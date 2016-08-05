@@ -16,7 +16,6 @@
 .\out\paspc.o: .\..\src\config\user_profiles_config.h
 .\out\paspc.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\paspc.o: .\..\..\..\..\sdk_580\sdk\platform\arch\compiler\rvds\compiler.h
-.\out\paspc.o: C:\Keil\ARM\RV31\INC\stdbool.h
 .\out\paspc.o: .\..\..\..\..\sdk_580\sdk\platform\arch\ll\rvds\ll.h
 .\out\paspc.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\paspc.o: .\..\..\..\..\sdk_580\sdk\platform\include\reg_intc.h

@@ -16,7 +16,6 @@
 .\out\jump_table.o: .\..\src\config\user_profiles_config.h
 .\out\jump_table.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\jump_table.o: .\..\..\..\..\sdk_580\sdk\platform\arch\compiler\rvds\compiler.h
-.\out\jump_table.o: C:\Keil\ARM\RV31\INC\stdbool.h
 .\out\jump_table.o: .\..\..\..\..\sdk_580\sdk\platform\arch\ll\rvds\ll.h
 .\out\jump_table.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\jump_table.o: .\..\..\..\..\sdk_580\sdk\platform\include\reg_intc.h
@@ -108,4 +107,3 @@
 .\out\jump_table.o: .\..\..\..\..\sdk_580\sdk\app_modules\api\app_easy_timer.h
 .\out\jump_table.o: .\..\..\..\..\sdk_580\sdk\app_modules\api\app_easy_gap.h
 .\out\jump_table.o: .\..\..\..\..\sdk_580\sdk\platform\core_modules\rf\api\pll_vcocal_lut.h
-.\out\jump_table.o: C:\Keil\ARM\RV31\INC\stdint.h

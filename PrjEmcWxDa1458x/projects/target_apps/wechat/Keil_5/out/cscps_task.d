@@ -16,7 +16,6 @@
 .\out\cscps_task.o: .\..\src\config\user_profiles_config.h
 .\out\cscps_task.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\cscps_task.o: .\..\..\..\..\sdk_580\sdk\platform\arch\compiler\rvds\compiler.h
-.\out\cscps_task.o: C:\Keil\ARM\RV31\INC\stdbool.h
 .\out\cscps_task.o: .\..\..\..\..\sdk_580\sdk\platform\arch\ll\rvds\ll.h
 .\out\cscps_task.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\cscps_task.o: .\..\..\..\..\sdk_580\sdk\platform\include\reg_intc.h

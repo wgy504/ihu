@@ -16,7 +16,6 @@
 .\out\rwip.o: .\..\src\config\user_profiles_config.h
 .\out\rwip.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\rwip.o: .\..\..\..\..\sdk_580\sdk\platform\arch\compiler\rvds\compiler.h
-.\out\rwip.o: C:\Keil\ARM\RV31\INC\stdbool.h
 .\out\rwip.o: .\..\..\..\..\sdk_580\sdk\platform\arch\ll\rvds\ll.h
 .\out\rwip.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\rwip.o: .\..\..\..\..\sdk_580\sdk\platform\include\reg_intc.h

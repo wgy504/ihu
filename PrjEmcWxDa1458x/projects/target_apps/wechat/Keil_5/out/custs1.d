@@ -16,7 +16,6 @@
 .\out\custs1.o: .\..\src\config\user_profiles_config.h
 .\out\custs1.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\custs1.o: .\..\..\..\..\sdk_580\sdk\platform\arch\compiler\rvds\compiler.h
-.\out\custs1.o: C:\Keil\ARM\RV31\INC\stdbool.h
 .\out\custs1.o: .\..\..\..\..\sdk_580\sdk\platform\arch\ll\rvds\ll.h
 .\out\custs1.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\custs1.o: .\..\..\..\..\sdk_580\sdk\platform\include\reg_intc.h

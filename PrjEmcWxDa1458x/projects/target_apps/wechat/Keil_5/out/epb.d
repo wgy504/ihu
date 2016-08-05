@@ -16,7 +16,6 @@
 .\out\epb.o: .\..\src\config\user_profiles_config.h
 .\out\epb.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\epb.o: .\..\..\..\..\sdk_580\sdk\platform\arch\compiler\rvds\compiler.h
-.\out\epb.o: C:\Keil\ARM\RV31\INC\stdbool.h
 .\out\epb.o: .\..\..\..\..\sdk_580\sdk\platform\arch\ll\rvds\ll.h
 .\out\epb.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\epb.o: .\..\..\..\..\sdk_580\sdk\platform\include\reg_intc.h

@@ -10,72 +10,59 @@
 
 #include "da1458x_config_basic.h"
 
-//PEM板子的预定义
-//#define IHU_EMCWX_CFG_HW_PEM1_0 //PEM1.0板子
-//#define IHU_EMCWX_CFG_HW_PEM1_1  //PEM1.1板子
-//#define IHU_EMCWX_CFG_HW_PEM2_0  //PEM2.0板子
-#define IHU_EMCWX_CFG_HW_PEM2_1  //PEM2.1板子
-//#define IHU_EMCWX_CFG_HW_PEM3  //PEM3板子
-#ifdef IHU_EMCWX_CFG_HW_PEM1_0
-	#undef IHU_EMCWX_CFG_HW_PEM1_1
-	#undef IHU_EMCWX_CFG_HW_PEM2_0
-	#undef IHU_EMCWX_CFG_HW_PEM2_1
-	#undef IHU_EMCWX_CFG_HW_PEM3
-#endif
-#ifdef IHU_EMCWX_CFG_HW_PEM1_1
-	#undef IHU_EMCWX_CFG_HW_PEM1_0
-	#undef IHU_EMCWX_CFG_HW_PEM2_0
-	#undef IHU_EMCWX_CFG_HW_PEM2_1
-	#undef IHU_EMCWX_CFG_HW_PEM3
-#endif
-#ifdef IHU_EMCWX_CFG_HW_PEM2_0
-	#undef IHU_EMCWX_CFG_HW_PEM1_0
-	#undef IHU_EMCWX_CFG_HW_PEM1_1
-	#undef IHU_EMCWX_CFG_HW_PEM2_1
-	#undef IHU_EMCWX_CFG_HW_PEM3
-#endif
-#ifdef IHU_EMCWX_CFG_HW_PEM2_1
-	#undef IHU_EMCWX_CFG_HW_PEM1_0
-	#undef IHU_EMCWX_CFG_HW_PEM1_1
-	#undef IHU_EMCWX_CFG_HW_PEM2_0
-	#undef IHU_EMCWX_CFG_HW_PEM3
-#endif
-#ifdef IHU_EMCWX_CFG_HW_PEM3
-	#undef IHU_EMCWX_CFG_HW_PEM1_0
-	#undef IHU_EMCWX_CFG_HW_PEM1_1
-	#undef IHU_EMCWX_CFG_HW_PEM2_0
-	#undef IHU_EMCWX_CFG_HW_PEM2_1
-#endif
+//PEM板子的预定义，严重影响预定义项。未来可以将老式PEM配置项删掉
+//.h程序中没法实现常量定义项的逻辑判断，所以只能实现#define和#undef的预编译项
 
-
-//硬件版本号
+//硬件PEM版本号
 #define IHU_EMCWX_CURRENT_HW_TYPE 1 // 1 = WEMC (XQ.WEMC.HW.V01), 2 = PM_CONTROLLER, 3 = WIFI_EMC
-//利用DA14580_Config.h中的硬件定义，产生唯一的硬件版本号
-//#undef的技巧，自行体会 :-)
-#define IHU_EMCWX_CURRENT_HW_PEM 0 // 0 = NULL, 1 = PEM1, 2 = PEM1.1, 3 = PEM2
+//#define IHU_EMCWX_CFG_HW_PEM_NULL 0 //PEM1.0板子
+//#define IHU_EMCWX_CFG_HW_PEM1_0 1 //PEM1.0板子
+//#define IHU_EMCWX_CFG_HW_PEM1_1 2 //PEM1.1板子
+//#define IHU_EMCWX_CFG_HW_PEM2_0 3 //PEM2.0板子
+#define IHU_EMCWX_CFG_HW_PEM2_1   4 //PEM2.1板子
+//#define IHU_EMCWX_CFG_HW_PEM3   5 //PEM3板子
+
 #ifdef IHU_EMCWX_CFG_HW_PEM1_0
+	#ifdef IHU_EMCWX_CURRENT_HW_PEM
 	#undef IHU_EMCWX_CURRENT_HW_PEM
-	#define IHU_EMCWX_CURRENT_HW_PEM 1 // 0 = NULL, 1 = PEM1, 2 = PEM1.1, 3 = PEM2
+	#endif
+	#define IHU_EMCWX_CURRENT_HW_PEM IHU_EMCWX_CFG_HW_PEM1_0
 #endif
 #ifdef IHU_EMCWX_CFG_HW_PEM1_1
+	#ifdef IHU_EMCWX_CURRENT_HW_PEM
 	#undef IHU_EMCWX_CURRENT_HW_PEM
-	#define IHU_EMCWX_CURRENT_HW_PEM 2 // 0 = NULL, 1 = PEM1, 2 = PEM1.1, 3 = PEM2
+	#endif
+	#define IHU_EMCWX_CURRENT_HW_PEM IHU_EMCWX_CFG_HW_PEM1_1
 #endif
 #ifdef IHU_EMCWX_CFG_HW_PEM2_0
+	#ifdef IHU_EMCWX_CURRENT_HW_PEM
 	#undef IHU_EMCWX_CURRENT_HW_PEM
-	#define IHU_EMCWX_CURRENT_HW_PEM 3 // 0 = NULL, 1 = PEM1, 2 = PEM1.1, 3 = PEM2
+	#endif
+	#define IHU_EMCWX_CURRENT_HW_PEM IHU_EMCWX_CFG_HW_PEM2_0
 #endif
 #ifdef IHU_EMCWX_CFG_HW_PEM2_1
+	#ifdef IHU_EMCWX_CURRENT_HW_PEM
 	#undef IHU_EMCWX_CURRENT_HW_PEM
-	#define IHU_EMCWX_CURRENT_HW_PEM 4 // 0 = NULL, 1 = PEM1, 2 = PEM1.1, 3 = PEM2, 4=PEM2.1
+	#endif
+	#define IHU_EMCWX_CURRENT_HW_PEM IHU_EMCWX_CFG_HW_PEM2_1
 #endif
 #ifdef IHU_EMCWX_CFG_HW_PEM3
+	#ifdef IHU_EMCWX_CURRENT_HW_PEM
 	#undef IHU_EMCWX_CURRENT_HW_PEM
-	#define IHU_EMCWX_CURRENT_HW_PEM 5 // 0 = NULL, 1 = PEM1, 2 = PEM1.1, 3 = PEM2, 4=PEM2.1, 5=PEM3
+	#endif
+	#define IHU_EMCWX_CURRENT_HW_PEM IHU_EMCWX_CFG_HW_PEM3
 #endif
 
+
+//为了方便程序中判定PEM是否是PEM2之后的版本
+#define IHU_EMCWX_CURRENT_HW_PEM_NEW ((IHU_EMCWX_CURRENT_HW_PEM==3) || (IHU_EMCWX_CURRENT_HW_PEM==4) || (IHU_EMCWX_CURRENT_HW_PEM==5))
+
+//软件版本定义
 #define IHU_EMCWX_CURRENT_SW_RELEASE  3//R01 = 0x01 (XQ.WEMC.SW.R01.456)
 #define IHU_EMCWX_CURRENT_SW_DELIVERY 11 //001 = 0x01 (XQ.WEMC.SW.R01.456), starting from 100 as 2015/10/03
+
+
+//软件修改历史记录
 //========================================R1.0 START============================================
 //2015/10/04, MYC, IHU_EMCWX_CURRENT_SW_DELIVERY 2
 //= ZJL, 2015 Oct.7, IHU_EMCWX_CURRENT_SW_DELIVERY 3

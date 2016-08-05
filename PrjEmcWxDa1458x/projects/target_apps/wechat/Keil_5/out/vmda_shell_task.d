@@ -16,7 +16,6 @@
 .\out\vmda_shell_task.o: .\..\src\config\user_profiles_config.h
 .\out\vmda_shell_task.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\vmda_shell_task.o: .\..\..\..\..\sdk_580\sdk\platform\arch\compiler\rvds\compiler.h
-.\out\vmda_shell_task.o: C:\Keil\ARM\RV31\INC\stdbool.h
 .\out\vmda_shell_task.o: .\..\..\..\..\sdk_580\sdk\platform\arch\ll\rvds\ll.h
 .\out\vmda_shell_task.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\vmda_shell_task.o: .\..\..\..\..\sdk_580\sdk\platform\include\reg_intc.h
@@ -62,11 +61,10 @@
 .\out\vmda_shell_task.o: ..\..\..\..\..\SrcBxxh\l0comvm\commsg.h
 .\out\vmda_shell_task.o: ..\..\..\..\..\SrcBxxh\l0comvm\comtype.h
 .\out\vmda_shell_task.o: ..\..\..\..\..\SrcBxxh\l0comvm\sysdim.h
-.\out\vmda_shell_task.o: C:\Keil\ARM\RV31\INC\time.h
+.\out\vmda_shell_task.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 .\out\vmda_shell_task.o: ..\..\..\..\..\SrcBxxh\l0comvm\sysconfig.h
 .\out\vmda_shell_task.o: ..\..\..\..\..\SrcBxxh\l0comvm\sysversion.h
 .\out\vmda_shell_task.o: ..\..\..\..\..\SrcBxxh\l0comvm\sysengpar.h
-.\out\vmda_shell_task.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 .\out\vmda_shell_task.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\out\vmda_shell_task.o: .\..\..\..\..\sdk_580\sdk\platform\driver\gpio\gpio.h
 .\out\vmda_shell_task.o: .\..\..\..\..\sdk_580\sdk\platform\driver\adc\adc.h

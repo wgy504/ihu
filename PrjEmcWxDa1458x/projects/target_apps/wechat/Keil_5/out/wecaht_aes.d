@@ -16,7 +16,6 @@
 .\out\wecaht_aes.o: .\..\src\config\user_profiles_config.h
 .\out\wecaht_aes.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\wecaht_aes.o: .\..\..\..\..\sdk_580\sdk\platform\arch\compiler\rvds\compiler.h
-.\out\wecaht_aes.o: C:\Keil\ARM\RV31\INC\stdbool.h
 .\out\wecaht_aes.o: .\..\..\..\..\sdk_580\sdk\platform\arch\ll\rvds\ll.h
 .\out\wecaht_aes.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\wecaht_aes.o: .\..\..\..\..\sdk_580\sdk\platform\include\reg_intc.h

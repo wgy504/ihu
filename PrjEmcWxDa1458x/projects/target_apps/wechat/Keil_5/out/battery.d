@@ -16,7 +16,6 @@
 .\out\battery.o: .\..\src\config\user_profiles_config.h
 .\out\battery.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\battery.o: .\..\..\..\..\sdk_580\sdk\platform\arch\compiler\rvds\compiler.h
-.\out\battery.o: C:\Keil\ARM\RV31\INC\stdbool.h
 .\out\battery.o: .\..\..\..\..\sdk_580\sdk\platform\arch\ll\rvds\ll.h
 .\out\battery.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\battery.o: .\..\..\..\..\sdk_580\sdk\platform\include\reg_intc.h
@@ -59,4 +58,4 @@
 .\out\battery.o: .\..\..\..\..\sdk_580\sdk\app_modules\api\app_adv_data.h
 .\out\battery.o: .\..\..\..\..\sdk_580\sdk\platform\driver\adc\adc.h
 .\out\battery.o: ..\..\..\..\sdk_580\sdk\platform\driver\battery\battery.h
-.\out\battery.o: C:\Keil\ARM\RV31\INC\stdlib.h
+.\out\battery.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h

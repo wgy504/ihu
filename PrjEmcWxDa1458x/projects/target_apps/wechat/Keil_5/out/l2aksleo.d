@@ -16,7 +16,6 @@
 .\out\l2aksleo.o: .\..\src\config\user_profiles_config.h
 .\out\l2aksleo.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\l2aksleo.o: .\..\..\..\..\sdk_580\sdk\platform\arch\compiler\rvds\compiler.h
-.\out\l2aksleo.o: C:\Keil\ARM\RV31\INC\stdbool.h
 .\out\l2aksleo.o: .\..\..\..\..\sdk_580\sdk\platform\arch\ll\rvds\ll.h
 .\out\l2aksleo.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\l2aksleo.o: .\..\..\..\..\sdk_580\sdk\platform\include\reg_intc.h

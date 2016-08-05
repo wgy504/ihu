@@ -444,6 +444,8 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 
 //= ZJL, 2016 Aug.5, IHU_EMCWX_CURRENT_SW_DELIVERY R03.11
 = 修改完善全局常量的命名规则，以便适应多项目模式下的严格区分
+= 完善LED BLINK中对PEM2.0判定的条件
+= 切换PEM2.0/PEM2.1，确定后台连不上的原因，发现PEM2.0/PEM2.1在管件连接上没有啥区别，除了两个不太用的管脚。锚定PEM2.1进行测试。
 
 
 
@@ -454,7 +456,8 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 
 
 
-
+Known Issues:
+1. 收到sendDataResp， 出现 "received msg: no message content!"  从而导致 "! error: mpbledemo2 reseted"
 
 
 

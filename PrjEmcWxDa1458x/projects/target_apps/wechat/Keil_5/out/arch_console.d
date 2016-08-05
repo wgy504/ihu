@@ -16,7 +16,6 @@
 .\out\arch_console.o: .\..\src\config\user_profiles_config.h
 .\out\arch_console.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\arch_console.o: .\..\..\..\..\sdk_580\sdk\platform\arch\compiler\rvds\compiler.h
-.\out\arch_console.o: C:\Keil\ARM\RV31\INC\stdbool.h
 .\out\arch_console.o: .\..\..\..\..\sdk_580\sdk\platform\arch\ll\rvds\ll.h
 .\out\arch_console.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\arch_console.o: .\..\..\..\..\sdk_580\sdk\platform\include\reg_intc.h

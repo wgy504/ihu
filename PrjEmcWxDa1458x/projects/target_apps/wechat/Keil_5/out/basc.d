@@ -16,7 +16,6 @@
 .\out\basc.o: .\..\src\config\user_profiles_config.h
 .\out\basc.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\basc.o: .\..\..\..\..\sdk_580\sdk\platform\arch\compiler\rvds\compiler.h
-.\out\basc.o: C:\Keil\ARM\RV31\INC\stdbool.h
 .\out\basc.o: .\..\..\..\..\sdk_580\sdk\platform\arch\ll\rvds\ll.h
 .\out\basc.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\basc.o: .\..\..\..\..\sdk_580\sdk\platform\include\reg_intc.h

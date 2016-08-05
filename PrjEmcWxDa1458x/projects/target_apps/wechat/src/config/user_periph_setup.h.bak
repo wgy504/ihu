@@ -345,7 +345,7 @@
 #define DB15_RSV3_PIN   GPIO_PIN_6
 #endif //IHU_EMCWX_CFG_HW_PEM3
 
-//鏂扮殑PEM鐗堟湰锛岃繖閲屼篃闇�瑕佸畾涔夊畬鍠勭殑鏄犲皠鍏崇郴
+//新的PEM版本，这里也需要定义完善的映射关系
 
 /*
  * FUNCTION DECLARATIONS

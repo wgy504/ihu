@@ -16,7 +16,6 @@
 .\out\md5.o: .\..\src\config\user_profiles_config.h
 .\out\md5.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\md5.o: .\..\..\..\..\sdk_580\sdk\platform\arch\compiler\rvds\compiler.h
-.\out\md5.o: C:\Keil\ARM\RV31\INC\stdbool.h
 .\out\md5.o: .\..\..\..\..\sdk_580\sdk\platform\arch\ll\rvds\ll.h
 .\out\md5.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\md5.o: .\..\..\..\..\sdk_580\sdk\platform\include\reg_intc.h
@@ -60,5 +59,4 @@
 .\out\md5.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\out\md5.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 .\out\md5.o: ..\src\common\md5.h
-.\out\md5.o: C:\Keil\ARM\RV31\INC\stdint.h
 .\out\md5.o: .\..\..\..\..\sdk_580\sdk\platform\core_modules\ke\api\ke_mem.h

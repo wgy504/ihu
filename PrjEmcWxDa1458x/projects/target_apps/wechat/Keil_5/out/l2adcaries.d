@@ -16,7 +16,6 @@
 .\out\l2adcaries.o: .\..\src\config\user_profiles_config.h
 .\out\l2adcaries.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\l2adcaries.o: .\..\..\..\..\sdk_580\sdk\platform\arch\compiler\rvds\compiler.h
-.\out\l2adcaries.o: C:\Keil\ARM\RV31\INC\stdbool.h
 .\out\l2adcaries.o: .\..\..\..\..\sdk_580\sdk\platform\arch\ll\rvds\ll.h
 .\out\l2adcaries.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\l2adcaries.o: .\..\..\..\..\sdk_580\sdk\platform\include\reg_intc.h
@@ -62,11 +61,10 @@
 .\out\l2adcaries.o: ..\..\..\..\..\SrcBxxh\l0comvm\commsg.h
 .\out\l2adcaries.o: ..\..\..\..\..\SrcBxxh\l0comvm\comtype.h
 .\out\l2adcaries.o: ..\..\..\..\..\SrcBxxh\l0comvm\sysdim.h
-.\out\l2adcaries.o: C:\Keil\ARM\RV31\INC\time.h
+.\out\l2adcaries.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 .\out\l2adcaries.o: ..\..\..\..\..\SrcBxxh\l0comvm\sysconfig.h
 .\out\l2adcaries.o: ..\..\..\..\..\SrcBxxh\l0comvm\sysversion.h
 .\out\l2adcaries.o: ..\..\..\..\..\SrcBxxh\l0comvm\sysengpar.h
-.\out\l2adcaries.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 .\out\l2adcaries.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\out\l2adcaries.o: .\..\..\..\..\sdk_580\sdk\platform\driver\gpio\gpio.h
 .\out\l2adcaries.o: .\..\..\..\..\sdk_580\sdk\platform\driver\adc\adc.h

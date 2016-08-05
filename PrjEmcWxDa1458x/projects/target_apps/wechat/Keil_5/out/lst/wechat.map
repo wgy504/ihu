@@ -615,7 +615,7 @@ Section Cross References
     vmlayer.o(.text) refers to i2c_led.o(.text) for bxxh_led_blink_once_on_off
     vmlayer.o(.text) refers to vmlayer.o(.text) for app_ble_push
     vmlayer.o(.text) refers to i2c_led.o(.text) for bxxh_led_blink_once_on_off
-    vmlayer.o(.text) refers to gpio.o(.text) for GPIO_SetInactive
+    vmlayer.o(.text) refers to i2c_led.o(.text) for bxxh_led_blink_once_on_off
     vmlayer.o(.text) refers to vmlayer.o(.bss) for .bss
     vmlayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
     vmlayer.o(.text) refers to vmlayer.o(.text) for IhuDebugPrint
@@ -1635,7 +1635,7 @@ Removing Unused input sections from the image.
     Removing vmlayer.o(.text), (520 bytes).
     Removing vmlayer.o(.text), (152 bytes).
     Removing vmlayer.o(.text), (156 bytes).
-    Removing vmlayer.o(.text), (332 bytes).
+    Removing vmlayer.o(.text), (352 bytes).
     Removing vmlayer.o(.text), (108 bytes).
     Removing vmlayer.o(.text), (704 bytes).
     Removing vmlayer.o(.text), (608 bytes).
@@ -1654,13 +1654,13 @@ Removing Unused input sections from the image.
     Removing vmlayer.o(.text), (20 bytes).
     Removing vmlayer.o(.text), (2 bytes).
     Removing vmlayer.o(.text), (20 bytes).
-    Removing vmlayer.o(.text), (44 bytes).
+    Removing vmlayer.o(.text), (52 bytes).
     Removing vmlayer.o(.text), (10 bytes).
     Removing vmlayer.o(.text), (68 bytes).
     Removing vmlayer.o(.text), (4 bytes).
     Removing vmlayer.o(.text), (22 bytes).
     Removing vmlayer.o(.bss), (44 bytes).
-    Removing vmlayer.o(.conststring), (737 bytes).
+    Removing vmlayer.o(.conststring), (749 bytes).
     Removing vmlayer.o(.data), (108 bytes).
     Removing i2c_led.o(.text), (284 bytes).
     Removing i2c_led.o(.text), (172 bytes).
@@ -1809,7 +1809,7 @@ Removing Unused input sections from the image.
     Removing pwm.o(i.timer2_set_pwm3_duty_cycle), (12 bytes).
     Removing pwm.o(i.timer2_set_pwm4_duty_cycle), (12 bytes).
 
-387 unused section(s) (total 53993 bytes) removed from the image.
+387 unused section(s) (total 54033 bytes) removed from the image.
 
 ==============================================================================
 
@@ -3735,7 +3735,7 @@ Memory Map of the image
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x200002c0   0x00000064   Data   RO         1800    timeout_table_area  gapm.o
+    0x200002c0   0x00000064   Data   RO         1797    timeout_table_area  gapm.o
 
 
 
@@ -3755,15 +3755,15 @@ Memory Map of the image
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000440   0x00000000   Code   RO         4388  * .ARM.Collect$$$$00000000  mc_p.l(entry.o)
-    0x20000440   0x00000004   Code   RO         4732    .ARM.Collect$$$$00000001  mc_p.l(entry2.o)
-    0x20000444   0x00000004   Code   RO         4735    .ARM.Collect$$$$00000004  mc_p.l(entry5.o)
-    0x20000448   0x00000000   Code   RO         4737    .ARM.Collect$$$$00000008  mc_p.l(entry7b.o)
-    0x20000448   0x00000000   Code   RO         4739    .ARM.Collect$$$$0000000A  mc_p.l(entry8b.o)
-    0x20000448   0x00000008   Code   RO         4740    .ARM.Collect$$$$0000000B  mc_p.l(entry9a.o)
-    0x20000450   0x00000000   Code   RO         4742    .ARM.Collect$$$$0000000D  mc_p.l(entry10a.o)
-    0x20000450   0x00000000   Code   RO         4744    .ARM.Collect$$$$0000000F  mc_p.l(entry11a.o)
-    0x20000450   0x00000004   Code   RO         4733    .ARM.Collect$$$$00002712  mc_p.l(entry2.o)
+    0x20000440   0x00000000   Code   RO         4385  * .ARM.Collect$$$$00000000  mc_p.l(entry.o)
+    0x20000440   0x00000004   Code   RO         4729    .ARM.Collect$$$$00000001  mc_p.l(entry2.o)
+    0x20000444   0x00000004   Code   RO         4732    .ARM.Collect$$$$00000004  mc_p.l(entry5.o)
+    0x20000448   0x00000000   Code   RO         4734    .ARM.Collect$$$$00000008  mc_p.l(entry7b.o)
+    0x20000448   0x00000000   Code   RO         4736    .ARM.Collect$$$$0000000A  mc_p.l(entry8b.o)
+    0x20000448   0x00000008   Code   RO         4737    .ARM.Collect$$$$0000000B  mc_p.l(entry9a.o)
+    0x20000450   0x00000000   Code   RO         4739    .ARM.Collect$$$$0000000D  mc_p.l(entry10a.o)
+    0x20000450   0x00000000   Code   RO         4741    .ARM.Collect$$$$0000000F  mc_p.l(entry11a.o)
+    0x20000450   0x00000004   Code   RO         4730    .ARM.Collect$$$$00002712  mc_p.l(entry2.o)
     0x20000454   0x00000050   Code   RO            2    .text               system_armcm0.o
     0x200004a4   0x0000006c   Code   RO          192    .text               boot_vectors.o
     0x20000510   0x00000060   Code   RO          197    .text               hardfault_handler.o
@@ -3786,168 +3786,168 @@ Memory Map of the image
     0x20001b68   0x0000002c   Code   RO          840    .text               syscntl.o
     0x20001b94   0x0000022c   Code   RO          860    .text               gpio.o
     0x20001dc0   0x00000148   Code   RO          918    .text               wkupct_quadec.o
-    0x20001f08   0x000000e4   Code   RO         1050    .text               adc.o
-    0x20001fec   0x000001d4   Code   RO         1071    .text               trng.o
-    0x200021c0   0x00000010   Code   RO         1368    .text               pwm.o
-    0x200021d0   0x0000017c   Code   RO         1527    .text               uart2.o
-    0x2000234c   0x00000010   Code   RO         1571    .text               systick.o
-    0x2000235c   0x000002f8   Code   RO         1618    .text               rf_580.o
-    0x20002654   0x00000364   Code   RO         1658    .text               rwble.o
-    0x200029b8   0x000001cc   Code   RO         1772    .text               rwip.o
-    0x20002b84   0x00000080   Code   RO         2097    .text               prf_utils.o
-    0x20002c04   0x000000d4   Code   RO         2389    .text               wechat.o
-    0x20002cd8   0x000001c0   Code   RO         2417    .text               wechat_task.o
-    0x20002e98   0x000000d0   Code   RO         2449    .text               app_default_handlers.o
-    0x20002f68   0x000003b8   Code   RO         2493    .text               app.o
-    0x20003320   0x0000017c   Code   RO         2675    .text               app_task.o
-    0x2000349c   0x00000094   Code   RO         2706    .text               app_entry_point.o
-    0x20003530   0x000000ac   Code   RO         2748    .text               app_easy_timer.o
-    0x200035dc   0x00000002   Code   RO         2749    .text               app_easy_timer.o
+    0x20001f08   0x000000e4   Code   RO         1047    .text               adc.o
+    0x20001fec   0x000001d4   Code   RO         1068    .text               trng.o
+    0x200021c0   0x00000010   Code   RO         1365    .text               pwm.o
+    0x200021d0   0x0000017c   Code   RO         1524    .text               uart2.o
+    0x2000234c   0x00000010   Code   RO         1568    .text               systick.o
+    0x2000235c   0x000002f8   Code   RO         1615    .text               rf_580.o
+    0x20002654   0x00000364   Code   RO         1655    .text               rwble.o
+    0x200029b8   0x000001cc   Code   RO         1769    .text               rwip.o
+    0x20002b84   0x00000080   Code   RO         2094    .text               prf_utils.o
+    0x20002c04   0x000000d4   Code   RO         2386    .text               wechat.o
+    0x20002cd8   0x000001c0   Code   RO         2414    .text               wechat_task.o
+    0x20002e98   0x000000d0   Code   RO         2446    .text               app_default_handlers.o
+    0x20002f68   0x000003b8   Code   RO         2490    .text               app.o
+    0x20003320   0x0000017c   Code   RO         2672    .text               app_task.o
+    0x2000349c   0x00000094   Code   RO         2703    .text               app_entry_point.o
+    0x20003530   0x000000ac   Code   RO         2745    .text               app_easy_timer.o
+    0x200035dc   0x00000002   Code   RO         2746    .text               app_easy_timer.o
     0x200035de   0x00000002   PAD
-    0x200035e0   0x00000054   Code   RO         2820    .text               app_easy_msg_utils.o
-    0x20003634   0x000001e8   Code   RO         2875    .text               app_wechat.o
-    0x2000381c   0x000000a8   Code   RO         2915    .text               app_wechat_task.o
-    0x200038c4   0x00000078   Code   RO         2929    .text               app_security.o
-    0x2000393c   0x000000c4   Code   RO         2947    .text               app_security_task.o
-    0x20003a00   0x00000298   Code   RO         2962    .text               app_easy_security.o
-    0x20003c98   0x000000d4   Code   RO         3034    .text               user_periph_setup.o
-    0x20003d6c   0x00000008   Code   RO         3048    .text               user_wechat.o
-    0x20003d74   0x0000021c   Code   RO         3073    .text               ble_wechat_util.o
-    0x20003f90   0x000000d8   Code   RO         3103    .text               crc32.o
-    0x20004068   0x000002d0   Code   RO         3118    .text               epb.o
-    0x20004338   0x00000850   Code   RO         3206    .text               epb_mmbp.o
-    0x20004b88   0x00000dbc   Code   RO         3282    .text               mpbledemo2.o
-    0x20005944   0x00000110   Code   RO         3426    .text               vmlayer.o
-    0x20005a54   0x0000001a   Code   RO         4397    .text               mc_p.l(strncpy.o)
-    0x20005a6e   0x00000012   Code   RO         4399    .text               mc_p.l(strcpy.o)
-    0x20005a80   0x0000007a   Code   RO         4692    .text               mf_p.l(fmul.o)
-    0x20005afa   0x0000000e   Code   RO         4696    .text               mf_p.l(ffltui.o)
-    0x20005b08   0x00000028   Code   RO         4698    .text               mf_p.l(ffixui.o)
-    0x20005b30   0x00000060   Code   RO         4749    .text               mc_p.l(uldiv.o)
-    0x20005b90   0x00000082   Code   RO         4760    .text               mf_p.l(fepilogue.o)
+    0x200035e0   0x00000054   Code   RO         2817    .text               app_easy_msg_utils.o
+    0x20003634   0x000001e8   Code   RO         2872    .text               app_wechat.o
+    0x2000381c   0x000000a8   Code   RO         2912    .text               app_wechat_task.o
+    0x200038c4   0x00000078   Code   RO         2926    .text               app_security.o
+    0x2000393c   0x000000c4   Code   RO         2944    .text               app_security_task.o
+    0x20003a00   0x00000298   Code   RO         2959    .text               app_easy_security.o
+    0x20003c98   0x000000d4   Code   RO         3031    .text               user_periph_setup.o
+    0x20003d6c   0x00000008   Code   RO         3045    .text               user_wechat.o
+    0x20003d74   0x0000021c   Code   RO         3070    .text               ble_wechat_util.o
+    0x20003f90   0x000000d8   Code   RO         3100    .text               crc32.o
+    0x20004068   0x000002d0   Code   RO         3115    .text               epb.o
+    0x20004338   0x00000850   Code   RO         3203    .text               epb_mmbp.o
+    0x20004b88   0x00000dbc   Code   RO         3279    .text               mpbledemo2.o
+    0x20005944   0x00000110   Code   RO         3423    .text               vmlayer.o
+    0x20005a54   0x0000001a   Code   RO         4394    .text               mc_p.l(strncpy.o)
+    0x20005a6e   0x00000012   Code   RO         4396    .text               mc_p.l(strcpy.o)
+    0x20005a80   0x0000007a   Code   RO         4689    .text               mf_p.l(fmul.o)
+    0x20005afa   0x0000000e   Code   RO         4693    .text               mf_p.l(ffltui.o)
+    0x20005b08   0x00000028   Code   RO         4695    .text               mf_p.l(ffixui.o)
+    0x20005b30   0x00000060   Code   RO         4746    .text               mc_p.l(uldiv.o)
+    0x20005b90   0x00000082   Code   RO         4757    .text               mf_p.l(fepilogue.o)
     0x20005c12   0x00000002   PAD
-    0x20005c14   0x00000024   Code   RO         4774    .text               mc_p.l(init.o)
-    0x20005c38   0x0000000c   Ven    RO         4790    Veneer$$Code        anon$$obj.o
-    0x20005c44   0x0000000c   Ven    RO         4791    Veneer$$Code        anon$$obj.o
-    0x20005c50   0x0000000c   Ven    RO         4792    Veneer$$Code        anon$$obj.o
-    0x20005c5c   0x0000000c   Ven    RO         4793    Veneer$$Code        anon$$obj.o
-    0x20005c68   0x0000000c   Ven    RO         4794    Veneer$$Code        anon$$obj.o
-    0x20005c74   0x0000000c   Ven    RO         4795    Veneer$$Code        anon$$obj.o
-    0x20005c80   0x0000000c   Ven    RO         4796    Veneer$$Code        anon$$obj.o
-    0x20005c8c   0x0000000c   Ven    RO         4797    Veneer$$Code        anon$$obj.o
-    0x20005c98   0x0000000c   Ven    RO         4798    Veneer$$Code        anon$$obj.o
-    0x20005ca4   0x0000000c   Ven    RO         4799    Veneer$$Code        anon$$obj.o
-    0x20005cb0   0x0000000c   Ven    RO         4800    Veneer$$Code        anon$$obj.o
-    0x20005cbc   0x0000000c   Ven    RO         4801    Veneer$$Code        anon$$obj.o
-    0x20005cc8   0x0000000c   Ven    RO         4802    Veneer$$Code        anon$$obj.o
-    0x20005cd4   0x0000000c   Ven    RO         4803    Veneer$$Code        anon$$obj.o
-    0x20005ce0   0x0000000c   Ven    RO         4804    Veneer$$Code        anon$$obj.o
-    0x20005cec   0x0000000c   Ven    RO         4805    Veneer$$Code        anon$$obj.o
-    0x20005cf8   0x0000000c   Ven    RO         4806    Veneer$$Code        anon$$obj.o
-    0x20005d04   0x0000000c   Ven    RO         4807    Veneer$$Code        anon$$obj.o
-    0x20005d10   0x0000000c   Ven    RO         4808    Veneer$$Code        anon$$obj.o
-    0x20005d1c   0x0000000c   Ven    RO         4809    Veneer$$Code        anon$$obj.o
-    0x20005d28   0x0000000c   Ven    RO         4810    Veneer$$Code        anon$$obj.o
-    0x20005d34   0x0000000c   Ven    RO         4811    Veneer$$Code        anon$$obj.o
-    0x20005d40   0x0000000c   Ven    RO         4812    Veneer$$Code        anon$$obj.o
-    0x20005d4c   0x0000000c   Ven    RO         4813    Veneer$$Code        anon$$obj.o
-    0x20005d58   0x0000000c   Ven    RO         4814    Veneer$$Code        anon$$obj.o
-    0x20005d64   0x0000000c   Ven    RO         4815    Veneer$$Code        anon$$obj.o
-    0x20005d70   0x0000000c   Ven    RO         4816    Veneer$$Code        anon$$obj.o
-    0x20005d7c   0x0000000c   Ven    RO         4817    Veneer$$Code        anon$$obj.o
-    0x20005d88   0x0000000c   Ven    RO         4818    Veneer$$Code        anon$$obj.o
-    0x20005d94   0x0000000c   Ven    RO         4819    Veneer$$Code        anon$$obj.o
-    0x20005da0   0x0000000c   Ven    RO         4820    Veneer$$Code        anon$$obj.o
-    0x20005dac   0x0000000c   Ven    RO         4821    Veneer$$Code        anon$$obj.o
-    0x20005db8   0x0000000c   Ven    RO         4822    Veneer$$Code        anon$$obj.o
-    0x20005dc4   0x0000000c   Ven    RO         4823    Veneer$$Code        anon$$obj.o
-    0x20005dd0   0x0000000c   Ven    RO         4824    Veneer$$Code        anon$$obj.o
-    0x20005ddc   0x0000000c   Ven    RO         4825    Veneer$$Code        anon$$obj.o
-    0x20005de8   0x0000000c   Ven    RO         4826    Veneer$$Code        anon$$obj.o
-    0x20005df4   0x0000000c   Ven    RO         4827    Veneer$$Code        anon$$obj.o
-    0x20005e00   0x0000000c   Ven    RO         4828    Veneer$$Code        anon$$obj.o
-    0x20005e0c   0x0000000c   Ven    RO         4829    Veneer$$Code        anon$$obj.o
-    0x20005e18   0x0000000c   Ven    RO         4830    Veneer$$Code        anon$$obj.o
-    0x20005e24   0x0000000c   Ven    RO         4831    Veneer$$Code        anon$$obj.o
-    0x20005e30   0x0000000c   Ven    RO         4832    Veneer$$Code        anon$$obj.o
-    0x20005e3c   0x0000000c   Ven    RO         4833    Veneer$$Code        anon$$obj.o
-    0x20005e48   0x0000000c   Ven    RO         4834    Veneer$$Code        anon$$obj.o
-    0x20005e54   0x0000000c   Ven    RO         4835    Veneer$$Code        anon$$obj.o
-    0x20005e60   0x0000000c   Ven    RO         4836    Veneer$$Code        anon$$obj.o
-    0x20005e6c   0x0000000c   Ven    RO         4837    Veneer$$Code        anon$$obj.o
-    0x20005e78   0x0000000c   Ven    RO         4838    Veneer$$Code        anon$$obj.o
-    0x20005e84   0x0000000c   Ven    RO         4839    Veneer$$Code        anon$$obj.o
-    0x20005e90   0x0000000c   Ven    RO         4840    Veneer$$Code        anon$$obj.o
-    0x20005e9c   0x0000000c   Ven    RO         4841    Veneer$$Code        anon$$obj.o
-    0x20005ea8   0x0000000c   Ven    RO         4842    Veneer$$Code        anon$$obj.o
-    0x20005eb4   0x0000000c   Ven    RO         4843    Veneer$$Code        anon$$obj.o
-    0x20005ec0   0x0000000c   Ven    RO         4844    Veneer$$Code        anon$$obj.o
-    0x20005ecc   0x0000000c   Ven    RO         4845    Veneer$$Code        anon$$obj.o
-    0x20005ed8   0x0000000c   Ven    RO         4846    Veneer$$Code        anon$$obj.o
-    0x20005ee4   0x0000000c   Ven    RO         4847    Veneer$$Code        anon$$obj.o
-    0x20005ef0   0x0000000c   Ven    RO         4848    Veneer$$Code        anon$$obj.o
-    0x20005efc   0x0000000c   Ven    RO         4849    Veneer$$Code        anon$$obj.o
-    0x20005f08   0x0000000c   Ven    RO         4850    Veneer$$Code        anon$$obj.o
-    0x20005f14   0x0000000c   Ven    RO         4851    Veneer$$Code        anon$$obj.o
-    0x20005f20   0x0000000c   Ven    RO         4852    Veneer$$Code        anon$$obj.o
-    0x20005f2c   0x0000000c   Ven    RO         4853    Veneer$$Code        anon$$obj.o
-    0x20005f38   0x0000000c   Ven    RO         4854    Veneer$$Code        anon$$obj.o
-    0x20005f44   0x0000000c   Ven    RO         4855    Veneer$$Code        anon$$obj.o
-    0x20005f50   0x0000000c   Ven    RO         4856    Veneer$$Code        anon$$obj.o
-    0x20005f5c   0x0000000c   Ven    RO         4857    Veneer$$Code        anon$$obj.o
-    0x20005f68   0x0000000c   Ven    RO         4858    Veneer$$Code        anon$$obj.o
-    0x20005f74   0x0000000c   Ven    RO         4859    Veneer$$Code        anon$$obj.o
-    0x20005f80   0x0000000c   Ven    RO         4860    Veneer$$Code        anon$$obj.o
-    0x20005f8c   0x0000000c   Ven    RO         4861    Veneer$$Code        anon$$obj.o
-    0x20005f98   0x0000000c   Ven    RO         4862    Veneer$$Code        anon$$obj.o
-    0x20005fa4   0x0000000c   Ven    RO         4863    Veneer$$Code        anon$$obj.o
-    0x20005fb0   0x0000000c   Ven    RO         4864    Veneer$$Code        anon$$obj.o
-    0x20005fbc   0x0000000c   Ven    RO         4865    Veneer$$Code        anon$$obj.o
-    0x20005fc8   0x0000000c   Ven    RO         4866    Veneer$$Code        anon$$obj.o
-    0x20005fd4   0x0000000c   Ven    RO         4867    Veneer$$Code        anon$$obj.o
-    0x20005fe0   0x0000000c   Ven    RO         4868    Veneer$$Code        anon$$obj.o
-    0x20005fec   0x0000000c   Ven    RO         4869    Veneer$$Code        anon$$obj.o
-    0x20005ff8   0x0000000c   Ven    RO         4870    Veneer$$Code        anon$$obj.o
-    0x20006004   0x0000000c   Ven    RO         4871    Veneer$$Code        anon$$obj.o
-    0x20006010   0x0000000c   Ven    RO         4872    Veneer$$Code        anon$$obj.o
-    0x2000601c   0x0000000c   Ven    RO         4873    Veneer$$Code        anon$$obj.o
-    0x20006028   0x0000000c   Ven    RO         4874    Veneer$$Code        anon$$obj.o
-    0x20006034   0x0000000c   Ven    RO         4875    Veneer$$Code        anon$$obj.o
-    0x20006040   0x0000000c   Ven    RO         4876    Veneer$$Code        anon$$obj.o
-    0x2000604c   0x0000000c   Ven    RO         4877    Veneer$$Code        anon$$obj.o
-    0x20006058   0x0000000c   Ven    RO         4878    Veneer$$Code        anon$$obj.o
-    0x20006064   0x0000000c   Ven    RO         4879    Veneer$$Code        anon$$obj.o
-    0x20006070   0x0000000c   Ven    RO         4880    Veneer$$Code        anon$$obj.o
-    0x2000607c   0x0000000c   Ven    RO         4881    Veneer$$Code        anon$$obj.o
-    0x20006088   0x0000000c   Ven    RO         4882    Veneer$$Code        anon$$obj.o
-    0x20006094   0x0000000c   Ven    RO         4883    Veneer$$Code        anon$$obj.o
-    0x200060a0   0x0000000c   Ven    RO         4884    Veneer$$Code        anon$$obj.o
-    0x200060ac   0x0000000c   Ven    RO         4885    Veneer$$Code        anon$$obj.o
-    0x200060b8   0x0000000c   Ven    RO         4886    Veneer$$Code        anon$$obj.o
-    0x200060c4   0x0000000c   Ven    RO         4887    Veneer$$Code        anon$$obj.o
-    0x200060d0   0x0000000c   Ven    RO         4888    Veneer$$Code        anon$$obj.o
-    0x200060dc   0x0000000c   Ven    RO         4889    Veneer$$Code        anon$$obj.o
-    0x200060e8   0x0000000c   Ven    RO         4890    Veneer$$Code        anon$$obj.o
-    0x200060f4   0x0000000c   Ven    RO         4891    Veneer$$Code        anon$$obj.o
-    0x20006100   0x0000000c   Ven    RO         4892    Veneer$$Code        anon$$obj.o
-    0x2000610c   0x0000000c   Ven    RO         4893    Veneer$$Code        anon$$obj.o
-    0x20006118   0x0000000c   Ven    RO         4894    Veneer$$Code        anon$$obj.o
-    0x20006124   0x0000000c   Ven    RO         4895    Veneer$$Code        anon$$obj.o
-    0x20006130   0x0000000c   Ven    RO         4896    Veneer$$Code        anon$$obj.o
-    0x2000613c   0x0000000c   Ven    RO         4897    Veneer$$Code        anon$$obj.o
-    0x20006148   0x0000000c   Ven    RO         4898    Veneer$$Code        anon$$obj.o
-    0x20006154   0x00000028   Code   RO         4612    i.__0sprintf$8      mc_p.l(printf8.o)
-    0x2000617c   0x0000000e   Code   RO         4784    i.__scatterload_copy  mc_p.l(handlers.o)
-    0x2000618a   0x00000002   Code   RO         4785    i.__scatterload_null  mc_p.l(handlers.o)
-    0x2000618c   0x0000000e   Code   RO         4786    i.__scatterload_zeroinit  mc_p.l(handlers.o)
+    0x20005c14   0x00000024   Code   RO         4771    .text               mc_p.l(init.o)
+    0x20005c38   0x0000000c   Ven    RO         4787    Veneer$$Code        anon$$obj.o
+    0x20005c44   0x0000000c   Ven    RO         4788    Veneer$$Code        anon$$obj.o
+    0x20005c50   0x0000000c   Ven    RO         4789    Veneer$$Code        anon$$obj.o
+    0x20005c5c   0x0000000c   Ven    RO         4790    Veneer$$Code        anon$$obj.o
+    0x20005c68   0x0000000c   Ven    RO         4791    Veneer$$Code        anon$$obj.o
+    0x20005c74   0x0000000c   Ven    RO         4792    Veneer$$Code        anon$$obj.o
+    0x20005c80   0x0000000c   Ven    RO         4793    Veneer$$Code        anon$$obj.o
+    0x20005c8c   0x0000000c   Ven    RO         4794    Veneer$$Code        anon$$obj.o
+    0x20005c98   0x0000000c   Ven    RO         4795    Veneer$$Code        anon$$obj.o
+    0x20005ca4   0x0000000c   Ven    RO         4796    Veneer$$Code        anon$$obj.o
+    0x20005cb0   0x0000000c   Ven    RO         4797    Veneer$$Code        anon$$obj.o
+    0x20005cbc   0x0000000c   Ven    RO         4798    Veneer$$Code        anon$$obj.o
+    0x20005cc8   0x0000000c   Ven    RO         4799    Veneer$$Code        anon$$obj.o
+    0x20005cd4   0x0000000c   Ven    RO         4800    Veneer$$Code        anon$$obj.o
+    0x20005ce0   0x0000000c   Ven    RO         4801    Veneer$$Code        anon$$obj.o
+    0x20005cec   0x0000000c   Ven    RO         4802    Veneer$$Code        anon$$obj.o
+    0x20005cf8   0x0000000c   Ven    RO         4803    Veneer$$Code        anon$$obj.o
+    0x20005d04   0x0000000c   Ven    RO         4804    Veneer$$Code        anon$$obj.o
+    0x20005d10   0x0000000c   Ven    RO         4805    Veneer$$Code        anon$$obj.o
+    0x20005d1c   0x0000000c   Ven    RO         4806    Veneer$$Code        anon$$obj.o
+    0x20005d28   0x0000000c   Ven    RO         4807    Veneer$$Code        anon$$obj.o
+    0x20005d34   0x0000000c   Ven    RO         4808    Veneer$$Code        anon$$obj.o
+    0x20005d40   0x0000000c   Ven    RO         4809    Veneer$$Code        anon$$obj.o
+    0x20005d4c   0x0000000c   Ven    RO         4810    Veneer$$Code        anon$$obj.o
+    0x20005d58   0x0000000c   Ven    RO         4811    Veneer$$Code        anon$$obj.o
+    0x20005d64   0x0000000c   Ven    RO         4812    Veneer$$Code        anon$$obj.o
+    0x20005d70   0x0000000c   Ven    RO         4813    Veneer$$Code        anon$$obj.o
+    0x20005d7c   0x0000000c   Ven    RO         4814    Veneer$$Code        anon$$obj.o
+    0x20005d88   0x0000000c   Ven    RO         4815    Veneer$$Code        anon$$obj.o
+    0x20005d94   0x0000000c   Ven    RO         4816    Veneer$$Code        anon$$obj.o
+    0x20005da0   0x0000000c   Ven    RO         4817    Veneer$$Code        anon$$obj.o
+    0x20005dac   0x0000000c   Ven    RO         4818    Veneer$$Code        anon$$obj.o
+    0x20005db8   0x0000000c   Ven    RO         4819    Veneer$$Code        anon$$obj.o
+    0x20005dc4   0x0000000c   Ven    RO         4820    Veneer$$Code        anon$$obj.o
+    0x20005dd0   0x0000000c   Ven    RO         4821    Veneer$$Code        anon$$obj.o
+    0x20005ddc   0x0000000c   Ven    RO         4822    Veneer$$Code        anon$$obj.o
+    0x20005de8   0x0000000c   Ven    RO         4823    Veneer$$Code        anon$$obj.o
+    0x20005df4   0x0000000c   Ven    RO         4824    Veneer$$Code        anon$$obj.o
+    0x20005e00   0x0000000c   Ven    RO         4825    Veneer$$Code        anon$$obj.o
+    0x20005e0c   0x0000000c   Ven    RO         4826    Veneer$$Code        anon$$obj.o
+    0x20005e18   0x0000000c   Ven    RO         4827    Veneer$$Code        anon$$obj.o
+    0x20005e24   0x0000000c   Ven    RO         4828    Veneer$$Code        anon$$obj.o
+    0x20005e30   0x0000000c   Ven    RO         4829    Veneer$$Code        anon$$obj.o
+    0x20005e3c   0x0000000c   Ven    RO         4830    Veneer$$Code        anon$$obj.o
+    0x20005e48   0x0000000c   Ven    RO         4831    Veneer$$Code        anon$$obj.o
+    0x20005e54   0x0000000c   Ven    RO         4832    Veneer$$Code        anon$$obj.o
+    0x20005e60   0x0000000c   Ven    RO         4833    Veneer$$Code        anon$$obj.o
+    0x20005e6c   0x0000000c   Ven    RO         4834    Veneer$$Code        anon$$obj.o
+    0x20005e78   0x0000000c   Ven    RO         4835    Veneer$$Code        anon$$obj.o
+    0x20005e84   0x0000000c   Ven    RO         4836    Veneer$$Code        anon$$obj.o
+    0x20005e90   0x0000000c   Ven    RO         4837    Veneer$$Code        anon$$obj.o
+    0x20005e9c   0x0000000c   Ven    RO         4838    Veneer$$Code        anon$$obj.o
+    0x20005ea8   0x0000000c   Ven    RO         4839    Veneer$$Code        anon$$obj.o
+    0x20005eb4   0x0000000c   Ven    RO         4840    Veneer$$Code        anon$$obj.o
+    0x20005ec0   0x0000000c   Ven    RO         4841    Veneer$$Code        anon$$obj.o
+    0x20005ecc   0x0000000c   Ven    RO         4842    Veneer$$Code        anon$$obj.o
+    0x20005ed8   0x0000000c   Ven    RO         4843    Veneer$$Code        anon$$obj.o
+    0x20005ee4   0x0000000c   Ven    RO         4844    Veneer$$Code        anon$$obj.o
+    0x20005ef0   0x0000000c   Ven    RO         4845    Veneer$$Code        anon$$obj.o
+    0x20005efc   0x0000000c   Ven    RO         4846    Veneer$$Code        anon$$obj.o
+    0x20005f08   0x0000000c   Ven    RO         4847    Veneer$$Code        anon$$obj.o
+    0x20005f14   0x0000000c   Ven    RO         4848    Veneer$$Code        anon$$obj.o
+    0x20005f20   0x0000000c   Ven    RO         4849    Veneer$$Code        anon$$obj.o
+    0x20005f2c   0x0000000c   Ven    RO         4850    Veneer$$Code        anon$$obj.o
+    0x20005f38   0x0000000c   Ven    RO         4851    Veneer$$Code        anon$$obj.o
+    0x20005f44   0x0000000c   Ven    RO         4852    Veneer$$Code        anon$$obj.o
+    0x20005f50   0x0000000c   Ven    RO         4853    Veneer$$Code        anon$$obj.o
+    0x20005f5c   0x0000000c   Ven    RO         4854    Veneer$$Code        anon$$obj.o
+    0x20005f68   0x0000000c   Ven    RO         4855    Veneer$$Code        anon$$obj.o
+    0x20005f74   0x0000000c   Ven    RO         4856    Veneer$$Code        anon$$obj.o
+    0x20005f80   0x0000000c   Ven    RO         4857    Veneer$$Code        anon$$obj.o
+    0x20005f8c   0x0000000c   Ven    RO         4858    Veneer$$Code        anon$$obj.o
+    0x20005f98   0x0000000c   Ven    RO         4859    Veneer$$Code        anon$$obj.o
+    0x20005fa4   0x0000000c   Ven    RO         4860    Veneer$$Code        anon$$obj.o
+    0x20005fb0   0x0000000c   Ven    RO         4861    Veneer$$Code        anon$$obj.o
+    0x20005fbc   0x0000000c   Ven    RO         4862    Veneer$$Code        anon$$obj.o
+    0x20005fc8   0x0000000c   Ven    RO         4863    Veneer$$Code        anon$$obj.o
+    0x20005fd4   0x0000000c   Ven    RO         4864    Veneer$$Code        anon$$obj.o
+    0x20005fe0   0x0000000c   Ven    RO         4865    Veneer$$Code        anon$$obj.o
+    0x20005fec   0x0000000c   Ven    RO         4866    Veneer$$Code        anon$$obj.o
+    0x20005ff8   0x0000000c   Ven    RO         4867    Veneer$$Code        anon$$obj.o
+    0x20006004   0x0000000c   Ven    RO         4868    Veneer$$Code        anon$$obj.o
+    0x20006010   0x0000000c   Ven    RO         4869    Veneer$$Code        anon$$obj.o
+    0x2000601c   0x0000000c   Ven    RO         4870    Veneer$$Code        anon$$obj.o
+    0x20006028   0x0000000c   Ven    RO         4871    Veneer$$Code        anon$$obj.o
+    0x20006034   0x0000000c   Ven    RO         4872    Veneer$$Code        anon$$obj.o
+    0x20006040   0x0000000c   Ven    RO         4873    Veneer$$Code        anon$$obj.o
+    0x2000604c   0x0000000c   Ven    RO         4874    Veneer$$Code        anon$$obj.o
+    0x20006058   0x0000000c   Ven    RO         4875    Veneer$$Code        anon$$obj.o
+    0x20006064   0x0000000c   Ven    RO         4876    Veneer$$Code        anon$$obj.o
+    0x20006070   0x0000000c   Ven    RO         4877    Veneer$$Code        anon$$obj.o
+    0x2000607c   0x0000000c   Ven    RO         4878    Veneer$$Code        anon$$obj.o
+    0x20006088   0x0000000c   Ven    RO         4879    Veneer$$Code        anon$$obj.o
+    0x20006094   0x0000000c   Ven    RO         4880    Veneer$$Code        anon$$obj.o
+    0x200060a0   0x0000000c   Ven    RO         4881    Veneer$$Code        anon$$obj.o
+    0x200060ac   0x0000000c   Ven    RO         4882    Veneer$$Code        anon$$obj.o
+    0x200060b8   0x0000000c   Ven    RO         4883    Veneer$$Code        anon$$obj.o
+    0x200060c4   0x0000000c   Ven    RO         4884    Veneer$$Code        anon$$obj.o
+    0x200060d0   0x0000000c   Ven    RO         4885    Veneer$$Code        anon$$obj.o
+    0x200060dc   0x0000000c   Ven    RO         4886    Veneer$$Code        anon$$obj.o
+    0x200060e8   0x0000000c   Ven    RO         4887    Veneer$$Code        anon$$obj.o
+    0x200060f4   0x0000000c   Ven    RO         4888    Veneer$$Code        anon$$obj.o
+    0x20006100   0x0000000c   Ven    RO         4889    Veneer$$Code        anon$$obj.o
+    0x2000610c   0x0000000c   Ven    RO         4890    Veneer$$Code        anon$$obj.o
+    0x20006118   0x0000000c   Ven    RO         4891    Veneer$$Code        anon$$obj.o
+    0x20006124   0x0000000c   Ven    RO         4892    Veneer$$Code        anon$$obj.o
+    0x20006130   0x0000000c   Ven    RO         4893    Veneer$$Code        anon$$obj.o
+    0x2000613c   0x0000000c   Ven    RO         4894    Veneer$$Code        anon$$obj.o
+    0x20006148   0x0000000c   Ven    RO         4895    Veneer$$Code        anon$$obj.o
+    0x20006154   0x00000028   Code   RO         4609    i.__0sprintf$8      mc_p.l(printf8.o)
+    0x2000617c   0x0000000e   Code   RO         4781    i.__scatterload_copy  mc_p.l(handlers.o)
+    0x2000618a   0x00000002   Code   RO         4782    i.__scatterload_null  mc_p.l(handlers.o)
+    0x2000618c   0x0000000e   Code   RO         4783    i.__scatterload_zeroinit  mc_p.l(handlers.o)
     0x2000619a   0x00000002   PAD
-    0x2000619c   0x00000428   Code   RO         4617    i._printf_core      mc_p.l(printf8.o)
-    0x200065c4   0x00000020   Code   RO         4618    i._printf_post_padding  mc_p.l(printf8.o)
-    0x200065e4   0x0000002c   Code   RO         4619    i._printf_pre_padding  mc_p.l(printf8.o)
-    0x20006610   0x0000000a   Code   RO         4621    i._sputc            mc_p.l(printf8.o)
+    0x2000619c   0x00000428   Code   RO         4614    i._printf_core      mc_p.l(printf8.o)
+    0x200065c4   0x00000020   Code   RO         4615    i._printf_post_padding  mc_p.l(printf8.o)
+    0x200065e4   0x0000002c   Code   RO         4616    i._printf_pre_padding  mc_p.l(printf8.o)
+    0x20006610   0x0000000a   Code   RO         4618    i._sputc            mc_p.l(printf8.o)
     0x2000661a   0x00000002   PAD
-    0x2000661c   0x00000054   Code   RO         4664    i.free              mc_p.l(malloc.o)
-    0x20006670   0x0000006c   Code   RO         4665    i.malloc            mc_p.l(malloc.o)
+    0x2000661c   0x00000054   Code   RO         4661    i.free              mc_p.l(malloc.o)
+    0x20006670   0x0000006c   Code   RO         4662    i.malloc            mc_p.l(malloc.o)
     0x200066dc   0x00000016   Data   RO          469    .constdata          jump_table.o
     0x200066f2   0x00000002   PAD
     0x200066f4   0x00000130   Data   RO          751    .constdata          arch_patch.o
@@ -3959,38 +3959,38 @@ Memory Map of the image
     0x20006a4c   0x00000008   Data   RO          835    .constdata          llc.obj
     0x20006a54   0x00000010   Data   RO          836    .constdata          llc.obj
     0x20006a64   0x00000008   Data   RO          868    .constdata          gpio.o
-    0x20006a6c   0x00000060   Data   RO         2390    .constdata          wechat.o
-    0x20006acc   0x00000002   Data   RO         2391    .constdata          wechat.o
-    0x20006ace   0x00000005   Data   RO         2392    .constdata          wechat.o
-    0x20006ad3   0x00000005   Data   RO         2393    .constdata          wechat.o
-    0x20006ad8   0x00000005   Data   RO         2394    .constdata          wechat.o
+    0x20006a6c   0x00000060   Data   RO         2387    .constdata          wechat.o
+    0x20006acc   0x00000002   Data   RO         2388    .constdata          wechat.o
+    0x20006ace   0x00000005   Data   RO         2389    .constdata          wechat.o
+    0x20006ad3   0x00000005   Data   RO         2390    .constdata          wechat.o
+    0x20006ad8   0x00000005   Data   RO         2391    .constdata          wechat.o
     0x20006add   0x00000003   PAD
-    0x20006ae0   0x00000010   Data   RO         2395    .constdata          wechat.o
-    0x20006af0   0x00000008   Data   RO         2418    .constdata          wechat_task.o
-    0x20006af8   0x00000008   Data   RO         2419    .constdata          wechat_task.o
-    0x20006b00   0x00000018   Data   RO         2420    .constdata          wechat_task.o
-    0x20006b18   0x00000008   Data   RO         2421    .constdata          wechat_task.o
-    0x20006b20   0x00000018   Data   RO         2422    .constdata          wechat_task.o
-    0x20006b38   0x00000008   Data   RO         2423    .constdata          wechat_task.o
-    0x20006b40   0x000000c2   Data   RO         2518    .constdata          app.o
+    0x20006ae0   0x00000010   Data   RO         2392    .constdata          wechat.o
+    0x20006af0   0x00000008   Data   RO         2415    .constdata          wechat_task.o
+    0x20006af8   0x00000008   Data   RO         2416    .constdata          wechat_task.o
+    0x20006b00   0x00000018   Data   RO         2417    .constdata          wechat_task.o
+    0x20006b18   0x00000008   Data   RO         2418    .constdata          wechat_task.o
+    0x20006b20   0x00000018   Data   RO         2419    .constdata          wechat_task.o
+    0x20006b38   0x00000008   Data   RO         2420    .constdata          wechat_task.o
+    0x20006b40   0x000000c2   Data   RO         2515    .constdata          app.o
     0x20006c02   0x00000002   PAD
-    0x20006c04   0x00000038   Data   RO         2677    .constdata          app_task.o
-    0x20006c3c   0x00000008   Data   RO         2678    .constdata          app_task.o
-    0x20006c44   0x00000008   Data   RO         2679    .constdata          app_task.o
-    0x20006c4c   0x00000014   Data   RO         2707    .constdata          app_entry_point.o
-    0x20006c60   0x00000030   Data   RO         2916    .constdata          app_wechat_task.o
-    0x20006c90   0x00000020   Data   RO         2949    .constdata          app_security_task.o
-    0x20006cb0   0x00000027   Data   RO         2971    .constdata          app_easy_security.o
+    0x20006c04   0x00000038   Data   RO         2674    .constdata          app_task.o
+    0x20006c3c   0x00000008   Data   RO         2675    .constdata          app_task.o
+    0x20006c44   0x00000008   Data   RO         2676    .constdata          app_task.o
+    0x20006c4c   0x00000014   Data   RO         2704    .constdata          app_entry_point.o
+    0x20006c60   0x00000030   Data   RO         2913    .constdata          app_wechat_task.o
+    0x20006c90   0x00000020   Data   RO         2946    .constdata          app_security_task.o
+    0x20006cb0   0x00000027   Data   RO         2968    .constdata          app_easy_security.o
     0x20006cd7   0x00000001   PAD
-    0x20006cd8   0x00000078   Data   RO         3287    .constdata          mpbledemo2.o
-    0x20006d50   0x00000031   Data   RO         3288    .conststring        mpbledemo2.o
+    0x20006cd8   0x00000078   Data   RO         3284    .constdata          mpbledemo2.o
+    0x20006d50   0x00000031   Data   RO         3285    .conststring        mpbledemo2.o
     0x20006d81   0x00000003   PAD
-    0x20006d84   0x00000020   Data   RO         4782    Region$$Table       anon$$obj.o
+    0x20006d84   0x00000020   Data   RO         4779    Region$$Table       anon$$obj.o
     0x20006da4   0x00000004   Data   RW          618    .data               arch_system.o
-    0x20006da8   0x00000038   Data   RW         3289    .data               mpbledemo2.o
-    0x20006de0   0x0000002c   Data   RW         3290    .data               mpbledemo2.o
-    0x20006e0c   0x00000004   Data   RW         4751    .data               mc_p.l(mvars.o)
-    0x20006e10   0x00000004   Data   RW         4752    .data               mc_p.l(mvars.o)
+    0x20006da8   0x00000038   Data   RW         3286    .data               mpbledemo2.o
+    0x20006de0   0x0000002c   Data   RW         3287    .data               mpbledemo2.o
+    0x20006e0c   0x00000004   Data   RW         4748    .data               mc_p.l(mvars.o)
+    0x20006e10   0x00000004   Data   RW         4749    .data               mc_p.l(mvars.o)
 
 
     Execution Region RW_IRAM50 (Base: 0x20008000, Size: 0x00000000, Max: 0x00000bf4, ABSOLUTE)
@@ -4035,14 +4035,14 @@ Memory Map of the image
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x00080768   0x00000004   Zero   RW         1373    .bss                pwm.o
-    0x0008076c   0x00000004   Zero   RW         1576    .bss                systick.o
-    0x00080770   0x00000014   Zero   RW         2876    .bss                app_wechat.o
-    0x00080784   0x0000002c   Zero   RW         3076    .bss                ble_wechat_util.o
-    0x000807b0   0x0000000c   Zero   RW         3283    .bss                mpbledemo2.o
-    0x000807bc   0x00000016   Zero   RW         3284    .bss                mpbledemo2.o
+    0x00080768   0x00000004   Zero   RW         1370    .bss                pwm.o
+    0x0008076c   0x00000004   Zero   RW         1573    .bss                systick.o
+    0x00080770   0x00000014   Zero   RW         2873    .bss                app_wechat.o
+    0x00080784   0x0000002c   Zero   RW         3073    .bss                ble_wechat_util.o
+    0x000807b0   0x0000000c   Zero   RW         3280    .bss                mpbledemo2.o
+    0x000807bc   0x00000016   Zero   RW         3281    .bss                mpbledemo2.o
     0x000807d2   0x00000002   PAD
-    0x000807d4   0x000011ec   Zero   RW         3459    .bss                vmlayer.o
+    0x000807d4   0x000011ec   Zero   RW         3456    .bss                vmlayer.o
     0x000819c0   0x0000040c   Zero   RW          470    heap_db_area        jump_table.o
     0x00081dcc   0x00000154   Zero   RW          471    heap_env_area       jump_table.o
     0x00081f20   0x0000052c   Zero   RW          473    heap_msg_area       jump_table.o
@@ -4054,27 +4054,27 @@ Memory Map of the image
     0x00082460   0x00000014   Zero   RW          619    retention_mem_area0  arch_system.o
     0x00082474   0x00000018   Zero   RW          837    retention_mem_area0  llc.obj
     0x0008248c   0x0000000c   Zero   RW          926    retention_mem_area0  wkupct_quadec.o
-    0x00082498   0x0000001c   Zero   RW         1532    retention_mem_area0  uart2.o
-    0x000824b4   0x00000001   Zero   RW         1621    retention_mem_area0  rf_580.o
+    0x00082498   0x0000001c   Zero   RW         1529    retention_mem_area0  uart2.o
+    0x000824b4   0x00000001   Zero   RW         1618    retention_mem_area0  rf_580.o
     0x000824b5   0x00000001   PAD
-    0x000824b6   0x00000008   Zero   RW         1661    retention_mem_area0  rwble.o
+    0x000824b6   0x00000008   Zero   RW         1658    retention_mem_area0  rwble.o
     0x000824be   0x00000002   PAD
-    0x000824c0   0x00000004   Zero   RW         1773    retention_mem_area0  rwip.o
-    0x000824c4   0x00000004   Zero   RW         1774    retention_mem_area0  rwip.o
-    0x000824c8   0x0000000a   Zero   RW         2396    retention_mem_area0  wechat.o
-    0x000824d2   0x00000002   Zero   RW         2424    retention_mem_area0  wechat_task.o
-    0x000824d4   0x00000001   Zero   RW         2425    retention_mem_area0  wechat_task.o
+    0x000824c0   0x00000004   Zero   RW         1770    retention_mem_area0  rwip.o
+    0x000824c4   0x00000004   Zero   RW         1771    retention_mem_area0  rwip.o
+    0x000824c8   0x0000000a   Zero   RW         2393    retention_mem_area0  wechat.o
+    0x000824d2   0x00000002   Zero   RW         2421    retention_mem_area0  wechat_task.o
+    0x000824d4   0x00000001   Zero   RW         2422    retention_mem_area0  wechat_task.o
     0x000824d5   0x00000003   PAD
-    0x000824d8   0x00000038   Zero   RW         2520    retention_mem_area0  app.o
-    0x00082510   0x00000001   Zero   RW         2680    retention_mem_area0  app_task.o
+    0x000824d8   0x00000038   Zero   RW         2517    retention_mem_area0  app.o
+    0x00082510   0x00000001   Zero   RW         2677    retention_mem_area0  app_task.o
     0x00082511   0x00000003   PAD
-    0x00082514   0x00000028   Zero   RW         2756    retention_mem_area0  app_easy_timer.o
-    0x0008253c   0x00000018   Zero   RW         2828    retention_mem_area0  app_easy_msg_utils.o
-    0x00082554   0x00000002   Zero   RW         2877    retention_mem_area0  app_wechat.o
-    0x00082556   0x00000024   Zero   RW         2930    retention_mem_area0  app_security.o
+    0x00082514   0x00000028   Zero   RW         2753    retention_mem_area0  app_easy_timer.o
+    0x0008253c   0x00000018   Zero   RW         2825    retention_mem_area0  app_easy_msg_utils.o
+    0x00082554   0x00000002   Zero   RW         2874    retention_mem_area0  app_wechat.o
+    0x00082556   0x00000024   Zero   RW         2927    retention_mem_area0  app_security.o
     0x0008257a   0x00000002   PAD
-    0x0008257c   0x00000018   Zero   RW         2975    retention_mem_area0  app_easy_security.o
-    0x00082594   0x00000001   Zero   RW         3291    retention_mem_area0  mpbledemo2.o
+    0x0008257c   0x00000018   Zero   RW         2972    retention_mem_area0  app_easy_security.o
+    0x00082594   0x00000001   Zero   RW         3288    retention_mem_area0  mpbledemo2.o
 
 
     Execution Region ZI_RET21 (Base: 0x00082a20, Size: 0x000005e0, Max: 0x000005e0, ABSOLUTE)
@@ -4091,7 +4091,7 @@ Memory Map of the image
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x50000004   0x00000004   Zero   RW         1370    .ARM.__AT_0x50000004  pwm.o
+    0x50000004   0x00000004   Zero   RW         1367    .ARM.__AT_0x50000004  pwm.o
 
 
 
@@ -4101,7 +4101,7 @@ Memory Map of the image
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x50003400   0x00000004   Zero   RW         1371    .ARM.__AT_0x50003400  pwm.o
+    0x50003400   0x00000004   Zero   RW         1368    .ARM.__AT_0x50003400  pwm.o
 
 
 
@@ -4111,7 +4111,7 @@ Memory Map of the image
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x50003410   0x00000004   Zero   RW         1372    .ARM.__AT_0x50003410  pwm.o
+    0x50003410   0x00000004   Zero   RW         1369    .ARM.__AT_0x50003410  pwm.o
 
 
 ==============================================================================
@@ -4121,61 +4121,61 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-       228         14          0          0          0       1593   adc.o
-       952         20        194          0         56      18812   app.o
-       208          8          0          0          0       4602   app_default_handlers.o
-        84          8          0          0         24       2556   app_easy_msg_utils.o
-       664         16         39          0         24      13258   app_easy_security.o
-       174         12          0          0         40       4152   app_easy_timer.o
-       148          8         20          0          0       2919   app_entry_point.o
-       120         14          0          0         36       2751   app_security.o
-       196         22         32          0          0       3428   app_security_task.o
-       380         16         72          0          1      12000   app_task.o
-       488         40          0          0         22       9785   app_wechat.o
-       168         18         48          0          0       4044   app_wechat_task.o
-      1060         58          0          0          8       9359   arch_console.o
-       460         32          0          0       1503      18191   arch_main.o
-       376         94        360          0          0      14302   arch_patch.o
-       244         12          0          0          4       2348   arch_sleep.o
-       900         66          0          4         20      97118   arch_system.o
+       228         14          0          0          0       1581   adc.o
+       952         20        194          0         56      18668   app.o
+       208          8          0          0          0       4558   app_default_handlers.o
+        84          8          0          0         24       2516   app_easy_msg_utils.o
+       664         16         39          0         24      13190   app_easy_security.o
+       174         12          0          0         40       4100   app_easy_timer.o
+       148          8         20          0          0       2883   app_entry_point.o
+       120         14          0          0         36       2695   app_security.o
+       196         22         32          0          0       3388   app_security_task.o
+       380         16         72          0          1      11924   app_task.o
+       488         40          0          0         22       9693   app_wechat.o
+       168         18         48          0          0       3996   app_wechat_task.o
+      1060         58          0          0          8       9287   arch_console.o
+       460         32          0          0       1503      18051   arch_main.o
+       376         94        360          0          0      14206   arch_patch.o
+       244         12          0          0          4       2320   arch_sleep.o
+       900         66          0          4         20      96938   arch_system.o
        236         18          0          0          0         72   atts_task.obj
-       540        324          0          0         44       4602   ble_wechat_util.o
-       108         22        160          0       1792        760   boot_vectors.o
+       540        324          0          0         44       4546   ble_wechat_util.o
+       108         22        160          0       1792        744   boot_vectors.o
        196         12          0          0          0        108   ch_map.obj
-       216          6          0          0          0       1544   crc32.o
-       720          0          0          0          0       8732   epb.o
-      2128          8          0          0          0      11274   epb_mmbp.o
-         0          0        100          0          0       3516   gapm.o
+       216          6          0          0          0       1516   crc32.o
+       720          0          0          0          0       8700   epb.o
+      2128          8          0          0          0      11250   epb_mmbp.o
+         0          0        100          0          0       3476   gapm.o
        384         38          0          0          0        112   gapm_util.obj
-       556         22          8          0        188      11935   gpio.o
-        96         10          0          0          0        665   hardfault_handler.o
-         2          0        374          0       3736       8475   jump_table.o
+       556         22          8          0        188      11867   gpio.o
+        96         10          0          0          0        653   hardfault_handler.o
+         2          0        374          0       3736       8415   jump_table.o
        184         18          0          0          0         96   ke_task.obj
        352         22        520          0         24        236   llc.obj
-      3516       1140        169        100         35      31663   mpbledemo2.o
-       156         16          0          0          0       7163   nmi_handler.o
-       192         30        164          0          6       2340   nvds.o
-       128          4          0          0          0       4945   prf_utils.o
-        16          4          0          0         16       2602   pwm.o
-       760        178          0          0          1      65775   rf_580.o
-       868         68          0          0          8     117008   rwble.o
-       460         42          0          0          8      65608   rwip.o
+      3516       1140        169        100         35      31539   mpbledemo2.o
+       156         16          0          0          0       7115   nmi_handler.o
+       192         30        164          0          6       2300   nvds.o
+       128          4          0          0          0       4901   prf_utils.o
+        16          4          0          0         16       2546   pwm.o
+       760        178          0          0          1      65703   rf_580.o
+       868         68          0          0          8     116824   rwble.o
+       460         42          0          0          8      65536   rwip.o
        348         24          0          0          0        160   smpc.obj
        532          4          0          0          0         84   smpc_task.obj
-        44          0          0          0          0        681   syscntl.o
-        80         18          0          0          0     197683   system_armcm0.o
-        16          4          0          0          4       1284   systick.o
-       468         32          0          0          0       2665   trng.o
-       380         20          0          0         28      23534   uart2.o
-       212         18          0          0          0        830   user_periph_setup.o
-         8          0          0          0          0        981   user_wechat.o
-       272        112          0          0       4588       6856   vmlayer.o
-       212         14        129          0         10       5434   wechat.o
-       448         18         80          0          3       7482   wechat_task.o
-       328         30          0          0         12      13133   wkupct_quadec.o
+        44          0          0          0          0        665   syscntl.o
+        80         18          0          0          0     197383   system_armcm0.o
+        16          4          0          0          4       1236   systick.o
+       468         32          0          0          0       2637   trng.o
+       380         20          0          0         28      23462   uart2.o
+       212         18          0          0          0        814   user_periph_setup.o
+         8          0          0          0          0        953   user_wechat.o
+       272        112          0          0       4588       6808   vmlayer.o
+       212         14        129          0         10       5366   wechat.o
+       448         18         80          0          3       7414   wechat_task.o
+       328         30          0          0         12      13025   wkupct_quadec.o
 
     ----------------------------------------------------------------------
-     23324       3170       2512        104      12296     831256   Object Totals
+     23324       3170       2512        104      12296     828256   Object Totals
       1308        436         32          0         32          0   (incl. Generated)
          4          0         11          0         23          0   (incl. Padding)
 
@@ -4225,8 +4225,8 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     25244       3254       2512        112      12296     828996   Grand Totals
-     25244       3254       2512        112      12296     828996   ELF Image Totals
+     25244       3254       2512        112      12296     825996   Grand Totals
+     25244       3254       2512        112      12296     825996   ELF Image Totals
      25244       3254       2512        112          0          0   ROM Totals
 
 ==============================================================================

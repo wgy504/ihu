@@ -77,7 +77,7 @@ void bxxh_vm_init_hook(void)
 	
 	//纯粹启动信息的展示
 	IhuDebugPrint("IHU-VM: VM Shell start and initialization!");
-	sprintf(strDebug, "IHU-VM: Current HW-Type=%d, HW-VER=%d, SW-REL=%d, SW-DELIVERY=%d.", IHU_EMCWX_CURRENT_HW_TYPE, IHU_EMCWX_CURRENT_HW_PEM, IHU_EMCWX_CURRENT_SW_RELEASE, IHU_EMCWX_CURRENT_SW_DELIVERY);
+	sprintf(strDebug, "IHU-VM: Current Project = %s, HW-Type=%d, HW-VER=%d, SW-REL=%d, SW-DELIVERY=%d.", IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT, IHU_EMCWX_CURRENT_HW_TYPE, IHU_EMCWX_CURRENT_HW_PEM, IHU_EMCWX_CURRENT_SW_RELEASE, IHU_EMCWX_CURRENT_SW_DELIVERY);
 	IhuDebugPrint(strDebug);
 		
 	//NVDS MAC ADRESS的展示
@@ -242,7 +242,7 @@ int bxxh_emc_sample(void)
 void bxxh_led_flair(void)
 {
 	if (zIhuHwInvInfo.led_on_off == true){
-#ifdef IHU_EMCWX_CFG_HW_PEM2_0
+#if (IHU_EMCWX_CURRENT_HW_PEM_NEW == true)
 		bxxh_led_blink_once_on_off(LED_ID_6);
 		bxxh_led_blink_once_on_off(LED_ID_6);
 #else
@@ -252,7 +252,7 @@ void bxxh_led_flair(void)
 		zIhuHwInvInfo.led_on_off = false;
 	}else{
 		
-#ifdef IHU_EMCWX_CFG_HW_PEM2_0
+#if (IHU_EMCWX_CURRENT_HW_PEM_NEW == true)
 		bxxh_led_blink_once_on_off(LED_ID_6);
 		bxxh_led_blink_once_on_off(LED_ID_6);
 #else
