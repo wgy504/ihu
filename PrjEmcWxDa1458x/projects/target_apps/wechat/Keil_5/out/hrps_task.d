@@ -16,6 +16,7 @@
 .\out\hrps_task.o: .\..\src\config\user_profiles_config.h
 .\out\hrps_task.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\hrps_task.o: .\..\..\..\..\sdk_580\sdk\platform\arch\compiler\rvds\compiler.h
+.\out\hrps_task.o: C:\Keil\ARM\RV31\INC\stdbool.h
 .\out\hrps_task.o: .\..\..\..\..\sdk_580\sdk\platform\arch\ll\rvds\ll.h
 .\out\hrps_task.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\hrps_task.o: .\..\..\..\..\sdk_580\sdk\platform\include\reg_intc.h

@@ -99,7 +99,13 @@ int app_wechat_write_val_ind_handler(ke_msg_id_t const msgid,
 int app_wechat_send_data_handler(ke_msg_id_t const msgid,
                                   struct wechat_send_data_req const *req,
                                   ke_task_id_t const dest_id,
-                                  ke_task_id_t const src_id);                                  
+                                  ke_task_id_t const src_id);
+																	
+int app_wechat_period_report_time_out_handler(ke_msg_id_t const msgid,
+                                  struct wechat_period_report_time_out const *param,
+                                  ke_task_id_t const dest_id,
+                                  ke_task_id_t const src_id);     
+                                  
 #endif //(BLE_WECHAT)
 
 /// @} APPDISTASK

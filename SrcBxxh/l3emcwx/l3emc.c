@@ -836,5 +836,6 @@ OPSTAT ihu_pack_l3_data_to_cloud(IhuL3DataFormatTag_t *input, UINT8 *buf, UINT8 
 		return FAILURE;
 	}
 	
-	return SUCCESS;
+	return len; //纯粹为了消除WARNING，未来待完善这里的业务逻辑
+	//return SUCCESS;
 }

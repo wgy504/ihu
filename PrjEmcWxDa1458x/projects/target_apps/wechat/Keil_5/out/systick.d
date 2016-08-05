@@ -16,6 +16,7 @@
 .\out\systick.o: .\..\src\config\user_profiles_config.h
 .\out\systick.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\systick.o: .\..\..\..\..\sdk_580\sdk\platform\arch\compiler\rvds\compiler.h
+.\out\systick.o: C:\Keil\ARM\RV31\INC\stdbool.h
 .\out\systick.o: .\..\..\..\..\sdk_580\sdk\platform\arch\ll\rvds\ll.h
 .\out\systick.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\systick.o: .\..\..\..\..\sdk_580\sdk\platform\include\reg_intc.h

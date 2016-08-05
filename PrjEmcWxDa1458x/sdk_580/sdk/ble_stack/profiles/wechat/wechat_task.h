@@ -89,6 +89,8 @@ enum
     
     /// Error Indication
     WECHAT_ERROR_IND,
+		
+		WECHAT_PERIOD_REPORT_TIME_OUT,
 };
 
 
@@ -175,6 +177,11 @@ struct wechat_send_data_req
 {
     uint32_t dataLen;
     uint8_t* pDataBuf;
+};
+
+struct wechat_period_report_time_out
+{
+    uint8_t status;
 };
 
 /*

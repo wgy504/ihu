@@ -16,6 +16,7 @@
 .\out\ble_wechat_util.o: .\..\src\config\user_profiles_config.h
 .\out\ble_wechat_util.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\ble_wechat_util.o: .\..\..\..\..\sdk_580\sdk\platform\arch\compiler\rvds\compiler.h
+.\out\ble_wechat_util.o: C:\Keil\ARM\RV31\INC\stdbool.h
 .\out\ble_wechat_util.o: .\..\..\..\..\sdk_580\sdk\platform\arch\ll\rvds\ll.h
 .\out\ble_wechat_util.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\ble_wechat_util.o: .\..\..\..\..\sdk_580\sdk\platform\include\reg_intc.h

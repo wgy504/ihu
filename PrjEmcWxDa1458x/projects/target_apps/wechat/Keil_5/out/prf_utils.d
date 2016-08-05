@@ -16,6 +16,7 @@
 .\out\prf_utils.o: .\..\src\config\user_profiles_config.h
 .\out\prf_utils.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\prf_utils.o: .\..\..\..\..\sdk_580\sdk\platform\arch\compiler\rvds\compiler.h
+.\out\prf_utils.o: C:\Keil\ARM\RV31\INC\stdbool.h
 .\out\prf_utils.o: .\..\..\..\..\sdk_580\sdk\platform\arch\ll\rvds\ll.h
 .\out\prf_utils.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\prf_utils.o: .\..\..\..\..\sdk_580\sdk\platform\include\reg_intc.h

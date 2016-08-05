@@ -16,6 +16,7 @@
 .\out\l3emc.o: .\..\src\config\user_profiles_config.h
 .\out\l3emc.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\l3emc.o: .\..\..\..\..\sdk_580\sdk\platform\arch\compiler\rvds\compiler.h
+.\out\l3emc.o: C:\Keil\ARM\RV31\INC\stdbool.h
 .\out\l3emc.o: .\..\..\..\..\sdk_580\sdk\platform\arch\ll\rvds\ll.h
 .\out\l3emc.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\l3emc.o: .\..\..\..\..\sdk_580\sdk\platform\include\reg_intc.h
@@ -61,10 +62,11 @@
 .\out\l3emc.o: ..\..\..\..\..\SrcBxxh\l0comvm\commsg.h
 .\out\l3emc.o: ..\..\..\..\..\SrcBxxh\l0comvm\comtype.h
 .\out\l3emc.o: ..\..\..\..\..\SrcBxxh\l0comvm\sysdim.h
-.\out\l3emc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
+.\out\l3emc.o: C:\Keil\ARM\RV31\INC\time.h
 .\out\l3emc.o: ..\..\..\..\..\SrcBxxh\l0comvm\sysconfig.h
 .\out\l3emc.o: ..\..\..\..\..\SrcBxxh\l0comvm\sysversion.h
 .\out\l3emc.o: ..\..\..\..\..\SrcBxxh\l0comvm\sysengpar.h
+.\out\l3emc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 .\out\l3emc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\out\l3emc.o: .\..\..\..\..\sdk_580\sdk\platform\driver\gpio\gpio.h
 .\out\l3emc.o: .\..\..\..\..\sdk_580\sdk\platform\driver\adc\adc.h

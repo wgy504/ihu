@@ -16,6 +16,7 @@
 .\out\custom_common.o: .\..\src\config\user_profiles_config.h
 .\out\custom_common.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\custom_common.o: .\..\..\..\..\sdk_580\sdk\platform\arch\compiler\rvds\compiler.h
+.\out\custom_common.o: C:\Keil\ARM\RV31\INC\stdbool.h
 .\out\custom_common.o: .\..\..\..\..\sdk_580\sdk\platform\arch\ll\rvds\ll.h
 .\out\custom_common.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\custom_common.o: .\..\..\..\..\sdk_580\sdk\platform\include\reg_intc.h

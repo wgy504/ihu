@@ -446,7 +446,7 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 修改完善全局常量的命名规则，以便适应多项目模式下的严格区分
 = 完善LED BLINK中对PEM2.0判定的条件
 = 切换PEM2.0/PEM2.1，确定后台连不上的原因，发现PEM2.0/PEM2.1在管件连接上没有啥区别，除了两个不太用的管脚。锚定PEM2.1进行测试。
-
+= 增加了定时机制，以便在链路建立起来后，定时回报数据，待测试完善
 
 
 
@@ -469,12 +469,15 @@ Mission coming:
 ==SMART SNIPPETS
 ==Sleep: CFG_EXT_SLEEP / CFG_DEEP_SLEEP
   > 配置CFG文件，可以选择两种模式
+  > 如何进行相应的功耗测试
 ==Drivers: POWER MANAGEMENT, ADC, LED
 ==Security
   > CFG中有开关可以控制
   > AIRSYNC CRC/AES亦相关
 ==2nd uboot, SPtOA and SW download features
 ==Merge of other projects: proximity tag, iBeaCon, etc.
+==如果烧制MAC地址
+
 
 [待验证问题]
 - ADC sample

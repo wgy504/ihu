@@ -19,7 +19,6 @@
 #define CMD_SENDDAT_TMR_REPORT  7
 #define CMD_SENDDAT_HMD_REPORT  8
 
-
 #define DEVICE_TYPE "gh_70c714952b02" 
 #define DEVICE_ID  "gh_70c714952b02_8248307502397542f48a3775bcb234d4" //"wechat_dialog"   
 #define PROTO_VERSION   0x010004
@@ -79,7 +78,8 @@ typedef enum
 } mpbledemo2PackErrorCode;
 
 
-// command ID between device and vendor server
+// command ID between device and vendor server，
+// 这是纯粹的数据命令，属于L3的命令，只不过这里全部放在L2中解决掉了
 typedef enum
 {
 	//原始命令
@@ -97,13 +97,13 @@ typedef enum
 	readHmdInsPush  = 0x2901,  //后台送到DEVICE
 	readHmdDataResp = 0x2981,
 	//TimeSync
-	readTimeSyncReq= 0xF201,  //DEVICE发到后台
-	readTimeSyncResp  = 0xF281,  
+	readTimeSyncReq = 0xF201,  //DEVICE发到后台
+	readTimeSyncResp= 0xF281,  
 	//Equipment Info
 	readEquInfoPush = 0xF001,  //后台送到DEVICE
 	readEquInfoReq  = 0xF081,	
 	
-} BleDemo2CmdID;
+}BleDemo2CmdID;
 
 typedef struct
 {
@@ -148,5 +148,8 @@ extern data_handler *m_mpbledemo2_handler;
 extern void mpbledemo2_reset(void);
 extern void mpbledemo2_indication_state(bool isEnable);
 extern int32_t mpbledemo2_sendData(uint8_t* ptrData, uint32_t lengthInByte);
+
+#define BLEDEMO2_TIMER_PERIOD_REPORT 10 //in second
+extern void mpbledemo2_airsync_link_setup_period_report(void);
 
 #endif

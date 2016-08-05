@@ -16,6 +16,7 @@
 .\out\rf_580.o: .\..\src\config\user_profiles_config.h
 .\out\rf_580.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\rf_580.o: .\..\..\..\..\sdk_580\sdk\platform\arch\compiler\rvds\compiler.h
+.\out\rf_580.o: C:\Keil\ARM\RV31\INC\stdbool.h
 .\out\rf_580.o: .\..\..\..\..\sdk_580\sdk\platform\arch\ll\rvds\ll.h
 .\out\rf_580.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\rf_580.o: .\..\..\..\..\sdk_580\sdk\platform\include\reg_intc.h
@@ -78,5 +79,6 @@
 .\out\rf_580.o: .\..\..\..\..\sdk_580\sdk\platform\core_modules\rf\api\rf_580.h
 .\out\rf_580.o: .\..\..\..\..\sdk_580\sdk\platform\arch\system_settings.h
 .\out\rf_580.o: .\..\..\..\..\sdk_580\sdk\platform\core_modules\rf\api\pll_vcocal_lut.h
+.\out\rf_580.o: C:\Keil\ARM\RV31\INC\stdint.h
 .\out\rf_580.o: .\..\..\..\..\sdk_580\sdk\platform\driver\gpio\gpio.h
 .\out\rf_580.o: .\..\..\..\..\sdk_580\sdk\platform\arch\main\arch_system.h

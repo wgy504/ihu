@@ -16,6 +16,7 @@
 .\out\i2c_led.o: .\..\src\config\user_profiles_config.h
 .\out\i2c_led.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\i2c_led.o: .\..\..\..\..\sdk_580\sdk\platform\arch\compiler\rvds\compiler.h
+.\out\i2c_led.o: C:\Keil\ARM\RV31\INC\stdbool.h
 .\out\i2c_led.o: .\..\..\..\..\sdk_580\sdk\platform\arch\ll\rvds\ll.h
 .\out\i2c_led.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\i2c_led.o: .\..\..\..\..\sdk_580\sdk\platform\include\reg_intc.h
@@ -61,10 +62,11 @@
 .\out\i2c_led.o: ..\..\..\..\..\SrcBxxh\l0comvm\commsg.h
 .\out\i2c_led.o: ..\..\..\..\..\SrcBxxh\l0comvm\comtype.h
 .\out\i2c_led.o: ..\..\..\..\..\SrcBxxh\l0comvm\sysdim.h
-.\out\i2c_led.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
+.\out\i2c_led.o: C:\Keil\ARM\RV31\INC\time.h
 .\out\i2c_led.o: ..\..\..\..\..\SrcBxxh\l0comvm\sysconfig.h
 .\out\i2c_led.o: ..\..\..\..\..\SrcBxxh\l0comvm\sysversion.h
 .\out\i2c_led.o: ..\..\..\..\..\SrcBxxh\l0comvm\sysengpar.h
+.\out\i2c_led.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 .\out\i2c_led.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\out\i2c_led.o: .\..\..\..\..\sdk_580\sdk\platform\driver\gpio\gpio.h
 .\out\i2c_led.o: .\..\..\..\..\sdk_580\sdk\platform\driver\adc\adc.h

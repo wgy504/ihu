@@ -1,4 +1,4 @@
-;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Fri Aug 05 16:12:21 2016
+;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Fri Aug 05 19:52:45 2016
 ;VERSION 0.2
 ;FILE adc.o
 adc_calibrate <= USED 0
@@ -35,7 +35,6 @@ app_easy_gap_start_connection_to_set <= USED 0
 app_easy_gap_undirected_advertise_get_active <= USED 0
 app_easy_gap_undirected_advertise_with_timeout_start <= USED 0
 app_set_prf_srv_perm <= USED 0
-app_timer_set <= USED 0
 get_user_prf_srv_perm <= USED 0
 ;FILE app_default_handlers.o
 default_app_on_init <= USED 0
@@ -344,7 +343,6 @@ bxxh_init_msg_to_vmda <= USED 0
 bxxh_led_flair <= USED 0
 bxxh_message_send <= USED 0
 bxxh_timer_clear <= USED 0
-bxxh_timer_set <= USED 0
 bxxh_vm_init_hook <= USED 0
 bxxh_vm_task_entry_hook <= USED 0
 fsm_com_do_nothing <= USED 0

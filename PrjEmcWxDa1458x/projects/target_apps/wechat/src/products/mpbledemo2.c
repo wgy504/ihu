@@ -270,6 +270,7 @@ void mpbledemo2_data_free_func(uint8_t *data, uint32_t len)
     }
 }
 
+//从DEVICE发送命令到后台
 void mpbledemo2_data_produce_func(void *args, uint8_t **r_data, uint32_t *r_len)
 {	
 		static uint16_t bleDemoHeadLen = sizeof(BlueDemoHead);
@@ -368,17 +369,16 @@ void mpbledemo2_data_produce_func(void *args, uint8_t **r_data, uint32_t *r_len)
 		case CMD_SENDDAT_EMC_REPORT:
 		case CMD_SENDDAT:
 			{
-			#ifdef CATCH_LOG
-				arch_printf("\r\n msg to send : %s",(uint8_t*)info->send_msg.str);
-			#endif
+				#ifdef CATCH_LOG
+					arch_printf("\r\n msg to send : %s",(uint8_t*)info->send_msg.str);
+				#endif
 				BlueDemoHead  *bleDemoHead = (BlueDemoHead*)ke_malloc(bleDemoHeadLen+info->send_msg.len, KE_MEM_NON_RETENTION);
 				if (!bleDemoHead)
-                {
-                    arch_printf("\r\nNo enough memory!");
-                    return;
-                }
-                
-                // header of sent data
+				{
+					arch_printf("\r\nNo enough memory!");
+					return;
+				}
+        // header of sent data
 				bleDemoHead->m_magicCode[0] = MPBLEDEMO2_MAGICCODE_H;
 				bleDemoHead->m_magicCode[1] = MPBLEDEMO2_MAGICCODE_L;
 				bleDemoHead->m_version      = htons(MPBLEDEMO2_VERSION);
@@ -395,43 +395,43 @@ void mpbledemo2_data_produce_func(void *args, uint8_t **r_data, uint32_t *r_len)
 				memcpy((uint8_t*)bleDemoHead + bleDemoHeadLen, info->send_msg.str, info->send_msg.len);		
                 
 				SendDataRequest sendDatReq = 
-                    {
-                        &basReq, 
-                        { (uint8_t*) bleDemoHead, (bleDemoHeadLen + info->send_msg.len)},  // define the data content wrapped in epb
-                        false,      // no type, the data is directly sent to vendor server
-                        (EmDeviceDataType)NULL
-                    };
+				{
+					&basReq, 
+					{ (uint8_t*) bleDemoHead, (bleDemoHeadLen + info->send_msg.len)},  // define the data content wrapped in epb
+					false,      // no type, the data is directly sent to vendor server
+					(EmDeviceDataType)NULL
+				};
 				*r_len = epb_send_data_request_pack_size(&sendDatReq) + fix_head_len;
                     
-			#if defined EAM_md5AndAesEnrypt
-				uint16_t length = *r_len;
-				uint8_t *p = ke_malloc(AES_get_length( *r_len-fix_head_len), KE_MEM_NON_RETENTION);
-				if(!p){arch_printf("\r\nNot enough memory!");return;}
-				*r_len = AES_get_length( *r_len-fix_head_len)+fix_head_len;
-			#endif
+				#if defined EAM_md5AndAesEnrypt
+					uint16_t length = *r_len;
+					uint8_t *p = ke_malloc(AES_get_length( *r_len-fix_head_len), KE_MEM_NON_RETENTION);
+					if(!p){arch_printf("\r\nNot enough memory!");return;}
+					*r_len = AES_get_length( *r_len-fix_head_len)+fix_head_len;
+				#endif
                 
 				*r_data = (uint8_t *)ke_malloc(*r_len, KE_MEM_NON_RETENTION);
 				if(!(*r_data)){arch_printf("\r\nNot enough memory!");return;}
 				if(epb_pack_send_data_request(&sendDatReq, *r_data+fix_head_len, *r_len-fix_head_len)<0)
 				{
 					*r_data = NULL;
-				#if defined EAM_md5AndAesEnrypt
-					if(p){ke_free(p);
-					p = NULL;}
-				#endif
+					#if defined EAM_md5AndAesEnrypt
+						if(p){ke_free(p);
+						p = NULL;}
+					#endif
 					arch_printf("\r\nepb_pack_send_data_request error!");
 					return;
 				}
                 
-			#if defined EAM_md5AndAesEnrypt
-				//encrypt body
-				AES_Init(session_key);
-				AES_Encrypt_PKCS7(*r_data+fix_head_len,p,length-fix_head_len,session_key);//原始数据长度
-				memcpy(*r_data + fix_head_len, p, *r_len-fix_head_len);
-				if(p){ke_free(p); p = NULL;}
-			#endif
+				#if defined EAM_md5AndAesEnrypt
+					//encrypt body
+					AES_Init(session_key);
+					AES_Encrypt_PKCS7(*r_data+fix_head_len,p,length-fix_head_len,session_key);//原始数据长度
+					memcpy(*r_data + fix_head_len, p, *r_len-fix_head_len);
+					if(p){ke_free(p); p = NULL;}
+				#endif
                 
-                // header of epb
+        // header of epb
 				fix_head.nCmdId = htons(ECI_req_sendData);
 				fix_head.nLength = htons(*r_len);
 				fix_head.nSeq = htons(mpbledemo2Sta.seq);
@@ -439,54 +439,57 @@ void mpbledemo2_data_produce_func(void *args, uint8_t **r_data, uint32_t *r_len)
 				memcpy(*r_data, &fix_head, fix_head_len);
 				if(bleDemoHead){ke_free(bleDemoHead);bleDemoHead = NULL;}
                 
-			#ifdef CATCH_LOG
-				arch_printf("\r\n##send data: ");
-				uint8_t *d = *r_data;
-				for(uint8_t i=0;i<*r_len;++i){
-				arch_printf(" %x",d[i]);}
-				BpFixHead *fix_head = (BpFixHead *)*r_data;
-				arch_printf("\r\n CMDID: %d",ntohs(fix_head->nCmdId));
-				arch_printf("\r\n len: %d", ntohs(fix_head->nLength ));
-				arch_printf("\r\n Seq: %d", ntohs(fix_head->nSeq));
-			#endif
+				#ifdef CATCH_LOG
+					arch_printf("\r\n##send data: ");
+					uint8_t *d = *r_data;
+					for(uint8_t i=0;i<*r_len;++i){
+					arch_printf(" %x",d[i]);}
+					BpFixHead *fix_head = (BpFixHead *)*r_data;
+					arch_printf("\r\n CMDID: %d",ntohs(fix_head->nCmdId));
+					arch_printf("\r\n len: %d", ntohs(fix_head->nLength ));
+					arch_printf("\r\n Seq: %d", ntohs(fix_head->nSeq));
+				#endif
                 
-                // increase sequence by 1
-                mpbledemo2Sta.send_data_seq++;				
+				// increase sequence by 1
+        mpbledemo2Sta.send_data_seq++;				
 				return ;
 		}
 	}	
 }
 
+//从后台发送命令到DEVICE
 int mpbledemo2_data_consume_func(uint8_t *data, uint32_t len)
 {
 		BpFixHead *fix_head = (BpFixHead *)data;
 		uint8_t fix_head_len = sizeof(BpFixHead);
-	#ifdef CATCH_LOG
-		arch_printf("\r\n##Received data: ");
-		uint8_t *d = data;
-		for(uint8_t i=0;i<len;++i){
-		arch_printf(" %x",d[i]);}
-		arch_printf("\r\n CMDID: %d", ntohs(fix_head->nCmdId));
-		arch_printf("\r\n len: %d", ntohs(fix_head->nLength));
-		arch_printf("\r\n Seq: %d",ntohs(fix_head->nSeq));
-	#endif
+		#ifdef CATCH_LOG
+			arch_printf("\r\n##Received data: ");
+			uint8_t *d = data;
+			for(uint8_t i=0;i<len;++i){
+			arch_printf(" %x",d[i]);}
+			arch_printf("\r\n CMDID: %d", ntohs(fix_head->nCmdId));
+			arch_printf("\r\n len: %d", ntohs(fix_head->nLength));
+			arch_printf("\r\n Seq: %d",ntohs(fix_head->nSeq));
+		#endif
+			
 		switch(ntohs(fix_head->nCmdId))
 		{
 			case ECI_none:
 				{
 				}
 				break;
+				
 			case ECI_resp_auth:
 				{
 					AuthResponse* authResp;
 					authResp = epb_unpack_auth_response(data+fix_head_len,len-fix_head_len);
-				#ifdef CATCH_LOG
-					arch_printf("\r\n@@Received 'authResp'\r\n");
-				#endif
-					if(!authResp){return errorCodeUnpackAuthResp;}
-				#ifdef CATCH_LOG
-					arch_printf("\r\n unpack 'authResp' success!\r\n");
-				#endif
+					#ifdef CATCH_LOG
+						arch_printf("\r\n@@Received 'authResp'\r\n");
+					#endif
+						if(!authResp){return errorCodeUnpackAuthResp;}
+					#ifdef CATCH_LOG
+						arch_printf("\r\n unpack 'authResp' success!\r\n");
+					#endif
 					if(authResp->base_response)
 					{
 						if(authResp->base_response->err_code == 0)
@@ -510,99 +513,100 @@ int mpbledemo2_data_consume_func(uint8_t *data, uint32_t len)
 							return returnedErrCode;
 						}
 					}
-				#if defined EAM_md5AndAesEnrypt// get sessionkey
-					if(authResp->aes_session_key.len)
-					{
-					#ifdef CATCH_LOG
-						arch_printf("\r\nsession_key:");
-					#endif
-						AES_Init(key);
-						AES_Decrypt(session_key,authResp->aes_session_key.data,authResp->aes_session_key.len,key);
-						#ifdef CATCH_LOG
-						for(uint8_t i = 0;i<16;i++)
+					#if defined EAM_md5AndAesEnrypt// get sessionkey
+						if(authResp->aes_session_key.len)
 						{
-							arch_printf(" 0x%02x",session_key[i]);	
-						}
+						#ifdef CATCH_LOG
+							arch_printf("\r\nsession_key:");
 						#endif
-					}
-				#endif
+							AES_Init(key);
+							AES_Decrypt(session_key,authResp->aes_session_key.data,authResp->aes_session_key.len,key);
+							#ifdef CATCH_LOG
+							for(uint8_t i = 0;i<16;i++)
+							{
+								arch_printf(" 0x%02x",session_key[i]);	
+							}
+							#endif
+						}
+					#endif
 					epb_unpack_auth_response_free(authResp);
 				}
 				break;
+				
 			case ECI_resp_sendData:
 				{
-				
-			#ifdef CATCH_LOG
-				arch_printf("\r\n@@Received 'sendDataResp'\r\n");
-			#endif
-			#if defined EAM_md5AndAesEnrypt		
-					uint32_t length = len- fix_head_len;//加密后数据长度
-					uint8_t *p = ke_malloc (length, KE_MEM_NON_RETENTION);
-					if(!p){arch_printf("\r\nNot enough memory!"); if(data)ke_free(data);data = NULL; return 0;}
-					AES_Init(session_key);
-					//解密数据
-					AES_Decrypt(p,data+fix_head_len,len- fix_head_len,session_key);
-					
-					uint8_t temp;
-					temp = p[length - 1];//算出填充长度
-					len = len - temp;//取加密前数据总长度
-					memcpy(data + fix_head_len, p ,length -temp);//把明文放回
-					if(p){ke_free(p);p = NULL;}
-			#endif	
-				SendDataResponse *sendDataResp;
-				sendDataResp = epb_unpack_send_data_response(data+fix_head_len,len-fix_head_len);
-				if (!sendDataResp)
-				{
-					return errorCodeUnpackSendDataResp;
-				}
-			#ifdef CATCH_LOG
-				BlueDemoHead *bledemohead = (BlueDemoHead*)sendDataResp->data.data;
-				if ((sendDataResp->data.len < 12) ||(bledemohead->m_magicCode[0] != MPBLEDEMO2_MAGICCODE_H) || (bledemohead->m_magicCode[1] != MPBLEDEMO2_MAGICCODE_H))
-				{
-					arch_printf("\r\n received msg: no message content! \r\n");
-				}									
-				else if(ntohs(bledemohead->m_cmdid) == sendTextResp)
+					#ifdef CATCH_LOG
+						arch_printf("\r\n@@Received 'sendDataResp'\r\n");
+					#endif
+					#if defined EAM_md5AndAesEnrypt		
+						uint32_t length = len- fix_head_len;//加密后数据长度
+						uint8_t *p = ke_malloc (length, KE_MEM_NON_RETENTION);
+						if(!p){arch_printf("\r\nNot enough memory!"); if(data)ke_free(data);data = NULL; return 0;}
+						AES_Init(session_key);
+						//解密数据
+						AES_Decrypt(p,data+fix_head_len,len- fix_head_len,session_key);
+						
+						uint8_t temp;
+						temp = p[length - 1];//算出填充长度
+						len = len - temp;//取加密前数据总长度
+						memcpy(data + fix_head_len, p ,length -temp);//把明文放回
+						if(p){ke_free(p);p = NULL;}
+					#endif	
+					SendDataResponse *sendDataResp;
+					sendDataResp = epb_unpack_send_data_response(data+fix_head_len,len-fix_head_len);
+					if (!sendDataResp)
 					{
-						arch_printf("\r\n received msg: %s\r\n",sendDataResp->data.data+sizeof(BlueDemoHead));
+						return errorCodeUnpackSendDataResp;
 					}
-			#endif
+					#ifdef CATCH_LOG
+						BlueDemoHead *bledemohead = (BlueDemoHead*)sendDataResp->data.data;
+						if ((sendDataResp->data.len < 12) ||(bledemohead->m_magicCode[0] != MPBLEDEMO2_MAGICCODE_H) || (bledemohead->m_magicCode[1] != MPBLEDEMO2_MAGICCODE_H))
+						{
+							arch_printf("\r\n received msg: no message content! \r\n");
+						}									
+						else if(ntohs(bledemohead->m_cmdid) == sendTextResp)
+						{
+							arch_printf("\r\n received msg: %s\r\n",sendDataResp->data.data+sizeof(BlueDemoHead));
+						}
+					#endif
 					if(sendDataResp->base_response->err_code)
 					{
 						epb_unpack_send_data_response_free(sendDataResp);
 						return sendDataResp->base_response->err_code;
 					}
 					epb_unpack_send_data_response_free(sendDataResp);
-			}
+				}
 				break;
+			
 			case ECI_resp_init:
 				{
-				FirstNotificationBit = 0;
-				SecondNotificationBit = 0; 
-			#ifdef CATCH_LOG
-				arch_printf("\r\n@@Received 'initResp'\r\n");
-			#endif
-			#if defined EAM_md5AndAesEnrypt		
-					uint32_t length = len- fix_head_len;//加密后数据长度
-					uint8_t *p = ke_malloc (length, KE_MEM_NON_RETENTION);
-					if(!p){arch_printf("\r\nNot enough memory!");if(data)ke_free(data);data = NULL; return 0;}
-					AES_Init(session_key);
-					//解密数据
-					AES_Decrypt(p,data+fix_head_len,len- fix_head_len,session_key);
-					
-					uint8_t temp;
-					temp = p[length - 1];//算出填充长度
-					len = len - temp;//取加密前数据总长度
-					memcpy(data + fix_head_len, p ,length -temp);//把明文放回
-					if(p){ke_free(p);p = NULL;}
-			#endif		
-				InitResponse *initResp = epb_unpack_init_response(data+fix_head_len, len-fix_head_len);
-				if(!initResp)
-				{
-					return errorCodeUnpackInitResp;
-				}
-				#ifdef CATCH_LOG
-					arch_printf("\r\n unpack 'initResp' success!");
-				#endif	
+					FirstNotificationBit = 0;
+					SecondNotificationBit = 0; 
+					#ifdef CATCH_LOG
+						arch_printf("\r\n@@Received 'initResp'\r\n");
+					#endif
+					#if defined EAM_md5AndAesEnrypt		
+						uint32_t length = len- fix_head_len;//加密后数据长度
+						uint8_t *p = ke_malloc (length, KE_MEM_NON_RETENTION);
+						if(!p){arch_printf("\r\nNot enough memory!");if(data)ke_free(data);data = NULL; return 0;}
+						AES_Init(session_key);
+						//解密数据
+						AES_Decrypt(p,data+fix_head_len,len- fix_head_len,session_key);
+						
+						uint8_t temp;
+						temp = p[length - 1];//算出填充长度
+						len = len - temp;//取加密前数据总长度
+						memcpy(data + fix_head_len, p ,length -temp);//把明文放回
+						if(p){ke_free(p);p = NULL;}
+					#endif		
+					InitResponse *initResp = epb_unpack_init_response(data+fix_head_len, len-fix_head_len);
+					if(!initResp)
+					{
+						return errorCodeUnpackInitResp;
+					}
+					#ifdef CATCH_LOG
+						arch_printf("\r\n unpack 'initResp' success!");
+					#endif	
 					if(initResp->base_response)
 					{
 						if(initResp->base_response->err_code == 0)
@@ -632,141 +636,148 @@ int mpbledemo2_data_consume_func(uint8_t *data, uint32_t len)
 							return initResp->base_response->err_code;
 						}
 					}
-				epb_unpack_init_response_free(initResp);
-			}
+					epb_unpack_init_response_free(initResp);
+					
+					//这里可以增加时钟的启动，从而实现链路建立以后，自动上报数据
+					bxxh_timer_set(WECHAT_PERIOD_REPORT_TIME_OUT, TASK_WECHAT, BLEDEMO2_TIMER_PERIOD_REPORT);
+				}
 				break;
+			
 			case ECI_push_recvData:
 				{
-				#if defined EAM_md5AndAesEnrypt
-					uint32_t length = len- fix_head_len;//加密后数据长度
-					uint8_t *p = ke_malloc (length, KE_MEM_NON_RETENTION);
-					if(!p){arch_printf("\r\nNot enough memory!");if(data)ke_free(data); data =NULL; return 0;}
-					AES_Init(session_key);
-					//解密数据
-					AES_Decrypt(p,data+fix_head_len,len- fix_head_len,session_key);
-					
-					uint8_t temp;
-					temp = p[length - 1];//算出填充长度
-					len = len - temp;//取加密前数据总长度
-					memcpy(data + fix_head_len, p ,length -temp);//把明文放回
-					if(p){ke_free(p);p = NULL;}
-				#endif
-			RecvDataPush *recvDatPush;
-			recvDatPush = epb_unpack_recv_data_push(data+fix_head_len, len-fix_head_len);
-		#ifdef CATCH_LOG
-			arch_printf("\r\n@@Received 'recvDataPush'\r\n");
-		#endif
-			if(!recvDatPush)
-			{
-				return errorCodeUnpackRecvDataPush;
-			}
-		#ifdef CATCH_LOG
-			arch_printf("\r\n unpack the 'recvDataPush' successfully! \r\n");
-			if(recvDatPush->base_push == NULL)
-			{
-				arch_printf("\r\n recvDatPush->base_push is NULL! \r\n");
-			}
-			else 
-			{
-				arch_printf("\r\n recvDatPush->base_push is not NULL! \r\n");
-			}
-			arch_printf("\r\n recvDatPush->data.len: %x \r\n",recvDatPush->data.len);
-			arch_printf("\r\n recvDatPush->data.data:  \r\n");
-			const uint8_t *d = recvDatPush->data.data;
-			for(uint8_t i=0;i<recvDatPush->data.len;++i){
-			arch_printf(" %x",d[i]);}
-			if(recvDatPush->has_type)
-			{
-				arch_printf("\r\n recvDatPush has type! \r\n");
-				arch_printf("\r\n type: %d\r\n",recvDatPush->type);
-			}
-		#endif	
-			BlueDemoHead *bledemohead = (BlueDemoHead*)recvDatPush->data.data;
-		#ifdef CATCH_LOG
-			arch_printf("\r\n magicCode: %x",bledemohead->m_magicCode[0]);
-			arch_printf(" %x",bledemohead->m_magicCode[1]);
-			arch_printf("\r\n version: %x",ntohs(bledemohead->m_version));
-			arch_printf("\r\n totalLength: %x",ntohs(bledemohead->m_totalLength));
-			arch_printf("\r\n cmdid: %x",ntohs(bledemohead->m_cmdid ));
-			arch_printf("\r\n errorCode: %x",ntohs(bledemohead->m_errorCode));
-		#endif	
-            
-            // ble demo command handler
-            mpbledemo2_handleCmdFromServer((BleDemo2CmdID)ntohs(bledemohead->m_cmdid), ((uint8_t *)recvDatPush->data.data) + \
-                sizeof(BlueDemoHead), ntohs(bledemohead->m_totalLength) - sizeof(BlueDemoHead));
-  
-			epb_unpack_recv_data_push_free(recvDatPush);
-			mpbledemo2Sta.push_data_seq++;
-		}
+					#if defined EAM_md5AndAesEnrypt
+						uint32_t length = len- fix_head_len;//加密后数据长度
+						uint8_t *p = ke_malloc (length, KE_MEM_NON_RETENTION);
+						if(!p){arch_printf("\r\nNot enough memory!");if(data)ke_free(data); data =NULL; return 0;}
+						AES_Init(session_key);
+						//解密数据
+						AES_Decrypt(p,data+fix_head_len,len- fix_head_len,session_key);
+						
+						uint8_t temp;
+						temp = p[length - 1];//算出填充长度
+						len = len - temp;//取加密前数据总长度
+						memcpy(data + fix_head_len, p ,length -temp);//把明文放回
+						if(p){ke_free(p);p = NULL;}
+					#endif
+					RecvDataPush *recvDatPush;
+					recvDatPush = epb_unpack_recv_data_push(data+fix_head_len, len-fix_head_len);
+					#ifdef CATCH_LOG
+						arch_printf("\r\n@@Received 'recvDataPush'\r\n");
+					#endif
+					if(!recvDatPush)
+					{
+						return errorCodeUnpackRecvDataPush;
+					}
+					#ifdef CATCH_LOG
+						arch_printf("\r\n unpack the 'recvDataPush' successfully! \r\n");
+						if(recvDatPush->base_push == NULL)
+						{
+							arch_printf("\r\n recvDatPush->base_push is NULL! \r\n");
+						}
+						else 
+						{
+							arch_printf("\r\n recvDatPush->base_push is not NULL! \r\n");
+						}
+						arch_printf("\r\n recvDatPush->data.len: %x \r\n",recvDatPush->data.len);
+						arch_printf("\r\n recvDatPush->data.data:  \r\n");
+						const uint8_t *d = recvDatPush->data.data;
+						for(uint8_t i=0;i<recvDatPush->data.len;++i){
+						arch_printf(" %x",d[i]);}
+						if(recvDatPush->has_type)
+						{
+							arch_printf("\r\n recvDatPush has type! \r\n");
+							arch_printf("\r\n type: %d\r\n",recvDatPush->type);
+						}
+					#endif	
+					BlueDemoHead *bledemohead = (BlueDemoHead*)recvDatPush->data.data;
+					#ifdef CATCH_LOG
+						arch_printf("\r\n magicCode: %x",bledemohead->m_magicCode[0]);
+						arch_printf(" %x",bledemohead->m_magicCode[1]);
+						arch_printf("\r\n version: %x",ntohs(bledemohead->m_version));
+						arch_printf("\r\n totalLength: %x",ntohs(bledemohead->m_totalLength));
+						arch_printf("\r\n cmdid: %x",ntohs(bledemohead->m_cmdid ));
+						arch_printf("\r\n errorCode: %x",ntohs(bledemohead->m_errorCode));
+					#endif	 
+					// ble demo command handler
+					mpbledemo2_handleCmdFromServer((BleDemo2CmdID)ntohs(bledemohead->m_cmdid), ((uint8_t *)recvDatPush->data.data) + \
+										sizeof(BlueDemoHead), ntohs(bledemohead->m_totalLength) - sizeof(BlueDemoHead));  
+					epb_unpack_recv_data_push_free(recvDatPush);
+					mpbledemo2Sta.push_data_seq++;
+				}
 				break;
+				
 			case ECI_push_switchView:
 				{
-			
 					mpbledemo2Sta.wechats_switch_state = !mpbledemo2Sta.wechats_switch_state;
-			#ifdef CATCH_LOG
-				arch_printf("\r\n@@Received 'switchViewPush'\r\n");
-			#endif
-			#if defined EAM_md5AndAesEnrypt		
-					uint32_t length = len- fix_head_len;//加密后数据长度
-					uint8_t *p = ke_malloc (length, KE_MEM_NON_RETENTION);
-					if(!p){arch_printf("\r\nNot enough memory!");if(data)ke_free(data);data = NULL; return 0;}
-					AES_Init(session_key);
-					//解密数据
-					AES_Decrypt(p,data+fix_head_len,len- fix_head_len,session_key);
-					
-					uint8_t temp;
-					temp = p[length - 1];//算出填充长度
-					len = len - temp;//取加密前数据总长度
-					memcpy(data + fix_head_len, p ,length -temp);//把明文放回
-					if(p){ke_free(p);p = NULL;}
-			#endif		
-				SwitchViewPush *swichViewPush;
-				swichViewPush = epb_unpack_switch_view_push(data+fix_head_len,len-fix_head_len);
-				if(!swichViewPush)
-				{
-					return errorCodeUnpackSwitchViewPush;
+					#ifdef CATCH_LOG
+						arch_printf("\r\n@@Received 'switchViewPush'\r\n");
+					#endif
+					#if defined EAM_md5AndAesEnrypt		
+						uint32_t length = len- fix_head_len;//加密后数据长度
+						uint8_t *p = ke_malloc (length, KE_MEM_NON_RETENTION);
+						if(!p){arch_printf("\r\nNot enough memory!");if(data)ke_free(data);data = NULL; return 0;}
+						AES_Init(session_key);
+						//解密数据
+						AES_Decrypt(p,data+fix_head_len,len- fix_head_len,session_key);
+						
+						uint8_t temp;
+						temp = p[length - 1];//算出填充长度
+						len = len - temp;//取加密前数据总长度
+						memcpy(data + fix_head_len, p ,length -temp);//把明文放回
+						if(p){ke_free(p);p = NULL;}
+					#endif		
+					SwitchViewPush *swichViewPush;
+					swichViewPush = epb_unpack_switch_view_push(data+fix_head_len,len-fix_head_len);
+					if(!swichViewPush)
+					{
+						return errorCodeUnpackSwitchViewPush;
+					}
+					epb_unpack_switch_view_push_free(swichViewPush);
 				}
-				epb_unpack_switch_view_push_free(swichViewPush);
-			}
 				break;
+			
 			case ECI_push_switchBackgroud:
 				{
-			#ifdef CATCH_LOG
-				arch_printf("\r\n@@Received 'switchBackgroudPush'\r\n");
-			#endif
-			#if defined EAM_md5AndAesEnrypt
-					uint32_t length = len- fix_head_len;//加密后数据长度
-					uint8_t *p = ke_malloc (length, KE_MEM_NON_RETENTION);
-					if(!p){arch_printf("\r\nNot enough memory!");if(data)ke_free(data);data = NULL;  return 0;}
-					AES_Init(session_key);
-					//解密数据
-					AES_Decrypt(p,data+fix_head_len,len- fix_head_len,session_key);
-					uint8_t temp;
-					temp = p[length - 1];//算出填充长度
-					len = len - temp;//取加密前数据总长度
-					memcpy(data + fix_head_len, p ,length -temp);//把明文放回
-					if(data){ke_free(p);p = NULL;}
-			#endif
-				SwitchBackgroudPush *switchBackgroundPush = epb_unpack_switch_backgroud_push(data+fix_head_len,len-fix_head_len);
-				if(! switchBackgroundPush)
-				{
-					return errorCodeUnpackSwitchBackgroundPush;
-				}	
-				epb_unpack_switch_backgroud_push_free(switchBackgroundPush);
-			}
+					#ifdef CATCH_LOG
+						arch_printf("\r\n@@Received 'switchBackgroudPush'\r\n");
+					#endif
+					#if defined EAM_md5AndAesEnrypt
+						uint32_t length = len- fix_head_len;//加密后数据长度
+						uint8_t *p = ke_malloc (length, KE_MEM_NON_RETENTION);
+						if(!p){arch_printf("\r\nNot enough memory!");if(data)ke_free(data);data = NULL;  return 0;}
+						AES_Init(session_key);
+						//解密数据
+						AES_Decrypt(p,data+fix_head_len,len- fix_head_len,session_key);
+						uint8_t temp;
+						temp = p[length - 1];//算出填充长度
+						len = len - temp;//取加密前数据总长度
+						memcpy(data + fix_head_len, p ,length -temp);//把明文放回
+						if(data){ke_free(p);p = NULL;}
+					#endif
+					SwitchBackgroudPush *switchBackgroundPush = epb_unpack_switch_backgroud_push(data+fix_head_len,len-fix_head_len);
+					if(! switchBackgroundPush)
+					{
+						return errorCodeUnpackSwitchBackgroundPush;
+					}	
+					epb_unpack_switch_backgroud_push_free(switchBackgroundPush);
+				}
 				break;
+				
 			case ECI_err_decode:
 				break;
+			
 			default:
 				{
-		#ifdef CATCH_LOG
-			arch_printf("\r\n !!ERROR CMDID:%d",ntohs(fix_head->nCmdId));
-		#endif
-			}
+					#ifdef CATCH_LOG
+						arch_printf("\r\n !!ERROR CMDID:%d",ntohs(fix_head->nCmdId));
+					#endif
+				}
 				break;
-		}
+				
+		}//End of switch(ntohs(fix_head->nCmdId))
 		return 0;
 }
+
 void mpbledemo2_data_error_func(int error_code)
 {
 	if(error_code)
@@ -792,7 +803,8 @@ data_handler mpbledemo2_data_handler = {
 		.next                           = NULL
 };
 
-// send data to wechat server
+//send data to wechat server
+//app_wechat_task.c中的主要应用函数，用于处理{WECHAT_SEND_DATA_TO_MASTER, (ke_msg_func_t)app_wechat_send_data_handler}
 int32_t mpbledemo2_sendData(uint8_t* ptrData, uint32_t lengthInByte)
 {
   uint8_t *data = NULL;
@@ -817,20 +829,20 @@ void mpbledemo2_handleSendDataRsp(uint8_t *ptrData, uint32_t lengthInByte)
 
 void mpbledemo2_OpenLight(uint8_t *ptrData, uint32_t lengthInByte)
 {
-#ifdef CATCH_LOG
-	arch_printf("\r\n light on!! ");
-#endif
-    GPIO_SetActive(GPIO_ALERT_LED_PORT, GPIO_ALERT_LED_PIN);
-    isLightOn = true;
+	#ifdef CATCH_LOG
+		arch_printf("\r\n light on!! ");
+	#endif
+	GPIO_SetActive(GPIO_ALERT_LED_PORT, GPIO_ALERT_LED_PIN);
+	isLightOn = true;
 }
 
 void mpbledemo2_CloseLight(uint8_t *ptrData, uint32_t lengthInByte)
 {
-#ifdef CATCH_LOG
-	arch_printf("\r\n light off!! ");
-#endif    
-    GPIO_SetInactive(GPIO_ALERT_LED_PORT, GPIO_ALERT_LED_PIN);
-    isLightOn = false;
+	#ifdef CATCH_LOG
+		arch_printf("\r\n light off!! ");
+	#endif    
+	GPIO_SetInactive(GPIO_ALERT_LED_PORT, GPIO_ALERT_LED_PIN);
+	isLightOn = false;
 }
 
 void mpbledemo2_readEmcDataResp(uint8_t *ptrData, uint32_t lengthInByte)
@@ -866,7 +878,7 @@ void mpbledemo2_readEmcDataResp(uint8_t *ptrData, uint32_t lengthInByte)
 		return;
 	}
 	ble_wechat_indicate_data(data, len);
-    return;
+  return;
 	
 	//TMD，估计只能手工编码，不然就给屁朝凉了。。。
 }
@@ -909,4 +921,11 @@ void mpbledemo2_handleCmdFromServer(BleDemo2CmdID cmd, uint8_t *ptrData, uint32_
     }
 }
 
-
+void mpbledemo2_airsync_link_setup_period_report(void)
+{
+	//先判断链路状态，如果处于正常状态，则干下面的活
+	//发送报告数据
+	mpbledemo2_readEmcDataResp(NULL, 0);
+	//重新启动定时器
+	bxxh_timer_set(WECHAT_PERIOD_REPORT_TIME_OUT, TASK_WECHAT, BLEDEMO2_TIMER_PERIOD_REPORT);
+}

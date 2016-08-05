@@ -28,7 +28,7 @@ typedef struct data_handler{
 		data_free_func 						m_data_free_func;
 		data_consume_func 				m_data_consume_func;
 		data_error_func 					m_data_error_func;
-        data_init_peripheral_func          m_data_init_peripheral_func;
+    data_init_peripheral_func          m_data_init_peripheral_func;
 		data_init_func 						m_data_init_func;
 		data_main_process_func 		m_data_main_process_func;
 		data_button_handler_func 	m_data_button_handler_func;

@@ -16,6 +16,7 @@
 .\out\rwble.o: .\..\src\config\user_profiles_config.h
 .\out\rwble.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\rwble.o: .\..\..\..\..\sdk_580\sdk\platform\arch\compiler\rvds\compiler.h
+.\out\rwble.o: C:\Keil\ARM\RV31\INC\stdbool.h
 .\out\rwble.o: .\..\..\..\..\sdk_580\sdk\platform\arch\ll\rvds\ll.h
 .\out\rwble.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\rwble.o: .\..\..\..\..\sdk_580\sdk\platform\include\reg_intc.h
@@ -88,6 +89,7 @@
 .\out\rwble.o: .\..\..\..\..\sdk_580\sdk\platform\include\_reg_ble_em_cs.h
 .\out\rwble.o: .\..\..\..\..\sdk_580\sdk\platform\core_modules\ke\api\ke_mem.h
 .\out\rwble.o: .\..\..\..\..\sdk_580\sdk\platform\core_modules\rf\api\pll_vcocal_lut.h
+.\out\rwble.o: C:\Keil\ARM\RV31\INC\stdint.h
 .\out\rwble.o: .\..\..\..\..\sdk_580\sdk\platform\driver\gpio\gpio.h
 .\out\rwble.o: .\..\..\..\..\sdk_580\sdk\platform\core_modules\rf\api\rf_580.h
 .\out\rwble.o: .\..\..\..\..\sdk_580\sdk\platform\include\reg_ble_em_cs.h

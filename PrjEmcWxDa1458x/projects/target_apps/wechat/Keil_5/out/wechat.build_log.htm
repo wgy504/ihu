@@ -5,7 +5,7 @@
 <h2>Tool Versions:</h2>
 IDE-Version: ¦ÌVision V5.18.0.0
 Copyright (C) 2016 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: ZZ Microsoft, Microsoft, LIC=LJWGK-ZEPR1-AVU1J-U4SSR-Q96M5-JRGTF
+License Information: z MAMA, Microsoft, LIC=JDA30-BZJU5-68CFC-7RXXZ-QM63C-6Q9JT
  
 Tool Versions:
 Toolchain:       MDK-ARM Professional  Version: 5.18
@@ -21,43 +21,33 @@ Target DLL:      Segger\JL2CM3.dll V2.99.18.0
 Dialog DLL:      TARMCM1.DLL V1.9.0.0
  
 <h2>Project:</h2>
-D:\IHUPRJ\ihu\PrjEmcWxDa1458x\projects\target_apps\wechat\Keil_5\wechat.uvprojx
-Project File Date:  08/05/2016
+D:\IHUSRC\ihu\PrjEmcWxDa1458x\projects\target_apps\wechat\Keil_5\wechat.uvprojx
+Project File Date:  08/04/2016
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 1 (build 61)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build Project 'wechat' - Target 'emcwx'
-compiling i2c_led.c...
-D:\IHUPRJ\ihu\SrcBxxh\l0vmapi\i2c_led.c(456): warning:  #186-D: pointless comparison of unsigned integer with zero
-  		if((ledId >= 
-ED_ID_0) && (ledId <= LED_ID_3))
-..\..\..\..\..\SrcBxxh\l0vmapi\i2c_led.c: 1 warning, 0 errors
-compiling mpbledemo2.c...
-compiling vmlayer.c...
-compiling vmda_shell_task.c...
-compiling l1timer.c...
-compiling l2adcaries.c...
-compiling l2asylibra.c...
-D:\IHUPRJ\ihu\SrcBxxh\l2frame\l2asylibra.c(500): warning:  #188-D: enumerated type mixed with another type
-  		request->type = rcv.EmDeviceDataType;		
-D:\IHUPRJ\ihu\SrcBxxh\l2frame\l2asylibra.c(632): warning:  #188-D: enumerated type mixed with another type
-  	request->auth_method = 1;
-..\..\..\..\..\SrcBxxh\l2frame\l2asylibra.c: 2 warnings, 0 errors
-compiling l3emc.c...
-D:\IHUPRJ\ihu\SrcBxxh\l3emcwx\l3emc.c(813): warning:  #550-D: parameter "len" was set but never used
-  OPSTAT ihu_pack_l3_data_to_cloud(IhuL3DataFormatTag_t *input, UINT8 *buf, UINT8 len)
-..\..\..\..\..\SrcBxxh\l3emcwx\l3emc.c: 1 warning, 0 errors
+compiling app_wechat_task.c...
+D:\IHUSRC\ihu\PrjEmcWxDa1458x\sdk_580\sdk\app_modules\src\app_wechat\app_wechat_task.c(205): warning:  #223-D: function "arch_printf" declared implicitly
+  		arch_printf("\r\n button 1");
+D:\IHUSRC\ihu\PrjEmcWxDa1458x\sdk_580\sdk\app_modules\src\app_wechat\app_wechat_task.c(207): warning:  #223-D: function "mpbledemo2_sendData" declared implicitly
+    mpbledemo2_sendData(req->pDataBuf, req->dataLen);
+D:\IHUSRC\ihu\PrjEmcWxDa1458x\sdk_580\sdk\app_modules\src\app_wechat\app_wechat_task.c(218): warning:  #223-D: function "arch_printf" declared implicitly
+  		arch_printf("\r\n time out received");
+D:\IHUSRC\ihu\PrjEmcWxDa1458x\sdk_580\sdk\app_modules\src\app_wechat\app_wechat_task.c(220): warning:  #223-D: function "mpbledemo2_airsync_link_setup_period_report" declared implicitly
+    mpbledemo2_airsync_link_setup_period_report();
+..\..\..\..\sdk_580\sdk\app_modules\src\app_wechat\app_wechat_task.c: 4 warnings, 0 errors
 linking...
-Program Size: Code=25244 RO-data=2512 RW-data=112 ZI-data=12296  
+Program Size: Code=25368 RO-data=2520 RW-data=112 ZI-data=12296  
 FromELF: creating hex file...
 ".\out\wechat.axf" - 0 Error(s), 4 Warning(s).
 
 <h2>Collection of Component include folders:</h2>
-  D:\IHUPRJ\ihu\PrjEmcWxDa1458x\projects\target_apps\wechat\Keil_5\RTE
+  D:\IHUSRC\ihu\PrjEmcWxDa1458x\projects\target_apps\wechat\Keil_5\RTE
   C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include
 
 <h2>Collection of Component Files used:</h2>
-Build Time Elapsed:  00:00:09
+Build Time Elapsed:  00:00:03
 </pre>
 </body>
 </html>

@@ -16,6 +16,7 @@
 .\out\mpbledemo2.o: .\..\src\config\user_profiles_config.h
 .\out\mpbledemo2.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\mpbledemo2.o: .\..\..\..\..\sdk_580\sdk\platform\arch\compiler\rvds\compiler.h
+.\out\mpbledemo2.o: C:\Keil\ARM\RV31\INC\stdbool.h
 .\out\mpbledemo2.o: .\..\..\..\..\sdk_580\sdk\platform\arch\ll\rvds\ll.h
 .\out\mpbledemo2.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\mpbledemo2.o: .\..\..\..\..\sdk_580\sdk\platform\include\reg_intc.h
@@ -66,6 +67,7 @@
 .\out\mpbledemo2.o: ..\src\common\epb.h
 .\out\mpbledemo2.o: ..\src\common\md5.h
 .\out\mpbledemo2.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+.\out\mpbledemo2.o: C:\Keil\ARM\RV31\INC\stdint.h
 .\out\mpbledemo2.o: ..\src\common\crc32.h
 .\out\mpbledemo2.o: ..\src\products\mpbledemo2.h
 .\out\mpbledemo2.o: .\..\src\config\user_periph_setup.h
@@ -89,10 +91,11 @@
 .\out\mpbledemo2.o: ..\..\..\..\..\SrcBxxh\l0comvm\commsg.h
 .\out\mpbledemo2.o: ..\..\..\..\..\SrcBxxh\l0comvm\comtype.h
 .\out\mpbledemo2.o: ..\..\..\..\..\SrcBxxh\l0comvm\sysdim.h
-.\out\mpbledemo2.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
+.\out\mpbledemo2.o: C:\Keil\ARM\RV31\INC\time.h
 .\out\mpbledemo2.o: ..\..\..\..\..\SrcBxxh\l0comvm\sysconfig.h
 .\out\mpbledemo2.o: ..\..\..\..\..\SrcBxxh\l0comvm\sysversion.h
 .\out\mpbledemo2.o: ..\..\..\..\..\SrcBxxh\l0comvm\sysengpar.h
+.\out\mpbledemo2.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 .\out\mpbledemo2.o: .\..\..\..\..\sdk_580\sdk\platform\driver\adc\adc.h
 .\out\mpbledemo2.o: .\..\..\..\..\sdk_580\sdk\app_modules\api\app_task.h
 .\out\mpbledemo2.o: .\..\..\..\..\sdk_580\sdk\app_modules\api\app_api.h

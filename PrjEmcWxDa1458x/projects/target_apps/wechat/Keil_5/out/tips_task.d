@@ -16,6 +16,7 @@
 .\out\tips_task.o: .\..\src\config\user_profiles_config.h
 .\out\tips_task.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\tips_task.o: .\..\..\..\..\sdk_580\sdk\platform\arch\compiler\rvds\compiler.h
+.\out\tips_task.o: C:\Keil\ARM\RV31\INC\stdbool.h
 .\out\tips_task.o: .\..\..\..\..\sdk_580\sdk\platform\arch\ll\rvds\ll.h
 .\out\tips_task.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\tips_task.o: .\..\..\..\..\sdk_580\sdk\platform\include\reg_intc.h

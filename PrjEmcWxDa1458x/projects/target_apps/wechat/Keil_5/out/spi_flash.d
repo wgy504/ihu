@@ -16,6 +16,7 @@
 .\out\spi_flash.o: .\..\src\config\user_profiles_config.h
 .\out\spi_flash.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\spi_flash.o: .\..\..\..\..\sdk_580\sdk\platform\arch\compiler\rvds\compiler.h
+.\out\spi_flash.o: C:\Keil\ARM\RV31\INC\stdbool.h
 .\out\spi_flash.o: .\..\..\..\..\sdk_580\sdk\platform\arch\ll\rvds\ll.h
 .\out\spi_flash.o: .\..\..\..\..\sdk_580\sdk\platform\arch\arch.h
 .\out\spi_flash.o: .\..\..\..\..\sdk_580\sdk\platform\include\reg_intc.h
