@@ -20,7 +20,6 @@
 
     #include "da1458x_stack_config.h"
 
-           
 /****************************************************************************************************************/
 /* If defined the OTP header data are read from SysRAM. The data are copied by bootrom code.                    */
 /* Otherwise the OTP Header data are read from OTP memory.                                                      */
@@ -123,14 +122,44 @@
 /* - CFG_NVDS_TAG_BLE_CA_NB_PKT         Number of packets to receive for statistics                             */
 /* - CFG_NVDS_TAG_BLE_CA_NB_BAD_PKT     Number  of bad packets needed to remove a channel                       */
 /****************************************************************************************************************/
-//#define CFG_NVDS_TAG_BD_ADDRESS             {0xbc, 0x9a, 0x78, 0x56, 0x34, 0x12} //ZJL
-#define CFG_NVDS_TAG_BD_ADDRESS             {0x27, 0xEF, 0xA5, 0x72, 0x39, 0xD0} //ZJL
-//#define CFG_NVDS_TAG_BD_ADDRESS             {0x28, 0xEF, 0xA5, 0x72, 0x39, 0xD0} //MYC
-//#define CFG_NVDS_TAG_BD_ADDRESS             {0x29, 0xEF, 0xA5, 0x72, 0x39, 0xD0} //XX
-//#define CFG_NVDS_TAG_BD_ADDRESS             {0x2A, 0xEF, 0xA5, 0x72, 0x39, 0xD0} //CZ
-//#define CFG_NVDS_TAG_BD_ADDRESS             {0x2B, 0xEF, 0xA5, 0x72, 0x39, 0xD0} //LZH
-//#define CFG_NVDS_TAG_BD_ADDRESS             {0x2C, 0xEF, 0xA5, 0x72, 0x39, 0xD0} //JT
-
+#if (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_NULL)
+	#define CFG_NVDS_TAG_BD_ADDRESS             {0xbc, 0x9a, 0x78, 0x56, 0x34, 0x12}
+#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_ZJL)	
+	#define CFG_NVDS_TAG_BD_ADDRESS             {0x27, 0xEF, 0xA5, 0x72, 0x39, 0xD0} //ZJL
+#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_MYC)		
+	#define CFG_NVDS_TAG_BD_ADDRESS             {0x28, 0xEF, 0xA5, 0x72, 0x39, 0xD0} //MYC
+#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_XX)		
+	#define CFG_NVDS_TAG_BD_ADDRESS             {0x29, 0xEF, 0xA5, 0x72, 0x39, 0xD0} //XX
+#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_CZ)		
+	#define CFG_NVDS_TAG_BD_ADDRESS             {0x2A, 0xEF, 0xA5, 0x72, 0x39, 0xD0} //CZ
+#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_LZH)		
+	#define CFG_NVDS_TAG_BD_ADDRESS             {0x2B, 0xEF, 0xA5, 0x72, 0x39, 0xD0} //LZH
+#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPEr_ENV_NAME_JT)		
+	#define CFG_NVDS_TAG_BD_ADDRESS             {0x2C, 0xEF, 0xA5, 0x72, 0x39, 0xD0} //JT
+#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_TESTER1)		
+	#define CFG_NVDS_TAG_BD_ADDRESS             {0x27, 0xEF, 0xA5, 0x72, 0x39, 0xD0}
+#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_TESTER2)		
+	#define CFG_NVDS_TAG_BD_ADDRESS             {0x27, 0xEF, 0xA5, 0x72, 0x39, 0xD0}	
+#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_TESTER3)		
+	#define CFG_NVDS_TAG_BD_ADDRESS             {0x27, 0xEF, 0xA5, 0x72, 0x39, 0xD0}
+#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_TESTER4)		
+	#define CFG_NVDS_TAG_BD_ADDRESS             {0x27, 0xEF, 0xA5, 0x72, 0x39, 0xD0}	
+#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_TESTER5)		
+	#define CFG_NVDS_TAG_BD_ADDRESS             {0x27, 0xEF, 0xA5, 0x72, 0x39, 0xD0}
+#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_TESTER6)		
+	#define CFG_NVDS_TAG_BD_ADDRESS             {0x27, 0xEF, 0xA5, 0x72, 0x39, 0xD0}	
+#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_TESTER7)		
+	#define CFG_NVDS_TAG_BD_ADDRESS             {0x27, 0xEF, 0xA5, 0x72, 0x39, 0xD0}
+#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_TESTER8)		
+	#define CFG_NVDS_TAG_BD_ADDRESS             {0x27, 0xEF, 0xA5, 0x72, 0x39, 0xD0}	
+#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_TESTER9)		
+	#define CFG_NVDS_TAG_BD_ADDRESS             {0x27, 0xEF, 0xA5, 0x72, 0x39, 0xD0}
+#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_TESTER10)		
+	#define CFG_NVDS_TAG_BD_ADDRESS             {0x27, 0xEF, 0xA5, 0x72, 0x39, 0xD0}	
+#else
+	#define CFG_NVDS_TAG_BD_ADDRESS             {0x27, 0xEF, 0xA5, 0x72, 0x39, 0xD0}	
+#endif
+	
 #define CFG_NVDS_TAG_LPCLK_DRIFT            DRIFT_BLE_DFT
 #define CFG_NVDS_TAG_BLE_CA_TIMER_DUR       2000
 #define CFG_NVDS_TAG_BLE_CRA_TIMER_DUR      6
