@@ -2382,7 +2382,7 @@
 
   <Group>
     <GroupName>user_app</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -2646,7 +2646,7 @@
 
   <Group>
     <GroupName>l0vmda</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -2657,8 +2657,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\SrcBxxh\l0vmda\vmda_shell_task.c</PathWithFileName>
-      <FilenameWithoutPath>vmda_shell_task.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\..\SrcBxxh\l0vmda\vmdashell_task.c</PathWithFileName>
+      <FilenameWithoutPath>vmdashell_task.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2669,8 +2669,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\SrcBxxh\l0vmda\vmda_shell_task.h</PathWithFileName>
-      <FilenameWithoutPath>vmda_shell_task.h</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\..\SrcBxxh\l0vmda\vmdashell_task.h</PathWithFileName>
+      <FilenameWithoutPath>vmdashell_task.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

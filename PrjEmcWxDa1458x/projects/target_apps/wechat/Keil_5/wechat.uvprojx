@@ -1490,14 +1490,14 @@
           <GroupName>l0vmda</GroupName>
           <Files>
             <File>
-              <FileName>vmda_shell_task.c</FileName>
+              <FileName>vmdashell_task.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\SrcBxxh\l0vmda\vmda_shell_task.c</FilePath>
+              <FilePath>..\..\..\..\..\SrcBxxh\l0vmda\vmdashell_task.c</FilePath>
             </File>
             <File>
-              <FileName>vmda_shell_task.h</FileName>
+              <FileName>vmdashell_task.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\SrcBxxh\l0vmda\vmda_shell_task.h</FilePath>
+              <FilePath>..\..\..\..\..\SrcBxxh\l0vmda\vmdashell_task.h</FilePath>
             </File>
           </Files>
         </Group>
