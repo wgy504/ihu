@@ -502,7 +502,7 @@ enum KE_TASK_TYPE
     #endif
 
     // End of conditionally assigned task types
-    TASK_VMDA           = 59  ,
+    TASK_VMDA1458X           = 59  ,
 		
     TASK_HCI            = 60  ,
     TASK_HCIH           = 61  ,

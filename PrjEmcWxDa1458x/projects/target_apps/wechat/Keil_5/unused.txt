@@ -1,4 +1,4 @@
-;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Sat Aug 13 11:47:04 2016
+;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Sat Aug 13 14:13:14 2016
 ;VERSION 0.2
 ;FILE adc.o
 adc_calibrate <= USED 0
@@ -308,23 +308,23 @@ uart2_read <= USED 0
 ;FILE user_wechat.o
 user_on_connection <= USED 0
 user_on_disconnect <= USED 0
-;FILE vmda_shell_task.o
-bxxh_task_vmda_init <= USED 0
-bxxh_task_vmda_mainloop <= USED 0
-fsm_vmda_data_ul_send <= USED 0
-fsm_vmda_init <= USED 0
-fsm_vmda_init_fb_rcv <= USED 0
-fsm_vmda_init_time_out <= USED 0
-fsm_vmda_restart <= USED 0
-fsm_vmda_stop_rcv <= USED 0
-fsm_vmda_task_entry <= USED 0
-func_vmda_check_init_fb_complete <= USED 0
-func_vmda_hw_init <= USED 0
-func_vmda_send_out_init <= USED 0
-hlBxxhVmdaBleDisc <= USED 0
-hlBxxhVmdaBleInit <= USED 0
-hlBxxhVmdaSpsBleDataDlRcv <= USED 0
-hlBxxhVmdaSysClock1sPeriod <= USED 0
+;FILE vmdashell_task.o
+fsm_vmdashell_data_ul_send <= USED 0
+fsm_vmdashell_restart <= USED 0
+fsm_vmdashell_stop_rcv <= USED 0
+fsm_vmdashell_task_entry <= USED 0
+fsm_vmdashell_task_init <= USED 0
+fsm_vmdashell_task_init_fb_rcv <= USED 0
+fsm_vmdashell_task_init_time_out <= USED 0
+func_vmdashell_check_init_fb_complete <= USED 0
+func_vmdashell_hw_init <= USED 0
+func_vmdashell_send_out_init <= USED 0
+hlFuncVmdashellBleDisc <= USED 0
+hlFuncVmdashellBleInit <= USED 0
+hlFuncVmdashellSpsBleDataDlRcv <= USED 0
+hlFuncVmdashellSysClock1sPeriod <= USED 0
+ihu_task_vmdashell_init <= USED 0
+ihu_task_vmdashell_mainloop <= USED 0
 ;FILE vmlayer.o
 FsmAddNew <= USED 0
 FsmGetState <= USED 0
@@ -334,8 +334,6 @@ FsmProcessingLaunchExecute <= USED 0
 FsmRunEngine <= USED 0
 FsmSetState <= USED 0
 IhuDebugPrint <= USED 0
-app_ble_push <= USED 0
-app_uart_push_zjl <= USED 0
 b2l_uint16 <= USED 0
 bxxh_vm_init_hook <= USED 0
 bxxh_vm_task_entry_hook <= USED 0
@@ -352,12 +350,15 @@ ihu_task_create_all <= USED 0
 ihu_task_create_and_run <= USED 0
 ihu_task_execute_all <= USED 0
 ihu_taskid_to_string <= USED 0
-vmda_data_send_to_ble <= USED 0
-vmda_data_send_to_uart <= USED 0
-vmda_init_msg_to_shell <= USED 0
-vmda_led_flair <= USED 0
-vmda_message_send <= USED 0
-vmda_timer_clear <= USED 0
+ihu_timer_clear <= USED 0
+vmda1458x_data_send_to_ble <= USED 0
+vmda1458x_data_send_to_uart <= USED 0
+vmda1458x_init_msg_to_vmdashell <= USED 0
+vmda1458x_led_flair <= USED 0
+vmda1458x_message_send <= USED 0
+vmda1458x_timer_clear <= USED 0
+vmda_app_ble_push <= USED 0
+vmda_app_uart_push_zjl <= USED 0
 ;FILE wecaht_aes.o
 AES_Decrypt <= USED 0
 AES_Encrypt_PKCS7 <= USED 0

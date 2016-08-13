@@ -449,8 +449,12 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 增加了定时机制，以便在链路建立起来后，定时回报数据，待测试完善
 = 统一命名，将VMDA对应的函数改为VMDA开头的函数，以便未来支持更多的VM虚拟机函数入口，并且命名有规律
 
-
-
+//= ZJL, 2016 Aug.13, IHU_EMCWX_CURRENT_SW_DELIVERY R03.12
+= 完善VMDA的函数空间
+= 统一PEM的#if (表达式)定义方式
+= 统一ihu函数对不同项目的分类处理
+= 统一对VMDASHELL和vmda1458x底层函数的命名
+= TASK_VMDA1458X和TASK_ID_VMDASHELL任务分别对应SHELL上层任务模块以及底层SDK认可的任务模块
 
 
 

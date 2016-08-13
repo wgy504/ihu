@@ -61,7 +61,7 @@
 enum IHU_TASK_NAME_ID
 {
 	TASK_ID_MIN = 0,
-	TASK_ID_VMDA,
+	TASK_ID_VMDASHELL,
 	TASK_ID_TIMER,
 	TASK_ID_ASYLIBRA,
 	//TASK_ID_AKSLEO,
@@ -153,15 +153,33 @@ typedef struct FsmTable
 //跟DA14580 BLE底层交互的API
 extern void bxxh_vm_init_hook(void);  //用于给DA148x的主程序挂载初始化的入口函数
 extern void bxxh_vm_task_entry_hook(void);  //用于给DA148x的主程序挂载循环主任务的入口函数
-extern void vmda_message_send(ke_msg_id_t const msg_id, ke_task_id_t const dest_id, ke_task_id_t const src_id, void const *param_ptr, uint16_t const param_len); //message send
-extern void vmda_timer_set(ke_msg_id_t const timerid, ke_task_id_t const taskid, uint16_t delay);
-extern void vmda_timer_clear(ke_msg_id_t const timerid, ke_task_id_t const taskid);
-extern void vmda_data_send_to_ble(unsigned char *p, int n);
-extern void vmda_data_send_to_uart(unsigned char *p, int n);
-extern int  vmda_emc_sample(void);  //ADC0读数，可以通过被动式获取
-extern void vmda_led_flair(void);
-extern void vmda_init_msg_to_shell(void);
+extern void vmda1458x_message_send(ke_msg_id_t const msg_id, ke_task_id_t const dest_id, ke_task_id_t const src_id, void const *param_ptr, uint16_t const param_len); //message send
+extern void vmda1458x_timer_set(ke_msg_id_t const timerid, ke_task_id_t const taskid, uint16_t delay);
+extern void vmda1458x_timer_clear(ke_msg_id_t const timerid, ke_task_id_t const taskid);
+extern void vmda1458x_data_send_to_ble(unsigned char *p, int n);
+extern void vmda1458x_data_send_to_uart(unsigned char *p, int n);
+extern int  vmda1458x_emc_sample(void);  //ADC0读数，可以通过被动式获取
+extern void vmda1458x_led_flair(void);
+extern void vmda1458x_init_msg_to_vmdashell(void);
+extern OPSTAT vmda1458x_mac_addr_get(UINT8* mac, UINT8 len);
 
+
+//外部引用的API
+extern _ARMABI int sprintf(char * __restrict /*s*/, const char * __restrict /*format*/, ...) __attribute__((__nonnull__(1,2)));
+extern int arch_printf(const char *fmt, ...);
+//extern void bxxh_task_vmda_main_entry(void);
+extern void ihu_task_vmdashell_init(void);
+extern void ihu_task_vmdashell_mainloop(void);
+
+//VM FSM related APIs
+extern OPSTAT FsmInit(void);
+extern OPSTAT FsmAddNew(UINT8 task_id, FsmStateItem_t* pFsmStateItem);
+extern OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT8 param_len);
+extern OPSTAT FsmProcessingLaunchEntry(UINT8 task_id);
+extern OPSTAT FsmProcessingLaunchExecute(UINT8 task_id);
+extern OPSTAT FsmSetState(UINT8 task_id, UINT8 newState);
+extern UINT8  FsmGetState(UINT8 task_id);
+extern OPSTAT fsm_com_do_nothing(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 param_len);
 
 //Global VM layer basic API and functions
 extern OPSTAT ihu_message_rcv(UINT8 dest_id, IhuMsgSruct_t *msg);
@@ -174,36 +192,19 @@ extern OPSTAT ihu_system_task_execute(UINT8 task_id, FsmStateItem_t *p);
 extern OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateItem);
 extern void   ihu_task_create_all(void);
 extern void   ihu_task_execute_all(void);
-
-//VM FSM related APIs
-extern OPSTAT FsmInit(void);
-extern OPSTAT FsmAddNew(UINT8 task_id, FsmStateItem_t* pFsmStateItem);
-extern OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT8 param_len);
-extern OPSTAT FsmProcessingLaunchEntry(UINT8 task_id);
-extern OPSTAT FsmProcessingLaunchExecute(UINT8 task_id);
-extern OPSTAT FsmSetState(UINT8 task_id, UINT8 newState);
-extern UINT8  FsmGetState(UINT8 task_id);
-extern OPSTAT fsm_com_do_nothing(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 param_len);
+extern void ihu_timer_set(UINT16 const timerid, UINT16 const taskid, UINT16 delay);
+extern void ihu_timer_clear(UINT16 const timerid, UINT16 const taskid);
 
 //VMDA内部以及上层使用的API
 extern void IhuDebugPrint(char *p);
 extern void IhuErrorPrint(char *p);
 uint16_t b2l_uint16(uint16_t in);
-//extern void ihu_sw_restart(void);
+extern void ihu_sw_restart(void);
 extern OPSTAT ihu_sleep(UINT32 cntDuration, UINT8 task_id, UINT8 seed);
 extern void ihu_task_create_all(void);
 extern struct tm ihu_clock_unix_to_ymd(time_t t_unix);
 extern UINT16 ihu_emc_adc_read(void);
-extern OPSTAT ihu_mac_add_get(UINT8* mac, UINT8 len);
 extern OPSTAT ihu_get_mac_addr(UINT8* mac);
-
-
-//外部引用的API
-extern _ARMABI int sprintf(char * __restrict /*s*/, const char * __restrict /*format*/, ...) __attribute__((__nonnull__(1,2)));
-extern int arch_printf(const char *fmt, ...);
-extern void bxxh_task_vmda_main_entry(void);
-extern void bxxh_task_vmda_init(void);
-extern void bxxh_task_vmda_mainloop(void);
 
 /*
  *	
@@ -294,7 +295,7 @@ extern IhuTimerTable_t zIhuTimerTable;                      //定时器
 extern time_t zIhuSystemTimeUnix;                           //系统时钟TimeStamp
 extern struct tm zIhuSystemTimeYmd;                        	//系统时钟YMD
 extern UINT32 zIhuSleepCnt[MAX_TASK_NUM_IN_ONE_IHU][MAX_SLEEP_NUM_IN_ONE_TASK];  //睡眠控制表
-extern FsmStateItem_t FsmVmda[];                            //状态机
+extern FsmStateItem_t FsmVmdashell[];                            //状态机
 extern FsmStateItem_t FsmTimer[];                           //状态机
 extern FsmStateItem_t FsmAsylibra[];                        //状态机
 extern FsmStateItem_t FsmAdcaries[];                        //状态机
@@ -305,7 +306,7 @@ extern OPSTAT ihu_timer_start(UINT8 task_id, UINT8 timer_id, UINT32 t_dur, UINT8
 extern OPSTAT ihu_timer_stop(UINT8 task_id, UINT8 timer_id, UINT8 t_res);
 extern void ihu_timer_routine_handler_1s(void);
 extern void ihu_timer_routine_handler_10ms(void);
-extern void app_uart_push_zjl(unsigned char *p, int n);
-extern void app_ble_push(unsigned char *p, int n);
+extern void vmda_app_uart_push_zjl(unsigned char *p, int n);
+extern void vmda_app_ble_push(unsigned char *p, int n);
 
 #endif /* L0COMVM_VMLAYER_H_ */

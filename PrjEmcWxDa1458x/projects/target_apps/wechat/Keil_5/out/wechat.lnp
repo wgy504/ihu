@@ -144,7 +144,7 @@
 ".\out\wecaht_aes.o"
 ".\out\vmlayer.o"
 ".\out\i2c_led.o"
-".\out\vmda_shell_task.o"
+".\out\vmdashell_task.o"
 ".\out\l1timer.o"
 ".\out\aes_cbc.o"
 ".\out\aes_core.o"

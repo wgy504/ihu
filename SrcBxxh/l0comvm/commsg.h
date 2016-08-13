@@ -46,7 +46,7 @@ typedef struct IhuMsgSruct
 enum IHU_INTER_TASK_MSG_ID
 {
 	//START FLAG
-	MSG_ID_COM_MIN = KE_FIRST_MSG(TASK_VMDA), //Starting point
+	MSG_ID_COM_MIN = KE_FIRST_MSG(TASK_VMDA1458X), //Starting point
 
 	//VMDA-BLE所需要的消息
 	MSG_BLEAPP_VMDA_INIT,  //ZJL, add to trigger VMDA SHELL init

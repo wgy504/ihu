@@ -639,7 +639,7 @@ int mpbledemo2_data_consume_func(uint8_t *data, uint32_t len)
 					epb_unpack_init_response_free(initResp);
 					
 					//这里可以增加时钟的启动，从而实现链路建立以后，自动上报数据
-					vmda_timer_set(WECHAT_PERIOD_REPORT_TIME_OUT, TASK_WECHAT, BLEDEMO2_TIMER_PERIOD_REPORT);
+					ihu_timer_set(WECHAT_PERIOD_REPORT_TIME_OUT, TASK_WECHAT, BLEDEMO2_TIMER_PERIOD_REPORT);
 				}
 				break;
 			
@@ -927,5 +927,5 @@ void mpbledemo2_airsync_link_setup_period_report(void)
 	//发送报告数据
 	mpbledemo2_readEmcDataResp(NULL, 0);
 	//重新启动定时器
-	vmda_timer_set(WECHAT_PERIOD_REPORT_TIME_OUT, TASK_WECHAT, BLEDEMO2_TIMER_PERIOD_REPORT);
+	ihu_timer_set(WECHAT_PERIOD_REPORT_TIME_OUT, TASK_WECHAT, BLEDEMO2_TIMER_PERIOD_REPORT);
 }

@@ -484,7 +484,7 @@ OPSTAT fsm_emc_push_cmd_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8
 		IhuL3DataFormatTag_t l3dataT;
 		memset(&l3dataT, 0, sizeof(IhuL3DataFormatTag_t));
 		l3dataT.UserCmdId = l3dataR.UserCmdId;
-		if (ihu_mac_add_get(l3dataT.equInfo.mac, sizeof(l3dataT.equInfo.mac)) == FAILURE){
+		if (ihu_get_mac_addr(l3dataT.equInfo.mac) == FAILURE){
 			IhuErrorPrint("EMC: Not get MAC address correctly, can not send back Equipment Info to cloud.");
 			zIhuRunErrCnt[TASK_ID_EMC]++;
 			return FAILURE;

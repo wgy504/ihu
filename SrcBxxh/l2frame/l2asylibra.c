@@ -196,7 +196,7 @@ OPSTAT fsm_asylibra_ble_con_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 	memset(&rcv, 0, sizeof(msg_struct_vmda_asylibra_ble_con_t));
 	if (param_len > sizeof(msg_struct_vmda_asylibra_ble_con_t)){
 		IhuErrorPrint("ASYLIBRA: Receive MSG_ID_VMDA_ASY_BLE_CON message error!");
-		zIhuRunErrCnt[TASK_ID_VMDA]++;
+		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 		return FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
@@ -235,9 +235,9 @@ OPSTAT fsm_asylibra_ble_con_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 		ihu_led_blink_enable(ASYLIBRA_LED_IND_NO, ASYLIBRA_LED_STATE_INITED);		
 		return FAILURE;		
 	}
-	ret = ihu_message_send(MSG_ID_ASYLIBRA_VMDA_DATA_UL, TASK_ID_VMDA, TASK_ID_ASYLIBRA, &snd, snd.length);
+	ret = ihu_message_send(MSG_ID_ASYLIBRA_VMDA_DATA_UL, TASK_ID_VMDASHELL, TASK_ID_ASYLIBRA, &snd, snd.length);
 	if (ret == FAILURE){
-		sprintf(strDebug, "ASYLIBRA: Send MSG_ID_ASYLIBRA_VMDA_DATA_UL message error, TASK [%s] to TASK[%s]!", zIhuTaskNameList[TASK_ID_ASYLIBRA], zIhuTaskNameList[TASK_ID_VMDA]);
+		sprintf(strDebug, "ASYLIBRA: Send MSG_ID_ASYLIBRA_VMDA_DATA_UL message error, TASK [%s] to TASK[%s]!", zIhuTaskNameList[TASK_ID_ASYLIBRA], zIhuTaskNameList[TASK_ID_VMDASHELL]);
 		IhuErrorPrint(strDebug);
 		zIhuRunErrCnt[TASK_ID_ASYLIBRA]++;
 		return FAILURE;
@@ -504,9 +504,9 @@ OPSTAT fsm_asylibra_emc_data_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 	epb_pack_send_data_request(request, (UINT8*)snd.dataBuf, snd.length);
 	free(request);
 	
-	ret = ihu_message_send(MSG_ID_ASYLIBRA_VMDA_DATA_UL, TASK_ID_VMDA, TASK_ID_ASYLIBRA, &snd, snd.length);
+	ret = ihu_message_send(MSG_ID_ASYLIBRA_VMDA_DATA_UL, TASK_ID_VMDASHELL, TASK_ID_ASYLIBRA, &snd, snd.length);
 	if (ret == FAILURE){
-		sprintf(strDebug, "ASYLIBRA: Send MSG_ID_ASYLIBRA_VMDA_DATA_UL message error, TASK [%s] to TASK[%s]!", zIhuTaskNameList[TASK_ID_ASYLIBRA], zIhuTaskNameList[TASK_ID_VMDA]);
+		sprintf(strDebug, "ASYLIBRA: Send MSG_ID_ASYLIBRA_VMDA_DATA_UL message error, TASK [%s] to TASK[%s]!", zIhuTaskNameList[TASK_ID_ASYLIBRA], zIhuTaskNameList[TASK_ID_VMDASHELL]);
 		IhuErrorPrint(strDebug);
 		zIhuRunErrCnt[TASK_ID_ASYLIBRA]++;
 		return FAILURE;
@@ -617,7 +617,7 @@ OPSTAT func_asylibra_pack_auth_req(INT8 *buf, UINT8 len)
 	//设置MAC地址
 	*(buf+18) = TAG_AuthRequest_MacAddress;
 	*(buf+19) = 6;
-	if (ihu_mac_add_get((UINT8*)(buf+20), 6) == FAILURE){
+	if (ihu_get_mac_addr((UINT8*)(buf+20)) == FAILURE){
 		IhuErrorPrint("ASYLIBRA: Pack AUTH - get MAC address error!");
 		zIhuRunErrCnt[TASK_ID_ASYLIBRA]++;
 		return FAILURE;
@@ -862,9 +862,9 @@ OPSTAT func_asylibra_time_out_auth_resp_wait(void)
 			ihu_led_blink_enable(ASYLIBRA_LED_IND_NO, ASYLIBRA_LED_STATE_INITED);		
 			return FAILURE;		
 		}
-		ret = ihu_message_send(MSG_ID_ASYLIBRA_VMDA_DATA_UL, TASK_ID_VMDA, TASK_ID_ASYLIBRA, &snd, snd.length);
+		ret = ihu_message_send(MSG_ID_ASYLIBRA_VMDA_DATA_UL, TASK_ID_VMDASHELL, TASK_ID_ASYLIBRA, &snd, snd.length);
 		if (ret == FAILURE){
-			sprintf(strDebug, "ASYLIBRA: Send MSG_ID_ASYLIBRA_VMDA_DATA_UL message error, TASK [%s] to TASK[%s]!", zIhuTaskNameList[TASK_ID_ASYLIBRA], zIhuTaskNameList[TASK_ID_VMDA]);
+			sprintf(strDebug, "ASYLIBRA: Send MSG_ID_ASYLIBRA_VMDA_DATA_UL message error, TASK [%s] to TASK[%s]!", zIhuTaskNameList[TASK_ID_ASYLIBRA], zIhuTaskNameList[TASK_ID_VMDASHELL]);
 			IhuErrorPrint(strDebug);
 			zIhuRunErrCnt[TASK_ID_ASYLIBRA]++;
 			return FAILURE;
@@ -910,9 +910,9 @@ OPSTAT func_asylibra_time_out_init_resp_wait(void)
 			ihu_led_blink_enable(ASYLIBRA_LED_IND_NO, ASYLIBRA_LED_STATE_INITED);		
 			return FAILURE;		
 		}
-		ret = ihu_message_send(MSG_ID_ASYLIBRA_VMDA_DATA_UL, TASK_ID_VMDA, TASK_ID_ASYLIBRA, &snd, snd.length);
+		ret = ihu_message_send(MSG_ID_ASYLIBRA_VMDA_DATA_UL, TASK_ID_VMDASHELL, TASK_ID_ASYLIBRA, &snd, snd.length);
 		if (ret == FAILURE){
-			sprintf(strDebug, "ASYLIBRA: Send MSG_ID_ASYLIBRA_VMDA_DATA_UL message error, TASK [%s] to TASK[%s]!", zIhuTaskNameList[TASK_ID_ASYLIBRA], zIhuTaskNameList[TASK_ID_VMDA]);
+			sprintf(strDebug, "ASYLIBRA: Send MSG_ID_ASYLIBRA_VMDA_DATA_UL message error, TASK [%s] to TASK[%s]!", zIhuTaskNameList[TASK_ID_ASYLIBRA], zIhuTaskNameList[TASK_ID_VMDASHELL]);
 			IhuErrorPrint(strDebug);
 			zIhuRunErrCnt[TASK_ID_ASYLIBRA]++;
 			return FAILURE;
@@ -968,9 +968,9 @@ OPSTAT func_asylibra_time_out_data_resp_wait(void)
 			ihu_led_blink_enable(ASYLIBRA_LED_IND_NO, ASYLIBRA_LED_STATE_INITED);		
 			return FAILURE;		
 		}
-		ret = ihu_message_send(MSG_ID_ASYLIBRA_VMDA_DATA_UL, TASK_ID_VMDA, TASK_ID_ASYLIBRA, &snd, snd.length);
+		ret = ihu_message_send(MSG_ID_ASYLIBRA_VMDA_DATA_UL, TASK_ID_VMDASHELL, TASK_ID_ASYLIBRA, &snd, snd.length);
 		if (ret == FAILURE){
-			sprintf(strDebug, "ASYLIBRA: Send MSG_ID_ASYLIBRA_VMDA_DATA_UL message error, TASK [%s] to TASK[%s]!", zIhuTaskNameList[TASK_ID_ASYLIBRA], zIhuTaskNameList[TASK_ID_VMDA]);
+			sprintf(strDebug, "ASYLIBRA: Send MSG_ID_ASYLIBRA_VMDA_DATA_UL message error, TASK [%s] to TASK[%s]!", zIhuTaskNameList[TASK_ID_ASYLIBRA], zIhuTaskNameList[TASK_ID_VMDASHELL]);
 			IhuErrorPrint(strDebug);
 			zIhuRunErrCnt[TASK_ID_ASYLIBRA]++;
 			return FAILURE;
@@ -1048,9 +1048,9 @@ OPSTAT func_asylibra_rcv_auth_resp_processing(INT8 *buf, UINT8 len)
 		ihu_led_blink_enable(ASYLIBRA_LED_IND_NO, ASYLIBRA_LED_STATE_INITED);		
 		return FAILURE;		
 	}
-	ret = ihu_message_send(MSG_ID_ASYLIBRA_VMDA_DATA_UL, TASK_ID_VMDA, TASK_ID_ASYLIBRA, &snd, snd.length);
+	ret = ihu_message_send(MSG_ID_ASYLIBRA_VMDA_DATA_UL, TASK_ID_VMDASHELL, TASK_ID_ASYLIBRA, &snd, snd.length);
 	if (ret == FAILURE){
-		sprintf(strDebug, "ASYLIBRA: Send MSG_ID_ASYLIBRA_VMDA_DATA_UL message error, TASK [%s] to TASK[%s]!", zIhuTaskNameList[TASK_ID_ASYLIBRA], zIhuTaskNameList[TASK_ID_VMDA]);
+		sprintf(strDebug, "ASYLIBRA: Send MSG_ID_ASYLIBRA_VMDA_DATA_UL message error, TASK [%s] to TASK[%s]!", zIhuTaskNameList[TASK_ID_ASYLIBRA], zIhuTaskNameList[TASK_ID_VMDASHELL]);
 		IhuErrorPrint(strDebug);
 		zIhuRunErrCnt[TASK_ID_ASYLIBRA]++;
 		return FAILURE;
@@ -1431,9 +1431,9 @@ OPSTAT func_asylibra_rcv_err_decode_processing(INT8 *buf, UINT8 len)
 //		ihu_led_blink_enable(ASYLIBRA_LED_IND_NO, ASYLIBRA_LED_STATE_DATA_READY);		
 //		return FAILURE;
 //	}
-//	ret = ihu_message_send(MSG_ID_ASYLIBRA_VMDA_DATA_UL, TASK_ID_VMDA, TASK_ID_ASYLIBRA, &snd, snd.length);
+//	ret = ihu_message_send(MSG_ID_ASYLIBRA_VMDA_DATA_UL, TASK_ID_VMDASHELL, TASK_ID_ASYLIBRA, &snd, snd.length);
 //	if (ret == FAILURE){
-//		sprintf(strDebug, "ASYLIBRA: Send MSG_ID_ASYLIBRA_VMDA_DATA_UL message error, TASK [%s] to TASK[%s]!", zIhuTaskNameList[TASK_ID_ASYLIBRA], zIhuTaskNameList[TASK_ID_VMDA]);
+//		sprintf(strDebug, "ASYLIBRA: Send MSG_ID_ASYLIBRA_VMDA_DATA_UL message error, TASK [%s] to TASK[%s]!", zIhuTaskNameList[TASK_ID_ASYLIBRA], zIhuTaskNameList[TASK_ID_VMDASHELL]);
 //		IhuErrorPrint(strDebug);
 //		zIhuRunErrCnt[TASK_ID_ASYLIBRA]++;
 //		return FAILURE;
@@ -1510,9 +1510,9 @@ OPSTAT func_asylibra_rcv_err_decode_processing(INT8 *buf, UINT8 len)
 //		ihu_led_blink_enable(ASYLIBRA_LED_IND_NO, ASYLIBRA_LED_STATE_DATA_READY);		
 //		return FAILURE;
 //	}
-//	ret = ihu_message_send(MSG_ID_ASYLIBRA_VMDA_DATA_UL, TASK_ID_VMDA, TASK_ID_ASYLIBRA, &snd, snd.length);
+//	ret = ihu_message_send(MSG_ID_ASYLIBRA_VMDA_DATA_UL, TASK_ID_VMDASHELL, TASK_ID_ASYLIBRA, &snd, snd.length);
 //	if (ret == FAILURE){
-//		sprintf(strDebug, "ASYLIBRA: Send MSG_ID_ASYLIBRA_VMDA_DATA_UL message error, TASK [%s] to TASK[%s]!", zIhuTaskNameList[TASK_ID_ASYLIBRA], zIhuTaskNameList[TASK_ID_VMDA]);
+//		sprintf(strDebug, "ASYLIBRA: Send MSG_ID_ASYLIBRA_VMDA_DATA_UL message error, TASK [%s] to TASK[%s]!", zIhuTaskNameList[TASK_ID_ASYLIBRA], zIhuTaskNameList[TASK_ID_VMDASHELL]);
 //		IhuErrorPrint(strDebug);
 //		zIhuRunErrCnt[TASK_ID_ASYLIBRA]++;
 //		return FAILURE;
@@ -1590,9 +1590,9 @@ OPSTAT func_asylibra_rcv_err_decode_processing(INT8 *buf, UINT8 len)
 //		ihu_led_blink_enable(ASYLIBRA_LED_IND_NO, ASYLIBRA_LED_STATE_DATA_READY);		
 //		return FAILURE;
 //	}
-//	ret = ihu_message_send(MSG_ID_ASYLIBRA_VMDA_DATA_UL, TASK_ID_VMDA, TASK_ID_ASYLIBRA, &snd, snd.length);
+//	ret = ihu_message_send(MSG_ID_ASYLIBRA_VMDA_DATA_UL, TASK_ID_VMDASHELL, TASK_ID_ASYLIBRA, &snd, snd.length);
 //	if (ret == FAILURE){
-//		sprintf(strDebug, "ASYLIBRA: Send MSG_ID_ASYLIBRA_VMDA_DATA_UL message error, TASK [%s] to TASK[%s]!", zIhuTaskNameList[TASK_ID_ASYLIBRA], zIhuTaskNameList[TASK_ID_VMDA]);
+//		sprintf(strDebug, "ASYLIBRA: Send MSG_ID_ASYLIBRA_VMDA_DATA_UL message error, TASK [%s] to TASK[%s]!", zIhuTaskNameList[TASK_ID_ASYLIBRA], zIhuTaskNameList[TASK_ID_VMDASHELL]);
 //		IhuErrorPrint(strDebug);
 //		zIhuRunErrCnt[TASK_ID_ASYLIBRA]++;
 //		return FAILURE;

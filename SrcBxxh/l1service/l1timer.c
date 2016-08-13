@@ -118,10 +118,10 @@ OPSTAT fsm_timer_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 pa
 	msg_struct_com_restart_t snd;
 	memset(&snd, 0, sizeof(msg_struct_com_restart_t));
 	snd.length = sizeof(msg_struct_com_restart_t);
-	ret = ihu_message_send(MSG_ID_COM_RESTART, TASK_ID_VMDA, TASK_ID_TIMER, &snd, snd.length);
+	ret = ihu_message_send(MSG_ID_COM_RESTART, TASK_ID_VMDASHELL, TASK_ID_TIMER, &snd, snd.length);
 	if (ret == FAILURE){
 		zIhuRunErrCnt[TASK_ID_TIMER]++;
-		sprintf(strDebug, "TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_TIMER], zIhuTaskNameList[TASK_ID_VMDA]);
+		sprintf(strDebug, "TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_TIMER], zIhuTaskNameList[TASK_ID_VMDASHELL]);
 		IhuErrorPrint(strDebug);
 		return FAILURE;
 	}
