@@ -27,6 +27,8 @@
 #include "arch_api.h"
 #include "app_default_handlers.h"
 #include "app_adv_data.h"
+#include "da1458x_config_basic.h"
+
 /*
  * DEFINES
  ****************************************************************************************
@@ -129,7 +131,46 @@ static const struct advertise_configuration user_adv_conf = {
 
 /// Advertising service data
 /// Advertising AD type flags, shall not be set in advertising data
-#define USER_ADVERTISE_DATA    "\x09\xff\x60\x00\x12\x34\x56\x78\x9a\xbc\x03\x03\xE7\xFE"
+#if (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_NULL)
+	#define USER_ADVERTISE_DATA    "\x09\xff\x60\x00\x12\x34\x56\x78\x9a\xbc\x03\x03\xE7\xFE"
+#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_ZJL)
+	#define USER_ADVERTISE_DATA    "\x09\xff\x60\x00\x27\xEF\xA5\x72\x39\xD0\x03\x03\xE7\xFE"
+#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_MYC)		
+	#define USER_ADVERTISE_DATA    "\x09\xff\x60\x00\x28\xEF\xA5\x72\x39\xD0\x03\x03\xE7\xFE"
+#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_XX)		
+	#define USER_ADVERTISE_DATA    "\x09\xff\x60\x00\x29\xEF\xA5\x72\x39\xD0\x03\x03\xE7\xFE"
+#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_CZ)		
+	#define USER_ADVERTISE_DATA    "\x09\xff\x60\x00\x2A\xEF\xA5\x72\x39\xD0\x03\x03\xE7\xFE"
+#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_LZH)		
+	#define USER_ADVERTISE_DATA    "\x09\xff\x60\x00\x2B\xEF\xA5\x72\x39\xD0\x03\x03\xE7\xFE"
+#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPEr_ENV_NAME_JT)		
+	#define USER_ADVERTISE_DATA    "\x09\xff\x60\x00\x2C\xEF\xA5\x72\x39\xD0\x03\x03\xE7\xFE"
+#else
+	#define USER_ADVERTISE_DATA    "\x09\xff\x60\x00\x27\xEF\xA5\x72\x39\xD0\x03\x03\xE7\xFE"
+#endif
+
+//#ifdef IHU_DEVELOPER_ENV_NAME_NULL
+//	#define USER_ADVERTISE_DATA    "\x09\xff\x60\x00\x12\x34\x56\x78\x9a\xbc\x03\x03\xE7\xFE"
+//#endif
+//#ifdef IHU_DEVELOPER_ENV_NAME_ZJL
+//	#define USER_ADVERTISE_DATA    "\x09\xff\x60\x00\x27\xEF\xA5\x72\x39\xD0\x03\x03\xE7\xFE"
+//#endif
+//#ifdef IHU_DEVELOPER_ENV_NAME_MYC
+//	#define USER_ADVERTISE_DATA    "\x09\xff\x60\x00\x28\xEF\xA5\x72\x39\xD0\x03\x03\xE7\xFE"
+//#endif
+//#ifdef IHU_DEVELOPER_ENV_NAME_XX
+//	#define USER_ADVERTISE_DATA    "\x09\xff\x60\x00\x29\xEF\xA5\x72\x39\xD0\x03\x03\xE7\xFE"
+//#endif
+//#ifdef IHU_DEVELOPER_ENV_NAME_CZ
+//	#define USER_ADVERTISE_DATA    "\x09\xff\x60\x00\x2A\xEF\xA5\x72\x39\xD0\x03\x03\xE7\xFE"
+//#endif
+//#ifdef IHU_DEVELOPER_ENV_NAME_LZH
+//	#define USER_ADVERTISE_DATA    "\x09\xff\x60\x00\x2B\xEF\xA5\x72\x39\xD0\x03\x03\xE7\xFE"
+//#endif
+//#ifdef IHU_DEVELOPEr_ENV_NAME_JT
+//	#define USER_ADVERTISE_DATA    "\x09\xff\x60\x00\x2C\xEF\xA5\x72\x39\xD0\x03\x03\xE7\xFE"
+//#endif
+
 /// Advertising data length - maximum 28 bytes, 3 bytes are reserved to set
 #define USER_ADVERTISE_DATA_LEN (sizeof(USER_ADVERTISE_DATA)-1)
 /// Advertising name

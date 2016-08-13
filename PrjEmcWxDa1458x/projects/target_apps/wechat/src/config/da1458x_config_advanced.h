@@ -17,8 +17,9 @@
 
 #ifndef _DA1458X_CONFIG_ADVANCED_H_
     #define _DA1458X_CONFIG_ADVANCED_H_
-
+		
     #include "da1458x_stack_config.h"
+		#include "da1458x_config_basic.h"
 
 /****************************************************************************************************************/
 /* If defined the OTP header data are read from SysRAM. The data are copied by bootrom code.                    */
@@ -122,6 +123,7 @@
 /* - CFG_NVDS_TAG_BLE_CA_NB_PKT         Number of packets to receive for statistics                             */
 /* - CFG_NVDS_TAG_BLE_CA_NB_BAD_PKT     Number  of bad packets needed to remove a channel                       */
 /****************************************************************************************************************/
+
 #if (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_NULL)
 	#define CFG_NVDS_TAG_BD_ADDRESS             {0xbc, 0x9a, 0x78, 0x56, 0x34, 0x12}
 #elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_ZJL)	
@@ -136,29 +138,31 @@
 	#define CFG_NVDS_TAG_BD_ADDRESS             {0x2B, 0xEF, 0xA5, 0x72, 0x39, 0xD0} //LZH
 #elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPEr_ENV_NAME_JT)		
 	#define CFG_NVDS_TAG_BD_ADDRESS             {0x2C, 0xEF, 0xA5, 0x72, 0x39, 0xD0} //JT
-#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_TESTER1)		
-	#define CFG_NVDS_TAG_BD_ADDRESS             {0x27, 0xEF, 0xA5, 0x72, 0x39, 0xD0}
-#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_TESTER2)		
-	#define CFG_NVDS_TAG_BD_ADDRESS             {0x27, 0xEF, 0xA5, 0x72, 0x39, 0xD0}	
-#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_TESTER3)		
-	#define CFG_NVDS_TAG_BD_ADDRESS             {0x27, 0xEF, 0xA5, 0x72, 0x39, 0xD0}
-#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_TESTER4)		
-	#define CFG_NVDS_TAG_BD_ADDRESS             {0x27, 0xEF, 0xA5, 0x72, 0x39, 0xD0}	
-#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_TESTER5)		
-	#define CFG_NVDS_TAG_BD_ADDRESS             {0x27, 0xEF, 0xA5, 0x72, 0x39, 0xD0}
-#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_TESTER6)		
-	#define CFG_NVDS_TAG_BD_ADDRESS             {0x27, 0xEF, 0xA5, 0x72, 0x39, 0xD0}	
-#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_TESTER7)		
-	#define CFG_NVDS_TAG_BD_ADDRESS             {0x27, 0xEF, 0xA5, 0x72, 0x39, 0xD0}
-#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_TESTER8)		
-	#define CFG_NVDS_TAG_BD_ADDRESS             {0x27, 0xEF, 0xA5, 0x72, 0x39, 0xD0}	
-#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_TESTER9)		
-	#define CFG_NVDS_TAG_BD_ADDRESS             {0x27, 0xEF, 0xA5, 0x72, 0x39, 0xD0}
-#elif (IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME == IHU_DEVELOPER_ENV_NAME_TESTER10)		
-	#define CFG_NVDS_TAG_BD_ADDRESS             {0x27, 0xEF, 0xA5, 0x72, 0x39, 0xD0}	
-#else
-	#define CFG_NVDS_TAG_BD_ADDRESS             {0x27, 0xEF, 0xA5, 0x72, 0x39, 0xD0}	
 #endif
+
+//#define IHU_DEVELOPER_ENV_NAME_ZJL 1
+//#ifdef IHU_DEVELOPER_ENV_NAME_NULL
+//	#define CFG_NVDS_TAG_BD_ADDRESS             {0xbc, 0x9a, 0x78, 0x56, 0x34, 0x12}
+//#endif
+//#ifdef IHU_DEVELOPER_ENV_NAME_ZJL
+//	#define CFG_NVDS_TAG_BD_ADDRESS             {0x27, 0xEF, 0xA5, 0x72, 0x39, 0xD0} //ZJL
+//#endif
+//#ifdef IHU_DEVELOPER_ENV_NAME_MYC
+//	#define CFG_NVDS_TAG_BD_ADDRESS             {0x28, 0xEF, 0xA5, 0x72, 0x39, 0xD0} //MYC
+//#endif
+//#ifdef IHU_DEVELOPER_ENV_NAME_XX
+//	#define CFG_NVDS_TAG_BD_ADDRESS             {0x29, 0xEF, 0xA5, 0x72, 0x39, 0xD0} //XX
+//#endif
+//#ifdef IHU_DEVELOPER_ENV_NAME_CZ
+//	#define CFG_NVDS_TAG_BD_ADDRESS             {0x2A, 0xEF, 0xA5, 0x72, 0x39, 0xD0} //CZ
+//#endif
+//#ifdef IHU_DEVELOPER_ENV_NAME_LZH
+//	#define CFG_NVDS_TAG_BD_ADDRESS             {0x2B, 0xEF, 0xA5, 0x72, 0x39, 0xD0} //LZH
+//#endif
+//#ifdef IHU_DEVELOPEr_ENV_NAME_JT
+//	#define CFG_NVDS_TAG_BD_ADDRESS             {0x2C, 0xEF, 0xA5, 0x72, 0x39, 0xD0} //JT
+//#endif
+	
 	
 #define CFG_NVDS_TAG_LPCLK_DRIFT            DRIFT_BLE_DFT
 #define CFG_NVDS_TAG_BLE_CA_TIMER_DUR       2000

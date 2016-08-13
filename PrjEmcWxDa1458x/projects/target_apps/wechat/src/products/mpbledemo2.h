@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include "epb_MmBp.h"
 #include "ble_wechat_util.h"
+#include "i2c_led.h"
 
 #define CMD_NULL    0
 #define CMD_AUTH    1
