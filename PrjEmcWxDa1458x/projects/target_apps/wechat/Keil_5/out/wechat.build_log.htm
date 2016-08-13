@@ -22,23 +22,33 @@ Dialog DLL:      TARMCM1.DLL V1.9.0.0
  
 <h2>Project:</h2>
 D:\IHUSRC\ihu\PrjEmcWxDa1458x\projects\target_apps\wechat\Keil_5\wechat.uvprojx
-Project File Date:  08/04/2016
+Project File Date:  08/13/2016
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 1 (build 61)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build Project 'wechat' - Target 'emcwx'
-compiling app_wechat_task.c...
-D:\IHUSRC\ihu\PrjEmcWxDa1458x\sdk_580\sdk\app_modules\src\app_wechat\app_wechat_task.c(205): warning:  #223-D: function "arch_printf" declared implicitly
-  		arch_printf("\r\n button 1");
-D:\IHUSRC\ihu\PrjEmcWxDa1458x\sdk_580\sdk\app_modules\src\app_wechat\app_wechat_task.c(207): warning:  #223-D: function "mpbledemo2_sendData" declared implicitly
-    mpbledemo2_sendData(req->pDataBuf, req->dataLen);
-D:\IHUSRC\ihu\PrjEmcWxDa1458x\sdk_580\sdk\app_modules\src\app_wechat\app_wechat_task.c(218): warning:  #223-D: function "arch_printf" declared implicitly
-  		arch_printf("\r\n time out received");
-D:\IHUSRC\ihu\PrjEmcWxDa1458x\sdk_580\sdk\app_modules\src\app_wechat\app_wechat_task.c(220): warning:  #223-D: function "mpbledemo2_airsync_link_setup_period_report" declared implicitly
-    mpbledemo2_airsync_link_setup_period_report();
-..\..\..\..\sdk_580\sdk\app_modules\src\app_wechat\app_wechat_task.c: 4 warnings, 0 errors
+compiling l2adcaries.c...
+compiling i2c_led.c...
+D:\IHUSRC\ihu\SrcBxxh\l0vmapi\i2c_led.c(456): warning:  #186-D: pointless comparison of unsigned integer with zero
+  		if((ledId >= 
+ED_ID_0) && (ledId <= LED_ID_3))
+..\..\..\..\..\SrcBxxh\l0vmapi\i2c_led.c: 1 warning, 0 errors
+compiling l1timer.c...
+compiling l2asylibra.c...
+D:\IHUSRC\ihu\SrcBxxh\l2frame\l2asylibra.c(500): warning:  #188-D: enumerated type mixed with another type
+  		request->type = rcv.EmDeviceDataType;		
+D:\IHUSRC\ihu\SrcBxxh\l2frame\l2asylibra.c(632): warning:  #188-D: enumerated type mixed with another type
+  	request->auth_method = 1;
+..\..\..\..\..\SrcBxxh\l2frame\l2asylibra.c: 2 warnings, 0 errors
+compiling vmda_shell_task.c...
+compiling mpbledemo2.c...
+C:\Keil\ARM\RV31\INC\time.h(26): warning:  #47-D: incompatible redefinition of macro "_ARMABI_PURE" (declared at line 55 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h")
+  #define _ARMABI_PURE __declspec(__nothrow) __pure
+..\src\products\mpbledemo2.c: 1 warning, 0 errors
+compiling vmlayer.c...
+compiling l3emc.c...
 linking...
-Program Size: Code=25368 RO-data=2520 RW-data=112 ZI-data=12296  
+Program Size: Code=25360 RO-data=2520 RW-data=112 ZI-data=12296  
 FromELF: creating hex file...
 ".\out\wechat.axf" - 0 Error(s), 4 Warning(s).
 
@@ -47,7 +57,7 @@ FromELF: creating hex file...
   C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include
 
 <h2>Collection of Component Files used:</h2>
-Build Time Elapsed:  00:00:03
+Build Time Elapsed:  00:00:14
 </pre>
 </body>
 </html>

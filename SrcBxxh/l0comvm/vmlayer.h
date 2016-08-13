@@ -155,8 +155,8 @@ extern void bxxh_vm_init_hook(void);
 extern void bxxh_vm_task_entry_hook(void);
 extern void bxxh_print_console(char *p);  //console print
 extern void bxxh_message_send(ke_msg_id_t const msg_id, ke_task_id_t const dest_id, ke_task_id_t const src_id, void const *param_ptr, uint16_t const param_len); //message send
-extern void bxxh_timer_set(ke_msg_id_t const timerid, ke_task_id_t const taskid, uint16_t delay);
-extern void bxxh_timer_clear(ke_msg_id_t const timerid, ke_task_id_t const taskid);
+extern void vmda_timer_set(ke_msg_id_t const timerid, ke_task_id_t const taskid, uint16_t delay);
+extern void vmda_timer_clear(ke_msg_id_t const timerid, ke_task_id_t const taskid);
 extern void bxxh_data_send_to_ble(unsigned char *p, int n);
 extern void bxxh_data_send_to_uart(unsigned char *p, int n);
 extern int  bxxh_emc_sample(void);  //ADC0读数，可以通过被动式获取
@@ -167,8 +167,8 @@ extern void bxxh_init_msg_to_vmda(void);
 //Global VM layer basic API and functions
 extern OPSTAT ihu_message_rcv(UINT8 dest_id, IhuMsgSruct_t *msg);
 extern OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT8 param_len); //message send
-extern OPSTAT taskid_to_string(UINT8 id, char *string);
-extern OPSTAT msgid_to_string(UINT16 id, char *string);
+extern OPSTAT ihu_taskid_to_string(UINT8 id, char *string);
+extern OPSTAT ihu_msgid_to_string(UINT16 id, char *string);
 extern OPSTAT ihu_message_queue_clean(UINT8 dest_id);
 extern OPSTAT ihu_system_task_init_call(UINT8 task_id, FsmStateItem_t *p);
 extern OPSTAT ihu_system_task_execute(UINT8 task_id, FsmStateItem_t *p);
@@ -193,7 +193,7 @@ uint16_t b2l_uint16(uint16_t in);
 extern OPSTAT fsm_com_do_nothing(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 param_len);
 extern OPSTAT ihu_sleep(UINT32 cntDuration, UINT8 task_id, UINT8 seed);
 extern OPSTAT ihu_mac_add_get(UINT8* mac, UINT8 len);
-extern OPSTAT get_mac_addr(UINT8* mac);
+extern OPSTAT ihu_get_mac_addr(UINT8* mac);
 
 
 //外部引用的API

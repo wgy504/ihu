@@ -195,13 +195,13 @@ void IhuErrorPrint(char *p)
 
 
 //纯粹为了方便，以便自己的任务调用
-void bxxh_timer_set(ke_msg_id_t const timerid, ke_task_id_t const taskid, uint16_t delay)
+void vmda_timer_set(ke_msg_id_t const timerid, ke_task_id_t const taskid, uint16_t delay)
 {
 	app_timer_set(timerid, taskid, delay);
 }
 
 //纯粹为了方便，以便自己的任务调用
-void bxxh_timer_clear(ke_msg_id_t const timerid, ke_task_id_t const taskid)
+void vmda_timer_clear(ke_msg_id_t const timerid, ke_task_id_t const taskid)
 {
 	ke_timer_clear(timerid, taskid);
 }
@@ -923,17 +923,17 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 			break;
 
 		case TRACE_MSG_MODE_ALL:
-			taskid_to_string(dest_id, s1);
-			taskid_to_string(src_id, s2);
-			msgid_to_string(msg_id, s3);
+			ihu_taskid_to_string(dest_id, s1);
+			ihu_taskid_to_string(src_id, s2);
+			ihu_msgid_to_string(msg_id, s3);
 			sprintf(strDebug, "MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
 			IhuDebugPrint(strDebug);
 			break;
 
 		case TRACE_MSG_MODE_ALL_BUT_TIME_OUT:
-			taskid_to_string(dest_id, s1);
-			taskid_to_string(src_id, s2);
-			msgid_to_string(msg_id, s3);
+			ihu_taskid_to_string(dest_id, s1);
+			ihu_taskid_to_string(src_id, s2);
+			ihu_msgid_to_string(msg_id, s3);
 			if (msg_id != MSG_ID_COM_TIME_OUT){
 				sprintf(strDebug, "MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
 				IhuDebugPrint(strDebug);
@@ -941,9 +941,9 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 			break;
 
 //		case TRACE_MSG_MODE_ALL_BUT_HEART_BEAT:
-//			taskid_to_string(dest_id, s1);
-//			taskid_to_string(src_id, s2);
-//			msgid_to_string(msg_id, s3);
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
 //			if ((msg_id != MSG_ID_COM_HEART_BEAT) && (msg_id != MSG_ID_COM_HEART_BEAT_FB)){
 //				sprintf(strDebug, "MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
 //				IhuDebugPrint(strDebug);
@@ -951,9 +951,9 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 //			break;
 
 //		case TRACE_MSG_MODE_ALL_BUT_TIME_OUT_AND_HEART_BEAT:
-//			taskid_to_string(dest_id, s1);
-//			taskid_to_string(src_id, s2);
-//			msgid_to_string(msg_id, s3);
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
 //			if ((msg_id != MSG_ID_COM_TIME_OUT) && (msg_id != MSG_ID_COM_HEART_BEAT) && (msg_id != MSG_ID_COM_HEART_BEAT_FB)){
 //				sprintf(strDebug, "MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
 //				IhuDebugPrint(strDebug);
@@ -961,9 +961,9 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 //			break;
 
 //		case TRACE_MSG_MODE_MOUDLE_TO_ALLOW:
-//			taskid_to_string(dest_id, s1);
-//			taskid_to_string(src_id, s2);
-//			msgid_to_string(msg_id, s3);
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
 //			if ((zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToAllow == TRUE)){
 //				sprintf(strDebug, "MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
 //				IhuDebugPrint(strDebug);
@@ -971,9 +971,9 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 //			break;
 
 //		case TRACE_MSG_MODE_MOUDLE_TO_RESTRICT:
-//			taskid_to_string(dest_id, s1);
-//			taskid_to_string(src_id, s2);
-//			msgid_to_string(msg_id, s3);
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
 //			if ((zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToRestrict!= TRUE)){
 //				sprintf(strDebug, "MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
 //				IhuDebugPrint(strDebug);
@@ -981,9 +981,9 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 //			break;
 //
 //		case TRACE_MSG_MODE_MOUDLE_FROM_ALLOW:
-//			taskid_to_string(dest_id, s1);
-//			taskid_to_string(src_id, s2);
-//			msgid_to_string(msg_id, s3);
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
 //			if ((zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleToAllow == TRUE)){
 //				sprintf(strDebug, "MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
 //				IhuDebugPrint(strDebug);
@@ -991,9 +991,9 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 //			break;
 //
 //		case TRACE_MSG_MODE_MOUDLE_FROM_RESTRICT:
-//			taskid_to_string(dest_id, s1);
-//			taskid_to_string(src_id, s2);
-//			msgid_to_string(msg_id, s3);
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
 //			if ((zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleToRestrict!= TRUE)){
 //				sprintf(strDebug, "MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
 //				IhuDebugPrint(strDebug);				
@@ -1001,9 +1001,9 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 //			break;
 
 //		case TRACE_MSG_MODE_MOUDLE_DOUBLE_ALLOW:
-//			taskid_to_string(dest_id, s1);
-//			taskid_to_string(src_id, s2);
-//			msgid_to_string(msg_id, s3);
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
 //			if ((zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleToAllow == TRUE)
 //					&& (zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToAllow == TRUE)){
 //				sprintf(strDebug, "MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
@@ -1012,9 +1012,9 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 //			break;
 
 //		case TRACE_MSG_MODE_MOUDLE_DOUBLE_RESTRICT:
-//			taskid_to_string(dest_id, s1);
-//			taskid_to_string(src_id, s2);
-//			msgid_to_string(msg_id, s3);
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
 //			if ((zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleToRestrict != TRUE)
 //					&& (zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToRestrict != TRUE)){
 //				sprintf(strDebug, "MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
@@ -1023,9 +1023,9 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 //			break;
 
 //		case TRACE_MSG_MODE_MSGID_ALLOW:
-//			taskid_to_string(dest_id, s1);
-//			taskid_to_string(src_id, s2);
-//			msgid_to_string(msg_id, s3);
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
 //			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgAllow == TRUE)){
 //				sprintf(strDebug, "MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
 //				IhuDebugPrint(strDebug);				
@@ -1033,9 +1033,9 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 //			break;
 
 //		case TRACE_MSG_MODE_MSGID_RESTRICT:
-//			taskid_to_string(dest_id, s1);
-//			taskid_to_string(src_id, s2);
-//			msgid_to_string(msg_id, s3);
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
 //			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgRestrict != TRUE)){
 //				sprintf(strDebug, "MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
 //				IhuDebugPrint(strDebug);				
@@ -1043,9 +1043,9 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 //			break;
 
 //		case TRACE_MSG_MODE_COMBINE_TO_ALLOW:
-//			taskid_to_string(dest_id, s1);
-//			taskid_to_string(src_id, s2);
-//			msgid_to_string(msg_id, s3);
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
 //			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgAllow == TRUE)
 //					&& (zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToAllow == TRUE)){
 //				sprintf(strDebug, "MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
@@ -1054,9 +1054,9 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 //			break;
 
 //		case TRACE_MSG_MODE_COMBINE_TO_RESTRICT:
-//			taskid_to_string(dest_id, s1);
-//			taskid_to_string(src_id, s2);
-//			msgid_to_string(msg_id, s3);
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
 //			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgAllow == TRUE)
 //					&& (zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToRestrict != TRUE)){
 //				sprintf(strDebug, "MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
@@ -1065,9 +1065,9 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 //			break;
 
 //		case TRACE_MSG_MODE_COMBINE_FROM_ALLOW:
-//			taskid_to_string(dest_id, s1);
-//			taskid_to_string(src_id, s2);
-//			msgid_to_string(msg_id, s3);
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
 //			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgAllow == TRUE)
 //					&& (zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleFromAllow == TRUE)){
 //				sprintf(strDebug, "MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
@@ -1076,9 +1076,9 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 //			break;
 
 //		case TRACE_MSG_MODE_COMBINE_FROM_RESTRICT:
-//			taskid_to_string(dest_id, s1);
-//			taskid_to_string(src_id, s2);
-//			msgid_to_string(msg_id, s3);
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
 //			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgRestrict != TRUE)
 //					&& (zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleFromRestrict != TRUE)){
 //				sprintf(strDebug, "MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
@@ -1087,9 +1087,9 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 //			break;
 
 //		case TRACE_MSG_MODE_COMBINE_DOUBLE_ALLOW:
-//			taskid_to_string(dest_id, s1);
-//			taskid_to_string(src_id, s2);
-//			msgid_to_string(msg_id, s3);
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
 //			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgAllow == TRUE)
 //					&& (zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToAllow == TRUE)
 //					&& (zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleFromAllow == TRUE)){
@@ -1099,9 +1099,9 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 //			break;
 
 //		case TRACE_MSG_MODE_COMBINE_DOUBLE_RESTRICT:
-//			taskid_to_string(dest_id, s1);
-//			taskid_to_string(src_id, s2);
-//			msgid_to_string(msg_id, s3);
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
 //			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgRestrict != TRUE)
 //					&& (zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToRestrict != TRUE)
 //					&& (zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleFromRestrict != TRUE)){
@@ -1125,7 +1125,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 //TaskId transfer to string
 //待调试的函数，是否需要使用动态内存
 //正确的做法也许应该使用zHcuTaskInfo[id].TaskName这个信息来表达
-OPSTAT taskid_to_string(UINT8 id, char *string)
+OPSTAT ihu_taskid_to_string(UINT8 id, char *string)
 {
 	if ((id<=TASK_ID_MIN) || (id>=TASK_ID_MAX)){
 		zIhuRunErrCnt[TASK_ID_VMDA]++;	
@@ -1146,7 +1146,7 @@ OPSTAT taskid_to_string(UINT8 id, char *string)
 
 //MsgId transfer to string
 //输入的string参数，其内存地址空间和长度预留，是否足够
-OPSTAT msgid_to_string(UINT16 id, char *string)
+OPSTAT ihu_msgid_to_string(UINT16 id, char *string)
 {
 	if (id <= MSG_ID_COM_MIN || id >= MSG_ID_COM_MAX){
 		zIhuRunErrCnt[TASK_ID_VMDA]++;	
@@ -1470,7 +1470,7 @@ UINT16 ihu_emc_adc_read(void)
 }
 
 //简单的函数映射
-OPSTAT get_mac_addr(UINT8* mac)
+OPSTAT ihu_get_mac_addr(UINT8* mac)
 {
 	return ihu_mac_add_get(mac, 6);
 }

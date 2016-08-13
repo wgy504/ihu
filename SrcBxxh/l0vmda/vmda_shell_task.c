@@ -77,7 +77,7 @@ OPSTAT hlBxxhVmdaBleInit(ke_msg_id_t const msgid, msg_struct_bleapp_vmda_init_t 
 	}
 	
 	//启动周期性定时器
-	bxxh_timer_set(MSG_ID_VMDA_TIMER_1S_PERIOD, TASK_VMDA, VMDA_TIMER_1SECOND_CLOCK);
+	vmda_timer_set(MSG_ID_VMDA_TIMER_1S_PERIOD, TASK_VMDA, VMDA_TIMER_1SECOND_CLOCK);
 	
 	//发送MSG_ID_VMDA_ASY_BLE_CON给ASYLIBRA模块
 	msg_struct_vmda_asylibra_ble_con_t snd;
@@ -115,7 +115,7 @@ OPSTAT hlBxxhVmdaSysClock1sPeriod(ke_msg_id_t const msgid, msg_struct_vmda_1s_pe
 	ihu_timer_routine_handler_1s();
 	
 	//再次启动周期性定时器
-	bxxh_timer_set(MSG_ID_VMDA_TIMER_1S_PERIOD, TASK_VMDA, VMDA_TIMER_1SECOND_CLOCK);
+	vmda_timer_set(MSG_ID_VMDA_TIMER_1S_PERIOD, TASK_VMDA, VMDA_TIMER_1SECOND_CLOCK);
 		
 	//返回
 	return (KE_MSG_CONSUMED);

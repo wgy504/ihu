@@ -314,7 +314,7 @@ void mpbledemo2_data_produce_func(void *args, uint8_t **r_data, uint32_t *r_len)
 				
 			#if defined EAM_macNoEncrypt
 				static uint8_t mac_address[MAC_ADDRESS_LENGTH];
-				get_mac_addr(mac_address);
+				ihu_get_mac_addr(mac_address);
 				AuthRequest authReq = {&basReq, false,{NULL, 0}, PROTO_VERSION, AUTH_PROTO, (EmAuthMethod)AUTH_METHOD, false,{NULL, 0}, true, {mac_address, MAC_ADDRESS_LENGTH}, false, {NULL, 0}, false, {NULL, 0},true,{DEVICE_ID,sizeof(DEVICE_ID)}};
 			#endif
 				
@@ -639,7 +639,7 @@ int mpbledemo2_data_consume_func(uint8_t *data, uint32_t len)
 					epb_unpack_init_response_free(initResp);
 					
 					//这里可以增加时钟的启动，从而实现链路建立以后，自动上报数据
-					bxxh_timer_set(WECHAT_PERIOD_REPORT_TIME_OUT, TASK_WECHAT, BLEDEMO2_TIMER_PERIOD_REPORT);
+					vmda_timer_set(WECHAT_PERIOD_REPORT_TIME_OUT, TASK_WECHAT, BLEDEMO2_TIMER_PERIOD_REPORT);
 				}
 				break;
 			
@@ -927,5 +927,5 @@ void mpbledemo2_airsync_link_setup_period_report(void)
 	//发送报告数据
 	mpbledemo2_readEmcDataResp(NULL, 0);
 	//重新启动定时器
-	bxxh_timer_set(WECHAT_PERIOD_REPORT_TIME_OUT, TASK_WECHAT, BLEDEMO2_TIMER_PERIOD_REPORT);
+	vmda_timer_set(WECHAT_PERIOD_REPORT_TIME_OUT, TASK_WECHAT, BLEDEMO2_TIMER_PERIOD_REPORT);
 }

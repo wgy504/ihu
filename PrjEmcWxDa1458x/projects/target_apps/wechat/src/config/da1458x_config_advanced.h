@@ -125,6 +125,11 @@
 /****************************************************************************************************************/
 //#define CFG_NVDS_TAG_BD_ADDRESS             {0xbc, 0x9a, 0x78, 0x56, 0x34, 0x12} //ZJL
 #define CFG_NVDS_TAG_BD_ADDRESS             {0x27, 0xEF, 0xA5, 0x72, 0x39, 0xD0} //ZJL
+//#define CFG_NVDS_TAG_BD_ADDRESS             {0x28, 0xEF, 0xA5, 0x72, 0x39, 0xD0} //MYC
+//#define CFG_NVDS_TAG_BD_ADDRESS             {0x29, 0xEF, 0xA5, 0x72, 0x39, 0xD0} //XX
+//#define CFG_NVDS_TAG_BD_ADDRESS             {0x2A, 0xEF, 0xA5, 0x72, 0x39, 0xD0} //CZ
+//#define CFG_NVDS_TAG_BD_ADDRESS             {0x2B, 0xEF, 0xA5, 0x72, 0x39, 0xD0} //LZH
+//#define CFG_NVDS_TAG_BD_ADDRESS             {0x2C, 0xEF, 0xA5, 0x72, 0x39, 0xD0} //JT
 
 #define CFG_NVDS_TAG_LPCLK_DRIFT            DRIFT_BLE_DFT
 #define CFG_NVDS_TAG_BLE_CA_TIMER_DUR       2000
