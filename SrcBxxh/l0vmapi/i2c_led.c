@@ -334,7 +334,7 @@ static uint8_t led_init_or_not = false;
 //    return bytes_written;
 //}
 
-void bxxh_i2c_led_init(uint16_t dev_address, uint8_t speed)
+void vmda1458x_i2c_led_init(uint16_t dev_address, uint8_t speed)
 {
     
 		uint32_t i;
@@ -432,7 +432,7 @@ void bxxh_i2c_led_init(uint16_t dev_address, uint8_t speed)
 
 }
 
-void bxxh_led_set(uint8_t ledId, uint8_t mode)
+void vmda1458x_led_set(uint8_t ledId, uint8_t mode)
 {
 		////MYC
 		//#define 	LED_ID_0										0
@@ -491,28 +491,28 @@ void bxxh_led_set(uint8_t ledId, uint8_t mode)
 		return;
 }
 
-void bxxh_led_on(uint8_t ledId)
+void vmda1458x_led_on(uint8_t ledId)
 {
 		if( (false == led_init_or_not) || (ledId > LED_ID_7) )
 		{				
 				return;
 		}
 		
-		bxxh_led_set(ledId, LED_MODE_ON);	
+		vmda1458x_led_set(ledId, LED_MODE_ON);	
 }
 
-void bxxh_led_off(uint8_t ledId)
+void vmda1458x_led_off(uint8_t ledId)
 {
 		if( (false == led_init_or_not) || (ledId > LED_ID_7) )
 		{				
 				return;
 		}
 		
-		bxxh_led_set(ledId, LED_MODE_OFF);
+		vmda1458x_led_set(ledId, LED_MODE_OFF);
 	
 }
 
-void bxxh_led_blink_once_off_on(uint8_t ledId)
+void vmda1458x_led_blink_once_off_on(uint8_t ledId)
 {
 		uint32_t i;
 		if( (false == led_init_or_not) || (ledId > LED_ID_7) )
@@ -520,15 +520,15 @@ void bxxh_led_blink_once_off_on(uint8_t ledId)
 				return;
 		}
 		
-		bxxh_led_set(ledId, LED_MODE_OFF);
+		vmda1458x_led_set(ledId, LED_MODE_OFF);
 		
 		for(i = 0; i < LED_BLINK_ONCE_DELAY_LOOP; i++);
 		
-		bxxh_led_set(ledId, LED_MODE_ON);
+		vmda1458x_led_set(ledId, LED_MODE_ON);
 	
 }
 
-void bxxh_led_blink_once_on_off(uint8_t ledId)
+void vmda1458x_led_blink_once_on_off(uint8_t ledId)
 {
 		uint32_t i;
 		if( (false == led_init_or_not) || (ledId > LED_ID_7) )
@@ -536,45 +536,45 @@ void bxxh_led_blink_once_on_off(uint8_t ledId)
 				return;
 		}
 		
-		bxxh_led_set(ledId, LED_MODE_ON);
+		vmda1458x_led_set(ledId, LED_MODE_ON);
 		
 		for(i = 0; i < LED_BLINK_ONCE_DELAY_LOOP; i++);
 		
-		bxxh_led_set(ledId, LED_MODE_OFF);
+		vmda1458x_led_set(ledId, LED_MODE_OFF);
 	
 }
 
-void bxxh_led_blinking_high_speed(uint8_t ledId)
+void vmda14568x_led_blinking_high_speed(uint8_t ledId)
 {
 		if( (false == led_init_or_not) || (ledId > LED_ID_7) )
 		{				
 				return;
 		}
 		
-		bxxh_led_set(ledId, LED_MODE_BLINK_HIGH_SPEED);
+		vmda1458x_led_set(ledId, LED_MODE_BLINK_HIGH_SPEED);
 	
 }
 
-void bxxh_led_blinking_low_speed(uint8_t ledId)
+void vmda1458x_led_blinking_low_speed(uint8_t ledId)
 {
 		if( (false == led_init_or_not) || (ledId > LED_ID_7) )
 		{				
 				return;
 		}
 		
-		bxxh_led_set(ledId, LED_MODE_BLINK_LOW_SPEED);	
+		vmda1458x_led_set(ledId, LED_MODE_BLINK_LOW_SPEED);	
 	
 }
 
 //Change for VM system usage
 void ihu_i2c_led_init(uint16_t dev_address, uint8_t speed)
 {
-	bxxh_i2c_led_init(dev_address, speed);
+	vmda1458x_i2c_led_init(dev_address, speed);
 }
 
 void ihu_led_set(uint8_t ledId, uint8_t mode)
 {
-	bxxh_led_set(ledId, mode);
+	vmda1458x_led_set(ledId, mode);
 }
 
 //由于不输出差错，故而稍微有点怪异
@@ -587,27 +587,27 @@ void ihu_led_blink_enable(uint8_t ledId, uint8_t mode)
 	switch(mode)
 	{
 		case IHU_LED_BLINK_MODE_ALWAYS_ON:
-			bxxh_led_on(ledId);
+			vmda1458x_led_on(ledId);
 			break;
 		
 		case IHU_LED_BLINK_MODE_ALWAYS_OFF:
-			bxxh_led_off(ledId);
+			vmda1458x_led_off(ledId);
 			break;
 		
 		case IHU_LED_BLINK_MODE_ONCE_OFF_ON:
-			bxxh_led_blink_once_off_on(ledId);
+			vmda1458x_led_blink_once_off_on(ledId);
 			break;
 		
 		case IHU_LED_BLINK_MODE_ONCE_ON_OFF:
-			bxxh_led_blink_once_on_off(ledId);
+			vmda1458x_led_blink_once_on_off(ledId);
 			break;
 		
 		case IHU_LED_BLINK_MODE_HIGH_SPEED:
-			bxxh_led_blinking_high_speed(ledId);
+			vmda14568x_led_blinking_high_speed(ledId);
 			break;
 		
 		case IHU_LED_BLINK_MODE_LOW_SPEED:
-			bxxh_led_blinking_low_speed(ledId);
+			vmda1458x_led_blinking_low_speed(ledId);
 			break;
 		
 		default:

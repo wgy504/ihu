@@ -613,10 +613,10 @@ Section Cross References
     vmlayer.o(.text) refers to vmlayer.o(.text) for ihu_task_execute_all
     vmlayer.o(.text) refers to vmlayer.o(.bss) for .bss
     vmlayer.o(.text) refers to vmlayer.o(.text) for vmda1458x_app_uart_push_zjl
-    vmlayer.o(.text) refers to i2c_led.o(.text) for bxxh_led_blink_once_on_off
+    vmlayer.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_blink_once_on_off
     vmlayer.o(.text) refers to vmlayer.o(.text) for vmda1458x_app_ble_push
-    vmlayer.o(.text) refers to i2c_led.o(.text) for bxxh_led_blink_once_on_off
-    vmlayer.o(.text) refers to i2c_led.o(.text) for bxxh_led_blink_once_on_off
+    vmlayer.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_blink_once_on_off
+    vmlayer.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_blink_once_on_off
     vmlayer.o(.text) refers to vmlayer.o(.bss) for .bss
     vmlayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
     vmlayer.o(.text) refers to vmlayer.o(.text) for IhuDebugPrint
@@ -627,26 +627,23 @@ Section Cross References
     i2c_led.o(.text) refers to i2c_led.o(.bss) for .bss
     i2c_led.o(.text) refers to i2c_led.o(.bss) for .bss
     i2c_led.o(.text) refers to i2c_led.o(.data) for .data
-    i2c_led.o(.text) refers to i2c_led.o(.text) for bxxh_led_set
+    i2c_led.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_set
     i2c_led.o(.text) refers to i2c_led.o(.bss) for .bss
-    i2c_led.o(.text) refers to i2c_led.o(.text) for bxxh_led_set
+    i2c_led.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_set
     i2c_led.o(.text) refers to i2c_led.o(.bss) for .bss
-    i2c_led.o(.text) refers to i2c_led.o(.text) for bxxh_led_set
+    i2c_led.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_set
     i2c_led.o(.text) refers to i2c_led.o(.bss) for .bss
-    i2c_led.o(.text) refers to i2c_led.o(.text) for bxxh_led_set
+    i2c_led.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_set
     i2c_led.o(.text) refers to i2c_led.o(.bss) for .bss
-    i2c_led.o(.text) refers to i2c_led.o(.text) for bxxh_led_set
+    i2c_led.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_set
     i2c_led.o(.text) refers to i2c_led.o(.bss) for .bss
-    i2c_led.o(.text) refers to i2c_led.o(.text) for bxxh_led_set
-    i2c_led.o(.text) refers to i2c_led.o(.bss) for .bss
-    i2c_led.o(.text) refers to i2c_led.o(.text) for bxxh_i2c_led_init
-    i2c_led.o(.text) refers to i2c_led.o(.text) for bxxh_led_set
-    i2c_led.o(.text) refers to i2c_led.o(.text) for bxxh_led_on
-    i2c_led.o(.text) refers to i2c_led.o(.text) for bxxh_led_off
-    i2c_led.o(.text) refers to i2c_led.o(.text) for bxxh_led_blink_once_off_on
-    i2c_led.o(.text) refers to i2c_led.o(.text) for bxxh_led_blink_once_on_off
-    i2c_led.o(.text) refers to i2c_led.o(.text) for bxxh_led_blinking_high_speed
-    i2c_led.o(.text) refers to i2c_led.o(.text) for bxxh_led_blinking_low_speed
+    i2c_led.o(.text) refers to i2c_led.o(.text) for vmda1458x_i2c_led_init
+    i2c_led.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_set
+    i2c_led.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_on
+    i2c_led.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_off
+    i2c_led.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_blink_once_off_on
+    i2c_led.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_blink_once_on_off
+    i2c_led.o(.text) refers to i2c_led.o(.text) for vmda14568x_led_blinking_high_speed
     vmdashell_task.o(.text) refers to vmdashell_task.o(.bss) for .bss
     vmdashell_task.o(.text) refers to vmdashell_task.o(.constdata) for .constdata
     vmdashell_task.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
@@ -1667,8 +1664,7 @@ Removing Unused input sections from the image.
     Removing i2c_led.o(.text), (28 bytes).
     Removing i2c_led.o(.text), (52 bytes).
     Removing i2c_led.o(.text), (52 bytes).
-    Removing i2c_led.o(.text), (28 bytes).
-    Removing i2c_led.o(.text), (28 bytes).
+    Removing i2c_led.o(.text), (48 bytes).
     Removing i2c_led.o(.text), (8 bytes).
     Removing i2c_led.o(.text), (8 bytes).
     Removing i2c_led.o(.text), (62 bytes).
@@ -1808,7 +1804,7 @@ Removing Unused input sections from the image.
     Removing pwm.o(i.timer2_set_pwm3_duty_cycle), (12 bytes).
     Removing pwm.o(i.timer2_set_pwm4_duty_cycle), (12 bytes).
 
-384 unused section(s) (total 53416 bytes) removed from the image.
+383 unused section(s) (total 53408 bytes) removed from the image.
 
 ==============================================================================
 
@@ -3759,15 +3755,15 @@ Memory Map of the image
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000440   0x00000000   Code   RO         4376  * .ARM.Collect$$$$00000000  mc_p.l(entry.o)
-    0x20000440   0x00000004   Code   RO         4720    .ARM.Collect$$$$00000001  mc_p.l(entry2.o)
-    0x20000444   0x00000004   Code   RO         4723    .ARM.Collect$$$$00000004  mc_p.l(entry5.o)
-    0x20000448   0x00000000   Code   RO         4725    .ARM.Collect$$$$00000008  mc_p.l(entry7b.o)
-    0x20000448   0x00000000   Code   RO         4727    .ARM.Collect$$$$0000000A  mc_p.l(entry8b.o)
-    0x20000448   0x00000008   Code   RO         4728    .ARM.Collect$$$$0000000B  mc_p.l(entry9a.o)
-    0x20000450   0x00000000   Code   RO         4730    .ARM.Collect$$$$0000000D  mc_p.l(entry10a.o)
-    0x20000450   0x00000000   Code   RO         4732    .ARM.Collect$$$$0000000F  mc_p.l(entry11a.o)
-    0x20000450   0x00000004   Code   RO         4721    .ARM.Collect$$$$00002712  mc_p.l(entry2.o)
+    0x20000440   0x00000000   Code   RO         4370  * .ARM.Collect$$$$00000000  mc_p.l(entry.o)
+    0x20000440   0x00000004   Code   RO         4714    .ARM.Collect$$$$00000001  mc_p.l(entry2.o)
+    0x20000444   0x00000004   Code   RO         4717    .ARM.Collect$$$$00000004  mc_p.l(entry5.o)
+    0x20000448   0x00000000   Code   RO         4719    .ARM.Collect$$$$00000008  mc_p.l(entry7b.o)
+    0x20000448   0x00000000   Code   RO         4721    .ARM.Collect$$$$0000000A  mc_p.l(entry8b.o)
+    0x20000448   0x00000008   Code   RO         4722    .ARM.Collect$$$$0000000B  mc_p.l(entry9a.o)
+    0x20000450   0x00000000   Code   RO         4724    .ARM.Collect$$$$0000000D  mc_p.l(entry10a.o)
+    0x20000450   0x00000000   Code   RO         4726    .ARM.Collect$$$$0000000F  mc_p.l(entry11a.o)
+    0x20000450   0x00000004   Code   RO         4715    .ARM.Collect$$$$00002712  mc_p.l(entry2.o)
     0x20000454   0x00000050   Code   RO            2    .text               system_armcm0.o
     0x200004a4   0x0000006c   Code   RO          192    .text               boot_vectors.o
     0x20000510   0x00000060   Code   RO          197    .text               hardfault_handler.o
@@ -3822,136 +3818,136 @@ Memory Map of the image
     0x2000437c   0x00000850   Code   RO         3200    .text               epb_mmbp.o
     0x20004bcc   0x00000de4   Code   RO         3276    .text               mpbledemo2.o
     0x200059b0   0x000000e0   Code   RO         3420    .text               vmlayer.o
-    0x20005a90   0x0000001a   Code   RO         4385    .text               mc_p.l(strncpy.o)
-    0x20005aaa   0x00000012   Code   RO         4387    .text               mc_p.l(strcpy.o)
-    0x20005abc   0x0000007a   Code   RO         4680    .text               mf_p.l(fmul.o)
-    0x20005b36   0x0000000e   Code   RO         4684    .text               mf_p.l(ffltui.o)
-    0x20005b44   0x00000028   Code   RO         4686    .text               mf_p.l(ffixui.o)
-    0x20005b6c   0x00000060   Code   RO         4737    .text               mc_p.l(uldiv.o)
-    0x20005bcc   0x00000082   Code   RO         4748    .text               mf_p.l(fepilogue.o)
+    0x20005a90   0x0000001a   Code   RO         4379    .text               mc_p.l(strncpy.o)
+    0x20005aaa   0x00000012   Code   RO         4381    .text               mc_p.l(strcpy.o)
+    0x20005abc   0x0000007a   Code   RO         4674    .text               mf_p.l(fmul.o)
+    0x20005b36   0x0000000e   Code   RO         4678    .text               mf_p.l(ffltui.o)
+    0x20005b44   0x00000028   Code   RO         4680    .text               mf_p.l(ffixui.o)
+    0x20005b6c   0x00000060   Code   RO         4731    .text               mc_p.l(uldiv.o)
+    0x20005bcc   0x00000082   Code   RO         4742    .text               mf_p.l(fepilogue.o)
     0x20005c4e   0x00000002   PAD
-    0x20005c50   0x00000024   Code   RO         4762    .text               mc_p.l(init.o)
-    0x20005c74   0x0000000c   Ven    RO         4778    Veneer$$Code        anon$$obj.o
-    0x20005c80   0x0000000c   Ven    RO         4779    Veneer$$Code        anon$$obj.o
-    0x20005c8c   0x0000000c   Ven    RO         4780    Veneer$$Code        anon$$obj.o
-    0x20005c98   0x0000000c   Ven    RO         4781    Veneer$$Code        anon$$obj.o
-    0x20005ca4   0x0000000c   Ven    RO         4782    Veneer$$Code        anon$$obj.o
-    0x20005cb0   0x0000000c   Ven    RO         4783    Veneer$$Code        anon$$obj.o
-    0x20005cbc   0x0000000c   Ven    RO         4784    Veneer$$Code        anon$$obj.o
-    0x20005cc8   0x0000000c   Ven    RO         4785    Veneer$$Code        anon$$obj.o
-    0x20005cd4   0x0000000c   Ven    RO         4786    Veneer$$Code        anon$$obj.o
-    0x20005ce0   0x0000000c   Ven    RO         4787    Veneer$$Code        anon$$obj.o
-    0x20005cec   0x0000000c   Ven    RO         4788    Veneer$$Code        anon$$obj.o
-    0x20005cf8   0x0000000c   Ven    RO         4789    Veneer$$Code        anon$$obj.o
-    0x20005d04   0x0000000c   Ven    RO         4790    Veneer$$Code        anon$$obj.o
-    0x20005d10   0x0000000c   Ven    RO         4791    Veneer$$Code        anon$$obj.o
-    0x20005d1c   0x0000000c   Ven    RO         4792    Veneer$$Code        anon$$obj.o
-    0x20005d28   0x0000000c   Ven    RO         4793    Veneer$$Code        anon$$obj.o
-    0x20005d34   0x0000000c   Ven    RO         4794    Veneer$$Code        anon$$obj.o
-    0x20005d40   0x0000000c   Ven    RO         4795    Veneer$$Code        anon$$obj.o
-    0x20005d4c   0x0000000c   Ven    RO         4796    Veneer$$Code        anon$$obj.o
-    0x20005d58   0x0000000c   Ven    RO         4797    Veneer$$Code        anon$$obj.o
-    0x20005d64   0x0000000c   Ven    RO         4798    Veneer$$Code        anon$$obj.o
-    0x20005d70   0x0000000c   Ven    RO         4799    Veneer$$Code        anon$$obj.o
-    0x20005d7c   0x0000000c   Ven    RO         4800    Veneer$$Code        anon$$obj.o
-    0x20005d88   0x0000000c   Ven    RO         4801    Veneer$$Code        anon$$obj.o
-    0x20005d94   0x0000000c   Ven    RO         4802    Veneer$$Code        anon$$obj.o
-    0x20005da0   0x0000000c   Ven    RO         4803    Veneer$$Code        anon$$obj.o
-    0x20005dac   0x0000000c   Ven    RO         4804    Veneer$$Code        anon$$obj.o
-    0x20005db8   0x0000000c   Ven    RO         4805    Veneer$$Code        anon$$obj.o
-    0x20005dc4   0x0000000c   Ven    RO         4806    Veneer$$Code        anon$$obj.o
-    0x20005dd0   0x0000000c   Ven    RO         4807    Veneer$$Code        anon$$obj.o
-    0x20005ddc   0x0000000c   Ven    RO         4808    Veneer$$Code        anon$$obj.o
-    0x20005de8   0x0000000c   Ven    RO         4809    Veneer$$Code        anon$$obj.o
-    0x20005df4   0x0000000c   Ven    RO         4810    Veneer$$Code        anon$$obj.o
-    0x20005e00   0x0000000c   Ven    RO         4811    Veneer$$Code        anon$$obj.o
-    0x20005e0c   0x0000000c   Ven    RO         4812    Veneer$$Code        anon$$obj.o
-    0x20005e18   0x0000000c   Ven    RO         4813    Veneer$$Code        anon$$obj.o
-    0x20005e24   0x0000000c   Ven    RO         4814    Veneer$$Code        anon$$obj.o
-    0x20005e30   0x0000000c   Ven    RO         4815    Veneer$$Code        anon$$obj.o
-    0x20005e3c   0x0000000c   Ven    RO         4816    Veneer$$Code        anon$$obj.o
-    0x20005e48   0x0000000c   Ven    RO         4817    Veneer$$Code        anon$$obj.o
-    0x20005e54   0x0000000c   Ven    RO         4818    Veneer$$Code        anon$$obj.o
-    0x20005e60   0x0000000c   Ven    RO         4819    Veneer$$Code        anon$$obj.o
-    0x20005e6c   0x0000000c   Ven    RO         4820    Veneer$$Code        anon$$obj.o
-    0x20005e78   0x0000000c   Ven    RO         4821    Veneer$$Code        anon$$obj.o
-    0x20005e84   0x0000000c   Ven    RO         4822    Veneer$$Code        anon$$obj.o
-    0x20005e90   0x0000000c   Ven    RO         4823    Veneer$$Code        anon$$obj.o
-    0x20005e9c   0x0000000c   Ven    RO         4824    Veneer$$Code        anon$$obj.o
-    0x20005ea8   0x0000000c   Ven    RO         4825    Veneer$$Code        anon$$obj.o
-    0x20005eb4   0x0000000c   Ven    RO         4826    Veneer$$Code        anon$$obj.o
-    0x20005ec0   0x0000000c   Ven    RO         4827    Veneer$$Code        anon$$obj.o
-    0x20005ecc   0x0000000c   Ven    RO         4828    Veneer$$Code        anon$$obj.o
-    0x20005ed8   0x0000000c   Ven    RO         4829    Veneer$$Code        anon$$obj.o
-    0x20005ee4   0x0000000c   Ven    RO         4830    Veneer$$Code        anon$$obj.o
-    0x20005ef0   0x0000000c   Ven    RO         4831    Veneer$$Code        anon$$obj.o
-    0x20005efc   0x0000000c   Ven    RO         4832    Veneer$$Code        anon$$obj.o
-    0x20005f08   0x0000000c   Ven    RO         4833    Veneer$$Code        anon$$obj.o
-    0x20005f14   0x0000000c   Ven    RO         4834    Veneer$$Code        anon$$obj.o
-    0x20005f20   0x0000000c   Ven    RO         4835    Veneer$$Code        anon$$obj.o
-    0x20005f2c   0x0000000c   Ven    RO         4836    Veneer$$Code        anon$$obj.o
-    0x20005f38   0x0000000c   Ven    RO         4837    Veneer$$Code        anon$$obj.o
-    0x20005f44   0x0000000c   Ven    RO         4838    Veneer$$Code        anon$$obj.o
-    0x20005f50   0x0000000c   Ven    RO         4839    Veneer$$Code        anon$$obj.o
-    0x20005f5c   0x0000000c   Ven    RO         4840    Veneer$$Code        anon$$obj.o
-    0x20005f68   0x0000000c   Ven    RO         4841    Veneer$$Code        anon$$obj.o
-    0x20005f74   0x0000000c   Ven    RO         4842    Veneer$$Code        anon$$obj.o
-    0x20005f80   0x0000000c   Ven    RO         4843    Veneer$$Code        anon$$obj.o
-    0x20005f8c   0x0000000c   Ven    RO         4844    Veneer$$Code        anon$$obj.o
-    0x20005f98   0x0000000c   Ven    RO         4845    Veneer$$Code        anon$$obj.o
-    0x20005fa4   0x0000000c   Ven    RO         4846    Veneer$$Code        anon$$obj.o
-    0x20005fb0   0x0000000c   Ven    RO         4847    Veneer$$Code        anon$$obj.o
-    0x20005fbc   0x0000000c   Ven    RO         4848    Veneer$$Code        anon$$obj.o
-    0x20005fc8   0x0000000c   Ven    RO         4849    Veneer$$Code        anon$$obj.o
-    0x20005fd4   0x0000000c   Ven    RO         4850    Veneer$$Code        anon$$obj.o
-    0x20005fe0   0x0000000c   Ven    RO         4851    Veneer$$Code        anon$$obj.o
-    0x20005fec   0x0000000c   Ven    RO         4852    Veneer$$Code        anon$$obj.o
-    0x20005ff8   0x0000000c   Ven    RO         4853    Veneer$$Code        anon$$obj.o
-    0x20006004   0x0000000c   Ven    RO         4854    Veneer$$Code        anon$$obj.o
-    0x20006010   0x0000000c   Ven    RO         4855    Veneer$$Code        anon$$obj.o
-    0x2000601c   0x0000000c   Ven    RO         4856    Veneer$$Code        anon$$obj.o
-    0x20006028   0x0000000c   Ven    RO         4857    Veneer$$Code        anon$$obj.o
-    0x20006034   0x0000000c   Ven    RO         4858    Veneer$$Code        anon$$obj.o
-    0x20006040   0x0000000c   Ven    RO         4859    Veneer$$Code        anon$$obj.o
-    0x2000604c   0x0000000c   Ven    RO         4860    Veneer$$Code        anon$$obj.o
-    0x20006058   0x0000000c   Ven    RO         4861    Veneer$$Code        anon$$obj.o
-    0x20006064   0x0000000c   Ven    RO         4862    Veneer$$Code        anon$$obj.o
-    0x20006070   0x0000000c   Ven    RO         4863    Veneer$$Code        anon$$obj.o
-    0x2000607c   0x0000000c   Ven    RO         4864    Veneer$$Code        anon$$obj.o
-    0x20006088   0x0000000c   Ven    RO         4865    Veneer$$Code        anon$$obj.o
-    0x20006094   0x0000000c   Ven    RO         4866    Veneer$$Code        anon$$obj.o
-    0x200060a0   0x0000000c   Ven    RO         4867    Veneer$$Code        anon$$obj.o
-    0x200060ac   0x0000000c   Ven    RO         4868    Veneer$$Code        anon$$obj.o
-    0x200060b8   0x0000000c   Ven    RO         4869    Veneer$$Code        anon$$obj.o
-    0x200060c4   0x0000000c   Ven    RO         4870    Veneer$$Code        anon$$obj.o
-    0x200060d0   0x0000000c   Ven    RO         4871    Veneer$$Code        anon$$obj.o
-    0x200060dc   0x0000000c   Ven    RO         4872    Veneer$$Code        anon$$obj.o
-    0x200060e8   0x0000000c   Ven    RO         4873    Veneer$$Code        anon$$obj.o
-    0x200060f4   0x0000000c   Ven    RO         4874    Veneer$$Code        anon$$obj.o
-    0x20006100   0x0000000c   Ven    RO         4875    Veneer$$Code        anon$$obj.o
-    0x2000610c   0x0000000c   Ven    RO         4876    Veneer$$Code        anon$$obj.o
-    0x20006118   0x0000000c   Ven    RO         4877    Veneer$$Code        anon$$obj.o
-    0x20006124   0x0000000c   Ven    RO         4878    Veneer$$Code        anon$$obj.o
-    0x20006130   0x0000000c   Ven    RO         4879    Veneer$$Code        anon$$obj.o
-    0x2000613c   0x0000000c   Ven    RO         4880    Veneer$$Code        anon$$obj.o
-    0x20006148   0x0000000c   Ven    RO         4881    Veneer$$Code        anon$$obj.o
-    0x20006154   0x0000000c   Ven    RO         4882    Veneer$$Code        anon$$obj.o
-    0x20006160   0x0000000c   Ven    RO         4883    Veneer$$Code        anon$$obj.o
-    0x2000616c   0x0000000c   Ven    RO         4884    Veneer$$Code        anon$$obj.o
-    0x20006178   0x0000000c   Ven    RO         4885    Veneer$$Code        anon$$obj.o
-    0x20006184   0x0000000c   Ven    RO         4886    Veneer$$Code        anon$$obj.o
-    0x20006190   0x00000028   Code   RO         4600    i.__0sprintf$8      mc_p.l(printf8.o)
-    0x200061b8   0x0000000e   Code   RO         4772    i.__scatterload_copy  mc_p.l(handlers.o)
-    0x200061c6   0x00000002   Code   RO         4773    i.__scatterload_null  mc_p.l(handlers.o)
-    0x200061c8   0x0000000e   Code   RO         4774    i.__scatterload_zeroinit  mc_p.l(handlers.o)
+    0x20005c50   0x00000024   Code   RO         4756    .text               mc_p.l(init.o)
+    0x20005c74   0x0000000c   Ven    RO         4772    Veneer$$Code        anon$$obj.o
+    0x20005c80   0x0000000c   Ven    RO         4773    Veneer$$Code        anon$$obj.o
+    0x20005c8c   0x0000000c   Ven    RO         4774    Veneer$$Code        anon$$obj.o
+    0x20005c98   0x0000000c   Ven    RO         4775    Veneer$$Code        anon$$obj.o
+    0x20005ca4   0x0000000c   Ven    RO         4776    Veneer$$Code        anon$$obj.o
+    0x20005cb0   0x0000000c   Ven    RO         4777    Veneer$$Code        anon$$obj.o
+    0x20005cbc   0x0000000c   Ven    RO         4778    Veneer$$Code        anon$$obj.o
+    0x20005cc8   0x0000000c   Ven    RO         4779    Veneer$$Code        anon$$obj.o
+    0x20005cd4   0x0000000c   Ven    RO         4780    Veneer$$Code        anon$$obj.o
+    0x20005ce0   0x0000000c   Ven    RO         4781    Veneer$$Code        anon$$obj.o
+    0x20005cec   0x0000000c   Ven    RO         4782    Veneer$$Code        anon$$obj.o
+    0x20005cf8   0x0000000c   Ven    RO         4783    Veneer$$Code        anon$$obj.o
+    0x20005d04   0x0000000c   Ven    RO         4784    Veneer$$Code        anon$$obj.o
+    0x20005d10   0x0000000c   Ven    RO         4785    Veneer$$Code        anon$$obj.o
+    0x20005d1c   0x0000000c   Ven    RO         4786    Veneer$$Code        anon$$obj.o
+    0x20005d28   0x0000000c   Ven    RO         4787    Veneer$$Code        anon$$obj.o
+    0x20005d34   0x0000000c   Ven    RO         4788    Veneer$$Code        anon$$obj.o
+    0x20005d40   0x0000000c   Ven    RO         4789    Veneer$$Code        anon$$obj.o
+    0x20005d4c   0x0000000c   Ven    RO         4790    Veneer$$Code        anon$$obj.o
+    0x20005d58   0x0000000c   Ven    RO         4791    Veneer$$Code        anon$$obj.o
+    0x20005d64   0x0000000c   Ven    RO         4792    Veneer$$Code        anon$$obj.o
+    0x20005d70   0x0000000c   Ven    RO         4793    Veneer$$Code        anon$$obj.o
+    0x20005d7c   0x0000000c   Ven    RO         4794    Veneer$$Code        anon$$obj.o
+    0x20005d88   0x0000000c   Ven    RO         4795    Veneer$$Code        anon$$obj.o
+    0x20005d94   0x0000000c   Ven    RO         4796    Veneer$$Code        anon$$obj.o
+    0x20005da0   0x0000000c   Ven    RO         4797    Veneer$$Code        anon$$obj.o
+    0x20005dac   0x0000000c   Ven    RO         4798    Veneer$$Code        anon$$obj.o
+    0x20005db8   0x0000000c   Ven    RO         4799    Veneer$$Code        anon$$obj.o
+    0x20005dc4   0x0000000c   Ven    RO         4800    Veneer$$Code        anon$$obj.o
+    0x20005dd0   0x0000000c   Ven    RO         4801    Veneer$$Code        anon$$obj.o
+    0x20005ddc   0x0000000c   Ven    RO         4802    Veneer$$Code        anon$$obj.o
+    0x20005de8   0x0000000c   Ven    RO         4803    Veneer$$Code        anon$$obj.o
+    0x20005df4   0x0000000c   Ven    RO         4804    Veneer$$Code        anon$$obj.o
+    0x20005e00   0x0000000c   Ven    RO         4805    Veneer$$Code        anon$$obj.o
+    0x20005e0c   0x0000000c   Ven    RO         4806    Veneer$$Code        anon$$obj.o
+    0x20005e18   0x0000000c   Ven    RO         4807    Veneer$$Code        anon$$obj.o
+    0x20005e24   0x0000000c   Ven    RO         4808    Veneer$$Code        anon$$obj.o
+    0x20005e30   0x0000000c   Ven    RO         4809    Veneer$$Code        anon$$obj.o
+    0x20005e3c   0x0000000c   Ven    RO         4810    Veneer$$Code        anon$$obj.o
+    0x20005e48   0x0000000c   Ven    RO         4811    Veneer$$Code        anon$$obj.o
+    0x20005e54   0x0000000c   Ven    RO         4812    Veneer$$Code        anon$$obj.o
+    0x20005e60   0x0000000c   Ven    RO         4813    Veneer$$Code        anon$$obj.o
+    0x20005e6c   0x0000000c   Ven    RO         4814    Veneer$$Code        anon$$obj.o
+    0x20005e78   0x0000000c   Ven    RO         4815    Veneer$$Code        anon$$obj.o
+    0x20005e84   0x0000000c   Ven    RO         4816    Veneer$$Code        anon$$obj.o
+    0x20005e90   0x0000000c   Ven    RO         4817    Veneer$$Code        anon$$obj.o
+    0x20005e9c   0x0000000c   Ven    RO         4818    Veneer$$Code        anon$$obj.o
+    0x20005ea8   0x0000000c   Ven    RO         4819    Veneer$$Code        anon$$obj.o
+    0x20005eb4   0x0000000c   Ven    RO         4820    Veneer$$Code        anon$$obj.o
+    0x20005ec0   0x0000000c   Ven    RO         4821    Veneer$$Code        anon$$obj.o
+    0x20005ecc   0x0000000c   Ven    RO         4822    Veneer$$Code        anon$$obj.o
+    0x20005ed8   0x0000000c   Ven    RO         4823    Veneer$$Code        anon$$obj.o
+    0x20005ee4   0x0000000c   Ven    RO         4824    Veneer$$Code        anon$$obj.o
+    0x20005ef0   0x0000000c   Ven    RO         4825    Veneer$$Code        anon$$obj.o
+    0x20005efc   0x0000000c   Ven    RO         4826    Veneer$$Code        anon$$obj.o
+    0x20005f08   0x0000000c   Ven    RO         4827    Veneer$$Code        anon$$obj.o
+    0x20005f14   0x0000000c   Ven    RO         4828    Veneer$$Code        anon$$obj.o
+    0x20005f20   0x0000000c   Ven    RO         4829    Veneer$$Code        anon$$obj.o
+    0x20005f2c   0x0000000c   Ven    RO         4830    Veneer$$Code        anon$$obj.o
+    0x20005f38   0x0000000c   Ven    RO         4831    Veneer$$Code        anon$$obj.o
+    0x20005f44   0x0000000c   Ven    RO         4832    Veneer$$Code        anon$$obj.o
+    0x20005f50   0x0000000c   Ven    RO         4833    Veneer$$Code        anon$$obj.o
+    0x20005f5c   0x0000000c   Ven    RO         4834    Veneer$$Code        anon$$obj.o
+    0x20005f68   0x0000000c   Ven    RO         4835    Veneer$$Code        anon$$obj.o
+    0x20005f74   0x0000000c   Ven    RO         4836    Veneer$$Code        anon$$obj.o
+    0x20005f80   0x0000000c   Ven    RO         4837    Veneer$$Code        anon$$obj.o
+    0x20005f8c   0x0000000c   Ven    RO         4838    Veneer$$Code        anon$$obj.o
+    0x20005f98   0x0000000c   Ven    RO         4839    Veneer$$Code        anon$$obj.o
+    0x20005fa4   0x0000000c   Ven    RO         4840    Veneer$$Code        anon$$obj.o
+    0x20005fb0   0x0000000c   Ven    RO         4841    Veneer$$Code        anon$$obj.o
+    0x20005fbc   0x0000000c   Ven    RO         4842    Veneer$$Code        anon$$obj.o
+    0x20005fc8   0x0000000c   Ven    RO         4843    Veneer$$Code        anon$$obj.o
+    0x20005fd4   0x0000000c   Ven    RO         4844    Veneer$$Code        anon$$obj.o
+    0x20005fe0   0x0000000c   Ven    RO         4845    Veneer$$Code        anon$$obj.o
+    0x20005fec   0x0000000c   Ven    RO         4846    Veneer$$Code        anon$$obj.o
+    0x20005ff8   0x0000000c   Ven    RO         4847    Veneer$$Code        anon$$obj.o
+    0x20006004   0x0000000c   Ven    RO         4848    Veneer$$Code        anon$$obj.o
+    0x20006010   0x0000000c   Ven    RO         4849    Veneer$$Code        anon$$obj.o
+    0x2000601c   0x0000000c   Ven    RO         4850    Veneer$$Code        anon$$obj.o
+    0x20006028   0x0000000c   Ven    RO         4851    Veneer$$Code        anon$$obj.o
+    0x20006034   0x0000000c   Ven    RO         4852    Veneer$$Code        anon$$obj.o
+    0x20006040   0x0000000c   Ven    RO         4853    Veneer$$Code        anon$$obj.o
+    0x2000604c   0x0000000c   Ven    RO         4854    Veneer$$Code        anon$$obj.o
+    0x20006058   0x0000000c   Ven    RO         4855    Veneer$$Code        anon$$obj.o
+    0x20006064   0x0000000c   Ven    RO         4856    Veneer$$Code        anon$$obj.o
+    0x20006070   0x0000000c   Ven    RO         4857    Veneer$$Code        anon$$obj.o
+    0x2000607c   0x0000000c   Ven    RO         4858    Veneer$$Code        anon$$obj.o
+    0x20006088   0x0000000c   Ven    RO         4859    Veneer$$Code        anon$$obj.o
+    0x20006094   0x0000000c   Ven    RO         4860    Veneer$$Code        anon$$obj.o
+    0x200060a0   0x0000000c   Ven    RO         4861    Veneer$$Code        anon$$obj.o
+    0x200060ac   0x0000000c   Ven    RO         4862    Veneer$$Code        anon$$obj.o
+    0x200060b8   0x0000000c   Ven    RO         4863    Veneer$$Code        anon$$obj.o
+    0x200060c4   0x0000000c   Ven    RO         4864    Veneer$$Code        anon$$obj.o
+    0x200060d0   0x0000000c   Ven    RO         4865    Veneer$$Code        anon$$obj.o
+    0x200060dc   0x0000000c   Ven    RO         4866    Veneer$$Code        anon$$obj.o
+    0x200060e8   0x0000000c   Ven    RO         4867    Veneer$$Code        anon$$obj.o
+    0x200060f4   0x0000000c   Ven    RO         4868    Veneer$$Code        anon$$obj.o
+    0x20006100   0x0000000c   Ven    RO         4869    Veneer$$Code        anon$$obj.o
+    0x2000610c   0x0000000c   Ven    RO         4870    Veneer$$Code        anon$$obj.o
+    0x20006118   0x0000000c   Ven    RO         4871    Veneer$$Code        anon$$obj.o
+    0x20006124   0x0000000c   Ven    RO         4872    Veneer$$Code        anon$$obj.o
+    0x20006130   0x0000000c   Ven    RO         4873    Veneer$$Code        anon$$obj.o
+    0x2000613c   0x0000000c   Ven    RO         4874    Veneer$$Code        anon$$obj.o
+    0x20006148   0x0000000c   Ven    RO         4875    Veneer$$Code        anon$$obj.o
+    0x20006154   0x0000000c   Ven    RO         4876    Veneer$$Code        anon$$obj.o
+    0x20006160   0x0000000c   Ven    RO         4877    Veneer$$Code        anon$$obj.o
+    0x2000616c   0x0000000c   Ven    RO         4878    Veneer$$Code        anon$$obj.o
+    0x20006178   0x0000000c   Ven    RO         4879    Veneer$$Code        anon$$obj.o
+    0x20006184   0x0000000c   Ven    RO         4880    Veneer$$Code        anon$$obj.o
+    0x20006190   0x00000028   Code   RO         4594    i.__0sprintf$8      mc_p.l(printf8.o)
+    0x200061b8   0x0000000e   Code   RO         4766    i.__scatterload_copy  mc_p.l(handlers.o)
+    0x200061c6   0x00000002   Code   RO         4767    i.__scatterload_null  mc_p.l(handlers.o)
+    0x200061c8   0x0000000e   Code   RO         4768    i.__scatterload_zeroinit  mc_p.l(handlers.o)
     0x200061d6   0x00000002   PAD
-    0x200061d8   0x00000428   Code   RO         4605    i._printf_core      mc_p.l(printf8.o)
-    0x20006600   0x00000020   Code   RO         4606    i._printf_post_padding  mc_p.l(printf8.o)
-    0x20006620   0x0000002c   Code   RO         4607    i._printf_pre_padding  mc_p.l(printf8.o)
-    0x2000664c   0x0000000a   Code   RO         4609    i._sputc            mc_p.l(printf8.o)
+    0x200061d8   0x00000428   Code   RO         4599    i._printf_core      mc_p.l(printf8.o)
+    0x20006600   0x00000020   Code   RO         4600    i._printf_post_padding  mc_p.l(printf8.o)
+    0x20006620   0x0000002c   Code   RO         4601    i._printf_pre_padding  mc_p.l(printf8.o)
+    0x2000664c   0x0000000a   Code   RO         4603    i._sputc            mc_p.l(printf8.o)
     0x20006656   0x00000002   PAD
-    0x20006658   0x00000054   Code   RO         4652    i.free              mc_p.l(malloc.o)
-    0x200066ac   0x0000006c   Code   RO         4653    i.malloc            mc_p.l(malloc.o)
+    0x20006658   0x00000054   Code   RO         4646    i.free              mc_p.l(malloc.o)
+    0x200066ac   0x0000006c   Code   RO         4647    i.malloc            mc_p.l(malloc.o)
     0x20006718   0x00000016   Data   RO          469    .constdata          jump_table.o
     0x2000672e   0x00000002   PAD
     0x20006730   0x00000130   Data   RO          751    .constdata          arch_patch.o
@@ -3991,12 +3987,12 @@ Memory Map of the image
     0x20006dc5   0x00000003   PAD
     0x20006dc8   0x00000041   Data   RO         3454    .conststring        vmlayer.o
     0x20006e09   0x00000003   PAD
-    0x20006e0c   0x00000020   Data   RO         4770    Region$$Table       anon$$obj.o
+    0x20006e0c   0x00000020   Data   RO         4764    Region$$Table       anon$$obj.o
     0x20006e2c   0x00000004   Data   RW          618    .data               arch_system.o
     0x20006e30   0x00000038   Data   RW         3283    .data               mpbledemo2.o
     0x20006e68   0x0000002c   Data   RW         3284    .data               mpbledemo2.o
-    0x20006e94   0x00000004   Data   RW         4739    .data               mc_p.l(mvars.o)
-    0x20006e98   0x00000004   Data   RW         4740    .data               mc_p.l(mvars.o)
+    0x20006e94   0x00000004   Data   RW         4733    .data               mc_p.l(mvars.o)
+    0x20006e98   0x00000004   Data   RW         4734    .data               mc_p.l(mvars.o)
 
 
     Execution Region RW_IRAM50 (Base: 0x20008000, Size: 0x00000000, Max: 0x00000bf4, ABSOLUTE)

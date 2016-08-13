@@ -126,8 +126,8 @@
  ****************************************************************************************
  */
 void i2c_led_init(uint16_t dev_address, uint8_t speed, uint8_t address_mode, uint8_t address_size);
-void bxxh_i2c_led_init(uint16_t dev_address, uint8_t speed);
-void bxxh_led_set(uint8_t ledId, uint8_t mode);
+void vmda1458x_i2c_led_init(uint16_t dev_address, uint8_t speed);
+void vmda1458x_led_set(uint8_t ledId, uint8_t mode);
 
 
 /**
@@ -221,14 +221,14 @@ uint32_t i2c_led_write_data (uint8_t *wr_data_ptr, uint32_t address, uint32_t si
 
 
 
-extern void bxxh_i2c_led_init(uint16_t dev_address, uint8_t speed);
-extern void bxxh_led_set(uint8_t ledId, uint8_t mode);
-extern void bxxh_led_on(uint8_t ledId);
-extern void bxxh_led_off(uint8_t ledId);
-extern void bxxh_led_blink_once_off_on(uint8_t ledId);
-extern void bxxh_led_blink_once_on_off(uint8_t ledId);
-extern void bxxh_led_blinking_high_speed(uint8_t ledId);
-extern void bxxh_led_blinking_low_speed(uint8_t ledId);
+extern void vmda1458x_i2c_led_init(uint16_t dev_address, uint8_t speed);
+extern void vmda1458x_led_set(uint8_t ledId, uint8_t mode);
+extern void vmda1458x_led_on(uint8_t ledId);
+extern void vmda1458x_led_off(uint8_t ledId);
+extern void vmda1458x_led_blink_once_off_on(uint8_t ledId);
+extern void vmda1458x_led_blink_once_on_off(uint8_t ledId);
+extern void vmda14568x_led_blinking_high_speed(uint8_t ledId);
+extern void vmda1458x_led_blinking_low_speed(uint8_t ledId);
 
 //为IHU上层提供服务
 enum IHU_LED_BLINK_MODE_SET

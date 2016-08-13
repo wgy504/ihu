@@ -1,4 +1,4 @@
-;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Sat Aug 13 15:09:14 2016
+;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Sat Aug 13 15:15:16 2016
 ;VERSION 0.2
 ;FILE adc.o
 adc_calibrate <= USED 0
@@ -137,17 +137,17 @@ i2c_eeprom_write_page <= USED 0
 i2c_send_address <= USED 0
 i2c_wait_until_eeprom_ready <= USED 0
 ;FILE i2c_led.o
-bxxh_i2c_led_init <= USED 0
-bxxh_led_blink_once_off_on <= USED 0
-bxxh_led_blink_once_on_off <= USED 0
-bxxh_led_blinking_high_speed <= USED 0
-bxxh_led_blinking_low_speed <= USED 0
-bxxh_led_off <= USED 0
-bxxh_led_on <= USED 0
-bxxh_led_set <= USED 0
 ihu_i2c_led_init <= USED 0
 ihu_led_blink_enable <= USED 0
 ihu_led_set <= USED 0
+vmda14568x_led_blinking_high_speed <= USED 0
+vmda1458x_i2c_led_init <= USED 0
+vmda1458x_led_blink_once_off_on <= USED 0
+vmda1458x_led_blink_once_on_off <= USED 0
+vmda1458x_led_blinking_low_speed <= USED 0
+vmda1458x_led_off <= USED 0
+vmda1458x_led_on <= USED 0
+vmda1458x_led_set <= USED 0
 ;FILE jump_table.o
 dummyf <= USED 0
 ;FILE ke_task.obj
