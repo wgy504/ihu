@@ -162,12 +162,12 @@ extern int  vmda1458x_emc_sample(void);  //ADC0读数，可以通过被动式获
 extern void vmda1458x_led_flair(void);
 extern void vmda1458x_init_msg_to_vmdashell(void);
 extern OPSTAT vmda1458x_mac_addr_get(UINT8* mac, UINT8 len);
-
+extern void vmda1458x_app_uart_push_zjl(unsigned char *p, int n);
+extern void vmda1458x_app_ble_push(unsigned char *p, int n);
 
 //外部引用的API
 extern _ARMABI int sprintf(char * __restrict /*s*/, const char * __restrict /*format*/, ...) __attribute__((__nonnull__(1,2)));
 extern int arch_printf(const char *fmt, ...);
-//extern void bxxh_task_vmda_main_entry(void);
 extern void ihu_task_vmdashell_init(void);
 extern void ihu_task_vmdashell_mainloop(void);
 
@@ -192,8 +192,6 @@ extern OPSTAT ihu_system_task_execute(UINT8 task_id, FsmStateItem_t *p);
 extern OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateItem);
 extern void   ihu_task_create_all(void);
 extern void   ihu_task_execute_all(void);
-extern void ihu_timer_set(UINT16 const timerid, UINT16 const taskid, UINT16 delay);
-extern void ihu_timer_clear(UINT16 const timerid, UINT16 const taskid);
 
 //VMDA内部以及上层使用的API
 extern void IhuDebugPrint(char *p);
@@ -301,12 +299,10 @@ extern FsmStateItem_t FsmAsylibra[];                        //状态机
 extern FsmStateItem_t FsmAdcaries[];                        //状态机
 extern FsmStateItem_t FsmEmc[];                             //状态机
 
-//外部引用API
+//外部引用API，来自于TIMER任务模块。TIMER任务模块的机制是，必须将VM启动起来，然后TIMER上层任务模块才能被激活，并产生自定义的TIME_OUT消息
 extern OPSTAT ihu_timer_start(UINT8 task_id, UINT8 timer_id, UINT32 t_dur, UINT8 t_type, UINT8 t_res);
 extern OPSTAT ihu_timer_stop(UINT8 task_id, UINT8 timer_id, UINT8 t_res);
 extern void ihu_timer_routine_handler_1s(void);
 extern void ihu_timer_routine_handler_10ms(void);
-extern void vmda_app_uart_push_zjl(unsigned char *p, int n);
-extern void vmda_app_ble_push(unsigned char *p, int n);
 
 #endif /* L0COMVM_VMLAYER_H_ */

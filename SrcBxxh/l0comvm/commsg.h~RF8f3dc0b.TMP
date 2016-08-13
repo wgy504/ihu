@@ -49,9 +49,9 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_COM_MIN = KE_FIRST_MSG(TASK_VMDA1458X), //Starting point
 
 	//VMDA-BLE所需要的消息
-	MSG_BLEAPP_VMDASHELL_INIT,  //ZJL, add to trigger VMDASHELL init
-	MSG_BLEAPP_VMDASHELL_DISCONNECT,  //ZJL, add to trigger VMDA SHELL disconnect
-	MSG_SPS_VMDASHELL_BLE_DATA_DL_RCV,  //send BLE received data to VMDASHELL task
+	MSG_BLEAPP_VMDA_INIT,  //ZJL, add to trigger VMDA SHELL init
+	MSG_BLEAPP_VMDA_DISCONNECT,  //ZJL, add to trigger VMDA SHELL disconnect
+	MSG_SPS_VMDA_BLE_DATA_DL_RCV,  //send BLE received data to VMDA task
 	MSG_APP_SERVER_UART1_DATA_RECEIVED,  //APP_SPS_SCHEDULER send UART1 data to MODBUS	
 	
 	//正常的消息ID
@@ -61,11 +61,11 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_COM_TIME_OUT,
 	MSG_ID_COM_STOP,
 	
-	//VMDASHELL
-	MSG_ID_VMDASHELL_TIMER_1S_PERIOD,
-	MSG_ID_VMDASHELL_ASYLIBRA_BLE_CON,
-	MSG_ID_VMDASHELL_ASYLIBRA_BLE_DISC,
-	MSG_ID_VMDASHELL_ASYLIBRA_DATA_DL,
+	//VMDA SHELL
+	MSG_ID_VMDA_TIMER_1S_PERIOD,
+	MSG_ID_VMDA_ASYLIBRA_BLE_CON,
+	MSG_ID_VMDA_ASYLIBRA_BLE_DISC,
+	MSG_ID_VMDA_ASYLIBRA_DATA_DL,
 	
 	//ASYLIBRA任务
 	MSG_ID_ASYLIBRA_EMC_DISC,
@@ -73,7 +73,7 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_ASYLIBRA_EMC_DLK_BLOCK,
 	MSG_ID_ASYLIBRA_EMC_DLK_UNBLOCK,
 	MSG_ID_ASYLIBRA_EMC_PUSH_CMD,
-	MSG_ID_ASYLIBRA_VMDASHELL_DATA_UL,
+	MSG_ID_ASYLIBRA_VMDA_DATA_UL,
 
 	//AIRKISS任务模块
 	
@@ -81,9 +81,9 @@ enum IHU_INTER_TASK_MSG_ID
 	
 	//EMC任务模块
 	MSG_ID_EMC_ASYLIBRA_DATA_REQ,
-	//MSG_ID_EMC_ASYLIBRA_DATA_REPORT,	
-	//MSG_ID_EMC_ASYLIBRA_TIME_SYNC_REQ,
-	//MSG_ID_EMC_ASYLIBRA_EQU_INFO_SYNC,
+//	MSG_ID_EMC_ASYLIBRA_DATA_REPORT,	
+//	MSG_ID_EMC_ASYLIBRA_TIME_SYNC_REQ,
+//	MSG_ID_EMC_ASYLIBRA_EQU_INFO_SYNC,
 
 
 	//老旧消息的定义
@@ -134,7 +134,7 @@ enum IHU_INTER_TASK_MSG_ID
  *
  */
 // keep same structure as gattc_write_cmd_ind, to reduce memory copy
-typedef struct msg_struct_sps_vmda1458x_ble_data_dl_rcv
+typedef struct msg_struct_sps_vmda_ble_data_dl_rcv
 {
     /// Handle of the attribute that has to be written
     uint16_t handle;
@@ -148,7 +148,7 @@ typedef struct msg_struct_sps_vmda1458x_ble_data_dl_rcv
     bool last;
     /// Data to be written in attribute database
     uint8_t  value[__ARRAY_EMPTY];
-}msg_struct_sps_vmda1458x_ble_data_dl_rcv_t;
+}msg_struct_sps_vmda_ble_data_dl_rcv_t;
 
 //UART1½ÓÊÕµ½µÄÊý¾Ý£¬·¢ËÍ¸øMODBUS
 #define APP_SPS_UART1_DATA_LENGTH_MAX_BUF 50
@@ -165,27 +165,27 @@ typedef struct {
 	uint8_t data[APP_SPS_UART1_DATA_LENGTH_MAX_BUF];
 }UartRingBuffer;
 
-typedef struct msg_struct_bleapp_vmdashell_init
+typedef struct msg_struct_bleapp_vmda_init
 {
     uint32_t length;
-}msg_struct_bleapp_vmdashell_init_t;
-typedef struct msg_struct_bleapp_vmda1458x_disconnect
+}msg_struct_bleapp_vmda_init_t;
+typedef struct msg_struct_bleapp_vmda_disconnect
 {
     /// length
     uint32_t length;
-}msg_struct_bleapp_vmda1458x_disconnect_t;
+}msg_struct_bleapp_vmda_disconnect_t;
 
 
 /*
  *	
- *  VMDASHELL与底层BLEAPP相关的消息结构体定义
+ *  BXXH与底层BLEAPP相关的消息结构体定义
  *
  */
 //VMDA消息定义
-typedef struct msg_struct_vmdashell_1s_period_timtout
+typedef struct msg_struct_vmda_1s_period_timtout
 {
 	UINT8 length;
-}msg_struct_vmdashell_1s_period_timtout_t;
+}msg_struct_vmda_1s_period_timtout_t;
 
 /*
  *	
@@ -260,21 +260,21 @@ typedef struct  msg_struct_com_stop //
 }msg_struct_com_stop_t;
 
 //VMDA消息定义
-typedef struct  msg_struct_vmdashell_asylibra_ble_con //
+typedef struct  msg_struct_vmda_asylibra_ble_con //
 {
 	UINT8 length;
-}msg_struct_vmdashell_asylibra_ble_con_t;
-typedef struct  msg_struct_vmdashell_asylibra_ble_disc //
+}msg_struct_vmda_asylibra_ble_con_t;
+typedef struct  msg_struct_vmda_asylibra_ble_disc //
 {
 	UINT8 length;
-}msg_struct_vmdashell_asylibra_ble_disc_t;
+}msg_struct_vmda_asylibra_ble_disc_t;
 
 #define MSG_BUF_MAX_LENGTH_ASY_DATA_GENERAL MAX_IHU_MSG_BODY_LENGTH-4
-typedef struct  msg_struct_vmdashell_asylibra_data_dl //
+typedef struct  msg_struct_vmda_asylibra_data_dl //
 {
 	UINT8 length;
 	INT8 dataBuf[MSG_BUF_MAX_LENGTH_ASY_DATA_GENERAL];
-}msg_struct_vmdashell_asylibra_data_dl_t;
+}msg_struct_vmda_asylibra_data_dl_t;
 
 //ASYLIBRA消息定义
 typedef struct  msg_struct_asylibra_emc_disc //
@@ -301,11 +301,11 @@ typedef struct  msg_struct_asylibra_emc_push_cmd //
 	UINT8 l3Data[MSG_BUF_MAX_LENGTH_ASY_DATA_GENERAL-10];
 }msg_struct_asylibra_emc_push_cmd_t;
 
-typedef struct  msg_struct_vmdashell_asylibra_data_ul //
+typedef struct  msg_struct_vmda_asylibra_data_ul //
 {
 	UINT8 length;
 	INT8 dataBuf[MSG_BUF_MAX_LENGTH_ASY_DATA_GENERAL];
-}msg_struct_vmdashell_asylibra_data_ul_t;
+}msg_struct_vmda_asylibra_data_ul_t;
 
 //EMC消息定义
 typedef struct  msg_struct_emc_asylibra_data_req //

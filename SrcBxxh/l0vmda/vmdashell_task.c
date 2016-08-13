@@ -28,10 +28,10 @@
 //按照DaWechat工程：消息路由表
 const struct ke_msg_handler ihu_fsm_vmdashell_default[] =
 {
-	{MSG_BLEAPP_VMDA_INIT, 								(ke_msg_func_t)hlFuncVmdashellBleInit},
-	{MSG_ID_VMDA_TIMER_1S_PERIOD, 				(ke_msg_func_t)hlFuncVmdashellSysClock1sPeriod},
-	{MSG_SPS_VMDA_BLE_DATA_DL_RCV,				(ke_msg_func_t)hlFuncVmdashellSpsBleDataDlRcv},
-	{MSG_BLEAPP_VMDA_DISCONNECT, 					(ke_msg_func_t)hlFuncVmdashellBleDisc},
+	{MSG_BLEAPP_VMDASHELL_INIT, 								(ke_msg_func_t)hlFuncVmdashellBleInit},
+	{MSG_ID_VMDASHELL_TIMER_1S_PERIOD, 				(ke_msg_func_t)hlFuncVmdashellSysClock1sPeriod},
+	{MSG_SPS_VMDASHELL_BLE_DATA_DL_RCV,				(ke_msg_func_t)hlFuncVmdashellSpsBleDataDlRcv},
+	{MSG_BLEAPP_VMDASHELL_DISCONNECT, 					(ke_msg_func_t)hlFuncVmdashellBleDisc},
 };
 
 //按照DaWechat工程：定义全局变量
@@ -64,7 +64,7 @@ void ihu_task_vmdashell_mainloop(void)
 }
 
 //按照DaWechat工程：初始化处理函数API
-OPSTAT hlFuncVmdashellBleInit(ke_msg_id_t const msgid, msg_struct_bleapp_vmda_init_t const *param, ke_task_id_t const dest_id, ke_task_id_t const src_id)
+OPSTAT hlFuncVmdashellBleInit(ke_msg_id_t const msgid, msg_struct_bleapp_vmdashell_init_t const *param, ke_task_id_t const dest_id, ke_task_id_t const src_id)
 {	
 	int ret = 0;
 	char strDebug[BX_PRINT_SZ];		
@@ -77,15 +77,15 @@ OPSTAT hlFuncVmdashellBleInit(ke_msg_id_t const msgid, msg_struct_bleapp_vmda_in
 	}
 	
 	//启动周期性定时器
-	vmda1458x_timer_set(MSG_ID_VMDA_TIMER_1S_PERIOD, TASK_VMDA1458X, VMDASHELL_TIMER_1SECOND_CLOCK);
+	vmda1458x_timer_set(MSG_ID_VMDASHELL_TIMER_1S_PERIOD, TASK_VMDA1458X, VMDASHELL_TIMER_1SECOND_CLOCK);
 	
 	//发送MSG_ID_VMDA_ASY_BLE_CON给ASYLIBRA模块
-	msg_struct_vmda_asylibra_ble_con_t snd;
-	memset(&snd, 0, sizeof(msg_struct_vmda_asylibra_ble_con_t));
-	snd.length = sizeof(msg_struct_vmda_asylibra_ble_con_t);
-	ret = ihu_message_send(MSG_ID_VMDA_ASYLIBRA_BLE_CON, TASK_ID_ASYLIBRA, TASK_ID_VMDASHELL, &snd, snd.length);
+	msg_struct_vmdashell_asylibra_ble_con_t snd;
+	memset(&snd, 0, sizeof(msg_struct_vmdashell_asylibra_ble_con_t));
+	snd.length = sizeof(msg_struct_vmdashell_asylibra_ble_con_t);
+	ret = ihu_message_send(MSG_ID_VMDASHELL_ASYLIBRA_BLE_CON, TASK_ID_ASYLIBRA, TASK_ID_VMDASHELL, &snd, snd.length);
 	if (ret == FAILURE){
-		sprintf(strDebug, "VMDA: Send MSG_ID_VMDA_ASYLIBRA_BLE_CON message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_VMDASHELL], zIhuTaskNameList[TASK_ID_ASYLIBRA]);
+		sprintf(strDebug, "VMDA: Send MSG_ID_VMDASHELL_ASYLIBRA_BLE_CON message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_VMDASHELL], zIhuTaskNameList[TASK_ID_ASYLIBRA]);
 		IhuErrorPrint(strDebug);
 		return FAILURE;
 	}
@@ -98,7 +98,7 @@ OPSTAT hlFuncVmdashellBleInit(ke_msg_id_t const msgid, msg_struct_bleapp_vmda_in
 }
 
 //VM及上层系统时钟的定海神针！
-OPSTAT hlFuncVmdashellSysClock1sPeriod(ke_msg_id_t const msgid, msg_struct_vmda_1s_period_timtout_t const *param, ke_task_id_t const dest_id, ke_task_id_t const src_id)
+OPSTAT hlFuncVmdashellSysClock1sPeriod(ke_msg_id_t const msgid, msg_struct_vmdashell_1s_period_timtout_t const *param, ke_task_id_t const dest_id, ke_task_id_t const src_id)
 {
 	//入参检查
 	if ((param == NULL) || (dest_id != TASK_VMDA1458X)){
@@ -115,14 +115,14 @@ OPSTAT hlFuncVmdashellSysClock1sPeriod(ke_msg_id_t const msgid, msg_struct_vmda_
 	ihu_timer_routine_handler_1s();
 	
 	//再次启动周期性定时器
-	vmda1458x_timer_set(MSG_ID_VMDA_TIMER_1S_PERIOD, TASK_VMDA1458X, VMDASHELL_TIMER_1SECOND_CLOCK);
+	vmda1458x_timer_set(MSG_ID_VMDASHELL_TIMER_1S_PERIOD, TASK_VMDA1458X, VMDASHELL_TIMER_1SECOND_CLOCK);
 		
 	//返回
 	return (KE_MSG_CONSUMED);
 }
 
 //按照DaWechat工程：接收到数据的总处理函数
-OPSTAT hlFuncVmdashellSpsBleDataDlRcv(ke_msg_id_t const msgid, msg_struct_sps_vmda_ble_data_dl_rcv_t const *param, ke_task_id_t const dest_id, ke_task_id_t const src_id)
+OPSTAT hlFuncVmdashellSpsBleDataDlRcv(ke_msg_id_t const msgid, msg_struct_sps_vmda1458x_ble_data_dl_rcv_t const *param, ke_task_id_t const dest_id, ke_task_id_t const src_id)
 {
 	int ret = 0;
 	char strDebug[BX_PRINT_SZ];	
@@ -140,14 +140,14 @@ OPSTAT hlFuncVmdashellSpsBleDataDlRcv(ke_msg_id_t const msgid, msg_struct_sps_vm
 		return FAILURE;
 	}
 
-	//发送MSG_ID_VMDA_ASYLIBRA_DATA_DL给ASYLIBRA模块
-	msg_struct_vmda_asylibra_data_dl_t snd;
-	memset(&snd, 0, sizeof(msg_struct_vmda_asylibra_data_dl_t));
+	//发送MSG_ID_VMDASHELL_ASYLIBRA_DATA_DL给ASYLIBRA模块
+	msg_struct_vmdashell_asylibra_data_dl_t snd;
+	memset(&snd, 0, sizeof(msg_struct_vmdashell_asylibra_data_dl_t));
 	snd.length = param->length;
 	memcpy(snd.dataBuf, param->value, snd.length);	
-	ret = ihu_message_send(MSG_ID_VMDA_ASYLIBRA_DATA_DL, TASK_ID_ASYLIBRA, TASK_ID_VMDASHELL, &snd, snd.length);
+	ret = ihu_message_send(MSG_ID_VMDASHELL_ASYLIBRA_DATA_DL, TASK_ID_ASYLIBRA, TASK_ID_VMDASHELL, &snd, snd.length);
 	if (ret == FAILURE){
-		sprintf(strDebug, "VMDA: Send MSG_ID_VMDA_ASYLIBRA_DATA_DL message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_VMDASHELL], zIhuTaskNameList[TASK_ID_ASYLIBRA]);
+		sprintf(strDebug, "VMDA: Send MSG_ID_VMDASHELL_ASYLIBRA_DATA_DL message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_VMDASHELL], zIhuTaskNameList[TASK_ID_ASYLIBRA]);
 		IhuErrorPrint(strDebug);
 		return FAILURE;
 	}
@@ -160,7 +160,7 @@ OPSTAT hlFuncVmdashellSpsBleDataDlRcv(ke_msg_id_t const msgid, msg_struct_sps_vm
 
 
 //按照DaWechat工程：处理拆链过程
-OPSTAT hlFuncVmdashellBleDisc(ke_msg_id_t const msgid, msg_struct_bleapp_vmda_disconnect_t const *param, ke_task_id_t const dest_id, ke_task_id_t const src_id)
+OPSTAT hlFuncVmdashellBleDisc(ke_msg_id_t const msgid, msg_struct_bleapp_vmda1458x_disconnect_t const *param, ke_task_id_t const dest_id, ke_task_id_t const src_id)
 {
 	int ret = 0;
 	char strDebug[BX_PRINT_SZ];		
@@ -173,12 +173,12 @@ OPSTAT hlFuncVmdashellBleDisc(ke_msg_id_t const msgid, msg_struct_bleapp_vmda_di
 	}
 		
 	//发送MSG_ID_VMDA_ASY_BLE_DISC给ASYLIBRA模块
-	msg_struct_vmda_asylibra_ble_disc_t snd;
-	memset(&snd, 0, sizeof(msg_struct_vmda_asylibra_ble_disc_t));
-	snd.length = sizeof(msg_struct_vmda_asylibra_ble_disc_t);
-	ret = ihu_message_send(MSG_ID_VMDA_ASYLIBRA_BLE_DISC, TASK_ID_ASYLIBRA, TASK_ID_VMDASHELL, &snd, snd.length);
+	msg_struct_vmdashell_asylibra_ble_disc_t snd;
+	memset(&snd, 0, sizeof(msg_struct_vmdashell_asylibra_ble_disc_t));
+	snd.length = sizeof(msg_struct_vmdashell_asylibra_ble_disc_t);
+	ret = ihu_message_send(MSG_ID_VMDASHELL_ASYLIBRA_BLE_DISC, TASK_ID_ASYLIBRA, TASK_ID_VMDASHELL, &snd, snd.length);
 	if (ret == FAILURE){
-		sprintf(strDebug, "VMDA: Send MSG_ID_VMDA_ASYLIBRA_BLE_DISC message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_VMDASHELL], zIhuTaskNameList[TASK_ID_ASYLIBRA]);
+		sprintf(strDebug, "VMDA: Send MSG_ID_VMDASHELL_ASYLIBRA_BLE_DISC message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_VMDASHELL], zIhuTaskNameList[TASK_ID_ASYLIBRA]);
 		IhuErrorPrint(strDebug);
 		return FAILURE;
 	}
@@ -222,7 +222,7 @@ FsmStateItem_t FsmVmdashell[] =
   {MSG_ID_COM_INIT_FB,										FSM_STATE_VMDASHELL_ACTIVE,         							fsm_com_do_nothing},
   {MSG_ID_COM_STOP,												FSM_STATE_VMDASHELL_ACTIVE,         							fsm_vmdashell_stop_rcv},  //消息逻辑的来源待定
   {MSG_ID_COM_TIME_OUT,       						FSM_STATE_VMDASHELL_ACTIVE,            					fsm_vmdashell_task_init_time_out},		
-  {MSG_ID_ASYLIBRA_VMDA_DATA_UL,       		FSM_STATE_VMDASHELL_ACTIVE,            					fsm_vmdashell_data_ul_send},
+  {MSG_ID_ASYLIBRA_VMDASHELL_DATA_UL,       		FSM_STATE_VMDASHELL_ACTIVE,            					fsm_vmdashell_data_ul_send},
 	
   //Task level initialization
   {MSG_ID_COM_RESTART,        						FSM_STATE_VMDASHELL_WF_INIT_FB,         					fsm_vmdashell_restart},
@@ -488,7 +488,7 @@ OPSTAT fsm_vmdashell_task_init_time_out(UINT8 dest_id, UINT8 src_id, void * para
 	return SUCCESS;
 }
 
-//MSG_ID_ASYLIBRA_VMDA_DATA_UL消息的处理，以便发送到BLE底层
+//MSG_ID_ASYLIBRA_VMDASHELL_DATA_UL消息的处理，以便发送到BLE底层
 OPSTAT fsm_vmdashell_data_ul_send(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 param_len)
 {
 	int ret=0;
@@ -501,10 +501,10 @@ OPSTAT fsm_vmdashell_data_ul_send(UINT8 dest_id, UINT8 src_id, void * param_ptr,
 	}	
 	
 	//收消息
-	msg_struct_vmda_asylibra_data_ul_t rcv;
-	memset(&rcv, 0, sizeof(msg_struct_vmda_asylibra_data_ul_t));
-	if (param_len > sizeof(msg_struct_vmda_asylibra_data_ul_t)){
-		IhuErrorPrint("VMDA: Receive MSG_ID_ASYLIBRA_VMDA_DATA_UL message error!");
+	msg_struct_vmdashell_asylibra_data_ul_t rcv;
+	memset(&rcv, 0, sizeof(msg_struct_vmdashell_asylibra_data_ul_t));
+	if (param_len > sizeof(msg_struct_vmdashell_asylibra_data_ul_t)){
+		IhuErrorPrint("VMDA: Receive MSG_ID_ASYLIBRA_VMDASHELL_DATA_UL message error!");
 		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 		return FAILURE;
 	}

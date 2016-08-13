@@ -41,10 +41,10 @@ typedef struct ihu_vmdashell_env_tag
 //按照DaWechat工程：Local APIs //状态处理机
 extern void ihu_task_vmdashell_init(void);
 extern void ihu_task_vmdashell_mainloop(void);
-OPSTAT hlFuncVmdashellBleInit(ke_msg_id_t const msgid, msg_struct_bleapp_vmda_init_t const *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-OPSTAT hlFuncVmdashellSysClock1sPeriod(ke_msg_id_t const msgid, msg_struct_vmda_1s_period_timtout_t const *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-OPSTAT hlFuncVmdashellSpsBleDataDlRcv(ke_msg_id_t const msgid, msg_struct_sps_vmda_ble_data_dl_rcv_t const *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-OPSTAT hlFuncVmdashellBleDisc(ke_msg_id_t const msgid, msg_struct_bleapp_vmda_disconnect_t const *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
+OPSTAT hlFuncVmdashellBleInit(ke_msg_id_t const msgid, msg_struct_bleapp_vmdashell_init_t const *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
+OPSTAT hlFuncVmdashellSysClock1sPeriod(ke_msg_id_t const msgid, msg_struct_vmdashell_1s_period_timtout_t const *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
+OPSTAT hlFuncVmdashellSpsBleDataDlRcv(ke_msg_id_t const msgid, msg_struct_sps_vmda1458x_ble_data_dl_rcv_t const *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
+OPSTAT hlFuncVmdashellBleDisc(ke_msg_id_t const msgid, msg_struct_bleapp_vmda1458x_disconnect_t const *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
 
 
 /*

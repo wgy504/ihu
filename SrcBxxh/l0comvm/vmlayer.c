@@ -42,7 +42,7 @@ struct tm zIhuSystemTimeYmd;
 //从极致优化内存的角度，这里浪费了一个TASK对应的内存空间（MIN=0)，但它却极大的改善了程序编写的效率，值得浪费！！！
 char *zIhuTaskNameList[MAX_TASK_NUM_IN_ONE_IHU] ={
 	"MIN",
-	"VMDA",
+	"VMDASHELL",
 	"TIMER",
 	"ASYLIBRA",
 	//"AKSLEO",
@@ -127,7 +127,7 @@ void bxxh_vm_init_hook(void)
 	//Init FSM
 	FsmInit();
 
-	//创建并初始化所有任务，这是调用vmda_shell中提供的控制API来进行这个初始化
+	//创建并初始化所有任务，这是调用vmdashell中提供的控制API来进行这个初始化
 	ihu_task_create_all();
 	
 	//然后，初始化完成，系统可以进入正常的循环中
@@ -208,7 +208,7 @@ void vmda1458x_timer_clear(ke_msg_id_t const timerid, ke_task_id_t const taskid)
 	ke_timer_clear(timerid, taskid);
 }
 
-void vmda_app_uart_push_zjl(unsigned char *p, int n)
+void vmda1458x_app_uart_push_zjl(unsigned char *p, int n)
 {
 	return;
 }
@@ -216,12 +216,12 @@ void vmda_app_uart_push_zjl(unsigned char *p, int n)
 //数据送往BLE模块
 void vmda1458x_data_send_to_ble(unsigned char *p, int n)
 {
-	vmda_app_uart_push_zjl(p, n);
+	vmda1458x_app_uart_push_zjl(p, n);
 	bxxh_led_blink_once_on_off(LED_ID_7);
 	bxxh_led_blink_once_on_off(LED_ID_7);
 }
 
-void vmda_app_ble_push(unsigned char *p, int n)
+void vmda1458x_app_ble_push(unsigned char *p, int n)
 {
 	return;
 }
@@ -229,7 +229,7 @@ void vmda_app_ble_push(unsigned char *p, int n)
 //数据送往UART1模块
 void vmda1458x_data_send_to_uart(unsigned char *p, int n)
 {
-	vmda_app_ble_push(p, n);
+	vmda1458x_app_ble_push(p, n);
 	bxxh_led_blink_once_on_off(LED_ID_6);
 	bxxh_led_blink_once_on_off(LED_ID_6);
 }
@@ -1509,32 +1509,5 @@ OPSTAT ihu_get_mac_addr(UINT8* mac)
 	#endif
 }
 
-//为了生成上层统一执行使用的IHU开头的函数
-void ihu_timer_set(UINT16 const timerid, UINT16 const taskid, UINT16 delay)
-{
-	#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCWX_ID)	
-		vmda1458x_timer_set(timerid, taskid, delay);
-	#elif 	(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCSPS_ID)	
-		vmda1458x_timer_set(timerid, taskid, delay);
-	#elif 	(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCY_ID)
-		return ;
-	#else
-		return ;
-	#endif	
-}
-
-void ihu_timer_clear(UINT16 const timerid, UINT16 const taskid)
-{
-
-	#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCWX_ID)	
-		vmda1458x_timer_clear(timerid, taskid);
-	#elif 	(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCSPS_ID)	
-		vmda1458x_timer_clear(timerid, taskid);
-	#elif 	(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCY_ID)
-		return ;
-	#else
-		return ;
-	#endif		
-}
 
 
