@@ -512,7 +512,7 @@ OPSTAT fsm_vmda_data_ul_send(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 
 	//发送内容体到BLE底层
 	__disable_irq();
-	bxxh_data_send_to_ble((uint8_t *)&rcv.dataBuf, rcv.length);
+	vmda_data_send_to_ble((uint8_t *)&rcv.dataBuf, rcv.length);
 	__enable_irq();
 	
 	//继续保持在FSM_STATE_VMDA_ACTIVE状态

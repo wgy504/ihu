@@ -1,4 +1,4 @@
-;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Sat Aug 13 11:23:23 2016
+;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Sat Aug 13 11:47:04 2016
 ;VERSION 0.2
 ;FILE adc.o
 adc_calibrate <= USED 0
@@ -337,11 +337,6 @@ IhuDebugPrint <= USED 0
 app_ble_push <= USED 0
 app_uart_push_zjl <= USED 0
 b2l_uint16 <= USED 0
-bxxh_data_send_to_ble <= USED 0
-bxxh_data_send_to_uart <= USED 0
-bxxh_init_msg_to_vmda <= USED 0
-bxxh_led_flair <= USED 0
-bxxh_message_send <= USED 0
 bxxh_vm_init_hook <= USED 0
 bxxh_vm_task_entry_hook <= USED 0
 fsm_com_do_nothing <= USED 0
@@ -357,6 +352,11 @@ ihu_task_create_all <= USED 0
 ihu_task_create_and_run <= USED 0
 ihu_task_execute_all <= USED 0
 ihu_taskid_to_string <= USED 0
+vmda_data_send_to_ble <= USED 0
+vmda_data_send_to_uart <= USED 0
+vmda_init_msg_to_shell <= USED 0
+vmda_led_flair <= USED 0
+vmda_message_send <= USED 0
 vmda_timer_clear <= USED 0
 ;FILE wecaht_aes.o
 AES_Decrypt <= USED 0

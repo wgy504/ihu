@@ -608,7 +608,7 @@ Section Cross References
     vmlayer.o(.text) refers to vmlayer.o(.data) for .data
     vmlayer.o(.text) refers to vmda_shell_task.o(.text) for bxxh_task_vmda_mainloop
     vmlayer.o(.text) refers to vmlayer.o(.text) for ihu_sleep
-    vmlayer.o(.text) refers to vmlayer.o(.text) for bxxh_init_msg_to_vmda
+    vmlayer.o(.text) refers to vmlayer.o(.text) for vmda_init_msg_to_shell
     vmlayer.o(.text) refers to vmlayer.o(.text) for ihu_task_execute_all
     vmlayer.o(.text) refers to vmlayer.o(.bss) for .bss
     vmlayer.o(.text) refers to vmlayer.o(.text) for app_uart_push_zjl
@@ -714,7 +714,7 @@ Section Cross References
     vmda_shell_task.o(.text) refers to vmda_shell_task.o(.conststring) for .conststring
     vmda_shell_task.o(.text) refers to vmlayer.o(.data) for zIhuTaskNameList
     vmda_shell_task.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    vmda_shell_task.o(.text) refers to vmlayer.o(.text) for bxxh_data_send_to_ble
+    vmda_shell_task.o(.text) refers to vmlayer.o(.text) for vmda_data_send_to_ble
     vmda_shell_task.o(.text) refers to vmlayer.o(.text) for FsmSetState
     vmda_shell_task.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
     vmda_shell_task.o(.constdata) refers to vmda_shell_task.o(.text) for hlBxxhVmdaBleInit
@@ -3531,7 +3531,7 @@ Image Symbol Table
     IhuErrorPrint                            0x200059b1   Thumb Code    64  vmlayer.o(.text)
     ihu_mac_add_get                          0x200059f1   Thumb Code    74  vmlayer.o(.text)
     vmda_timer_set                           0x20005a3b   Thumb Code     8  vmlayer.o(.text)
-    bxxh_emc_sample                          0x20005a43   Thumb Code     8  vmlayer.o(.text)
+    vmda_emc_sample                          0x20005a43   Thumb Code     8  vmlayer.o(.text)
     ihu_emc_adc_read                         0x20005a4b   Thumb Code    10  vmlayer.o(.text)
     ihu_get_mac_addr                         0x20005a55   Thumb Code     4  vmlayer.o(.text)
     strncpy                                  0x20005ac9   Thumb Code    26  strncpy.o(.text)

@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\out\wechat.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\out\wechat.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Sat Aug 13 11:23:23 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Sat Aug 13 11:47:04 2016
 <BR><P>
 <H3>Maximum Stack Usage =       1156 bytes + Unknown(Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1804,7 +1804,7 @@ Global Symbols
 
 <P><STRONG><a name="[174]"></a>adc_get_sample</STRONG> (Thumb, 32 bytes, Stack size 0 bytes, adc.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[170]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adc_get_vbat_sample
-<LI><a href="#[23a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bxxh_emc_sample
+<LI><a href="#[23a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vmda_emc_sample
 </UL>
 
 <P><STRONG><a name="[172]"></a>adc_usDelay</STRONG> (Thumb, 32 bytes, Stack size 0 bytes, adc.o(.text))
@@ -3460,8 +3460,8 @@ Global Symbols
 <LI><a href="#[1e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mpbledemo2_airsync_link_setup_period_report
 </UL>
 
-<P><STRONG><a name="[23a]"></a>bxxh_emc_sample</STRONG> (Thumb, 8 bytes, Stack size 8 bytes, vmlayer.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = bxxh_emc_sample
+<P><STRONG><a name="[23a]"></a>vmda_emc_sample</STRONG> (Thumb, 8 bytes, Stack size 8 bytes, vmlayer.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = vmda_emc_sample
 </UL>
 <BR>[Calls]<UL><LI><a href="#[174]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adc_get_sample
 </UL>
@@ -3469,9 +3469,9 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[234]"></a>ihu_emc_adc_read</STRONG> (Thumb, 10 bytes, Stack size 8 bytes, vmlayer.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = ihu_emc_adc_read &rArr; bxxh_emc_sample
+<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = ihu_emc_adc_read &rArr; vmda_emc_sample
 </UL>
-<BR>[Calls]<UL><LI><a href="#[23a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bxxh_emc_sample
+<BR>[Calls]<UL><LI><a href="#[23a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vmda_emc_sample
 </UL>
 <BR>[Called By]<UL><LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mpbledemo2_readEmcDataResp
 </UL>

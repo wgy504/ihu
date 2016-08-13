@@ -146,8 +146,8 @@ void bxxh_vm_task_entry_hook(void)
 			return;
 		}
 		else{
-			//使用bxxh_message_send方法，发送消息给VMDA，让VMDA-SHELL起到总控的目的，初始化所有其它任务模块
-			bxxh_init_msg_to_vmda();			
+			//使用vmda_message_send方法，发送消息给VMDA，让VMDA-SHELL起到总控的目的，初始化所有其它任务模块
+			vmda_init_msg_to_shell();			
 			flagInitMsgSend = TRUE;
 		}
 	}
@@ -212,7 +212,7 @@ void app_uart_push_zjl(unsigned char *p, int n)
 }
 
 //数据送往BLE模块
-void bxxh_data_send_to_ble(unsigned char *p, int n)
+void vmda_data_send_to_ble(unsigned char *p, int n)
 {
 	app_uart_push_zjl(p, n);
 	bxxh_led_blink_once_on_off(LED_ID_7);
@@ -225,7 +225,7 @@ void app_ble_push(unsigned char *p, int n)
 }
 
 //数据送往UART1模块
-void bxxh_data_send_to_uart(unsigned char *p, int n)
+void vmda_data_send_to_uart(unsigned char *p, int n)
 {
 	app_ble_push(p, n);
 	bxxh_led_blink_once_on_off(LED_ID_6);
@@ -233,13 +233,13 @@ void bxxh_data_send_to_uart(unsigned char *p, int n)
 }
 
 //采样EMC数据
-int bxxh_emc_sample(void)
+int vmda_emc_sample(void)
 {
 	return adc_get_sample();
 }
 
 //Only used for PEM1, to be updated for PEM2
-void bxxh_led_flair(void)
+void vmda_led_flair(void)
 {
 	if (zIhuHwInvInfo.led_on_off == true){
 #if (IHU_EMCWX_CURRENT_HW_PEM_NEW == true)
@@ -269,14 +269,14 @@ uint16_t b2l_uint16(uint16_t in)
 
 //message send
 //param_len indicate the message total length = structure + value length
-void bxxh_message_send(ke_msg_id_t const msg_id, ke_task_id_t const dest_id, ke_task_id_t const src_id, void const *param_ptr, uint16_t const param_len)
+void vmda_message_send(ke_msg_id_t const msg_id, ke_task_id_t const dest_id, ke_task_id_t const src_id, void const *param_ptr, uint16_t const param_len)
 {
 	char strDebug[BX_PRINT_SZ];
 	struct param_str *msg = ke_msg_alloc(msg_id, dest_id, src_id, param_len);
 	
 	if(NULL == msg)
 	{
-		sprintf(strDebug, "IHU-VM: bxxh_message_send, ke_msg_alloc return with NULL msg_id = %d", msg_id);
+		sprintf(strDebug, "IHU-VM: vmda_message_send, ke_msg_alloc return with NULL msg_id = %d", msg_id);
 		IhuDebugPrint(strDebug);
 		return;
 	}	
@@ -292,7 +292,7 @@ void bxxh_message_send(ke_msg_id_t const msg_id, ke_task_id_t const dest_id, ke_
 }
 
 //初始化生成消息，发送给VMDA，以便发送给所有任务模块
-void bxxh_init_msg_to_vmda(void)
+void vmda_init_msg_to_shell(void)
 {
 	int ret = 0;
 	char strDebug[BX_PRINT_SZ];
@@ -1466,7 +1466,7 @@ struct tm ihu_clock_unix_to_ymd(time_t t_unix)
 //EMC ADC Read
 UINT16 ihu_emc_adc_read(void)
 {
-	return bxxh_emc_sample();
+	return vmda_emc_sample();
 }
 
 //简单的函数映射
