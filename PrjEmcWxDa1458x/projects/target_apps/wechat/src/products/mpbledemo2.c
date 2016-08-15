@@ -641,7 +641,6 @@ int mpbledemo2_data_consume_func(uint8_t *data, uint32_t len)
 					//这里可以增加时钟的启动，从而实现链路建立以后，自动上报数据
 					vmda1458x_timer_set(WECHAT_PERIOD_REPORT_TIME_OUT, TASK_WECHAT, BLEDEMO2_TIMER_PERIOD_REPORT);
 					//闪灯
-					//ihu_i2c_led_init(I2C_SLAVE_ADDRESS, LED_BLINK_1HZ_PSC);
 					vmda1458x_led_blink_once_off_on(LED_ID_6);
 				}
 				break;
@@ -882,7 +881,6 @@ void mpbledemo2_readEmcDataResp(uint8_t *ptrData, uint32_t lengthInByte)
 	}
 	ble_wechat_indicate_data(data, len);
 	//闪灯
-//	ihu_i2c_led_init(I2C_SLAVE_ADDRESS, LED_BLINK_1HZ_PSC);
 	vmda1458x_led_blink_once_off_on(LED_ID_6);
   return;
 	

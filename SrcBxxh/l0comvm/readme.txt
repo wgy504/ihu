@@ -455,6 +455,15 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 统一ihu函数对不同项目的分类处理
 = 统一对VMDASHELL和vmda1458x底层函数的命名
 = TASK_VMDA1458X和TASK_ID_VMDASHELL任务分别对应SHELL上层任务模块以及底层SDK认可的任务模块
+= 将PEM定义以及MAC地址定义放到da1458x_config_basic.h中，以实现多个人共享程序代码的能力
+
+//= ZJL, 2016 Aug.13, IHU_EMCWX_CURRENT_SW_DELIVERY R03.13
+= 实验FLASH读取，以及LED灯状态的控制
+= 定时读取EMC数据依然有问题
+= 在user_periph_setup.c中注册LED、FLASH等管脚
+= 增加外设的初始化过程
+
+
 
 
 
