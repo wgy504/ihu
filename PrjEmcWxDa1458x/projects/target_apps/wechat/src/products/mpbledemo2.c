@@ -766,6 +766,9 @@ int mpbledemo2_data_consume_func(uint8_t *data, uint32_t len)
 				break;
 				
 			case ECI_err_decode:
+				//清除TIMEOUT消息，是否应该放在这里，也是一个小小的问题，原则上需要放在断链的过程中，但并没有断链过程
+				//待完善
+				vmda1458x_timer_clear(WECHAT_PERIOD_REPORT_TIME_OUT, TASK_WECHAT);
 				break;
 			
 			default:

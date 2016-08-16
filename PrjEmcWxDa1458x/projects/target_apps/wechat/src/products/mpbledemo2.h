@@ -150,7 +150,7 @@ extern void mpbledemo2_reset(void);
 extern void mpbledemo2_indication_state(bool isEnable);
 extern int32_t mpbledemo2_sendData(uint8_t* ptrData, uint32_t lengthInByte);
 
-#define BLEDEMO2_TIMER_PERIOD_REPORT 10 //in second
+#define BLEDEMO2_TIMER_PERIOD_REPORT 1000 //10ms网格，in second
 extern void mpbledemo2_airsync_link_setup_period_report(void);
 
 #endif

@@ -1,4 +1,4 @@
-;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Mon Aug 15 20:30:39 2016
+;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Tue Aug 16 12:04:44 2016
 ;VERSION 0.2
 ;FILE adc.o
 adc_calibrate <= USED 0
@@ -342,7 +342,6 @@ vmda1458x_data_send_to_uart <= USED 0
 vmda1458x_init_msg_to_vmdashell <= USED 0
 vmda1458x_led_flair <= USED 0
 vmda1458x_message_send <= USED 0
-vmda1458x_timer_clear <= USED 0
 ;FILE wecaht_aes.o
 AES_Decrypt <= USED 0
 AES_Encrypt_PKCS7 <= USED 0

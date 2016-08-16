@@ -463,6 +463,9 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 在user_periph_setup.c中注册LED、FLASH等管脚
 = 增加外设的初始化过程
 
+//= ZJL, 2016 Aug.16, IHU_EMCWX_CURRENT_SW_DELIVERY R03.14
+= 验证定时读取过程，设置定时器的准确时间长度，DELAY网格为10ms，所以长度应该设置为1000，表示10s
+
 
 
 

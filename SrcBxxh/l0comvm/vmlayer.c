@@ -197,6 +197,7 @@ void IhuErrorPrint(char *p)
 
 
 //纯粹为了方便，以便自己的任务调用
+//DELAY的单位是10ms
 void vmda1458x_timer_set(ke_msg_id_t const timerid, ke_task_id_t const taskid, uint16_t delay)
 {
 	app_timer_set(timerid, taskid, delay);

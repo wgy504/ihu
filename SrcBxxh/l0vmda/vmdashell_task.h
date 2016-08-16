@@ -72,7 +72,7 @@ extern FsmStateItem_t FsmVmdashell[];
 //extern bool zVmdashellInitFbRcvCtrl[MAX_TASK_NUM_IN_ONE_IHU];
 
 //Local variables
-#define VMDASHELL_TIMER_1SECOND_CLOCK 100 //1s，用于时钟形成，这是采用了操作系统BXXH提供的方式
+#define VMDASHELL_TIMER_1SECOND_CLOCK 100 //100=1s，用于时钟形成，这是采用了操作系统BXXH提供的方式，因为网格为10ms
 #define VMDASHELL_TIMER_DURATION_INIT_FB 3  //in second，这是采用了VM以上层的时钟形式
 
 //API
