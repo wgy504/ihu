@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 #<SYMDEFS># ARM Linker, 5060061: Last Updated: Sat Aug 20 15:11:59 2016
+=======
+#<SYMDEFS># ARM Linker, 5060061: Last Updated: Sat Aug 20 13:08:16 2016
+>>>>>>> a6f8527cedd5694571a3ff1e4184c5a019c2418c
 0x00000000 N __ARM_use_no_argv
 0x00000000 N _printf_a
 0x00000000 N _printf_c
