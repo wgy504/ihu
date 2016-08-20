@@ -465,6 +465,20 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 
 //= ZJL, 2016 Aug.16, IHU_EMCWX_CURRENT_SW_DELIVERY R03.14
 = 验证定时读取过程，设置定时器的准确时间长度，DELAY网格为10ms，所以长度应该设置为1000，表示10s
+= 增加PEM3.0/PEM3.1的配置管脚，为烧制UART1的配置（P04/P05）做好准备
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
