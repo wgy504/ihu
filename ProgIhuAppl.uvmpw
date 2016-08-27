@@ -13,19 +13,19 @@
   </project>
 
   <project>
+    <PathAndName>.\DA1458x_SDK\5.0.3\utilities\flash_programmer\emcwx_flash_programmer.uvproj</PathAndName>
+  </project>
+
+  <project>
+    <PathAndName>.\DA1458x_SDK\5.0.3\utilities\secondary_bootloader\emcwx_secondary_bootloader.uvproj</PathAndName>
+  </project>
+
+  <project>
     <PathAndName>.\PrjEmcSpsDa1458x\projects\target_apps\dsps\sps_device\Keil_5\spswechat.uvprojx</PathAndName>
   </project>
 
   <project>
     <PathAndName>.\PrjScyStm205RG\Project\stm32_test.uvproj</PathAndName>
-  </project>
-
-  <project>
-    <PathAndName>.\DA1458x_SDK\5.0.3\utilities\flash_programmer\flash_programmer.uvproj</PathAndName>
-  </project>
-
-  <project>
-    <PathAndName>.\DA1458x_SDK\5.0.3\utilities\secondary_bootloader\secondary_bootloader.uvproj</PathAndName>
   </project>
 
 </ProjectWorkspace>
