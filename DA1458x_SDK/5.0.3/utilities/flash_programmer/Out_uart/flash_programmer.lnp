@@ -1,0 +1,16 @@
+--cpu Cortex-M0
+".\out_uart\startup_cmsdk_cm0.o"
+".\out_uart\system_cmsdk.o"
+".\out_uart\peripherals.o"
+".\out_uart\crc32.o"
+".\out_uart\otpc.o"
+".\out_uart\uart.o"
+".\out_uart\i2c_eeprom.o"
+".\out_uart\spi_flash.o"
+".\out_uart\spi.o"
+".\out_uart\gpio.o"
+".\out_uart\programmer.o"
+--library_type=microlib --strict --scatter ".\startup\bootloader.sct"
+--datacompressor=off --summary_stderr --info summarysizes --map --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list ".\Out_uart\flash_programmer.map" -o .\Out_uart\flash_programmer.axf

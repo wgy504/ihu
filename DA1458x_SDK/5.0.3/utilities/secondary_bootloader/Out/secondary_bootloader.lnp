@@ -1,0 +1,19 @@
+--cpu Cortex-M0
+".\out\startup_cmsdk_cm0.o"
+".\out\system_cmsdk.o"
+".\out\bootloader.o"
+".\out\timer.o"
+".\out\spi_flash.o"
+".\out\spi.o"
+".\out\gpio.o"
+".\out\uart.o"
+".\out\i2c_eeprom.o"
+".\out\main.o"
+".\out\uart_booter.o"
+".\out\spi_commands.o"
+".\out\crc32.o"
+".\out\sw_aes.o"
+--library_type=microlib --strict --scatter ".\startup\bootloader.sct"
+--summary_stderr --info summarysizes --map --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list ".\Out\secondary_bootloader.map" -o .\Out\secondary_bootloader.axf
