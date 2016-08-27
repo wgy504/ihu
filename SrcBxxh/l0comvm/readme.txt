@@ -469,7 +469,7 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 
 //= ZJL, 2016 Aug.27, IHU_EMCWX_CURRENT_SW_DELIVERY R03.15
 = 增加Flash_Programmer以及Sencond_bootloader程序代码到本项目工程
-
+= 修改并完善PEM3.0/PEM3.1的关键定义，包括ADC0在PEM3.x中采用了ADC1通道，而非之前确定的ADC0/P00通道
 
 
 
