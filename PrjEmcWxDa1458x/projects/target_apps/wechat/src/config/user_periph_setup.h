@@ -540,7 +540,7 @@
 	#define DB15_RSV2_PIN   GPIO_PIN_1
 	#define DB15_RSV3_PORT  GPIO_PORT_2
 	#define DB15_RSV3_PIN   GPIO_PIN_6  //changed comparing with PEM2.0
-
+/*
 #elif (IHU_EMCWX_CURRENT_HW_PEM == IHU_EMCWX_CFG_HW_PEM3_0)
 	#define FLASH_SPI_DI_PORT   GPIO_PORT_0
 	#define FLASH_SPI_DI_PIN    GPIO_PIN_6
@@ -672,9 +672,9 @@
 	#define DB15_RSV2_PIN   GPIO_PIN_1
 	#define DB15_RSV3_PORT  GPIO_PORT_2
 	#define DB15_RSV3_PIN   GPIO_PIN_6  //changed comparing with PEM2.0
-	//IHU_EMCWX_CFG_HW_PEM3
+	//IHU_EMCWX_CFG_HW_PEM3 */
+#else	
 #endif //IHU_EMCWX_CURRENT_HW_PEM
-
 
 
 /*
