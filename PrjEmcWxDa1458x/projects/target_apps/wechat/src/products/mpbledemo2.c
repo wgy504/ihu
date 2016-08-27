@@ -864,8 +864,12 @@ void mpbledemo2_readEmcDataResp(uint8_t *ptrData, uint32_t lengthInByte)
 //	FirstNotificationBit = 1;
 //	SecondNotificationBit = 1;
 
-	uint16_t emcData = 0;
-	emcData = ihu_emc_adc_read();
+	UINT16 emcData = 0, tmp = 0;
+	UINT32 index = 0, loopReadMax = 1000;
+	for (index = 0; index < loopReadMax; index++){
+		tmp = ihu_emc_adc_read();
+		if (tmp > emcData) emcData = tmp;
+	}
 	uint8_t emc[2];
 	emc[0] = (emcData>>8) & 0xFF; emc[1] = emcData & 0xFF;
 	

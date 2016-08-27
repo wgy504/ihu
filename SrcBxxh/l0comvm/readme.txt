@@ -470,7 +470,7 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 //= ZJL, 2016 Aug.27, IHU_EMCWX_CURRENT_SW_DELIVERY R03.15
 = 增加Flash_Programmer以及Sencond_bootloader程序代码到本项目工程
 = 修改并完善PEM3.0/PEM3.1的关键定义，包括ADC0在PEM3.x中采用了ADC1通道，而非之前确定的ADC0/P00通道
-
+= ADC_READ读取N次并取最大值，依然没有解决实际读书偏小的问题。给天线输入3.3v，读数是满量程3FFH = 1024，说明整个后向通道是好使的
 
 
 

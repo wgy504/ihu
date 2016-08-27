@@ -3,7 +3,11 @@
 <title>Static Call Graph - [.\out\wechat.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\out\wechat.axf</H1><HR>
+<<<<<<< HEAD
 <BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Sat Aug 27 17:27:58 2016
+=======
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Sat Aug 27 20:54:59 2016
+>>>>>>> feature
 <BR><P>
 <H3>Maximum Stack Usage =       1156 bytes + Unknown(Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -2646,7 +2650,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> app_wechat_task.o(.constdata)
 </UL>
 <P><STRONG><a name="[d5]"></a>app_wechat_period_report_time_out_handler</STRONG> (Thumb, 16 bytes, Stack size 8 bytes, app_wechat_task.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 464<LI>Call Chain = app_wechat_period_report_time_out_handler &rArr; mpbledemo2_airsync_link_setup_period_report &rArr; mpbledemo2_readEmcDataResp &rArr; ble_wechat_indicate_data &rArr; arch_printf &rArr; arch_snprintf &rArr; arch_vsnprintf &rArr; arch_itoa
+<BR><BR>[Stack]<UL><LI>Max Depth = 480<LI>Call Chain = app_wechat_period_report_time_out_handler &rArr; mpbledemo2_airsync_link_setup_period_report &rArr; mpbledemo2_readEmcDataResp &rArr; ble_wechat_indicate_data &rArr; arch_printf &rArr; arch_snprintf &rArr; arch_vsnprintf &rArr; arch_itoa
 </UL>
 <BR>[Calls]<UL><LI><a href="#[fd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;arch_printf
 <LI><a href="#[1f2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mpbledemo2_airsync_link_setup_period_report
@@ -3518,8 +3522,8 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> mpbledemo2.o(.data)
 </UL>
-<P><STRONG><a name="[dd]"></a>mpbledemo2_readEmcDataResp</STRONG> (Thumb, 76 bytes, Stack size 16 bytes, mpbledemo2.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 448<LI>Call Chain = mpbledemo2_readEmcDataResp &rArr; ble_wechat_indicate_data &rArr; arch_printf &rArr; arch_snprintf &rArr; arch_vsnprintf &rArr; arch_itoa
+<P><STRONG><a name="[dd]"></a>mpbledemo2_readEmcDataResp</STRONG> (Thumb, 98 bytes, Stack size 32 bytes, mpbledemo2.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 464<LI>Call Chain = mpbledemo2_readEmcDataResp &rArr; ble_wechat_indicate_data &rArr; arch_printf &rArr; arch_snprintf &rArr; arch_vsnprintf &rArr; arch_itoa
 </UL>
 <BR>[Calls]<UL><LI><a href="#[240]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vmda1458x_led_blink_once_off_on
 <LI><a href="#[243]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_emc_adc_read
@@ -3536,7 +3540,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> mpbledemo2.o(.data)
 </UL>
 <P><STRONG><a name="[1f2]"></a>mpbledemo2_airsync_link_setup_period_report</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, mpbledemo2.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 456<LI>Call Chain = mpbledemo2_airsync_link_setup_period_report &rArr; mpbledemo2_readEmcDataResp &rArr; ble_wechat_indicate_data &rArr; arch_printf &rArr; arch_snprintf &rArr; arch_vsnprintf &rArr; arch_itoa
+<BR><BR>[Stack]<UL><LI>Max Depth = 472<LI>Call Chain = mpbledemo2_airsync_link_setup_period_report &rArr; mpbledemo2_readEmcDataResp &rArr; ble_wechat_indicate_data &rArr; arch_printf &rArr; arch_snprintf &rArr; arch_vsnprintf &rArr; arch_itoa
 </UL>
 <BR>[Calls]<UL><LI><a href="#[23f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vmda1458x_timer_set
 <LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mpbledemo2_readEmcDataResp
