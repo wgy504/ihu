@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-#<SYMDEFS># ARM Linker, 5060061: Last Updated: Sat Aug 20 15:11:59 2016
-=======
-#<SYMDEFS># ARM Linker, 5060061: Last Updated: Sat Aug 20 13:08:16 2016
->>>>>>> a6f8527cedd5694571a3ff1e4184c5a019c2418c
+#<SYMDEFS># ARM Linker, 5060061: Last Updated: Sat Aug 27 12:11:37 2016
 0x00000000 N __ARM_use_no_argv
 0x00000000 N _printf_a
 0x00000000 N _printf_c
@@ -762,6 +758,11 @@
 0x000806c6 D rwip_env
 0x000806cc D ble_reg_save
 0x0008071c D rwip_rf
+0x00080768 D spi_flash_device_index
+0x0008076c D spi_flash_detected_device
+0x00080770 D spi_flash_size
+0x00080774 D spi_flash_page_size
+0x00080778 D spi_driver_cs_pad
 0x0008077c D TIMER0_callback
 0x00080780 D callback_function
 0x00080784 D pDataHandler
@@ -907,6 +908,17 @@
 0x2000203d T trng_init
 0x2000209d T trng_get_raw_data
 0x200020af T trng_acquire
+0x200021c1 T spi_flash_init
+0x200021c9 T spi_flash_read_status_reg
+0x200021dd T spi_flash_wait_till_ready
+0x200021fb T spi_read_flash_jedec_id
+0x20002237 T spi_flash_auto_detect
+0x20002291 T spi_cs_low
+0x2000229f T spi_cs_high
+0x200022ad T spi_init
+0x20002337 T spi_set_bitmode
+0x20002359 T spi_access
+0x20002387 T spi_transaction
 0x200023a9 T SWTIM_Handler
 0x2000245b T uart2_init
 0x200024b1 T uart2_finish_transfers
@@ -1085,11 +1097,24 @@
 0x20005e25 T mpbledemo2_readEquInfoReq
 0x20005e27 T mpbledemo2_airsync_link_setup_period_report
 0x20005efd T IhuErrorPrint
+0x20005f3d T vmda1458x_mac_addr_get
+0x20005f87 T vmda1458x_timer_set
+0x20005f8f T vmda1458x_timer_clear
+0x20005f97 T vmda1458x_emc_sample
 0x20005f9f T ihu_emc_adc_read
 0x20005fa9 T ihu_get_mac_addr
+0x20005fe5 T vmda1458x_i2c_led_init
+0x200060f5 T vmda1458x_led_set
+0x20006193 T vmda1458x_led_blink_once_off_on
+0x200061bf T ihu_i2c_led_init
 0x200061d5 T strncpy
 0x200061ef T strcpy
+0x20006201 T __aeabi_fmul
+0x2000627b T __aeabi_ui2f
+0x20006289 T __aeabi_f2uiz
 0x200062b1 T __aeabi_uldivmod
+0x20006311 T _float_round
+0x20006321 T _float_epilogue
 0x20006395 T __scatterload
 0x20006395 T __scatterload_rt2
 0x200068e1 T __0sprintf$8
@@ -1104,6 +1129,7 @@
 0x20007128 D my_llc_state_handler
 0x200071d8 D my_llc_default_handler
 0x200071e0 D TASK_DESC_LLC
+0x200071f8 D SPI_FLASH_KNOWN_DEVICES_PARAMETERS_LIST
 0x20007248 D wechat_att_db
 0x200072a8 D wechat_svc
 0x200072aa D wechat_write_char
