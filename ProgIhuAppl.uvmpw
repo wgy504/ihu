@@ -8,25 +8,17 @@
   <WorkspaceName>WorkSpace</WorkspaceName>
 
   <project>
-    <PathAndName>.\PrjEmcWxDa1458x\projects\target_apps\wechat\Keil_5\emcwechat.uvprojx</PathAndName>
+    <PathAndName>.\PrjEmcWxDa1458x\projects\target_apps\wechat\Keil_5\wechat.uvprojx</PathAndName>
     <NodeIsActive>1</NodeIsActive>
     <NodeIsExpanded>1</NodeIsExpanded>
   </project>
 
   <project>
-    <PathAndName>.\DA1458x_SDK\5.0.3\utilities\flash_programmer\emcwx_flash_programmer.uvproj</PathAndName>
+    <PathAndName>.\PrjEmcSpsDa1458x\projects\target_apps\dsps\sps_device\Keil_5\sps_device.uvprojx</PathAndName>
   </project>
 
   <project>
-    <PathAndName>.\DA1458x_SDK\5.0.3\utilities\secondary_bootloader\emcwx_secondary_bootloader.uvproj</PathAndName>
-  </project>
-
-  <project>
-    <PathAndName>.\PrjEmcSpsDa1458x\projects\target_apps\dsps\sps_device\Keil_5\spswechat.uvprojx</PathAndName>
-  </project>
-
-  <project>
-    <PathAndName>.\PrjScyStm205RG\Project\stm32_test.uvproj</PathAndName>
+    <PathAndName>.\PrjScyStm205RG\Project\test.uvproj</PathAndName>
   </project>
 
 </ProjectWorkspace>

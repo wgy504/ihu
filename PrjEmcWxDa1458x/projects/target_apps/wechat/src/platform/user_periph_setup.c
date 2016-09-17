@@ -52,8 +52,7 @@ i.e.
 	RESERVE_GPIO(UART2_TX, GPIO_UART2_TX_PORT,  GPIO_UART2_TX_PIN, PID_UART2_TX);
 	RESERVE_GPIO(UART2_RX, GPIO_UART2_RX_PORT,  GPIO_UART2_RX_PIN, PID_UART2_RX);
 #endif
-
-	//针对PEM2.x/PEM3.x，其处理过程完全一样，所以不再区别
+	
 	//RESERVE ADC == PEM2.x以后才能完整支持
 	RESERVE_GPIO(ADC_EMC, ADC0_EMC_PORT,  ADC0_EMC_PIN, PID_ADC);
 	RESERVE_GPIO(ADC_TMR, ADC1_TMR_PORT,  ADC1_TMR_PIN, PID_ADC);
@@ -67,19 +66,27 @@ i.e.
 	RESERVE_GPIO(FLASH_DI, FLASH_SPI_DI_PORT,  FLASH_SPI_DI_PIN, PID_SPI_DI);
 	
 	//RESERVE LED  == PEM2.x以后才能完整支持
-	RESERVE_GPIO(LED_SCL, LED_SCL_PORT,  LED_SCL_PIN, PID_I2C_SCL);
-	RESERVE_GPIO(LED_SDA, LED_SDA_PORT,  LED_SDA_PIN, PID_I2C_SDA);  
-	RESERVE_GPIO(LED_RESET, LED_RESET_PORT,  LED_RESET_PIN, PID_GPIO);
+//	RESERVE_GPIO(LED_SCL, LED_SCL_PORT,  LED_SCL_PIN, PID_I2C_SCL);
+//	RESERVE_GPIO(LED_SDA, LED_SDA_PORT,  LED_SDA_PIN, PID_I2C_SDA);  
+//	RESERVE_GPIO(LED_RESET, LED_RESET_PORT,  LED_RESET_PIN, PID_GPIO);
+	
+	//MYC I2C LED
+	RESERVE_GPIO( I2C_LED, LED_SCL_PORT, LED_SCL_PIN, I2C_LED);  
+	RESERVE_GPIO( I2C_LED, LED_SDA_PORT, LED_SDA_PIN, I2C_LED);
+	RESERVE_GPIO( GPIO, LED_RESET_PORT, LED_RESET_PIN, PID_GPIO);
 	
 	//RESERVE UART1
-	RESERVE_GPIO(UART_TX, UART1_TX_PORT,  UART1_TX_PIN, PID_UART1_TX);
-	RESERVE_GPIO(UART_TX, UART1_RX_PORT,  UART1_RX_PIN, PID_UART1_RX);
-	RESERVE_GPIO(UART_RTS, UART1_RTS_PORT,  UART1_RTS_PIN, PID_UART1_RTSN);
-	RESERVE_GPIO(UART_CTS, UART1_CTS_PORT,  UART1_CTS_PIN, PID_UART1_CTSN);
+//	RESERVE_GPIO(UART_TX, UART1_TX_PORT,  UART1_TX_PIN, PID_UART1_TX);
+//	RESERVE_GPIO(UART_TX, UART1_RX_PORT,  UART1_RX_PIN, PID_UART1_RX);
+//	RESERVE_GPIO(UART_RTS, UART1_RTS_PORT,  UART1_RTS_PIN, PID_UART1_RTSN);
+//	RESERVE_GPIO(UART_CTS, UART1_CTS_PORT,  UART1_CTS_PIN, PID_UART1_CTSN);
 	
 	//Battery Management
 	RESERVE_GPIO(BM_VIN, BM_VIN_OK_PORT,  BM_VIN_OK_PIN, PID_GPIO);
-
+	
+	//LMV341 SHND Management
+	RESERVE_GPIO(LMV341, LMV_SHDN_PORT,  LMV_SHDN_PIN,  PID_GPIO);
+	
 }
 #endif //DEVELOPMENT_DEBUG
 
@@ -102,7 +109,6 @@ i.e.
     GPIO_ConfigurePin( GPIO_PORT_0, GPIO_PIN_1, OUTPUT, PID_GPIO, false ); // Set P_01 as Generic purpose Output
 */
 	
-	//针对PEM2.x/PEM3.x，其处理过程完全一样，所以不再区别
 	//ADC PAD SET  == PEM2.x以后才能完整支持
 	GPIO_ConfigurePin(ADC0_EMC_PORT, ADC0_EMC_PIN, INPUT, PID_ADC, false);
 	GPIO_ConfigurePin(ADC1_TMR_PORT, ADC1_TMR_PIN, INPUT, PID_ADC, false);
@@ -116,19 +122,26 @@ i.e.
 	GPIO_ConfigurePin(FLASH_SPI_DI_PORT, FLASH_SPI_DI_PIN, INPUT, PID_SPI_DI, false);	
 	 
 	//LED PAD SET  == PEM2.x以后才能完整支持
-	GPIO_ConfigurePin(LED_SCL_PORT, LED_SCL_PIN, OUTPUT, PID_I2C_SCL, false);	//输入输出？？？
-	GPIO_ConfigurePin(LED_SDA_PORT, LED_SDA_PIN, OUTPUT, PID_I2C_SDA, false);	//输入输出？？？
-	GPIO_ConfigurePin(LED_RESET_PORT, LED_RESET_PIN, INPUT, PID_GPIO, false); //针对哪一个PID？
+//	GPIO_ConfigurePin(LED_SCL_PORT, LED_SCL_PIN, INPUT, PID_I2C_SCL, false);	//输入输出？？？
+//	GPIO_ConfigurePin(LED_SDA_PORT, LED_SDA_PIN, INPUT, PID_I2C_SDA, false);	//输入输出？？？
+//	GPIO_ConfigurePin(LED_RESET_PORT, LED_RESET_PIN, OUTPUT, PID_GPIO, false); //针对哪一个PID？
+	
+	GPIO_ConfigurePin(LED_SCL_PORT, LED_SCL_PIN, OUTPUT, PID_I2C_SCL, false);
+	GPIO_ConfigurePin(LED_SDA_PORT, LED_SDA_PIN, OUTPUT, PID_I2C_SDA, false);
+	GPIO_ConfigurePin(LED_RESET_PORT, LED_RESET_PIN, OUTPUT, PID_GPIO, false);
 	
 	//UART1 PAD SET
-	GPIO_ConfigurePin(UART1_TX_PORT, UART1_TX_PIN, OUTPUT, PID_UART1_TX, false);	
-	GPIO_ConfigurePin(UART1_RX_PORT, UART1_RX_PIN, INPUT, PID_UART1_RX, false);	
-	GPIO_ConfigurePin(UART1_RTS_PORT, UART1_RTS_PIN, INPUT, PID_UART1_RTSN, false);	
-	GPIO_ConfigurePin(UART1_RTS_PORT, UART1_CTS_PIN, OUTPUT, PID_UART1_CTSN, false);	
+//	GPIO_ConfigurePin(UART1_TX_PORT, UART1_TX_PIN, OUTPUT, PID_UART1_TX, false);	
+//	GPIO_ConfigurePin(UART1_RX_PORT, UART1_RX_PIN, INPUT, PID_UART1_RX, false);	
+//	GPIO_ConfigurePin(UART1_RTS_PORT, UART1_RTS_PIN, INPUT, PID_UART1_RTSN, false);	
+//	GPIO_ConfigurePin(UART1_RTS_PORT, UART1_CTS_PIN, OUTPUT, PID_UART1_CTSN, false);	
 
 	//Battery Management PAD SET
 	GPIO_ConfigurePin(BM_VIN_OK_PORT, BM_VIN_OK_PIN, INPUT, PID_GPIO, false);	
-
+	
+	//LMV341 SHND Management
+	GPIO_ConfigurePin(LMV_SHDN_PORT, LMV_SHDN_PIN, OUTPUT, PID_GPIO, false);
+	
 }
 
 
@@ -173,42 +186,11 @@ void periph_init(void)
     
   //Enable the pads
 	SetBits16(SYS_CTRL_REG, PAD_LATCH_EN, 1);
-
-#if ((IHU_EMCWX_CURRENT_HW_PEM == IHU_EMCWX_CFG_HW_PEM2_0) || (IHU_EMCWX_CURRENT_HW_PEM == IHU_EMCWX_CFG_HW_PEM2_1))
-	//初始化ADC设备，只有ADC0被激活，所以这里只ENABLE一个通道ADC0
-	//attn  :0 = attenuation x1, GP_ADC_ATTN3X(0x0002) = attenuation x3.
-  //第三个参数是设置ADC输入衰减倍数的，有两种，不衰减或者衰减三倍。这里需要说明一点，DA1458x的ADC的参考电压是1.2V，所以如果ADC的输入电压大于1.2V的时候，只能设置为三倍衰减输入。
-  //这里的参数配置，需要再实验研究，并查阅DATASHEET！！！
-	//adc_init(GP_ADC_SE, GP_ADC_SIGN, GP_ADC_ATTN3X);   //超过1.2v就需要设置三倍衰减
-	adc_init(GP_ADC_SE, GP_ADC_SIGN, GP_ADC_DELAY_EN);   //不设置衰减	
-	adc_usDelay(20);
-	adc_enable_channel(ADC_CHANNEL_P00);
 		
-	/*
-	6.将ADC采样结果转换为电压先定义几个计算时会用到的值
-	#define ADC_RESOLUTION      1023
-	#define ADC_ATTENUATION    3
-	#define ADC_VOLTAGE_REFER  1200  //mv
-	unsigned int voltage  = 0;
-	voltage = (unsigned int)((float)(adc_result  * ADC_ATTENUATION * ADC_VOLTAGE_REFER) / ADC_RESOLUTION);
-	
-	7.补充一点
-	当使用多个ADC通道时，在读取某个通道的ADC采样值时，要先使能那个通道，然后读数，再使能下一个通道，读下一个通道的ADC采样值。
-	下面以两个通道举例
-	adc_enable_channel(ADC_CHANNEL_P00);
-	adc_result = adc_get_sample();       //读取通道0的ADC
-	adc_enable_channel(ADC_CHANNEL_P01);
-	adc_result = adc_get_sample();       //读取通道1的ADC
-	*/	
-
-#elif ((IHU_EMCWX_CURRENT_HW_PEM == IHU_EMCWX_CFG_HW_PEM3_0) || (IHU_EMCWX_CURRENT_HW_PEM == IHU_EMCWX_CFG_HW_PEM3_1))
-	adc_init(GP_ADC_SE, GP_ADC_SIGN, GP_ADC_DELAY_EN);
+	//初始化ADC设备，只有ADC0被激活，所以这里只ENABLE一个通道ADC0
+	adc_init(GP_ADC_SE, GP_ADC_SIGN, GP_ADC_ATTN3X);  //这里的参数配置，需要再实验研究，并查阅DATASHEET！！！
 	adc_usDelay(20);
-	adc_enable_channel(ADC_CHANNEL_P01);
-#else
-#endif
-
-	//针对其它的DRIVER，PEM2.x/PEM3.x，其处理过程完全一样，所以不再区别
+	adc_enable_channel(ADC_CHANNEL_P00);
 	
 	//初始化SPI_FLASH，从SPI_FLASH的官方例子中拷贝而来
 	SPI_Pad_t spi_FLASH_CS_Pad;
@@ -226,15 +208,34 @@ void periph_init(void)
 			spi_flash_init(0x20000, 0x100);  //得根据实际的FLASH进行修改
 	}
 	
-	//初始化LED
-	ihu_i2c_led_init(I2C_SLAVE_ADDRESS, LED_BLINK_1HZ_PSC);
 	
-	//初始化UART1  == PEM2.x中暂时未用，这里只是为了程序编写的完整性，同时还可以进行必要的测试，但板子上并没有强制使用
-	SetBits16(CLK_PER_REG, UART1_ENABLE, 1);        // enable clock - always @16MHz
-  uart_init(UART_BAUDRATE_115K2, 3);	
+//	//初始化UART1  == PEM2.x中暂时未用，这里只是为了程序编写的完整性，同时还可以进行必要的测试，但板子上并没有强制使用
+//	SetBits16(CLK_PER_REG, UART1_ENABLE, 1);        // enable clock - always @16MHz
+//  uart_init(UART_BAUDRATE_115K2, 3);	
 	
 	//初始化BM_VIN
 	//电源直接使用uint8_t battery_get_lvl(uint8_t batt_type)，并没有初始化过程，它采用的ADC自身带的初始化
+	
+	//初始化LED
+	vmda1458x_i2c_led_init(I2C_SLAVE_ADDRESS, I2C_SPEED_MODE);
+	// For test after initialization
+	vmda1458x_led_set(LED_ID_0, LED_MODE_ON);
+	vmda1458x_led_set(LED_ID_0, LED_MODE_OFF);
+	
+	vmda1458x_led_set(LED_ID_1, LED_MODE_ON);
+	vmda1458x_led_set(LED_ID_1, LED_MODE_OFF);
+	
+	vmda1458x_led_set(LED_ID_2, LED_MODE_ON);
+	vmda1458x_led_set(LED_ID_2, LED_MODE_OFF);
+	
+	vmda1458x_led_set(LED_ID_6, LED_MODE_ON);
+	vmda1458x_led_set(LED_ID_6, LED_MODE_OFF);
+	vmda1458x_led_set(LED_ID_7, LED_MODE_ON);
+	vmda1458x_led_set(LED_ID_7, LED_MODE_OFF);
 
 	
+	//LMV341 SHND Management
+	GPIO_SetActive(LMV_SHDN_PORT, LMV_SHDN_PIN);
+	GPIO_SetInactive(LMV_SHDN_PORT, LMV_SHDN_PIN);
+
 }

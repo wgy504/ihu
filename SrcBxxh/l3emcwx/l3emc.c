@@ -12,6 +12,7 @@
  */
  
 #include "l3emc.h"
+#include "i2c_led.h"
  
 /*
 ** FSM of the EMC
@@ -191,6 +192,8 @@ OPSTAT fsm_emc_disc_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 par
 		return FAILURE;
 	}
 	
+	vmda1458x_led_off(LED_ID_7);
+
 	//返回
 	return SUCCESS;
 }
@@ -245,6 +248,8 @@ OPSTAT fsm_emc_con_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 para
 	}
 	
 	//返回
+	
+	vmda1458x_led_on(LED_ID_7);
 	return SUCCESS;
 }
 
@@ -554,6 +559,7 @@ OPSTAT fsm_emc_push_cmd_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8
 		return FAILURE;		
 	}
 	
+	vmda1458x_led_blink_once_on_off(LED_ID_6);
 	//返回
 	return SUCCESS;
 }

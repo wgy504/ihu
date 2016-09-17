@@ -51,7 +51,7 @@
 #define i2c_led_PAGE   8                // EEPROM's page size in bytes          
 #define I2C_SPEED_MODE    I2C_FAST         // fast mode (400 kbits/s)              
 #define I2C_ADDRESS_MODE  I2C_7BIT_ADDR    // 7-bit addressing                     
-//#define I2C_ADDRESS_SIZE  I2C_1BYTE_ADDR   // 8-bit memory address       
+#define I2C_ADDRESS_SIZE  I2C_1BYTE_ADDR   // 8-bit memory address       
 
 // Select EEPROM characteristics
 #define I2C_EEPROM_SIZE   0x20000         // EEPROM size in bytes
@@ -227,7 +227,7 @@ extern void vmda1458x_led_on(uint8_t ledId);
 extern void vmda1458x_led_off(uint8_t ledId);
 extern void vmda1458x_led_blink_once_off_on(uint8_t ledId);
 extern void vmda1458x_led_blink_once_on_off(uint8_t ledId);
-extern void vmda14568x_led_blinking_high_speed(uint8_t ledId);
+extern void vmda1458x_led_blinking_high_speed(uint8_t ledId);
 extern void vmda1458x_led_blinking_low_speed(uint8_t ledId);
 
 //为IHU上层提供服务

@@ -480,14 +480,6 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 
 
 
-
-
-
-
-
-
-
-
 Known Issues:
 1. 收到sendDataResp， 出现 "received msg: no message content!"  从而导致 "! error: mpbledemo2 reseted"
 

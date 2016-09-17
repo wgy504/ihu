@@ -342,7 +342,8 @@ void vmda1458x_i2c_led_init(uint16_t dev_address, uint8_t speed)
 		GPIO_SetInactive(LED_RESET_PORT, LED_RESET_PIN);
 		for(i = 0; i < 10000; i++);
 		GPIO_SetActive(LED_RESET_PORT, LED_RESET_PIN);
-		for(i = 0; i < 100; i++);
+		for(i = 0; i < 1000; i++);
+//		GPIO_SetInactive(LED_RESET_PORT, LED_RESET_PIN);
 	
 		SetBits16(CLK_PER_REG, I2C_ENABLE, 1);                                        // enable  clock for I2C 
     SetWord16(I2C_ENABLE_REG, 0x0);                                               // Disable the I2C controller	
@@ -430,7 +431,7 @@ void vmda1458x_i2c_led_init(uint16_t dev_address, uint8_t speed)
 
 		GLOBAL_INT_RESTORE();
 
-}
+ }
 
 void vmda1458x_led_set(uint8_t ledId, uint8_t mode)
 {
