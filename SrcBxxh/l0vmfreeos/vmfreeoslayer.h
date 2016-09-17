@@ -1,13 +1,12 @@
 /*
- * vmdalayer.h
+ * vmfreeoslayer.h
  *
- *  Created on: 2016年1月3日
+ *  Created on: 2016年9月18日
  *      Author: test
  */
 
-#ifndef L0VMDA_VMDALAYER_H_
-#define L0VMDA_VMDALAYER_H_
-#if (IHU_WORKING_VM_CURRENT_USAGE_ID == IHU_WORKING_VM_VMDA_USAGE_ID)
+#ifndef L0VMFREEOS_VMFREEOSLAYER_H_
+#define L0VMFREEOS_VMFREEOSLAYER_H_
 
 //自行标准配置
 #include "commsg.h"
@@ -20,36 +19,6 @@
 #include <string.h>
 #include <time.h>
 #include <stdlib.h>
-
-//DA系统配置文件
-#include "rwip_config.h"
-//#include "da14580_config.h"
-//#include "app_console.h"
-
-//DA系统核心API
-#include "ke_msg.h"
-#include "ke_task.h"
-#include "gpio.h"
-#include "nvds.h"
-#include "adc.h"
-
-//DA系统应用API
-//#include "sps_server_task.h"
-#include "prf_types.h"
-//#include "app_sps_scheduler.h"
-//#include "sps_server_task.h"  //MSG_SPS_VMDA_BLE_DATA_RCV message incoming
-#include "app_task.h"  //APPBLE_VMDA_INIT message incoming
-#include "app.h"
-#include "app_api.h"  //APPBLE_VMDA_INIT message incoming
-#include "user_periph_setup.h"
-
-//自定义应用API
-//#include "i2c_led.h"
-
-//Google/Tecent库
-#include "epb_MmBp.h"
-#include "crc32.h"
-#include "aes_crypt.h"
 
 /*
  *	
@@ -151,36 +120,8 @@ typedef struct FsmTable
  *
  */
 
-//跟DA14580 BLE底层交互的API
-extern void bxxh_vm_init_hook(void);  //用于给DA148x的主程序挂载初始化的入口函数
-extern void bxxh_vm_task_entry_hook(void);  //用于给DA148x的主程序挂载循环主任务的入口函数
-extern void vmda1458x_message_send(ke_msg_id_t const msg_id, ke_task_id_t const dest_id, ke_task_id_t const src_id, void const *param_ptr, uint16_t const param_len); //message send
-extern void vmda1458x_timer_set(ke_msg_id_t const timerid, ke_task_id_t const taskid, uint16_t delay);
-extern void vmda1458x_timer_clear(ke_msg_id_t const timerid, ke_task_id_t const taskid);
-extern void vmda1458x_data_send_to_ble(unsigned char *p, int n);
-extern void vmda1458x_data_send_to_uart(unsigned char *p, int n);
-extern int  vmda1458x_emc_sample(void);  //ADC0读数，可以通过被动式获取
-extern void vmda1458x_led_flair(void);
-extern void vmda1458x_init_msg_to_vmdashell(void);
-extern OPSTAT vmda1458x_mac_addr_get(UINT8* mac, UINT8 len);
-extern void vmda1458x_app_uart_push_zjl(unsigned char *p, int n);
-extern void vmda1458x_app_ble_push(unsigned char *p, int n);
-
 //外部引用的API
-extern _ARMABI int sprintf(char * __restrict /*s*/, const char * __restrict /*format*/, ...) __attribute__((__nonnull__(1,2)));
-extern int arch_printf(const char *fmt, ...);
-extern void ihu_task_vmdashell_init(void);
-extern void ihu_task_vmdashell_mainloop(void);
 
-//VM FSM related APIs
-extern OPSTAT FsmInit(void);
-extern OPSTAT FsmAddNew(UINT8 task_id, FsmStateItem_t* pFsmStateItem);
-extern OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT8 param_len);
-extern OPSTAT FsmProcessingLaunchEntry(UINT8 task_id);
-extern OPSTAT FsmProcessingLaunchExecute(UINT8 task_id);
-extern OPSTAT FsmSetState(UINT8 task_id, UINT8 newState);
-extern UINT8  FsmGetState(UINT8 task_id);
-extern OPSTAT fsm_com_do_nothing(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 param_len);
 
 //Global VM layer basic API and functions
 extern OPSTAT ihu_message_rcv(UINT8 dest_id, IhuMsgSruct_t *msg);
@@ -195,8 +136,7 @@ extern void   ihu_task_create_all(void);
 extern void   ihu_task_execute_all(void);
 
 //VMDA内部以及上层使用的API
-extern void IhuDebugPrint(char *p);
-extern void IhuErrorPrint(char *p);
+
 uint16_t b2l_uint16(uint16_t in);
 extern void ihu_sw_restart(void);
 extern OPSTAT ihu_sleep(UINT32 cntDuration, UINT8 task_id, UINT8 seed);
@@ -306,5 +246,4 @@ extern OPSTAT ihu_timer_stop(UINT8 task_id, UINT8 timer_id, UINT8 t_res);
 extern void ihu_timer_routine_handler_1s(void);
 extern void ihu_timer_routine_handler_10ms(void);
 
-#endif //IHU_WORKING_VM_VMDA_USAGE_ID
-#endif /* L0VMDA_VMDALAYER_H_ */
+#endif /* L0VMFREEOS_VMFREEOSLAYER_H_ */

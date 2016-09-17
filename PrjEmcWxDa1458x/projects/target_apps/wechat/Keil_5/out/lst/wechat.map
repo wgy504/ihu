@@ -4121,7 +4121,7 @@ Image component sizes
        148          8         20          0          0       2883   app_entry_point.o
        120         14          0          0         36       2695   app_security.o
        196         22         32          0          0       3388   app_security_task.o
-       388         16         72          0          1      28556   app_task.o
+       388         16         72          0          1      28796   app_task.o
        488         40          0          0         22       5941   app_wechat.o
        208         42         56          0          0       4350   app_wechat_task.o
       1060         58          0          0          8       9287   arch_console.o
@@ -4169,7 +4169,7 @@ Image component sizes
        328         30          0          0         12      13025   wkupct_quadec.o
 
     ----------------------------------------------------------------------
-     25300       3196       2668        108      12320     846524   Object Totals
+     25300       3196       2668        108      12320     846764   Object Totals
       1308        436         32          0         32          0   (incl. Generated)
          4          0         14          2         27          0   (incl. Padding)
 
@@ -4219,8 +4219,8 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     27220       3280       2668        116      12320     844088   Grand Totals
-     27220       3280       2668        116      12320     844088   ELF Image Totals
+     27220       3280       2668        116      12320     844328   Grand Totals
+     27220       3280       2668        116      12320     844328   ELF Image Totals
      27220       3280       2668        116          0          0   ROM Totals
 
 ==============================================================================

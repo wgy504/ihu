@@ -14,7 +14,10 @@
 #ifndef L1SERVICE_L1TIMER_H_
 #define L1SERVICE_L1TIMER_H_
 
+#if (IHU_WORKING_VM_CURRENT_USAGE_ID == IHU_WORKING_VM_VMDA_USAGE_ID)
 #include "vmdalayer.h"
+#endif
+
 #include "l1comdef.h"
 
 //State definition

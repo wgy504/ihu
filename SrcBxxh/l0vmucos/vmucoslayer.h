@@ -1,13 +1,12 @@
 /*
- * vmdalayer.h
+ * vmlayer.h
  *
  *  Created on: 2016年1月3日
  *      Author: test
  */
 
-#ifndef L0VMDA_VMDALAYER_H_
-#define L0VMDA_VMDALAYER_H_
-#if (IHU_WORKING_VM_CURRENT_USAGE_ID == IHU_WORKING_VM_VMDA_USAGE_ID)
+#ifndef L0COMVM_VMLAYER_H_
+#define L0COMVM_VMLAYER_H_
 
 //自行标准配置
 #include "commsg.h"
@@ -306,5 +305,4 @@ extern OPSTAT ihu_timer_stop(UINT8 task_id, UINT8 timer_id, UINT8 t_res);
 extern void ihu_timer_routine_handler_1s(void);
 extern void ihu_timer_routine_handler_10ms(void);
 
-#endif //IHU_WORKING_VM_VMDA_USAGE_ID
-#endif /* L0VMDA_VMDALAYER_H_ */
+#endif /* L0COMVM_VMLAYER_H_ */

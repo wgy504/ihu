@@ -8,7 +8,9 @@
 #ifndef L1COM_L1COMDEF_H_
 #define L1COM_L1COMDEF_H_
 
+#if (IHU_WORKING_VM_CURRENT_USAGE_ID == IHU_WORKING_VM_VMDA_USAGE_ID)
 #include "vmdalayer.h"
+#endif
 
 //自定义存储数据结构
 //DISC data, 只存储周期性数据

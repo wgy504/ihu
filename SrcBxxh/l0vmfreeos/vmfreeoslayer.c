@@ -1,13 +1,11 @@
 /*
- * vmlayer.c
+ * vmfreeoslayer.c
  *
- *  Created on: 2016年1月3日
+ *  Created on: 2016年9月18日
  *      Author: test
  */
-#if (IHU_WORKING_VM_CURRENT_USAGE_ID == IHU_WORKING_VM_VMDA_USAGE_ID)
 
-#include "vmdalayer.h"
-#include "i2c_led.h"
+#include "vmfreeoslayer.h"
 
 /**********************************************************************************
  *
@@ -1506,4 +1504,4 @@ OPSTAT ihu_get_mac_addr(UINT8* mac)
 }
 
 
-#endif //IHU_WORKING_VM_VMDA_USAGE_ID
+
