@@ -15,30 +15,11 @@
 
 //软件版本定义
 #define IHU_EMCWX_CURRENT_SW_RELEASE  3//R01 = 0x01 (XQ.WEMC.SW.R01.456)
-#define IHU_EMCWX_CURRENT_SW_DELIVERY 15 //001 = 0x01 (XQ.WEMC.SW.R01.456), starting from 100 as 2015/10/03
+#define IHU_EMCWX_CURRENT_SW_DELIVERY 16 //001 = 0x01 (XQ.WEMC.SW.R01.456), starting from 100 as 2015/10/03
 
 //硬件PEM版本号
 #define IHU_EMCWX_CURRENT_HW_TYPE 1 // 1 = WEMC (XQ.WEMC.HW.V01), 2 = PM_CONTROLLER, 3 = WIFI_EMC
 
-//PEM定义移动到da1458x_config_basic.h
-//#define IHU_EMCWX_CFG_HW_PEM_NULL 0 //PEM1.0板子
-//#define IHU_EMCWX_CFG_HW_PEM1_0   1 //PEM1.0板子
-//#define IHU_EMCWX_CFG_HW_PEM1_1   2 //PEM1.1板子
-//#define IHU_EMCWX_CFG_HW_PEM2_0   3 //PEM2.0板子
-//#define IHU_EMCWX_CFG_HW_PEM2_1   4 //PEM2.1板子
-//#define IHU_EMCWX_CFG_HW_PEM3     5 //PEM3板子
-//#define IHU_EMCWX_CURRENT_HW_PEM IHU_EMCWX_CFG_HW_PEM2_1
-
-//工作环境定义，各个人的工作环境有不同，比如MAC地址，将导致不同的编译选项，这里统一定义，各位在程序修改时只需要改这里的配置项，
-//而不需要进入程序满世界都改动
-//MAC地址定义移动到da1458x_config_basic.h
-//#define IHU_DEVELOPER_ENV_NAME_NULL 0
-//#define IHU_DEVELOPER_ENV_NAME_ZJL 1
-//#define IHU_DEVELOPER_ENV_NAME_MYC 2
-//#define IHU_DEVELOPER_ENV_NAME_XX 3
-//#define IHU_DEVELOPER_ENV_NAME_CZ 4
-//#define IHU_DEVELOPER_ENV_NAME_LZH 5
-//#define IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME IHU_DEVELOPER_ENV_NAME_ZJL
 
 //软件修改历史记录
 //========================================R1.0 START============================================
@@ -84,6 +65,6 @@
 //= ZJL, 2016 Aug.15, IHU_EMCWX_CURRENT_SW_DELIVERY R03.13
 //= ZJL, 2016 Aug.16, IHU_EMCWX_CURRENT_SW_DELIVERY R03.14
 //= ZJL, 2016 Aug.27, IHU_EMCWX_CURRENT_SW_DELIVERY R03.15
-
+//= ZJL, 2016 Sep.17, IHU_EMCWX_CURRENT_SW_DELIVERY R03.16
 
 #endif /* L0COMVM_SYSVERSION_H_ */

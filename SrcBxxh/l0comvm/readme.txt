@@ -473,6 +473,19 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = ADC_READ读取N次并取最大值，依然没有解决实际读书偏小的问题。给天线输入3.3v，读数是满量程3FFH = 1024，说明整个后向通道是好使的
 = 增加EMC数据格式的CMDID字头部分，采用垃圾编码的方式，纯粹为了方便后台云程序的编解码
 
+//= ZJL/MYC, 2016 Sep.17, IHU_EMCWX_CURRENT_SW_DELIVERY R03.16
+= 适配PEM3.0板子，清理PEM1.x/2.x的老旧程序和配置信息，从这一版开始，不要再试图测试和使用PEM1.x/PEM2.x板子了，因为不再支持
+= MYC增加亮灯DEMO程序
+= ADC通道改为P02后，读书正常。本来以为ADC通道为P01，端口Port0/Pin1，怪哉。
+
+
+
+
+
+
+
+
+
 
 
 

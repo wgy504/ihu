@@ -150,350 +150,59 @@
     #define  GPIO_UART2_RX_PIN      GPIO_PIN_3
 #endif
 
-//ZJL: PEM2 is totally different configuration
-//#if (IHU_EMCWX_CURRENT_HW_PEM == IHU_EMCWX_CFG_HW_PEM1_0)
-//	#define UART1_TX_PORT   GPIO_PORT_0
-//	#define UART1_TX_PIN    GPIO_PIN_6
-//	#define UART1_RX_PORT   GPIO_PORT_0
-//	#define UART1_RX_PIN    GPIO_PIN_7
-//	#define UART1_RTS_PORT  GPIO_PORT_3
-//	#define UART1_RTS_PIN   GPIO_PIN_1
-//	#define UART1_CTS_PORT  GPIO_PORT_3
-//	#define UART1_CTS_PIN   GPIO_PIN_2
-//	#define UART2_TX_PORT   GPIO_PORT_2
-//	#define UART2_TX_PIN    GPIO_PIN_3
-//	#define UART2_RX_PORT   GPIO_PORT_2
-//	#define UART2_RX_PIN    GPIO_PIN_4
-//	#define BEEP_PORT  			GPIO_PORT_2
-//	#define BEEP_PIN   			GPIO_PIN_0
-//	//MYC test begin, no useful so far
-//	#define RELAY_PORT 			GPIO_PORT_2
-//	#define RELAY_PIN  			GPIO_PIN_3
-//	#define RGB_LED_R_PORT  GPIO_PORT_2
-//	#define RGB_LED_R_PIN   GPIO_PIN_4
-//	#define RGB_LED_G_PORT  GPIO_PORT_2
-//	#define RGB_LED_G_PIN   GPIO_PIN_5
-//	#define RGB_LED_B_PORT  GPIO_PORT_2
-//	#define RGB_LED_B_PIN   GPIO_PIN_6
-//	//MYC test end
+//ZJL: modified and clean
+#ifdef IHU_EMCWX_CFG_HW_PEM3_0
+	#define FLASH_SPI_DI_PORT   GPIO_PORT_0
+	#define FLASH_SPI_DI_PIN    GPIO_PIN_6
+	#define FLASH_SPI_CLK_PORT  GPIO_PORT_0
+	#define FLASH_SPI_CLK_PIN   GPIO_PIN_5
+	#define FLASH_SPI_DO_PORT   GPIO_PORT_0
+	#define FLASH_SPI_DO_PIN    GPIO_PIN_4
+	#define FLASH_SPI_EN_PORT   GPIO_PORT_2
+	#define FLASH_SPI_EN_PIN    GPIO_PIN_1
+	#define UART1_TX_PORT   GPIO_PORT_2
+	#define UART1_TX_PIN    GPIO_PIN_2
+	#define UART1_RX_PORT   GPIO_PORT_2
+	#define UART1_RX_PIN    GPIO_PIN_3
+	#define UART1_RTS_PORT  GPIO_PORT_2
+	#define UART1_RTS_PIN   GPIO_PIN_4
+	#define UART1_CTS_PORT  GPIO_PORT_0
+	#define UART1_CTS_PIN   GPIO_PIN_7
+	#define UART2_TX_PORT   GPIO_PORT_1
+	#define UART2_TX_PIN    GPIO_PIN_2 
+	#define UART2_RX_PORT   GPIO_PORT_1
+	#define UART2_RX_PIN    GPIO_PIN_3 
+	#define BEEP_PORT  			GPIO_PORT_1
+	#define BEEP_PIN   			GPIO_PIN_0
+	#define LED_SCL_PORT  	GPIO_PORT_2
+	#define LED_SCL_PIN   	GPIO_PIN_8
+	#define LED_SDA_PORT  	GPIO_PORT_2
+	#define LED_SDA_PIN   	GPIO_PIN_9
+	#define LED_RESET_PORT  GPIO_PORT_2
+	#define LED_RESET_PIN   GPIO_PIN_7
+	#define BM_VIN_OK_PORT  GPIO_PORT_2
+	#define BM_VIN_OK_PIN   GPIO_PIN_0
+	#define ADC0_RSV_PORT  	GPIO_PORT_0
+	#define ADC0_RSV_PIN   	GPIO_PIN_0
+	#define ADC1_EMC_PORT  	GPIO_PORT_0
+	#define ADC1_EMC_PIN   	GPIO_PIN_1
+	#define ADC2_RSV_PORT  	GPIO_PORT_0
+	#define ADC2_RSV_PIN   	GPIO_PIN_2
+	#define ADC3_RSV_PORT  	GPIO_PORT_0
+	#define ADC3_RSV_PIN   	GPIO_PIN_3
+	#define VCC_OUT_EN_PORT GPIO_PORT_2
+	#define VCC_OUT_EN_PIN  GPIO_PIN_5  //changed comparing with PEM2.0
+	#define DB15_RSV1_PORT  GPIO_PORT_1
+	#define DB15_RSV1_PIN   GPIO_PIN_0
+	#define DB15_RSV2_PORT  GPIO_PORT_1
+	#define DB15_RSV2_PIN   GPIO_PIN_1
+	#define DB15_RSV3_PORT  GPIO_PORT_2
+	#define DB15_RSV3_PIN   GPIO_PIN_6  //changed comparing with PEM2.0
+	#define LMV_SHDN_PORT		GPIO_PORT_2
+	#define LMV_SHDN_PIN		GPIO_PIN_6
+#endif
 
-//#elif (IHU_EMCWX_CURRENT_HW_PEM == IHU_EMCWX_CFG_HW_PEM1_1)
-//	#define UART1_TX_PORT   GPIO_PORT_1
-//	#define UART1_TX_PIN    GPIO_PIN_1
-//	#define UART1_RX_PORT   GPIO_PORT_1
-//	#define UART1_RX_PIN    GPIO_PIN_2
-//	#define UART1_RTS_PORT  GPIO_PORT_2
-//	#define UART1_RTS_PIN   GPIO_PIN_1
-//	#define UART1_CTS_PORT  GPIO_PORT_2
-//	#define UART1_CTS_PIN   GPIO_PIN_2
-//	#define UART2_TX_PORT   GPIO_PORT_0
-//	#define UART2_TX_PIN    GPIO_PIN_4
-//	#define UART2_RX_PORT   GPIO_PORT_0
-//	#define UART2_RX_PIN    GPIO_PIN_5
-//	#define BEEP_PORT  			GPIO_PORT_1
-//	#define BEEP_PIN   			GPIO_PIN_0
-
-////#elif (IHU_EMCWX_CURRENT_HW_PEM == IHU_EMCWX_CFG_HW_PEM2_0)
-//#ifdef IHU_EMCWX_CFG_HW_PEM2_0_PRESENT
-//	#define FLASH_SPI_DI_PORT   GPIO_PORT_0
-//	#define FLASH_SPI_DI_PIN    GPIO_PIN_6
-//	#define FLASH_SPI_CLK_PORT  GPIO_PORT_0
-//	#define FLASH_SPI_CLK_PIN   GPIO_PIN_5
-//	#define FLASH_SPI_DO_PORT   GPIO_PORT_0
-//	#define FLASH_SPI_DO_PIN    GPIO_PIN_4
-//	#define FLASH_SPI_EN_PORT   GPIO_PORT_2
-//	#define FLASH_SPI_EN_PIN    GPIO_PIN_1
-//	#define UART1_TX_PORT   GPIO_PORT_2
-//	#define UART1_TX_PIN    GPIO_PIN_2
-//	#define UART1_RX_PORT   GPIO_PORT_2
-//	#define UART1_RX_PIN    GPIO_PIN_3
-//	#define UART1_RTS_PORT  GPIO_PORT_2
-//	#define UART1_RTS_PIN   GPIO_PIN_4
-//	#define UART1_CTS_PORT  GPIO_PORT_0
-//	#define UART1_CTS_PIN   GPIO_PIN_7
-//	//#define UART2_TX_PORT   GPIO_PORT_0 //MYC
-//	//#define UART2_TX_PIN    GPIO_PIN_7  //MYC
-//	//#define UART2_RX_PORT   GPIO_PORT_2 //MYC
-//	//#define UART2_RX_PIN    GPIO_PIN_4  //MYC
-//	#define UART2_TX_PORT   GPIO_PORT_1 //ZJL
-//	#define UART2_TX_PIN    GPIO_PIN_2  //ZJL
-//	#define UART2_RX_PORT   GPIO_PORT_1 //ZJL
-//	#define UART2_RX_PIN    GPIO_PIN_3  //ZJL
-//	#define BEEP_PORT  			GPIO_PORT_1 //MYC
-//	#define BEEP_PIN   			GPIO_PIN_0  //MYC
-//	#define LED_SCL_PORT  	GPIO_PORT_2
-//	#define LED_SCL_PIN   	GPIO_PIN_8
-//	#define LED_SDA_PORT  	GPIO_PORT_2
-//	#define LED_SDA_PIN   	GPIO_PIN_9
-//	#define LED_RESET_PORT  GPIO_PORT_2
-//	#define LED_RESET_PIN   GPIO_PIN_7
-//	#define BM_VIN_OK_PORT  GPIO_PORT_2
-//	#define BM_VIN_OK_PIN   GPIO_PIN_0
-//	#define ADC0_EMC_PORT  	GPIO_PORT_0
-//	#define ADC0_EMC_PIN   	GPIO_PIN_0
-//	#define ADC1_TMR_PORT  	GPIO_PORT_0
-//	#define ADC1_TMR_PIN   	GPIO_PIN_1
-//	#define ADC2_THM_PORT  	GPIO_PORT_0
-//	#define ADC2_THM_PIN   	GPIO_PIN_2
-//	#define ADC3_RSV_PORT  	GPIO_PORT_0
-//	#define ADC3_RSV_PIN   	GPIO_PIN_3
-//	#define VCC_OUT_EN_PORT GPIO_PORT_2
-//	#define VCC_OUT_EN_PIN  GPIO_PIN_6
-//	#define DB15_RSV1_PORT  GPIO_PORT_1
-//	#define DB15_RSV1_PIN   GPIO_PIN_0
-//	#define DB15_RSV2_PORT  GPIO_PORT_1
-//	#define DB15_RSV2_PIN   GPIO_PIN_1
-//	#define DB15_RSV3_PORT  GPIO_PORT_2
-//	#define DB15_RSV3_PIN   GPIO_PIN_5
-//#endif
-
-////#elif (IHU_EMCWX_CURRENT_HW_PEM == IHU_EMCWX_CFG_HW_PEM2_1)
-//#ifdef IHU_EMCWX_CFG_HW_PEM2_1_PRESENT
-//	#define FLASH_SPI_DI_PORT   GPIO_PORT_0
-//	#define FLASH_SPI_DI_PIN    GPIO_PIN_6
-//	#define FLASH_SPI_CLK_PORT  GPIO_PORT_0
-//	#define FLASH_SPI_CLK_PIN   GPIO_PIN_5
-//	#define FLASH_SPI_DO_PORT   GPIO_PORT_0
-//	#define FLASH_SPI_DO_PIN    GPIO_PIN_4
-//	#define FLASH_SPI_EN_PORT   GPIO_PORT_2
-//	#define FLASH_SPI_EN_PIN    GPIO_PIN_1
-//	#define UART1_TX_PORT   GPIO_PORT_2
-//	#define UART1_TX_PIN    GPIO_PIN_2
-//	#define UART1_RX_PORT   GPIO_PORT_2
-//	#define UART1_RX_PIN    GPIO_PIN_3
-//	#define UART1_RTS_PORT  GPIO_PORT_2
-//	#define UART1_RTS_PIN   GPIO_PIN_4
-//	#define UART1_CTS_PORT  GPIO_PORT_0
-//	#define UART1_CTS_PIN   GPIO_PIN_7
-//	#define UART2_TX_PORT   GPIO_PORT_1
-//	#define UART2_TX_PIN    GPIO_PIN_2 
-//	#define UART2_RX_PORT   GPIO_PORT_1
-//	#define UART2_RX_PIN    GPIO_PIN_3 
-//	#define BEEP_PORT  			GPIO_PORT_1
-//	#define BEEP_PIN   			GPIO_PIN_0
-//	#define LED_SCL_PORT  	GPIO_PORT_2
-//	#define LED_SCL_PIN   	GPIO_PIN_8
-//	#define LED_SDA_PORT  	GPIO_PORT_2
-//	#define LED_SDA_PIN   	GPIO_PIN_9
-//	#define LED_RESET_PORT  GPIO_PORT_2
-//	#define LED_RESET_PIN   GPIO_PIN_7
-//	#define BM_VIN_OK_PORT  GPIO_PORT_2
-//	#define BM_VIN_OK_PIN   GPIO_PIN_0
-//	#define ADC0_EMC_PORT  	GPIO_PORT_0
-//	#define ADC0_EMC_PIN   	GPIO_PIN_0
-//	#define ADC1_TMR_PORT  	GPIO_PORT_0
-//	#define ADC1_TMR_PIN   	GPIO_PIN_1
-//	#define ADC2_THM_PORT  	GPIO_PORT_0
-//	#define ADC2_THM_PIN   	GPIO_PIN_2
-//	#define ADC3_RSV_PORT  	GPIO_PORT_0
-//	#define ADC3_RSV_PIN   	GPIO_PIN_3
-//	#define VCC_OUT_EN_PORT GPIO_PORT_2
-//	#define VCC_OUT_EN_PIN  GPIO_PIN_5  //changed comparing with PEM2.0
-//	#define DB15_RSV1_PORT  GPIO_PORT_1
-//	#define DB15_RSV1_PIN   GPIO_PIN_0
-//	#define DB15_RSV2_PORT  GPIO_PORT_1
-//	#define DB15_RSV2_PIN   GPIO_PIN_1
-//	#define DB15_RSV3_PORT  GPIO_PORT_2
-//	#define DB15_RSV3_PIN   GPIO_PIN_6  //changed comparing with PEM2.0
-//#endif
-
-////#elif (IHU_EMCWX_CURRENT_HW_PEM == IHU_EMCWX_CFG_HW_PEM3)
-//#ifdef IHU_EMCWX_CFG_HW_PEM3_PRESENT
-//	#define FLASH_SPI_DI_PORT   GPIO_PORT_0
-//	#define FLASH_SPI_DI_PIN    GPIO_PIN_6
-//	#define FLASH_SPI_CLK_PORT  GPIO_PORT_0
-//	#define FLASH_SPI_CLK_PIN   GPIO_PIN_5
-//	#define FLASH_SPI_DO_PORT   GPIO_PORT_0
-//	#define FLASH_SPI_DO_PIN    GPIO_PIN_4
-//	#define FLASH_SPI_EN_PORT   GPIO_PORT_2
-//	#define FLASH_SPI_EN_PIN    GPIO_PIN_1
-//	#define UART1_TX_PORT   GPIO_PORT_2
-//	#define UART1_TX_PIN    GPIO_PIN_2
-//	#define UART1_RX_PORT   GPIO_PORT_2
-//	#define UART1_RX_PIN    GPIO_PIN_3
-//	#define UART1_RTS_PORT  GPIO_PORT_2
-//	#define UART1_RTS_PIN   GPIO_PIN_4
-//	#define UART1_CTS_PORT  GPIO_PORT_0
-//	#define UART1_CTS_PIN   GPIO_PIN_7
-//	#define UART2_TX_PORT   GPIO_PORT_1
-//	#define UART2_TX_PIN    GPIO_PIN_2 
-//	#define UART2_RX_PORT   GPIO_PORT_1
-//	#define UART2_RX_PIN    GPIO_PIN_3 
-//	#define BEEP_PORT  			GPIO_PORT_1
-//	#define BEEP_PIN   			GPIO_PIN_0
-//	#define LED_SCL_PORT  	GPIO_PORT_2
-//	#define LED_SCL_PIN   	GPIO_PIN_8
-//	#define LED_SDA_PORT  	GPIO_PORT_2
-//	#define LED_SDA_PIN   	GPIO_PIN_9
-//	#define LED_RESET_PORT  GPIO_PORT_2
-//	#define LED_RESET_PIN   GPIO_PIN_7
-//	#define BM_VIN_OK_PORT  GPIO_PORT_2
-//	#define BM_VIN_OK_PIN   GPIO_PIN_0
-//	#define ADC0_EMC_PORT  	GPIO_PORT_0
-//	#define ADC0_EMC_PIN   	GPIO_PIN_0
-//	#define ADC1_TMR_PORT  	GPIO_PORT_0
-//	#define ADC1_TMR_PIN   	GPIO_PIN_1
-//	#define ADC2_THM_PORT  	GPIO_PORT_0
-//	#define ADC2_THM_PIN   	GPIO_PIN_2
-//	#define ADC3_RSV_PORT  	GPIO_PORT_0
-//	#define ADC3_RSV_PIN   	GPIO_PIN_3
-//	#define VCC_OUT_EN_PORT GPIO_PORT_2
-//	#define VCC_OUT_EN_PIN  GPIO_PIN_5
-//	#define DB15_RSV1_PORT  GPIO_PORT_1
-//	#define DB15_RSV1_PIN   GPIO_PIN_0
-//	#define DB15_RSV2_PORT  GPIO_PORT_1
-//	#define DB15_RSV2_PIN   GPIO_PIN_1
-//	#define DB15_RSV3_PORT  GPIO_PORT_2
-//	#define DB15_RSV3_PIN   GPIO_PIN_6
-//#endif
-
-//#else
-//	#define FLASH_SPI_DI_PORT   GPIO_PORT_0
-//	#define FLASH_SPI_DI_PIN    GPIO_PIN_6
-//	#define FLASH_SPI_CLK_PORT  GPIO_PORT_0
-//	#define FLASH_SPI_CLK_PIN   GPIO_PIN_5
-//	#define FLASH_SPI_DO_PORT   GPIO_PORT_0
-//	#define FLASH_SPI_DO_PIN    GPIO_PIN_4
-//	#define FLASH_SPI_EN_PORT   GPIO_PORT_2
-//	#define FLASH_SPI_EN_PIN    GPIO_PIN_1
-//	#define UART1_TX_PORT   GPIO_PORT_2
-//	#define UART1_TX_PIN    GPIO_PIN_2
-//	#define UART1_RX_PORT   GPIO_PORT_2
-//	#define UART1_RX_PIN    GPIO_PIN_3
-//	#define UART1_RTS_PORT  GPIO_PORT_2
-//	#define UART1_RTS_PIN   GPIO_PIN_4
-//	#define UART1_CTS_PORT  GPIO_PORT_0
-//	#define UART1_CTS_PIN   GPIO_PIN_7
-//	#define UART2_TX_PORT   GPIO_PORT_1
-//	#define UART2_TX_PIN    GPIO_PIN_2 
-//	#define UART2_RX_PORT   GPIO_PORT_1
-//	#define UART2_RX_PIN    GPIO_PIN_3 
-//	#define BEEP_PORT  			GPIO_PORT_1
-//	#define BEEP_PIN   			GPIO_PIN_0
-//	#define LED_SCL_PORT  	GPIO_PORT_2
-//	#define LED_SCL_PIN   	GPIO_PIN_8
-//	#define LED_SDA_PORT  	GPIO_PORT_2
-//	#define LED_SDA_PIN   	GPIO_PIN_9
-//	#define LED_RESET_PORT  GPIO_PORT_2
-//	#define LED_RESET_PIN   GPIO_PIN_7
-//	#define BM_VIN_OK_PORT  GPIO_PORT_2
-//	#define BM_VIN_OK_PIN   GPIO_PIN_0
-//	#define ADC0_EMC_PORT  	GPIO_PORT_0
-//	#define ADC0_EMC_PIN   	GPIO_PIN_0
-//	#define ADC1_TMR_PORT  	GPIO_PORT_0
-//	#define ADC1_TMR_PIN   	GPIO_PIN_1
-//	#define ADC2_THM_PORT  	GPIO_PORT_0
-//	#define ADC2_THM_PIN   	GPIO_PIN_2
-//	#define ADC3_RSV_PORT  	GPIO_PORT_0
-//	#define ADC3_RSV_PIN   	GPIO_PIN_3
-//	#define VCC_OUT_EN_PORT GPIO_PORT_2
-//	#define VCC_OUT_EN_PIN  GPIO_PIN_5
-//	#define DB15_RSV1_PORT  GPIO_PORT_1
-//	#define DB15_RSV1_PIN   GPIO_PIN_0
-//	#define DB15_RSV2_PORT  GPIO_PORT_1
-//	#define DB15_RSV2_PIN   GPIO_PIN_1
-//	#define DB15_RSV3_PORT  GPIO_PORT_2
-//	#define DB15_RSV3_PIN   GPIO_PIN_6
-//	//IHU_EMCWX_CFG_HW_PEM3
-//#endif //IHU_EMCWX_CURRENT_HW_PEM
-
-
-
-//#if (IHU_EMCWX_CURRENT_HW_PEM == IHU_EMCWX_CFG_HW_PEM1_0)
-//	#define UART1_TX_PORT   GPIO_PORT_0
-//	#define UART1_TX_PIN    GPIO_PIN_6
-//	#define UART1_RX_PORT   GPIO_PORT_0
-//	#define UART1_RX_PIN    GPIO_PIN_7
-//	#define UART1_RTS_PORT  GPIO_PORT_3
-//	#define UART1_RTS_PIN   GPIO_PIN_1
-//	#define UART1_CTS_PORT  GPIO_PORT_3
-//	#define UART1_CTS_PIN   GPIO_PIN_2
-//	#define UART2_TX_PORT   GPIO_PORT_2
-//	#define UART2_TX_PIN    GPIO_PIN_3
-//	#define UART2_RX_PORT   GPIO_PORT_2
-//	#define UART2_RX_PIN    GPIO_PIN_4
-//	#define BEEP_PORT  			GPIO_PORT_2
-//	#define BEEP_PIN   			GPIO_PIN_0
-//	//MYC test begin, no useful so far
-//	#define RELAY_PORT 			GPIO_PORT_2
-//	#define RELAY_PIN  			GPIO_PIN_3
-//	#define RGB_LED_R_PORT  GPIO_PORT_2
-//	#define RGB_LED_R_PIN   GPIO_PIN_4
-//	#define RGB_LED_G_PORT  GPIO_PORT_2
-//	#define RGB_LED_G_PIN   GPIO_PIN_5
-//	#define RGB_LED_B_PORT  GPIO_PORT_2
-//	#define RGB_LED_B_PIN   GPIO_PIN_6
-//	//MYC test end
-
-//#elif (IHU_EMCWX_CURRENT_HW_PEM == IHU_EMCWX_CFG_HW_PEM1_1)
-//	#define UART1_TX_PORT   GPIO_PORT_1
-//	#define UART1_TX_PIN    GPIO_PIN_1
-//	#define UART1_RX_PORT   GPIO_PORT_1
-//	#define UART1_RX_PIN    GPIO_PIN_2
-//	#define UART1_RTS_PORT  GPIO_PORT_2
-//	#define UART1_RTS_PIN   GPIO_PIN_1
-//	#define UART1_CTS_PORT  GPIO_PORT_2
-//	#define UART1_CTS_PIN   GPIO_PIN_2
-//	#define UART2_TX_PORT   GPIO_PORT_0
-//	#define UART2_TX_PIN    GPIO_PIN_4
-//	#define UART2_RX_PORT   GPIO_PORT_0
-//	#define UART2_RX_PIN    GPIO_PIN_5
-//	#define BEEP_PORT  			GPIO_PORT_1
-//	#define BEEP_PIN   			GPIO_PIN_0
-
-//#elif (IHU_EMCWX_CURRENT_HW_PEM == IHU_EMCWX_CFG_HW_PEM2_0)
-//	#define FLASH_SPI_DI_PORT   GPIO_PORT_0
-//	#define FLASH_SPI_DI_PIN    GPIO_PIN_6
-//	#define FLASH_SPI_CLK_PORT  GPIO_PORT_0
-//	#define FLASH_SPI_CLK_PIN   GPIO_PIN_5
-//	#define FLASH_SPI_DO_PORT   GPIO_PORT_0
-//	#define FLASH_SPI_DO_PIN    GPIO_PIN_4
-//	#define FLASH_SPI_EN_PORT   GPIO_PORT_2
-//	#define FLASH_SPI_EN_PIN    GPIO_PIN_1
-//	#define UART1_TX_PORT   GPIO_PORT_2
-//	#define UART1_TX_PIN    GPIO_PIN_2
-//	#define UART1_RX_PORT   GPIO_PORT_2
-//	#define UART1_RX_PIN    GPIO_PIN_3
-//	#define UART1_RTS_PORT  GPIO_PORT_2
-//	#define UART1_RTS_PIN   GPIO_PIN_4
-//	#define UART1_CTS_PORT  GPIO_PORT_0
-//	#define UART1_CTS_PIN   GPIO_PIN_7
-//	//#define UART2_TX_PORT   GPIO_PORT_0 //MYC
-//	//#define UART2_TX_PIN    GPIO_PIN_7  //MYC
-//	//#define UART2_RX_PORT   GPIO_PORT_2 //MYC
-//	//#define UART2_RX_PIN    GPIO_PIN_4  //MYC
-//	#define UART2_TX_PORT   GPIO_PORT_1 //ZJL
-//	#define UART2_TX_PIN    GPIO_PIN_2  //ZJL
-//	#define UART2_RX_PORT   GPIO_PORT_1 //ZJL
-//	#define UART2_RX_PIN    GPIO_PIN_3  //ZJL
-//	#define BEEP_PORT  			GPIO_PORT_1 //MYC
-//	#define BEEP_PIN   			GPIO_PIN_0  //MYC
-//	#define LED_SCL_PORT  	GPIO_PORT_2
-//	#define LED_SCL_PIN   	GPIO_PIN_8
-//	#define LED_SDA_PORT  	GPIO_PORT_2
-//	#define LED_SDA_PIN   	GPIO_PIN_9
-//	#define LED_RESET_PORT  GPIO_PORT_2
-//	#define LED_RESET_PIN   GPIO_PIN_7
-//	#define BM_VIN_OK_PORT  GPIO_PORT_2
-//	#define BM_VIN_OK_PIN   GPIO_PIN_0
-//	#define ADC0_EMC_PORT  	GPIO_PORT_0
-//	#define ADC0_EMC_PIN   	GPIO_PIN_0
-//	#define ADC1_TMR_PORT  	GPIO_PORT_0
-//	#define ADC1_TMR_PIN   	GPIO_PIN_1
-//	#define ADC2_THM_PORT  	GPIO_PORT_0
-//	#define ADC2_THM_PIN   	GPIO_PIN_2
-//	#define ADC3_RSV_PORT  	GPIO_PORT_0
-//	#define ADC3_RSV_PIN   	GPIO_PIN_3
-//	#define VCC_OUT_EN_PORT GPIO_PORT_2
-//	#define VCC_OUT_EN_PIN  GPIO_PIN_6
-//	#define DB15_RSV1_PORT  GPIO_PORT_1
-//	#define DB15_RSV1_PIN   GPIO_PIN_0
-//	#define DB15_RSV2_PORT  GPIO_PORT_1
-//	#define DB15_RSV2_PIN   GPIO_PIN_1
-//	#define DB15_RSV3_PORT  GPIO_PORT_2
-//	#define DB15_RSV3_PIN   GPIO_PIN_5
-
-//#elif (IHU_EMCWX_CURRENT_HW_PEM == IHU_EMCWX_CFG_HW_PEM2_1)
+#ifdef IHU_EMCWX_CFG_HW_PEM3_1
 	#define FLASH_SPI_DI_PORT   GPIO_PORT_0
 	#define FLASH_SPI_DI_PIN    GPIO_PIN_6
 	#define FLASH_SPI_CLK_PORT  GPIO_PORT_0
@@ -542,105 +251,7 @@
 	#define DB15_RSV3_PIN   GPIO_PIN_6  //changed comparing with PEM2.0
 	#define LMV_SHDN_PORT		GPIO_PORT_2
 	#define LMV_SHDN_PIN		GPIO_PIN_6
-
-//#elif (IHU_EMCWX_CURRENT_HW_PEM == IHU_EMCWX_CFG_HW_PEM3)
-//	#define FLASH_SPI_DI_PORT   GPIO_PORT_0
-//	#define FLASH_SPI_DI_PIN    GPIO_PIN_6
-//	#define FLASH_SPI_CLK_PORT  GPIO_PORT_0
-//	#define FLASH_SPI_CLK_PIN   GPIO_PIN_5
-//	#define FLASH_SPI_DO_PORT   GPIO_PORT_0
-//	#define FLASH_SPI_DO_PIN    GPIO_PIN_4
-//	#define FLASH_SPI_EN_PORT   GPIO_PORT_2
-//	#define FLASH_SPI_EN_PIN    GPIO_PIN_1
-//	#define UART1_TX_PORT   GPIO_PORT_2
-//	#define UART1_TX_PIN    GPIO_PIN_2
-//	#define UART1_RX_PORT   GPIO_PORT_2
-//	#define UART1_RX_PIN    GPIO_PIN_3
-//	#define UART1_RTS_PORT  GPIO_PORT_2
-//	#define UART1_RTS_PIN   GPIO_PIN_4
-//	#define UART1_CTS_PORT  GPIO_PORT_0
-//	#define UART1_CTS_PIN   GPIO_PIN_7
-//	#define UART2_TX_PORT   GPIO_PORT_1
-//	#define UART2_TX_PIN    GPIO_PIN_2 
-//	#define UART2_RX_PORT   GPIO_PORT_1
-//	#define UART2_RX_PIN    GPIO_PIN_3 
-//	#define BEEP_PORT  			GPIO_PORT_1
-//	#define BEEP_PIN   			GPIO_PIN_0
-//	#define LED_SCL_PORT  	GPIO_PORT_2
-//	#define LED_SCL_PIN   	GPIO_PIN_8
-//	#define LED_SDA_PORT  	GPIO_PORT_2
-//	#define LED_SDA_PIN   	GPIO_PIN_9
-//	#define LED_RESET_PORT  GPIO_PORT_2
-//	#define LED_RESET_PIN   GPIO_PIN_7
-//	#define BM_VIN_OK_PORT  GPIO_PORT_2
-//	#define BM_VIN_OK_PIN   GPIO_PIN_0
-//	#define ADC0_EMC_PORT  	GPIO_PORT_0
-//	#define ADC0_EMC_PIN   	GPIO_PIN_0
-//	#define ADC1_TMR_PORT  	GPIO_PORT_0
-//	#define ADC1_TMR_PIN   	GPIO_PIN_1
-//	#define ADC2_THM_PORT  	GPIO_PORT_0
-//	#define ADC2_THM_PIN   	GPIO_PIN_2
-//	#define ADC3_RSV_PORT  	GPIO_PORT_0
-//	#define ADC3_RSV_PIN   	GPIO_PIN_3
-//	#define VCC_OUT_EN_PORT GPIO_PORT_2
-//	#define VCC_OUT_EN_PIN  GPIO_PIN_5
-//	#define DB15_RSV1_PORT  GPIO_PORT_1
-//	#define DB15_RSV1_PIN   GPIO_PIN_0
-//	#define DB15_RSV2_PORT  GPIO_PORT_1
-//	#define DB15_RSV2_PIN   GPIO_PIN_1
-//	#define DB15_RSV3_PORT  GPIO_PORT_2
-//	#define DB15_RSV3_PIN   GPIO_PIN_6
-
-//#else
-//	#define FLASH_SPI_DI_PORT   GPIO_PORT_0
-//	#define FLASH_SPI_DI_PIN    GPIO_PIN_6
-//	#define FLASH_SPI_CLK_PORT  GPIO_PORT_0
-//	#define FLASH_SPI_CLK_PIN   GPIO_PIN_5
-//	#define FLASH_SPI_DO_PORT   GPIO_PORT_0
-//	#define FLASH_SPI_DO_PIN    GPIO_PIN_4
-//	#define FLASH_SPI_EN_PORT   GPIO_PORT_2
-//	#define FLASH_SPI_EN_PIN    GPIO_PIN_1
-//	#define UART1_TX_PORT   GPIO_PORT_2
-//	#define UART1_TX_PIN    GPIO_PIN_2
-//	#define UART1_RX_PORT   GPIO_PORT_2
-//	#define UART1_RX_PIN    GPIO_PIN_3
-//	#define UART1_RTS_PORT  GPIO_PORT_2
-//	#define UART1_RTS_PIN   GPIO_PIN_4
-//	#define UART1_CTS_PORT  GPIO_PORT_0
-//	#define UART1_CTS_PIN   GPIO_PIN_7
-//	#define UART2_TX_PORT   GPIO_PORT_1
-//	#define UART2_TX_PIN    GPIO_PIN_2 
-//	#define UART2_RX_PORT   GPIO_PORT_1
-//	#define UART2_RX_PIN    GPIO_PIN_3 
-//	#define BEEP_PORT  			GPIO_PORT_1
-//	#define BEEP_PIN   			GPIO_PIN_0
-//	#define LED_SCL_PORT  	GPIO_PORT_2
-//	#define LED_SCL_PIN   	GPIO_PIN_8
-//	#define LED_SDA_PORT  	GPIO_PORT_2
-//	#define LED_SDA_PIN   	GPIO_PIN_9
-//	#define LED_RESET_PORT  GPIO_PORT_2
-//	#define LED_RESET_PIN   GPIO_PIN_7
-//	#define BM_VIN_OK_PORT  GPIO_PORT_2
-//	#define BM_VIN_OK_PIN   GPIO_PIN_0
-//	#define ADC0_EMC_PORT  	GPIO_PORT_0
-//	#define ADC0_EMC_PIN   	GPIO_PIN_0
-//	#define ADC1_TMR_PORT  	GPIO_PORT_0
-//	#define ADC1_TMR_PIN   	GPIO_PIN_1
-//	#define ADC2_THM_PORT  	GPIO_PORT_0
-//	#define ADC2_THM_PIN   	GPIO_PIN_2
-//	#define ADC3_RSV_PORT  	GPIO_PORT_0
-//	#define ADC3_RSV_PIN   	GPIO_PIN_3
-//	#define VCC_OUT_EN_PORT GPIO_PORT_2
-//	#define VCC_OUT_EN_PIN  GPIO_PIN_5
-//	#define DB15_RSV1_PORT  GPIO_PORT_1
-//	#define DB15_RSV1_PIN   GPIO_PIN_0
-//	#define DB15_RSV2_PORT  GPIO_PORT_1
-//	#define DB15_RSV2_PIN   GPIO_PIN_1
-//	#define DB15_RSV3_PORT  GPIO_PORT_2
-//	#define DB15_RSV3_PIN   GPIO_PIN_6
-//	//IHU_EMCWX_CFG_HW_PEM3
-//#endif //IHU_EMCWX_CURRENT_HW_PEM
-
+#endif
 
 
 /*

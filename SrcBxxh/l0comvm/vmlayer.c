@@ -238,6 +238,7 @@ void vmda1458x_data_send_to_uart(unsigned char *p, int n)
 //采样EMC数据
 int vmda1458x_emc_sample(void)
 {
+	adc_enable_channel(ADC_CHANNEL_P02);
 	return adc_get_sample();
 }
 
@@ -245,22 +246,12 @@ int vmda1458x_emc_sample(void)
 void vmda1458x_led_flair(void)
 {
 	if (zIhuHwInvInfo.led_on_off == true){
-	#if ((IHU_EMCWX_CURRENT_HW_PEM == IHU_EMCWX_CFG_HW_PEM2_0) || (IHU_EMCWX_CURRENT_HW_PEM == IHU_EMCWX_CFG_HW_PEM2_1) || (IHU_EMCWX_CURRENT_HW_PEM == IHU_EMCWX_CFG_HW_PEM3))
 			vmda1458x_led_blink_once_on_off(LED_ID_6);
 			vmda1458x_led_blink_once_on_off(LED_ID_6);
-	#else
-			GPIO_SetActive(BEEP_PORT,BEEP_PIN);
-	#endif
-		
-		zIhuHwInvInfo.led_on_off = false;
-	}else{
-		
-	#if ((IHU_EMCWX_CURRENT_HW_PEM == IHU_EMCWX_CFG_HW_PEM2_0) || (IHU_EMCWX_CURRENT_HW_PEM == IHU_EMCWX_CFG_HW_PEM2_1) || (IHU_EMCWX_CURRENT_HW_PEM == IHU_EMCWX_CFG_HW_PEM3))
+			zIhuHwInvInfo.led_on_off = false;
+	}else{		
 			vmda1458x_led_blink_once_on_off(LED_ID_6);
 			vmda1458x_led_blink_once_on_off(LED_ID_6);
-	#else
-			GPIO_SetInactive(BEEP_PORT,BEEP_PIN);
-	#endif		
 			zIhuHwInvInfo.led_on_off = true;
 	}
 }
@@ -1482,7 +1473,7 @@ struct tm ihu_clock_unix_to_ymd(time_t t_unix)
 	#endif
 }
 
-//EMCWX ADC channel #0 Read
+//EMCWX ADC channel Read
 UINT16 ihu_emc_adc_read(void)
 {
 	#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCWX_ID)	

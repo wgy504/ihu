@@ -864,14 +864,23 @@ void mpbledemo2_readEmcDataResp(uint8_t *ptrData, uint32_t lengthInByte)
 //	FirstNotificationBit = 1;
 //	SecondNotificationBit = 1;
 
-	uint16_t emcData = 0;
-	emcData = ihu_emc_adc_read();
-	uint8_t emc[2];
-	emc[0] = (emcData>>8) & 0xFF; emc[1] = emcData & 0xFF;
+	//循环读取，为了找到合适的瞬时最大值
+	UINT16 emcData = 0, tmp = 0;
+	UINT32 index = 0, loopReadMax = 100;
+	for (index = 0; index < loopReadMax; index++){
+		tmp = ihu_emc_adc_read();
+		if (tmp > emcData) emcData = tmp;
+	}
+	uint8_t emc[3];
+	//垃圾代码，没有编解码，完全是为了方便后台云代码的解码，从而对齐格式。未来需要完善的自定义数据结构。
+	emc[0] = 0x20;
+	emc[1] = (emcData>>8) & 0xFF; 
+	emc[2] = emcData & 0xFF;
 	
   uint8_t *data = NULL;
 	data=emc;
-	uint32_t len = 2;
+	uint32_t len = sizeof(emc);
+	
 	ARGS_ITEM_SET(mpbledemo2_info, m_mpbledemo2_handler->m_data_produce_args, cmd, CMD_SENDDAT_EMC_REPORT);   
 	ARGS_ITEM_SET(mpbledemo2_info, m_mpbledemo2_handler->m_data_produce_args, send_msg.len, len);
 	ARGS_ITEM_SET(mpbledemo2_info, m_mpbledemo2_handler->m_data_produce_args, send_msg.str, (const char *)data);    

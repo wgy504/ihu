@@ -54,9 +54,9 @@ i.e.
 #endif
 	
 	//RESERVE ADC == PEM2.x以后才能完整支持
-	RESERVE_GPIO(ADC_EMC, ADC0_EMC_PORT,  ADC0_EMC_PIN, PID_ADC);
-	RESERVE_GPIO(ADC_TMR, ADC1_TMR_PORT,  ADC1_TMR_PIN, PID_ADC);
-	RESERVE_GPIO(ADC_THM, ADC2_THM_PORT,  ADC2_THM_PIN, PID_ADC);
+	RESERVE_GPIO(ADC_RSV, ADC0_RSV_PORT,  ADC0_RSV_PIN, PID_ADC);
+	RESERVE_GPIO(ADC_EMC, ADC1_EMC_PORT,  ADC1_EMC_PIN, PID_ADC);
+	RESERVE_GPIO(ADC_RSV, ADC2_RSV_PORT,  ADC2_RSV_PIN, PID_ADC);
 	RESERVE_GPIO(ADC_RSV, ADC3_RSV_PORT,  ADC3_RSV_PIN, PID_ADC);
 
 	//RESERVE SPI FLASH == PEM2.x以后才能完整支持
@@ -110,9 +110,9 @@ i.e.
 */
 	
 	//ADC PAD SET  == PEM2.x以后才能完整支持
-	GPIO_ConfigurePin(ADC0_EMC_PORT, ADC0_EMC_PIN, INPUT, PID_ADC, false);
-	GPIO_ConfigurePin(ADC1_TMR_PORT, ADC1_TMR_PIN, INPUT, PID_ADC, false);
-	GPIO_ConfigurePin(ADC2_THM_PORT, ADC2_THM_PIN, INPUT, PID_ADC, false);
+	GPIO_ConfigurePin(ADC0_RSV_PORT, ADC0_RSV_PIN, INPUT, PID_ADC, false);
+	GPIO_ConfigurePin(ADC1_EMC_PORT, ADC1_EMC_PIN, INPUT, PID_ADC, false);
+	GPIO_ConfigurePin(ADC2_RSV_PORT, ADC2_RSV_PIN, INPUT, PID_ADC, false);
 	GPIO_ConfigurePin(ADC3_RSV_PORT, ADC3_RSV_PIN, INPUT, PID_ADC, false);
 	
 	//FLASH_SPI PAD SET  == PEM2.x以后才能完整支持
@@ -187,10 +187,30 @@ void periph_init(void)
   //Enable the pads
 	SetBits16(SYS_CTRL_REG, PAD_LATCH_EN, 1);
 		
-	//初始化ADC设备，只有ADC0被激活，所以这里只ENABLE一个通道ADC0
-	adc_init(GP_ADC_SE, GP_ADC_SIGN, GP_ADC_ATTN3X);  //这里的参数配置，需要再实验研究，并查阅DATASHEET！！！
+	
+	//初始化ADC设备，只有ADC1被激活，所以这里只ENABLE一个通道ADC1
+	//attn  :0 = attenuation x1, GP_ADC_ATTN3X(0x0002) = attenuation x3.
+  //第三个参数是设置ADC输入衰减倍数的，有两种，不衰减或者衰减三倍。这里需要说明一点，DA1458x的ADC的参考电压是1.2V，所以如果ADC的输入电压大于1.2V的时候，只能设置为三倍衰减输入。
+  //这里的参数配置，需要再实验研究，并查阅DATASHEET！！！
+	//a).将ADC采样结果转换为电压先定义几个计算时会用到的值
+	//#define ADC_RESOLUTION      1023
+	//#define ADC_ATTENUATION    3
+	//#define ADC_VOLTAGE_REFER  1200  //mv
+	//unsigned int voltage  = 0;
+	//voltage = (unsigned int)((float)(adc_result  * ADC_ATTENUATION * ADC_VOLTAGE_REFER) / ADC_RESOLUTION);
+	//b).补充一点
+	//当使用多个ADC通道时，在读取某个通道的ADC采样值时，要先使能那个通道，然后读数，再使能下一个通道，读下一个通道的ADC采样值。
+	//下面以两个通道举例
+	//adc_enable_channel(ADC_CHANNEL_P00);
+	//adc_result = adc_get_sample();       //读取通道0的ADC
+	//adc_enable_channel(ADC_CHANNEL_P01);
+	//adc_result = adc_get_sample();       //读取通道1的ADC
+
+	//adc_init(GP_ADC_SE, GP_ADC_SIGN, GP_ADC_ATTN3X);  //超过1.2v就需要设置三倍衰减
+	adc_init(GP_ADC_SE, GP_ADC_SIGN, GP_ADC_DELAY_EN);   //不设置衰减	
 	adc_usDelay(20);
-	adc_enable_channel(ADC_CHANNEL_P00);
+	adc_enable_channel(ADC_CHANNEL_P02);
+	
 	
 	//初始化SPI_FLASH，从SPI_FLASH的官方例子中拷贝而来
 	SPI_Pad_t spi_FLASH_CS_Pad;
