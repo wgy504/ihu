@@ -640,8 +640,11 @@ int mpbledemo2_data_consume_func(uint8_t *data, uint32_t len)
 					
 					//这里可以增加时钟的启动，从而实现链路建立以后，自动上报数据
 					vmda1458x_timer_set(WECHAT_PERIOD_REPORT_TIME_OUT, TASK_WECHAT, BLEDEMO2_TIMER_PERIOD_REPORT);
-					//闪灯
-					vmda1458x_led_blink_once_off_on(LED_ID_6);
+					//BLE连接好，设置该灯常亮
+					vmda1458x_led_on(LED_ID_6);
+					//vmda1458x_led_on(LED_ID_0);
+					//vmda1458x_led_on(LED_ID_1);
+					//vmda1458x_led_on(LED_ID_2);
 				}
 				break;
 			
@@ -909,12 +912,8 @@ void mpbledemo2_readEmcDataResp(uint8_t *ptrData, uint32_t lengthInByte)
 		return;
 	}
 	ble_wechat_indicate_data(data, len);
-	//闪灯
-	vmda1458x_led_blink_once_off_on(LED_ID_7);
-	//vmda1458x_led_set(LED_ID_6, LED_MODE_ON);
-	vmda1458x_led_set(LED_ID_6, LED_MODE_ON);
-	vmda1458x_led_set(LED_ID_7, LED_MODE_ON);
-	arch_printf("\r\n light on myc!! ");
+	//BLE数据传输一次，闪灯一次
+	vmda1458x_led_blink_once_on_off(LED_ID_1);
   return;
 	
 	//TMD，估计只能手工编码，不然就给屁朝凉了。。。

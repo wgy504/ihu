@@ -481,8 +481,10 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 最终平均500次，取非0的均值
 
 //= ZJL/MYC, 2016 Sep.17, IHU_EMCWX_CURRENT_SW_DELIVERY R03.17
-= 完善调试LED灯
-
+= 完善调试LED灯，规定：
+	单色灯LED6表示BLE链路是否连上
+	三色灯LED0/1/2三色等表示数据传输状态，目前貌似还有些问题
+= app_task.c: gapc_disconnect_ind_handler中增加 vmda1458x_led_set(LED_ID_6, LED_MODE_OFF)，以便链路断开时灭灯，测试结果良好
 
 
 

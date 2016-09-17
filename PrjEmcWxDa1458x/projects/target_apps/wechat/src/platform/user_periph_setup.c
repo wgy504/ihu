@@ -250,9 +250,9 @@ void periph_init(void)
 	
 	vmda1458x_led_set(LED_ID_6, LED_MODE_ON);
 	vmda1458x_led_set(LED_ID_6, LED_MODE_OFF);
+	
 	vmda1458x_led_set(LED_ID_7, LED_MODE_ON);
 	vmda1458x_led_set(LED_ID_7, LED_MODE_OFF);
-
 	
 	//LMV341 SHND Management
 	GPIO_SetActive(LMV_SHDN_PORT, LMV_SHDN_PIN);

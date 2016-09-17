@@ -47,6 +47,7 @@
 
     #include "app_entry_point.h"
 
+		#include "i2c_led.h"
 
 /*
  * EXTERNAL FUNCTION DECLARATIONS
@@ -351,7 +352,9 @@ int gapc_disconnect_ind_handler(ke_msg_id_t const msgid,
         // We are not in a Connected State
         ASSERT_ERR(0);
     }
-    
+		
+    vmda1458x_led_set(LED_ID_6, LED_MODE_OFF);
+		
     return (KE_MSG_CONSUMED);
 }
 

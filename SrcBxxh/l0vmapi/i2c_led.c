@@ -487,8 +487,6 @@ void vmda1458x_led_set(uint8_t ledId, uint8_t mode)
 		
 		GLOBAL_INT_RESTORE();
 		
-
-		
 		return;
 }
 
