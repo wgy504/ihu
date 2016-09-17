@@ -10,15 +10,16 @@
 
 #include "comtype.h"
 #include "sysdim.h"
-
 #include <stdio.h>
+#include "sysengpar.h"
 
-#include "rwip_config.h"
-#include "ke_msg.h"
-#include <stdint.h>
-#include "ke_task.h"
-#include "time.h"
-//#include "da14580_config.h"
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCWX_ID)
+	#include "rwip_config.h"
+	#include "ke_msg.h"
+	#include <stdint.h>
+	#include "ke_task.h"
+	#include "time.h"
+#endif
 
 //2. 公共消息结构体定义
 //Under normal case, 1024Byte shall be enough for internal message communciation purpose.
@@ -315,76 +316,12 @@ typedef struct  msg_struct_emc_asylibra_data_req //
 	UINT8 l3dataLen;
 	UINT8 l3Data[MSG_BUF_MAX_LENGTH_ASY_DATA_GENERAL-4];
 }msg_struct_emc_asylibra_data_req_t;
-//typedef struct  msg_struct_emc_asylibra_data_report //
-//{
-//	UINT8  usercmdid;
-//	UINT8  useroptid;
-//	UINT8  cmdIdBackType; //指明是瞬时，还是周期性读数
-//	sensor_emc_data_element_t emc;
-//	UINT16 EmDeviceDataType;
-//	UINT8 length;
-//}msg_struct_emc_asylibra_data_report_t;
-//typedef struct  msg_struct_emc_asylibra_time_sync_req //
-//{
-//	UINT8 length;
-//}msg_struct_emc_asylibra_time_sync_req_t;
-//typedef struct  msg_struct_emc_asylibra_equ_info_sync //
-//{
-//	UINT8 hw_uuid[6];
-//	UINT8 hw_type;
-//	UINT8 hw_version;
-//	UINT8 sw_release;
-//	UINT8 sw_delivery;		
-//	UINT8 length;
-//}msg_struct_emc_asylibra_equ_info_sync_t;
-
-
-
-
-
-
-
-
-
-
-
 
 
 typedef struct msg_struct_asylibra_ble_connected //用于定时结束时，指示BLE连接态
 {
 	uint16_t length;
 }msg_struct_asylibra_ble_connected_t;
-
-//struct msg_struct_asylibra_auth_resp
-//{
-//	/// Handle of the attribute that has to be written
-//	uint16_t handle;
-//	/// Data length to be written
-//	uint16_t length;
-//	/// offset at which the data has to be written
-//	uint16_t offset;
-//	/// Destination task shall send back a write response command if true.
-//	bool response;
-//	///Informs that it's last request of a multiple prepare write request.
-//	bool last;
-//	/// Data to be written in attribute database
-//	uint8_t  value[__ARRAY_EMPTY];
-//};
-//struct msg_struct_asylibra_init_resp
-//{
-//	/// Handle of the attribute that has to be written
-//	uint16_t handle;
-//	/// Data length to be written
-//	uint16_t length;
-//	/// offset at which the data has to be written
-//	uint16_t offset;
-//	/// Destination task shall send back a write response command if true.
-//	bool response;
-//	///Informs that it's last request of a multiple prepare write request.
-//	bool last;
-//	/// Data to be written in attribute database
-//	uint8_t  value[__ARRAY_EMPTY];
-//};
 
 struct msg_struct_asylibra_connect_ready
 {
@@ -398,22 +335,6 @@ struct msg_struct_asylibra_data_push
 	uint16_t length;
 	uint8_t data[ASY_DATA_PUSH_LENGTH_MAX];
 };
-//该消息将保留在ASYLIBRA内部，不再用于WXAPP使用
-//struct msg_struct_asylibra_data_resp
-//{
-//	/// Handle of the attribute that has to be written
-//	uint16_t handle;
-//	/// Data length to be written
-//	uint16_t length;
-//	/// offset at which the data has to be written
-//	uint16_t offset;
-//	/// Destination task shall send back a write response command if true.
-//	bool response;
-//	///Informs that it's last request of a multiple prepare write request.
-//	bool last;
-//	/// Data to be written in attribute database
-//	uint8_t  value[__ARRAY_EMPTY];
-//};
 
 ///////////////////////////////////////////////////////////////////////////////////////
 /* MYC 2015/10/25, simplify the BLE to AirSync Message, after using Buffer_Man APIs */
@@ -573,59 +494,5 @@ struct msg_struct_wxapp_modbus_disconnect
 #define MSG_PAYLOAD_LEN_ECI_RESP_SENDDATA									(0x0000)
 #define MSG_PAYLOAD_LEN_ECI_RESP_RECVDATA									(0x0000)
 
-/*
-**** send auth response ****
-data len = 14
-data dump = FE 01 00 0E 4E 21 00 01 0A 02 08 00 12 00 
-
-**** send init request response ****
-data len = 70
-data dump = FE 01 00 46 4E 23 00 02 0A 02 08 00 10 B4 24 18 F8 AC 01 20 B9 AE 94 85 06 5A 14 57 65 43 68 61 74 20 54 65 73 74 20 62 79 20 6D 61 74 74 21 8A 01 14 57 65 43 68 61 74 20 54 65 73 74 20 62 79 20 6D 61 74 74 21 
-
-**** send SendData Response(echo request) ****
-data len = 36
-data dump = FE 01 00 24 4E 22 12 37 0A 02 08 00 12 16 0A 00 12 10 20 0E 00 06 00 01 02 03 04 05 01 02 03 04 05 06 18 10 
-
-**** send ManufactureSvr Push ****
-data len = 22
-data dump = FE 01 00 16 75 31 00 00 0A 00 12 08 31 32 33 34 35 36 37 38 18 00 
-
-**** send Html Push ****
-data len = 23
-data dump = FE 01 00 17 75 31 00 00 0A 00 12 08 31 32 33 34 35 36 37 38 18 91 4E 
-
-**** send wxWristBand Push ****
-data len = 14
-data dump = FE 01 00 0E 75 31 00 00 0A 00 12 00 18 01 
-
-**** send EnterDeviceChatView Push ****
-data len = 14
-data dump = FE 01 00 0E 75 32 00 00 0A 00 10 01 18 01 
-
-**** send Exit ChatView Push ****
-data len = 14
-data dump = FE 01 00 0E 75 32 00 00 0A 00 10 02 18 01 
-
-**** send Enter HtmlChatView Push ****
-data len = 14
-data dump = FE 01 00 0E 75 32 00 00 0A 00 10 01 18 02 
-
-**** send Exit HtmlChatView Push ****
-data len = 14
-data dump = FE 01 00 0E 75 32 00 00 0A 00 10 02 18 02 
-
-**** send enterBackground Push ****
-data len = 12
-data dump = FE 01 00 0C 75 33 00 00 0A 00 10 01 
-
-**** send enterForground Push ****
-data len = 12
-data dump = FE 01 00 0C 75 33 00 00 0A 00 10 02 
-
-**** send enterSleep Push ****
-data len = 12
-data dump = FE 01 00 0C 75 33 00 00 0A 00 10 03 
-
-*/
 
 #endif /* L0COMVM_COMMSG_H_ */

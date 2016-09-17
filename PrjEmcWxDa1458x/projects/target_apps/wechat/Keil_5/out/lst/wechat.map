@@ -285,7 +285,7 @@ Section Cross References
     app_task.o(.text) refers to app.o(.text) for app_easy_gap_dev_configure
     app_task.o(.text) refers to app_default_handlers.o(.text) for default_app_on_set_dev_config_complete
     app_task.o(.text) refers to user_wechat.o(.text) for app_advertise_complete
-    app_task.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_set
+    app_task.o(.text) refers to i2c_led_1.o(.text) for vmda1458x_led_set
     app_task.o(.text) refers to app_task.o(.constdata) for .constdata
     app_task.o(.text) refers to app.o(retention_mem_area0) for app_env
     app_task.o(.text) refers to app_security.o(retention_mem_area0) for app_sec_env
@@ -372,7 +372,7 @@ Section Cross References
     user_periph_setup.o(.text) refers to adc.o(.text) for adc_init
     user_periph_setup.o(.text) refers to spi.o(.text) for spi_init
     user_periph_setup.o(.text) refers to spi_flash.o(.text) for spi_flash_auto_detect
-    user_periph_setup.o(.text) refers to i2c_led.o(.text) for vmda1458x_i2c_led_init
+    user_periph_setup.o(.text) refers to i2c_led_1.o(.text) for vmda1458x_i2c_led_init
     user_periph_setup.o(.text) refers to gpio.o(.bss) for GPIO
     user_periph_setup.o(.text) refers to mpbledemo2.o(.bss) for m_mpbledemo2_handler
     user_wechat.o(.text) refers to app_default_handlers.o(.text) for default_app_on_connection
@@ -417,7 +417,7 @@ Section Cross References
     mpbledemo2.o(.text) refers to gpio.o(.text) for GPIO_ConfigurePin
     mpbledemo2.o(.text) refers to ble_wechat_util.o(.text) for get_handler_by_type
     mpbledemo2.o(.text) refers to arch_console.o(.text) for arch_printf
-    mpbledemo2.o(.text) refers to vmlayer.o(.text) for ihu_get_mac_addr
+    mpbledemo2.o(.text) refers to vmdalayer.o(.text) for ihu_get_mac_addr
     mpbledemo2.o(.text) refers to epb_mmbp.o(.text) for epb_auth_request_pack_size
     mpbledemo2.o(.text) refers to mpbledemo2.o(.bss) for .bss
     mpbledemo2.o(.text) refers to wechat_task.o(retention_mem_area0) for FirstNotificationBit
@@ -426,7 +426,7 @@ Section Cross References
     mpbledemo2.o(.text) refers to mpbledemo2.o(.constdata) for .constdata
     mpbledemo2.o(.text) refers to mpbledemo2.o(.data) for .data
     mpbledemo2.o(.text) refers to crc32.o(.text) for crc32
-    mpbledemo2.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_on
+    mpbledemo2.o(.text) refers to i2c_led_1.o(.text) for vmda1458x_led_on
     mpbledemo2.o(.constdata) refers to mpbledemo2.o(.bss) for mac_address
     mpbledemo2.o(.constdata) refers to mpbledemo2.o(.conststring) for .conststring
     mpbledemo2.o(.constdata) refers to mpbledemo2.o(.data) for challeange
@@ -454,231 +454,231 @@ Section Cross References
     wecaht_aes.o(.text) refers to wecaht_aes.o(.text) for BlockEncrypt
     wecaht_aes.o(.text) refers to wecaht_aes.o(.text) for BlockDecrypt
     wecaht_aes.o(.text) refers to wecaht_aes.o(.text) for XorBytes
-    vmlayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    vmlayer.o(.text) refers to arch_console.o(.text) for arch_printf
-    vmlayer.o(.text) refers to strncpy.o(.text) for strncpy
-    vmlayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    vmlayer.o(.text) refers to arch_console.o(.text) for arch_printf
-    vmlayer.o(.text) refers to strncpy.o(.text) for strncpy
-    vmlayer.o(.text) refers to app.o(.text) for app_timer_set
-    vmlayer.o(.text) refers to adc.o(.text) for adc_enable_channel
-    vmlayer.o(.text) refers to vmlayer.o(.conststring) for .conststring
-    vmlayer.o(.text) refers to vmlayer.o(.bss) for .bss
-    vmlayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    vmlayer.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    vmlayer.o(.text) refers to vmlayer.o(.bss) for .bss
-    vmlayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    vmlayer.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    vmlayer.o(.text) refers to vmlayer.o(.bss) for .bss
-    vmlayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    vmlayer.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    vmlayer.o(.text) refers to vmlayer.o(.bss) for .bss
-    vmlayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    vmlayer.o(.text) refers to vmlayer.o(.text) for IhuDebugPrint
-    vmlayer.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    vmlayer.o(.text) refers to vmlayer.o(.text) for FsmSetState
-    vmlayer.o(.text) refers to vmlayer.o(.bss) for .bss
-    vmlayer.o(.text) refers to vmlayer.o(.data) for .data
-    vmlayer.o(.text) refers to vmlayer.o(.conststring) for .conststring
-    vmlayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    vmlayer.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    vmlayer.o(.text) refers to vmlayer.o(.text) for FsmAddNew
-    vmlayer.o(.text) refers to vmlayer.o(.text) for IhuDebugPrint
-    vmlayer.o(.text) refers to vmlayer.o(.text) for ihu_message_queue_clean
-    vmlayer.o(.text) refers to vmlayer.o(.text) for FsmProcessingLaunchEntry
-    vmlayer.o(.text) refers to vmlayer.o(.bss) for .bss
-    vmlayer.o(.text) refers to vmlayer.o(.data) for .data
-    vmlayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    vmlayer.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    vmlayer.o(.text) refers to vmlayer.o(.text) for IhuDebugPrint
-    vmlayer.o(.text) refers to vmlayer.o(.text) for ihu_task_create_and_run
-    vmlayer.o(.text) refers to vmlayer.o(.bss) for .bss
-    vmlayer.o(.text) refers to vmlayer.o(.data) for .data
-    vmlayer.o(.text) refers to vmlayer.o(.text) for ihu_system_task_init_call
-    vmlayer.o(.text) refers to vmlayer.o(.text) for IhuDebugPrint
-    vmlayer.o(.text) refers to vmlayer.o(.bss) for .bss
-    vmlayer.o(.text) refers to vmdashell_task.o(.data) for FsmVmdashell
-    vmlayer.o(.text) refers to l1timer.o(.data) for FsmTimer
-    vmlayer.o(.text) refers to l2asylibra.o(.data) for FsmAsylibra
-    vmlayer.o(.text) refers to l2adcaries.o(.data) for FsmAdcaries
-    vmlayer.o(.text) refers to l3emc.o(.data) for FsmEmc
-    vmlayer.o(.text) refers to vmlayer.o(.text) for IhuDebugPrint
-    vmlayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    vmlayer.o(.text) refers to vmlayer.o(.bss) for .bss
-    vmlayer.o(.text) refers to vmlayer.o(.text) for IhuDebugPrint
-    vmlayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    vmlayer.o(.text) refers to vmlayer.o(.text) for vmda1458x_mac_addr_get
-    vmlayer.o(.text) refers to vmdashell_task.o(.text) for ihu_task_vmdashell_init
-    vmlayer.o(.text) refers to strcpy.o(.text) for strcpy
-    vmlayer.o(.text) refers to vmlayer.o(.text) for FsmInit
-    vmlayer.o(.text) refers to vmlayer.o(.text) for ihu_task_create_all
-    vmlayer.o(.text) refers to vmlayer.o(.conststring) for .conststring
-    vmlayer.o(.text) refers to vmlayer.o(.bss) for .bss
-    vmlayer.o(.text) refers to vmlayer.o(.data) for .data
-    vmlayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    vmlayer.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    vmlayer.o(.text) refers to vmlayer.o(.bss) for .bss
-    vmlayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    vmlayer.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    vmlayer.o(.text) refers to vmlayer.o(.text) for FsmGetState
-    vmlayer.o(.text) refers to vmlayer.o(.text) for IhuDebugPrint
-    vmlayer.o(.text) refers to vmlayer.o(.bss) for .bss
-    vmlayer.o(.text) refers to vmlayer.o(.conststring) for .conststring
-    vmlayer.o(.text) refers to vmlayer.o(.data) for .data
-    vmlayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    vmlayer.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    vmlayer.o(.text) refers to vmlayer.o(.bss) for .bss
-    vmlayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    vmlayer.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    vmlayer.o(.text) refers to vmlayer.o(.text) for ihu_message_rcv
-    vmlayer.o(.text) refers to vmlayer.o(.text) for FsmRunEngine
-    vmlayer.o(.text) refers to vmlayer.o(.bss) for .bss
-    vmlayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    vmlayer.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    vmlayer.o(.text) refers to vmlayer.o(.text) for FsmProcessingLaunchExecute
-    vmlayer.o(.text) refers to vmlayer.o(.bss) for .bss
-    vmlayer.o(.text) refers to vmlayer.o(.data) for .data
-    vmlayer.o(.text) refers to vmlayer.o(.text) for ihu_system_task_execute
-    vmlayer.o(.text) refers to vmlayer.o(.text) for IhuDebugPrint
-    vmlayer.o(.text) refers to vmlayer.o(.bss) for .bss
-    vmlayer.o(.text) refers to vmdashell_task.o(.data) for FsmVmdashell
-    vmlayer.o(.text) refers to l1timer.o(.data) for FsmTimer
-    vmlayer.o(.text) refers to l2asylibra.o(.data) for FsmAsylibra
-    vmlayer.o(.text) refers to l2adcaries.o(.data) for FsmAdcaries
-    vmlayer.o(.text) refers to l3emc.o(.data) for FsmEmc
-    vmlayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    vmlayer.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    vmlayer.o(.text) refers to vmlayer.o(.bss) for .bss
-    vmlayer.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    vmlayer.o(.text) refers to strncpy.o(.text) for strncpy
-    vmlayer.o(.text) refers to strcat.o(.text) for strcat
-    vmlayer.o(.text) refers to vmlayer.o(.bss) for .bss
-    vmlayer.o(.text) refers to vmlayer.o(.data) for .data
-    vmlayer.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    vmlayer.o(.text) refers to strncpy.o(.text) for strncpy
-    vmlayer.o(.text) refers to strcat.o(.text) for strcat
-    vmlayer.o(.text) refers to vmlayer.o(.bss) for .bss
-    vmlayer.o(.text) refers to vmlayer.o(.data) for .data
-    vmlayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    vmlayer.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    vmlayer.o(.text) refers to vmlayer.o(.text) for ihu_taskid_to_string
-    vmlayer.o(.text) refers to vmlayer.o(.text) for ihu_msgid_to_string
-    vmlayer.o(.text) refers to vmlayer.o(.text) for IhuDebugPrint
-    vmlayer.o(.text) refers to vmlayer.o(.bss) for .bss
-    vmlayer.o(.text) refers to vmlayer.o(.conststring) for .conststring
-    vmlayer.o(.text) refers to vmlayer.o(.text) for ihu_message_send
-    vmlayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    vmlayer.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    vmlayer.o(.text) refers to vmlayer.o(.bss) for .bss
-    vmlayer.o(.text) refers to vmlayer.o(.data) for .data
-    vmlayer.o(.text) refers to vmdashell_task.o(.text) for ihu_task_vmdashell_mainloop
-    vmlayer.o(.text) refers to vmlayer.o(.text) for ihu_sleep
-    vmlayer.o(.text) refers to vmlayer.o(.text) for vmda1458x_init_msg_to_vmdashell
-    vmlayer.o(.text) refers to vmlayer.o(.text) for ihu_task_execute_all
-    vmlayer.o(.text) refers to vmlayer.o(.bss) for .bss
-    vmlayer.o(.text) refers to vmlayer.o(.text) for vmda1458x_app_uart_push_zjl
-    vmlayer.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_blink_once_on_off
-    vmlayer.o(.text) refers to vmlayer.o(.text) for vmda1458x_app_ble_push
-    vmlayer.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_blink_once_on_off
-    vmlayer.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_blink_once_on_off
-    vmlayer.o(.text) refers to vmlayer.o(.bss) for .bss
-    vmlayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    vmlayer.o(.text) refers to vmlayer.o(.text) for IhuDebugPrint
-    vmlayer.o(.text) refers to vmlayer.o(.conststring) for .conststring
-    vmlayer.o(.text) refers to localtime.o(.text) for localtime
-    vmlayer.o(.data) refers to vmlayer.o(.conststring) for .conststring
-    i2c_led.o(.text) refers to gpio.o(.text) for GPIO_SetInactive
-    i2c_led.o(.text) refers to i2c_led.o(.bss) for .bss
-    i2c_led.o(.text) refers to i2c_led.o(.data) for .data
-    i2c_led.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_set
-    i2c_led.o(.text) refers to i2c_led.o(.bss) for .bss
-    i2c_led.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_set
-    i2c_led.o(.text) refers to i2c_led.o(.bss) for .bss
-    i2c_led.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_set
-    i2c_led.o(.text) refers to i2c_led.o(.bss) for .bss
-    i2c_led.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_set
-    i2c_led.o(.text) refers to i2c_led.o(.bss) for .bss
-    i2c_led.o(.text) refers to i2c_led.o(.text) for vmda1458x_i2c_led_init
-    i2c_led.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_set
-    i2c_led.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_on
-    i2c_led.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_off
-    i2c_led.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_blink_once_off_on
-    i2c_led.o(.text) refers to i2c_led.o(.text) for vmda14568x_led_blinking_high_speed
-    i2c_led.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_blinking_low_speed
+    vmdalayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
+    vmdalayer.o(.text) refers to arch_console.o(.text) for arch_printf
+    vmdalayer.o(.text) refers to strncpy.o(.text) for strncpy
+    vmdalayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
+    vmdalayer.o(.text) refers to arch_console.o(.text) for arch_printf
+    vmdalayer.o(.text) refers to strncpy.o(.text) for strncpy
+    vmdalayer.o(.text) refers to app.o(.text) for app_timer_set
+    vmdalayer.o(.text) refers to adc.o(.text) for adc_enable_channel
+    vmdalayer.o(.text) refers to vmdalayer.o(.conststring) for .conststring
+    vmdalayer.o(.text) refers to vmdalayer.o(.bss) for .bss
+    vmdalayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    vmdalayer.o(.text) refers to vmdalayer.o(.bss) for .bss
+    vmdalayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    vmdalayer.o(.text) refers to vmdalayer.o(.bss) for .bss
+    vmdalayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    vmdalayer.o(.text) refers to vmdalayer.o(.bss) for .bss
+    vmdalayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for IhuDebugPrint
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for FsmSetState
+    vmdalayer.o(.text) refers to vmdalayer.o(.bss) for .bss
+    vmdalayer.o(.text) refers to vmdalayer.o(.data) for .data
+    vmdalayer.o(.text) refers to vmdalayer.o(.conststring) for .conststring
+    vmdalayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for FsmAddNew
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for IhuDebugPrint
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for ihu_message_queue_clean
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for FsmProcessingLaunchEntry
+    vmdalayer.o(.text) refers to vmdalayer.o(.bss) for .bss
+    vmdalayer.o(.text) refers to vmdalayer.o(.data) for .data
+    vmdalayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for IhuDebugPrint
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for ihu_task_create_and_run
+    vmdalayer.o(.text) refers to vmdalayer.o(.bss) for .bss
+    vmdalayer.o(.text) refers to vmdalayer.o(.data) for .data
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for ihu_system_task_init_call
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for IhuDebugPrint
+    vmdalayer.o(.text) refers to vmdalayer.o(.bss) for .bss
+    vmdalayer.o(.text) refers to vmdashell_task.o(.data) for FsmVmdashell
+    vmdalayer.o(.text) refers to l1timer.o(.data) for FsmTimer
+    vmdalayer.o(.text) refers to l2asylibra.o(.data) for FsmAsylibra
+    vmdalayer.o(.text) refers to l2adcaries.o(.data) for FsmAdcaries
+    vmdalayer.o(.text) refers to l3emc.o(.data) for FsmEmc
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for IhuDebugPrint
+    vmdalayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
+    vmdalayer.o(.text) refers to vmdalayer.o(.bss) for .bss
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for IhuDebugPrint
+    vmdalayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for vmda1458x_mac_addr_get
+    vmdalayer.o(.text) refers to vmdashell_task.o(.text) for ihu_task_vmdashell_init
+    vmdalayer.o(.text) refers to strcpy.o(.text) for strcpy
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for FsmInit
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for ihu_task_create_all
+    vmdalayer.o(.text) refers to vmdalayer.o(.conststring) for .conststring
+    vmdalayer.o(.text) refers to vmdalayer.o(.bss) for .bss
+    vmdalayer.o(.text) refers to vmdalayer.o(.data) for .data
+    vmdalayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    vmdalayer.o(.text) refers to vmdalayer.o(.bss) for .bss
+    vmdalayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for FsmGetState
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for IhuDebugPrint
+    vmdalayer.o(.text) refers to vmdalayer.o(.bss) for .bss
+    vmdalayer.o(.text) refers to vmdalayer.o(.conststring) for .conststring
+    vmdalayer.o(.text) refers to vmdalayer.o(.data) for .data
+    vmdalayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    vmdalayer.o(.text) refers to vmdalayer.o(.bss) for .bss
+    vmdalayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for ihu_message_rcv
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for FsmRunEngine
+    vmdalayer.o(.text) refers to vmdalayer.o(.bss) for .bss
+    vmdalayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for FsmProcessingLaunchExecute
+    vmdalayer.o(.text) refers to vmdalayer.o(.bss) for .bss
+    vmdalayer.o(.text) refers to vmdalayer.o(.data) for .data
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for ihu_system_task_execute
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for IhuDebugPrint
+    vmdalayer.o(.text) refers to vmdalayer.o(.bss) for .bss
+    vmdalayer.o(.text) refers to vmdashell_task.o(.data) for FsmVmdashell
+    vmdalayer.o(.text) refers to l1timer.o(.data) for FsmTimer
+    vmdalayer.o(.text) refers to l2asylibra.o(.data) for FsmAsylibra
+    vmdalayer.o(.text) refers to l2adcaries.o(.data) for FsmAdcaries
+    vmdalayer.o(.text) refers to l3emc.o(.data) for FsmEmc
+    vmdalayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    vmdalayer.o(.text) refers to vmdalayer.o(.bss) for .bss
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    vmdalayer.o(.text) refers to strncpy.o(.text) for strncpy
+    vmdalayer.o(.text) refers to strcat.o(.text) for strcat
+    vmdalayer.o(.text) refers to vmdalayer.o(.bss) for .bss
+    vmdalayer.o(.text) refers to vmdalayer.o(.data) for .data
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    vmdalayer.o(.text) refers to strncpy.o(.text) for strncpy
+    vmdalayer.o(.text) refers to strcat.o(.text) for strcat
+    vmdalayer.o(.text) refers to vmdalayer.o(.bss) for .bss
+    vmdalayer.o(.text) refers to vmdalayer.o(.data) for .data
+    vmdalayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for ihu_taskid_to_string
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for ihu_msgid_to_string
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for IhuDebugPrint
+    vmdalayer.o(.text) refers to vmdalayer.o(.bss) for .bss
+    vmdalayer.o(.text) refers to vmdalayer.o(.conststring) for .conststring
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for ihu_message_send
+    vmdalayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    vmdalayer.o(.text) refers to vmdalayer.o(.bss) for .bss
+    vmdalayer.o(.text) refers to vmdalayer.o(.data) for .data
+    vmdalayer.o(.text) refers to vmdashell_task.o(.text) for ihu_task_vmdashell_mainloop
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for ihu_sleep
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for vmda1458x_init_msg_to_vmdashell
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for ihu_task_execute_all
+    vmdalayer.o(.text) refers to vmdalayer.o(.bss) for .bss
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for vmda1458x_app_uart_push_zjl
+    vmdalayer.o(.text) refers to i2c_led_1.o(.text) for vmda1458x_led_blink_once_on_off
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for vmda1458x_app_ble_push
+    vmdalayer.o(.text) refers to i2c_led_1.o(.text) for vmda1458x_led_blink_once_on_off
+    vmdalayer.o(.text) refers to i2c_led_1.o(.text) for vmda1458x_led_blink_once_on_off
+    vmdalayer.o(.text) refers to vmdalayer.o(.bss) for .bss
+    vmdalayer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
+    vmdalayer.o(.text) refers to vmdalayer.o(.text) for IhuDebugPrint
+    vmdalayer.o(.text) refers to vmdalayer.o(.conststring) for .conststring
+    vmdalayer.o(.text) refers to localtime.o(.text) for localtime
+    vmdalayer.o(.data) refers to vmdalayer.o(.conststring) for .conststring
+    i2c_led_1.o(.text) refers to gpio.o(.text) for GPIO_SetInactive
+    i2c_led_1.o(.text) refers to i2c_led_1.o(.bss) for .bss
+    i2c_led_1.o(.text) refers to i2c_led_1.o(.data) for .data
+    i2c_led_1.o(.text) refers to i2c_led_1.o(.text) for vmda1458x_led_set
+    i2c_led_1.o(.text) refers to i2c_led_1.o(.bss) for .bss
+    i2c_led_1.o(.text) refers to i2c_led_1.o(.text) for vmda1458x_led_set
+    i2c_led_1.o(.text) refers to i2c_led_1.o(.bss) for .bss
+    i2c_led_1.o(.text) refers to i2c_led_1.o(.text) for vmda1458x_led_set
+    i2c_led_1.o(.text) refers to i2c_led_1.o(.bss) for .bss
+    i2c_led_1.o(.text) refers to i2c_led_1.o(.text) for vmda1458x_led_set
+    i2c_led_1.o(.text) refers to i2c_led_1.o(.bss) for .bss
+    i2c_led_1.o(.text) refers to i2c_led_1.o(.text) for vmda1458x_i2c_led_init
+    i2c_led_1.o(.text) refers to i2c_led_1.o(.text) for vmda1458x_led_set
+    i2c_led_1.o(.text) refers to i2c_led_1.o(.text) for vmda1458x_led_on
+    i2c_led_1.o(.text) refers to i2c_led_1.o(.text) for vmda1458x_led_off
+    i2c_led_1.o(.text) refers to i2c_led_1.o(.text) for vmda1458x_led_blink_once_off_on
+    i2c_led_1.o(.text) refers to i2c_led_1.o(.text) for vmda14568x_led_blinking_high_speed
+    i2c_led_1.o(.text) refers to i2c_led_1.o(.text) for vmda1458x_led_blinking_low_speed
     vmdashell_task.o(.text) refers to vmdashell_task.o(.bss) for .bss
     vmdashell_task.o(.text) refers to vmdashell_task.o(.constdata) for .constdata
-    vmdashell_task.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    vmdashell_task.o(.text) refers to vmlayer.o(.text) for ihu_message_send
+    vmdashell_task.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    vmdashell_task.o(.text) refers to vmdalayer.o(.text) for ihu_message_send
     vmdashell_task.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    vmdashell_task.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
-    vmdashell_task.o(.text) refers to vmlayer.o(.data) for zIhuTaskNameList
+    vmdashell_task.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
+    vmdashell_task.o(.text) refers to vmdalayer.o(.data) for zIhuTaskNameList
     vmdashell_task.o(.text) refers to vmdashell_task.o(.conststring) for .conststring
-    vmdashell_task.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
+    vmdashell_task.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
     vmdashell_task.o(.text) refers to localtime.o(.text) for localtime
     vmdashell_task.o(.text) refers to l1timer.o(.text) for ihu_timer_routine_handler_1s
     vmdashell_task.o(.text) refers to vmdashell_task.o(.conststring) for .conststring
-    vmdashell_task.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
-    vmdashell_task.o(.text) refers to vmlayer.o(.data) for zIhuSystemTimeUnix
-    vmdashell_task.o(.text) refers to vmlayer.o(.bss) for zIhuSystemTimeYmd
-    vmdashell_task.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
+    vmdashell_task.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
+    vmdashell_task.o(.text) refers to vmdalayer.o(.data) for zIhuSystemTimeUnix
+    vmdashell_task.o(.text) refers to vmdalayer.o(.bss) for zIhuSystemTimeYmd
+    vmdashell_task.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
     vmdashell_task.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    vmdashell_task.o(.text) refers to vmlayer.o(.text) for ihu_message_send
-    vmdashell_task.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    vmdashell_task.o(.text) refers to vmdalayer.o(.text) for ihu_message_send
+    vmdashell_task.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     vmdashell_task.o(.text) refers to vmdashell_task.o(.conststring) for .conststring
-    vmdashell_task.o(.text) refers to vmlayer.o(.data) for zIhuTaskNameList
-    vmdashell_task.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    vmdashell_task.o(.text) refers to vmlayer.o(.text) for ihu_message_send
+    vmdashell_task.o(.text) refers to vmdalayer.o(.data) for zIhuTaskNameList
+    vmdashell_task.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    vmdashell_task.o(.text) refers to vmdalayer.o(.text) for ihu_message_send
     vmdashell_task.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    vmdashell_task.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
-    vmdashell_task.o(.text) refers to vmlayer.o(.data) for zIhuTaskNameList
+    vmdashell_task.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
+    vmdashell_task.o(.text) refers to vmdalayer.o(.data) for zIhuTaskNameList
     vmdashell_task.o(.text) refers to vmdashell_task.o(.conststring) for .conststring
-    vmdashell_task.o(.text) refers to vmlayer.o(.text) for FsmSetState
-    vmdashell_task.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
+    vmdashell_task.o(.text) refers to vmdalayer.o(.text) for FsmSetState
+    vmdashell_task.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
     vmdashell_task.o(.text) refers to vmdashell_task.o(.conststring) for .conststring
     vmdashell_task.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    vmdashell_task.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    vmdashell_task.o(.text) refers to vmlayer.o(.text) for ihu_message_send
-    vmdashell_task.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    vmdashell_task.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    vmdashell_task.o(.text) refers to vmdalayer.o(.text) for ihu_message_send
+    vmdashell_task.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     vmdashell_task.o(.text) refers to vmdashell_task.o(.conststring) for .conststring
-    vmdashell_task.o(.text) refers to vmlayer.o(.data) for zIhuTaskNameList
-    vmdashell_task.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    vmdashell_task.o(.text) refers to vmlayer.o(.text) for FsmSetState
+    vmdashell_task.o(.text) refers to vmdalayer.o(.data) for zIhuTaskNameList
+    vmdashell_task.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    vmdashell_task.o(.text) refers to vmdalayer.o(.text) for FsmSetState
     vmdashell_task.o(.text) refers to vmdashell_task.o(.text) for func_vmdashell_hw_init
-    vmdashell_task.o(.text) refers to vmlayer.o(.text) for IhuDebugPrint
+    vmdashell_task.o(.text) refers to vmdalayer.o(.text) for IhuDebugPrint
     vmdashell_task.o(.text) refers to vmdashell_task.o(.text) for func_vmdashell_send_out_init
     vmdashell_task.o(.text) refers to l1timer.o(.text) for ihu_timer_start
-    vmdashell_task.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    vmdashell_task.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     vmdashell_task.o(.text) refers to vmdashell_task.o(.bss) for .bss
     vmdashell_task.o(.text) refers to vmdashell_task.o(.conststring) for .conststring
-    vmdashell_task.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
+    vmdashell_task.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
     vmdashell_task.o(.text) refers to vmdashell_task.o(.text) for fsm_vmdashell_task_init
     vmdashell_task.o(.text) refers to vmdashell_task.o(.conststring) for .conststring
-    vmdashell_task.o(.text) refers to vmlayer.o(.bss) for zIhuTaskInfo
+    vmdashell_task.o(.text) refers to vmdalayer.o(.bss) for zIhuTaskInfo
     vmdashell_task.o(.text) refers to vmdashell_task.o(.bss) for .bss
     vmdashell_task.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    vmdashell_task.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
+    vmdashell_task.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
     vmdashell_task.o(.text) refers to vmdashell_task.o(.text) for func_vmdashell_check_init_fb_complete
     vmdashell_task.o(.text) refers to l1timer.o(.text) for ihu_timer_stop
-    vmdashell_task.o(.text) refers to vmlayer.o(.text) for FsmSetState
-    vmdashell_task.o(.text) refers to vmlayer.o(.text) for IhuDebugPrint
+    vmdashell_task.o(.text) refers to vmdalayer.o(.text) for FsmSetState
+    vmdashell_task.o(.text) refers to vmdalayer.o(.text) for IhuDebugPrint
     vmdashell_task.o(.text) refers to vmdashell_task.o(.text) for func_vmdashell_send_out_init
-    vmdashell_task.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    vmdashell_task.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     vmdashell_task.o(.text) refers to vmdashell_task.o(.conststring) for .conststring
     vmdashell_task.o(.text) refers to vmdashell_task.o(.bss) for .bss
-    vmdashell_task.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    vmdashell_task.o(.text) refers to vmlayer.o(.text) for FsmSetState
-    vmdashell_task.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
-    vmdashell_task.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    vmdashell_task.o(.text) refers to vmlayer.o(.text) for FsmSetState
-    vmdashell_task.o(.text) refers to vmlayer.o(.text) for ihu_message_send
+    vmdashell_task.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    vmdashell_task.o(.text) refers to vmdalayer.o(.text) for FsmSetState
+    vmdashell_task.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
+    vmdashell_task.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    vmdashell_task.o(.text) refers to vmdalayer.o(.text) for FsmSetState
+    vmdashell_task.o(.text) refers to vmdalayer.o(.text) for ihu_message_send
     vmdashell_task.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    vmdashell_task.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    vmdashell_task.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     vmdashell_task.o(.text) refers to vmdashell_task.o(.conststring) for .conststring
-    vmdashell_task.o(.text) refers to vmlayer.o(.data) for zIhuTaskNameList
-    vmdashell_task.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    vmdashell_task.o(.text) refers to vmlayer.o(.text) for vmda1458x_data_send_to_ble
-    vmdashell_task.o(.text) refers to vmlayer.o(.text) for FsmSetState
-    vmdashell_task.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    vmdashell_task.o(.text) refers to vmdalayer.o(.data) for zIhuTaskNameList
+    vmdashell_task.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    vmdashell_task.o(.text) refers to vmdalayer.o(.text) for vmda1458x_data_send_to_ble
+    vmdashell_task.o(.text) refers to vmdalayer.o(.text) for FsmSetState
+    vmdashell_task.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     vmdashell_task.o(.constdata) refers to vmdashell_task.o(.text) for hlFuncVmdashellBleInit
     vmdashell_task.o(.constdata) refers to vmdashell_task.o(.text) for hlFuncVmdashellSysClock1sPeriod
     vmdashell_task.o(.constdata) refers to vmdashell_task.o(.text) for hlFuncVmdashellSpsBleDataDlRcv
@@ -689,59 +689,59 @@ Section Cross References
     vmdashell_task.o(.data) refers to vmdashell_task.o(.text) for fsm_vmdashell_task_entry
     vmdashell_task.o(.data) refers to vmdashell_task.o(.text) for fsm_vmdashell_task_init
     vmdashell_task.o(.data) refers to vmdashell_task.o(.text) for fsm_vmdashell_restart
-    vmdashell_task.o(.data) refers to vmlayer.o(.text) for fsm_com_do_nothing
+    vmdashell_task.o(.data) refers to vmdalayer.o(.text) for fsm_com_do_nothing
     vmdashell_task.o(.data) refers to vmdashell_task.o(.text) for fsm_vmdashell_stop_rcv
     vmdashell_task.o(.data) refers to vmdashell_task.o(.text) for fsm_vmdashell_task_init_time_out
     vmdashell_task.o(.data) refers to vmdashell_task.o(.text) for fsm_vmdashell_data_ul_send
     vmdashell_task.o(.data) refers to vmdashell_task.o(.text) for fsm_vmdashell_task_init_fb_rcv
-    l1timer.o(.text) refers to vmlayer.o(.text) for FsmSetState
-    l1timer.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    l1timer.o(.text) refers to vmlayer.o(.text) for ihu_message_send
-    l1timer.o(.text) refers to vmlayer.o(.text) for FsmSetState
+    l1timer.o(.text) refers to vmdalayer.o(.text) for FsmSetState
+    l1timer.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    l1timer.o(.text) refers to vmdalayer.o(.text) for ihu_message_send
+    l1timer.o(.text) refers to vmdalayer.o(.text) for FsmSetState
     l1timer.o(.text) refers to l1timer.o(.text) for func_timer_hw_init
-    l1timer.o(.text) refers to vmlayer.o(.text) for IhuDebugPrint
+    l1timer.o(.text) refers to vmdalayer.o(.text) for IhuDebugPrint
     l1timer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    l1timer.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
+    l1timer.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
     l1timer.o(.text) refers to l1timer.o(.bss) for .bss
-    l1timer.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    l1timer.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     l1timer.o(.text) refers to l1timer.o(.conststring) for .conststring
-    l1timer.o(.text) refers to vmlayer.o(.data) for zIhuTaskNameList
-    l1timer.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
+    l1timer.o(.text) refers to vmdalayer.o(.data) for zIhuTaskNameList
+    l1timer.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
     l1timer.o(.text) refers to l1timer.o(.text) for fsm_timer_init
-    l1timer.o(.text) refers to vmlayer.o(.text) for ihu_message_send
+    l1timer.o(.text) refers to vmdalayer.o(.text) for ihu_message_send
     l1timer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
     l1timer.o(.text) refers to l1timer.o(.conststring) for .conststring
-    l1timer.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
-    l1timer.o(.text) refers to vmlayer.o(.data) for zIhuTaskNameList
-    l1timer.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    l1timer.o(.text) refers to vmlayer.o(.text) for FsmSetState
-    l1timer.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    l1timer.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
+    l1timer.o(.text) refers to vmdalayer.o(.data) for zIhuTaskNameList
+    l1timer.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    l1timer.o(.text) refers to vmdalayer.o(.text) for FsmSetState
+    l1timer.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     l1timer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    l1timer.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    l1timer.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
-    l1timer.o(.text) refers to vmlayer.o(.data) for zIhuTaskNameList
+    l1timer.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    l1timer.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
+    l1timer.o(.text) refers to vmdalayer.o(.data) for zIhuTaskNameList
     l1timer.o(.text) refers to l1timer.o(.bss) for .bss
     l1timer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    l1timer.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    l1timer.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
-    l1timer.o(.text) refers to vmlayer.o(.data) for zIhuTaskNameList
+    l1timer.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    l1timer.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
+    l1timer.o(.text) refers to vmdalayer.o(.data) for zIhuTaskNameList
     l1timer.o(.text) refers to l1timer.o(.bss) for .bss
-    l1timer.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    l1timer.o(.text) refers to vmlayer.o(.text) for ihu_message_send
+    l1timer.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    l1timer.o(.text) refers to vmdalayer.o(.text) for ihu_message_send
     l1timer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
     l1timer.o(.text) refers to l1timer.o(.bss) for .bss
-    l1timer.o(.text) refers to vmlayer.o(.data) for zIhuTaskNameList
-    l1timer.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
-    l1timer.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    l1timer.o(.text) refers to vmlayer.o(.text) for ihu_message_send
+    l1timer.o(.text) refers to vmdalayer.o(.data) for zIhuTaskNameList
+    l1timer.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
+    l1timer.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    l1timer.o(.text) refers to vmdalayer.o(.text) for ihu_message_send
     l1timer.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
     l1timer.o(.text) refers to l1timer.o(.bss) for .bss
-    l1timer.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
-    l1timer.o(.text) refers to vmlayer.o(.data) for zIhuTaskNameList
+    l1timer.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
+    l1timer.o(.text) refers to vmdalayer.o(.data) for zIhuTaskNameList
     l1timer.o(.data) refers to l1timer.o(.text) for fsm_timer_task_entry
     l1timer.o(.data) refers to l1timer.o(.text) for fsm_timer_init
     l1timer.o(.data) refers to l1timer.o(.text) for fsm_timer_restart
-    l1timer.o(.data) refers to vmlayer.o(.text) for fsm_com_do_nothing
+    l1timer.o(.data) refers to vmdalayer.o(.text) for fsm_com_do_nothing
     l1timer.o(.data) refers to l1timer.o(.text) for fsm_timer_stop_rcv
     aes_cbc.o(.text) refers to cbc128.o(.text) for cbc128_encrypt
     aes_cbc.o(.text) refers to cbc128.o(.text) for cbc128_decrypt
@@ -758,50 +758,50 @@ Section Cross References
     aes_crypt.o(.text) refers to aes_core.o(.text) for AES_set_decrypt_key
     aes_crypt.o(.text) refers to aes_cbc.o(.text) for AES_cbc_decrypt
     aes_crypt.o(.text) refers to aes_cbc.o(.text) for AES_cbc_decrypt
-    l2adcaries.o(.text) refers to vmlayer.o(.text) for FsmSetState
-    l2adcaries.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    l2adcaries.o(.text) refers to vmlayer.o(.text) for ihu_message_send
-    l2adcaries.o(.text) refers to vmlayer.o(.text) for FsmSetState
+    l2adcaries.o(.text) refers to vmdalayer.o(.text) for FsmSetState
+    l2adcaries.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    l2adcaries.o(.text) refers to vmdalayer.o(.text) for ihu_message_send
+    l2adcaries.o(.text) refers to vmdalayer.o(.text) for FsmSetState
     l2adcaries.o(.text) refers to l2adcaries.o(.text) for func_adcaries_hw_init
-    l2adcaries.o(.text) refers to vmlayer.o(.text) for IhuDebugPrint
+    l2adcaries.o(.text) refers to vmdalayer.o(.text) for IhuDebugPrint
     l2adcaries.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    l2adcaries.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    l2adcaries.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    l2adcaries.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    l2adcaries.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     l2adcaries.o(.text) refers to l2adcaries.o(.conststring) for .conststring
-    l2adcaries.o(.text) refers to vmlayer.o(.data) for zIhuTaskNameList
-    l2adcaries.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
+    l2adcaries.o(.text) refers to vmdalayer.o(.data) for zIhuTaskNameList
+    l2adcaries.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
     l2adcaries.o(.text) refers to l2adcaries.o(.text) for fsm_adcaries_init
     l2adcaries.o(.text) refers to l2adcaries.o(.conststring) for .conststring
-    l2adcaries.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    l2adcaries.o(.text) refers to vmlayer.o(.text) for FsmSetState
-    l2adcaries.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    l2adcaries.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    l2adcaries.o(.text) refers to vmdalayer.o(.text) for FsmSetState
+    l2adcaries.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     l2adcaries.o(.data) refers to l2adcaries.o(.text) for fsm_adcaries_task_entry
     l2adcaries.o(.data) refers to l2adcaries.o(.text) for fsm_adcaries_init
     l2adcaries.o(.data) refers to l2adcaries.o(.text) for fsm_adcaries_restart
     l2adcaries.o(.data) refers to l2adcaries.o(.text) for fsm_adcaries_stop_rcv
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for FsmSetState
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    l2asylibra.o(.text) refers to i2c_led.o(.text) for ihu_led_blink_enable
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for FsmSetState
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    l2asylibra.o(.text) refers to i2c_led_1.o(.text) for ihu_led_blink_enable
     l2asylibra.o(.text) refers to l2asylibra.o(.conststring) for .conststring
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for ihu_message_send
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for ihu_message_send
     l2asylibra.o(.text) refers to l2asylibra.o(.text) for func_asylibra_hw_init
     l2asylibra.o(.text) refers to strcpy.o(.text) for strcpy
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for FsmSetState
-    l2asylibra.o(.text) refers to i2c_led.o(.text) for ihu_led_blink_enable
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for IhuDebugPrint
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for FsmSetState
+    l2asylibra.o(.text) refers to i2c_led_1.o(.text) for ihu_led_blink_enable
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for IhuDebugPrint
     l2asylibra.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    l2asylibra.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    l2asylibra.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     l2asylibra.o(.text) refers to l2asylibra.o(.bss) for .bss
     l2asylibra.o(.text) refers to l2asylibra.o(.conststring) for .conststring
-    l2asylibra.o(.text) refers to vmlayer.o(.data) for zIhuTaskNameList
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
+    l2asylibra.o(.text) refers to vmdalayer.o(.data) for zIhuTaskNameList
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
     l2asylibra.o(.text) refers to l2asylibra.o(.text) for fsm_asylibra_init
     l2asylibra.o(.text) refers to l2asylibra.o(.conststring) for .conststring
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for FsmSetState
-    l2asylibra.o(.text) refers to i2c_led.o(.text) for ihu_led_blink_enable
-    l2asylibra.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for FsmSetState
+    l2asylibra.o(.text) refers to i2c_led_1.o(.text) for ihu_led_blink_enable
+    l2asylibra.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     l2asylibra.o(.text) refers to malloc.o(i.malloc) for malloc
     l2asylibra.o(.text) refers to crc32.o(.text) for crc32
     l2asylibra.o(.text) refers to aes_crypt.o(.text) for aes_cbc_encrypt_init
@@ -809,144 +809,144 @@ Section Cross References
     l2asylibra.o(.text) refers to epb_mmbp.o(.text) for epb_pack_auth_request
     l2asylibra.o(.text) refers to malloc.o(i.free) for free
     l2asylibra.o(.text) refers to l2asylibra.o(.bss) for .bss
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for FsmSetState
-    l2asylibra.o(.text) refers to i2c_led.o(.text) for ihu_led_blink_enable
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for FsmSetState
+    l2asylibra.o(.text) refers to i2c_led_1.o(.text) for ihu_led_blink_enable
     l2asylibra.o(.text) refers to l2asylibra.o(.text) for func_asylibra_pack_auth_req
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for ihu_message_send
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for ihu_message_send
     l2asylibra.o(.text) refers to l1timer.o(.text) for ihu_timer_start
     l2asylibra.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    l2asylibra.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    l2asylibra.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     l2asylibra.o(.text) refers to l2asylibra.o(.bss) for .bss
-    l2asylibra.o(.text) refers to vmlayer.o(.data) for zIhuTaskNameList
+    l2asylibra.o(.text) refers to vmdalayer.o(.data) for zIhuTaskNameList
     l2asylibra.o(.text) refers to l2asylibra.o(.conststring) for .conststring
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for ihu_message_send
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for FsmSetState
-    l2asylibra.o(.text) refers to i2c_led.o(.text) for ihu_led_blink_enable
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for ihu_message_send
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for FsmSetState
+    l2asylibra.o(.text) refers to i2c_led_1.o(.text) for ihu_led_blink_enable
     l2asylibra.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    l2asylibra.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
-    l2asylibra.o(.text) refers to vmlayer.o(.data) for zIhuTaskNameList
+    l2asylibra.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
+    l2asylibra.o(.text) refers to vmdalayer.o(.data) for zIhuTaskNameList
     l2asylibra.o(.text) refers to l2asylibra.o(.conststring) for .conststring
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    l2asylibra.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    l2asylibra.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     l2asylibra.o(.text) refers to l2asylibra.o(.conststring) for .conststring
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
     l2asylibra.o(.text) refers to epb_mmbp.o(.text) for epb_unpack_switch_backgroud_push
-    l2asylibra.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    l2asylibra.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     l2asylibra.o(.text) refers to l2asylibra.o(.conststring) for .conststring
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
     l2asylibra.o(.text) refers to epb_mmbp.o(.text) for epb_unpack_switch_view_push
-    l2asylibra.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    l2asylibra.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     l2asylibra.o(.text) refers to l2asylibra.o(.conststring) for .conststring
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for FsmGetState
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for FsmSetState
-    l2asylibra.o(.text) refers to i2c_led.o(.text) for ihu_led_blink_enable
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for FsmGetState
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for FsmSetState
+    l2asylibra.o(.text) refers to i2c_led_1.o(.text) for ihu_led_blink_enable
     l2asylibra.o(.text) refers to epb_mmbp.o(.text) for epb_unpack_recv_data_push
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for ihu_message_send
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for ihu_message_send
     l2asylibra.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    l2asylibra.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    l2asylibra.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     l2asylibra.o(.text) refers to l2asylibra.o(.conststring) for .conststring
-    l2asylibra.o(.text) refers to vmlayer.o(.data) for zIhuTaskNameList
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
+    l2asylibra.o(.text) refers to vmdalayer.o(.data) for zIhuTaskNameList
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
     l2asylibra.o(.text) refers to epb_mmbp.o(.text) for epb_unpack_send_data_response
     l2asylibra.o(.text) refers to l1timer.o(.text) for ihu_timer_stop
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for FsmGetState
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for FsmSetState
-    l2asylibra.o(.text) refers to i2c_led.o(.text) for ihu_led_blink_enable
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for ihu_message_send
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for FsmGetState
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for FsmSetState
+    l2asylibra.o(.text) refers to i2c_led_1.o(.text) for ihu_led_blink_enable
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for ihu_message_send
     l2asylibra.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    l2asylibra.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    l2asylibra.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     l2asylibra.o(.text) refers to l2asylibra.o(.conststring) for .conststring
-    l2asylibra.o(.text) refers to vmlayer.o(.data) for zIhuTaskNameList
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
+    l2asylibra.o(.text) refers to vmdalayer.o(.data) for zIhuTaskNameList
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
     l2asylibra.o(.text) refers to epb_mmbp.o(.text) for epb_unpack_init_response
     l2asylibra.o(.text) refers to l1timer.o(.text) for ihu_timer_stop
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for FsmGetState
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for FsmSetState
-    l2asylibra.o(.text) refers to i2c_led.o(.text) for ihu_led_blink_enable
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for ihu_message_send
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for FsmGetState
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for FsmSetState
+    l2asylibra.o(.text) refers to i2c_led_1.o(.text) for ihu_led_blink_enable
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for ihu_message_send
     l2asylibra.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    l2asylibra.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    l2asylibra.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     l2asylibra.o(.text) refers to l2asylibra.o(.conststring) for .conststring
-    l2asylibra.o(.text) refers to vmlayer.o(.data) for zIhuTaskNameList
+    l2asylibra.o(.text) refers to vmdalayer.o(.data) for zIhuTaskNameList
     l2asylibra.o(.text) refers to malloc.o(i.malloc) for malloc
     l2asylibra.o(.text) refers to epb_mmbp.o(.text) for epb_pack_init_request
     l2asylibra.o(.text) refers to malloc.o(i.free) for free
     l2asylibra.o(.text) refers to l2asylibra.o(.bss) for .bss
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
     l2asylibra.o(.text) refers to epb_mmbp.o(.text) for epb_unpack_auth_response
     l2asylibra.o(.text) refers to l1timer.o(.text) for ihu_timer_stop
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for FsmGetState
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for FsmSetState
-    l2asylibra.o(.text) refers to i2c_led.o(.text) for ihu_led_blink_enable
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for FsmGetState
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for FsmSetState
+    l2asylibra.o(.text) refers to i2c_led_1.o(.text) for ihu_led_blink_enable
     l2asylibra.o(.text) refers to l2asylibra.o(.text) for func_asylibra_pack_init_req
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for ihu_message_send
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for ihu_message_send
     l2asylibra.o(.text) refers to l1timer.o(.text) for ihu_timer_start
     l2asylibra.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    l2asylibra.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    l2asylibra.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     l2asylibra.o(.text) refers to l2asylibra.o(.conststring) for .conststring
-    l2asylibra.o(.text) refers to vmlayer.o(.data) for zIhuTaskNameList
+    l2asylibra.o(.text) refers to vmdalayer.o(.data) for zIhuTaskNameList
     l2asylibra.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    l2asylibra.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    l2asylibra.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     l2asylibra.o(.text) refers to l2asylibra.o(.conststring) for .conststring
     l2asylibra.o(.text) refers to l2asylibra.o(.bss) for .bss
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
     l2asylibra.o(.text) refers to l2asylibra.o(.text) for func_asylibra_unpack_ble_data_dl_head
-    l2asylibra.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    l2asylibra.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     l2asylibra.o(.text) refers to l2asylibra.o(.conststring) for .conststring
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for FsmGetState
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for FsmGetState
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
     l2asylibra.o(.text) refers to l2asylibra.o(.text) for fsm_asylibra_init
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for FsmSetState
-    l2asylibra.o(.text) refers to i2c_led.o(.text) for ihu_led_blink_enable
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for FsmSetState
+    l2asylibra.o(.text) refers to i2c_led_1.o(.text) for ihu_led_blink_enable
     l2asylibra.o(.text) refers to l2asylibra.o(.text) for func_asylibra_pack_auth_req
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for ihu_message_send
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for ihu_message_send
     l2asylibra.o(.text) refers to l1timer.o(.text) for ihu_timer_start
     l2asylibra.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    l2asylibra.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
-    l2asylibra.o(.text) refers to vmlayer.o(.data) for zIhuTaskNameList
+    l2asylibra.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
+    l2asylibra.o(.text) refers to vmdalayer.o(.data) for zIhuTaskNameList
     l2asylibra.o(.text) refers to l2asylibra.o(.conststring) for .conststring
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for FsmGetState
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for FsmGetState
     l2asylibra.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
     l2asylibra.o(.text) refers to l2asylibra.o(.text) for func_asylibra_pack_init_req
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for ihu_message_send
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for ihu_message_send
     l2asylibra.o(.text) refers to l1timer.o(.text) for ihu_timer_start
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for FsmSetState
-    l2asylibra.o(.text) refers to i2c_led.o(.text) for ihu_led_blink_enable
-    l2asylibra.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for FsmSetState
+    l2asylibra.o(.text) refers to i2c_led_1.o(.text) for ihu_led_blink_enable
+    l2asylibra.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     l2asylibra.o(.text) refers to l2asylibra.o(.conststring) for .conststring
-    l2asylibra.o(.text) refers to vmlayer.o(.data) for zIhuTaskNameList
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for FsmGetState
+    l2asylibra.o(.text) refers to vmdalayer.o(.data) for zIhuTaskNameList
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for FsmGetState
     l2asylibra.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
     l2asylibra.o(.text) refers to l2asylibra.o(.text) for func_asylibra_pack_auth_req
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for ihu_message_send
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for ihu_message_send
     l2asylibra.o(.text) refers to l1timer.o(.text) for ihu_timer_start
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for FsmSetState
-    l2asylibra.o(.text) refers to i2c_led.o(.text) for ihu_led_blink_enable
-    l2asylibra.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for FsmSetState
+    l2asylibra.o(.text) refers to i2c_led_1.o(.text) for ihu_led_blink_enable
+    l2asylibra.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     l2asylibra.o(.text) refers to l2asylibra.o(.conststring) for .conststring
-    l2asylibra.o(.text) refers to vmlayer.o(.data) for zIhuTaskNameList
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
+    l2asylibra.o(.text) refers to vmdalayer.o(.data) for zIhuTaskNameList
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
     l2asylibra.o(.text) refers to l2asylibra.o(.text) for func_asylibra_time_out_auth_resp_wait
     l2asylibra.o(.text) refers to l2asylibra.o(.text) for func_asylibra_time_out_init_resp_wait
     l2asylibra.o(.text) refers to l2asylibra.o(.text) for func_asylibra_time_out_data_resp_wait
-    l2asylibra.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
+    l2asylibra.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
     l2asylibra.o(.text) refers to malloc.o(i.malloc) for malloc
     l2asylibra.o(.text) refers to epb_mmbp.o(.text) for epb_pack_send_data_request
     l2asylibra.o(.text) refers to malloc.o(i.free) for free
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for ihu_message_send
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for ihu_message_send
     l2asylibra.o(.text) refers to l1timer.o(.text) for ihu_timer_start
-    l2asylibra.o(.text) refers to vmlayer.o(.text) for FsmSetState
-    l2asylibra.o(.text) refers to i2c_led.o(.text) for ihu_led_blink_enable
+    l2asylibra.o(.text) refers to vmdalayer.o(.text) for FsmSetState
+    l2asylibra.o(.text) refers to i2c_led_1.o(.text) for ihu_led_blink_enable
     l2asylibra.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    l2asylibra.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
-    l2asylibra.o(.text) refers to vmlayer.o(.data) for zIhuTaskNameList
+    l2asylibra.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
+    l2asylibra.o(.text) refers to vmdalayer.o(.data) for zIhuTaskNameList
     l2asylibra.o(.text) refers to l2asylibra.o(.conststring) for .conststring
     l2asylibra.o(.data) refers to l2asylibra.o(.text) for fsm_asylibra_task_entry
     l2asylibra.o(.data) refers to l2asylibra.o(.text) for fsm_asylibra_init
@@ -957,95 +957,95 @@ Section Cross References
     l2asylibra.o(.data) refers to l2asylibra.o(.text) for fsm_asylibra_ble_data_dl_rcv
     l2asylibra.o(.data) refers to l2asylibra.o(.text) for fsm_asylibra_time_out
     l2asylibra.o(.data) refers to l2asylibra.o(.text) for fsm_asylibra_emc_data_req
-    l3emc.o(.text) refers to vmlayer.o(.text) for FsmSetState
-    l3emc.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    l3emc.o(.text) refers to vmlayer.o(.text) for ihu_message_send
-    l3emc.o(.text) refers to vmlayer.o(.text) for FsmSetState
+    l3emc.o(.text) refers to vmdalayer.o(.text) for FsmSetState
+    l3emc.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    l3emc.o(.text) refers to vmdalayer.o(.text) for ihu_message_send
+    l3emc.o(.text) refers to vmdalayer.o(.text) for FsmSetState
     l3emc.o(.text) refers to l3emc.o(.text) for func_emc_hw_init
     l3emc.o(.text) refers to l1timer.o(.text) for ihu_timer_start
-    l3emc.o(.text) refers to vmlayer.o(.text) for IhuDebugPrint
+    l3emc.o(.text) refers to vmdalayer.o(.text) for IhuDebugPrint
     l3emc.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    l3emc.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    l3emc.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    l3emc.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    l3emc.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     l3emc.o(.text) refers to l3emc.o(.bss) for .bss
-    l3emc.o(.text) refers to vmlayer.o(.data) for zIhuTaskNameList
+    l3emc.o(.text) refers to vmdalayer.o(.data) for zIhuTaskNameList
     l3emc.o(.text) refers to l3emc.o(.conststring) for .conststring
-    l3emc.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
+    l3emc.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
     l3emc.o(.text) refers to l3emc.o(.text) for fsm_emc_init
-    l3emc.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    l3emc.o(.text) refers to vmlayer.o(.text) for FsmSetState
-    l3emc.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
-    l3emc.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    l3emc.o(.text) refers to vmlayer.o(.text) for FsmSetState
-    l3emc.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_off
-    l3emc.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
-    l3emc.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
+    l3emc.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    l3emc.o(.text) refers to vmdalayer.o(.text) for FsmSetState
+    l3emc.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
+    l3emc.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    l3emc.o(.text) refers to vmdalayer.o(.text) for FsmSetState
+    l3emc.o(.text) refers to i2c_led_1.o(.text) for vmda1458x_led_off
+    l3emc.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
+    l3emc.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
     l3emc.o(.text) refers to l3emc.o(.text) for ihu_pack_l3_data_to_cloud
-    l3emc.o(.text) refers to vmlayer.o(.text) for ihu_message_send
-    l3emc.o(.text) refers to vmlayer.o(.text) for FsmSetState
-    l3emc.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_on
+    l3emc.o(.text) refers to vmdalayer.o(.text) for ihu_message_send
+    l3emc.o(.text) refers to vmdalayer.o(.text) for FsmSetState
+    l3emc.o(.text) refers to i2c_led_1.o(.text) for vmda1458x_led_on
     l3emc.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    l3emc.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
-    l3emc.o(.text) refers to vmlayer.o(.data) for zIhuTaskNameList
+    l3emc.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
+    l3emc.o(.text) refers to vmdalayer.o(.data) for zIhuTaskNameList
     l3emc.o(.text) refers to l3emc.o(.conststring) for .conststring
-    l3emc.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
+    l3emc.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
     l3emc.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    l3emc.o(.text) refers to vmlayer.o(.text) for IhuDebugPrint
-    l3emc.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    l3emc.o(.text) refers to vmdalayer.o(.text) for IhuDebugPrint
+    l3emc.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     l3emc.o(.text) refers to l3emc.o(.conststring) for .conststring
     l3emc.o(.text) refers to l3emc.o(.bss) for .bss
-    l3emc.o(.text) refers to vmlayer.o(.text) for ihu_emc_adc_read
+    l3emc.o(.text) refers to vmdalayer.o(.text) for ihu_emc_adc_read
     l3emc.o(.text) refers to l3emc.o(.text) for ihu_save_to_storage_mem
     l3emc.o(.text) refers to l3emc.o(.text) for ihu_save_to_storage_disc
-    l3emc.o(.text) refers to vmlayer.o(.data) for zIhuSystemTimeUnix
-    l3emc.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
-    l3emc.o(.text) refers to vmlayer.o(.text) for ihu_emc_adc_read
-    l3emc.o(.text) refers to vmlayer.o(.text) for ihu_clock_unix_to_ymd
+    l3emc.o(.text) refers to vmdalayer.o(.data) for zIhuSystemTimeUnix
+    l3emc.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
+    l3emc.o(.text) refers to vmdalayer.o(.text) for ihu_emc_adc_read
+    l3emc.o(.text) refers to vmdalayer.o(.text) for ihu_clock_unix_to_ymd
     l3emc.o(.text) refers to l3emc.o(.text) for ihu_pack_l3_data_to_cloud
-    l3emc.o(.text) refers to vmlayer.o(.text) for ihu_message_send
+    l3emc.o(.text) refers to vmdalayer.o(.text) for ihu_message_send
     l3emc.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    l3emc.o(.text) refers to vmlayer.o(.data) for zIhuSystemTimeUnix
-    l3emc.o(.text) refers to vmlayer.o(.bss) for zIhuSystemTimeYmd
-    l3emc.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    l3emc.o(.text) refers to vmdalayer.o(.data) for zIhuSystemTimeUnix
+    l3emc.o(.text) refers to vmdalayer.o(.bss) for zIhuSystemTimeYmd
+    l3emc.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     l3emc.o(.text) refers to l3emc.o(.conststring) for .conststring
-    l3emc.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    l3emc.o(.text) refers to vmlayer.o(.text) for FsmGetState
+    l3emc.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    l3emc.o(.text) refers to vmdalayer.o(.text) for FsmGetState
     l3emc.o(.text) refers to l3emc.o(.text) for fsm_emc_init
     l3emc.o(.text) refers to l3emc.o(.text) for func_emc_send_out_data_online
     l3emc.o(.text) refers to l3emc.o(.text) for func_emc_store_data_offline
-    l3emc.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    l3emc.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     l3emc.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    l3emc.o(.text) refers to vmlayer.o(.text) for IhuDebugPrint
-    l3emc.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
+    l3emc.o(.text) refers to vmdalayer.o(.text) for IhuDebugPrint
+    l3emc.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
     l3emc.o(.text) refers to l3emc.o(.bss) for .bss
-    l3emc.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    l3emc.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     l3emc.o(.text) refers to l3emc.o(.conststring) for .conststring
-    l3emc.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    l3emc.o(.text) refers to vmlayer.o(.text) for FsmSetState
+    l3emc.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    l3emc.o(.text) refers to vmdalayer.o(.text) for FsmSetState
     l3emc.o(.text) refers to l3emc.o(.text) for ihu_read_from_storage_mem
-    l3emc.o(.text) refers to vmlayer.o(.text) for ihu_clock_unix_to_ymd
+    l3emc.o(.text) refers to vmdalayer.o(.text) for ihu_clock_unix_to_ymd
     l3emc.o(.text) refers to l3emc.o(.text) for ihu_pack_l3_data_to_cloud
-    l3emc.o(.text) refers to vmlayer.o(.text) for ihu_message_send
-    l3emc.o(.text) refers to vmlayer.o(.text) for IhuDebugPrint
+    l3emc.o(.text) refers to vmdalayer.o(.text) for ihu_message_send
+    l3emc.o(.text) refers to vmdalayer.o(.text) for IhuDebugPrint
     l3emc.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
-    l3emc.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
+    l3emc.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
     l3emc.o(.text) refers to l3emc.o(.bss) for .bss
-    l3emc.o(.text) refers to vmlayer.o(.bss) for zIhuSystemTimeYmd
-    l3emc.o(.text) refers to vmlayer.o(.data) for zIhuTaskNameList
+    l3emc.o(.text) refers to vmdalayer.o(.bss) for zIhuSystemTimeYmd
+    l3emc.o(.text) refers to vmdalayer.o(.data) for zIhuTaskNameList
     l3emc.o(.text) refers to l3emc.o(.conststring) for .conststring
-    l3emc.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
-    l3emc.o(.text) refers to vmlayer.o(.text) for FsmSetState
-    l3emc.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
-    l3emc.o(.text) refers to vmlayer.o(.text) for IhuErrorPrint
+    l3emc.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
+    l3emc.o(.text) refers to vmdalayer.o(.text) for FsmSetState
+    l3emc.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
+    l3emc.o(.text) refers to vmdalayer.o(.text) for IhuErrorPrint
     l3emc.o(.text) refers to l3emc.o(.text) for ihu_unpack_l3_data_from_cloud
-    l3emc.o(.text) refers to vmlayer.o(.text) for ihu_clock_unix_to_ymd
+    l3emc.o(.text) refers to vmdalayer.o(.text) for ihu_clock_unix_to_ymd
     l3emc.o(.text) refers to printf8.o(i.__0sprintf$8) for __2sprintf
     l3emc.o(.text) refers to l3emc.o(.text) for ihu_pack_l3_data_to_cloud
-    l3emc.o(.text) refers to vmlayer.o(.text) for ihu_message_send
-    l3emc.o(.text) refers to i2c_led.o(.text) for vmda1458x_led_blink_once_on_off
-    l3emc.o(.text) refers to vmlayer.o(.bss) for zIhuRunErrCnt
-    l3emc.o(.text) refers to vmlayer.o(.data) for zIhuSystemTimeUnix
-    l3emc.o(.text) refers to vmlayer.o(.bss) for zIhuSystemTimeYmd
+    l3emc.o(.text) refers to vmdalayer.o(.text) for ihu_message_send
+    l3emc.o(.text) refers to i2c_led_1.o(.text) for vmda1458x_led_blink_once_on_off
+    l3emc.o(.text) refers to vmdalayer.o(.bss) for zIhuRunErrCnt
+    l3emc.o(.text) refers to vmdalayer.o(.data) for zIhuSystemTimeUnix
+    l3emc.o(.text) refers to vmdalayer.o(.bss) for zIhuSystemTimeYmd
     l3emc.o(.text) refers to l3emc.o(.conststring) for .conststring
     l3emc.o(.data) refers to l3emc.o(.text) for fsm_emc_task_entry
     l3emc.o(.data) refers to l3emc.o(.text) for fsm_emc_init
@@ -1574,46 +1574,46 @@ Removing Unused input sections from the image.
     Removing wecaht_aes.o(.text), (70 bytes).
     Removing wecaht_aes.o(.bss), (176 bytes).
     Removing wecaht_aes.o(.constdata), (512 bytes).
-    Removing vmlayer.o(.text), (112 bytes).
-    Removing vmlayer.o(.text), (188 bytes).
-    Removing vmlayer.o(.text), (116 bytes).
-    Removing vmlayer.o(.text), (192 bytes).
-    Removing vmlayer.o(.text), (940 bytes).
-    Removing vmlayer.o(.text), (632 bytes).
-    Removing vmlayer.o(.text), (520 bytes).
-    Removing vmlayer.o(.text), (152 bytes).
-    Removing vmlayer.o(.text), (156 bytes).
-    Removing vmlayer.o(.text), (352 bytes).
-    Removing vmlayer.o(.text), (108 bytes).
-    Removing vmlayer.o(.text), (704 bytes).
-    Removing vmlayer.o(.text), (608 bytes).
-    Removing vmlayer.o(.text), (208 bytes).
-    Removing vmlayer.o(.text), (344 bytes).
-    Removing vmlayer.o(.text), (152 bytes).
-    Removing vmlayer.o(.text), (292 bytes).
-    Removing vmlayer.o(.text), (176 bytes).
-    Removing vmlayer.o(.text), (160 bytes).
-    Removing vmlayer.o(.text), (828 bytes).
-    Removing vmlayer.o(.text), (136 bytes).
-    Removing vmlayer.o(.text), (68 bytes).
-    Removing vmlayer.o(.text), (2 bytes).
-    Removing vmlayer.o(.text), (20 bytes).
-    Removing vmlayer.o(.text), (2 bytes).
-    Removing vmlayer.o(.text), (20 bytes).
-    Removing vmlayer.o(.text), (52 bytes).
-    Removing vmlayer.o(.text), (10 bytes).
-    Removing vmlayer.o(.text), (68 bytes).
-    Removing vmlayer.o(.text), (4 bytes).
-    Removing vmlayer.o(.text), (22 bytes).
-    Removing vmlayer.o(.bss), (44 bytes).
-    Removing vmlayer.o(.data), (108 bytes).
-    Removing i2c_led.o(.text), (28 bytes).
-    Removing i2c_led.o(.text), (52 bytes).
-    Removing i2c_led.o(.text), (28 bytes).
-    Removing i2c_led.o(.text), (28 bytes).
-    Removing i2c_led.o(.text), (8 bytes).
-    Removing i2c_led.o(.text), (8 bytes).
-    Removing i2c_led.o(.text), (62 bytes).
+    Removing vmdalayer.o(.text), (112 bytes).
+    Removing vmdalayer.o(.text), (188 bytes).
+    Removing vmdalayer.o(.text), (116 bytes).
+    Removing vmdalayer.o(.text), (192 bytes).
+    Removing vmdalayer.o(.text), (940 bytes).
+    Removing vmdalayer.o(.text), (632 bytes).
+    Removing vmdalayer.o(.text), (520 bytes).
+    Removing vmdalayer.o(.text), (152 bytes).
+    Removing vmdalayer.o(.text), (156 bytes).
+    Removing vmdalayer.o(.text), (352 bytes).
+    Removing vmdalayer.o(.text), (108 bytes).
+    Removing vmdalayer.o(.text), (704 bytes).
+    Removing vmdalayer.o(.text), (608 bytes).
+    Removing vmdalayer.o(.text), (208 bytes).
+    Removing vmdalayer.o(.text), (344 bytes).
+    Removing vmdalayer.o(.text), (152 bytes).
+    Removing vmdalayer.o(.text), (292 bytes).
+    Removing vmdalayer.o(.text), (176 bytes).
+    Removing vmdalayer.o(.text), (160 bytes).
+    Removing vmdalayer.o(.text), (828 bytes).
+    Removing vmdalayer.o(.text), (136 bytes).
+    Removing vmdalayer.o(.text), (68 bytes).
+    Removing vmdalayer.o(.text), (2 bytes).
+    Removing vmdalayer.o(.text), (20 bytes).
+    Removing vmdalayer.o(.text), (2 bytes).
+    Removing vmdalayer.o(.text), (20 bytes).
+    Removing vmdalayer.o(.text), (52 bytes).
+    Removing vmdalayer.o(.text), (10 bytes).
+    Removing vmdalayer.o(.text), (68 bytes).
+    Removing vmdalayer.o(.text), (4 bytes).
+    Removing vmdalayer.o(.text), (22 bytes).
+    Removing vmdalayer.o(.bss), (44 bytes).
+    Removing vmdalayer.o(.data), (108 bytes).
+    Removing i2c_led_1.o(.text), (28 bytes).
+    Removing i2c_led_1.o(.text), (52 bytes).
+    Removing i2c_led_1.o(.text), (28 bytes).
+    Removing i2c_led_1.o(.text), (28 bytes).
+    Removing i2c_led_1.o(.text), (8 bytes).
+    Removing i2c_led_1.o(.text), (8 bytes).
+    Removing i2c_led_1.o(.text), (62 bytes).
     Removing vmdashell_task.o(.text), (36 bytes).
     Removing vmdashell_task.o(.text), (2 bytes).
     Removing vmdashell_task.o(.text), (184 bytes).
@@ -1861,7 +1861,7 @@ Adding Veneers to the image
     Adding TT veneer (12 bytes, Long) for call to 'rand' from app_security.o(.text).
     Adding TT veneer (12 bytes, Long) for call to '__aeabi_idivmod' from app_security.o(.text).
     Adding TT veneer (12 bytes, Long) for call to '__aeabi_memcpy4' from mpbledemo2.o(.text).
-    Adding TT veneer (12 bytes, Long) for call to 'strlen' from vmlayer.o(.text).
+    Adding TT veneer (12 bytes, Long) for call to 'strlen' from vmdalayer.o(.text).
     Adding TT veneer (12 bytes, Long) for call to '__aeabi_llsr' from uldiv.o(.text).
 
 109 Veneer(s) (total 1308 bytes) added to the image.
@@ -1939,8 +1939,8 @@ Image Symbol Table
     ../mathlib/sin_i.c                       0x00000000   Number         0  sin_i_x.o ABSOLUTE
     ..\..\..\..\..\..\..\..\clean\kbd_ref\dk_apps\patch_code\src\ch_map.c 0x00000000   Number         0  ch_map.obj ABSOLUTE
     ..\..\..\..\..\..\..\..\clean\kbd_ref\dk_apps\patch_code\src\gapm_util.c 0x00000000   Number         0  gapm_util.obj ABSOLUTE
-    ..\..\..\..\..\SrcBxxh\l0comvm\vmlayer.c 0x00000000   Number         0  vmlayer.o ABSOLUTE
-    ..\..\..\..\..\SrcBxxh\l0vmapi\i2c_led.c 0x00000000   Number         0  i2c_led.o ABSOLUTE
+    ..\..\..\..\..\SrcBxxh\l0vmda\i2c_led.c  0x00000000   Number         0  i2c_led_1.o ABSOLUTE
+    ..\..\..\..\..\SrcBxxh\l0vmda\vmdalayer.c 0x00000000   Number         0  vmdalayer.o ABSOLUTE
     ..\..\..\..\..\SrcBxxh\l0vmda\vmdashell_task.c 0x00000000   Number         0  vmdashell_task.o ABSOLUTE
     ..\..\..\..\..\SrcBxxh\l1service\l1timer.c 0x00000000   Number         0  l1timer.o ABSOLUTE
     ..\..\..\..\..\SrcBxxh\l2_asyapi_tc\crypt\aes\aes_cbc.c 0x00000000   Number         0  aes_cbc.o ABSOLUTE
@@ -2105,10 +2105,10 @@ Image Symbol Table
     .bss                                     0x000807c4   Section       12  mpbledemo2.o(.bss)
     .bss                                     0x000807d0   Section       22  mpbledemo2.o(.bss)
     mac_address                              0x000807d4   Data           6  mpbledemo2.o(.bss)
-    .bss                                     0x000807e8   Section     4588  vmlayer.o(.bss)
-    .bss                                     0x000819d4   Section        2  i2c_led.o(.bss)
-    led_init_or_not                          0x000819d4   Data           1  i2c_led.o(.bss)
-    i2c_dev_address                          0x000819d5   Data           1  i2c_led.o(.bss)
+    .bss                                     0x000807e8   Section     4588  vmdalayer.o(.bss)
+    .bss                                     0x000819d4   Section        2  i2c_led_1.o(.bss)
+    led_init_or_not                          0x000819d4   Data           1  i2c_led_1.o(.bss)
+    i2c_dev_address                          0x000819d5   Data           1  i2c_led_1.o(.bss)
     heap_db_area                             0x000819d8   Section     1036  jump_table.o(heap_db_area)
     heap_env_area                            0x00081de4   Section      340  jump_table.o(heap_env_area)
     heap_msg_area                            0x00081f38   Section     1324  jump_table.o(heap_msg_area)
@@ -2300,8 +2300,8 @@ Image Symbol Table
     gpio_button_enable                       0x200050eb   Thumb Code    22  mpbledemo2.o(.text)
     gpio_button_handler                      0x2000515f   Thumb Code    14  mpbledemo2.o(.text)
     mpbledemo2_handleCmdFromServer           0x200056e7   Thumb Code    40  mpbledemo2.o(.text)
-    .text                                    0x20005f14   Section        0  vmlayer.o(.text)
-    .text                                    0x20006008   Section        0  i2c_led.o(.text)
+    .text                                    0x20005f14   Section        0  vmdalayer.o(.text)
+    .text                                    0x20006008   Section        0  i2c_led_1.o(.text)
     .text                                    0x2000620c   Section        0  strncpy.o(.text)
     .text                                    0x20006226   Section        0  strcpy.o(.text)
     .text                                    0x20006238   Section        0  fmul.o(.text)
@@ -2374,15 +2374,15 @@ Image Symbol Table
     user_security_configuration              0x200074c0   Data          39  app_easy_security.o(.constdata)
     .constdata                               0x200074e8   Section      120  mpbledemo2.o(.constdata)
     .conststring                             0x20007560   Section       49  mpbledemo2.o(.conststring)
-    .conststring                             0x20007594   Section       65  vmlayer.o(.conststring)
+    .conststring                             0x20007594   Section       65  vmdalayer.o(.conststring)
     .data                                    0x200075f8   Section        4  arch_system.o(.data)
     .data                                    0x200075fc   Section       56  mpbledemo2.o(.data)
     fix_head_len                             0x200075fc   Data           1  mpbledemo2.o(.data)
     bleDemoHeadLen                           0x200075fe   Data           2  mpbledemo2.o(.data)
     .data                                    0x20007634   Section       44  mpbledemo2.o(.data)
-    .data                                    0x20007660   Section        2  i2c_led.o(.data)
-    pca9551_ls0                              0x20007660   Data           1  i2c_led.o(.data)
-    pca9551_ls1                              0x20007661   Data           1  i2c_led.o(.data)
+    .data                                    0x20007660   Section        2  i2c_led_1.o(.data)
+    pca9551_ls0                              0x20007660   Data           1  i2c_led_1.o(.data)
+    pca9551_ls1                              0x20007661   Data           1  i2c_led_1.o(.data)
     .data                                    0x20007664   Section        4  mvars.o(.data)
     .data                                    0x20007668   Section        4  mvars.o(.data)
     heap_mem_area_not_ret                    0x20008bf4   Section     1036  jump_table.o(heap_mem_area_not_ret)
@@ -3175,13 +3175,13 @@ Image Symbol Table
     m_info                                   0x000807c4   Data          12  mpbledemo2.o(.bss)
     m_mpbledemo2_handler                     0x000807d0   Data           4  mpbledemo2.o(.bss)
     mpbledemo2Sta                            0x000807da   Data          12  mpbledemo2.o(.bss)
-    flagInitMsgSend                          0x000807e8   Data           1  vmlayer.o(.bss)
-    zIhuHwInvInfo                            0x000807e9   Data           1  vmlayer.o(.bss)
-    zIhuTaskInfo                             0x000807ec   Data         120  vmlayer.o(.bss)
-    zIhuRunErrCnt                            0x00080864   Data          24  vmlayer.o(.bss)
-    zIhuFsmTable                             0x0008087c   Data        4368  vmlayer.o(.bss)
-    zIhuSysEngPar                            0x0008198c   Data          22  vmlayer.o(.bss)
-    zIhuSleepCnt                             0x000819a4   Data          48  vmlayer.o(.bss)
+    flagInitMsgSend                          0x000807e8   Data           1  vmdalayer.o(.bss)
+    zIhuHwInvInfo                            0x000807e9   Data           1  vmdalayer.o(.bss)
+    zIhuTaskInfo                             0x000807ec   Data         120  vmdalayer.o(.bss)
+    zIhuRunErrCnt                            0x00080864   Data          24  vmdalayer.o(.bss)
+    zIhuFsmTable                             0x0008087c   Data        4368  vmdalayer.o(.bss)
+    zIhuSysEngPar                            0x0008198c   Data          22  vmdalayer.o(.bss)
+    zIhuSleepCnt                             0x000819a4   Data          48  vmdalayer.o(.bss)
     rwip_heap_db_ret                         0x000819d8   Data        1036  jump_table.o(heap_db_area)
     rwip_heap_env_ret                        0x00081de4   Data         340  jump_table.o(heap_env_area)
     rwip_heap_msg_ret                        0x00081f38   Data        1324  jump_table.o(heap_msg_area)
@@ -3500,17 +3500,17 @@ Image Symbol Table
     mpbledemo2_readTimeSyncReq               0x20005e3d   Thumb Code     2  mpbledemo2.o(.text)
     mpbledemo2_readEquInfoReq                0x20005e3f   Thumb Code     2  mpbledemo2.o(.text)
     mpbledemo2_airsync_link_setup_period_report 0x20005e41   Thumb Code    24  mpbledemo2.o(.text)
-    IhuErrorPrint                            0x20005f15   Thumb Code    64  vmlayer.o(.text)
-    vmda1458x_mac_addr_get                   0x20005f55   Thumb Code    74  vmlayer.o(.text)
-    vmda1458x_timer_set                      0x20005f9f   Thumb Code     8  vmlayer.o(.text)
-    vmda1458x_timer_clear                    0x20005fa7   Thumb Code     8  vmlayer.o(.text)
-    vmda1458x_emc_sample                     0x20005faf   Thumb Code    20  vmlayer.o(.text)
-    ihu_emc_adc_read                         0x20005fc3   Thumb Code    10  vmlayer.o(.text)
-    ihu_get_mac_addr                         0x20005fcd   Thumb Code     4  vmlayer.o(.text)
-    vmda1458x_i2c_led_init                   0x20006009   Thumb Code   276  i2c_led.o(.text)
-    vmda1458x_led_set                        0x2000611d   Thumb Code   158  i2c_led.o(.text)
-    vmda1458x_led_on                         0x200061bb   Thumb Code    18  i2c_led.o(.text)
-    vmda1458x_led_blink_once_on_off          0x200061cd   Thumb Code    44  i2c_led.o(.text)
+    IhuErrorPrint                            0x20005f15   Thumb Code    64  vmdalayer.o(.text)
+    vmda1458x_mac_addr_get                   0x20005f55   Thumb Code    74  vmdalayer.o(.text)
+    vmda1458x_timer_set                      0x20005f9f   Thumb Code     8  vmdalayer.o(.text)
+    vmda1458x_timer_clear                    0x20005fa7   Thumb Code     8  vmdalayer.o(.text)
+    vmda1458x_emc_sample                     0x20005faf   Thumb Code    20  vmdalayer.o(.text)
+    ihu_emc_adc_read                         0x20005fc3   Thumb Code    10  vmdalayer.o(.text)
+    ihu_get_mac_addr                         0x20005fcd   Thumb Code     4  vmdalayer.o(.text)
+    vmda1458x_i2c_led_init                   0x20006009   Thumb Code   276  i2c_led_1.o(.text)
+    vmda1458x_led_set                        0x2000611d   Thumb Code   158  i2c_led_1.o(.text)
+    vmda1458x_led_on                         0x200061bb   Thumb Code    18  i2c_led_1.o(.text)
+    vmda1458x_led_blink_once_on_off          0x200061cd   Thumb Code    44  i2c_led_1.o(.text)
     strncpy                                  0x2000620d   Thumb Code    26  strncpy.o(.text)
     strcpy                                   0x20006227   Thumb Code    18  strcpy.o(.text)
     __aeabi_fmul                             0x20006239   Thumb Code   122  fmul.o(.text)
@@ -3797,8 +3797,8 @@ Memory Map of the image
     0x200045b0   0x000002d0   Code   RO         3092    .text               epb.o
     0x20004880   0x00000850   Code   RO         3180    .text               epb_mmbp.o
     0x200050d0   0x00000e44   Code   RO         3256    .text               mpbledemo2.o
-    0x20005f14   0x000000f4   Code   RO         3369    .text               vmlayer.o
-    0x20006008   0x00000204   Code   RO         3576    .text               i2c_led.o
+    0x20005f14   0x000000f4   Code   RO         3369    .text               vmdalayer.o
+    0x20006008   0x00000204   Code   RO         3576    .text               i2c_led_1.o
     0x2000620c   0x0000001a   Code   RO         4304    .text               mc_p.l(strncpy.o)
     0x20006226   0x00000012   Code   RO         4306    .text               mc_p.l(strcpy.o)
     0x20006238   0x0000007a   Code   RO         4599    .text               mf_p.l(fmul.o)
@@ -3967,13 +3967,13 @@ Memory Map of the image
     0x200074e8   0x00000078   Data   RO         3261    .constdata          mpbledemo2.o
     0x20007560   0x00000031   Data   RO         3262    .conststring        mpbledemo2.o
     0x20007591   0x00000003   PAD
-    0x20007594   0x00000041   Data   RO         3402    .conststring        vmlayer.o
+    0x20007594   0x00000041   Data   RO         3402    .conststring        vmdalayer.o
     0x200075d5   0x00000003   PAD
     0x200075d8   0x00000020   Data   RO         4689    Region$$Table       anon$$obj.o
     0x200075f8   0x00000004   Data   RW          618    .data               arch_system.o
     0x200075fc   0x00000038   Data   RW         3263    .data               mpbledemo2.o
     0x20007634   0x0000002c   Data   RW         3264    .data               mpbledemo2.o
-    0x20007660   0x00000002   Data   RW         3585    .data               i2c_led.o
+    0x20007660   0x00000002   Data   RW         3585    .data               i2c_led_1.o
     0x20007662   0x00000002   PAD
     0x20007664   0x00000004   Data   RW         4658    .data               mc_p.l(mvars.o)
     0x20007668   0x00000004   Data   RW         4659    .data               mc_p.l(mvars.o)
@@ -4031,8 +4031,8 @@ Memory Map of the image
     0x000807c4   0x0000000c   Zero   RW         3257    .bss                mpbledemo2.o
     0x000807d0   0x00000016   Zero   RW         3258    .bss                mpbledemo2.o
     0x000807e6   0x00000002   PAD
-    0x000807e8   0x000011ec   Zero   RW         3400    .bss                vmlayer.o
-    0x000819d4   0x00000002   Zero   RW         3584    .bss                i2c_led.o
+    0x000807e8   0x000011ec   Zero   RW         3400    .bss                vmdalayer.o
+    0x000819d4   0x00000002   Zero   RW         3584    .bss                i2c_led_1.o
     0x000819d6   0x00000002   PAD
     0x000819d8   0x0000040c   Zero   RW          470    heap_db_area        jump_table.o
     0x00081de4   0x00000154   Zero   RW          471    heap_env_area       jump_table.o
@@ -4121,7 +4121,7 @@ Image component sizes
        148          8         20          0          0       2883   app_entry_point.o
        120         14          0          0         36       2695   app_security.o
        196         22         32          0          0       3388   app_security_task.o
-       388         16         72          0          1      28196   app_task.o
+       388         16         72          0          1      28556   app_task.o
        488         40          0          0         22       5941   app_wechat.o
        208         42         56          0          0       4350   app_wechat_task.o
       1060         58          0          0          8       9287   arch_console.o
@@ -4140,7 +4140,7 @@ Image component sizes
        384         38          0          0          0        112   gapm_util.obj
        556         22          8          0        188      11867   gpio.o
         96         10          0          0          0       2388   hardfault_handler.o
-       516         20          0          2          2       2656   i2c_led.o
+       516         20          0          2          2       2656   i2c_led_1.o
          2          0        374          0       3736       8399   jump_table.o
        184         18          0          0          0         96   ke_task.obj
        352         22        520          0         24        236   llc.obj
@@ -4163,13 +4163,13 @@ Image component sizes
        380         20          0          0         28      23462   uart2.o
       1000         22          0          0          0       1338   user_periph_setup.o
          8          0          0          0          0        953   user_wechat.o
-       244         56         65          0       4588       7315   vmlayer.o
+       244         56         65          0       4588       7315   vmdalayer.o
        212         14        129          0         10       5450   wechat.o
        448         18         80          0          3       7498   wechat_task.o
        328         30          0          0         12      13025   wkupct_quadec.o
 
     ----------------------------------------------------------------------
-     25300       3196       2668        108      12320     846164   Object Totals
+     25300       3196       2668        108      12320     846524   Object Totals
       1308        436         32          0         32          0   (incl. Generated)
          4          0         14          2         27          0   (incl. Padding)
 
@@ -4219,8 +4219,8 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     27220       3280       2668        116      12320     843728   Grand Totals
-     27220       3280       2668        116      12320     843728   ELF Image Totals
+     27220       3280       2668        116      12320     844088   Grand Totals
+     27220       3280       2668        116      12320     844088   ELF Image Totals
      27220       3280       2668        116          0          0   ROM Totals
 
 ==============================================================================

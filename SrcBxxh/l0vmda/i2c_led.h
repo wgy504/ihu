@@ -42,7 +42,7 @@
 /* i2c_led_init(I2C_SLAVE_ADDRESS, I2C_SPEED_MODE, I2C_ADDRESS_MODE, I2C_2BYTES_ADDR);  */
 /*******************************************************************************************/
 
-#include "vmlayer.h"
+#include "vmdalayer.h"
 
 #ifndef _i2c_led_H
 #define _i2c_led_H

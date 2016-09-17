@@ -14,7 +14,7 @@
 #ifndef L0VMDA_VMDASHELL_TASK_H_
 #define L0VMDA_VMDASHELL_TASK_H_
 
-#include "vmlayer.h"
+#include "vmdalayer.h"
 
 //按照DaWechat工程：Number of VMDASHELL Task Instances
 #define IHU_VMDASHELL_IDX_MAX                 (1)

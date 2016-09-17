@@ -8,7 +8,7 @@
 #ifndef L1COM_L1COMDEF_H_
 #define L1COM_L1COMDEF_H_
 
-#include "vmlayer.h"
+#include "vmdalayer.h"
 
 //自定义存储数据结构
 //DISC data, 只存储周期性数据

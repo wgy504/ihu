@@ -485,6 +485,12 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 	单色灯LED6表示BLE链路是否连上
 	三色灯LED0/1/2三色等表示数据传输状态，目前貌似还有些问题
 = app_task.c: gapc_disconnect_ind_handler中增加 vmda1458x_led_set(LED_ID_6, LED_MODE_OFF)，以便链路断开时灭灯，测试结果良好
+= 删掉vmcomapi目录，调整VMLAYER的命名，为增加其他VM虚拟机程序，打基础
+= 增加freeRTOS/uCOSii对应的目录
+= 增加emc1468x和数采仪大板scycb对应的项目目录，就是为了KEIL下的编译和VM体系建立
+
+//= ZJL, 2016 Sep.17, IHU_EMCWX_CURRENT_SW_DELIVERY R03.18
+
 
 
 

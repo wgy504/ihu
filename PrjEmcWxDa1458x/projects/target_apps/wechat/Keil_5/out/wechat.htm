@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\out\wechat.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\out\wechat.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Sat Sep 17 15:29:49 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Sat Sep 17 21:37:22 2016
 <BR><P>
 <H3>Maximum Stack Usage =       1156 bytes + Unknown(Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -3549,7 +3549,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_wechat_period_report_time_out_handler
 </UL>
 
-<P><STRONG><a name="[245]"></a>IhuErrorPrint</STRONG> (Thumb, 64 bytes, Stack size 216 bytes, vmlayer.o(.text))
+<P><STRONG><a name="[245]"></a>IhuErrorPrint</STRONG> (Thumb, 64 bytes, Stack size 216 bytes, vmdalayer.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 640<LI>Call Chain = IhuErrorPrint &rArr; arch_printf &rArr; arch_snprintf &rArr; arch_vsnprintf &rArr; arch_itoa
 </UL>
 <BR>[Calls]<UL><LI><a href="#[fd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;arch_printf
@@ -3560,7 +3560,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[249]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vmda1458x_mac_addr_get
 </UL>
 
-<P><STRONG><a name="[249]"></a>vmda1458x_mac_addr_get</STRONG> (Thumb, 74 bytes, Stack size 24 bytes, vmlayer.o(.text))
+<P><STRONG><a name="[249]"></a>vmda1458x_mac_addr_get</STRONG> (Thumb, 74 bytes, Stack size 24 bytes, vmdalayer.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 664<LI>Call Chain = vmda1458x_mac_addr_get &rArr; IhuErrorPrint &rArr; arch_printf &rArr; arch_snprintf &rArr; arch_vsnprintf &rArr; arch_itoa
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nvds_get (via Veneer)
@@ -3569,7 +3569,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[23d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_get_mac_addr
 </UL>
 
-<P><STRONG><a name="[23f]"></a>vmda1458x_timer_set</STRONG> (Thumb, 8 bytes, Stack size 8 bytes, vmlayer.o(.text))
+<P><STRONG><a name="[23f]"></a>vmda1458x_timer_set</STRONG> (Thumb, 8 bytes, Stack size 8 bytes, vmdalayer.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = vmda1458x_timer_set &rArr; app_timer_set
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_timer_set
@@ -3578,7 +3578,7 @@ Global Symbols
 <LI><a href="#[1f3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mpbledemo2_airsync_link_setup_period_report
 </UL>
 
-<P><STRONG><a name="[242]"></a>vmda1458x_timer_clear</STRONG> (Thumb, 8 bytes, Stack size 8 bytes, vmlayer.o(.text))
+<P><STRONG><a name="[242]"></a>vmda1458x_timer_clear</STRONG> (Thumb, 8 bytes, Stack size 8 bytes, vmdalayer.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = vmda1458x_timer_clear
 </UL>
 <BR>[Calls]<UL><LI><a href="#[135]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ke_timer_clear (via Veneer)
@@ -3586,7 +3586,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mpbledemo2_data_consume_func
 </UL>
 
-<P><STRONG><a name="[24a]"></a>vmda1458x_emc_sample</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, vmlayer.o(.text))
+<P><STRONG><a name="[24a]"></a>vmda1458x_emc_sample</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, vmdalayer.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = vmda1458x_emc_sample
 </UL>
 <BR>[Calls]<UL><LI><a href="#[172]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adc_usDelay
@@ -3596,7 +3596,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[243]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_emc_adc_read
 </UL>
 
-<P><STRONG><a name="[243]"></a>ihu_emc_adc_read</STRONG> (Thumb, 10 bytes, Stack size 8 bytes, vmlayer.o(.text))
+<P><STRONG><a name="[243]"></a>ihu_emc_adc_read</STRONG> (Thumb, 10 bytes, Stack size 8 bytes, vmdalayer.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = ihu_emc_adc_read &rArr; vmda1458x_emc_sample
 </UL>
 <BR>[Calls]<UL><LI><a href="#[24a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vmda1458x_emc_sample
@@ -3604,7 +3604,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mpbledemo2_readEmcDataResp
 </UL>
 
-<P><STRONG><a name="[23d]"></a>ihu_get_mac_addr</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, vmlayer.o(.text))
+<P><STRONG><a name="[23d]"></a>ihu_get_mac_addr</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, vmdalayer.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 664<LI>Call Chain = ihu_get_mac_addr &rArr; vmda1458x_mac_addr_get &rArr; IhuErrorPrint &rArr; arch_printf &rArr; arch_snprintf &rArr; arch_vsnprintf &rArr; arch_itoa
 </UL>
 <BR>[Calls]<UL><LI><a href="#[249]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vmda1458x_mac_addr_get
@@ -3612,7 +3612,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mpbledemo2_data_produce_func
 </UL>
 
-<P><STRONG><a name="[1ff]"></a>vmda1458x_i2c_led_init</STRONG> (Thumb, 276 bytes, Stack size 24 bytes, i2c_led.o(.text))
+<P><STRONG><a name="[1ff]"></a>vmda1458x_i2c_led_init</STRONG> (Thumb, 276 bytes, Stack size 24 bytes, i2c_led_1.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = vmda1458x_i2c_led_init &rArr; GPIO_SetActive
 </UL>
 <BR>[Calls]<UL><LI><a href="#[168]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_SetActive
@@ -3621,7 +3621,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[127]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;periph_init
 </UL>
 
-<P><STRONG><a name="[1dd]"></a>vmda1458x_led_set</STRONG> (Thumb, 158 bytes, Stack size 20 bytes, i2c_led.o(.text))
+<P><STRONG><a name="[1dd]"></a>vmda1458x_led_set</STRONG> (Thumb, 158 bytes, Stack size 20 bytes, i2c_led_1.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = vmda1458x_led_set
 </UL>
 <BR>[Called By]<UL><LI><a href="#[127]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;periph_init
@@ -3630,7 +3630,7 @@ Global Symbols
 <LI><a href="#[244]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vmda1458x_led_blink_once_on_off
 </UL>
 
-<P><STRONG><a name="[240]"></a>vmda1458x_led_on</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, i2c_led.o(.text))
+<P><STRONG><a name="[240]"></a>vmda1458x_led_on</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, i2c_led_1.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = vmda1458x_led_on &rArr; vmda1458x_led_set
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vmda1458x_led_set
@@ -3638,7 +3638,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mpbledemo2_data_consume_func
 </UL>
 
-<P><STRONG><a name="[244]"></a>vmda1458x_led_blink_once_on_off</STRONG> (Thumb, 44 bytes, Stack size 8 bytes, i2c_led.o(.text))
+<P><STRONG><a name="[244]"></a>vmda1458x_led_blink_once_on_off</STRONG> (Thumb, 44 bytes, Stack size 8 bytes, i2c_led_1.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = vmda1458x_led_blink_once_on_off &rArr; vmda1458x_led_set
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vmda1458x_led_set

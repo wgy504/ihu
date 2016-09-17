@@ -23,7 +23,7 @@
 #include "ke_mem.h"
 #include "ke_task.h"
 #include "wechat_task.h"
-#include "vmlayer.h"
+#include "vmdalayer.h"
 
 mpbledemo2_info m_info = {CMD_NULL, {NULL, 0}};
 
