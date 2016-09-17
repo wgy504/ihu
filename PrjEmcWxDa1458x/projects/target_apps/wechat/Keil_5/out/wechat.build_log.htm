@@ -27,12 +27,13 @@ Project File Date:  09/17/2016
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 1 (build 61)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build Project 'wechat' - Target 'emcwx'
-compiling mpbledemo2.c...
-C:\Keil\ARM\RV31\INC\time.h(26): warning:  #47-D: incompatible redefinition of macro "_ARMABI_PURE" (declared at line 55 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h")
-  #define _ARMABI_PURE __declspec(__nothrow) __pure
-..\src\products\mpbledemo2.c: 1 warning, 0 errors
+compiling i2c_led.c...
+D:\IHUSRC\ihu\SrcBxxh\l0vmapi\i2c_led.c(457): warning:  #186-D: pointless comparison of unsigned integer with zero
+  		if((ledId >= 
+ED_ID_0) && (ledId <= LED_ID_3))
+..\..\..\..\..\SrcBxxh\l0vmapi\i2c_led.c: 1 warning, 0 errors
 linking...
-Program Size: Code=27272 RO-data=2668 RW-data=116 ZI-data=12320  
+Program Size: Code=27220 RO-data=2668 RW-data=116 ZI-data=12320  
 FromELF: creating hex file...
 ".\out\wechat.axf" - 0 Error(s), 1 Warning(s).
 
@@ -41,7 +42,7 @@ FromELF: creating hex file...
   C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include
 
 <h2>Collection of Component Files used:</h2>
-Build Time Elapsed:  00:00:08
+Build Time Elapsed:  00:00:07
 </pre>
 </body>
 </html>

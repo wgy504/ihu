@@ -913,7 +913,9 @@ void mpbledemo2_readEmcDataResp(uint8_t *ptrData, uint32_t lengthInByte)
 	}
 	ble_wechat_indicate_data(data, len);
 	//BLE数据传输一次，闪灯一次
+	vmda1458x_led_blink_once_on_off(LED_ID_0);
 	vmda1458x_led_blink_once_on_off(LED_ID_1);
+	vmda1458x_led_blink_once_on_off(LED_ID_2);
   return;
 	
 	//TMD，估计只能手工编码，不然就给屁朝凉了。。。
