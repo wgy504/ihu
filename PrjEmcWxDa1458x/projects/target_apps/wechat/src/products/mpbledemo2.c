@@ -866,11 +866,28 @@ void mpbledemo2_readEmcDataResp(uint8_t *ptrData, uint32_t lengthInByte)
 
 	//循环读取，为了找到合适的瞬时最大值
 	UINT16 emcData = 0, tmp = 0;
-	UINT32 index = 0, loopReadMax = 100;
-	for (index = 0; index < loopReadMax; index++){
+	UINT32 index = 0, emcTotal = 0, validCnt = 0;
+	for (index = 0; index < IHU_EMC_LOOP_READ_TIMES; index++){
 		tmp = ihu_emc_adc_read();
 		if (tmp > emcData) emcData = tmp;
+		//读取最大量程为1024 = 0x3FF，多保留一位为了安全
+		if (tmp > 0)
+		{
+			emcTotal = emcTotal + (tmp & 0x7FF);
+			validCnt++;
+		}
 	}
+	//啥都不干，直接进入下一阶段处理，是最大值的情形
+
+	//瞬时读取的情形
+	//emcData = ihu_emc_adc_read();
+	
+	//平均值的情形，当前选择这个了
+	if (validCnt > 0)
+		emcData = emcTotal / validCnt;
+	else
+		emcData = 0;
+	
 	uint8_t emc[3];
 	//垃圾代码，没有编解码，完全是为了方便后台云代码的解码，从而对齐格式。未来需要完善的自定义数据结构。
 	emc[0] = 0x20;

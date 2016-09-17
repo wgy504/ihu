@@ -238,7 +238,10 @@ void vmda1458x_data_send_to_uart(unsigned char *p, int n)
 //采样EMC数据
 int vmda1458x_emc_sample(void)
 {
-	adc_enable_channel(ADC_CHANNEL_P02);
+	//这里其实受制于板子对EMC通道具体的配置情况。未来如果需要统一处理，其实需要分门别类的根据板子进行处理。
+	//PEM3.0/3.1板子中，EMC_ADC1通道用的是P01
+	adc_enable_channel(ADC_CHANNEL_P01);
+	adc_usDelay(2);
 	return adc_get_sample();
 }
 

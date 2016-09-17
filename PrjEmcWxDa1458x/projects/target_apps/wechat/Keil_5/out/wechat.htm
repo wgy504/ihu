@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\out\wechat.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\out\wechat.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Sat Sep 17 12:07:18 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Sat Sep 17 13:55:25 2016
 <BR><P>
 <H3>Maximum Stack Usage =       1156 bytes + Unknown(Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1125,6 +1125,7 @@ Global Symbols
 <LI><a href="#[f0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;arch_itoa (via Veneer)
 <LI><a href="#[145]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;my_llc_con_update_req_ind (via Veneer)
 <LI><a href="#[198]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rwip_slot_2_lpcycles (via Veneer)
+<LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mpbledemo2_readEmcDataResp (via Veneer)
 </UL>
 
 <P><STRONG><a name="[1f4]"></a>__aeabi_idivmod</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, rom_symdef.txt(ABSOLUTE))
@@ -1821,6 +1822,7 @@ Global Symbols
 <P><STRONG><a name="[172]"></a>adc_usDelay</STRONG> (Thumb, 32 bytes, Stack size 0 bytes, adc.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[170]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adc_get_vbat_sample
 <LI><a href="#[127]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;periph_init
+<LI><a href="#[249]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vmda1458x_emc_sample
 </UL>
 
 <P><STRONG><a name="[170]"></a>adc_get_vbat_sample</STRONG> (Thumb, 94 bytes, Stack size 16 bytes, adc.o(.text))
@@ -3520,10 +3522,11 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> mpbledemo2.o(.data)
 </UL>
-<P><STRONG><a name="[dd]"></a>mpbledemo2_readEmcDataResp</STRONG> (Thumb, 122 bytes, Stack size 32 bytes, mpbledemo2.o(.text))
+<P><STRONG><a name="[dd]"></a>mpbledemo2_readEmcDataResp</STRONG> (Thumb, 156 bytes, Stack size 32 bytes, mpbledemo2.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 464<LI>Call Chain = mpbledemo2_readEmcDataResp &rArr; ble_wechat_indicate_data &rArr; arch_printf &rArr; arch_snprintf &rArr; arch_vsnprintf &rArr; arch_itoa
 </UL>
-<BR>[Calls]<UL><LI><a href="#[fd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;arch_printf
+<BR>[Calls]<UL><LI><a href="#[f1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uidivmod (via Veneer)
+<LI><a href="#[fd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;arch_printf
 <LI><a href="#[240]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vmda1458x_led_blink_once_off_on
 <LI><a href="#[243]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_emc_adc_read
 <LI><a href="#[1ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vmda1458x_led_set
@@ -3585,10 +3588,11 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mpbledemo2_data_consume_func
 </UL>
 
-<P><STRONG><a name="[249]"></a>vmda1458x_emc_sample</STRONG> (Thumb, 14 bytes, Stack size 8 bytes, vmlayer.o(.text))
+<P><STRONG><a name="[249]"></a>vmda1458x_emc_sample</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, vmlayer.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = vmda1458x_emc_sample
 </UL>
-<BR>[Calls]<UL><LI><a href="#[174]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adc_get_sample
+<BR>[Calls]<UL><LI><a href="#[172]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adc_usDelay
+<LI><a href="#[174]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adc_get_sample
 <LI><a href="#[173]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adc_enable_channel
 </UL>
 <BR>[Called By]<UL><LI><a href="#[243]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_emc_adc_read

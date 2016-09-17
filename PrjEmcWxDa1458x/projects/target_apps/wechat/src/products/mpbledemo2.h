@@ -153,4 +153,7 @@ extern int32_t mpbledemo2_sendData(uint8_t* ptrData, uint32_t lengthInByte);
 #define BLEDEMO2_TIMER_PERIOD_REPORT 1000 //10ms网格，in second
 extern void mpbledemo2_airsync_link_setup_period_report(void);
 
+extern void adc_usDelay(uint32_t nof_us);
+#define IHU_EMC_LOOP_READ_TIMES 500
+
 #endif

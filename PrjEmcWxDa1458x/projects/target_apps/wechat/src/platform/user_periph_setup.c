@@ -209,7 +209,7 @@ void periph_init(void)
 	//adc_init(GP_ADC_SE, GP_ADC_SIGN, GP_ADC_ATTN3X);  //超过1.2v就需要设置三倍衰减
 	adc_init(GP_ADC_SE, GP_ADC_SIGN, GP_ADC_DELAY_EN);   //不设置衰减	
 	adc_usDelay(20);
-	adc_enable_channel(ADC_CHANNEL_P02);
+	adc_enable_channel(ADC_CHANNEL_P01);
 	
 	
 	//初始化SPI_FLASH，从SPI_FLASH的官方例子中拷贝而来

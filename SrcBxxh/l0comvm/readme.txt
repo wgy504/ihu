@@ -477,9 +477,11 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 适配PEM3.0板子，清理PEM1.x/2.x的老旧程序和配置信息，从这一版开始，不要再试图测试和使用PEM1.x/PEM2.x板子了，因为不再支持
 = MYC增加亮灯DEMO程序
 = ADC通道改为P02后，读书正常。本来以为ADC通道为P01，端口Port0/Pin1，怪哉。
+= 去掉EMC最大值机制，换成了平均值，更加稳定可靠
+= 最终平均500次，取非0的均值
 
-
-
+//= ZJL/MYC, 2016 Sep.17, IHU_EMCWX_CURRENT_SW_DELIVERY R03.17
+= 完善调试LED灯
 
 
 
