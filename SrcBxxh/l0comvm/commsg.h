@@ -10,8 +10,8 @@
 
 #include "comtype.h"
 #include "sysdim.h"
-#include <stdio.h>
 #include "sysengpar.h"
+#include <stdio.h>
 
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCWX_ID)
 	#include "rwip_config.h"
@@ -19,6 +19,12 @@
 	#include <stdint.h>
 	#include "ke_task.h"
 	#include "time.h"
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCSPS_ID)
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID)
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID)
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCCB_ID)
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCSB_ID)
+#else
 #endif
 
 //2. 公共消息结构体定义
@@ -76,16 +82,8 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_ASYLIBRA_EMC_PUSH_CMD,
 	MSG_ID_ASYLIBRA_VMDASHELL_DATA_UL,
 
-	//AIRKISS任务模块
-	
-	//ADCARIES任务模块
-	
 	//EMC任务模块
 	MSG_ID_EMC_ASYLIBRA_DATA_REQ,
-	//MSG_ID_EMC_ASYLIBRA_DATA_REPORT,	
-	//MSG_ID_EMC_ASYLIBRA_TIME_SYNC_REQ,
-	//MSG_ID_EMC_ASYLIBRA_EQU_INFO_SYNC,
-
 
 	//老旧消息的定义
 	//INIT, SPS -> ASYLIBRA
@@ -488,7 +486,6 @@ struct msg_struct_wxapp_modbus_disconnect
 #define TAG_SwitchViewPush_ViewId												  0x18
 #define TAG_SwitchBackgroudPush_BasePush									0x0a
 #define TAG_SwitchBackgroudPush_SwitchBackgroundOp				0x10
-
 #define MSG_PAYLOAD_LEN_ECI_RESP_AUTH											(0x000E)  
 #define MSG_PAYLOAD_LEN_ECI_RESP_INIT											(0x0000)
 #define MSG_PAYLOAD_LEN_ECI_RESP_SENDDATA									(0x0000)

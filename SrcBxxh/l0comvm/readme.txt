@@ -490,6 +490,8 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 增加emc1468x和数采仪大板scycb对应的项目目录，就是为了KEIL下的编译和VM体系建立
 
 //= ZJL, 2016 Sep.17, IHU_EMCWX_CURRENT_SW_DELIVERY R03.18
+= 建立SCY/EMC68X的版本控制全局信息
+
 
 
 

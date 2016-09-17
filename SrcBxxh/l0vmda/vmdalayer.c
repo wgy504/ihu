@@ -1007,7 +1007,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 //				IhuDebugPrint(strDebug);
 //			}
 //			break;
-//
+
 //		case TRACE_MSG_MODE_MOUDLE_FROM_ALLOW:
 //			ihu_taskid_to_string(dest_id, s1);
 //			ihu_taskid_to_string(src_id, s2);
@@ -1017,7 +1017,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 //				IhuDebugPrint(strDebug);
 //			}
 //			break;
-//
+
 //		case TRACE_MSG_MODE_MOUDLE_FROM_RESTRICT:
 //			ihu_taskid_to_string(dest_id, s1);
 //			ihu_taskid_to_string(src_id, s2);
