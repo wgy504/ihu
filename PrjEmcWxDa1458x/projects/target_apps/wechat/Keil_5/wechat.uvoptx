@@ -22,7 +22,7 @@
   </DaveTm>
 
   <Target>
-    <TargetName>emcwx</TargetName>
+    <TargetName>EMC Wechat</TargetName>
     <ToolsetNumber>0x4</ToolsetNumber>
     <ToolsetName>ARM-ADS</ToolsetName>
     <TargetOption>
@@ -2532,8 +2532,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\SrcBxxh\l0comvm\commsg.h</PathWithFileName>
-      <FilenameWithoutPath>commsg.h</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\..\SrcBxxh\l0comvm\comtype.h</PathWithFileName>
+      <FilenameWithoutPath>comtype.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2544,8 +2544,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\SrcBxxh\l0comvm\comtype.h</PathWithFileName>
-      <FilenameWithoutPath>comtype.h</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\..\SrcBxxh\l0comvm\commsgemcwx.h</PathWithFileName>
+      <FilenameWithoutPath>commsgemcwx.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2568,8 +2568,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\SrcBxxh\l0comvm\sysdim.h</PathWithFileName>
-      <FilenameWithoutPath>sysdim.h</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\..\SrcBxxh\l0comvm\sysversion.h</PathWithFileName>
+      <FilenameWithoutPath>sysversion.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2580,8 +2580,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\SrcBxxh\l0comvm\sysengpar.h</PathWithFileName>
-      <FilenameWithoutPath>sysengpar.h</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\..\SrcBxxh\l0comvm\sysdim.h</PathWithFileName>
+      <FilenameWithoutPath>sysdim.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2592,8 +2592,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\SrcBxxh\l0comvm\sysversion.h</PathWithFileName>
-      <FilenameWithoutPath>sysversion.h</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\..\SrcBxxh\l0comvm\sysengpar.h</PathWithFileName>
+      <FilenameWithoutPath>sysengpar.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2613,7 +2613,7 @@
 
   <Group>
     <GroupName>l0vmda</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -2692,29 +2692,13 @@
   </Group>
 
   <Group>
-    <GroupName>l0vmfreeos</GroupName>
-    <tvExp>1</tvExp>
-    <tvExpOptDlg>0</tvExpOptDlg>
-    <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
-  </Group>
-
-  <Group>
-    <GroupName>l0vmucos</GroupName>
-    <tvExp>1</tvExp>
-    <tvExpOptDlg>0</tvExpOptDlg>
-    <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
-  </Group>
-
-  <Group>
     <GroupName>l1service</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>18</GroupNumber>
+      <GroupNumber>16</GroupNumber>
       <FileNumber>198</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
@@ -2726,7 +2710,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>18</GroupNumber>
+      <GroupNumber>16</GroupNumber>
       <FileNumber>199</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -2738,7 +2722,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>18</GroupNumber>
+      <GroupNumber>16</GroupNumber>
       <FileNumber>200</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
@@ -2758,7 +2742,7 @@
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>19</GroupNumber>
+      <GroupNumber>17</GroupNumber>
       <FileNumber>201</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
@@ -2770,7 +2754,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>19</GroupNumber>
+      <GroupNumber>17</GroupNumber>
       <FileNumber>202</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -2782,7 +2766,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>19</GroupNumber>
+      <GroupNumber>17</GroupNumber>
       <FileNumber>203</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -2794,7 +2778,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>19</GroupNumber>
+      <GroupNumber>17</GroupNumber>
       <FileNumber>204</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
@@ -2806,7 +2790,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>19</GroupNumber>
+      <GroupNumber>17</GroupNumber>
       <FileNumber>205</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -2818,7 +2802,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>19</GroupNumber>
+      <GroupNumber>17</GroupNumber>
       <FileNumber>206</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
@@ -2830,7 +2814,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>19</GroupNumber>
+      <GroupNumber>17</GroupNumber>
       <FileNumber>207</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -2842,7 +2826,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>19</GroupNumber>
+      <GroupNumber>17</GroupNumber>
       <FileNumber>208</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
@@ -2862,7 +2846,7 @@
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>20</GroupNumber>
+      <GroupNumber>18</GroupNumber>
       <FileNumber>209</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -2874,7 +2858,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>20</GroupNumber>
+      <GroupNumber>18</GroupNumber>
       <FileNumber>210</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
@@ -2886,7 +2870,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>20</GroupNumber>
+      <GroupNumber>18</GroupNumber>
       <FileNumber>211</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -2898,7 +2882,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>20</GroupNumber>
+      <GroupNumber>18</GroupNumber>
       <FileNumber>212</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
@@ -2910,7 +2894,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>20</GroupNumber>
+      <GroupNumber>18</GroupNumber>
       <FileNumber>213</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -2922,7 +2906,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>20</GroupNumber>
+      <GroupNumber>18</GroupNumber>
       <FileNumber>214</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
@@ -2942,7 +2926,7 @@
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>21</GroupNumber>
+      <GroupNumber>19</GroupNumber>
       <FileNumber>215</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -2954,7 +2938,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>21</GroupNumber>
+      <GroupNumber>19</GroupNumber>
       <FileNumber>216</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
@@ -2965,22 +2949,6 @@
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
-  </Group>
-
-  <Group>
-    <GroupName>l3emc68x</GroupName>
-    <tvExp>0</tvExp>
-    <tvExpOptDlg>0</tvExpOptDlg>
-    <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
-  </Group>
-
-  <Group>
-    <GroupName>l3scycb</GroupName>
-    <tvExp>0</tvExp>
-    <tvExpOptDlg>0</tvExpOptDlg>
-    <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
   </Group>
 
 </ProjectOpt>

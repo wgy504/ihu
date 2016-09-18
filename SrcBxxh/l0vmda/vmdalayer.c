@@ -1,11 +1,9 @@
 /*
- * vmlayer.c
+ * vmdalayer.c
  *
  *  Created on: 2016年1月3日
  *      Author: test
  */
-#if (IHU_WORKING_VM_CURRENT_USAGE_ID == IHU_WORKING_VM_VMDA_USAGE_ID)
-
 #include "vmdalayer.h"
 #include "i2c_led.h"
 
@@ -1466,44 +1464,18 @@ OPSTAT ihu_sleep(UINT32 cntDuration, UINT8 task_id, UINT8 seed)
 //Unix Time transfer to YMD time
 struct tm ihu_clock_unix_to_ymd(time_t t_unix)
 {
-	#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCWX_ID)	
 		return *localtime(&t_unix);
-	#elif 	(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCSPS_ID)	
-		return *localtime(&t_unix);
-	#elif 	(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCY_ID)
-		return 0;
-	#else
-		return 0;
-	#endif
 }
 
 //EMCWX ADC channel Read
 UINT16 ihu_emc_adc_read(void)
 {
-	#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCWX_ID)	
 		return vmda1458x_emc_sample();
-	#elif 	(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCSPS_ID)	
-		return 0;
-	#elif 	(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCY_ID)
-		return 0;
-	#else
-		return 0;
-	#endif
 }
 
 //简单的函数映射
 OPSTAT ihu_get_mac_addr(UINT8* mac)
 {
-	#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCWX_ID)	
 		return vmda1458x_mac_addr_get(mac, 6);
-	#elif 	(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCSPS_ID)	
-		return FAILURE;
-	#elif 	(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCY_ID)
-		return FAILURE;
-	#else
-		return FAILURE;
-	#endif
 }
 
-
-#endif //IHU_WORKING_VM_VMDA_USAGE_ID

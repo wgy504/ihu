@@ -5,14 +5,17 @@
  *      Author: test
  */
 
-#ifndef L0VMFREEOS_VMFREEOSLAYER_H_
-#define L0VMFREEOS_VMFREEOSLAYER_H_
+#ifndef L1VMFREEOS_VMFREEOSLAYER_H_
+#define L1VMFREEOS_VMFREEOSLAYER_H_
 
 //自行标准配置
-#include "commsg.h"
+#include "comtype.h"
 #include "sysdim.h"
+#include "commsgscycb.h"
 #include "sysconfig.h"
 #include "sysengpar.h"
+#include "sysversion.h"
+
 
 //标准库
 #include <stdint.h>
@@ -31,10 +34,10 @@
 enum IHU_TASK_NAME_ID
 {
 	TASK_ID_MIN = 0,
-	TASK_ID_VMDASHELL,
+	TASK_ID_VMFO,
 	TASK_ID_TIMER,
 	TASK_ID_ASYLIBRA,
-	//TASK_ID_AKSLEO,
+	TASK_ID_AKSLEO,
 	TASK_ID_ADCARIES,
 	TASK_ID_EMC,
 	TASK_ID_MAX,
@@ -120,8 +123,15 @@ typedef struct FsmTable
  *
  */
 
-//外部引用的API
-
+//VM FSM related APIs
+extern OPSTAT FsmInit(void);
+extern OPSTAT FsmAddNew(UINT8 task_id, FsmStateItem_t* pFsmStateItem);
+extern OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT8 param_len);
+extern OPSTAT FsmProcessingLaunchEntry(UINT8 task_id);
+extern OPSTAT FsmProcessingLaunchExecute(UINT8 task_id);
+extern OPSTAT FsmSetState(UINT8 task_id, UINT8 newState);
+extern UINT8  FsmGetState(UINT8 task_id);
+extern OPSTAT fsm_com_do_nothing(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 param_len);
 
 //Global VM layer basic API and functions
 extern OPSTAT ihu_message_rcv(UINT8 dest_id, IhuMsgSruct_t *msg);
@@ -136,14 +146,13 @@ extern void   ihu_task_create_all(void);
 extern void   ihu_task_execute_all(void);
 
 //VMDA内部以及上层使用的API
-
+extern void IhuDebugPrint(char *p);
+extern void IhuErrorPrint(char *p);
 uint16_t b2l_uint16(uint16_t in);
 extern void ihu_sw_restart(void);
 extern OPSTAT ihu_sleep(UINT32 cntDuration, UINT8 task_id, UINT8 seed);
 extern void ihu_task_create_all(void);
 extern struct tm ihu_clock_unix_to_ymd(time_t t_unix);
-extern UINT16 ihu_emc_adc_read(void);
-extern OPSTAT ihu_get_mac_addr(UINT8* mac);
 
 /*
  *	
@@ -246,4 +255,7 @@ extern OPSTAT ihu_timer_stop(UINT8 task_id, UINT8 timer_id, UINT8 t_res);
 extern void ihu_timer_routine_handler_1s(void);
 extern void ihu_timer_routine_handler_10ms(void);
 
-#endif /* L0VMFREEOS_VMFREEOSLAYER_H_ */
+extern int sprintf(char * __restrict /*s*/, const char * __restrict /*format*/, ...) __attribute__((__nonnull__(1,2)));
+extern int arch_printf(const char *fmt, ...);
+
+#endif /* L1VMFREEOS_VMFREEOSLAYER_H_ */

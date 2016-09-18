@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\out\wechat.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\out\wechat.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Sun Sep 18 07:41:56 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Sun Sep 18 11:58:44 2016
 <BR><P>
 <H3>Maximum Stack Usage =       1156 bytes + Unknown(Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -3612,7 +3612,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mpbledemo2_data_produce_func
 </UL>
 
-<P><STRONG><a name="[1ff]"></a>vmda1458x_i2c_led_init</STRONG> (Thumb, 276 bytes, Stack size 24 bytes, i2c_led_1.o(.text))
+<P><STRONG><a name="[1ff]"></a>vmda1458x_i2c_led_init</STRONG> (Thumb, 276 bytes, Stack size 24 bytes, i2c_led.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = vmda1458x_i2c_led_init &rArr; GPIO_SetActive
 </UL>
 <BR>[Calls]<UL><LI><a href="#[168]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_SetActive
@@ -3621,7 +3621,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[127]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;periph_init
 </UL>
 
-<P><STRONG><a name="[1dd]"></a>vmda1458x_led_set</STRONG> (Thumb, 158 bytes, Stack size 20 bytes, i2c_led_1.o(.text))
+<P><STRONG><a name="[1dd]"></a>vmda1458x_led_set</STRONG> (Thumb, 158 bytes, Stack size 20 bytes, i2c_led.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = vmda1458x_led_set
 </UL>
 <BR>[Called By]<UL><LI><a href="#[127]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;periph_init
@@ -3630,7 +3630,7 @@ Global Symbols
 <LI><a href="#[244]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vmda1458x_led_blink_once_on_off
 </UL>
 
-<P><STRONG><a name="[240]"></a>vmda1458x_led_on</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, i2c_led_1.o(.text))
+<P><STRONG><a name="[240]"></a>vmda1458x_led_on</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, i2c_led.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = vmda1458x_led_on &rArr; vmda1458x_led_set
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vmda1458x_led_set
@@ -3638,7 +3638,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mpbledemo2_data_consume_func
 </UL>
 
-<P><STRONG><a name="[244]"></a>vmda1458x_led_blink_once_on_off</STRONG> (Thumb, 44 bytes, Stack size 8 bytes, i2c_led_1.o(.text))
+<P><STRONG><a name="[244]"></a>vmda1458x_led_blink_once_on_off</STRONG> (Thumb, 44 bytes, Stack size 8 bytes, i2c_led.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = vmda1458x_led_blink_once_on_off &rArr; vmda1458x_led_set
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vmda1458x_led_set

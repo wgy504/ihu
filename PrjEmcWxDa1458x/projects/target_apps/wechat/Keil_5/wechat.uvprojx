@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>emcwx</TargetName>
+      <TargetName>EMC Wechat</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <pCCUsed>5060061::V5.06 update 1 (build 61)::ARMCC</pCCUsed>
@@ -1425,19 +1425,24 @@
           <GroupName>l0comvm</GroupName>
           <Files>
             <File>
-              <FileName>commsg.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\SrcBxxh\l0comvm\commsg.h</FilePath>
-            </File>
-            <File>
               <FileName>comtype.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\SrcBxxh\l0comvm\comtype.h</FilePath>
             </File>
             <File>
+              <FileName>commsgemcwx.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\SrcBxxh\l0comvm\commsgemcwx.h</FilePath>
+            </File>
+            <File>
               <FileName>sysconfig.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\SrcBxxh\l0comvm\sysconfig.h</FilePath>
+            </File>
+            <File>
+              <FileName>sysversion.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\SrcBxxh\l0comvm\sysversion.h</FilePath>
             </File>
             <File>
               <FileName>sysdim.h</FileName>
@@ -1448,11 +1453,6 @@
               <FileName>sysengpar.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\SrcBxxh\l0comvm\sysengpar.h</FilePath>
-            </File>
-            <File>
-              <FileName>sysversion.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\SrcBxxh\l0comvm\sysversion.h</FilePath>
             </File>
             <File>
               <FileName>readme.txt</FileName>
@@ -1495,12 +1495,6 @@
               <FilePath>..\..\..\..\..\SrcBxxh\l0vmda\vmdashell_task.c</FilePath>
             </File>
           </Files>
-        </Group>
-        <Group>
-          <GroupName>l0vmfreeos</GroupName>
-        </Group>
-        <Group>
-          <GroupName>l0vmucos</GroupName>
         </Group>
         <Group>
           <GroupName>l1service</GroupName>
@@ -1616,12 +1610,6 @@
               <FilePath>..\..\..\..\..\SrcBxxh\l3emcwx\l3emc.h</FilePath>
             </File>
           </Files>
-        </Group>
-        <Group>
-          <GroupName>l3emc68x</GroupName>
-        </Group>
-        <Group>
-          <GroupName>l3scycb</GroupName>
         </Group>
       </Groups>
     </Target>

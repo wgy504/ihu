@@ -1,25 +1,15 @@
 /*
- * sysengpar.h
+ * sysengparemcwx.h
  *
  *  Created on: 2016年1月6日
  *      Author: test
  */
 
-#ifndef L0COMVM_SYSENGPAR_H_
-#define L0COMVM_SYSENGPAR_H_
+#ifndef L0COMVM_SYSENGPAREMCWX_H_
+#define L0COMVM_SYSENGPAREMCWX_H_
 
 #include "comtype.h"
 #include "sysdim.h"
-
-//EMWX独特配置项
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCWX_ID)
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCSPS_ID)
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID)
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID)
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCCB_ID)
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCSB_ID)
-#else
-#endif
 
 /*******************************************************************************************
  *                                                                                         *
@@ -97,4 +87,4 @@ typedef struct IhuSysEngParTable
 }IhuSysEngParTable_t;
 
 
-#endif /* L0COMVM_SYSENGPAR_H_ */
+#endif /* L0COMVM_SYSENGPAREMCWX_H_ */

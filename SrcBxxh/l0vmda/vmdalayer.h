@@ -7,13 +7,14 @@
 
 #ifndef L0VMDA_VMDALAYER_H_
 #define L0VMDA_VMDALAYER_H_
-#if (IHU_WORKING_VM_CURRENT_USAGE_ID == IHU_WORKING_VM_VMDA_USAGE_ID)
 
 //自行标准配置
-#include "commsg.h"
+#include "comtype.h"
 #include "sysdim.h"
 #include "sysconfig.h"
 #include "sysengpar.h"
+#include "sysversion.h"
+#include "commsgemcwx.h"
 
 //标准库
 #include <stdint.h>
@@ -305,6 +306,7 @@ extern OPSTAT ihu_timer_start(UINT8 task_id, UINT8 timer_id, UINT32 t_dur, UINT8
 extern OPSTAT ihu_timer_stop(UINT8 task_id, UINT8 timer_id, UINT8 t_res);
 extern void ihu_timer_routine_handler_1s(void);
 extern void ihu_timer_routine_handler_10ms(void);
+extern void adc_usDelay(uint32_t nof_us);
 
-#endif //IHU_WORKING_VM_VMDA_USAGE_ID
+
 #endif /* L0VMDA_VMDALAYER_H_ */

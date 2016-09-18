@@ -22,7 +22,7 @@
   </DaveTm>
 
   <Target>
-    <TargetName>test</TargetName>
+    <TargetName>VM Test &amp; Int</TargetName>
     <ToolsetNumber>0x4</ToolsetNumber>
     <ToolsetName>ARM-ADS</ToolsetName>
     <TargetOption>

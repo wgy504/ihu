@@ -1,14 +1,14 @@
 /*
- * l1comdef.h
+ * l1comdef_freeos.h
  *
  *  Created on: 2016年1月3日
  *      Author: test
  */
 
-#ifndef L1COM_L1COMDEF_H_
-#define L1COM_L1COMDEF_H_
+#ifndef L1VMFREEOS_L1COMDEF_FREEOS_H_
+#define L1VMFREEOS_L1COMDEF_FREEOS_H_
 
-#include "vmdalayer.h"
+#include "vmfreeoslayer.h"
 
 //自定义存储数据结构
 //DISC data, 只存储周期性数据
@@ -187,4 +187,4 @@ typedef enum
 //设备地址，用于支持多个设备的同时工作
 #define IHU_EMC_EQUID_DEFAULT 1
 
-#endif /* L1COM_L1COMDEF_H_ */
+#endif /* L1VMFREEOS_L1COMDEF_FREEOS_H_ */

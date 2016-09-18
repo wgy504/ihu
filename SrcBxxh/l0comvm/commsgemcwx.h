@@ -1,31 +1,15 @@
 /*
- * commsg.h
+ * commsgemcwx.h
  *
  *  Created on: 2016年1月3日
  *      Author: test
  */
 
-#ifndef L0COMVM_COMMSG_H_
-#define L0COMVM_COMMSG_H_
+#ifndef L0COMVM_COMMSGEMCWX_H_
+#define L0COMVM_COMMSGEMCWX_H_
 
 #include "comtype.h"
 #include "sysdim.h"
-#include "sysengpar.h"
-#include <stdio.h>
-
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCWX_ID)
-	#include "rwip_config.h"
-	#include "ke_msg.h"
-	#include <stdint.h>
-	#include "ke_task.h"
-	#include "time.h"
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCSPS_ID)
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID)
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID)
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCCB_ID)
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCSB_ID)
-#else
-#endif
 
 //2. 公共消息结构体定义
 //Under normal case, 1024Byte shall be enough for internal message communciation purpose.
@@ -492,4 +476,4 @@ struct msg_struct_wxapp_modbus_disconnect
 #define MSG_PAYLOAD_LEN_ECI_RESP_RECVDATA									(0x0000)
 
 
-#endif /* L0COMVM_COMMSG_H_ */
+#endif /* L0COMVM_COMMSGEMCWX_H_ */

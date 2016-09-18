@@ -143,7 +143,7 @@
 ".\out\mpbledemo2.o"
 ".\out\wecaht_aes.o"
 ".\out\vmdalayer.o"
-".\out\i2c_led_1.o"
+".\out\i2c_led.o"
 ".\out\vmdashell_task.o"
 ".\out\l1timer.o"
 ".\out\aes_cbc.o"

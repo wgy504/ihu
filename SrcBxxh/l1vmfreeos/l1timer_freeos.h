@@ -1,9 +1,9 @@
 /**
  ****************************************************************************************
  *
- * @file l1timer.h
+ * @file l1timer_freeos.h
  *
- * @brief L1 TIMER
+ * @brief L1 TIMER FreeRTOS
  *
  * BXXH team
  * Created by ZJL, 20160127
@@ -11,11 +11,10 @@
  ****************************************************************************************
  */
 
-#ifndef L1SERVICE_L1TIMER_H_
-#define L1SERVICE_L1TIMER_H_
+#ifndef L1VMFREEOS_L1TIMER_FREEOS_H_
+#define L1VMFREEOS_L1TIMER_FREEOS_H_
 
-#include "vmdalayer.h"
-#include "l1comdef.h"
+#include "l1comdef_freeos.h"
 
 //State definition
 //#define FSM_STATE_ENTRY  0x00
@@ -46,5 +45,5 @@ extern void ihu_timer_routine_handler_10ms(void);
 //Local API
 OPSTAT func_timer_hw_init(void);
 
-#endif /* L1SERVICE_L1TIMER_H_ */
+#endif /* L1VMFREEOS_L1TIMER_FREEOS_H_ */
 

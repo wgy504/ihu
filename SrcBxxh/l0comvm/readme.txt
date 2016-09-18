@@ -492,8 +492,9 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 //= ZJL, 2016 Sep.17, IHU_EMCWX_CURRENT_SW_DELIVERY R03.18
 = 建立SCY/EMC68X的版本控制全局信息
 = 建立vmfreeoslayer和vmucoslayer程序框架
-
-
+= 由于在emcwx项目下，KEIL无法编译通过，所以只能单独再创建一个全新的项目，用来编译和处理FREEOS/UCOS的VM
+= 由于L1timer, L1comdef, commsg等，都要复用到VMDA中的环境，导致新项目无法编译，故而只能将不同的VM文件拆开
+= L1VMFREEOS/L1VMUCOS中存有L1COMDEF/L1COM/VMLAYER等，不再单独放到不同的文件中去，以避免文件结构过于复杂
 
 
 
