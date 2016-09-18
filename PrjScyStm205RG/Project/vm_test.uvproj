@@ -330,7 +330,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STM322xG_EVAL, STM32F2XX, USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\StartUp;..\HardDrivers;..\STM32F20X_Lib\inc</IncludePath>
+              <IncludePath>..\StartUp;..\HardDrivers;..\STM32F20X_Lib\inc;..\..\SrcBxxh\l0comvm;..\..\SrcBxxh\l1vmfreeos;..\..\SrcBxxh\l3scycb</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -582,6 +582,79 @@
         </Group>
         <Group>
           <GroupName>Doc</GroupName>
+        </Group>
+        <Group>
+          <GroupName>l0comvm</GroupName>
+          <Files>
+            <File>
+              <FileName>commsgscycb.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0comvm\commsgscycb.h</FilePath>
+            </File>
+            <File>
+              <FileName>comtype.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0comvm\comtype.h</FilePath>
+            </File>
+            <File>
+              <FileName>sysconfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0comvm\sysconfig.h</FilePath>
+            </File>
+            <File>
+              <FileName>sysdim.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0comvm\sysdim.h</FilePath>
+            </File>
+            <File>
+              <FileName>sysengpar.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0comvm\sysengpar.h</FilePath>
+            </File>
+            <File>
+              <FileName>sysversion.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0comvm\sysversion.h</FilePath>
+            </File>
+            <File>
+              <FileName>readme.txt</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0comvm\readme.txt</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>l1vmfreeos</GroupName>
+          <Files>
+            <File>
+              <FileName>l1comdef_freeos.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\l1comdef_freeos.h</FilePath>
+            </File>
+            <File>
+              <FileName>l1timer_freeos.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\l1timer_freeos.c</FilePath>
+            </File>
+            <File>
+              <FileName>l1timer_freeos.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\l1timer_freeos.h</FilePath>
+            </File>
+            <File>
+              <FileName>vmfreeoslayer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\vmfreeoslayer.c</FilePath>
+            </File>
+            <File>
+              <FileName>vmfreeoslayer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\vmfreeoslayer.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>l3scycb</GroupName>
         </Group>
       </Groups>
     </Target>

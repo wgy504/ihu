@@ -37,6 +37,8 @@
 ".\obj\stm32f2xx_tim.o"
 ".\obj\stm32f2xx_usart.o"
 ".\obj\stm32f2xx_wwdg.o"
+".\obj\l1timer_freeos.o"
+".\obj\vmfreeoslayer.o"
 --strict --scatter ".\Obj\RTC.sct"
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

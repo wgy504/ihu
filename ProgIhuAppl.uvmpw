@@ -9,8 +9,6 @@
 
   <project>
     <PathAndName>.\PrjEmcWxDa1458x\projects\target_apps\wechat\Keil_5\wechat.uvprojx</PathAndName>
-    <NodeIsActive>1</NodeIsActive>
-    <NodeIsExpanded>1</NodeIsExpanded>
   </project>
 
   <project>
@@ -23,6 +21,8 @@
 
   <project>
     <PathAndName>.\PrjScyStm205RG\Project\vm_test.uvproj</PathAndName>
+    <NodeIsActive>1</NodeIsActive>
+    <NodeIsExpanded>1</NodeIsExpanded>
   </project>
 
 </ProjectWorkspace>
