@@ -30,7 +30,7 @@
  */
 
 // 定义TASK对应的名字
-// [增加任务]，必须同时修改2个地方：IHU_TASK_NAME_ID，zIhuTaskNameList
+// [增加任务]，必须同时修改3个地方：IHU_TASK_NAME_ID，zIhuTaskNameList, IHU_TASK_QUE_NAME_ID
 enum IHU_TASK_NAME_ID
 {
 	TASK_ID_MIN = 0,
