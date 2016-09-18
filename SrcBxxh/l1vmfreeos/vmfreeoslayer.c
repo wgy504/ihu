@@ -18,9 +18,7 @@ IhuTaskTag_t zIhuTaskInfo[MAX_TASK_NUM_IN_ONE_IHU];
 
 //全局变量：记录所有任务模块工作差错的次数，以便适当处理
 UINT32 zIhuRunErrCnt[MAX_TASK_NUM_IN_ONE_IHU];
-
-//全局变量：
-IhuHwInvInfoTag_t zIhuHwInvInfo;
+IhuGlobalCounter_t zIhuGlobalCounter;  //定义全局计数器COUNTER
 
 //任务状态机FSM全局控制表，占用内存的大户！！！
 FsmTable_t zIhuFsmTable;
@@ -40,25 +38,31 @@ struct tm zIhuSystemTimeYmd;
 //全局变量：任务打印命名
 //从极致优化内存的角度，这里浪费了一个TASK对应的内存空间（MIN=0)，但它却极大的改善了程序编写的效率，值得浪费！！！
 char *zIhuTaskNameList[MAX_TASK_NUM_IN_ONE_IHU] ={
-	"MIN",
+	"MIN", 
 	"VMFO",
 	"TIMER",
-	"ASYLIBRA",
-	"AKSLEO",
-	"ADCARIES",
-	"EMC",
+	"ADCLIBRA",
+	"SPILEO",
+	"I2CARIES",
+	"PWMTAURUS",
+	"SPSVIRGO",
+	"GPIOCANCER",
+	"DIDOCAP",
+	"LEDPISCES",
+	"ETHORION",	
+	"SCYCB",
 	"MAX"};
 
 //消息ID的定义全局表，方便TRACE函数使用
 //请服从MSG_NAME_MAX_LENGTH的最长定义，不然出错
 //全局变量：消息打印命名
 char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK] ={
-		"MSG_ID_COM_MIN",
-		"MSG_ID_COM_INIT",
-		"MSG_ID_COM_INIT_FB",
-		"MSG_ID_COM_RESTART",
-		"MSG_ID_COM_TIME_OUT",
-		"MSG_ID_XXX_NULL"
+	"MSG_ID_COM_MIN",
+	"MSG_ID_COM_INIT",
+	"MSG_ID_COM_INIT_FB",
+	"MSG_ID_COM_RESTART",
+	"MSG_ID_COM_TIME_OUT",
+	"MSG_ID_XXX_NULL"
 };
 
 
@@ -70,6 +74,29 @@ bool flagInitMsgSend = FALSE;
 **	依赖于FreeRTOS，面对底层SDK所定义的过程API函数
 **
 **********************************************************************************/
+//INIT the whole system
+void hcu_vm_system_init(void)
+{
+	//INIT HCU itself
+	//炮制打印函数
+	IhuDebugPrint("VMFO: CURRENT_PRJ=[%s], HW_TYPE=[%d], HW_MODULE=[%d], SW_REL=[%d], SW_DELIVER=[%d].\n", IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT, CURRENT_HW_TYPE, CURRENT_HW_MODULE, CURRENT_SW_RELEASE, CURRENT_SW_DELIVERY);
+	IhuDebugPrint("VMFO: BXXH(TM) HCU(c) Application Layer start and initialized, build at %s, %s.\n", /*__DATE__*/"TBD", __TIME__);
+
+	//初始化全局变量TASK_ID/QUE_ID/TASK_STAT
+	memset(&(zIhuTaskInfo[0].TaskId), 0, sizeof(zIhuTaskInfo)*(TASK_ID_MAX-TASK_ID_MIN+1));
+	int i=0;
+	for (i=TASK_ID_MIN; i<TASK_ID_MAX; i++){
+		zIhuTaskInfo[i].TaskId = i;
+		strcpy(zIhuTaskInfo[i].TaskName, zIhuTaskNameList[i]);
+	}
+	memset(zIhuRunErrCnt, 0, sizeof(UINT32)*(TASK_ID_MAX-TASK_ID_MIN+1));
+
+	//Init Fsm
+	FsmInit();
+}
+
+
+
 //正常打印，print string to console port (UART2)
 void IhuDebugPrint(char *p)
 {
@@ -109,7 +136,7 @@ uint16_t b2l_uint16(uint16_t in)
 }
 
 
-OPSTAT fsm_com_do_nothing(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 param_len)
+OPSTAT fsm_com_do_nothing(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
 	return SUCCESS;
 }
@@ -378,7 +405,7 @@ OPSTAT FsmAddNew(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 **------------------------------------------------------------------------------
 ** Return value : SUCCESS OR FAILURE
 *******************************************************************************/
-OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT8 param_len)
+OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)
 {
 	UINT8  state;
 	OPSTAT ret;
@@ -637,7 +664,7 @@ OPSTAT ihu_message_rcv(UINT8 dest_id, IhuMsgSruct_t *msg)
 
 //message send basic processing
 //All in parameters
-OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT8 param_len)
+OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)
 {
 	IhuMsgSruct_t msg;
 	char strDebug[BX_PRINT_SZ];	

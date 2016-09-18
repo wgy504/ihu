@@ -36,6 +36,7 @@
 	#define TASK_NAME_MAX_LENGTH 12
 	//系统消息级
 	//maxmum state number and msg number in one task, no instance concept
+	#define IHU_TASK_QUEUE_ID_START 1024
 	#define MAX_MSGID_NUM_IN_ONE_TASK 20 //一个任务中最多定义的消息数量，之前放254个，优化后更省内存，暂时用不了这么多
 	#define MASK_MSGID_NUM_IN_ONE_TASK 255 //消息号段在同一个任务中必须连续到这个范围内
 	#define MAX_STATE_NUM_IN_ONE_TASK 7  //一个任务之中最多定义的状态数量
@@ -61,6 +62,7 @@
 	#define TASK_NAME_MAX_LENGTH 12
 	//系统消息级
 	//maxmum state number and msg number in one task, no instance concept
+	#define IHU_TASK_QUEUE_ID_START 1024
 	#define MAX_MSGID_NUM_IN_ONE_TASK 32 //一个任务中最多定义的消息数量，之前放254个，优化后更省内存，暂时用不了这么多
 	#define MASK_MSGID_NUM_IN_ONE_TASK 255 //消息号段在同一个任务中必须连续到这个范围内
 	#define MAX_STATE_NUM_IN_ONE_TASK 7  //一个任务之中最多定义的状态数量

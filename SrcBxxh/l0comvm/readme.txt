@@ -497,7 +497,15 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = L1VMFREEOS/L1VMUCOS中存有L1COMDEF/L1COM/VMLAYER等，不再单独放到不同的文件中去，以避免文件结构过于复杂
 
 //= ZJL, 2016 Sep.18, IHU_EMCWX_CURRENT_SW_DELIVERY R03.19
-= 继续VMFREEOS矿建建立
+= 继续VMFREEOS框架程序建立
+
+
+
+
+
+
+
+
 
 
 
@@ -512,46 +520,16 @@ Known Issues:
 1. 收到sendDataResp， 出现 "received msg: no message content!"  从而导致 "! error: mpbledemo2 reseted"
 
 
-
-
 Mission coming:
-==1) FLASH Driver
-  > 驱动中有READ/WRITE函数，官方文档比较明确
-==2) OTP UBOOT
-==SMART SNIPPETS
 ==Sleep: CFG_EXT_SLEEP / CFG_DEEP_SLEEP
   > 配置CFG文件，可以选择两种模式
-  > 如何进行相应的功耗测试
-==Drivers: POWER MANAGEMENT, ADC, LED
+  > 如何进行相应的功耗测试, - POWER METER
 ==Security
   > CFG中有开关可以控制
   > AIRSYNC CRC/AES亦相关
-==2nd uboot, SPtOA and SW download features
-==Merge of other projects: proximity tag, iBeaCon, etc.
-==如果烧制MAC地址
+==2nd uboot, SPtOA and SW download features, - SW Download
+==BLE multi-connection
 
-
-[待验证问题]
-- ADC sample
-- BLE多连接
-- GPS, to be accomplished by SAE cloud
-
-[遗留问题]
-- AirSync同步50%概率会Reboot，目前不知道元原因，但是连接上比较稳定
-- 接收消息不会超过20 bytes，Init_resp（70bytes）收不全
-
-[指望学生搞定的任务]
-- FLASH
-- SLEEP
-- OTP UBOOT
-- POWER METER
-- LED driver
-- BLE multi-connection
-- Security
-- SW Download
-- Smart Snippets scripts
-- OS adapt layer
-- SDK 5.0.x new migiration
 
 [VM的使用方法：以3.20版的SPS为例]
 1. 升级到SDK最新版本，当前最新版本为SDK5
@@ -567,57 +545,4 @@ Mission coming:
 11. 在rwip_config.h中，增加TASK_VMDA模块
 11. 编译并更正潜在的错误
 
-/*
-**** send auth response ****
-data len = 14
-data dump = FE 01 00 0E 4E 21 00 01 0A 02 08 00 12 00 
 
-**** send init request response ****
-data len = 70
-data dump = FE 01 00 46 4E 23 00 02 0A 02 08 00 10 B4 24 18 F8 AC 01 20 B9 AE 94 85 06 5A 14 57 65 43 68 61 74 20 54 65 73 74 20 62 79 20 6D 61 74 74 21 8A 01 14 57 65 43 68 61 74 20 54 65 73 74 20 62 79 20 6D 61 74 74 21 
-
-**** send SendData Response(echo request) ****
-data len = 36
-data dump = FE 01 00 24 4E 22 12 37 0A 02 08 00 12 16 0A 00 12 10 20 0E 00 06 00 01 02 03 04 05 01 02 03 04 05 06 18 10 
-
-**** send ManufactureSvr Push ****
-data len = 22
-data dump = FE 01 00 16 75 31 00 00 0A 00 12 08 31 32 33 34 35 36 37 38 18 00 
-
-**** send Html Push ****
-data len = 23
-data dump = FE 01 00 17 75 31 00 00 0A 00 12 08 31 32 33 34 35 36 37 38 18 91 4E 
-
-**** send wxWristBand Push ****
-data len = 14
-data dump = FE 01 00 0E 75 31 00 00 0A 00 12 00 18 01 
-
-**** send EnterDeviceChatView Push ****
-data len = 14
-data dump = FE 01 00 0E 75 32 00 00 0A 00 10 01 18 01 
-
-**** send Exit ChatView Push ****
-data len = 14
-data dump = FE 01 00 0E 75 32 00 00 0A 00 10 02 18 01 
-
-**** send Enter HtmlChatView Push ****
-data len = 14
-data dump = FE 01 00 0E 75 32 00 00 0A 00 10 01 18 02 
-
-**** send Exit HtmlChatView Push ****
-data len = 14
-data dump = FE 01 00 0E 75 32 00 00 0A 00 10 02 18 02 
-
-**** send enterBackground Push ****
-data len = 12
-data dump = FE 01 00 0C 75 33 00 00 0A 00 10 01 
-
-**** send enterForground Push ****
-data len = 12
-data dump = FE 01 00 0C 75 33 00 00 0A 00 10 02 
-
-**** send enterSleep Push ****
-data len = 12
-data dump = FE 01 00 0C 75 33 00 00 0A 00 10 03 
-
-*/

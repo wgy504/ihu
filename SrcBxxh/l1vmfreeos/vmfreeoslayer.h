@@ -29,35 +29,62 @@
  *
  */
 
-// 定义TASK对应的名字
-// [增加任务]，必须同时修改3个地方：IHU_TASK_NAME_ID，zIhuTaskNameList, IHU_TASK_QUE_NAME_ID
+//定义TASK对应的名字
+//!!!!!!!!!!!!!!!!ATTENTION!!!!!!!!!!!!!!!!
+//Whenever the Task Id is changed, QueID and vmlayer.c/zIhuTaskNameList array should be updated, otherwise error will happen!!!
+//不是任务的任务，比如TRACE/CONFIG/3G/GPIO等等，留待清理，简化任务列表
+/*
+ *
+ *   【增加任务】，必须同时修改四个地方：
+ *   - IHU_TASK_NAME_ID
+ *   - IHU_TASK_QUEUE_ID
+ *   - zIhuTaskNameList
+ *   - 还要修改可能的本地配置文件，或者sysengpar.h的固定工参配置信息
+ *
+ */
 enum IHU_TASK_NAME_ID
 {
 	TASK_ID_MIN = 0,
 	TASK_ID_VMFO,
 	TASK_ID_TIMER,
-	TASK_ID_ASYLIBRA,
-	TASK_ID_AKSLEO,
-	TASK_ID_ADCARIES,
-	TASK_ID_EMC,
+	TASK_ID_ADCLIBRA,
+	TASK_ID_SPILEO,
+	TASK_ID_I2CARIES,
+	TASK_ID_PWMTAURUS,
+	TASK_ID_SPSVIRGO,
+	TASK_ID_GPIOCANCER,
+	TASK_ID_DIDOCAP,
+	TASK_ID_LEDPISCES,
+	TASK_ID_ETHORION,	
+	TASK_ID_SCYCB,
 	TASK_ID_MAX,
 	TASK_ID_INVALID = 0xFF,
 }; //end of IHU_TASK_NAME_ID
 
-typedef struct IhuTaskTag
+//定义TASK对应的MESSAGE_QUEUE的ID
+enum IHU_TASK_QUEUE_ID
 {
-	UINT32 TaskId;
-	UINT8  pnpState;
-	UINT8  state;
-	char   TaskName[TASK_NAME_MAX_LENGTH];
-}IhuTaskTag_t;
+	TASK_QUE_ID_MIN = IHU_TASK_QUEUE_ID_START,
+	TASK_QUE_ID_VMFO,
+	TASK_QUE_ID_TIMER,
+	TASK_QUE_ID_ADCLIBRA,
+	TASK_QUE_ID_SPILEO,
+	TASK_QUE_ID_I2CARIES,
+	TASK_QUE_ID_PWMTAURUS,
+	TASK_QUE_ID_SPSVIRGO,
+	TASK_QUE_ID_GPIOCANCER,
+	TASK_QUE_ID_DIDOCAP,
+	TASK_QUE_ID_LEDPISCES,
+	TASK_QUE_ID_ETHORION,	
+	TASK_QUE_ID_SCYCB,
+	TASK_QUE_ID_MAX,
+	TASK_QUE_ID_INVALID = 0xFF,
+}; //end of IHU_TASK_QUEUE_ID
 
 
-//HW INVENTORY对应的信息
-typedef struct IhuHwInvInfoTag
-{
-	bool led_on_off;
-}IhuHwInvInfoTag_t;
+
+
+
 
 /*
 ** Fsm INFORMATION structure.
@@ -67,17 +94,38 @@ typedef struct IhuHwInvInfoTag
 #define FSM_STATE_END   0xFE
 #define FSM_STATE_INVALID 0xFF
 
+
+
 //FSM的基础结构定义
 typedef struct FsmStateItem
 {
 	UINT16 msg_id;
 	UINT8 state;
-	OPSTAT (*stateFunc)(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT8 param_len);
+	OPSTAT (*stateFunc)(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len);
 }FsmStateItem_t;
+
+typedef struct IhuTaskTag
+{
+	UINT32 TaskId;
+	UINT8  pnpState;
+	INT32  QueId;
+	UINT8  state;
+	char   TaskName[TASK_NAME_MAX_LENGTH];
+	FsmStateItem_t *fsmPtr;
+	UINT8 QueFullFlag;
+}IhuTaskTag_t;
+#define IHU_TASK_PNP_ON 2
+#define IHU_TASK_PNP_OFF 1
+#define IHU_TASK_PNP_INVALID 0xFF
+#define IHU_TASK_QUEUE_FULL_TRUE 2
+#define IHU_TASK_QUEUE_FULL_FALSE 1
+#define IHU_TASK_QUEUE_FULL_INVALID 0xFF
+
 typedef struct FsmArrayElement
 {
-	OPSTAT (*stateFunc)(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT8 param_len);
+	OPSTAT (*stateFunc)(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len);
 }FsmArrayElement_t;
+
 typedef struct FsmCtrlTable
 {
 	UINT8 numOfFsmArrayElement;  //每一个具体任务TASK中，定义了多少个STATE-MSGID映射表单
@@ -91,6 +139,7 @@ typedef struct FsmQueueElement
 	UINT8 msgQue[MAX_IHU_MSG_BODY_LENGTH];
 	bool useFlag;
 }FsmQueueElement_t;
+
 typedef struct FsmQueueListTable
 {
 	FsmQueueElement_t queList[MAX_QUEUE_NUM_IN_ONE_TASK];
@@ -113,9 +162,14 @@ typedef struct FsmTable
 #define IHU_RUN_ERROR_LEVEL_3_CRITICAL 10000
 #define IHU_RUN_ERROR_LEVEL_4_DEAD 100000
 
-//Local variables
-#define VM_SLEEP_INIT_1SECOND_CNT 5000 //计数器，用于调节发送INIT消息的时间
-#define VM_SLEEP_INIT_1SECOND_SEED 0
+//全局Counter，用于性能指标统计之用
+typedef struct IhuGlobalCounter
+{
+	UINT32 errCnt[MAX_TASK_NUM_IN_ONE_IHU];  //以每个任务为单位
+	UINT32 restartCnt;
+}IhuGlobalCounter_t;
+extern IhuGlobalCounter_t zIhuGlobalCounter;
+
 
 /*
  *	
@@ -126,16 +180,16 @@ typedef struct FsmTable
 //VM FSM related APIs
 extern OPSTAT FsmInit(void);
 extern OPSTAT FsmAddNew(UINT8 task_id, FsmStateItem_t* pFsmStateItem);
-extern OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT8 param_len);
+extern OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len);
 extern OPSTAT FsmProcessingLaunchEntry(UINT8 task_id);
 extern OPSTAT FsmProcessingLaunchExecute(UINT8 task_id);
 extern OPSTAT FsmSetState(UINT8 task_id, UINT8 newState);
 extern UINT8  FsmGetState(UINT8 task_id);
-extern OPSTAT fsm_com_do_nothing(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 param_len);
+extern OPSTAT fsm_com_do_nothing(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 
 //Global VM layer basic API and functions
 extern OPSTAT ihu_message_rcv(UINT8 dest_id, IhuMsgSruct_t *msg);
-extern OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT8 param_len); //message send
+extern OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len); //message send
 extern OPSTAT ihu_taskid_to_string(UINT8 id, char *string);
 extern OPSTAT ihu_msgid_to_string(UINT16 id, char *string);
 extern OPSTAT ihu_message_queue_clean(UINT8 dest_id);
@@ -145,14 +199,22 @@ extern OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateIt
 extern void   ihu_task_create_all(void);
 extern void   ihu_task_execute_all(void);
 
-//VMDA内部以及上层使用的API
+//Global APIs
+extern void ihu_vm_system_init(void);  //系统级别的初始化
+extern OPSTAT ihu_task_create(UINT8 task_id, void *(*task_func)(void *), void *arg, int prio);
+extern OPSTAT ihu_task_delete(UINT8 task_id);
+extern OPSTAT ihu_msgque_create(UINT8 task_id);
+extern OPSTAT ihu_msgque_delete(UINT8 task_id);
+UINT32 ihu_msgque_inquery(UINT8 task_id);
+extern OPSTAT ihu_msgque_resync(void);
+extern void ihu_sleep(UINT32 second);
+extern void ihu_usleep(UINT32 usecond);  //resulution 10^(-6)s = 1 microsecond
 extern void IhuDebugPrint(char *p);
 extern void IhuErrorPrint(char *p);
 uint16_t b2l_uint16(uint16_t in);
 extern void ihu_sw_restart(void);
-extern OPSTAT ihu_sleep(UINT32 cntDuration, UINT8 task_id, UINT8 seed);
-extern void ihu_task_create_all(void);
 extern struct tm ihu_clock_unix_to_ymd(time_t t_unix);
+
 
 /*
  *	
@@ -255,7 +317,7 @@ extern OPSTAT ihu_timer_stop(UINT8 task_id, UINT8 timer_id, UINT8 t_res);
 extern void ihu_timer_routine_handler_1s(void);
 extern void ihu_timer_routine_handler_10ms(void);
 
-extern int sprintf(char * __restrict /*s*/, const char * __restrict /*format*/, ...) __attribute__((__nonnull__(1,2)));
-extern int arch_printf(const char *fmt, ...);
+//extern int sprintf(char * __restrict /*s*/, const char * __restrict /*format*/, ...) __attribute__((__nonnull__(1,2)));
+//extern int arch_printf(const char *fmt, ...);
 
 #endif /* L1VMFREEOS_VMFREEOSLAYER_H_ */
