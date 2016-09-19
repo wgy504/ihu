@@ -14,8 +14,15 @@
 #ifndef L2FRAME_L2SPSVIRGO_H_
 #define L2FRAME_L2SPSVIRGO_H_
 
-#include "vmfreeoslayer.h"
-#include "l1comdef_freeos.h"
+#include "sysdim.h"
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID)
+	#include "vmfreeoslayer.h"
+	#include "l1comdef_freeos.h"
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID)
+	#include "vmucoslayer.h"
+	#include "l1comdef_ucos.h"
+#else
+#endif
 
 
 //State definition
