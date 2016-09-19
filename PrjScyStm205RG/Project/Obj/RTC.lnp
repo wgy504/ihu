@@ -39,6 +39,16 @@
 ".\obj\stm32f2xx_wwdg.o"
 ".\obj\l1timer_freeos.o"
 ".\obj\vmfreeoslayer.o"
+".\obj\l2adclibra.o"
+".\obj\l2spileo_1.o"
+".\obj\l2i2caries.o"
+".\obj\l2pwmtaurus.o"
+".\obj\l2spsvirgo.o"
+".\obj\l2gpiocancer.o"
+".\obj\l2didocap.o"
+".\obj\l2ledpisces.o"
+".\obj\l2ethorion.o"
+".\obj\l3emc68x.o"
 --strict --scatter ".\Obj\RTC.sct"
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

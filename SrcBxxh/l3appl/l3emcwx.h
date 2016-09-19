@@ -3,7 +3,7 @@
  *
  * @file l3emc.h
  *
- * @brief L3 EMC
+ * @brief L3 EMCWX
  *
  * BXXH team
  * Created by ZJL, 20160127
@@ -11,8 +11,8 @@
  ****************************************************************************************
  */
 
-#ifndef L3APPL_L3EMC_H_
-#define L3APPL_L3EMC_H_
+#ifndef L3APPL_L3EMCWX_H_
+#define L3APPL_L3EMCWX_H_
 
 #include "vmdalayer.h"
 #include "l1comdef.h"
@@ -64,5 +64,5 @@ OPSTAT func_emc_hw_init(void);
 OPSTAT func_emc_send_out_data_online(void);
 OPSTAT func_emc_store_data_offline(void);
 
-#endif /* L3APPL_L3EMC_H_ */
+#endif /* L3APPL_L3EMCWX_H_ */
 

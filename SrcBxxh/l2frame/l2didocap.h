@@ -1,0 +1,46 @@
+/**
+ ****************************************************************************************
+ *
+ * @file l2didocap.h
+ *
+ * @brief L2 DIDOCAP
+ *
+ * BXXH team
+ * Created by ZJL, 20160918
+ *
+ ****************************************************************************************
+ */
+
+#ifndef L2FRAME_L2DIDOCAP_H_
+#define L2FRAME_L2DIDOCAP_H_
+
+#include "vmfreeoslayer.h"
+#include "l1comdef_freeos.h"
+
+
+//State definition
+//#define FSM_STATE_ENTRY  0x00
+//#define FSM_STATE_IDLE  0x01
+enum FSM_STATE_DIDOCAP
+{
+	FSM_STATE_DIDOCAP_INITED = 0x02,
+	FSM_STATE_DIDOCAP_AVTIVE,
+	FSM_STATE_DIDOCAP_MAX,
+};
+//#define FSM_STATE_END   0xFE
+//#define FSM_STATE_INVALID 0xFF
+
+//Global variables
+extern FsmStateItem_t FsmDidocap[];
+
+//API
+extern OPSTAT fsm_didocap_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT fsm_didocap_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT fsm_didocap_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT fsm_didocap_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+
+//Local API
+OPSTAT func_didocap_hw_init(void);
+
+#endif /* L2FRAME_L2DIDOCAP_H_ */
+

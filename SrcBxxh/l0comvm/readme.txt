@@ -516,11 +516,10 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 	=> CALLBACK不支持，导致以下函数可能不正常
 	extern OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateItem);
 => VM以及各个任务的自启动RESTART机制，待定
-=> 打印时候需要\n做为结束符，待定
+=> 打印时候需要\n做为结束符，先修改完善
 => 基本上完成FreeRTOS VM的框架环境，但还未跟操作系统直接相连接
 => 确保了本VM_TEST项目和EMCWX项目的编译成功
-
-
+=> 完成了EMC68x对应的所有任务模块的框架建立
 
 
 

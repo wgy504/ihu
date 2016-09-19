@@ -55,21 +55,19 @@ OPSTAT fsm_timer_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 
 OPSTAT fsm_timer_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	int ret=0;
-	char strDebug[IHU_PRINT_CHAR_SIZE];
+	//int ret=0;
 
-	//串行会送INIT_FB给VMDA，不然消息队列不够深度，此为节省内存机制
-	if ((src_id > TASK_ID_MIN) &&(src_id < TASK_ID_MAX)){
-		//Send back MSG_ID_COM_INIT_FB to VMDA
-		msg_struct_com_init_fb_t snd;
-		memset(&snd, 0, sizeof(msg_struct_com_init_fb_t));
-		snd.length = sizeof(msg_struct_com_init_fb_t);
-		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_TIMER, &snd, snd.length);
-		if (ret == FAILURE){
-			sprintf(strDebug, "TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_TIMER], zIhuTaskNameList[src_id]);
-			IhuErrorPrint(strDebug);
-			return FAILURE;
-		}
+	//串行会送INIT_FB给VM，不然消息队列不够深度，此为节省内存机制
+	if ((src_id > TASK_ID_MIN) && (src_id < TASK_ID_MAX)){
+		//Send back MSG_ID_COM_INIT_FB to VM。由于消息队列不够深，所以不再回送FB证实。
+//		msg_struct_com_init_fb_t snd;
+//		memset(&snd, 0, sizeof(msg_struct_com_init_fb_t));
+//		snd.length = sizeof(msg_struct_com_init_fb_t);
+//		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_TIMER, &snd, snd.length);
+//		if (ret == FAILURE){
+//			IhuErrorPrint("TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_TIMER], zIhuTaskNameList[src_id]);
+//			return FAILURE;
+//		}
 	}
 
 	//收到初始化消息后，进入初始化状态
@@ -115,7 +113,7 @@ OPSTAT fsm_timer_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 	IhuErrorPrint("TIMER: Internal error counter reach DEAD level, SW-RESTART soon!");
 	fsm_timer_init(0, 0, NULL, 0);
 	
-	//由于时钟是系统工作的基础，该模块启动后，必须让VMDA启动，并初始化所有任务模块
+	//由于时钟是系统工作的基础，该模块启动后，必须让VM启动，并初始化所有任务模块
 	memset(&snd, 0, sizeof(msg_struct_com_restart_t));
 	snd.length = sizeof(msg_struct_com_restart_t);
 	ret = ihu_message_send(MSG_ID_COM_RESTART, TASK_ID_VMFO, TASK_ID_TIMER, &snd, snd.length);

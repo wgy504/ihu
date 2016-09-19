@@ -12,10 +12,11 @@
 #include "comtype.h"
 #include "sysversion.h"
 #include "sysdim.h"
-#include "commsgscycb.h"
 #include "sysconfig.h"
 #include "sysengpar.h"
-
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID)
+	#include "commsgemc68.h"
+#endif
 
 /*
  *	
@@ -51,7 +52,7 @@ enum IHU_TASK_NAME_ID
 	TASK_ID_DIDOCAP,
 	TASK_ID_LEDPISCES,
 	TASK_ID_ETHORION,	
-	TASK_ID_SCYCB,
+	TASK_ID_EMC68X,
 	TASK_ID_MAX,
 	TASK_ID_INVALID = 0xFF,
 }; //end of IHU_TASK_NAME_ID
@@ -71,7 +72,7 @@ enum IHU_TASK_QUEUE_ID
 	TASK_QUE_ID_DIDOCAP,
 	TASK_QUE_ID_LEDPISCES,
 	TASK_QUE_ID_ETHORION,	
-	TASK_QUE_ID_SCYCB,
+	TASK_QUE_ID_EMC68X,
 	TASK_QUE_ID_MAX,
 	TASK_QUE_ID_INVALID = 0xFF,
 }; //end of IHU_TASK_QUEUE_ID
@@ -179,6 +180,7 @@ extern OPSTAT ihu_taskid_to_string(UINT8 id, char *string);
 extern OPSTAT ihu_msgid_to_string(UINT16 id, char *string);
 extern int  ihu_vm_main(void);
 extern void ihu_vm_check_task_que_status_and_action(void);
+extern OPSTAT ihu_vm_send_init_msg_to_app_task(UINT8 dest_id);
 
 //VM FSM related APIs，状态机核心部分，不依赖具体操作系统
 extern OPSTAT FsmInit(void);
@@ -305,11 +307,18 @@ extern IhuTimerTable_t zIhuTimerTable;                      //定时器
 extern time_t zIhuSystemTimeUnix;                           //系统时钟TimeStamp
 extern struct tm zIhuSystemTimeYmd;                        	//系统时钟YMD
 extern UINT32 zIhuSleepCnt[MAX_TASK_NUM_IN_ONE_IHU][MAX_SLEEP_NUM_IN_ONE_TASK];  //睡眠控制表
-extern FsmStateItem_t FsmVmdashell[];                            //状态机
 extern FsmStateItem_t FsmTimer[];                           //状态机
-extern FsmStateItem_t FsmAsylibra[];                        //状态机
-extern FsmStateItem_t FsmAdcaries[];                        //状态机
-extern FsmStateItem_t FsmEmc[];                             //状态机
+extern FsmStateItem_t FsmAdclibra[];                        //状态机
+extern FsmStateItem_t FsmSpileo[];                          //状态机
+extern FsmStateItem_t FsmI2caries[];                        //状态机
+extern FsmStateItem_t FsmPwmtaurus[];                       //状态机
+extern FsmStateItem_t FsmSpsvirgo[];                        //状态机
+extern FsmStateItem_t FsmGpiocancer[];                      //状态机
+extern FsmStateItem_t FsmDidocap[];                         //状态机
+extern FsmStateItem_t FsmLedpisces[];                       //状态机
+extern FsmStateItem_t FsmEthorion[];                        //状态机
+extern FsmStateItem_t FsmEmc68x[];                          //状态机
+
 
 //外部引用API，来自于TIMER任务模块。TIMER任务模块的机制是，必须将VM启动起来，然后TIMER上层任务模块才能被激活，并产生自定义的TIME_OUT消息
 extern OPSTAT ihu_timer_start(UINT8 task_id, UINT8 timer_id, UINT32 t_dur, UINT8 t_type, UINT8 t_res);

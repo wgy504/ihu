@@ -1,4 +1,4 @@
-;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Mon Sep 19 16:46:52 2016
+;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Mon Sep 19 20:46:41 2016
 ;VERSION 0.2
 ;FILE adc.o
 adc_calibrate <= USED 0
@@ -187,7 +187,7 @@ func_asylibra_time_out_auth_resp_wait <= USED 0
 func_asylibra_time_out_data_resp_wait <= USED 0
 func_asylibra_time_out_init_resp_wait <= USED 0
 func_asylibra_unpack_ble_data_dl_head <= USED 0
-;FILE l3emc.o
+;FILE l3emcwx.o
 fsm_emc_con_rcv <= USED 0
 fsm_emc_disc_rcv <= USED 0
 fsm_emc_dlk_block_rcv <= USED 0

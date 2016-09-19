@@ -2521,7 +2521,7 @@
 
   <Group>
     <GroupName>l0comvm</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -2613,7 +2613,7 @@
 
   <Group>
     <GroupName>l0vmda</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -2693,7 +2693,7 @@
 
   <Group>
     <GroupName>l1service</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -2932,8 +2932,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\SrcBxxh\l3emcwx\l3emc.c</PathWithFileName>
-      <FilenameWithoutPath>l3emc.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\..\SrcBxxh\l3appl\l3emcwx.c</PathWithFileName>
+      <FilenameWithoutPath>l3emcwx.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2944,8 +2944,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\SrcBxxh\l3emcwx\l3emc.h</PathWithFileName>
-      <FilenameWithoutPath>l3emc.h</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\..\SrcBxxh\l3appl\l3emcwx.h</PathWithFileName>
+      <FilenameWithoutPath>l3emcwx.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
