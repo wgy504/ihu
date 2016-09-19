@@ -77,7 +77,7 @@ OPSTAT fsm_emc_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 p
 OPSTAT fsm_emc_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 param_len)
 {
 	int ret=0;
-	char strDebug[BX_PRINT_SZ];
+	char strDebug[IHU_PRINT_CHAR_SIZE];
 
 	//串行会送INIT_FB给VMDA，不然消息队列不够深度，此为节省内存机制
 	if ((src_id > TASK_ID_MIN) &&(src_id < TASK_ID_MAX)){
@@ -125,7 +125,7 @@ OPSTAT fsm_emc_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 param_l
 	}	
 	
 	//打印报告进入常规状态
-	if ((zIhuSysEngPar.debugMode & TRACE_DEBUG_FAT_ON) != FALSE){
+	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
 		IhuDebugPrint("EMC: Enter FSM_STATE_EMC_ACTIVE status, Keeping refresh here!");
 	}
 	
@@ -202,7 +202,7 @@ OPSTAT fsm_emc_disc_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 par
 OPSTAT fsm_emc_con_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 param_len)
 {		
 	int ret = 0;
-	char strDebug[BX_PRINT_SZ];	
+	char strDebug[IHU_PRINT_CHAR_SIZE];	
 
 	//入参检查
 	if ((param_ptr == NULL) || (dest_id != TASK_ID_EMC)){
@@ -305,7 +305,7 @@ OPSTAT fsm_emc_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 par
 OPSTAT fsm_emc_dlk_block_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 param_len)
 {	
 	int ret = 0;
-	char strDebug[BX_PRINT_SZ];	
+	char strDebug[IHU_PRINT_CHAR_SIZE];	
 	
 	//入参检查
 	if ((param_ptr == NULL) || (dest_id != TASK_ID_EMC)){
@@ -391,7 +391,7 @@ OPSTAT fsm_emc_dlk_block_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 	}
 
 	//结束打印信息
-	if ((zIhuSysEngPar.debugMode & TRACE_DEBUG_NOR_ON) != FALSE){
+	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_NOR_ON) != FALSE){
 		IhuDebugPrint("EMC: Under online state, send off-line data to cloud success!");
 	}	
 
@@ -442,7 +442,7 @@ OPSTAT fsm_emc_dlk_unblock_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UI
 OPSTAT fsm_emc_push_cmd_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 param_len)
 {		
 	int ret=0;
-	char strDebug[BX_PRINT_SZ];
+	char strDebug[IHU_PRINT_CHAR_SIZE];
 
 	//入参检查
 	if ((param_ptr == NULL) || (dest_id != TASK_ID_EMC)){
@@ -580,7 +580,7 @@ OPSTAT func_emc_hw_init(void)
 OPSTAT func_emc_send_out_data_online(void)
 {
 	int ret=0;
-	char strDebug[BX_PRINT_SZ];
+	char strDebug[IHU_PRINT_CHAR_SIZE];
 	
 	//发送数据给底层，状态由调用者决定
 	//Send data MSG_ID_EMC_ASYLIBRA_DATA_REQ to ASYLIBRA
@@ -658,7 +658,7 @@ OPSTAT func_emc_store_data_offline(void)
 //存入数据到本地内存磁盘
 OPSTAT ihu_save_to_storage_mem(IhuDiscDataSampleStorageArray_t *record)
 {
-	char strDebug[BX_PRINT_SZ];
+	char strDebug[IHU_PRINT_CHAR_SIZE];
 	UINT32 readCnt=0, wrtCnt=0, totalNbr=0, sid=0;
 
 	//先检查输入数据的合法性，以下三项必须填写，其它的无所谓
@@ -706,7 +706,7 @@ OPSTAT ihu_save_to_storage_mem(IhuDiscDataSampleStorageArray_t *record)
 	zIhuMemStorageBuf.lastSid = sid;  //最新一个写入记录的SID数值
 
 	//Always successful, as the storage is a cycle buffer!
-	if ((zIhuSysEngPar.debugMode & TRACE_DEBUG_NOR_ON) != FALSE){
+	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_NOR_ON) != FALSE){
 		sprintf(strDebug, "EMC: Data record save to MEM-DISC, sid=%d, totalNbr=%d, offNbr=%d.", sid, totalNbr, zIhuMemStorageBuf.offlineNbr);
 		IhuDebugPrint(strDebug);
 	}
@@ -718,7 +718,7 @@ OPSTAT ihu_save_to_storage_mem(IhuDiscDataSampleStorageArray_t *record)
 //从本地内存磁盘，读取数据并送往后台
 OPSTAT ihu_read_from_storage_mem(IhuDiscDataSampleStorageArray_t *record)
 {
-	char strDebug[BX_PRINT_SZ];
+	char strDebug[IHU_PRINT_CHAR_SIZE];
 	UINT32 readCnt=0, totalNbr=0;
 
 	readCnt = zIhuMemStorageBuf.rdCnt;
@@ -768,7 +768,7 @@ OPSTAT ihu_read_from_storage_mem(IhuDiscDataSampleStorageArray_t *record)
 		return FAILURE;
 	}
 
-	if ((zIhuSysEngPar.debugMode & TRACE_DEBUG_NOR_ON) != FALSE){
+	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_NOR_ON) != FALSE){
 		sprintf(strDebug, "EMC: Data record read from MEM-DISC, rdCnt=%d, totalNbr = %d, offNbr=%d.", readCnt, totalNbr, zIhuMemStorageBuf.offlineNbr);		
 		IhuDebugPrint(strDebug);
 	}

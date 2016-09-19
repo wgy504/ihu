@@ -71,52 +71,52 @@
  */
 
 //可选项通信端口的全局定义，未来需要通过ConfigXml进一步优化
-#define COMM_HW_BOARD_ON 1
-#define COMM_HW_BOARD_OFF 0
+#define IHU_COMM_HW_BOARD_ON 1
+#define IHU_COMM_HW_BOARD_OFF 0
 //定义后台连接网络的接口
 //现在采用这种互斥的方式进行定义，以后需要等待HWINV进行PnP，确保多种接口即插即用，随时切换
 //多种接口之间的优先级关系，则有程序任务自动决定：ETHERNET > WIFI > USB-OTG2 > 3G4G
 //当前版本的做法是，多种接口均启动起来，但如何使用，由CLOUDCONT按照优先级和COMM_BACK_HAWL_CON定义唯一决定
 
 //定义后台CLOUD连接到本地及SAE的地址
-#define CLOUDWX_HTTP_ADDRESS_LOCAL "http://127.0.0.1/test.php"
-#define CLOUDWX_HTTP_ADDRESS_TEST "http://aaa.bbb/"
-#define CLOUDWX_HTTP_ADDRESS_SAE "http://mfunhcu.sinaapp.com/wechat/cloud_callback.php"
-#define CLOUDWX_HTTP_ADDRESS_JD "http://mfunhcu.sinaapp.com/jd/cloud_callback.php"
-#define CLOUDWX_HTTP_ADDRESS_WECHAT "http://mfunhcu.sinaapp.com/wechat/cloud_callback.php"
+#define IHU_CLOUDWX_HTTP_ADDRESS_LOCAL "http://127.0.0.1/test.php"
+#define IHU_CLOUDWX_HTTP_ADDRESS_TEST "http://aaa.bbb/"
+#define IHU_CLOUDWX_HTTP_ADDRESS_SAE "http://mfunhcu.sinaapp.com/wechat/cloud_callback.php"
+#define IHU_CLOUDWX_HTTP_ADDRESS_JD "http://mfunhcu.sinaapp.com/jd/cloud_callback.php"
+#define IHU_CLOUDWX_HTTP_ADDRESS_WECHAT "http://mfunhcu.sinaapp.com/wechat/cloud_callback.php"
 
 //DEBUG开关，缺省打开
-#define TRACE_DEBUG_ALL_OFF 0 //全关
-#define TRACE_DEBUG_ALL_ON 0xFF //全开
-#define TRACE_DEBUG_INF_ON 1  //信息
-#define TRACE_DEBUG_NOR_ON 2  //普通级
-#define TRACE_DEBUG_IPT_ON 4  //重要级
-#define TRACE_DEBUG_CRT_ON 8  //关键级
-#define TRACE_DEBUG_FAT_ON 16 //致命级
-#define TRACE_DEBUG_ON TRACE_DEBUG_ALL_OFF //利用以上标示位，确定TRACE的级别
+#define IHU_TRACE_DEBUG_ALL_OFF 0 //全关
+#define IHU_TRACE_DEBUG_ALL_ON 0xFF //全开
+#define IHU_TRACE_DEBUG_INF_ON 1  //信息
+#define IHU_TRACE_DEBUG_NOR_ON 2  //普通级
+#define IHU_TRACE_DEBUG_IPT_ON 4  //重要级
+#define IHU_TRACE_DEBUG_CRT_ON 8  //关键级
+#define IHU_TRACE_DEBUG_FAT_ON 16 //致命级
+#define IHU_TRACE_DEBUG_ON IHU_TRACE_DEBUG_ALL_OFF //利用以上标示位，确定TRACE的级别
 
 //TRACE开关，缺省打开
-#define TRACE_MSG_MODE_OFF 0 //全关
-#define TRACE_MSG_MODE_INVALID 0xFF //无效
-#define TRACE_MSG_MODE_ALL 1 //放开所有的TRACE模块和消息，该模式将忽略模块和消息的设置
-#define TRACE_MSG_MODE_ALL_BUT_TIME_OUT 2  //除了所有的TIME_OUT消息
-#define TRACE_MSG_MODE_ALL_BUT_HEART_BEAT 3 //除了所有的HEART_BEAT消息
-#define TRACE_MSG_MODE_ALL_BUT_TIME_OUT_AND_HEART_BEAT 4  //除了所有的TIME_OUT消息
-#define TRACE_MSG_MODE_MOUDLE_TO_ALLOW 10  //只通过模块号过滤消息
-#define TRACE_MSG_MODE_MOUDLE_TO_RESTRICT 11  //只通过模块号过滤消息
-#define TRACE_MSG_MODE_MOUDLE_FROM_ALLOW 12  //只通过模块号过滤消息
-#define TRACE_MSG_MODE_MOUDLE_FROM_RESTRICT 13  //只通过模块号过滤消息
-#define TRACE_MSG_MODE_MOUDLE_DOUBLE_ALLOW 14  //只通过模块号过滤消息
-#define TRACE_MSG_MODE_MOUDLE_DOUBLE_RESTRICT 15  //只通过模块号过滤消息
-#define TRACE_MSG_MODE_MSGID_ALLOW 20  //只通过模块号过滤消息
-#define TRACE_MSG_MODE_MSGID_RESTRICT 21  //只通过模块号过滤消息
-#define TRACE_MSG_MODE_COMBINE_TO_ALLOW 30  //通过模块和消息枚举
-#define TRACE_MSG_MODE_COMBINE_TO_RESTRICT 31  //通过模块和消息枚举
-#define TRACE_MSG_MODE_COMBINE_FROM_ALLOW 32  //通过模块和消息枚举
-#define TRACE_MSG_MODE_COMBINE_FROM_RESTRICT 33  //通过模块和消息枚举
-#define TRACE_MSG_MODE_COMBINE_DOUBLE_ALLOW 34  //通过模块和消息枚举
-#define TRACE_MSG_MODE_COMBINE_DOUBLE_RESTRICT 35  //通过模块和消息枚举
-#define TRACE_MSG_ON TRACE_MSG_MODE_OFF
+#define IHU_TRACE_MSG_MODE_OFF 0 //全关
+#define IHU_TRACE_MSG_MODE_INVALID 0xFF //无效
+#define IHU_TRACE_MSG_MODE_ALL 1 //放开所有的TRACE模块和消息，该模式将忽略模块和消息的设置
+#define IHU_TRACE_MSG_MODE_ALL_BUT_TIME_OUT 2  //除了所有的TIME_OUT消息
+#define IHU_TRACE_MSG_MODE_ALL_BUT_HEART_BEAT 3 //除了所有的HEART_BEAT消息
+#define IHU_TRACE_MSG_MODE_ALL_BUT_TIME_OUT_AND_HEART_BEAT 4  //除了所有的TIME_OUT消息
+#define IHU_TRACE_MSG_MODE_MOUDLE_TO_ALLOW 10  //只通过模块号过滤消息
+#define IHU_TRACE_MSG_MODE_MOUDLE_TO_RESTRICT 11  //只通过模块号过滤消息
+#define IHU_TRACE_MSG_MODE_MOUDLE_FROM_ALLOW 12  //只通过模块号过滤消息
+#define IHU_TRACE_MSG_MODE_MOUDLE_FROM_RESTRICT 13  //只通过模块号过滤消息
+#define IHU_TRACE_MSG_MODE_MOUDLE_DOUBLE_ALLOW 14  //只通过模块号过滤消息
+#define IHU_TRACE_MSG_MODE_MOUDLE_DOUBLE_RESTRICT 15  //只通过模块号过滤消息
+#define IHU_TRACE_MSG_MODE_MSGID_ALLOW 20  //只通过模块号过滤消息
+#define IHU_TRACE_MSG_MODE_MSGID_RESTRICT 21  //只通过模块号过滤消息
+#define IHU_TRACE_MSG_MODE_COMBINE_TO_ALLOW 30  //通过模块和消息枚举
+#define IHU_TRACE_MSG_MODE_COMBINE_TO_RESTRICT 31  //通过模块和消息枚举
+#define IHU_TRACE_MSG_MODE_COMBINE_FROM_ALLOW 32  //通过模块和消息枚举
+#define IHU_TRACE_MSG_MODE_COMBINE_FROM_RESTRICT 33  //通过模块和消息枚举
+#define IHU_TRACE_MSG_MODE_COMBINE_DOUBLE_ALLOW 34  //通过模块和消息枚举
+#define IHU_TRACE_MSG_MODE_COMBINE_DOUBLE_RESTRICT 35  //通过模块和消息枚举
+#define IHU_TRACE_MSG_ON IHU_TRACE_MSG_MODE_OFF
 
 
 #endif /* L0COMVM_SYSCONFIG_H_ */

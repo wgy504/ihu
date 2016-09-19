@@ -93,7 +93,7 @@ OPSTAT fsm_asylibra_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UI
 OPSTAT fsm_asylibra_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 param_len)
 {
 	int ret=0;
-	char strDebug[BX_PRINT_SZ];
+	char strDebug[IHU_PRINT_CHAR_SIZE];
 
 	//串行会送INIT_FB给VMDA，不然消息队列不够深度，此为节省内存机制
 	if ((src_id > TASK_ID_MIN) &&(src_id < TASK_ID_MAX)){
@@ -139,7 +139,7 @@ OPSTAT fsm_asylibra_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 pa
 	ihu_led_blink_enable(ASYLIBRA_LED_IND_NO, ASYLIBRA_LED_STATE_INITED);
 	
 	//打印报告进入常规状态
-	if ((zIhuSysEngPar.debugMode & TRACE_DEBUG_FAT_ON) != FALSE){
+	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
 		IhuDebugPrint("ASYLIBRA: Enter FSM_STATE_ASYLIBRA_INITED status, Keeping refresh here!");
 	}
 
@@ -182,7 +182,7 @@ OPSTAT fsm_asylibra_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 OPSTAT fsm_asylibra_ble_con_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 param_len)
 {
 	int ret=0;
-	char strDebug[BX_PRINT_SZ];
+	char strDebug[IHU_PRINT_CHAR_SIZE];
 	
 	//入参检查
 	if ((param_ptr == NULL) || (dest_id != TASK_ID_ASYLIBRA)){
@@ -268,7 +268,7 @@ OPSTAT fsm_asylibra_ble_con_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 OPSTAT fsm_asylibra_ble_disc_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 param_len)
 {	
 	int ret=0;
-	char strDebug[BX_PRINT_SZ];
+	char strDebug[IHU_PRINT_CHAR_SIZE];
 	
 	//入参检查
 	if ((param_ptr == NULL) || (dest_id != TASK_ID_ASYLIBRA)){
@@ -460,7 +460,7 @@ OPSTAT fsm_asylibra_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 OPSTAT fsm_asylibra_emc_data_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 param_len)
 {	
 	int ret=0;
-	char strDebug[BX_PRINT_SZ];
+	char strDebug[IHU_PRINT_CHAR_SIZE];
 
 	//入参检查
 	if ((param_ptr == NULL) || (dest_id != TASK_ID_ASYLIBRA)){
@@ -751,7 +751,7 @@ OPSTAT func_asylibra_pack_init_req(INT8 *buf, UINT8 len)
 //暂时还是采用比较土的方式进行解码，未来再考虑优化
 OPSTAT func_asylibra_unpack_ble_data_dl_head(INT8 *buf, UINT8 len, UINT16 nCmd)
 {
-	char strDebug[BX_PRINT_SZ];
+	char strDebug[IHU_PRINT_CHAR_SIZE];
 	
 	//入参检查
 	if ((buf == NULL) ||(len > MSG_BUF_MAX_LENGTH_ASY_DATA_GENERAL)){
@@ -846,7 +846,7 @@ OPSTAT func_asylibra_unpack_ble_data_dl_head(INT8 *buf, UINT8 len, UINT16 nCmd)
 OPSTAT func_asylibra_time_out_auth_resp_wait(void)
 {
 	int ret=0;
-	char strDebug[BX_PRINT_SZ];
+	char strDebug[IHU_PRINT_CHAR_SIZE];
 	
 	//超时，检查状态，合适就重发AUTH_REQ消息
 	if (FsmGetState(TASK_ID_ASYLIBRA) == FSM_STATE_ASYLIBRA_BLE_CONNECTED){
@@ -894,7 +894,7 @@ OPSTAT func_asylibra_time_out_auth_resp_wait(void)
 OPSTAT func_asylibra_time_out_init_resp_wait(void)
 {
 	int ret=0;
-	char strDebug[BX_PRINT_SZ];
+	char strDebug[IHU_PRINT_CHAR_SIZE];
 	
 	//超时，检查状态，合适就重发INIT_REQ消息
 	if (FsmGetState(TASK_ID_ASYLIBRA) == FSM_STATE_ASYLIBRA_AUTH_OK){
@@ -942,7 +942,7 @@ OPSTAT func_asylibra_time_out_init_resp_wait(void)
 OPSTAT func_asylibra_time_out_data_resp_wait(void)
 {
 	int ret=0;
-	char strDebug[BX_PRINT_SZ];
+	char strDebug[IHU_PRINT_CHAR_SIZE];
 	
 	//超时检查状态，恢复到BLE连接状态，准备重新建立AIRSYNC远程链路
 	if (FsmGetState(TASK_ID_ASYLIBRA) == FSM_STATE_ASYLIBRA_DATA_WF_CONF){
@@ -1004,7 +1004,7 @@ OPSTAT func_asylibra_time_out_data_resp_wait(void)
 OPSTAT func_asylibra_rcv_auth_resp_processing(INT8 *buf, UINT8 len)
 {
 	int ret=0;
-	char strDebug[BX_PRINT_SZ];
+	char strDebug[IHU_PRINT_CHAR_SIZE];
 
 	//入参检查
 	if ((buf == NULL) || (len > MSG_BUF_MAX_LENGTH_ASY_DATA_GENERAL)){
@@ -1085,7 +1085,7 @@ OPSTAT func_asylibra_rcv_auth_resp_processing(INT8 *buf, UINT8 len)
 OPSTAT func_asylibra_rcv_init_resp_processing(INT8 *buf, UINT8 len)
 {
 	int ret=0;
-	char strDebug[BX_PRINT_SZ];
+	char strDebug[IHU_PRINT_CHAR_SIZE];
 
 	//入参检查
 	if ((buf == NULL) || (len > MSG_BUF_MAX_LENGTH_ASY_DATA_GENERAL)){
@@ -1149,7 +1149,7 @@ OPSTAT func_asylibra_rcv_init_resp_processing(INT8 *buf, UINT8 len)
 OPSTAT func_asylibra_rcv_data_resp_processing(INT8 *buf, UINT8 len)
 {
 	int ret=0;
-	char strDebug[BX_PRINT_SZ];
+	char strDebug[IHU_PRINT_CHAR_SIZE];
 
 	//入参检查
 	if ((buf == NULL) || (len > MSG_BUF_MAX_LENGTH_ASY_DATA_GENERAL)){
@@ -1222,7 +1222,7 @@ OPSTAT func_asylibra_rcv_data_resp_processing(INT8 *buf, UINT8 len)
 OPSTAT func_asylibra_rcv_data_push_processing(INT8 *buf, UINT8 len)
 {
 	int ret=0;
-	char strDebug[BX_PRINT_SZ];
+	char strDebug[IHU_PRINT_CHAR_SIZE];
 
 	//入参检查
 	if ((buf == NULL) || (len > MSG_BUF_MAX_LENGTH_ASY_DATA_GENERAL) || (len < 6)){
@@ -1398,7 +1398,7 @@ OPSTAT func_asylibra_rcv_err_decode_processing(INT8 *buf, UINT8 len)
 //OPSTAT fsm_asylibra_emc_data_report(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 param_len)
 //{	
 //	int ret=0;
-//	char strDebug[BX_PRINT_SZ];
+//	char strDebug[IHU_PRINT_CHAR_SIZE];
 
 //	//入参检查
 //	if ((param_ptr == NULL) || (dest_id != TASK_ID_ASYLIBRA)){
@@ -1477,7 +1477,7 @@ OPSTAT func_asylibra_rcv_err_decode_processing(INT8 *buf, UINT8 len)
 //OPSTAT fsm_asylibra_emc_time_sync_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 param_len)
 //{	
 //	int ret=0;
-//	char strDebug[BX_PRINT_SZ];
+//	char strDebug[IHU_PRINT_CHAR_SIZE];
 
 //	//入参检查
 //	if ((param_ptr == NULL) || (dest_id != TASK_ID_ASYLIBRA)){
@@ -1557,7 +1557,7 @@ OPSTAT func_asylibra_rcv_err_decode_processing(INT8 *buf, UINT8 len)
 //OPSTAT fsm_asylibra_emc_equ_info_sync(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 param_len)
 //{	
 //	int ret=0;
-//	char strDebug[BX_PRINT_SZ];
+//	char strDebug[IHU_PRINT_CHAR_SIZE];
 
 //	//入参检查
 //	if ((param_ptr == NULL) || (dest_id != TASK_ID_ASYLIBRA)){

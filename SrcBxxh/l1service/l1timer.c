@@ -56,7 +56,7 @@ OPSTAT fsm_timer_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8
 OPSTAT fsm_timer_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 param_len)
 {
 	int ret=0;
-	char strDebug[BX_PRINT_SZ];
+	char strDebug[IHU_PRINT_CHAR_SIZE];
 
 	//串行会送INIT_FB给VMDA，不然消息队列不够深度，此为节省内存机制
 	if ((src_id > TASK_ID_MIN) &&(src_id < TASK_ID_MAX)){
@@ -98,7 +98,7 @@ OPSTAT fsm_timer_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 param
 	//启动本地定时器，如果有必要
 	
 	//打印报告进入常规状态
-	if ((zIhuSysEngPar.debugMode & TRACE_DEBUG_FAT_ON) != FALSE){
+	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
 		IhuDebugPrint("TIMER: Enter FSM_STATE_TIMER_ACTIVE status, Keeping refresh here!");
 	}
 
@@ -109,7 +109,7 @@ OPSTAT fsm_timer_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 param
 OPSTAT fsm_timer_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 param_len)
 {
 	int ret = 0;
-	char strDebug[BX_PRINT_SZ];
+	char strDebug[IHU_PRINT_CHAR_SIZE];
 	
 	IhuErrorPrint("TIMER: Internal error counter reach DEAD level, SW-RESTART soon!");
 	fsm_timer_init(0, 0, NULL, 0);
@@ -158,7 +158,7 @@ OPSTAT func_timer_hw_init(void)
 //定时器启动，支持远程调用
 OPSTAT ihu_timer_start(UINT8 task_id, UINT8 timer_id, UINT32 t_dur, UINT8 t_type, UINT8 t_res)
 {
-	char strDebug[BX_PRINT_SZ];
+	char strDebug[IHU_PRINT_CHAR_SIZE];
 	
 	//检查task_id是否合法
 	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
@@ -240,7 +240,7 @@ OPSTAT ihu_timer_start(UINT8 task_id, UINT8 timer_id, UINT32 t_dur, UINT8 t_type
 //全局基础函数，支持时钟的停止
 OPSTAT ihu_timer_stop(UINT8 task_id, UINT8 timer_id, UINT8 t_res)
 {
-	char strDebug[BX_PRINT_SZ];
+	char strDebug[IHU_PRINT_CHAR_SIZE];
 	
 	//检查task_id是否合法
 	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
@@ -302,7 +302,7 @@ OPSTAT ihu_timer_stop(UINT8 task_id, UINT8 timer_id, UINT8 t_res)
 void ihu_timer_routine_handler_1s(void)
 {
 	int i=0, ret=0;
-	char strDebug[BX_PRINT_SZ];
+	char strDebug[IHU_PRINT_CHAR_SIZE];
 	msg_struct_com_time_out_t snd;
 
 	//IhuDebugPrint("TIMER: 1S resolution timer enter one time!\n");
@@ -356,7 +356,7 @@ void ihu_timer_routine_handler_1s(void)
 void ihu_timer_routine_handler_10ms(void)
 {
 	int i=0, ret=0;
-	char strDebug[BX_PRINT_SZ];
+	char strDebug[IHU_PRINT_CHAR_SIZE];
 	msg_struct_com_time_out_t snd;
 
 	for (i=0;i<MAX_TIMER_NUM_IN_ONE_IHU_10MS;i++)

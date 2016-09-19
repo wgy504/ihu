@@ -53,7 +53,7 @@ OPSTAT fsm_adcaries_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UI
 OPSTAT fsm_adcaries_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 param_len)
 {
 	int ret=0;
-	char strDebug[BX_PRINT_SZ];
+	char strDebug[IHU_PRINT_CHAR_SIZE];
 
 	//串行会送INIT_FB给VMDA，不然消息队列不够深度，此为节省内存机制
 	if ((src_id > TASK_ID_MIN) &&(src_id < TASK_ID_MAX)){
@@ -94,7 +94,7 @@ OPSTAT fsm_adcaries_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 pa
 	//启动本地定时器，如果有必要
 	
 	//打印报告进入常规状态
-	if ((zIhuSysEngPar.debugMode & TRACE_DEBUG_FAT_ON) != FALSE){
+	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
 		IhuDebugPrint("ADCARIES: Enter FSM_STATE_ADCARIES_ACTIVE status, Keeping refresh here!");
 	}
 

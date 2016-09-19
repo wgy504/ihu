@@ -11,6 +11,12 @@
 #include "comtype.h"
 #include "sysdim.h"
 #include "sysengpar.h"
+#include <stdio.h>
+#include <stdarg.h>
+#include <string.h>
+#include <time.h>
+#include <math.h>
+//#include <system.h>
 
 
 //遗留特殊的定义

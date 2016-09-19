@@ -10,6 +10,12 @@
 
 #include "comtype.h"
 #include "sysdim.h"
+#include <stdio.h>
+#include <stdarg.h>
+#include <string.h>
+#include <time.h>
+#include <math.h>
+
 
 //2. 公共消息结构体定义
 //Under normal case, 1024Byte shall be enough for internal message communciation purpose.

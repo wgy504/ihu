@@ -67,7 +67,7 @@ void ihu_task_vmdashell_mainloop(void)
 OPSTAT hlFuncVmdashellBleInit(ke_msg_id_t const msgid, msg_struct_bleapp_vmdashell_init_t const *param, ke_task_id_t const dest_id, ke_task_id_t const src_id)
 {	
 	int ret = 0;
-	char strDebug[BX_PRINT_SZ];		
+	char strDebug[IHU_PRINT_CHAR_SIZE];		
 	
 	//入参检查
 	if ((param == NULL) || (dest_id != TASK_VMDA1458X)){
@@ -125,7 +125,7 @@ OPSTAT hlFuncVmdashellSysClock1sPeriod(ke_msg_id_t const msgid, msg_struct_vmdas
 OPSTAT hlFuncVmdashellSpsBleDataDlRcv(ke_msg_id_t const msgid, msg_struct_sps_vmda1458x_ble_data_dl_rcv_t const *param, ke_task_id_t const dest_id, ke_task_id_t const src_id)
 {
 	int ret = 0;
-	char strDebug[BX_PRINT_SZ];	
+	char strDebug[IHU_PRINT_CHAR_SIZE];	
 	
 	//入参检查
 	if ((param == NULL) || (dest_id != TASK_VMDA1458X)){
@@ -163,7 +163,7 @@ OPSTAT hlFuncVmdashellSpsBleDataDlRcv(ke_msg_id_t const msgid, msg_struct_sps_vm
 OPSTAT hlFuncVmdashellBleDisc(ke_msg_id_t const msgid, msg_struct_bleapp_vmda1458x_disconnect_t const *param, ke_task_id_t const dest_id, ke_task_id_t const src_id)
 {
 	int ret = 0;
-	char strDebug[BX_PRINT_SZ];		
+	char strDebug[IHU_PRINT_CHAR_SIZE];		
 	
 	//入参检查
 	if ((param == NULL) || (dest_id != TASK_VMDA1458X)){
@@ -281,7 +281,7 @@ OPSTAT fsm_vmdashell_task_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UI
 	}
 
 	//打印报告进入常规状态	
-	if ((zIhuSysEngPar.debugMode & TRACE_DEBUG_FAT_ON) != FALSE){
+	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
 		IhuDebugPrint("VMDA: Enter FSM_STATE_VMDASHELL_ACTIVE status, Keeping refresh here!");
 	}
 
@@ -320,7 +320,7 @@ OPSTAT fsm_vmdashell_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 OPSTAT fsm_vmdashell_task_init_fb_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 param_len)
 {
 	int ret = 0;
-	char strDebug[BX_PRINT_SZ];	
+	char strDebug[IHU_PRINT_CHAR_SIZE];	
 	//入参检查
 	if ((dest_id <= TASK_ID_MIN) || (dest_id >= TASK_ID_MAX)){
 		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
@@ -410,7 +410,7 @@ OPSTAT fsm_vmdashell_task_init_fb_rcv(UINT8 dest_id, UINT8 src_id, void * param_
 OPSTAT fsm_vmdashell_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 param_len)
 {
 	//int ret = 0;
-	//char strDebug[BX_PRINT_SZ];
+	//char strDebug[IHU_PRINT_CHAR_SIZE];
 	
 	//入参检查
 	if ((param_ptr == NULL) || (dest_id != TASK_ID_VMDASHELL)){
@@ -445,7 +445,7 @@ OPSTAT fsm_vmdashell_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UIN
 OPSTAT fsm_vmdashell_task_init_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 param_len)
 {
 	int ret=0;
-	char strDebug[BX_PRINT_SZ];
+	char strDebug[IHU_PRINT_CHAR_SIZE];
 	
 	//收消息
 	msg_struct_com_time_out_t rcv;
@@ -537,7 +537,7 @@ OPSTAT func_vmdashell_hw_init(void)
 OPSTAT func_vmdashell_send_out_init(UINT8 task_id)
 {
 	int ret = 0;
-	char strDebug[BX_PRINT_SZ];	
+	char strDebug[IHU_PRINT_CHAR_SIZE];	
 	
 	//入参检查task_id
 	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){

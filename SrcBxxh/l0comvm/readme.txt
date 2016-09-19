@@ -498,7 +498,7 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 
 //= ZJL, 2016 Sep.18, IHU_EMCWX_CURRENT_SW_DELIVERY R03.19
 = 继续VMFREEOS框架程序建立
-
+= FreeRTOS待完成的函数体：sleep, usleep, 
 
 
 

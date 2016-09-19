@@ -176,18 +176,23 @@ extern IhuGlobalCounter_t zIhuGlobalCounter;
  *  全局API
  *
  */
+//全局API
+extern void IhuDebugPrint(char *format, ...);
+extern void IhuErrorPrint(char *format, ...);
 
 //VM FSM related APIs
 extern OPSTAT FsmInit(void);
 extern OPSTAT FsmAddNew(UINT8 task_id, FsmStateItem_t* pFsmStateItem);
+extern OPSTAT FsmRemove(UINT8 task_id);
 extern OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len);
+extern OPSTAT FsmProcessingLaunch(void);
 extern OPSTAT FsmProcessingLaunchEntry(UINT8 task_id);
 extern OPSTAT FsmProcessingLaunchExecute(UINT8 task_id);
 extern OPSTAT FsmSetState(UINT8 task_id, UINT8 newState);
 extern UINT8  FsmGetState(UINT8 task_id);
-extern OPSTAT fsm_com_do_nothing(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 
 //Global VM layer basic API and functions
+extern OPSTAT fsm_com_do_nothing(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT ihu_message_rcv(UINT8 dest_id, IhuMsgSruct_t *msg);
 extern OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len); //message send
 extern OPSTAT ihu_taskid_to_string(UINT8 id, char *string);
@@ -209,11 +214,16 @@ UINT32 ihu_msgque_inquery(UINT8 task_id);
 extern OPSTAT ihu_msgque_resync(void);
 extern void ihu_sleep(UINT32 second);
 extern void ihu_usleep(UINT32 usecond);  //resulution 10^(-6)s = 1 microsecond
-extern void IhuDebugPrint(char *p);
-extern void IhuErrorPrint(char *p);
+
 uint16_t b2l_uint16(uint16_t in);
 extern void ihu_sw_restart(void);
 extern struct tm ihu_clock_unix_to_ymd(time_t t_unix);
+
+
+
+
+
+
 
 
 /*
@@ -295,7 +305,6 @@ typedef struct IhuTimerTable
 
 //Global variables
 extern IhuTaskTag_t zIhuTaskInfo[MAX_TASK_NUM_IN_ONE_IHU];  //任务控制总表
-extern IhuHwInvInfoTag_t zIhuHwInvInfo;                     //硬件清单
 extern UINT32 zIhuRunErrCnt[MAX_TASK_NUM_IN_ONE_IHU];       //差错表
 extern FsmTable_t zIhuFsmTable;                             //状态机总表
 extern char *zIhuTaskNameList[MAX_TASK_NUM_IN_ONE_IHU];     //任务名字符串
