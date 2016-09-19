@@ -82,10 +82,6 @@ enum IHU_TASK_QUEUE_ID
 }; //end of IHU_TASK_QUEUE_ID
 
 
-
-
-
-
 /*
 ** Fsm INFORMATION structure.
 */
@@ -174,13 +170,21 @@ extern IhuGlobalCounter_t zIhuGlobalCounter;
 /*
  *	
  *  全局API
+ *  UINT16 param_len: 考虑到单片机下的实时操作系统，U16长度是最为合适的，如果没有意外，以后不得修改
  *
  */
-//全局API
+//全局API，不依赖具体操作系统
 extern void IhuDebugPrint(char *format, ...);
 extern void IhuErrorPrint(char *format, ...);
+extern void ihu_vm_system_init(void);  //系统级别的初始化
+extern void ihu_sleep(UINT32 second);
+extern void ihu_usleep(UINT32 usecond);  //resulution 10^(-6)s = 1 microsecond
+uint16_t b2l_uint16(uint16_t in);
+extern OPSTAT ihu_taskid_to_string(UINT8 id, char *string);
+extern OPSTAT ihu_msgid_to_string(UINT16 id, char *string);
 
-//VM FSM related APIs
+
+//VM FSM related APIs，状态机核心部分，不依赖具体操作系统
 extern OPSTAT FsmInit(void);
 extern OPSTAT FsmAddNew(UINT8 task_id, FsmStateItem_t* pFsmStateItem);
 extern OPSTAT FsmRemove(UINT8 task_id);
@@ -191,31 +195,25 @@ extern OPSTAT FsmProcessingLaunchExecute(UINT8 task_id);
 extern OPSTAT FsmSetState(UINT8 task_id, UINT8 newState);
 extern UINT8  FsmGetState(UINT8 task_id);
 
-//Global VM layer basic API and functions
-extern OPSTAT fsm_com_do_nothing(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+
+//Global VM layer basic API and functions，跟具体操作系统相关的API部分
+extern OPSTAT ihu_msgque_create(UINT8 task_id);
+extern OPSTAT ihu_msgque_delete(UINT8 task_id);
+UINT32 ihu_msgque_inquery(UINT8 task_id);
+extern OPSTAT ihu_msgque_resync(void);
+extern OPSTAT ihu_message_queue_clean(UINT8 dest_id);
+extern OPSTAT ihu_task_create(UINT8 task_id, void *(*task_func)(void *), void *arg, int prio);
+extern OPSTAT ihu_task_delete(UINT8 task_id);
+
 extern OPSTAT ihu_message_rcv(UINT8 dest_id, IhuMsgSruct_t *msg);
 extern OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len); //message send
-extern OPSTAT ihu_taskid_to_string(UINT8 id, char *string);
-extern OPSTAT ihu_msgid_to_string(UINT16 id, char *string);
-extern OPSTAT ihu_message_queue_clean(UINT8 dest_id);
+
 extern OPSTAT ihu_system_task_init_call(UINT8 task_id, FsmStateItem_t *p);
 extern OPSTAT ihu_system_task_execute(UINT8 task_id, FsmStateItem_t *p);
 extern OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateItem);
 extern void   ihu_task_create_all(void);
 extern void   ihu_task_execute_all(void);
-
-//Global APIs
-extern void ihu_vm_system_init(void);  //系统级别的初始化
-extern OPSTAT ihu_task_create(UINT8 task_id, void *(*task_func)(void *), void *arg, int prio);
-extern OPSTAT ihu_task_delete(UINT8 task_id);
-extern OPSTAT ihu_msgque_create(UINT8 task_id);
-extern OPSTAT ihu_msgque_delete(UINT8 task_id);
-UINT32 ihu_msgque_inquery(UINT8 task_id);
-extern OPSTAT ihu_msgque_resync(void);
-extern void ihu_sleep(UINT32 second);
-extern void ihu_usleep(UINT32 usecond);  //resulution 10^(-6)s = 1 microsecond
-
-uint16_t b2l_uint16(uint16_t in);
+extern OPSTAT fsm_com_do_nothing(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern void ihu_sw_restart(void);
 extern struct tm ihu_clock_unix_to_ymd(time_t t_unix);
 

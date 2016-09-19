@@ -498,8 +498,16 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 
 //= ZJL, 2016 Sep.18, IHU_EMCWX_CURRENT_SW_DELIVERY R03.19
 = 继续VMFREEOS框架程序建立
-= FreeRTOS待完成的函数体：sleep, usleep, 
-
+= FreeRTOS待完成的函数体：
+  => 不支持<system.h>中的sleep, usleep，导致未完成
+	void ihu_sleep(UINT32 second); 
+	void ihu_usleep(UINT32 usecond);
+=> 不支持<sys/ipc.h>中的msgctl, msgget, IPC_EXCL/IPC_RMID/IPC_CREATE，导致以下函数出现问题
+	extern OPSTAT ihu_msgque_create(UINT8 task_id);
+	extern OPSTAT ihu_msgque_delete(UINT8 task_id);
+	UINT32 ihu_msgque_inquery(UINT8 task_id);
+	extern OPSTAT ihu_msgque_resync(void);
+	extern OPSTAT ihu_message_queue_clean(UINT8 dest_id);
 
 
 

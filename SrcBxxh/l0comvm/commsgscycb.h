@@ -11,12 +11,20 @@
 #include "comtype.h"
 #include "sysdim.h"
 #include "sysengpar.h"
+
 #include <stdio.h>
+#include <errno.h>
 #include <stdarg.h>
 #include <string.h>
 #include <time.h>
 #include <math.h>
+#include <assert.h>
+#include <signal.h>
+#include <ctype.h>
+#include <limits.h>
+#include <locale.h>
 //#include <system.h>
+//#include <sys/ipc.h>
 
 
 //遗留特殊的定义
