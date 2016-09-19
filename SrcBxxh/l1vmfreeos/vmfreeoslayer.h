@@ -10,18 +10,12 @@
 
 //自行标准配置
 #include "comtype.h"
+#include "sysversion.h"
 #include "sysdim.h"
 #include "commsgscycb.h"
 #include "sysconfig.h"
 #include "sysengpar.h"
-#include "sysversion.h"
 
-
-//标准库
-#include <stdint.h>
-#include <string.h>
-#include <time.h>
-#include <stdlib.h>
 
 /*
  *	
@@ -39,7 +33,8 @@
  *   - IHU_TASK_NAME_ID
  *   - IHU_TASK_QUEUE_ID
  *   - zIhuTaskNameList
- *   - 还要修改可能的本地配置文件，或者sysengpar.h的固定工参配置信息
+ *   - 还要修改可能的本地配置文件，或者sysengpar.h的固定工参配置信息，#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID
+ *	 - 继续修改初始化函数void ihu_vm_system_init(void)
  *
  */
 enum IHU_TASK_NAME_ID
@@ -182,7 +177,8 @@ extern void ihu_usleep(UINT32 usecond);  //resulution 10^(-6)s = 1 microsecond
 uint16_t b2l_uint16(uint16_t in);
 extern OPSTAT ihu_taskid_to_string(UINT8 id, char *string);
 extern OPSTAT ihu_msgid_to_string(UINT16 id, char *string);
-
+extern int  ihu_vm_main(void);
+extern void ihu_vm_check_task_que_status_and_action(void);
 
 //VM FSM related APIs，状态机核心部分，不依赖具体操作系统
 extern OPSTAT FsmInit(void);
@@ -190,39 +186,36 @@ extern OPSTAT FsmAddNew(UINT8 task_id, FsmStateItem_t* pFsmStateItem);
 extern OPSTAT FsmRemove(UINT8 task_id);
 extern OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len);
 extern OPSTAT FsmProcessingLaunch(void);
-extern OPSTAT FsmProcessingLaunchEntry(UINT8 task_id);
-extern OPSTAT FsmProcessingLaunchExecute(UINT8 task_id);
 extern OPSTAT FsmSetState(UINT8 task_id, UINT8 newState);
 extern UINT8  FsmGetState(UINT8 task_id);
 
 
 //Global VM layer basic API and functions，跟具体操作系统相关的API部分
-extern OPSTAT ihu_msgque_create(UINT8 task_id);
-extern OPSTAT ihu_msgque_delete(UINT8 task_id);
-UINT32 ihu_msgque_inquery(UINT8 task_id);
-extern OPSTAT ihu_msgque_resync(void);
+extern OPSTAT ihu_message_queue_create(UINT8 task_id);
+extern OPSTAT ihu_message_queue_delete(UINT8 task_id);
+extern UINT32 ihu_message_queue_inquery(UINT8 task_id);
+extern OPSTAT ihu_message_queue_resync(void);
 extern OPSTAT ihu_message_queue_clean(UINT8 dest_id);
+extern OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len); //message send
+extern OPSTAT ihu_message_rcv(UINT8 dest_id, IhuMsgSruct_t *msg);
 extern OPSTAT ihu_task_create(UINT8 task_id, void *(*task_func)(void *), void *arg, int prio);
 extern OPSTAT ihu_task_delete(UINT8 task_id);
-
-extern OPSTAT ihu_message_rcv(UINT8 dest_id, IhuMsgSruct_t *msg);
-extern OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len); //message send
-
-extern OPSTAT ihu_system_task_init_call(UINT8 task_id, FsmStateItem_t *p);
-extern OPSTAT ihu_system_task_execute(UINT8 task_id, FsmStateItem_t *p);
 extern OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateItem);
+extern OPSTAT ihu_system_task_init_call(UINT8 task_id, FsmStateItem_t *p);
 extern void   ihu_task_create_all(void);
-extern void   ihu_task_execute_all(void);
 extern OPSTAT fsm_com_do_nothing(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+
 extern void ihu_sw_restart(void);
 extern struct tm ihu_clock_unix_to_ymd(time_t t_unix);
 
 
-
-
-
-
-
+//对于没有RTOS的情形
+extern OPSTAT FsmProcessingLaunchEntryBareRtos(UINT8 task_id);   //当创建和启动分离时使用
+extern OPSTAT FsmProcessingLaunchExecuteBareRtos(UINT8 task_id); //当创建和启动分离时使用
+extern OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len); //message send
+extern OPSTAT ihu_message_rcv_bare_rtos(UINT8 dest_id, IhuMsgSruct_t *msg);
+extern OPSTAT ihu_system_task_execute_bare_rtos(UINT8 task_id, FsmStateItem_t *p);
+extern void   ihu_task_execute_all_bare_rtos(void);
 
 /*
  *	

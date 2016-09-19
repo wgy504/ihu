@@ -508,6 +508,18 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 	UINT32 ihu_msgque_inquery(UINT8 task_id);
 	extern OPSTAT ihu_msgque_resync(void);
 	extern OPSTAT ihu_message_queue_clean(UINT8 dest_id);
+	extern OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len); //message send
+	extern OPSTAT ihu_message_rcv(UINT8 dest_id, IhuMsgSruct_t *msg);	
+=> 不支持<pthread.h>，导致以下函数不能支持
+	extern OPSTAT ihu_task_create(UINT8 task_id, void *(*task_func)(void *), void *arg, int prio);
+	extern OPSTAT ihu_task_delete(UINT8 task_id);
+	=> CALLBACK不支持，导致以下函数可能不正常
+	extern OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateItem);
+=> VM以及各个任务的自启动RESTART机制，待定
+=> 打印时候需要\n做为结束符，待定
+=> 基本上完成FreeRTOS VM的框架环境，但还未跟操作系统直接相连接
+=> 确保了本VM_TEST项目和EMCWX项目的编译成功
+
 
 
 

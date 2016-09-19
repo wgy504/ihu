@@ -15,6 +15,7 @@
 #define L1VMFREEOS_L1TIMER_FREEOS_H_
 
 #include "l1comdef_freeos.h"
+#include "vmfreeoslayer.h"
 
 //State definition
 //#define FSM_STATE_ENTRY  0x00

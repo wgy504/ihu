@@ -13,6 +13,8 @@
 #include "sysengpar.h"
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
 #include <errno.h>
 #include <stdarg.h>
 #include <string.h>
@@ -45,6 +47,7 @@ typedef struct IhuMsgSruct
 	INT8 msgBody[MAX_IHU_MSG_BODY_LENGTH];
 }IhuMsgSruct_t;
 
+#define  IHU_THREAD_PRIO  10          //priority of the main loop de 1 a 99 max
 
 /*
  *
@@ -66,6 +69,8 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_COM_RESTART,  //L1->重新初始化上下文数据
 	MSG_ID_COM_TIME_OUT,
 	MSG_ID_COM_STOP,
+	MSG_ID_COM_HEART_BEAT,
+	MSG_ID_COM_HEART_BEAT_FB,
 	
 	//VMFO
 	MSG_ID_VMFO_TIMER_1S_PERIOD,
