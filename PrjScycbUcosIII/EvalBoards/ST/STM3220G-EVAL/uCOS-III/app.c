@@ -36,7 +36,7 @@
 */
 
 #include  <includes.h>
-
+#include  <vmucoslayer.h>
 
 
 /*
@@ -91,6 +91,10 @@ int main(void)
 
     OSInit(&err);                                               /* Init OS.                                                 */
 
+		//我们加载VM和上层程序例子，编译和测试下
+		ihu_vm_main();
+		
+	
     OSTaskCreate((OS_TCB     *)&AppTaskStartTCB,                /* Create the start task                                    */
                  (CPU_CHAR   *)"App Task Start",
                  (OS_TASK_PTR ) AppTaskStart,
