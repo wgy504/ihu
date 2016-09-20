@@ -632,24 +632,24 @@
               <FilePath>..\..\SrcBxxh\l1vmlayer\l1comdef_ucos.h</FilePath>
             </File>
             <File>
-              <FileName>l1timer.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l1vmlayer\l1timer.h</FilePath>
-            </File>
-            <File>
-              <FileName>l1timer.c</FileName>
+              <FileName>l1timer_ucos.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l1vmlayer\l1timer.c</FilePath>
+              <FilePath>..\..\SrcBxxh\l1vmlayer\l1timer_ucos.c</FilePath>
             </File>
             <File>
-              <FileName>vmucoslayer.h</FileName>
+              <FileName>l1timer_ucos.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l1vmlayer\vmucoslayer.h</FilePath>
+              <FilePath>..\..\SrcBxxh\l1vmlayer\l1timer_ucos.h</FilePath>
             </File>
             <File>
               <FileName>vmucoslayer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\SrcBxxh\l1vmlayer\vmucoslayer.c</FilePath>
+            </File>
+            <File>
+              <FileName>vmucoslayer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmlayer\vmucoslayer.h</FilePath>
             </File>
           </Files>
         </Group>

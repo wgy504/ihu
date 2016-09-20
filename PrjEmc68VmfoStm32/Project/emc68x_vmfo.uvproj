@@ -597,11 +597,6 @@
               <FilePath>..\..\SrcBxxh\l0comvm\commsgemc68.h</FilePath>
             </File>
             <File>
-              <FileName>commsgscycb.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l0comvm\commsgscycb.h</FilePath>
-            </File>
-            <File>
               <FileName>sysconfig.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l0comvm\sysconfig.h</FilePath>
@@ -637,16 +632,6 @@
               <FilePath>..\..\SrcBxxh\l1vmlayer\l1comdef_freeos.h</FilePath>
             </File>
             <File>
-              <FileName>l1timer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l1vmlayer\l1timer.c</FilePath>
-            </File>
-            <File>
-              <FileName>l1timer.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l1vmlayer\l1timer.h</FilePath>
-            </File>
-            <File>
               <FileName>vmfreeoslayer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\SrcBxxh\l1vmlayer\vmfreeoslayer.c</FilePath>
@@ -655,6 +640,16 @@
               <FileName>vmfreeoslayer.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l1vmlayer\vmfreeoslayer.h</FilePath>
+            </File>
+            <File>
+              <FileName>l1timer_freeos.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmlayer\l1timer_freeos.c</FilePath>
+            </File>
+            <File>
+              <FileName>l1timer_freeos.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmlayer\l1timer_freeos.h</FilePath>
             </File>
           </Files>
         </Group>

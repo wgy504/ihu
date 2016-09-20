@@ -14,7 +14,8 @@
  *   2. 完善系统DIMENSION，工程参数定义
  *   3. 调用硬件初始化  ihu_vm_system_init();
  *   4. 调用任务创建 ihu_task_create_all(void);
- *   5. 进入while(1)循环，并sleep状态，每1分钟醒来一次，检查各个任务的状态以及messageque，如果非正常，则重新启动该任务
+ *   5. 进入while(1)循环，并sleep状态，每1分钟醒来一次，检查各个任务的状态以及messageque，
+ *      如果非正常，则重新启动该任务
  *   6. 象征性的清理环境，调用 ihu_task_delete_all_and_queue();
  *   7. 结束
  *
@@ -1975,11 +1976,12 @@ int ihu_vm_main(void)
 		ihu_sleep(60); //可以设置为5秒的定时，甚至更长
 		ihu_vm_check_task_que_status_and_action();
 	}
+	
+	//清理现场环境，永远到达不了，清掉以消除COMPILE WARNING
+	//ihu_task_delete_all_and_queue();
 
-	//清理现场环境
-	ihu_task_delete_all_and_queue();
-
-	return EXIT_SUCCESS;
+	//永远到达不了，清掉以消除COMPILE WARNING
+	//return EXIT_SUCCESS;
 }
 
 //TBD

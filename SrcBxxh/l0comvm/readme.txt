@@ -527,12 +527,14 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 
 //= ZJL, 2016 Sep.20, IHU_EMCWX_CURRENT_SW_DELIVERY R03.21
 = 增加LPCCCB/PLCSB两个项目的配置，修改sysconfig/L2frame等部分
-
-
-
-
-
-
+= 分离l1timer_freeos和l1timer_ucos
+=>  不支持<sys/time.h>的sigval, sigevent, itimerspec, timer_t导致以下函数无法继续
+	void func_timer_routine_handler_1s(union sigval v);
+	void func_timer_routine_handler_10ms(union sigval v);
+	void func_timer_routine_handler_1ms(union sigval v);
+	OPSTAT fsm_timer_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+= 时钟全局DIMENSION定义，移到L1TIMER中去了
+= 完成所有项目的框架改造，以支持l1timer的改进
 
 
 

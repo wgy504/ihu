@@ -14,9 +14,18 @@
 #ifndef L2FRAME_L2SCYCB_H_
 #define L2FRAME_L2SCYCB_H_
 
-#include "vmucoslayer.h"
 #include "l1comdef_ucos.h"
-
+#include "vmucoslayer.h"
+#include "l1timer_ucos.h"
+#include "l2adclibra.h"
+#include "l2spileo.h"
+#include "l2i2caries.h"
+#include "l2pwmtaurus.h"
+#include "l2spsvirgo.h"
+#include "l2gpiocancer.h"
+#include "l2didocap.h"
+#include "l2ledpisces.h"
+#include "l2ethorion.h"
 
 //State definition
 //#define FSM_STATE_ENTRY  0x00

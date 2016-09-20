@@ -1976,10 +1976,11 @@ int ihu_vm_main(void)
 		ihu_vm_check_task_que_status_and_action();
 	}
 
-	//清理现场环境
-	ihu_task_delete_all_and_queue();
+	//清理现场环境，永远到达不了，清掉以消除COMPILE WARNING
+	//ihu_task_delete_all_and_queue();
 
-	return EXIT_SUCCESS;
+	//永远到达不了，清掉以消除COMPILE WARNING
+	//return EXIT_SUCCESS;
 }
 
 //TBD

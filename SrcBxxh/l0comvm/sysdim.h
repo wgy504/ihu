@@ -8,7 +8,23 @@
 #ifndef L0COMVM_SYSDIM_H_
 #define L0COMVM_SYSDIM_H_
 
-//当前项目
+/**********************************************************************************
+ *
+ *   =====项目配置使用方式=====
+ *   0. 建立一个新的KEIL项目，包括源文件及目录结构
+ *   1. 修改sysdim.h，并配置相应的性能参数
+ *   2. 确定要使用哪一种操作系统对应的VM，选择VMDA, VMFO, VMUO, VMLO, VMHO，分别对应FreeRTOS, ucosIII, LiteOS, HuiOS
+ *   3. 换过VM之后，生成相应项目的commsgxxx.h, l1comdefxxx.h, l1timerxxx.h，这些在不同的项目环境下是不一样的
+ *   4. 更新sysconfig.h, 配置相应的工程参数
+ *   5. 修改vmxxxlayer.h，修改包含文件以及关系
+ *   6. 修改l2frame中的公共模块包含关系
+ *   7. 新建l3xxx.h/c, 修改l3app中的包含关系，建立其完整的文件体系
+ *   8. 回归编译老旧工程项目，确保不损坏之前的项目
+ *
+ **********************************************************************************/
+
+
+//项目定义
 #define IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCWX "IHU_PRG_EMCWX"
 #define IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCWX_ID 1
 #define IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCSPS "IHU_PRG_EMCSPS"
@@ -65,12 +81,12 @@
 	#define MAX_SLEEP_COUNTER_UP_LIMITATION 50000
 	//MYC add debug print preparation buffer
 	#define IHU_PRINT_CHAR_SIZE 200
-	//时钟定义的DIMENSION
+	//TIMER DIMENSION
 	#define MAX_TIMER_NUM_IN_ONE_IHU_1S 8  //Normal situation
 	#define MAX_TIMER_NUM_IN_ONE_IHU_10MS 3 //Frame usage
 	#define MAX_TIMER_NUM_IN_ONE_IHU_1MS 3  //Real-time usage
 	#define MAX_TIMER_SET_DURATION 100000
-	
+
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID)
 	#define MAX_TASK_NUM_IN_ONE_IHU 16
 	#define TASK_NAME_MAX_LENGTH 12
@@ -91,11 +107,6 @@
 	#define MAX_SLEEP_COUNTER_UP_LIMITATION 50000
 	//MYC add debug print preparation buffer
 	#define IHU_PRINT_CHAR_SIZE 1000
-	//时钟定义的DIMENSION
-	#define MAX_TIMER_NUM_IN_ONE_IHU_1S 8  //Normal situation
-	#define MAX_TIMER_NUM_IN_ONE_IHU_10MS 3 //Frame usage
-	#define MAX_TIMER_NUM_IN_ONE_IHU_1MS 3  //Real-time usage
-	#define MAX_TIMER_SET_DURATION 100000
 
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID)
 	#define MAX_TASK_NUM_IN_ONE_IHU 16
@@ -117,11 +128,6 @@
 	#define MAX_SLEEP_COUNTER_UP_LIMITATION 50000
 	//MYC add debug print preparation buffer
 	#define IHU_PRINT_CHAR_SIZE 1000
-	//时钟定义的DIMENSION
-	#define MAX_TIMER_NUM_IN_ONE_IHU_1S 8  //Normal situation
-	#define MAX_TIMER_NUM_IN_ONE_IHU_10MS 3 //Frame usage
-	#define MAX_TIMER_NUM_IN_ONE_IHU_1MS 3  //Real-time usage
-	#define MAX_TIMER_SET_DURATION 100000
 
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCCB_ID)
 	#define MAX_TASK_NUM_IN_ONE_IHU 16
@@ -143,11 +149,6 @@
 	#define MAX_SLEEP_COUNTER_UP_LIMITATION 50000
 	//MYC add debug print preparation buffer
 	#define IHU_PRINT_CHAR_SIZE 1000
-	//时钟定义的DIMENSION
-	#define MAX_TIMER_NUM_IN_ONE_IHU_1S 8  //Normal situation
-	#define MAX_TIMER_NUM_IN_ONE_IHU_10MS 3 //Frame usage
-	#define MAX_TIMER_NUM_IN_ONE_IHU_1MS 3  //Real-time usage
-	#define MAX_TIMER_SET_DURATION 100000
 
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCSB_ID)
 	#define MAX_TASK_NUM_IN_ONE_IHU 16
@@ -169,11 +170,6 @@
 	#define MAX_SLEEP_COUNTER_UP_LIMITATION 50000
 	//MYC add debug print preparation buffer
 	#define IHU_PRINT_CHAR_SIZE 1000
-	//时钟定义的DIMENSION
-	#define MAX_TIMER_NUM_IN_ONE_IHU_1S 8  //Normal situation
-	#define MAX_TIMER_NUM_IN_ONE_IHU_10MS 3 //Frame usage
-	#define MAX_TIMER_NUM_IN_ONE_IHU_1MS 3  //Real-time usage
-	#define MAX_TIMER_SET_DURATION 100000
 	
 	
 #else

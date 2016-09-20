@@ -855,48 +855,48 @@
     <File>
       <GroupNumber>7</GroupNumber>
       <FileNumber>47</FileNumber>
-      <FileType>5</FileType>
+      <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\SrcBxxh\l1vmlayer\l1timer.h</PathWithFileName>
-      <FilenameWithoutPath>l1timer.h</FilenameWithoutPath>
+      <PathWithFileName>..\..\SrcBxxh\l1vmlayer\l1timer_ucos.c</PathWithFileName>
+      <FilenameWithoutPath>l1timer_ucos.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
       <FileNumber>48</FileNumber>
-      <FileType>1</FileType>
+      <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\SrcBxxh\l1vmlayer\l1timer.c</PathWithFileName>
-      <FilenameWithoutPath>l1timer.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\SrcBxxh\l1vmlayer\l1timer_ucos.h</PathWithFileName>
+      <FilenameWithoutPath>l1timer_ucos.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
       <FileNumber>49</FileNumber>
-      <FileType>5</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\SrcBxxh\l1vmlayer\vmucoslayer.h</PathWithFileName>
-      <FilenameWithoutPath>vmucoslayer.h</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>7</GroupNumber>
-      <FileNumber>50</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\SrcBxxh\l1vmlayer\vmucoslayer.c</PathWithFileName>
       <FilenameWithoutPath>vmucoslayer.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>7</GroupNumber>
+      <FileNumber>50</FileNumber>
+      <FileType>5</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\SrcBxxh\l1vmlayer\vmucoslayer.h</PathWithFileName>
+      <FilenameWithoutPath>vmucoslayer.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

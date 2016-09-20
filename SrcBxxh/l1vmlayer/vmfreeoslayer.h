@@ -219,76 +219,6 @@ extern OPSTAT ihu_message_rcv_bare_rtos(UINT8 dest_id, IhuMsgSruct_t *msg);
 extern OPSTAT ihu_system_task_execute_bare_rtos(UINT8 task_id, FsmStateItem_t *p);
 extern void   ihu_task_execute_all_bare_rtos(void);
 
-/*
- *	
- *  全局TIMER定义
- *
- */
-//Granularity of 1second and 10ms timer set
-#define IHU_TIMER_TICK_1_SEC 1      //in second
-#define IHU_TIMER_TICK_10_MS 10000  //in u second
-#define IHU_TIMER_TICK_1_MS 1000  //in u second
-#define IHU_TIMER_TICK_10_MS_IN_NS 10000000  //in n second
-#define IHU_TIMER_TICK_1_MS_IN_NS 1000000  //in n second
-#define IHU_TIMER_TICK_100_MS_IN_NS 100000000  //in n second
-
-//Timer Id definition
-enum IHU_TIMER_ID_1S_ALL
-{
-	TIMER_ID_1S_MIN = 0,
-	TIMER_ID_1S_VMDA_INIT_FB,
-	TIMER_ID_1S_ASYLIBRA_AUTH_RESP_WAIT,
-	TIMER_ID_1S_ASYLIBRA_INIT_RESP_WAIT,
-	TIMER_ID_1S_ASYLIBRA_DATA_RESP_WAIT,	
-	TIMER_ID_1S_EMC_PERIOD_READ,
-	TIMER_ID_1S_MAX,
-};
-enum IHU_TIMER_ID_10MS_ALL
-{
-	TIMER_ID_10MS_MIN = 0,
-	TIMER_ID_10MS_VMDA_TEST,
-	TIMER_ID_10MS_MAX,
-};
-enum IHU_TIMER_ID_1MS_ALL
-{
-	TIMER_ID_1MS_MIN = 0,
-	TIMER_ID_1MS_VMDA_TEST,
-	TIMER_ID_1MS_MAX,
-};
-
-//System level timer global variables
-typedef struct IhuTimerElement
-{
-	UINT32 timerId;
-	UINT32 taskId;
-	UINT32 tDuration;
-	UINT8  timerType;
-	UINT8  timerRes; //Timer Resolution
-	UINT32 elapse;
-	UINT8  status;
-}IhuTimerElement_t;
-typedef struct IhuTimerTable
-{
-	IhuTimerElement_t timer1s[MAX_TIMER_NUM_IN_ONE_IHU_1S];
-	IhuTimerElement_t timer10ms[MAX_TIMER_NUM_IN_ONE_IHU_10MS];
-	IhuTimerElement_t timer1ms[MAX_TIMER_NUM_IN_ONE_IHU_1MS];
-}IhuTimerTable_t;
-
-#define TIMER_STATUS_DEACTIVE 1
-#define TIMER_STATUS_ACTIVE 2
-#define TIMER_STATUS_START 0xFD
-#define TIMER_STATUS_STOP 0xFE
-#define TIMER_STATUS_INVALID 0xFF
-
-#define TIMER_TYPE_ONE_TIME 1
-#define TIMER_TYPE_PERIOD 2
-#define TIMER_TYPE_INVALID 0xFF
-
-#define TIMER_RESOLUTION_1S 1
-#define TIMER_RESOLUTION_10MS 2
-#define TIMER_RESOLUTION_1MS 3
-#define TIMER_RESOLUTION_INVALID 0xFF
-
 
 /*
  *	
@@ -303,7 +233,6 @@ extern FsmTable_t zIhuFsmTable;                             //状态机总表
 extern char *zIhuTaskNameList[MAX_TASK_NUM_IN_ONE_IHU];     //任务名字符串
 extern char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK];    //消息名字符串
 extern IhuSysEngParTable_t zIhuSysEngPar;                   //工参
-extern IhuTimerTable_t zIhuTimerTable;                      //定时器
 extern time_t zIhuSystemTimeUnix;                           //系统时钟TimeStamp
 extern struct tm zIhuSystemTimeYmd;                        	//系统时钟YMD
 extern UINT32 zIhuSleepCnt[MAX_TASK_NUM_IN_ONE_IHU][MAX_SLEEP_NUM_IN_ONE_TASK];  //睡眠控制表
