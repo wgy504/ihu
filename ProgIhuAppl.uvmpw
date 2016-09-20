@@ -28,4 +28,8 @@
     <PathAndName>.\PrjScycbVmuoStm205RG\Project\scycb_vmuo.uvproj</PathAndName>
   </project>
 
+  <project>
+    <PathAndName>.\PrjScycbUcosIII\EvalBoards\ST\STM3220G-EVAL\uCOS-III\KeilMDK\uCOS-III-Scycb.uvgui.uvproj</PathAndName>
+  </project>
+
 </ProjectWorkspace>

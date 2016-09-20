@@ -536,6 +536,20 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 时钟全局DIMENSION定义，移到L1TIMER中去了
 = 完成所有项目的框架改造，以支持l1timer的改进
 
+//= ZJL, 2016 Sep.20, IHU_EMCWX_CURRENT_SW_DELIVERY R03.22
+= 集成ucosIII的操作系统到Scycb项目工程中来，以便开始集成ucos操作系统
+= 暂时遇到uCosIII的最小DEMO程序不能下载到STM32205RC评估班子中去，这个应用最初是支持STM32F207IGH6，待搞定，不然无法调测
+= 之前的项目工程Scycb VMUO暂时保留，待清除
+
+
+
+
+
+
+
+
+
+
 
 
 
