@@ -525,7 +525,8 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 建立scycb的程序框架，以及VMUO所对应的VM程序框架
 = 完成了VMFO和VMUO两种VM的框架。VMFO未来将不保证完善的更新，主要任务将放在VMUO的更新上，以便与UCOS紧密结合并对其
 
-
+//= ZJL, 2016 Sep.20, IHU_EMCWX_CURRENT_SW_DELIVERY R03.21
+= 增加LPCCCB/PLCSB两个项目的配置，修改sysconfig/L2frame等部分
 
 
 
