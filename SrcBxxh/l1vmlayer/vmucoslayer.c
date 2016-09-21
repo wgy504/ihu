@@ -152,30 +152,50 @@ uint16_t b2l_uint16(uint16_t in)
 
 //API abstract
 //通过时钟问题的解决，这个问题终于解决了，原因就是SLEEP和SIGALM公用同一套信号量，导致相互冲突。时钟采用线程方式后，再也没有问题了
+//以下两个函数的绝对时间，严格依赖ucos中的配置，这意味着步进是1ms。
+//如果RATE_HZ配置是100u，意味着步进编程10ms，这样所有的实际时间将大10倍，所有在VMUO和OS的配置之中，需要严格对其这一点。
+// #define  OS_CFG_TICK_RATE_HZ 1000u
 void ihu_sleep(UINT32 second)
 {
-	if (second <= (UINT32)0) second =0;
-	//second = sleep(second*1000);
-	while (second>0)
-	{
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
-			//太多的错误，未来需要再研究这个错误出现的原因，这里留下一点点报告的可行性
-				IhuDebugPrint("VMUO: Sleep interrupt by other higher level system call, remaining %d second to be executed\n", second);
+	OS_ERR err;	
+	UINT32 minute=0, hour=0, sec = 0;
+	
+	hour = second / 60 / 60;
+	minute = second / 60 - hour * 60;
+	sec = second - hour * 60 * 60 - minute * 60;
+	
+	//设置最大工作范围
+	if (hour > 99) hour = 99; 
+	OSTimeDlyHMSM(hour, minute, sec, 0, OS_OPT_TIME_HMSM_STRICT, &err);
+	if (err != OS_ERR_NONE){
+			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
+				zIhuRunErrCnt[TASK_ID_VMUO]++;
+				IhuErrorPrint("VMUO: ihu_sleep call error, error code = [%d].\n", err);
+				return;
 		}
-		//second = sleep(second);
 	}
 }
 
+//单位是1ms
 void ihu_usleep(UINT32 usecond)
 {
-	if (usecond <= 0) usecond =0;
-	//usecond = usleep(usecond);
-	while (usecond>0)
-	{
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
-			IhuErrorPrint("VMUO: uSleep interrupt by other higher level system call, remaining %d usecond to be executed\n", usecond);
+	OS_ERR err;	
+	UINT32 minute=0, hour=0, sec = 0, usec = 0;
+	
+	hour = usecond /1000 / 60 / 60;
+	minute = usecond / 1000 / 60 - hour * 60;
+	sec = usecond / 1000 - hour * 60 * 60 - minute * 60;
+	usec = usecond - hour * 60 * 60 * 1000 - minute * 60 * 1000 - sec * 1000;
+	
+	//设置最大工作范围
+	if (hour > 99) hour = 99; 
+	OSTimeDlyHMSM(hour, minute, sec, usec, OS_OPT_TIME_HMSM_STRICT, &err);
+	if (err != OS_ERR_NONE){
+			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
+				zIhuRunErrCnt[TASK_ID_VMUO]++;
+				IhuErrorPrint("VMUO: ihu_usleep call error, error code = [%d].\n", err);
+				return;
 		}
-		//usecond = usleep(usecond);
 	}
 }
 
@@ -1972,16 +1992,18 @@ int ihu_vm_main(void)
   ihu_task_create_all();
 
 	//wait for ever
-	while (1){
-		ihu_sleep(60); //可以设置为5秒的定时，甚至更长
-		ihu_vm_check_task_que_status_and_action();
-	}
+	//基于ucos的运行机制，以下while(1)不能被执行，不然任务永远创建不成功
+	//同时，对其它任务的监控，也移到L1TIMER任务中去了
+	//while (1){
+	//	ihu_sleep(60); //可以设置为5秒的定时，甚至更长
+	//	ihu_vm_check_task_que_status_and_action();
+	//}
 	
-	//清理现场环境，永远到达不了，清掉以消除COMPILE WARNING
+	//这里不该清除。任务的清除只能通过RESTART系统得以达成
 	//ihu_task_delete_all_and_queue();
 
-	//永远到达不了，清掉以消除COMPILE WARNING
-	//return EXIT_SUCCESS;
+	//成功返回，以便使得OSStart得以执行
+	return EXIT_SUCCESS;
 }
 
 //TBD

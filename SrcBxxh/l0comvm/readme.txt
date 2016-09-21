@@ -541,11 +541,19 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 暂时遇到uCosIII的最小DEMO程序不能下载到STM32205RC评估班子中去，这个应用最初是支持STM32F207IGH6，待搞定，不然无法调测
 = 之前的项目工程Scycb VMUO暂时保留，待清除
 
-
-
-
-
-
+//= ZJL, 2016 Sep.21, IHU_EMCWX_CURRENT_SW_DELIVERY R03.23
+= Sleep / uSleep通过OSTimeDlyHMSM()解决
+	//如果RATE_HZ配置是100u，意味着步进编程10ms，这样所有的实际时间将大10倍，所有在VMUO和OS的配置之中，需要严格对其这一点。
+	// #define  OS_CFG_TICK_RATE_HZ 1000u
+= 为了生成10ms的任务级时钟，以下缺省配置从10u改为了100u，从而将任务级的时钟频率改为100Hz
+	#define  OS_CFG_TMR_TASK_RATE_HZ          100u              /* Rate for timers (10 Hz Typ.)                           */
+= 使用了OSTmrCreate / OSTmrStart函数后，解决了L1Timer的初始时钟创建问题，同时以下函数体得到解决
+	OPSTAT fsm_timer_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+	void func_timer_routine_handler_1s(OS_TMR *p_tmr, void *p_arg);
+	void func_timer_routine_handler_10ms(OS_TMR *p_tmr, void *p_arg);
+	void func_timer_routine_handler_1ms(OS_TMR *p_tmr, void *p_arg);
+= L1timer基本解决，等待最终测试
+= 调整全局消息数量和任务数量等性能数据，最终内存占用在70KB附近，以便充分测试128KB的内存以及配置。程序代码71KB，必须放在FLASH中执行。
 
 
 

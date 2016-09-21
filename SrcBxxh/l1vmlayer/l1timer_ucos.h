@@ -36,9 +36,9 @@ enum FSM_STATE_TIMER
  *
  */
 //Granularity of 1second and 10ms timer set
-#define IHU_TIMER_TICK_1_SEC 1      //in second
-#define IHU_TIMER_TICK_10_MS 10000  //in u second
-#define IHU_TIMER_TICK_1_MS 1000  //in u second
+#define IHU_TIMER_TICK_1_SEC 100      //in 10ms, by (#define  OS_CFG_TMR_TASK_RATE_HZ  100u)
+#define IHU_TIMER_TICK_10_MS 1  //in 10ms
+#define IHU_TIMER_TICK_1_MS 1  //in 1ms
 #define IHU_TIMER_TICK_10_MS_IN_NS 10000000  //in n second
 #define IHU_TIMER_TICK_1_MS_IN_NS 1000000  //in n second
 #define IHU_TIMER_TICK_100_MS_IN_NS 100000000  //in n second
@@ -105,7 +105,7 @@ typedef struct IhuTimerTable
 #define TIMER_RESOLUTION_INVALID 0xFF
 
 #define IHU_TIMER_CONFIG_START_RESOLUTION_1S TRUE
-#define IHU_TIMER_CONFIG_START_RESOLUTION_10MS FALSE
+#define IHU_TIMER_CONFIG_START_RESOLUTION_10MS TRUE
 #define IHU_TIMER_CONFIG_START_RESOLUTION_1MS FALSE
 
 
@@ -124,9 +124,9 @@ extern OPSTAT ihu_timer_stop(UINT8 task_id, UINT8 timer_id, UINT8 t_res);
 
 //Local API
 OPSTAT func_timer_hw_init(void);
-//void func_timer_routine_handler_1s(union sigval v);
-//void func_timer_routine_handler_10ms(union sigval v);
-//void func_timer_routine_handler_1ms(union sigval v);
+void func_timer_routine_handler_1s(OS_TMR *p_tmr, void *p_arg);
+void func_timer_routine_handler_10ms(OS_TMR *p_tmr, void *p_arg);
+void func_timer_routine_handler_1ms(OS_TMR *p_tmr, void *p_arg);
 
 #endif /* L1VMFREEOS_L1TIMER_FREEOS_H_ */
 

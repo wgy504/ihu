@@ -1,4 +1,4 @@
-﻿/*
+/*
 ************************************************************************************************************************
 *                                                      uC/OS-III
 *                                                 The Real-Time Kernel
@@ -69,7 +69,7 @@
 
                                                             /* ----------------------- TIMERS ----------------------- */
 #define  OS_CFG_TMR_TASK_PRIO      (OS_CFG_PRIO_MAX - 2u)   /* Priority                                               */
-#define  OS_CFG_TMR_TASK_RATE_HZ          10u               /* Rate for timers (10 Hz Typ.)                           */
+#define  OS_CFG_TMR_TASK_RATE_HZ          100u              /* Rate for timers (10 Hz Typ.)                           */
 #define  OS_CFG_TMR_TASK_STK_SIZE        128u               /* Stack size (number of CPU_STK elements)                */
 #define  OS_CFG_TMR_WHEEL_SIZE            16u               /* Number of 'spokes' in timer wheel                      */
 

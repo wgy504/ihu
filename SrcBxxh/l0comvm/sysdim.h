@@ -105,72 +105,67 @@
 	//SLEEP控制表给任务模块可以给出
 	#define MAX_SLEEP_NUM_IN_ONE_TASK 2
 	#define MAX_SLEEP_COUNTER_UP_LIMITATION 50000
-	//MYC add debug print preparation buffer
 	#define IHU_PRINT_CHAR_SIZE 1000
 
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID)
-	#define MAX_TASK_NUM_IN_ONE_IHU 16
+	#define MAX_TASK_NUM_IN_ONE_IHU 20
 	#define TASK_NAME_MAX_LENGTH 12
 	//系统消息级
 	//maxmum state number and msg number in one task, no instance concept
 	#define IHU_TASK_QUEUE_ID_START 1024
 	#define MAX_MSGID_NUM_IN_ONE_TASK 32 //一个任务中最多定义的消息数量，之前放254个，优化后更省内存，暂时用不了这么多
 	#define MASK_MSGID_NUM_IN_ONE_TASK 255 //消息号段在同一个任务中必须连续到这个范围内
-	#define MAX_STATE_NUM_IN_ONE_TASK 7  //一个任务之中最多定义的状态数量
-	#define MAX_FSM_STATE_ENTRY_NUM_IN_ONE_TASK 30   //一个任务之中，STATE-MSGID成对处理函数最多数量
+	#define MAX_STATE_NUM_IN_ONE_TASK 9  //一个任务之中最多定义的状态数量
+	#define MAX_FSM_STATE_ENTRY_NUM_IN_ONE_TASK 32   //一个任务之中，STATE-MSGID成对处理函数最多数量
 	//消息长度
 	#define MSG_NAME_MAX_LENGTH 70
 	#define MAX_IHU_MSG_BODY_LENGTH 250
 	#define IHU_FILE_NAME_LENGTH_MAX 100
-	#define MAX_QUEUE_NUM_IN_ONE_TASK 2
+	#define MAX_QUEUE_NUM_IN_ONE_TASK 3
 	//SLEEP控制表给任务模块可以给出
 	#define MAX_SLEEP_NUM_IN_ONE_TASK 2
 	#define MAX_SLEEP_COUNTER_UP_LIMITATION 50000
-	//MYC add debug print preparation buffer
 	#define IHU_PRINT_CHAR_SIZE 1000
 
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCCB_ID)
-	#define MAX_TASK_NUM_IN_ONE_IHU 16
+	#define MAX_TASK_NUM_IN_ONE_IHU 20
 	#define TASK_NAME_MAX_LENGTH 12
 	//系统消息级
 	//maxmum state number and msg number in one task, no instance concept
 	#define IHU_TASK_QUEUE_ID_START 1024
 	#define MAX_MSGID_NUM_IN_ONE_TASK 32 //一个任务中最多定义的消息数量，之前放254个，优化后更省内存，暂时用不了这么多
 	#define MASK_MSGID_NUM_IN_ONE_TASK 255 //消息号段在同一个任务中必须连续到这个范围内
-	#define MAX_STATE_NUM_IN_ONE_TASK 7  //一个任务之中最多定义的状态数量
-	#define MAX_FSM_STATE_ENTRY_NUM_IN_ONE_TASK 30   //一个任务之中，STATE-MSGID成对处理函数最多数量
+	#define MAX_STATE_NUM_IN_ONE_TASK 9  //一个任务之中最多定义的状态数量
+	#define MAX_FSM_STATE_ENTRY_NUM_IN_ONE_TASK 32   //一个任务之中，STATE-MSGID成对处理函数最多数量
 	//消息长度
 	#define MSG_NAME_MAX_LENGTH 70
 	#define MAX_IHU_MSG_BODY_LENGTH 250
 	#define IHU_FILE_NAME_LENGTH_MAX 100
-	#define MAX_QUEUE_NUM_IN_ONE_TASK 2
+	#define MAX_QUEUE_NUM_IN_ONE_TASK 3
 	//SLEEP控制表给任务模块可以给出
 	#define MAX_SLEEP_NUM_IN_ONE_TASK 2
 	#define MAX_SLEEP_COUNTER_UP_LIMITATION 50000
-	//MYC add debug print preparation buffer
 	#define IHU_PRINT_CHAR_SIZE 1000
 
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCSB_ID)
-	#define MAX_TASK_NUM_IN_ONE_IHU 16
+	#define MAX_TASK_NUM_IN_ONE_IHU 20
 	#define TASK_NAME_MAX_LENGTH 12
 	//系统消息级
 	//maxmum state number and msg number in one task, no instance concept
 	#define IHU_TASK_QUEUE_ID_START 1024
 	#define MAX_MSGID_NUM_IN_ONE_TASK 32 //一个任务中最多定义的消息数量，之前放254个，优化后更省内存，暂时用不了这么多
 	#define MASK_MSGID_NUM_IN_ONE_TASK 255 //消息号段在同一个任务中必须连续到这个范围内
-	#define MAX_STATE_NUM_IN_ONE_TASK 7  //一个任务之中最多定义的状态数量
-	#define MAX_FSM_STATE_ENTRY_NUM_IN_ONE_TASK 30   //一个任务之中，STATE-MSGID成对处理函数最多数量
+	#define MAX_STATE_NUM_IN_ONE_TASK 9  //一个任务之中最多定义的状态数量
+	#define MAX_FSM_STATE_ENTRY_NUM_IN_ONE_TASK 32   //一个任务之中，STATE-MSGID成对处理函数最多数量
 	//消息长度
 	#define MSG_NAME_MAX_LENGTH 70
 	#define MAX_IHU_MSG_BODY_LENGTH 250
 	#define IHU_FILE_NAME_LENGTH_MAX 100
-	#define MAX_QUEUE_NUM_IN_ONE_TASK 2
+	#define MAX_QUEUE_NUM_IN_ONE_TASK 3
 	//SLEEP控制表给任务模块可以给出
 	#define MAX_SLEEP_NUM_IN_ONE_TASK 2
 	#define MAX_SLEEP_COUNTER_UP_LIMITATION 50000
-	//MYC add debug print preparation buffer
 	#define IHU_PRINT_CHAR_SIZE 1000
-	
 	
 #else
 #endif
