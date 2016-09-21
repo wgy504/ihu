@@ -108,19 +108,15 @@ OPSTAT fsm_timer_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 para
 			NULL,         //Arguments
 			&err); 
 		if (err != OS_ERR_NONE){
-			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
 				zIhuRunErrCnt[TASK_ID_TIMER]++;
-				IhuErrorPrint("TIMER: Create 1s timers error and error code = [%d].\n", err);
+				IhuErrorPrint("TIMER: Create 1s timers error, err=%d, errno=%d, %s\n", err, errno, strerror(err));
 				return FAILURE;
-			}			
 		}
 		OSTmrStart((OS_TMR *)&zIhuL1timer1s, (OS_ERR *)&err);
 		if (err != OS_ERR_NONE){
-			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
-				zIhuRunErrCnt[TASK_ID_TIMER]++;
-				IhuErrorPrint("TIMER: Start 1s timers error and error code = [%d].\n", err);
-				return FAILURE;
-			}
+			zIhuRunErrCnt[TASK_ID_TIMER]++;
+			IhuErrorPrint("TIMER: Start 1s timers error, err=%d, errno=%d, %s\n", err, errno, strerror(err));
+			return FAILURE;
 		}
 	}
 
@@ -135,19 +131,15 @@ OPSTAT fsm_timer_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 para
 			NULL,         //Arguments
 			&err); 
 		if (err != OS_ERR_NONE){
-			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
-				zIhuRunErrCnt[TASK_ID_TIMER]++;
-				IhuErrorPrint("TIMER: Create 10ms timers error and error code = [%d].\n", err);
-				return FAILURE;
-			}			
+			zIhuRunErrCnt[TASK_ID_TIMER]++;
+			IhuErrorPrint("TIMER: Create 10ms timers error, err=%d, errno=%d, %s\n", err, errno, strerror(err));
+			return FAILURE;
 		}
 		OSTmrStart((OS_TMR *)&zIhuL1timer10ms, (OS_ERR *)&err);
 		if (err != OS_ERR_NONE){
-			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
-				zIhuRunErrCnt[TASK_ID_TIMER]++;
-				IhuErrorPrint("TIMER: Start 10ms timers error and error code = [%d].\n", err);
-				return FAILURE;
-			}
+			zIhuRunErrCnt[TASK_ID_TIMER]++;
+			IhuErrorPrint("TIMER: Start 10ms timers error, err=%d, errno=%d, %s\n", err, errno, strerror(err));
+			return FAILURE;
 		}
 	}
 
@@ -162,19 +154,15 @@ OPSTAT fsm_timer_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 para
 			NULL,         //Arguments
 			&err); 
 		if (err != OS_ERR_NONE){
-			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
-				zIhuRunErrCnt[TASK_ID_TIMER]++;
-				IhuErrorPrint("TIMER: Create 1ms timers error and error code = [%d].\n", err);
-				return FAILURE;
-			}			
+			zIhuRunErrCnt[TASK_ID_TIMER]++;
+			IhuErrorPrint("TIMER: Create 1ms timers error, err=%d, errno=%d, %s\n", err, errno, strerror(err));
+			return FAILURE;
 		}
 		OSTmrStart((OS_TMR *)&zIhuL1timer1ms, (OS_ERR *)&err);
 		if (err != OS_ERR_NONE){
-			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
-				zIhuRunErrCnt[TASK_ID_TIMER]++;
-				IhuErrorPrint("TIMER: Start 1ms timers error and error code = [%d].\n", err);
-				return FAILURE;
-			}
+			zIhuRunErrCnt[TASK_ID_TIMER]++;
+			IhuErrorPrint("TIMER: Start 1ms timers error, err=%d, errno=%d, %s\n", err, errno, strerror(err));
+			return FAILURE;
 		}
 	}
 	

@@ -555,6 +555,35 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = L1timer基本解决，等待最终测试
 = 调整全局消息数量和任务数量等性能数据，最终内存占用在70KB附近，以便充分测试128KB的内存以及配置。程序代码71KB，必须放在FLASH中执行。
 
+//= ZJL, 2016 Sep.21, IHU_EMCWX_CURRENT_SW_DELIVERY R03.24
+= 应用ucos的函数OSTaskCreate / OSTaskDel，完成了以下函数体
+	extern OPSTAT ihu_task_create(UINT8 task_id, void *(*task_func)(void *), void *arg, int prio);
+	extern OPSTAT ihu_task_delete(UINT8 task_id);
+    => CALLBACK不能支持修饰带来的风险
+	OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateItem);
+= 为了支持删除任务，全局变量开关被打开 #define OS_CFG_TASK_DEL_EN              1u   /* Include code for OSTaskDel()     
+= 为了支持删除队列，全局变量开关被打开 #define OS_CFG_Q_DEL_EN                 1u   /*     Include code for OSQDel()  
+= 为了支持清理队列，全局变量开关被打开#define OS_CFG_Q_FLUSH_EN               1u   /*     Include code for OSQFlush() 
+= 创建了新的MEM PARTITION，以支持队列的数据发送和接收
+= 初步完成ucosIII和VMUO的改造与对齐
+
+//= ZJL, 2016 Sep.22, IHU_EMCWX_CURRENT_SW_DELIVERY R03.25
+= EMC: 打开CFG_MEM_MAP_DEEP_SLEEP模式，进一步省电。由于符号表占用的内存不够，没做成，需要未来进一步优化内存空间试试。
+= EMC: 打开WATCH_DOG
+= EMC: 关掉CFG_DEVELOPMENT_DEBUG
+= 简化EMC项目的程序文件，去掉VMDA的VM机制，因为本来就用不上，而且还占用大量的符号表，造成无法扩展已有功能
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

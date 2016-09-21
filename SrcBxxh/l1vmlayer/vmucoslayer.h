@@ -25,7 +25,8 @@
 
 //#include  <includes.h>
 #include  <os.h>
-//#include  <app_cfg.h>
+#include  <app_cfg.h>
+
 
 /*
  *	
@@ -39,9 +40,8 @@
 //不是任务的任务，比如TRACE/CONFIG/3G/GPIO等等，留待清理，简化任务列表
 /*
  *
- *   【增加任务】，必须同时修改四个地方：
+ *   【增加任务】，必须同时修改的地方：
  *   - IHU_TASK_NAME_ID
- *   - IHU_TASK_QUEUE_ID
  *   - zIhuTaskNameList
  *   - 还要修改可能的本地配置文件，或者sysengpar.h的固定工参配置信息，#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID
  *	 - 继续修改初始化函数void ihu_vm_system_init(void)
@@ -67,25 +67,24 @@ enum IHU_TASK_NAME_ID
 }; //end of IHU_TASK_NAME_ID
 
 //定义TASK对应的MESSAGE_QUEUE的ID
-enum IHU_TASK_QUEUE_ID
-{
-	TASK_QUE_ID_MIN = IHU_TASK_QUEUE_ID_START,
-	TASK_QUE_ID_VMUO,
-	TASK_QUE_ID_TIMER,
-	TASK_QUE_ID_ADCLIBRA,
-	TASK_QUE_ID_SPILEO,
-	TASK_QUE_ID_I2CARIES,
-	TASK_QUE_ID_PWMTAURUS,
-	TASK_QUE_ID_SPSVIRGO,
-	TASK_QUE_ID_GPIOCANCER,
-	TASK_QUE_ID_DIDOCAP,
-	TASK_QUE_ID_LEDPISCES,
-	TASK_QUE_ID_ETHORION,	
-	TASK_QUE_ID_SCYCB,
-	TASK_QUE_ID_MAX,
-	TASK_QUE_ID_INVALID = 0xFF,
-}; //end of IHU_TASK_QUEUE_ID
-
+//enum IHU_TASK_QUEUE_ID
+//{
+//	TASK_QUE_ID_MIN = IHU_TASK_QUEUE_ID_START,
+//	TASK_QUE_ID_VMUO,
+//	TASK_QUE_ID_TIMER,
+//	TASK_QUE_ID_ADCLIBRA,
+//	TASK_QUE_ID_SPILEO,
+//	TASK_QUE_ID_I2CARIES,
+//	TASK_QUE_ID_PWMTAURUS,
+//	TASK_QUE_ID_SPSVIRGO,
+//	TASK_QUE_ID_GPIOCANCER,
+//	TASK_QUE_ID_DIDOCAP,
+//	TASK_QUE_ID_LEDPISCES,
+//	TASK_QUE_ID_ETHORION,	
+//	TASK_QUE_ID_SCYCB,
+//	TASK_QUE_ID_MAX,
+//	TASK_QUE_ID_INVALID = 0xFF,
+//}; //end of IHU_TASK_QUEUE_ID
 
 /*
 ** Fsm INFORMATION structure.
@@ -95,8 +94,6 @@ enum IHU_TASK_QUEUE_ID
 #define FSM_STATE_END   0xFE
 #define FSM_STATE_INVALID 0xFF
 
-
-
 //FSM的基础结构定义
 typedef struct FsmStateItem
 {
@@ -105,15 +102,19 @@ typedef struct FsmStateItem
 	OPSTAT (*stateFunc)(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len);
 }FsmStateItem_t;
 
+//Task控制表
+#define IHU_TASK_STACK_WATERMAKR_LIMIT 10
+#define IHU_TASK_STACK_LENGTH 200
 typedef struct IhuTaskTag
 {
 	UINT32 TaskId;
 	UINT8  pnpState;
-	INT32  QueId;
 	UINT8  state;
 	char   TaskName[TASK_NAME_MAX_LENGTH];
 	FsmStateItem_t *fsmPtr;
-	UINT8 QueFullFlag;
+	OS_TCB TaskTCB;
+	CPU_STK TaskSTK[IHU_TASK_STACK_LENGTH];
+	OS_Q   TaskQue;
 }IhuTaskTag_t;
 #define IHU_TASK_PNP_ON 2
 #define IHU_TASK_PNP_OFF 1
@@ -137,10 +138,9 @@ typedef struct FsmCtrlTable
 //MsgQueue的基础结构定义
 typedef struct FsmQueueElement
 {
-	UINT8 msgQue[MAX_IHU_MSG_BODY_LENGTH];
+	UINT8 msgQue[MAX_IHU_MSG_BUF_LENGTH];
 	bool useFlag;
 }FsmQueueElement_t;
-
 typedef struct FsmQueueListTable
 {
 	FsmQueueElement_t queList[MAX_QUEUE_NUM_IN_ONE_TASK];
@@ -153,7 +153,8 @@ typedef struct FsmTable
 	UINT8 numOfFsmCtrlTable;  //Number of running (Task + Instance)
 	UINT8 currentTaskId;  //transfer task_id to launched FSM machine, then useless
 	FsmCtrlTable_t  pFsmCtrlTable[MAX_TASK_NUM_IN_ONE_IHU];  //所有任务的状态机总控表
-	FsmQueueListTable_t taskQue[MAX_TASK_NUM_IN_ONE_IHU];  //所有任务的消息队列总控表
+	//采用OS_Q之后，不再需要自行使用内存进行QUEUE的管理了
+	//FsmQueueListTable_t taskQue[MAX_TASK_NUM_IN_ONE_IHU];  //所有任务的消息队列总控表
 }FsmTable_t;
 
 //任务模块RESTART的一些全局定义
@@ -204,8 +205,7 @@ extern UINT8  FsmGetState(UINT8 task_id);
 //Global VM layer basic API and functions，跟具体操作系统相关的API部分
 extern OPSTAT ihu_message_queue_create(UINT8 task_id);
 extern OPSTAT ihu_message_queue_delete(UINT8 task_id);
-extern UINT32 ihu_message_queue_inquery(UINT8 task_id);
-extern OPSTAT ihu_message_queue_resync(void);
+extern void*  ihu_message_queue_inquery(UINT8 task_id);
 extern OPSTAT ihu_message_queue_clean(UINT8 dest_id);
 extern OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len); //message send
 extern OPSTAT ihu_message_rcv(UINT8 dest_id, IhuMsgSruct_t *msg);
@@ -243,7 +243,7 @@ extern char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK];    //消息名字符串
 extern IhuSysEngParTable_t zIhuSysEngPar;                   //工参
 extern time_t zIhuSystemTimeUnix;                           //系统时钟TimeStamp
 extern struct tm zIhuSystemTimeYmd;                        	//系统时钟YMD
-extern UINT32 zIhuSleepCnt[MAX_TASK_NUM_IN_ONE_IHU][MAX_SLEEP_NUM_IN_ONE_TASK];  //睡眠控制表
+//extern UINT32 zIhuSleepCnt[MAX_TASK_NUM_IN_ONE_IHU][MAX_SLEEP_NUM_IN_ONE_TASK];  //睡眠控制表
 extern FsmStateItem_t FsmTimer[];                           //状态机
 extern FsmStateItem_t FsmAdclibra[];                        //状态机
 extern FsmStateItem_t FsmSpileo[];                          //状态机

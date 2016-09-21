@@ -144,16 +144,6 @@
 ".\out\wecaht_aes.o"
 ".\out\vmdalayer.o"
 ".\out\i2c_led.o"
-".\out\vmdashell_task.o"
-".\out\l1timer.o"
-".\out\aes_cbc.o"
-".\out\aes_core.o"
-".\out\cbc128.o"
-".\out\aes_crypt.o"
-".\out\l2adcaries.o"
-".\out\l2aksleo.o"
-".\out\l2asylibra.o"
-".\out\l3emcwx.o"
 --library_type=microlib --strict --scatter ".\..\..\..\..\sdk_580\sdk\common_project_files\scatterfiles\scatterfile_common.sct"
 --feedback=".\unused.txt" .\..\..\..\..\sdk_580\sdk\common_project_files\misc\rom_symdef.txt --symdefs=wechat_580_symdef.txt --keep gapm.o(timeout_table_area) --keep jump_table.o(*) --keep nvds.o(*) --any_placement=best_fit --datacompressor off --summary_stderr --info summarysizes --map --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

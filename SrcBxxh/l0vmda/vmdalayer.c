@@ -93,7 +93,7 @@ void bxxh_vm_init_hook(void)
 	zIhuSysEngPar.traceMode = IHU_TRACE_MSG_ON;
 	
 	//init VMDA SHELL Task
-	ihu_task_vmdashell_init();
+//	ihu_task_vmdashell_init();
 	
 	//初始化全局变量TASK_ID/QUE_ID/TASK_STAT
 	memset(&(zIhuTaskInfo[0].TaskId), 0, sizeof(zIhuTaskInfo)*(TASK_ID_MAX-TASK_ID_MIN+1));
@@ -136,8 +136,8 @@ void bxxh_vm_init_hook(void)
 //系统任务每次都要调用的轮询过程
 void bxxh_vm_task_entry_hook(void)
 {
-	//要给VMDA SHELL一个MAIN ENTRY的入口，有些逆层次结构，但无伤大雅
-	ihu_task_vmdashell_mainloop();
+//	//要给VMDA SHELL一个MAIN ENTRY的入口，有些逆层次结构，但无伤大雅
+//	ihu_task_vmdashell_mainloop();
 	
 	//实现等待一会儿
 	if (flagInitMsgSend == FALSE)
@@ -1365,30 +1365,30 @@ OPSTAT ihu_system_task_execute(UINT8 task_id, FsmStateItem_t *p)
 //创建所有任务
 void ihu_task_create_all(void)
 {
-	#ifdef IHU_COMPILE_TASK_VMDASHELL
-		//Create task VMDA environments /1
-		if (zIhuTaskInfo[TASK_ID_VMDASHELL].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_VMDASHELL, FsmVmdashell);	
-	#endif //IHU_COMPILE_TASK_VMDASHELL
+//	#ifdef IHU_COMPILE_TASK_VMDASHELL
+//		//Create task VMDA environments /1
+//		if (zIhuTaskInfo[TASK_ID_VMDASHELL].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_VMDASHELL, FsmVmdashell);	
+//	#endif //IHU_COMPILE_TASK_VMDASHELL
 
-	#ifdef IHU_COMPILE_TASK_TIMER
-		//Create task Timer environments /2
-		if (zIhuTaskInfo[TASK_ID_TIMER].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_TIMER, FsmTimer);
-	#endif //IHU_COMPILE_TASK_TIMER
+//	#ifdef IHU_COMPILE_TASK_TIMER
+//		//Create task Timer environments /2
+//		if (zIhuTaskInfo[TASK_ID_TIMER].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_TIMER, FsmTimer);
+//	#endif //IHU_COMPILE_TASK_TIMER
 
-	#ifdef IHU_COMPILE_TASK_ASYLIBRA
-		//Create task ASYLIBRA environments /3
-		if (zIhuTaskInfo[TASK_ID_ASYLIBRA].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_ASYLIBRA, FsmAsylibra);
-	#endif //IHU_COMPILE_TASK_ASYLIBRA
-		
-	#ifdef IHU_COMPILE_TASK_ADCARIES
-		//Create task ADCARIES environments /4
-		if (zIhuTaskInfo[TASK_ID_ADCARIES].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_ADCARIES, FsmAdcaries);
-	#endif //IHU_COMPILE_TASK_ADCARIES
-		
-	#ifdef IHU_COMPILE_TASK_EMC
-		//Create task EMC environments /5
-		if (zIhuTaskInfo[TASK_ID_EMC].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_EMC, FsmEmc);
-	#endif //IHU_COMPILE_TASK_EMC
+//	#ifdef IHU_COMPILE_TASK_ASYLIBRA
+//		//Create task ASYLIBRA environments /3
+//		if (zIhuTaskInfo[TASK_ID_ASYLIBRA].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_ASYLIBRA, FsmAsylibra);
+//	#endif //IHU_COMPILE_TASK_ASYLIBRA
+//		
+//	#ifdef IHU_COMPILE_TASK_ADCARIES
+//		//Create task ADCARIES environments /4
+//		if (zIhuTaskInfo[TASK_ID_ADCARIES].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_ADCARIES, FsmAdcaries);
+//	#endif //IHU_COMPILE_TASK_ADCARIES
+//		
+//	#ifdef IHU_COMPILE_TASK_EMC
+//		//Create task EMC environments /5
+//		if (zIhuTaskInfo[TASK_ID_EMC].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_EMC, FsmEmc);
+//	#endif //IHU_COMPILE_TASK_EMC
 	
 	IhuDebugPrint("VMDA: Create all task successfully!");
 }
@@ -1396,30 +1396,30 @@ void ihu_task_create_all(void)
 //轮询所有任务的正常执行
 void ihu_task_execute_all(void)
 {
-	#ifdef IHU_COMPILE_TASK_VMDASHELL
-		//Execute task VMDA FSM /1
-		if (zIhuTaskInfo[TASK_ID_VMDASHELL].pnpState == IHU_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_VMDASHELL, FsmVmdashell);	
-	#endif //IHU_COMPILE_TASK_VMDASHELL
+//	#ifdef IHU_COMPILE_TASK_VMDASHELL
+//		//Execute task VMDA FSM /1
+//		if (zIhuTaskInfo[TASK_ID_VMDASHELL].pnpState == IHU_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_VMDASHELL, FsmVmdashell);	
+//	#endif //IHU_COMPILE_TASK_VMDASHELL
 		
-	#ifdef IHU_COMPILE_TASK_TIMER
-		//Execute task Timer FSM /2
-		if (zIhuTaskInfo[TASK_ID_TIMER].pnpState == IHU_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_TIMER, FsmTimer);
-	#endif //IHU_COMPILE_TASK_TIMER
+//	#ifdef IHU_COMPILE_TASK_TIMER
+//		//Execute task Timer FSM /2
+//		if (zIhuTaskInfo[TASK_ID_TIMER].pnpState == IHU_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_TIMER, FsmTimer);
+//	#endif //IHU_COMPILE_TASK_TIMER
 
-	#ifdef IHU_COMPILE_TASK_ASYLIBRA
-		//Execute task ASYLIBRA FSM /3
-		if (zIhuTaskInfo[TASK_ID_ASYLIBRA].pnpState == IHU_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_ASYLIBRA, FsmAsylibra);
-	#endif //IHU_COMPILE_TASK_ASYLIBRA
-		
-	#ifdef IHU_COMPILE_TASK_ADCARIES
-		//Execute task ADCARIES FSM /4
-		if (zIhuTaskInfo[TASK_ID_ADCARIES].pnpState == IHU_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_ADCARIES, FsmAdcaries);
-	#endif //IHU_COMPILE_TASK_ADCARIES
-		
-	#ifdef IHU_COMPILE_TASK_EMC
-		//Execute task EMC FSM /5
-		if (zIhuTaskInfo[TASK_ID_EMC].pnpState == IHU_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_EMC, FsmEmc);
-	#endif //IHU_COMPILE_TASK_EMC
+//	#ifdef IHU_COMPILE_TASK_ASYLIBRA
+//		//Execute task ASYLIBRA FSM /3
+//		if (zIhuTaskInfo[TASK_ID_ASYLIBRA].pnpState == IHU_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_ASYLIBRA, FsmAsylibra);
+//	#endif //IHU_COMPILE_TASK_ASYLIBRA
+//		
+//	#ifdef IHU_COMPILE_TASK_ADCARIES
+//		//Execute task ADCARIES FSM /4
+//		if (zIhuTaskInfo[TASK_ID_ADCARIES].pnpState == IHU_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_ADCARIES, FsmAdcaries);
+//	#endif //IHU_COMPILE_TASK_ADCARIES
+//		
+//	#ifdef IHU_COMPILE_TASK_EMC
+//		//Execute task EMC FSM /5
+//		if (zIhuTaskInfo[TASK_ID_EMC].pnpState == IHU_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_EMC, FsmEmc);
+//	#endif //IHU_COMPILE_TASK_EMC
 
 	IhuDebugPrint("VMDA: Execute task once, for test!");
 }

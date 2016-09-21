@@ -37,13 +37,13 @@ typedef UINT8           		BOOL;
 //2. 公共消息结构体定义
 //Under normal case, 1024Byte shall be enough for internal message communciation purpose.
 //If not enough, need modify here to enlarge
-#define MAX_IHU_MSG_BUF_LENGTH MAX_IHU_MSG_BODY_LENGTH-5
+#define MAX_IHU_MSG_BUF_LENGTH MAX_IHU_MSG_BODY_LENGTH+6
 typedef struct IhuMsgSruct
 {
 	UINT16 msgType;
 	UINT8 dest_id;
 	UINT8 src_id;
-	UINT8 msgLen;
+	UINT16 msgLen;
 	INT8 msgBody[MAX_IHU_MSG_BODY_LENGTH];
 }IhuMsgSruct_t;
 

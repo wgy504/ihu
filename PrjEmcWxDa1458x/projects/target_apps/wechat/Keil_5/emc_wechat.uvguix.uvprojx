@@ -310,7 +310,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>2</Optim>
+            <Optim>4</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>0</OneElfS>
@@ -1484,132 +1484,19 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\SrcBxxh\l0vmda\i2c_led.c</FilePath>
             </File>
-            <File>
-              <FileName>vmdashell_task.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\SrcBxxh\l0vmda\vmdashell_task.h</FilePath>
-            </File>
-            <File>
-              <FileName>vmdashell_task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\SrcBxxh\l0vmda\vmdashell_task.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>l1service</GroupName>
-          <Files>
-            <File>
-              <FileName>l1comdef.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\SrcBxxh\l1service\l1comdef.h</FilePath>
-            </File>
-            <File>
-              <FileName>l1timer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\SrcBxxh\l1service\l1timer.c</FilePath>
-            </File>
-            <File>
-              <FileName>l1timer.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\SrcBxxh\l1service\l1timer.h</FilePath>
-            </File>
-          </Files>
         </Group>
         <Group>
           <GroupName>l2_asyapi_tc</GroupName>
-          <Files>
-            <File>
-              <FileName>aes.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\SrcBxxh\l2_asyapi_tc\crypt\aes\aes.h</FilePath>
-            </File>
-            <File>
-              <FileName>aes_cbc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\SrcBxxh\l2_asyapi_tc\crypt\aes\aes_cbc.c</FilePath>
-            </File>
-            <File>
-              <FileName>aes_core.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\SrcBxxh\l2_asyapi_tc\crypt\aes\aes_core.c</FilePath>
-            </File>
-            <File>
-              <FileName>aes_locl.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\SrcBxxh\l2_asyapi_tc\crypt\aes\aes_locl.h</FilePath>
-            </File>
-            <File>
-              <FileName>cbc128.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\SrcBxxh\l2_asyapi_tc\crypt\aes\cbc128.c</FilePath>
-            </File>
-            <File>
-              <FileName>modes.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\SrcBxxh\l2_asyapi_tc\crypt\aes\modes.h</FilePath>
-            </File>
-            <File>
-              <FileName>aes_crypt.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\SrcBxxh\l2_asyapi_tc\crypt\aes_crypt.c</FilePath>
-            </File>
-            <File>
-              <FileName>aes_crypt.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\SrcBxxh\l2_asyapi_tc\crypt\aes_crypt.h</FilePath>
-            </File>
-          </Files>
         </Group>
         <Group>
           <GroupName>l2frame</GroupName>
-          <Files>
-            <File>
-              <FileName>l2adcaries.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\SrcBxxh\l2frame\l2adcaries.c</FilePath>
-            </File>
-            <File>
-              <FileName>l2adcaries.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\SrcBxxh\l2frame\l2adcaries.h</FilePath>
-            </File>
-            <File>
-              <FileName>l2aksleo.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\SrcBxxh\l2frame\l2aksleo.c</FilePath>
-            </File>
-            <File>
-              <FileName>l2aksleo.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\SrcBxxh\l2frame\l2aksleo.h</FilePath>
-            </File>
-            <File>
-              <FileName>l2asylibra.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\SrcBxxh\l2frame\l2asylibra.c</FilePath>
-            </File>
-            <File>
-              <FileName>l2asylibra.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\SrcBxxh\l2frame\l2asylibra.h</FilePath>
-            </File>
-          </Files>
         </Group>
         <Group>
           <GroupName>l3emcwx</GroupName>
-          <Files>
-            <File>
-              <FileName>l3emcwx.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\SrcBxxh\l3appl\l3emcwx.c</FilePath>
-            </File>
-            <File>
-              <FileName>l3emcwx.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\SrcBxxh\l3appl\l3emcwx.h</FilePath>
-            </File>
-          </Files>
         </Group>
       </Groups>
     </Target>

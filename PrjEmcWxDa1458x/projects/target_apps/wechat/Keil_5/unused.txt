@@ -1,22 +1,8 @@
-;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Tue Sep 20 21:30:33 2016
+;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Thu Sep 22 01:22:18 2016
 ;VERSION 0.2
 ;FILE adc.o
 adc_calibrate <= USED 0
-;FILE aes_cbc.o
-AES_cbc_decrypt <= USED 0
-AES_cbc_encrypt <= USED 0
-;FILE aes_core.o
-AES_decrypt <= USED 0
-AES_encrypt <= USED 0
-AES_set_decrypt_key <= USED 0
-AES_set_encrypt_key <= USED 0
-;FILE aes_crypt.o
-aes_cbc_decrypt_final <= USED 0
-aes_cbc_decrypt_init <= USED 0
-aes_cbc_decrypt_update <= USED 0
-aes_cbc_encrypt_final <= USED 0
-aes_cbc_encrypt_init <= USED 0
-aes_cbc_encrypt_update <= USED 0
+adc_disable <= USED 0
 ;FILE app.o
 active_conhdl_to_conidx <= USED 0
 active_conidx_to_conhdl <= USED 0
@@ -37,6 +23,7 @@ app_easy_gap_undirected_advertise_with_timeout_start <= USED 0
 app_set_prf_srv_perm <= USED 0
 get_user_prf_srv_perm <= USED 0
 ;FILE app_default_handlers.o
+default_advertise_operation <= USED 0
 default_app_on_init <= USED 0
 ;FILE app_easy_msg_utils.o
 app_easy_msg_free_callback <= USED 0
@@ -68,6 +55,7 @@ app_msg_send_wakeup_ble <= USED 0
 ;FILE app_security_task.o
 ;FILE app_task.o
 ;FILE app_wechat.o
+app_wechat_SetDatahandler <= USED 0
 ;FILE app_wechat_task.o
 ;FILE arch_console.o
 arch_puts <= USED 0
@@ -86,6 +74,7 @@ calibrate_rcx20 <= USED 0
 lld_sleep_lpcycles_2_us_rcx_func <= USED 0
 lld_sleep_us_2_lpcycles_rcx_func <= USED 0
 read_rcx_freq <= USED 0
+select_lp_clk <= USED 0
 set_xtal16m_trim_value <= USED 0
 ;FILE attm_db_128.o
 attm_svc_create_db_128 <= USED 0
@@ -99,9 +88,6 @@ battery_get_lvl <= USED 0
 t_htonl <= USED 0
 t_ntohl <= USED 0
 ;FILE boot_vectors.o
-;FILE cbc128.o
-cbc128_decrypt <= USED 0
-cbc128_encrypt <= USED 0
 ;FILE ch_map.obj
 ;FILE crc32.o
 ;FILE epb.o
@@ -117,6 +103,9 @@ epb_set_float <= USED 0
 epb_set_sfixed32 <= USED 0
 epb_set_sint32 <= USED 0
 ;FILE epb_mmbp.o
+epb_base_request_pack_size <= USED 0
+epb_unpack_base_push_free <= USED 0
+epb_unpack_base_response_free <= USED 0
 ;FILE gapm_util.obj
 ;FILE gpio.o
 GPIO_ConfigurePinPower <= USED 0
@@ -147,66 +136,6 @@ vmda1458x_led_off <= USED 0
 ;FILE jump_table.o
 dummyf <= USED 0
 ;FILE ke_task.obj
-;FILE l1timer.o
-fsm_timer_init <= USED 0
-fsm_timer_restart <= USED 0
-fsm_timer_stop_rcv <= USED 0
-fsm_timer_task_entry <= USED 0
-func_timer_hw_init <= USED 0
-ihu_timer_routine_handler_10ms <= USED 0
-ihu_timer_routine_handler_1s <= USED 0
-ihu_timer_start <= USED 0
-ihu_timer_stop <= USED 0
-;FILE l2adcaries.o
-fsm_adcaries_init <= USED 0
-fsm_adcaries_restart <= USED 0
-fsm_adcaries_stop_rcv <= USED 0
-fsm_adcaries_task_entry <= USED 0
-func_adcaries_hw_init <= USED 0
-;FILE l2asylibra.o
-fsm_asylibra_ble_con_rcv <= USED 0
-fsm_asylibra_ble_data_dl_rcv <= USED 0
-fsm_asylibra_ble_disc_rcv <= USED 0
-fsm_asylibra_emc_data_req <= USED 0
-fsm_asylibra_init <= USED 0
-fsm_asylibra_restart <= USED 0
-fsm_asylibra_stop_rcv <= USED 0
-fsm_asylibra_task_entry <= USED 0
-fsm_asylibra_time_out <= USED 0
-func_asylibra_hw_init <= USED 0
-func_asylibra_pack_auth_req <= USED 0
-func_asylibra_pack_init_req <= USED 0
-func_asylibra_rcv_auth_resp_processing <= USED 0
-func_asylibra_rcv_data_push_processing <= USED 0
-func_asylibra_rcv_data_resp_processing <= USED 0
-func_asylibra_rcv_err_decode_processing <= USED 0
-func_asylibra_rcv_init_resp_processing <= USED 0
-func_asylibra_rcv_push_switch_background_processing <= USED 0
-func_asylibra_rcv_push_switch_view_processing <= USED 0
-func_asylibra_time_out_auth_resp_wait <= USED 0
-func_asylibra_time_out_data_resp_wait <= USED 0
-func_asylibra_time_out_init_resp_wait <= USED 0
-func_asylibra_unpack_ble_data_dl_head <= USED 0
-;FILE l3emcwx.o
-fsm_emc_con_rcv <= USED 0
-fsm_emc_disc_rcv <= USED 0
-fsm_emc_dlk_block_rcv <= USED 0
-fsm_emc_dlk_unblock_rcv <= USED 0
-fsm_emc_init <= USED 0
-fsm_emc_push_cmd_rcv <= USED 0
-fsm_emc_restart <= USED 0
-fsm_emc_stop_rcv <= USED 0
-fsm_emc_task_entry <= USED 0
-fsm_emc_time_out <= USED 0
-func_emc_hw_init <= USED 0
-func_emc_send_out_data_online <= USED 0
-func_emc_store_data_offline <= USED 0
-ihu_pack_l3_data_to_cloud <= USED 0
-ihu_read_from_storage_disc <= USED 0
-ihu_read_from_storage_mem <= USED 0
-ihu_save_to_storage_disc <= USED 0
-ihu_save_to_storage_mem <= USED 0
-ihu_unpack_l3_data_from_cloud <= USED 0
 ;FILE llc.obj
 ;FILE md5.o
 F <= USED 0
@@ -218,6 +147,7 @@ count_padding_bits <= USED 0
 md5 <= USED 0
 rotate_left <= USED 0
 ;FILE mpbledemo2.o
+mpbledemo2_get_md5 <= USED 0
 ;FILE nmi_handler.o
 ;FILE nvds.o
 ;FILE prf_utils.o
@@ -249,6 +179,7 @@ timer2_stop <= USED 0
 ;FILE rf_580.o
 rf_nfm_disable <= USED 0
 rf_nfm_enable <= USED 0
+rf_nfm_is_enabled <= USED 0
 ;FILE rwble.o
 ;FILE rwip.o
 ;FILE smpc.obj
@@ -325,23 +256,6 @@ vmda1458x_data_send_to_uart <= USED 0
 vmda1458x_init_msg_to_vmdashell <= USED 0
 vmda1458x_led_flair <= USED 0
 vmda1458x_message_send <= USED 0
-;FILE vmdashell_task.o
-fsm_vmdashell_data_ul_send <= USED 0
-fsm_vmdashell_restart <= USED 0
-fsm_vmdashell_stop_rcv <= USED 0
-fsm_vmdashell_task_entry <= USED 0
-fsm_vmdashell_task_init <= USED 0
-fsm_vmdashell_task_init_fb_rcv <= USED 0
-fsm_vmdashell_task_init_time_out <= USED 0
-func_vmdashell_check_init_fb_complete <= USED 0
-func_vmdashell_hw_init <= USED 0
-func_vmdashell_send_out_init <= USED 0
-hlFuncVmdashellBleDisc <= USED 0
-hlFuncVmdashellBleInit <= USED 0
-hlFuncVmdashellSpsBleDataDlRcv <= USED 0
-hlFuncVmdashellSysClock1sPeriod <= USED 0
-ihu_task_vmdashell_init <= USED 0
-ihu_task_vmdashell_mainloop <= USED 0
 ;FILE wecaht_aes.o
 AES_Decrypt <= USED 0
 AES_Encrypt_PKCS7 <= USED 0

@@ -42,7 +42,7 @@ FsmTable_t zIhuFsmTable;
 IhuSysEngParTable_t zIhuSysEngPar; //全局工程参数控制表
 
 //全局SLEEP时长控制表
-UINT32 zIhuSleepCnt[MAX_TASK_NUM_IN_ONE_IHU][MAX_SLEEP_NUM_IN_ONE_TASK];
+//UINT32 zIhuSleepCnt[MAX_TASK_NUM_IN_ONE_IHU][MAX_SLEEP_NUM_IN_ONE_TASK];
 
 //全局时间
 time_t zIhuSystemTimeUnix = 1444341556;  //2015/8
@@ -50,6 +50,11 @@ struct tm zIhuSystemTimeYmd;
 
 //全局公用打印字符串
 static INT8 strGlobalPrintChar[IHU_PRINT_CHAR_SIZE];
+
+//全局内存公共块，特定用于ucos操作系统下的msgQueue传数据
+OS_MEM zIhuPartition;
+CPU_INT08U zIhuPartitionStorage[IHU_MAX_PARTITION_TOTAL][MAX_IHU_MSG_BUF_LENGTH];
+
 
 //请确保，该全局字符串的定义跟Task_Id的顺序保持完全一致，不然后面的显示内容会出现差错
 //请服从最长长度TASK_NAME_MAX_LENGTH的定义，不然Debug/Trace打印出的信息也会出错
@@ -168,11 +173,9 @@ void ihu_sleep(UINT32 second)
 	if (hour > 99) hour = 99; 
 	OSTimeDlyHMSM(hour, minute, sec, 0, OS_OPT_TIME_HMSM_STRICT, &err);
 	if (err != OS_ERR_NONE){
-			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
-				zIhuRunErrCnt[TASK_ID_VMUO]++;
-				IhuErrorPrint("VMUO: ihu_sleep call error, error code = [%d].\n", err);
-				return;
-		}
+			zIhuRunErrCnt[TASK_ID_VMUO]++;
+			IhuErrorPrint("VMUO: ihu_sleep call error, err=%d, errno=%d, %s\n", err, errno, strerror(err));
+			return;
 	}
 }
 
@@ -191,11 +194,9 @@ void ihu_usleep(UINT32 usecond)
 	if (hour > 99) hour = 99; 
 	OSTimeDlyHMSM(hour, minute, sec, usec, OS_OPT_TIME_HMSM_STRICT, &err);
 	if (err != OS_ERR_NONE){
-			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
-				zIhuRunErrCnt[TASK_ID_VMUO]++;
-				IhuErrorPrint("VMUO: ihu_usleep call error, error code = [%d].\n", err);
-				return;
-		}
+			zIhuRunErrCnt[TASK_ID_VMUO]++;
+			IhuErrorPrint("VMUO: ihu_usleep call error, err=%d, errno=%d, %s\n", err, errno, strerror(err));
+			return;
 	}
 }
 
@@ -203,6 +204,7 @@ void ihu_usleep(UINT32 usecond)
 void ihu_vm_system_init(void)
 {
 	int i=0;
+	OS_ERR err;
 
 	//INIT IHU itself
 	IhuDebugPrint("VMUO: CURRENT_PRJ=[%s], HW_TYPE=[%d], HW_MODULE=[%d], SW_REL=[%d], SW_DELIVER=[%d].\n", IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT, CURRENT_HW_TYPE, CURRENT_HW_MODULE, CURRENT_SW_RELEASE, CURRENT_SW_DELIVERY);
@@ -283,6 +285,18 @@ void ihu_vm_system_init(void)
 	if (IHU_COMM_FRONT_ETH == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_ETHORION].pnpState = IHU_TASK_PNP_ON;		
 	if (IHU_MAIN_CTRL_SCYCB == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_SCYCB].pnpState = IHU_TASK_PNP_ON;			
 	
+	//申请全局内存块
+	OSMemCreate((OS_MEM *)&zIhuPartition,
+		(CPU_CHAR *)"VMUO Partition",
+		(void *)&zIhuPartitionStorage[0][0],
+		(OS_MEM_QTY)IHU_MAX_PARTITION_TOTAL,
+		(OS_MEM_SIZE)MAX_IHU_MSG_BUF_LENGTH,
+		(OS_ERR *)&err);
+	if (err != OS_ERR_NONE){
+		zIhuRunErrCnt[TASK_ID_VMUO]++;
+		IhuErrorPrint("VMUO: ihu_vm_system_init error, err=%d, errno=%d, %s\n", err, errno, strerror(err));
+		return;
+	}
 	return;
 }
 
@@ -775,7 +789,8 @@ UINT8 FsmGetState(UINT8 task_id)
  ***************************************************************************************/
 OPSTAT ihu_message_queue_create(UINT8 task_id)
 {
-	int msgKey=0, msgQid=0;
+	OS_ERR err;
+	char s[TASK_NAME_MAX_LENGTH+20] = "Queue of Task ";
 	
 	//Checking task_id range
 	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
@@ -784,42 +799,23 @@ OPSTAT ihu_message_queue_create(UINT8 task_id)
 		return FAILURE;
 	}
 
-	//Generate msgKey
-	msgKey = task_id + IHU_TASK_QUEUE_ID_START;
-	if ((msgKey <= TASK_QUE_ID_MIN) || (msgKey >= TASK_QUE_ID_MAX)){
+	//Create queue
+	strcat(s, zIhuTaskNameList[task_id]);
+	OSQCreate(&(zIhuTaskInfo[task_id].TaskQue), s, MAX_QUEUE_NUM_IN_ONE_TASK, &err);
+	if (err != OS_ERR_NONE){
 		zIhuRunErrCnt[TASK_ID_VMUO]++;
-		IhuErrorPrint("VMUO: Error on task_id, msgKey=%d!!!\n", msgKey);
+		IhuErrorPrint("VMUO: ihu_message_queue_create error, err=%d, errno=%d, %s\n", err, errno, strerror(err));
 		return FAILURE;
 	}
-	//Checking msgQid exiting or not, if YES, just DELETE.
-//	msgQid=msgget(msgKey, IPC_EXCL);  /*检查消息队列是否存在*/
-	if (msgQid>=0){
-		//IhuErrorPrint("VMUO: Existing Queue id error, input Key = %d\n", msgKey);
-		//直接使用已有的QUEID，而不是重新创建
-		//zIhuTaskInfo[task_id].QueId = msgQid;
-		//return SUCCESS;
-		//删除消息队列
-//		if (msgctl(msgQid, IPC_RMID, NULL) == FAILURE){
-//			zIhuRunErrCnt[TASK_ID_VMUO]++;
-//			IhuErrorPrint("VMUO: Remove Queue error!\n");
-//			return FAILURE;
-//		}
-		//IhuErrorPrint("VMUO: Already remove Queue Id, input Key = %d\n", msgKey);
-	}
-	//Re-create the relevant message queue Id
-//	msgQid = msgget(msgKey, IPC_CREAT|0666);/*创建消息队列*/
-	if(msgQid <0){
-		zIhuRunErrCnt[TASK_ID_VMUO]++;
-		IhuErrorPrint("VMUO: Failed to create msg-queue | errno=%d [%s]\n", errno, strerror(errno));
-		return FAILURE;
-	}
-	zIhuTaskInfo[task_id].QueId = msgQid;
+
 	return SUCCESS;
 }
 
 //kill message queue
 OPSTAT ihu_message_queue_delete(UINT8 task_id)
 {
+	OS_ERR err;
+	
 	//Checking task_id range
 	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
 		zIhuRunErrCnt[TASK_ID_VMUO]++;
@@ -827,22 +823,23 @@ OPSTAT ihu_message_queue_delete(UINT8 task_id)
 		return FAILURE;
 	}
 
-	//Not exist
-	//特殊情况下，msgqid=0也是可能的，这种情形，需要再仔细考虑
-	if (zIhuTaskInfo[task_id].QueId == 0) {return FAILURE;}
-
 	//Delete queue
-//	msgctl(zIhuTaskInfo[task_id].QueId, IPC_RMID, NULL); //删除消息队列
+	OSQDel(&(zIhuTaskInfo[task_id].TaskQue), OS_OPT_DEL_ALWAYS, &err);
+	if (err != OS_ERR_NONE){
+		zIhuRunErrCnt[TASK_ID_VMUO]++;
+		IhuErrorPrint("VMUO: ihu_message_queue_delete error, err=%d, errno=%d, %s\n", err, errno, strerror(err));
+		return FAILURE;
+	}
 
-	zIhuTaskInfo[task_id].QueId =0;
 	return SUCCESS;
 }
 
 //查询消息队列
-UINT32 ihu_message_queue_inquery(UINT8 task_id)
+//本来应该是(OS_Q*的返回函数，这里为了上层的一致性，不让ucos延伸到上层，所以强制转换为void*指针
+//如果上层要用，可以继续使用强制指针转换在换回来
+//目前该函数并未启用
+void* ihu_message_queue_inquery(UINT8 task_id)
 {
-	int msgKey=0, msgQid=0;
-	
 	//Checking task_id range
 	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
 		zIhuRunErrCnt[TASK_ID_VMUO]++;
@@ -850,57 +847,29 @@ UINT32 ihu_message_queue_inquery(UINT8 task_id)
 		return 0;
 	}
 
-	//Generate msgKey
-	msgKey = task_id + IHU_TASK_QUEUE_ID_START;
-	if ((msgKey <= TASK_QUE_ID_MIN) || (msgKey >= TASK_QUE_ID_MAX)){
-		zIhuRunErrCnt[TASK_ID_VMUO]++;
-		IhuErrorPrint("VMUO: Error on task_id, msgKey=%d!!!\n", msgKey);
-		return 0;
-	}
-
-//	msgQid=msgget(msgKey, IPC_EXCL);  /*检查消息队列是否存在*/
-
-	return msgQid;
-}
-
-//这个过程用在同步不同进程之间的消息队列，确保不同进程之间的任务可以互发消息
-//如果队列本来就不存在，就不用同步或者重新填入全局控制表了
-OPSTAT ihu_message_queue_resync(void)
-{
-	UINT8 task_id = 0;
-	int msgKey=0, msgQid=0;
-	for (task_id = TASK_ID_MIN; task_id < TASK_ID_MAX; task_id++){
-		//Generate msgKey
-		msgKey = task_id + IHU_TASK_QUEUE_ID_START;
-		if ((msgKey <= TASK_QUE_ID_MIN) || (msgKey >= TASK_QUE_ID_MAX)){
-			zIhuRunErrCnt[TASK_ID_VMUO]++;
-			IhuErrorPrint("VMUO: Error on task_id, msgKey=%d!!!\n", msgKey);
-			return FAILURE;
-		}
-		//Checking msgQid exiting or not
-		//这里，不在本进程中的任务模块，只有最为基本的消息队列和Task_ID，其它信息一律不存在
-//		msgQid=msgget(msgKey, IPC_EXCL);  /*检查消息队列是否存在*/
-		if (msgQid>=0){
-			zIhuTaskInfo[task_id].QueId = msgQid;
-			zIhuTaskInfo[task_id].TaskId = task_id;
-		}
-	}//For loop
-
-	return SUCCESS;
+	return (void *)&(zIhuTaskInfo[task_id].TaskQue);
 }
 
 //清理某一个任务的消息队列
 OPSTAT ihu_message_queue_clean(UINT8 dest_id)
 {
+	OS_ERR err;
+	
 	//入参检查
 	if ((dest_id <= TASK_ID_MIN) || (dest_id >= TASK_ID_MAX)){
 		zIhuRunErrCnt[TASK_ID_VMUO]++;
 		IhuErrorPrint("VMUO: Error on task_id, dest_id=%d!!!\n", dest_id);
 		return FAILURE;
 	}	
-	//清理消息队列
-	memset(&zIhuFsmTable.taskQue[dest_id], 0, sizeof(FsmQueueListTable_t));
 	
+	//清理消息队列
+	OSQFlush(&(zIhuTaskInfo[dest_id].TaskQue), &err);
+	if (err != OS_ERR_NONE){
+		zIhuRunErrCnt[TASK_ID_VMUO]++;
+		IhuErrorPrint("VMUO: ihu_message_queue_clean error, err=%d, errno=%d, %s\n", err, errno, strerror(err));
+		return FAILURE;
+	}
+
 	return SUCCESS;
 }
 
@@ -909,9 +878,10 @@ OPSTAT ihu_message_queue_clean(UINT8 dest_id)
 //All in parameters
 OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)
 {
-	int ret = 0;
+	OS_ERR err;
 	char s1[TASK_NAME_MAX_LENGTH+2]="", s2[TASK_NAME_MAX_LENGTH+2]="", s3[MSG_NAME_MAX_LENGTH]="";
-	IhuMsgSruct_t *msg;
+	IhuMsgSruct_t msg;
+	CPU_INT08U *p_msg;
 	
 	//Checking task_id range
 	if ((dest_id <= TASK_ID_MIN) || (dest_id >= TASK_ID_MAX)){
@@ -929,31 +899,41 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 		IhuErrorPrint("VMUO: Too large message length than IHU set capability, param_len=%d!!!\n", param_len);
 		return FAILURE;
 	}
-
-	//Starting to process message send
-	//Not use malloc/free function, as it is a little bit complex to manage, to be checked here the memory conflict
-	msg = malloc(sizeof(IhuMsgSruct_t));
-	if (msg == NULL){
-		IhuErrorPrint("VMUO: Message send allocate memory error, exit!\n");
-		return FAILURE;
-	}
+	
 	//Init to clean this memory area
 	//初始化消息内容，是为了稳定可靠安全
-	memset(msg, 0, sizeof(IhuMsgSruct_t));
-	msg->msgType = msg_id;
-	msg->dest_id = dest_id;
-	msg->src_id = src_id;
-	msg->msgLen = param_len;
-	memcpy(&(msg->msgBody[0]), param_ptr, param_len);
-	//msg->msgBody是否可以直接当指针？
-
-//	ret = msgsnd(ihu_msgque_inquery(dest_id), msg, (sizeof(IhuMsgSruct_t)-sizeof(long)), IPC_NOWAIT);
-//	free(msg);
-	if ( ret < 0 ) {
-		IhuErrorPrint("VMUO: msgsnd() write msg failed, errno=%d[%s], dest_id = %d [%s]\n",errno,strerror(errno), dest_id, zIhuTaskNameList[dest_id]);
-		zIhuTaskInfo[dest_id].QueFullFlag = IHU_TASK_QUEUE_FULL_TRUE;
+	memset(&msg, 0, sizeof(IhuMsgSruct_t));
+	msg.msgType = msg_id;
+	msg.dest_id = dest_id;
+	msg.src_id = src_id;
+	msg.msgLen = param_len;
+	memcpy(&(msg.msgBody[0]), param_ptr, param_len);
+	
+	//申请MEM Partition，用于数据的传递
+	p_msg = (CPU_INT08U *)OSMemGet((OS_MEM *)&zIhuPartition, (OS_ERR *)&err);
+	if (err != OS_ERR_NONE){
+		zIhuRunErrCnt[TASK_ID_VMUO]++;
+		IhuErrorPrint("VMUO: ihu_message_send apply MEM Partition error, err=%d, errno=%d, %s, dest_id = %d [%s].\n", err, errno, strerror(err), dest_id, zIhuTaskNameList[dest_id]);
+		return FAILURE;
+	}	
+	
+	//拷贝数据到共享内存区
+	memset(p_msg, 0, MAX_IHU_MSG_BUF_LENGTH);
+	memcpy(p_msg, &msg, param_len + 6); //6是消息头的长度
+	
+	//Post a message to dest queue
+	OSQPost(
+		(OS_Q *)&(zIhuTaskInfo[dest_id].TaskQue),
+		(void *)p_msg,
+		(OS_MSG_SIZE)(param_len + 6), //这里是将实际的数据长度汇报给接收者
+		(OS_OPT)OS_OPT_POST_FIFO + OS_OPT_POST_ALL + OS_OPT_POST_NO_SCHED,
+		(OS_ERR *)&err);
+	if (err != OS_ERR_NONE){
+		zIhuRunErrCnt[TASK_ID_VMUO]++;
+		IhuErrorPrint("VMUO: ihu_message_send error, err=%d, errno=%d, %s, dest_id = %d [%s].\n", err, errno, strerror(err), dest_id, zIhuTaskNameList[dest_id]);
 		return FAILURE;
 	}
+	p_msg = NULL; //以免后面再出问题
 
 	/*
 	 *  Message Trace processing
@@ -1163,7 +1143,10 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 // ret: 接受消息中的errno=4/EINTR需要单独处理，不然会出现被SIGALRM打断的情形
 OPSTAT ihu_message_rcv(UINT8 dest_id, IhuMsgSruct_t *msg)
 {
-	int ret = 0;
+	OS_ERR err;
+	OS_MSG_SIZE msg_size;
+	CPU_TS ts;
+	CPU_INT08U *p_msg;
 	
 	//Checking task_id range
 	if ((dest_id <= TASK_ID_MIN) || (dest_id >= TASK_ID_MAX)){
@@ -1171,15 +1154,43 @@ OPSTAT ihu_message_rcv(UINT8 dest_id, IhuMsgSruct_t *msg)
 		return FAILURE;
 	}
 
-	//ret = msgrcv(zIhuTaskInfo[dest_id].QueId, msg, (sizeof(IhuMsgSruct_t) - sizeof(long)), 0, 0);
-//	ret = msgrcv(ihu_msgque_inquery(dest_id), msg, (sizeof(IhuMsgSruct_t) - sizeof(long)), 0, 0);
-//	if (errno == EINTR) //EINTR, system interrupt call error
-//		return EINTR;
-	if ( ret < 0 ) {
+	//Receive/Pend a message
+	p_msg = OSQPend(
+		(OS_Q *  )&(zIhuTaskInfo[dest_id].TaskQue),
+		(OS_TICK )0, //For ever wait
+		(OS_OPT  )OS_OPT_PEND_BLOCKING,
+		(OS_MSG_SIZE *)&msg_size,
+		(CPU_TS *)&ts,  //Time Stamp，获取了该消息产生的时间戳
+		(OS_ERR *)&err);
+	if (err != OS_ERR_NONE){
 		zIhuRunErrCnt[TASK_ID_VMUO]++;
-		IhuErrorPrint("VMUO: msgrcv() receive msg failed, Qid=%d, msg=%08X, errno=%d[%s]\n", zIhuTaskInfo[dest_id].QueId, msg, errno, strerror(errno));
+		IhuErrorPrint("VMUO: ihu_message_rcv error, err=%d, errno=%d, %s, dest_id = %d [%s].\n", err, errno, strerror(err), dest_id, zIhuTaskNameList[dest_id]);
 		return FAILURE;
 	}
+	
+	//收到消息长度判定
+	if ((msg_size == 0) || (msg_size > MAX_IHU_MSG_BUF_LENGTH)){
+		zIhuRunErrCnt[TASK_ID_VMUO]++;
+		IhuErrorPrint("VMUO: ihu_message_rcv length error, err=%d, errno=%d, %s, dest_id = %d [%s].\n", err, errno, strerror(err), dest_id, zIhuTaskNameList[dest_id]);
+		OSMemPut((OS_MEM *)&zIhuPartition, (void *)p_msg, (OS_ERR *)&err);
+		return FAILURE;
+	}else{	
+		//拷贝到目标
+		memcpy(msg, p_msg, msg_size);
+	}
+	
+	//拿回/送回/释放Mem Partition
+	OSMemPut(
+		(OS_MEM *)&zIhuPartition,
+		(void *)p_msg,
+		(OS_ERR *)&err);
+	if (err != OS_ERR_NONE){
+		zIhuRunErrCnt[TASK_ID_VMUO]++;
+		IhuErrorPrint("VMUO: ihu_message_rcv Take back Mem Partition error, err=%d, errno=%d, %s, dest_id = %d [%s].\n", err, errno, strerror(err), dest_id, zIhuTaskNameList[dest_id]);
+		return FAILURE;
+	}
+	p_msg = NULL;
+	
 	return SUCCESS;
 }
 
@@ -1187,60 +1198,25 @@ OPSTAT ihu_message_rcv(UINT8 dest_id, IhuMsgSruct_t *msg)
 /**************************************************************************************
  * 创建任务，使用的是线程模拟，各个任务之间可以共享内存
  * To Create a thread
- * void  ihu_task_create( UINT8 task_id,          		out: pointer to zIhuTaskId[task_id]
+ * void  ihu_task_create( UINT8 task_id,          		  out: pointer to zIhuTaskId[task_id]
  *                   void *(*task_func)(void *),        in: task's entry point
  *                   void *arg,                         in: parameter of the task's function
  *                   int prio )                         in: priority of the task*
  ***************************************************************************************/
 OPSTAT ihu_task_create(UINT8 task_id, void *(*task_func)(void *), void *arg, int prio)
 {
-	int                     err;
-//	pthread_attr_t          attr;
-//	struct  sched_param     sched;
-
-	// The thread is initialized with attributes object default values
-//	if(0!= (err = pthread_attr_init(&attr)))
-//	{
-//		IhuDebugPrint("VMUO: pthread_attr_init() nok!! err=%d, errno=%d, %s\n", err, errno, strerror(err));
-//		return FAILURE;
-//	}
-
-	// Change the inherit scheduling attribute
-	// of the specified thread attribute object,because PTHREAD_INHERIT_SCHED is default value
-//	if (0!= (err = pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED)))
-//	{
-//		IhuDebugPrint("VMUO: pthread_attr_setinheritsched() nok!! err=%d, errno=%d, %s\n", err, errno, strerror(err));
-//		return FAILURE;
-//	}
-
-	// Set the contention scope attribute of
-	// the specified thread attributes object, the thread compete with all threads on the station
-//	if (0 != (err = pthread_attr_setscope(&attr, PTHREAD_SCOPE_SYSTEM)))
-//	{
-//		IhuDebugPrint("VMUO: pthread_attr_setscope() nok!! err=%d, errno=%d, %s\n", err, errno, strerror(err));
-//		return FAILURE;
-//	}
-
-	// Set the scheduling policy,SCHED_OTHER is the default
-//	if (0 != (err = pthread_attr_setschedpolicy(&attr, SCHED_FIFO)))
-//	{
-//		IhuDebugPrint("VMUO: pthread_attr_setschedpolicy() nok!! err=%d, errno=%d, %s\n", err, errno, strerror(err));
-//		return FAILURE;
-//	}
-
-	// Set the priority of the task
-//	sched.sched_priority = prio;
-//	if (0 != (err = pthread_attr_setschedparam(&attr, &sched)))
-//	{
-//		IhuErrorPrint("VMUO: pthread_attr_setschedparam() nok!! err=%d, errno=%d, %s\n", err, errno, strerror(err));
-//		return FAILURE;
-//	}
-
+	OS_ERR err;
+	
 	// Checking task_id
 	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
 		zIhuRunErrCnt[TASK_ID_VMUO]++;
 		IhuErrorPrint("VMUO: Error on task_id!! err=%d, errno=%d, %s, task_id=%d\n", err, errno, strerror(err), task_id);
 		return FAILURE;
+	}
+	if (task_func == NULL){
+		zIhuRunErrCnt[TASK_ID_VMUO]++;
+		IhuErrorPrint("VMUO: Null routine pointer!! err=%d, errno=%d, %s=%d\n", err, errno, strerror(err));
+		return FAILURE;		
 	}
 
 	//As FsmProcessLaunch has to transfer task_id in, we will use global variance of zIhuFsmTable.currentTaskId
@@ -1256,26 +1232,31 @@ OPSTAT ihu_task_create(UINT8 task_id, void *(*task_func)(void *), void *arg, int
 	}
 	zIhuFsmTable.currentTaskId = task_id;
 
-	// creation of the task
-//	err=pthread_create(&(zIhuTaskInfo[task_id].ThrId), &attr, (void *(*)(void*))(task_func), (void*)arg);
-	if(err != 0)
-	{
-		IhuDebugPrint("VMUO: pthread_create() nok!! err=%d, errno=%d, %s\n", err, errno, strerror(err));
+	//creation of the task
+	OSTaskCreate(&(zIhuTaskInfo[task_id].TaskTCB),
+		zIhuTaskNameList[task_id],
+		(OS_TASK_PTR)(task_func),  //(void *(*)(void*))(task_func)
+		(void *)arg,
+		prio,
+		&(zIhuTaskInfo[task_id].TaskSTK[0]),
+		IHU_TASK_STACK_WATERMAKR_LIMIT,
+		IHU_TASK_STACK_LENGTH,
+		0,  //q_size, 不使用TASK自己提供的Queue
+		0,  //time_quanta
+		(void *)0,  //Extention pointer is not used
+		OS_OPT_TASK_STK_CHK + OS_OPT_TASK_STK_CLR,
+		&err);
+	if (err != OS_ERR_NONE){
+		zIhuRunErrCnt[TASK_ID_VMUO]++;
+		IhuErrorPrint("VMUO: OSTaskCreate create task error, err=%d, errno=%d, %s\n", err, errno, strerror(err));
 		return FAILURE;
 	}
 
 	//zIhuTaskInfo[task_id].TaskName to be added in another way, TBD
-	zIhuTaskInfo[task_id].TaskId = task_id;
-//	zIhuTaskInfo[task_id].processId = getpid(); //进程号存入
+	zIhuTaskInfo[task_id].TaskId = task_id;		
 	IhuDebugPrint("VMUO: pthread_create() OK ...\n");
-	/* ERRORS
-	       EAGAIN Insufficient resources to create another thread, or a system-imposed limit on the number of threads was encountered.  The latter case may occur in two ways: the RLIMIT_NPROC soft  resource  limit
-	              (set via setrlimit(2)), which limits the number of process for a real user ID, was reached; or the kernel's system-wide limit on the number of threads, /proc/sys/kernel/threads-max, was reached.
 
-	       EINVAL Invalid settings in attr.
-
-	       EPERM  No permission to set the scheduling policy and parameters specified in attr.
-	 */
+	//返回
 	return SUCCESS;
 }
 
@@ -1283,6 +1264,8 @@ OPSTAT ihu_task_create(UINT8 task_id, void *(*task_func)(void *), void *arg, int
 //有关进程与线程方面的杀死清理，未来需要再完善
 OPSTAT ihu_task_delete(UINT8 task_id)
 {
+	OS_ERR err;
+	
 	//Checking task_id range
 	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
 		zIhuRunErrCnt[TASK_ID_VMUO]++;
@@ -1290,22 +1273,19 @@ OPSTAT ihu_task_delete(UINT8 task_id)
 		return FAILURE;
 	}
 
-	//Not exist
-//	if (zIhuTaskInfo[task_id].ThrId ==0){return FAILURE;}
+	//Not exist，这里的取地址，是否正确？待定待研究！
+	//if (&(zIhuTaskInfo[task_id].TaskTCB) == NULL){return FAILURE;}
 
 	//只是清理掉FSM中的信息
 	FsmRemove(task_id);
 
-	//以下KILL线程会出错，未来待研究验证
-	/*
-	//SIGKILL用于杀死整个进程, 返回为ESRCH则表示线程不存在
-	if (pthread_kill(zIhuTaskInfo[task_id].ThrId, 0) != (EINVAL || ESRCH)) {
-		pthread_kill(zIhuTaskInfo[task_id].ThrId, SIGQUIT);
-		return SUCCESS;
-	}else{
+	//删除任务
+	OSTaskDel(&(zIhuTaskInfo[task_id].TaskTCB), &err);
+	if (err != OS_ERR_NONE){
+		zIhuRunErrCnt[TASK_ID_VMUO]++;
+		IhuErrorPrint("VMUO: OSTaskCreate create task error, err=%d, errno=%d, %s\n", err, errno, strerror(err));
 		return FAILURE;
 	}
-	*/
 	return SUCCESS;
 }
 
@@ -1332,8 +1312,8 @@ OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 		IhuDebugPrint("VMUO: FsmAddNew Successful, taskId = 0x%x [%s].\n", task_id, zIhuTaskNameList[task_id]);
 	}
 
-	//Create Queid
-	ret = ihu_message_queue_clean(task_id);
+	//Create Queue
+	ret = ihu_message_queue_create(task_id);
 	if (ret == FAILURE)
 	{
 	zIhuRunErrCnt[TASK_ID_VMUO]++;
@@ -1362,6 +1342,7 @@ OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 	
 	//给该任务设置一个软的状态：省略了
 	
+	//返回
 	return SUCCESS;
 }
 
@@ -1495,486 +1476,6 @@ struct tm ihu_clock_unix_to_ymd(time_t t_unix)
 		return *localtime(&t_unix);
 }
 
-
-/*******************************************************************************
-**
-**	没有RTOS的情形
-**
-**********************************************************************************/
-//这里将LaunchEntry和LaunchExecute是因为在VMDA环境中，创造环境和执行不在一起
-//具有真正任务的操作系统环境中，没有这个必要了
-OPSTAT FsmProcessingLaunchEntryBareRtos(UINT8 task_id)
-{
-	/*
-	** Check the task_id
-	*/
-	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
-		zIhuRunErrCnt[TASK_ID_VMUO]++;
-		IhuErrorPrint("VMUO: Error on task_id, task_id=%d!!!\n", task_id);
-		return FAILURE;
-	}
-
-	/*
-	** Run each task entry API, give each task a chance to init any specific information
-	*/
-	if (zIhuFsmTable.pFsmCtrlTable[task_id].pFsmArray[FSM_STATE_ENTRY][MSG_ID_ENTRY].stateFunc != NULL){
-		(zIhuFsmTable.pFsmCtrlTable[task_id].pFsmArray[FSM_STATE_ENTRY][MSG_ID_ENTRY].stateFunc)(task_id, 0, NULL, 0);
-	}else{
-		zIhuRunErrCnt[TASK_ID_VMUO]++;
-		IhuErrorPrint("VMUO: Task (ID=%d) get no init entry fetched!\n", task_id);
-	}
-	
-	return SUCCESS;
-}
-
-OPSTAT FsmProcessingLaunchExecuteBareRtos(UINT8 task_id)
-{
-	OPSTAT ret;
-	IhuMsgSruct_t rcv;
-
-	/*
-	** Check the task_id
-	*/
-	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
-		zIhuRunErrCnt[TASK_ID_VMUO]++;
-		IhuErrorPrint("VMUO: Error on task_id, task_id=%d!!!\n", task_id);
-		return FAILURE;
-	}
-
-	//任务中的消息轮循
-	//从当前TASKID对应的消息队列读取消息
-	//每一次循环，只从消息队列中读取一个消息并进行执行，这相当于所有任务的优先级都是均等的，不存在优先级高的问题
-	//如果消息过多，可能会造成消息队列的溢出，这里没有考虑消息队列的共享问题，未来可以考虑继续优化
-	//小喇叭响起来，这里是资源优化集中营！
-	memset(&rcv, 0, sizeof(IhuMsgSruct_t));
-	ret = ihu_message_rcv(task_id, &rcv);
-	if (ret == SUCCESS)
-	{
-		ret = FsmRunEngine(rcv.msgType, rcv.dest_id, rcv.src_id, rcv.msgBody, rcv.msgLen);
-		if (ret == FAILURE)
-		{
-			zIhuRunErrCnt[TASK_ID_VMUO]++;	
-			IhuErrorPrint("VMUO: Error execute FsmRun state machine!\n");
-			return FAILURE;
-		}
-	}
-	else
-	{
-		//失败了，啥都不干，说明读取出错，或者消息队列是空的
-		//这意味着只是空转一下
-		//真正失败的时候，需要返回FAILURE
-		
-		//这里是消息队列空，所以返回成功
-		return SUCCESS;
-	}
-	
-	return SUCCESS;
-}
-
-//Reveive message
-//dest_id: in
-//*msg: out
-OPSTAT ihu_message_rcv_bare_rtos(UINT8 dest_id, IhuMsgSruct_t *msg)
-{
-	int i=0, j=0;
-	bool Flag = FALSE;
-	
-	//Checking task_id range
-	if ((dest_id <= TASK_ID_MIN) || (dest_id >= TASK_ID_MAX)){
-		zIhuRunErrCnt[TASK_ID_VMUO]++;
-		IhuErrorPrint("VMUO: Error on task_id, dest_id=%d!!!\n", dest_id);
-		return FAILURE;
-	}
-	
-	//循环查找一个任务的消息队列，看看有无有效消息
-	for (i=0; i<MAX_QUEUE_NUM_IN_ONE_TASK; i++)
-	{
-		j = zIhuFsmTable.taskQue[dest_id].queIndex + i;
-		j = j%MAX_QUEUE_NUM_IN_ONE_TASK;
-		if (zIhuFsmTable.taskQue[dest_id].queList[j].useFlag == TRUE)
-		{
-			//找到了未消耗的消息
-			memcpy(msg, zIhuFsmTable.taskQue[dest_id].queList[j].msgQue, MAX_IHU_MSG_BODY_LENGTH);
-			zIhuFsmTable.taskQue[dest_id].queList[j].useFlag = FALSE;
-			//将INDEX指向下一个
-			j = (j+1) % MAX_QUEUE_NUM_IN_ONE_TASK;
-			zIhuFsmTable.taskQue[dest_id].queIndex = j;
-			//判断消息的合法性
-			if ((msg->dest_id <= TASK_ID_MIN) || (msg->dest_id >= TASK_ID_MAX)){
-				zIhuRunErrCnt[TASK_ID_VMUO]++;
-				IhuErrorPrint("VMUO: Receive message error on task_id, dest_id=%d!!!\n", msg->dest_id);
-				return FAILURE;
-			}
-			if ((msg->src_id <= TASK_ID_MIN) || (msg->src_id >= TASK_ID_MAX)){
-				zIhuRunErrCnt[TASK_ID_VMUO]++;
-				IhuErrorPrint("VMUO: Receive message error on src_id, dest_id=%d!!!\n", msg->src_id);
-				return FAILURE;
-			}
-			//不允许定义消息结构中长度为0的消息体，至少需要一个长度域
-			if ((msg->msgLen <= 0) || (msg->msgLen > MAX_IHU_MSG_BUF_LENGTH)){
-				zIhuRunErrCnt[TASK_ID_VMUO]++;
-				IhuErrorPrint("VMUO: Receive message error on length, msgLen=%d!!!\n", msg->msgLen);
-				return FAILURE;
-			}
-			if ((msg->msgType <= MSG_ID_COM_MIN) || (msg->msgType >= MSG_ID_COM_MAX)){
-				zIhuRunErrCnt[TASK_ID_VMUO]++;
-				IhuErrorPrint("VMUO: Receive message error on msgId, msgType=%d!!!\n", msg->msgType);
-				return FAILURE;
-			}			
-			//退出循环
-			Flag = TRUE;
-			break;
-		}
-	}
-	//返回错误，并不一定表示真发生了错误，也有可能是没有任何消息供消耗，此时，上层调用者就啥都不做，确保自己安全
-	if (Flag == TRUE){	
-		return SUCCESS;
-	}else{
-		return FAILURE;
-	}
-}
-
-//message send basic processing
-//All in parameters
-OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)
-{
-	IhuMsgSruct_t msg;
-	int i=0, j=0;
-	bool Flag = FALSE;
-	char s1[TASK_NAME_MAX_LENGTH+2]="", s2[TASK_NAME_MAX_LENGTH+2]="", s3[MSG_NAME_MAX_LENGTH]="";
-	
-	//入参检查Checking task_id range
-	if ((dest_id <= TASK_ID_MIN) || (dest_id >= TASK_ID_MAX)){
-		zIhuRunErrCnt[TASK_ID_VMUO]++;
-		IhuErrorPrint("VMUO: Error on task_id, dest_id=%d!!!\n", dest_id);
-		return FAILURE;
-	}
-	if ((src_id <= TASK_ID_MIN) || (src_id >= TASK_ID_MAX)){
-		zIhuRunErrCnt[TASK_ID_VMUO]++;
-		IhuErrorPrint("VMUO: Error on task_id, src_id=%d!!!\n", src_id);
-		return FAILURE;
-	}
-	if (param_len>MAX_IHU_MSG_BODY_LENGTH){
-		zIhuRunErrCnt[TASK_ID_VMUO]++;	
-		IhuErrorPrint("VMUO: Too large message length than IHU set capability, param_len=%d!!!\n", param_len);
-		return FAILURE;
-	}
-	if ((msg_id <= MSG_ID_COM_MIN) || (msg_id >= MSG_ID_COM_MAX)){
-		zIhuRunErrCnt[TASK_ID_VMUO]++;
-		IhuErrorPrint("VMUO: Receive message error on msgId, msgType=%d!!!\n", msg_id);
-		return FAILURE;
-	}
-
-	//对来源数据进行初始化，是为了稳定可靠安全	
-	memset(&msg, 0, sizeof(IhuMsgSruct_t));
-	msg.msgType = msg_id;
-	msg.dest_id = dest_id;
-	msg.src_id = src_id;
-	msg.msgLen = param_len;
-	memcpy(&(msg.msgBody[0]), param_ptr, param_len);
-
-
-	//然后送到目的地，循环查找一个任务的消息队列，看看有无空闲位置
-	for (i=0; i<MAX_QUEUE_NUM_IN_ONE_TASK; i++)
-	{
-		j = zIhuFsmTable.taskQue[dest_id].queIndex + i;
-		j = j%MAX_QUEUE_NUM_IN_ONE_TASK;
-		if (zIhuFsmTable.taskQue[dest_id].queList[j].useFlag == FALSE)
-		{
-			//找到了空闲的消息位置
-			memcpy(zIhuFsmTable.taskQue[dest_id].queList[j].msgQue, &msg, MAX_IHU_MSG_BODY_LENGTH);
-			zIhuFsmTable.taskQue[dest_id].queList[j].useFlag = TRUE;
-			//将INDEX指向下一个
-			j = (j+1) % MAX_QUEUE_NUM_IN_ONE_TASK;
-			zIhuFsmTable.taskQue[dest_id].queIndex = j;
-			//退出循环
-			Flag = TRUE;
-			break;
-		}
-	}
-	//错误，表示没有空闲队列
-	if (Flag == FALSE){
-		zIhuRunErrCnt[TASK_ID_VMUO]++;
-		IhuErrorPrint("VMUO: Message queue full, can not send into task = %d!!!\n", dest_id);
-		return FAILURE;
-	}
-
-	/*
-	 *  Message Trace processing
-	 *  注意字符串长度，太小会出现内存飞掉的情形，MessageTrace的数据配置来源于数据库，层次比这个还要高，虽然有点怪怪的，但不影响总体架构
-	 *  最开始采用IFDEF的形式，后期完善后改为更为直接的代码方式
-	 *  软件开发中，DEBUG和TRACE是两种最常用/最有用的调试模式，比单步还有用，这不仅是因为熟手不需要单步执行，而且也是因为多线程多进程单步执行环境制造的复杂性
-	 *
-	 *  有关MESSAGE TRACE的效率，是一个要注意的问题，当系统负载不高时，打开所有的TRACE是合适的，但一旦部署实际系统，TRACE需要减少到最低程度，这是原则，实际需要
-	 *  维护人员根据情况灵活把我
-	 *
-	 *  本TRACE功能，提供了多种工作模式
-	 *
-	 */
-	switch (zIhuSysEngPar.traceMode)
-	{
-		case IHU_TRACE_MSG_MODE_OFF:
-			break;
-
-		case IHU_TRACE_MSG_MODE_INVALID:
-			break;
-
-		case IHU_TRACE_MSG_MODE_ALL:
-			ihu_taskid_to_string(dest_id, s1);
-			ihu_taskid_to_string(src_id, s2);
-			ihu_msgid_to_string(msg_id, s3);
-			IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
-			break;
-
-		case IHU_TRACE_MSG_MODE_ALL_BUT_TIME_OUT:
-			ihu_taskid_to_string(dest_id, s1);
-			ihu_taskid_to_string(src_id, s2);
-			ihu_msgid_to_string(msg_id, s3);
-			if (msg_id != MSG_ID_COM_TIME_OUT){
-				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
-			}
-			break;
-
-		case IHU_TRACE_MSG_MODE_ALL_BUT_HEART_BEAT:
-			ihu_taskid_to_string(dest_id, s1);
-			ihu_taskid_to_string(src_id, s2);
-			ihu_msgid_to_string(msg_id, s3);
-			if ((msg_id != MSG_ID_COM_HEART_BEAT) && (msg_id != MSG_ID_COM_HEART_BEAT_FB)){
-				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
-			}
-			break;
-
-		case IHU_TRACE_MSG_MODE_ALL_BUT_TIME_OUT_AND_HEART_BEAT:
-			ihu_taskid_to_string(dest_id, s1);
-			ihu_taskid_to_string(src_id, s2);
-			ihu_msgid_to_string(msg_id, s3);
-			if ((msg_id != MSG_ID_COM_TIME_OUT) && (msg_id != MSG_ID_COM_HEART_BEAT) && (msg_id != MSG_ID_COM_HEART_BEAT_FB)){
-				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
-			}
-			break;
-
-		case IHU_TRACE_MSG_MODE_MOUDLE_TO_ALLOW:
-			ihu_taskid_to_string(dest_id, s1);
-			ihu_taskid_to_string(src_id, s2);
-			ihu_msgid_to_string(msg_id, s3);
-			if ((zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToAllow == TRUE)){
-				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
-			}
-			break;
-
-		case IHU_TRACE_MSG_MODE_MOUDLE_TO_RESTRICT:
-			ihu_taskid_to_string(dest_id, s1);
-			ihu_taskid_to_string(src_id, s2);
-			ihu_msgid_to_string(msg_id, s3);
-			if ((zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToRestrict!= TRUE)){
-				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
-			}
-			break;
-
-		case IHU_TRACE_MSG_MODE_MOUDLE_FROM_ALLOW:
-			ihu_taskid_to_string(dest_id, s1);
-			ihu_taskid_to_string(src_id, s2);
-			ihu_msgid_to_string(msg_id, s3);
-			if ((zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleToAllow == TRUE)){
-				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
-			}
-			break;
-
-		case IHU_TRACE_MSG_MODE_MOUDLE_FROM_RESTRICT:
-			ihu_taskid_to_string(dest_id, s1);
-			ihu_taskid_to_string(src_id, s2);
-			ihu_msgid_to_string(msg_id, s3);
-			if ((zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleToRestrict!= TRUE)){
-				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);				
-			}
-			break;
-
-		case IHU_TRACE_MSG_MODE_MOUDLE_DOUBLE_ALLOW:
-			ihu_taskid_to_string(dest_id, s1);
-			ihu_taskid_to_string(src_id, s2);
-			ihu_msgid_to_string(msg_id, s3);
-			if ((zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleToAllow == TRUE)
-					&& (zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToAllow == TRUE)){
-				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);				
-			}
-			break;
-
-		case IHU_TRACE_MSG_MODE_MOUDLE_DOUBLE_RESTRICT:
-			ihu_taskid_to_string(dest_id, s1);
-			ihu_taskid_to_string(src_id, s2);
-			ihu_msgid_to_string(msg_id, s3);
-			if ((zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleToRestrict != TRUE)
-					&& (zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToRestrict != TRUE)){
-				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);				
-			}
-			break;
-
-		case IHU_TRACE_MSG_MODE_MSGID_ALLOW:
-			ihu_taskid_to_string(dest_id, s1);
-			ihu_taskid_to_string(src_id, s2);
-			ihu_msgid_to_string(msg_id, s3);
-			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgAllow == TRUE)){
-				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);				
-			}
-			break;
-
-		case IHU_TRACE_MSG_MODE_MSGID_RESTRICT:
-			ihu_taskid_to_string(dest_id, s1);
-			ihu_taskid_to_string(src_id, s2);
-			ihu_msgid_to_string(msg_id, s3);
-			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgRestrict != TRUE)){
-				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);				
-			}
-			break;
-
-		case IHU_TRACE_MSG_MODE_COMBINE_TO_ALLOW:
-			ihu_taskid_to_string(dest_id, s1);
-			ihu_taskid_to_string(src_id, s2);
-			ihu_msgid_to_string(msg_id, s3);
-			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgAllow == TRUE)
-					&& (zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToAllow == TRUE)){
-				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);				
-			}
-			break;
-
-		case IHU_TRACE_MSG_MODE_COMBINE_TO_RESTRICT:
-			ihu_taskid_to_string(dest_id, s1);
-			ihu_taskid_to_string(src_id, s2);
-			ihu_msgid_to_string(msg_id, s3);
-			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgAllow == TRUE)
-					&& (zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToRestrict != TRUE)){
-				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);				
-			}
-			break;
-
-		case IHU_TRACE_MSG_MODE_COMBINE_FROM_ALLOW:
-			ihu_taskid_to_string(dest_id, s1);
-			ihu_taskid_to_string(src_id, s2);
-			ihu_msgid_to_string(msg_id, s3);
-			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgAllow == TRUE)
-					&& (zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleFromAllow == TRUE)){
-				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);				
-			}
-			break;
-
-		case IHU_TRACE_MSG_MODE_COMBINE_FROM_RESTRICT:
-			ihu_taskid_to_string(dest_id, s1);
-			ihu_taskid_to_string(src_id, s2);
-			ihu_msgid_to_string(msg_id, s3);
-			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgRestrict != TRUE)
-					&& (zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleFromRestrict != TRUE)){
-				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);				
-			}
-			break;
-
-		case IHU_TRACE_MSG_MODE_COMBINE_DOUBLE_ALLOW:
-			ihu_taskid_to_string(dest_id, s1);
-			ihu_taskid_to_string(src_id, s2);
-			ihu_msgid_to_string(msg_id, s3);
-			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgAllow == TRUE)
-					&& (zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToAllow == TRUE)
-					&& (zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleFromAllow == TRUE)){
-				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);				
-			}
-			break;
-
-		case IHU_TRACE_MSG_MODE_COMBINE_DOUBLE_RESTRICT:
-			ihu_taskid_to_string(dest_id, s1);
-			ihu_taskid_to_string(src_id, s2);
-			ihu_msgid_to_string(msg_id, s3);
-			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgRestrict != TRUE)
-					&& (zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToRestrict != TRUE)
-					&& (zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleFromRestrict != TRUE)){
-				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);				
-			}
-			break;
-
-		default:
-			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_NOR_ON) != FALSE){
-				zIhuRunErrCnt[TASK_ID_VMUO]++;				
-				IhuErrorPrint("VMUO: System Engineering Parameter Trace Mode setting error! DebugMode=%d.\n", zIhuSysEngPar.debugMode);				
-			}
-			break;
-	}
-
-	return SUCCESS;
-}
-
-
-//为了对付不存在OS的情形
-OPSTAT ihu_system_task_execute_bare_rtos(UINT8 task_id, FsmStateItem_t *p)
-{
-	int ret = 0;
-	char strDebug[IHU_PRINT_CHAR_SIZE];
-	
-	//Checking task_id range
-	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
-		zIhuRunErrCnt[TASK_ID_VMUO]++;
-		sprintf(strDebug, "VMUO: Input Error on task_id, task_id=%d!!!\n", task_id);
-		IhuErrorPrint(strDebug);
-		return FAILURE;
-	}
-	
-	//入参检查
-	if (p == NULL){
-		zIhuRunErrCnt[TASK_ID_VMUO]++;
-		IhuErrorPrint("VMUO: Input wrong FsmStateItem pointer!\n");
-		return FAILURE;
-	}
-	
-	//任务控制启动标示检查
-	if (zIhuTaskInfo[task_id].pnpState != IHU_TASK_PNP_ON){
-		zIhuRunErrCnt[TASK_ID_VMUO]++;
-		sprintf(strDebug, "VMUO: no need execute this task [%s]!\n", zIhuTaskNameList[task_id]);
-		IhuErrorPrint(strDebug);	
-		return FAILURE;
-	}
-
-	//轮询执行任务的消息消耗
-	ret = FsmProcessingLaunchExecuteBareRtos(task_id);
-	if (ret == FAILURE)
-	{
-		zIhuRunErrCnt[TASK_ID_VMUO]++;
-		sprintf(strDebug, "VMUO: Execute task FSM un-successfully, taskid = %d", task_id);
-		IhuErrorPrint(strDebug);		
-		return FAILURE;
-	}
-	
-	//正确返回
-	return SUCCESS;
-}
-
-//轮询所有任务的正常执行
-void ihu_task_execute_all_bare_rtos(void)
-{
-	#ifdef IHU_COMPILE_TASK_VMUO
-		//Execute task VMUO FSM /1
-		if (zIhuTaskInfo[TASK_ID_VMUO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_VMUO, FsmVMUO);	
-	#endif //IHU_COMPILE_TASK_VMUO
-		
-	#ifdef IHU_COMPILE_TASK_TIMER
-		//Execute task Timer FSM /2
-		if (zIhuTaskInfo[TASK_ID_TIMER].pnpState == IHU_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_TIMER, FsmTimer);
-	#endif //IHU_COMPILE_TASK_TIMER
-
-//	#ifdef IHU_COMPILE_TASK_ASYLIBRA
-//		//Execute task ASYLIBRA FSM /3
-//		if (zIhuTaskInfo[TASK_ID_ASYLIBRA].pnpState == IHU_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_ASYLIBRA, FsmAsylibra);
-//	#endif //IHU_COMPILE_TASK_ASYLIBRA
-//		
-//	#ifdef IHU_COMPILE_TASK_ADCARIES
-//		//Execute task ADCARIES FSM /4
-//		if (zIhuTaskInfo[TASK_ID_ADCARIES].pnpState == IHU_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_ADCARIES, FsmAdcaries);
-//	#endif //IHU_COMPILE_TASK_ADCARIES
-//		
-//	#ifdef IHU_COMPILE_TASK_EMC
-//		//Execute task EMC FSM /5
-//		if (zIhuTaskInfo[TASK_ID_EMC].pnpState == IHU_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_EMC, FsmEmc);
-//	#endif //IHU_COMPILE_TASK_EMC
-
-	IhuDebugPrint("VMUO: Execute task once, for test!\n");
-}
-
 /**********************************************************************************
  *
  *   MAIN函数入口，供应上层使用
@@ -2035,3 +1536,486 @@ OPSTAT ihu_vm_send_init_msg_to_app_task(UINT8 dest_id)
 	
 	return ret;
 }
+
+
+///*******************************************************************************
+//**
+//**	没有RTOS的情形
+//**
+//**********************************************************************************/
+////这里将LaunchEntry和LaunchExecute是因为在VMDA环境中，创造环境和执行不在一起
+////具有真正任务的操作系统环境中，没有这个必要了
+//OPSTAT FsmProcessingLaunchEntryBareRtos(UINT8 task_id)
+//{
+//	/*
+//	** Check the task_id
+//	*/
+//	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
+//		zIhuRunErrCnt[TASK_ID_VMUO]++;
+//		IhuErrorPrint("VMUO: Error on task_id, task_id=%d!!!\n", task_id);
+//		return FAILURE;
+//	}
+
+//	/*
+//	** Run each task entry API, give each task a chance to init any specific information
+//	*/
+//	if (zIhuFsmTable.pFsmCtrlTable[task_id].pFsmArray[FSM_STATE_ENTRY][MSG_ID_ENTRY].stateFunc != NULL){
+//		(zIhuFsmTable.pFsmCtrlTable[task_id].pFsmArray[FSM_STATE_ENTRY][MSG_ID_ENTRY].stateFunc)(task_id, 0, NULL, 0);
+//	}else{
+//		zIhuRunErrCnt[TASK_ID_VMUO]++;
+//		IhuErrorPrint("VMUO: Task (ID=%d) get no init entry fetched!\n", task_id);
+//	}
+//	
+//	return SUCCESS;
+//}
+
+//OPSTAT FsmProcessingLaunchExecuteBareRtos(UINT8 task_id)
+//{
+//	OPSTAT ret;
+//	IhuMsgSruct_t rcv;
+
+//	/*
+//	** Check the task_id
+//	*/
+//	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
+//		zIhuRunErrCnt[TASK_ID_VMUO]++;
+//		IhuErrorPrint("VMUO: Error on task_id, task_id=%d!!!\n", task_id);
+//		return FAILURE;
+//	}
+
+//	//任务中的消息轮循
+//	//从当前TASKID对应的消息队列读取消息
+//	//每一次循环，只从消息队列中读取一个消息并进行执行，这相当于所有任务的优先级都是均等的，不存在优先级高的问题
+//	//如果消息过多，可能会造成消息队列的溢出，这里没有考虑消息队列的共享问题，未来可以考虑继续优化
+//	//小喇叭响起来，这里是资源优化集中营！
+//	memset(&rcv, 0, sizeof(IhuMsgSruct_t));
+//	ret = ihu_message_rcv(task_id, &rcv);
+//	if (ret == SUCCESS)
+//	{
+//		ret = FsmRunEngine(rcv.msgType, rcv.dest_id, rcv.src_id, rcv.msgBody, rcv.msgLen);
+//		if (ret == FAILURE)
+//		{
+//			zIhuRunErrCnt[TASK_ID_VMUO]++;	
+//			IhuErrorPrint("VMUO: Error execute FsmRun state machine!\n");
+//			return FAILURE;
+//		}
+//	}
+//	else
+//	{
+//		//失败了，啥都不干，说明读取出错，或者消息队列是空的
+//		//这意味着只是空转一下
+//		//真正失败的时候，需要返回FAILURE
+//		
+//		//这里是消息队列空，所以返回成功
+//		return SUCCESS;
+//	}
+//	
+//	return SUCCESS;
+//}
+
+////Reveive message
+////dest_id: in
+////*msg: out
+//OPSTAT ihu_message_rcv_bare_rtos(UINT8 dest_id, IhuMsgSruct_t *msg)
+//{
+//	int i=0, j=0;
+//	bool Flag = FALSE;
+//	
+//	//Checking task_id range
+//	if ((dest_id <= TASK_ID_MIN) || (dest_id >= TASK_ID_MAX)){
+//		zIhuRunErrCnt[TASK_ID_VMUO]++;
+//		IhuErrorPrint("VMUO: Error on task_id, dest_id=%d!!!\n", dest_id);
+//		return FAILURE;
+//	}
+//	
+//	//循环查找一个任务的消息队列，看看有无有效消息
+//	for (i=0; i<MAX_QUEUE_NUM_IN_ONE_TASK; i++)
+//	{
+//		j = zIhuFsmTable.taskQue[dest_id].queIndex + i;
+//		j = j%MAX_QUEUE_NUM_IN_ONE_TASK;
+//		if (zIhuFsmTable.taskQue[dest_id].queList[j].useFlag == TRUE)
+//		{
+//			//找到了未消耗的消息
+//			memcpy(msg, zIhuFsmTable.taskQue[dest_id].queList[j].msgQue, MAX_IHU_MSG_BUF_LENGTH);
+//			zIhuFsmTable.taskQue[dest_id].queList[j].useFlag = FALSE;
+//			//将INDEX指向下一个
+//			j = (j+1) % MAX_QUEUE_NUM_IN_ONE_TASK;
+//			zIhuFsmTable.taskQue[dest_id].queIndex = j;
+//			//判断消息的合法性
+//			if ((msg->dest_id <= TASK_ID_MIN) || (msg->dest_id >= TASK_ID_MAX)){
+//				zIhuRunErrCnt[TASK_ID_VMUO]++;
+//				IhuErrorPrint("VMUO: Receive message error on task_id, dest_id=%d!!!\n", msg->dest_id);
+//				return FAILURE;
+//			}
+//			if ((msg->src_id <= TASK_ID_MIN) || (msg->src_id >= TASK_ID_MAX)){
+//				zIhuRunErrCnt[TASK_ID_VMUO]++;
+//				IhuErrorPrint("VMUO: Receive message error on src_id, dest_id=%d!!!\n", msg->src_id);
+//				return FAILURE;
+//			}
+//			//不允许定义消息结构中长度为0的消息体，至少需要一个长度域
+//			if ((msg->msgLen <= 0) || (msg->msgLen > MAX_IHU_MSG_BODY_LENGTH)){
+//				zIhuRunErrCnt[TASK_ID_VMUO]++;
+//				IhuErrorPrint("VMUO: Receive message error on length, msgLen=%d!!!\n", msg->msgLen);
+//				return FAILURE;
+//			}
+//			if ((msg->msgType <= MSG_ID_COM_MIN) || (msg->msgType >= MSG_ID_COM_MAX)){
+//				zIhuRunErrCnt[TASK_ID_VMUO]++;
+//				IhuErrorPrint("VMUO: Receive message error on msgId, msgType=%d!!!\n", msg->msgType);
+//				return FAILURE;
+//			}			
+//			//退出循环
+//			Flag = TRUE;
+//			break;
+//		}
+//	}
+//	//返回错误，并不一定表示真发生了错误，也有可能是没有任何消息供消耗，此时，上层调用者就啥都不做，确保自己安全
+//	if (Flag == TRUE){	
+//		return SUCCESS;
+//	}else{
+//		return FAILURE;
+//	}
+//}
+
+////message send basic processing
+////All in parameters
+//OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)
+//{
+//	IhuMsgSruct_t msg;
+//	int i=0, j=0;
+//	bool Flag = FALSE;
+//	char s1[TASK_NAME_MAX_LENGTH+2]="", s2[TASK_NAME_MAX_LENGTH+2]="", s3[MSG_NAME_MAX_LENGTH]="";
+//	
+//	//入参检查Checking task_id range
+//	if ((dest_id <= TASK_ID_MIN) || (dest_id >= TASK_ID_MAX)){
+//		zIhuRunErrCnt[TASK_ID_VMUO]++;
+//		IhuErrorPrint("VMUO: Error on task_id, dest_id=%d!!!\n", dest_id);
+//		return FAILURE;
+//	}
+//	if ((src_id <= TASK_ID_MIN) || (src_id >= TASK_ID_MAX)){
+//		zIhuRunErrCnt[TASK_ID_VMUO]++;
+//		IhuErrorPrint("VMUO: Error on task_id, src_id=%d!!!\n", src_id);
+//		return FAILURE;
+//	}
+//	if (param_len>MAX_IHU_MSG_BODY_LENGTH){
+//		zIhuRunErrCnt[TASK_ID_VMUO]++;	
+//		IhuErrorPrint("VMUO: Too large message length than IHU set capability, param_len=%d!!!\n", param_len);
+//		return FAILURE;
+//	}
+//	if ((msg_id <= MSG_ID_COM_MIN) || (msg_id >= MSG_ID_COM_MAX)){
+//		zIhuRunErrCnt[TASK_ID_VMUO]++;
+//		IhuErrorPrint("VMUO: Receive message error on msgId, msgType=%d!!!\n", msg_id);
+//		return FAILURE;
+//	}
+
+//	//对来源数据进行初始化，是为了稳定可靠安全	
+//	memset(&msg, 0, sizeof(IhuMsgSruct_t));
+//	msg.msgType = msg_id;
+//	msg.dest_id = dest_id;
+//	msg.src_id = src_id;
+//	msg.msgLen = param_len;
+//	memcpy(&(msg.msgBody[0]), param_ptr, param_len);
+
+
+//	//然后送到目的地，循环查找一个任务的消息队列，看看有无空闲位置
+//	for (i=0; i<MAX_QUEUE_NUM_IN_ONE_TASK; i++)
+//	{
+//		j = zIhuFsmTable.taskQue[dest_id].queIndex + i;
+//		j = j%MAX_QUEUE_NUM_IN_ONE_TASK;
+//		if (zIhuFsmTable.taskQue[dest_id].queList[j].useFlag == FALSE)
+//		{
+//			//找到了空闲的消息位置
+//			memcpy(zIhuFsmTable.taskQue[dest_id].queList[j].msgQue, &msg, MAX_IHU_MSG_BUF_LENGTH);
+//			zIhuFsmTable.taskQue[dest_id].queList[j].useFlag = TRUE;
+//			//将INDEX指向下一个
+//			j = (j+1) % MAX_QUEUE_NUM_IN_ONE_TASK;
+//			zIhuFsmTable.taskQue[dest_id].queIndex = j;
+//			//退出循环
+//			Flag = TRUE;
+//			break;
+//		}
+//	}
+//	//错误，表示没有空闲队列
+//	if (Flag == FALSE){
+//		zIhuRunErrCnt[TASK_ID_VMUO]++;
+//		IhuErrorPrint("VMUO: Message queue full, can not send into task = %d!!!\n", dest_id);
+//		return FAILURE;
+//	}
+
+//	/*
+//	 *  Message Trace processing
+//	 *  注意字符串长度，太小会出现内存飞掉的情形，MessageTrace的数据配置来源于数据库，层次比这个还要高，虽然有点怪怪的，但不影响总体架构
+//	 *  最开始采用IFDEF的形式，后期完善后改为更为直接的代码方式
+//	 *  软件开发中，DEBUG和TRACE是两种最常用/最有用的调试模式，比单步还有用，这不仅是因为熟手不需要单步执行，而且也是因为多线程多进程单步执行环境制造的复杂性
+//	 *
+//	 *  有关MESSAGE TRACE的效率，是一个要注意的问题，当系统负载不高时，打开所有的TRACE是合适的，但一旦部署实际系统，TRACE需要减少到最低程度，这是原则，实际需要
+//	 *  维护人员根据情况灵活把我
+//	 *
+//	 *  本TRACE功能，提供了多种工作模式
+//	 *
+//	 */
+//	switch (zIhuSysEngPar.traceMode)
+//	{
+//		case IHU_TRACE_MSG_MODE_OFF:
+//			break;
+
+//		case IHU_TRACE_MSG_MODE_INVALID:
+//			break;
+
+//		case IHU_TRACE_MSG_MODE_ALL:
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
+//			IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
+//			break;
+
+//		case IHU_TRACE_MSG_MODE_ALL_BUT_TIME_OUT:
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
+//			if (msg_id != MSG_ID_COM_TIME_OUT){
+//				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
+//			}
+//			break;
+
+//		case IHU_TRACE_MSG_MODE_ALL_BUT_HEART_BEAT:
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
+//			if ((msg_id != MSG_ID_COM_HEART_BEAT) && (msg_id != MSG_ID_COM_HEART_BEAT_FB)){
+//				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
+//			}
+//			break;
+
+//		case IHU_TRACE_MSG_MODE_ALL_BUT_TIME_OUT_AND_HEART_BEAT:
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
+//			if ((msg_id != MSG_ID_COM_TIME_OUT) && (msg_id != MSG_ID_COM_HEART_BEAT) && (msg_id != MSG_ID_COM_HEART_BEAT_FB)){
+//				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
+//			}
+//			break;
+
+//		case IHU_TRACE_MSG_MODE_MOUDLE_TO_ALLOW:
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
+//			if ((zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToAllow == TRUE)){
+//				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
+//			}
+//			break;
+
+//		case IHU_TRACE_MSG_MODE_MOUDLE_TO_RESTRICT:
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
+//			if ((zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToRestrict!= TRUE)){
+//				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
+//			}
+//			break;
+
+//		case IHU_TRACE_MSG_MODE_MOUDLE_FROM_ALLOW:
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
+//			if ((zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleToAllow == TRUE)){
+//				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
+//			}
+//			break;
+
+//		case IHU_TRACE_MSG_MODE_MOUDLE_FROM_RESTRICT:
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
+//			if ((zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleToRestrict!= TRUE)){
+//				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);				
+//			}
+//			break;
+
+//		case IHU_TRACE_MSG_MODE_MOUDLE_DOUBLE_ALLOW:
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
+//			if ((zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleToAllow == TRUE)
+//					&& (zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToAllow == TRUE)){
+//				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);				
+//			}
+//			break;
+
+//		case IHU_TRACE_MSG_MODE_MOUDLE_DOUBLE_RESTRICT:
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
+//			if ((zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleToRestrict != TRUE)
+//					&& (zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToRestrict != TRUE)){
+//				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);				
+//			}
+//			break;
+
+//		case IHU_TRACE_MSG_MODE_MSGID_ALLOW:
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
+//			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgAllow == TRUE)){
+//				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);				
+//			}
+//			break;
+
+//		case IHU_TRACE_MSG_MODE_MSGID_RESTRICT:
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
+//			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgRestrict != TRUE)){
+//				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);				
+//			}
+//			break;
+
+//		case IHU_TRACE_MSG_MODE_COMBINE_TO_ALLOW:
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
+//			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgAllow == TRUE)
+//					&& (zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToAllow == TRUE)){
+//				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);				
+//			}
+//			break;
+
+//		case IHU_TRACE_MSG_MODE_COMBINE_TO_RESTRICT:
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
+//			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgAllow == TRUE)
+//					&& (zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToRestrict != TRUE)){
+//				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);				
+//			}
+//			break;
+
+//		case IHU_TRACE_MSG_MODE_COMBINE_FROM_ALLOW:
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
+//			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgAllow == TRUE)
+//					&& (zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleFromAllow == TRUE)){
+//				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);				
+//			}
+//			break;
+
+//		case IHU_TRACE_MSG_MODE_COMBINE_FROM_RESTRICT:
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
+//			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgRestrict != TRUE)
+//					&& (zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleFromRestrict != TRUE)){
+//				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);				
+//			}
+//			break;
+
+//		case IHU_TRACE_MSG_MODE_COMBINE_DOUBLE_ALLOW:
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
+//			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgAllow == TRUE)
+//					&& (zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToAllow == TRUE)
+//					&& (zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleFromAllow == TRUE)){
+//				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);				
+//			}
+//			break;
+
+//		case IHU_TRACE_MSG_MODE_COMBINE_DOUBLE_RESTRICT:
+//			ihu_taskid_to_string(dest_id, s1);
+//			ihu_taskid_to_string(src_id, s2);
+//			ihu_msgid_to_string(msg_id, s3);
+//			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgRestrict != TRUE)
+//					&& (zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToRestrict != TRUE)
+//					&& (zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleFromRestrict != TRUE)){
+//				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);				
+//			}
+//			break;
+
+//		default:
+//			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_NOR_ON) != FALSE){
+//				zIhuRunErrCnt[TASK_ID_VMUO]++;				
+//				IhuErrorPrint("VMUO: System Engineering Parameter Trace Mode setting error! DebugMode=%d.\n", zIhuSysEngPar.debugMode);				
+//			}
+//			break;
+//	}
+
+//	return SUCCESS;
+//}
+
+
+////为了对付不存在OS的情形
+//OPSTAT ihu_system_task_execute_bare_rtos(UINT8 task_id, FsmStateItem_t *p)
+//{
+//	int ret = 0;
+//	char strDebug[IHU_PRINT_CHAR_SIZE];
+//	
+//	//Checking task_id range
+//	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
+//		zIhuRunErrCnt[TASK_ID_VMUO]++;
+//		sprintf(strDebug, "VMUO: Input Error on task_id, task_id=%d!!!\n", task_id);
+//		IhuErrorPrint(strDebug);
+//		return FAILURE;
+//	}
+//	
+//	//入参检查
+//	if (p == NULL){
+//		zIhuRunErrCnt[TASK_ID_VMUO]++;
+//		IhuErrorPrint("VMUO: Input wrong FsmStateItem pointer!\n");
+//		return FAILURE;
+//	}
+//	
+//	//任务控制启动标示检查
+//	if (zIhuTaskInfo[task_id].pnpState != IHU_TASK_PNP_ON){
+//		zIhuRunErrCnt[TASK_ID_VMUO]++;
+//		sprintf(strDebug, "VMUO: no need execute this task [%s]!\n", zIhuTaskNameList[task_id]);
+//		IhuErrorPrint(strDebug);	
+//		return FAILURE;
+//	}
+
+//	//轮询执行任务的消息消耗
+//	ret = FsmProcessingLaunchExecuteBareRtos(task_id);
+//	if (ret == FAILURE)
+//	{
+//		zIhuRunErrCnt[TASK_ID_VMUO]++;
+//		sprintf(strDebug, "VMUO: Execute task FSM un-successfully, taskid = %d", task_id);
+//		IhuErrorPrint(strDebug);		
+//		return FAILURE;
+//	}
+//	
+//	//正确返回
+//	return SUCCESS;
+//}
+
+////轮询所有任务的正常执行
+//void ihu_task_execute_all_bare_rtos(void)
+//{
+//	#ifdef IHU_COMPILE_TASK_VMUO
+//		//Execute task VMUO FSM /1
+//		if (zIhuTaskInfo[TASK_ID_VMUO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_VMUO, FsmVMUO);	
+//	#endif //IHU_COMPILE_TASK_VMUO
+//		
+//	#ifdef IHU_COMPILE_TASK_TIMER
+//		//Execute task Timer FSM /2
+//		if (zIhuTaskInfo[TASK_ID_TIMER].pnpState == IHU_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_TIMER, FsmTimer);
+//	#endif //IHU_COMPILE_TASK_TIMER
+
+////	#ifdef IHU_COMPILE_TASK_ASYLIBRA
+////		//Execute task ASYLIBRA FSM /3
+////		if (zIhuTaskInfo[TASK_ID_ASYLIBRA].pnpState == IHU_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_ASYLIBRA, FsmAsylibra);
+////	#endif //IHU_COMPILE_TASK_ASYLIBRA
+////		
+////	#ifdef IHU_COMPILE_TASK_ADCARIES
+////		//Execute task ADCARIES FSM /4
+////		if (zIhuTaskInfo[TASK_ID_ADCARIES].pnpState == IHU_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_ADCARIES, FsmAdcaries);
+////	#endif //IHU_COMPILE_TASK_ADCARIES
+////		
+////	#ifdef IHU_COMPILE_TASK_EMC
+////		//Execute task EMC FSM /5
+////		if (zIhuTaskInfo[TASK_ID_EMC].pnpState == IHU_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_EMC, FsmEmc);
+////	#endif //IHU_COMPILE_TASK_EMC
+
+//	IhuDebugPrint("VMUO: Execute task once, for test!\n");
+//}
+
+
+

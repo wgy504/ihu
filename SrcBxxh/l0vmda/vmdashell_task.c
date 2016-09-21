@@ -112,7 +112,7 @@ OPSTAT hlFuncVmdashellSysClock1sPeriod(ke_msg_id_t const msgid, msg_struct_vmdas
 	zIhuSystemTimeYmd = *(localtime(&zIhuSystemTimeUnix)); //节省系统处理能力，需要的时候再做该转化
 	
 	//调用TIMER_1S中的处理函数，该函数相当于抛锚点，定时激活TIMER_1S的扫描过程，从而实现定时任务的发生
-	ihu_timer_routine_handler_1s();
+	//ihu_timer_routine_handler_1s();
 	
 	//再次启动周期性定时器
 	vmda1458x_timer_set(MSG_ID_VMDASHELL_TIMER_1S_PERIOD, TASK_VMDA1458X, VMDASHELL_TIMER_1SECOND_CLOCK);
@@ -292,12 +292,12 @@ OPSTAT fsm_vmdashell_task_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UI
 	}
 		
 	//启动本地定时器
-	ret = ihu_timer_start(TASK_ID_VMDASHELL, TIMER_ID_1S_VMDA_INIT_FB, VMDASHELL_TIMER_DURATION_INIT_FB, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
-	if (ret == FAILURE){
-		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
-		IhuErrorPrint("VMDA: Error ihu_timer_start start timer!");
-		return FAILURE;
-	}
+//	ret = ihu_timer_start(TASK_ID_VMDASHELL, TIMER_ID_1S_VMDA_INIT_FB, VMDASHELL_TIMER_DURATION_INIT_FB, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
+//	if (ret == FAILURE){
+//		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
+//		IhuErrorPrint("VMDA: Error ihu_timer_start start timer!");
+//		return FAILURE;
+//	}
 	
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_VMDASHELL, FSM_STATE_VMDASHELL_WF_INIT_FB) == FAILURE){
@@ -385,12 +385,12 @@ OPSTAT fsm_vmdashell_task_init_fb_rcv(UINT8 dest_id, UINT8 src_id, void * param_
 	}
 	
 	//停止INIT_FB时钟
-	ret = ihu_timer_stop(TASK_ID_VMDASHELL, TIMER_ID_1S_VMDA_INIT_FB, TIMER_RESOLUTION_1S);
-	if (ret == FAILURE){
-		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
-		IhuErrorPrint("VMDA: Error ihu_timer_stop stop timer!\n");
-		return FAILURE;
-	}
+//	ret = ihu_timer_stop(TASK_ID_VMDASHELL, TIMER_ID_1S_VMDA_INIT_FB, TIMER_RESOLUTION_1S);
+//	if (ret == FAILURE){
+//		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
+//		IhuErrorPrint("VMDA: Error ihu_timer_stop stop timer!\n");
+//		return FAILURE;
+//	}
 	
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_VMDASHELL, FSM_STATE_VMDASHELL_ACTIVE) == FAILURE){

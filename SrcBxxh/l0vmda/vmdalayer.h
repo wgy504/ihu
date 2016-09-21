@@ -24,8 +24,6 @@
 
 //DA系统配置文件
 #include "rwip_config.h"
-//#include "da14580_config.h"
-//#include "app_console.h"
 
 //DA系统核心API
 #include "ke_msg.h"
@@ -295,11 +293,11 @@ extern IhuTimerTable_t zIhuTimerTable;                      //定时器
 extern time_t zIhuSystemTimeUnix;                           //系统时钟TimeStamp
 extern struct tm zIhuSystemTimeYmd;                        	//系统时钟YMD
 extern UINT32 zIhuSleepCnt[MAX_TASK_NUM_IN_ONE_IHU][MAX_SLEEP_NUM_IN_ONE_TASK];  //睡眠控制表
-extern FsmStateItem_t FsmVmdashell[];                            //状态机
-extern FsmStateItem_t FsmTimer[];                           //状态机
-extern FsmStateItem_t FsmAsylibra[];                        //状态机
-extern FsmStateItem_t FsmAdcaries[];                        //状态机
-extern FsmStateItem_t FsmEmc[];                             //状态机
+//extern FsmStateItem_t FsmVmdashell[];                            //状态机
+//extern FsmStateItem_t FsmTimer[];                           //状态机
+//extern FsmStateItem_t FsmAsylibra[];                        //状态机
+//extern FsmStateItem_t FsmAdcaries[];                        //状态机
+//extern FsmStateItem_t FsmEmc[];                             //状态机
 
 //外部引用API，来自于TIMER任务模块。TIMER任务模块的机制是，必须将VM启动起来，然后TIMER上层任务模块才能被激活，并产生自定义的TIME_OUT消息
 extern OPSTAT ihu_timer_start(UINT8 task_id, UINT8 timer_id, UINT32 t_dur, UINT8 t_type, UINT8 t_res);
