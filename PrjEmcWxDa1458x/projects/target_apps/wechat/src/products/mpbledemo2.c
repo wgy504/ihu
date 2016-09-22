@@ -24,6 +24,7 @@
 #include "ke_task.h"
 #include "wechat_task.h"
 #include "vmdalayer.h"
+#include "battery.h"
 
 mpbledemo2_info m_info = {CMD_NULL, {NULL, 0}};
 
@@ -40,6 +41,8 @@ data_handler *m_mpbledemo2_handler = NULL;
 uint8_t isLightOn __attribute__((section("retention_mem_area0"), zero_init));;
 
 static void mpbledemo2_handleCmdFromServer(BleDemo2CmdID cmd, uint8_t *ptrData, uint32_t lengthInByte);
+
+int8_t mpdemo2_emcdata[3] = {0};
 
 /**@brief   Function for the light initialization.
  *
@@ -639,7 +642,7 @@ int mpbledemo2_data_consume_func(uint8_t *data, uint32_t len)
 					epb_unpack_init_response_free(initResp);
 					
 					//这里可以增加时钟的启动，从而实现链路建立以后，自动上报数据
-					vmda1458x_timer_set(WECHAT_PERIOD_REPORT_TIME_OUT, TASK_WECHAT, BLEDEMO2_TIMER_PERIOD_REPORT);
+					vmda1458x_timer_set(WECHAT_PERIOD_REPORT_TIME_OUT, TASK_WECHAT, BLEDEMO2_TIMER_PERIOD_REPORT_DURATION);
 					//BLE连接好，设置该灯常亮
 					vmda1458x_led_on(LED_ID_6);
 					//vmda1458x_led_on(LED_ID_0);
@@ -867,46 +870,16 @@ void mpbledemo2_readEmcDataResp(uint8_t *ptrData, uint32_t lengthInByte)
 //	FirstNotificationBit = 1;
 //	SecondNotificationBit = 1;
 
-	//循环读取，为了找到合适的瞬时最大值
-	UINT16 emcData = 0, tmp = 0;
-	UINT32 index = 0, emcTotal = 0, validCnt = 0;
-	for (index = 0; index < IHU_EMC_LOOP_READ_TIMES; index++){
-		tmp = ihu_emc_adc_read();
-		if (tmp > emcData) emcData = tmp;
-		//读取最大量程为1024 = 0x3FF，多保留一位为了安全
-		if (tmp > 0)
-		{
-			emcTotal = emcTotal + (tmp & 0x7FF);
-			validCnt++;
-		}
-	}
-	//啥都不干，直接进入下一阶段处理，是最大值的情形
-
-	//瞬时读取的情形
-	//emcData = ihu_emc_adc_read();
-	
-	//平均值的情形，当前选择这个了
-	if (validCnt > 0)
-		emcData = emcTotal / validCnt;
-	else
-		emcData = 0;
-	
-	uint8_t emc[3];
-	//垃圾代码，没有编解码，完全是为了方便后台云代码的解码，从而对齐格式。未来需要完善的自定义数据结构。
-	emc[0] = 0x20;
-	emc[1] = (emcData>>8) & 0xFF; 
-	emc[2] = emcData & 0xFF;
+	mpdemo2_emcdata_read();
 	
   uint8_t *data = NULL;
-	data=emc;
-	uint32_t len = sizeof(emc);
-	
+	data= (uint8_t *)&mpdemo2_emcdata[0];
+	uint32_t len = sizeof(mpdemo2_emcdata);
 	ARGS_ITEM_SET(mpbledemo2_info, m_mpbledemo2_handler->m_data_produce_args, cmd, CMD_SENDDAT_EMC_REPORT);   
 	ARGS_ITEM_SET(mpbledemo2_info, m_mpbledemo2_handler->m_data_produce_args, send_msg.len, len);
 	ARGS_ITEM_SET(mpbledemo2_info, m_mpbledemo2_handler->m_data_produce_args, send_msg.str, (const char *)data);    
     
-	m_mpbledemo2_handler->m_data_produce_func(m_mpbledemo2_handler->m_data_produce_args, &data, &len);
-	
+	m_mpbledemo2_handler->m_data_produce_func(m_mpbledemo2_handler->m_data_produce_args, &data, &len);	
 	if(data == NULL)
 	{
 		return;
@@ -916,6 +889,11 @@ void mpbledemo2_readEmcDataResp(uint8_t *ptrData, uint32_t lengthInByte)
 	vmda1458x_led_blink_once_on_off(LED_ID_0);
 	vmda1458x_led_blink_once_on_off(LED_ID_1);
 	vmda1458x_led_blink_once_on_off(LED_ID_2);
+	
+	//测试电池水平
+	#ifdef CATCH_LOG
+		arch_printf( "\r\nCurrent Battery Level = %d/100", battery_get_lvl(BATT_CR2032));
+	#endif
   return;
 	
 	//TMD，估计只能手工编码，不然就给屁朝凉了。。。
@@ -961,9 +939,74 @@ void mpbledemo2_handleCmdFromServer(BleDemo2CmdID cmd, uint8_t *ptrData, uint32_
 
 void mpbledemo2_airsync_link_setup_period_report(void)
 {
+#ifdef CATCH_LOG
+		arch_printf("\r\n Periodic working mode start. Data send!!! ");
+#endif
+	
 	//先判断链路状态，如果处于正常状态，则干下面的活
 	//发送报告数据
-	mpbledemo2_readEmcDataResp(NULL, 0);
+	//Code type 1
+	//mpbledemo2_readEmcDataResp(NULL, 0);
+
+	//Code type 2
+//	struct wechat_send_data_req * req = KE_MSG_ALLOC(WECHAT_SEND_DATA_TO_MASTER, TASK_APP,
+//																			TASK_APP, wechat_send_data_req);
+//	req->dataLen = sizeof(mpdemo2_emcdata);	
+//	mpdemo2_emcdata_read();
+//	req->pDataBuf = (uint8_t *)&mpdemo2_emcdata[0];
+//	
+//	ke_msg_send(req);
+
+	//Code type 3
+	mpdemo2_emcdata_read();	
+  uint8_t *data = NULL;
+	data= (uint8_t *)&mpdemo2_emcdata[0];
+	uint32_t len = sizeof(mpdemo2_emcdata);
+	ARGS_ITEM_SET(mpbledemo2_info, m_mpbledemo2_handler->m_data_produce_args, cmd, CMD_SENDDAT_EMC_REPORT);   
+	ARGS_ITEM_SET(mpbledemo2_info, m_mpbledemo2_handler->m_data_produce_args, send_msg.len, len);
+	ARGS_ITEM_SET(mpbledemo2_info, m_mpbledemo2_handler->m_data_produce_args, send_msg.str, (const char *)data);        
+	m_mpbledemo2_handler->m_data_produce_func(m_mpbledemo2_handler->m_data_produce_args, &data, &len);	
+	if(data == NULL)
+	{
+		return;
+	}
+	ble_wechat_indicate_data(data, len);
+	
 	//重新启动定时器
-	vmda1458x_timer_set(WECHAT_PERIOD_REPORT_TIME_OUT, TASK_WECHAT, BLEDEMO2_TIMER_PERIOD_REPORT);
+	vmda1458x_timer_set(WECHAT_PERIOD_REPORT_TIME_OUT, TASK_WECHAT, BLEDEMO2_TIMER_PERIOD_REPORT_DURATION);
 }
+
+
+void mpdemo2_emcdata_read(void)
+{
+	//循环读取，为了找到合适的瞬时最大值
+	UINT16 emcData = 0, tmp = 0;
+	UINT32 index = 0, emcTotal = 0, validCnt = 0;
+	for (index = 0; index < IHU_EMC_LOOP_READ_TIMES; index++){
+		tmp = ihu_emc_adc_read();
+		if (tmp > emcData) emcData = tmp;
+		//读取最大量程为1024 = 0x3FF，多保留一位为了安全
+		if (tmp > 0)
+		{
+			emcTotal = emcTotal + (tmp & 0x7FF);
+			validCnt++;
+		}
+	}
+	//啥都不干，直接进入下一阶段处理，是最大值的情形
+
+	//瞬时读取的情形
+	//emcData = ihu_emc_adc_read();
+	
+	//平均值的情形，当前选择这个了
+	if (validCnt > 0)
+		emcData = emcTotal / validCnt;
+	else
+		emcData = 0;
+	
+	//uint8_t emc[3];
+	//垃圾代码，没有编解码，完全是为了方便后台云代码的解码，从而对齐格式。未来需要完善的自定义数据结构。
+	mpdemo2_emcdata[0] = 0x20;
+	mpdemo2_emcdata[1] = (emcData>>8) & 0xFF; 
+	mpdemo2_emcdata[2] = emcData & 0xFF;
+}
+

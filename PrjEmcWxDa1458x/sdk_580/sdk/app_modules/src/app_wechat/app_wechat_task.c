@@ -53,7 +53,7 @@ static const struct ke_msg_handler app_wechat_process_handlers[]=
     {WECHAT_WRITE_VAL_IND,               (ke_msg_func_t)app_wechat_write_val_ind_handler},
     {WECHAT_ENABLE_IND_REQ,              (ke_msg_func_t)app_wechat_enable_ind_handler},
     {WECHAT_SEND_DATA_TO_MASTER,         (ke_msg_func_t)app_wechat_send_data_handler},
-    {WECHAT_PERIOD_REPORT_TIME_OUT,      (ke_msg_func_t)app_wechat_period_report_time_out_handler},		
+    //{WECHAT_PERIOD_REPORT_TIME_OUT,      (ke_msg_func_t)app_wechat_task_period_report_time_out_handler},		
 };
 
 enum process_event_response app_wechat_process_handler (ke_msg_id_t const msgid,
@@ -208,20 +208,15 @@ int app_wechat_send_data_handler(ke_msg_id_t const msgid,
   return (KE_MSG_CONSUMED);
 }
 
-
-int app_wechat_period_report_time_out_handler(ke_msg_id_t const msgid,
-                                  struct wechat_period_report_time_out const *param,
-                                  ke_task_id_t const dest_id,
-                                  ke_task_id_t const src_id)
-{
-	#ifdef CATCH_LOG
-		arch_printf("\r\n time out received");
-	#endif
-  mpbledemo2_airsync_link_setup_period_report();
-  return (KE_MSG_CONSUMED);
-}
-
-
+//int app_wechat_task_period_report_time_out_handler(ke_msg_id_t const msgid,
+//                                  void const *param,
+//                                  ke_task_id_t const dest_id,
+//                                  ke_task_id_t const src_id)																		
+//{
+//	arch_printf("\r\n App Wechat Task Time Out received No 2. ");
+//  mpbledemo2_airsync_link_setup_period_report();
+//  return (KE_MSG_CONSUMED);
+//}
 
 #endif //(BLE_DIS_SERVER)
 

@@ -179,10 +179,19 @@ struct wechat_send_data_req
     uint8_t* pDataBuf;
 };
 
-struct wechat_period_report_time_out
-{
-    uint8_t status;
-};
+//struct wechat_period_report_time_out
+//{
+//    uint8_t status;
+//};
+
+//int app_wechat_period_report_time_out_handler(ke_msg_id_t const msgid,
+//                                  struct wechat_period_report_time_out const *param,
+//                                  ke_task_id_t const dest_id,
+//                                  ke_task_id_t const src_id);
+int app_wechat_period_report_time_out_handler(ke_msg_id_t const msgid,
+                                  void const *param,
+                                  ke_task_id_t const dest_id,
+                                  ke_task_id_t const src_id);
 
 /*
  * GLOBAL VARIABLES DECLARATIONS
@@ -192,6 +201,10 @@ struct wechat_period_report_time_out
 extern const struct ke_state_handler wechat_state_handler[WECHAT_STATE_MAX];
 extern const struct ke_state_handler wechat_default_handler;
 extern ke_state_t wechat_state[WECHAT_IDX_MAX];
+extern int arch_printf(const char *fmt, ...);
+extern void mpbledemo2_airsync_link_setup_period_report(void);
+extern int32_t mpbledemo2_sendData(uint8_t* ptrData, uint32_t lengthInByte);
+
 
 #endif //BLE_WECHAT
 

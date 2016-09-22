@@ -1,8 +1,6 @@
-;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Thu Sep 22 01:22:18 2016
+;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Thu Sep 22 16:44:22 2016
 ;VERSION 0.2
 ;FILE adc.o
-adc_calibrate <= USED 0
-adc_disable <= USED 0
 ;FILE app.o
 active_conhdl_to_conidx <= USED 0
 active_conidx_to_conhdl <= USED 0
@@ -23,7 +21,6 @@ app_easy_gap_undirected_advertise_with_timeout_start <= USED 0
 app_set_prf_srv_perm <= USED 0
 get_user_prf_srv_perm <= USED 0
 ;FILE app_default_handlers.o
-default_advertise_operation <= USED 0
 default_app_on_init <= USED 0
 ;FILE app_easy_msg_utils.o
 app_easy_msg_free_callback <= USED 0
@@ -55,7 +52,6 @@ app_msg_send_wakeup_ble <= USED 0
 ;FILE app_security_task.o
 ;FILE app_task.o
 ;FILE app_wechat.o
-app_wechat_SetDatahandler <= USED 0
 ;FILE app_wechat_task.o
 ;FILE arch_console.o
 arch_puts <= USED 0
@@ -74,16 +70,11 @@ calibrate_rcx20 <= USED 0
 lld_sleep_lpcycles_2_us_rcx_func <= USED 0
 lld_sleep_us_2_lpcycles_rcx_func <= USED 0
 read_rcx_freq <= USED 0
-select_lp_clk <= USED 0
 set_xtal16m_trim_value <= USED 0
 ;FILE attm_db_128.o
 attm_svc_create_db_128 <= USED 0
 ;FILE atts_task.obj
 ;FILE battery.o
-batt_cal_aaa <= USED 0
-batt_cal_cr1225 <= USED 0
-batt_cal_cr2032 <= USED 0
-battery_get_lvl <= USED 0
 ;FILE ble_wechat_util.o
 t_htonl <= USED 0
 t_ntohl <= USED 0
@@ -103,9 +94,6 @@ epb_set_float <= USED 0
 epb_set_sfixed32 <= USED 0
 epb_set_sint32 <= USED 0
 ;FILE epb_mmbp.o
-epb_base_request_pack_size <= USED 0
-epb_unpack_base_push_free <= USED 0
-epb_unpack_base_response_free <= USED 0
 ;FILE gapm_util.obj
 ;FILE gpio.o
 GPIO_ConfigurePinPower <= USED 0
@@ -147,7 +135,6 @@ count_padding_bits <= USED 0
 md5 <= USED 0
 rotate_left <= USED 0
 ;FILE mpbledemo2.o
-mpbledemo2_get_md5 <= USED 0
 ;FILE nmi_handler.o
 ;FILE nvds.o
 ;FILE prf_utils.o
@@ -179,7 +166,6 @@ timer2_stop <= USED 0
 ;FILE rf_580.o
 rf_nfm_disable <= USED 0
 rf_nfm_enable <= USED 0
-rf_nfm_is_enabled <= USED 0
 ;FILE rwble.o
 ;FILE rwip.o
 ;FILE smpc.obj
@@ -225,43 +211,16 @@ uart2_read <= USED 0
 user_on_connection <= USED 0
 user_on_disconnect <= USED 0
 ;FILE vmdalayer.o
-FsmAddNew <= USED 0
-FsmGetState <= USED 0
-FsmInit <= USED 0
-FsmProcessingLaunchEntry <= USED 0
-FsmProcessingLaunchExecute <= USED 0
-FsmRunEngine <= USED 0
-FsmSetState <= USED 0
 IhuDebugPrint <= USED 0
-b2l_uint16 <= USED 0
-bxxh_vm_init_hook <= USED 0
-bxxh_vm_task_entry_hook <= USED 0
-fsm_com_do_nothing <= USED 0
 ihu_clock_unix_to_ymd <= USED 0
-ihu_message_queue_clean <= USED 0
-ihu_message_rcv <= USED 0
-ihu_message_send <= USED 0
-ihu_msgid_to_string <= USED 0
 ihu_sleep <= USED 0
-ihu_system_task_execute <= USED 0
-ihu_system_task_init_call <= USED 0
-ihu_task_create_all <= USED 0
-ihu_task_create_and_run <= USED 0
-ihu_task_execute_all <= USED 0
-ihu_taskid_to_string <= USED 0
-vmda1458x_app_ble_push <= USED 0
-vmda1458x_app_uart_push_zjl <= USED 0
-vmda1458x_data_send_to_ble <= USED 0
-vmda1458x_data_send_to_uart <= USED 0
-vmda1458x_init_msg_to_vmdashell <= USED 0
-vmda1458x_led_flair <= USED 0
-vmda1458x_message_send <= USED 0
 ;FILE wecaht_aes.o
 AES_Decrypt <= USED 0
 AES_Encrypt_PKCS7 <= USED 0
 AES_Init <= USED 0
 AES_get_length <= USED 0
 ;FILE wechat.o
+;FILE wechat_task.o
 ;FILE wkupct_quadec.o
 quad_decoder_disable_irq <= USED 0
 quad_decoder_enable_irq <= USED 0

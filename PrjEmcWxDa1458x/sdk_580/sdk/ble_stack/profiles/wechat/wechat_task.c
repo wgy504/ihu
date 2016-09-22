@@ -40,7 +40,8 @@
 uint8_t FirstNotificationBit __attribute__((section("retention_mem_area0"), zero_init));
 uint8_t SecondNotificationBit __attribute__((section("retention_mem_area0"), zero_init));
 
-
+extern void mpbledemo2_reset(void);
+extern void mpbledemo2_indication_state(bool isEnable);
 
 /*
  * FUNCTION DEFINITIONS
@@ -329,6 +330,16 @@ static int gap_disconnnect_ind_handler(ke_msg_id_t const msgid,
     return (KE_MSG_CONSUMED);
 }
 
+int app_wechat_period_report_time_out_handler(ke_msg_id_t const msgid,
+                                  void const *param,
+                                  ke_task_id_t const dest_id,
+                                  ke_task_id_t const src_id)																		
+{
+	//arch_printf("\r\n Wechat Task Time Out received No 1. ");
+  mpbledemo2_airsync_link_setup_period_report();
+  return (KE_MSG_CONSUMED);
+}
+
 /*
  * GLOBAL VARIABLE DEFINITIONS
  ****************************************************************************************
@@ -351,7 +362,8 @@ const struct ke_msg_handler wechat_connected[] =
 {
     {GATTC_WRITE_CMD_IND,               (ke_msg_func_t) gattc_write_cmd_ind_handler},
     {WECHAT_SEND_INDICATION_REQ,        (ke_msg_func_t) wechat_send_indication_req_handler},
-    {GATTC_CMP_EVT,                     (ke_msg_func_t) gattc_cmp_evt_handler},    
+    {GATTC_CMP_EVT,                     (ke_msg_func_t) gattc_cmp_evt_handler},
+		{WECHAT_PERIOD_REPORT_TIME_OUT,     (ke_msg_func_t) app_wechat_period_report_time_out_handler},	
 };
 
 /// Default State handlers definition

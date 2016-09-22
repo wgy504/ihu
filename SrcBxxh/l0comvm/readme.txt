@@ -573,13 +573,27 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = EMC: 关掉CFG_DEVELOPMENT_DEBUG
 = 简化EMC项目的程序文件，去掉VMDA的VM机制，因为本来就用不上，而且还占用大量的符号表，造成无法扩展已有功能
 
-
-
-
-
-
-
-
+//= ZJL, 2016 Sep.22, IHU_EMCWX_CURRENT_SW_DELIVERY R03.26
+= 继续调测EMC项目，将VMDA中的不用函数全部注释掉，去掉L2/L3的暂时无用函数，减少符号的产生，终于而已打开CFG_MEM_MAP_DEEP_SLEEP模式，并关闭CFG_DEVELOPMENT_DEBUG
+= 最终推荐两种配置方式（均打开了深度休眠模式CFG_MEM_MAP_DEEP_SLEEP）
+  ==> 调试工作模式：O1编译选项，关闭WATCH_DOG，打开CFG_DEVELOPMENT_DEBUG，打开<mpbledemo2.h>中的#define EAM_macNoEncrypt 2
+      Program Size: Code=27132 RO-data=2992 RW-data=120 ZI-data=7556  
+  ==> 批量生产模式：O3编译选项，打开WATCH_DOG，关闭CFG_DEVELOPMENT_DEBUG，打开<mpbledemo2.h>中的#define EAM_md5AndNoEnrypt 1 
+      Program Size: Code=26472 RO-data=2684 RW-data=116 ZI-data=7804
+= 烧录程序，SPI的管脚P0/3/5/6，记录在这儿
+= 电池读取API，验证好使。现在关键是如何表达电量，初步想法是：
+  1. 电源电量在低压时，使用快闪表达。函数挂在哪儿，是个问题。
+  2. BLE连上时，电源单色灯使用慢闪表达，断掉时，灭灯。目前函数挂在BLE连接以及DISC函数中。
+  3. 状态三色灯，用来表达数据传输的状态。目前每一次数据传输，只快闪一次，功能挂在数据读取函数中。
+= 需要继续验证定时器问题，不仅解决电源低压的状态展示，也用来搞定周期汇报的问题。
+= 为了测试TIME OUT的问题，在wechat_task以及app_wechat_task中，均植入了探针
+  arch_printf("\r\n Wechat Task Time Out received No 1. ");  
+  试图找到定时工作的模式。未来可以将这两个任务中的打印删除。
+  另外，从目前的TRACE看，wechat_task参与了，但app_wechat_task貌似根本就没参与。
+  一旦确认，需要删去相应代码，以减少代码符号量溢出的可能性。
+= 另外，mpbledemo2_readEmcDataResp(NULL, 0);这里的指针全部是NULL，造成汇报一两次后，BLE链路在微信上就断掉，AIRSYNC工具下
+  还可以工作，但微信上一旦从设备上发出数据，微信BLE立即断掉，使用了三种数据函数调用方式都不行
+= 对APP_WECHAT_TASK中的TIMEOUT代码做了清理
 
 
 
