@@ -848,10 +848,30 @@ void mpbledemo2_OpenLight(uint8_t *ptrData, uint32_t lengthInByte)
 void mpbledemo2_CloseLight(uint8_t *ptrData, uint32_t lengthInByte)
 {
 	#ifdef CATCH_LOG
-		arch_printf("\r\n light off!! ");
-	#endif    
-	GPIO_SetInactive(GPIO_ALERT_LED_PORT, GPIO_ALERT_LED_PIN);
+		arch_printf("\r\n light close!! ");
+	#endif
+	GPIO_SetActive(GPIO_ALERT_LED_PORT, GPIO_ALERT_LED_PIN);
 	isLightOn = false;
+}
+
+void mpbledemo2_readEmcPeriodOpen(uint8_t *ptrData, uint32_t lengthInByte)
+{
+	#ifdef CATCH_LOG
+		arch_printf("\r\n Open Period EMC Report mode!! ");
+	#endif    
+	//闪灯
+	vmda1458x_led_blink_once_on_off(LED_ID_1); //GREEN
+	mpdemo2_emcPeriodInsMeasureFlag = IHU_EMC_PERIOD_INSTANCE_MEASUREMENT_PERIOD;
+}
+
+void mpbledemo2_readEmcPeriodClose(uint8_t *ptrData, uint32_t lengthInByte)
+{
+	#ifdef CATCH_LOG
+		arch_printf("\r\n Close Period EMC Report mode!! ");
+	#endif    
+	//闪灯
+	vmda1458x_led_blink_once_on_off(LED_ID_2); //BLUE
+	mpdemo2_emcPeriodInsMeasureFlag = IHU_EMC_PERIOD_INSTANCE_MEASUREMENT_INSTANCE;
 }
 
 void mpbledemo2_readEmcDataResp(uint8_t *ptrData, uint32_t lengthInByte)
@@ -927,9 +947,9 @@ void mpbledemo2_readEmcDataResp(uint8_t *ptrData, uint32_t lengthInByte)
 //	ble_wechat_indicate_data(data, len);
 
 	//BLE数据传输一次，闪灯一次
-	vmda1458x_led_blink_once_on_off(LED_ID_0);
-	vmda1458x_led_blink_once_on_off(LED_ID_1);
-	vmda1458x_led_blink_once_on_off(LED_ID_2);
+	vmda1458x_led_blink_once_on_off(LED_ID_0); //RED
+	//vmda1458x_led_blink_once_on_off(LED_ID_1); //GREEN
+	//vmda1458x_led_blink_once_on_off(LED_ID_2); //BLUE
 	
 	//测试电池水平
 	#ifdef CATCH_LOG
@@ -953,6 +973,8 @@ MPBLEDEMO2_RECEIVED_CMD_HANDLER_T mpbledemo2_cmd_handler[] =
     {openLightPush,     mpbledemo2_OpenLight},
     {closeLightPush,    mpbledemo2_CloseLight},
     {readEmcInsPush,    mpbledemo2_readEmcDataResp},
+    {readEmcPeriodOpen, mpbledemo2_readEmcPeriodOpen},
+    {readEmcPeriodClose,mpbledemo2_readEmcPeriodClose},
     {readTimeSyncResp,  mpbledemo2_readTimeSyncReq},
     {readEquInfoPush,   mpbledemo2_readEquInfoReq},
 		

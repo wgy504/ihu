@@ -91,8 +91,9 @@ typedef enum
 	//EMC
 	readEmcInsPush  = 0x2001,  //后台送到DEVICE
 	readEmcDataResp = 0x2081,
-	readEmcPeriodPush     = 0x2002,  //后台送到DEVICE
-	readEmcPeriodDataResp = 0x2082,
+	readEmcPeriodOpen  = 0x2002,  //后台送到DEVICE
+	readEmcPeriodClose = 0x2003,  //后台送到DEVICE
+
 	//温度
 	readTmrInsPush  = 0x2801,  //后台送到DEVICE
 	readTmrDataResp = 0x2881,
@@ -151,6 +152,8 @@ extern data_handler *m_mpbledemo2_handler;
 extern void mpbledemo2_reset(void);
 extern void mpbledemo2_indication_state(bool isEnable);
 extern int32_t mpbledemo2_sendData(uint8_t* ptrData, uint32_t lengthInByte);
+extern void mpbledemo2_readEmcPeriodOpen(uint8_t *ptrData, uint32_t lengthInByte);
+extern void mpbledemo2_readEmcPeriodClose(uint8_t *ptrData, uint32_t lengthInByte);
 
 #define BLEDEMO2_TIMER_PERIOD_REPORT_DURATION 18000 //10ms网格，in second， 3分钟定时自动
 extern void mpbledemo2_airsync_link_setup_period_report(void);
