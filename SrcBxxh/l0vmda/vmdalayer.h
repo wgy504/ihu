@@ -158,7 +158,7 @@ extern void vmda1458x_timer_set(ke_msg_id_t const timerid, ke_task_id_t const ta
 extern void vmda1458x_timer_clear(ke_msg_id_t const timerid, ke_task_id_t const taskid);
 extern void vmda1458x_data_send_to_ble(unsigned char *p, int n);
 extern void vmda1458x_data_send_to_uart(unsigned char *p, int n);
-extern int  vmda1458x_emc_sample(void);  //ADC0读数，可以通过被动式获取
+extern UINT16 vmda1458x_emc_sample(void);  //ADC0读数，可以通过被动式获取
 extern void vmda1458x_led_flair(void);
 extern void vmda1458x_init_msg_to_vmdashell(void);
 extern OPSTAT vmda1458x_mac_addr_get(UINT8* mac, UINT8 len);

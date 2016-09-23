@@ -27,9 +27,9 @@
 
 #define MAC_ADDRESS_LENGTH  6
 
-//#define EAM_md5AndNoEnrypt 1     
+#define EAM_md5AndNoEnrypt 1  //批量生产配置
 //#define EAM_md5AndAesEnrypt 1
-#define EAM_macNoEncrypt 2
+//#define EAM_macNoEncrypt 2     //测试版本
 
 #define DEVICE_KEY {0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a,0x0b,0x0c,0x0d,0x0e,0x0f};
 
@@ -91,6 +91,8 @@ typedef enum
 	//EMC
 	readEmcInsPush  = 0x2001,  //后台送到DEVICE
 	readEmcDataResp = 0x2081,
+	readEmcPeriodPush     = 0x2002,  //后台送到DEVICE
+	readEmcPeriodDataResp = 0x2082,
 	//温度
 	readTmrInsPush  = 0x2801,  //后台送到DEVICE
 	readTmrDataResp = 0x2881,
@@ -150,12 +152,16 @@ extern void mpbledemo2_reset(void);
 extern void mpbledemo2_indication_state(bool isEnable);
 extern int32_t mpbledemo2_sendData(uint8_t* ptrData, uint32_t lengthInByte);
 
-#define BLEDEMO2_TIMER_PERIOD_REPORT_DURATION 1000 //10ms网格，in second
+#define BLEDEMO2_TIMER_PERIOD_REPORT_DURATION 18000 //10ms网格，in second， 3分钟定时自动
 extern void mpbledemo2_airsync_link_setup_period_report(void);
 
 extern void adc_usDelay(uint32_t nof_us);
-#define IHU_EMC_LOOP_READ_TIMES 1000
+#define IHU_EMC_LOOP_READ_TIMES 10
 
 extern void mpdemo2_emcdata_read(void);
-	
+
+#define IHU_EMC_PERIOD_INSTANCE_MEASUREMENT_INVALID 0
+#define IHU_EMC_PERIOD_INSTANCE_MEASUREMENT_PERIOD 1
+#define IHU_EMC_PERIOD_INSTANCE_MEASUREMENT_INSTANCE 2
+
 #endif

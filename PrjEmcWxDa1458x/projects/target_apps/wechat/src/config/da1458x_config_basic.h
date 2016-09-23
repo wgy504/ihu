@@ -37,8 +37,8 @@
 /****************************************************************************************************************/
 /* Enables WatchDog timer.                                                                                      */
 /****************************************************************************************************************/
-#undef CFG_WDOG 
-
+//#undef CFG_WDOG  //TEST Version
+#define CFG_WDOG   //Volume production
 /****************************************************************************************************************/
 /* Sleep mode memory map configuration. Only one or none of the following directives must be defined.           */
 /* The selection determines the memory map configuration. Sleep mode is determined by host application sleep    */
@@ -69,7 +69,8 @@
 /*      -   Enables Debug module and sets code execution in breakpoint in Hardfault and NMI (Watcdog) handleres.*/
 /*          It allows developer to hot attach debugger and get debug information                                */
 /****************************************************************************************************************/
-#define CFG_DEVELOPMENT_DEBUG            
+//#define CFG_DEVELOPMENT_DEBUG //TEST Version         
+#undef CFG_DEVELOPMENT_DEBUG //Volume production       
 
 /****************************************************************************************************************/
 /*UART Console Print. Enables serial interface logging mechanism. If CFG_PRINTF is defined CFG_PRINTF_UART2     */
