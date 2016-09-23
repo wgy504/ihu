@@ -87,6 +87,15 @@ char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK] ={
 	"MSG_ID_COM_TIME_OUT",
 	"MSG_ID_COM_HEART_BEAT",
 	"MSG_ID_COM_HEART_BEAT_FB",
+	"MSG_ID_VMFO_TIMER_1S_PERIOD",
+	"MSG_ID_ADC_UL_DATA_PULL_BWD",
+	"MSG_ID_ADC_DL_CTRL_CMD_REQ",
+	"MSG_ID_ADC_UL_CTRL_CMD_RESP",
+	"MSG_ID_SPI_DL_DATA_PUSH_FWD",
+	"MSG_ID_SPI_UL_DATA_PULL_BWD",
+	"MSG_ID_SPI_DL_CTRL_CMD_REQ",
+	"MSG_ID_SPI_UL_CTRL_CMD_RESP",
+	"MSG_ID_COM_MAX"
 	"MSG_ID_XXX_NULL"
 };
 
@@ -1474,6 +1483,14 @@ OPSTAT fsm_com_do_nothing(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 
 struct tm ihu_clock_unix_to_ymd(time_t t_unix)
 {
 		return *localtime(&t_unix);
+}
+
+//安装ISR服务程序，目前暂时找不到合适的ucosIII对应的方式，待定
+//采用ISR方式后，硬件的轮询将变得不重要，都采用ISR方式，将更加干净、高效，完全是最正常的方式
+OPSTAT ihu_isr_install(UINT8 priority, void *my_routine)
+{
+	
+	return SUCCESS;
 }
 
 /**********************************************************************************

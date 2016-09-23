@@ -215,12 +215,12 @@ extern OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateIt
 extern OPSTAT ihu_system_task_init_call(UINT8 task_id, FsmStateItem_t *p);
 extern void   ihu_task_create_all(void);
 extern OPSTAT fsm_com_do_nothing(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
-
 extern void ihu_sw_restart(void);
 extern struct tm ihu_clock_unix_to_ymd(time_t t_unix);
+extern OPSTAT ihu_isr_install(UINT8 priority, void *my_routine);
 
 
-//对于没有RTOS的情形
+//对于没有RTOS的情形，为了兼容VMDA，暂时没用到
 extern OPSTAT FsmProcessingLaunchEntryBareRtos(UINT8 task_id);   //当创建和启动分离时使用
 extern OPSTAT FsmProcessingLaunchExecuteBareRtos(UINT8 task_id); //当创建和启动分离时使用
 extern OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len); //message send

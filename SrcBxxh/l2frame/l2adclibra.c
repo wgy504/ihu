@@ -31,6 +31,7 @@ FsmStateItem_t FsmAdclibra[] =
   //Task level initialization
   {MSG_ID_COM_RESTART,        						FSM_STATE_ADCLIBRA_AVTIVE,         					fsm_adclibra_restart},
   {MSG_ID_COM_STOP,												FSM_STATE_ADCLIBRA_AVTIVE,         					fsm_adclibra_stop_rcv},
+  {MSG_ID_ADC_DL_CTRL_CMD_REQ,						FSM_STATE_ADCLIBRA_AVTIVE,         					fsm_adclibra_dl_ctrl_cmd_req},	
 
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             									NULL},  //Ending
@@ -127,6 +128,20 @@ OPSTAT fsm_adclibra_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 	//返回
 	return SUCCESS;
 }
+
+OPSTAT fsm_adclibra_dl_ctrl_cmd_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{	
+	//入参检查
+	if ((param_ptr == NULL) || (dest_id != TASK_ID_ADCLIBRA)){
+		zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
+		IhuErrorPrint("ADCLIBRA: Wrong input paramters!");
+		return FAILURE;
+	}
+	
+	//返回
+	return SUCCESS;
+}
+
 
 //Local APIs
 OPSTAT func_adclibra_hw_init(void)

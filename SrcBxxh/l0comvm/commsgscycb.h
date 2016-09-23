@@ -75,6 +75,17 @@ enum IHU_INTER_TASK_MSG_ID
 	//VMFO
 	MSG_ID_VMFO_TIMER_1S_PERIOD,
 	
+	//ADC
+	MSG_ID_ADC_UL_DATA_PULL_BWD,
+	MSG_ID_ADC_DL_CTRL_CMD_REQ,
+	MSG_ID_ADC_UL_CTRL_CMD_RESP,
+	
+	//SPI
+	MSG_ID_SPI_DL_DATA_PUSH_FWD,
+	MSG_ID_SPI_UL_DATA_PULL_BWD,
+	MSG_ID_SPI_DL_CTRL_CMD_REQ,
+	MSG_ID_SPI_UL_CTRL_CMD_RESP,
+	
 	//END FLAG
 	MSG_ID_COM_MAX, //Ending point
 
@@ -93,32 +104,69 @@ typedef struct com_gps_pos //
 //公共消息定义
 typedef struct msg_struct_com_init //
 {
-	UINT8 length;
+	UINT16 length;
 }msg_struct_com_init_t;
 typedef struct msg_struct_com_init_fb //
 {
-	UINT8 length;
+	UINT16 length;
 }msg_struct_com_init_fb_t;
 typedef struct  msg_struct_com_restart //
 {
-	UINT8 length;
+	UINT16 length;
 }msg_struct_com_restart_t;
 typedef struct  msg_struct_com_time_out //
 {
 	UINT32 timeId;
 	UINT8  timeRes;
-	UINT8 length;
+	UINT16 length;
 }msg_struct_com_time_out_t;
 typedef struct  msg_struct_com_stop //
 {
-	UINT8 length;
+	UINT16 length;
 }msg_struct_com_stop_t;
 
 //VMFO消息定义
 typedef struct msg_struct_vmfo_1s_period_timtout
 {
-	UINT8 length;
+	UINT16 length;
 }msg_struct_vmfo_1s_period_timtout_t;
+
+//ADC消息定义
+#define IHU_MSG_ADC_DATA_BUF_LEN 40
+typedef struct msg_struct_adc_ul_data_pull_bwd
+{
+	UINT16 length;
+	UINT8 data[IHU_MSG_ADC_DATA_BUF_LEN];
+}msg_struct_adc_ul_data_pull_bwd_t;
+typedef struct msg_struct_adc_dl_ctrl_cmd_req
+{
+	UINT16 length;
+}msg_struct_adc_dl_ctrl_cmd_req_t;
+typedef struct msg_struct_adc_ul_ctrl_cmd_resp
+{
+	UINT16 length;
+}msg_struct_adc_ul_ctrl_cmd_resp_t;
+
+//SPI消息定义
+#define IHU_MSG_SPI_DATA_BUF_LEN 40
+typedef struct msg_struct_spi_dl_data_push_fwd
+{
+	UINT16 length;
+	UINT8 data[IHU_MSG_SPI_DATA_BUF_LEN];
+}msg_struct_spi_dl_data_push_fwd_t;
+typedef struct msg_struct_spi_ul_data_pull_bwd
+{
+	UINT16 length;
+	UINT8 data[IHU_MSG_SPI_DATA_BUF_LEN];
+}msg_struct_spi_ul_data_pull_bwd_t;
+typedef struct msg_struct_spi_dl_ctrl_cmd_req
+{
+	UINT16 length;
+}msg_struct_spi_dl_ctrl_cmd_req_t;
+typedef struct msg_struct_spi_ul_ctrl_cmd_resp
+{
+	UINT16 length;
+}msg_struct_spi_ul_ctrl_cmd_resp_t;
 
 
 #endif /* L0COMVM_COMMSGSCYCB_H_ */

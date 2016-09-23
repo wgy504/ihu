@@ -31,7 +31,11 @@ FsmStateItem_t FsmScycb[] =
   //Task level initialization
   {MSG_ID_COM_RESTART,        						FSM_STATE_SCYCB_AVTIVE,         					fsm_scycb_restart},
   {MSG_ID_COM_STOP,												FSM_STATE_SCYCB_AVTIVE,         					fsm_scycb_stop_rcv},
-
+	{MSG_ID_ADC_UL_DATA_PULL_BWD,						FSM_STATE_SCYCB_AVTIVE,         					fsm_scycb_adc_ul_data_pull_bwd},
+	{MSG_ID_ADC_UL_CTRL_CMD_RESP,						FSM_STATE_SCYCB_AVTIVE,         					fsm_scycb_adc_ul_ctrl_cmd_resp},
+	{MSG_ID_SPI_UL_DATA_PULL_BWD,						FSM_STATE_SCYCB_AVTIVE,         					fsm_scycb_spi_ul_data_pull_bwd},
+	{MSG_ID_SPI_UL_CTRL_CMD_RESP,						FSM_STATE_SCYCB_AVTIVE,         					fsm_scycb_spi_ul_ctrl_cmd_resp},
+	
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             									NULL},  //Ending
 };
@@ -124,6 +128,58 @@ OPSTAT fsm_scycb_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 
 		return FAILURE;
 	}
 	
+	//返回
+	return SUCCESS;
+}
+
+OPSTAT fsm_scycb_adc_ul_data_pull_bwd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{	
+	//入参检查
+	if ((param_ptr == NULL) || (dest_id != TASK_ID_SCYCB)){
+		zIhuRunErrCnt[TASK_ID_SCYCB]++;
+		IhuErrorPrint("SCYCB: Wrong input paramters!");
+		return FAILURE;
+	}
+
+	//返回
+	return SUCCESS;
+}
+
+OPSTAT fsm_scycb_adc_ul_ctrl_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{	
+	//入参检查
+	if ((param_ptr == NULL) || (dest_id != TASK_ID_SCYCB)){
+		zIhuRunErrCnt[TASK_ID_SCYCB]++;
+		IhuErrorPrint("SCYCB: Wrong input paramters!");
+		return FAILURE;
+	}
+
+	//返回
+	return SUCCESS;
+}
+
+OPSTAT fsm_scycb_spi_ul_data_pull_bwd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{	
+	//入参检查
+	if ((param_ptr == NULL) || (dest_id != TASK_ID_SCYCB)){
+		zIhuRunErrCnt[TASK_ID_SCYCB]++;
+		IhuErrorPrint("SCYCB: Wrong input paramters!");
+		return FAILURE;
+	}
+
+	//返回
+	return SUCCESS;
+}
+
+OPSTAT fsm_scycb_spi_ul_ctrl_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{	
+	//入参检查
+	if ((param_ptr == NULL) || (dest_id != TASK_ID_SCYCB)){
+		zIhuRunErrCnt[TASK_ID_SCYCB]++;
+		IhuErrorPrint("SCYCB: Wrong input paramters!");
+		return FAILURE;
+	}
+
 	//返回
 	return SUCCESS;
 }

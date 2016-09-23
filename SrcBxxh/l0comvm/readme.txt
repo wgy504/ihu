@@ -605,9 +605,10 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 	readEmcPeriodClose = 0x2003,  //后台送到DEVICE  => BLUE灯
 	该命令无返回，只是闪灯表示结果
 
-
-
-
+//= ZJL, 2016 Sep.23, IHU_EMCWX_CURRENT_SW_DELIVERY R03.28
+= 添加SCY项目中的ISR工作机制
+= 添加SCY项目中的ADC/SPI数据消息
+= 建立了SCY初步的消息处理状态机框架
 
 
 

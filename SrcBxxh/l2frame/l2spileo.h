@@ -46,6 +46,9 @@ extern OPSTAT fsm_spileo_task_entry(UINT8 dest_id, UINT8 src_id, void * param_pt
 extern OPSTAT fsm_spileo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_spileo_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_spileo_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT fsm_spileo_dl_data_push_fwd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT fsm_spileo_dl_ctrl_cmd_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+
 
 //Local API
 OPSTAT func_spileo_hw_init(void);

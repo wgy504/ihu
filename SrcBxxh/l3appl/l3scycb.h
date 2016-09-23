@@ -47,7 +47,11 @@ extern OPSTAT fsm_scycb_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr
 extern OPSTAT fsm_scycb_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_scycb_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_scycb_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
-
+extern OPSTAT fsm_scycb_adc_ul_data_pull_bwd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT fsm_scycb_adc_ul_ctrl_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT fsm_scycb_spi_ul_data_pull_bwd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT fsm_scycb_spi_ul_ctrl_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+	
 //Local API
 OPSTAT func_scycb_hw_init(void);
 
