@@ -78,6 +78,7 @@
 #define		LED_MODE_BLINK_HIGH_SPEED		3
 
 //MYC
+#define 	LED_BLINK_6_7368S_PSC				255  	//(255+1)/38 = 6.7368s/period
 #define		LED_BLINK_ONE_FOUTH_HZ_PSC	151  	//(0.25Hz)
 #define		LED_BLINK_HALF_HZ_PSC				75   	//(0.5Hz)
 #define		LED_BLINK_1HZ_PSC						37   	//(1Hz)
@@ -88,6 +89,7 @@
 
 //MYC
 #define		LED_BLINK_DUTYCYCLE_50_PWM	128
+#define		LED_BLINK_DUTYCYCLE_254_PWM	255
 
 //MYC
 //#define		LED_BLINK_LOW_SPEED					LED_BLINK_1HZ

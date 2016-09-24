@@ -379,7 +379,8 @@ void vmda1458x_i2c_led_init(uint16_t dev_address, uint8_t speed)
 		SEND_I2C_COMMAND(PCA9551_CTL_REG_PSC0);  // Set address MSB, write access
 		WAIT_UNTIL_I2C_FIFO_IS_EMPTY();                 // Wait until Tx FIFO is empty
 		
-		SEND_I2C_COMMAND(LED_BLINK_ONE_FOUTH_HZ_PSC);   // Set address MSB, write access  
+		//SEND_I2C_COMMAND(LED_BLINK_ONE_FOUTH_HZ_PSC);   // Set address MSB, write access  
+		SEND_I2C_COMMAND(LED_BLINK_6_7368S_PSC);
 		WAIT_UNTIL_I2C_FIFO_IS_EMPTY();                 // Wait until Tx FIFO is empty
 		
 		/* !!!!!!! REGISTER 2 !!!!!!! */
@@ -392,7 +393,8 @@ void vmda1458x_i2c_led_init(uint16_t dev_address, uint8_t speed)
 		SEND_I2C_COMMAND(PCA9551_CTL_REG_PWM0);  // Set address MSB, write access
 		WAIT_UNTIL_I2C_FIFO_IS_EMPTY();                 // Wait until Tx FIFO is empty
 		
-		SEND_I2C_COMMAND(LED_BLINK_DUTYCYCLE_50_PWM);   // Set address MSB, write access  
+		//SEND_I2C_COMMAND(LED_BLINK_DUTYCYCLE_50_PWM);   // Set address MSB, write access  
+		SEND_I2C_COMMAND(LED_BLINK_DUTYCYCLE_254_PWM);
 		WAIT_UNTIL_I2C_FIFO_IS_EMPTY();                 // Wait until Tx FIFO is empty
 		
 		/* !!!!!!! REGISTER 3 !!!!!!! */
@@ -406,7 +408,7 @@ void vmda1458x_i2c_led_init(uint16_t dev_address, uint8_t speed)
 		WAIT_UNTIL_I2C_FIFO_IS_EMPTY();                 // Wait until Tx FIFO is empty
 		
 		SEND_I2C_COMMAND(LED_BLINK_HALF_HZ_PSC);   // Set address MSB, write access  
-		WAIT_UNTIL_I2C_FIFO_IS_EMPTY();                 // Wait until Tx FIFO is empty
+		WAIT_UNTIL_I2C_FIFO_IS_EMPTY();            // Wait until Tx FIFO is empty
 		
 		/* !!!!!!! REGISTER 4 !!!!!!! */
 		/* #define		PCA9551_CTL_REG_PWM1				0x04 */
