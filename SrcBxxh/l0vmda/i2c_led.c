@@ -454,7 +454,7 @@ void vmda1458x_led_set(uint8_t ledId, uint8_t mode)
 		SetWord16(I2C_ENABLE_REG, 0x1);
 		while( (GetWord16(I2C_STATUS_REG) & 0x20) != 0 );   // Wait for I2C master FSM to be IDLE
 		
-		if((ledId >= LED_ID_0) && (ledId <= LED_ID_3))
+		if((ledId <= LED_ID_3))
 		{
 				pca9551_ls0 = pca9551_ls0 & (~(3 << ( ledId << 1 ) ) );
 				pca9551_ls0 = pca9551_ls0 | (mode << ( ledId << 1 ) );
