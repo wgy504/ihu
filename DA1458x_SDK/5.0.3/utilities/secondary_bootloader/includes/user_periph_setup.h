@@ -83,17 +83,17 @@
 #else
 
     #define SPI_GPIO_PORT   GPIO_PORT_0
+		#define SPI_CLK_PIN     GPIO_PIN_0
     #define SPI_CS_PIN      GPIO_PIN_3
-    #define SPI_CLK_PIN     GPIO_PIN_0
-    #define SPI_DO_PIN      GPIO_PIN_6
-    #define SPI_DI_PIN      GPIO_PIN_5
+    #define SPI_DO_PIN      GPIO_PIN_5
+    #define SPI_DI_PIN      GPIO_PIN_6
 
 #endif
 
 // EEPROM GPIO assignment
-#define I2C_GPIO_PORT   GPIO_PORT_0
-#define I2C_SCL_PIN     GPIO_PIN_2
-#define I2C_SDA_PIN     GPIO_PIN_3
+#define I2C_GPIO_PORT   GPIO_PORT_2
+#define I2C_SCL_PIN     GPIO_PIN_8
+#define I2C_SDA_PIN     GPIO_PIN_9
 
 #endif // _USER_PERIPH_SETUP_H_
 

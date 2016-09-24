@@ -616,7 +616,8 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 	vmda1458x_led_blink_once_on_off(LED_ID_0); //BLUE
 	vmda1458x_led_blink_once_on_off(LED_ID_1); //GREEN
 	vmda1458x_led_blink_once_on_off(LED_ID_2); //RED
-
+= 更新了EMC项目的管脚配置
+= 更新了2nd boot loader的管脚配置
 
 
 

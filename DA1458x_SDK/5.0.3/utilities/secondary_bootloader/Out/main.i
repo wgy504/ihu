@@ -9750,8 +9750,8 @@ void Start_run_user_application(void)
     
     GPIO_ConfigurePin( GPIO_PORT_0, GPIO_PIN_3, INPUT_PULLUP, PID_GPIO, 1 );
     GPIO_ConfigurePin( GPIO_PORT_0, GPIO_PIN_0, INPUT_PULLDOWN, PID_GPIO, 0 );
-    GPIO_ConfigurePin( GPIO_PORT_0, GPIO_PIN_6, INPUT_PULLDOWN, PID_GPIO, 0 );
     GPIO_ConfigurePin( GPIO_PORT_0, GPIO_PIN_5, INPUT_PULLDOWN, PID_GPIO, 0 );
+    GPIO_ConfigurePin( GPIO_PORT_0, GPIO_PIN_6, INPUT_PULLDOWN, PID_GPIO, 0 );
 
 
 #line 71 "src\\main.c"
