@@ -647,7 +647,8 @@ int mpbledemo2_data_consume_func(uint8_t *data, uint32_t len)
 					//这里可以增加时钟的启动，从而实现链路建立以后，自动上报数据
 					vmda1458x_timer_set(WECHAT_PERIOD_REPORT_TIME_OUT, TASK_WECHAT, BLEDEMO2_TIMER_PERIOD_REPORT_DURATION);
 					//BLE连接好，设置该灯常亮
-					vmda1458x_led_on(LED_ID_6);
+					//vmda1458x_led_on(LED_ID_6);
+					vmda1458x_led_set(LED_ID_6, LED_MODE_BLINK_LOW_SPEED);
 				}
 				break;
 			
