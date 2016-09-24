@@ -19,6 +19,7 @@
 #define CMD_SENDDAT_EMC_REPORT  6
 #define CMD_SENDDAT_TMR_REPORT  7
 #define CMD_SENDDAT_HMD_REPORT  8
+#define CMD_SENDDAT_EMC_BAT_REPORT  9
 
 #define DEVICE_TYPE "gh_70c714952b02" 
 #define DEVICE_ID  "gh_70c714952b02_8248307502397542f48a3775bcb234d4" //"wechat_dialog"   
@@ -93,6 +94,8 @@ typedef enum
 	readEmcDataResp = 0x2081,
 	readEmcPeriodOpen  = 0x2002,  //后台送到DEVICE
 	readEmcPeriodClose = 0x2003,  //后台送到DEVICE
+	readEmcBatPush  = 0x2005,  //后台送到DEVICE
+	readEmcBatResp  = 0x2085,
 
 	//温度
 	readTmrInsPush  = 0x2801,  //后台送到DEVICE
@@ -152,8 +155,11 @@ extern data_handler *m_mpbledemo2_handler;
 extern void mpbledemo2_reset(void);
 extern void mpbledemo2_indication_state(bool isEnable);
 extern int32_t mpbledemo2_sendData(uint8_t* ptrData, uint32_t lengthInByte);
+extern void mpbledemo2_readEmcDataPush(uint8_t *ptrData, uint32_t lengthInByte);
 extern void mpbledemo2_readEmcPeriodOpen(uint8_t *ptrData, uint32_t lengthInByte);
 extern void mpbledemo2_readEmcPeriodClose(uint8_t *ptrData, uint32_t lengthInByte);
+extern void mpbledemo2_readEmcBatPush(uint8_t *ptrData, uint32_t lengthInByte);
+
 
 #define BLEDEMO2_TIMER_PERIOD_REPORT_DURATION 18000 //10ms网格，in second， 3分钟定时自动
 extern void mpbledemo2_airsync_link_setup_period_report(void);

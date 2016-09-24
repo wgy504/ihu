@@ -371,6 +371,7 @@ void mpbledemo2_data_produce_func(void *args, uint8_t **r_data, uint32_t *r_len)
 		case CMD_SENDDAT_TIME_SYNC:
 		case CMD_SENDDAT_EQU_INFO:
 		case CMD_SENDDAT_EMC_REPORT:
+		case CMD_SENDDAT_EMC_BAT_REPORT:
 		case CMD_SENDDAT:
 			{
 				#ifdef CATCH_LOG
@@ -390,6 +391,7 @@ void mpbledemo2_data_produce_func(void *args, uint8_t **r_data, uint32_t *r_len)
 				if (info->cmd == CMD_SENDDAT_TIME_SYNC) bleDemoHead->m_cmdid = htons(readTimeSyncReq);
 				else if (info->cmd == CMD_SENDDAT_EQU_INFO) bleDemoHead->m_cmdid = htons(readEquInfoReq);
 				else if (info->cmd == CMD_SENDDAT_EMC_REPORT) bleDemoHead->m_cmdid = htons(readEmcDataResp);
+				else if (info->cmd == CMD_SENDDAT_EMC_BAT_REPORT) bleDemoHead->m_cmdid = htons(readEmcBatResp);				
 				else	bleDemoHead->m_cmdid = htons(sendTextReq);
 				bleDemoHead->m_seq          = htons(mpbledemo2Sta.seq);
 				bleDemoHead->m_errorCode    = 0;	
@@ -860,7 +862,7 @@ void mpbledemo2_readEmcPeriodOpen(uint8_t *ptrData, uint32_t lengthInByte)
 		arch_printf("\r\n Open Period EMC Report mode!! ");
 	#endif    
 	//闪灯
-	vmda1458x_led_blink_once_on_off(LED_ID_1); //GREEN
+	vmda1458x_led_blink_once_on_off(LED_ID_0); //BLUE
 	mpdemo2_emcPeriodInsMeasureFlag = IHU_EMC_PERIOD_INSTANCE_MEASUREMENT_PERIOD;
 }
 
@@ -870,18 +872,18 @@ void mpbledemo2_readEmcPeriodClose(uint8_t *ptrData, uint32_t lengthInByte)
 		arch_printf("\r\n Close Period EMC Report mode!! ");
 	#endif    
 	//闪灯
-	vmda1458x_led_blink_once_on_off(LED_ID_2); //BLUE
+	vmda1458x_led_blink_once_on_off(LED_ID_2); //RED
 	mpdemo2_emcPeriodInsMeasureFlag = IHU_EMC_PERIOD_INSTANCE_MEASUREMENT_INSTANCE;
 }
 
-void mpbledemo2_readEmcDataResp(uint8_t *ptrData, uint32_t lengthInByte)
+void mpbledemo2_readEmcDataPush(uint8_t *ptrData, uint32_t lengthInByte)
 {
 	//方法一：CMD_SENDDAT_EMC_DREPORT的方式，是在CMD命令的层面
 	memset(mpdemo2_emcdata, 0, sizeof(mpdemo2_emcdata));
 	mpdemo2_emcdata_read();	
   uint8_t *data = NULL;
 	data= &mpdemo2_emcdata[0];
-	uint32_t len = sizeof(mpdemo2_emcdata);
+	uint32_t len = 2;
 	ARGS_ITEM_SET(mpbledemo2_info, m_mpbledemo2_handler->m_data_produce_args, cmd, CMD_SENDDAT_EMC_REPORT);   
 	ARGS_ITEM_SET(mpbledemo2_info, m_mpbledemo2_handler->m_data_produce_args, send_msg.len, len);
 	ARGS_ITEM_SET(mpbledemo2_info, m_mpbledemo2_handler->m_data_produce_args, send_msg.str, (const char *)data);    
@@ -896,7 +898,7 @@ void mpbledemo2_readEmcDataResp(uint8_t *ptrData, uint32_t lengthInByte)
 //	struct wechat_send_data_req * req = KE_MSG_ALLOC(WECHAT_SEND_DATA_TO_MASTER, TASK_APP,
 //																			TASK_APP, wechat_send_data_req);
 //	memset(mpdemo2_emcdata, 0, sizeof(mpdemo2_emcdata));
-//	req->dataLen = sizeof(mpdemo2_emcdata);	
+//	req->dataLen = 3;	
 //	mpdemo2_emcdata_read();
 //	req->pDataBuf = (uint8_t *)&mpdemo2_emcdata[0];
 //	ke_msg_send(req);
@@ -929,13 +931,12 @@ void mpbledemo2_readEmcDataResp(uint8_t *ptrData, uint32_t lengthInByte)
 //		emcData = 0;
 //	//uint8_t emc[3];
 //	//垃圾代码，没有编解码，完全是为了方便后台云代码的解码，从而对齐格式。未来需要完善的自定义数据结构。
-//	emc[0] = 0x20;
-//	emc[1] = (emcData>>8) & 0xFF; 
-//	emc[2] = emcData & 0xFF;
+//	emc[0] = (emcData>>8) & 0xFF; 
+//	emc[1] = emcData & 0xFF;
 
 //  uint8_t *data = NULL;
 //	data= &emc[0];
-//	uint32_t len = sizeof(emc);
+//	uint32_t len = 2;
 //	ARGS_ITEM_SET(mpbledemo2_info, m_mpbledemo2_handler->m_data_produce_args, cmd, CMD_SENDDAT_EMC_REPORT);   
 //	ARGS_ITEM_SET(mpbledemo2_info, m_mpbledemo2_handler->m_data_produce_args, send_msg.len, len);
 //	ARGS_ITEM_SET(mpbledemo2_info, m_mpbledemo2_handler->m_data_produce_args, send_msg.str, (const char *)data);    
@@ -947,17 +948,32 @@ void mpbledemo2_readEmcDataResp(uint8_t *ptrData, uint32_t lengthInByte)
 //	ble_wechat_indicate_data(data, len);
 
 	//BLE数据传输一次，闪灯一次
-	vmda1458x_led_blink_once_on_off(LED_ID_0); //RED
-	//vmda1458x_led_blink_once_on_off(LED_ID_1); //GREEN
-	//vmda1458x_led_blink_once_on_off(LED_ID_2); //BLUE
-	
-	//测试电池水平
-	#ifdef CATCH_LOG
-		arch_printf( "\r\nCurrent Battery Level = %d/100", battery_get_lvl(BATT_CR2032));
-	#endif
+	//vmda1458x_led_blink_once_on_off(LED_ID_0); //BLUE
+	vmda1458x_led_blink_once_on_off(LED_ID_1); //GREEN
+	//vmda1458x_led_blink_once_on_off(LED_ID_2); //RED
+
   return;
-	
-	//TMD，估计只能手工编码，不然就给屁朝凉了。。。
+}
+
+void mpbledemo2_readEmcBatPush(uint8_t *ptrData, uint32_t lengthInByte)
+{	
+  uint8_t *data = NULL;
+	memset(mpdemo2_emcdata, 0, sizeof(mpdemo2_emcdata));
+
+	mpdemo2_emcdata[0] = (battery_get_lvl(BATT_CR2032)) & 0xFF;
+	data= &mpdemo2_emcdata[0];
+	uint32_t len = 1;
+	ARGS_ITEM_SET(mpbledemo2_info, m_mpbledemo2_handler->m_data_produce_args, cmd, CMD_SENDDAT_EMC_BAT_REPORT);   
+	ARGS_ITEM_SET(mpbledemo2_info, m_mpbledemo2_handler->m_data_produce_args, send_msg.len, len);
+	ARGS_ITEM_SET(mpbledemo2_info, m_mpbledemo2_handler->m_data_produce_args, send_msg.str, (const char *)data);    
+	m_mpbledemo2_handler->m_data_produce_func(m_mpbledemo2_handler->m_data_produce_args, &data, &len);	
+	if(data == NULL)
+	{
+		return;
+	}
+	ble_wechat_indicate_data(data, len);
+
+  return;	
 }
 
 void mpbledemo2_readTimeSyncReq(uint8_t *ptrData, uint32_t lengthInByte)
@@ -972,9 +988,10 @@ MPBLEDEMO2_RECEIVED_CMD_HANDLER_T mpbledemo2_cmd_handler[] =
     {sendTextResp,      mpbledemo2_handleSendDataRsp},
     {openLightPush,     mpbledemo2_OpenLight},
     {closeLightPush,    mpbledemo2_CloseLight},
-    {readEmcInsPush,    mpbledemo2_readEmcDataResp},
+    {readEmcInsPush,    mpbledemo2_readEmcDataPush},
     {readEmcPeriodOpen, mpbledemo2_readEmcPeriodOpen},
     {readEmcPeriodClose,mpbledemo2_readEmcPeriodClose},
+		{readEmcBatPush,    mpbledemo2_readEmcBatPush},
     {readTimeSyncResp,  mpbledemo2_readTimeSyncReq},
     {readEquInfoPush,   mpbledemo2_readEquInfoReq},
 		
@@ -1017,7 +1034,7 @@ void mpbledemo2_airsync_link_setup_period_report(void)
 //		struct wechat_send_data_req * req = KE_MSG_ALLOC(WECHAT_SEND_DATA_TO_MASTER, TASK_APP,
 //																				TASK_APP, wechat_send_data_req);
 //		memset(mpdemo2_emcdata, 0, sizeof(mpdemo2_emcdata));
-//		req->dataLen = sizeof(mpdemo2_emcdata);	
+//		req->dataLen = 3;	
 //		mpdemo2_emcdata_read();
 //		req->pDataBuf = (uint8_t *)&mpdemo2_emcdata[0];
 //		
@@ -1028,7 +1045,7 @@ void mpbledemo2_airsync_link_setup_period_report(void)
 		mpdemo2_emcdata_read();	
 		uint8_t *data = NULL;
 		data= (uint8_t *)&mpdemo2_emcdata[0];
-		uint32_t len = sizeof(mpdemo2_emcdata);
+		uint32_t len = 2;
 		ARGS_ITEM_SET(mpbledemo2_info, m_mpbledemo2_handler->m_data_produce_args, cmd, CMD_SENDDAT_EMC_REPORT);   
 		ARGS_ITEM_SET(mpbledemo2_info, m_mpbledemo2_handler->m_data_produce_args, send_msg.len, len);
 		ARGS_ITEM_SET(mpbledemo2_info, m_mpbledemo2_handler->m_data_produce_args, send_msg.str, (const char *)data);        
@@ -1074,8 +1091,7 @@ void mpdemo2_emcdata_read(void)
 	
 	//uint8_t emc[3];
 	//垃圾代码，没有编解码，完全是为了方便后台云代码的解码，从而对齐格式。未来需要完善的自定义数据结构。
-	mpdemo2_emcdata[0] = 0x20;
-	mpdemo2_emcdata[1] = (emcData>>8) & 0xFF; 
-	mpdemo2_emcdata[2] = emcData & 0xFF;
+	mpdemo2_emcdata[0] = (emcData>>8) & 0xFF; 
+	mpdemo2_emcdata[1] = emcData & 0xFF;
 }
 

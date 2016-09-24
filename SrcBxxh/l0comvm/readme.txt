@@ -601,8 +601,8 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 定时和瞬时模式好使了，待定义明确的工作方式后再行完善可控工作模式，目前完全混合支持
 = 目前定时工作模式是永远打开定时汇报，这也是痛苦的，因为系统永远定时工作，打扰得厉害
 = 支持了定时读取的开关控制，如下，等待后台修改好了之后进行验证
-	readEmcPeriodOpen  = 0x2002,  //后台送到DEVICE  => GREEN灯
-	readEmcPeriodClose = 0x2003,  //后台送到DEVICE  => BLUE灯
+	readEmcPeriodOpen  = 0x2002,  //后台送到DEVICE
+	readEmcPeriodClose = 0x2003,  //后台送到DEVICE
 	该命令无返回，只是闪灯表示结果
 
 //= ZJL, 2016 Sep.23, IHU_EMCWX_CURRENT_SW_DELIVERY R03.28
@@ -610,8 +610,12 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 添加SCY项目中的ADC/SPI数据消息
 = 建立了SCY初步的消息处理状态机框架
 
-
-
+//= ZJL, 2016 Sep.23, IHU_EMCWX_CURRENT_SW_DELIVERY R03.29
+= 建立查询电量机制
+= 确定颜色
+	vmda1458x_led_blink_once_on_off(LED_ID_0); //BLUE
+	vmda1458x_led_blink_once_on_off(LED_ID_1); //GREEN
+	vmda1458x_led_blink_once_on_off(LED_ID_2); //RED
 
 
 
