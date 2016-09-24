@@ -239,9 +239,13 @@ UINT16 vmda1458x_emc_sample(void)
 {
 	//这里其实受制于板子对EMC通道具体的配置情况。未来如果需要统一处理，其实需要分门别类的根据板子进行处理。
 	//PEM3.0/3.1板子中，EMC_ADC1通道用的是P01
+	UINT16 value=0;
+	adc_init(GP_ADC_SE, GP_ADC_SIGN, GP_ADC_DELAY_EN);   //不设置衰减	
 	adc_enable_channel(ADC_CHANNEL_P01);
 	adc_usDelay(20);
-	return (UINT16)(adc_get_sample() & 0xFFFF);
+	value = adc_get_sample() & 0xFFFF;
+	adc_disable();
+	return value;	
 }
 
 //Only used for PEM1, to be updated for PEM2
