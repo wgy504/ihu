@@ -857,6 +857,7 @@ void mpbledemo2_CloseLight(uint8_t *ptrData, uint32_t lengthInByte)
 	isLightOn = false;
 }
 
+//周期模式打开，闪蓝灯
 void mpbledemo2_readEmcPeriodOpen(uint8_t *ptrData, uint32_t lengthInByte)
 {
 	#ifdef CATCH_LOG
@@ -867,6 +868,7 @@ void mpbledemo2_readEmcPeriodOpen(uint8_t *ptrData, uint32_t lengthInByte)
 	mpdemo2_emcPeriodInsMeasureFlag = IHU_EMC_PERIOD_INSTANCE_MEASUREMENT_PERIOD;
 }
 
+//周期模式关闭，闪红灯
 void mpbledemo2_readEmcPeriodClose(uint8_t *ptrData, uint32_t lengthInByte)
 {
 	#ifdef CATCH_LOG
@@ -877,6 +879,7 @@ void mpbledemo2_readEmcPeriodClose(uint8_t *ptrData, uint32_t lengthInByte)
 	mpdemo2_emcPeriodInsMeasureFlag = IHU_EMC_PERIOD_INSTANCE_MEASUREMENT_INSTANCE;
 }
 
+//支持EMC瞬时模式的回复，闪绿灯
 void mpbledemo2_readEmcDataPush(uint8_t *ptrData, uint32_t lengthInByte)
 {
 	//方法一：CMD_SENDDAT_EMC_DREPORT的方式，是在CMD命令的层面
@@ -956,6 +959,7 @@ void mpbledemo2_readEmcDataPush(uint8_t *ptrData, uint32_t lengthInByte)
   return;
 }
 
+//电池电量读取回复
 void mpbledemo2_readEmcBatPush(uint8_t *ptrData, uint32_t lengthInByte)
 {	
   uint8_t *data = NULL;
@@ -1018,6 +1022,7 @@ void mpbledemo2_handleCmdFromServer(BleDemo2CmdID cmd, uint8_t *ptrData, uint32_
     }
 }
 
+//周期性回报，定时方式
 void mpbledemo2_airsync_link_setup_period_report(void)
 {
 #ifdef CATCH_LOG
@@ -1066,33 +1071,36 @@ void mpbledemo2_airsync_link_setup_period_report(void)
 void mpdemo2_emcdata_read(void)
 {
 	//循环读取，为了找到合适的瞬时最大值
-	UINT16 emcData = 0, tmp = 0;
-	UINT32 index = 0, emcTotal = 0, validCnt = 0;
-	for (index = 0; index < IHU_EMC_LOOP_READ_TIMES; index++){
-		tmp = ihu_emc_adc_read();
-		//arch_printf("\r\n Read result = %d", tmp);
-		//if (tmp > emcData) emcData = tmp;
-		//读取最大量程为1024 = 0x3FF，多保留一位为了安全
-		if (tmp > 0)
-		{
-			emcTotal = emcTotal + (tmp & 0x7FF);
-			validCnt++;
-		}
-	}
+	UINT16 emcData = 0;
+//	UINT16 tmp = 0;
+//	UINT32 index = 0, emcTotal = 0, validCnt = 0;
+//	for (index = 0; index < IHU_EMC_LOOP_READ_TIMES; index++){
+//		tmp = ihu_emc_adc_read();
+//		//arch_printf("\r\n Read result = %d", tmp);
+//		//if (tmp > emcData) emcData = tmp;
+//		//读取最大量程为1024 = 0x3FF，多保留一位为了安全
+//		if (tmp > 0)
+//		{
+//			emcTotal = emcTotal + (tmp & 0x7FF);
+//			validCnt++;
+//		}
+//	}
 	//啥都不干，直接进入下一阶段处理，是最大值的情形
 
 	//瞬时读取的情形
-	//emcData = ihu_emc_adc_read();
+	emcData = ihu_emc_adc_read();
 	
-	//平均值的情形，当前选择这个了
-	if (validCnt > 0)
-		emcData = emcTotal / validCnt;
-	else
-		emcData = 0;
+//	//平均值的情形，当前选择这个了
+//	if (validCnt > 0)
+//		emcData = emcTotal / validCnt;
+//	else
+//		emcData = 0;
 	
 	//uint8_t emc[3];
 	//垃圾代码，没有编解码，完全是为了方便后台云代码的解码，从而对齐格式。未来需要完善的自定义数据结构。
 	mpdemo2_emcdata[0] = (emcData>>8) & 0xFF; 
 	mpdemo2_emcdata[1] = emcData & 0xFF;
+
+	return;
 }
 

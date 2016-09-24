@@ -618,6 +618,11 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 	vmda1458x_led_blink_once_on_off(LED_ID_2); //RED
 = 更新了EMC项目的管脚配置
 = 更新了2nd boot loader的管脚配置
+= 每次都初始化ADC通道，读取后，DISABLE_ADC()，比较圆满的解决了读数大的问题。应该是9个ADC通道相互串的问题。
+= VIN_OK表征真正的电池量，但没有接到ADC通道上，无法正确读出，下一版改进
+
+
+
 
 
 
