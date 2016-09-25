@@ -622,12 +622,22 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = VIN_OK表征真正的电池量，但没有接到ADC通道上，无法正确读出，下一版改进
 = MYC改进了闪灯工作状态
 
+
 //= ZJL, 2016 Sep.25, IHU_EMCWX_CURRENT_SW_DELIVERY R03.30
 = 恢复10次读取取最大值
 = 改进VIN_OK的电源指示读取，从而补全单色电源指示灯的工作状态：电量低于阈值=》快闪，BLE连接=》慢闪，电量正常但BLE无连接，不闪。
 = 发现当电池低电压的时候，插上miniUSB充电，VIN_OK处于高，插上JTAG供电工作时，VIN_OK是低
 = 优化vmda1458x_led_set(xx, LED_MODE_OFF)的时机，在AIRSYNC链路出现error，以及BLE链路断掉时，均主动关闭BLE链路指示慢闪
 = 周期汇报处理函数中，增加BLE链路上AIRSYNC的状态判断，以防止非正常状态下强行发送数据，虽然这个时候，一样会导致不成功
+= FLASH的读写函数spi_flash_read_data，是可以访问的
+= 在有FLASH外部空间，且OTP不支持的情况下，为了修改MAC地址，可以使用如下方式
+	方式1：烧录到FLASH中的MAC地址为0x366以及0x3E0，记录是为了对照，以便手工修改
+	方式2：通过在FLASH的0x7FF8（最后的8个字节）中存入MAC地址，然后让nvds_read_bdaddr_from_otp强行读取，或者定义一个标志位，以便OTP真的起作用时进行隔离风险。
+
+
+
+
+
 
 
 
