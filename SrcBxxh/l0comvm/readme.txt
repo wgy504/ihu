@@ -625,6 +625,13 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 //= ZJL, 2016 Sep.25, IHU_EMCWX_CURRENT_SW_DELIVERY R03.30
 = 恢复10次读取取最大值
 = 改进VIN_OK的电源指示读取，从而补全单色电源指示灯的工作状态：电量低于阈值=》快闪，BLE连接=》慢闪，电量正常但BLE无连接，不闪。
+= 发现当电池低电压的时候，插上miniUSB充电，VIN_OK处于高，插上JTAG供电工作时，VIN_OK是低
+= 优化vmda1458x_led_set(xx, LED_MODE_OFF)的时机，在AIRSYNC链路出现error，以及BLE链路断掉时，均主动关闭BLE链路指示慢闪
+= 周期汇报处理函数中，增加BLE链路上AIRSYNC的状态判断，以防止非正常状态下强行发送数据，虽然这个时候，一样会导致不成功
+
+
+
+
 
 
 

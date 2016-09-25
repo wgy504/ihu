@@ -353,6 +353,7 @@ int gapc_disconnect_ind_handler(ke_msg_id_t const msgid,
         ASSERT_ERR(0);
     }
 		
+		//When BLE connection is disconnect, LED shall be off
     vmda1458x_led_set(LED_ID_6, LED_MODE_OFF);
 		
     return (KE_MSG_CONSUMED);

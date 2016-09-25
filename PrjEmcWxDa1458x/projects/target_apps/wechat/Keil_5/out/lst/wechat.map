@@ -1570,84 +1570,84 @@ Image Symbol Table
     gpio_button_enable                       0x20004e8f   Thumb Code    22  mpbledemo2.o(.text)
     gpio_button_handler                      0x20004f03   Thumb Code    14  mpbledemo2.o(.text)
     mpbledemo2_handleCmdFromServer           0x20005451   Thumb Code    40  mpbledemo2.o(.text)
-    .text                                    0x20005d70   Section        0  vmdalayer.o(.text)
-    .text                                    0x20005e7c   Section        0  i2c_led.o(.text)
-    .text                                    0x20006070   Section        0  strncpy.o(.text)
-    .text                                    0x2000608a   Section        0  strcpy.o(.text)
-    .text                                    0x2000609c   Section        0  fmul.o(.text)
-    .text                                    0x20006116   Section        0  ffltui.o(.text)
-    .text                                    0x20006124   Section        0  ffixui.o(.text)
-    .text                                    0x2000614c   Section        0  fepilogue.o(.text)
-    .text                                    0x200061d0   Section       36  init.o(.text)
-    i.__0sprintf$3                           0x200066f8   Section        0  printf3.o(i.__0sprintf$3)
-    i.__scatterload_copy                     0x20006720   Section       14  handlers.o(i.__scatterload_copy)
-    i.__scatterload_null                     0x2000672e   Section        2  handlers.o(i.__scatterload_null)
-    i.__scatterload_zeroinit                 0x20006730   Section       14  handlers.o(i.__scatterload_zeroinit)
-    i._printf_core                           0x20006740   Section        0  printf3.o(i._printf_core)
-    _printf_core                             0x20006741   Thumb Code   456  printf3.o(i._printf_core)
-    i._sputc                                 0x2000690c   Section        0  printf3.o(i._sputc)
-    _sputc                                   0x2000690d   Thumb Code    10  printf3.o(i._sputc)
-    i.free                                   0x20006918   Section        0  malloc.o(i.free)
-    i.malloc                                 0x2000696c   Section        0  malloc.o(i.malloc)
-    .constdata                               0x200069d8   Section       22  jump_table.o(.constdata)
-    .constdata                               0x200069f0   Section      304  arch_patch.o(.constdata)
-    my_llm_default_state                     0x200069f0   Data         304  arch_patch.o(.constdata)
-    .constdata                               0x20006b20   Section        8  arch_patch.o(.constdata)
-    my_llm_default_handler                   0x20006b20   Data           8  arch_patch.o(.constdata)
-    .constdata                               0x20006b28   Section       48  arch_patch.o(.constdata)
-    TASK_DESC_LLM                            0x20006b28   Data          16  arch_patch.o(.constdata)
-    patch_table                              0x20006b38   Data          32  arch_patch.o(.constdata)
-    .constdata                               0x20006b58   Section      304  llc.obj(.constdata)
-    my_llc_default_state                     0x20006b58   Data         304  llc.obj(.constdata)
-    .constdata                               0x20006c88   Section       16  llc.obj(.constdata)
-    my_llc_stopping                          0x20006c88   Data          16  llc.obj(.constdata)
-    .constdata                               0x20006c98   Section      176  llc.obj(.constdata)
-    .constdata                               0x20006d48   Section        8  llc.obj(.constdata)
-    .constdata                               0x20006d50   Section       16  llc.obj(.constdata)
-    .constdata                               0x20006d60   Section       80  spi_flash.o(.constdata)
-    .constdata                               0x20006db0   Section       96  wechat.o(.constdata)
-    .constdata                               0x20006e10   Section        2  wechat.o(.constdata)
-    .constdata                               0x20006e12   Section        5  wechat.o(.constdata)
-    .constdata                               0x20006e17   Section        5  wechat.o(.constdata)
-    .constdata                               0x20006e1c   Section        5  wechat.o(.constdata)
-    .constdata                               0x20006e24   Section       16  wechat.o(.constdata)
-    TASK_DESC_WECHAT                         0x20006e24   Data          16  wechat.o(.constdata)
-    .constdata                               0x20006e34   Section        8  wechat_task.o(.constdata)
-    .constdata                               0x20006e3c   Section        8  wechat_task.o(.constdata)
-    .constdata                               0x20006e44   Section       32  wechat_task.o(.constdata)
-    .constdata                               0x20006e64   Section       16  wechat_task.o(.constdata)
-    .constdata                               0x20006e74   Section       24  wechat_task.o(.constdata)
-    .constdata                               0x20006e8c   Section        8  wechat_task.o(.constdata)
-    .constdata                               0x20006e94   Section      194  app.o(.constdata)
-    user_adv_conf                            0x20006e94   Data          24  app.o(.constdata)
-    user_gapm_conf                           0x20006eac   Data          34  app.o(.constdata)
-    user_prf_funcs                           0x20006ed0   Data          12  app.o(.constdata)
-    TASK_DESC_APP                            0x20006ef4   Data          16  app.o(.constdata)
-    user_central_conf                        0x20006f04   Data          82  app.o(.constdata)
-    .constdata                               0x20006f58   Section       56  app_task.o(.constdata)
-    app_gap_process_handlers                 0x20006f58   Data          56  app_task.o(.constdata)
-    .constdata                               0x20006f90   Section        8  app_task.o(.constdata)
-    .constdata                               0x20006f98   Section        8  app_task.o(.constdata)
-    .constdata                               0x20006fa0   Section       20  app_entry_point.o(.constdata)
-    .constdata                               0x20006fb4   Section       48  app_wechat_task.o(.constdata)
-    app_wechat_process_handlers              0x20006fb4   Data          48  app_wechat_task.o(.constdata)
-    .constdata                               0x20006fe4   Section       32  app_security_task.o(.constdata)
-    app_sec_process_handlers                 0x20006fe4   Data          32  app_security_task.o(.constdata)
-    .constdata                               0x20007004   Section       39  app_easy_security.o(.constdata)
-    user_security_configuration              0x20007004   Data          39  app_easy_security.o(.constdata)
-    .constdata                               0x2000702c   Section      120  mpbledemo2.o(.constdata)
-    .conststring                             0x200070a4   Section       49  mpbledemo2.o(.conststring)
-    .conststring                             0x200070d8   Section       65  vmdalayer.o(.conststring)
-    .data                                    0x2000714c   Section        4  arch_system.o(.data)
-    .data                                    0x20007150   Section       80  mpbledemo2.o(.data)
-    fix_head_len                             0x20007151   Data           1  mpbledemo2.o(.data)
-    bleDemoHeadLen                           0x20007152   Data           2  mpbledemo2.o(.data)
-    .data                                    0x200071a0   Section       44  mpbledemo2.o(.data)
-    .data                                    0x200071cc   Section        2  i2c_led.o(.data)
-    pca9551_ls0                              0x200071cc   Data           1  i2c_led.o(.data)
-    pca9551_ls1                              0x200071cd   Data           1  i2c_led.o(.data)
-    .data                                    0x200071d0   Section        4  mvars.o(.data)
-    .data                                    0x200071d4   Section        4  mvars.o(.data)
+    .text                                    0x20005d84   Section        0  vmdalayer.o(.text)
+    .text                                    0x20005e90   Section        0  i2c_led.o(.text)
+    .text                                    0x20006084   Section        0  strncpy.o(.text)
+    .text                                    0x2000609e   Section        0  strcpy.o(.text)
+    .text                                    0x200060b0   Section        0  fmul.o(.text)
+    .text                                    0x2000612a   Section        0  ffltui.o(.text)
+    .text                                    0x20006138   Section        0  ffixui.o(.text)
+    .text                                    0x20006160   Section        0  fepilogue.o(.text)
+    .text                                    0x200061e4   Section       36  init.o(.text)
+    i.__0sprintf$3                           0x2000670c   Section        0  printf3.o(i.__0sprintf$3)
+    i.__scatterload_copy                     0x20006734   Section       14  handlers.o(i.__scatterload_copy)
+    i.__scatterload_null                     0x20006742   Section        2  handlers.o(i.__scatterload_null)
+    i.__scatterload_zeroinit                 0x20006744   Section       14  handlers.o(i.__scatterload_zeroinit)
+    i._printf_core                           0x20006754   Section        0  printf3.o(i._printf_core)
+    _printf_core                             0x20006755   Thumb Code   456  printf3.o(i._printf_core)
+    i._sputc                                 0x20006920   Section        0  printf3.o(i._sputc)
+    _sputc                                   0x20006921   Thumb Code    10  printf3.o(i._sputc)
+    i.free                                   0x2000692c   Section        0  malloc.o(i.free)
+    i.malloc                                 0x20006980   Section        0  malloc.o(i.malloc)
+    .constdata                               0x200069ec   Section       22  jump_table.o(.constdata)
+    .constdata                               0x20006a04   Section      304  arch_patch.o(.constdata)
+    my_llm_default_state                     0x20006a04   Data         304  arch_patch.o(.constdata)
+    .constdata                               0x20006b34   Section        8  arch_patch.o(.constdata)
+    my_llm_default_handler                   0x20006b34   Data           8  arch_patch.o(.constdata)
+    .constdata                               0x20006b3c   Section       48  arch_patch.o(.constdata)
+    TASK_DESC_LLM                            0x20006b3c   Data          16  arch_patch.o(.constdata)
+    patch_table                              0x20006b4c   Data          32  arch_patch.o(.constdata)
+    .constdata                               0x20006b6c   Section      304  llc.obj(.constdata)
+    my_llc_default_state                     0x20006b6c   Data         304  llc.obj(.constdata)
+    .constdata                               0x20006c9c   Section       16  llc.obj(.constdata)
+    my_llc_stopping                          0x20006c9c   Data          16  llc.obj(.constdata)
+    .constdata                               0x20006cac   Section      176  llc.obj(.constdata)
+    .constdata                               0x20006d5c   Section        8  llc.obj(.constdata)
+    .constdata                               0x20006d64   Section       16  llc.obj(.constdata)
+    .constdata                               0x20006d74   Section       80  spi_flash.o(.constdata)
+    .constdata                               0x20006dc4   Section       96  wechat.o(.constdata)
+    .constdata                               0x20006e24   Section        2  wechat.o(.constdata)
+    .constdata                               0x20006e26   Section        5  wechat.o(.constdata)
+    .constdata                               0x20006e2b   Section        5  wechat.o(.constdata)
+    .constdata                               0x20006e30   Section        5  wechat.o(.constdata)
+    .constdata                               0x20006e38   Section       16  wechat.o(.constdata)
+    TASK_DESC_WECHAT                         0x20006e38   Data          16  wechat.o(.constdata)
+    .constdata                               0x20006e48   Section        8  wechat_task.o(.constdata)
+    .constdata                               0x20006e50   Section        8  wechat_task.o(.constdata)
+    .constdata                               0x20006e58   Section       32  wechat_task.o(.constdata)
+    .constdata                               0x20006e78   Section       16  wechat_task.o(.constdata)
+    .constdata                               0x20006e88   Section       24  wechat_task.o(.constdata)
+    .constdata                               0x20006ea0   Section        8  wechat_task.o(.constdata)
+    .constdata                               0x20006ea8   Section      194  app.o(.constdata)
+    user_adv_conf                            0x20006ea8   Data          24  app.o(.constdata)
+    user_gapm_conf                           0x20006ec0   Data          34  app.o(.constdata)
+    user_prf_funcs                           0x20006ee4   Data          12  app.o(.constdata)
+    TASK_DESC_APP                            0x20006f08   Data          16  app.o(.constdata)
+    user_central_conf                        0x20006f18   Data          82  app.o(.constdata)
+    .constdata                               0x20006f6c   Section       56  app_task.o(.constdata)
+    app_gap_process_handlers                 0x20006f6c   Data          56  app_task.o(.constdata)
+    .constdata                               0x20006fa4   Section        8  app_task.o(.constdata)
+    .constdata                               0x20006fac   Section        8  app_task.o(.constdata)
+    .constdata                               0x20006fb4   Section       20  app_entry_point.o(.constdata)
+    .constdata                               0x20006fc8   Section       48  app_wechat_task.o(.constdata)
+    app_wechat_process_handlers              0x20006fc8   Data          48  app_wechat_task.o(.constdata)
+    .constdata                               0x20006ff8   Section       32  app_security_task.o(.constdata)
+    app_sec_process_handlers                 0x20006ff8   Data          32  app_security_task.o(.constdata)
+    .constdata                               0x20007018   Section       39  app_easy_security.o(.constdata)
+    user_security_configuration              0x20007018   Data          39  app_easy_security.o(.constdata)
+    .constdata                               0x20007040   Section      120  mpbledemo2.o(.constdata)
+    .conststring                             0x200070b8   Section       49  mpbledemo2.o(.conststring)
+    .conststring                             0x200070ec   Section       65  vmdalayer.o(.conststring)
+    .data                                    0x20007160   Section        4  arch_system.o(.data)
+    .data                                    0x20007164   Section       80  mpbledemo2.o(.data)
+    fix_head_len                             0x20007165   Data           1  mpbledemo2.o(.data)
+    bleDemoHeadLen                           0x20007166   Data           2  mpbledemo2.o(.data)
+    .data                                    0x200071b4   Section       44  mpbledemo2.o(.data)
+    .data                                    0x200071e0   Section        2  i2c_led.o(.data)
+    pca9551_ls0                              0x200071e0   Data           1  i2c_led.o(.data)
+    pca9551_ls1                              0x200071e1   Data           1  i2c_led.o(.data)
+    .data                                    0x200071e4   Section        4  mvars.o(.data)
+    .data                                    0x200071e8   Section        4  mvars.o(.data)
     .bss                                     0x20008000   Section       16  spi_flash.o(.bss)
     .bss                                     0x20008010   Section        2  spi.o(.bss)
     .bss                                     0x20008014   Section        4  pwm.o(.bss)
@@ -2751,184 +2751,184 @@ Image Symbol Table
     mpbledemo2_main_process                  0x20005077   Thumb Code    64  mpbledemo2.o(.text)
     mpbledemo2_data_free_func                0x200050b7   Thumb Code    12  mpbledemo2.o(.text)
     mpbledemo2_data_produce_func             0x200050c3   Thumb Code   910  mpbledemo2.o(.text)
-    mpbledemo2_data_consume_func             0x20005479   Thumb Code  1616  mpbledemo2.o(.text)
-    mpbledemo2_data_error_func               0x20005ac9   Thumb Code    14  mpbledemo2.o(.text)
-    mpbledemo2_sendData                      0x20005ad7   Thumb Code    60  mpbledemo2.o(.text)
-    mpbledemo2_handleSendDataRsp             0x20005b13   Thumb Code     2  mpbledemo2.o(.text)
-    mpbledemo2_OpenLight                     0x20005b15   Thumb Code    24  mpbledemo2.o(.text)
-    mpbledemo2_CloseLight                    0x20005b2d   Thumb Code    24  mpbledemo2.o(.text)
-    mpbledemo2_readEmcPeriodOpen             0x20005b45   Thumb Code    22  mpbledemo2.o(.text)
-    mpbledemo2_readEmcPeriodClose            0x20005b5b   Thumb Code    22  mpbledemo2.o(.text)
-    mpdemo2_emcdata_read                     0x20005b71   Thumb Code    32  mpbledemo2.o(.text)
-    mpbledemo2_readEmcDataPush               0x20005b91   Thumb Code    76  mpbledemo2.o(.text)
-    mpbledemo2_readEmcBatPush                0x20005bdd   Thumb Code    76  mpbledemo2.o(.text)
-    mpbledemo2_readTimeSyncReq               0x20005c29   Thumb Code     2  mpbledemo2.o(.text)
-    mpbledemo2_readEquInfoReq                0x20005c2b   Thumb Code     2  mpbledemo2.o(.text)
-    mpbledemo2_airsync_link_setup_period_report 0x20005c2d   Thumb Code    88  mpbledemo2.o(.text)
-    IhuErrorPrint                            0x20005d71   Thumb Code    64  vmdalayer.o(.text)
-    vmda1458x_timer_set                      0x20005db1   Thumb Code     8  vmdalayer.o(.text)
-    vmda1458x_timer_clear                    0x20005db9   Thumb Code     8  vmdalayer.o(.text)
-    vmda1458x_emc_sample                     0x20005dc1   Thumb Code    38  vmdalayer.o(.text)
-    vmda1458x_mac_addr_get                   0x20005de7   Thumb Code    74  vmdalayer.o(.text)
-    ihu_emc_adc_read                         0x20005e31   Thumb Code     2  vmdalayer.o(.text)
-    ihu_get_mac_addr                         0x20005e33   Thumb Code     4  vmdalayer.o(.text)
-    ihu_get_vin_ok_status                    0x20005e37   Thumb Code    12  vmdalayer.o(.text)
-    vmda1458x_i2c_led_init                   0x20005e7d   Thumb Code   276  i2c_led.o(.text)
-    vmda1458x_led_set                        0x20005f91   Thumb Code   158  i2c_led.o(.text)
-    vmda1458x_led_blink_once_on_off          0x2000602f   Thumb Code    44  i2c_led.o(.text)
-    strncpy                                  0x20006071   Thumb Code    26  strncpy.o(.text)
-    strcpy                                   0x2000608b   Thumb Code    18  strcpy.o(.text)
-    __aeabi_fmul                             0x2000609d   Thumb Code   122  fmul.o(.text)
-    __aeabi_ui2f                             0x20006117   Thumb Code    14  ffltui.o(.text)
-    __aeabi_f2uiz                            0x20006125   Thumb Code    40  ffixui.o(.text)
-    _float_round                             0x2000614d   Thumb Code    16  fepilogue.o(.text)
-    _float_epilogue                          0x2000615d   Thumb Code   114  fepilogue.o(.text)
-    __scatterload                            0x200061d1   Thumb Code    28  init.o(.text)
-    __scatterload_rt2                        0x200061d1   Thumb Code     0  init.o(.text)
-    Long Thumb to Thumb Veneer to ke_malloc  0x200061f5   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to ke_free    0x20006201   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to __aeabi_uidivmod 0x2000620d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to memcmp     0x20006219   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to __aeabi_memcpy 0x20006225   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to nvds_get_func 0x20006231   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to rwip_prevent_sleep_get 0x2000623d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to ke_event_get 0x20006249   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to rwip_schedule 0x20006255   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to lld_sleep_check 0x20006261   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to func_check_mem 0x2000626d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to test_rxdone 0x20006279   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to ke_mem_is_empty 0x20006285   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to rwip_wakeup_delay_set 0x20006291   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to $Super$$get_rc16m_count_func 0x2000629d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to get_rc16m_count 0x200062a9   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to pll_vcocal_LUT_InitUpdate 0x200062b5   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to rf_calibration 0x200062c1   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to lld_sleep_us_2_lpcycles_func 0x200062cd   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to lld_sleep_lpcycles_2_us_func 0x200062d9   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to uart_flow_on 0x200062e5   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to srand      0x200062f1   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to set_system_clocks 0x200062fd   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to nvds_init  0x20006309   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to rwip_init  0x20006315   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to enable_rf_diag_irq 0x20006321   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to platform_reset_func 0x2000632d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to ke_state_get 0x20006339   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to __ARM_common_switch8 0x20006345   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to TASK_LLM_lld_data_ind_handler 0x20006351   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to co_buf_rx_free 0x2000635d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to ke_timer_clear 0x20006369   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to atts_send_cmd_cmp 0x20006375   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to ke_state_set 0x20006381   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to atts_mtu_exc_resp 0x2000638d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to atts_find_info_resp 0x20006399   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to atts_find_by_type_resp 0x200063a5   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to atts_read_by_type_resp 0x200063b1   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to atts_read_by_grp_type_resp 0x200063bd   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to atts_read_resp 0x200063c9   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to atts_read_blob_resp 0x200063d5   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to atts_read_mult_resp 0x200063e1   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to atts_write_no_resp 0x200063ed   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to atts_write_resp 0x200063f9   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to atts_signed_write_resp 0x20006405   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to atts_prepare_write_resp 0x20006411   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to atts_execute_write_resp 0x2000641d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to lld_con_update_ind 0x20006429   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to llc_util_dicon_procedure 0x20006435   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to lld_ch_map_ind 0x20006441   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to gapm_get_privacy_flag 0x2000644d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to gapm_set_recon_addr 0x20006459   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to co_list_pop_front 0x20006465   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to ke_task_handler_get 0x20006471   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to ke_msg_free 0x2000647d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to co_list_push_back 0x20006489   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to ke_event_clear 0x20006495   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to __aeabi_memclr4 0x200064a1   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to ke_event_callback_set 0x200064ad   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to ke_msg_alloc 0x200064b9   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to gapc_get_enc_keysize 0x200064c5   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to gapc_get_role 0x200064d1   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to ke_msg_send 0x200064dd   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to smpc_generate_rand 0x200064e9   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to smpc_tkdp_send_continue 0x200064f5   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to smpc_pdu_send 0x20006501   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to smpc_tkdp_rcp_start 0x2000650d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to smpc_pairing_end 0x20006519   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to smpc_check_max_key_size 0x20006525   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to smpc_check_key_distrib 0x20006531   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to smpc_get_key_sec_prop 0x2000653d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to smpc_is_sec_mode_reached 0x20006549   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to llc_le_con_update_cmd_handler 0x20006555   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to llm_util_get_role 0x20006561   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to lld_evt_int_extract 0x2000656d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to lld_stop_ind_handler 0x20006579   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to __aeabi_idivmod 0x20006585   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to IffCalibration 0x20006591   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to DCoffsetCalibration 0x2000659d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to ble_regs_pop 0x200065a9   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to rwip_wakeup 0x200065b5   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to rf_workaround_init 0x200065c1   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to rf_reinit  0x200065cd   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to lld_evt_start_isr 0x200065d9   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to $Super$$BLE_CSCNT_Handler 0x200065e5   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to lld_evt_rx_isr 0x200065f1   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to lld_evt_end_isr 0x200065fd   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to set_rf_cal_cap 0x20006609   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to set_gauss_modgain 0x20006615   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to ke_sleep_check 0x20006621   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to ke_timer_sleep_check 0x2000662d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to lld_sleep_enter 0x20006639   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to ble_regs_push 0x20006645   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to gapc_get_conhdl 0x20006651   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to gapc_send_disconect_ind 0x2000665d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to __aeabi_memclr 0x20006669   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to ke_task_create 0x20006675   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to attmdb_svc_set_permission 0x20006681   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to attm_svc_create_db 0x2000668d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to gapc_get_conidx 0x20006699   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to attmdb_att_set_value 0x200066a5   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to atts_write_rsp_send 0x200066b1   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to nvds_get   0x200066bd   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to ke_timer_set 0x200066c9   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to rand       0x200066d5   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to __aeabi_memcpy4 0x200066e1   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    Long Thumb to Thumb Veneer to strlen     0x200066ed   Thumb Code    12  anon$$obj.o(Veneer$$Code)
-    __0sprintf$3                             0x200066f9   Thumb Code    36  printf3.o(i.__0sprintf$3)
-    __1sprintf$3                             0x200066f9   Thumb Code     0  printf3.o(i.__0sprintf$3)
-    __2sprintf                               0x200066f9   Thumb Code     0  printf3.o(i.__0sprintf$3)
-    __scatterload_copy                       0x20006721   Thumb Code    14  handlers.o(i.__scatterload_copy)
-    __scatterload_null                       0x2000672f   Thumb Code     2  handlers.o(i.__scatterload_null)
-    __scatterload_zeroinit                   0x20006731   Thumb Code    14  handlers.o(i.__scatterload_zeroinit)
-    free                                     0x20006919   Thumb Code    80  malloc.o(i.free)
-    malloc                                   0x2000696d   Thumb Code    92  malloc.o(i.malloc)
-    LUT_CFG                                  0x200069d8   Data          22  jump_table.o(.constdata)
-    my_llc_state_handler                     0x20006c98   Data         176  llc.obj(.constdata)
-    my_llc_default_handler                   0x20006d48   Data           8  llc.obj(.constdata)
-    TASK_DESC_LLC                            0x20006d50   Data          16  llc.obj(.constdata)
-    SPI_FLASH_KNOWN_DEVICES_PARAMETERS_LIST  0x20006d60   Data          80  spi_flash.o(.constdata)
-    wechat_att_db                            0x20006db0   Data          96  wechat.o(.constdata)
-    wechat_svc                               0x20006e10   Data           2  wechat.o(.constdata)
-    wechat_write_char                        0x20006e12   Data           5  wechat.o(.constdata)
-    wechat_read_char                         0x20006e17   Data           5  wechat.o(.constdata)
-    wechat_ind_char                          0x20006e1c   Data           5  wechat.o(.constdata)
-    wechat_disabled                          0x20006e34   Data           8  wechat_task.o(.constdata)
-    wechat_idle                              0x20006e3c   Data           8  wechat_task.o(.constdata)
-    wechat_connected                         0x20006e44   Data          32  wechat_task.o(.constdata)
-    wechat_default_state                     0x20006e64   Data          16  wechat_task.o(.constdata)
-    wechat_state_handler                     0x20006e74   Data          24  wechat_task.o(.constdata)
-    wechat_default_handler                   0x20006e8c   Data           8  wechat_task.o(.constdata)
-    prf_funcs                                0x20006edc   Data          24  app.o(.constdata)
-    app_default_state                        0x20006f90   Data           8  app_task.o(.constdata)
-    app_default_handler                      0x20006f98   Data           8  app_task.o(.constdata)
-    app_process_handlers                     0x20006fa0   Data          20  app_entry_point.o(.constdata)
-    Region$$Table$$Base                      0x2000711c   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x2000714c   Number         0  anon$$obj.o(Region$$Table)
-    startup_sleep_delay                      0x2000714c   Data           4  arch_system.o(.data)
-    mpdemo2_emcPeriodInsMeasureFlag          0x20007150   Data           1  mpbledemo2.o(.data)
-    challeange                               0x20007154   Data           4  mpbledemo2.o(.data)
-    mpbledemo2_cmd_handler                   0x20007158   Data          72  mpbledemo2.o(.data)
-    mpbledemo2_data_handler                  0x200071a0   Data          44  mpbledemo2.o(.data)
-    __microlib_freelist                      0x200071d0   Data           4  mvars.o(.data)
-    __microlib_freelist_initialised          0x200071d4   Data           4  mvars.o(.data)
+    mpbledemo2_data_consume_func             0x20005479   Thumb Code  1624  mpbledemo2.o(.text)
+    mpbledemo2_data_error_func               0x20005ad1   Thumb Code    14  mpbledemo2.o(.text)
+    mpbledemo2_sendData                      0x20005adf   Thumb Code    60  mpbledemo2.o(.text)
+    mpbledemo2_handleSendDataRsp             0x20005b1b   Thumb Code     2  mpbledemo2.o(.text)
+    mpbledemo2_OpenLight                     0x20005b1d   Thumb Code    24  mpbledemo2.o(.text)
+    mpbledemo2_CloseLight                    0x20005b35   Thumb Code    24  mpbledemo2.o(.text)
+    mpbledemo2_readEmcPeriodOpen             0x20005b4d   Thumb Code    22  mpbledemo2.o(.text)
+    mpbledemo2_readEmcPeriodClose            0x20005b63   Thumb Code    22  mpbledemo2.o(.text)
+    mpdemo2_emcdata_read                     0x20005b79   Thumb Code    32  mpbledemo2.o(.text)
+    mpbledemo2_readEmcDataPush               0x20005b99   Thumb Code    76  mpbledemo2.o(.text)
+    mpbledemo2_readEmcBatPush                0x20005be5   Thumb Code    76  mpbledemo2.o(.text)
+    mpbledemo2_readTimeSyncReq               0x20005c31   Thumb Code     2  mpbledemo2.o(.text)
+    mpbledemo2_readEquInfoReq                0x20005c33   Thumb Code     2  mpbledemo2.o(.text)
+    mpbledemo2_airsync_link_setup_period_report 0x20005c35   Thumb Code    98  mpbledemo2.o(.text)
+    IhuErrorPrint                            0x20005d85   Thumb Code    64  vmdalayer.o(.text)
+    vmda1458x_timer_set                      0x20005dc5   Thumb Code     8  vmdalayer.o(.text)
+    vmda1458x_timer_clear                    0x20005dcd   Thumb Code     8  vmdalayer.o(.text)
+    vmda1458x_emc_sample                     0x20005dd5   Thumb Code    38  vmdalayer.o(.text)
+    vmda1458x_mac_addr_get                   0x20005dfb   Thumb Code    74  vmdalayer.o(.text)
+    ihu_emc_adc_read                         0x20005e45   Thumb Code     2  vmdalayer.o(.text)
+    ihu_get_mac_addr                         0x20005e47   Thumb Code     4  vmdalayer.o(.text)
+    ihu_get_vin_ok_status                    0x20005e4b   Thumb Code    12  vmdalayer.o(.text)
+    vmda1458x_i2c_led_init                   0x20005e91   Thumb Code   276  i2c_led.o(.text)
+    vmda1458x_led_set                        0x20005fa5   Thumb Code   158  i2c_led.o(.text)
+    vmda1458x_led_blink_once_on_off          0x20006043   Thumb Code    44  i2c_led.o(.text)
+    strncpy                                  0x20006085   Thumb Code    26  strncpy.o(.text)
+    strcpy                                   0x2000609f   Thumb Code    18  strcpy.o(.text)
+    __aeabi_fmul                             0x200060b1   Thumb Code   122  fmul.o(.text)
+    __aeabi_ui2f                             0x2000612b   Thumb Code    14  ffltui.o(.text)
+    __aeabi_f2uiz                            0x20006139   Thumb Code    40  ffixui.o(.text)
+    _float_round                             0x20006161   Thumb Code    16  fepilogue.o(.text)
+    _float_epilogue                          0x20006171   Thumb Code   114  fepilogue.o(.text)
+    __scatterload                            0x200061e5   Thumb Code    28  init.o(.text)
+    __scatterload_rt2                        0x200061e5   Thumb Code     0  init.o(.text)
+    Long Thumb to Thumb Veneer to ke_malloc  0x20006209   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to ke_free    0x20006215   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to __aeabi_uidivmod 0x20006221   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to memcmp     0x2000622d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to __aeabi_memcpy 0x20006239   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to nvds_get_func 0x20006245   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to rwip_prevent_sleep_get 0x20006251   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to ke_event_get 0x2000625d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to rwip_schedule 0x20006269   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to lld_sleep_check 0x20006275   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to func_check_mem 0x20006281   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to test_rxdone 0x2000628d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to ke_mem_is_empty 0x20006299   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to rwip_wakeup_delay_set 0x200062a5   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to $Super$$get_rc16m_count_func 0x200062b1   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to get_rc16m_count 0x200062bd   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to pll_vcocal_LUT_InitUpdate 0x200062c9   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to rf_calibration 0x200062d5   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to lld_sleep_us_2_lpcycles_func 0x200062e1   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to lld_sleep_lpcycles_2_us_func 0x200062ed   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to uart_flow_on 0x200062f9   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to srand      0x20006305   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to set_system_clocks 0x20006311   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to nvds_init  0x2000631d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to rwip_init  0x20006329   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to enable_rf_diag_irq 0x20006335   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to platform_reset_func 0x20006341   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to ke_state_get 0x2000634d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to __ARM_common_switch8 0x20006359   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to TASK_LLM_lld_data_ind_handler 0x20006365   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to co_buf_rx_free 0x20006371   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to ke_timer_clear 0x2000637d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to atts_send_cmd_cmp 0x20006389   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to ke_state_set 0x20006395   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to atts_mtu_exc_resp 0x200063a1   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to atts_find_info_resp 0x200063ad   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to atts_find_by_type_resp 0x200063b9   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to atts_read_by_type_resp 0x200063c5   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to atts_read_by_grp_type_resp 0x200063d1   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to atts_read_resp 0x200063dd   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to atts_read_blob_resp 0x200063e9   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to atts_read_mult_resp 0x200063f5   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to atts_write_no_resp 0x20006401   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to atts_write_resp 0x2000640d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to atts_signed_write_resp 0x20006419   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to atts_prepare_write_resp 0x20006425   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to atts_execute_write_resp 0x20006431   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to lld_con_update_ind 0x2000643d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to llc_util_dicon_procedure 0x20006449   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to lld_ch_map_ind 0x20006455   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to gapm_get_privacy_flag 0x20006461   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to gapm_set_recon_addr 0x2000646d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to co_list_pop_front 0x20006479   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to ke_task_handler_get 0x20006485   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to ke_msg_free 0x20006491   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to co_list_push_back 0x2000649d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to ke_event_clear 0x200064a9   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to __aeabi_memclr4 0x200064b5   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to ke_event_callback_set 0x200064c1   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to ke_msg_alloc 0x200064cd   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to gapc_get_enc_keysize 0x200064d9   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to gapc_get_role 0x200064e5   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to ke_msg_send 0x200064f1   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to smpc_generate_rand 0x200064fd   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to smpc_tkdp_send_continue 0x20006509   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to smpc_pdu_send 0x20006515   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to smpc_tkdp_rcp_start 0x20006521   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to smpc_pairing_end 0x2000652d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to smpc_check_max_key_size 0x20006539   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to smpc_check_key_distrib 0x20006545   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to smpc_get_key_sec_prop 0x20006551   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to smpc_is_sec_mode_reached 0x2000655d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to llc_le_con_update_cmd_handler 0x20006569   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to llm_util_get_role 0x20006575   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to lld_evt_int_extract 0x20006581   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to lld_stop_ind_handler 0x2000658d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to __aeabi_idivmod 0x20006599   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to IffCalibration 0x200065a5   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to DCoffsetCalibration 0x200065b1   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to ble_regs_pop 0x200065bd   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to rwip_wakeup 0x200065c9   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to rf_workaround_init 0x200065d5   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to rf_reinit  0x200065e1   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to lld_evt_start_isr 0x200065ed   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to $Super$$BLE_CSCNT_Handler 0x200065f9   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to lld_evt_rx_isr 0x20006605   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to lld_evt_end_isr 0x20006611   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to set_rf_cal_cap 0x2000661d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to set_gauss_modgain 0x20006629   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to ke_sleep_check 0x20006635   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to ke_timer_sleep_check 0x20006641   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to lld_sleep_enter 0x2000664d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to ble_regs_push 0x20006659   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to gapc_get_conhdl 0x20006665   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to gapc_send_disconect_ind 0x20006671   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to __aeabi_memclr 0x2000667d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to ke_task_create 0x20006689   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to attmdb_svc_set_permission 0x20006695   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to attm_svc_create_db 0x200066a1   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to gapc_get_conidx 0x200066ad   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to attmdb_att_set_value 0x200066b9   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to atts_write_rsp_send 0x200066c5   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to nvds_get   0x200066d1   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to ke_timer_set 0x200066dd   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to rand       0x200066e9   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to __aeabi_memcpy4 0x200066f5   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to strlen     0x20006701   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    __0sprintf$3                             0x2000670d   Thumb Code    36  printf3.o(i.__0sprintf$3)
+    __1sprintf$3                             0x2000670d   Thumb Code     0  printf3.o(i.__0sprintf$3)
+    __2sprintf                               0x2000670d   Thumb Code     0  printf3.o(i.__0sprintf$3)
+    __scatterload_copy                       0x20006735   Thumb Code    14  handlers.o(i.__scatterload_copy)
+    __scatterload_null                       0x20006743   Thumb Code     2  handlers.o(i.__scatterload_null)
+    __scatterload_zeroinit                   0x20006745   Thumb Code    14  handlers.o(i.__scatterload_zeroinit)
+    free                                     0x2000692d   Thumb Code    80  malloc.o(i.free)
+    malloc                                   0x20006981   Thumb Code    92  malloc.o(i.malloc)
+    LUT_CFG                                  0x200069ec   Data          22  jump_table.o(.constdata)
+    my_llc_state_handler                     0x20006cac   Data         176  llc.obj(.constdata)
+    my_llc_default_handler                   0x20006d5c   Data           8  llc.obj(.constdata)
+    TASK_DESC_LLC                            0x20006d64   Data          16  llc.obj(.constdata)
+    SPI_FLASH_KNOWN_DEVICES_PARAMETERS_LIST  0x20006d74   Data          80  spi_flash.o(.constdata)
+    wechat_att_db                            0x20006dc4   Data          96  wechat.o(.constdata)
+    wechat_svc                               0x20006e24   Data           2  wechat.o(.constdata)
+    wechat_write_char                        0x20006e26   Data           5  wechat.o(.constdata)
+    wechat_read_char                         0x20006e2b   Data           5  wechat.o(.constdata)
+    wechat_ind_char                          0x20006e30   Data           5  wechat.o(.constdata)
+    wechat_disabled                          0x20006e48   Data           8  wechat_task.o(.constdata)
+    wechat_idle                              0x20006e50   Data           8  wechat_task.o(.constdata)
+    wechat_connected                         0x20006e58   Data          32  wechat_task.o(.constdata)
+    wechat_default_state                     0x20006e78   Data          16  wechat_task.o(.constdata)
+    wechat_state_handler                     0x20006e88   Data          24  wechat_task.o(.constdata)
+    wechat_default_handler                   0x20006ea0   Data           8  wechat_task.o(.constdata)
+    prf_funcs                                0x20006ef0   Data          24  app.o(.constdata)
+    app_default_state                        0x20006fa4   Data           8  app_task.o(.constdata)
+    app_default_handler                      0x20006fac   Data           8  app_task.o(.constdata)
+    app_process_handlers                     0x20006fb4   Data          20  app_entry_point.o(.constdata)
+    Region$$Table$$Base                      0x20007130   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x20007160   Number         0  anon$$obj.o(Region$$Table)
+    startup_sleep_delay                      0x20007160   Data           4  arch_system.o(.data)
+    mpdemo2_emcPeriodInsMeasureFlag          0x20007164   Data           1  mpbledemo2.o(.data)
+    challeange                               0x20007168   Data           4  mpbledemo2.o(.data)
+    mpbledemo2_cmd_handler                   0x2000716c   Data          72  mpbledemo2.o(.data)
+    mpbledemo2_data_handler                  0x200071b4   Data          44  mpbledemo2.o(.data)
+    __microlib_freelist                      0x200071e4   Data           4  mvars.o(.data)
+    __microlib_freelist_initialised          0x200071e8   Data           4  mvars.o(.data)
     spi_flash_device_index                   0x20008000   Data           2  spi_flash.o(.bss)
     spi_flash_detected_device                0x20008004   Data           4  spi_flash.o(.bss)
     spi_flash_size                           0x20008008   Data           4  spi_flash.o(.bss)
@@ -3004,9 +3004,9 @@ Memory Map of the image
 
 
 
-  Load Region LR_IROM5 (Base: 0x20000440, Size: 0x00006d98, Max: 0x000093c0, ABSOLUTE)
+  Load Region LR_IROM5 (Base: 0x20000440, Size: 0x00006dac, Max: 0x000093c0, ABSOLUTE)
 
-    Execution Region ER_IROM5 (Base: 0x20000440, Size: 0x00006d98, Max: 0x00007ac0, ABSOLUTE)
+    Execution Region ER_IROM5 (Base: 0x20000440, Size: 0x00006dac, Max: 0x00007ac0, ABSOLUTE)
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -3075,181 +3075,181 @@ Memory Map of the image
     0x2000427c   0x000000d8   Code   RO         3085    .text               crc32.o
     0x20004354   0x000002d0   Code   RO         3097    .text               epb.o
     0x20004624   0x00000850   Code   RO         3185    .text               epb_mmbp.o
-    0x20004e74   0x00000efc   Code   RO         3257    .text               mpbledemo2.o
-    0x20005d70   0x0000010c   Code   RO         3373    .text               vmdalayer.o
-    0x20005e7c   0x000001f4   Code   RO         3421    .text               i2c_led.o
-    0x20006070   0x0000001a   Code   RO         3503    .text               mc_p.l(strncpy.o)
-    0x2000608a   0x00000012   Code   RO         3505    .text               mc_p.l(strcpy.o)
-    0x2000609c   0x0000007a   Code   RO         3798    .text               mf_p.l(fmul.o)
-    0x20006116   0x0000000e   Code   RO         3802    .text               mf_p.l(ffltui.o)
-    0x20006124   0x00000028   Code   RO         3804    .text               mf_p.l(ffixui.o)
-    0x2000614c   0x00000082   Code   RO         3866    .text               mf_p.l(fepilogue.o)
-    0x200061ce   0x00000002   PAD
-    0x200061d0   0x00000024   Code   RO         3880    .text               mc_p.l(init.o)
-    0x200061f4   0x0000000c   Ven    RO         3896    Veneer$$Code        anon$$obj.o
-    0x20006200   0x0000000c   Ven    RO         3897    Veneer$$Code        anon$$obj.o
-    0x2000620c   0x0000000c   Ven    RO         3898    Veneer$$Code        anon$$obj.o
-    0x20006218   0x0000000c   Ven    RO         3899    Veneer$$Code        anon$$obj.o
-    0x20006224   0x0000000c   Ven    RO         3900    Veneer$$Code        anon$$obj.o
-    0x20006230   0x0000000c   Ven    RO         3901    Veneer$$Code        anon$$obj.o
-    0x2000623c   0x0000000c   Ven    RO         3902    Veneer$$Code        anon$$obj.o
-    0x20006248   0x0000000c   Ven    RO         3903    Veneer$$Code        anon$$obj.o
-    0x20006254   0x0000000c   Ven    RO         3904    Veneer$$Code        anon$$obj.o
-    0x20006260   0x0000000c   Ven    RO         3905    Veneer$$Code        anon$$obj.o
-    0x2000626c   0x0000000c   Ven    RO         3906    Veneer$$Code        anon$$obj.o
-    0x20006278   0x0000000c   Ven    RO         3907    Veneer$$Code        anon$$obj.o
-    0x20006284   0x0000000c   Ven    RO         3908    Veneer$$Code        anon$$obj.o
-    0x20006290   0x0000000c   Ven    RO         3909    Veneer$$Code        anon$$obj.o
-    0x2000629c   0x0000000c   Ven    RO         3910    Veneer$$Code        anon$$obj.o
-    0x200062a8   0x0000000c   Ven    RO         3911    Veneer$$Code        anon$$obj.o
-    0x200062b4   0x0000000c   Ven    RO         3912    Veneer$$Code        anon$$obj.o
-    0x200062c0   0x0000000c   Ven    RO         3913    Veneer$$Code        anon$$obj.o
-    0x200062cc   0x0000000c   Ven    RO         3914    Veneer$$Code        anon$$obj.o
-    0x200062d8   0x0000000c   Ven    RO         3915    Veneer$$Code        anon$$obj.o
-    0x200062e4   0x0000000c   Ven    RO         3916    Veneer$$Code        anon$$obj.o
-    0x200062f0   0x0000000c   Ven    RO         3917    Veneer$$Code        anon$$obj.o
-    0x200062fc   0x0000000c   Ven    RO         3918    Veneer$$Code        anon$$obj.o
-    0x20006308   0x0000000c   Ven    RO         3919    Veneer$$Code        anon$$obj.o
-    0x20006314   0x0000000c   Ven    RO         3920    Veneer$$Code        anon$$obj.o
-    0x20006320   0x0000000c   Ven    RO         3921    Veneer$$Code        anon$$obj.o
-    0x2000632c   0x0000000c   Ven    RO         3922    Veneer$$Code        anon$$obj.o
-    0x20006338   0x0000000c   Ven    RO         3923    Veneer$$Code        anon$$obj.o
-    0x20006344   0x0000000c   Ven    RO         3924    Veneer$$Code        anon$$obj.o
-    0x20006350   0x0000000c   Ven    RO         3925    Veneer$$Code        anon$$obj.o
-    0x2000635c   0x0000000c   Ven    RO         3926    Veneer$$Code        anon$$obj.o
-    0x20006368   0x0000000c   Ven    RO         3927    Veneer$$Code        anon$$obj.o
-    0x20006374   0x0000000c   Ven    RO         3928    Veneer$$Code        anon$$obj.o
-    0x20006380   0x0000000c   Ven    RO         3929    Veneer$$Code        anon$$obj.o
-    0x2000638c   0x0000000c   Ven    RO         3930    Veneer$$Code        anon$$obj.o
-    0x20006398   0x0000000c   Ven    RO         3931    Veneer$$Code        anon$$obj.o
-    0x200063a4   0x0000000c   Ven    RO         3932    Veneer$$Code        anon$$obj.o
-    0x200063b0   0x0000000c   Ven    RO         3933    Veneer$$Code        anon$$obj.o
-    0x200063bc   0x0000000c   Ven    RO         3934    Veneer$$Code        anon$$obj.o
-    0x200063c8   0x0000000c   Ven    RO         3935    Veneer$$Code        anon$$obj.o
-    0x200063d4   0x0000000c   Ven    RO         3936    Veneer$$Code        anon$$obj.o
-    0x200063e0   0x0000000c   Ven    RO         3937    Veneer$$Code        anon$$obj.o
-    0x200063ec   0x0000000c   Ven    RO         3938    Veneer$$Code        anon$$obj.o
-    0x200063f8   0x0000000c   Ven    RO         3939    Veneer$$Code        anon$$obj.o
-    0x20006404   0x0000000c   Ven    RO         3940    Veneer$$Code        anon$$obj.o
-    0x20006410   0x0000000c   Ven    RO         3941    Veneer$$Code        anon$$obj.o
-    0x2000641c   0x0000000c   Ven    RO         3942    Veneer$$Code        anon$$obj.o
-    0x20006428   0x0000000c   Ven    RO         3943    Veneer$$Code        anon$$obj.o
-    0x20006434   0x0000000c   Ven    RO         3944    Veneer$$Code        anon$$obj.o
-    0x20006440   0x0000000c   Ven    RO         3945    Veneer$$Code        anon$$obj.o
-    0x2000644c   0x0000000c   Ven    RO         3946    Veneer$$Code        anon$$obj.o
-    0x20006458   0x0000000c   Ven    RO         3947    Veneer$$Code        anon$$obj.o
-    0x20006464   0x0000000c   Ven    RO         3948    Veneer$$Code        anon$$obj.o
-    0x20006470   0x0000000c   Ven    RO         3949    Veneer$$Code        anon$$obj.o
-    0x2000647c   0x0000000c   Ven    RO         3950    Veneer$$Code        anon$$obj.o
-    0x20006488   0x0000000c   Ven    RO         3951    Veneer$$Code        anon$$obj.o
-    0x20006494   0x0000000c   Ven    RO         3952    Veneer$$Code        anon$$obj.o
-    0x200064a0   0x0000000c   Ven    RO         3953    Veneer$$Code        anon$$obj.o
-    0x200064ac   0x0000000c   Ven    RO         3954    Veneer$$Code        anon$$obj.o
-    0x200064b8   0x0000000c   Ven    RO         3955    Veneer$$Code        anon$$obj.o
-    0x200064c4   0x0000000c   Ven    RO         3956    Veneer$$Code        anon$$obj.o
-    0x200064d0   0x0000000c   Ven    RO         3957    Veneer$$Code        anon$$obj.o
-    0x200064dc   0x0000000c   Ven    RO         3958    Veneer$$Code        anon$$obj.o
-    0x200064e8   0x0000000c   Ven    RO         3959    Veneer$$Code        anon$$obj.o
-    0x200064f4   0x0000000c   Ven    RO         3960    Veneer$$Code        anon$$obj.o
-    0x20006500   0x0000000c   Ven    RO         3961    Veneer$$Code        anon$$obj.o
-    0x2000650c   0x0000000c   Ven    RO         3962    Veneer$$Code        anon$$obj.o
-    0x20006518   0x0000000c   Ven    RO         3963    Veneer$$Code        anon$$obj.o
-    0x20006524   0x0000000c   Ven    RO         3964    Veneer$$Code        anon$$obj.o
-    0x20006530   0x0000000c   Ven    RO         3965    Veneer$$Code        anon$$obj.o
-    0x2000653c   0x0000000c   Ven    RO         3966    Veneer$$Code        anon$$obj.o
-    0x20006548   0x0000000c   Ven    RO         3967    Veneer$$Code        anon$$obj.o
-    0x20006554   0x0000000c   Ven    RO         3968    Veneer$$Code        anon$$obj.o
-    0x20006560   0x0000000c   Ven    RO         3969    Veneer$$Code        anon$$obj.o
-    0x2000656c   0x0000000c   Ven    RO         3970    Veneer$$Code        anon$$obj.o
-    0x20006578   0x0000000c   Ven    RO         3971    Veneer$$Code        anon$$obj.o
-    0x20006584   0x0000000c   Ven    RO         3972    Veneer$$Code        anon$$obj.o
-    0x20006590   0x0000000c   Ven    RO         3973    Veneer$$Code        anon$$obj.o
-    0x2000659c   0x0000000c   Ven    RO         3974    Veneer$$Code        anon$$obj.o
-    0x200065a8   0x0000000c   Ven    RO         3975    Veneer$$Code        anon$$obj.o
-    0x200065b4   0x0000000c   Ven    RO         3976    Veneer$$Code        anon$$obj.o
-    0x200065c0   0x0000000c   Ven    RO         3977    Veneer$$Code        anon$$obj.o
-    0x200065cc   0x0000000c   Ven    RO         3978    Veneer$$Code        anon$$obj.o
-    0x200065d8   0x0000000c   Ven    RO         3979    Veneer$$Code        anon$$obj.o
-    0x200065e4   0x0000000c   Ven    RO         3980    Veneer$$Code        anon$$obj.o
-    0x200065f0   0x0000000c   Ven    RO         3981    Veneer$$Code        anon$$obj.o
-    0x200065fc   0x0000000c   Ven    RO         3982    Veneer$$Code        anon$$obj.o
-    0x20006608   0x0000000c   Ven    RO         3983    Veneer$$Code        anon$$obj.o
-    0x20006614   0x0000000c   Ven    RO         3984    Veneer$$Code        anon$$obj.o
-    0x20006620   0x0000000c   Ven    RO         3985    Veneer$$Code        anon$$obj.o
-    0x2000662c   0x0000000c   Ven    RO         3986    Veneer$$Code        anon$$obj.o
-    0x20006638   0x0000000c   Ven    RO         3987    Veneer$$Code        anon$$obj.o
-    0x20006644   0x0000000c   Ven    RO         3988    Veneer$$Code        anon$$obj.o
-    0x20006650   0x0000000c   Ven    RO         3989    Veneer$$Code        anon$$obj.o
-    0x2000665c   0x0000000c   Ven    RO         3990    Veneer$$Code        anon$$obj.o
-    0x20006668   0x0000000c   Ven    RO         3991    Veneer$$Code        anon$$obj.o
-    0x20006674   0x0000000c   Ven    RO         3992    Veneer$$Code        anon$$obj.o
-    0x20006680   0x0000000c   Ven    RO         3993    Veneer$$Code        anon$$obj.o
-    0x2000668c   0x0000000c   Ven    RO         3994    Veneer$$Code        anon$$obj.o
-    0x20006698   0x0000000c   Ven    RO         3995    Veneer$$Code        anon$$obj.o
-    0x200066a4   0x0000000c   Ven    RO         3996    Veneer$$Code        anon$$obj.o
-    0x200066b0   0x0000000c   Ven    RO         3997    Veneer$$Code        anon$$obj.o
-    0x200066bc   0x0000000c   Ven    RO         3998    Veneer$$Code        anon$$obj.o
-    0x200066c8   0x0000000c   Ven    RO         3999    Veneer$$Code        anon$$obj.o
-    0x200066d4   0x0000000c   Ven    RO         4000    Veneer$$Code        anon$$obj.o
-    0x200066e0   0x0000000c   Ven    RO         4001    Veneer$$Code        anon$$obj.o
-    0x200066ec   0x0000000c   Ven    RO         4002    Veneer$$Code        anon$$obj.o
-    0x200066f8   0x00000028   Code   RO         3600    i.__0sprintf$3      mc_p.l(printf3.o)
-    0x20006720   0x0000000e   Code   RO         3890    i.__scatterload_copy  mc_p.l(handlers.o)
-    0x2000672e   0x00000002   Code   RO         3891    i.__scatterload_null  mc_p.l(handlers.o)
-    0x20006730   0x0000000e   Code   RO         3892    i.__scatterload_zeroinit  mc_p.l(handlers.o)
-    0x2000673e   0x00000002   PAD
-    0x20006740   0x000001cc   Code   RO         3605    i._printf_core      mc_p.l(printf3.o)
-    0x2000690c   0x0000000a   Code   RO         3607    i._sputc            mc_p.l(printf3.o)
-    0x20006916   0x00000002   PAD
-    0x20006918   0x00000054   Code   RO         3770    i.free              mc_p.l(malloc.o)
-    0x2000696c   0x0000006c   Code   RO         3771    i.malloc            mc_p.l(malloc.o)
-    0x200069d8   0x00000016   Data   RO          471    .constdata          jump_table.o
-    0x200069ee   0x00000002   PAD
-    0x200069f0   0x00000130   Data   RO          753    .constdata          arch_patch.o
-    0x20006b20   0x00000008   Data   RO          754    .constdata          arch_patch.o
-    0x20006b28   0x00000030   Data   RO          755    .constdata          arch_patch.o
-    0x20006b58   0x00000130   Data   RO          834    .constdata          llc.obj
-    0x20006c88   0x00000010   Data   RO          835    .constdata          llc.obj
-    0x20006c98   0x000000b0   Data   RO          836    .constdata          llc.obj
-    0x20006d48   0x00000008   Data   RO          837    .constdata          llc.obj
-    0x20006d50   0x00000010   Data   RO          838    .constdata          llc.obj
-    0x20006d60   0x00000050   Data   RO         1075    .constdata          spi_flash.o
-    0x20006db0   0x00000060   Data   RO         2397    .constdata          wechat.o
-    0x20006e10   0x00000002   Data   RO         2398    .constdata          wechat.o
-    0x20006e12   0x00000005   Data   RO         2399    .constdata          wechat.o
-    0x20006e17   0x00000005   Data   RO         2400    .constdata          wechat.o
-    0x20006e1c   0x00000005   Data   RO         2401    .constdata          wechat.o
-    0x20006e21   0x00000003   PAD
-    0x20006e24   0x00000010   Data   RO         2402    .constdata          wechat.o
-    0x20006e34   0x00000008   Data   RO         2425    .constdata          wechat_task.o
-    0x20006e3c   0x00000008   Data   RO         2426    .constdata          wechat_task.o
-    0x20006e44   0x00000020   Data   RO         2427    .constdata          wechat_task.o
-    0x20006e64   0x00000010   Data   RO         2428    .constdata          wechat_task.o
-    0x20006e74   0x00000018   Data   RO         2429    .constdata          wechat_task.o
-    0x20006e8c   0x00000008   Data   RO         2430    .constdata          wechat_task.o
-    0x20006e94   0x000000c2   Data   RO         2518    .constdata          app.o
-    0x20006f56   0x00000002   PAD
-    0x20006f58   0x00000038   Data   RO         2665    .constdata          app_task.o
-    0x20006f90   0x00000008   Data   RO         2666    .constdata          app_task.o
-    0x20006f98   0x00000008   Data   RO         2667    .constdata          app_task.o
-    0x20006fa0   0x00000014   Data   RO         2695    .constdata          app_entry_point.o
-    0x20006fb4   0x00000030   Data   RO         2898    .constdata          app_wechat_task.o
-    0x20006fe4   0x00000020   Data   RO         2931    .constdata          app_security_task.o
-    0x20007004   0x00000027   Data   RO         2953    .constdata          app_easy_security.o
-    0x2000702b   0x00000001   PAD
-    0x2000702c   0x00000078   Data   RO         3262    .constdata          mpbledemo2.o
-    0x200070a4   0x00000031   Data   RO         3263    .conststring        mpbledemo2.o
-    0x200070d5   0x00000003   PAD
-    0x200070d8   0x00000041   Data   RO         3385    .conststring        vmdalayer.o
-    0x20007119   0x00000003   PAD
-    0x2000711c   0x00000030   Data   RO         3888    Region$$Table       anon$$obj.o
-    0x2000714c   0x00000004   Data   RW          620    .data               arch_system.o
-    0x20007150   0x00000050   Data   RW         3264    .data               mpbledemo2.o
-    0x200071a0   0x0000002c   Data   RW         3265    .data               mpbledemo2.o
-    0x200071cc   0x00000002   Data   RW         3431    .data               i2c_led.o
-    0x200071ce   0x00000002   PAD
-    0x200071d0   0x00000004   Data   RW         3857    .data               mc_p.l(mvars.o)
-    0x200071d4   0x00000004   Data   RW         3858    .data               mc_p.l(mvars.o)
+    0x20004e74   0x00000f10   Code   RO         3257    .text               mpbledemo2.o
+    0x20005d84   0x0000010c   Code   RO         3373    .text               vmdalayer.o
+    0x20005e90   0x000001f4   Code   RO         3421    .text               i2c_led.o
+    0x20006084   0x0000001a   Code   RO         3503    .text               mc_p.l(strncpy.o)
+    0x2000609e   0x00000012   Code   RO         3505    .text               mc_p.l(strcpy.o)
+    0x200060b0   0x0000007a   Code   RO         3798    .text               mf_p.l(fmul.o)
+    0x2000612a   0x0000000e   Code   RO         3802    .text               mf_p.l(ffltui.o)
+    0x20006138   0x00000028   Code   RO         3804    .text               mf_p.l(ffixui.o)
+    0x20006160   0x00000082   Code   RO         3866    .text               mf_p.l(fepilogue.o)
+    0x200061e2   0x00000002   PAD
+    0x200061e4   0x00000024   Code   RO         3880    .text               mc_p.l(init.o)
+    0x20006208   0x0000000c   Ven    RO         3896    Veneer$$Code        anon$$obj.o
+    0x20006214   0x0000000c   Ven    RO         3897    Veneer$$Code        anon$$obj.o
+    0x20006220   0x0000000c   Ven    RO         3898    Veneer$$Code        anon$$obj.o
+    0x2000622c   0x0000000c   Ven    RO         3899    Veneer$$Code        anon$$obj.o
+    0x20006238   0x0000000c   Ven    RO         3900    Veneer$$Code        anon$$obj.o
+    0x20006244   0x0000000c   Ven    RO         3901    Veneer$$Code        anon$$obj.o
+    0x20006250   0x0000000c   Ven    RO         3902    Veneer$$Code        anon$$obj.o
+    0x2000625c   0x0000000c   Ven    RO         3903    Veneer$$Code        anon$$obj.o
+    0x20006268   0x0000000c   Ven    RO         3904    Veneer$$Code        anon$$obj.o
+    0x20006274   0x0000000c   Ven    RO         3905    Veneer$$Code        anon$$obj.o
+    0x20006280   0x0000000c   Ven    RO         3906    Veneer$$Code        anon$$obj.o
+    0x2000628c   0x0000000c   Ven    RO         3907    Veneer$$Code        anon$$obj.o
+    0x20006298   0x0000000c   Ven    RO         3908    Veneer$$Code        anon$$obj.o
+    0x200062a4   0x0000000c   Ven    RO         3909    Veneer$$Code        anon$$obj.o
+    0x200062b0   0x0000000c   Ven    RO         3910    Veneer$$Code        anon$$obj.o
+    0x200062bc   0x0000000c   Ven    RO         3911    Veneer$$Code        anon$$obj.o
+    0x200062c8   0x0000000c   Ven    RO         3912    Veneer$$Code        anon$$obj.o
+    0x200062d4   0x0000000c   Ven    RO         3913    Veneer$$Code        anon$$obj.o
+    0x200062e0   0x0000000c   Ven    RO         3914    Veneer$$Code        anon$$obj.o
+    0x200062ec   0x0000000c   Ven    RO         3915    Veneer$$Code        anon$$obj.o
+    0x200062f8   0x0000000c   Ven    RO         3916    Veneer$$Code        anon$$obj.o
+    0x20006304   0x0000000c   Ven    RO         3917    Veneer$$Code        anon$$obj.o
+    0x20006310   0x0000000c   Ven    RO         3918    Veneer$$Code        anon$$obj.o
+    0x2000631c   0x0000000c   Ven    RO         3919    Veneer$$Code        anon$$obj.o
+    0x20006328   0x0000000c   Ven    RO         3920    Veneer$$Code        anon$$obj.o
+    0x20006334   0x0000000c   Ven    RO         3921    Veneer$$Code        anon$$obj.o
+    0x20006340   0x0000000c   Ven    RO         3922    Veneer$$Code        anon$$obj.o
+    0x2000634c   0x0000000c   Ven    RO         3923    Veneer$$Code        anon$$obj.o
+    0x20006358   0x0000000c   Ven    RO         3924    Veneer$$Code        anon$$obj.o
+    0x20006364   0x0000000c   Ven    RO         3925    Veneer$$Code        anon$$obj.o
+    0x20006370   0x0000000c   Ven    RO         3926    Veneer$$Code        anon$$obj.o
+    0x2000637c   0x0000000c   Ven    RO         3927    Veneer$$Code        anon$$obj.o
+    0x20006388   0x0000000c   Ven    RO         3928    Veneer$$Code        anon$$obj.o
+    0x20006394   0x0000000c   Ven    RO         3929    Veneer$$Code        anon$$obj.o
+    0x200063a0   0x0000000c   Ven    RO         3930    Veneer$$Code        anon$$obj.o
+    0x200063ac   0x0000000c   Ven    RO         3931    Veneer$$Code        anon$$obj.o
+    0x200063b8   0x0000000c   Ven    RO         3932    Veneer$$Code        anon$$obj.o
+    0x200063c4   0x0000000c   Ven    RO         3933    Veneer$$Code        anon$$obj.o
+    0x200063d0   0x0000000c   Ven    RO         3934    Veneer$$Code        anon$$obj.o
+    0x200063dc   0x0000000c   Ven    RO         3935    Veneer$$Code        anon$$obj.o
+    0x200063e8   0x0000000c   Ven    RO         3936    Veneer$$Code        anon$$obj.o
+    0x200063f4   0x0000000c   Ven    RO         3937    Veneer$$Code        anon$$obj.o
+    0x20006400   0x0000000c   Ven    RO         3938    Veneer$$Code        anon$$obj.o
+    0x2000640c   0x0000000c   Ven    RO         3939    Veneer$$Code        anon$$obj.o
+    0x20006418   0x0000000c   Ven    RO         3940    Veneer$$Code        anon$$obj.o
+    0x20006424   0x0000000c   Ven    RO         3941    Veneer$$Code        anon$$obj.o
+    0x20006430   0x0000000c   Ven    RO         3942    Veneer$$Code        anon$$obj.o
+    0x2000643c   0x0000000c   Ven    RO         3943    Veneer$$Code        anon$$obj.o
+    0x20006448   0x0000000c   Ven    RO         3944    Veneer$$Code        anon$$obj.o
+    0x20006454   0x0000000c   Ven    RO         3945    Veneer$$Code        anon$$obj.o
+    0x20006460   0x0000000c   Ven    RO         3946    Veneer$$Code        anon$$obj.o
+    0x2000646c   0x0000000c   Ven    RO         3947    Veneer$$Code        anon$$obj.o
+    0x20006478   0x0000000c   Ven    RO         3948    Veneer$$Code        anon$$obj.o
+    0x20006484   0x0000000c   Ven    RO         3949    Veneer$$Code        anon$$obj.o
+    0x20006490   0x0000000c   Ven    RO         3950    Veneer$$Code        anon$$obj.o
+    0x2000649c   0x0000000c   Ven    RO         3951    Veneer$$Code        anon$$obj.o
+    0x200064a8   0x0000000c   Ven    RO         3952    Veneer$$Code        anon$$obj.o
+    0x200064b4   0x0000000c   Ven    RO         3953    Veneer$$Code        anon$$obj.o
+    0x200064c0   0x0000000c   Ven    RO         3954    Veneer$$Code        anon$$obj.o
+    0x200064cc   0x0000000c   Ven    RO         3955    Veneer$$Code        anon$$obj.o
+    0x200064d8   0x0000000c   Ven    RO         3956    Veneer$$Code        anon$$obj.o
+    0x200064e4   0x0000000c   Ven    RO         3957    Veneer$$Code        anon$$obj.o
+    0x200064f0   0x0000000c   Ven    RO         3958    Veneer$$Code        anon$$obj.o
+    0x200064fc   0x0000000c   Ven    RO         3959    Veneer$$Code        anon$$obj.o
+    0x20006508   0x0000000c   Ven    RO         3960    Veneer$$Code        anon$$obj.o
+    0x20006514   0x0000000c   Ven    RO         3961    Veneer$$Code        anon$$obj.o
+    0x20006520   0x0000000c   Ven    RO         3962    Veneer$$Code        anon$$obj.o
+    0x2000652c   0x0000000c   Ven    RO         3963    Veneer$$Code        anon$$obj.o
+    0x20006538   0x0000000c   Ven    RO         3964    Veneer$$Code        anon$$obj.o
+    0x20006544   0x0000000c   Ven    RO         3965    Veneer$$Code        anon$$obj.o
+    0x20006550   0x0000000c   Ven    RO         3966    Veneer$$Code        anon$$obj.o
+    0x2000655c   0x0000000c   Ven    RO         3967    Veneer$$Code        anon$$obj.o
+    0x20006568   0x0000000c   Ven    RO         3968    Veneer$$Code        anon$$obj.o
+    0x20006574   0x0000000c   Ven    RO         3969    Veneer$$Code        anon$$obj.o
+    0x20006580   0x0000000c   Ven    RO         3970    Veneer$$Code        anon$$obj.o
+    0x2000658c   0x0000000c   Ven    RO         3971    Veneer$$Code        anon$$obj.o
+    0x20006598   0x0000000c   Ven    RO         3972    Veneer$$Code        anon$$obj.o
+    0x200065a4   0x0000000c   Ven    RO         3973    Veneer$$Code        anon$$obj.o
+    0x200065b0   0x0000000c   Ven    RO         3974    Veneer$$Code        anon$$obj.o
+    0x200065bc   0x0000000c   Ven    RO         3975    Veneer$$Code        anon$$obj.o
+    0x200065c8   0x0000000c   Ven    RO         3976    Veneer$$Code        anon$$obj.o
+    0x200065d4   0x0000000c   Ven    RO         3977    Veneer$$Code        anon$$obj.o
+    0x200065e0   0x0000000c   Ven    RO         3978    Veneer$$Code        anon$$obj.o
+    0x200065ec   0x0000000c   Ven    RO         3979    Veneer$$Code        anon$$obj.o
+    0x200065f8   0x0000000c   Ven    RO         3980    Veneer$$Code        anon$$obj.o
+    0x20006604   0x0000000c   Ven    RO         3981    Veneer$$Code        anon$$obj.o
+    0x20006610   0x0000000c   Ven    RO         3982    Veneer$$Code        anon$$obj.o
+    0x2000661c   0x0000000c   Ven    RO         3983    Veneer$$Code        anon$$obj.o
+    0x20006628   0x0000000c   Ven    RO         3984    Veneer$$Code        anon$$obj.o
+    0x20006634   0x0000000c   Ven    RO         3985    Veneer$$Code        anon$$obj.o
+    0x20006640   0x0000000c   Ven    RO         3986    Veneer$$Code        anon$$obj.o
+    0x2000664c   0x0000000c   Ven    RO         3987    Veneer$$Code        anon$$obj.o
+    0x20006658   0x0000000c   Ven    RO         3988    Veneer$$Code        anon$$obj.o
+    0x20006664   0x0000000c   Ven    RO         3989    Veneer$$Code        anon$$obj.o
+    0x20006670   0x0000000c   Ven    RO         3990    Veneer$$Code        anon$$obj.o
+    0x2000667c   0x0000000c   Ven    RO         3991    Veneer$$Code        anon$$obj.o
+    0x20006688   0x0000000c   Ven    RO         3992    Veneer$$Code        anon$$obj.o
+    0x20006694   0x0000000c   Ven    RO         3993    Veneer$$Code        anon$$obj.o
+    0x200066a0   0x0000000c   Ven    RO         3994    Veneer$$Code        anon$$obj.o
+    0x200066ac   0x0000000c   Ven    RO         3995    Veneer$$Code        anon$$obj.o
+    0x200066b8   0x0000000c   Ven    RO         3996    Veneer$$Code        anon$$obj.o
+    0x200066c4   0x0000000c   Ven    RO         3997    Veneer$$Code        anon$$obj.o
+    0x200066d0   0x0000000c   Ven    RO         3998    Veneer$$Code        anon$$obj.o
+    0x200066dc   0x0000000c   Ven    RO         3999    Veneer$$Code        anon$$obj.o
+    0x200066e8   0x0000000c   Ven    RO         4000    Veneer$$Code        anon$$obj.o
+    0x200066f4   0x0000000c   Ven    RO         4001    Veneer$$Code        anon$$obj.o
+    0x20006700   0x0000000c   Ven    RO         4002    Veneer$$Code        anon$$obj.o
+    0x2000670c   0x00000028   Code   RO         3600    i.__0sprintf$3      mc_p.l(printf3.o)
+    0x20006734   0x0000000e   Code   RO         3890    i.__scatterload_copy  mc_p.l(handlers.o)
+    0x20006742   0x00000002   Code   RO         3891    i.__scatterload_null  mc_p.l(handlers.o)
+    0x20006744   0x0000000e   Code   RO         3892    i.__scatterload_zeroinit  mc_p.l(handlers.o)
+    0x20006752   0x00000002   PAD
+    0x20006754   0x000001cc   Code   RO         3605    i._printf_core      mc_p.l(printf3.o)
+    0x20006920   0x0000000a   Code   RO         3607    i._sputc            mc_p.l(printf3.o)
+    0x2000692a   0x00000002   PAD
+    0x2000692c   0x00000054   Code   RO         3770    i.free              mc_p.l(malloc.o)
+    0x20006980   0x0000006c   Code   RO         3771    i.malloc            mc_p.l(malloc.o)
+    0x200069ec   0x00000016   Data   RO          471    .constdata          jump_table.o
+    0x20006a02   0x00000002   PAD
+    0x20006a04   0x00000130   Data   RO          753    .constdata          arch_patch.o
+    0x20006b34   0x00000008   Data   RO          754    .constdata          arch_patch.o
+    0x20006b3c   0x00000030   Data   RO          755    .constdata          arch_patch.o
+    0x20006b6c   0x00000130   Data   RO          834    .constdata          llc.obj
+    0x20006c9c   0x00000010   Data   RO          835    .constdata          llc.obj
+    0x20006cac   0x000000b0   Data   RO          836    .constdata          llc.obj
+    0x20006d5c   0x00000008   Data   RO          837    .constdata          llc.obj
+    0x20006d64   0x00000010   Data   RO          838    .constdata          llc.obj
+    0x20006d74   0x00000050   Data   RO         1075    .constdata          spi_flash.o
+    0x20006dc4   0x00000060   Data   RO         2397    .constdata          wechat.o
+    0x20006e24   0x00000002   Data   RO         2398    .constdata          wechat.o
+    0x20006e26   0x00000005   Data   RO         2399    .constdata          wechat.o
+    0x20006e2b   0x00000005   Data   RO         2400    .constdata          wechat.o
+    0x20006e30   0x00000005   Data   RO         2401    .constdata          wechat.o
+    0x20006e35   0x00000003   PAD
+    0x20006e38   0x00000010   Data   RO         2402    .constdata          wechat.o
+    0x20006e48   0x00000008   Data   RO         2425    .constdata          wechat_task.o
+    0x20006e50   0x00000008   Data   RO         2426    .constdata          wechat_task.o
+    0x20006e58   0x00000020   Data   RO         2427    .constdata          wechat_task.o
+    0x20006e78   0x00000010   Data   RO         2428    .constdata          wechat_task.o
+    0x20006e88   0x00000018   Data   RO         2429    .constdata          wechat_task.o
+    0x20006ea0   0x00000008   Data   RO         2430    .constdata          wechat_task.o
+    0x20006ea8   0x000000c2   Data   RO         2518    .constdata          app.o
+    0x20006f6a   0x00000002   PAD
+    0x20006f6c   0x00000038   Data   RO         2665    .constdata          app_task.o
+    0x20006fa4   0x00000008   Data   RO         2666    .constdata          app_task.o
+    0x20006fac   0x00000008   Data   RO         2667    .constdata          app_task.o
+    0x20006fb4   0x00000014   Data   RO         2695    .constdata          app_entry_point.o
+    0x20006fc8   0x00000030   Data   RO         2898    .constdata          app_wechat_task.o
+    0x20006ff8   0x00000020   Data   RO         2931    .constdata          app_security_task.o
+    0x20007018   0x00000027   Data   RO         2953    .constdata          app_easy_security.o
+    0x2000703f   0x00000001   PAD
+    0x20007040   0x00000078   Data   RO         3262    .constdata          mpbledemo2.o
+    0x200070b8   0x00000031   Data   RO         3263    .conststring        mpbledemo2.o
+    0x200070e9   0x00000003   PAD
+    0x200070ec   0x00000041   Data   RO         3385    .conststring        vmdalayer.o
+    0x2000712d   0x00000003   PAD
+    0x20007130   0x00000030   Data   RO         3888    Region$$Table       anon$$obj.o
+    0x20007160   0x00000004   Data   RW          620    .data               arch_system.o
+    0x20007164   0x00000050   Data   RW         3264    .data               mpbledemo2.o
+    0x200071b4   0x0000002c   Data   RW         3265    .data               mpbledemo2.o
+    0x200071e0   0x00000002   Data   RW         3431    .data               i2c_led.o
+    0x200071e2   0x00000002   PAD
+    0x200071e4   0x00000004   Data   RW         3857    .data               mc_p.l(mvars.o)
+    0x200071e8   0x00000004   Data   RW         3858    .data               mc_p.l(mvars.o)
 
 
     Execution Region RW_IRAM50 (Base: 0x20008000, Size: 0x0000002c, Max: 0x00000bf4, ABSOLUTE)
@@ -3422,7 +3422,7 @@ Image component sizes
          2          0        374          0       3736       8399   jump_table.o
        184         18          0          0          0         96   ke_task.obj
        352         22        520          0         24        236   llc.obj
-      3836       1228        169        124         39      21821   mpbledemo2.o
+      3856       1230        169        124         39      21833   mpbledemo2.o
         56          6          0          0          0       6395   nmi_handler.o
        192         30        164          0          6       2300   nvds.o
        128          4          0          0          0      13437   prf_utils.o
@@ -3447,7 +3447,7 @@ Image component sizes
        328         30          0          0         12      13025   wkupct_quadec.o
 
     ----------------------------------------------------------------------
-     24864       3272       2684        132       7624     842475   Object Totals
+     24884       3274       2684        132       7624     842487   Object Totals
       1284        428         48          0         32          0   (incl. Generated)
          4          0         14          2         19          0   (incl. Padding)
 
@@ -3496,15 +3496,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     26008       3316       2684        140       7624     839755   Grand Totals
-     26008       3316       2684        140       7624     839755   ELF Image Totals
-     26008       3316       2684        140          0          0   ROM Totals
+     26028       3318       2684        140       7624     839767   Grand Totals
+     26028       3318       2684        140       7624     839767   ELF Image Totals
+     26028       3318       2684        140          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                28692 (  28.02kB)
+    Total RO  Size (Code + RO Data)                28712 (  28.04kB)
     Total RW  Size (RW Data + ZI Data)              7764 (   7.58kB)
-    Total ROM Size (Code + RO Data + RW Data)      28832 (  28.16kB)
+    Total ROM Size (Code + RO Data + RW Data)      28852 (  28.18kB)
 
 ==============================================================================
 

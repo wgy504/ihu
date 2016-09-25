@@ -775,6 +775,7 @@ int mpbledemo2_data_consume_func(uint8_t *data, uint32_t len)
 				//清除TIMEOUT消息，是否应该放在这里，也是一个小小的问题，原则上需要放在断链的过程中，但并没有断链过程
 				//待完善
 				vmda1458x_timer_clear(WECHAT_PERIOD_BLE_STATUS_TIME_OUT, TASK_WECHAT);
+				vmda1458x_led_set(LED_ID_6, LED_MODE_OFF);
 				break;
 			
 			default:
@@ -1031,7 +1032,7 @@ void mpbledemo2_airsync_link_setup_period_report(void)
 	//先判断链路状态，如果处于正常状态，则干下面的活
 	//发送报告数据
 	
-	if (mpdemo2_emcPeriodInsMeasureFlag == IHU_EMC_PERIOD_INSTANCE_MEASUREMENT_PERIOD){
+	if ((mpdemo2_emcPeriodInsMeasureFlag == IHU_EMC_PERIOD_INSTANCE_MEASUREMENT_PERIOD) && (mpbledemo2Sta.init_state == true)){
 		//Code type 1：测试方式
 		//mpbledemo2_readEmcDataResp(NULL, 0);
 		
