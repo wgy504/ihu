@@ -163,7 +163,7 @@
           <Expression>\\wechat\../src/products/mpbledemo2.c\671</Expression>
         </Bp>
         <Bp>
-          <Number>4</Number>
+          <Number>1</Number>
           <Type>0</Type>
           <LineNumber>670</LineNumber>
           <EnabledFlag>0</EnabledFlag>
@@ -179,7 +179,7 @@
           <Expression></Expression>
         </Bp>
         <Bp>
-          <Number>5</Number>
+          <Number>2</Number>
           <Type>0</Type>
           <LineNumber>673</LineNumber>
           <EnabledFlag>0</EnabledFlag>
@@ -195,7 +195,7 @@
           <Expression></Expression>
         </Bp>
         <Bp>
-          <Number>6</Number>
+          <Number>3</Number>
           <Type>0</Type>
           <LineNumber>675</LineNumber>
           <EnabledFlag>0</EnabledFlag>
@@ -2346,7 +2346,7 @@
 
   <Group>
     <GroupName>user_config</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -2450,7 +2450,7 @@
 
   <Group>
     <GroupName>user_platform</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -2470,7 +2470,7 @@
 
   <Group>
     <GroupName>user_app</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -2678,7 +2678,7 @@
 
   <Group>
     <GroupName>l0vmda</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

@@ -610,7 +610,7 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 添加SCY项目中的ADC/SPI数据消息
 = 建立了SCY初步的消息处理状态机框架
 
-//= ZJL, 2016 Sep.23, IHU_EMCWX_CURRENT_SW_DELIVERY R03.29
+//= ZJL, 2016 Sep.24, IHU_EMCWX_CURRENT_SW_DELIVERY R03.29
 = 建立查询电量机制
 = 确定颜色
 	vmda1458x_led_blink_once_on_off(LED_ID_0); //BLUE
@@ -620,10 +620,10 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 更新了2nd boot loader的管脚配置
 = 每次都初始化ADC通道，读取后，DISABLE_ADC()，比较圆满的解决了读数大的问题。应该是9个ADC通道相互串的问题。
 = VIN_OK表征真正的电池量，但没有接到ADC通道上，无法正确读出，下一版改进
+= MYC改进了闪灯工作状态
 
-
-
-
+//= ZJL, 2016 Sep.25, IHU_EMCWX_CURRENT_SW_DELIVERY R03.30
+= 改进VIN_OK的电源指示读取，从而补全单色电源指示灯的工作状态：电量低于阈值=》快闪，BLE连接=》慢闪，电量正常但BLE无连接，不闪。
 
 
 
