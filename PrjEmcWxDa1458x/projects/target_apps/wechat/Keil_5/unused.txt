@@ -1,4 +1,4 @@
-;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Sun Sep 25 19:28:41 2016
+;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Sun Sep 25 20:57:33 2016
 ;VERSION 0.2
 ;FILE adc.o
 ;FILE app.o
@@ -99,7 +99,6 @@ epb_set_sint32 <= USED 0
 GPIO_ConfigurePinPower <= USED 0
 GPIO_EnableIRQ <= USED 0
 GPIO_GetIRQInputLevel <= USED 0
-GPIO_GetPinStatus <= USED 0
 GPIO_RegisterCallback <= USED 0
 GPIO_SetIRQInputLevel <= USED 0
 ;FILE hardfault_handler.o

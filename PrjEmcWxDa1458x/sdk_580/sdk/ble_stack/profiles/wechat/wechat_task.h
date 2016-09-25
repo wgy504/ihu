@@ -28,6 +28,9 @@
 #include "ke_task.h"
 #include "wechat.h"
 
+#include "i2c_led.h"
+#include "vmdalayer.h"
+
 /*
  * DEFINES
  ****************************************************************************************
@@ -90,7 +93,9 @@ enum
     /// Error Indication
     WECHAT_ERROR_IND,
 		
-		WECHAT_PERIOD_REPORT_TIME_OUT,
+		WECHAT_PERIOD_BLE_STATUS_TIME_OUT,  //用于BLE连接状态下的单色灯闪动报告
+		WECHAT_PERIOD_BAT_STATUS_TIME_OUT,  //用于电池电量低时单色灯闪动报告
+		
 };
 
 
@@ -184,15 +189,15 @@ struct wechat_send_data_req
 //    uint8_t status;
 //};
 
-//int app_wechat_period_report_time_out_handler(ke_msg_id_t const msgid,
-//                                  struct wechat_period_report_time_out const *param,
-//                                  ke_task_id_t const dest_id,
-//                                  ke_task_id_t const src_id);
-int app_wechat_period_report_time_out_handler(ke_msg_id_t const msgid,
+int app_wechat_period_ble_status_time_out_handler(ke_msg_id_t const msgid,
                                   void const *param,
                                   ke_task_id_t const dest_id,
                                   ke_task_id_t const src_id);
-
+int app_wechat_period_bat_status_time_out_handler(ke_msg_id_t const msgid,
+                                  void const *param,
+                                  ke_task_id_t const dest_id,
+                                  ke_task_id_t const src_id);
+																	
 /*
  * GLOBAL VARIABLES DECLARATIONS
  ****************************************************************************************
@@ -204,8 +209,11 @@ extern ke_state_t wechat_state[WECHAT_IDX_MAX];
 extern int arch_printf(const char *fmt, ...);
 extern void mpbledemo2_airsync_link_setup_period_report(void);
 extern int32_t mpbledemo2_sendData(uint8_t* ptrData, uint32_t lengthInByte);
-
-
+extern void vmda1458x_timer_set(ke_msg_id_t const timerid, ke_task_id_t const taskid, uint16_t delay);
+extern void vmda1458x_led_set(uint8_t ledId, uint8_t mode);
+																	
+#define WECHAT_TIME_OUT_DURATION_BAT_STATUS 6000 //10ms, in second
+																	
 #endif //BLE_WECHAT
 
 #endif // WECHAT_TASK_H_

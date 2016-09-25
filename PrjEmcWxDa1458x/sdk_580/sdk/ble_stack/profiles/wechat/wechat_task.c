@@ -88,6 +88,9 @@ static int wechat_create_db_req_handler(ke_msg_id_t const msgid,
     cfm->status = status;
     ke_msg_send(cfm);
     
+		//初始化定时器以及标志位
+		vmda1458x_timer_set(WECHAT_PERIOD_BAT_STATUS_TIME_OUT, TASK_WECHAT, WECHAT_TIME_OUT_DURATION_BAT_STATUS);
+		
     return (KE_MSG_CONSUMED);
 }
 
@@ -330,7 +333,7 @@ static int gap_disconnnect_ind_handler(ke_msg_id_t const msgid,
     return (KE_MSG_CONSUMED);
 }
 
-int app_wechat_period_report_time_out_handler(ke_msg_id_t const msgid,
+int app_wechat_period_ble_status_time_out_handler(ke_msg_id_t const msgid,
                                   void const *param,
                                   ke_task_id_t const dest_id,
                                   ke_task_id_t const src_id)																		
@@ -339,6 +342,22 @@ int app_wechat_period_report_time_out_handler(ke_msg_id_t const msgid,
   mpbledemo2_airsync_link_setup_period_report();
   return (KE_MSG_CONSUMED);
 }
+
+int app_wechat_period_bat_status_time_out_handler(ke_msg_id_t const msgid,
+                                  void const *param,
+                                  ke_task_id_t const dest_id,
+                                  ke_task_id_t const src_id)																		
+{
+	//arch_printf("\r\n Wechat Task Time Out received No 1. ");
+	//Restart timer
+  vmda1458x_timer_set(WECHAT_PERIOD_BAT_STATUS_TIME_OUT, TASK_WECHAT, WECHAT_TIME_OUT_DURATION_BAT_STATUS);
+	
+	//Set BAT working status, to check if BAT_VIN_OK status is TRUE or not
+	if (ihu_get_vin_ok_status() == false) vmda1458x_led_set(LED_ID_6, LED_MODE_BLINK_HIGH_SPEED);
+	
+  return (KE_MSG_CONSUMED);
+}
+
 
 /*
  * GLOBAL VARIABLE DEFINITIONS
@@ -363,13 +382,14 @@ const struct ke_msg_handler wechat_connected[] =
     {GATTC_WRITE_CMD_IND,               (ke_msg_func_t) gattc_write_cmd_ind_handler},
     {WECHAT_SEND_INDICATION_REQ,        (ke_msg_func_t) wechat_send_indication_req_handler},
     {GATTC_CMP_EVT,                     (ke_msg_func_t) gattc_cmp_evt_handler},
-		{WECHAT_PERIOD_REPORT_TIME_OUT,     (ke_msg_func_t) app_wechat_period_report_time_out_handler},	
+		{WECHAT_PERIOD_BLE_STATUS_TIME_OUT, (ke_msg_func_t) app_wechat_period_ble_status_time_out_handler},
 };
 
 /// Default State handlers definition
 const struct ke_msg_handler wechat_default_state[] =
 {
     {GAPC_DISCONNECT_IND,    (ke_msg_func_t) gap_disconnnect_ind_handler},
+		{WECHAT_PERIOD_BAT_STATUS_TIME_OUT, (ke_msg_func_t)app_wechat_period_bat_status_time_out_handler},				
 };
 
 /// Specifies the message handler structure for every input state.

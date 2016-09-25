@@ -623,7 +623,9 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = MYC改进了闪灯工作状态
 
 //= ZJL, 2016 Sep.25, IHU_EMCWX_CURRENT_SW_DELIVERY R03.30
+= 恢复10次读取取最大值
 = 改进VIN_OK的电源指示读取，从而补全单色电源指示灯的工作状态：电量低于阈值=》快闪，BLE连接=》慢闪，电量正常但BLE无连接，不闪。
+
 
 
 

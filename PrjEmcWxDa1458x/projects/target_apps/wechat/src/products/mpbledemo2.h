@@ -160,8 +160,7 @@ extern void mpbledemo2_readEmcPeriodOpen(uint8_t *ptrData, uint32_t lengthInByte
 extern void mpbledemo2_readEmcPeriodClose(uint8_t *ptrData, uint32_t lengthInByte);
 extern void mpbledemo2_readEmcBatPush(uint8_t *ptrData, uint32_t lengthInByte);
 
-
-#define BLEDEMO2_TIMER_PERIOD_REPORT_DURATION 18000 //10ms网格，in second， 3分钟定时自动
+#define BLEDEMO2_TIME_OUT_DURATION_BLE_STATUS 18000 //10ms网格，in second， 3分钟定时自动
 extern void mpbledemo2_airsync_link_setup_period_report(void);
 
 extern void adc_usDelay(uint32_t nof_us);

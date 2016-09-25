@@ -305,6 +305,6 @@ extern OPSTAT ihu_timer_stop(UINT8 task_id, UINT8 timer_id, UINT8 t_res);
 extern void ihu_timer_routine_handler_1s(void);
 extern void ihu_timer_routine_handler_10ms(void);
 extern void adc_usDelay(uint32_t nof_us);
-
+extern UINT8 ihu_get_vin_ok_status(void);
 
 #endif /* L0VMDA_VMDALAYER_H_ */

@@ -645,10 +645,9 @@ int mpbledemo2_data_consume_func(uint8_t *data, uint32_t len)
 					epb_unpack_init_response_free(initResp);
 					
 					//这里可以增加时钟的启动，从而实现链路建立以后，自动上报数据
-					vmda1458x_timer_set(WECHAT_PERIOD_REPORT_TIME_OUT, TASK_WECHAT, BLEDEMO2_TIMER_PERIOD_REPORT_DURATION);
-					//BLE连接好，设置该灯常亮
-					//vmda1458x_led_on(LED_ID_6);
-					vmda1458x_led_set(LED_ID_6, LED_MODE_BLINK_LOW_SPEED);
+					vmda1458x_timer_set(WECHAT_PERIOD_BLE_STATUS_TIME_OUT, TASK_WECHAT, BLEDEMO2_TIME_OUT_DURATION_BLE_STATUS);
+					//BLE连接好，设置该灯慢闪
+					if (ihu_get_vin_ok_status() == true) vmda1458x_led_set(LED_ID_6, LED_MODE_BLINK_LOW_SPEED);
 				}
 				break;
 			
@@ -775,7 +774,7 @@ int mpbledemo2_data_consume_func(uint8_t *data, uint32_t len)
 			case ECI_err_decode:
 				//清除TIMEOUT消息，是否应该放在这里，也是一个小小的问题，原则上需要放在断链的过程中，但并没有断链过程
 				//待完善
-				vmda1458x_timer_clear(WECHAT_PERIOD_REPORT_TIME_OUT, TASK_WECHAT);
+				vmda1458x_timer_clear(WECHAT_PERIOD_BLE_STATUS_TIME_OUT, TASK_WECHAT);
 				break;
 			
 			default:
@@ -1064,7 +1063,7 @@ void mpbledemo2_airsync_link_setup_period_report(void)
 	}//mpdemo2_emcPeriodInsMeasureFlag => IHU_EMC_PERIOD_INSTANCE_MEASUREMENT_PERIOD
 		
 	//重新启动定时器
-	vmda1458x_timer_set(WECHAT_PERIOD_REPORT_TIME_OUT, TASK_WECHAT, BLEDEMO2_TIMER_PERIOD_REPORT_DURATION);
+	vmda1458x_timer_set(WECHAT_PERIOD_BLE_STATUS_TIME_OUT, TASK_WECHAT, BLEDEMO2_TIME_OUT_DURATION_BLE_STATUS);
 }
 
 
@@ -1072,25 +1071,26 @@ void mpdemo2_emcdata_read(void)
 {
 	//循环读取，为了找到合适的瞬时最大值
 	UINT16 emcData = 0;
-//	UINT16 tmp = 0;
-//	UINT32 index = 0, emcTotal = 0, validCnt = 0;
-//	for (index = 0; index < IHU_EMC_LOOP_READ_TIMES; index++){
-//		tmp = ihu_emc_adc_read();
-//		//arch_printf("\r\n Read result = %d", tmp);
-//		//if (tmp > emcData) emcData = tmp;
-//		//读取最大量程为1024 = 0x3FF，多保留一位为了安全
+	UINT16 tmp = 0;
+	UINT32 index = 0;
+//	UINT32 emcTotal = 0, validCnt = 0;
+	for (index = 0; index < IHU_EMC_LOOP_READ_TIMES; index++){
+		tmp = ihu_emc_adc_read();
+		//arch_printf("\r\n Read result = %d", tmp);
+		if (tmp > emcData) emcData = tmp;
+		//读取最大量程为1024 = 0x3FF，多保留一位为了安全
 //		if (tmp > 0)
 //		{
 //			emcTotal = emcTotal + (tmp & 0x7FF);
 //			validCnt++;
 //		}
-//	}
+	}
 	//啥都不干，直接进入下一阶段处理，是最大值的情形
 
 	//瞬时读取的情形
-	emcData = ihu_emc_adc_read();
+	//emcData = ihu_emc_adc_read();
 	
-//	//平均值的情形，当前选择这个了
+	//平均值的情形，当前选择这个了
 //	if (validCnt > 0)
 //		emcData = emcTotal / validCnt;
 //	else

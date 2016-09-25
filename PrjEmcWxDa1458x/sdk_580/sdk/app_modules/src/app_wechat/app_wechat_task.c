@@ -52,8 +52,7 @@ static const struct ke_msg_handler app_wechat_process_handlers[]=
     {WECHAT_SEND_INDICATION_CFM,         (ke_msg_func_t)app_wechat_send_indication_cfm_handler},
     {WECHAT_WRITE_VAL_IND,               (ke_msg_func_t)app_wechat_write_val_ind_handler},
     {WECHAT_ENABLE_IND_REQ,              (ke_msg_func_t)app_wechat_enable_ind_handler},
-    {WECHAT_SEND_DATA_TO_MASTER,         (ke_msg_func_t)app_wechat_send_data_handler},
-    //{WECHAT_PERIOD_REPORT_TIME_OUT,      (ke_msg_func_t)app_wechat_task_period_report_time_out_handler},		
+    {WECHAT_SEND_DATA_TO_MASTER,         (ke_msg_func_t)app_wechat_send_data_handler},		
 };
 
 enum process_event_response app_wechat_process_handler (ke_msg_id_t const msgid,

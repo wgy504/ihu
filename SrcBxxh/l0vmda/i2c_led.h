@@ -127,9 +127,9 @@
  * @brief Initialize I2C controller as a master for EEPROM handling.
  ****************************************************************************************
  */
-void i2c_led_init(uint16_t dev_address, uint8_t speed, uint8_t address_mode, uint8_t address_size);
-void vmda1458x_i2c_led_init(uint16_t dev_address, uint8_t speed);
-void vmda1458x_led_set(uint8_t ledId, uint8_t mode);
+extern void i2c_led_init(uint16_t dev_address, uint8_t speed, uint8_t address_mode, uint8_t address_size);
+extern void vmda1458x_i2c_led_init(uint16_t dev_address, uint8_t speed);
+extern void vmda1458x_led_set(uint8_t ledId, uint8_t mode);
 
 
 /**

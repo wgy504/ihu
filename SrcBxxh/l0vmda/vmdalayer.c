@@ -1483,3 +1483,9 @@ OPSTAT ihu_get_mac_addr(UINT8* mac)
 		return vmda1458x_mac_addr_get(mac, 6);
 }
 
+UINT8 ihu_get_vin_ok_status(void)
+{
+	return GPIO_GetPinStatus(BM_VIN_OK_PORT, BM_VIN_OK_PIN);
+}
+
+
