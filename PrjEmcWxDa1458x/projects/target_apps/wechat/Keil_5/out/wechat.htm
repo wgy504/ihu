@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\out\wechat.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\out\wechat.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Sun Sep 25 22:02:34 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Mon Sep 26 14:23:48 2016
 <BR><P>
 <H3>Maximum Stack Usage =       1164 bytes + Unknown(Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1712,6 +1712,10 @@ Global Symbols
 <LI><a href="#[205]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_pad_functions
 </UL>
 
+<P><STRONG><a name="[254]"></a>GPIO_GetPinStatus</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, gpio.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[1be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_get_vin_ok_status
+</UL>
+
 <P><STRONG><a name="[16c]"></a>GPIO_ResetIRQ</STRONG> (Thumb, 30 bytes, Stack size 16 bytes, gpio.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = GPIO_ResetIRQ
 </UL>
@@ -1767,10 +1771,6 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> boot_vectors.o(RESET)
 </UL>
-<P><STRONG><a name="[254]"></a>GPIO_GetPinStatus</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, gpio.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[1be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_get_vin_ok_status
-</UL>
-
 <P><STRONG><a name="[f]"></a>WKUP_QUADEC_Handler</STRONG> (Thumb, 106 bytes, Stack size 8 bytes, wkupct_quadec.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = WKUP_QUADEC_Handler
 </UL>
@@ -3510,7 +3510,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> mpbledemo2.o(.data)
 </UL>
-<P><STRONG><a name="[e6]"></a>mpbledemo2_data_consume_func</STRONG> (Thumb, 1624 bytes, Stack size 24 bytes, mpbledemo2.o(.text))
+<P><STRONG><a name="[e6]"></a>mpbledemo2_data_consume_func</STRONG> (Thumb, 1630 bytes, Stack size 24 bytes, mpbledemo2.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 448<LI>Call Chain = mpbledemo2_data_consume_func &rArr; arch_printf &rArr; arch_snprintf &rArr; arch_vsnprintf &rArr; arch_itoa
 </UL>
 <BR>[Calls]<UL><LI><a href="#[101]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;arch_printf
@@ -3536,7 +3536,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> mpbledemo2.o(.data)
 </UL>
-<P><STRONG><a name="[e7]"></a>mpbledemo2_data_error_func</STRONG> (Thumb, 14 bytes, Stack size 8 bytes, mpbledemo2.o(.text))
+<P><STRONG><a name="[e7]"></a>mpbledemo2_data_error_func</STRONG> (Thumb, 30 bytes, Stack size 8 bytes, mpbledemo2.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 432<LI>Call Chain = mpbledemo2_data_error_func &rArr; arch_printf &rArr; arch_snprintf &rArr; arch_vsnprintf &rArr; arch_itoa
 </UL>
 <BR>[Calls]<UL><LI><a href="#[101]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;arch_printf

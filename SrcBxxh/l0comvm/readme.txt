@@ -634,7 +634,14 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 	方式1：烧录到FLASH中的MAC地址为0x366以及0x3E0，记录是为了对照，以便手工修改
 	方式2：通过在FLASH的0x7FF8（最后的8个字节）中存入MAC地址，然后让nvds_read_bdaddr_from_otp强行读取，或者定义一个标志位，以便OTP真的起作用时进行隔离风险。
 
-
+//= ZJL, 2016 Sep.26, IHU_EMCWX_CURRENT_SW_DELIVERY R03.31
+= 如果再出现GPIO_RESVR对应的调试问题，需要查阅mpbledemo2_init_peripheral_func中的BUTTON所对应的GPIO管脚是否冲突。当前板子被缺省
+ 定义为 HW_CONFIG_BASIC_DK
+= mpbledemo2_data_error_func函数中的NVIC_SystemReset()函数没有打开，先得解决 "Known Issues:.1"，不然每一收到一个数据都会RESET板子
+= 1. 收到sendDataResp， 出现 "received msg: no message content!"  从而导致 "! error: mpbledemo2 reseted"
+=>通过一个临时补丁，解决规避该问题。因为服务器就是返回如此的FFFFFFFF=-1=SYSTEM ERROR差错，导致板子RESET的
+  ##Received data:  fe 1 0 19 4e 22 0 3 a d 8 ff ff ff ff ff ff ff ff ff 1 12 0 12 0
+= 打开mpbledemo2_data_error_func函数中的NVIC_SystemReset()
 
 
 
@@ -655,7 +662,6 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 
 
 Known Issues:
-1. 收到sendDataResp， 出现 "received msg: no message content!"  从而导致 "! error: mpbledemo2 reseted"
 
 
 Mission coming:

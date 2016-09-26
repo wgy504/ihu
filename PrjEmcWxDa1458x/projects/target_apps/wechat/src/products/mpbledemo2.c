@@ -42,8 +42,11 @@ uint8_t isLightOn __attribute__((section("retention_mem_area0"), zero_init));;
 
 static void mpbledemo2_handleCmdFromServer(BleDemo2CmdID cmd, uint8_t *ptrData, uint32_t lengthInByte);
 
+//EMC数据采样的全局缓冲区
 uint8_t mpdemo2_emcdata[3] = {0};
+//指示是否需要周期测量，这里的技巧是，初始化为周期测量打开
 uint8_t mpdemo2_emcPeriodInsMeasureFlag = IHU_EMC_PERIOD_INSTANCE_MEASUREMENT_PERIOD;
+
 
 /**@brief   Function for the light initialization.
  *
@@ -477,6 +480,8 @@ int mpbledemo2_data_consume_func(uint8_t *data, uint32_t len)
 			arch_printf("\r\n len: %d", ntohs(fix_head->nLength));
 			arch_printf("\r\n Seq: %d",ntohs(fix_head->nSeq));
 		#endif
+		
+		int errCode = 0;
 			
 		switch(ntohs(fix_head->nCmdId))
 		{
@@ -566,7 +571,7 @@ int mpbledemo2_data_consume_func(uint8_t *data, uint32_t len)
 					}
 					#ifdef CATCH_LOG
 						BlueDemoHead *bledemohead = (BlueDemoHead*)sendDataResp->data.data;
-						if ((sendDataResp->data.len < 12) ||(bledemohead->m_magicCode[0] != MPBLEDEMO2_MAGICCODE_H) || (bledemohead->m_magicCode[1] != MPBLEDEMO2_MAGICCODE_H))
+						if ((sendDataResp->data.len < 12) ||(bledemohead->m_magicCode[0] != MPBLEDEMO2_MAGICCODE_H) || (bledemohead->m_magicCode[1] != MPBLEDEMO2_MAGICCODE_L))
 						{
 							arch_printf("\r\n received msg: no message content! \r\n");
 						}									
@@ -577,8 +582,13 @@ int mpbledemo2_data_consume_func(uint8_t *data, uint32_t len)
 					#endif
 					if(sendDataResp->base_response->err_code)
 					{
+						errCode = sendDataResp->base_response->err_code;
+						//由于服务器的特殊情形，总返回如下字符串带有FFFFFFFF=-1（SYSTEM ERROR）的错误，导致板子重启
+						//故而，需要特定打补丁去掉这种情况
+						//##Received data:  fe 1 0 19 4e 22 0 3 a d 8 ff ff ff ff ff ff ff ff ff 1 12 0 12 0
+						if (errCode == 0xFFFFFFFF) errCode = 0;
 						epb_unpack_send_data_response_free(sendDataResp);
-						return sendDataResp->base_response->err_code;
+						return errCode;
 					}
 					epb_unpack_send_data_response_free(sendDataResp);
 				}
@@ -792,13 +802,14 @@ int mpbledemo2_data_consume_func(uint8_t *data, uint32_t len)
 
 void mpbledemo2_data_error_func(int error_code)
 {
+	//arch_printf("\r\n Error code = 0x%08x", error_code);
 	if(error_code)
 	{
 		#ifdef CATCH_LOG
 			arch_printf("\r\n! error: mpbledemo2 reseted");
 		#endif
         
-		//NVIC_SystemReset();
+		NVIC_SystemReset();
 	}
 }
 data_handler mpbledemo2_data_handler = {
