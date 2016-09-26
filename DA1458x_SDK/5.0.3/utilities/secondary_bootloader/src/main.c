@@ -42,6 +42,7 @@ __asm void sw_reset(void)
   BX r2
 }
 
+
  /**
 ****************************************************************************************
 * @brief Run the user application after receiving a binany from uart or reading the binary from a non volatile memory booting 

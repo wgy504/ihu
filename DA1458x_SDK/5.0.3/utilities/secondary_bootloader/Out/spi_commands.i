@@ -9857,8 +9857,8 @@ void spi_flash_peripheral_init(void)
 {
     GPIO_ConfigurePin( GPIO_PORT_0, GPIO_PIN_3, OUTPUT, PID_SPI_EN, 1 );
     GPIO_ConfigurePin( GPIO_PORT_0, GPIO_PIN_0, OUTPUT, PID_SPI_CLK, 0 );
-    GPIO_ConfigurePin( GPIO_PORT_0, GPIO_PIN_5, OUTPUT, PID_SPI_DO, 0 );  
-    GPIO_ConfigurePin( GPIO_PORT_0, GPIO_PIN_6, INPUT, PID_SPI_DI, 0 );
+    GPIO_ConfigurePin( GPIO_PORT_0, GPIO_PIN_6, OUTPUT, PID_SPI_DO, 0 );  
+    GPIO_ConfigurePin( GPIO_PORT_0, GPIO_PIN_5, INPUT, PID_SPI_DI, 0 );
     spi_FLASH_CS_Pad.pin = GPIO_PIN_3;
     spi_FLASH_CS_Pad.port = GPIO_PORT_0;
     

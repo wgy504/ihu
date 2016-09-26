@@ -642,7 +642,9 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 =>通过一个临时补丁，解决规避该问题。因为服务器就是返回如此的FFFFFFFF=-1=SYSTEM ERROR差错，导致板子RESET的
   ##Received data:  fe 1 0 19 4e 22 0 3 a d 8 ff ff ff ff ff ff ff ff ff 1 12 0 12 0
 = 打开mpbledemo2_data_error_func函数中的NVIC_SystemReset()
-
+= 设置2nd bootloader的配置参数，其中将两个项目的MISO/MOSI都改为统一标识，其中MISO-DI，MOSI-DO，这样，就跟所有的文档
+  (ANB001/ANB023)以及SmartSnippets工具中的配置都统一和一致起来了。同时订正2nd bootloader中的FLASH DI/DO。
+= 关闭2nd bootloader中的UART启动，打开FLASH支持。原则上，这个版本可以用来直接烧录OPT了
 
 
 

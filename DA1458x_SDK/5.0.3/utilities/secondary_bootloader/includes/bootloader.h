@@ -18,7 +18,7 @@
 #define _DOWNLOADER_H
 
 /************** Encrypted Image Support section**************/
-#define AES_ENCRYPTED_IMAGE_SUPPORTED 1
+#define AES_ENCRYPTED_IMAGE_SUPPORTED 0
 
 /************** UART Booter section**************/
 #undef UART_SUPPORTED
@@ -34,7 +34,7 @@
 /************** AN-B-001 based image /fast bootloader section **************/
 // Define it if
 // if AN-B-001 based image is burned in SPI flash and the bootloader is running from the OTP
-#undef SUPPORT_AN_B_001  //Enable it for the secondary bootloader
+#define SUPPORT_AN_B_001  //Enable it for the secondary bootloader
 
 // Define ALLOW_NO_HEADER to enable loading 0x7f00 bytes from memory offset 0
 // in case no valid AN-B-001 header is found.

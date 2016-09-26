@@ -9735,6 +9735,7 @@ __asm void sw_reset(void)
   BX r2
 }
 
+
  
 
 
@@ -9750,11 +9751,11 @@ void Start_run_user_application(void)
     
     GPIO_ConfigurePin( GPIO_PORT_0, GPIO_PIN_3, INPUT_PULLUP, PID_GPIO, 1 );
     GPIO_ConfigurePin( GPIO_PORT_0, GPIO_PIN_0, INPUT_PULLDOWN, PID_GPIO, 0 );
-    GPIO_ConfigurePin( GPIO_PORT_0, GPIO_PIN_5, INPUT_PULLDOWN, PID_GPIO, 0 );
     GPIO_ConfigurePin( GPIO_PORT_0, GPIO_PIN_6, INPUT_PULLDOWN, PID_GPIO, 0 );
+    GPIO_ConfigurePin( GPIO_PORT_0, GPIO_PIN_5, INPUT_PULLDOWN, PID_GPIO, 0 );
 
 
-#line 71 "src\\main.c"
+#line 72 "src\\main.c"
 
     if (*(volatile unsigned*)0x20000000 & 0x20000000)
     {
@@ -9777,7 +9778,7 @@ int main (void)
     int ret = -1;
 
 
-#line 99 "src\\main.c"
+#line 100 "src\\main.c"
 
     (* ( volatile uint16*)((0x50003300))=((0x0008)) );
     ( (* ( volatile uint16*)(((0x50000010)))=(((* ( volatile uint16*)((0x50000010)) )&(~(uint16)((0x0002)))) | (((uint16)(0))<<((((0x0002)))&0x0001?0: (((0x0002)))&0x0002?1: (((0x0002)))&0x0004?2: (((0x0002)))&0x0008?3: (((0x0002)))&0x0010?4: (((0x0002)))&0x0020?5: (((0x0002)))&0x0040?6: (((0x0002)))&0x0080?7: (((0x0002)))&0x0100?8: (((0x0002)))&0x0200?9: (((0x0002)))&0x0400?10:(((0x0002)))&0x0800?11: (((0x0002)))&0x1000?12:(((0x0002)))&0x2000?13:(((0x0002)))&0x4000?14: 15))) ));   
@@ -9786,7 +9787,7 @@ int main (void)
 
     while (1){
 
-#line 123 "src\\main.c"
+#line 124 "src\\main.c"
 
 
         ret =spi_loadActiveImage();
@@ -9797,7 +9798,7 @@ int main (void)
         }
 
 
-#line 141 "src\\main.c"
+#line 142 "src\\main.c"
 
     } 
 } 

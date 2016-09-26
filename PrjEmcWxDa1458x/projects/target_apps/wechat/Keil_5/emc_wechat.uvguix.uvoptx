@@ -2393,7 +2393,7 @@
       <GroupNumber>12</GroupNumber>
       <FileNumber>175</FileNumber>
       <FileType>1</FileType>
-      <tvExp>0</tvExp>
+      <tvExp>1</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\platform\user_periph_setup.c</PathWithFileName>
@@ -2521,7 +2521,7 @@
 
   <Group>
     <GroupName>l0comvm</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

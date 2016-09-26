@@ -10045,302 +10045,13 @@ void uart_send_byte(char ch);
  
   
 #line 29 "src\\bootloader.c"
-#line 1 ".\\includes\\sw_aes.h"
- 
 
 
 
 
-#line 1 ".\\includes\\os_int.h"
+#line 53 "src\\bootloader.c"
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-#line 54 ".\\includes\\os_int.h"
-
-#line 59 ".\\includes\\os_int.h"
-
-
-
-
-
-
-
-
-#line 7 ".\\includes\\sw_aes.h"
-
-
-
-
- 
-
-
-
-
-
-#line 24 ".\\includes\\sw_aes.h"
-
-
-
-
-
-
-typedef struct aes_key_st 
-{
-    uint16_t rounds;
-    uint16_t key_size;
-    uint32_t ks[(14+1)*8];
-    uint8_t iv[16];
-} AES_CTX;
-
-typedef enum
-{
-    AES_MODE_128,
-    AES_MODE_256
-} AES_MODE;
-
-
-
- 
-void AES_set_key(AES_CTX *ctx, const uint8_t *key, 
-        const uint8_t *iv, AES_MODE mode);
-
-
-
- 
-void AES_cbc_encrypt(AES_CTX *ctx, const uint8_t *msg, 
-        uint8_t *out, int length);
-
-
-
- 
-void AES_cbc_decrypt(AES_CTX *ks, const uint8_t *in, uint8_t *out, int length);
-
-
-
- 
-void AES_convert_key(AES_CTX *ctx);
-
-
-
- 
-void AES_decrypt(const AES_CTX *ctx, uint32_t *data);
-
-
-
- 
-void AES_encrypt(const AES_CTX *ctx, uint32_t *data);
-
-
-#line 31 "src\\bootloader.c"
-
-
-
-
-AES_CTX ctx;
-const uint8_t Key[16]= {0x06,0xa9,0x21,0x40,0x36,0xb8,0xa1,0x5b,0x51,0x2e,0x03,0xd5,0x34,0x12,0x00,0x06};
-const uint8_t IV[16] = {0x3d,0xaf,0xba,0x42,0x9d,0x9e,0xb4,0x30,0xb4,0x22,0xda,0x80,0x2c,0x9f,0xac,0x41};
-
-
-
-
-
-
- 
-void Decrypt_Image(int nsize)
-{
-    AES_set_key(&ctx,Key,IV,AES_MODE_128);
-    AES_convert_key(&ctx);
-    AES_cbc_decrypt(&ctx, 0,0,nsize);
-}
-
-
-
-
-
-
-
-
-
-
-
-
- 
-static int FlashRead(unsigned long destination_buffer,unsigned long source_addr,unsigned long len)
-{
-
-    spi_flash_read_data((uint8_t *)destination_buffer, source_addr,len);
-    return 0;
-
-
-
-}
-
-
-
-
-
-
-
-
- 
-static uint8 findlatest(uint8 id1, uint8 id2)
-{
-    if (id1==0xFF && id2==0) return 2;
-    if (id2==0xFF && id1==0) return 1;
-    if (id1>=id2) return 1;
-    else return 2;
-}
-
-extern uint32_t crc32(uint32_t crc, const void *buf, size_t size);
-
-
-
-
-
-
-
- 
-static int loadActiveImage(void)
-{
-    uint32 codesize1=0;
-    uint32 codesize2=0;
-    uint8 spi_data_buffer[64];
-    s_productHeader *pProductHeader;
-    s_imageHeader *pImageHeader;
-    uint32 imageposition1;
-    uint32 imageposition2;
-    uint8 activeImage=0;
-    uint8 images_status=0;
-    uint8 imageid1=0;
-    uint8 imageid2=0;
-    uint32 crc_image1=0;
-    uint32 crc_image2=0;
-    uint8_t image1_encryption = 0;
-    uint8_t image2_encryption = 0;
-
-    
-    pProductHeader = (s_productHeader*)spi_data_buffer;	
-    FlashRead((unsigned long )pProductHeader,(unsigned long)0x1F000, (unsigned long)sizeof(s_productHeader));
-    
-    if (pProductHeader->signature[0]!=0x70 || pProductHeader->signature[1]!=0x52) 
-        return -1;
-
-    imageposition1 = pProductHeader->offset1; 
-    imageposition2 = pProductHeader->offset2; 
-
-    pImageHeader = (s_imageHeader*)spi_data_buffer;	
-    
-    FlashRead((unsigned long )pImageHeader, (unsigned long)imageposition1, (unsigned long)sizeof(s_imageHeader));
-    if (pImageHeader->validflag==0xAA && pImageHeader->signature[0]==0x70 && pImageHeader->signature[1]==0x51) 
-    {
-        codesize1 = pImageHeader->code_size;
-        imageid1 = pImageHeader->imageid;
-        images_status = 1;
-        crc_image1 = pImageHeader->CRC;
-        image1_encryption = pImageHeader->encryption;
-    } 
-
-    pImageHeader = (s_imageHeader*)spi_data_buffer;
-    
-    FlashRead((unsigned long )pImageHeader, (unsigned long)imageposition2, (unsigned long)sizeof(s_imageHeader));
-    if (pImageHeader->validflag==0xAA && pImageHeader->signature[0]==0x70 && pImageHeader->signature[1]==0x51) 
-    {
-        imageid2 = pImageHeader->imageid;
-        codesize2 = pImageHeader->code_size;
-        crc_image2 = pImageHeader->CRC;
-        images_status += 2;
-        image2_encryption = pImageHeader->encryption;
-    }
-
-    if (images_status==3) 
-        activeImage=findlatest(imageid1,imageid2);
-    else
-        activeImage = images_status;
-
-    if (activeImage==1) {
-        FlashRead(0, (unsigned long) imageposition1+64, (unsigned long) codesize1);
-
-        if (image1_encryption) { Decrypt_Image(codesize1); }
-
-        if ( (image1_encryption && !1)
-            || (crc_image1!=crc32(0, (uint8_t*)0, codesize1)) )
-        {
-            if (images_status==3)
-            {
-                FlashRead(0, (unsigned long) imageposition2+64, (unsigned long) codesize2);
-
-                if (image2_encryption) { Decrypt_Image(codesize2); }
-
-                if ( (image2_encryption && !1)
-                    || crc_image2 != crc32(0, (uint8_t*)0, codesize2))
-                    return -1;
-            }
-        }
-    } else if (activeImage==2) {
-        FlashRead(0, (unsigned long) imageposition2+64, (unsigned long) codesize2);
-
-        if (image2_encryption) { Decrypt_Image(codesize2); }
-
-        if ( (image2_encryption && !1)
-            || crc_image2 !=crc32(0,(uint8_t*)0, codesize2))
-        {
-            if (images_status==3)
-            {
-                FlashRead(0, (unsigned long) imageposition1+64, (unsigned long) codesize1);
-
-                if (image1_encryption) { Decrypt_Image(codesize1); }
-
-                if ( (image1_encryption && !1)
-                    || crc_image1 != crc32(0,(uint8_t*)0, codesize1))
-                        return -1;
-            }
-        }
-    }
-  
-    return 0;
-}
-
-
+#line 200 "src\\bootloader.c"
 
 
 
@@ -10357,9 +10068,31 @@ int spi_loadActiveImage(void)
     spi_flash_peripheral_init();
     spi_flash_release_from_power_down();   
         
-#line 239 "src\\bootloader.c"
-    spi_flash_size_init();
-    return loadActiveImage();
+
+    uint8 AN001Header[8];
+    
+    SpiFlashRead((unsigned long)&AN001Header, (unsigned long) 0, (unsigned long)8);
+    if (AN001Header[0]==0x70 && AN001Header[1]==0x50) { 
+        SpiFlashRead(0, (unsigned long)8, (unsigned long)  (AN001Header[6]<<8 | AN001Header[7]));
+        return 0;
+    }
+    else
+    {
+        
+
+        
+        
+        SpiFlashRead(0, 0, 0x7F00);
+        return 0;
+        
+
+    }
+    
+    
+    return -1;
+
+
+
 
 }
 
