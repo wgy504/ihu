@@ -646,7 +646,12 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
   (ANB001/ANB023)以及SmartSnippets工具中的配置都统一和一致起来了。同时订正2nd bootloader中的FLASH DI/DO。
 = 关闭2nd bootloader中的UART启动，打开FLASH支持。原则上，这个版本可以用来直接烧录OPT了
 
-
+//= ZJL, 2016 Sep.26, IHU_EMCWX_CURRENT_SW_DELIVERY R03.32
+= 打开CFG_PRODUCTION_DEBUG_OUTPUT，发现较多的问题。这个时候在生产时需要，待定。
+= 验证CFG_BOOT_FROM_OTP打开，则MAC地址就是全FF，说明的确是从OTP Header中读取的。这说明，未来一旦OTP中烧录了MAC地址，而且想起作用，这个标志必须打开。
+  幸好FLASH代码是可以多次烧录的。
+  
+  
 
 
 
