@@ -650,7 +650,7 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 打开CFG_PRODUCTION_DEBUG_OUTPUT，发现较多的问题。这个时候在生产时需要，待定。
 = 验证CFG_BOOT_FROM_OTP打开，则MAC地址就是全FF，说明的确是从OTP Header中读取的。这说明，未来一旦OTP中烧录了MAC地址，而且想起作用，这个标志必须打开。
   幸好FLASH代码是可以多次烧录的。
-  
+  = MYC订正app.c中的MAC地址顺序，解决IOS不能识别的问题
   
 
 

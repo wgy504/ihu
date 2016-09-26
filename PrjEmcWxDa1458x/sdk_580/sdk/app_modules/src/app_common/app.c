@@ -465,6 +465,26 @@ static struct gapm_start_advertise_cmd* app_easy_gap_undirected_advertise_start_
             {
                 app_easy_gap_place_name_ad_struct(&cmd->info.host.adv_data_len, device_name_length,
                 &cmd->info.host.adv_data[cmd->info.host.adv_data_len], device_name_temp_buf);
+							
+								//MYC ADDED TO CHANGE the SEQUENCE of
+                //          0	 1	2  3  4  5  6  7  8  9 10 11 12	13 14 15 16 17 18 19 20 21 22 23 24 25		
+							  //02 01 06 09 FF 60 00 29 EF A5 72 39 D0 03 03 E7 FE 0B 09 42 41 58 49 41 4E 5F 42 4C 45
+							  //         LL -------- =======MAC======= LL -------- LL -- =B==A==X==I==A==N==_==B==L==E    
+							  //                               TO
+							  //         LL -------- LL -- =B==A==X==I==A==N==_==B==L==E LL -------- =======MAC=======
+							  uint8_t tempbuf[64];
+								memcpy(tempbuf, cmd->info.host.adv_data, 10);
+							  memcpy(&cmd->info.host.adv_data[0], &cmd->info.host.adv_data[10], device_name_length + 2 + 4);
+							  memcpy(&cmd->info.host.adv_data[device_name_length + 2 + 4], tempbuf, 10);
+							
+							  cmd->info.host.adv_data[device_name_length + 2 + 4 + 4] = tempbuf[9];
+								cmd->info.host.adv_data[device_name_length + 2 + 4 + 5] = tempbuf[8];
+							  cmd->info.host.adv_data[device_name_length + 2 + 4 + 6] = tempbuf[7];
+							  cmd->info.host.adv_data[device_name_length + 2 + 4 + 7] = tempbuf[6];
+							  cmd->info.host.adv_data[device_name_length + 2 + 4 + 8] = tempbuf[5];
+							  cmd->info.host.adv_data[device_name_length + 2 + 4 + 9] = tempbuf[4];
+							  
+							
             }
             else if(scan_avail_space >= device_name_length)
             {

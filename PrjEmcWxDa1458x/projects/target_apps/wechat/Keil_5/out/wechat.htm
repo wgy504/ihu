@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\out\wechat.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\out\wechat.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Mon Sep 26 21:03:56 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Tue Sep 27 07:18:06 2016
 <BR><P>
 <H3>Maximum Stack Usage =       1164 bytes + Unknown(Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1157,6 +1157,7 @@ Global Symbols
 <LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;smpc_pairing_cfm_handler (via Veneer)
 <LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gapc_connection_req_ind_handler (via Veneer)
 <LI><a href="#[1e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_easy_gap_dev_config_create_msg (via Veneer)
+<LI><a href="#[1e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_easy_gap_undirected_advertise_start_create_msg (via Veneer)
 <LI><a href="#[1e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_easy_gap_place_name_ad_struct (via Veneer)
 <LI><a href="#[1dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_easy_gap_adv_read_from_NVDS (via Veneer)
 <LI><a href="#[1cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_easy_security_set_tk (via Veneer)
@@ -2291,7 +2292,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> wechat_task.o(.constdata)
 </UL>
 <P><STRONG><a name="[1c0]"></a>default_advertise_operation</STRONG> (Thumb, 8 bytes, Stack size 8 bytes, app_default_handlers.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 188<LI>Call Chain = default_advertise_operation &rArr; app_easy_gap_undirected_advertise_start &rArr; app_easy_gap_undirected_advertise_start_create_msg &rArr; app_easy_gap_adv_read_from_NVDS &rArr; malloc
+<BR><BR>[Stack]<UL><LI>Max Depth = 244<LI>Call Chain = default_advertise_operation &rArr; app_easy_gap_undirected_advertise_start &rArr; app_easy_gap_undirected_advertise_start_create_msg &rArr; app_easy_gap_adv_read_from_NVDS &rArr; malloc
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_easy_gap_undirected_advertise_start
 </UL>
@@ -2302,7 +2303,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[1c2]"></a>default_app_on_connection</STRONG> (Thumb, 30 bytes, Stack size 8 bytes, app_default_handlers.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 196<LI>Call Chain = default_app_on_connection &rArr; default_advertise_operation &rArr; app_easy_gap_undirected_advertise_start &rArr; app_easy_gap_undirected_advertise_start_create_msg &rArr; app_easy_gap_adv_read_from_NVDS &rArr; malloc
+<BR><BR>[Stack]<UL><LI>Max Depth = 252<LI>Call Chain = default_app_on_connection &rArr; default_advertise_operation &rArr; app_easy_gap_undirected_advertise_start &rArr; app_easy_gap_undirected_advertise_start_create_msg &rArr; app_easy_gap_adv_read_from_NVDS &rArr; malloc
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_prf_enable
 <LI><a href="#[1c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;default_advertise_operation
@@ -2311,7 +2312,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[1c4]"></a>default_app_on_disconnect</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, app_default_handlers.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 188<LI>Call Chain = default_app_on_disconnect &rArr; default_advertise_operation &rArr; app_easy_gap_undirected_advertise_start &rArr; app_easy_gap_undirected_advertise_start_create_msg &rArr; app_easy_gap_adv_read_from_NVDS &rArr; malloc
+<BR><BR>[Stack]<UL><LI>Max Depth = 244<LI>Call Chain = default_app_on_disconnect &rArr; default_advertise_operation &rArr; app_easy_gap_undirected_advertise_start &rArr; app_easy_gap_undirected_advertise_start_create_msg &rArr; app_easy_gap_adv_read_from_NVDS &rArr; malloc
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;default_advertise_operation
 </UL>
@@ -2319,7 +2320,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[1c5]"></a>default_app_on_set_dev_config_complete</STRONG> (Thumb, 16 bytes, Stack size 8 bytes, app_default_handlers.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 196<LI>Call Chain = default_app_on_set_dev_config_complete &rArr; default_advertise_operation &rArr; app_easy_gap_undirected_advertise_start &rArr; app_easy_gap_undirected_advertise_start_create_msg &rArr; app_easy_gap_adv_read_from_NVDS &rArr; malloc
+<BR><BR>[Stack]<UL><LI>Max Depth = 252<LI>Call Chain = default_app_on_set_dev_config_complete &rArr; default_advertise_operation &rArr; app_easy_gap_undirected_advertise_start &rArr; app_easy_gap_undirected_advertise_start_create_msg &rArr; app_easy_gap_adv_read_from_NVDS &rArr; malloc
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_db_init_start
 <LI><a href="#[1c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;default_advertise_operation
@@ -2332,7 +2333,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[1c7]"></a>default_app_on_db_init_complete</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, app_default_handlers.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 188<LI>Call Chain = default_app_on_db_init_complete &rArr; default_advertise_operation &rArr; app_easy_gap_undirected_advertise_start &rArr; app_easy_gap_undirected_advertise_start_create_msg &rArr; app_easy_gap_adv_read_from_NVDS &rArr; malloc
+<BR><BR>[Stack]<UL><LI>Max Depth = 244<LI>Call Chain = default_app_on_db_init_complete &rArr; default_advertise_operation &rArr; app_easy_gap_undirected_advertise_start &rArr; app_easy_gap_undirected_advertise_start_create_msg &rArr; app_easy_gap_adv_read_from_NVDS &rArr; malloc
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;default_advertise_operation
 </UL>
@@ -2427,8 +2428,8 @@ Global Symbols
 <LI><a href="#[1d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;default_app_on_encrypt_req_ind
 </UL>
 
-<P><STRONG><a name="[1c1]"></a>app_easy_gap_undirected_advertise_start</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, app.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 180<LI>Call Chain = app_easy_gap_undirected_advertise_start &rArr; app_easy_gap_undirected_advertise_start_create_msg &rArr; app_easy_gap_adv_read_from_NVDS &rArr; malloc
+<P><STRONG><a name="[1c1]"></a>app_easy_gap_undirected_advertise_start</STRONG> (Thumb, 56 bytes, Stack size 8 bytes, app.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 236<LI>Call Chain = app_easy_gap_undirected_advertise_start &rArr; app_easy_gap_undirected_advertise_start_create_msg &rArr; app_easy_gap_adv_read_from_NVDS &rArr; malloc
 </UL>
 <BR>[Calls]<UL><LI><a href="#[15b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ke_msg_send (via Veneer)
 <LI><a href="#[13b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ke_state_set (via Veneer)
@@ -2494,7 +2495,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> app_task.o(.constdata)
 </UL>
 <P><STRONG><a name="[c5]"></a>gapm_cmp_evt_handler</STRONG> (Thumb, 80 bytes, Stack size 8 bytes, app_task.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 204<LI>Call Chain = gapm_cmp_evt_handler &rArr; default_app_on_set_dev_config_complete &rArr; default_advertise_operation &rArr; app_easy_gap_undirected_advertise_start &rArr; app_easy_gap_undirected_advertise_start_create_msg &rArr; app_easy_gap_adv_read_from_NVDS &rArr; malloc
+<BR><BR>[Stack]<UL><LI>Max Depth = 260<LI>Call Chain = gapm_cmp_evt_handler &rArr; default_app_on_set_dev_config_complete &rArr; default_advertise_operation &rArr; app_easy_gap_undirected_advertise_start &rArr; app_easy_gap_undirected_advertise_start_create_msg &rArr; app_easy_gap_adv_read_from_NVDS &rArr; malloc
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1e9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_advertise_complete
 <LI><a href="#[1e7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_easy_gap_dev_configure
@@ -2503,7 +2504,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> app_task.o(.constdata)
 </UL>
 <P><STRONG><a name="[c7]"></a>gapc_connection_req_ind_handler</STRONG> (Thumb, 100 bytes, Stack size 24 bytes, app_task.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 220<LI>Call Chain = gapc_connection_req_ind_handler &rArr; default_app_on_connection &rArr; default_advertise_operation &rArr; app_easy_gap_undirected_advertise_start &rArr; app_easy_gap_undirected_advertise_start_create_msg &rArr; app_easy_gap_adv_read_from_NVDS &rArr; malloc
+<BR><BR>[Stack]<UL><LI>Max Depth = 276<LI>Call Chain = gapc_connection_req_ind_handler &rArr; default_app_on_connection &rArr; default_advertise_operation &rArr; app_easy_gap_undirected_advertise_start &rArr; app_easy_gap_undirected_advertise_start_create_msg &rArr; app_easy_gap_adv_read_from_NVDS &rArr; malloc
 </UL>
 <BR>[Calls]<UL><LI><a href="#[105]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy (via Veneer)
 <LI><a href="#[13b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ke_state_set (via Veneer)
@@ -2522,7 +2523,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> app_task.o(.constdata)
 </UL>
 <P><STRONG><a name="[c8]"></a>gapc_disconnect_ind_handler</STRONG> (Thumb, 40 bytes, Stack size 8 bytes, app_task.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 196<LI>Call Chain = gapc_disconnect_ind_handler &rArr; default_app_on_disconnect &rArr; default_advertise_operation &rArr; app_easy_gap_undirected_advertise_start &rArr; app_easy_gap_undirected_advertise_start_create_msg &rArr; app_easy_gap_adv_read_from_NVDS &rArr; malloc
+<BR><BR>[Stack]<UL><LI>Max Depth = 252<LI>Call Chain = gapc_disconnect_ind_handler &rArr; default_app_on_disconnect &rArr; default_advertise_operation &rArr; app_easy_gap_undirected_advertise_start &rArr; app_easy_gap_undirected_advertise_start_create_msg &rArr; app_easy_gap_adv_read_from_NVDS &rArr; malloc
 </UL>
 <BR>[Calls]<UL><LI><a href="#[135]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ke_state_get (via Veneer)
 <LI><a href="#[1c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;default_app_on_disconnect
@@ -2531,7 +2532,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> app_task.o(.constdata)
 </UL>
 <P><STRONG><a name="[c9]"></a>app_module_init_cmp_evt_handler</STRONG> (Thumb, 36 bytes, Stack size 8 bytes, app_task.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 196<LI>Call Chain = app_module_init_cmp_evt_handler &rArr; default_app_on_db_init_complete &rArr; default_advertise_operation &rArr; app_easy_gap_undirected_advertise_start &rArr; app_easy_gap_undirected_advertise_start_create_msg &rArr; app_easy_gap_adv_read_from_NVDS &rArr; malloc
+<BR><BR>[Stack]<UL><LI>Max Depth = 252<LI>Call Chain = app_module_init_cmp_evt_handler &rArr; default_app_on_db_init_complete &rArr; default_advertise_operation &rArr; app_easy_gap_undirected_advertise_start &rArr; app_easy_gap_undirected_advertise_start_create_msg &rArr; app_easy_gap_adv_read_from_NVDS &rArr; malloc
 </UL>
 <BR>[Calls]<UL><LI><a href="#[135]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ke_state_get (via Veneer)
 <LI><a href="#[1e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_db_init
@@ -4132,10 +4133,11 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[1e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_easy_gap_undirected_advertise_start_create_msg
 </UL>
 
-<P><STRONG><a name="[1e2]"></a>app_easy_gap_undirected_advertise_start_create_msg</STRONG> (Thumb, 204 bytes, Stack size 112 bytes, app.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 172<LI>Call Chain = app_easy_gap_undirected_advertise_start_create_msg &rArr; app_easy_gap_adv_read_from_NVDS &rArr; malloc
+<P><STRONG><a name="[1e2]"></a>app_easy_gap_undirected_advertise_start_create_msg</STRONG> (Thumb, 330 bytes, Stack size 168 bytes, app.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 228<LI>Call Chain = app_easy_gap_undirected_advertise_start_create_msg &rArr; app_easy_gap_adv_read_from_NVDS &rArr; malloc
 </UL>
-<BR>[Calls]<UL><LI><a href="#[158]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ke_msg_alloc (via Veneer)
+<BR>[Calls]<UL><LI><a href="#[105]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy (via Veneer)
+<LI><a href="#[158]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ke_msg_alloc (via Veneer)
 <LI><a href="#[1df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nvds_get (via Veneer)
 <LI><a href="#[1e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_easy_gap_place_name_ad_struct
 <LI><a href="#[1dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_easy_gap_adv_read_from_NVDS
