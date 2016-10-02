@@ -15,6 +15,7 @@
 
   <project>
     <PathAndName>.\DA1458x_SDK\5.0.3\utilities\secondary_bootloader\emcwx_secondary_bootloader.uvprojx</PathAndName>
+    <NodeIsExpanded>1</NodeIsExpanded>
   </project>
 
   <project>

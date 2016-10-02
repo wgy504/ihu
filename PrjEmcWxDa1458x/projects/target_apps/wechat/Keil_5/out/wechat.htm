@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\out\wechat.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\out\wechat.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Tue Sep 27 07:18:06 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Sun Oct 02 17:27:08 2016
 <BR><P>
 <H3>Maximum Stack Usage =       1164 bytes + Unknown(Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1342,8 +1342,8 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> jump_table.o(jump_table_mem_area)
 </UL>
-<P><STRONG><a name="[ed]"></a>nvds_read_bdaddr_from_otp</STRONG> (Thumb, 52 bytes, Stack size 16 bytes, nvds.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = nvds_read_bdaddr_from_otp
+<P><STRONG><a name="[ed]"></a>nvds_read_bdaddr_from_otp</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, nvds.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = nvds_read_bdaddr_from_otp
 </UL>
 <BR>[Calls]<UL><LI><a href="#[105]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy (via Veneer)
 </UL>
@@ -2034,10 +2034,8 @@ Global Symbols
 <P><STRONG><a name="[5]"></a>SysTick_Handler</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, systick.o(.text))
 <BR>[Address Reference Count : 1]<UL><LI> boot_vectors.o(RESET)
 </UL>
-<P><STRONG><a name="[12c]"></a>iq_trim_from_otp</STRONG> (Thumb, 56 bytes, Stack size 12 bytes, rf_580.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = iq_trim_from_otp
-</UL>
-<BR>[Called By]<UL><LI><a href="#[107]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;system_init
+<P><STRONG><a name="[12c]"></a>iq_trim_from_otp</STRONG> (Thumb, 32 bytes, Stack size 0 bytes, rf_580.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[107]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;system_init
 </UL>
 
 <P><STRONG><a name="[5b]"></a>rf_reg_rd</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, rf_580.o(.text))
@@ -2428,7 +2426,7 @@ Global Symbols
 <LI><a href="#[1d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;default_app_on_encrypt_req_ind
 </UL>
 
-<P><STRONG><a name="[1c1]"></a>app_easy_gap_undirected_advertise_start</STRONG> (Thumb, 56 bytes, Stack size 8 bytes, app.o(.text))
+<P><STRONG><a name="[1c1]"></a>app_easy_gap_undirected_advertise_start</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, app.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 236<LI>Call Chain = app_easy_gap_undirected_advertise_start &rArr; app_easy_gap_undirected_advertise_start_create_msg &rArr; app_easy_gap_adv_read_from_NVDS &rArr; malloc
 </UL>
 <BR>[Calls]<UL><LI><a href="#[15b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ke_msg_send (via Veneer)
@@ -2438,7 +2436,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[1c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;default_advertise_operation
 </UL>
 
-<P><STRONG><a name="[1e4]"></a>app_timer_set</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, app.o(.text))
+<P><STRONG><a name="[1e4]"></a>app_timer_set</STRONG> (Thumb, 60 bytes, Stack size 8 bytes, app.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = app_timer_set
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ke_timer_set (via Veneer)
@@ -4133,7 +4131,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[1e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_easy_gap_undirected_advertise_start_create_msg
 </UL>
 
-<P><STRONG><a name="[1e2]"></a>app_easy_gap_undirected_advertise_start_create_msg</STRONG> (Thumb, 330 bytes, Stack size 168 bytes, app.o(.text))
+<P><STRONG><a name="[1e2]"></a>app_easy_gap_undirected_advertise_start_create_msg</STRONG> (Thumb, 320 bytes, Stack size 168 bytes, app.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 228<LI>Call Chain = app_easy_gap_undirected_advertise_start_create_msg &rArr; app_easy_gap_adv_read_from_NVDS &rArr; malloc
 </UL>
 <BR>[Calls]<UL><LI><a href="#[105]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy (via Veneer)

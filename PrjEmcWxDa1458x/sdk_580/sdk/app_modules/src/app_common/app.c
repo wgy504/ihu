@@ -68,6 +68,9 @@ struct app_env_tag app_env[APP_EASY_MAX_ACTIVE_CONNECTION] __attribute__((sectio
 // Array that holds the service access rights set by user for the included profiles. The default value is "ENABLE"
 app_prf_srv_sec_t app_prf_srv_perm[PRFS_TASK_ID_MAX] __attribute__((section("retention_mem_area0"),zero_init)); //@RETENTION MEMORY
 
+//MYC 2016/10/02
+extern struct bd_addr dev_bdaddr;
+	
 const struct prf_func_callbacks prf_funcs[] =
 {
     #if BLE_PROX_REPORTER
@@ -477,13 +480,24 @@ static struct gapm_start_advertise_cmd* app_easy_gap_undirected_advertise_start_
 							  memcpy(&cmd->info.host.adv_data[0], &cmd->info.host.adv_data[10], device_name_length + 2 + 4);
 							  memcpy(&cmd->info.host.adv_data[device_name_length + 2 + 4], tempbuf, 10);
 							
-							  cmd->info.host.adv_data[device_name_length + 2 + 4 + 4] = tempbuf[9];
-								cmd->info.host.adv_data[device_name_length + 2 + 4 + 5] = tempbuf[8];
-							  cmd->info.host.adv_data[device_name_length + 2 + 4 + 6] = tempbuf[7];
-							  cmd->info.host.adv_data[device_name_length + 2 + 4 + 7] = tempbuf[6];
-							  cmd->info.host.adv_data[device_name_length + 2 + 4 + 8] = tempbuf[5];
-							  cmd->info.host.adv_data[device_name_length + 2 + 4 + 9] = tempbuf[4];
-							  
+								if (APP_BOOT_FROM_OTP == 1)
+								{  //MYC use the MAC address can be well filled in Wechat broadcast message (2016/10/02)
+										cmd->info.host.adv_data[device_name_length + 2 + 4 + 4] = dev_bdaddr.addr[5];
+										cmd->info.host.adv_data[device_name_length + 2 + 4 + 5] = dev_bdaddr.addr[4];
+										cmd->info.host.adv_data[device_name_length + 2 + 4 + 6] = dev_bdaddr.addr[3];
+										cmd->info.host.adv_data[device_name_length + 2 + 4 + 7] = dev_bdaddr.addr[2];
+										cmd->info.host.adv_data[device_name_length + 2 + 4 + 8] = dev_bdaddr.addr[1];
+										cmd->info.host.adv_data[device_name_length + 2 + 4 + 9] = dev_bdaddr.addr[0];
+								}
+								else
+								{
+										cmd->info.host.adv_data[device_name_length + 2 + 4 + 4] = tempbuf[9];
+										cmd->info.host.adv_data[device_name_length + 2 + 4 + 5] = tempbuf[8];
+										cmd->info.host.adv_data[device_name_length + 2 + 4 + 6] = tempbuf[7];
+										cmd->info.host.adv_data[device_name_length + 2 + 4 + 7] = tempbuf[6];
+										cmd->info.host.adv_data[device_name_length + 2 + 4 + 8] = tempbuf[5];
+										cmd->info.host.adv_data[device_name_length + 2 + 4 + 9] = tempbuf[4];
+								}
 							
             }
             else if(scan_avail_space >= device_name_length)

@@ -289,11 +289,11 @@ ARM Macro Assembler    Page 5
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M0 --apcs=interw
 ork --depend=.\out\startup_cmsdk_cm0.d -o.\out\startup_cmsdk_cm0.o -I.\includes
- -ID:\IHUPRJ\ihu\DA1458x_SDK\5.0.3\utilities\secondary_bootloader\RTE -IC:\Keil
-_v5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include -IC:\Keil_v5\ARM\CMSIS\I
-nclude --predefine="__MICROLIB SETA 1" --predefine="__UVISION_VERSION SETA 518"
- --predefine="ARMCM0 SETA 1" --list=.\out\startup_cmsdk_cm0.lst startup\startup
-_CMSDK_CM0.s
+ -ID:\Myc\Project\Baxian\Git\ihu\DA1458x_SDK\5.0.3\utilities\secondary_bootload
+er\RTE -IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0-Beta4\Device\ARM\ARMCM0\Include -I
+C:\Keil_v5\ARM\CMSIS\Include --predefine="__MICROLIB SETA 1" --predefine="__UVI
+SION_VERSION SETA 518" --predefine="ARMCM0 SETA 1" --list=.\out\startup_cmsdk_c
+m0.lst startup\startup_CMSDK_CM0.s
 
 
 
