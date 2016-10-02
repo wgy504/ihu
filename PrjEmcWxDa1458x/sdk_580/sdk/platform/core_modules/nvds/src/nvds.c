@@ -131,7 +131,6 @@ void nvds_read_bdaddr_from_otp()
 {
     const uint16_t BDADDR_OFFSET = 0x7fd4; // offset of BD address in OTP header
     uint8_t *otp_bdaddr;
-	  uint8_t len;
 
     if (!APP_BOOT_FROM_OTP)
     {
@@ -150,11 +149,7 @@ void nvds_read_bdaddr_from_otp()
     else
         otp_bdaddr = (uint8_t *)0x20000000 + BDADDR_OFFSET;   //where in OTP header is BDADDR
 
-		len = sizeof(dev_bdaddr);
     memcpy(&dev_bdaddr, otp_bdaddr, sizeof(dev_bdaddr));
-		
-		//MYC use the MAC address can be well filled in Wechat broadcast message (2016/10/02)
-		//memcpy(&(nvds_data_ptr->NVDS_TAG_APP_BLE_ADV_DATA[0]), otp_bdaddr, sizeof(dev_bdaddr));
 		
     SetBits16(CLK_AMBA_REG, OTP_ENABLE, 0);     //disable OTP clock
 }
