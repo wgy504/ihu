@@ -650,8 +650,20 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 打开CFG_PRODUCTION_DEBUG_OUTPUT，发现较多的问题。这个时候在生产时需要，待定。
 = 验证CFG_BOOT_FROM_OTP打开，则MAC地址就是全FF，说明的确是从OTP Header中读取的。这说明，未来一旦OTP中烧录了MAC地址，而且想起作用，这个标志必须打开。
   幸好FLASH代码是可以多次烧录的。
-  = MYC订正app.c中的MAC地址顺序，解决IOS不能识别的问题
-  
+= MYC订正app.c中的MAC地址顺序，解决IOS不能识别的问题
+= OTP独立烧制，以及PLT烧制，都是好使了，这一版可以当做了官方DELIVERY程序了
+= 当前本地MAC=MYC，CFG_BOOT_FROM_OTP已经打开。如果需要本地调测，则需要将MAC改为自己的，而且需要将BOOT_OTP关闭，才能通过JTAG下载到FLASH进行调测
+= PLT上的RF测试还有各种问题，待解决
+= 生产流程文档《DA14580开发测试环境与过程V06.docx》以及相应的PLT批量版本均在云上了
+
+//= ZJL, 2016 Oct.4, CURRENT_SW_DELIVERY R03.33
+= 准备EMCWX以及SCYCB项目的持续完善
+
+
+
+
+
+
 
 
 
