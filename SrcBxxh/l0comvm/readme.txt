@@ -658,7 +658,8 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 
 //= ZJL, 2016 Oct.4, CURRENT_SW_DELIVERY R03.33
 = 准备EMCWX以及SCYCB项目的持续完善
-
+= 重新清理了一下任务清单和目录结构，将老旧vmuo@stm32裸系统的程序例子删掉，将sps_device任务删掉，已经没有用处，但sps_device源代码还保留。
+= 修正vmfo编译中的问题：l2adc模块将需要分开，不然他们必须复用msgxxx.h的消息定义部分
 
 
 

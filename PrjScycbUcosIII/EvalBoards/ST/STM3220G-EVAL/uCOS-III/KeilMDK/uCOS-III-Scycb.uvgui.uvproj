@@ -1159,7 +1159,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>l3sycb</GroupName>
+          <GroupName>l3scycb</GroupName>
           <Files>
             <File>
               <FileName>l3scycb.c</FileName>

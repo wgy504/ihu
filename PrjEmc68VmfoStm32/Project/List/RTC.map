@@ -745,12 +745,12 @@ Removing Unused input sections from the image.
     Removing l1timer_freeos.o(.bss), (216 bytes).
     Removing l1timer_freeos.o(.conststring), (133 bytes).
     Removing l1timer_freeos.o(.data), (64 bytes).
-    Removing l2adclibra.o(.text), (460 bytes).
+    Removing l2adclibra.o(.text), (508 bytes).
     Removing l2adclibra.o(.conststring), (140 bytes).
-    Removing l2adclibra.o(.data), (48 bytes).
-    Removing l2spileo.o(.text), (448 bytes).
+    Removing l2adclibra.o(.data), (56 bytes).
+    Removing l2spileo.o(.text), (540 bytes).
     Removing l2spileo.o(.conststring), (134 bytes).
-    Removing l2spileo.o(.data), (48 bytes).
+    Removing l2spileo.o(.data), (64 bytes).
     Removing l2i2caries.o(.text), (460 bytes).
     Removing l2i2caries.o(.conststring), (140 bytes).
     Removing l2i2caries.o(.data), (48 bytes).
@@ -776,7 +776,7 @@ Removing Unused input sections from the image.
     Removing l3emc68x.o(.conststring), (134 bytes).
     Removing l3emc68x.o(.data), (48 bytes).
 
-138 unused section(s) (total 70730 bytes) removed from the image.
+138 unused section(s) (total 70894 bytes) removed from the image.
 
 ==============================================================================
 

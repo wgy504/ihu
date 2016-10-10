@@ -1,1 +1,0 @@
--c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\StartUp -I..\HardDrivers -I..\STM32F20X_Lib\inc -I d:\Keil\ARM\RV31\Inc -I d:\Keil\ARM\CMSIS\Include -I d:\Keil\ARM\Inc\ST\STM32F2xx -DUSE_STM322xG_EVAL -DSTM32F2XX -DUSE_STDPERIPH_DRIVER -o ".\Obj\spi.o" --omf_browse ".\Obj\spi.crf" --depend ".\Obj\spi.d" "..\HardDrivers\spi.c"

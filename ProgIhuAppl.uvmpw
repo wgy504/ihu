@@ -10,7 +10,6 @@
   <project>
     <PathAndName>.\PrjEmcWxDa1458x\projects\target_apps\wechat\Keil_5\emc_wechat.uvguix.uvprojx</PathAndName>
     <NodeIsActive>1</NodeIsActive>
-    <NodeIsExpanded>1</NodeIsExpanded>
   </project>
 
   <project>
@@ -18,15 +17,7 @@
   </project>
 
   <project>
-    <PathAndName>.\PrjEmcSpsDa1458x\projects\target_apps\dsps\sps_device\Keil_5\sps_device.uvprojx</PathAndName>
-  </project>
-
-  <project>
     <PathAndName>.\PrjEmc68VmfoStm32\Project\emc68x_vmfo.uvproj</PathAndName>
-  </project>
-
-  <project>
-    <PathAndName>.\PrjScycbVmuoStm205RG\Project\scycb_vmuo.uvproj</PathAndName>
   </project>
 
   <project>
