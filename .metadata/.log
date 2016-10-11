@@ -387,3 +387,16 @@ org.eclipse.core.internal.resources.ResourceException: Resource is out of sync w
 	at org.eclipse.equinox.launcher.Main.run(Main.java:1515)
 !SUBENTRY 2 org.eclipse.core.resources 4 274 2016-10-11 16:23:22.219
 !MESSAGE Resource is out of sync with the file system: '/freertos_retarget/.settings/language.settings.xml'.
+!SESSION 2016-10-11 16:29:03.052 -----------------------------------------------
+eclipse.buildId=unknown
+java.version=1.8.0_45
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=en_US
+Framework arguments:  -pluginCustomization C:/DiaSemi/SmartSnippetsStudio/CDT/plugin_customization.ini
+Command-line arguments:  -os win32 -ws win32 -arch x86 -pluginCustomization C:/DiaSemi/SmartSnippetsStudio/CDT/plugin_customization.ini
+
+!ENTRY org.eclipse.cdt.core 1 0 2016-10-11 16:33:35.275
+!MESSAGE Indexed 'freertos_retarget' (78 sources, 113 headers) in 2.42 sec: 10,739 declarations; 43,401 references; 12 unresolved inclusions; 0 syntax errors; 2,379 unresolved names (4.2%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2016-10-11 16:39:56.791
+!MESSAGE Indexed 'freertos_retarget' (78 sources, 113 headers) in 3.06 sec: 10,739 declarations; 43,401 references; 12 unresolved inclusions; 0 syntax errors; 2,379 unresolved names (4.2%)

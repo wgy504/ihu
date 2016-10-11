@@ -1,253 +1,103 @@
-16:25:59 **** Incremental Build of configuration DA14681-01-Release_QSPI for project freertos_retarget ****
+16:40:12 **** Incremental Build of configuration DA14681-01-Release_QSPI for project freertos_retarget ****
 make --silent pre-build main-build 
 Generate mem.ld for selected configuration (QSPI).
  
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/startup/config.c
+Building file: D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emc68x.c
 Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/startup/config.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/startup/startup_ARMCM0.S
-Invoking: Cross ARM GNU Assembler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/startup/startup_ARMCM0.S
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/startup/system_ARMCM0.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/startup/system_ARMCM0.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/startup/vector_table.S
-Invoking: Cross ARM GNU Assembler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/startup/vector_table.S
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/system/sys_man/sys_charger.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/system/sys_man/sys_charger.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/system/sys_man/sys_clock_mgr.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/system/sys_man/sys_clock_mgr.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/system/sys_man/sys_power_mgr.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/system/sys_man/sys_power_mgr.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/system/sys_man/sys_rtc.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/system/sys_man/sys_rtc.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/system/sys_man/sys_watchdog.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/system/sys_man/sys_watchdog.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_aes_hash.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_aes_hash.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_cpm.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_cpm.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_dma.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_dma.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_fem_sky66112-11.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_fem_sky66112-11.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_gpadc.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_gpadc.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_gpio.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_gpio.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_hard_fault.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_hard_fault.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_i2c.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_i2c.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_irgen.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_irgen.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_keyboard_scanner.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_keyboard_scanner.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_otpc.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_otpc.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_qspi.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_qspi.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_quad.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_quad.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_rf.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_rf.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_soc.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_soc.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_spi.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_spi.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_tempsens.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_tempsens.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_timer0.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_timer0.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_timer1.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_timer1.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_timer2.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_timer2.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_trng.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_trng.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_uart.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_uart.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_usb_charger.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_usb_charger.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_watchdog.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_watchdog.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_wkup.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/hw_wkup.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/sys_tcs.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/peripherals/src/sys_tcs.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/osal/msg_queues.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/osal/msg_queues.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/osal/resmgmt.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/osal/resmgmt.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/memory/src/qspi_automode.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/memory/src/qspi_automode.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/free_rtos/portable/MemMang/heap_4.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/free_rtos/portable/MemMang/heap_4.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/free_rtos/portable/GCC/ARM_CM0/port.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/free_rtos/portable/GCC/ARM_CM0/port.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/free_rtos/croutine.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/free_rtos/croutine.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/free_rtos/event_groups.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/free_rtos/event_groups.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/free_rtos/list.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/free_rtos/list.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/free_rtos/queue.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/free_rtos/queue.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/free_rtos/tasks.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/free_rtos/tasks.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/free_rtos/timers.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/free_rtos/timers.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_battery.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_battery.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_flash.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_flash.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_gpadc.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_gpadc.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_i2c.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_i2c.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_keyboard_scanner.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_keyboard_scanner.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_nvms.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_nvms.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_nvms_direct.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_nvms_direct.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_nvms_ves.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_nvms_ves.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_nvparam.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_nvparam.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_rf.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_rf.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_spi.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_spi.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_temp_sens.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_temp_sens.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_uart.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_uart.c
- 
-Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_uart_ble.c
-Invoking: Cross ARM C Compiler
-Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_uart_ble.c
+In file included from D:\IHUPRJ\ihu\SrcBxxh\l1vmlayer/l1comdef_freeos.h:11:0,
+                 from D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emc68x.h:17,
+                 from D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emc68x.c:14:
+D:\IHUPRJ\ihu\SrcBxxh\l1vmlayer/vmfreeoslayer.h:132:2: error: unknown type name 'bool'
+  bool useFlag;
+  ^
+D:\IHUPRJ\ihu\SrcBxxh\l1vmlayer/vmfreeoslayer.h:178:1: error: unknown type name 'uint16_t'
+ uint16_t b2l_uint16(uint16_t in);
+ ^
+D:\IHUPRJ\ihu\SrcBxxh\l1vmlayer/vmfreeoslayer.h:178:21: error: unknown type name 'uint16_t'
+ uint16_t b2l_uint16(uint16_t in);
+                     ^
+D:\IHUPRJ\ihu\SrcBxxh\l1vmlayer/vmfreeoslayer.h:202:46: error: unknown type name 'IhuMsgSruct_t'
+ extern OPSTAT ihu_message_rcv(UINT8 dest_id, IhuMsgSruct_t *msg);
+                                              ^
+D:\IHUPRJ\ihu\SrcBxxh\l1vmlayer/vmfreeoslayer.h:211:40: error: unknown type name 'time_t'
+ extern struct tm ihu_clock_unix_to_ymd(time_t t_unix);
+                                        ^
+D:\IHUPRJ\ihu\SrcBxxh\l1vmlayer/vmfreeoslayer.h:218:56: error: unknown type name 'IhuMsgSruct_t'
+ extern OPSTAT ihu_message_rcv_bare_rtos(UINT8 dest_id, IhuMsgSruct_t *msg);
+                                                        ^
+D:\IHUPRJ\ihu\SrcBxxh\l1vmlayer/vmfreeoslayer.h:236:8: error: unknown type name 'time_t'
+ extern time_t zIhuSystemTimeUnix;                           //系统时钟TimeStamp
+        ^
+In file included from D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emc68x.h:19:0,
+                 from D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emc68x.c:14:
+D:\IHUPRJ\ihu\SrcBxxh\l1vmlayer/l1timer_freeos.h:69:0: warning: "MAX_TIMER_NUM_IN_ONE_IHU_1S" redefined
+ #define MAX_TIMER_NUM_IN_ONE_IHU_1S TIMER_ID_1S_MAX + 1  //Normal situation
+ ^
+In file included from D:\IHUPRJ\ihu\SrcBxxh\l1vmlayer/vmfreeoslayer.h:14:0,
+                 from D:\IHUPRJ\ihu\SrcBxxh\l1vmlayer/l1comdef_freeos.h:11,
+                 from D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emc68x.h:17,
+                 from D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emc68x.c:14:
+D:\IHUPRJ\ihu\SrcBxxh\l0comvm/sysdim.h:87:0: note: this is the location of the previous definition
+  #define MAX_TIMER_NUM_IN_ONE_IHU_1S 8  //Normal situation
+ ^
+In file included from D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emc68x.h:19:0,
+                 from D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emc68x.c:14:
+D:\IHUPRJ\ihu\SrcBxxh\l1vmlayer/l1timer_freeos.h:70:0: warning: "MAX_TIMER_NUM_IN_ONE_IHU_10MS" redefined
+ #define MAX_TIMER_NUM_IN_ONE_IHU_10MS TIMER_ID_10MS_MAX + 1  //Frame usage
+ ^
+In file included from D:\IHUPRJ\ihu\SrcBxxh\l1vmlayer/vmfreeoslayer.h:14:0,
+                 from D:\IHUPRJ\ihu\SrcBxxh\l1vmlayer/l1comdef_freeos.h:11,
+                 from D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emc68x.h:17,
+                 from D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emc68x.c:14:
+D:\IHUPRJ\ihu\SrcBxxh\l0comvm/sysdim.h:88:0: note: this is the location of the previous definition
+  #define MAX_TIMER_NUM_IN_ONE_IHU_10MS 3 //Frame usage
+ ^
+In file included from D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emc68x.h:19:0,
+                 from D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emc68x.c:14:
+D:\IHUPRJ\ihu\SrcBxxh\l1vmlayer/l1timer_freeos.h:71:0: warning: "MAX_TIMER_NUM_IN_ONE_IHU_1MS" redefined
+ #define MAX_TIMER_NUM_IN_ONE_IHU_1MS TIMER_ID_1MS_MAX + 1  //Real-time usage
+ ^
+In file included from D:\IHUPRJ\ihu\SrcBxxh\l1vmlayer/vmfreeoslayer.h:14:0,
+                 from D:\IHUPRJ\ihu\SrcBxxh\l1vmlayer/l1comdef_freeos.h:11,
+                 from D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emc68x.h:17,
+                 from D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emc68x.c:14:
+D:\IHUPRJ\ihu\SrcBxxh\l0comvm/sysdim.h:89:0: note: this is the location of the previous definition
+  #define MAX_TIMER_NUM_IN_ONE_IHU_1MS 3  //Real-time usage
+ ^
+D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emc68x.c:25:3: error: 'MSG_ID_ENTRY' undeclared here (not in a function)
+  {MSG_ID_ENTRY,                 FSM_STATE_ENTRY,                    fsm_emc68x_task_entry}, //Starting
+   ^
+D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emc68x.c:28:4: error: 'MSG_ID_COM_INIT' undeclared here (not in a function)
+   {MSG_ID_COM_INIT,               FSM_STATE_IDLE,                     fsm_emc68x_init},
+    ^
+D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emc68x.c:29:4: error: 'MSG_ID_COM_RESTART' undeclared here (not in a function)
+   {MSG_ID_COM_RESTART,          FSM_STATE_IDLE,                     fsm_emc68x_restart},
+    ^
+D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emc68x.c:33:4: error: 'MSG_ID_COM_STOP' undeclared here (not in a function)
+   {MSG_ID_COM_STOP,            FSM_STATE_EMC68X_AVTIVE,              fsm_emc68x_stop_rcv},
+    ^
+D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emc68x.c:36:4: error: 'MSG_ID_END' undeclared here (not in a function)
+   {MSG_ID_END,                    FSM_STATE_END,                      NULL},  //Ending
+    ^
+D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emc68x.c:36:71: error: 'NULL' undeclared here (not in a function)
+   {MSG_ID_END,                    FSM_STATE_END,                      NULL},  //Ending
+                                                                       ^
+make: *** [l3emc68x/l3emc68x.o] Error 1
+l3emc68x/subdir.mk:24: recipe for target 'l3emc68x/l3emc68x.o' failed
+16:42:06 **** Incremental Build of configuration DA14681-01-Release_QSPI for project freertos_retarget ****
+make --silent pre-build main-build 
+Generate mem.ld for selected configuration (QSPI).
  
 Building file: D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emc68x.c
 Invoking: Cross ARM C Compiler
-In file included from D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emc68x.c:14:0:
-D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emc68x.h:17:29: fatal error: l1comdef_freeos.h: No such file or directory
- #include "l1comdef_freeos.h"
-                             ^
+Finished building: D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emc68x.c
+ 
+Building file: D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emcwx.c
+Invoking: Cross ARM C Compiler
+In file included from D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emcwx.c:14:0:
+D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emcwx.h:17:23: fatal error: vmdalayer.h: No such file or directory
+ #include "vmdalayer.h"
+                       ^
 compilation terminated.
-make: *** [l3emc68x/l3emc68x.o] Error 1
-l3emc68x/subdir.mk:24: recipe for target 'l3emc68x/l3emc68x.o' failed
+make: *** [l3emc68x/l3emcwx.o] Error 1
+l3emc68x/subdir.mk:31: recipe for target 'l3emc68x/l3emcwx.o' failed

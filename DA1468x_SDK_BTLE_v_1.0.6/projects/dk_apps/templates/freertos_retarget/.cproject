@@ -66,6 +66,10 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/peripherals/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/free_rtos/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/sys_man/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l0comvm}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l1vmfreeos}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l2frame}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l3emc68x}&quot;"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.defs.412745849" name="Defined symbols (-D)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.defs" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="dg_configBLACK_ORCA_IC_REV=BLACK_ORCA_IC_REV_A"/>
@@ -193,6 +197,11 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/peripherals/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/free_rtos/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/sys_man/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;/${WORKSPACE_LOC}/SrcBxxh/l1vmlayer&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l0comvm}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l1vmfreeos}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l2frame}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l3emc68x}&quot;"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.defs.867099039" name="Defined symbols (-D)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.defs" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="dg_configBLACK_ORCA_IC_REV=BLACK_ORCA_IC_REV_A"/>
@@ -322,6 +331,11 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/peripherals/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/free_rtos/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/sys_man/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;/${WORKSPACE_LOC}/SrcBxxh/l1vmlayer&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l0comvm}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l1vmfreeos}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l2frame}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l3emc68x}&quot;"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.defs.1978348659" name="Defined symbols (-D)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.defs" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="dg_configBLACK_ORCA_IC_REV=BLACK_ORCA_IC_REV_A"/>
@@ -449,6 +463,11 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/peripherals/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/free_rtos/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/sys_man/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;/${WORKSPACE_LOC}/SrcBxxh/l1vmlayer&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l0comvm}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l1vmfreeos}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l2frame}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l3emc68x}&quot;"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.defs.1387867923" name="Defined symbols (-D)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.defs" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="dg_configBLACK_ORCA_IC_REV=BLACK_ORCA_IC_REV_A"/>
@@ -578,6 +597,11 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/peripherals/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/free_rtos/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/sys_man/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;/${WORKSPACE_LOC}/SrcBxxh/l1vmlayer&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l0comvm}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l1vmfreeos}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l2frame}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l3emc68x}&quot;"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.defs.2025657705" name="Defined symbols (-D)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.defs" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="dg_configBLACK_ORCA_IC_REV=BLACK_ORCA_IC_REV_A"/>
@@ -705,6 +729,11 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/peripherals/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/free_rtos/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/sys_man/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;/${WORKSPACE_LOC}/SrcBxxh/l1vmlayer&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l0comvm}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l1vmfreeos}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l2frame}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l3emc68x}&quot;"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.defs.890709670" name="Defined symbols (-D)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.defs" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="dg_configBLACK_ORCA_IC_REV=BLACK_ORCA_IC_REV_A"/>
@@ -834,6 +863,11 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/peripherals/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/free_rtos/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/sys_man/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;/${WORKSPACE_LOC}/SrcBxxh/l1vmlayer&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l0comvm}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l1vmfreeos}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l2frame}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l3emc68x}&quot;"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.defs.1492847205" name="Defined symbols (-D)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.defs" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="dg_configBLACK_ORCA_IC_REV=BLACK_ORCA_IC_REV_A"/>
@@ -961,6 +995,11 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/peripherals/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/free_rtos/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/sys_man/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;/${WORKSPACE_LOC}/SrcBxxh/l1vmlayer&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l0comvm}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l1vmfreeos}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l2frame}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l3emc68x}&quot;"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.defs.1722482129" name="Defined symbols (-D)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.defs" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="dg_configBLACK_ORCA_IC_REV=BLACK_ORCA_IC_REV_A"/>
@@ -1037,17 +1076,35 @@
 		<configuration configurationName="Debug_RAM"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
+	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		<scannerConfigBuildInfo instanceId="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.76586611.526921126;ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.76586611.526921126.;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.1063186517;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.705343494">
+		<scannerConfigBuildInfo instanceId="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.76586611;ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.76586611.;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.550104045;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.903589725">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.76586611;ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.76586611.;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.550104045;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.903589725">
+		<scannerConfigBuildInfo instanceId="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.76586611.1736308061.1787781349;ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.76586611.1736308061.1787781349.;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.1446689458;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.1340357336">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.76586611.1736308061;ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.76586611.1736308061.;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.1544522482;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.812696277">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.76586611.289030582;ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.76586611.289030582.;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.1563901496;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.201109755">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="ilg.gnuarmeclipse.managedbuild.cross.config.elf.release.395694521;ilg.gnuarmeclipse.managedbuild.cross.config.elf.release.395694521.;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.1046827007;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.1876181439">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="ilg.gnuarmeclipse.managedbuild.cross.config.elf.release.395694521.610553498;ilg.gnuarmeclipse.managedbuild.cross.config.elf.release.395694521.610553498.;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.1661432511;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.419847158">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="ilg.gnuarmeclipse.managedbuild.cross.config.elf.release.395694521.301986592;ilg.gnuarmeclipse.managedbuild.cross.config.elf.release.395694521.301986592.;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.1600572290;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.1676171357">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="ilg.gnuarmeclipse.managedbuild.cross.config.elf.release.395694521.610553498.1964659146;ilg.gnuarmeclipse.managedbuild.cross.config.elf.release.395694521.610553498.1964659146.;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.1518460341;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.484456831">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.76586611.526921126;ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.76586611.526921126.;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.1063186517;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.705343494">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
 	</storageModule>
-	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 </cproject>

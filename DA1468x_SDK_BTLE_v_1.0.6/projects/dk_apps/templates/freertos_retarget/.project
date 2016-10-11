@@ -105,5 +105,9 @@
 			<name>SDKROOT</name>
 			<value>$%7BPARENT-4-PROJECT_LOC%7D</value>
 		</variable>
+		<variable>
+			<name>SRCBXXH_LOC</name>
+			<value>file:/D:/IHUPRJ/ihu/SrcBxxh</value>
+		</variable>
 	</variableList>
 </projectDescription>
