@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ASCII"?>
 <application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_WQ1RkY-LEeaSF7NIOcbEbA" elementId="org.eclipse.e4.legacy.ide.application" contributorURI="platform:/plugin/org.eclipse.ui.workbench" selectedElement="_WQ1Rko-LEeaSF7NIOcbEbA" bindingContexts="_WQ1RmI-LEeaSF7NIOcbEbA">
-  <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;workbench>&#xD;&#xA;&lt;mruList>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.ui.DefaultTextEditor&quot; name=&quot;Readme.txt&quot; tooltip=&quot;freertos_retarget/Readme.txt&quot;>&#xD;&#xA;&lt;persistable path=&quot;/freertos_retarget/Readme.txt&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;/mruList>&#xD;&#xA;&lt;/workbench>"/>
+  <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;workbench>&#xD;&#xA;&lt;mruList>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.ui.DefaultTextEditor&quot; name=&quot;readme.txt&quot; tooltip=&quot;freertos_retarget/l0comvm/readme.txt&quot;>&#xD;&#xA;&lt;persistable path=&quot;/freertos_retarget/l0comvm/readme.txt&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.ui.DefaultTextEditor&quot; name=&quot;Readme.txt&quot; tooltip=&quot;freertos_retarget/Readme.txt&quot;>&#xD;&#xA;&lt;persistable path=&quot;/freertos_retarget/Readme.txt&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;/mruList>&#xD;&#xA;&lt;/workbench>"/>
   <tags>activeSchemeId:org.eclipse.ui.defaultAcceleratorConfiguration</tags>
   <tags>ModelMigrationProcessor.001</tags>
   <children xsi:type="basic:TrimmedWindow" xmi:id="_WQ1Rko-LEeaSF7NIOcbEbA" elementId="IDEWindow" contributorURI="platform:/plugin/org.eclipse.ui.workbench" selectedElement="_WcwNs4-LEeaSF7NIOcbEbA" x="149" y="31" width="1024" height="768">
@@ -69,15 +69,15 @@
           <tags>persp.viewSC:org.eclipse.tm.terminal.view.ui.TerminalsView</tags>
           <tags>persp.showIn:org.eclipse.tm.terminal.view.ui.TerminalsView</tags>
           <children xsi:type="basic:PartSashContainer" xmi:id="_Wjcrno-LEeaSF7NIOcbEbA" selectedElement="_Wjcrn4-LEeaSF7NIOcbEbA" horizontal="true">
-            <children xsi:type="basic:PartStack" xmi:id="_Wjcrn4-LEeaSF7NIOcbEbA" elementId="topLeft" containerData="1183" selectedElement="_WjcroI-LEeaSF7NIOcbEbA">
+            <children xsi:type="basic:PartStack" xmi:id="_Wjcrn4-LEeaSF7NIOcbEbA" elementId="topLeft" containerData="1430" selectedElement="_WjcroI-LEeaSF7NIOcbEbA">
               <tags>active</tags>
               <children xsi:type="advanced:Placeholder" xmi:id="_WjcroI-LEeaSF7NIOcbEbA" elementId="org.eclipse.ui.navigator.ProjectExplorer" ref="_WjcrkI-LEeaSF7NIOcbEbA"/>
               <children xsi:type="advanced:Placeholder" xmi:id="_WjcroY-LEeaSF7NIOcbEbA" elementId="org.eclipse.cdt.ui.CView" toBeRendered="false" ref="_WjcrkY-LEeaSF7NIOcbEbA"/>
               <children xsi:type="advanced:Placeholder" xmi:id="_Wjcroo-LEeaSF7NIOcbEbA" elementId="org.eclipse.ui.views.ResourceNavigator" toBeRendered="false" ref="_Wjcrko-LEeaSF7NIOcbEbA"/>
               <children xsi:type="advanced:Placeholder" xmi:id="_Wjcro4-LEeaSF7NIOcbEbA" elementId="org.eclipse.ui.views.BookmarkView" toBeRendered="false" ref="_Wjcrk4-LEeaSF7NIOcbEbA"/>
             </children>
-            <children xsi:type="basic:PartSashContainer" xmi:id="_WjcrpI-LEeaSF7NIOcbEbA" containerData="8817" selectedElement="_WjcrpY-LEeaSF7NIOcbEbA">
-              <children xsi:type="basic:PartSashContainer" xmi:id="_WjcrpY-LEeaSF7NIOcbEbA" containerData="5396" selectedElement="_Wjcrpo-LEeaSF7NIOcbEbA" horizontal="true">
+            <children xsi:type="basic:PartSashContainer" xmi:id="_WjcrpI-LEeaSF7NIOcbEbA" containerData="8570" selectedElement="_WjcrpY-LEeaSF7NIOcbEbA">
+              <children xsi:type="basic:PartSashContainer" xmi:id="_WjcrpY-LEeaSF7NIOcbEbA" containerData="6345" selectedElement="_Wjcrpo-LEeaSF7NIOcbEbA" horizontal="true">
                 <children xsi:type="advanced:Placeholder" xmi:id="_Wjcrpo-LEeaSF7NIOcbEbA" elementId="org.eclipse.ui.editorss" containerData="9000" ref="_WjS6kI-LEeaSF7NIOcbEbA"/>
                 <children xsi:type="basic:PartStack" xmi:id="_Wjcrp4-LEeaSF7NIOcbEbA" elementId="topRight" containerData="1000" selectedElement="_Wjcrqo-LEeaSF7NIOcbEbA">
                   <children xsi:type="advanced:Placeholder" xmi:id="_WjcrqI-LEeaSF7NIOcbEbA" elementId="org.eclipse.ui.views.ContentOutline" toBeRendered="false" ref="_WjcrmI-LEeaSF7NIOcbEbA"/>
@@ -85,7 +85,7 @@
                   <children xsi:type="advanced:Placeholder" xmi:id="_Wjcrqo-LEeaSF7NIOcbEbA" elementId="org.eclipse.cdt.make.ui.views.MakeView" ref="_Wjcrm4-LEeaSF7NIOcbEbA"/>
                 </children>
               </children>
-              <children xsi:type="basic:PartStack" xmi:id="_WjcrrI-LEeaSF7NIOcbEbA" elementId="bottom" containerData="4604" selectedElement="_Wjcrr4-LEeaSF7NIOcbEbA">
+              <children xsi:type="basic:PartStack" xmi:id="_WjcrrI-LEeaSF7NIOcbEbA" elementId="bottom" containerData="3655" selectedElement="_Wjcrr4-LEeaSF7NIOcbEbA">
                 <children xsi:type="advanced:Placeholder" xmi:id="_WjcrrY-LEeaSF7NIOcbEbA" elementId="org.eclipse.ui.views.ProblemView" ref="_WjcrlI-LEeaSF7NIOcbEbA"/>
                 <children xsi:type="advanced:Placeholder" xmi:id="_Wjcrro-LEeaSF7NIOcbEbA" elementId="org.eclipse.ui.views.TaskList" ref="_WjcrlY-LEeaSF7NIOcbEbA"/>
                 <children xsi:type="advanced:Placeholder" xmi:id="_Wjcrr4-LEeaSF7NIOcbEbA" elementId="org.eclipse.ui.console.ConsoleView" ref="_Wjcrlo-LEeaSF7NIOcbEbA"/>
@@ -227,7 +227,7 @@
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_Wdyvgo-LEeaSF7NIOcbEbA" elementId="org.eclipse.ui.workbench.file">
         <tags>Draggable</tags>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_WdyvlI-LEeaSF7NIOcbEbA" elementId="print" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/print_edit.png" tooltip="Print" enabled="false" command="_WRRXMI-LEeaSF7NIOcbEbA"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_-ETmt4-LEeaE7-ZsLcZ0-w" elementId="print" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/print_edit.png" tooltip="Print" command="_WRRXMI-LEeaSF7NIOcbEbA"/>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_Wdyvg4-LEeaSF7NIOcbEbA" elementId="additions" toBeRendered="false">
         <tags>toolbarSeparator</tags>
@@ -251,7 +251,7 @@
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_Wdyvh4-LEeaSF7NIOcbEbA" elementId="org.eclipse.ui.workbench.navigate">
         <tags>Draggable</tags>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_Wdyvno-LEeaSF7NIOcbEbA" elementId="org.eclipse.ui.window.pinEditor" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/pin_editor.png" tooltip="Pin Editor" type="Check" command="_WRRW0o-LEeaSF7NIOcbEbA"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_-EcwqI-LEeaE7-ZsLcZ0-w" elementId="org.eclipse.ui.window.pinEditor" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/pin_editor.png" tooltip="Pin Editor" type="Check" command="_WRRW0o-LEeaSF7NIOcbEbA"/>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_WdyviI-LEeaSF7NIOcbEbA" elementId="group.editor" toBeRendered="false">
         <tags>toolbarSeparator</tags>

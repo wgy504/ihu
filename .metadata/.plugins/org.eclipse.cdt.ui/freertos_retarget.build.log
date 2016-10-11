@@ -1,4 +1,4 @@
-16:21:56 **** Build of configuration DA14681-01-Release_QSPI for project freertos_retarget ****
+16:25:59 **** Incremental Build of configuration DA14681-01-Release_QSPI for project freertos_retarget ****
 make --silent pre-build main-build 
 Generate mem.ld for selected configuration (QSPI).
  
@@ -242,22 +242,15 @@ Building file: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_ua
 Invoking: Cross ARM C Compiler
 Finished building: D:/IHUPRJ/ihu/DA1468x_SDK_BTLE_v_1.0.6/sdk/bsp/adapters/src/ad_uart_ble.c
  
-Building file: ../main.c
+Building file: D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emc68x.c
 Invoking: Cross ARM C Compiler
-Finished building: ../main.c
- 
-Building target: freertos_retarget.elf
-Invoking: Cross ARM C Linker
-Finished building target: freertos_retarget.elf
- 
-Invoking: Cross ARM GNU Create Flash Image
-Finished building: freertos_retarget.bin
- 
-Invoking: Cross ARM GNU Print Size
-   text	   data	    bss	    dec	    hex	filename
-  24408	    152	  15376	  39936	   9c00	freertos_retarget.elf
-Finished building: freertos_retarget.siz
- 
+In file included from D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emc68x.c:14:0:
+D:/IHUPRJ/ihu/SrcBxxh/l3appl/l3emc68x.h:17:29: fatal error: l1comdef_freeos.h: No such file or directory
+ #include "l1comdef_freeos.h"
+                             ^
+compilation terminated.
+make: *** [l3emc68x/l3emc68x.o] Error 1
+l3emc68x/subdir.mk:24: recipe for target 'l3emc68x/l3emc68x.o' failed
 
-16:22:15 Build Finished (took 18s.830ms)
+16:26:39 Build Finished (took 39s.812ms)
 
