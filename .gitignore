@@ -1,12 +1,13 @@
 ### C ###
 
 #.o .hex .ref .crf .d .dep .axf
-
+#.elf
 *.ref
 *.crf
 *.d
 *.dep
 *.axf
+*.elf
 
 # Object files
 *.o
