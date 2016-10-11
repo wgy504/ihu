@@ -1,0 +1,4 @@
+DEBUGGER_EXECUTABLE=Ozone.exe
+DEBUGGER_PATH=C\:\\Program Files (x86)\\SEGGER\\Ozone V2.16d
+SDK_TYPE=1.0.4
+eclipse.preferences.version=1
