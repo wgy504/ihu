@@ -1,0 +1,2 @@
+For a pure win32 executable, you can build with cygwin's mingw-gcc:
+	make CC=i686-pc-mingw32-gcc

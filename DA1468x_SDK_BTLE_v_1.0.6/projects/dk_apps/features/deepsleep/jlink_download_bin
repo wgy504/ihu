@@ -1,0 +1,8 @@
+speed 5000
+w2 0x50000012, 0xab
+r
+loadbin   freertos_deepsleep.bin, 0x7FC0000
+verifybin freertos_deepsleep.bin, 0x7FC0000
+r
+g
+exit

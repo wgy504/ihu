@@ -1,0 +1,1 @@
+"C:\Program Files\SEGGER\JLink_V498b\JLink.exe" -CommanderScript jlink_download_bin
