@@ -25,14 +25,14 @@
 #include <ctype.h>
 #include <limits.h>
 #include <locale.h>
+#include <stdbool.h>
 //#include <system.h>
 //#include <sys/ipc.h>
 
 
 //遗留特殊的定义
-typedef UINT8           		bool;  
+//typedef UINT8           		bool;
 typedef UINT8           		BOOL;  
-
 
 //2. 公共消息结构体定义
 //Under normal case, 1024Byte shall be enough for internal message communciation purpose.

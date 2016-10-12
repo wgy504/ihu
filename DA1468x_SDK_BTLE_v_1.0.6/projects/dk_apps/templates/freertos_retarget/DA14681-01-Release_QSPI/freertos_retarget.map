@@ -10,6 +10,8 @@ c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3
                               ./sdk/sys_man/sys_clock_mgr.o (__aeabi_uidiv)
 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/armv6-m\libgcc.a(_dvmd_tls.o)
                               c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/armv6-m\libgcc.a(_udivsi3.o) (__aeabi_idiv0)
+c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-errno.o)
+                              ./l1vmfreeos/vmfreeoslayer.o (__errno)
 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-exit.o)
                               c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m/crt0.o (exit)
 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-fflush.o)
@@ -22,6 +24,10 @@ c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3
                               c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-exit.o) (_global_impure_ptr)
 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-init.o)
                               c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m/crt0.o (__libc_init_array)
+c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-lcltime.o)
+                              ./l1vmfreeos/vmfreeoslayer.o (localtime)
+c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-lcltime_r.o)
+                              c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-lcltime.o) (localtime_r)
 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-malloc.o)
                               ./sdk/sys_man/sys_power_mgr.o (malloc)
 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memcmp.o)
@@ -30,22 +36,56 @@ c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3
                               ./sdk/osal/msg_queues.o (memcpy)
 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memset.o)
                               c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m/crt0.o (memset)
+c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-month_lengths.o)
+                              c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-lcltime_r.o) (__month_lengths)
 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-freer.o)
                               c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-fflush.o) (_free_r)
 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-mallocr.o)
                               c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-findfp.o) (_malloc_r)
+c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-printf.o)
+                              ./l1vmfreeos/vmfreeoslayer.o (printf)
 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-putchar.o)
                               ./main.o (putchar)
 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-sbrkr.o)
                               c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-mallocr.o) (_sbrk_r)
+c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-sprintf.o)
+                              ./l1vmfreeos/vmfreeoslayer.o (sprintf)
 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-stdio.o)
                               c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-findfp.o) (__sread)
+c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strcat.o)
+                              ./l1vmfreeos/vmfreeoslayer.o (strcat)
+c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strcpy.o)
+                              ./l1vmfreeos/vmfreeoslayer.o (strcpy)
+c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strerror.o)
+                              ./l1vmfreeos/vmfreeoslayer.o (strerror)
+c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strncpy.o)
+                              ./l1vmfreeos/vmfreeoslayer.o (strncpy)
+c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-tzcalc_limits.o)
+                              c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-lcltime_r.o) (__tzcalc_limits)
+c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-tzlock.o)
+                              c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-lcltime_r.o) (__tz_lock)
+c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-tzvars.o)
+                              c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-lcltime_r.o) (_daylight)
+c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-u_strerr.o)
+                              c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strerror.o) (_user_strerror)
+c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-vsprintf.o)
+                              ./l1vmfreeos/vmfreeoslayer.o (vsprintf)
 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-writer.o)
                               c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-stdio.o) (_write_r)
 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-closer.o)
                               c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-stdio.o) (_close_r)
+c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-gettzinfo.o)
+                              c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-lcltime_r.o) (__gettzinfo)
+c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-gmtime_r.o)
+                              c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-lcltime_r.o) (gmtime_r)
 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-lseekr.o)
                               c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-stdio.o) (_lseek_r)
+c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-svfprintf.o)
+                              c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-sprintf.o) (_svfprintf_r)
+c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-vfprintf.o)
+                              c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-printf.o) (_vfprintf_r)
+c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-vfprintf_i.o)
+                              c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-svfprintf.o) (_printf_i)
 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-putc.o)
                               c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-putchar.o) (_putc_r)
 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-readr.o)
@@ -53,15 +93,27 @@ c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3
 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-reent.o)
                               c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-sbrkr.o) (errno)
 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-wbuf.o)
-                              c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-putc.o) (__swbuf_r)
+                              c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-vfprintf.o) (__swbuf_r)
 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-wsetup.o)
-                              c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-wbuf.o) (__swsetup_r)
+                              c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-vfprintf.o) (__swsetup_r)
+c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-fvwrite.o)
+                              c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-vfprintf.o) (__sfvwrite_r)
 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-makebuf.o)
                               c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-wsetup.o) (__smakebuf_r)
+c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memchr.o)
+                              c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-svfprintf.o) (memchr)
+c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memmove.o)
+                              c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-svfprintf.o) (memmove)
+c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-reallocr.o)
+                              c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-svfprintf.o) (_realloc_r)
 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-fstatr.o)
                               c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-makebuf.o) (_fstat_r)
 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-isattyr.o)
                               c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-makebuf.o) (_isatty_r)
+c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-msizer.o)
+                              c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-reallocr.o) (_malloc_usable_size_r)
+c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/armv6-m\libgcc.a(_divsi3.o)
+                              c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-lcltime_r.o) (__aeabi_idiv)
 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libnosys.a(close.o)
                               c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-closer.o) (_close)
 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libnosys.a(fstat.o)
@@ -78,21 +130,29 @@ c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3
 Allocating common symbols
 Common symbol       size              file
 
+zIhuSystemTimeYmd   0x24              ./l1vmfreeos/vmfreeoslayer.o
 pxOverflowDelayedCoRoutineList
                     0x4               ./sdk/free_rtos/croutine.o
 errno               0x4               c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-reent.o)
+zIhuTaskInfo        0x280             ./l1vmfreeos/vmfreeoslayer.o
+zIhuSleepCnt        0x80              ./l1vmfreeos/vmfreeoslayer.o
 pxDelayedCoRoutineList
                     0x4               ./sdk/free_rtos/croutine.o
 charge_initiation_state
                     0x1               ./sdk/sys_man/sys_charger.o
+zIhuTimerTable      0xd8              ./l1vmfreeos/l1timer_freeos.o
 ulTimeSpentSleepingInTicks
                     0x4               ./sdk/sys_man/sys_power_mgr.o
 xPendingReadyCoRoutineList
                     0x14              ./sdk/free_rtos/croutine.o
+zIhuFsmTable        0x57b4            ./l1vmfreeos/vmfreeoslayer.o
 xDelayedCoRoutineList2
                     0x14              ./sdk/free_rtos/croutine.o
+zIhuGlobalCounter   0x44              ./l1vmfreeos/vmfreeoslayer.o
+zIhuSysEngPar       0xc84             ./l1vmfreeos/vmfreeoslayer.o
 xDelayedCoRoutineList1
                     0x14              ./sdk/free_rtos/croutine.o
+zIhuRunErrCnt       0x40              ./l1vmfreeos/vmfreeoslayer.o
 pxReadyCoRoutineLists
                     0x28              ./sdk/free_rtos/croutine.o
 
@@ -998,6 +1058,441 @@ Discarded input sections
  .comment       0x00000000       0x71 ./sdk/adapters/src/ad_uart_ble.o
  .ARM.attributes
                 0x00000000       0x31 ./sdk/adapters/src/ad_uart_ble.o
+ .text          0x00000000        0x0 ./l3emc68x/l3emc68x.o
+ .data          0x00000000        0x0 ./l3emc68x/l3emc68x.o
+ .bss           0x00000000        0x0 ./l3emc68x/l3emc68x.o
+ .text.fsm_emc68x_task_entry
+                0x00000000       0x1c ./l3emc68x/l3emc68x.o
+ .text.fsm_emc68x_stop_rcv
+                0x00000000       0x4c ./l3emc68x/l3emc68x.o
+ .text.fsm_emc68x_init
+                0x00000000       0x5c ./l3emc68x/l3emc68x.o
+ .text.fsm_emc68x_restart
+                0x00000000       0x1c ./l3emc68x/l3emc68x.o
+ .text.func_emc68x_hw_init
+                0x00000000        0x4 ./l3emc68x/l3emc68x.o
+ .rodata.str1.1
+                0x00000000       0xf8 ./l3emc68x/l3emc68x.o
+ .data.FsmEmc68x
+                0x00000000       0x30 ./l3emc68x/l3emc68x.o
+ .debug_info    0x00000000      0x911 ./l3emc68x/l3emc68x.o
+ .debug_abbrev  0x00000000      0x204 ./l3emc68x/l3emc68x.o
+ .debug_loc     0x00000000      0x2b4 ./l3emc68x/l3emc68x.o
+ .debug_aranges
+                0x00000000       0x40 ./l3emc68x/l3emc68x.o
+ .debug_ranges  0x00000000       0x30 ./l3emc68x/l3emc68x.o
+ .debug_line    0x00000000      0x1af ./l3emc68x/l3emc68x.o
+ .debug_str     0x00000000      0xaa9 ./l3emc68x/l3emc68x.o
+ .comment       0x00000000       0x71 ./l3emc68x/l3emc68x.o
+ .debug_frame   0x00000000       0x84 ./l3emc68x/l3emc68x.o
+ .ARM.attributes
+                0x00000000       0x31 ./l3emc68x/l3emc68x.o
+ .text          0x00000000        0x0 ./l2frame/l2adclibra.o
+ .data          0x00000000        0x0 ./l2frame/l2adclibra.o
+ .bss           0x00000000        0x0 ./l2frame/l2adclibra.o
+ .text.fsm_adclibra_task_entry
+                0x00000000       0x1c ./l2frame/l2adclibra.o
+ .text.fsm_adclibra_stop_rcv
+                0x00000000       0x4c ./l2frame/l2adclibra.o
+ .text.fsm_adclibra_dl_ctrl_cmd_req
+                0x00000000       0x2c ./l2frame/l2adclibra.o
+ .text.fsm_adclibra_init
+                0x00000000       0x5c ./l2frame/l2adclibra.o
+ .text.fsm_adclibra_restart
+                0x00000000       0x1c ./l2frame/l2adclibra.o
+ .text.func_adclibra_hw_init
+                0x00000000        0x4 ./l2frame/l2adclibra.o
+ .data.FsmAdclibra
+                0x00000000       0x38 ./l2frame/l2adclibra.o
+ .rodata.str1.1
+                0x00000000      0x106 ./l2frame/l2adclibra.o
+ .debug_info    0x00000000      0x96a ./l2frame/l2adclibra.o
+ .debug_abbrev  0x00000000      0x20d ./l2frame/l2adclibra.o
+ .debug_loc     0x00000000      0x382 ./l2frame/l2adclibra.o
+ .debug_aranges
+                0x00000000       0x48 ./l2frame/l2adclibra.o
+ .debug_ranges  0x00000000       0x38 ./l2frame/l2adclibra.o
+ .debug_line    0x00000000      0x1c3 ./l2frame/l2adclibra.o
+ .debug_str     0x00000000      0x9f0 ./l2frame/l2adclibra.o
+ .comment       0x00000000       0x71 ./l2frame/l2adclibra.o
+ .debug_frame   0x00000000       0x9c ./l2frame/l2adclibra.o
+ .ARM.attributes
+                0x00000000       0x31 ./l2frame/l2adclibra.o
+ .text          0x00000000        0x0 ./l2frame/l2didocap.o
+ .data          0x00000000        0x0 ./l2frame/l2didocap.o
+ .bss           0x00000000        0x0 ./l2frame/l2didocap.o
+ .text.fsm_didocap_task_entry
+                0x00000000       0x1c ./l2frame/l2didocap.o
+ .text.fsm_didocap_stop_rcv
+                0x00000000       0x4c ./l2frame/l2didocap.o
+ .text.fsm_didocap_init
+                0x00000000       0x5c ./l2frame/l2didocap.o
+ .text.fsm_didocap_restart
+                0x00000000       0x1c ./l2frame/l2didocap.o
+ .text.func_didocap_hw_init
+                0x00000000        0x4 ./l2frame/l2didocap.o
+ .data.FsmDidocap
+                0x00000000       0x30 ./l2frame/l2didocap.o
+ .rodata.str1.1
+                0x00000000       0xff ./l2frame/l2didocap.o
+ .debug_info    0x00000000      0x8b4 ./l2frame/l2didocap.o
+ .debug_abbrev  0x00000000      0x204 ./l2frame/l2didocap.o
+ .debug_loc     0x00000000      0x2b4 ./l2frame/l2didocap.o
+ .debug_aranges
+                0x00000000       0x40 ./l2frame/l2didocap.o
+ .debug_ranges  0x00000000       0x30 ./l2frame/l2didocap.o
+ .debug_line    0x00000000      0x19e ./l2frame/l2didocap.o
+ .debug_str     0x00000000      0x9c8 ./l2frame/l2didocap.o
+ .comment       0x00000000       0x71 ./l2frame/l2didocap.o
+ .debug_frame   0x00000000       0x84 ./l2frame/l2didocap.o
+ .ARM.attributes
+                0x00000000       0x31 ./l2frame/l2didocap.o
+ .text          0x00000000        0x0 ./l2frame/l2ethorion.o
+ .data          0x00000000        0x0 ./l2frame/l2ethorion.o
+ .bss           0x00000000        0x0 ./l2frame/l2ethorion.o
+ .text.fsm_ethorion_task_entry
+                0x00000000       0x1c ./l2frame/l2ethorion.o
+ .text.fsm_ethorion_stop_rcv
+                0x00000000       0x4c ./l2frame/l2ethorion.o
+ .text.fsm_ethorion_init
+                0x00000000       0x5c ./l2frame/l2ethorion.o
+ .text.fsm_ethorion_restart
+                0x00000000       0x1c ./l2frame/l2ethorion.o
+ .text.func_ethorion_hw_init
+                0x00000000        0x4 ./l2frame/l2ethorion.o
+ .rodata.str1.1
+                0x00000000      0x106 ./l2frame/l2ethorion.o
+ .data.FsmEthorion
+                0x00000000       0x30 ./l2frame/l2ethorion.o
+ .debug_info    0x00000000      0x8b4 ./l2frame/l2ethorion.o
+ .debug_abbrev  0x00000000      0x204 ./l2frame/l2ethorion.o
+ .debug_loc     0x00000000      0x2b4 ./l2frame/l2ethorion.o
+ .debug_aranges
+                0x00000000       0x40 ./l2frame/l2ethorion.o
+ .debug_ranges  0x00000000       0x30 ./l2frame/l2ethorion.o
+ .debug_line    0x00000000      0x1a0 ./l2frame/l2ethorion.o
+ .debug_str     0x00000000      0x9d3 ./l2frame/l2ethorion.o
+ .comment       0x00000000       0x71 ./l2frame/l2ethorion.o
+ .debug_frame   0x00000000       0x84 ./l2frame/l2ethorion.o
+ .ARM.attributes
+                0x00000000       0x31 ./l2frame/l2ethorion.o
+ .text          0x00000000        0x0 ./l2frame/l2gpiocancer.o
+ .data          0x00000000        0x0 ./l2frame/l2gpiocancer.o
+ .bss           0x00000000        0x0 ./l2frame/l2gpiocancer.o
+ .text.fsm_gpiocancer_task_entry
+                0x00000000       0x1c ./l2frame/l2gpiocancer.o
+ .text.fsm_gpiocancer_stop_rcv
+                0x00000000       0x4c ./l2frame/l2gpiocancer.o
+ .text.fsm_gpiocancer_init
+                0x00000000       0x5c ./l2frame/l2gpiocancer.o
+ .text.fsm_gpiocancer_restart
+                0x00000000       0x1c ./l2frame/l2gpiocancer.o
+ .text.func_gpiocancer_hw_init
+                0x00000000        0x4 ./l2frame/l2gpiocancer.o
+ .rodata.str1.1
+                0x00000000      0x114 ./l2frame/l2gpiocancer.o
+ .data.FsmGpiocancer
+                0x00000000       0x30 ./l2frame/l2gpiocancer.o
+ .debug_info    0x00000000      0x8b4 ./l2frame/l2gpiocancer.o
+ .debug_abbrev  0x00000000      0x204 ./l2frame/l2gpiocancer.o
+ .debug_loc     0x00000000      0x2b4 ./l2frame/l2gpiocancer.o
+ .debug_aranges
+                0x00000000       0x40 ./l2frame/l2gpiocancer.o
+ .debug_ranges  0x00000000       0x30 ./l2frame/l2gpiocancer.o
+ .debug_line    0x00000000      0x1a4 ./l2frame/l2gpiocancer.o
+ .debug_str     0x00000000      0x9e9 ./l2frame/l2gpiocancer.o
+ .comment       0x00000000       0x71 ./l2frame/l2gpiocancer.o
+ .debug_frame   0x00000000       0x84 ./l2frame/l2gpiocancer.o
+ .ARM.attributes
+                0x00000000       0x31 ./l2frame/l2gpiocancer.o
+ .text          0x00000000        0x0 ./l2frame/l2i2caries.o
+ .data          0x00000000        0x0 ./l2frame/l2i2caries.o
+ .bss           0x00000000        0x0 ./l2frame/l2i2caries.o
+ .text.fsm_i2caries_task_entry
+                0x00000000       0x1c ./l2frame/l2i2caries.o
+ .text.fsm_i2caries_stop_rcv
+                0x00000000       0x4c ./l2frame/l2i2caries.o
+ .text.fsm_i2caries_init
+                0x00000000       0x5c ./l2frame/l2i2caries.o
+ .text.fsm_i2caries_restart
+                0x00000000       0x1c ./l2frame/l2i2caries.o
+ .text.func_i2caries_hw_init
+                0x00000000        0x4 ./l2frame/l2i2caries.o
+ .rodata.str1.1
+                0x00000000      0x106 ./l2frame/l2i2caries.o
+ .data.FsmI2caries
+                0x00000000       0x30 ./l2frame/l2i2caries.o
+ .debug_info    0x00000000      0x8b4 ./l2frame/l2i2caries.o
+ .debug_abbrev  0x00000000      0x204 ./l2frame/l2i2caries.o
+ .debug_loc     0x00000000      0x2b4 ./l2frame/l2i2caries.o
+ .debug_aranges
+                0x00000000       0x40 ./l2frame/l2i2caries.o
+ .debug_ranges  0x00000000       0x30 ./l2frame/l2i2caries.o
+ .debug_line    0x00000000      0x1a0 ./l2frame/l2i2caries.o
+ .debug_str     0x00000000      0x9d3 ./l2frame/l2i2caries.o
+ .comment       0x00000000       0x71 ./l2frame/l2i2caries.o
+ .debug_frame   0x00000000       0x84 ./l2frame/l2i2caries.o
+ .ARM.attributes
+                0x00000000       0x31 ./l2frame/l2i2caries.o
+ .text          0x00000000        0x0 ./l2frame/l2ledpisces.o
+ .data          0x00000000        0x0 ./l2frame/l2ledpisces.o
+ .bss           0x00000000        0x0 ./l2frame/l2ledpisces.o
+ .text.fsm_ledpisces_task_entry
+                0x00000000       0x1c ./l2frame/l2ledpisces.o
+ .text.fsm_ledpisces_stop_rcv
+                0x00000000       0x4c ./l2frame/l2ledpisces.o
+ .text.fsm_ledpisces_init
+                0x00000000       0x5c ./l2frame/l2ledpisces.o
+ .text.fsm_ledpisces_restart
+                0x00000000       0x1c ./l2frame/l2ledpisces.o
+ .text.func_ledpisces_hw_init
+                0x00000000        0x4 ./l2frame/l2ledpisces.o
+ .rodata.str1.1
+                0x00000000      0x10d ./l2frame/l2ledpisces.o
+ .data.FsmLedpisces
+                0x00000000       0x30 ./l2frame/l2ledpisces.o
+ .debug_info    0x00000000      0x8b4 ./l2frame/l2ledpisces.o
+ .debug_abbrev  0x00000000      0x204 ./l2frame/l2ledpisces.o
+ .debug_loc     0x00000000      0x2b4 ./l2frame/l2ledpisces.o
+ .debug_aranges
+                0x00000000       0x40 ./l2frame/l2ledpisces.o
+ .debug_ranges  0x00000000       0x30 ./l2frame/l2ledpisces.o
+ .debug_line    0x00000000      0x1a2 ./l2frame/l2ledpisces.o
+ .debug_str     0x00000000      0x9de ./l2frame/l2ledpisces.o
+ .comment       0x00000000       0x71 ./l2frame/l2ledpisces.o
+ .debug_frame   0x00000000       0x84 ./l2frame/l2ledpisces.o
+ .ARM.attributes
+                0x00000000       0x31 ./l2frame/l2ledpisces.o
+ .text          0x00000000        0x0 ./l2frame/l2pwmtaurus.o
+ .data          0x00000000        0x0 ./l2frame/l2pwmtaurus.o
+ .bss           0x00000000        0x0 ./l2frame/l2pwmtaurus.o
+ .text.fsm_pwmtaurus_task_entry
+                0x00000000       0x1c ./l2frame/l2pwmtaurus.o
+ .text.fsm_pwmtaurus_stop_rcv
+                0x00000000       0x4c ./l2frame/l2pwmtaurus.o
+ .text.fsm_pwmtaurus_init
+                0x00000000       0x5c ./l2frame/l2pwmtaurus.o
+ .text.fsm_pwmtaurus_restart
+                0x00000000       0x1c ./l2frame/l2pwmtaurus.o
+ .text.func_pwmtaurus_hw_init
+                0x00000000        0x4 ./l2frame/l2pwmtaurus.o
+ .rodata.str1.1
+                0x00000000      0x10d ./l2frame/l2pwmtaurus.o
+ .data.FsmPwmtaurus
+                0x00000000       0x30 ./l2frame/l2pwmtaurus.o
+ .debug_info    0x00000000      0x8b4 ./l2frame/l2pwmtaurus.o
+ .debug_abbrev  0x00000000      0x204 ./l2frame/l2pwmtaurus.o
+ .debug_loc     0x00000000      0x2b4 ./l2frame/l2pwmtaurus.o
+ .debug_aranges
+                0x00000000       0x40 ./l2frame/l2pwmtaurus.o
+ .debug_ranges  0x00000000       0x30 ./l2frame/l2pwmtaurus.o
+ .debug_line    0x00000000      0x1a2 ./l2frame/l2pwmtaurus.o
+ .debug_str     0x00000000      0x9de ./l2frame/l2pwmtaurus.o
+ .comment       0x00000000       0x71 ./l2frame/l2pwmtaurus.o
+ .debug_frame   0x00000000       0x84 ./l2frame/l2pwmtaurus.o
+ .ARM.attributes
+                0x00000000       0x31 ./l2frame/l2pwmtaurus.o
+ .text          0x00000000        0x0 ./l2frame/l2spileo.o
+ .data          0x00000000        0x0 ./l2frame/l2spileo.o
+ .bss           0x00000000        0x0 ./l2frame/l2spileo.o
+ .text.fsm_spileo_task_entry
+                0x00000000       0x1c ./l2frame/l2spileo.o
+ .text.fsm_spileo_stop_rcv
+                0x00000000       0x4c ./l2frame/l2spileo.o
+ .text.fsm_spileo_dl_data_push_fwd
+                0x00000000       0x2c ./l2frame/l2spileo.o
+ .text.fsm_spileo_dl_ctrl_cmd_req
+                0x00000000       0x2c ./l2frame/l2spileo.o
+ .text.fsm_spileo_init
+                0x00000000       0x5c ./l2frame/l2spileo.o
+ .text.fsm_spileo_restart
+                0x00000000       0x1c ./l2frame/l2spileo.o
+ .text.func_spileo_hw_init
+                0x00000000        0x4 ./l2frame/l2spileo.o
+ .rodata.str1.1
+                0x00000000       0xf8 ./l2frame/l2spileo.o
+ .data.FsmSpileo
+                0x00000000       0x40 ./l2frame/l2spileo.o
+ .debug_info    0x00000000      0xa20 ./l2frame/l2spileo.o
+ .debug_abbrev  0x00000000      0x20d ./l2frame/l2spileo.o
+ .debug_loc     0x00000000      0x450 ./l2frame/l2spileo.o
+ .debug_aranges
+                0x00000000       0x50 ./l2frame/l2spileo.o
+ .debug_ranges  0x00000000       0x40 ./l2frame/l2spileo.o
+ .debug_line    0x00000000      0x1e0 ./l2frame/l2spileo.o
+ .debug_str     0x00000000      0x9f4 ./l2frame/l2spileo.o
+ .comment       0x00000000       0x71 ./l2frame/l2spileo.o
+ .debug_frame   0x00000000       0xb4 ./l2frame/l2spileo.o
+ .ARM.attributes
+                0x00000000       0x31 ./l2frame/l2spileo.o
+ .text          0x00000000        0x0 ./l2frame/l2spsvirgo.o
+ .data          0x00000000        0x0 ./l2frame/l2spsvirgo.o
+ .bss           0x00000000        0x0 ./l2frame/l2spsvirgo.o
+ .text.fsm_spsvirgo_task_entry
+                0x00000000       0x1c ./l2frame/l2spsvirgo.o
+ .text.fsm_spsvirgo_stop_rcv
+                0x00000000       0x4c ./l2frame/l2spsvirgo.o
+ .text.fsm_spsvirgo_init
+                0x00000000       0x5c ./l2frame/l2spsvirgo.o
+ .text.fsm_spsvirgo_restart
+                0x00000000       0x1c ./l2frame/l2spsvirgo.o
+ .text.func_spsvirgo_hw_init
+                0x00000000        0x4 ./l2frame/l2spsvirgo.o
+ .rodata.str1.1
+                0x00000000      0x106 ./l2frame/l2spsvirgo.o
+ .data.FsmSpsvirgo
+                0x00000000       0x30 ./l2frame/l2spsvirgo.o
+ .debug_info    0x00000000      0x8b4 ./l2frame/l2spsvirgo.o
+ .debug_abbrev  0x00000000      0x204 ./l2frame/l2spsvirgo.o
+ .debug_loc     0x00000000      0x2b4 ./l2frame/l2spsvirgo.o
+ .debug_aranges
+                0x00000000       0x40 ./l2frame/l2spsvirgo.o
+ .debug_ranges  0x00000000       0x30 ./l2frame/l2spsvirgo.o
+ .debug_line    0x00000000      0x1a0 ./l2frame/l2spsvirgo.o
+ .debug_str     0x00000000      0x9d3 ./l2frame/l2spsvirgo.o
+ .comment       0x00000000       0x71 ./l2frame/l2spsvirgo.o
+ .debug_frame   0x00000000       0x84 ./l2frame/l2spsvirgo.o
+ .ARM.attributes
+                0x00000000       0x31 ./l2frame/l2spsvirgo.o
+ .text          0x00000000        0x0 ./l1vmfreeos/l1timer_freeos.o
+ .data          0x00000000        0x0 ./l1vmfreeos/l1timer_freeos.o
+ .bss           0x00000000        0x0 ./l1vmfreeos/l1timer_freeos.o
+ .text.fsm_timer_task_entry
+                0x00000000       0x1c ./l1vmfreeos/l1timer_freeos.o
+ .text.fsm_timer_init
+                0x00000000       0x6c ./l1vmfreeos/l1timer_freeos.o
+ .text.fsm_timer_restart
+                0x00000000       0x1c ./l1vmfreeos/l1timer_freeos.o
+ .text.fsm_timer_stop_rcv
+                0x00000000       0x4c ./l1vmfreeos/l1timer_freeos.o
+ .text.func_timer_hw_init
+                0x00000000        0x4 ./l1vmfreeos/l1timer_freeos.o
+ .text.ihu_timer_start
+                0x00000000      0x100 ./l1vmfreeos/l1timer_freeos.o
+ .text.ihu_timer_stop
+                0x00000000       0xf0 ./l1vmfreeos/l1timer_freeos.o
+ .rodata.str1.1
+                0x00000000      0x2ff ./l1vmfreeos/l1timer_freeos.o
+ .data.FsmTimer
+                0x00000000       0x40 ./l1vmfreeos/l1timer_freeos.o
+ .debug_info    0x00000000      0xb1b ./l1vmfreeos/l1timer_freeos.o
+ .debug_abbrev  0x00000000      0x24d ./l1vmfreeos/l1timer_freeos.o
+ .debug_loc     0x00000000      0x613 ./l1vmfreeos/l1timer_freeos.o
+ .debug_aranges
+                0x00000000       0x50 ./l1vmfreeos/l1timer_freeos.o
+ .debug_ranges  0x00000000       0x40 ./l1vmfreeos/l1timer_freeos.o
+ .debug_line    0x00000000      0x228 ./l1vmfreeos/l1timer_freeos.o
+ .debug_str     0x00000000      0xbb1 ./l1vmfreeos/l1timer_freeos.o
+ .comment       0x00000000       0x71 ./l1vmfreeos/l1timer_freeos.o
+ .debug_frame   0x00000000       0xc0 ./l1vmfreeos/l1timer_freeos.o
+ .ARM.attributes
+                0x00000000       0x31 ./l1vmfreeos/l1timer_freeos.o
+ COMMON         0x00000000       0xd8 ./l1vmfreeos/l1timer_freeos.o
+ .text          0x00000000        0x0 ./l1vmfreeos/vmfreeoslayer.o
+ .data          0x00000000        0x0 ./l1vmfreeos/vmfreeoslayer.o
+ .bss           0x00000000        0x0 ./l1vmfreeos/vmfreeoslayer.o
+ .text.IhuDebugPrint
+                0x00000000       0x88 ./l1vmfreeos/vmfreeoslayer.o
+ .text.IhuErrorPrint
+                0x00000000       0x88 ./l1vmfreeos/vmfreeoslayer.o
+ .text.b2l_uint16
+                0x00000000        0x6 ./l1vmfreeos/vmfreeoslayer.o
+ .text.ihu_sleep
+                0x00000000       0x2c ./l1vmfreeos/vmfreeoslayer.o
+ .text.ihu_usleep
+                0x00000000       0x28 ./l1vmfreeos/vmfreeoslayer.o
+ .text.ihu_taskid_to_string
+                0x00000000       0x7c ./l1vmfreeos/vmfreeoslayer.o
+ .text.ihu_msgid_to_string
+                0x00000000       0x84 ./l1vmfreeos/vmfreeoslayer.o
+ .text.FsmInit  0x00000000       0x58 ./l1vmfreeos/vmfreeoslayer.o
+ .text.ihu_vm_system_init
+                0x00000000      0x15c ./l1vmfreeos/vmfreeoslayer.o
+ .text.FsmRemove
+                0x00000000       0x30 ./l1vmfreeos/vmfreeoslayer.o
+ .text.FsmSetState
+                0x00000000       0x50 ./l1vmfreeos/vmfreeoslayer.o
+ .text.FsmAddNew
+                0x00000000      0x1bc ./l1vmfreeos/vmfreeoslayer.o
+ .text.FsmGetState
+                0x00000000       0x38 ./l1vmfreeos/vmfreeoslayer.o
+ .text.FsmRunEngine
+                0x00000000      0x170 ./l1vmfreeos/vmfreeoslayer.o
+ .text.ihu_message_queue_create
+                0x00000000       0x74 ./l1vmfreeos/vmfreeoslayer.o
+ .text.ihu_message_queue_delete
+                0x00000000       0x6c ./l1vmfreeos/vmfreeoslayer.o
+ .text.ihu_message_queue_inquery
+                0x00000000       0x34 ./l1vmfreeos/vmfreeoslayer.o
+ .text.ihu_message_queue_resync
+                0x00000000        0x4 ./l1vmfreeos/vmfreeoslayer.o
+ .text.ihu_message_queue_clean
+                0x00000000       0x9c ./l1vmfreeos/vmfreeoslayer.o
+ .text.ihu_message_send
+                0x00000000      0x744 ./l1vmfreeos/vmfreeoslayer.o
+ .text.ihu_message_rcv
+                0x00000000       0x78 ./l1vmfreeos/vmfreeoslayer.o
+ .text.FsmProcessingLaunch
+                0x00000000       0xc8 ./l1vmfreeos/vmfreeoslayer.o
+ .text.ihu_task_create
+                0x00000000       0xdc ./l1vmfreeos/vmfreeoslayer.o
+ .text.ihu_task_delete
+                0x00000000       0x30 ./l1vmfreeos/vmfreeoslayer.o
+ .text.ihu_task_create_and_run
+                0x00000000      0x100 ./l1vmfreeos/vmfreeoslayer.o
+ .text.ihu_system_task_init_call
+                0x00000000       0xe4 ./l1vmfreeos/vmfreeoslayer.o
+ .text.ihu_task_delete_all_and_queue
+                0x00000000       0x24 ./l1vmfreeos/vmfreeoslayer.o
+ .text.fsm_com_do_nothing
+                0x00000000        0x4 ./l1vmfreeos/vmfreeoslayer.o
+ .text.ihu_clock_unix_to_ymd
+                0x00000000       0x1e ./l1vmfreeos/vmfreeoslayer.o
+ .text.FsmProcessingLaunchEntryBareRtos
+                0x00000000       0x5c ./l1vmfreeos/vmfreeoslayer.o
+ .text.FsmProcessingLaunchExecuteBareRtos
+                0x00000000       0x78 ./l1vmfreeos/vmfreeoslayer.o
+ .text.ihu_message_rcv_bare_rtos
+                0x00000000      0x120 ./l1vmfreeos/vmfreeoslayer.o
+ .text.ihu_message_send_bare_rtos
+                0x00000000      0x7e0 ./l1vmfreeos/vmfreeoslayer.o
+ .text.ihu_system_task_execute_bare_rtos
+                0x00000000       0xac ./l1vmfreeos/vmfreeoslayer.o
+ .text.ihu_task_execute_all_bare_rtos
+                0x00000000       0x10 ./l1vmfreeos/vmfreeoslayer.o
+ .text.ihu_isr_install
+                0x00000000        0x4 ./l1vmfreeos/vmfreeoslayer.o
+ .text.ihu_vm_check_task_que_status_and_action
+                0x00000000        0x2 ./l1vmfreeos/vmfreeoslayer.o
+ .text.ihu_vm_send_init_msg_to_app_task
+                0x00000000       0x64 ./l1vmfreeos/vmfreeoslayer.o
+ .text.ihu_task_create_all
+                0x00000000      0x148 ./l1vmfreeos/vmfreeoslayer.o
+ .text.ihu_vm_main
+                0x00000000        0xe ./l1vmfreeos/vmfreeoslayer.o
+ .bss.strGlobalPrintChar
+                0x00000000      0x3e8 ./l1vmfreeos/vmfreeoslayer.o
+ .data.zIhuMsgNameList
+                0x00000000       0x80 ./l1vmfreeos/vmfreeoslayer.o
+ .data.zIhuTaskNameList
+                0x00000000       0x40 ./l1vmfreeos/vmfreeoslayer.o
+ .rodata.str1.1
+                0x00000000      0xfdd ./l1vmfreeos/vmfreeoslayer.o
+ .data.zIhuSystemTimeUnix
+                0x00000000        0x4 ./l1vmfreeos/vmfreeoslayer.o
+ .debug_info    0x00000000     0x3692 ./l1vmfreeos/vmfreeoslayer.o
+ .debug_abbrev  0x00000000      0x41d ./l1vmfreeos/vmfreeoslayer.o
+ .debug_loc     0x00000000     0x1314 ./l1vmfreeos/vmfreeoslayer.o
+ .debug_aranges
+                0x00000000      0x158 ./l1vmfreeos/vmfreeoslayer.o
+ .debug_ranges  0x00000000      0x148 ./l1vmfreeos/vmfreeoslayer.o
+ .debug_line    0x00000000      0xc8d ./l1vmfreeos/vmfreeoslayer.o
+ .debug_str     0x00000000     0x11cb ./l1vmfreeos/vmfreeoslayer.o
+ .comment       0x00000000       0x71 ./l1vmfreeos/vmfreeoslayer.o
+ .debug_frame   0x00000000      0x454 ./l1vmfreeos/vmfreeoslayer.o
+ .ARM.attributes
+                0x00000000       0x31 ./l1vmfreeos/vmfreeoslayer.o
+ COMMON         0x00000000     0x67e0 ./l1vmfreeos/vmfreeoslayer.o
  .text          0x00000000        0x0 ./main.o
  .data          0x00000000        0x0 ./main.o
  .bss           0x00000000        0x0 ./main.o
@@ -1025,6 +1520,13 @@ Discarded input sections
  .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/armv6-m\libgcc.a(_dvmd_tls.o)
  .ARM.attributes
                 0x00000000       0x1e c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/armv6-m\libgcc.a(_dvmd_tls.o)
+ .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-errno.o)
+ .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-errno.o)
+ .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-errno.o)
+ .text.__errno  0x00000000        0xc c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-errno.o)
+ .debug_frame   0x00000000       0x20 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-errno.o)
+ .ARM.attributes
+                0x00000000       0x2c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-errno.o)
  .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-exit.o)
  .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-exit.o)
  .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-exit.o)
@@ -1062,6 +1564,22 @@ Discarded input sections
  .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-init.o)
  .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-init.o)
  .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-init.o)
+ .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-lcltime.o)
+ .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-lcltime.o)
+ .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-lcltime.o)
+ .text.localtime
+                0x00000000       0x24 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-lcltime.o)
+ .debug_frame   0x00000000       0x2c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-lcltime.o)
+ .ARM.attributes
+                0x00000000       0x2c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-lcltime.o)
+ .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-lcltime_r.o)
+ .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-lcltime_r.o)
+ .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-lcltime_r.o)
+ .text.localtime_r
+                0x00000000      0x1dc c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-lcltime_r.o)
+ .debug_frame   0x00000000       0x34 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-lcltime_r.o)
+ .ARM.attributes
+                0x00000000       0x2c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-lcltime_r.o)
  .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-malloc.o)
  .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-malloc.o)
  .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-malloc.o)
@@ -1078,12 +1596,28 @@ Discarded input sections
  .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memset.o)
  .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memset.o)
  .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memset.o)
+ .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-month_lengths.o)
+ .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-month_lengths.o)
+ .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-month_lengths.o)
+ .rodata.__month_lengths
+                0x00000000       0x60 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-month_lengths.o)
+ .ARM.attributes
+                0x00000000       0x2c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-month_lengths.o)
  .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-freer.o)
  .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-freer.o)
  .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-freer.o)
  .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-mallocr.o)
  .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-mallocr.o)
  .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-mallocr.o)
+ .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-printf.o)
+ .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-printf.o)
+ .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-printf.o)
+ .text._printf_r
+                0x00000000       0x28 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-printf.o)
+ .text.printf   0x00000000       0x34 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-printf.o)
+ .debug_frame   0x00000000       0x50 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-printf.o)
+ .ARM.attributes
+                0x00000000       0x2c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-printf.o)
  .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-putchar.o)
  .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-putchar.o)
  .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-putchar.o)
@@ -1092,20 +1626,171 @@ Discarded input sections
  .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-sbrkr.o)
  .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-sbrkr.o)
  .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-sbrkr.o)
+ .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-sprintf.o)
+ .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-sprintf.o)
+ .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-sprintf.o)
+ .text._sprintf_r
+                0x00000000       0x40 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-sprintf.o)
+ .text.sprintf  0x00000000       0x44 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-sprintf.o)
+ .debug_frame   0x00000000       0x50 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-sprintf.o)
+ .ARM.attributes
+                0x00000000       0x2c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-sprintf.o)
  .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-stdio.o)
  .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-stdio.o)
  .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-stdio.o)
  .text.__seofread
                 0x00000000        0x4 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-stdio.o)
+ .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strcat.o)
+ .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strcat.o)
+ .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strcat.o)
+ .text.strcat   0x00000000       0x1a c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strcat.o)
+ .debug_frame   0x00000000       0x28 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strcat.o)
+ .ARM.attributes
+                0x00000000       0x2c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strcat.o)
+ .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strcpy.o)
+ .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strcpy.o)
+ .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strcpy.o)
+ .text.strcpy   0x00000000       0x10 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strcpy.o)
+ .debug_frame   0x00000000       0x20 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strcpy.o)
+ .ARM.attributes
+                0x00000000       0x2c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strcpy.o)
+ .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strerror.o)
+ .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strerror.o)
+ .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strerror.o)
+ .text._strerror_r
+                0x00000000      0x33c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strerror.o)
+ .text.strerror
+                0x00000000       0x18 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strerror.o)
+ .rodata.str1.1
+                0x00000000      0x697 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strerror.o)
+ .debug_frame   0x00000000       0x40 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strerror.o)
+ .ARM.attributes
+                0x00000000       0x2c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strerror.o)
+ .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strncpy.o)
+ .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strncpy.o)
+ .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strncpy.o)
+ .text.strncpy  0x00000000       0x28 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strncpy.o)
+ .debug_frame   0x00000000       0x2c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strncpy.o)
+ .ARM.attributes
+                0x00000000       0x2c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-strncpy.o)
+ .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-tzcalc_limits.o)
+ .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-tzcalc_limits.o)
+ .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-tzcalc_limits.o)
+ .text.__tzcalc_limits
+                0x00000000      0x160 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-tzcalc_limits.o)
+ .debug_frame   0x00000000       0x30 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-tzcalc_limits.o)
+ .ARM.attributes
+                0x00000000       0x2c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-tzcalc_limits.o)
+ .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-tzlock.o)
+ .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-tzlock.o)
+ .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-tzlock.o)
+ .text.__tz_lock
+                0x00000000        0x2 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-tzlock.o)
+ .text.__tz_unlock
+                0x00000000        0x2 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-tzlock.o)
+ .debug_frame   0x00000000       0x30 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-tzlock.o)
+ .ARM.attributes
+                0x00000000       0x2c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-tzlock.o)
+ .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-tzvars.o)
+ .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-tzvars.o)
+ .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-tzvars.o)
+ .data._tzname  0x00000000        0x8 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-tzvars.o)
+ .bss._daylight
+                0x00000000        0x4 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-tzvars.o)
+ .bss._timezone
+                0x00000000        0x4 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-tzvars.o)
+ .rodata.str1.1
+                0x00000000        0x4 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-tzvars.o)
+ .ARM.attributes
+                0x00000000       0x2c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-tzvars.o)
+ .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-u_strerr.o)
+ .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-u_strerr.o)
+ .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-u_strerr.o)
+ .text._user_strerror
+                0x00000000        0x4 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-u_strerr.o)
+ .debug_frame   0x00000000       0x20 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-u_strerr.o)
+ .ARM.attributes
+                0x00000000       0x2c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-u_strerr.o)
+ .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-vsprintf.o)
+ .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-vsprintf.o)
+ .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-vsprintf.o)
+ .text._vsprintf_r
+                0x00000000       0x30 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-vsprintf.o)
+ .text.vsprintf
+                0x00000000       0x1c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-vsprintf.o)
+ .debug_frame   0x00000000       0x48 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-vsprintf.o)
+ .ARM.attributes
+                0x00000000       0x2c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-vsprintf.o)
  .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-writer.o)
  .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-writer.o)
  .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-writer.o)
  .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-closer.o)
  .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-closer.o)
  .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-closer.o)
+ .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-gettzinfo.o)
+ .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-gettzinfo.o)
+ .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-gettzinfo.o)
+ .text.__gettzinfo
+                0x00000000        0x8 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-gettzinfo.o)
+ .data.tzinfo   0x00000000       0x40 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-gettzinfo.o)
+ .debug_frame   0x00000000       0x20 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-gettzinfo.o)
+ .ARM.attributes
+                0x00000000       0x2c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-gettzinfo.o)
+ .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-gmtime_r.o)
+ .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-gmtime_r.o)
+ .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-gmtime_r.o)
+ .text.gmtime_r
+                0x00000000      0x158 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-gmtime_r.o)
+ .debug_frame   0x00000000       0x34 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-gmtime_r.o)
+ .ARM.attributes
+                0x00000000       0x2c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-gmtime_r.o)
  .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-lseekr.o)
  .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-lseekr.o)
  .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-lseekr.o)
+ .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-svfprintf.o)
+ .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-svfprintf.o)
+ .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-svfprintf.o)
+ .text.__ssputs_r
+                0x00000000       0xc0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-svfprintf.o)
+ .text.__ssprint_r
+                0x00000000      0x108 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-svfprintf.o)
+ .text._svfprintf_r
+                0x00000000      0x1ec c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-svfprintf.o)
+ .rodata.str1.1
+                0x00000000       0x11 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-svfprintf.o)
+ .debug_frame   0x00000000       0x74 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-svfprintf.o)
+ .ARM.attributes
+                0x00000000       0x2c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-svfprintf.o)
+ .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-vfprintf.o)
+ .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-vfprintf.o)
+ .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-vfprintf.o)
+ .text.__sfputc_r
+                0x00000000       0x2a c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-vfprintf.o)
+ .text.__sfputs_r
+                0x00000000       0x24 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-vfprintf.o)
+ .text.__sprint_r
+                0x00000000       0x1c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-vfprintf.o)
+ .text._vfprintf_r
+                0x00000000      0x220 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-vfprintf.o)
+ .text.vfprintf
+                0x00000000       0x1c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-vfprintf.o)
+ .rodata.str1.1
+                0x00000000       0x11 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-vfprintf.o)
+ .debug_frame   0x00000000       0xa0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-vfprintf.o)
+ .ARM.attributes
+                0x00000000       0x2c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-vfprintf.o)
+ .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-vfprintf_i.o)
+ .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-vfprintf_i.o)
+ .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-vfprintf_i.o)
+ .text._printf_common
+                0x00000000       0xdc c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-vfprintf_i.o)
+ .text._printf_i
+                0x00000000      0x230 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-vfprintf_i.o)
+ .rodata.str1.1
+                0x00000000       0x22 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-vfprintf_i.o)
+ .debug_frame   0x00000000       0x54 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-vfprintf_i.o)
+ .ARM.attributes
+                0x00000000       0x2c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-vfprintf_i.o)
  .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-putc.o)
  .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-putc.o)
  .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-putc.o)
@@ -1127,15 +1812,59 @@ Discarded input sections
  .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-wsetup.o)
  .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-wsetup.o)
  .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-wsetup.o)
+ .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-fvwrite.o)
+ .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-fvwrite.o)
+ .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-fvwrite.o)
+ .text.__sfvwrite_r
+                0x00000000      0x2b0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-fvwrite.o)
+ .debug_frame   0x00000000       0x30 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-fvwrite.o)
+ .ARM.attributes
+                0x00000000       0x2c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-fvwrite.o)
  .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-makebuf.o)
  .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-makebuf.o)
  .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-makebuf.o)
+ .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memchr.o)
+ .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memchr.o)
+ .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memchr.o)
+ .text.memchr   0x00000000       0x16 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memchr.o)
+ .debug_frame   0x00000000       0x20 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memchr.o)
+ .ARM.attributes
+                0x00000000       0x2c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memchr.o)
+ .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memmove.o)
+ .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memmove.o)
+ .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memmove.o)
+ .text.memmove  0x00000000       0x28 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memmove.o)
+ .debug_frame   0x00000000       0x28 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memmove.o)
+ .ARM.attributes
+                0x00000000       0x2c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memmove.o)
+ .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-reallocr.o)
+ .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-reallocr.o)
+ .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-reallocr.o)
+ .text._realloc_r
+                0x00000000       0x4c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-reallocr.o)
+ .debug_frame   0x00000000       0x30 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-reallocr.o)
+ .ARM.attributes
+                0x00000000       0x2c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-reallocr.o)
  .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-fstatr.o)
  .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-fstatr.o)
  .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-fstatr.o)
  .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-isattyr.o)
  .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-isattyr.o)
  .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-isattyr.o)
+ .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-msizer.o)
+ .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-msizer.o)
+ .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-msizer.o)
+ .text._malloc_usable_size_r
+                0x00000000       0x16 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-msizer.o)
+ .debug_frame   0x00000000       0x20 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-msizer.o)
+ .ARM.attributes
+                0x00000000       0x2c c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-msizer.o)
+ .text          0x00000000      0x1e0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/armv6-m\libgcc.a(_divsi3.o)
+ .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/armv6-m\libgcc.a(_divsi3.o)
+ .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/armv6-m\libgcc.a(_divsi3.o)
+ .debug_frame   0x00000000       0x20 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/armv6-m\libgcc.a(_divsi3.o)
+ .ARM.attributes
+                0x00000000       0x1e c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/armv6-m\libgcc.a(_divsi3.o)
  .text          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libnosys.a(close.o)
  .data          0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libnosys.a(close.o)
  .bss           0x00000000        0x0 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libnosys.a(close.o)
@@ -1235,6 +1964,18 @@ LOAD ./sdk/adapters/src/ad_spi.o
 LOAD ./sdk/adapters/src/ad_temp_sens.o
 LOAD ./sdk/adapters/src/ad_uart.o
 LOAD ./sdk/adapters/src/ad_uart_ble.o
+LOAD ./l3emc68x/l3emc68x.o
+LOAD ./l2frame/l2adclibra.o
+LOAD ./l2frame/l2didocap.o
+LOAD ./l2frame/l2ethorion.o
+LOAD ./l2frame/l2gpiocancer.o
+LOAD ./l2frame/l2i2caries.o
+LOAD ./l2frame/l2ledpisces.o
+LOAD ./l2frame/l2pwmtaurus.o
+LOAD ./l2frame/l2spileo.o
+LOAD ./l2frame/l2spsvirgo.o
+LOAD ./l1vmfreeos/l1timer_freeos.o
+LOAD ./l1vmfreeos/vmfreeoslayer.o
 LOAD ./main.o
 START GROUP
 LOAD c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/armv6-m\libgcc.a
@@ -2092,9 +2833,9 @@ LOAD c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/
  .bss.requests  0x07fc01d8       0xa0 ./sdk/osal/resmgmt.o
  .bss.waiting_list
                 0x07fc0278        0x4 ./sdk/osal/resmgmt.o
- .bss.test_counter.8306
-                0x07fc027c        0x4 ./main.o
- .bss.xHandle   0x07fc0280        0x4 ./main.o
+ .bss.xHandle   0x07fc027c        0x4 ./main.o
+ .bss.test_counter.9775
+                0x07fc0280        0x4 ./main.o
  .bss.__malloc_sbrk_start
                 0x07fc0284        0x4 c:/diasemi/smartsnippetsstudio/gcc/4_9-2015q1/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-nano-mallocr.o)
                 0x07fc0284                __malloc_sbrk_start
@@ -3293,7 +4034,7 @@ OUTPUT(freertos_retarget.elf elf32-littlearm)
  .comment       0x00000000       0x71 ./sdk/free_rtos/timers.o
  .comment       0x00000000       0x71 ./main.o
 
-.debug_info     0x00000000    0x207ec
+.debug_info     0x00000000    0x207fa
  .debug_info    0x00000000      0xe42 ./startup/config.o
  .debug_info    0x00000e42       0xd8 ./startup/startup_ARMCM0.o
  .debug_info    0x00000f1a     0x177e ./startup/system_ARMCM0.o
@@ -3324,7 +4065,7 @@ OUTPUT(freertos_retarget.elf elf32-littlearm)
  .debug_info    0x0001a7ec     0x1897 ./sdk/free_rtos/queue.o
  .debug_info    0x0001c083     0x24f7 ./sdk/free_rtos/tasks.o
  .debug_info    0x0001e57a     0x1146 ./sdk/free_rtos/timers.o
- .debug_info    0x0001f6c0     0x112c ./main.o
+ .debug_info    0x0001f6c0     0x113a ./main.o
 
 .debug_abbrev   0x00000000     0x51b0
  .debug_abbrev  0x00000000      0x2ba ./startup/config.o
@@ -3519,7 +4260,7 @@ OUTPUT(freertos_retarget.elf elf32-littlearm)
  .debug_line    0x000090f9      0x496 ./sdk/free_rtos/timers.o
  .debug_line    0x0000958f      0x464 ./main.o
 
-.debug_str      0x00000000     0xa272
+.debug_str      0x00000000     0xa278
  .debug_str     0x00000000      0xca9 ./startup/config.o
                                 0xd35 (size before relaxing)
  .debug_str     0x00000ca9     0x1004 ./startup/system_ARMCM0.o
@@ -3576,8 +4317,8 @@ OUTPUT(freertos_retarget.elf elf32-littlearm)
                                0x10bd (size before relaxing)
  .debug_str     0x00009a42      0x3ef ./sdk/free_rtos/timers.o
                                 0x947 (size before relaxing)
- .debug_str     0x00009e31      0x441 ./main.o
-                               0x1110 (size before relaxing)
+ .debug_str     0x00009e31      0x447 ./main.o
+                               0x111d (size before relaxing)
 
 .debug_frame    0x00000000     0x3344
  .debug_frame   0x00000000       0xa8 ./startup/config.o

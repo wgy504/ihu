@@ -17,6 +17,9 @@ C_DEPS :=
 
 # Every subdirectory with source files must be described here
 SUBDIRS := \
+l1vmfreeos \
+l2frame \
+l3emc68x \
 . \
 sdk/adapters/src \
 sdk/free_rtos \

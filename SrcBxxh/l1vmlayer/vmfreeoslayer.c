@@ -150,32 +150,20 @@ uint16_t b2l_uint16(uint16_t in)
 }
 
 //API abstract
-//通过时钟问题的解决，这个问题终于解决了，原因就是SLEEP和SIGALM公用同一套信号量，导致相互冲突。时钟采用线程方式后，再也没有问题了
+//这里采用系统提供的时钟函数
 void ihu_sleep(UINT32 second)
 {
 	if (second <= (UINT32)0) second =0;
-	//second = sleep(second*1000);
-	while (second>0)
-	{
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
-			//太多的错误，未来需要再研究这个错误出现的原因，这里留下一点点报告的可行性
-				IhuDebugPrint("VMFO: Sleep interrupt by other higher level system call, remaining %d second to be executed\n", second);
-		}
-		//second = sleep(second);
-	}
+	if (second >= MAX_SLEEP_COUNTER_UP_LIMITATION) second = MAX_SLEEP_COUNTER_UP_LIMITATION;
+	second = second*1000;
+	OS_DELAY_MS(second);
 }
 
 void ihu_usleep(UINT32 usecond)
 {
 	if (usecond <= 0) usecond =0;
-	//usecond = usleep(usecond);
-	while (usecond>0)
-	{
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
-			IhuErrorPrint("VMFO: uSleep interrupt by other higher level system call, remaining %d usecond to be executed\n", usecond);
-		}
-		//usecond = usleep(usecond);
-	}
+	if (usecond >= MAX_SLEEP_COUNTER_UP_LIMITATION) usecond = MAX_SLEEP_COUNTER_UP_LIMITATION;
+	OS_DELAY_MS(usecond);
 }
 
 //INIT the whole system
@@ -754,8 +742,6 @@ UINT8 FsmGetState(UINT8 task_id)
  ***************************************************************************************/
 OPSTAT ihu_message_queue_create(UINT8 task_id)
 {
-	int msgKey=0, msgQid=0;
-	
 	//Checking task_id range
 	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
@@ -763,36 +749,14 @@ OPSTAT ihu_message_queue_create(UINT8 task_id)
 		return FAILURE;
 	}
 
-	//Generate msgKey
-	msgKey = task_id + IHU_TASK_QUEUE_ID_START;
-	if ((msgKey <= TASK_QUE_ID_MIN) || (msgKey >= TASK_QUE_ID_MAX)){
-		zIhuRunErrCnt[TASK_ID_VMFO]++;
-		IhuErrorPrint("VMFO: Error on task_id, msgKey=%d!!!\n", msgKey);
-		return FAILURE;
-	}
-	//Checking msgQid exiting or not, if YES, just DELETE.
-//	msgQid=msgget(msgKey, IPC_EXCL);  /*检查消息队列是否存在*/
-	if (msgQid>=0){
-		//IhuErrorPrint("VMFO: Existing Queue id error, input Key = %d\n", msgKey);
-		//直接使用已有的QUEID，而不是重新创建
-		//zIhuTaskInfo[task_id].QueId = msgQid;
-		//return SUCCESS;
-		//删除消息队列
-//		if (msgctl(msgQid, IPC_RMID, NULL) == FAILURE){
-//			zIhuRunErrCnt[TASK_ID_VMFO]++;
-//			IhuErrorPrint("VMFO: Remove Queue error!\n");
-//			return FAILURE;
-//		}
-		//IhuErrorPrint("VMFO: Already remove Queue Id, input Key = %d\n", msgKey);
-	}
-	//Re-create the relevant message queue Id
-//	msgQid = msgget(msgKey, IPC_CREAT|0666);/*创建消息队列*/
-	if(msgQid <0){
+	//OS_QUEUE_CREATE(queue, item_size, max_items)
+	OS_QUEUE_CREATE(zIhuTaskInfo[task_id].QueId, IHU_QUEUE_MAX_SIZE, MAX_QUEUE_NUM_IN_ONE_TASK);
+	if(zIhuTaskInfo[task_id].QueId == NULL){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Failed to create msg-queue | errno=%d [%s]\n", errno, strerror(errno));
 		return FAILURE;
 	}
-	zIhuTaskInfo[task_id].QueId = msgQid;
+
 	return SUCCESS;
 }
 
@@ -807,21 +771,22 @@ OPSTAT ihu_message_queue_delete(UINT8 task_id)
 	}
 
 	//Not exist
-	//特殊情况下，msgqid=0也是可能的，这种情形，需要再仔细考虑
-	if (zIhuTaskInfo[task_id].QueId == 0) {return FAILURE;}
+	if (zIhuTaskInfo[task_id].QueId == NULL) {
+    zIhuRunErrCnt[TASK_ID_VMFO]++;
+    IhuErrorPrint("VMFO: Null msg-queue and no need delete | errno=%d [%s]\n", errno, strerror(errno));
+	  return FAILURE;
+	}
 
 	//Delete queue
-//	msgctl(zIhuTaskInfo[task_id].QueId, IPC_RMID, NULL); //删除消息队列
+	OS_QUEUE_DELETE(zIhuTaskInfo[task_id].QueId);
+	zIhuTaskInfo[task_id].QueId = NULL;
 
-	zIhuTaskInfo[task_id].QueId =0;
 	return SUCCESS;
 }
 
 //查询消息队列
-UINT32 ihu_message_queue_inquery(UINT8 task_id)
+QueueHandle_t ihu_message_queue_inquery(UINT8 task_id)
 {
-	int msgKey=0, msgQid=0;
-	
 	//Checking task_id range
 	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
@@ -829,41 +794,14 @@ UINT32 ihu_message_queue_inquery(UINT8 task_id)
 		return 0;
 	}
 
-	//Generate msgKey
-	msgKey = task_id + IHU_TASK_QUEUE_ID_START;
-	if ((msgKey <= TASK_QUE_ID_MIN) || (msgKey >= TASK_QUE_ID_MAX)){
-		zIhuRunErrCnt[TASK_ID_VMFO]++;
-		IhuErrorPrint("VMFO: Error on task_id, msgKey=%d!!!\n", msgKey);
-		return 0;
-	}
-
-//	msgQid=msgget(msgKey, IPC_EXCL);  /*检查消息队列是否存在*/
-
-	return msgQid;
+	return zIhuTaskInfo[task_id].QueId;
 }
 
 //这个过程用在同步不同进程之间的消息队列，确保不同进程之间的任务可以互发消息
 //如果队列本来就不存在，就不用同步或者重新填入全局控制表了
 OPSTAT ihu_message_queue_resync(void)
 {
-	UINT8 task_id = 0;
-	int msgKey=0, msgQid=0;
-	for (task_id = TASK_ID_MIN; task_id < TASK_ID_MAX; task_id++){
-		//Generate msgKey
-		msgKey = task_id + IHU_TASK_QUEUE_ID_START;
-		if ((msgKey <= TASK_QUE_ID_MIN) || (msgKey >= TASK_QUE_ID_MAX)){
-			zIhuRunErrCnt[TASK_ID_VMFO]++;
-			IhuErrorPrint("VMFO: Error on task_id, msgKey=%d!!!\n", msgKey);
-			return FAILURE;
-		}
-		//Checking msgQid exiting or not
-		//这里，不在本进程中的任务模块，只有最为基本的消息队列和Task_ID，其它信息一律不存在
-//		msgQid=msgget(msgKey, IPC_EXCL);  /*检查消息队列是否存在*/
-		if (msgQid>=0){
-			zIhuTaskInfo[task_id].QueId = msgQid;
-			zIhuTaskInfo[task_id].TaskId = task_id;
-		}
-	}//For loop
+  //此函数在VMFO中没有实质意义
 
 	return SUCCESS;
 }
@@ -876,13 +814,26 @@ OPSTAT ihu_message_queue_clean(UINT8 dest_id)
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Error on task_id, dest_id=%d!!!\n", dest_id);
 		return FAILURE;
-	}	
-	//清理消息队列
-	memset(&zIhuFsmTable.taskQue[dest_id], 0, sizeof(FsmQueueListTable_t));
-	
+	}
+
+	//先删除消息队列
+  if (zIhuTaskInfo[dest_id].QueId == NULL) {
+    zIhuRunErrCnt[TASK_ID_VMFO]++;
+    IhuErrorPrint("VMFO: Null msg-queue and no need clean | errno=%d [%s]\n", errno, strerror(errno));
+    return FAILURE;
+  }
+	OS_QUEUE_DELETE(zIhuTaskInfo[dest_id].QueId);
+
+	//再建立消息队列
+	OS_QUEUE_CREATE(zIhuTaskInfo[dest_id].QueId, IHU_QUEUE_MAX_SIZE, MAX_QUEUE_NUM_IN_ONE_TASK);
+  if (zIhuTaskInfo[dest_id].QueId == NULL) {
+    zIhuRunErrCnt[TASK_ID_VMFO]++;
+    IhuErrorPrint("VMFO: Not successfully re-build the msg queue | errno=%d [%s]\n", errno, strerror(errno));
+    return FAILURE;
+  }
+
 	return SUCCESS;
 }
-
 
 //message send basic processing
 //All in parameters
@@ -890,7 +841,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 {
 	int ret = 0;
 	char s1[TASK_NAME_MAX_LENGTH+2]="", s2[TASK_NAME_MAX_LENGTH+2]="", s3[MSG_NAME_MAX_LENGTH]="";
-	IhuMsgSruct_t *msg;
+	IhuMsgSruct_t msg;
 	
 	//Checking task_id range
 	if ((dest_id <= TASK_ID_MIN) || (dest_id >= TASK_ID_MAX)){
@@ -909,30 +860,22 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 		return FAILURE;
 	}
 
-	//Starting to process message send
-	//Not use malloc/free function, as it is a little bit complex to manage, to be checked here the memory conflict
-	msg = malloc(sizeof(IhuMsgSruct_t));
-	if (msg == NULL){
-		IhuErrorPrint("VMFO: Message send allocate memory error, exit!\n");
-		return FAILURE;
-	}
 	//Init to clean this memory area
-	//初始化消息内容，是为了稳定可靠安全
-	memset(msg, 0, sizeof(IhuMsgSruct_t));
-	msg->msgType = msg_id;
-	msg->dest_id = dest_id;
-	msg->src_id = src_id;
-	msg->msgLen = param_len;
-	memcpy(&(msg->msgBody[0]), param_ptr, param_len);
-	//msg->msgBody是否可以直接当指针？
+  //初始化消息内容，是为了稳定可靠安全
+  memset(&msg, 0, sizeof(IhuMsgSruct_t));
+  msg.msgType = msg_id;
+  msg.dest_id = dest_id;
+  msg.src_id = src_id;
+  msg.msgLen = param_len;
+  memcpy(&(msg.msgBody[0]), param_ptr, param_len);
 
-//	ret = msgsnd(ihu_msgque_inquery(dest_id), msg, (sizeof(IhuMsgSruct_t)-sizeof(long)), IPC_NOWAIT);
-//	free(msg);
-	if ( ret < 0 ) {
-		IhuErrorPrint("VMFO: msgsnd() write msg failed, errno=%d[%s], dest_id = %d [%s]\n",errno,strerror(errno), dest_id, zIhuTaskNameList[dest_id]);
-		zIhuTaskInfo[dest_id].QueFullFlag = IHU_TASK_QUEUE_FULL_TRUE;
-		return FAILURE;
-	}
+  //正式发送QUEUE
+  if (OS_QUEUE_PUT(zIhuTaskInfo[dest_id].QueId, &msg, 0) != OS_QUEUE_OK){
+    zIhuRunErrCnt[TASK_ID_VMFO]++;
+    IhuErrorPrint("VMFO: msgsnd() write msg failed, errno=%d[%s], dest_id = %d [%s]\n",errno,strerror(errno), dest_id, zIhuTaskNameList[dest_id]);
+    zIhuTaskInfo[dest_id].QueFullFlag = IHU_TASK_QUEUE_FULL_TRUE;
+    return FAILURE;
+  }
 
 	/*
 	 *  Message Trace processing
@@ -1142,23 +1085,22 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 // ret: 接受消息中的errno=4/EINTR需要单独处理，不然会出现被SIGALRM打断的情形
 OPSTAT ihu_message_rcv(UINT8 dest_id, IhuMsgSruct_t *msg)
 {
-	int ret = 0;
-	
 	//Checking task_id range
 	if ((dest_id <= TASK_ID_MIN) || (dest_id >= TASK_ID_MAX)){
 		IhuErrorPrint("VMFO: Error on task_id, dest_id=%d!!!\n", dest_id);
 		return FAILURE;
 	}
 
+	//未来调试时，需要注意，这里的BUFFER长度是否合理。原先在LINUX系统中，需要扣掉头部
 	//ret = msgrcv(zIhuTaskInfo[dest_id].QueId, msg, (sizeof(IhuMsgSruct_t) - sizeof(long)), 0, 0);
-//	ret = msgrcv(ihu_msgque_inquery(dest_id), msg, (sizeof(IhuMsgSruct_t) - sizeof(long)), 0, 0);
-//	if (errno == EINTR) //EINTR, system interrupt call error
-//		return EINTR;
-	if ( ret < 0 ) {
-		zIhuRunErrCnt[TASK_ID_VMFO]++;
-		IhuErrorPrint("VMFO: msgrcv() receive msg failed, Qid=%d, msg=%08X, errno=%d[%s]\n", zIhuTaskInfo[dest_id].QueId, msg, errno, strerror(errno));
-		return FAILURE;
+	if (OS_QUEUE_GET(zIhuTaskInfo[dest_id].QueId, msg, OS_QUEUE_FOREVER) != OS_QUEUE_OK){
+    zIhuRunErrCnt[TASK_ID_VMFO]++;
+    IhuErrorPrint("VMFO: msgrcv() receive msg failed, Qid=%d, msg=%08X, errno=%d[%s]\n", zIhuTaskInfo[dest_id].QueId, msg, errno, strerror(errno));
+    //防止某个任务在接受消息时，既不阻塞，也接受出错，所以休眠100ms，保持其他任务的正常运行
+    ihu_usleep(100);
+    return FAILURE;
 	}
+
 	return SUCCESS;
 }
 
@@ -1174,46 +1116,7 @@ OPSTAT ihu_message_rcv(UINT8 dest_id, IhuMsgSruct_t *msg)
 OPSTAT ihu_task_create(UINT8 task_id, void *(*task_func)(void *), void *arg, int prio)
 {
 	int                     err;
-//	pthread_attr_t          attr;
-//	struct  sched_param     sched;
-
-	// The thread is initialized with attributes object default values
-//	if(0!= (err = pthread_attr_init(&attr)))
-//	{
-//		IhuDebugPrint("VMFO: pthread_attr_init() nok!! err=%d, errno=%d, %s\n", err, errno, strerror(err));
-//		return FAILURE;
-//	}
-
-	// Change the inherit scheduling attribute
-	// of the specified thread attribute object,because PTHREAD_INHERIT_SCHED is default value
-//	if (0!= (err = pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED)))
-//	{
-//		IhuDebugPrint("VMFO: pthread_attr_setinheritsched() nok!! err=%d, errno=%d, %s\n", err, errno, strerror(err));
-//		return FAILURE;
-//	}
-
-	// Set the contention scope attribute of
-	// the specified thread attributes object, the thread compete with all threads on the station
-//	if (0 != (err = pthread_attr_setscope(&attr, PTHREAD_SCOPE_SYSTEM)))
-//	{
-//		IhuDebugPrint("VMFO: pthread_attr_setscope() nok!! err=%d, errno=%d, %s\n", err, errno, strerror(err));
-//		return FAILURE;
-//	}
-
-	// Set the scheduling policy,SCHED_OTHER is the default
-//	if (0 != (err = pthread_attr_setschedpolicy(&attr, SCHED_FIFO)))
-//	{
-//		IhuDebugPrint("VMFO: pthread_attr_setschedpolicy() nok!! err=%d, errno=%d, %s\n", err, errno, strerror(err));
-//		return FAILURE;
-//	}
-
-	// Set the priority of the task
-//	sched.sched_priority = prio;
-//	if (0 != (err = pthread_attr_setschedparam(&attr, &sched)))
-//	{
-//		IhuErrorPrint("VMFO: pthread_attr_setschedparam() nok!! err=%d, errno=%d, %s\n", err, errno, strerror(err));
-//		return FAILURE;
-//	}
+	OS_BASE_TYPE ret;
 
 	// Checking task_id
 	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
@@ -1236,30 +1139,28 @@ OPSTAT ihu_task_create(UINT8 task_id, void *(*task_func)(void *), void *arg, int
 	zIhuFsmTable.currentTaskId = task_id;
 
 	// creation of the task
-//	err=pthread_create(&(zIhuTaskInfo[task_id].ThrId), &attr, (void *(*)(void*))(task_func), (void*)arg);
-	if(err != 0)
+  ret = OS_TASK_CREATE(zIhuTaskNameList[task_id], /* The text name assigned to the task, for debug only; not used by the kernel. */
+        (void *(*)(void*))(task_func),            /* The System Initialization task. */
+        (void *) arg,                             /* The parameter passed to the task. */
+        IHU_TASK_STACK_SIZE * OS_STACK_WORD_SIZE, /* The number of bytes to allocate to the stack of the task. */
+        IHU_THREAD_PRIO,                          /* The priority assigned to the task. */
+        zIhuTaskInfo[task_id].TaskHandle);       /* The task handle */
+	if(ret != OS_TASK_CREATE_SUCCESS)
 	{
-		IhuDebugPrint("VMFO: pthread_create() nok!! err=%d, errno=%d, %s\n", err, errno, strerror(err));
+	  zIhuRunErrCnt[TASK_ID_VMFO]++;
+		IhuDebugPrint("VMFO: Create task nok!! err=%d, errno=%d, %s\n", err, errno, strerror(err));
 		return FAILURE;
 	}
 
-	//zIhuTaskInfo[task_id].TaskName to be added in another way, TBD
+	//存储现场记录, zIhuTaskInfo[task_id].TaskName to be added in another way, TBD
 	zIhuTaskInfo[task_id].TaskId = task_id;
-//	zIhuTaskInfo[task_id].processId = getpid(); //进程号存入
 	IhuDebugPrint("VMFO: pthread_create() OK ...\n");
-	/* ERRORS
-	       EAGAIN Insufficient resources to create another thread, or a system-imposed limit on the number of threads was encountered.  The latter case may occur in two ways: the RLIMIT_NPROC soft  resource  limit
-	              (set via setrlimit(2)), which limits the number of process for a real user ID, was reached; or the kernel's system-wide limit on the number of threads, /proc/sys/kernel/threads-max, was reached.
 
-	       EINVAL Invalid settings in attr.
-
-	       EPERM  No permission to set the scheduling policy and parameters specified in attr.
-	 */
+	//返回
 	return SUCCESS;
 }
 
 //kill task
-//有关进程与线程方面的杀死清理，未来需要再完善
 OPSTAT ihu_task_delete(UINT8 task_id)
 {
 	//Checking task_id range
@@ -1312,7 +1213,7 @@ OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 	}
 
 	//Create Queid
-	ret = ihu_message_queue_clean(task_id);
+	ret = ihu_message_queue_create(task_id);
 	if (ret == FAILURE)
 	{
 	zIhuRunErrCnt[TASK_ID_VMFO]++;
@@ -1644,7 +1545,7 @@ OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, vo
 		return FAILURE;
 	}
 
-	//对来源数据进行初始化，是为了稳定可靠安全	
+	//对来源数据进行初始化，是为了稳定可靠安全
 	memset(&msg, 0, sizeof(IhuMsgSruct_t));
 	msg.msgType = msg_id;
 	msg.dest_id = dest_id;
@@ -1954,6 +1855,14 @@ void ihu_task_execute_all_bare_rtos(void)
 	IhuDebugPrint("VMFO: Execute task once, for test!\n");
 }
 
+//安装ISR服务程序，目前暂时找不到合适的ucosIII对应的方式，待定
+//采用ISR方式后，硬件的轮询将变得不重要，都采用ISR方式，将更加干净、高效，完全是最正常的方式
+OPSTAT ihu_isr_install(UINT8 priority, void *my_routine)
+{
+
+        return SUCCESS;
+}
+
 /**********************************************************************************
  *
  *   MAIN函数入口，供应上层使用
@@ -1970,17 +1879,17 @@ int ihu_vm_main(void)
 	//启动所有任务
   ihu_task_create_all();
 
-	//wait for ever
-	while (1){
-		ihu_sleep(60); //可以设置为5秒的定时，甚至更长
-		ihu_vm_check_task_que_status_and_action();
-	}
+	//wait for ever，由于FreeRTOS需要vTaskStartScheduler()以后才能执行，所以这里不能阻塞
+//	while (1){
+//		ihu_sleep(60); //可以设置为5秒的定时，甚至更长
+//		ihu_vm_check_task_que_status_and_action();
+//	}
 
 	//清理现场环境，永远到达不了，清掉以消除COMPILE WARNING
 	//ihu_task_delete_all_and_queue();
 
 	//永远到达不了，清掉以消除COMPILE WARNING
-	//return EXIT_SUCCESS;
+	return EXIT_SUCCESS;
 }
 
 //TBD

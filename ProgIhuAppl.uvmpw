@@ -9,7 +9,6 @@
 
   <project>
     <PathAndName>.\PrjEmcWxDa1458x\projects\target_apps\wechat\Keil_5\emc_wechat.uvguix.uvprojx</PathAndName>
-    <NodeIsActive>1</NodeIsActive>
   </project>
 
   <project>
@@ -22,6 +21,8 @@
 
   <project>
     <PathAndName>.\PrjScycbUcosIII\EvalBoards\ST\STM3220G-EVAL\uCOS-III\KeilMDK\uCOS-III-Scycb.uvgui.uvproj</PathAndName>
+    <NodeIsActive>1</NodeIsActive>
+    <NodeIsExpanded>1</NodeIsExpanded>
   </project>
 
 </ProjectWorkspace>

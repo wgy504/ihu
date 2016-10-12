@@ -107,7 +107,7 @@ typedef struct FsmStateItem
 #define IHU_TASK_STACK_LENGTH 200
 typedef struct IhuTaskTag
 {
-	UINT32 TaskId;
+	UINT8  TaskId;
 	UINT8  pnpState;
 	UINT8  state;
 	char   TaskName[TASK_NAME_MAX_LENGTH];

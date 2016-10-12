@@ -27,6 +27,9 @@
 #include "sys_clock_mgr.h"
 #include "sys_power_mgr.h"
 
+//包含VMFO
+#include "vmfreeoslayer.h"
+
 /* Task priorities */
 #define mainTEMPLATE_TASK_PRIORITY		( OS_TASK_PRIORITY_NORMAL )
 
@@ -107,23 +110,25 @@ static void system_init( void *pvParameters )
  */
 int main( void )
 {
-        OS_BASE_TYPE status;
+  OS_BASE_TYPE status;
 
-        cm_clk_init_low_level();                            /* Basic clock initializations. */
+  cm_clk_init_low_level();                            /* Basic clock initializations. */
 
-        /* Start the two tasks as described in the comments at the top of this
-        file. */
-        status = OS_TASK_CREATE("SysInit",              /* The text name assigned to the task, for
-                                                           debug only; not used by the kernel. */
-                        system_init,                    /* The System Initialization task. */
-                        ( void * ) 0,                   /* The parameter passed to the task. */
-                        configMINIMAL_STACK_SIZE * OS_STACK_WORD_SIZE,
-                                                        /* The number of bytes to allocate to the
-                                                           stack of the task. */
-                        OS_TASK_PRIORITY_HIGHEST,       /* The priority assigned to the task. */
-                        xHandle );                      /* The task handle */
-        OS_ASSERT(status == OS_TASK_CREATE_SUCCESS);
+  /* Start the two tasks as described in the comments at the top of this
+  file. */
+  status = OS_TASK_CREATE("SysInit",              /* The text name assigned to the task, for
+                                                     debug only; not used by the kernel. */
+                  system_init,                    /* The System Initialization task. */
+                  ( void * ) 0,                   /* The parameter passed to the task. */
+                  configMINIMAL_STACK_SIZE * OS_STACK_WORD_SIZE,
+                                                  /* The number of bytes to allocate to the
+                                                     stack of the task. */
+                  OS_TASK_PRIORITY_HIGHEST,       /* The priority assigned to the task. */
+                  xHandle );                      /* The task handle */
+  OS_ASSERT(status == OS_TASK_CREATE_SUCCESS);
 
+  //挂在VMFO的主入口函数，居然出现内存不够的情形
+  //ihu_vm_main();
 
 	/* Start the tasks and timer running. */
 	vTaskStartScheduler();

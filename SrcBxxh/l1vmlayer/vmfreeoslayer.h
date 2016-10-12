@@ -18,6 +18,14 @@
 	#include "commsgemc68.h"
 #endif
 
+#include "osal.h"
+#include "resmgmt.h"
+#include "hw_cpm.h"
+#include "hw_gpio.h"
+#include "hw_watchdog.h"
+#include "sys_clock_mgr.h"
+#include "sys_power_mgr.h"
+
 /*
  *	
  *  定义结构体
@@ -77,7 +85,6 @@ enum IHU_TASK_QUEUE_ID
 	TASK_QUE_ID_INVALID = 0xFF,
 }; //end of IHU_TASK_QUEUE_ID
 
-
 /*
 ** Fsm INFORMATION structure.
 */
@@ -85,8 +92,6 @@ enum IHU_TASK_QUEUE_ID
 #define FSM_STATE_IDLE  0x01
 #define FSM_STATE_END   0xFE
 #define FSM_STATE_INVALID 0xFF
-
-
 
 //FSM的基础结构定义
 typedef struct FsmStateItem
@@ -100,10 +105,11 @@ typedef struct IhuTaskTag
 {
 	UINT32 TaskId;
 	UINT8  pnpState;
-	INT32  QueId;
+	QueueHandle_t  QueId;
 	UINT8  state;
 	char   TaskName[TASK_NAME_MAX_LENGTH];
 	FsmStateItem_t *fsmPtr;
+	xTaskHandle *TaskHandle;
 	UINT8 QueFullFlag;
 }IhuTaskTag_t;
 #define IHU_TASK_PNP_ON 2
@@ -195,7 +201,7 @@ extern UINT8  FsmGetState(UINT8 task_id);
 //Global VM layer basic API and functions，跟具体操作系统相关的API部分
 extern OPSTAT ihu_message_queue_create(UINT8 task_id);
 extern OPSTAT ihu_message_queue_delete(UINT8 task_id);
-extern UINT32 ihu_message_queue_inquery(UINT8 task_id);
+extern QueueHandle_t ihu_message_queue_inquery(UINT8 task_id);
 extern OPSTAT ihu_message_queue_resync(void);
 extern OPSTAT ihu_message_queue_clean(UINT8 dest_id);
 extern OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len); //message send
@@ -206,12 +212,12 @@ extern OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateIt
 extern OPSTAT ihu_system_task_init_call(UINT8 task_id, FsmStateItem_t *p);
 extern void   ihu_task_create_all(void);
 extern OPSTAT fsm_com_do_nothing(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
-
 extern void ihu_sw_restart(void);
 extern struct tm ihu_clock_unix_to_ymd(time_t t_unix);
+extern OPSTAT ihu_isr_install(UINT8 priority, void *my_routine);
 
 
-//对于没有RTOS的情形
+//对于没有RTOS的情形，为了兼容VMDA，暂时没用到
 extern OPSTAT FsmProcessingLaunchEntryBareRtos(UINT8 task_id);   //当创建和启动分离时使用
 extern OPSTAT FsmProcessingLaunchExecuteBareRtos(UINT8 task_id); //当创建和启动分离时使用
 extern OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len); //message send
