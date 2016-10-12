@@ -22,7 +22,7 @@ Accomplished Features / Function:
   > periph_setup.c file active uart2_init_func, modify GPIO_reservations and set_pad_functions
   > GPIO_PIN_1 -> UART2_TX, GPIO_PIN_2 -> UART2_RX, uing GPIO_PORT_1
   > To be tested: Pin to USB hardware
-  > 串口测试功能，完成
+  > 串口测试功能，完成 
   > Printf的字符串，必须以\r\n结束
 
 ==Task creation and FSM framework
@@ -664,12 +664,31 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 //= ZJL, 2016 Oct.11, CURRENT_SW_DELIVERY R03.34
 = 首次将VMFO嫁接到FreeOS上的1468x SDK 1.0.6官方例子上，基于SmartSnippets Studio v1.2.3编译通过
 = 编译环境不支持最新版Eclipse，下载调测还不明白是否支持KEIL5
+= 为了更好是使用该环节，请遵循以下步骤进行项目工程创建和环境设置，不然会出现意想不到的问题
+  1. 不用使用自己的Eclipse，而使用SmartSnippets Studio V1.2.3，假设装在C盘上，c:\DiaSemi目录下
+  2. 进去后选择SDK Boot Root选择另外一个目录，比如D:\TEMP，设置为缺省工作目录，不要跟git sourcecde放在一起，IDE工具将会在该目录下创建
+             工作环境和临时文件。
+  3. 选择IDE进去，打开IDE工作环境，如果已经存在项目程序，删除清空
+  4. Import项目，选择DA1468x_SDK_BTLE_v_xxx，（Existing Projects），系统会列出SDK下的所有项目，Deselct所有的，只保留Freetos_retarget
+  5. 如果已经存在l0comvm/l1vmfreeos/l2frame/l3emc68x，请删去，这只是link，并不会影响项目的编译。
+  6. 点击freertos_regarget项目名字，右键选择new=>Folder->advance->link to location->选择SrcBxxh目录下的l0comvm，保持创建后的名字也是l0comvm
+  7. 如法炮制创建剩下的三个目录，但l1vmfreeos， l3emc68x可以修改，以便保持跟其他开发者一致
+  8. 将SrcBxxh整个git source下的目录做备份，很重要！如果这个不做，后面的操作会删掉源代码！！！
+  9. 在刚才创建好的项目工程目录中，l0comvm删掉其他项目的commsgemcwx.h/commsgscycb.h文件，只保留commsgemc68.h，其他的公共.h文件不要动。
+  10. 在l1vmfreeos目录下，删掉ucos相关的文件
+  11. 在l2frame目录下，删掉adcaries.c/h，asy*.*, aks*.*
+  12. 在l3emc68x目录下，只保留l3emc68x.*，删掉其他文件
+  13. 修改sysdim.h中的项目参数，改为emc68x项目
+  14. 编译，这时应该编译通过。如果不通过，以上操作一定有什么差错，可以重新来过。
+  15. 将SrcBxxh目录拷贝回来git source，注意，这里可以选择不重复拷贝，只拷贝不存在删掉的文件。
+  16. 完善IDE的工作界面，Windows->Preference->General->Apperance->Colors and Fonts -> Basic -> Text Font-> Edit -> Courier New, Reglar, 10
+                如果Courier New字体不存在，去c:\Windows\Fonts目录下将Courier New改为显示
+  17. Windows->Preference->General->Editors -> Text Editor -> Display Tab Width = 2, Inserts Spaces for Tabs勾选
+  18. Windows->Preference-> c/c++-> code style -> Formatter -> Edit -> Indentation -> Tab policy = "Space only", Indentation size = 2, Tab size = 2
+  19. 打开l2frame/adclibra.c，看看状态机消息路由表是否排列整齐，如果不整齐，说明上述步骤没有设置完整。
+  20. 原则上，下一次再打开项目，这个环境就是保持状态，而不再需要重新设置。
 
-
-
-
-
-
+//= ZJL, 2016 Oct.12, CURRENT_SW_DELIVERY R03.35
 
 
 

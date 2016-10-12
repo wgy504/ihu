@@ -27,22 +27,22 @@
 		<link>
 			<name>l0comvm</name>
 			<type>2</type>
-			<location>D:/IHUSRC/ihu/SrcBxxh/l0comvm</location>
+			<location>D:/IHUPRJ/ihu/SrcBxxh/l0comvm</location>
 		</link>
 		<link>
 			<name>l1vmfreeos</name>
 			<type>2</type>
-			<location>D:/IHUSRC/ihu/SrcBxxh/l1vmlayer</location>
+			<location>D:/IHUPRJ/ihu/SrcBxxh/l1vmlayer</location>
 		</link>
 		<link>
 			<name>l2frame</name>
 			<type>2</type>
-			<location>D:/IHUSRC/ihu/SrcBxxh/l2frame</location>
+			<location>D:/IHUPRJ/ihu/SrcBxxh/l2frame</location>
 		</link>
 		<link>
 			<name>l3emc68x</name>
 			<type>2</type>
-			<location>D:/IHUSRC/ihu/SrcBxxh/l3appl</location>
+			<location>D:/IHUPRJ/ihu/SrcBxxh/l3appl</location>
 		</link>
 		<link>
 			<name>misc</name>
