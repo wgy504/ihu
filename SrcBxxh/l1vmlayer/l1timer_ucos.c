@@ -179,13 +179,15 @@ OPSTAT fsm_timer_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 para
 	}
 
 	//进入永久的监控状态
-	while(1) {
-		ihu_sleep(60);
-		ihu_vm_check_task_que_status_and_action();
-	  }
-	
+	//如果这里进入永久不出来的状态，意味着L1TIMER任务将不受控，该任务一直阻塞在这儿，无法再能接受到任何其他消息
+	//如果这就是我们想要的，那正常。如果不是，那这里就不能如此设计。
+//	while(1) {
+//		ihu_sleep(60);
+//		ihu_vm_check_task_que_status_and_action();
+//	  }
+//	
 	//返回，由于到达不了，所以这里就隐去，以便消除COMPILE WARNING
-	//return SUCCESS;
+	return SUCCESS;
 }
 
 //是否能起到作用，待定

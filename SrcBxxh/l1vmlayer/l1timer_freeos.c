@@ -40,6 +40,7 @@ FsmStateItem_t FsmTimer[] =
 
 //Global variables defination
 IhuTimerTable_t zIhuTimerTable;
+OS_TIMER zIhuL1timer1s, zIhuL1timer10ms, zIhuL1timer1ms;
 
 //Main Entry
 //Input parameter would be useless, but just for similar structure purpose
@@ -55,7 +56,7 @@ OPSTAT fsm_timer_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 
 OPSTAT fsm_timer_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	//int ret=0;
+  //xTimerHandle timerStart;
 
 	//串行会送INIT_FB给VM，不然消息队列不够深度，此为节省内存机制
 	if ((src_id > TASK_ID_MIN) && (src_id < TASK_ID_MAX)){
@@ -88,98 +89,55 @@ OPSTAT fsm_timer_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 para
 		return FAILURE;
 	}
 
-	/*
-	*   方法三：线程机制，实时系统的稳态性肯定要差点，但还是在某种限度内，没有太大的问题。
-	*/
-  // 1s
-	
+  /*
+  *   沿用HCU的程序代码风格，这里采用了FreeRTOS对应的定时器，然后生成自己的软定时器
+  *   方法四：任务CALLBACK，实时系统的稳态性肯定要差点，但还是在某种限度内，没有太大的问题。
+  */
+
+  // 1s, TIMERID不存储，因为TIMERID就没有打算停止
 	if (IHU_TIMER_CONFIG_START_RESOLUTION_1S == TRUE){
-//	    struct sigevent evp1s;
-//	    struct itimerspec ts1s;
-//	    timer_t timer1s;
-
-//	    memset (&evp1s, 0, sizeof (evp1s));
-//	    evp1s.sigev_value.sival_ptr = &timer1s;
-//	    evp1s.sigev_notify = SIGEV_THREAD;
-//	    evp1s.sigev_notify_function = func_timer_routine_handler_1s;
-//	    evp1s.sigev_value.sival_int = 3; //作为func_timer_routine_handler_1s的参数
-
-//	    if (timer_create(CLOCK_REALTIME, &evp1s, &timer1s) == -1) {
-//	    	IhuErrorPrint("TIMER: Error create timer timer_create()!\n");
-//	    	zIhuRunErrCnt[TASK_ID_TIMER]++;
-//	    	return FAILURE;
-//	    }
-
-//	    ts1s.it_interval.tv_sec = IHU_TIMER_TICK_1_SEC;
-//	    ts1s.it_interval.tv_nsec = 0;
-//	    ts1s.it_value.tv_sec = IHU_TIMER_TICK_1_SEC;
-//	    ts1s.it_value.tv_nsec = 0;
-
-//	    if (timer_settime(timer1s, TIMER_ABSTIME, &ts1s, NULL) == -1) {
-//	    	IhuErrorPrint("TIMER: Error set timer timer_settime()!\n");
-//	    	zIhuRunErrCnt[TASK_ID_TIMER]++;
-//	    	return FAILURE;
-//	    }
+	  zIhuL1timer1s = OS_TIMER_CREATE("IHU_TIMER_1S", OS_MS_2_TICKS(IHU_TIMER_TICK_1_SEC), pdTRUE, (void *)NULL, (TimerCallbackFunction_t)func_timer_routine_handler_1s);
+	  if (zIhuL1timer1s == NULL){
+	    zIhuRunErrCnt[TASK_ID_TIMER]++;
+	    IhuErrorPrint("TIMER: Error create 1S timer!");
+	    return FAILURE;
+	  }
+    if (OS_TIMER_START(zIhuL1timer1s, OS_MS_2_TICKS(rand()%1000)) != OS_TIMER_SUCCESS){
+      zIhuRunErrCnt[TASK_ID_TIMER]++;
+      IhuErrorPrint("TIMER: Error start 1S timer!");
+      return FAILURE;
+    }
 	}
 
-    //10ms帧协议定时器
+  //10ms帧协议定时器
 	if (IHU_TIMER_CONFIG_START_RESOLUTION_10MS == TRUE){
-//	    struct sigevent evp10ms;
-//	    struct itimerspec ts10ms;
-//	    timer_t timer10ms;
-
-//	    memset (&evp10ms, 0, sizeof (evp10ms));
-//	    evp10ms.sigev_value.sival_ptr = &timer10ms;
-//	    evp10ms.sigev_notify = SIGEV_THREAD;
-//	    evp10ms.sigev_notify_function = func_timer_routine_handler_10ms;
-//	    evp10ms.sigev_value.sival_int = 3; //作为func_timer_routine_handler_10ms的参数
-
-//	    if (timer_create(CLOCK_REALTIME, &evp10ms, &timer10ms) == -1) {
-//	    	IhuErrorPrint("TIMER: Error create timer timer_create()!\n");
-//	    	zIhuRunErrCnt[TASK_ID_TIMER]++;
-//	    	return FAILURE;
-//	    }
-//	    ts10ms.it_interval.tv_sec = 0;
-//	    ts10ms.it_interval.tv_nsec = IHU_TIMER_TICK_10_MS_IN_NS;
-//	    ts10ms.it_value.tv_sec = 0;
-//	    ts10ms.it_value.tv_nsec = IHU_TIMER_TICK_10_MS_IN_NS;
-
-//	    if (timer_settime(timer10ms, TIMER_ABSTIME, &ts10ms, NULL) == -1) {
-//	    	IhuErrorPrint("TIMER: Error set timer timer_settime()!\n");
-//	    	zIhuRunErrCnt[TASK_ID_TIMER]++;
-//	    	return FAILURE;
-//	    }
+	  zIhuL1timer10ms = OS_TIMER_CREATE("IHU_TIMER_10MS", OS_MS_2_TICKS(IHU_TIMER_TICK_10_MS), pdTRUE, (void *)NULL, (TimerCallbackFunction_t)func_timer_routine_handler_10ms);
+    if (zIhuL1timer10ms == NULL){
+      zIhuRunErrCnt[TASK_ID_TIMER]++;
+      IhuErrorPrint("TIMER: Error create 10MS timer!");
+      return FAILURE;
+    }
+    if (OS_TIMER_START(zIhuL1timer10ms, OS_MS_2_TICKS(rand()%10)) != OS_TIMER_SUCCESS){
+      zIhuRunErrCnt[TASK_ID_TIMER]++;
+      IhuErrorPrint("TIMER: Error start 10MS timer!");
+      return FAILURE;
+    }
 	}
 
-    //1ms时钟，这个应该是挺影响性能的，如果系统中没有用到，可以去掉
+  //1ms时钟，这个应该是挺影响性能的，如果系统中没有用到，可以去掉
 	if (IHU_TIMER_CONFIG_START_RESOLUTION_1MS == TRUE){
-//	    struct sigevent evp1ms;
-//	    struct itimerspec ts1ms;
-//	    timer_t timer1ms;
-
-//	    memset (&evp1ms, 0, sizeof (evp1ms));
-//	    evp1ms.sigev_value.sival_ptr = &timer1ms;
-//	    evp1ms.sigev_notify = SIGEV_THREAD;
-//	    evp1ms.sigev_notify_function = func_timer_routine_handler_1ms;
-//	    evp1ms.sigev_value.sival_int = 3; //作为func_timer_routine_handler_1ms的参数
-
-//	    if (timer_create(CLOCK_REALTIME, &evp1ms, &timer1ms) == -1) {
-//	    	IhuErrorPrint("TIMER: Error create timer timer_create()!\n");
-//	    	zIhuRunErrCnt[TASK_ID_TIMER]++;
-//	    	return FAILURE;
-//	    }
-//	    ts1ms.it_interval.tv_sec = 0;
-//	    ts1ms.it_interval.tv_nsec = IHU_TIMER_TICK_10_MS_IN_NS;
-//	    ts1ms.it_value.tv_sec = 0;
-//	    ts1ms.it_value.tv_nsec = IHU_TIMER_TICK_10_MS_IN_NS;
-
-//	    if (timer_settime(timer1ms, TIMER_ABSTIME, &ts1ms, NULL) == -1) {
-//	    	IhuErrorPrint("TIMER: Error set timer timer_settime()!\n");
-//	    	zIhuRunErrCnt[TASK_ID_TIMER]++;
-//	    	return FAILURE;
-//	    }
-	}	
-	
+	  zIhuL1timer1ms = OS_TIMER_CREATE("IHU_TIMER_1MS", OS_MS_2_TICKS(IHU_TIMER_TICK_1_MS), pdTRUE, (void *)NULL, (TimerCallbackFunction_t)func_timer_routine_handler_1ms);
+    if (zIhuL1timer1ms == NULL){
+      zIhuRunErrCnt[TASK_ID_TIMER]++;
+      IhuErrorPrint("TIMER: Error create 1MS timer!");
+      return FAILURE;
+    }
+    if (OS_TIMER_START(zIhuL1timer1ms, OS_MS_2_TICKS(rand()%10)) != OS_TIMER_SUCCESS){
+      zIhuRunErrCnt[TASK_ID_TIMER]++;
+      IhuErrorPrint("TIMER: Error start 1MS timer!");
+      return FAILURE;
+    }
+	}
 	
 	//进入等待反馈状态
 	if (FsmSetState(TASK_ID_TIMER, FSM_STATE_TIMER_AVTIVE) == FAILURE){
@@ -193,12 +151,14 @@ OPSTAT fsm_timer_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 para
 		IhuDebugPrint("TIMER: Enter FSM_STATE_TIMER_ACTIVE status, Keeping refresh here!");
 	}
 
+	//循环：考虑到L1TIMER还要受到系统消息的控制，这里并不采用无限循环的方式进行工作，而是让消息可以控制它
+	//while(1) {
+	//	ihu_sleep(60);
+	//	ihu_vm_check_task_que_status_and_action();
+	//  }
+
 	//返回
-	while(1) {
-//		pause();
-		ihu_sleep(60);
-	  }
-	//return SUCCESS;
+	return SUCCESS;
 }
 
 OPSTAT fsm_timer_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
@@ -386,161 +346,160 @@ OPSTAT ihu_timer_stop(UINT8 task_id, UINT8 timer_id, UINT8 t_res)
 	return SUCCESS;
 }
 
-////线程机制，搞定时器
-//void func_timer_routine_handler_1s(union sigval v)
-//{
-//	int i=0, ret=0;
-//	msg_struct_com_time_out_t snd;
+//函数机制，搞定时器
+void func_timer_routine_handler_1s(OS_TIMER timerid)
+{
+  int i=0, ret=0;
+  msg_struct_com_time_out_t snd;
 
-//	if (v.sival_int !=3) return;
+  //入参检查
 
-//	//IhuDebugPrint("TIMER: 1s resolution timer enter one time!\n");
-//	//IhuDebugPrint("TIMER: SIGPROF 1S resolution timer enter one time!\n");
-//	for (i=0;i<MAX_TIMER_NUM_IN_ONE_IHU_1S;i++)
-//	{
-//		//Active status
-//		if (zIhuTimerTable.timer1s[i].status == TIMER_STATUS_ACTIVE){
-//			if (zIhuTimerTable.timer1s[i].elapse > zIhuTimerTable.timer1s[i].tDuration){
-//				IhuErrorPrint("TIMER: Error elapse value meet!\n");
-//				zIhuTimerTable.timer1s[i].elapse = zIhuTimerTable.timer1s[i].elapse % zIhuTimerTable.timer1s[i].tDuration;
-//			}
-//			if (zIhuTimerTable.timer1s[i].elapse >= 1){
-//				//防止出现潜在问题，求余再减1
-//				zIhuTimerTable.timer1s[i].elapse--;
-//			}else{
-//				//change ACTIVE to STOP, no
-//				if (zIhuTimerTable.timer1s[i].timerType == TIMER_TYPE_ONE_TIME){
-//					zIhuTimerTable.timer1s[i].status = TIMER_STATUS_STOP;
-//					zIhuTimerTable.timer1s[i].elapse = 0;
-//				}
-//				//No change for PERIOD, re-start this timer
-//				//本轮也算1秒，所以需要在周期的基础上减1
-//				else if (zIhuTimerTable.timer1s[i].timerType == TIMER_TYPE_PERIOD){
-//					zIhuTimerTable.timer1s[i].elapse = zIhuTimerTable.timer1s[i].tDuration-1;
-//				}
-//				//Send message time_out
-//				memset(&snd, 0, sizeof(msg_struct_com_time_out_t));
-//				snd.length = sizeof(msg_struct_com_time_out_t);
-//				snd.timeId = zIhuTimerTable.timer1s[i].timerId;
-//				snd.timeRes = zIhuTimerTable.timer1s[i].timerRes;
-//				ret = ihu_message_send(MSG_ID_COM_TIME_OUT, zIhuTimerTable.timer1s[i].taskId, TASK_ID_TIMER, &snd, snd.length);
-//				if (ret == FAILURE){
-//					zIhuRunErrCnt[TASK_ID_TIMER]++;
-//					IhuErrorPrint("TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_TIMER], zIhuTaskNameList[zIhuTimerTable.timer1s[i].taskId]);
-//					return;
-//				}
-//			}//Elapse <= 0, timeout reach
-//		}
-//		//START status
-//		else if(zIhuTimerTable.timer1s[i].status == TIMER_STATUS_START){
-//			zIhuTimerTable.timer1s[i].elapse = zIhuTimerTable.timer1s[i].tDuration;
-//			zIhuTimerTable.timer1s[i].status = TIMER_STATUS_ACTIVE;
-//		}//Not meet ACTIVE or START timer
-//	}//for-MAX_TIMER_NUM_IN_ONE_IHU_1S
-//}
+  //扫描
+  for (i=0;i<MAX_TIMER_NUM_IN_ONE_IHU_1S;i++)
+  {
+    //Active status
+    if (zIhuTimerTable.timer1s[i].status == TIMER_STATUS_ACTIVE){
+      if (zIhuTimerTable.timer1s[i].elapse > zIhuTimerTable.timer1s[i].tDuration){
+        IhuErrorPrint("TIMER: Error elapse value meet!\n");
+        zIhuTimerTable.timer1s[i].elapse = zIhuTimerTable.timer1s[i].elapse % zIhuTimerTable.timer1s[i].tDuration;
+      }
+      if (zIhuTimerTable.timer1s[i].elapse >= 1){
+        //防止出现潜在问题，求余再减1
+        zIhuTimerTable.timer1s[i].elapse--;
+      }else{
+        //change ACTIVE to STOP, no
+        if (zIhuTimerTable.timer1s[i].timerType == TIMER_TYPE_ONE_TIME){
+          zIhuTimerTable.timer1s[i].status = TIMER_STATUS_STOP;
+          zIhuTimerTable.timer1s[i].elapse = 0;
+        }
+        //No change for PERIOD, re-start this timer
+        //本轮也算1秒，所以需要在周期的基础上减1
+        else if (zIhuTimerTable.timer1s[i].timerType == TIMER_TYPE_PERIOD){
+          zIhuTimerTable.timer1s[i].elapse = zIhuTimerTable.timer1s[i].tDuration-1;
+        }
+        //Send message time_out
+        memset(&snd, 0, sizeof(msg_struct_com_time_out_t));
+        snd.length = sizeof(msg_struct_com_time_out_t);
+        snd.timeId = zIhuTimerTable.timer1s[i].timerId;
+        snd.timeRes = zIhuTimerTable.timer1s[i].timerRes;
+        ret = ihu_message_send(MSG_ID_COM_TIME_OUT, zIhuTimerTable.timer1s[i].taskId, TASK_ID_TIMER, &snd, snd.length);
+        if (ret == FAILURE){
+          zIhuRunErrCnt[TASK_ID_TIMER]++;
+          IhuErrorPrint("TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_TIMER], zIhuTaskNameList[zIhuTimerTable.timer1s[i].taskId]);
+          return;
+        }
+      }//Elapse <= 0, timeout reach
+    }
+    //START status
+    else if(zIhuTimerTable.timer1s[i].status == TIMER_STATUS_START){
+      zIhuTimerTable.timer1s[i].elapse = zIhuTimerTable.timer1s[i].tDuration;
+      zIhuTimerTable.timer1s[i].status = TIMER_STATUS_ACTIVE;
+    }//Not meet ACTIVE or START timer
+  }//for-MAX_TIMER_NUM_IN_ONE_IHU_1S
+}
 
 
-////线程机制，搞定时器
-//void func_timer_routine_handler_10ms(union sigval v)
-//{
-//	int i=0, ret=0;
-//	msg_struct_com_time_out_t snd;
+//函数机制，搞定时器
+void func_timer_routine_handler_10ms(OS_TIMER timerid)
+{
+  int i=0, ret=0;
+  msg_struct_com_time_out_t snd;
 
-//	if (v.sival_int !=3) return;
+  //入参检查
 
-//	//IhuDebugPrint("TIMER: 10ms resolution timer enter one time!\n");
-//	for (i=0;i<MAX_TIMER_NUM_IN_ONE_IHU_10MS;i++)
-//	{
-//		//Active status
-//		if (zIhuTimerTable.timer10ms[i].status == TIMER_STATUS_ACTIVE){
-//			if (zIhuTimerTable.timer10ms[i].elapse > zIhuTimerTable.timer10ms[i].tDuration){
-//				IhuErrorPrint("TIMER: Error elapse value meet!\n");
-//				zIhuTimerTable.timer10ms[i].elapse = zIhuTimerTable.timer10ms[i].elapse % zIhuTimerTable.timer10ms[i].tDuration;
-//			}
-//			if (zIhuTimerTable.timer10ms[i].elapse >= 1){
-//				//防止出现潜在问题，求余再减1
-//				zIhuTimerTable.timer10ms[i].elapse--;
-//			}else{
-//				//change ACTIVE to STOP, no
-//				if (zIhuTimerTable.timer10ms[i].timerType == TIMER_TYPE_ONE_TIME){
-//					zIhuTimerTable.timer10ms[i].status = TIMER_STATUS_STOP;
-//					zIhuTimerTable.timer10ms[i].elapse = 0;
-//				}
-//				//No change for PERIOD, re-start this timer
-//				//本轮也算1次，所以需要在周期的基础上减1，不然会出现问题
-//				else if (zIhuTimerTable.timer10ms[i].timerType == TIMER_TYPE_PERIOD){
-//					zIhuTimerTable.timer10ms[i].elapse = zIhuTimerTable.timer10ms[i].tDuration-1;
-//				}
-//				//Send message time_out
-//				memset(&snd, 0, sizeof(msg_struct_com_time_out_t));
-//				snd.length = sizeof(msg_struct_com_time_out_t);
-//				snd.timeId = zIhuTimerTable.timer10ms[i].timerId;
-//				snd.timeRes = zIhuTimerTable.timer10ms[i].timerRes;
-//				ret = ihu_message_send(MSG_ID_COM_TIME_OUT, zIhuTimerTable.timer10ms[i].taskId, TASK_ID_TIMER, &snd, snd.length);
-//				if (ret == FAILURE){
-//					zIhuRunErrCnt[TASK_ID_TIMER]++;
-//					IhuErrorPrint("TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_TIMER], zIhuTaskNameList[zIhuTimerTable.timer10ms[i].taskId]);
-//					return;
-//				}
-//			}//Elapse <= 0, timeout reach
-//		}
-//		//START status
-//		else if(zIhuTimerTable.timer10ms[i].status == TIMER_STATUS_START){
-//			zIhuTimerTable.timer10ms[i].elapse = zIhuTimerTable.timer10ms[i].tDuration;
-//			zIhuTimerTable.timer10ms[i].status = TIMER_STATUS_ACTIVE;
-//		}//Not meet ACTIVE or START timer
-//	}//for-MAX_TIMER_NUM_IN_ONE_IHU_10MS
-//}
+  //扫描
+  for (i=0;i<MAX_TIMER_NUM_IN_ONE_IHU_10MS;i++)
+  {
+    //Active status
+    if (zIhuTimerTable.timer10ms[i].status == TIMER_STATUS_ACTIVE){
+      if (zIhuTimerTable.timer10ms[i].elapse > zIhuTimerTable.timer10ms[i].tDuration){
+        IhuErrorPrint("TIMER: Error elapse value meet!\n");
+        zIhuTimerTable.timer10ms[i].elapse = zIhuTimerTable.timer10ms[i].elapse % zIhuTimerTable.timer10ms[i].tDuration;
+      }
+      if (zIhuTimerTable.timer10ms[i].elapse >= 1){
+        //防止出现潜在问题，求余再减1
+        zIhuTimerTable.timer10ms[i].elapse--;
+      }else{
+        //change ACTIVE to STOP, no
+        if (zIhuTimerTable.timer10ms[i].timerType == TIMER_TYPE_ONE_TIME){
+          zIhuTimerTable.timer10ms[i].status = TIMER_STATUS_STOP;
+          zIhuTimerTable.timer10ms[i].elapse = 0;
+        }
+        //No change for PERIOD, re-start this timer
+        //本轮也算1次，所以需要在周期的基础上减1，不然会出现问题
+        else if (zIhuTimerTable.timer10ms[i].timerType == TIMER_TYPE_PERIOD){
+          zIhuTimerTable.timer10ms[i].elapse = zIhuTimerTable.timer10ms[i].tDuration-1;
+        }
+        //Send message time_out
+        memset(&snd, 0, sizeof(msg_struct_com_time_out_t));
+        snd.length = sizeof(msg_struct_com_time_out_t);
+        snd.timeId = zIhuTimerTable.timer10ms[i].timerId;
+        snd.timeRes = zIhuTimerTable.timer10ms[i].timerRes;
+        ret = ihu_message_send(MSG_ID_COM_TIME_OUT, zIhuTimerTable.timer10ms[i].taskId, TASK_ID_TIMER, &snd, snd.length);
+        if (ret == FAILURE){
+          zIhuRunErrCnt[TASK_ID_TIMER]++;
+          IhuErrorPrint("TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_TIMER], zIhuTaskNameList[zIhuTimerTable.timer10ms[i].taskId]);
+          return;
+        }
+      }//Elapse <= 0, timeout reach
+    }
+    //START status
+    else if(zIhuTimerTable.timer10ms[i].status == TIMER_STATUS_START){
+      zIhuTimerTable.timer10ms[i].elapse = zIhuTimerTable.timer10ms[i].tDuration;
+      zIhuTimerTable.timer10ms[i].status = TIMER_STATUS_ACTIVE;
+    }//Not meet ACTIVE or START timer
+  }//for-MAX_TIMER_NUM_IN_ONE_IHU_10MS
+}
 
-////线程机制，搞定时器
-//void func_timer_routine_handler_1ms(union sigval v)
-//{
-//	int i=0, ret=0;
-//	msg_struct_com_time_out_t snd;
+//函数机制，搞定时器
+void func_timer_routine_handler_1ms(OS_TIMER timerid)
+{
+  int i=0, ret=0;
+  msg_struct_com_time_out_t snd;
 
-//	if (v.sival_int !=3) return;
+  //入参检查
 
-//	//IhuDebugPrint("TIMER: 1ms resolution timer enter one time!\n");
-//	for (i=0;i<MAX_TIMER_NUM_IN_ONE_IHU_1MS;i++)
-//	{
-//		//Active status
-//		if (zIhuTimerTable.timer1ms[i].status == TIMER_STATUS_ACTIVE){
-//			if (zIhuTimerTable.timer1ms[i].elapse > zIhuTimerTable.timer1ms[i].tDuration){
-//				IhuErrorPrint("TIMER: Error elapse value meet!\n");
-//				zIhuTimerTable.timer1ms[i].elapse = zIhuTimerTable.timer1ms[i].elapse % zIhuTimerTable.timer1ms[i].tDuration;
-//			}
-//			if (zIhuTimerTable.timer1ms[i].elapse >= 1){
-//				//防止出现潜在问题，求余再减1
-//				zIhuTimerTable.timer1ms[i].elapse--;
-//			}else{
-//				//change ACTIVE to STOP, no
-//				if (zIhuTimerTable.timer1ms[i].timerType == TIMER_TYPE_ONE_TIME){
-//					zIhuTimerTable.timer1ms[i].status = TIMER_STATUS_STOP;
-//					zIhuTimerTable.timer1ms[i].elapse = 0;
-//				}
-//				//No change for PERIOD, re-start this timer
-//				//本轮也算1次，所以需要在周期的基础上减1，不然会出现问题
-//				else if (zIhuTimerTable.timer1ms[i].timerType == TIMER_TYPE_PERIOD){
-//					zIhuTimerTable.timer1ms[i].elapse = zIhuTimerTable.timer1ms[i].tDuration-1;
-//				}
-//				//Send message time_out
-//				memset(&snd, 0, sizeof(msg_struct_com_time_out_t));
-//				snd.length = sizeof(msg_struct_com_time_out_t);
-//				snd.timeId = zIhuTimerTable.timer1ms[i].timerId;
-//				snd.timeRes = zIhuTimerTable.timer1ms[i].timerRes;
-//				ret = ihu_message_send(MSG_ID_COM_TIME_OUT, zIhuTimerTable.timer1ms[i].taskId, TASK_ID_TIMER, &snd, snd.length);
-//				if (ret == FAILURE){
-//					zIhuRunErrCnt[TASK_ID_TIMER]++;
-//					IhuErrorPrint("TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_TIMER], zIhuTaskNameList[zIhuTimerTable.timer1ms[i].taskId]);
-//					return;
-//				}
-//			}//Elapse <= 0, timeout reach
-//		}
-//		//START status
-//		else if(zIhuTimerTable.timer1ms[i].status == TIMER_STATUS_START){
-//			zIhuTimerTable.timer1ms[i].elapse = zIhuTimerTable.timer1ms[i].tDuration;
-//			zIhuTimerTable.timer1ms[i].status = TIMER_STATUS_ACTIVE;
-//		}//Not meet ACTIVE or START timer
-//	}//for-MAX_TIMER_NUM_IN_ONE_IHU_1MS
-//}
+  //扫描
+  for (i=0;i<MAX_TIMER_NUM_IN_ONE_IHU_1MS;i++)
+  {
+    //Active status
+    if (zIhuTimerTable.timer1ms[i].status == TIMER_STATUS_ACTIVE){
+      if (zIhuTimerTable.timer1ms[i].elapse > zIhuTimerTable.timer1ms[i].tDuration){
+        IhuErrorPrint("TIMER: Error elapse value meet!\n");
+        zIhuTimerTable.timer1ms[i].elapse = zIhuTimerTable.timer1ms[i].elapse % zIhuTimerTable.timer1ms[i].tDuration;
+      }
+      if (zIhuTimerTable.timer1ms[i].elapse >= 1){
+        //防止出现潜在问题，求余再减1
+        zIhuTimerTable.timer1ms[i].elapse--;
+      }else{
+        //change ACTIVE to STOP, no
+        if (zIhuTimerTable.timer1ms[i].timerType == TIMER_TYPE_ONE_TIME){
+          zIhuTimerTable.timer1ms[i].status = TIMER_STATUS_STOP;
+          zIhuTimerTable.timer1ms[i].elapse = 0;
+        }
+        //No change for PERIOD, re-start this timer
+        //本轮也算1次，所以需要在周期的基础上减1，不然会出现问题
+        else if (zIhuTimerTable.timer1ms[i].timerType == TIMER_TYPE_PERIOD){
+          zIhuTimerTable.timer1ms[i].elapse = zIhuTimerTable.timer1ms[i].tDuration-1;
+        }
+        //Send message time_out
+        memset(&snd, 0, sizeof(msg_struct_com_time_out_t));
+        snd.length = sizeof(msg_struct_com_time_out_t);
+        snd.timeId = zIhuTimerTable.timer1ms[i].timerId;
+        snd.timeRes = zIhuTimerTable.timer1ms[i].timerRes;
+        ret = ihu_message_send(MSG_ID_COM_TIME_OUT, zIhuTimerTable.timer1ms[i].taskId, TASK_ID_TIMER, &snd, snd.length);
+        if (ret == FAILURE){
+          zIhuRunErrCnt[TASK_ID_TIMER]++;
+          IhuErrorPrint("TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_TIMER], zIhuTaskNameList[zIhuTimerTable.timer1ms[i].taskId]);
+          return;
+        }
+      }//Elapse <= 0, timeout reach
+    }
+    //START status
+    else if(zIhuTimerTable.timer1ms[i].status == TIMER_STATUS_START){
+      zIhuTimerTable.timer1ms[i].elapse = zIhuTimerTable.timer1ms[i].tDuration;
+      zIhuTimerTable.timer1ms[i].status = TIMER_STATUS_ACTIVE;
+    }//Not meet ACTIVE or START timer
+  }//for-MAX_TIMER_NUM_IN_ONE_IHU_1MS
+}
 

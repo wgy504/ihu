@@ -128,7 +128,7 @@ int main( void )
   OS_ASSERT(status == OS_TASK_CREATE_SUCCESS);
 
   //挂在VMFO的主入口函数，居然出现内存不够的情形
-  //ihu_vm_main();
+  ihu_vm_main();
 
 	/* Start the tasks and timer running. */
 	vTaskStartScheduler();

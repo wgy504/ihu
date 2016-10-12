@@ -49,7 +49,7 @@
 enum IHU_TASK_NAME_ID
 {
 	TASK_ID_MIN = 0,
-	TASK_ID_VMFO,
+	TASK_ID_VMFO = 0,
 	TASK_ID_TIMER,
 	TASK_ID_ADCLIBRA,
 	TASK_ID_SPILEO,
@@ -66,24 +66,24 @@ enum IHU_TASK_NAME_ID
 }; //end of IHU_TASK_NAME_ID
 
 //定义TASK对应的MESSAGE_QUEUE的ID
-enum IHU_TASK_QUEUE_ID
-{
-	TASK_QUE_ID_MIN = IHU_TASK_QUEUE_ID_START,
-	TASK_QUE_ID_VMFO,
-	TASK_QUE_ID_TIMER,
-	TASK_QUE_ID_ADCLIBRA,
-	TASK_QUE_ID_SPILEO,
-	TASK_QUE_ID_I2CARIES,
-	TASK_QUE_ID_PWMTAURUS,
-	TASK_QUE_ID_SPSVIRGO,
-	TASK_QUE_ID_GPIOCANCER,
-	TASK_QUE_ID_DIDOCAP,
-	TASK_QUE_ID_LEDPISCES,
-	TASK_QUE_ID_ETHORION,	
-	TASK_QUE_ID_EMC68X,
-	TASK_QUE_ID_MAX,
-	TASK_QUE_ID_INVALID = 0xFF,
-}; //end of IHU_TASK_QUEUE_ID
+//enum IHU_TASK_QUEUE_ID
+//{
+//	TASK_QUE_ID_MIN = IHU_TASK_QUEUE_ID_START,
+//	TASK_QUE_ID_VMFO,
+//	TASK_QUE_ID_TIMER,
+//	TASK_QUE_ID_ADCLIBRA,
+//	TASK_QUE_ID_SPILEO,
+//	TASK_QUE_ID_I2CARIES,
+//	TASK_QUE_ID_PWMTAURUS,
+//	TASK_QUE_ID_SPSVIRGO,
+//	TASK_QUE_ID_GPIOCANCER,
+//	TASK_QUE_ID_DIDOCAP,
+//	TASK_QUE_ID_LEDPISCES,
+//	TASK_QUE_ID_ETHORION,
+//	TASK_QUE_ID_EMC68X,
+//	TASK_QUE_ID_MAX,
+//	TASK_QUE_ID_INVALID = 0xFF,
+//}; //end of IHU_TASK_QUEUE_ID
 
 /*
 ** Fsm INFORMATION structure.
@@ -103,14 +103,14 @@ typedef struct FsmStateItem
 
 typedef struct IhuTaskTag
 {
-	UINT32 TaskId;
+	UINT8  TaskId;
 	UINT8  pnpState;
 	QueueHandle_t  QueId;
 	UINT8  state;
 	char   TaskName[TASK_NAME_MAX_LENGTH];
 	FsmStateItem_t *fsmPtr;
-	xTaskHandle *TaskHandle;
-	UINT8 QueFullFlag;
+	xTaskHandle TaskHandle;
+	//UINT8 QueFullFlag;
 }IhuTaskTag_t;
 #define IHU_TASK_PNP_ON 2
 #define IHU_TASK_PNP_OFF 1
@@ -241,7 +241,6 @@ extern char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK];    //消息名字符串
 extern IhuSysEngParTable_t zIhuSysEngPar;                   //工参
 extern time_t zIhuSystemTimeUnix;                           //系统时钟TimeStamp
 extern struct tm zIhuSystemTimeYmd;                        	//系统时钟YMD
-extern UINT32 zIhuSleepCnt[MAX_TASK_NUM_IN_ONE_IHU][MAX_SLEEP_NUM_IN_ONE_TASK];  //睡眠控制表
 extern FsmStateItem_t FsmTimer[];                           //状态机
 extern FsmStateItem_t FsmAdclibra[];                        //状态机
 extern FsmStateItem_t FsmSpileo[];                          //状态机

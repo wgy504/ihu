@@ -689,7 +689,23 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
   20. 原则上，下一次再打开项目，这个环境就是保持状态，而不再需要重新设置。
 
 //= ZJL, 2016 Oct.12, CURRENT_SW_DELIVERY R03.35
+= 完善修改EMC68x项目中VMFO的任务、消息、定时器、DELAY等函数体，跟FreeRTOS严格绑定，从而完成VMFO对FreeRTOS的落地
+= 该VMFO是以freertos_retarget项目参考例子为基础的，其他例子暂时不能编译通过，等待新的SDK出来后再行转换。原则上，我们需要WECHAT例程
+= ihu_vm_main(void)挂在main函数里面，做为入口。未来一旦新SDK出来后，这个需要保持更迭。
+= 统一更新L3CI/L3PO的定义，在L1COM_DEF.H文件中
+= SCYCB项目中的L1TIMER任务不再进入无线循环SLEEP，因为还要等待接收消息处理，不然任何额外的系统消息再也发不进来了
+= EMC68x在FreeRTOS没有优化，也没有WECHAT任务例程的情况下，占用DATA内存=28+75=103KB，CODE内存=46KB。未来期望CODE可以多些，内存还可以再优化些
+   text    data     bss     dec     hex filename
+  45896     856   28396   75148   1258c freertos_retarget.elf
 
+//= ZJL, 2016 Oct.12, CURRENT_SW_DELIVERY R03.36
+= 
+
+
+
+
+
+ 
 
 
 
