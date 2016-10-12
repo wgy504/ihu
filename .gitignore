@@ -2,12 +2,17 @@
 
 #.o .hex .ref .crf .d .dep .axf
 #.elf
+#.mk .object .bin .map
 *.ref
 *.crf
 *.d
 *.dep
 *.axf
 *.elf
+*.mk
+*.object
+*.bin
+*.map
 
 # Object files
 *.o
