@@ -14,6 +14,9 @@
 *.bin
 *.map
 
+# Eclipse setting directory
+.setting/
+
 # Object files
 *.o
 #*.ko
