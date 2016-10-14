@@ -90,9 +90,6 @@ int main(void)
     CPU_Init();                                                 /* Initialize uC/CPU services.                              */
 
     OSInit(&err);                                               /* Init OS.                                                 */
-
-		//我们加载VM和上层程序例子，编译和测试下
-		ihu_vm_main();
 		
 	
     OSTaskCreate((OS_TCB     *)&AppTaskStartTCB,                /* Create the start task                                    */
@@ -187,7 +184,8 @@ static  void  AppTaskStart (void *p_arg)
 
 static  void  AppTaskCreate (void)
 {
-
+	//我们加载VM和上层程序例子，编译和测试下
+	ihu_vm_main();
 }
 
 

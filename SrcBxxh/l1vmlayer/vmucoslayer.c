@@ -6,6 +6,7 @@
  */
 
 #include "vmucoslayer.h"
+#include "bsp_ser.h"
 
 /**********************************************************************************
  *
@@ -49,7 +50,7 @@ time_t zIhuSystemTimeUnix = 1444341556;  //2015/8
 struct tm zIhuSystemTimeYmd;
 
 //全局公用打印字符串
-static INT8 strGlobalPrintChar[IHU_PRINT_CHAR_SIZE];
+//static INT8 strGlobalPrintChar[IHU_PRINT_CHAR_SIZE];
 
 //全局内存公共块，特定用于ucos操作系统下的msgQueue传数据
 OS_MEM zIhuPartition;
@@ -104,58 +105,60 @@ char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK] ={
 **	全局公用的API函数，不依赖于任何操作系统，只依赖于POSIX支持的标准函数集
 **
 **********************************************************************************/
+#define IHU_PRINT_BUF_NUM 40
+char globalPrintBuffer[IHU_PRINT_BUF_NUM][IHU_PRINT_CHAR_SIZE];
+unsigned int globalPrintIndex;
+
 //正常打印
 void IhuDebugPrint(char *format, ...)
-{
-	va_list marker;
-	char strDebug[IHU_PRINT_CHAR_SIZE-50];	
+ {
+ 	va_list marker;
+	char strDebug[IHU_PRINT_CHAR_SIZE];
+	char *ptrPrintBuffer;
+	unsigned int currentTick;
+	OS_ERR err;
 	
 	va_start(marker, format );
-	vsprintf(strDebug, format, marker);
+	vsnprintf(strDebug, IHU_PRINT_CHAR_SIZE-1, format, marker);
 	
-	sprintf((char *)strGlobalPrintChar, "[DBG: %s, %s] ", __DATE__, __TIME__);
-	strcat((char *)strGlobalPrintChar, strDebug);
-		
-	// The trace is limited to 1000 characters.
-	if( (strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-2] != 0) && (strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-1] != 0) )
-	{
-		strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-3] = '!';
-		strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-2] = '\n';
-		strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-1] = '\0';
-	}
-
-	printf("%s", strGlobalPrintChar);
-	strGlobalPrintChar[0] = '\0';
-
-	//Reset variable arguments.
+	// fetch a new print buffer
+	ptrPrintBuffer = globalPrintBuffer[globalPrintIndex++];
+	if (globalPrintIndex >= IHU_PRINT_BUF_NUM)
+		globalPrintIndex = 0;
+	
+	memset(ptrPrintBuffer, 0, IHU_PRINT_CHAR_SIZE);
+	currentTick = OSTimeGet(&err);
+	snprintf(ptrPrintBuffer, IHU_PRINT_CHAR_SIZE-1, "[DBG: %08d] %s\n", currentTick, strDebug);
+	
+	BSP_Ser_WrStr(ptrPrintBuffer);
+	
 	va_end(marker);	
 }
-
+ 
 //错误打印
 void IhuErrorPrint(char *format, ...)
 {
-	va_list marker;
-	char strDebug[IHU_PRINT_CHAR_SIZE-50];	
+ 	va_list marker;
+	char strDebug[IHU_PRINT_CHAR_SIZE];
+	char *ptrPrintBuffer;
+	unsigned int currentTick;
+	OS_ERR err;
 	
 	va_start(marker, format );
-	vsprintf(strDebug, format, marker);
+	vsnprintf(strDebug, IHU_PRINT_CHAR_SIZE-1, format, marker);
 	
-	sprintf((char *)strGlobalPrintChar, "[ERR: %s, %s] ", __DATE__, __TIME__);
-	strcat((char *)strGlobalPrintChar, strDebug);
-		
-	// The trace is limited to 1000 characters.
-	if( (strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-2] != 0) && (strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-1] != 0) )
-	{
-		strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-3] = '!';
-		strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-2] = '\n';
-		strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-1] = '\0';
-	}
+	// fetch a new print buffer
+	ptrPrintBuffer = globalPrintBuffer[globalPrintIndex++];
+	if (globalPrintIndex >= IHU_PRINT_BUF_NUM)
+		globalPrintIndex = 0;
+	
+	memset(ptrPrintBuffer, 0, IHU_PRINT_CHAR_SIZE);
+	currentTick = OSTimeGet(&err);
+	snprintf(ptrPrintBuffer, IHU_PRINT_CHAR_SIZE-1, "[ERR: %08d] %s\n", currentTick, strDebug);
+	
+	BSP_Ser_WrStr(ptrPrintBuffer);
 
-	printf("%s", strGlobalPrintChar);
-	strGlobalPrintChar[0] = '\0';
-
-	//Reset variable arguments.
-	va_end(marker);
+	va_end(marker);	
 }
 
 //交换U16的高位低位字节
@@ -220,7 +223,7 @@ void ihu_vm_system_init(void)
 	IhuDebugPrint("VMUO: BXXH(TM) IHU(c) Application Layer start and initialized, build at %s, %s.\n", __DATE__, __TIME__);
 
 	//初始化全局变量TASK_ID/QUE_ID/TASK_STAT
-	memset(&(zIhuTaskInfo[0].TaskId), 0, sizeof(zIhuTaskInfo)*(TASK_ID_MAX-TASK_ID_MIN+1));
+	memset(&(zIhuTaskInfo[0].TaskId), 0, sizeof(IhuTaskTag_t)*(TASK_ID_MAX-TASK_ID_MIN+1));
 
 	for (i=TASK_ID_MIN; i<TASK_ID_MAX; i++){
 		zIhuTaskInfo[i].TaskId = i;
@@ -1263,7 +1266,7 @@ OPSTAT ihu_task_create(UINT8 task_id, void *(*task_func)(void *), void *arg, int
 
 	//zIhuTaskInfo[task_id].TaskName to be added in another way, TBD
 	zIhuTaskInfo[task_id].TaskId = task_id;		
-	IhuDebugPrint("VMUO: pthread_create() OK ...\n");
+	IhuDebugPrint("VMUO: task create OK: %s\n", zIhuTaskNameList[task_id]);
 
 	//返回
 	return SUCCESS;

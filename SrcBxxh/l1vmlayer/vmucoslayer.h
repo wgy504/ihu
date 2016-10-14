@@ -104,7 +104,7 @@ typedef struct FsmStateItem
 
 //Task控制表
 #define IHU_TASK_STACK_WATERMAKR_LIMIT 10
-#define IHU_TASK_STACK_LENGTH 200
+#define IHU_TASK_STACK_LENGTH 500
 typedef struct IhuTaskTag
 {
 	UINT8  TaskId;
