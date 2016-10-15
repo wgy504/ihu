@@ -53,8 +53,9 @@
 */
 
                                                                 /* ----------------- APPLICATION GLOBALS ------------------ */
+#define IHU_APP_TASK_START_STK_SIZE 512u // puhuix: must enlarge the size otherwise stack overflow
 static  OS_TCB   AppTaskStartTCB;
-static  CPU_STK  AppTaskStartStk[APP_TASK_START_STK_SIZE];
+static  CPU_STK  AppTaskStartStk[IHU_APP_TASK_START_STK_SIZE];
 
 
 /*
@@ -91,15 +92,14 @@ int main(void)
 
     OSInit(&err);                                               /* Init OS.                                                 */
 		
-	
     OSTaskCreate((OS_TCB     *)&AppTaskStartTCB,                /* Create the start task                                    */
                  (CPU_CHAR   *)"App Task Start",
                  (OS_TASK_PTR ) AppTaskStart,
                  (void       *) 0,
                  (OS_PRIO     ) APP_TASK_START_PRIO,
                  (CPU_STK    *)&AppTaskStartStk[0],
-                 (CPU_STK     )(APP_TASK_START_STK_SIZE / 10u),
-                 (CPU_STK_SIZE) APP_TASK_START_STK_SIZE,
+                 (CPU_STK     )(IHU_APP_TASK_START_STK_SIZE / 10u),
+                 (CPU_STK_SIZE) IHU_APP_TASK_START_STK_SIZE,
                  (OS_MSG_QTY  ) 0,
                  (OS_TICK     ) 0,
                  (void       *) 0,
@@ -132,7 +132,7 @@ int main(void)
 static  void  AppTaskStart (void *p_arg)
 {
     OS_ERR      os_err;
-
+		unsigned int currentTick, n=0;
 
    (void)p_arg;
 
@@ -162,6 +162,13 @@ static  void  AppTaskStart (void *p_arg)
         BSP_LED_Toggle(0);
         OSTimeDlyHMSM(0, 0, 0, 500,
                       OS_OPT_TIME_HMSM_STRICT, &os_err);
+
+				if((n&3) == 0)
+				{
+					currentTick = OSTimeGet(&os_err);
+					BSP_Ser_Printf("tick: %d \n\r", currentTick);
+				}
+				n++;
     }
 }
 

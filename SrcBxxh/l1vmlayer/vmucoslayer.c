@@ -120,6 +120,7 @@ void IhuDebugPrint(char *format, ...)
 	
 	va_start(marker, format );
 	vsnprintf(strDebug, IHU_PRINT_CHAR_SIZE-1, format, marker);
+	va_end(marker);
 	
 	// fetch a new print buffer
 	ptrPrintBuffer = globalPrintBuffer[globalPrintIndex++];
@@ -131,8 +132,6 @@ void IhuDebugPrint(char *format, ...)
 	snprintf(ptrPrintBuffer, IHU_PRINT_CHAR_SIZE-1, "[DBG: %08d] %s\n", currentTick, strDebug);
 	
 	BSP_Ser_WrStr(ptrPrintBuffer);
-	
-	va_end(marker);	
 }
  
 //错误打印
@@ -146,6 +145,7 @@ void IhuErrorPrint(char *format, ...)
 	
 	va_start(marker, format );
 	vsnprintf(strDebug, IHU_PRINT_CHAR_SIZE-1, format, marker);
+	va_end(marker);
 	
 	// fetch a new print buffer
 	ptrPrintBuffer = globalPrintBuffer[globalPrintIndex++];
@@ -157,8 +157,6 @@ void IhuErrorPrint(char *format, ...)
 	snprintf(ptrPrintBuffer, IHU_PRINT_CHAR_SIZE-1, "[ERR: %08d] %s\n", currentTick, strDebug);
 	
 	BSP_Ser_WrStr(ptrPrintBuffer);
-
-	va_end(marker);	
 }
 
 //交换U16的高位低位字节
@@ -894,7 +892,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 	char s1[TASK_NAME_MAX_LENGTH+2]="", s2[TASK_NAME_MAX_LENGTH+2]="", s3[MSG_NAME_MAX_LENGTH]="";
 	IhuMsgSruct_t msg;
 	CPU_INT08U *p_msg;
-	
+
 	//Checking task_id range
 	if ((dest_id <= TASK_ID_MIN) || (dest_id >= TASK_ID_MAX)){
 		zIhuRunErrCnt[TASK_ID_VMUO]++;
@@ -932,7 +930,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 	//拷贝数据到共享内存区
 	memset(p_msg, 0, MAX_IHU_MSG_BUF_LENGTH);
 	memcpy(p_msg, &msg, param_len + 6); //6是消息头的长度
-	
+
 	//Post a message to dest queue
 	OSQPost(
 		(OS_Q *)&(zIhuTaskInfo[dest_id].TaskQue),
@@ -942,6 +940,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 		(OS_ERR *)&err);
 	if (err != OS_ERR_NONE){
 		zIhuRunErrCnt[TASK_ID_VMUO]++;
+		OSMemPut((OS_MEM *)&zIhuPartition, (void *)p_msg, (OS_ERR *)&err);  // avoid memory leakage
 		IhuErrorPrint("VMUO: ihu_message_send error, err=%d, errno=%d, %s, dest_id = %d [%s].\n", err, errno, strerror(err), dest_id, zIhuTaskNameList[dest_id]);
 		return FAILURE;
 	}
@@ -1457,7 +1456,7 @@ void ihu_task_create_all(void)
 	//Create task SCYCB environments /12
 	if (zIhuTaskInfo[TASK_ID_SCYCB].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_SCYCB, FsmScycb);
 	ihu_vm_send_init_msg_to_app_task(TASK_ID_SCYCB);	
-	
+
 	IhuDebugPrint("VMUO: Create all task successfully!\n");
 }
 
@@ -1544,7 +1543,7 @@ OPSTAT ihu_vm_send_init_msg_to_app_task(UINT8 dest_id)
 		IhuErrorPrint("VMUO: Error on task_id, dest_id=%d!!!\n", dest_id);
 		return FAILURE;
 	}
-		
+
 	//发送初始化消息给目标任务，以便初始化所有任务模块
 	memset(&snd, 0, sizeof(msg_struct_com_init_t));
 	snd.length = sizeof(msg_struct_com_init_t);
