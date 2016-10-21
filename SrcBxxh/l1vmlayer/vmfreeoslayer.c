@@ -260,7 +260,7 @@ OPSTAT ihu_taskid_to_string(UINT8 id, char *string)
 	if ((id<=TASK_ID_MIN) || (id>=TASK_ID_MAX)){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;	
 		IhuErrorPrint("VMFO: Error task Id input!\n");
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 
 	strcpy(string, "[");
@@ -271,7 +271,7 @@ OPSTAT ihu_taskid_to_string(UINT8 id, char *string)
 		strcat(string, "TASK_ID_XXX");
 	}
 	strcat(string, "]");
-	return SUCCESS;
+	return IHU_SUCCESS;
 }
 
 //MsgId transfer to string
@@ -283,7 +283,7 @@ OPSTAT ihu_msgid_to_string(UINT16 id, char *string)
 	if (id <= MSG_ID_COM_MIN || id >= MSG_ID_COM_MAX){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;	
 		IhuErrorPrint("VMFO: Error Message Id input!\n");
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 
 	strcpy(string, "[");
@@ -295,7 +295,7 @@ OPSTAT ihu_msgid_to_string(UINT16 id, char *string)
 	}
 	strcat(string, "]");
 
-	return SUCCESS;
+	return IHU_SUCCESS;
 }
 
 
@@ -318,7 +318,7 @@ OPSTAT ihu_msgid_to_string(UINT16 id, char *string)
 **    OUT:   none
 **    INOUT: none
 **------------------------------------------------------------------------------
-** Return value : SUCCESS OR FAILURE
+** Return value : IHU_SUCCESS OR IHU_FAILURE
 *******************************************************************************/
 OPSTAT FsmInit(void)
 {
@@ -335,7 +335,7 @@ OPSTAT FsmInit(void)
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
 		IhuDebugPrint("VMFO: Maxium (%d) tasks/modules supported.\n", MAX_TASK_NUM_IN_ONE_IHU);
 	}
-    return SUCCESS;
+    return IHU_SUCCESS;
 }
 
 /*******************************************************************************
@@ -350,7 +350,7 @@ OPSTAT FsmInit(void)
 **    OUT:   none
 **    INOUT: none
 **------------------------------------------------------------------------------
-** Return value : SUCCESS OR FAILURE
+** Return value : IHU_SUCCESS OR IHU_FAILURE
 *******************************************************************************/
 OPSTAT FsmAddNew(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 {
@@ -369,19 +369,19 @@ OPSTAT FsmAddNew(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 	{
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Can not init FSM machine.\n");
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 	if((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX))
 	{
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: The task_ID is invalid.\n");
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 	if( zIhuFsmTable.pFsmCtrlTable[task_id].taskId != TASK_ID_INVALID )
 	{
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: This task_id has been already inited.\n");
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 
 	/*
@@ -391,7 +391,7 @@ OPSTAT FsmAddNew(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 	{
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: The format of the FSM table is invalid.\n");
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 
     /*
@@ -407,13 +407,13 @@ OPSTAT FsmAddNew(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 		{
 			zIhuRunErrCnt[TASK_ID_VMFO]++;
 			IhuErrorPrint("VMFO: Invalid FSM machine.\n");
-			return FAILURE;
+			return IHU_FAILURE;
 		}
 		if( NULL == pFsmStateItem[item].stateFunc)
 		{
 			zIhuRunErrCnt[TASK_ID_VMFO]++;
 			IhuErrorPrint("VMFO: Invalid state function pointer.\n");
-			return FAILURE;
+			return IHU_FAILURE;
 		}
 	}
 
@@ -426,7 +426,7 @@ OPSTAT FsmAddNew(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 	{
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Invalid FSM machine -- Can not find the end of the FSM.\n");
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 	zIhuFsmTable.pFsmCtrlTable[task_id].numOfFsmArrayElement = item-1; //有效STATE-MSG条目数，不包括START/END两条
 
@@ -463,7 +463,7 @@ OPSTAT FsmAddNew(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 		{
 			zIhuRunErrCnt[TASK_ID_VMFO]++;
 			IhuErrorPrint("VMFO: The State number > %d.\n", MAX_STATE_NUM_IN_ONE_TASK);
-			return FAILURE;
+			return IHU_FAILURE;
 		}
 		msgid = pFsmStateItem[itemNo].msg_id & MASK_MSGID_NUM_IN_ONE_TASK;
 		zIhuFsmTable.pFsmCtrlTable[task_id].pFsmArray[state][msgid].stateFunc = pFsmStateItem[itemNo].stateFunc;
@@ -485,12 +485,12 @@ OPSTAT FsmAddNew(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 	** 一旦任务创建，自动转移到IDLE状态，因而每个任务独特的初始化不能处理状态，也不能被FsmRunEngine调度，而必须被任务创建的入口函数所执行
 	*/
 	ret = FsmSetState(task_id, FSM_STATE_IDLE);
-	if (ret == FAILURE){
+	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Error set FSM State!\n");
 	}
 
-    return SUCCESS;
+    return IHU_SUCCESS;
 }
 
 OPSTAT FsmRemove(UINT8 task_id)
@@ -499,13 +499,13 @@ OPSTAT FsmRemove(UINT8 task_id)
 	if((task_id <= (UINT8)TASK_ID_MIN) || (task_id >= TASK_ID_MAX))
 	{
 		IhuErrorPrint("VMFO: The task_ID is invalid.\n");
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 
 	//设置无效
 	zIhuFsmTable.pFsmCtrlTable[task_id].taskId = TASK_ID_INVALID;
 
-    return SUCCESS;
+    return IHU_SUCCESS;
 }
 
 /*******************************************************************************
@@ -523,7 +523,7 @@ OPSTAT FsmRemove(UINT8 task_id)
 **    OUT:   none
 **    INOUT: none
 **------------------------------------------------------------------------------
-** Return value : SUCCESS OR FAILURE
+** Return value : IHU_SUCCESS OR IHU_FAILURE
 *******************************************************************************/
 OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)
 {
@@ -536,22 +536,22 @@ OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr,
 	if ((dest_id <= TASK_ID_MIN) || (dest_id >= TASK_ID_MAX)){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Error on task_id, dest_id=%d!!!\n", dest_id);
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 	if ((src_id <= TASK_ID_MIN) || (src_id >= TASK_ID_MAX)){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Error on task_id, src_id=%d!!!\n", src_id);
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 	if (param_len>MAX_IHU_MSG_BODY_LENGTH){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Too large message length than IHU set capability, param_len=%d!!!\n", param_len);
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 	if ((msg_id <= MSG_ID_COM_MIN) || (msg_id >= MSG_ID_COM_MAX)){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Error on Msg_Id, msg_id=%d!!!\n", msg_id);
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 
 	/*
@@ -562,7 +562,7 @@ OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr,
 	{
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: The destination process does not exist.\n");
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 
 	/*
@@ -576,7 +576,7 @@ OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr,
 	{
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: The state(%d) or msgId(0x%x) of task(0x%x) is error.\n", state, mid, dest_id);
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_IPT_ON) != FALSE)
 	{
@@ -589,11 +589,11 @@ OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr,
 	if(zIhuFsmTable.pFsmCtrlTable[dest_id].pFsmArray[state][mid].stateFunc != NULL)
 	{
 		ret = (zIhuFsmTable.pFsmCtrlTable[dest_id].pFsmArray[state][mid].stateFunc)(dest_id, src_id, param_ptr, param_len);
-		if( FAILURE == ret)
+		if( IHU_FAILURE == ret)
 		{
 			zIhuRunErrCnt[TASK_ID_VMFO]++;			
 			IhuErrorPrint("VMFO: Internal error is found in the state function.\n");
-			return FAILURE;
+			return IHU_FAILURE;
 		}
 	}
 	else
@@ -604,10 +604,10 @@ OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr,
 		}
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Receive invalid msg(%x)[%s] in state(%d) of task(0x%x)[%s].\n", mid, zIhuMsgNameList[mid], state, dest_id, zIhuTaskNameList[dest_id]);
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 
-    return SUCCESS;
+    return IHU_SUCCESS;
 }
 
 /*******************************************************************************
@@ -621,7 +621,7 @@ OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr,
 **    OUT:   none
 **    INOUT: none
 **------------------------------------------------------------------------------
-** Return value : SUCCESS OR FAILURE
+** Return value : IHU_SUCCESS OR IHU_FAILURE
 *******************************************************************************/
 OPSTAT FsmProcessingLaunch(void)
 {
@@ -637,7 +637,7 @@ OPSTAT FsmProcessingLaunch(void)
 	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Error on task_id, task_id=%d!!!\n", task_id);
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 
 	/*
@@ -667,20 +667,20 @@ OPSTAT FsmProcessingLaunch(void)
 		else if (ret == -2){
 			continue;
 		}
-		else if (ret == FAILURE){
+		else if (ret == IHU_FAILURE){
 			IhuDebugPrint("VMFO: STM kernal receive message error, hold for further action!\n");
 			//To be defined here the error case, to recover everything
 			ihu_sleep(1); 
 		}else{
 			ret = FsmRunEngine(rcv.msgType, rcv.dest_id, rcv.src_id, rcv.msgBody, rcv.msgLen);
-			if (ret == FAILURE){
+			if (ret == IHU_FAILURE){
 				zIhuRunErrCnt[TASK_ID_VMFO]++;	
 				IhuErrorPrint("VMFO: Error execute FsmRun state machine!\n");
 			}
 		}
 	}//While(1)
 	
-	return SUCCESS;
+	return IHU_SUCCESS;
 }
 
 
@@ -691,18 +691,18 @@ OPSTAT FsmSetState(UINT8 task_id, UINT8 newState)
 	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: FsmSetState error on task_id, task_id=%d!!!\n", task_id);
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 
 	//Checking newState range
 	if (newState > MAX_STATE_NUM_IN_ONE_TASK){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: FsmSetState error on state, State=%d!!!\n", newState);
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 
 	zIhuTaskInfo[task_id].state = newState;
-	return SUCCESS;
+	return IHU_SUCCESS;
 }
 
 //获取状态
@@ -743,7 +743,7 @@ OPSTAT ihu_message_queue_create(UINT8 task_id)
 	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Error on task_id, task_id=%d!!!\n", task_id);
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 
 	//OS_QUEUE_CREATE(queue, item_size, max_items)
@@ -751,10 +751,10 @@ OPSTAT ihu_message_queue_create(UINT8 task_id)
 	if(zIhuTaskInfo[task_id].QueId == NULL){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Failed to create msg-queue | errno=%d [%s]\n", errno, strerror(errno));
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 
-	return SUCCESS;
+	return IHU_SUCCESS;
 }
 
 //kill message queue
@@ -764,21 +764,21 @@ OPSTAT ihu_message_queue_delete(UINT8 task_id)
 	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Error on task_id, task_id=%d!!!\n", task_id);
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 
 	//Not exist
 	if (zIhuTaskInfo[task_id].QueId == NULL) {
     zIhuRunErrCnt[TASK_ID_VMFO]++;
     IhuErrorPrint("VMFO: Null msg-queue and no need delete | errno=%d [%s]\n", errno, strerror(errno));
-	  return FAILURE;
+	  return IHU_FAILURE;
 	}
 
 	//Delete queue
 	OS_QUEUE_DELETE(zIhuTaskInfo[task_id].QueId);
 	zIhuTaskInfo[task_id].QueId = NULL;
 
-	return SUCCESS;
+	return IHU_SUCCESS;
 }
 
 //查询消息队列
@@ -800,7 +800,7 @@ OPSTAT ihu_message_queue_resync(void)
 {
   //此函数在VMFO中没有实质意义
 
-	return SUCCESS;
+	return IHU_SUCCESS;
 }
 
 //清理某一个任务的消息队列
@@ -810,14 +810,14 @@ OPSTAT ihu_message_queue_clean(UINT8 dest_id)
 	if ((dest_id <= TASK_ID_MIN) || (dest_id >= TASK_ID_MAX)){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Error on task_id, dest_id=%d!!!\n", dest_id);
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 
 	//先删除消息队列
   if (zIhuTaskInfo[dest_id].QueId == NULL) {
     zIhuRunErrCnt[TASK_ID_VMFO]++;
     IhuErrorPrint("VMFO: Null msg-queue and no need clean | errno=%d [%s]\n", errno, strerror(errno));
-    return FAILURE;
+    return IHU_FAILURE;
   }
 	OS_QUEUE_DELETE(zIhuTaskInfo[dest_id].QueId);
 
@@ -826,10 +826,10 @@ OPSTAT ihu_message_queue_clean(UINT8 dest_id)
   if (zIhuTaskInfo[dest_id].QueId == NULL) {
     zIhuRunErrCnt[TASK_ID_VMFO]++;
     IhuErrorPrint("VMFO: Not successfully re-build the msg queue | errno=%d [%s]\n", errno, strerror(errno));
-    return FAILURE;
+    return IHU_FAILURE;
   }
 
-	return SUCCESS;
+	return IHU_SUCCESS;
 }
 
 //message send basic processing
@@ -844,17 +844,17 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 	if ((dest_id <= TASK_ID_MIN) || (dest_id >= TASK_ID_MAX)){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Error on task_id, dest_id=%d!!!\n", dest_id);
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 	if ((src_id <= TASK_ID_MIN) || (src_id >= TASK_ID_MAX)){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Error on task_id, src_id=%d!!!\n", src_id);
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 	if (param_len > MAX_IHU_MSG_BODY_LENGTH){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Too large message length than IHU set capability, param_len=%d!!!\n", param_len);
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 
 	//Init to clean this memory area
@@ -871,7 +871,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
     zIhuRunErrCnt[TASK_ID_VMFO]++;
     IhuErrorPrint("VMFO: msgsnd() write msg failed, errno=%d[%s], dest_id = %d [%s]\n",errno,strerror(errno), dest_id, zIhuTaskNameList[dest_id]);
     //zIhuTaskInfo[dest_id].QueFullFlag = IHU_TASK_QUEUE_FULL_TRUE;
-    return FAILURE;
+    return IHU_FAILURE;
   }
 
 	/*
@@ -1072,7 +1072,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 			break;
 	}
 
-	return SUCCESS;
+	return IHU_SUCCESS;
 }
 
 
@@ -1085,7 +1085,7 @@ OPSTAT ihu_message_rcv(UINT8 dest_id, IhuMsgSruct_t *msg)
 	//Checking task_id range
 	if ((dest_id <= TASK_ID_MIN) || (dest_id >= TASK_ID_MAX)){
 		IhuErrorPrint("VMFO: Error on task_id, dest_id=%d!!!\n", dest_id);
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 
 	//未来调试时，需要注意，这里的BUFFER长度是否合理。原先在LINUX系统中，需要扣掉头部
@@ -1095,10 +1095,10 @@ OPSTAT ihu_message_rcv(UINT8 dest_id, IhuMsgSruct_t *msg)
     IhuErrorPrint("VMFO: msgrcv() receive msg failed, Qid=%d, msg=%08X, errno=%d[%s]\n", zIhuTaskInfo[dest_id].QueId, msg, errno, strerror(errno));
     //防止某个任务在接受消息时，既不阻塞，也接受出错，所以休眠100ms，保持其他任务的正常运行
     ihu_usleep(100);
-    return FAILURE;
+    return IHU_FAILURE;
 	}
 
-	return SUCCESS;
+	return IHU_SUCCESS;
 }
 
 
@@ -1119,7 +1119,7 @@ OPSTAT ihu_task_create(UINT8 task_id, void *(*task_func)(void *), void *arg, int
 	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Error on task_id!! err=%d, errno=%d, %s, task_id=%d\n", err, errno, strerror(err), task_id);
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 
 	//As FsmProcessLaunch has to transfer task_id in, we will use global variance of zIhuFsmTable.currentTaskId
@@ -1131,7 +1131,7 @@ OPSTAT ihu_task_create(UINT8 task_id, void *(*task_func)(void *), void *arg, int
 	if (zIhuFsmTable.currentTaskId != TASK_ID_INVALID){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Task_id not yet read by running process, new task create failure!\n");
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 	zIhuFsmTable.currentTaskId = task_id;
 
@@ -1148,7 +1148,7 @@ OPSTAT ihu_task_create(UINT8 task_id, void *(*task_func)(void *), void *arg, int
 	{
 	  zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuDebugPrint("VMFO: Create task nok!! err=%d, errno=%d, %s\n", err, errno, strerror(err));
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 
 	//存储现场记录, zIhuTaskInfo[task_id].TaskName to be added in another way, TBD
@@ -1156,7 +1156,7 @@ OPSTAT ihu_task_create(UINT8 task_id, void *(*task_func)(void *), void *arg, int
 	IhuDebugPrint("VMFO: pthread_create() OK ...\n");
 
 	//返回
-	return SUCCESS;
+	return IHU_SUCCESS;
 }
 
 //kill task
@@ -1166,7 +1166,7 @@ OPSTAT ihu_task_delete(UINT8 task_id)
 	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Error on task_id, task_id=%d!!!\n", task_id);
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 
 	//只是清理掉FSM中的信息
@@ -1176,12 +1176,12 @@ OPSTAT ihu_task_delete(UINT8 task_id)
 	if ((zIhuTaskInfo[task_id].TaskHandle == NULL) || (zIhuTaskInfo[task_id].TaskHandle == 0)){
     zIhuRunErrCnt[TASK_ID_VMFO]++;
     IhuErrorPrint("VMUO: No exist or right task to be deleted! \n");
-    return FAILURE;
+    return IHU_FAILURE;
 	}
 	OS_TASK_DELETE(zIhuTaskInfo[task_id].TaskHandle);
 
 	//返回
-	return SUCCESS;
+	return IHU_SUCCESS;
 }
 
 //聚合创建任务，消息队列，并直接让其开始运行
@@ -1193,15 +1193,15 @@ OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Input Error on task_id, task_id=%d!!!\n", task_id);
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 
 	//Init Fsm table
 	ret = FsmAddNew(task_id, pFsmStateItem);
-	if (ret == FAILURE){
+	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Init state machine FsmAddNew error, taskid = %d.\n", task_id);
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_CRT_ON) != FALSE){
 		IhuDebugPrint("VMFO: FsmAddNew Successful, taskId = 0x%x [%s].\n", task_id, zIhuTaskNameList[task_id]);
@@ -1209,11 +1209,11 @@ OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 
 	//Create Queid
 	ret = ihu_message_queue_create(task_id);
-	if (ret == FAILURE)
+	if (ret == IHU_FAILURE)
 	{
 	zIhuRunErrCnt[TASK_ID_VMFO]++;
 	IhuErrorPrint("VMFO: Create queue unsuccessfully, taskId = %d.\n", task_id);
-	return FAILURE;
+	return IHU_FAILURE;
 	}
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_CRT_ON) != FALSE){
 		IhuDebugPrint("VMFO: Msgque create successful, taskId = 0x%x [%s].\n", task_id, zIhuTaskNameList[task_id]);
@@ -1221,11 +1221,11 @@ OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 
 	//Create task and make it running for the 1st time
 	ret = ihu_task_create(task_id, /*CALLBACK*/ (void *(*)(void *))FsmProcessingLaunch, (void *)NULL, IHU_THREAD_PRIO);
-	if (ret == FAILURE)
+	if (ret == IHU_FAILURE)
 	{
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Create task un-successfully, taskid = %d.\n", task_id);		
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_CRT_ON) != FALSE){
 	  IhuDebugPrint("VMFO: Task create Successful, taskId = 0x%x [%s].\n", task_id, zIhuTaskNameList[task_id]);
@@ -1237,7 +1237,7 @@ OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 	
 	//给该任务设置一个软的状态：省略了
 	
-	return SUCCESS;
+	return IHU_SUCCESS;
 }
 
 //初始化任务并启动
@@ -1249,21 +1249,21 @@ OPSTAT ihu_system_task_init_call(UINT8 task_id, FsmStateItem_t *p)
 	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Input Error on task_id, task_id=%d!!!\n", task_id);
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 	
 	//入参检查
 	if (p == NULL){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Input wrong FsmStateItem pointer!\n");
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 	
 	//任务控制启动标示检查
 	if (zIhuTaskInfo[task_id].pnpState != IHU_TASK_PNP_ON){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: no need create this task [%s]!\n", zIhuTaskNameList[task_id]);	
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 	
 	//打印信息
@@ -1273,10 +1273,10 @@ OPSTAT ihu_system_task_init_call(UINT8 task_id, FsmStateItem_t *p)
 
 	//任务创建并初始化所有状态机
 	ret = ihu_task_create_and_run(task_id, p);
-	if (ret == FAILURE){
+	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: create task env [%s] un-successfully, program exit.\n", zIhuTaskNameList[task_id]);
-		return FAILURE;
+		return IHU_FAILURE;
 	}else{
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
 			IhuDebugPrint("VMFO: create task successfully, taskid=%d[%s].\n", task_id, zIhuTaskNameList[task_id]);
@@ -1287,7 +1287,7 @@ OPSTAT ihu_system_task_init_call(UINT8 task_id, FsmStateItem_t *p)
 	zIhuTaskInfo[task_id].fsmPtr = p;
 	
 	//正确返回
-	return SUCCESS;
+	return IHU_SUCCESS;
 }
 
 //创建所有任务
@@ -1361,7 +1361,7 @@ void ihu_task_delete_all_and_queue(void)
 //公共API，不做任何事情
 OPSTAT fsm_com_do_nothing(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	return SUCCESS;
+	return IHU_SUCCESS;
 }
 
 //Unix Time transfer to YMD time
@@ -1386,7 +1386,7 @@ OPSTAT FsmProcessingLaunchEntryBareRtos(UINT8 task_id)
   if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
     zIhuRunErrCnt[TASK_ID_VMFO]++;
     IhuErrorPrint("VMFO: Error on task_id, task_id=%d!!!\n", task_id);
-    return FAILURE;
+    return IHU_FAILURE;
   }
 
   /*
@@ -1399,7 +1399,7 @@ OPSTAT FsmProcessingLaunchEntryBareRtos(UINT8 task_id)
     IhuErrorPrint("VMFO: Task (ID=%d) get no init entry fetched!\n", task_id);
   }
 
-  return SUCCESS;
+  return IHU_SUCCESS;
 }
 
 OPSTAT FsmProcessingLaunchExecuteBareRtos(UINT8 task_id)
@@ -1413,7 +1413,7 @@ OPSTAT FsmProcessingLaunchExecuteBareRtos(UINT8 task_id)
   if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
     zIhuRunErrCnt[TASK_ID_VMFO]++;
     IhuErrorPrint("VMFO: Error on task_id, task_id=%d!!!\n", task_id);
-    return FAILURE;
+    return IHU_FAILURE;
   }
 
   //任务中的消息轮循
@@ -1423,14 +1423,14 @@ OPSTAT FsmProcessingLaunchExecuteBareRtos(UINT8 task_id)
   //小喇叭响起来，这里是资源优化集中营！
   memset(&rcv, 0, sizeof(IhuMsgSruct_t));
   ret = ihu_message_rcv(task_id, &rcv);
-  if (ret == SUCCESS)
+  if (ret == IHU_SUCCESS)
   {
     ret = FsmRunEngine(rcv.msgType, rcv.dest_id, rcv.src_id, rcv.msgBody, rcv.msgLen);
-    if (ret == FAILURE)
+    if (ret == IHU_FAILURE)
     {
       zIhuRunErrCnt[TASK_ID_VMFO]++;
       IhuErrorPrint("VMFO: Error execute FsmRun state machine!\n");
-      return FAILURE;
+      return IHU_FAILURE;
     }
   }
   else
@@ -1440,10 +1440,10 @@ OPSTAT FsmProcessingLaunchExecuteBareRtos(UINT8 task_id)
     //真正失败的时候，需要返回FAILURE
 
     //这里是消息队列空，所以返回成功
-    return SUCCESS;
+    return IHU_SUCCESS;
   }
 
-  return SUCCESS;
+  return IHU_SUCCESS;
 }
 
 //Reveive message
@@ -1458,7 +1458,7 @@ OPSTAT ihu_message_rcv_bare_rtos(UINT8 dest_id, IhuMsgSruct_t *msg)
   if ((dest_id <= TASK_ID_MIN) || (dest_id >= TASK_ID_MAX)){
     zIhuRunErrCnt[TASK_ID_VMFO]++;
     IhuErrorPrint("VMFO: Error on task_id, dest_id=%d!!!\n", dest_id);
-    return FAILURE;
+    return IHU_FAILURE;
   }
 
   //循环查找一个任务的消息队列，看看有无有效消息
@@ -1478,23 +1478,23 @@ OPSTAT ihu_message_rcv_bare_rtos(UINT8 dest_id, IhuMsgSruct_t *msg)
       if ((msg->dest_id <= TASK_ID_MIN) || (msg->dest_id >= TASK_ID_MAX)){
         zIhuRunErrCnt[TASK_ID_VMFO]++;
         IhuErrorPrint("VMFO: Receive message error on task_id, dest_id=%d!!!\n", msg->dest_id);
-        return FAILURE;
+        return IHU_FAILURE;
       }
       if ((msg->src_id <= TASK_ID_MIN) || (msg->src_id >= TASK_ID_MAX)){
         zIhuRunErrCnt[TASK_ID_VMFO]++;
         IhuErrorPrint("VMFO: Receive message error on src_id, dest_id=%d!!!\n", msg->src_id);
-        return FAILURE;
+        return IHU_FAILURE;
       }
       //不允许定义消息结构中长度为0的消息体，至少需要一个长度域
       if ((msg->msgLen <= 0) || (msg->msgLen > MAX_IHU_MSG_BUF_LENGTH)){
         zIhuRunErrCnt[TASK_ID_VMFO]++;
         IhuErrorPrint("VMFO: Receive message error on length, msgLen=%d!!!\n", msg->msgLen);
-        return FAILURE;
+        return IHU_FAILURE;
       }
       if ((msg->msgType <= MSG_ID_COM_MIN) || (msg->msgType >= MSG_ID_COM_MAX)){
         zIhuRunErrCnt[TASK_ID_VMFO]++;
         IhuErrorPrint("VMFO: Receive message error on msgId, msgType=%d!!!\n", msg->msgType);
-        return FAILURE;
+        return IHU_FAILURE;
       }
       //退出循环
       Flag = TRUE;
@@ -1503,9 +1503,9 @@ OPSTAT ihu_message_rcv_bare_rtos(UINT8 dest_id, IhuMsgSruct_t *msg)
   }
   //返回错误，并不一定表示真发生了错误，也有可能是没有任何消息供消耗，此时，上层调用者就啥都不做，确保自己安全
   if (Flag == TRUE){
-    return SUCCESS;
+    return IHU_SUCCESS;
   }else{
-    return FAILURE;
+    return IHU_FAILURE;
   }
 }
 
@@ -1522,22 +1522,22 @@ OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, vo
   if ((dest_id <= TASK_ID_MIN) || (dest_id >= TASK_ID_MAX)){
     zIhuRunErrCnt[TASK_ID_VMFO]++;
     IhuErrorPrint("VMFO: Error on task_id, dest_id=%d!!!\n", dest_id);
-    return FAILURE;
+    return IHU_FAILURE;
   }
   if ((src_id <= TASK_ID_MIN) || (src_id >= TASK_ID_MAX)){
     zIhuRunErrCnt[TASK_ID_VMFO]++;
     IhuErrorPrint("VMFO: Error on task_id, src_id=%d!!!\n", src_id);
-    return FAILURE;
+    return IHU_FAILURE;
   }
   if (param_len>MAX_IHU_MSG_BODY_LENGTH){
     zIhuRunErrCnt[TASK_ID_VMFO]++;
     IhuErrorPrint("VMFO: Too large message length than IHU set capability, param_len=%d!!!\n", param_len);
-    return FAILURE;
+    return IHU_FAILURE;
   }
   if ((msg_id <= MSG_ID_COM_MIN) || (msg_id >= MSG_ID_COM_MAX)){
     zIhuRunErrCnt[TASK_ID_VMFO]++;
     IhuErrorPrint("VMFO: Receive message error on msgId, msgType=%d!!!\n", msg_id);
-    return FAILURE;
+    return IHU_FAILURE;
   }
 
   //对来源数据进行初始化，是为了稳定可靠安全
@@ -1571,7 +1571,7 @@ OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, vo
   if (Flag == FALSE){
     zIhuRunErrCnt[TASK_ID_VMFO]++;
     IhuErrorPrint("VMFO: Message queue full, can not send into task = %d!!!\n", dest_id);
-    return FAILURE;
+    return IHU_FAILURE;
   }
 
   /*
@@ -1772,7 +1772,7 @@ OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, vo
       break;
   }
 
-  return SUCCESS;
+  return IHU_SUCCESS;
 }
 
 
@@ -1787,14 +1787,14 @@ OPSTAT ihu_system_task_execute_bare_rtos(UINT8 task_id, FsmStateItem_t *p)
     zIhuRunErrCnt[TASK_ID_VMFO]++;
     sprintf(strDebug, "VMFO: Input Error on task_id, task_id=%d!!!\n", task_id);
     IhuErrorPrint(strDebug);
-    return FAILURE;
+    return IHU_FAILURE;
   }
 
   //入参检查
   if (p == NULL){
     zIhuRunErrCnt[TASK_ID_VMFO]++;
     IhuErrorPrint("VMFO: Input wrong FsmStateItem pointer!\n");
-    return FAILURE;
+    return IHU_FAILURE;
   }
 
   //任务控制启动标示检查
@@ -1802,21 +1802,21 @@ OPSTAT ihu_system_task_execute_bare_rtos(UINT8 task_id, FsmStateItem_t *p)
     zIhuRunErrCnt[TASK_ID_VMFO]++;
     sprintf(strDebug, "VMFO: no need execute this task [%s]!\n", zIhuTaskNameList[task_id]);
     IhuErrorPrint(strDebug);
-    return FAILURE;
+    return IHU_FAILURE;
   }
 
   //轮询执行任务的消息消耗
   ret = FsmProcessingLaunchExecuteBareRtos(task_id);
-  if (ret == FAILURE)
+  if (ret == IHU_FAILURE)
   {
     zIhuRunErrCnt[TASK_ID_VMFO]++;
     sprintf(strDebug, "VMFO: Execute task FSM un-successfully, taskid = %d", task_id);
     IhuErrorPrint(strDebug);
-    return FAILURE;
+    return IHU_FAILURE;
   }
 
   //正确返回
-  return SUCCESS;
+  return IHU_SUCCESS;
 }
 
 //轮询所有任务的正常执行
@@ -1855,7 +1855,7 @@ void ihu_task_execute_all_bare_rtos(void)
 OPSTAT ihu_isr_install(UINT8 priority, void *my_routine)
 {
 
-        return SUCCESS;
+        return IHU_SUCCESS;
 }
 
 /**********************************************************************************
@@ -1902,14 +1902,14 @@ OPSTAT ihu_vm_send_init_msg_to_app_task(UINT8 dest_id)
 	if ((dest_id <= TASK_ID_MIN) || (dest_id >= TASK_ID_MAX)){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Error on task_id, dest_id=%d!!!\n", dest_id);
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 		
 	//发送初始化消息给目标任务，以便初始化所有任务模块
 	memset(&snd, 0, sizeof(msg_struct_com_init_t));
 	snd.length = sizeof(msg_struct_com_init_t);
 	ret = ihu_message_send(MSG_ID_COM_INIT, dest_id, TASK_ID_VMFO, &snd, snd.length);
-	if (ret == FAILURE){
+	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_VMFO], zIhuTaskNameList[dest_id]);
 	}

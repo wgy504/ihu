@@ -142,7 +142,7 @@ bool flagInitMsgSend = FALSE;
 //	//实现等待一会儿
 //	if (flagInitMsgSend == FALSE)
 //	{
-//		if (ihu_sleep(VM_SLEEP_INIT_1SECOND_CNT, TASK_ID_VMDASHELL, VM_SLEEP_INIT_1SECOND_SEED) == FAILURE)
+//		if (ihu_sleep(VM_SLEEP_INIT_1SECOND_CNT, TASK_ID_VMDASHELL, VM_SLEEP_INIT_1SECOND_SEED) == IHU_FAILURE)
 //		{
 //			return;
 //		}
@@ -154,7 +154,7 @@ bool flagInitMsgSend = FALSE;
 //	}
 
 //	//直接调用VM状态机的轮循，该状态机中，轮询出错，并不引起特别重要的后果，只是打印错误，记录出错数量，并正常返回
-//	if (ihu_sleep(VM_SLEEP_INIT_1SECOND_CNT, TASK_ID_VMDASHELL, VM_SLEEP_INIT_1SECOND_SEED) == SUCCESS){
+//	if (ihu_sleep(VM_SLEEP_INIT_1SECOND_CNT, TASK_ID_VMDASHELL, VM_SLEEP_INIT_1SECOND_SEED) == IHU_SUCCESS){
 //		ihu_task_execute_all();
 //	}
 //	return;
@@ -306,7 +306,7 @@ UINT16 vmda1458x_emc_sample(void)
 //	memset(&snd, 0, sizeof(msg_struct_com_init_t));
 //	snd.length = sizeof(msg_struct_com_init_t);
 //	ret = ihu_message_send(MSG_ID_COM_INIT, TASK_ID_VMDASHELL, TASK_ID_VMDASHELL, &snd, snd.length);
-//	if (ret == FAILURE){
+//	if (ret == IHU_FAILURE){
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		sprintf(strDebug, "IHU-VM: Send message error, TASK [%s] to TASK[%s]!", zIhuTaskNameList[TASK_ID_VMDASHELL], zIhuTaskNameList[TASK_ID_VMDASHELL]);
 //		IhuErrorPrint(strDebug);
@@ -323,7 +323,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 	if (len !=6){
 		IhuErrorPrint("VMDA: Func vmda1458x_mac_addr_get input parameter len must be 6!");
 		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 	
 	//底层获取MAC地址
@@ -335,12 +335,12 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 		*(mac+i) = tmpMac[5-i];
 	}
 	
-	return SUCCESS;
+	return IHU_SUCCESS;
 }
 
 //OPSTAT fsm_com_do_nothing(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT8 param_len)
 //{
-//	return SUCCESS;
+//	return IHU_SUCCESS;
 //}
 
 /*******************************************************************************
@@ -356,7 +356,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		sprintf(strDebug, "IHU-VM: FsmSetState error on task_id, task_id=%d!!!", task_id);
 //		IhuErrorPrint(strDebug);
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 
 //	//Checking newState range
@@ -364,11 +364,11 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		sprintf(strDebug, "IHU-VM: FsmSetState error on state, State=%d!!!", newState);
 //		IhuErrorPrint(strDebug);
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 
 //	zIhuTaskInfo[task_id].state = newState;
-//	return SUCCESS;
+//	return IHU_SUCCESS;
 //}
 
 //UINT8  FsmGetState(UINT8 task_id)
@@ -408,7 +408,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //**    OUT:   none
 //**    INOUT: none
 //**------------------------------------------------------------------------------
-//** Return value : SUCCESS OR FAILURE
+//** Return value : IHU_SUCCESS OR IHU_FAILURE
 //*******************************************************************************/
 //OPSTAT FsmInit(void)
 //{
@@ -427,7 +427,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //		sprintf(strDebug, "IHU-VM: Maxium (%d) tasks/modules supported.", MAX_TASK_NUM_IN_ONE_IHU);
 //		IhuDebugPrint(strDebug);
 //	}
-//    return SUCCESS;
+//    return IHU_SUCCESS;
 //}
 
 ///*******************************************************************************
@@ -442,7 +442,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //**    OUT:   none
 //**    INOUT: none
 //**------------------------------------------------------------------------------
-//** Return value : SUCCESS OR FAILURE
+//** Return value : IHU_SUCCESS OR IHU_FAILURE
 //*******************************************************************************/
 //OPSTAT FsmAddNew(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 //{
@@ -463,19 +463,19 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //	{
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		IhuErrorPrint("IHU-VM: Can not init FSM machine.");
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 //	if((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX))
 //	{
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		IhuErrorPrint("IHU-VM: The task_ID is invalid.");
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 //	if( zIhuFsmTable.pFsmCtrlTable[task_id].taskId != TASK_ID_INVALID )
 //	{
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		IhuErrorPrint("IHU-VM: This task_id has been already inited.");
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 
 //	/*
@@ -485,7 +485,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //	{
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		IhuErrorPrint("IHU-VM: The format of the FSM table is invalid.");
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 
 //    /*
@@ -501,13 +501,13 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //		{
 //			zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //			IhuErrorPrint("IHU-VM: Invalid FSM machine.");
-//			return FAILURE;
+//			return IHU_FAILURE;
 //		}
 //		if( NULL == pFsmStateItem[item].stateFunc)
 //		{
 //			zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //			IhuErrorPrint("IHU-VM: Invalid state function pointer.");
-//			return FAILURE;
+//			return IHU_FAILURE;
 //		}
 //	}
 
@@ -520,7 +520,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //	{
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		IhuErrorPrint("IHU-VM: Invalid FSM machine -- Can not find the end of the FSM.");
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 //	zIhuFsmTable.pFsmCtrlTable[task_id].numOfFsmArrayElement = item-1; //有效STATE-MSG条目数，不包括START/END两条
 
@@ -560,7 +560,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //			zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //			sprintf(strDebug, "IHU-VM: The State number > %d.", MAX_STATE_NUM_IN_ONE_TASK);
 //			IhuErrorPrint(strDebug);
-//			return FAILURE;
+//			return IHU_FAILURE;
 //		}
 //		msgid = pFsmStateItem[itemNo].msg_id & MASK_MSGID_NUM_IN_ONE_TASK;
 //		zIhuFsmTable.pFsmCtrlTable[task_id].pFsmArray[state][msgid].stateFunc = pFsmStateItem[itemNo].stateFunc;
@@ -582,12 +582,12 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //	** 一旦任务创建，自动转移到IDLE状态，因而每个任务独特的初始化不能处理状态，也不能被FsmRunEngine调度，而必须被任务创建的入口函数所执行
 //	*/
 //	ret = FsmSetState(task_id, FSM_STATE_IDLE);
-//	if (ret == FAILURE){
+//	if (ret == IHU_FAILURE){
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		IhuErrorPrint("IHU-VM: Error set FSM State!");
 //	}
 
-//    return SUCCESS;
+//    return IHU_SUCCESS;
 //}
 
 ///*******************************************************************************
@@ -605,7 +605,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //**    OUT:   none
 //**    INOUT: none
 //**------------------------------------------------------------------------------
-//** Return value : SUCCESS OR FAILURE
+//** Return value : IHU_SUCCESS OR IHU_FAILURE
 //*******************************************************************************/
 //OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT8 param_len)
 //{
@@ -620,25 +620,25 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		sprintf(strDebug, "IHU-VM: Error on task_id, dest_id=%d!!!", dest_id);
 //		IhuErrorPrint(strDebug);
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 //	if ((src_id <= TASK_ID_MIN) || (src_id >= TASK_ID_MAX)){
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		sprintf(strDebug, "IHU-VM: Error on task_id, src_id=%d!!!", src_id);
 //		IhuErrorPrint(strDebug);
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 //	if (param_len>MAX_IHU_MSG_BODY_LENGTH){
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		sprintf(strDebug, "IHU-VM: Too large message length than HCU set capability, param_len=%d!!!", param_len);
 //		IhuErrorPrint(strDebug);
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 //	if ((msg_id <= MSG_ID_COM_MIN) || (msg_id >= MSG_ID_COM_MAX)){
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		sprintf(strDebug, "IHU-VM: Error on Msg_Id, msg_id=%d!!!", msg_id);
 //		IhuErrorPrint(strDebug);
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 
 //	/*
@@ -649,7 +649,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //	{
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		IhuErrorPrint("IHU-VM: The destination process does not exist.");
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 
 //	/*
@@ -664,7 +664,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		sprintf(strDebug, "IHU-VM: The state(%d) or msgId(0x%x) of task(0x%x) is error.", 	state, mid, dest_id);
 //		IhuErrorPrint(strDebug);
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 //	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_IPT_ON) != FALSE)
 //	{
@@ -678,11 +678,11 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //	if(zIhuFsmTable.pFsmCtrlTable[dest_id].pFsmArray[state][mid].stateFunc != NULL)
 //	{
 //		ret = (zIhuFsmTable.pFsmCtrlTable[dest_id].pFsmArray[state][mid].stateFunc)(dest_id, src_id, param_ptr, param_len);
-//		if( FAILURE == ret)
+//		if( IHU_FAILURE == ret)
 //		{
 //			zIhuRunErrCnt[TASK_ID_VMDASHELL]++;			
 //			IhuErrorPrint("IHU-VM: Internal error is found in the state function.");
-//			return FAILURE;
+//			return IHU_FAILURE;
 //		}
 //	}
 //	else
@@ -694,10 +694,10 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		sprintf(strDebug, "IHU-VM: Receive invalid msg(%x)[%s] in state(%d) of task(0x%x)[%s].", mid, zIhuMsgNameList[mid], state, dest_id, zIhuTaskNameList[dest_id]);
 //		IhuErrorPrint(strDebug);
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 
-//    return SUCCESS;
+//    return IHU_SUCCESS;
 //}
 
 ///*******************************************************************************
@@ -711,7 +711,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //**    OUT:   none
 //**    INOUT: none
 //**------------------------------------------------------------------------------
-//** Return value : SUCCESS OR FAILURE
+//** Return value : IHU_SUCCESS OR IHU_FAILURE
 //*******************************************************************************/
 //OPSTAT FsmProcessingLaunchEntry(UINT8 task_id)
 //{
@@ -724,7 +724,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		sprintf(strDebug, "IHU-VM: Error on task_id, task_id=%d!!!", task_id);
 //		IhuErrorPrint(strDebug);
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 
 //	/*
@@ -738,7 +738,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //		IhuErrorPrint(strDebug);
 //	}
 //	
-//	return SUCCESS;
+//	return IHU_SUCCESS;
 //}
 
 //OPSTAT FsmProcessingLaunchExecute(UINT8 task_id)
@@ -754,7 +754,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		sprintf(strDebug, "IHU-VM: Error on task_id, task_id=%d!!!", task_id);
 //		IhuErrorPrint(strDebug);
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 
 //	//任务中的消息轮循
@@ -764,14 +764,14 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //	//小喇叭响起来，这里是资源优化集中营！
 //	memset(&rcv, 0, sizeof(IhuMsgSruct_t));
 //	ret = ihu_message_rcv(task_id, &rcv);
-//	if (ret == SUCCESS)
+//	if (ret == IHU_SUCCESS)
 //	{
 //		ret = FsmRunEngine(rcv.msgType, rcv.dest_id, rcv.src_id, rcv.msgBody, rcv.msgLen);
-//		if (ret == FAILURE)
+//		if (ret == IHU_FAILURE)
 //		{
 //			zIhuRunErrCnt[TASK_ID_VMDASHELL]++;	
 //			IhuErrorPrint("IHU-VM: Error execute FsmRun state machine!");
-//			return FAILURE;
+//			return IHU_FAILURE;
 //		}
 //	}
 //	else
@@ -781,10 +781,10 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //		//真正失败的时候，需要返回FAILURE
 //		
 //		//这里是消息队列空，所以返回成功
-//		return SUCCESS;
+//		return IHU_SUCCESS;
 //	}
 //	
-//	return SUCCESS;
+//	return IHU_SUCCESS;
 //}
 
 
@@ -806,7 +806,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		sprintf(strDebug, "IHU-VM: Error on task_id, dest_id=%d!!!", dest_id);
 //		IhuErrorPrint(strDebug);
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 //	//循环查找一个任务的消息队列，看看有无有效消息
 //	int i=0, j=0;
@@ -828,26 +828,26 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //				zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //				sprintf(strDebug, "IHU-VM: Receive message error on task_id, dest_id=%d!!!", msg->dest_id);
 //				IhuErrorPrint(strDebug);
-//				return FAILURE;
+//				return IHU_FAILURE;
 //			}
 //			if ((msg->src_id <= TASK_ID_MIN) || (msg->src_id >= TASK_ID_MAX)){
 //				zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //				sprintf(strDebug, "IHU-VM: Receive message error on src_id, dest_id=%d!!!", msg->src_id);
 //				IhuErrorPrint(strDebug);
-//				return FAILURE;
+//				return IHU_FAILURE;
 //			}
 //			//不允许定义消息结构中长度为0的消息体，至少需要一个长度域
 //			if ((msg->msgLen <= 0) || (msg->msgLen > MAX_IHU_MSG_BUF_LENGTH)){
 //				zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //				sprintf(strDebug, "IHU-VM: Receive message error on length, msgLen=%d!!!", msg->msgLen);
 //				IhuErrorPrint(strDebug);
-//				return FAILURE;
+//				return IHU_FAILURE;
 //			}
 //			if ((msg->msgType <= MSG_ID_COM_MIN) || (msg->msgType >= MSG_ID_COM_MAX)){
 //				zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //				sprintf(strDebug, "IHU-VM: Receive message error on msgId, msgType=%d!!!", msg->msgType);
 //				IhuErrorPrint(strDebug);
-//				return FAILURE;
+//				return IHU_FAILURE;
 //			}			
 //			//退出循环
 //			Flag = TRUE;
@@ -856,9 +856,9 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //	}
 //	//返回错误，并不一定表示真发生了错误，也有可能是没有任何消息供消耗，此时，上层调用者就啥都不做，确保自己安全
 //	if (Flag == TRUE){	
-//		return SUCCESS;
+//		return IHU_SUCCESS;
 //	}else{
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 //}
 
@@ -874,25 +874,25 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		sprintf(strDebug, "IHU-VM: Error on task_id, dest_id=%d!!!", dest_id);
 //		IhuErrorPrint(strDebug);
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 //	if ((src_id <= TASK_ID_MIN) || (src_id >= TASK_ID_MAX)){
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		sprintf(strDebug, "IHU-VM: Error on task_id, src_id=%d!!!", src_id);		
 //		IhuErrorPrint(strDebug);
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 //	if (param_len>MAX_IHU_MSG_BODY_LENGTH){
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		sprintf(strDebug, "IHU-VM: Too large message length than IHU set capability, param_len=%d!!!", param_len);			
 //		IhuErrorPrint(strDebug);
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 //	if ((msg_id <= MSG_ID_COM_MIN) || (msg_id >= MSG_ID_COM_MAX)){
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		sprintf(strDebug, "IHU-VM: Receive message error on msgId, msgType=%d!!!", msg_id);
 //		IhuErrorPrint(strDebug);
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 
 //	//对来源数据进行初始化，是为了稳定可靠安全	
@@ -929,7 +929,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		sprintf(strDebug, "IHU-VM: Message queue full, can not send into task = %d!!!", dest_id);	
 //		IhuErrorPrint(strDebug);
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 
 //	/*
@@ -1150,7 +1150,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //			break;
 //	}
 
-//	return SUCCESS;
+//	return IHU_SUCCESS;
 //}
 
 //TaskId transfer to string
@@ -1161,7 +1161,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //	if ((id<=TASK_ID_MIN) || (id>=TASK_ID_MAX)){
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;	
 //		IhuErrorPrint("IHU-VM: Error task Id input!");
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 //	char tmp[TASK_NAME_MAX_LENGTH-2]="";
 //	strcpy(string, "[");
@@ -1172,7 +1172,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //		strcat(string, "TASK_ID_XXX");
 //	}
 //	strcat(string, "]");
-//	return SUCCESS;
+//	return IHU_SUCCESS;
 //}
 
 //MsgId transfer to string
@@ -1182,7 +1182,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //	if (id <= MSG_ID_COM_MIN || id >= MSG_ID_COM_MAX){
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;	
 //		IhuErrorPrint("IHU-VM: Error Message Id input!");
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 //	char tmp[MSG_NAME_MAX_LENGTH-2]="";
 //	strcpy(string, "[");
@@ -1194,7 +1194,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //	}
 //	strcat(string, "]");
 
-//	return SUCCESS;
+//	return IHU_SUCCESS;
 //}
 
 
@@ -1207,12 +1207,12 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		sprintf(strDebug, "IHU-VM: Error on task_id, dest_id=%d!!!", dest_id);
 //		IhuErrorPrint(strDebug);
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}	
 //	//清理消息队列
 //	memset(&zIhuFsmTable.taskQue[dest_id], 0, sizeof(FsmQueueListTable_t));
 //	
-//	return SUCCESS;
+//	return IHU_SUCCESS;
 //}
 
 //聚合创建任务，消息队列，并直接让其开始运行
@@ -1226,16 +1226,16 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		sprintf(strDebug, "IHU-VM: Input Error on task_id, task_id=%d!!!", task_id);
 //		IhuErrorPrint(strDebug);
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 
 //	//Init Fsm table
 //	ret = FsmAddNew(task_id, pFsmStateItem);
-//	if (ret == FAILURE){
+//	if (ret == IHU_FAILURE){
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		sprintf(strDebug, "IHU-VM: Init state machine FsmAddNew error, taskid = %d.", task_id);
 //		IhuErrorPrint(strDebug);
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 //	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_CRT_ON) != FALSE){
 //		sprintf(strDebug, "IHU-VM: FsmAddNew Successful, taskId = 0x%x [%s].", task_id, zIhuTaskNameList[task_id]);
@@ -1244,12 +1244,12 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 
 //	//Create Queid
 //	ret = ihu_message_queue_clean(task_id);
-//	if (ret == FAILURE)
+//	if (ret == IHU_FAILURE)
 //	{
 //	zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //	sprintf(strDebug, "IHU-VM: Create queue unsuccessfully, taskId = %d.", task_id);
 //	IhuErrorPrint(strDebug);
-//	return FAILURE;
+//	return IHU_FAILURE;
 //	}
 //	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_CRT_ON) != FALSE){
 //		sprintf(strDebug, "IHU-VM: Msgque create successful, taskId = 0x%x [%s].", task_id, zIhuTaskNameList[task_id]);
@@ -1258,18 +1258,18 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 
 //	//Create task and make it running for the 1st time
 //	ret = FsmProcessingLaunchEntry(task_id);
-//	if (ret == FAILURE)
+//	if (ret == IHU_FAILURE)
 //	{
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		sprintf(strDebug, "IHU-VM: Create task un-successfully, taskid = %d", task_id);
 //		IhuErrorPrint(strDebug);		
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 //	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_CRT_ON) != FALSE){
 //		sprintf(strDebug, "IHU-VM: Task create Successful, taskId = 0x%x [%s].", task_id, zIhuTaskNameList[task_id]);
 //	  IhuDebugPrint(strDebug);
 //	}
-//	return SUCCESS;
+//	return IHU_SUCCESS;
 //}
 
 //OPSTAT ihu_system_task_init_call(UINT8 task_id, FsmStateItem_t *p)
@@ -1282,14 +1282,14 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		sprintf(strDebug, "IHU-VM: Input Error on task_id, task_id=%d!!!", task_id);
 //		IhuErrorPrint(strDebug);
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 //	
 //	//入参检查
 //	if (p == NULL){
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		IhuErrorPrint("IHU-VM: Input wrong FsmStateItem pointer!");
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 //	
 //	//任务控制启动标示检查
@@ -1297,7 +1297,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		sprintf(strDebug, "IHU-VM: no need create this task [%s]!", zIhuTaskNameList[task_id]);
 //		IhuErrorPrint(strDebug);	
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 //	
 //	//打印信息
@@ -1308,11 +1308,11 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 
 //	//任务创建并初始化所有状态机
 //	ret = ihu_task_create_and_run(task_id, p);
-//	if (ret == FAILURE){
+//	if (ret == IHU_FAILURE){
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		sprintf(strDebug, "IHU-VM: create task env [%s] un-successfully, program exit.", zIhuTaskNameList[task_id]);
 //		IhuErrorPrint(strDebug);
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}else{
 //		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
 //			sprintf(strDebug, "IHU-VM: create task successfully, taskid=%d[%s].", task_id, zIhuTaskNameList[task_id]);
@@ -1321,7 +1321,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //	}
 //	
 //	//正确返回
-//	return SUCCESS;
+//	return IHU_SUCCESS;
 //}
 
 //OPSTAT ihu_system_task_execute(UINT8 task_id, FsmStateItem_t *p)
@@ -1334,14 +1334,14 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		sprintf(strDebug, "IHU-VM: Input Error on task_id, task_id=%d!!!", task_id);
 //		IhuErrorPrint(strDebug);
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 //	
 //	//入参检查
 //	if (p == NULL){
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		IhuErrorPrint("IHU-VM: Input wrong FsmStateItem pointer!");
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 //	
 //	//任务控制启动标示检查
@@ -1349,21 +1349,21 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		sprintf(strDebug, "IHU-VM: no need execute this task [%s]!", zIhuTaskNameList[task_id]);
 //		IhuErrorPrint(strDebug);	
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 
 //	//轮询执行任务的消息消耗
 //	ret = FsmProcessingLaunchExecute(task_id);
-//	if (ret == FAILURE)
+//	if (ret == IHU_FAILURE)
 //	{
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		sprintf(strDebug, "IHU-VM: Execute task FSM un-successfully, taskid = %d", task_id);
 //		IhuErrorPrint(strDebug);		
-//		return FAILURE;
+//		return IHU_FAILURE;
 //	}
 //	
 //	//正确返回
-//	return SUCCESS;
+//	return IHU_SUCCESS;
 //}
 
 //创建所有任务
@@ -1440,28 +1440,28 @@ OPSTAT ihu_sleep(UINT32 cntDuration, UINT8 task_id, UINT8 seed)
 		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 		sprintf(strDebug, "IHU-VM: Input Error on task_id, task_id=%d!!!", task_id);
 		IhuErrorPrint(strDebug);
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 	if ((cntDuration <= 0) || (cntDuration > MAX_SLEEP_COUNTER_UP_LIMITATION)){
 		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 		sprintf(strDebug, "IHU-VM: Input Error on cntDuration, cntDuration=%d!!!", cntDuration);
 		IhuErrorPrint(strDebug);
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 	if (seed >= MAX_SLEEP_NUM_IN_ONE_TASK){
 		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 		sprintf(strDebug, "IHU-VM: Input Error on seed, seed=%d!!!", seed);
 		IhuErrorPrint(strDebug);
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 
 	//计数
 	zIhuSleepCnt[task_id][seed]++;
 	if (zIhuSleepCnt[task_id][seed] >=cntDuration){
 		zIhuSleepCnt[task_id][seed] = 0;
-		return SUCCESS;
+		return IHU_SUCCESS;
 	}else{
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 }
 

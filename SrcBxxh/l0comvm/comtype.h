@@ -26,8 +26,8 @@ typedef UINT8           		BOOLEAN;
 typedef void            		VOID;
 
 typedef INT32         	OPSTAT;
-#define SUCCESS        	0
-#define FAILURE        	-1
+#define IHU_SUCCESS        	0
+#define IHU_FAILURE        	-1
 #define true   					1
 #define false						0
 #define TRUE   					1

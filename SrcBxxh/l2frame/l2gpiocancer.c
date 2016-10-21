@@ -44,10 +44,10 @@ OPSTAT fsm_gpiocancer_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 {
 	//除了对全局变量进行操作之外，尽量不要做其它操作，因为该函数将被主任务/线程调用，不是本任务/线程调用
 	//该API就是给本任务一个提早介入的入口，可以帮着做些测试性操作
-	if (FsmSetState(TASK_ID_GPIOCANCER, FSM_STATE_IDLE) == FAILURE){
+	if (FsmSetState(TASK_ID_GPIOCANCER, FSM_STATE_IDLE) == IHU_FAILURE){
 		IhuErrorPrint("GPIOCANCER: Error Set FSM State at fsm_gpiocancer_task_entry.");
 	}
-	return SUCCESS;
+	return IHU_SUCCESS;
 }
 
 OPSTAT fsm_gpiocancer_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
@@ -61,32 +61,32 @@ OPSTAT fsm_gpiocancer_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16
 //		memset(&snd, 0, sizeof(msg_struct_com_init_fb_t));
 //		snd.length = sizeof(msg_struct_com_init_fb_t);
 //		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_GPIOCANCER, &snd, snd.length);
-//		if (ret == FAILURE){
+//		if (ret == IHU_FAILURE){
 //			IhuErrorPrint("GPIOCANCER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_GPIOCANCER], zIhuTaskNameList[src_id]);
-//			return FAILURE;
+//			return IHU_FAILURE;
 //		}
 	}
 
 	//收到初始化消息后，进入初始化状态
-	if (FsmSetState(TASK_ID_GPIOCANCER, FSM_STATE_GPIOCANCER_INITED) == FAILURE){
+	if (FsmSetState(TASK_ID_GPIOCANCER, FSM_STATE_GPIOCANCER_INITED) == IHU_FAILURE){
 		IhuErrorPrint("GPIOCANCER: Error Set FSM State!");	
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 
 	//初始化硬件接口
-	if (func_gpiocancer_hw_init() == FAILURE){	
+	if (func_gpiocancer_hw_init() == IHU_FAILURE){	
 		IhuErrorPrint("GPIOCANCER: Error initialize interface!");
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 
 	//Global Variables
 	zIhuRunErrCnt[TASK_ID_GPIOCANCER] = 0;
 
 	//设置状态机到目标状态
-	if (FsmSetState(TASK_ID_GPIOCANCER, FSM_STATE_GPIOCANCER_AVTIVE) == FAILURE){
+	if (FsmSetState(TASK_ID_GPIOCANCER, FSM_STATE_GPIOCANCER_AVTIVE) == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_GPIOCANCER]++;
 		IhuErrorPrint("GPIOCANCER: Error Set FSM State!");
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 	
 	//启动本地定时器，如果有必要
@@ -97,7 +97,7 @@ OPSTAT fsm_gpiocancer_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16
 	}
 
 	//返回
-	return SUCCESS;
+	return IHU_SUCCESS;
 }
 
 OPSTAT fsm_gpiocancer_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
@@ -105,7 +105,7 @@ OPSTAT fsm_gpiocancer_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UIN
 	IhuErrorPrint("GPIOCANCER: Internal error counter reach DEAD level, SW-RESTART soon!");
 	fsm_gpiocancer_init(0, 0, NULL, 0);
 	
-	return SUCCESS;
+	return IHU_SUCCESS;
 }
 
 OPSTAT fsm_gpiocancer_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
@@ -114,23 +114,23 @@ OPSTAT fsm_gpiocancer_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UI
 	if ((param_ptr == NULL) || (dest_id != TASK_ID_GPIOCANCER)){
 		zIhuRunErrCnt[TASK_ID_GPIOCANCER]++;
 		IhuErrorPrint("GPIOCANCER: Wrong input paramters!");
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 	
 	//设置状态机到目标状态
-	if (FsmSetState(TASK_ID_GPIOCANCER, FSM_STATE_IDLE) == FAILURE){
+	if (FsmSetState(TASK_ID_GPIOCANCER, FSM_STATE_IDLE) == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_GPIOCANCER]++;
 		IhuErrorPrint("GPIOCANCER: Error Set FSM State!");
-		return FAILURE;
+		return IHU_FAILURE;
 	}
 	
 	//返回
-	return SUCCESS;
+	return IHU_SUCCESS;
 }
 
 //Local APIs
 OPSTAT func_gpiocancer_hw_init(void)
 {
-	return SUCCESS;
+	return IHU_SUCCESS;
 }
 
