@@ -116,9 +116,9 @@ typedef struct IhuTaskTag
 	CPU_STK TaskSTK[IHU_TASK_STACK_LENGTH];
 	OS_Q   TaskQue;
 }IhuTaskTag_t;
-#define IHU_TASK_PNP_ON 2
-#define IHU_TASK_PNP_OFF 1
-#define IHU_TASK_PNP_INVALID 0xFF
+//#define IHU_TASK_PNP_ON 1
+//#define IHU_TASK_PNP_OFF 0
+//#define IHU_TASK_PNP_INVALID 0xFF
 #define IHU_TASK_QUEUE_FULL_TRUE 2
 #define IHU_TASK_QUEUE_FULL_FALSE 1
 #define IHU_TASK_QUEUE_FULL_INVALID 0xFF

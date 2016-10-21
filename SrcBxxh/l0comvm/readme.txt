@@ -698,7 +698,10 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
    text    data     bss     dec     hex filename
   45896     856   28396   75148   1258c freertos_retarget.elf
 
-//= ZJL, 2016 Oct.12, CURRENT_SW_DELIVERY R03.36
+//= XX, 2016 Oct.12, CURRENT_SW_DELIVERY R03.36
+= 修改完善VMUO Printf，使用了PC10/11作为USART3的打印输出口，115200, TTL电平输出
+= 修正SCYCB中ACTIVED状态，以及INIT状态下的处理
+= 增加SCYCB中TIME_OUT的处理样例
 = 
 
 

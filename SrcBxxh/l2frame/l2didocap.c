@@ -29,9 +29,14 @@ FsmStateItem_t FsmDidocap[] =
   {MSG_ID_COM_RESTART,										FSM_STATE_IDLE,            									fsm_didocap_restart},
 
   //Task level initialization
-  {MSG_ID_COM_RESTART,        						FSM_STATE_DIDOCAP_AVTIVE,         					fsm_didocap_restart},
-  {MSG_ID_COM_STOP,												FSM_STATE_DIDOCAP_AVTIVE,         					fsm_didocap_stop_rcv},
+  {MSG_ID_COM_RESTART,        						FSM_STATE_DIDOCAP_INITED,         					fsm_didocap_restart},
+  {MSG_ID_COM_STOP,												FSM_STATE_DIDOCAP_INITED,         					fsm_didocap_stop_rcv},
 
+	//Task level actived status
+  {MSG_ID_COM_RESTART,        						FSM_STATE_DIDOCAP_ACTIVED,         					fsm_didocap_restart},
+  {MSG_ID_COM_STOP,												FSM_STATE_DIDOCAP_ACTIVED,         					fsm_didocap_stop_rcv},
+  {MSG_ID_COM_TIME_OUT,										FSM_STATE_DIDOCAP_ACTIVED,         					fsm_didocap_time_out},
+	
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             									NULL},  //Ending
 };
@@ -45,14 +50,14 @@ OPSTAT fsm_didocap_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UIN
 	//除了对全局变量进行操作之外，尽量不要做其它操作，因为该函数将被主任务/线程调用，不是本任务/线程调用
 	//该API就是给本任务一个提早介入的入口，可以帮着做些测试性操作
 	if (FsmSetState(TASK_ID_DIDOCAP, FSM_STATE_IDLE) == IHU_FAILURE){
-		IhuErrorPrint("DIDOCAP: Error Set FSM State at fsm_didocap_task_entry.");
+		IhuErrorPrint("DIDOCAP: Error Set FSM State at fsm_didocap_task_entry.\n");
 	}
 	return IHU_SUCCESS;
 }
 
 OPSTAT fsm_didocap_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	//int ret=0;
+	int ret=0;
 
 	//串行会送INIT_FB给VM，不然消息队列不够深度，此为节省内存机制
 	if ((src_id > TASK_ID_MIN) &&(src_id < TASK_ID_MAX)){
@@ -69,13 +74,13 @@ OPSTAT fsm_didocap_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 
 	//收到初始化消息后，进入初始化状态
 	if (FsmSetState(TASK_ID_DIDOCAP, FSM_STATE_DIDOCAP_INITED) == IHU_FAILURE){
-		IhuErrorPrint("DIDOCAP: Error Set FSM State!");	
+		IhuErrorPrint("DIDOCAP: Error Set FSM State!\n");	
 		return IHU_FAILURE;
 	}
 
 	//初始化硬件接口
 	if (func_didocap_hw_init() == IHU_FAILURE){	
-		IhuErrorPrint("DIDOCAP: Error initialize interface!");
+		IhuErrorPrint("DIDOCAP: Error initialize interface!\n");
 		return IHU_FAILURE;
 	}
 
@@ -83,26 +88,33 @@ OPSTAT fsm_didocap_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 	zIhuRunErrCnt[TASK_ID_DIDOCAP] = 0;
 
 	//设置状态机到目标状态
-	if (FsmSetState(TASK_ID_DIDOCAP, FSM_STATE_DIDOCAP_AVTIVE) == IHU_FAILURE){
+	if (FsmSetState(TASK_ID_DIDOCAP, FSM_STATE_DIDOCAP_ACTIVED) == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
-		IhuErrorPrint("DIDOCAP: Error Set FSM State!");
+		IhuErrorPrint("DIDOCAP: Error Set FSM State!\n");
 		return IHU_FAILURE;
 	}
 	
 	//启动本地定时器，如果有必要
+	//测试性启动周期性定时器
+	ret = ihu_timer_start(TASK_ID_DIDOCAP, TIMER_ID_1S_DIDOCAP_PERIOD_SCAN, zIhuSysEngPar.timer.didoPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+	if (ret == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+		IhuErrorPrint("DIDOCAP: Error start timer!\n");
+		return IHU_FAILURE;
+	}	
 	
 	//打印报告进入常规状态
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
-		IhuDebugPrint("DIDOCAP: Enter FSM_STATE_DIDOCAP_ACTIVE status, Keeping refresh here!");
+		IhuDebugPrint("DIDOCAP: Enter FSM_STATE_DIDOCAP_ACTIVE status, Keeping refresh here!\n");
 	}
-
+	
 	//返回
 	return IHU_SUCCESS;
 }
 
 OPSTAT fsm_didocap_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	IhuErrorPrint("DIDOCAP: Internal error counter reach DEAD level, SW-RESTART soon!");
+	IhuErrorPrint("DIDOCAP: Internal error counter reach DEAD level, SW-RESTART soon!\n");
 	fsm_didocap_init(0, 0, NULL, 0);
 	
 	return IHU_SUCCESS;
@@ -113,14 +125,14 @@ OPSTAT fsm_didocap_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 	//入参检查
 	if ((param_ptr == NULL) || (dest_id != TASK_ID_DIDOCAP)){
 		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
-		IhuErrorPrint("DIDOCAP: Wrong input paramters!");
+		IhuErrorPrint("DIDOCAP: Wrong input paramters!\n");
 		return IHU_FAILURE;
 	}
 	
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_DIDOCAP, FSM_STATE_IDLE) == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
-		IhuErrorPrint("DIDOCAP: Error Set FSM State!");
+		IhuErrorPrint("DIDOCAP: Error Set FSM State!\n");
 		return IHU_FAILURE;
 	}
 	
@@ -132,5 +144,59 @@ OPSTAT fsm_didocap_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 OPSTAT func_didocap_hw_init(void)
 {
 	return IHU_SUCCESS;
+}
+
+//TIMER_OUT Processing
+OPSTAT fsm_didocap_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{
+	int ret;
+	msg_struct_com_restart_t snd0;
+	msg_struct_com_time_out_t rcv;
+	
+	//Receive message and copy to local variable
+	IhuDebugPrint("DIDOCAP: TEST! Receive TIME_OUT message!\n");
+
+	memset(&rcv, 0, sizeof(msg_struct_com_time_out_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_com_time_out_t))){
+		IhuErrorPrint("DIDOCAP: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+
+	//钩子在此处，检查zIhuRunErrCnt[TASK_ID_DIDOCAP]是否超限
+	if (zIhuRunErrCnt[TASK_ID_DIDOCAP] > IHU_RUN_ERROR_LEVEL_2_MAJOR){
+		//减少重复RESTART的概率
+		zIhuRunErrCnt[TASK_ID_DIDOCAP] = zIhuRunErrCnt[TASK_ID_DIDOCAP] - IHU_RUN_ERROR_LEVEL_2_MAJOR;
+		memset(&snd0, 0, sizeof(msg_struct_com_restart_t));
+		snd0.length = sizeof(msg_struct_com_restart_t);
+		ret = ihu_message_send(MSG_ID_COM_RESTART, TASK_ID_DIDOCAP, TASK_ID_DIDOCAP, &snd0, snd0.length);
+		if (ret == IHU_FAILURE){
+			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[TASK_ID_DIDOCAP]);
+			return IHU_FAILURE;
+		}
+	}
+
+	//Period time out received
+	if ((rcv.timeId == TIMER_ID_1S_DIDOCAP_PERIOD_SCAN) &&(rcv.timeRes == TIMER_RESOLUTION_1S)){
+		//保护周期读数的优先级，强制抢占状态，并简化问题
+		if (FsmGetState(TASK_ID_DIDOCAP) != FSM_STATE_DIDOCAP_ACTIVED){
+			ret = FsmSetState(TASK_ID_DIDOCAP, FSM_STATE_DIDOCAP_ACTIVED);
+			if (ret == IHU_FAILURE){
+				zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+				IhuErrorPrint("DIDOCAP: Error Set FSM State!\n");
+				return IHU_FAILURE;
+			}//FsmSetState
+		}
+		func_didocap_time_out_period_scan();
+	}
+
+	return IHU_SUCCESS;
+}
+
+void func_didocap_time_out_period_scan(void)
+{
+	IhuDebugPrint("DIDOCAP: Test!\n");
 }
 

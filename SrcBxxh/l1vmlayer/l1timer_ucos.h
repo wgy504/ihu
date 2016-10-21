@@ -52,6 +52,7 @@ enum IHU_TIMER_ID_1S_ALL
 {
 	TIMER_ID_1S_MIN = 0,
 	TIMER_ID_1S_VMFO_INIT_FB,
+	TIMER_ID_1S_DIDOCAP_PERIOD_SCAN,
 	TIMER_ID_1S_MAX,
 };
 enum IHU_TIMER_ID_10MS_ALL
@@ -105,19 +106,21 @@ typedef struct IhuTimerTable
 #define TIMER_RESOLUTION_INVALID 0xFF
 
 #define IHU_TIMER_CONFIG_START_RESOLUTION_1S TRUE
-#define IHU_TIMER_CONFIG_START_RESOLUTION_10MS TRUE
+#define IHU_TIMER_CONFIG_START_RESOLUTION_10MS FALSE
 #define IHU_TIMER_CONFIG_START_RESOLUTION_1MS FALSE
 
 
 //Global variables
 extern FsmStateItem_t FsmTimer[];
 extern IhuTimerTable_t zIhuTimerTable;
+//extern msg_struct_com_time_out_t zIhuTimerSnd;
 
 //API
 extern OPSTAT fsm_timer_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_timer_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_timer_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_timer_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+//用法中，TIMER_DUR就是多少秒为单位
 extern OPSTAT ihu_timer_start(UINT8 task_id, UINT8 timer_id, UINT32 t_dur, UINT8 t_type, UINT8 t_res);
 extern OPSTAT ihu_timer_stop(UINT8 task_id, UINT8 timer_id, UINT8 t_res);
 

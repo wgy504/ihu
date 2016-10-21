@@ -23,6 +23,7 @@
 	(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCSB_ID))
 	#include "vmucoslayer.h"
 	#include "l1comdef_ucos.h"
+	#include "l1timer_ucos.h"
 #else
 #endif
 
@@ -33,7 +34,7 @@
 enum FSM_STATE_I2CARIES
 {
 	FSM_STATE_I2CARIES_INITED = 0x02,
-	FSM_STATE_I2CARIES_AVTIVE,
+	FSM_STATE_I2CARIES_ACTIVED,
 	FSM_STATE_I2CARIES_MAX,
 };
 //#define FSM_STATE_END   0xFE
@@ -47,6 +48,7 @@ extern OPSTAT fsm_i2caries_task_entry(UINT8 dest_id, UINT8 src_id, void * param_
 extern OPSTAT fsm_i2caries_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_i2caries_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_i2caries_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT fsm_i2caries_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 
 //Local API
 OPSTAT func_i2caries_hw_init(void);

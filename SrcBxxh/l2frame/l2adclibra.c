@@ -28,11 +28,16 @@ FsmStateItem_t FsmAdclibra[] =
   {MSG_ID_COM_INIT,       								FSM_STATE_IDLE,            									fsm_adclibra_init},
   {MSG_ID_COM_RESTART,										FSM_STATE_IDLE,            									fsm_adclibra_restart},
 
-  //Task level initialization
-  {MSG_ID_COM_RESTART,        						FSM_STATE_ADCLIBRA_AVTIVE,         					fsm_adclibra_restart},
-  {MSG_ID_COM_STOP,												FSM_STATE_ADCLIBRA_AVTIVE,         					fsm_adclibra_stop_rcv},
-  {MSG_ID_ADC_DL_CTRL_CMD_REQ,						FSM_STATE_ADCLIBRA_AVTIVE,         					fsm_adclibra_dl_ctrl_cmd_req},	
+ //Task level initialization
+  {MSG_ID_COM_RESTART,        						FSM_STATE_ADCLIBRA_INITED,         					fsm_adclibra_restart},
+  {MSG_ID_COM_STOP,												FSM_STATE_ADCLIBRA_INITED,         					fsm_adclibra_stop_rcv},
 
+	//Task level actived status
+  {MSG_ID_COM_RESTART,        						FSM_STATE_ADCLIBRA_ACTIVED,         				fsm_adclibra_restart},
+  {MSG_ID_COM_STOP,												FSM_STATE_ADCLIBRA_ACTIVED,         				fsm_adclibra_stop_rcv},
+  {MSG_ID_COM_TIME_OUT,										FSM_STATE_ADCLIBRA_ACTIVED,         				fsm_adclibra_time_out},
+  {MSG_ID_ADC_DL_CTRL_CMD_REQ,						FSM_STATE_ADCLIBRA_ACTIVED,         				fsm_adclibra_dl_ctrl_cmd_req},	
+	
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             									NULL},  //Ending
 };
@@ -46,7 +51,7 @@ OPSTAT fsm_adclibra_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UI
 	//除了对全局变量进行操作之外，尽量不要做其它操作，因为该函数将被主任务/线程调用，不是本任务/线程调用
 	//该API就是给本任务一个提早介入的入口，可以帮着做些测试性操作
 	if (FsmSetState(TASK_ID_ADCLIBRA, FSM_STATE_IDLE) == IHU_FAILURE){
-		IhuErrorPrint("ADCLIBRA: Error Set FSM State at fsm_adclibra_task_entry.");
+		IhuErrorPrint("ADCLIBRA: Error Set FSM State at fsm_adclibra_task_entry.\n");
 	}
 	return IHU_SUCCESS;
 }
@@ -70,13 +75,13 @@ OPSTAT fsm_adclibra_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 
 	//收到初始化消息后，进入初始化状态
 	if (FsmSetState(TASK_ID_ADCLIBRA, FSM_STATE_ADCLIBRA_INITED) == IHU_FAILURE){
-		IhuErrorPrint("ADCLIBRA: Error Set FSM State!");	
+		IhuErrorPrint("ADCLIBRA: Error Set FSM State!\n");	
 		return IHU_FAILURE;
 	}
 
 	//初始化硬件接口
 	if (func_adclibra_hw_init() == IHU_FAILURE){	
-		IhuErrorPrint("ADCLIBRA: Error initialize interface!");
+		IhuErrorPrint("ADCLIBRA: Error initialize interface!\n");
 		return IHU_FAILURE;
 	}
 
@@ -84,9 +89,9 @@ OPSTAT fsm_adclibra_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 	zIhuRunErrCnt[TASK_ID_ADCLIBRA] = 0;
 
 	//设置状态机到目标状态
-	if (FsmSetState(TASK_ID_ADCLIBRA, FSM_STATE_ADCLIBRA_AVTIVE) == IHU_FAILURE){
+	if (FsmSetState(TASK_ID_ADCLIBRA, FSM_STATE_ADCLIBRA_ACTIVED) == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
-		IhuErrorPrint("ADCLIBRA: Error Set FSM State!");
+		IhuErrorPrint("ADCLIBRA: Error Set FSM State!\n");
 		return IHU_FAILURE;
 	}
 	
@@ -94,7 +99,7 @@ OPSTAT fsm_adclibra_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 	
 	//打印报告进入常规状态
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
-		IhuDebugPrint("ADCLIBRA: Enter FSM_STATE_ADCLIBRA_ACTIVE status, Keeping refresh here!");
+		IhuDebugPrint("ADCLIBRA: Enter FSM_STATE_ADCLIBRA_ACTIVE status, Keeping refresh here!\n");
 	}
 
 	//返回
@@ -103,7 +108,7 @@ OPSTAT fsm_adclibra_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 
 OPSTAT fsm_adclibra_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	IhuErrorPrint("ADCLIBRA: Internal error counter reach DEAD level, SW-RESTART soon!");
+	IhuErrorPrint("ADCLIBRA: Internal error counter reach DEAD level, SW-RESTART soon!\n");
 	fsm_adclibra_init(0, 0, NULL, 0);
 	
 	return IHU_SUCCESS;
@@ -114,14 +119,14 @@ OPSTAT fsm_adclibra_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 	//入参检查
 	if ((param_ptr == NULL) || (dest_id != TASK_ID_ADCLIBRA)){
 		zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
-		IhuErrorPrint("ADCLIBRA: Wrong input paramters!");
+		IhuErrorPrint("ADCLIBRA: Wrong input paramters!\n");
 		return IHU_FAILURE;
 	}
 	
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_ADCLIBRA, FSM_STATE_IDLE) == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
-		IhuErrorPrint("ADCLIBRA: Error Set FSM State!");
+		IhuErrorPrint("ADCLIBRA: Error Set FSM State!\n");
 		return IHU_FAILURE;
 	}
 	
@@ -134,7 +139,7 @@ OPSTAT fsm_adclibra_dl_ctrl_cmd_req(UINT8 dest_id, UINT8 src_id, void * param_pt
 	//入参检查
 	if ((param_ptr == NULL) || (dest_id != TASK_ID_ADCLIBRA)){
 		zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
-		IhuErrorPrint("ADCLIBRA: Wrong input paramters!");
+		IhuErrorPrint("ADCLIBRA: Wrong input paramters!\n");
 		return IHU_FAILURE;
 	}
 	
@@ -146,6 +151,13 @@ OPSTAT fsm_adclibra_dl_ctrl_cmd_req(UINT8 dest_id, UINT8 src_id, void * param_pt
 //Local APIs
 OPSTAT func_adclibra_hw_init(void)
 {
+	return IHU_SUCCESS;
+}
+
+//TIMER_OUT Processing
+OPSTAT fsm_adclibra_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{
+
 	return IHU_SUCCESS;
 }
 

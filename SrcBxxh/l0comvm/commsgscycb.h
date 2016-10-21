@@ -48,6 +48,7 @@ typedef struct IhuMsgSruct
 }IhuMsgSruct_t;
 
 #define  IHU_THREAD_PRIO  10          //priority of the main loop de 1 a 99 max
+#define  IHU_THREAD_PRIO_TIMER 4          //priority of the main loop de 1 a 99 max
 
 /*
  *

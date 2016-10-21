@@ -29,9 +29,14 @@ FsmStateItem_t FsmLedpisces[] =
   {MSG_ID_COM_RESTART,										FSM_STATE_IDLE,            									fsm_ledpisces_restart},
 
   //Task level initialization
-  {MSG_ID_COM_RESTART,        						FSM_STATE_LEDPISCES_AVTIVE,         					fsm_ledpisces_restart},
-  {MSG_ID_COM_STOP,												FSM_STATE_LEDPISCES_AVTIVE,         					fsm_ledpisces_stop_rcv},
+  {MSG_ID_COM_RESTART,        						FSM_STATE_LEDPISCES_INITED,         					fsm_ledpisces_restart},
+  {MSG_ID_COM_STOP,												FSM_STATE_LEDPISCES_INITED,         					fsm_ledpisces_stop_rcv},
 
+	//Task level actived status
+  {MSG_ID_COM_RESTART,        						FSM_STATE_LEDPISCES_ACTIVED,         					fsm_ledpisces_restart},
+  {MSG_ID_COM_STOP,												FSM_STATE_LEDPISCES_ACTIVED,         					fsm_ledpisces_stop_rcv},
+	{MSG_ID_COM_TIME_OUT,										FSM_STATE_LEDPISCES_ACTIVED,         				  fsm_ledpisces_time_out},
+	
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             									NULL},  //Ending
 };
@@ -45,7 +50,7 @@ OPSTAT fsm_ledpisces_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 	//除了对全局变量进行操作之外，尽量不要做其它操作，因为该函数将被主任务/线程调用，不是本任务/线程调用
 	//该API就是给本任务一个提早介入的入口，可以帮着做些测试性操作
 	if (FsmSetState(TASK_ID_LEDPISCES, FSM_STATE_IDLE) == IHU_FAILURE){
-		IhuErrorPrint("LEDPISCES: Error Set FSM State at fsm_ledpisces_task_entry.");
+		IhuErrorPrint("LEDPISCES: Error Set FSM State at fsm_ledpisces_task_entry.\n");
 	}
 	return IHU_SUCCESS;
 }
@@ -69,13 +74,13 @@ OPSTAT fsm_ledpisces_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 
 
 	//收到初始化消息后，进入初始化状态
 	if (FsmSetState(TASK_ID_LEDPISCES, FSM_STATE_LEDPISCES_INITED) == IHU_FAILURE){
-		IhuErrorPrint("LEDPISCES: Error Set FSM State!");	
+		IhuErrorPrint("LEDPISCES: Error Set FSM State!\n");	
 		return IHU_FAILURE;
 	}
 
 	//初始化硬件接口
 	if (func_ledpisces_hw_init() == IHU_FAILURE){	
-		IhuErrorPrint("LEDPISCES: Error initialize interface!");
+		IhuErrorPrint("LEDPISCES: Error initialize interface!\n");
 		return IHU_FAILURE;
 	}
 
@@ -83,9 +88,9 @@ OPSTAT fsm_ledpisces_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 
 	zIhuRunErrCnt[TASK_ID_LEDPISCES] = 0;
 
 	//设置状态机到目标状态
-	if (FsmSetState(TASK_ID_LEDPISCES, FSM_STATE_LEDPISCES_AVTIVE) == IHU_FAILURE){
+	if (FsmSetState(TASK_ID_LEDPISCES, FSM_STATE_LEDPISCES_ACTIVED) == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_LEDPISCES]++;
-		IhuErrorPrint("LEDPISCES: Error Set FSM State!");
+		IhuErrorPrint("LEDPISCES: Error Set FSM State!\n");
 		return IHU_FAILURE;
 	}
 	
@@ -93,7 +98,7 @@ OPSTAT fsm_ledpisces_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 
 	
 	//打印报告进入常规状态
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
-		IhuDebugPrint("LEDPISCES: Enter FSM_STATE_LEDPISCES_ACTIVE status, Keeping refresh here!");
+		IhuDebugPrint("LEDPISCES: Enter FSM_STATE_LEDPISCES_ACTIVE status, Keeping refresh here!\n");
 	}
 
 	//返回
@@ -102,7 +107,7 @@ OPSTAT fsm_ledpisces_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 
 
 OPSTAT fsm_ledpisces_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	IhuErrorPrint("LEDPISCES: Internal error counter reach DEAD level, SW-RESTART soon!");
+	IhuErrorPrint("LEDPISCES: Internal error counter reach DEAD level, SW-RESTART soon!\n");
 	fsm_ledpisces_init(0, 0, NULL, 0);
 	
 	return IHU_SUCCESS;
@@ -113,14 +118,14 @@ OPSTAT fsm_ledpisces_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UIN
 	//入参检查
 	if ((param_ptr == NULL) || (dest_id != TASK_ID_LEDPISCES)){
 		zIhuRunErrCnt[TASK_ID_LEDPISCES]++;
-		IhuErrorPrint("LEDPISCES: Wrong input paramters!");
+		IhuErrorPrint("LEDPISCES: Wrong input paramters!\n");
 		return IHU_FAILURE;
 	}
 	
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_LEDPISCES, FSM_STATE_IDLE) == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_LEDPISCES]++;
-		IhuErrorPrint("LEDPISCES: Error Set FSM State!");
+		IhuErrorPrint("LEDPISCES: Error Set FSM State!\n");
 		return IHU_FAILURE;
 	}
 	
@@ -130,6 +135,12 @@ OPSTAT fsm_ledpisces_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UIN
 
 //Local APIs
 OPSTAT func_ledpisces_hw_init(void)
+{
+	return IHU_SUCCESS;
+}
+
+//TIMER_OUT Processing
+OPSTAT fsm_ledpisces_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
 	return IHU_SUCCESS;
 }

@@ -129,7 +129,7 @@ void IhuDebugPrint(char *format, ...)
 	
 	memset(ptrPrintBuffer, 0, IHU_PRINT_CHAR_SIZE);
 	currentTick = OSTimeGet(&err);
-	snprintf(ptrPrintBuffer, IHU_PRINT_CHAR_SIZE-1, "[DBG: %08d] %s\n", currentTick, strDebug);
+	snprintf(ptrPrintBuffer, IHU_PRINT_CHAR_SIZE-1, "[DBG: %08d] %s", currentTick, strDebug);
 	
 	BSP_Ser_WrStr(ptrPrintBuffer);
 }
@@ -154,7 +154,7 @@ void IhuErrorPrint(char *format, ...)
 	
 	memset(ptrPrintBuffer, 0, IHU_PRINT_CHAR_SIZE);
 	currentTick = OSTimeGet(&err);
-	snprintf(ptrPrintBuffer, IHU_PRINT_CHAR_SIZE-1, "[ERR: %08d] %s\n", currentTick, strDebug);
+	snprintf(ptrPrintBuffer, IHU_PRINT_CHAR_SIZE-1, "[ERR: %08d] %s", currentTick, strDebug);
 	
 	BSP_Ser_WrStr(ptrPrintBuffer);
 }
@@ -237,7 +237,7 @@ void ihu_vm_system_init(void)
 	zIhuSysEngPar.comm.commBackHawlCon = IHU_COMM_BACK_HAWL_CON;
 
 	//Sensor timer
-	zIhuSysEngPar.timer.emcReqTimer = IHU_EMC_TIMER_DURATION_PERIOD_READ;
+	zIhuSysEngPar.timer.didoPeriodScanTimer = IHU_DIDOCAP_TIMER_DURATION_PERIOD_SCAN;
 
 	//Series Port config
 	zIhuSysEngPar.serialport.SeriesPortForGPS = IHU_SERIESPORT_NUM_FOR_GPS_DEFAULT;
@@ -1336,7 +1336,13 @@ OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 	}
 
 	//Create task and make it running for the 1st time
-	ret = ihu_task_create(task_id, /*CALLBACK*/ (void *(*)(void *))FsmProcessingLaunch, (void *)NULL, IHU_THREAD_PRIO);
+	//测试在ucosiii下是否TIMER需要拥有更高的优先级，结果是不需要
+//	if (task_id == TASK_ID_TIMER){
+//	ret = ihu_task_create(task_id, /*CALLBACK*/ (void *(*)(void *))FsmProcessingLaunch, (void *)NULL, IHU_THREAD_PRIO_TIMER);		
+//	}
+//	else{
+	ret = ihu_task_create(task_id, /*CALLBACK*/ (void *(*)(void *))FsmProcessingLaunch, (void *)NULL, IHU_THREAD_PRIO);		
+//	}
 	if (ret == IHU_FAILURE)
 	{
 		zIhuRunErrCnt[TASK_ID_VMUO]++;
