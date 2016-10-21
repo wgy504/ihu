@@ -711,30 +711,34 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
  
 
 
 
 
+SCYCB项目未来任务目标
+= SPI-GPIO互通小目标
+= 看门狗开启，自动重启
+= ucosiii/TICK级的休眠省电
 
 
 
-
-
-
-
-
-Known Issues:
-
-
-Mission coming:
-==Sleep: CFG_EXT_SLEEP / CFG_DEEP_SLEEP
-  > 配置CFG文件，可以选择两种模式
-  > 如何进行相应的功耗测试, - POWER METER
+EMC Mission coming:
 ==Security
   > CFG中有开关可以控制
   > AIRSYNC CRC/AES亦相关
-==2nd uboot, SPtOA and SW download features, - SW Download
 ==BLE multi-connection
 
 
