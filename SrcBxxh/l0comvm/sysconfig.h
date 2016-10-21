@@ -19,8 +19,8 @@
  *
  */
 //任务模块激活的定义
-#define IHU_TASK_PNP_ON 2
-#define IHU_TASK_PNP_OFF 1
+#define IHU_TASK_PNP_ON 1
+#define IHU_TASK_PNP_OFF 0
 #define IHU_TASK_PNP_INVALID 0xFF
 
 //可选项通信端口的全局定义，未来需要通过ConfigXml进一步优化
@@ -143,7 +143,7 @@
 	//系统定义的服务器以及本机名称，用于与服务器之间的通信
 	#define IHU_CLOUDXHUI_BH_INTERFACE_STANDARD IHU_CLOUDXHUI_BH_INTERFACE_STANDARD_XML	
 	//DEBUG开关，缺省打开
-	#define IHU_TRACE_DEBUG_ON IHU_TRACE_DEBUG_ALL_OFF //利用以上标示位，确定TRACE的级别
+	#define IHU_TRACE_DEBUG_ON IHU_TRACE_DEBUG_ALL_ON //利用以上标示位，确定TRACE的级别
 	//TRACE开关，缺省打开
 	#define IHU_TRACE_MSG_ON IHU_TRACE_MSG_MODE_ALL
 	
@@ -170,8 +170,8 @@
 	//现在采用这种互斥的方式进行定义，以后需要等待HWINV进行PnP，确保多种接口即插即用，随时切换
 	//多种接口之间的优先级关系，则有程序任务自动决定：ETHERNET > WIFI > USB-OTG2 > 3G4G
 	//当前版本的做法是，多种接口均启动起来，但如何使用，由CLOUDCONT按照优先级和COMM_BACK_HAWL_CON定义唯一决定
-	//Timer setting
-	#define IHU_EMC_TIMER_DURATION_PERIOD_READ 600
+	//Timer setting 
+	#define IHU_DIDOCAP_TIMER_DURATION_PERIOD_SCAN 4
 	//Series Port config
 	#define IHU_SERIESPORT_NUM_FOR_GPS_DEFAULT  1
 	//定义后台CLOUD连接到服务器
@@ -185,7 +185,7 @@
 	//系统定义的服务器以及本机名称，用于与服务器之间的通信
 	#define IHU_CLOUDXHUI_BH_INTERFACE_STANDARD IHU_CLOUDXHUI_BH_INTERFACE_STANDARD_XML	
 	//DEBUG开关，缺省打开
-	#define IHU_TRACE_DEBUG_ON IHU_TRACE_DEBUG_ALL_OFF //利用以上标示位，确定TRACE的级别
+	#define IHU_TRACE_DEBUG_ON IHU_TRACE_DEBUG_ALL_ON //利用以上标示位，确定TRACE的级别
 	//TRACE开关，缺省打开
 	#define IHU_TRACE_MSG_ON IHU_TRACE_MSG_MODE_ALL
 
@@ -226,7 +226,7 @@
 	//系统定义的服务器以及本机名称，用于与服务器之间的通信
 	#define IHU_CLOUDXHUI_BH_INTERFACE_STANDARD IHU_CLOUDXHUI_BH_INTERFACE_STANDARD_XML	
 	//DEBUG开关，缺省打开
-	#define IHU_TRACE_DEBUG_ON IHU_TRACE_DEBUG_ALL_OFF //利用以上标示位，确定TRACE的级别
+	#define IHU_TRACE_DEBUG_ON IHU_TRACE_DEBUG_ALL_ON //利用以上标示位，确定TRACE的级别
 	//TRACE开关，缺省打开
 	#define IHU_TRACE_MSG_ON IHU_TRACE_MSG_MODE_ALL
 
@@ -267,7 +267,7 @@
 	//系统定义的服务器以及本机名称，用于与服务器之间的通信
 	#define IHU_CLOUDXHUI_BH_INTERFACE_STANDARD IHU_CLOUDXHUI_BH_INTERFACE_STANDARD_XML	
 	//DEBUG开关，缺省打开
-	#define IHU_TRACE_DEBUG_ON IHU_TRACE_DEBUG_ALL_OFF //利用以上标示位，确定TRACE的级别
+	#define IHU_TRACE_DEBUG_ON IHU_TRACE_DEBUG_ALL_ON //利用以上标示位，确定TRACE的级别
 	//TRACE开关，缺省打开
 	#define IHU_TRACE_MSG_ON IHU_TRACE_MSG_MODE_ALL
 	

@@ -163,10 +163,10 @@ static  void  AppTaskStart (void *p_arg)
         OSTimeDlyHMSM(0, 0, 0, 500,
                       OS_OPT_TIME_HMSM_STRICT, &os_err);
 
-				if((n&3) == 0)
+				if((n&0x3) == 0)
 				{
 					currentTick = OSTimeGet(&os_err);
-					BSP_Ser_Printf("tick: %d \n\r", currentTick);
+					IhuDebugPrint("APP: Test tick = %d\n", currentTick);
 				}
 				n++;
     }

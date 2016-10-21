@@ -29,10 +29,15 @@ FsmStateItem_t FsmSpileo[] =
   {MSG_ID_COM_RESTART,										FSM_STATE_IDLE,            									fsm_spileo_restart},
 
   //Task level initialization
-  {MSG_ID_COM_RESTART,        						FSM_STATE_SPILEO_AVTIVE,         					fsm_spileo_restart},
-  {MSG_ID_COM_STOP,												FSM_STATE_SPILEO_AVTIVE,         					fsm_spileo_stop_rcv},
-  {MSG_ID_SPI_DL_DATA_PUSH_FWD,						FSM_STATE_SPILEO_AVTIVE,         					fsm_spileo_dl_data_push_fwd},
-  {MSG_ID_SPI_DL_CTRL_CMD_REQ,						FSM_STATE_SPILEO_AVTIVE,         					fsm_spileo_dl_ctrl_cmd_req},
+  {MSG_ID_COM_RESTART,        						FSM_STATE_SPILEO_INITED,         					fsm_spileo_restart},
+  {MSG_ID_COM_STOP,												FSM_STATE_SPILEO_INITED,         					fsm_spileo_stop_rcv},
+
+	//Task level actived status
+  {MSG_ID_COM_RESTART,        						FSM_STATE_SPILEO_ACTIVED,         					fsm_spileo_restart},
+  {MSG_ID_COM_STOP,												FSM_STATE_SPILEO_ACTIVED,         					fsm_spileo_stop_rcv},
+	{MSG_ID_COM_TIME_OUT,										FSM_STATE_SPILEO_ACTIVED,         				  fsm_spileo_time_out},
+  {MSG_ID_SPI_DL_DATA_PUSH_FWD,						FSM_STATE_SPILEO_ACTIVED,         					fsm_spileo_dl_data_push_fwd},
+  {MSG_ID_SPI_DL_CTRL_CMD_REQ,						FSM_STATE_SPILEO_ACTIVED,         					fsm_spileo_dl_ctrl_cmd_req},
 	
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             									NULL},  //Ending
@@ -47,7 +52,7 @@ OPSTAT fsm_spileo_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 	//除了对全局变量进行操作之外，尽量不要做其它操作，因为该函数将被主任务/线程调用，不是本任务/线程调用
 	//该API就是给本任务一个提早介入的入口，可以帮着做些测试性操作
 	if (FsmSetState(TASK_ID_SPILEO, FSM_STATE_IDLE) == FAILURE){
-		IhuErrorPrint("SPILEO: Error Set FSM State at fsm_spileo_task_entry.");
+		IhuErrorPrint("SPILEO: Error Set FSM State at fsm_spileo_task_entry.\n");
 	}
 	return SUCCESS;
 }
@@ -71,13 +76,13 @@ OPSTAT fsm_spileo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 par
 
 	//收到初始化消息后，进入初始化状态
 	if (FsmSetState(TASK_ID_SPILEO, FSM_STATE_SPILEO_INITED) == FAILURE){
-		IhuErrorPrint("SPILEO: Error Set FSM State!");	
+		IhuErrorPrint("SPILEO: Error Set FSM State!\n");	
 		return FAILURE;
 	}
 
 	//初始化硬件接口
 	if (func_spileo_hw_init() == FAILURE){	
-		IhuErrorPrint("SPILEO: Error initialize interface!");
+		IhuErrorPrint("SPILEO: Error initialize interface!\n");
 		return FAILURE;
 	}
 
@@ -85,9 +90,9 @@ OPSTAT fsm_spileo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 par
 	zIhuRunErrCnt[TASK_ID_SPILEO] = 0;
 
 	//设置状态机到目标状态
-	if (FsmSetState(TASK_ID_SPILEO, FSM_STATE_SPILEO_AVTIVE) == FAILURE){
+	if (FsmSetState(TASK_ID_SPILEO, FSM_STATE_SPILEO_ACTIVED) == FAILURE){
 		zIhuRunErrCnt[TASK_ID_SPILEO]++;
-		IhuErrorPrint("SPILEO: Error Set FSM State!");
+		IhuErrorPrint("SPILEO: Error Set FSM State!\n");
 		return FAILURE;
 	}
 	
@@ -95,7 +100,7 @@ OPSTAT fsm_spileo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 par
 	
 	//打印报告进入常规状态
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
-		IhuDebugPrint("SPILEO: Enter FSM_STATE_SPILEO_ACTIVE status, Keeping refresh here!");
+		IhuDebugPrint("SPILEO: Enter FSM_STATE_SPILEO_ACTIVE status, Keeping refresh here!\n");
 	}
 
 	//返回
@@ -104,7 +109,7 @@ OPSTAT fsm_spileo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 par
 
 OPSTAT fsm_spileo_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	IhuErrorPrint("SPILEO: Internal error counter reach DEAD level, SW-RESTART soon!");
+	IhuErrorPrint("SPILEO: Internal error counter reach DEAD level, SW-RESTART soon!\n");
 	fsm_spileo_init(0, 0, NULL, 0);
 	
 	return SUCCESS;
@@ -115,14 +120,14 @@ OPSTAT fsm_spileo_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16
 	//入参检查
 	if ((param_ptr == NULL) || (dest_id != TASK_ID_SPILEO)){
 		zIhuRunErrCnt[TASK_ID_SPILEO]++;
-		IhuErrorPrint("SPILEO: Wrong input paramters!");
+		IhuErrorPrint("SPILEO: Wrong input paramters!\n");
 		return FAILURE;
 	}
 	
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_SPILEO, FSM_STATE_IDLE) == FAILURE){
 		zIhuRunErrCnt[TASK_ID_SPILEO]++;
-		IhuErrorPrint("SPILEO: Error Set FSM State!");
+		IhuErrorPrint("SPILEO: Error Set FSM State!\n");
 		return FAILURE;
 	}
 	
@@ -135,7 +140,7 @@ OPSTAT fsm_spileo_dl_data_push_fwd(UINT8 dest_id, UINT8 src_id, void * param_ptr
 	//入参检查
 	if ((param_ptr == NULL) || (dest_id != TASK_ID_SPILEO)){
 		zIhuRunErrCnt[TASK_ID_SPILEO]++;
-		IhuErrorPrint("SPILEO: Wrong input paramters!");
+		IhuErrorPrint("SPILEO: Wrong input paramters!\n");
 		return FAILURE;
 	}
 	
@@ -149,7 +154,7 @@ OPSTAT fsm_spileo_dl_ctrl_cmd_req(UINT8 dest_id, UINT8 src_id, void * param_ptr,
 	//入参检查
 	if ((param_ptr == NULL) || (dest_id != TASK_ID_SPILEO)){
 		zIhuRunErrCnt[TASK_ID_SPILEO]++;
-		IhuErrorPrint("SPILEO: Wrong input paramters!");
+		IhuErrorPrint("SPILEO: Wrong input paramters!\n");
 		return FAILURE;
 	}
 	
@@ -160,6 +165,12 @@ OPSTAT fsm_spileo_dl_ctrl_cmd_req(UINT8 dest_id, UINT8 src_id, void * param_ptr,
 
 //Local APIs
 OPSTAT func_spileo_hw_init(void)
+{
+	return SUCCESS;
+}
+
+//TIMER_OUT Processing
+OPSTAT fsm_spileo_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
 	return SUCCESS;
 }

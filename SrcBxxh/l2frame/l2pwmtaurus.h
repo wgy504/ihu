@@ -23,6 +23,7 @@
 	(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCSB_ID))
 	#include "vmucoslayer.h"
 	#include "l1comdef_ucos.h"
+	#include "l1timer_ucos.h"
 #else
 #endif
 
@@ -33,7 +34,7 @@
 enum FSM_STATE_PWMTAURUS
 {
 	FSM_STATE_PWMTAURUS_INITED = 0x02,
-	FSM_STATE_PWMTAURUS_AVTIVE,
+	FSM_STATE_PWMTAURUS_ACTIVED,
 	FSM_STATE_PWMTAURUS_MAX,
 };
 //#define FSM_STATE_END   0xFE
@@ -47,6 +48,8 @@ extern OPSTAT fsm_pwmtaurus_task_entry(UINT8 dest_id, UINT8 src_id, void * param
 extern OPSTAT fsm_pwmtaurus_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_pwmtaurus_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_pwmtaurus_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT fsm_pwmtaurus_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+
 
 //Local API
 OPSTAT func_pwmtaurus_hw_init(void);

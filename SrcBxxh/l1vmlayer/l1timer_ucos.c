@@ -384,10 +384,10 @@ void func_timer_routine_handler_1s(OS_TMR *p_tmr, void *p_arg)
 	msg_struct_com_time_out_t snd;
 
 	//入参检查
-
+	
 	//扫描
 	for (i=0;i<MAX_TIMER_NUM_IN_ONE_IHU_1S;i++)
-	{
+	{		
 		//Active status
 		if (zIhuTimerTable.timer1s[i].status == TIMER_STATUS_ACTIVE){
 			if (zIhuTimerTable.timer1s[i].elapse > zIhuTimerTable.timer1s[i].tDuration){

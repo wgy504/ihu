@@ -29,12 +29,18 @@ FsmStateItem_t FsmScycb[] =
   {MSG_ID_COM_RESTART,										FSM_STATE_IDLE,            									fsm_scycb_restart},
 
   //Task level initialization
-  {MSG_ID_COM_RESTART,        						FSM_STATE_SCYCB_AVTIVE,         					fsm_scycb_restart},
-  {MSG_ID_COM_STOP,												FSM_STATE_SCYCB_AVTIVE,         					fsm_scycb_stop_rcv},
-	{MSG_ID_ADC_UL_DATA_PULL_BWD,						FSM_STATE_SCYCB_AVTIVE,         					fsm_scycb_adc_ul_data_pull_bwd},
-	{MSG_ID_ADC_UL_CTRL_CMD_RESP,						FSM_STATE_SCYCB_AVTIVE,         					fsm_scycb_adc_ul_ctrl_cmd_resp},
-	{MSG_ID_SPI_UL_DATA_PULL_BWD,						FSM_STATE_SCYCB_AVTIVE,         					fsm_scycb_spi_ul_data_pull_bwd},
-	{MSG_ID_SPI_UL_CTRL_CMD_RESP,						FSM_STATE_SCYCB_AVTIVE,         					fsm_scycb_spi_ul_ctrl_cmd_resp},
+  {MSG_ID_COM_RESTART,        						FSM_STATE_SCYCB_INITED,         					fsm_scycb_restart},
+  {MSG_ID_COM_STOP,												FSM_STATE_SCYCB_INITED,         					fsm_scycb_stop_rcv},
+
+	//Task level actived status
+  {MSG_ID_COM_RESTART,        						FSM_STATE_SCYCB_ACTIVED,         					fsm_scycb_restart},
+  {MSG_ID_COM_STOP,												FSM_STATE_SCYCB_ACTIVED,         					fsm_scycb_stop_rcv},
+	{MSG_ID_COM_TIME_OUT,										FSM_STATE_SCYCB_ACTIVED,         				  fsm_scycb_time_out},
+	{MSG_ID_ADC_UL_DATA_PULL_BWD,						FSM_STATE_SCYCB_ACTIVED,         					fsm_scycb_adc_ul_data_pull_bwd},
+	{MSG_ID_ADC_UL_CTRL_CMD_RESP,						FSM_STATE_SCYCB_ACTIVED,         					fsm_scycb_adc_ul_ctrl_cmd_resp},
+	{MSG_ID_SPI_UL_DATA_PULL_BWD,						FSM_STATE_SCYCB_ACTIVED,         					fsm_scycb_spi_ul_data_pull_bwd},
+	{MSG_ID_SPI_UL_CTRL_CMD_RESP,						FSM_STATE_SCYCB_ACTIVED,         					fsm_scycb_spi_ul_ctrl_cmd_resp},
+
 	
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             									NULL},  //Ending
@@ -49,7 +55,7 @@ OPSTAT fsm_scycb_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 	//除了对全局变量进行操作之外，尽量不要做其它操作，因为该函数将被主任务/线程调用，不是本任务/线程调用
 	//该API就是给本任务一个提早介入的入口，可以帮着做些测试性操作
 	if (FsmSetState(TASK_ID_SCYCB, FSM_STATE_IDLE) == FAILURE){
-		IhuErrorPrint("SCYCB: Error Set FSM State at fsm_scycb_task_entry.");
+		IhuErrorPrint("SCYCB: Error Set FSM State at fsm_scycb_task_entry.\n");
 	}
 	return SUCCESS;
 }
@@ -73,13 +79,13 @@ OPSTAT fsm_scycb_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 para
 
 	//收到初始化消息后，进入初始化状态
 	if (FsmSetState(TASK_ID_SCYCB, FSM_STATE_SCYCB_INITED) == FAILURE){
-		IhuErrorPrint("SCYCB: Error Set FSM State!");	
+		IhuErrorPrint("SCYCB: Error Set FSM State!\n");	
 		return FAILURE;
 	}
 
 	//初始化硬件接口
 	if (func_scycb_hw_init() == FAILURE){	
-		IhuErrorPrint("SCYCB: Error initialize interface!");
+		IhuErrorPrint("SCYCB: Error initialize interface!\n");
 		return FAILURE;
 	}
 
@@ -87,9 +93,9 @@ OPSTAT fsm_scycb_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 para
 	zIhuRunErrCnt[TASK_ID_SCYCB] = 0;
 
 	//设置状态机到目标状态
-	if (FsmSetState(TASK_ID_SCYCB, FSM_STATE_SCYCB_AVTIVE) == FAILURE){
+	if (FsmSetState(TASK_ID_SCYCB, FSM_STATE_SCYCB_ACTIVED) == FAILURE){
 		zIhuRunErrCnt[TASK_ID_SCYCB]++;
-		IhuErrorPrint("SCYCB: Error Set FSM State!");
+		IhuErrorPrint("SCYCB: Error Set FSM State!\n");
 		return FAILURE;
 	}
 	
@@ -97,7 +103,7 @@ OPSTAT fsm_scycb_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 para
 	
 	//打印报告进入常规状态
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
-		IhuDebugPrint("SCYCB: Enter FSM_STATE_SCYCB_ACTIVE status, Keeping refresh here!");
+		IhuDebugPrint("SCYCB: Enter FSM_STATE_SCYCB_ACTIVE status, Keeping refresh here!\n");
 	}
 
 	//返回
@@ -106,7 +112,7 @@ OPSTAT fsm_scycb_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 para
 
 OPSTAT fsm_scycb_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	IhuErrorPrint("SCYCB: Internal error counter reach DEAD level, SW-RESTART soon!");
+	IhuErrorPrint("SCYCB: Internal error counter reach DEAD level, SW-RESTART soon!\n");
 	fsm_scycb_init(0, 0, NULL, 0);
 	
 	return SUCCESS;
@@ -117,14 +123,14 @@ OPSTAT fsm_scycb_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 
 	//入参检查
 	if ((param_ptr == NULL) || (dest_id != TASK_ID_SCYCB)){
 		zIhuRunErrCnt[TASK_ID_SCYCB]++;
-		IhuErrorPrint("SCYCB: Wrong input paramters!");
+		IhuErrorPrint("SCYCB: Wrong input paramters!\n");
 		return FAILURE;
 	}
 	
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_SCYCB, FSM_STATE_IDLE) == FAILURE){
 		zIhuRunErrCnt[TASK_ID_SCYCB]++;
-		IhuErrorPrint("SCYCB: Error Set FSM State!");
+		IhuErrorPrint("SCYCB: Error Set FSM State!\n");
 		return FAILURE;
 	}
 	
@@ -137,7 +143,7 @@ OPSTAT fsm_scycb_adc_ul_data_pull_bwd(UINT8 dest_id, UINT8 src_id, void * param_
 	//入参检查
 	if ((param_ptr == NULL) || (dest_id != TASK_ID_SCYCB)){
 		zIhuRunErrCnt[TASK_ID_SCYCB]++;
-		IhuErrorPrint("SCYCB: Wrong input paramters!");
+		IhuErrorPrint("SCYCB: Wrong input paramters!\n");
 		return FAILURE;
 	}
 
@@ -150,7 +156,7 @@ OPSTAT fsm_scycb_adc_ul_ctrl_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_
 	//入参检查
 	if ((param_ptr == NULL) || (dest_id != TASK_ID_SCYCB)){
 		zIhuRunErrCnt[TASK_ID_SCYCB]++;
-		IhuErrorPrint("SCYCB: Wrong input paramters!");
+		IhuErrorPrint("SCYCB: Wrong input paramters!\n");
 		return FAILURE;
 	}
 
@@ -163,7 +169,7 @@ OPSTAT fsm_scycb_spi_ul_data_pull_bwd(UINT8 dest_id, UINT8 src_id, void * param_
 	//入参检查
 	if ((param_ptr == NULL) || (dest_id != TASK_ID_SCYCB)){
 		zIhuRunErrCnt[TASK_ID_SCYCB]++;
-		IhuErrorPrint("SCYCB: Wrong input paramters!");
+		IhuErrorPrint("SCYCB: Wrong input paramters!\n");
 		return FAILURE;
 	}
 
@@ -176,7 +182,7 @@ OPSTAT fsm_scycb_spi_ul_ctrl_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_
 	//入参检查
 	if ((param_ptr == NULL) || (dest_id != TASK_ID_SCYCB)){
 		zIhuRunErrCnt[TASK_ID_SCYCB]++;
-		IhuErrorPrint("SCYCB: Wrong input paramters!");
+		IhuErrorPrint("SCYCB: Wrong input paramters!\n");
 		return FAILURE;
 	}
 
@@ -190,3 +196,8 @@ OPSTAT func_scycb_hw_init(void)
 	return SUCCESS;
 }
 
+//TIMER_OUT Processing
+OPSTAT fsm_scycb_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{
+	return SUCCESS;
+}

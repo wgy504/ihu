@@ -33,7 +33,7 @@
 enum FSM_STATE_SCYCB
 {
 	FSM_STATE_SCYCB_INITED = 0x02,
-	FSM_STATE_SCYCB_AVTIVE,
+	FSM_STATE_SCYCB_ACTIVED,
 	FSM_STATE_SCYCB_MAX,
 };
 //#define FSM_STATE_END   0xFE
@@ -51,7 +51,8 @@ extern OPSTAT fsm_scycb_adc_ul_data_pull_bwd(UINT8 dest_id, UINT8 src_id, void *
 extern OPSTAT fsm_scycb_adc_ul_ctrl_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_scycb_spi_ul_data_pull_bwd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_scycb_spi_ul_ctrl_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
-	
+extern OPSTAT fsm_scycb_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+
 //Local API
 OPSTAT func_scycb_hw_init(void);
 
