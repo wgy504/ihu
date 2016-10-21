@@ -167,49 +167,19 @@
           <Name>-UAny -O15 -S0 -C0 -P00 -N00("ARM CoreSight JTAG-DP") -D00(4BA00477) -L00(4) -N01("Unknown JTAG device") -D01(06411041) -L01(5) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO7 -FD20000000 -FC800 -FN1 -FF0STM32F2xx_1024 -FS08000000 -FL0100000</Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
-      <Breakpoint>
-        <Bp>
-          <Number>0</Number>
-          <Type>0</Type>
-          <LineNumber>299</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134264614</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>&lt;4&gt;..\..\..\..\..\..\SrcBxxh\l1vmlayer\vmucoslayer.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\uCOS_III\../../../../../../SrcBxxh/l1vmlayer/vmucoslayer.c\299</Expression>
-        </Bp>
-      </Breakpoint>
+      <Breakpoint/>
       <WatchWindow1>
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>globalPrintBuffer</ItemText>
+          <ItemText>zIhuTaskInfo</ItemText>
         </Ww>
         <Ww>
           <count>1</count>
           <WinNumber>1</WinNumber>
-          <ItemText>globalPrintIndex</ItemText>
-        </Ww>
-        <Ww>
-          <count>2</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>zIhuPartitionStorage</ItemText>
+          <ItemText>snd</ItemText>
         </Ww>
       </WatchWindow1>
-      <MemoryWindow1>
-        <Mm>
-          <WinNumber>1</WinNumber>
-          <SubType>0</SubType>
-          <ItemText>p_link</ItemText>
-          <AccSizeX>0</AccSizeX>
-        </Mm>
-      </MemoryWindow1>
       <Tracepoint>
         <THDelay>0</THDelay>
       </Tracepoint>
@@ -250,7 +220,7 @@
 
   <Group>
     <GroupName>APP</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -2102,7 +2072,7 @@
 
   <Group>
     <GroupName>l3scycb</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
