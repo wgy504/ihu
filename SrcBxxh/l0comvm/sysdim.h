@@ -127,6 +127,7 @@
 	#define MAX_FSM_STATE_ENTRY_NUM_IN_ONE_TASK 32   //一个任务之中，STATE-MSGID成对处理函数最多数量
 	//消息长度
 	#define MSG_NAME_MAX_LENGTH 70
+	//ucosiii下的PARTITION必须跟256/128/64/32对其，不然会导致出错
 	#define MAX_IHU_MSG_BODY_LENGTH 58  //ARM Cortex-M3的能力没有想象的那么强大，所以需要将MessageLength大大降低
 	#define IHU_FILE_NAME_LENGTH_MAX 100
 	#define MAX_QUEUE_NUM_IN_ONE_TASK 2
@@ -150,7 +151,7 @@
 	#define MAX_FSM_STATE_ENTRY_NUM_IN_ONE_TASK 32   //一个任务之中，STATE-MSGID成对处理函数最多数量
 	//消息长度
 	#define MSG_NAME_MAX_LENGTH 70
-	#define MAX_IHU_MSG_BODY_LENGTH 250
+	#define MAX_IHU_MSG_BODY_LENGTH 58
 	#define IHU_FILE_NAME_LENGTH_MAX 100
 	#define MAX_QUEUE_NUM_IN_ONE_TASK 2
 	#define IHU_MAX_PARTITION_TOTAL 5
@@ -173,7 +174,7 @@
 	#define MAX_FSM_STATE_ENTRY_NUM_IN_ONE_TASK 32   //一个任务之中，STATE-MSGID成对处理函数最多数量
 	//消息长度
 	#define MSG_NAME_MAX_LENGTH 70
-	#define MAX_IHU_MSG_BODY_LENGTH 250
+	#define MAX_IHU_MSG_BODY_LENGTH 58
 	#define IHU_FILE_NAME_LENGTH_MAX 100
 	#define MAX_QUEUE_NUM_IN_ONE_TASK 2
 	#define IHU_MAX_PARTITION_TOTAL 5

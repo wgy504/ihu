@@ -237,7 +237,16 @@ void ihu_vm_system_init(void)
 	zIhuSysEngPar.comm.commBackHawlCon = IHU_COMM_BACK_HAWL_CON;
 
 	//Sensor timer
-	zIhuSysEngPar.timer.didoPeriodScanTimer = IHU_DIDOCAP_TIMER_DURATION_PERIOD_SCAN;
+	zIhuSysEngPar.timer.adclibraPeriodScanTimer = IHU_ADCLIBRA_TIMER_DURATION_PERIOD_SCAN;
+	zIhuSysEngPar.timer.didocapPeriodScanTimer = IHU_DIDOCAP_TIMER_DURATION_PERIOD_SCAN;
+	zIhuSysEngPar.timer.ethorionPeriodScanTimer = IHU_ETHORION_TIMER_DURATION_PERIOD_SCAN;
+	zIhuSysEngPar.timer.gpiocancerPeriodScanTimer = IHU_GPIOCANCER_TIMER_DURATION_PERIOD_SCAN;
+	zIhuSysEngPar.timer.i2cariesPeriodScanTimer = IHU_I2CARIERS_TIMER_DURATION_PERIOD_SCAN;
+	zIhuSysEngPar.timer.ledpiscesPeriodScanTimer = IHU_LEDPISCES_TIMER_DURATION_PERIOD_SCAN;
+	zIhuSysEngPar.timer.pwmtaurusPeriodScanTimer = IHU_PWMTAURUS_TIMER_DURATION_PERIOD_SCAN;
+	zIhuSysEngPar.timer.spileoPeriodScanTimer = IHU_SPILEO_TIMER_DURATION_PERIOD_SCAN;
+	zIhuSysEngPar.timer.spsvirgoPeriodScanTimer = IHU_SPSVIRGO_TIMER_DURATION_PERIOD_SCAN;
+	zIhuSysEngPar.timer.scycbPeriodScanTimer = IHU_SCYCB_TIMER_DURATION_PERIOD_SCAN;
 
 	//Series Port config
 	zIhuSysEngPar.serialport.SeriesPortForGPS = IHU_SERIESPORT_NUM_FOR_GPS_DEFAULT;

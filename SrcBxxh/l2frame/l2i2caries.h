@@ -52,6 +52,7 @@ extern OPSTAT fsm_i2caries_time_out(UINT8 dest_id, UINT8 src_id, void * param_pt
 
 //Local API
 OPSTAT func_i2caries_hw_init(void);
+void func_i2caries_time_out_period_scan(void);
 
 #endif /* L2FRAME_L2I2CARIES_H_ */
 

@@ -702,7 +702,10 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 修改完善VMUO Printf，使用了PC10/11作为USART3的打印输出口，115200, TTL电平输出
 = 修正SCYCB中ACTIVED状态，以及INIT状态下的处理
 = 增加SCYCB中TIME_OUT的处理样例
-= 
+= 修改MESSAGE_MAX_LENGTH = 64-6 = 58。一方面，PARTITION必须跟256/128/64/32对其，另一方面，TIME_OUT消息发送时，如果TRACE_ALL打印打开了，就不工作了
+= 由于系统堆栈的问题，目前消息最长长度不能超过128，如果设置为256则会出错
+= 修改TRACE选项为TRACE_ALL_BUT_TIME_OUT
+
 
 
 

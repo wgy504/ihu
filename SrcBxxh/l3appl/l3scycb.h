@@ -55,6 +55,7 @@ extern OPSTAT fsm_scycb_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 
 //Local API
 OPSTAT func_scycb_hw_init(void);
+void func_scycb_time_out_period_scan(void);
 
 #endif /* L2FRAME_L2SCYCB_H_ */
 

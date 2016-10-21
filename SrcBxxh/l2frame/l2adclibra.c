@@ -58,7 +58,7 @@ OPSTAT fsm_adclibra_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UI
 
 OPSTAT fsm_adclibra_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	//int ret=0;
+	int ret=0;
 
 	//串行会送INIT_FB给VM，不然消息队列不够深度，此为节省内存机制
 	if ((src_id > TASK_ID_MIN) &&(src_id < TASK_ID_MAX)){
@@ -96,7 +96,14 @@ OPSTAT fsm_adclibra_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 	}
 	
 	//启动本地定时器，如果有必要
-	
+	//测试性启动周期性定时器
+	ret = ihu_timer_start(TASK_ID_ADCLIBRA, TIMER_ID_1S_ADCLIBRA_PERIOD_SCAN, zIhuSysEngPar.timer.adclibraPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+	if (ret == FAILURE){
+		zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
+		IhuErrorPrint("ADCLIBRA: Error start timer!\n");
+		return FAILURE;
+	}	
+		
 	//打印报告进入常规状态
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
 		IhuDebugPrint("ADCLIBRA: Enter FSM_STATE_ADCLIBRA_ACTIVE status, Keeping refresh here!\n");
@@ -157,7 +164,52 @@ OPSTAT func_adclibra_hw_init(void)
 //TIMER_OUT Processing
 OPSTAT fsm_adclibra_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
+	int ret;
+	msg_struct_com_restart_t snd0;
+	msg_struct_com_time_out_t rcv;
+	
+	//Receive message and copy to local variable
+	memset(&rcv, 0, sizeof(msg_struct_com_time_out_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_com_time_out_t))){
+		IhuErrorPrint("ADCLIBRA: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
+		return FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+
+	//钩子在此处，检查zIhuRunErrCnt[TASK_ID_ADCLIBRA]是否超限
+	if (zIhuRunErrCnt[TASK_ID_ADCLIBRA] > IHU_RUN_ERROR_LEVEL_2_MAJOR){
+		//减少重复RESTART的概率
+		zIhuRunErrCnt[TASK_ID_ADCLIBRA] = zIhuRunErrCnt[TASK_ID_ADCLIBRA] - IHU_RUN_ERROR_LEVEL_2_MAJOR;
+		memset(&snd0, 0, sizeof(msg_struct_com_restart_t));
+		snd0.length = sizeof(msg_struct_com_restart_t);
+		ret = ihu_message_send(MSG_ID_COM_RESTART, TASK_ID_ADCLIBRA, TASK_ID_ADCLIBRA, &snd0, snd0.length);
+		if (ret == FAILURE){
+			zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
+			IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_ADCLIBRA], zIhuTaskNameList[TASK_ID_ADCLIBRA]);
+			return FAILURE;
+		}
+	}
+
+	//Period time out received
+	if ((rcv.timeId == TIMER_ID_1S_ADCLIBRA_PERIOD_SCAN) &&(rcv.timeRes == TIMER_RESOLUTION_1S)){
+		//保护周期读数的优先级，强制抢占状态，并简化问题
+		if (FsmGetState(TASK_ID_ADCLIBRA) != FSM_STATE_ADCLIBRA_ACTIVED){
+			ret = FsmSetState(TASK_ID_ADCLIBRA, FSM_STATE_ADCLIBRA_ACTIVED);
+			if (ret == FAILURE){
+				zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
+				IhuErrorPrint("ADCLIBRA: Error Set FSM State!\n");
+				return FAILURE;
+			}//FsmSetState
+		}
+		func_adclibra_time_out_period_scan();
+	}
 
 	return SUCCESS;
+}
+
+void func_adclibra_time_out_period_scan(void)
+{
+	IhuDebugPrint("ADCLIBRA: Time Out Test!\n");
 }
 

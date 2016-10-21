@@ -96,7 +96,7 @@ OPSTAT fsm_didocap_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 	
 	//启动本地定时器，如果有必要
 	//测试性启动周期性定时器
-	ret = ihu_timer_start(TASK_ID_DIDOCAP, TIMER_ID_1S_DIDOCAP_PERIOD_SCAN, zIhuSysEngPar.timer.didoPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+	ret = ihu_timer_start(TASK_ID_DIDOCAP, TIMER_ID_1S_DIDOCAP_PERIOD_SCAN, zIhuSysEngPar.timer.didocapPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 	if (ret == FAILURE){
 		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
 		IhuErrorPrint("DIDOCAP: Error start timer!\n");
@@ -154,8 +154,6 @@ OPSTAT fsm_didocap_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 	msg_struct_com_time_out_t rcv;
 	
 	//Receive message and copy to local variable
-	IhuDebugPrint("DIDOCAP: TEST! Receive TIME_OUT message!\n");
-
 	memset(&rcv, 0, sizeof(msg_struct_com_time_out_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_com_time_out_t))){
 		IhuErrorPrint("DIDOCAP: Receive message error!\n");
@@ -197,6 +195,6 @@ OPSTAT fsm_didocap_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 
 void func_didocap_time_out_period_scan(void)
 {
-	IhuDebugPrint("DIDOCAP: Test!\n");
+	IhuDebugPrint("DIDOCAP: Time Out Test!\n");
 }
 

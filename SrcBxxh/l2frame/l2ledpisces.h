@@ -52,6 +52,7 @@ extern OPSTAT fsm_ledpisces_time_out(UINT8 dest_id, UINT8 src_id, void * param_p
 
 //Local API
 OPSTAT func_ledpisces_hw_init(void);
+void func_ledpisces_time_out_period_scan(void);
 
 #endif /* L2FRAME_L2LEDPISCES_H_ */
 

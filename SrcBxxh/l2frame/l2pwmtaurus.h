@@ -53,6 +53,7 @@ extern OPSTAT fsm_pwmtaurus_time_out(UINT8 dest_id, UINT8 src_id, void * param_p
 
 //Local API
 OPSTAT func_pwmtaurus_hw_init(void);
+void func_pwmtaurus_time_out_period_scan(void);
 
 #endif /* L2FRAME_L2PWMTAURUS_H_ */
 
