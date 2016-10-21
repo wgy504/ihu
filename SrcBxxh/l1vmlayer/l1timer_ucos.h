@@ -113,6 +113,7 @@ typedef struct IhuTimerTable
 //Global variables
 extern FsmStateItem_t FsmTimer[];
 extern IhuTimerTable_t zIhuTimerTable;
+//extern msg_struct_com_time_out_t zIhuTimerSnd;
 
 //API
 extern OPSTAT fsm_timer_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);

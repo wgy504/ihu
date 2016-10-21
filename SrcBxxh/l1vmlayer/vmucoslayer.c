@@ -1336,12 +1336,13 @@ OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 	}
 
 	//Create task and make it running for the 1st time
-	if (task_id == TASK_ID_TIMER){
-	ret = ihu_task_create(task_id, /*CALLBACK*/ (void *(*)(void *))FsmProcessingLaunch, (void *)NULL, IHU_THREAD_PRIO_TIMER);		
-	}
-	else{
+	//测试在ucosiii下是否TIMER需要拥有更高的优先级，结果是不需要
+//	if (task_id == TASK_ID_TIMER){
+//	ret = ihu_task_create(task_id, /*CALLBACK*/ (void *(*)(void *))FsmProcessingLaunch, (void *)NULL, IHU_THREAD_PRIO_TIMER);		
+//	}
+//	else{
 	ret = ihu_task_create(task_id, /*CALLBACK*/ (void *(*)(void *))FsmProcessingLaunch, (void *)NULL, IHU_THREAD_PRIO);		
-	}
+//	}
 	if (ret == FAILURE)
 	{
 		zIhuRunErrCnt[TASK_ID_VMUO]++;

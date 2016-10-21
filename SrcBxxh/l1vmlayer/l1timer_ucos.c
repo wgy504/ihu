@@ -41,6 +41,7 @@ FsmStateItem_t FsmTimer[] =
 //Global variables defination
 IhuTimerTable_t zIhuTimerTable;
 OS_TMR zIhuL1timer1s, zIhuL1timer10ms, zIhuL1timer1ms;
+//msg_struct_com_time_out_t zIhuTimerSnd;
 
 //Main Entry
 //Input parameter would be useless, but just for similar structure purpose
@@ -380,7 +381,7 @@ OPSTAT ihu_timer_stop(UINT8 task_id, UINT8 timer_id, UINT8 t_res)
 //OS_TMR *p_tmr该参数起到啥作用，如何起作用，暂时不清楚，等待未来进一步测试和挖掘
 void func_timer_routine_handler_1s(OS_TMR *p_tmr, void *p_arg)
 {
-	int i=0, ret=0;
+	int i=0;
 	msg_struct_com_time_out_t snd;
 
 	//入参检查
@@ -413,8 +414,7 @@ void func_timer_routine_handler_1s(OS_TMR *p_tmr, void *p_arg)
 				snd.length = sizeof(msg_struct_com_time_out_t);
 				snd.timeId = zIhuTimerTable.timer1s[i].timerId;
 				snd.timeRes = zIhuTimerTable.timer1s[i].timerRes;
-				ret = ihu_message_send(MSG_ID_COM_TIME_OUT, zIhuTimerTable.timer1s[i].taskId, TASK_ID_TIMER, &snd, snd.length);
-				if (ret == FAILURE){
+				if (ihu_message_send(MSG_ID_COM_TIME_OUT, zIhuTimerTable.timer1s[i].taskId, TASK_ID_TIMER, &snd, snd.length) == FAILURE){
 					zIhuRunErrCnt[TASK_ID_TIMER]++;
 					IhuErrorPrint("TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_TIMER], zIhuTaskNameList[zIhuTimerTable.timer1s[i].taskId]);
 					return;
