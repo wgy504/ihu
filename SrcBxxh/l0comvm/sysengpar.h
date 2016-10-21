@@ -25,7 +25,16 @@ typedef struct SysEngParElementComm
 //Timer setting for sensor
 typedef struct SysEngParElementSensor
 {
-	INT32 didoPeriodScanTimer;
+	INT32 adclibraPeriodScanTimer;
+	INT32 didocapPeriodScanTimer;
+	INT32 ethorionPeriodScanTimer;
+	INT32 gpiocancerPeriodScanTimer;
+	INT32 i2cariesPeriodScanTimer;
+	INT32 ledpiscesPeriodScanTimer;
+	INT32 pwmtaurusPeriodScanTimer;
+	INT32 spileoPeriodScanTimer;
+	INT32 spsvirgoPeriodScanTimer;
+	INT32 scycbPeriodScanTimer;	
 }SysEngParElementSensorTimer_t;
 
 //Series port config

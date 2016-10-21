@@ -52,7 +52,16 @@ enum IHU_TIMER_ID_1S_ALL
 {
 	TIMER_ID_1S_MIN = 0,
 	TIMER_ID_1S_VMFO_INIT_FB,
+	TIMER_ID_1S_ADCLIBRA_PERIOD_SCAN,
 	TIMER_ID_1S_DIDOCAP_PERIOD_SCAN,
+	TIMER_ID_1S_ETHORION_PERIOD_SCAN,
+	TIMER_ID_1S_GPIOCANCER_PERIOD_SCAN,
+	TIMER_ID_1S_I2CARIES_PERIOD_SCAN,
+	TIMER_ID_1S_LEDPISCES_PERIOD_SCAN,
+	TIMER_ID_1S_PWMTAURUS_PERIOD_SCAN,
+	TIMER_ID_1S_SPILEO_PERIOD_SCAN,
+	TIMER_ID_1S_SPSVIRGO_PERIOD_SCAN,
+	TIMER_ID_1S_SCYCB_PERIOD_SCAN,
 	TIMER_ID_1S_MAX,
 };
 enum IHU_TIMER_ID_10MS_ALL
@@ -113,7 +122,6 @@ typedef struct IhuTimerTable
 //Global variables
 extern FsmStateItem_t FsmTimer[];
 extern IhuTimerTable_t zIhuTimerTable;
-//extern msg_struct_com_time_out_t zIhuTimerSnd;
 
 //API
 extern OPSTAT fsm_timer_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);

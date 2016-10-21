@@ -53,6 +53,7 @@ extern OPSTAT fsm_spileo_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr,
 
 //Local API
 OPSTAT func_spileo_hw_init(void);
+void func_spileo_time_out_period_scan(void);
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 #include "stm32f2xx.h"

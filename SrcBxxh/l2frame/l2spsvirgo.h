@@ -52,6 +52,7 @@ extern OPSTAT fsm_spsvirgo_time_out(UINT8 dest_id, UINT8 src_id, void * param_pt
 
 //Local API
 OPSTAT func_spsvirgo_hw_init(void);
+void func_spsvirgo_time_out_period_scan(void);
 
 #endif /* L2FRAME_L2SPSVIRGO_H_ */
 

@@ -52,6 +52,7 @@ extern OPSTAT fsm_ethorion_time_out(UINT8 dest_id, UINT8 src_id, void * param_pt
 
 //Local API
 OPSTAT func_ethorion_hw_init(void);
+void func_ethorion_time_out_period_scan(void);
 
 #endif /* L2FRAME_L2ETHORION_H_ */
 

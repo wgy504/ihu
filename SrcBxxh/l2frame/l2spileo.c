@@ -386,7 +386,7 @@ OPSTAT fsm_spileo_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 
 OPSTAT fsm_spileo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	//int ret=0;
+	int ret=0;
 
 	//串行会送INIT_FB给VM，不然消息队列不够深度，此为节省内存机制
 	if ((src_id > TASK_ID_MIN) &&(src_id < TASK_ID_MAX)){
@@ -424,6 +424,13 @@ OPSTAT fsm_spileo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 par
 	}
 	
 	//启动本地定时器，如果有必要
+	//测试性启动周期性定时器
+	ret = ihu_timer_start(TASK_ID_SPILEO, TIMER_ID_1S_SPILEO_PERIOD_SCAN, zIhuSysEngPar.timer.spileoPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+	if (ret == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_SPILEO]++;
+		IhuErrorPrint("SPILEO: Error start timer!\n");
+		return IHU_FAILURE;
+	}	
 	
 	//打印报告进入常规状态
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
@@ -493,6 +500,7 @@ OPSTAT fsm_spileo_dl_ctrl_cmd_req(UINT8 dest_id, UINT8 src_id, void * param_ptr,
 //Local APIs
 OPSTAT func_spileo_hw_init(void)
 {
+#if 0
 	SPI_HandleTypeDef *hspi = &SpiHandle;
 	
 	/******************************************************************************
@@ -520,11 +528,60 @@ OPSTAT func_spileo_hw_init(void)
 	/* attach SPI interrupt */
 	BSP_IntVectSet(BSP_INT_ID_SPI2, HAL_SPI_IRQHandler);
 	BSP_IntEn(BSP_INT_ID_SPI2);
-
+#endif
 	return IHU_SUCCESS;
 }
 
 OPSTAT fsm_spileo_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
+	int ret;
+	msg_struct_com_restart_t snd0;
+	msg_struct_com_time_out_t rcv;
+	
+	//Receive message and copy to local variable
+	memset(&rcv, 0, sizeof(msg_struct_com_time_out_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_com_time_out_t))){
+		IhuErrorPrint("SPILEO: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_SPILEO]++;
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+
+	//钩子在此处，检查zIhuRunErrCnt[TASK_ID_SPILEO]是否超限
+	if (zIhuRunErrCnt[TASK_ID_SPILEO] > IHU_RUN_ERROR_LEVEL_2_MAJOR){
+		//减少重复RESTART的概率
+		zIhuRunErrCnt[TASK_ID_SPILEO] = zIhuRunErrCnt[TASK_ID_SPILEO] - IHU_RUN_ERROR_LEVEL_2_MAJOR;
+		memset(&snd0, 0, sizeof(msg_struct_com_restart_t));
+		snd0.length = sizeof(msg_struct_com_restart_t);
+		ret = ihu_message_send(MSG_ID_COM_RESTART, TASK_ID_SPILEO, TASK_ID_SPILEO, &snd0, snd0.length);
+		if (ret == IHU_FAILURE){
+			zIhuRunErrCnt[TASK_ID_SPILEO]++;
+			IhuErrorPrint("SPILEO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPILEO], zIhuTaskNameList[TASK_ID_SPILEO]);
+			return IHU_FAILURE;
+		}
+	}
+
+	//Period time out received
+	if ((rcv.timeId == TIMER_ID_1S_SPILEO_PERIOD_SCAN) &&(rcv.timeRes == TIMER_RESOLUTION_1S)){
+		//保护周期读数的优先级，强制抢占状态，并简化问题
+		if (FsmGetState(TASK_ID_SPILEO) != FSM_STATE_SPILEO_ACTIVED){
+			ret = FsmSetState(TASK_ID_SPILEO, FSM_STATE_SPILEO_ACTIVED);
+			if (ret == IHU_FAILURE){
+				zIhuRunErrCnt[TASK_ID_SPILEO]++;
+				IhuErrorPrint("SPILEO: Error Set FSM State!\n");
+				return IHU_FAILURE;
+			}//FsmSetState
+		}
+		func_spileo_time_out_period_scan();
+	}
+
 	return IHU_SUCCESS;
 }
+
+void func_spileo_time_out_period_scan(void)
+{
+	IhuDebugPrint("SPILEO: Time Out Test!\n");
+}
+
+
+
