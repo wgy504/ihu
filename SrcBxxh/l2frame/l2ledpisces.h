@@ -24,6 +24,7 @@
 	#include "vmucoslayer.h"
 	#include "l1comdef_ucos.h"
 	#include "l1timer_ucos.h"
+	#include "led.h"
 #else
 #endif
 

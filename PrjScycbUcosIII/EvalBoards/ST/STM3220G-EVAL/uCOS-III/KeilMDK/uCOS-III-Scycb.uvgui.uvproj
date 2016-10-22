@@ -330,7 +330,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\uCOS-III;..\..\uCOS-III\KeilMDK;..\..\BSP\OS\uCOS-III;..\..\BSP\STM32F2xx\inc;..\..\BSP\CMSIS\Device_Support;..\..\BSP\CMSIS;..\..\BSP\KeilMDK;..\..\BSP;..\..\..\..\..\uC-CPU\ARM-Cortex-M3\RealView;..\..\..\..\..\uC-CPU;..\..\..\..\..\uC-LIB\Ports\ARM-Cortex-M3\RealView;..\..\..\..\..\uC-LIB;..\..\..\..\..\uCOS-III\Source;..\..\..\..\..\uCOS-III\Ports\ARM-Cortex-M3\Generic\RealView;..\..\..\..\..\..\SrcBxxh\l0comvm;..\..\..\..\..\..\SrcBxxh\l1vmlayer;..\..\..\..\..\..\SrcBxxh\l2frame;..\..\..\..\..\..\SrcBxxh\l3appl</IncludePath>
+              <IncludePath>..\..\uCOS-III;..\..\uCOS-III\KeilMDK;..\..\BSP\OS\uCOS-III;..\..\BSP\STM32F2xx\inc;..\..\BSP\CMSIS\Device_Support;..\..\BSP\CMSIS;..\..\BSP\KeilMDK;..\..\BSP;..\..\..\..\..\uC-CPU\ARM-Cortex-M3\RealView;..\..\..\..\..\uC-CPU;..\..\..\..\..\uC-LIB\Ports\ARM-Cortex-M3\RealView;..\..\..\..\..\uC-LIB;..\..\..\..\..\uCOS-III\Source;..\..\..\..\..\uCOS-III\Ports\ARM-Cortex-M3\Generic\RealView;..\..\..\..\..\..\SrcBxxh\l0comvm;..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2;..\..\..\..\..\..\SrcBxxh\l1vmlayer;..\..\..\..\..\..\SrcBxxh\l2frame;..\..\..\..\..\..\SrcBxxh\l3appl</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1030,6 +1030,51 @@
               <FileName>readme.txt</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\..\SrcBxxh\l0comvm\readme.txt</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>l1hd_stm32f2</GroupName>
+          <Files>
+            <File>
+              <FileName>key.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\key.c</FilePath>
+            </File>
+            <File>
+              <FileName>key.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\key.h</FilePath>
+            </File>
+            <File>
+              <FileName>led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\led.c</FilePath>
+            </File>
+            <File>
+              <FileName>led.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\led.h</FilePath>
+            </File>
+            <File>
+              <FileName>rtc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\rtc.c</FilePath>
+            </File>
+            <File>
+              <FileName>rtc.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\rtc.h</FilePath>
+            </File>
+            <File>
+              <FileName>spi_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\spi_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi_flash.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\spi_flash.h</FilePath>
             </File>
           </Files>
         </Group>

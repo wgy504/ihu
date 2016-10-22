@@ -706,6 +706,13 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 由于系统堆栈的问题，目前消息最长长度不能超过128，如果设置为256则会出错
 = 修改TRACE选项为TRACE_ALL_BUT_TIME_OUT
 
+//= ZJL/XH, 2016 Oct.22, CURRENT_SW_DELIVERY R03.37
+= XH专门完善SPI接口调用功能
+= 测试GPIO读取能力
+= 增加l1hd_stm32f2的目录，专门用来存放所有的STM32F2系列的驱动函数
+= 验证LED，修改LED_OUT到管脚PC03，的确可以点亮LED灯。目前程序是复用了例子程序中的LED点灯功能，该灯纯属205RB板载LED灯。
+
+
 
 
 

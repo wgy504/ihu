@@ -143,6 +143,11 @@ OPSTAT fsm_ledpisces_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UIN
 //Local APIs
 OPSTAT func_ledpisces_hw_init(void)
 {
+	led_init();                                         /* LED初始化                          */
+	//key_init();                                         /* 按键初始化                         */
+	//spi_flash_init();                                   /* spi_flash硬件接口初始化            */
+	//rtc_init();   	
+
 	return IHU_SUCCESS;
 }
 
@@ -195,6 +200,38 @@ OPSTAT fsm_ledpisces_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UIN
 
 void func_ledpisces_time_out_period_scan(void)
 {
+	UINT8   second_buf;
+	UINT16  temp;  
+
 	IhuDebugPrint("LEDPISCES: Time Out Test!\n");
+	
+//	if(W25Q32 == spi_flash_read_device_ID())
+//	{
+//			temp = 0;
+//	}    
+//	else
+//	{
+//			temp = 3000;
+//	}   
+
+//	while (1) 
+//	{
+//			if(KEY_VALUE_URSER_BUTTON == get_key_state())   /* 判断是否有按键按下                 */
+//			{
+//					led1_negation();
+//					delay_ms(temp + 500);
+//			}
+//			else
+//			{
+//					rtc_get_time();
+//					if(second_buf != g_current_time.second)
+//					{
+//							led1_negation();
+//							second_buf = g_current_time.second;
+//					}
+//			}
+//	}
+	led1_negation();	
+
 }
 
