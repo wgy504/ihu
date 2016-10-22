@@ -1,4 +1,4 @@
-﻿/*----------------------------------------Copyright (c)---------------------------------------------------                              
+/*----------------------------------------Copyright (c)---------------------------------------------------                              
 *                                        http://www.39board.com
 *
 *      39board工作室提供的所有ST、TI、Freescale、Altera等平台的例程、文档、方案等资料信息旨在为学习者提供
@@ -52,7 +52,7 @@ void  led_init (void)
 	
     GPIO_SetBits(GPIO_LED, led1_output);   
 
-# if 1    /* IO 测试   */
+# if 0    /* IO 测试   */
 	
 	
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA |
