@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Obj\uCOS-III.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Obj\uCOS-III.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Sun Oct 23 22:18:34 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Sun Oct 23 22:32:39 2016
 <BR><P>
 <H3>Maximum Stack Usage =        724 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -3721,7 +3721,7 @@ Global Symbols
 <LI><a href="#[204]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_ReadOutputDataBit
 </UL>
 
-<P><STRONG><a name="[206]"></a>USART1_Init_Config</STRONG> (Thumb, 156 bytes, Stack size 40 bytes, usart.o(.text))
+<P><STRONG><a name="[206]"></a>USART1_Init_Config</STRONG> (Thumb, 160 bytes, Stack size 40 bytes, usart.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 108<LI>Call Chain = USART1_Init_Config &rArr; USART_Init &rArr; RCC_GetClocksFreq
 </UL>
 <BR>[Calls]<UL><LI><a href="#[208]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NVIC_Init
@@ -4979,7 +4979,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> l2spsvirgo.o(.data)
 </UL>
-<P><STRONG><a name="[24e]"></a>func_spsvirgo_time_out_period_scan</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, l2spsvirgo.o(.text))
+<P><STRONG><a name="[24e]"></a>func_spsvirgo_time_out_period_scan</STRONG> (Thumb, 46 bytes, Stack size 8 bytes, l2spsvirgo.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 364 + Unknown Stack Size
 <LI>Call Chain = func_spsvirgo_time_out_period_scan &rArr; IhuDebugPrint &rArr; BSP_Ser_WrStr &rArr; BSP_Ser_WrByteUnlocked &rArr; BSP_OS_SemWait &rArr; OSSemPend &rArr; OS_Pend &rArr; OS_TaskBlock &rArr; OS_TickListInsert
 </UL>

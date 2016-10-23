@@ -36,14 +36,14 @@ void USART1_Init_Config(u32 bound)
  	USART_DeInit(USART1);  
 	
 	/*USART1_GPIO初始化设置*/ 
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;			//USART1_TXD(PA.9)     
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;			//USART1_TXD(PA.9)     
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;		//复用推挽输出
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;	//设置引脚输出最大速率为50MHz
-	GPIO_Init(GPIOB, &GPIO_InitStructure);				 //调用库函数中的GPIO初始化函数，初始化USART1_TXD(PA.9)  
+	GPIO_Init(GPIOA, &GPIO_InitStructure);				 //调用库函数中的GPIO初始化函数，初始化USART1_TXD(PA.9)  
  
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;	 			//USART1_RXD(PA.10)
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;	 			//USART1_RXD(PA.10)
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;	  //浮空输入
-	GPIO_Init(GPIOB, &GPIO_InitStructure);					//调用库函数中的GPIO初始化函数，初始化USART1_RXD(PA.10)
+	GPIO_Init(GPIOA, &GPIO_InitStructure);					//调用库函数中的GPIO初始化函数，初始化USART1_RXD(PA.10)
 
 
   /*USART1 初始化设置*/

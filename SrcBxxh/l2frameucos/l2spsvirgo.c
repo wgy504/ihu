@@ -148,7 +148,7 @@ OPSTAT fsm_spsvirgo_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 //Local APIs
 OPSTAT func_spsvirgo_hw_init(void)
 {
-	//测试目的，PB6/PB7 = TX/RX
+	//测试目的，PA9/PA10 = TX/RX
 	USART1_Init_Config(115200);//USART1初始化配置
 	
 	return IHU_SUCCESS;
@@ -204,12 +204,12 @@ OPSTAT fsm_spsvirgo_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 void func_spsvirgo_time_out_period_scan(void)
 {
 	USART1_SendData("This is my test!\n", 20);
-//	if(Usart1_R_State == 1)//一帧数据接收完成
-//	{
-//		USART1_SendData((u8 *)Usart1_R_Buff, Usart1_R_Count);//USART1发送数据缓冲区数据(发送刚接收完成的一帧数据)
-//		Usart1_R_State =0;
-//		Usart1_R_Count =0;
-//	}
+	if(Usart1_R_State == 1)//一帧数据接收完成
+	{
+		USART1_SendData((u8 *)Usart1_R_Buff, Usart1_R_Count);//USART1发送数据缓冲区数据(发送刚接收完成的一帧数据)
+		Usart1_R_State =0;
+		Usart1_R_Count =0;
+	}
 	IhuDebugPrint("SPSVIRGO: Time Out Test!\n");
 }
 
