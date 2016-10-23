@@ -1086,6 +1086,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\spi_itf.h</FilePath>
             </File>
+            <File>
+              <FileName>usart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>usart.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\usart.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

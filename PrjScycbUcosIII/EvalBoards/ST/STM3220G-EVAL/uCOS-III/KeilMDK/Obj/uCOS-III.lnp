@@ -72,6 +72,7 @@
 ".\obj\rtc.o"
 ".\obj\spi_flash.o"
 ".\obj\spi_itf.o"
+".\obj\usart.o"
 ".\obj\l1timer_ucos.o"
 ".\obj\vmucoslayer.o"
 ".\obj\l2adclibra.o"
