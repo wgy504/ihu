@@ -711,10 +711,10 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 测试GPIO读取能力
 = 增加l1hd_stm32f2的目录，专门用来存放所有的STM32F2系列的驱动函数
 = 验证LED，修改LED_OUT到管脚PC03，的确可以点亮LED灯。目前程序是复用了例子程序中的LED点灯功能，该灯纯属205RB板载LED灯。
+= 根据EMC68X_VMFO的要求，将任务目录进行了分离修改，以便适应Eclipse完整目录的要求
+= 完善了整个目录结果，删去VMFO的老旧项目，重新将项目和目录结构恢复到最简化的程度
 
-
-
-
+//= ZJL/XH, 2016 Oct.23, CURRENT_SW_DELIVERY R03.38
 
 
 

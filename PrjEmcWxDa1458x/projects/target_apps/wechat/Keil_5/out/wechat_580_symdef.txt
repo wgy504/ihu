@@ -1,4 +1,4 @@
-#<SYMDEFS># ARM Linker, 5060061: Last Updated: Mon Oct 10 12:17:10 2016
+#<SYMDEFS># ARM Linker, 5060061: Last Updated: Sun Oct 23 10:52:23 2016
 0x00000000 N __ARM_use_no_argv
 0x00000000 N _printf_a
 0x00000000 N _printf_c
@@ -1081,16 +1081,16 @@
 0x20005c73 T mpbledemo2_readTimeSyncReq
 0x20005c75 T mpbledemo2_readEquInfoReq
 0x20005c77 T mpbledemo2_airsync_link_setup_period_report
-0x20005dcd T IhuErrorPrint
-0x20005e0d T vmda1458x_timer_set
-0x20005e15 T vmda1458x_timer_clear
-0x20005e1d T vmda1458x_emc_sample
-0x20005e43 T vmda1458x_mac_addr_get
-0x20005e8d T ihu_emc_adc_read
-0x20005e8f T ihu_get_mac_addr
-0x20005ed9 T vmda1458x_i2c_led_init
-0x20005fed T vmda1458x_led_set
-0x2000608b T vmda1458x_led_blink_once_on_off
+0x20005fc1 T IhuErrorPrint
+0x20006001 T vmda1458x_timer_set
+0x20006009 T vmda1458x_timer_clear
+0x20006011 T vmda1458x_emc_sample
+0x20006037 T vmda1458x_mac_addr_get
+0x20006081 T ihu_emc_adc_read
+0x20006083 T ihu_get_mac_addr
+0x20005dcd T vmda1458x_i2c_led_init
+0x20005ee1 T vmda1458x_led_set
+0x20005f7f T vmda1458x_led_blink_once_on_off
 0x200060cd T strncpy
 0x200060e7 T strcpy
 0x200060f9 T __aeabi_fmul

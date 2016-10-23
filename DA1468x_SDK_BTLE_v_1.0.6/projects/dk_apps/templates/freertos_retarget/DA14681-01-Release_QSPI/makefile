@@ -17,8 +17,7 @@ RM := rm -rf
 -include sdk/free_rtos/portable/GCC/ARM_CM0/subdir.mk
 -include sdk/free_rtos/subdir.mk
 -include sdk/adapters/src/subdir.mk
--include l3emc68x/subdir.mk
--include l2frame/subdir.mk
+-include l3applemc68x/subdir.mk
 -include l1vmfreeos/subdir.mk
 -include subdir.mk
 -include objects.mk

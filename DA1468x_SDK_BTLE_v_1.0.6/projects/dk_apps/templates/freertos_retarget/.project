@@ -25,6 +25,11 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>l0commsgemc68x</name>
+			<type>2</type>
+			<location>D:/IHUSRC/ihu/SrcBxxh/l0commsgemc68x</location>
+		</link>
+		<link>
 			<name>l0comvm</name>
 			<type>2</type>
 			<location>D:/IHUSRC/ihu/SrcBxxh/l0comvm</location>
@@ -32,17 +37,12 @@
 		<link>
 			<name>l1vmfreeos</name>
 			<type>2</type>
-			<location>D:/IHUSRC/ihu/SrcBxxh/l1vmlayer</location>
+			<location>D:/IHUSRC/ihu/SrcBxxh/l1vmfreeos</location>
 		</link>
 		<link>
-			<name>l2frame</name>
+			<name>l3applemc68x</name>
 			<type>2</type>
-			<location>D:/IHUSRC/ihu/SrcBxxh/l2frame</location>
-		</link>
-		<link>
-			<name>l3emc68x</name>
-			<type>2</type>
-			<location>D:/IHUSRC/ihu/SrcBxxh/l3appl</location>
+			<location>D:/IHUSRC/ihu/SrcBxxh/l3applemc68x</location>
 		</link>
 		<link>
 			<name>misc</name>

@@ -66,10 +66,10 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/peripherals/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/free_rtos/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/sys_man/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l0commsgemc68x}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l0comvm}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l1vmfreeos}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l2frame}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l3emc68x}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/freertos_retarget/l3applemc68x}&quot;"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.defs.412745849" name="Defined symbols (-D)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.defs" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="dg_configBLACK_ORCA_IC_REV=BLACK_ORCA_IC_REV_A"/>

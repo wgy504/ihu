@@ -29,25 +29,20 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f2xx.h"
 	
-#define GPIO_LED         GPIOC 
-	
+#define GPIO_LED         GPIOC 	
 #define led1_output      GPIO_Pin_2 | GPIO_Pin_3  //ZJL: 为了测试目的，PIN2是板载管脚，PIN3是外接管脚
-
 #define led1_on()        GPIO_SetBits(GPIO_LED, led1_output)		
 #define led1_off()       GPIO_ResetBits(GPIO_LED, led1_output)
-#define led1_negation()  GPIO_WriteBit(GPIO_LED,                   \
-                                       led1_output,                \
-                                       (BitAction)(1-(GPIO_ReadOutputDataBit(GPIO_LED, led1_output))))	
+#define led1_negation()  GPIO_WriteBit(GPIO_LED, led1_output, (BitAction)(1-(GPIO_ReadOutputDataBit(GPIO_LED, led1_output))))	
 
-//ZJL: 欠缺如何将所有LED0-15的宏全部搞定的例子	
+//ZJL：原始方式
 void  led_init (void);
-
 void  led_all_on (void);
-
 void  led_all_off (void);
-
 void  led_all_negation (void);
-	
+
+//ZJL: 另外一种方式，就是直接使用LED宏定义搞定
+#define ihu_led_onoff(pin, onoff) if (onoff) GPIO_SetBits(GPIOC, pin); else GPIO_ResetBits (GPIOC, pin);
 
 #ifdef __cplusplus
 }
