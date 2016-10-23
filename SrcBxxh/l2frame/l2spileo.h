@@ -57,7 +57,6 @@ void func_spileo_time_out_period_scan(void);
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 #include "stm32f2xx.h"
-#include "stm32f2xx_spi.h"
 
 /** 
   * @brief  HAL Status structures definition  
@@ -96,14 +95,19 @@ typedef enum
 #define SPIx_SCK_PIN                     GPIO_Pin_13
 #define SPIx_SCK_GPIO_PORT               GPIOB
 #define SPIx_SCK_AF                      GPIO_AF_SPI2
+#define SPIx_SCK_PIN_SOURCE              GPIO_PinSource13
+#define SPIx_SCK_RCC_GPIO                RCC_AHB1Periph_GPIOB
+
 #define SPIx_MISO_PIN                    GPIO_Pin_14
 #define SPIx_MISO_GPIO_PORT              GPIOB
 #define SPIx_MISO_AF                     GPIO_AF_SPI2
+#define SPIx_MISO_PIN_SOURCE             GPIO_PinSource14
+#define SPIx_MISO_RCC_GPIO               RCC_AHB1Periph_GPIOB
+
 #define SPIx_MOSI_PIN                    GPIO_Pin_15
 #define SPIx_MOSI_GPIO_PORT              GPIOB
 #define SPIx_MOSI_AF                     GPIO_AF_SPI2
-#define SPIx_SCK_RCC_GPIO                RCC_AHB1Periph_GPIOB
-#define SPIx_MISO_RCC_GPIO               RCC_AHB1Periph_GPIOB
+#define SPIx_MOSI_PIN_SOURCE             GPIO_PinSource15
 #define SPIx_MOSI_RCC_GPIO               RCC_AHB1Periph_GPIOB
 
 /* Definition for SPIx's NVIC */
@@ -293,7 +297,7 @@ typedef struct __SPI_HandleTypeDef
   * @}
   */
 
-#define EXT_BORAD_START_CHAR 0xEF
+#define EXT_BORAD_START_CHAR 0xFE
 #define EXT_BOARD_PADDING_CH 0x00
 
 typedef struct l2spileo_msgheader

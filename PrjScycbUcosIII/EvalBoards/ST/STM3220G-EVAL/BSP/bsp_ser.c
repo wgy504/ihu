@@ -469,6 +469,17 @@ void  BSP_Ser_WrStr (CPU_CHAR  *p_str)
 {
     CPU_BOOLEAN  err;
 
+    /* under interrupt context, just send out the string */
+    if (OSIntNestingCtr > 0)
+    {
+        while ((*p_str) != (CPU_CHAR )0) {
+            while(!USART_GetFlagStatus(USART3, USART_FLAG_TXE)) ;
+            USART_SendData(USART3, *p_str++);
+        }
+				
+        return;
+    }
+		
     err = BSP_OS_SemWait(&BSP_SerLock, 0);                      /* Obtain access to the serial interface              */
 
     if (err != DEF_OK ) {
