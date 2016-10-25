@@ -718,7 +718,7 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 串口调测USART1， TX/RX=PA9/PA10
 = 为了避免UART4和USART3的冲突，将打印口USART3换到了PB10/PB11
 = USART1=>GPRS, USART2=>RFID, UART4=>BLE
-= USART都正常了，但UART还不太正常
+= USART/UART都正常了
 
 
 

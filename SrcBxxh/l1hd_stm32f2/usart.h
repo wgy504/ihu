@@ -7,6 +7,7 @@
 #define SPS_GPRS_REC_MAXLEN 200	//最大接收数据长度
 #define SPS_RFID_REC_MAXLEN 200	//最大接收数据长度
 #define SPS_BLE_REC_MAXLEN 200	//最大接收数据长度
+#define SPS_SPARE1_REC_MAXLEN 200	//最大接收数据长度
 
 //USART1 - GPRS，用于GPRS模块的串口控制
 #define USART_GPRS                        USART1
@@ -61,7 +62,7 @@
 #define USART_PRINT_RX_ENABLE()						RCC_APB1PeriphClockCmd(USART_PRINT_RX_GPIO_CLK, ENABLE)
 
 //UART4 - BLE，用于BLE模块的串口控制，跟I2C2以及ETH相冲突，同时更系统缺省打印口也相冲突
-#define UART_BLE                        	UART4
+#define UART_BLE                       		UART4
 #define UART_BLE_CLK_ENABLE()							RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART4, ENABLE)
 #define UART_BLE_TX_GPIO_PORT		 					GPIOC
 #define UART_BLE_TX_GPIO_PIN 							GPIO_Pin_10
@@ -79,7 +80,7 @@
 
 //UART5 - 空缺
 #define UART_SPARE1                       UART5
-#define UART_SPARE1_CLK_ENASPARE1()				RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART5, ENABLE)
+#define UART_SPARE1_CLK_ENABLE()					RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART5, ENABLE)
 #define UART_SPARE1_TX_GPIO_PORT		 			GPIOC
 #define UART_SPARE1_TX_GPIO_PIN 					GPIO_Pin_12
 #define UART_SPARE1_TX_GPIO_CLK           RCC_AHB1Periph_GPIOC
@@ -91,8 +92,8 @@
 #define UART_SPARE1_RX_SOURCE             GPIO_PinSource2
 #define UART_SPARE1_RX_AF                 GPIO_AF_UART5
 #define UART_SPARE1_IRQn									UART5_IRQn
-#define UART_SPARE1_TX_ENASPARE1()				RCC_AHB1PeriphClockCmd(UART_SPARE1_TX_GPIO_CLK, ENABLE)
-#define UART_SPARE1_RX_ENASPARE1()				RCC_APB1PeriphClockCmd(UART_SPARE1_RX_GPIO_CLK, ENABLE)
+#define UART_SPARE1_TX_ENABLE()						RCC_AHB1PeriphClockCmd(UART_SPARE1_TX_GPIO_CLK, ENABLE)
+#define UART_SPARE1_RX_ENABLE()						RCC_APB1PeriphClockCmd(UART_SPARE1_RX_GPIO_CLK, ENABLE)
 
 //USART6 - 空缺
 
@@ -106,7 +107,9 @@ extern void SPS_RFID_IRQHandler(void);
 extern void SPS_BLE_Init_Config(u32 bound);
 extern void SPS_BLE_SendData(u8* buff, u16 len);
 extern void SPS_BLE_IRQHandler(void);
-
+extern void SPS_SPARE1_Init_Config(u32 bound);
+extern void SPS_SPARE1_SendData(u8* buff, u16 len);
+extern void SPS_SPARE1_IRQHandler(void);
 #endif
 
 
