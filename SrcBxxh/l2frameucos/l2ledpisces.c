@@ -143,7 +143,8 @@ OPSTAT fsm_ledpisces_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UIN
 //Local APIs
 OPSTAT func_ledpisces_hw_init(void)
 {
-	led_init();                                         /* LED初始化                          */
+	ihu_l1hd_led_f2board_init();                          /* LED初始化                          */
+	ihu_l1hd_led_f2timer_ind_init();
 	//key_init();                                         /* 按键初始化                         */
 	//spi_flash_init();                                   /* spi_flash硬件接口初始化            */
 	//rtc_init();   	
@@ -200,8 +201,8 @@ OPSTAT fsm_ledpisces_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UIN
 
 void func_ledpisces_time_out_period_scan(void)
 {
-	UINT8   second_buf;
-	UINT16  temp;  
+//	UINT8   second_buf;
+//	UINT16  temp;  
 
 	IhuDebugPrint("LEDPISCES: Time Out Test!\n");
 	
@@ -231,7 +232,9 @@ void func_ledpisces_time_out_period_scan(void)
 //					}
 //			}
 //	}
-	led1_negation();	
+//对LED灯进行反转性测试，暂时没有任何实际意义，只是为了点亮灯，表示整个板子还活着
+	ihu_l1hd_led_f2board_negation();
+	ihu_l1hd_led_f2timer_ind_negation();	
 
 }
 

@@ -29,15 +29,10 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f2xx.h"
 	
-#define  CALENDAR_START_YEAR	              2000
+#define  CALENDAR_START_YEAR	              	2000
 #define  CALENDAR_END_YEAR	                  2079		
 #define  CALENDAR_START_YEAR_FIRST_DATE	      6	
 
-
-	
-	
-
-	
 typedef struct rtc_time_struct        //定时器的结构体
 { 
     u32 year;
@@ -52,10 +47,6 @@ typedef struct rtc_time_struct        //定时器的结构体
 
 extern struct_rtc_time g_current_time;     
 
-
-
-
-	
 u8  rtc_init (void);
 
 void rtc_set_time(struct_rtc_time temp_data);

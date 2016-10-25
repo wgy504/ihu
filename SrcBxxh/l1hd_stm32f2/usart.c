@@ -93,7 +93,7 @@ void SPS_GPRS_Init_Config(u32 bound)
 * 返回    : 无 
 * 说明    : 无
 *******************************************************************************/
-void SPS_GPRS_SendData(u8* buff, u16 len)
+void SPS_GPRS_SendData(vs8* buff, u16 len)
 {    
 	u16 i;
 
@@ -216,7 +216,7 @@ void SPS_RFID_Init_Config(u32 bound)
 * 返回    : 无 
 * 说明    : 无
 *******************************************************************************/
-void SPS_RFID_SendData(u8* buff, u16 len)
+void SPS_RFID_SendData(vs8* buff, u16 len)
 {    
 	u16 i;
 
@@ -339,7 +339,7 @@ void SPS_BLE_Init_Config(u32 bound)
 * 返回    : 无 
 * 说明    : 无
 *******************************************************************************/
-void SPS_BLE_SendData(u8* buff, u16 len)
+void SPS_BLE_SendData(vs8* buff, u16 len)
 {    
 	u16 i;
 
@@ -462,7 +462,7 @@ void SPS_SPARE1_Init_Config(u32 bound)
 * 返回    : 无 
 * 说明    : 无
 *******************************************************************************/
-void SPS_SPARE1_SendData(u8* buff, u16 len)
+void SPS_SPARE1_SendData(vs8* buff, u16 len)
 {    
 	u16 i;
 

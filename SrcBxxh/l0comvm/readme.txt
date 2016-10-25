@@ -716,13 +716,15 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 
 //= ZJL/XH, 2016 Oct.23, CURRENT_SW_DELIVERY R03.38
 = 串口调测USART1， TX/RX=PA9/PA10
+= UART4映射到PC10/PC11是固定无可选择的
 = 为了避免UART4和USART3的冲突，将打印口USART3换到了PB10/PB11
 = USART1=>GPRS, USART2=>RFID, UART4=>BLE
-= USART/UART都正常了
+= USART/UART都正常了，基本上将串口的配置完善了，测试全部通过了
 
-
-
-
+//= ZJL/XH, 2016 Oct.25, CURRENT_SW_DELIVERY R03.39
+= 完善LED的配置和规则化命名
+= USART/LED驱动到VMUO的函数映射
+= 增加LED在板灯以及时钟到达灯的定时取反控制
 
 
 

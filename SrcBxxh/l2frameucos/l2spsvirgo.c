@@ -157,10 +157,10 @@ OPSTAT fsm_spsvirgo_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 OPSTAT func_spsvirgo_hw_init(void)
 {
 	//测试目的，PA9/PA10 = TX/RX
-	SPS_GPRS_Init_Config(115200);//USART_GPRS初始化配置
-	SPS_RFID_Init_Config(115200);//USART_RFID初始化配置
-	SPS_BLE_Init_Config(115200);//UART_BLE初始化配置
-	SPS_SPARE1_Init_Config(115200);//UART_SPARE1初始化配置
+	ihu_l1hd_sps_gprs_init_config(115200);//USART_GPRS初始化配置
+	ihu_l1hd_sps_rfid_init_config(115200);//USART_RFID初始化配置
+	ihu_l1hd_sps_ble_init_config(115200);//UART_BLE初始化配置
+	ihu_l1hd_sps_spare1_init_config(115200);//UART_SPARE1初始化配置
 	
 	return IHU_SUCCESS;
 }
@@ -214,14 +214,14 @@ OPSTAT fsm_spsvirgo_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 
 void func_spsvirgo_time_out_period_scan(void)
 {
-	SPS_GPRS_SendData("This is my GPRS test!\n", 20);
-	SPS_RFID_SendData("This is my RFID test!\n", 20);
-	SPS_BLE_SendData("This is my BLE test!\n", 20);
-	SPS_SPARE1_SendData("This is my SPARE1 test!\n", 30);
+	ihu_l1hd_sps_gprs_send_data("This is my GPRS test!\n", 20);
+	ihu_l1hd_sps_rfid_send_data("This is my RFID test!\n", 20);
+	ihu_l1hd_sps_ble_send_data("This is my BLE test!\n", 20);
+	ihu_l1hd_sps_spare1_send_data("This is my SPARE1 test!\n", 30);
 
 	if(SPS_GPRS_R_State == 1)//一帧数据接收完成
 	{
-		SPS_GPRS_SendData((u8 *)SPS_GPRS_R_Buff, SPS_GPRS_R_Count);//USART1发送数据缓冲区数据(发送刚接收完成的一帧数据)
+		SPS_GPRS_SendData((INT8 *)SPS_GPRS_R_Buff, SPS_GPRS_R_Count);//USART1发送数据缓冲区数据(发送刚接收完成的一帧数据)
 		SPS_GPRS_R_State =0;
 		SPS_GPRS_R_Count =0;
 	}

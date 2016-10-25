@@ -266,4 +266,30 @@ extern void ihu_timer_routine_handler_10ms(void);
 //extern int sprintf(char * __restrict /*s*/, const char * __restrict /*format*/, ...) __attribute__((__nonnull__(1,2)));
 //extern int arch_printf(const char *fmt, ...);
 
+//LED专门对付一般性的驱动函数，对其进行映射，以便保持上层模块的一致性
+#define ihu_l1hd_led_f2board_init LED_F205_board_init
+#define ihu_l1hd_led_f2board_on LED_F205_board_on
+#define ihu_l1hd_led_f2board_off LED_F205_board_off
+#define ihu_l1hd_led_f2board_negation LED_F205_board_negation
+#define ihu_l1hd_led_f2timer_ind_init LED_F205_timer_ind_init
+#define ihu_l1hd_led_f2timer_ind_on LED_F205_timer_ind_on
+#define ihu_l1hd_led_f2timer_ind_off LED_F205_timer_ind_off
+#define ihu_l1hd_led_f2timer_ind_negation LED_F205_timer_ind_negation
+#define ihu_l1hd_led_f2_onff LED_F205_onoff
+
+//USART专门对付一般性的驱动函数，对其进行映射，以便保持上层模块的一致性
+#define ihu_l1hd_sps_gprs_init_config SPS_GPRS_Init_Config
+#define ihu_l1hd_sps_gprs_send_data SPS_GPRS_SendData
+#define ihu_l1hd_sps_gprs_irq_handler SPS_GPRS_IRQHandler
+#define ihu_l1hd_sps_rfid_init_config SPS_RFID_Init_Config
+#define ihu_l1hd_sps_rfid_send_data SPS_RFID_SendData
+#define ihu_l1hd_sps_rfid_irq_handler SPS_RFID_IRQHandler
+#define ihu_l1hd_sps_ble_init_config SPS_BLE_Init_Config
+#define ihu_l1hd_sps_ble_send_data SPS_BLE_SendData
+#define ihu_l1hd_sps_ble_irq_handler SPS_BLE_IRQHandler
+#define ihu_l1hd_sps_spare1_init_config SPS_SPARE1_Init_Config
+#define ihu_l1hd_sps_spare1_send_data SPS_SPARE1_SendData
+#define ihu_l1hd_sps_spare1_irq_handler SPS_SPARE1_IRQHandler
+
+
 #endif /* L1VMFREEOS_VMFREEOSLAYER_H_ */

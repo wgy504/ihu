@@ -99,16 +99,16 @@
 
 
 extern void SPS_GPRS_Init_Config(u32 bound);
-extern void SPS_GPRS_SendData(u8* buff, u16 len);
+extern void SPS_GPRS_SendData(vs8* buff, u16 len);
 extern void SPS_GPRS_IRQHandler(void);
 extern void SPS_RFID_Init_Config(u32 bound);
-extern void SPS_RFID_SendData(u8* buff, u16 len);
+extern void SPS_RFID_SendData(vs8* buff, u16 len);
 extern void SPS_RFID_IRQHandler(void);
 extern void SPS_BLE_Init_Config(u32 bound);
-extern void SPS_BLE_SendData(u8* buff, u16 len);
+extern void SPS_BLE_SendData(vs8* buff, u16 len);
 extern void SPS_BLE_IRQHandler(void);
 extern void SPS_SPARE1_Init_Config(u32 bound);
-extern void SPS_SPARE1_SendData(u8* buff, u16 len);
+extern void SPS_SPARE1_SendData(vs8* buff, u16 len);
 extern void SPS_SPARE1_IRQHandler(void);
 #endif
 
