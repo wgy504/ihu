@@ -1,15 +1,57 @@
+#include <string.h>
 #include "spi_itf.h"
 #include "bsp.h"
  
 ///////////////////////////////////////////////////////////////////////////////////////
-// 
+// redefine macros
 ///////////////////////////////////////////////////////////////////////////////////////
+#ifdef SPI_IT_TXE
+#undef SPI_IT_TXE
+#endif
+#define SPI_IT_TXE                   SPI_CR2_TXEIE
 
-//static void spileo_tx_isr(SPI_HandleTypeDef *hspi);
-//static void spileo_rx_isr(SPI_HandleTypeDef *hspi);
+#ifdef SPI_IT_RXNE
+#undef SPI_IT_RXNE
+#endif
+#define SPI_IT_RXNE                  SPI_CR2_RXNEIE
+
+#ifdef SPI_IT_ERR
+#undef SPI_IT_ERR
+#endif
+#define SPI_IT_ERR                   SPI_CR2_ERRIE
+
+#ifdef SPI_FLAG_RXNE
+#undef SPI_FLAG_RXNE
+#endif
+#define SPI_FLAG_RXNE                SPI_SR_RXNE
+
+#ifdef SPI_FLAG_TXE
+#undef SPI_FLAG_TXE
+#endif
+#define SPI_FLAG_TXE                 SPI_SR_TXE
+
+#ifdef SPI_FLAG_OVR
+#undef SPI_FLAG_OVR
+#endif
+#define SPI_FLAG_OVR                 SPI_SR_OVR
+
+#ifdef SPI_FLAG_BSY
+#undef SPI_FLAG_BSY
+#endif
+#define SPI_FLAG_BSY                 SPI_SR_BSY
+
+///////////////////////////////////////////////////////////////////////////////////////
 
 /* SPI handler declaration */
 SPI_HandleTypeDef SpiHandle;
+#define SPILEO_BUF_SIZE 256
+uint8_t spileo_rx_buffer[SPILEO_BUF_SIZE];
+uint8_t spileo_tx_buffer[SPILEO_BUF_SIZE];
+
+int spileo_start_transmit(SPI_HandleTypeDef *hspi, uint8_t *tx_buffer, uint16_t size);
+int spileo_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint16_t size);
+static void spileo_tx_isr(SPI_HandleTypeDef *hspi);
+static void spileo_rx_isr(SPI_HandleTypeDef *hspi);
 
 uint8_t spileo_gen_chksum(l2spileo_msgheader_t *pMsgHeader)
 {
@@ -60,17 +102,24 @@ static void spileo_rx_isr(SPI_HandleTypeDef *hspi)
 			hspi->RxState = SPI_RX_STATE_BODY;
 		  }
 		}
+		else if(hspi->RxXferCount > sizeof(l2spileo_msgheader_t))
+		{
+			/* error case, just reset */
+			hspi->RxXferCount = 0;
+			hspi->RxState = SPI_RX_STATE_START;
+		}
 		break;
 		
 	  case SPI_RX_STATE_BODY:
 		if(hspi->RxXferCount == pMsgHeader->len)
 		{
-		  hspi->RxState = SPI_RX_STATE_START;
 		  if(hspi->RxCompleteCallback)
-			hspi->RxCompleteCallback(hspi);
+				hspi->RxCompleteCallback(hspi);
+			hspi->RxState = SPI_RX_STATE_START;
+			hspi->RxXferCount = 0;
 		}
 
-		if(hspi->RxXferCount == hspi->RxXferSize)
+		if(hspi->RxXferCount >= hspi->RxXferSize)
 		{
 		  hspi->RxXferCount = 0;
 		  hspi->RxState = SPI_RX_STATE_START;
@@ -92,7 +141,7 @@ static void spileo_tx_isr(SPI_HandleTypeDef *hspi)
 	  hspi->Instance->DR = hspi->pTxBuffPtr[hspi->TxXferCount++];
 	}
 	
-	/* if there isn't more data to transmit, disable TXE interrupt */
+	/* if there isn't more data to transmit, disable TXE interrupt (must...) */
 	if(hspi->TxXferCount == hspi->TxXferSize)
 	{
 	  __HAL_SPI_DISABLE_IT(hspi, (SPI_IT_TXE));
@@ -119,12 +168,18 @@ void HAL_SPI_IRQHandler()
   tmp1 = __HAL_SPI_GET_FLAG(hspi, SPI_FLAG_RXNE);
   tmp2 = __HAL_SPI_GET_IT_SOURCE(hspi, SPI_IT_RXNE);
   tmp3 = __HAL_SPI_GET_FLAG(hspi, SPI_FLAG_OVR);
+	/*
+	IhuDebugPrint("HAL_SPI_IRQHandler: SR 0x%08x CR2 0x%08x\n", 
+		__HAL_SPI_GET_FLAG(hspi, 0xFFFF), 
+		__HAL_SPI_GET_IT_SOURCE(hspi, 0xFFFF));
+	*/
+	
   /* SPI in mode Receiver and Overrun not occurred ---------------------------*/
   if((tmp1 != RESET) && (tmp2 != RESET) && (tmp3 == RESET))
   {
     hspi->RxISR(hspi);
     return;
-  } 
+  }
 
   tmp1 = __HAL_SPI_GET_FLAG(hspi, SPI_FLAG_TXE);
   tmp2 = __HAL_SPI_GET_IT_SOURCE(hspi, SPI_IT_TXE);
@@ -172,32 +227,73 @@ void HAL_SPI_IRQHandler()
     if(hspi->ErrorCode!=HAL_SPI_ERROR_NONE)
     {
       hspi->State = HAL_SPI_STATE_READY;
-      IhuErrorPrint("SPI ErrorCode: 0x%08x\n", hspi->ErrorCode);
+      IhuErrorPrint("SPI ErrorCode: 0x%08x\n\r", hspi->ErrorCode);
     }
   }
 }
 
-
-int spileo_receive(uint8_t *rx_buffer, uint16_t size)
+static void spileo_rx_complete(SPI_HandleTypeDef *hspi)
 {
-  SPI_HandleTypeDef *hspi = &SpiHandle;
+/*
+  IhuDebugPrint("spi RX complete (%d): packet 0x%08x 0x%08x 0x%08x\n\r", 
+                hspi->RxXferCount, *(uint32_t *)&hspi->pRxBuffPtr[0], *(uint32_t *)&hspi->pRxBuffPtr[4], *(uint32_t *)&hspi->pRxBuffPtr[8]);
+*/
+
+  if(*(uint16_t *)(&spileo_rx_buffer[4]) == 0xEEEE)
+  {
+    /* for loopback test */
+		l2spileo_msgheader_t *pMsgHeader = (l2spileo_msgheader_t *)spileo_rx_buffer;
+		uint16_t msglen = pMsgHeader->len > SPILEO_BUF_SIZE? SPILEO_BUF_SIZE: pMsgHeader->len;
+		
+		memcpy(spileo_tx_buffer, spileo_rx_buffer, msglen);
+		spileo_start_transmit(hspi, spileo_tx_buffer, msglen);
+  }
+	else
+	{
+    /* notify the application */
+  }
+}
+
+int spileo_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint16_t size)
+{
   CPU_SR_ALLOC();
 
   CPU_CRITICAL_ENTER();
-  
+
+  /* set RX buffer */
   hspi->RxState = SPI_RX_STATE_START;
   hspi->RxXferCount = 0;
   hspi->RxXferSize = size;
   hspi->pRxBuffPtr = rx_buffer;
-  
+
+  /* set RX complete callback */
+  hspi->RxCompleteCallback = spileo_rx_complete;
+
   CPU_CRITICAL_EXIT();
+  
+  /* enable RXNE interrupt */
+  __HAL_SPI_ENABLE_IT(hspi, (SPI_IT_RXNE | SPI_IT_ERR));
+
+  /* Check if the SPI is already enabled */ 
+  if((hspi->Instance->CR1 &SPI_CR1_SPE) != SPI_CR1_SPE)
+  {
+    /* Enable SPI peripheral */
+    __HAL_SPI_ENABLE(hspi);
+  }
   
   return 0;
 }
 
-int spileo_transmit(uint8_t *tx_buffer, uint16_t size)
+static void spileo_tx_complete(SPI_HandleTypeDef *hspi)
 {
-  SPI_HandleTypeDef *hspi = &SpiHandle;
+/*
+	IhuDebugPrint("spi TX complete: packet 0x%08x 0x%08x size %d\n\r", 
+                *(uint32_t *)&hspi->pTxBuffPtr[0], *(uint32_t *)&hspi->pTxBuffPtr[4], hspi->TxXferCount);
+*/
+}
+
+int spileo_start_transmit(SPI_HandleTypeDef *hspi, uint8_t *tx_buffer, uint16_t size)
+{
   CPU_SR_ALLOC();
 
   if(hspi->TxXferCount < hspi->TxXferSize)
@@ -212,7 +308,19 @@ int spileo_transmit(uint8_t *tx_buffer, uint16_t size)
   hspi->TxXferCount = 0;
   hspi->TxXferSize = size;
 
+  hspi->TxCompleteCallback = spileo_tx_complete;
+  
   CPU_CRITICAL_EXIT();
+
+  /* enable TXE interrupt */
+  __HAL_SPI_ENABLE_IT(hspi, SPI_IT_TXE);
+
+  /* Check if the SPI is already enabled */ 
+  if((hspi->Instance->CR1 &SPI_CR1_SPE) != SPI_CR1_SPE)
+  {
+    /* Enable SPI peripheral */
+    __HAL_SPI_ENABLE(hspi);
+  }
 
   return 0;
 }
@@ -249,17 +357,17 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef *hspi)
 		GPIO_InitStruct.GPIO_PuPd      = GPIO_PuPd_UP;
     GPIO_InitStruct.GPIO_Speed     = GPIO_Speed_50MHz;
     GPIO_Init(SPIx_SCK_GPIO_PORT, &GPIO_InitStruct);
-		GPIO_PinAFConfig(SPIx_SCK_GPIO_PORT, SPIx_SCK_PIN, SPIx_SCK_AF);
+		GPIO_PinAFConfig(SPIx_SCK_GPIO_PORT, SPIx_SCK_PIN_SOURCE, SPIx_SCK_AF);
 
     /* SPI MISO GPIO pin configuration  */
     GPIO_InitStruct.GPIO_Pin = SPIx_MISO_PIN;
     GPIO_Init(SPIx_MISO_GPIO_PORT, &GPIO_InitStruct);
-		GPIO_PinAFConfig(SPIx_MISO_GPIO_PORT, SPIx_MISO_PIN, SPIx_MISO_AF);
+		GPIO_PinAFConfig(SPIx_MISO_GPIO_PORT, SPIx_MISO_PIN_SOURCE, SPIx_MISO_AF);
 
     /* SPI MOSI GPIO pin configuration  */
     GPIO_InitStruct.GPIO_Pin = SPIx_MOSI_PIN;
     GPIO_Init(SPIx_MOSI_GPIO_PORT, &GPIO_InitStruct);
-		GPIO_PinAFConfig(SPIx_MOSI_GPIO_PORT, SPIx_MOSI_PIN, SPIx_MOSI_AF);
+		GPIO_PinAFConfig(SPIx_MOSI_GPIO_PORT, SPIx_MOSI_PIN_SOURCE, SPIx_MOSI_AF);
 
     /*##-3- Configure the NVIC for SPI #########################################*/
     
@@ -328,9 +436,37 @@ HAL_StatusTypeDef HAL_SPI_Init(SPI_HandleTypeDef *hspi)
   return HAL_OK;
 }
 
+int spileo_slave_hw_init(int is_clock_phase_1edge, int is_clock_polarity_high)
+{
+	SPI_HandleTypeDef *hspi = &SpiHandle;
+	
+	/******************************************************************************
+	SPI init
+	******************************************************************************/
+	/*##-1- Configure the SPI peripheral #######################################*/
+	/* Set the SPI parameters */
+	hspi->Instance = SPIx;
 
+	SPI_StructInit(&hspi->Init);
+	hspi->Init.SPI_NSS = SPI_NSS_Soft;
+	hspi->Init.SPI_CPHA = is_clock_phase_1edge?SPI_CPHA_1Edge:SPI_CPHA_2Edge;
+	hspi->Init.SPI_CPOL = is_clock_polarity_high?SPI_CPOL_High:SPI_CPOL_Low;
 
+	hspi->RxISR = spileo_rx_isr;
+	hspi->TxISR = spileo_tx_isr;
+	
+	if(HAL_SPI_Init(hspi) != HAL_OK)
+	{
+		/* Initialization Error */
+		IhuErrorPrint("HAL_SPI_Init() failed.\n");
+		return -1;
+	}
 
+	/* attach SPI interrupt */
+	BSP_IntVectSet(BSP_INT_ID_SPI2, HAL_SPI_IRQHandler);
+	BSP_IntEn(BSP_INT_ID_SPI2);
 
-
+	IhuDebugPrint("spileo_slave_hw_init() done.\n");
+	return 0;
+}
 
