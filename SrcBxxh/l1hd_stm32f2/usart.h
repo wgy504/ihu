@@ -3,6 +3,8 @@
 
 #include "stm32f2xx.h"
 #include "stdio.h"  
+#include "string.h"  
+#include "vmucoslayer.h"
 
 #define SPS_GPRS_REC_MAXLEN 200	//最大接收数据长度
 #define SPS_RFID_REC_MAXLEN 200	//最大接收数据长度
@@ -97,10 +99,21 @@
 
 //USART6 - 空缺
 
-
+//API函数
 extern void SPS_GPRS_Init_Config(u32 bound);
 extern void SPS_GPRS_SendData(vs8* buff, u16 len);
 extern void SPS_GPRS_IRQHandler(void);
+void SPS_GPRS_clear_receive_buffer(void);
+u8 SPS_GPRS_Find_char(char *a);
+u8 SPS_GPRS_send_AT_command(char *cmd, char *ack, u16 wait_time);
+void SPS_GPRS_SendString(char* s);
+#define SPS_GPRS_SendLR() SPS_GPRS_SendString("\r\n")
+void SPS_GPRS_Wait_CREG(void);
+void SPS_GPRS_Set_ATE0(void);
+void SPS_GPRS_connect_server(void);
+void SPS_GPRS_Rec_Server_Data(void);
+void SPS_GPRS_data_connection_and_receive_process(void);
+
 extern void SPS_RFID_Init_Config(u32 bound);
 extern void SPS_RFID_SendData(vs8* buff, u16 len);
 extern void SPS_RFID_IRQHandler(void);
@@ -110,6 +123,14 @@ extern void SPS_BLE_IRQHandler(void);
 extern void SPS_SPARE1_Init_Config(u32 bound);
 extern void SPS_SPARE1_SendData(vs8* buff, u16 len);
 extern void SPS_SPARE1_IRQHandler(void);
+
+//本地函数
+int sps_fputc(int ch, FILE *f);
+int sps_fgetc(FILE *f);
+
+//Global functions
+//char *strstr( char *str, char * substr );
+
 #endif
 
 

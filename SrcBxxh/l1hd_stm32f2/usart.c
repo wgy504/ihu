@@ -11,21 +11,22 @@
 #include "stm32f2xx.h"
 #include "usart.h"	  
 	
-vu8 USART_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN];	//串口GPRS数据接收缓冲区 
-vu8 USART_GPRS_R_State=0;					//串口GPRS接收状态
-vu16 USART_GPRS_R_Count=0;					//当前接收数据的字节数
+vu8 SPS_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN];	//串口GPRS数据接收缓冲区 
+vu8 SPS_GPRS_R_State=0;					//串口GPRS接收状态
+vu16 SPS_GPRS_R_Count=0;					//当前接收数据的字节数
+const char *SPS_GPRS_string = "AT+CIPSTART=\"TCP\",\"14.125.48.205\",9015";//IP登录服务器,需要根据自己的IP和端口做修改
 
-vu8 USART_RFID_R_Buff[SPS_RFID_REC_MAXLEN];	//串口RFID数据接收缓冲区 
-vu8 USART_RFID_R_State=0;					//串口RFID接收状态
-vu16 USART_RFID_R_Count=0;					//当前接收数据的字节数 	  
+vu8 SPS_RFID_R_Buff[SPS_RFID_REC_MAXLEN];	//串口RFID数据接收缓冲区 
+vu8 SPS_RFID_R_State=0;					//串口RFID接收状态
+vu16 SPS_RFID_R_Count=0;					//当前接收数据的字节数 	  
 
-vu8 UART_BLE_R_Buff[SPS_BLE_REC_MAXLEN];	//串口BLE数据接收缓冲区 
-vu8 UART_BLE_R_State=0;					//串口BLE接收状态
-vu16 UART_BLE_R_Count=0;					//当前接收数据的字节数 	  
+vu8 SPS_BLE_R_Buff[SPS_BLE_REC_MAXLEN];	//串口BLE数据接收缓冲区 
+vu8 SPS_BLE_R_State=0;					//串口BLE接收状态
+vu16 SPS_BLE_R_Count=0;					//当前接收数据的字节数 	  
 
-vu8 UART_SPARE1_R_Buff[SPS_SPARE1_REC_MAXLEN];	//串口SPARE1数据接收缓冲区 
-vu8 UART_SPARE1_R_State=0;					//串口SPARE1接收状态
-vu16 UART_SPARE1_R_Count=0;					//当前接收数据的字节数 	  
+vu8 SPS_SPARE1_R_Buff[SPS_SPARE1_REC_MAXLEN];	//串口SPARE1数据接收缓冲区 
+vu8 SPS_SPARE1_R_State=0;					//串口SPARE1接收状态
+vu16 SPS_SPARE1_R_Count=0;					//当前接收数据的字节数 	  
 
 
 /*******************************************************************************
@@ -120,36 +121,240 @@ void SPS_GPRS_IRQHandler(void)
 	{
 		Res =USART_ReceiveData(USART_GPRS); //读取接收到的数据(USART_GPRS->DR)
 		
-		USART_GPRS_R_Buff[USART_GPRS_R_Count++] = Res;
-		if(USART_GPRS_R_State == 0)//数据接收未完成
+		SPS_GPRS_R_Buff[SPS_GPRS_R_Count++] = Res;
+		if(SPS_GPRS_R_State == 0)//数据接收未完成
 		{
 			if(Res == 0x0d)//接收到0x0d,下一个字节接收到0x0a则接收完成
 			{
-				USART_GPRS_R_State =2;
+				SPS_GPRS_R_State =2;
 			}
 		}
-		else if(USART_GPRS_R_State == 2)
+		else if(SPS_GPRS_R_State == 2)
 		{
-			if(Res == 0x0a)//上一个字节接收到0x0d,这个字节接收到oxoa则接收完成
+			if(Res == 0x0a)//上一个字节接收到0x0d,这个字节接收到0xoa则接收完成
 			{
-				USART_GPRS_R_State =1;//数据接收完成
+				SPS_GPRS_R_State =1;//数据接收完成
 			}
 			else//接收错误
 			{
-				USART_GPRS_R_State =0;
-				USART_GPRS_R_Count =0;
+				SPS_GPRS_R_State =0;
+				SPS_GPRS_R_Count =0;
 			}
 		}
-		if(USART_GPRS_R_Count >= SPS_GPRS_REC_MAXLEN)//接收数据长度走出接收数据缓冲区
+		if(SPS_GPRS_R_Count >= SPS_GPRS_REC_MAXLEN)//接收数据长度走出接收数据缓冲区
 		{
-			if((USART_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN-2] != 0x0d) || (USART_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN-1] != 0x0a))
+			if((SPS_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN-2] != 0x0d) || (SPS_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN-1] != 0x0a))
 			{
-				USART_GPRS_R_Count =0;
-				USART_GPRS_R_State =0;
+				SPS_GPRS_R_Count =0;
+				SPS_GPRS_R_State =0;
 			}
 		} 		 
 	} 
 } 	
+
+/*******************************************************************************
+* 函数名 : CLR_Buf2
+* 描述   : 清除串口2缓存数据
+* 输入   : 
+* 输出   : 
+* 返回   : 
+* 注意   : 
+*******************************************************************************/
+void SPS_GPRS_clear_receive_buffer(void)
+{
+	u16 k;
+	for(k=0;k<SPS_GPRS_REC_MAXLEN;k++)      //将缓存内容清零
+	{
+		SPS_GPRS_R_Buff[k] = 0x00;
+	}
+  SPS_GPRS_R_Count = 0;               //接收字符串的起始存储位置
+}
+
+/*******************************************************************************
+* 函数名 : Find
+* 描述   : 判断缓存中是否含有指定的字符串
+* 输入   : 
+* 输出   : 
+* 返回   : unsigned char:1 找到指定字符，0 未找到指定字符 
+* 注意   : 
+*******************************************************************************/
+u8 SPS_GPRS_Find_char(char *a)
+{ 
+  if(strstr((char *)SPS_GPRS_R_Buff, a)!=NULL)
+	    return 1;
+	else
+			return 0;
+}
+
+/*******************************************************************************
+* 函数名 : GSM_send_cmd
+* 描述   : 发送AT指令函数
+* 输入   : 发送数据的指针、发送等待时间(单位：ms)
+* 输出   : 
+* 返回   : 0:正常  1:错误
+* 注意   : 
+*******************************************************************************/
+u8 SPS_GPRS_send_AT_command(char *cmd, char *ack, u16 wait_time)   //in ms      
+{
+	u8 res=1;
+	SPS_GPRS_clear_receive_buffer(); 
+	for (; *cmd!='\0';cmd++)
+	{
+		while(USART_GetFlagStatus(USART_GPRS, USART_FLAG_TC)==RESET);
+	  USART_SendData(USART_GPRS,*cmd);
+	}
+	SPS_GPRS_SendLR();	
+	ihu_sleep(wait_time);
+	if(strstr((const char*)SPS_GPRS_R_Buff,(char*)ack)==NULL)
+		 res=1;
+	else res=0;
+
+	return res;
+}
+
+/*******************************************************************************
+* 函数名  : USART_GPRS_SendString
+* 描述    : USART_GPRS发送字符串
+* 输入    : *s字符串指针
+* 输出    : 无
+* 返回    : 无 
+* 说明    : 无
+*******************************************************************************/
+void SPS_GPRS_SendString(char* s)
+{
+	while(*s != '\0')//检测字符串结束符
+	{
+		while(USART_GetFlagStatus(USART_GPRS, USART_FLAG_TC)==RESET); 
+		USART_SendData(USART_GPRS ,*s++);//发送当前字符
+	}
+}
+
+/*******************************************************************************
+* 函数名 : Wait_CREG
+* 描述   : 等待模块注册成功
+* 输入   : 
+* 输出   : 
+* 返回   : 
+* 注意   : 
+*******************************************************************************/
+void SPS_GPRS_Wait_CREG(void)
+{
+	u8 i;
+	u8 k;
+	i = 0;
+  while(i == 0)        			
+	{
+		SPS_GPRS_clear_receive_buffer();        
+		SPS_GPRS_SendString("AT+CREG?");   //查询等待模块注册成功
+		SPS_GPRS_SendLR();
+		ihu_sleep(500);  //等待500ms
+		for(k=0;k<SPS_GPRS_REC_MAXLEN;k++)      			
+		{
+			if(SPS_GPRS_R_Buff[k] == ':')
+			{
+				if((SPS_GPRS_R_Buff[k+4] == '1')||(SPS_GPRS_R_Buff[k+4] == '5'))   //说明注册成功
+				{
+					i = 1;
+					IhuDebugPrint("\r");
+					break;
+				}
+			}
+		}
+		IhuDebugPrint("VMUO: Under Registering.....");  //注册中。。。
+	}
+}
+
+/*******************************************************************************
+* 函数名 : Set_ATE0
+* 描述   : 取消回显
+* 输入   : 
+* 输出   : 
+* 返回   : 
+* 注意   : 
+*******************************************************************************/
+void SPS_GPRS_Set_ATE0(void)
+{
+	SPS_GPRS_send_AT_command("ATE0", "OK", 500);								//取消回显		
+}
+
+/*******************************************************************************
+* 函数名 : Connect_Server
+* 描述   : GPRS连接服务器函数
+* 输入   : 
+* 输出   : 
+* 返回   : 
+* 注意   : 
+*******************************************************************************/
+void SPS_GPRS_connect_server(void)
+{
+	SPS_GPRS_clear_receive_buffer();
+	SPS_GPRS_SendString("AT+CIPCLOSE=1");	//关闭连接
+  ihu_sleep(100);
+	SPS_GPRS_send_AT_command("AT+CIPSHUT","SHUT OK", 500);		//关闭移动场景
+	SPS_GPRS_send_AT_command("AT+CGCLASS=\"B\"","OK", 500);//设置GPRS移动台类别为B,支持包交换和数据交换 
+	SPS_GPRS_send_AT_command("AT+CGDCONT=1,\"IP\",\"CMNET\"","OK", 500);//设置PDP上下文,互联网接协议,接入点等信息
+	SPS_GPRS_send_AT_command("AT+CGATT=1","OK", 500);//附着GPRS业务
+	SPS_GPRS_send_AT_command("AT+CIPCSGP=1,\"CMNET\"","OK", 500);//设置为GPRS连接模式
+  SPS_GPRS_send_AT_command("AT+CIPMUX=0","OK", 500);//设置为单路连接
+	SPS_GPRS_send_AT_command("AT+CIPHEAD=1","OK", 500);//设置接收数据显示IP头(方便判断数据来源,仅在单路连接有效)
+	SPS_GPRS_send_AT_command("AT+CIPMODE=1","OK", 500);//打开透传功能
+	SPS_GPRS_send_AT_command("AT+CIPCCFG=4,5,200,1","OK", 500);//配置透传模式：单包重发次数:2,间隔1S发送一次,每次发送200的字节
+  SPS_GPRS_send_AT_command((char *)SPS_GPRS_string, "OK", 2000);//建立连接
+  
+  ihu_sleep(100);                                //等待串口数据接收完毕
+  SPS_GPRS_clear_receive_buffer();                                    //清串口接收缓存为透传模式准备
+}
+
+/*******************************************************************************
+* 函数名 : Rec_Server_Data
+* 描述   : 接收服务器数据函数,并原样返回
+* 输入   : 
+* 输出   : 
+* 返回   : 
+* 注意   : 
+*******************************************************************************/
+void SPS_GPRS_Rec_Server_Data(void)
+{
+//p2指向发送数据，p1指向接收数据，这里可以使用SPS_GPRS_R_Count来判断
+//	if(p2!=p1)   		//说明还有数据未发出
+//	{	
+//		while(USART_GetFlagStatus(USART_GPRS, USART_FLAG_TC)==RESET);
+//		SPS_GPRS_SendData(USART_GPRS, *p2);
+//		p2++;
+//    if(p2>&SPS_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN])
+//			p2=SPS_GPRS_R_Buff;
+//	}
+}
+
+//一个完整的数据流程，且不断回送数据
+void SPS_GPRS_data_connection_and_receive_process(void)
+{
+	IhuDebugPrint("VMUO: GPRS Module GPRS register network!\n");
+	SPS_GPRS_SendString("+++");//退出透传模式，避免模块还处于透传模式中
+  ihu_usleep(500);  //500ms
+	SPS_GPRS_Wait_CREG();   //等待模块注册成功
+	IhuDebugPrint("VMUO: GPRS Register Success!\n");
+	IhuDebugPrint("VMUO: GPRS Module connect server!\n");
+	SPS_GPRS_Set_ATE0();    //取消回显
+	SPS_GPRS_connect_server(); //设置GPRS参数
+	IhuDebugPrint("VMUO: Connect success!\n");
+
+//	while(1)
+//	{
+//		Rec_Server_Data();//接收数据并原样返回	
+//	}
+
+
+}
+
+
+
+
+
+
+
+
+
 
 /*******************************************************************************
 * 函数名  : USART_RFID_Init_Config
@@ -243,32 +448,32 @@ void SPS_RFID_IRQHandler(void)
 	{
 		Res =USART_ReceiveData(USART_RFID); //读取接收到的数据(USART_RFID->DR)
 		
-		USART_RFID_R_Buff[USART_RFID_R_Count++] = Res;
-		if(USART_RFID_R_State == 0)//数据接收未完成
+		SPS_RFID_R_Buff[SPS_RFID_R_Count++] = Res;
+		if(SPS_RFID_R_State == 0)//数据接收未完成
 		{
 			if(Res == 0x0d)//接收到0x0d,下一个字节接收到0x0a则接收完成
 			{
-				USART_RFID_R_State =2;
+				SPS_RFID_R_State =2;
 			}
 		}
-		else if(USART_RFID_R_State == 2)
+		else if(SPS_RFID_R_State == 2)
 		{
 			if(Res == 0x0a)//上一个字节接收到0x0d,这个字节接收到oxoa则接收完成
 			{
-				USART_RFID_R_State =1;//数据接收完成
+				SPS_RFID_R_State =1;//数据接收完成
 			}
 			else//接收错误
 			{
-				USART_RFID_R_State =0;
-				USART_RFID_R_Count =0;
+				SPS_RFID_R_State =0;
+				SPS_RFID_R_Count =0;
 			}
 		}
-		if(USART_RFID_R_Count >= SPS_RFID_REC_MAXLEN)//接收数据长度走出接收数据缓冲区
+		if(SPS_RFID_R_Count >= SPS_RFID_REC_MAXLEN)//接收数据长度走出接收数据缓冲区
 		{
-			if((USART_RFID_R_Buff[SPS_RFID_REC_MAXLEN-2] != 0x0d) || (USART_RFID_R_Buff[SPS_RFID_REC_MAXLEN-1] != 0x0a))
+			if((SPS_RFID_R_Buff[SPS_RFID_REC_MAXLEN-2] != 0x0d) || (SPS_RFID_R_Buff[SPS_RFID_REC_MAXLEN-1] != 0x0a))
 			{
-				USART_RFID_R_Count =0;
-				USART_RFID_R_State =0;
+				SPS_RFID_R_Count =0;
+				SPS_RFID_R_State =0;
 			}
 		} 		 
 	} 
@@ -366,32 +571,32 @@ void SPS_BLE_IRQHandler(void)
 	{
 		Res =USART_ReceiveData(UART_BLE); //读取接收到的数据(UART_BLE->DR)
 		
-		UART_BLE_R_Buff[UART_BLE_R_Count++] = Res;
-		if(UART_BLE_R_State == 0)//数据接收未完成
+		SPS_BLE_R_Buff[SPS_BLE_R_Count++] = Res;
+		if(SPS_BLE_R_State == 0)//数据接收未完成
 		{
 			if(Res == 0x0d)//接收到0x0d,下一个字节接收到0x0a则接收完成
 			{
-				UART_BLE_R_State =2;
+				SPS_BLE_R_State =2;
 			}
 		}
-		else if(UART_BLE_R_State == 2)
+		else if(SPS_BLE_R_State == 2)
 		{
 			if(Res == 0x0a)//上一个字节接收到0x0d,这个字节接收到oxoa则接收完成
 			{
-				UART_BLE_R_State =1;//数据接收完成
+				SPS_BLE_R_State =1;//数据接收完成
 			}
 			else//接收错误
 			{
-				UART_BLE_R_State =0;
-				UART_BLE_R_Count =0;
+				SPS_BLE_R_State =0;
+				SPS_BLE_R_Count =0;
 			}
 		}
-		if(UART_BLE_R_Count >= SPS_BLE_REC_MAXLEN)//接收数据长度走出接收数据缓冲区
+		if(SPS_BLE_R_Count >= SPS_BLE_REC_MAXLEN)//接收数据长度走出接收数据缓冲区
 		{
-			if((UART_BLE_R_Buff[SPS_BLE_REC_MAXLEN-2] != 0x0d) || (UART_BLE_R_Buff[SPS_BLE_REC_MAXLEN-1] != 0x0a))
+			if((SPS_BLE_R_Buff[SPS_BLE_REC_MAXLEN-2] != 0x0d) || (SPS_BLE_R_Buff[SPS_BLE_REC_MAXLEN-1] != 0x0a))
 			{
-				UART_BLE_R_Count =0;
-				UART_BLE_R_State =0;
+				SPS_BLE_R_Count =0;
+				SPS_BLE_R_State =0;
 			}
 		} 		 
 	} 
@@ -489,32 +694,32 @@ void SPS_SPARE1_IRQHandler(void)
 	{
 		Res =USART_ReceiveData(UART_SPARE1); //读取接收到的数据(UART_SPARE1->DR)
 		
-		UART_SPARE1_R_Buff[UART_SPARE1_R_Count++] = Res;
-		if(UART_SPARE1_R_State == 0)//数据接收未完成
+		SPS_SPARE1_R_Buff[SPS_SPARE1_R_Count++] = Res;
+		if(SPS_SPARE1_R_State == 0)//数据接收未完成
 		{
 			if(Res == 0x0d)//接收到0x0d,下一个字节接收到0x0a则接收完成
 			{
-				UART_SPARE1_R_State =2;
+				SPS_SPARE1_R_State =2;
 			}
 		}
-		else if(UART_SPARE1_R_State == 2)
+		else if(SPS_SPARE1_R_State == 2)
 		{
 			if(Res == 0x0a)//上一个字节接收到0x0d,这个字节接收到oxoa则接收完成
 			{
-				UART_SPARE1_R_State =1;//数据接收完成
+				SPS_SPARE1_R_State =1;//数据接收完成
 			}
 			else//接收错误
 			{
-				UART_SPARE1_R_State =0;
-				UART_SPARE1_R_Count =0;
+				SPS_SPARE1_R_State =0;
+				SPS_SPARE1_R_Count =0;
 			}
 		}
-		if(UART_SPARE1_R_Count >= SPS_SPARE1_REC_MAXLEN)//接收数据长度走出接收数据缓冲区
+		if(SPS_SPARE1_R_Count >= SPS_SPARE1_REC_MAXLEN)//接收数据长度走出接收数据缓冲区
 		{
-			if((UART_SPARE1_R_Buff[SPS_SPARE1_REC_MAXLEN-2] != 0x0d) || (UART_SPARE1_R_Buff[SPS_SPARE1_REC_MAXLEN-1] != 0x0a))
+			if((SPS_SPARE1_R_Buff[SPS_SPARE1_REC_MAXLEN-2] != 0x0d) || (SPS_SPARE1_R_Buff[SPS_SPARE1_REC_MAXLEN-1] != 0x0a))
 			{
-				UART_SPARE1_R_Count =0;
-				UART_SPARE1_R_State =0;
+				SPS_SPARE1_R_Count =0;
+				SPS_SPARE1_R_State =0;
 			}
 		} 		 
 	} 
@@ -547,7 +752,7 @@ _sys_exit(int x)
 * 返回    : 无 
 * 说明    : 重定义putc函数，这样可以使用printf函数从串口1打印输出
 *******************************************************************************/
-int fputc(int ch, FILE *f)
+int sps_fputc(int ch, FILE *f)
 {
  /* e.g. 给USART写一个字符 */
  USART_SendData(USART_GPRS, (uint8_t) ch);
@@ -565,10 +770,15 @@ int fputc(int ch, FILE *f)
 * 返回    : 无 
 * 说明    : 重定义getc函数，这样可以使用scanff函数从串口1输入数据
 *******************************************************************************/
-int fgetc(FILE *f)
+int sps_fgetc(FILE *f)
 {
  /* 等待串口1输入数据 */
  while (USART_GetFlagStatus(USART_GPRS, USART_FLAG_RXNE) == RESET);
 
  return (int)USART_ReceiveData(USART_GPRS);
 }	
+
+
+
+
+

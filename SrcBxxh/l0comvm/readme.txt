@@ -725,6 +725,7 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 完善LED的配置和规则化命名
 = USART/LED驱动到VMUO的函数映射
 = 增加LED在板灯以及时钟到达灯的定时取反控制
+= 参照例子，增加完整的GPRS通信例程
 
 
 
