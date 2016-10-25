@@ -42,11 +42,15 @@ FsmStateItem_t FsmSpsvirgo[] =
 };
 
 //Global variables defination
-extern vu8 Usart1_R_Buff[USART1_REC_MAXLEN];	//串口1数据接收缓冲区 
-extern vu8 Usart1_R_State;						//串口1接收状态
-extern vu16 Usart1_R_Count;						//当前接收数据的字节数 	 
-extern vu8 Usart1_T_State;						//串口1接收状态
-extern vu16 Usart1_T_Count;						//当前接收数据的字节数 
+vu8 SPS_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN];	//串口1数据接收缓冲区 
+vu8 SPS_GPRS_R_State;						//串口1接收状态
+vu16 SPS_GPRS_R_Count;						//当前接收数据的字节数 	 
+vu8 SPS_RFID_R_Buff[SPS_RFID_REC_MAXLEN];	//串口1数据接收缓冲区 
+vu8 SPS_RFID_R_State;						//串口1接收状态
+vu16 SPS_RFID_R_Count;						//当前接收数据的字节数 	 
+vu8 SPS_BLE_R_Buff[SPS_BLE_REC_MAXLEN];	//串口1数据接收缓冲区 
+vu8 SPS_BLE_R_State;						//串口1接收状态
+vu16 SPS_BLE_R_Count;						//当前接收数据的字节数 	 
 
 //Main Entry
 //Input parameter would be useless, but just for similar structure purpose
@@ -149,7 +153,9 @@ OPSTAT fsm_spsvirgo_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 OPSTAT func_spsvirgo_hw_init(void)
 {
 	//测试目的，PA9/PA10 = TX/RX
-	USART1_Init_Config(115200);//USART1初始化配置
+	SPS_GPRS_Init_Config(115200);//USART1初始化配置
+	SPS_RFID_Init_Config(115200);//USART1初始化配置
+	SPS_BLE_Init_Config(115200);//USART1初始化配置
 	
 	return IHU_SUCCESS;
 }
@@ -203,12 +209,15 @@ OPSTAT fsm_spsvirgo_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 
 void func_spsvirgo_time_out_period_scan(void)
 {
-	USART1_SendData("This is my test!\n", 20);
-	if(Usart1_R_State == 1)//一帧数据接收完成
+	SPS_GPRS_SendData("This is my GPRS test!\n", 20);
+	SPS_RFID_SendData("This is my RFID test!\n", 20);
+	SPS_BLE_SendData("This is my BLE test!\n", 20);
+
+	if(SPS_GPRS_R_State == 1)//一帧数据接收完成
 	{
-		USART1_SendData((u8 *)Usart1_R_Buff, Usart1_R_Count);//USART1发送数据缓冲区数据(发送刚接收完成的一帧数据)
-		Usart1_R_State =0;
-		Usart1_R_Count =0;
+		SPS_GPRS_SendData((u8 *)SPS_GPRS_R_Buff, SPS_GPRS_R_Count);//USART1发送数据缓冲区数据(发送刚接收完成的一帧数据)
+		SPS_GPRS_R_State =0;
+		SPS_GPRS_R_Count =0;
 	}
 	IhuDebugPrint("SPSVIRGO: Time Out Test!\n");
 }

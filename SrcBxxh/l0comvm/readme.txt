@@ -715,7 +715,12 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 完善了整个目录结果，删去VMFO的老旧项目，重新将项目和目录结构恢复到最简化的程度
 
 //= ZJL/XH, 2016 Oct.23, CURRENT_SW_DELIVERY R03.38
-= 串口调测USART1， TX/RX=PB6/PB7
+= 串口调测USART1， TX/RX=PA9/PA10
+= 为了避免UART4和USART3的冲突，将打印口USART3换到了PB10/PB11
+= USART1=>GPRS, USART2=>RFID, UART4=>BLE
+= USART都正常了，但UART还不太正常
+
+
 
 
 
