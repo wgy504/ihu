@@ -55,7 +55,6 @@ extern vu8 SPS_SPARE1_R_Buff[SPS_SPARE1_REC_MAXLEN];	//串口1数据接收缓冲
 extern vu8 SPS_SPARE1_R_State;						//串口1接收状态
 extern vu16 SPS_SPARE1_R_Count;						//当前接收数据的字节数 	 
 
-
 //Main Entry
 //Input parameter would be useless, but just for similar structure purpose
 OPSTAT fsm_spsvirgo_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
