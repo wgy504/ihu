@@ -128,6 +128,9 @@ int main( void )
   OS_ASSERT(status == OS_TASK_CREATE_SUCCESS);
 
   //挂在VMFO的主入口函数，居然出现内存不够的情形
+  //如果不挂载VM，内存只有55KB，挂载VM之后，内存达到了98KB，距离128KB的最大空间也不远了。还需要继续优化
+  //CODE永远不是一个问题，所以代码效率可以低些，但数据空间必须优化
+  //这意味状态机是否要搞这么优化，是否可以考虑使用大量代码重复来代替数据空间？
   ihu_vm_main();
 
 	/* Start the tasks and timer running. */

@@ -706,11 +706,25 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 由于系统堆栈的问题，目前消息最长长度不能超过128，如果设置为256则会出错
 = 修改TRACE选项为TRACE_ALL_BUT_TIME_OUT
 
+//= ZJL/XH, 2016 Oct.22, CURRENT_SW_DELIVERY R03.37
+= XH专门完善SPI接口调用功能
+= 测试GPIO读取能力
+= 增加l1hd_stm32f2的目录，专门用来存放所有的STM32F2系列的驱动函数
+= 验证LED，修改LED_OUT到管脚PC03，的确可以点亮LED灯。目前程序是复用了例子程序中的LED点灯功能，该灯纯属205RB板载LED灯。
+= 根据EMC68X_VMFO的要求，将任务目录进行了分离修改，以便适应Eclipse完整目录的要求
+= 完善了整个目录结果，删去VMFO的老旧项目，重新将项目和目录结构恢复到最简化的程度
 
+//= ZJL/XH, 2016 Oct.23, CURRENT_SW_DELIVERY R03.38
+= 串口调测USART1， TX/RX=PA9/PA10
+= UART4映射到PC10/PC11是固定无可选择的
+= 为了避免UART4和USART3的冲突，将打印口USART3换到了PB10/PB11
+= USART1=>GPRS, USART2=>RFID, UART4=>BLE
+= USART/UART都正常了，基本上将串口的配置完善了，测试全部通过了
 
-
-
-
+//= ZJL/XH, 2016 Oct.25, CURRENT_SW_DELIVERY R03.39
+= 完善LED的配置和规则化命名
+= USART/LED驱动到VMUO的函数映射
+= 增加LED在板灯以及时钟到达灯的定时取反控制
 
 
 

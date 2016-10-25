@@ -151,7 +151,7 @@ void  BSP_Ser_Init (CPU_INT32U  baud_rate)
     USART_CLK_InitStructure.USART_LastBit         = USART_LastBit_Disable;
 
 
-    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);       /* Enable GPIO clock.                                   */
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);       /* Enable GPIO clock.                                   */
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);      /* Enable UART clock.                                   */
 
 
@@ -162,14 +162,14 @@ void  BSP_Ser_Init (CPU_INT32U  baud_rate)
     GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_AF;
     GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
     GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_UP;
-    GPIO_Init(GPIOC, &GPIO_InitStructure);
-    GPIO_PinAFConfig(GPIOC, GPIO_PinSource10, GPIO_AF_USART3);
+    GPIO_Init(GPIOB, &GPIO_InitStructure);
+    GPIO_PinAFConfig(GPIOB, GPIO_PinSource10, GPIO_AF_USART3);
 
                                                                 /* Configure GPIOD.6 as input floating.                 */
     GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_11;
     GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_AF;
-    GPIO_Init(GPIOC, &GPIO_InitStructure);
-    GPIO_PinAFConfig(GPIOC, GPIO_PinSource11, GPIO_AF_USART3);
+    GPIO_Init(GPIOB, &GPIO_InitStructure);
+    GPIO_PinAFConfig(GPIOB, GPIO_PinSource11, GPIO_AF_USART3);
 
                                                                 /* ------------------ SETUP USART3 -------------------- */
     USART_Init(USART3, &USART_InitStructure);

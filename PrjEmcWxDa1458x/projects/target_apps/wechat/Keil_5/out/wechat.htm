@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\out\wechat.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\out\wechat.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Mon Oct 10 12:17:10 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Sun Oct 23 10:52:23 2016
 <BR><P>
 <H3>Maximum Stack Usage =       1164 bytes + Unknown(Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -3630,6 +3630,35 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_wechat_period_ble_status_time_out_handler
 </UL>
 
+<P><STRONG><a name="[209]"></a>vmda1458x_i2c_led_init</STRONG> (Thumb, 276 bytes, Stack size 24 bytes, i2c_led.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = vmda1458x_i2c_led_init
+</UL>
+<BR>[Calls]<UL><LI><a href="#[169]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_SetActive
+<LI><a href="#[16a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_SetInactive
+</UL>
+<BR>[Called By]<UL><LI><a href="#[12b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;periph_init
+</UL>
+
+<P><STRONG><a name="[1bf]"></a>vmda1458x_led_set</STRONG> (Thumb, 158 bytes, Stack size 20 bytes, i2c_led.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = vmda1458x_led_set
+</UL>
+<BR>[Called By]<UL><LI><a href="#[12b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;periph_init
+<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gapc_disconnect_ind_handler
+<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_wechat_period_bat_status_time_out_handler
+<LI><a href="#[24b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vmda1458x_led_blink_once_on_off
+<LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mpbledemo2_data_consume_func
+</UL>
+
+<P><STRONG><a name="[24b]"></a>vmda1458x_led_blink_once_on_off</STRONG> (Thumb, 44 bytes, Stack size 8 bytes, i2c_led.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = vmda1458x_led_blink_once_on_off &rArr; vmda1458x_led_set
+</UL>
+<BR>[Calls]<UL><LI><a href="#[1bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vmda1458x_led_set
+</UL>
+<BR>[Called By]<UL><LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mpbledemo2_readEmcDataPush
+<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mpbledemo2_readEmcPeriodClose
+<LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mpbledemo2_readEmcPeriodOpen
+</UL>
+
 <P><STRONG><a name="[24e]"></a>IhuErrorPrint</STRONG> (Thumb, 64 bytes, Stack size 216 bytes, vmdalayer.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 640<LI>Call Chain = IhuErrorPrint &rArr; arch_printf &rArr; arch_snprintf &rArr; arch_vsnprintf &rArr; arch_itoa
 </UL>
@@ -3704,35 +3733,6 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_wechat_period_bat_status_time_out_handler
 <LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mpbledemo2_data_consume_func
-</UL>
-
-<P><STRONG><a name="[209]"></a>vmda1458x_i2c_led_init</STRONG> (Thumb, 276 bytes, Stack size 24 bytes, i2c_led.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = vmda1458x_i2c_led_init
-</UL>
-<BR>[Calls]<UL><LI><a href="#[169]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_SetActive
-<LI><a href="#[16a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_SetInactive
-</UL>
-<BR>[Called By]<UL><LI><a href="#[12b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;periph_init
-</UL>
-
-<P><STRONG><a name="[1bf]"></a>vmda1458x_led_set</STRONG> (Thumb, 158 bytes, Stack size 20 bytes, i2c_led.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = vmda1458x_led_set
-</UL>
-<BR>[Called By]<UL><LI><a href="#[12b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;periph_init
-<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gapc_disconnect_ind_handler
-<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_wechat_period_bat_status_time_out_handler
-<LI><a href="#[24b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vmda1458x_led_blink_once_on_off
-<LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mpbledemo2_data_consume_func
-</UL>
-
-<P><STRONG><a name="[24b]"></a>vmda1458x_led_blink_once_on_off</STRONG> (Thumb, 44 bytes, Stack size 8 bytes, i2c_led.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = vmda1458x_led_blink_once_on_off &rArr; vmda1458x_led_set
-</UL>
-<BR>[Calls]<UL><LI><a href="#[1bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vmda1458x_led_set
-</UL>
-<BR>[Called By]<UL><LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mpbledemo2_readEmcDataPush
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mpbledemo2_readEmcPeriodClose
-<LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mpbledemo2_readEmcPeriodOpen
 </UL>
 
 <P><STRONG><a name="[251]"></a>strncpy</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, strncpy.o(.text))

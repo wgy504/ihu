@@ -142,8 +142,8 @@
 ".\out\md5.o"
 ".\out\mpbledemo2.o"
 ".\out\wecaht_aes.o"
-".\out\vmdalayer.o"
 ".\out\i2c_led.o"
+".\out\vmdalayer.o"
 --library_type=microlib --strict --scatter ".\..\..\..\..\sdk_580\sdk\common_project_files\scatterfiles\scatterfile_common.sct"
 --feedback=".\unused.txt" .\..\..\..\..\sdk_580\sdk\common_project_files\misc\rom_symdef.txt --symdefs=wechat_580_symdef.txt --keep gapm.o(timeout_table_area) --keep jump_table.o(*) --keep nvds.o(*) --any_placement=best_fit --datacompressor off --summary_stderr --info summarysizes --map --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

@@ -16,10 +16,6 @@
   </project>
 
   <project>
-    <PathAndName>.\PrjEmc68VmfoStm32\Project\emc68x_vmfo.uvproj</PathAndName>
-  </project>
-
-  <project>
     <PathAndName>.\PrjScycbUcosIII\EvalBoards\ST\STM3220G-EVAL\uCOS-III\KeilMDK\uCOS-III-Scycb.uvgui.uvproj</PathAndName>
     <NodeIsActive>1</NodeIsActive>
     <NodeIsExpanded>1</NodeIsExpanded>
