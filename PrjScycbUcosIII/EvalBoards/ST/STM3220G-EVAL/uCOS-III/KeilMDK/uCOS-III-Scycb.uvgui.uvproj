@@ -1096,6 +1096,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\usart.h</FilePath>
             </File>
+            <File>
+              <FileName>timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>timer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\timer.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
