@@ -12,6 +12,7 @@
  */
 
 #include "l2spileo.h"
+#include "spi_itf.h"
 
 /*
 ** FSM of the SPILEO
@@ -173,36 +174,7 @@ OPSTAT fsm_spileo_dl_ctrl_cmd_req(UINT8 dest_id, UINT8 src_id, void * param_ptr,
 //Local APIs
 OPSTAT func_spileo_hw_init(void)
 {
-#if 0
-	SPI_HandleTypeDef *hspi = &SpiHandle;
-	
-	/******************************************************************************
-	SPI init
-	******************************************************************************/
-	/*##-1- Configure the SPI peripheral #######################################*/
-	/* Set the SPI parameters */
-	hspi->Instance = SPIx;
-
-	SPI_StructInit(&hspi->Init);
-	hspi->Init.SPI_NSS = SPI_NSS_Soft;
-	hspi->Init.SPI_CPHA = SPI_CPHA_1Edge;
-	hspi->Init.SPI_CPOL = SPI_CPOL_High;
-
-	hspi->RxISR = spileo_rx_isr;
-	hspi->TxISR = spileo_tx_isr;
-	
-	if(HAL_SPI_Init(hspi) != HAL_OK)
-	{
-		/* Initialization Error */
-		IhuErrorPrint("HAL_SPI_Init() failed.\n");
-		return ERROR;
-	}
-
-	/* attach SPI interrupt */
-	BSP_IntVectSet(BSP_INT_ID_SPI2, HAL_SPI_IRQHandler);
-	BSP_IntEn(BSP_INT_ID_SPI2);
-#endif
-	return IHU_SUCCESS;
+	return spileo_slave_hw_init(1, 1);
 }
 
 OPSTAT fsm_spileo_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)

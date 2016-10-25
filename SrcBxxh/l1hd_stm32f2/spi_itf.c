@@ -1,3 +1,4 @@
+#include <string.h>
 #include "spi_itf.h"
 #include "bsp.h"
  
@@ -49,6 +50,8 @@ uint8_t spileo_tx_buffer[SPILEO_BUF_SIZE];
 
 int spileo_start_transmit(SPI_HandleTypeDef *hspi, uint8_t *tx_buffer, uint16_t size);
 int spileo_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint16_t size);
+static void spileo_tx_isr(SPI_HandleTypeDef *hspi);
+static void spileo_rx_isr(SPI_HandleTypeDef *hspi);
 
 uint8_t spileo_gen_chksum(l2spileo_msgheader_t *pMsgHeader)
 {
@@ -433,10 +436,37 @@ HAL_StatusTypeDef HAL_SPI_Init(SPI_HandleTypeDef *hspi)
   return HAL_OK;
 }
 
+int spileo_slave_hw_init(int is_clock_phase_1edge, int is_clock_polarity_high)
+{
+	SPI_HandleTypeDef *hspi = &SpiHandle;
+	
+	/******************************************************************************
+	SPI init
+	******************************************************************************/
+	/*##-1- Configure the SPI peripheral #######################################*/
+	/* Set the SPI parameters */
+	hspi->Instance = SPIx;
 
+	SPI_StructInit(&hspi->Init);
+	hspi->Init.SPI_NSS = SPI_NSS_Soft;
+	hspi->Init.SPI_CPHA = is_clock_phase_1edge?SPI_CPHA_1Edge:SPI_CPHA_2Edge;
+	hspi->Init.SPI_CPOL = is_clock_polarity_high?SPI_CPOL_High:SPI_CPOL_Low;
 
+	hspi->RxISR = spileo_rx_isr;
+	hspi->TxISR = spileo_tx_isr;
+	
+	if(HAL_SPI_Init(hspi) != HAL_OK)
+	{
+		/* Initialization Error */
+		IhuErrorPrint("HAL_SPI_Init() failed.\n");
+		return -1;
+	}
 
+	/* attach SPI interrupt */
+	BSP_IntVectSet(BSP_INT_ID_SPI2, HAL_SPI_IRQHandler);
+	BSP_IntEn(BSP_INT_ID_SPI2);
 
-
-
+	IhuDebugPrint("spileo_slave_hw_init() done.\n");
+	return 0;
+}
 

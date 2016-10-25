@@ -262,8 +262,7 @@ typedef struct l2spileo_msgheader
 //Global APIs
 extern void IhuDebugPrint(char *format, ...);
 extern void IhuErrorPrint(char *format, ...);
-static void spileo_tx_isr(SPI_HandleTypeDef *hspi);
-static void spileo_rx_isr(SPI_HandleTypeDef *hspi);
+int spileo_slave_hw_init(int is_clock_phase_1edge, int is_clock_polarity_high);
 
 #ifdef __cplusplus
 }
