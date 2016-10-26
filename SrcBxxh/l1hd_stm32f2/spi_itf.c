@@ -466,6 +466,8 @@ int spileo_slave_hw_init(int is_clock_phase_1edge, int is_clock_polarity_high)
 	BSP_IntVectSet(BSP_INT_ID_SPI2, HAL_SPI_IRQHandler);
 	BSP_IntEn(BSP_INT_ID_SPI2);
 
+	spileo_start_receive(hspi, spileo_rx_buffer, SPILEO_BUF_SIZE);
+	
 	IhuDebugPrint("spileo_slave_hw_init() done.\n");
 	return 0;
 }
