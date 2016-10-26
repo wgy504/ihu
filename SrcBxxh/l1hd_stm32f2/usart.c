@@ -75,14 +75,17 @@ void SPS_GPRS_Init_Config(u32 bound)
   /*USART_GPRS NVIC配置*/
   NVIC_InitStructure.NVIC_IRQChannel = USART_GPRS_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=1;	//抢占优先级3
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;		//从优先级3
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQ通道使能
-	NVIC_Init(&NVIC_InitStructure);							//根据指定的参数初始化VIC寄存器 
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;			//从优先级3
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;					//IRQ通道使能
+	NVIC_Init(&NVIC_InitStructure);													//根据指定的参数初始化VIC寄存器 
 	  
-  USART_ITConfig(USART_GPRS, USART_IT_RXNE, ENABLE);			//使能串口1接收中断
-
+  USART_ITConfig(USART_GPRS, USART_IT_RXNE, ENABLE);			//使能串口1接收中断 Receive Data register not empty interrupt 
   USART_Cmd(USART_GPRS, ENABLE);                    			//使能串口 
-	USART_ClearFlag(USART_GPRS, USART_FLAG_TC);					//清除发送完成标志
+	USART_ClearFlag(USART_GPRS, USART_FLAG_TC);							//清除发送完成标志 Transmission complete interrupt
+	
+	//挂载中断
+	BSP_IntVectSet(USART_GPRS_INT_VECTOR, SPS_GPRS_IRQHandler);
+  BSP_IntEn(USART_GPRS_INT_VECTOR);
 }
 
 
@@ -116,9 +119,17 @@ void SPS_GPRS_SendData(vs8* buff, u16 len)
 void SPS_GPRS_IRQHandler(void)                	
 {
 	u8 Res=0;
-
-	if(USART_GetITStatus(USART_GPRS, USART_IT_RXNE) != RESET) //接收中断(接收到的数据必须是0x0d 0x0a结尾)
+	
+	//要不要设计成这样的：中断进来后立即禁止再次重入，等待接收R_BUFFER被处理好了后再行ENABLE该中断？
+	//还是我们有更好的方式，比如直接采用USART_IT_RXNE比特位，这个比特位一旦拉高后，不会再次进来了？
+	//当然还有一种方式来规避这个问题，就是接收到了数据后立即发送给任务模块，这个接收就继续了。
+	//由于状态机控制的复杂性，如果不是要做正常的双向通信机制，我们这里将采用与TIMER配合的轮询方式来工作
+	//USART_ITConfig(USART_GPRS, USART_IT_RXNE, DISABLE);
+	
+	// 原始代码中，使用了USART_IT_RXNE进行判定，而非USART_FLAG_RXNE，后续需要仔细确定，到底该如何？
+	if(USART_GetITStatus(USART_GPRS, USART_FLAG_RXNE) != RESET) //接收中断(接收到的数据必须是0x0d 0x0a结尾)
 	{
+		USART_ClearITPendingBit(USART_GPRS, USART_IT_RXNE);
 		Res =USART_ReceiveData(USART_GPRS); //读取接收到的数据(USART_GPRS->DR)
 		
 		SPS_GPRS_R_Buff[SPS_GPRS_R_Count++] = Res;
@@ -407,9 +418,12 @@ void SPS_RFID_Init_Config(u32 bound)
 	NVIC_Init(&NVIC_InitStructure);							//根据指定的参数初始化VIC寄存器 
 	  
   USART_ITConfig(USART_RFID, USART_IT_RXNE, ENABLE);			//使能串口1接收中断
-
   USART_Cmd(USART_RFID, ENABLE);                    			//使能串口 
 	USART_ClearFlag(USART_RFID, USART_FLAG_TC);					//清除发送完成标志
+	
+	//挂载中断
+	BSP_IntVectSet(USART_RFID_INT_VECTOR, SPS_RFID_IRQHandler);
+  BSP_IntEn(USART_RFID_INT_VECTOR);
 }
 
 
@@ -530,9 +544,12 @@ void SPS_BLE_Init_Config(u32 bound)
 	NVIC_Init(&NVIC_InitStructure);							//根据指定的参数初始化VIC寄存器 
 	  
   USART_ITConfig(UART_BLE, USART_IT_RXNE, ENABLE);			//使能串口1接收中断
-
   USART_Cmd(UART_BLE, ENABLE);                    			//使能串口 
 	USART_ClearFlag(UART_BLE, USART_FLAG_TC);					//清除发送完成标志
+	
+	//挂载中断
+	BSP_IntVectSet(UART_BLE_INT_VECTOR, SPS_BLE_IRQHandler);
+  BSP_IntEn(UART_BLE_INT_VECTOR);
 }
 
 
@@ -653,9 +670,12 @@ void SPS_SPARE1_Init_Config(u32 bound)
 	NVIC_Init(&NVIC_InitStructure);							//根据指定的参数初始化VIC寄存器 
 	  
   USART_ITConfig(UART_SPARE1, USART_IT_RXNE, ENABLE);			//使能串口1接收中断
-
   USART_Cmd(UART_SPARE1, ENABLE);                    			//使能串口 
 	USART_ClearFlag(UART_SPARE1, USART_FLAG_TC);					//清除发送完成标志
+
+	//挂载中断
+	BSP_IntVectSet(UART_SPARE1_INT_VECTOR, SPS_SPARE1_IRQHandler);
+  BSP_IntEn(UART_SPARE1_INT_VECTOR);
 }
 
 

@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Obj\uCOS-III.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Obj\uCOS-III.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Tue Oct 25 23:31:24 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Wed Oct 26 11:16:57 2016
 <BR><P>
 <H3>Maximum Stack Usage =        724 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -142,6 +142,10 @@ Function Pointers
  <LI><a href="#[1f9]">OS_TickTask</a> from os_tick.o(.text) referenced from os_tick.o(.text)
  <LI><a href="#[205]">OS_TmrTask</a> from os_tmr.o(.text) referenced from os_tmr.o(.text)
  <LI><a href="#[42]">Reset_Handler</a> from cstartup.o(.text) referenced from cstartup.o(RESET)
+ <LI><a href="#[230]">SPS_BLE_IRQHandler</a> from usart.o(.text) referenced from usart.o(.text)
+ <LI><a href="#[21b]">SPS_GPRS_IRQHandler</a> from usart.o(.text) referenced from usart.o(.text)
+ <LI><a href="#[22d]">SPS_RFID_IRQHandler</a> from usart.o(.text) referenced from usart.o(.text)
+ <LI><a href="#[233]">SPS_SPARE1_IRQHandler</a> from usart.o(.text) referenced from usart.o(.text)
  <LI><a href="#[aa]">__main</a> from __main.o(!!!main) referenced from cstartup.o(.text)
  <LI><a href="#[a8]">_get_lc_ctype</a> from lc_ctype_c.o(locale$$code) referenced from rt_ctype_table.o(.text)
  <LI><a href="#[a7]">_printf_input_char</a> from _printf_char_common.o(.text) referenced from _printf_char_common.o(.text)
@@ -649,6 +653,10 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[108]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CPU_IntSrcEn
 </UL>
 <BR>[Called By]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_Ser_Init
+<LI><a href="#[234]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_Init_Config
+<LI><a href="#[231]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_Init_Config
+<LI><a href="#[22e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_Init_Config
+<LI><a href="#[21d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Init_Config
 <LI><a href="#[219]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;spileo_slave_hw_init
 </UL>
 
@@ -661,6 +669,10 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[10e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_IntInit
 <LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_Ser_Init
+<LI><a href="#[234]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_Init_Config
+<LI><a href="#[231]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_Init_Config
+<LI><a href="#[22e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_Init_Config
+<LI><a href="#[21d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Init_Config
 <LI><a href="#[219]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;spileo_slave_hw_init
 </UL>
 
@@ -1482,13 +1494,13 @@ Global Symbols
 
 <P><STRONG><a name="[2ca]"></a>NVIC_PriorityGroupConfig</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, misc.o(.text), UNUSED)
 
-<P><STRONG><a name="[21d]"></a>NVIC_Init</STRONG> (Thumb, 106 bytes, Stack size 16 bytes, misc.o(.text))
+<P><STRONG><a name="[21f]"></a>NVIC_Init</STRONG> (Thumb, 106 bytes, Stack size 16 bytes, misc.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = NVIC_Init
 </UL>
-<BR>[Called By]<UL><LI><a href="#[233]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_Init_Config
-<LI><a href="#[230]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_Init_Config
-<LI><a href="#[22d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_Init_Config
-<LI><a href="#[21b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Init_Config
+<BR>[Called By]<UL><LI><a href="#[234]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_Init_Config
+<LI><a href="#[231]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_Init_Config
+<LI><a href="#[22e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_Init_Config
+<LI><a href="#[21d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Init_Config
 </UL>
 
 <P><STRONG><a name="[2cb]"></a>NVIC_SetVectorTable</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, misc.o(.text), UNUSED)
@@ -1552,10 +1564,10 @@ Global Symbols
 <LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_Ser_Init
 <LI><a href="#[20c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LED_F205_timer_ind_init
 <LI><a href="#[206]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LED_F205_board_init
-<LI><a href="#[233]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_Init_Config
-<LI><a href="#[230]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_Init_Config
-<LI><a href="#[22d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_Init_Config
-<LI><a href="#[21b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Init_Config
+<LI><a href="#[234]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_Init_Config
+<LI><a href="#[231]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_Init_Config
+<LI><a href="#[22e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_Init_Config
+<LI><a href="#[21d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Init_Config
 <LI><a href="#[217]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_MspInit
 </UL>
 
@@ -1608,10 +1620,10 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[fd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_SRAM_Init
 <LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_PSRAM_Init
 <LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_Ser_Init
-<LI><a href="#[233]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_Init_Config
-<LI><a href="#[230]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_Init_Config
-<LI><a href="#[22d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_Init_Config
-<LI><a href="#[21b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Init_Config
+<LI><a href="#[234]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_Init_Config
+<LI><a href="#[231]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_Init_Config
+<LI><a href="#[22e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_Init_Config
+<LI><a href="#[21d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Init_Config
 <LI><a href="#[217]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_MspInit
 </UL>
 
@@ -1681,10 +1693,10 @@ Global Symbols
 <LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_Ser_Init
 <LI><a href="#[20c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LED_F205_timer_ind_init
 <LI><a href="#[206]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LED_F205_board_init
-<LI><a href="#[233]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_Init_Config
-<LI><a href="#[230]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_Init_Config
-<LI><a href="#[22d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_Init_Config
-<LI><a href="#[21b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Init_Config
+<LI><a href="#[234]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_Init_Config
+<LI><a href="#[231]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_Init_Config
+<LI><a href="#[22e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_Init_Config
+<LI><a href="#[21d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Init_Config
 <LI><a href="#[217]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_MspInit
 </UL>
 
@@ -1699,15 +1711,15 @@ Global Symbols
 
 <P><STRONG><a name="[117]"></a>RCC_APB1PeriphClockCmd</STRONG> (Thumb, 34 bytes, Stack size 0 bytes, stm32f2xx_rcc.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_Ser_Init
-<LI><a href="#[233]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_Init_Config
-<LI><a href="#[230]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_Init_Config
-<LI><a href="#[22d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_Init_Config
-<LI><a href="#[21b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Init_Config
+<LI><a href="#[234]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_Init_Config
+<LI><a href="#[231]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_Init_Config
+<LI><a href="#[22e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_Init_Config
+<LI><a href="#[21d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Init_Config
 <LI><a href="#[217]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_MspInit
 </UL>
 
-<P><STRONG><a name="[21c]"></a>RCC_APB2PeriphClockCmd</STRONG> (Thumb, 34 bytes, Stack size 0 bytes, stm32f2xx_rcc.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[21b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Init_Config
+<P><STRONG><a name="[21e]"></a>RCC_APB2PeriphClockCmd</STRONG> (Thumb, 34 bytes, Stack size 0 bytes, stm32f2xx_rcc.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[21d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Init_Config
 </UL>
 
 <P><STRONG><a name="[12c]"></a>RCC_AHB1PeriphResetCmd</STRONG> (Thumb, 34 bytes, Stack size 0 bytes, stm32f2xx_rcc.o(.text), UNUSED)
@@ -1805,10 +1817,10 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[130]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB2PeriphResetCmd
 <LI><a href="#[131]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB1PeriphResetCmd
 </UL>
-<BR>[Called By]<UL><LI><a href="#[233]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_Init_Config
-<LI><a href="#[230]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_Init_Config
-<LI><a href="#[22d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_Init_Config
-<LI><a href="#[21b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Init_Config
+<BR>[Called By]<UL><LI><a href="#[234]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_Init_Config
+<LI><a href="#[231]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_Init_Config
+<LI><a href="#[22e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_Init_Config
+<LI><a href="#[21d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Init_Config
 </UL>
 
 <P><STRONG><a name="[118]"></a>USART_Init</STRONG> (Thumb, 204 bytes, Stack size 48 bytes, stm32f2xx_usart.o(.text))
@@ -1817,10 +1829,10 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_GetClocksFreq
 </UL>
 <BR>[Called By]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_Ser_Init
-<LI><a href="#[233]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_Init_Config
-<LI><a href="#[230]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_Init_Config
-<LI><a href="#[22d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_Init_Config
-<LI><a href="#[21b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Init_Config
+<LI><a href="#[234]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_Init_Config
+<LI><a href="#[231]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_Init_Config
+<LI><a href="#[22e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_Init_Config
+<LI><a href="#[21d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Init_Config
 </UL>
 
 <P><STRONG><a name="[31c]"></a>USART_StructInit</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, stm32f2xx_usart.o(.text), UNUSED)
@@ -1835,10 +1847,10 @@ Global Symbols
 
 <P><STRONG><a name="[11a]"></a>USART_Cmd</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, stm32f2xx_usart.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_Ser_Init
-<LI><a href="#[233]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_Init_Config
-<LI><a href="#[230]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_Init_Config
-<LI><a href="#[22d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_Init_Config
-<LI><a href="#[21b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Init_Config
+<LI><a href="#[234]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_Init_Config
+<LI><a href="#[231]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_Init_Config
+<LI><a href="#[22e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_Init_Config
+<LI><a href="#[21d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Init_Config
 </UL>
 
 <P><STRONG><a name="[31e]"></a>USART_SetPrescaler</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, stm32f2xx_usart.o(.text), UNUSED)
@@ -1851,21 +1863,21 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[11e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_Ser_WrStr
 <LI><a href="#[11b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_Ser_WrByteUnlocked
 <LI><a href="#[236]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sps_fputc
-<LI><a href="#[234]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_SendData
-<LI><a href="#[231]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_SendData
-<LI><a href="#[22e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_SendData
+<LI><a href="#[235]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_SendData
+<LI><a href="#[232]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_SendData
+<LI><a href="#[22f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_SendData
 <LI><a href="#[225]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_send_AT_command
 <LI><a href="#[224]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_SendString
-<LI><a href="#[21f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_SendData
+<LI><a href="#[221]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_SendData
 </UL>
 
 <P><STRONG><a name="[112]"></a>USART_ReceiveData</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, stm32f2xx_usart.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_Ser_ISR_Handler
 <LI><a href="#[237]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sps_fgetc
-<LI><a href="#[235]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_IRQHandler
-<LI><a href="#[232]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_IRQHandler
-<LI><a href="#[22f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_IRQHandler
-<LI><a href="#[220]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_IRQHandler
+<LI><a href="#[233]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_IRQHandler
+<LI><a href="#[230]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_IRQHandler
+<LI><a href="#[22d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_IRQHandler
+<LI><a href="#[21b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_IRQHandler
 </UL>
 
 <P><STRONG><a name="[321]"></a>USART_SetAddress</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, stm32f2xx_usart.o(.text), UNUSED)
@@ -1900,42 +1912,45 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[121]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_Ser_RdByteUnlocked
 <LI><a href="#[11b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_Ser_WrByteUnlocked
 <LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_Ser_ISR_Handler
-<LI><a href="#[233]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_Init_Config
-<LI><a href="#[230]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_Init_Config
-<LI><a href="#[22d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_Init_Config
-<LI><a href="#[21b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Init_Config
+<LI><a href="#[234]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_Init_Config
+<LI><a href="#[231]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_Init_Config
+<LI><a href="#[22e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_Init_Config
+<LI><a href="#[21d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Init_Config
 </UL>
 
 <P><STRONG><a name="[11f]"></a>USART_GetFlagStatus</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, stm32f2xx_usart.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[11e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_Ser_WrStr
 <LI><a href="#[237]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sps_fgetc
 <LI><a href="#[236]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sps_fputc
-<LI><a href="#[234]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_SendData
-<LI><a href="#[231]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_SendData
-<LI><a href="#[22e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_SendData
+<LI><a href="#[235]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_SendData
+<LI><a href="#[232]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_SendData
+<LI><a href="#[22f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_SendData
 <LI><a href="#[225]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_send_AT_command
 <LI><a href="#[224]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_SendString
-<LI><a href="#[21f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_SendData
+<LI><a href="#[221]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_SendData
 </UL>
 
-<P><STRONG><a name="[21e]"></a>USART_ClearFlag</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, stm32f2xx_usart.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[233]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_Init_Config
-<LI><a href="#[230]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_Init_Config
-<LI><a href="#[22d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_Init_Config
-<LI><a href="#[21b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Init_Config
+<P><STRONG><a name="[220]"></a>USART_ClearFlag</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, stm32f2xx_usart.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[234]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_Init_Config
+<LI><a href="#[231]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_Init_Config
+<LI><a href="#[22e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_Init_Config
+<LI><a href="#[21d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Init_Config
 </UL>
 
-<P><STRONG><a name="[221]"></a>USART_GetITStatus</STRONG> (Thumb, 110 bytes, Stack size 16 bytes, stm32f2xx_usart.o(.text), UNUSED)
-<BR><BR>[Called By]<UL><LI><a href="#[235]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_IRQHandler
-<LI><a href="#[232]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_IRQHandler
-<LI><a href="#[22f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_IRQHandler
-<LI><a href="#[220]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_IRQHandler
+<P><STRONG><a name="[21c]"></a>USART_GetITStatus</STRONG> (Thumb, 110 bytes, Stack size 16 bytes, stm32f2xx_usart.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = USART_GetITStatus
+</UL>
+<BR>[Called By]<UL><LI><a href="#[233]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_IRQHandler
+<LI><a href="#[230]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_IRQHandler
+<LI><a href="#[22d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_IRQHandler
+<LI><a href="#[21b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_IRQHandler
 </UL>
 
 <P><STRONG><a name="[113]"></a>USART_ClearITPendingBit</STRONG> (Thumb, 30 bytes, Stack size 8 bytes, stm32f2xx_usart.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = USART_ClearITPendingBit
 </UL>
 <BR>[Called By]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_Ser_ISR_Handler
+<LI><a href="#[21b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_IRQHandler
 </UL>
 
 <P><STRONG><a name="[32e]"></a>ASCII_IsAlpha</STRONG> (Thumb, 48 bytes, Stack size 0 bytes, lib_ascii.o(.text), UNUSED)
@@ -3948,36 +3963,43 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[26f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_spileo_hw_init
 </UL>
 
-<P><STRONG><a name="[21b]"></a>SPS_GPRS_Init_Config</STRONG> (Thumb, 196 bytes, Stack size 40 bytes, usart.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 108<LI>Call Chain = SPS_GPRS_Init_Config &rArr; USART_Init &rArr; RCC_GetClocksFreq
+<P><STRONG><a name="[21b]"></a>SPS_GPRS_IRQHandler</STRONG> (Thumb, 136 bytes, Stack size 8 bytes, usart.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = SPS_GPRS_IRQHandler &rArr; USART_GetITStatus
 </UL>
-<BR>[Calls]<UL><LI><a href="#[21d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NVIC_Init
+<BR>[Calls]<UL><LI><a href="#[112]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_ReceiveData
+<LI><a href="#[113]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_ClearITPendingBit
+<LI><a href="#[21c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_GetITStatus
+</UL>
+<BR>[Address Reference Count : 1]<UL><LI> usart.o(.text)
+</UL>
+<P><STRONG><a name="[21d]"></a>SPS_GPRS_Init_Config</STRONG> (Thumb, 212 bytes, Stack size 40 bytes, usart.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 108 + Unknown Stack Size
+<LI>Call Chain = SPS_GPRS_Init_Config &rArr; USART_Init &rArr; RCC_GetClocksFreq
+</UL>
+<BR>[Calls]<UL><LI><a href="#[21f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NVIC_Init
 <LI><a href="#[118]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_Init
 <LI><a href="#[115]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_ITConfig
 <LI><a href="#[11a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_Cmd
-<LI><a href="#[21c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB2PeriphClockCmd
+<LI><a href="#[21e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB2PeriphClockCmd
 <LI><a href="#[117]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB1PeriphClockCmd
+<LI><a href="#[109]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_IntVectSet
+<LI><a href="#[107]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_IntEn
 <LI><a href="#[f2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_AHB1PeriphClockCmd
 <LI><a href="#[fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_PinAFConfig
 <LI><a href="#[f3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
-<LI><a href="#[21e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_ClearFlag
+<LI><a href="#[220]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_ClearFlag
 <LI><a href="#[132]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_DeInit
 </UL>
 <BR>[Called By]<UL><LI><a href="#[271]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_spsvirgo_hw_init
 </UL>
 
-<P><STRONG><a name="[21f]"></a>SPS_GPRS_SendData</STRONG> (Thumb, 44 bytes, Stack size 16 bytes, usart.o(.text))
+<P><STRONG><a name="[221]"></a>SPS_GPRS_SendData</STRONG> (Thumb, 44 bytes, Stack size 16 bytes, usart.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = SPS_GPRS_SendData
 </UL>
 <BR>[Calls]<UL><LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendData
 <LI><a href="#[11f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_GetFlagStatus
 </UL>
 <BR>[Called By]<UL><LI><a href="#[272]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_spsvirgo_time_out_period_scan
-</UL>
-
-<P><STRONG><a name="[220]"></a>SPS_GPRS_IRQHandler</STRONG> (Thumb, 128 bytes, Stack size 8 bytes, usart.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[112]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_ReceiveData
-<LI><a href="#[221]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_GetITStatus
 </UL>
 
 <P><STRONG><a name="[226]"></a>SPS_GPRS_clear_receive_buffer</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, usart.o(.text), UNUSED)
@@ -4047,24 +4069,35 @@ Global Symbols
 <LI><a href="#[224]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_SendString
 </UL>
 
-<P><STRONG><a name="[22d]"></a>SPS_RFID_Init_Config</STRONG> (Thumb, 608 bytes, Stack size 40 bytes, usart.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 108<LI>Call Chain = SPS_RFID_Init_Config &rArr; USART_Init &rArr; RCC_GetClocksFreq
+<P><STRONG><a name="[22d]"></a>SPS_RFID_IRQHandler</STRONG> (Thumb, 556 bytes, Stack size 8 bytes, usart.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = SPS_RFID_IRQHandler &rArr; USART_GetITStatus
 </UL>
-<BR>[Calls]<UL><LI><a href="#[21d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NVIC_Init
+<BR>[Calls]<UL><LI><a href="#[112]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_ReceiveData
+<LI><a href="#[21c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_GetITStatus
+</UL>
+<BR>[Address Reference Count : 1]<UL><LI> usart.o(.text)
+</UL>
+<P><STRONG><a name="[22e]"></a>SPS_RFID_Init_Config</STRONG> (Thumb, 208 bytes, Stack size 40 bytes, usart.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 108 + Unknown Stack Size
+<LI>Call Chain = SPS_RFID_Init_Config &rArr; USART_Init &rArr; RCC_GetClocksFreq
+</UL>
+<BR>[Calls]<UL><LI><a href="#[21f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NVIC_Init
 <LI><a href="#[118]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_Init
 <LI><a href="#[115]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_ITConfig
 <LI><a href="#[11a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_Cmd
 <LI><a href="#[117]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB1PeriphClockCmd
+<LI><a href="#[109]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_IntVectSet
+<LI><a href="#[107]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_IntEn
 <LI><a href="#[f2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_AHB1PeriphClockCmd
 <LI><a href="#[fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_PinAFConfig
 <LI><a href="#[f3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
-<LI><a href="#[21e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_ClearFlag
+<LI><a href="#[220]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_ClearFlag
 <LI><a href="#[132]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_DeInit
 </UL>
 <BR>[Called By]<UL><LI><a href="#[271]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_spsvirgo_hw_init
 </UL>
 
-<P><STRONG><a name="[22e]"></a>SPS_RFID_SendData</STRONG> (Thumb, 44 bytes, Stack size 16 bytes, usart.o(.text))
+<P><STRONG><a name="[22f]"></a>SPS_RFID_SendData</STRONG> (Thumb, 44 bytes, Stack size 16 bytes, usart.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = SPS_RFID_SendData
 </UL>
 <BR>[Calls]<UL><LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendData
@@ -4073,29 +4106,35 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[272]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_spsvirgo_time_out_period_scan
 </UL>
 
-<P><STRONG><a name="[22f]"></a>SPS_RFID_IRQHandler</STRONG> (Thumb, 128 bytes, Stack size 8 bytes, usart.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[112]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_ReceiveData
-<LI><a href="#[221]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_GetITStatus
+<P><STRONG><a name="[230]"></a>SPS_BLE_IRQHandler</STRONG> (Thumb, 128 bytes, Stack size 8 bytes, usart.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = SPS_BLE_IRQHandler &rArr; USART_GetITStatus
 </UL>
-
-<P><STRONG><a name="[230]"></a>SPS_BLE_Init_Config</STRONG> (Thumb, 196 bytes, Stack size 40 bytes, usart.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 108<LI>Call Chain = SPS_BLE_Init_Config &rArr; USART_Init &rArr; RCC_GetClocksFreq
+<BR>[Calls]<UL><LI><a href="#[112]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_ReceiveData
+<LI><a href="#[21c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_GetITStatus
 </UL>
-<BR>[Calls]<UL><LI><a href="#[21d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NVIC_Init
+<BR>[Address Reference Count : 1]<UL><LI> usart.o(.text)
+</UL>
+<P><STRONG><a name="[231]"></a>SPS_BLE_Init_Config</STRONG> (Thumb, 212 bytes, Stack size 40 bytes, usart.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 108 + Unknown Stack Size
+<LI>Call Chain = SPS_BLE_Init_Config &rArr; USART_Init &rArr; RCC_GetClocksFreq
+</UL>
+<BR>[Calls]<UL><LI><a href="#[21f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NVIC_Init
 <LI><a href="#[118]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_Init
 <LI><a href="#[115]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_ITConfig
 <LI><a href="#[11a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_Cmd
 <LI><a href="#[117]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB1PeriphClockCmd
+<LI><a href="#[109]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_IntVectSet
+<LI><a href="#[107]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_IntEn
 <LI><a href="#[f2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_AHB1PeriphClockCmd
 <LI><a href="#[fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_PinAFConfig
 <LI><a href="#[f3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
-<LI><a href="#[21e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_ClearFlag
+<LI><a href="#[220]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_ClearFlag
 <LI><a href="#[132]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_DeInit
 </UL>
 <BR>[Called By]<UL><LI><a href="#[271]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_spsvirgo_hw_init
 </UL>
 
-<P><STRONG><a name="[231]"></a>SPS_BLE_SendData</STRONG> (Thumb, 44 bytes, Stack size 16 bytes, usart.o(.text))
+<P><STRONG><a name="[232]"></a>SPS_BLE_SendData</STRONG> (Thumb, 44 bytes, Stack size 16 bytes, usart.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = SPS_BLE_SendData
 </UL>
 <BR>[Calls]<UL><LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendData
@@ -4104,40 +4143,41 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[272]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_spsvirgo_time_out_period_scan
 </UL>
 
-<P><STRONG><a name="[232]"></a>SPS_BLE_IRQHandler</STRONG> (Thumb, 128 bytes, Stack size 8 bytes, usart.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[112]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_ReceiveData
-<LI><a href="#[221]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_GetITStatus
+<P><STRONG><a name="[233]"></a>SPS_SPARE1_IRQHandler</STRONG> (Thumb, 128 bytes, Stack size 8 bytes, usart.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = SPS_SPARE1_IRQHandler &rArr; USART_GetITStatus
 </UL>
-
-<P><STRONG><a name="[233]"></a>SPS_SPARE1_Init_Config</STRONG> (Thumb, 194 bytes, Stack size 40 bytes, usart.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 108<LI>Call Chain = SPS_SPARE1_Init_Config &rArr; USART_Init &rArr; RCC_GetClocksFreq
+<BR>[Calls]<UL><LI><a href="#[112]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_ReceiveData
+<LI><a href="#[21c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_GetITStatus
 </UL>
-<BR>[Calls]<UL><LI><a href="#[21d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NVIC_Init
+<BR>[Address Reference Count : 1]<UL><LI> usart.o(.text)
+</UL>
+<P><STRONG><a name="[234]"></a>SPS_SPARE1_Init_Config</STRONG> (Thumb, 210 bytes, Stack size 40 bytes, usart.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 108 + Unknown Stack Size
+<LI>Call Chain = SPS_SPARE1_Init_Config &rArr; USART_Init &rArr; RCC_GetClocksFreq
+</UL>
+<BR>[Calls]<UL><LI><a href="#[21f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NVIC_Init
 <LI><a href="#[118]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_Init
 <LI><a href="#[115]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_ITConfig
 <LI><a href="#[11a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_Cmd
 <LI><a href="#[117]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB1PeriphClockCmd
+<LI><a href="#[109]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_IntVectSet
+<LI><a href="#[107]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_IntEn
 <LI><a href="#[f2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_AHB1PeriphClockCmd
 <LI><a href="#[fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_PinAFConfig
 <LI><a href="#[f3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
-<LI><a href="#[21e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_ClearFlag
+<LI><a href="#[220]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_ClearFlag
 <LI><a href="#[132]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_DeInit
 </UL>
 <BR>[Called By]<UL><LI><a href="#[271]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_spsvirgo_hw_init
 </UL>
 
-<P><STRONG><a name="[234]"></a>SPS_SPARE1_SendData</STRONG> (Thumb, 44 bytes, Stack size 16 bytes, usart.o(.text))
+<P><STRONG><a name="[235]"></a>SPS_SPARE1_SendData</STRONG> (Thumb, 94 bytes, Stack size 16 bytes, usart.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = SPS_SPARE1_SendData
 </UL>
 <BR>[Calls]<UL><LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendData
 <LI><a href="#[11f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_GetFlagStatus
 </UL>
 <BR>[Called By]<UL><LI><a href="#[272]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_spsvirgo_time_out_period_scan
-</UL>
-
-<P><STRONG><a name="[235]"></a>SPS_SPARE1_IRQHandler</STRONG> (Thumb, 128 bytes, Stack size 8 bytes, usart.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[112]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_ReceiveData
-<LI><a href="#[221]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_GetITStatus
 </UL>
 
 <P><STRONG><a name="[df]"></a>_sys_exit</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, usart.o(.text))
@@ -5347,12 +5387,13 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> l2spsvirgo.o(.data)
 </UL>
 <P><STRONG><a name="[271]"></a>func_spsvirgo_hw_init</STRONG> (Thumb, 38 bytes, Stack size 8 bytes, l2spsvirgo.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 116<LI>Call Chain = func_spsvirgo_hw_init &rArr; SPS_SPARE1_Init_Config &rArr; USART_Init &rArr; RCC_GetClocksFreq
+<BR><BR>[Stack]<UL><LI>Max Depth = 116 + Unknown Stack Size
+<LI>Call Chain = func_spsvirgo_hw_init &rArr; SPS_SPARE1_Init_Config &rArr; USART_Init &rArr; RCC_GetClocksFreq
 </UL>
-<BR>[Calls]<UL><LI><a href="#[233]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_Init_Config
-<LI><a href="#[230]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_Init_Config
-<LI><a href="#[22d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_Init_Config
-<LI><a href="#[21b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Init_Config
+<BR>[Calls]<UL><LI><a href="#[234]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_Init_Config
+<LI><a href="#[231]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_Init_Config
+<LI><a href="#[22e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_Init_Config
+<LI><a href="#[21d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Init_Config
 </UL>
 <BR>[Called By]<UL><LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_spsvirgo_init
 </UL>
@@ -5394,10 +5435,10 @@ Global Symbols
 <LI>Call Chain = func_spsvirgo_time_out_period_scan &rArr; IhuDebugPrint &rArr; BSP_Ser_WrStr &rArr; BSP_Ser_WrByteUnlocked &rArr; BSP_OS_SemWait &rArr; OSSemPend &rArr; OS_Pend &rArr; OS_TaskBlock &rArr; OS_TickListInsert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ec]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrint
-<LI><a href="#[234]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_SendData
-<LI><a href="#[231]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_SendData
-<LI><a href="#[22e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_SendData
-<LI><a href="#[21f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_SendData
+<LI><a href="#[235]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_SPARE1_SendData
+<LI><a href="#[232]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_BLE_SendData
+<LI><a href="#[22f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_RFID_SendData
+<LI><a href="#[221]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_SendData
 </UL>
 <BR>[Called By]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_spsvirgo_time_out
 </UL>
