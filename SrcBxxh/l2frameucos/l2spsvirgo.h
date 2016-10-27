@@ -55,5 +55,9 @@ extern OPSTAT fsm_spsvirgo_time_out(UINT8 dest_id, UINT8 src_id, void * param_pt
 OPSTAT func_spsvirgo_hw_init(void);
 void func_spsvirgo_time_out_period_scan(void);
 
+//Global API
+extern void TIM_USART_GPRS_Init_Config(void);
+extern void SPS_GPRS_GSM_test_selection(u8 option);
+
 #endif /* L2FRAME_L2SPSVIRGO_H_ */
 

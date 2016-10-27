@@ -29,6 +29,7 @@
 //工作流函数
 u8 SPS_GPRS_gsm_test_main(void);
 void SPS_GPRS_GSM_test_loop(void);//模块测试主程序
+extern void SPS_GPRS_GSM_test_selection(u8 option);
 u8 SPS_GPRS_GSM_gsminfo(void);//GSM信息显示(信号质量,电池电量,日期时间)
 u8 SPS_GPRS_GSM_mtest(void);//模块信息检测
 u8 SPS_GPRS_GSM_call_test(void);//拨号测试程序

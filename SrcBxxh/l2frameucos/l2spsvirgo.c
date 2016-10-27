@@ -53,7 +53,9 @@ extern vu8 SPS_BLE_R_State;						//串口1接收状态
 extern vu16 SPS_BLE_R_Count;						//当前接收数据的字节数 	 
 extern vu8 SPS_SPARE1_R_Buff[SPS_SPARE1_REC_MAXLEN];	//串口1数据接收缓冲区 
 extern vu8 SPS_SPARE1_R_State;						//串口1接收状态
-extern vu16 SPS_SPARE1_R_Count;						//当前接收数据的字节数 	 
+extern vu16 SPS_SPARE1_R_Count;						//当前接收数据的字节数
+
+UINT8 zIhuGprsOperationFlag = 0;
 
 //Main Entry
 //Input parameter would be useless, but just for similar structure purpose
@@ -98,6 +100,7 @@ OPSTAT fsm_spsvirgo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 
 	//Global Variables
 	zIhuRunErrCnt[TASK_ID_SPSVIRGO] = 0;
+	zIhuGprsOperationFlag = 0;
 
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_SPSVIRGO, FSM_STATE_SPSVIRGO_ACTIVED) == IHU_FAILURE){
@@ -160,6 +163,7 @@ OPSTAT func_spsvirgo_hw_init(void)
 	ihu_l1hd_sps_rfid_init_config(115200);//USART_RFID初始化配置
 	ihu_l1hd_sps_ble_init_config(115200);//UART_BLE初始化配置
 	ihu_l1hd_sps_spare1_init_config(115200);//UART_SPARE1初始化配置
+	TIM_USART_GPRS_Init_Config();  //初始化跟GPRS时钟相关的TIM
 	
 	return IHU_SUCCESS;
 }
@@ -218,12 +222,17 @@ void func_spsvirgo_time_out_period_scan(void)
 	ihu_l1hd_sps_ble_send_data("This is my BLE test!\n", 20);
 	ihu_l1hd_sps_spare1_send_data("This is my SPARE1 test!\n", 30);
 
-	if(SPS_GPRS_R_State == 1)//一帧数据接收完成
-	{
-		SPS_GPRS_SendData((INT8 *)SPS_GPRS_R_Buff, SPS_GPRS_R_Count);//USART1发送数据缓冲区数据(发送刚接收完成的一帧数据)
-		SPS_GPRS_R_State =0;
-		SPS_GPRS_R_Count =0;
-	}
+	zIhuGprsOperationFlag++;
+	
+	//只干活一次
+	if (zIhuGprsOperationFlag == 1)	SPS_GPRS_GSM_test_selection(2);
+	
+//	if(SPS_GPRS_R_State == 1)//一帧数据接收完成
+//	{
+//		SPS_GPRS_SendData((INT8 *)SPS_GPRS_R_Buff, SPS_GPRS_R_Count);//USART1发送数据缓冲区数据(发送刚接收完成的一帧数据)
+//		SPS_GPRS_R_State =0;
+//		SPS_GPRS_R_Count =0;
+//	}
 	IhuDebugPrint("SPSVIRGO: Time Out Test!\n");
 }
 

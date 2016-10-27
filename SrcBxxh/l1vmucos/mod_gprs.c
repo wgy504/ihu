@@ -104,7 +104,7 @@ void SPS_GPRS_GSM_test_loop(void)
 	{
 		if(sim_ready)
 		{
-			if(SPS_PRINT_RX_STA&0x8000)
+			if(SPS_PRINT_RX_STA & 0x8000)
 			{
 				SPS_PRINT_RX_STA=0;
 				if(strstr((char*)SPS_PRINT_R_Buf,"DIAL"))
@@ -131,6 +131,48 @@ void SPS_GPRS_GSM_test_loop(void)
 		}			
 	} 	
 }
+
+/*******************************************************************************
+* 函数名 : SPS_GPRS_GSM_test_selection
+* 描述   : GSM主测试程序
+* 输入   : 
+* 输出   : 
+* 返回   : 
+* 注意   : 
+*******************************************************************************/
+void SPS_GPRS_GSM_test_selection(u8 option)
+{
+	u8 sim_ready=0;
+	while(SPS_GPRS_send_AT_command((u8*)"AT",(u8*)"OK",5))//查询是否应到AT指令
+	{
+		IhuDebugPrint("VMUO: Not dected module!\n");
+		ihu_usleep(800);
+		IhuDebugPrint("VMUO: Trying to reconnecting!\n");
+		ihu_usleep(400);  
+	} 	 
+	SPS_GPRS_send_AT_command((u8*)"ATE0",(u8*)"OK",200);//不回显
+	SPS_GPRS_GSM_mtest();
+	if(SPS_GPRS_GSM_gsminfo()==0)
+	{
+		sim_ready=1;
+		IhuDebugPrint("VMUO: Please select: Chinese+Enter, then re-send\n"); 				    	 
+		IhuDebugPrint("VMUO: DIAL\t"); 				    	 
+		IhuDebugPrint("VMUO: SMS\t");				    	 
+		IhuDebugPrint("VMUO: GPRS\t");
+		IhuDebugPrint("VMUO: LOC\t");
+		IhuDebugPrint("VMUO: VOICE\r\n");
+	}
+	
+	if ((sim_ready == 1) && (option == 1)) SPS_GPRS_GSM_call_test();	//电话测试
+	else if ((sim_ready == 1) && (option == 2)) SPS_GPRS_GSM_sms_test();		//短信测试
+	else if ((sim_ready == 1) && (option == 3)) SPS_GPRS_GSM_gprs_test();	//GPRS测试
+	else if ((sim_ready == 1) && (option == 4)) SPS_GPRS_GSM_jz_test();		//基站测试
+	else if ((sim_ready == 1) && (option == 5)) SPS_GPRS_GSM_tts_test();		//语音测试
+	else IhuDebugPrint("VMUO: Error selection!\n");
+	
+	return;
+}
+
 /*******************************************************************************
 * 函数名 : SPS_GPRS_GSM_mtest
 * 描述   : GSM/GPRS主测试控制部分
