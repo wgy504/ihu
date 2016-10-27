@@ -1,4 +1,4 @@
-#include "timer.h"
+#include "l1hd_timer.h"
 
 extern vu8 Timer0_start;
 extern u8 shijian;

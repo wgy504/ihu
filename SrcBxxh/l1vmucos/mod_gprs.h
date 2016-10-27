@@ -1,7 +1,7 @@
 /**
  ****************************************************************************************
  *
- * @file gprs.h
+ * @file mod_gprs.h
  *
  * @brief GPRS module control
  *
@@ -11,14 +11,14 @@
  ****************************************************************************************
  */
 
-#ifndef L1VUCOS_GPRS_H_
-#define L1VUCOS_GPRS_H_
+#ifndef L1VUCOS_MOD_GPRS_H_
+#define L1VUCOS_MOD_GPRS_H_
 
 #include "stm32f2xx.h"
 #include "string.h"
-#include "usart.h"
-#include "led.h"
-#include "timer.h"
+#include "l1hd_usart.h"
+#include "l1hd_led.h"
+#include "l1hd_timer.h"
 #include "vmucoslayer.h"
 #include "bsp.h"
 
@@ -69,5 +69,5 @@ extern void USART_PRINT_IRQHandler(void);
 
 
 
-#endif /* L1VUCOS_GPRS_H_ */
+#endif /* L1VUCOS_MOD_GPRS_H_ */
 

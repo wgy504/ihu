@@ -1,5 +1,5 @@
-#ifndef __TIMER_H
-#define __TIMER_H
+#ifndef __L1HD_TIMER_H
+#define __L1HD_TIMER_H
 
 #include "stm32f2xx.h"
 #include "bsp.h"

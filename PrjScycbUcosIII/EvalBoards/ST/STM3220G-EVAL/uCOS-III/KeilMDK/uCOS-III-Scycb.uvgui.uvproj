@@ -773,6 +773,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\BSP\STM32F2xx\src\stm32f2xx_wwdg.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f2xx_conf.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\BSP\CMSIS\Device_Support\stm32f2xx_conf.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1037,46 +1042,6 @@
           <GroupName>l1hd_stm32f2</GroupName>
           <Files>
             <File>
-              <FileName>key.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\key.c</FilePath>
-            </File>
-            <File>
-              <FileName>key.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\key.h</FilePath>
-            </File>
-            <File>
-              <FileName>led.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\led.c</FilePath>
-            </File>
-            <File>
-              <FileName>led.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\led.h</FilePath>
-            </File>
-            <File>
-              <FileName>rtc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\rtc.c</FilePath>
-            </File>
-            <File>
-              <FileName>rtc.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\rtc.h</FilePath>
-            </File>
-            <File>
-              <FileName>spi_flash.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\spi_flash.c</FilePath>
-            </File>
-            <File>
-              <FileName>spi_flash.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\spi_flash.h</FilePath>
-            </File>
-            <File>
               <FileName>spi_itf.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\spi_itf.c</FilePath>
@@ -1087,24 +1052,64 @@
               <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\spi_itf.h</FilePath>
             </File>
             <File>
-              <FileName>usart.c</FileName>
+              <FileName>l1hd_key.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\usart.c</FilePath>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\l1hd_key.c</FilePath>
             </File>
             <File>
-              <FileName>usart.h</FileName>
+              <FileName>l1hd_key.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\usart.h</FilePath>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\l1hd_key.h</FilePath>
             </File>
             <File>
-              <FileName>timer.c</FileName>
+              <FileName>l1hd_led.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\timer.c</FilePath>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\l1hd_led.c</FilePath>
             </File>
             <File>
-              <FileName>timer.h</FileName>
+              <FileName>l1hd_led.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\timer.h</FilePath>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\l1hd_led.h</FilePath>
+            </File>
+            <File>
+              <FileName>l1hd_rtc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\l1hd_rtc.c</FilePath>
+            </File>
+            <File>
+              <FileName>l1hd_rtc.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\l1hd_rtc.h</FilePath>
+            </File>
+            <File>
+              <FileName>l1hd_spi_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\l1hd_spi_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>l1hd_spi_flash.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\l1hd_spi_flash.h</FilePath>
+            </File>
+            <File>
+              <FileName>l1hd_timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\l1hd_timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>l1hd_timer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\l1hd_timer.h</FilePath>
+            </File>
+            <File>
+              <FileName>l1hd_usart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\l1hd_usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>l1hd_usart.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1hd_stm32f2\l1hd_usart.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1137,14 +1142,14 @@
               <FilePath>..\..\..\..\..\..\SrcBxxh\l1vmucos\vmucoslayer.h</FilePath>
             </File>
             <File>
-              <FileName>gprs.c</FileName>
+              <FileName>mod_gprs.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\SrcBxxh\l1vmucos\gprs.c</FilePath>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1vmucos\mod_gprs.c</FilePath>
             </File>
             <File>
-              <FileName>gprs.h</FileName>
+              <FileName>mod_gprs.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\..\SrcBxxh\l1vmucos\gprs.h</FilePath>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1vmucos\mod_gprs.h</FilePath>
             </File>
           </Files>
         </Group>
