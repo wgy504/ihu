@@ -727,7 +727,7 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 增加LED在板灯以及时钟到达灯的定时取反控制
 = 参照例子，增加完整的GPRS通信例程
 = 完善SPI2的通信控制机制
-
+= 机械的加入GSM/GPRS程序例子
 
 
 
