@@ -280,16 +280,12 @@ extern void ihu_timer_routine_handler_10ms(void);
 //USART专门对付一般性的驱动函数，对其进行映射，以便保持上层模块的一致性
 #define ihu_l1hd_sps_gprs_init_config SPS_GPRS_Init_Config
 #define ihu_l1hd_sps_gprs_send_data SPS_GPRS_SendData
-#define ihu_l1hd_sps_gprs_irq_handler SPS_GPRS_IRQHandler
 #define ihu_l1hd_sps_rfid_init_config SPS_RFID_Init_Config
 #define ihu_l1hd_sps_rfid_send_data SPS_RFID_SendData
-#define ihu_l1hd_sps_rfid_irq_handler SPS_RFID_IRQHandler
 #define ihu_l1hd_sps_ble_init_config SPS_BLE_Init_Config
 #define ihu_l1hd_sps_ble_send_data SPS_BLE_SendData
-#define ihu_l1hd_sps_ble_irq_handler SPS_BLE_IRQHandler
 #define ihu_l1hd_sps_spare1_init_config SPS_SPARE1_Init_Config
 #define ihu_l1hd_sps_spare1_send_data SPS_SPARE1_SendData
-#define ihu_l1hd_sps_spare1_irq_handler SPS_SPARE1_IRQHandler
 
 
 #endif /* L1VMFREEOS_VMFREEOSLAYER_H_ */

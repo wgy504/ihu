@@ -11,21 +11,22 @@
 #include "stm32f2xx.h"
 #include "usart.h"	  
 	
-vu8 USART_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN];	//串口GPRS数据接收缓冲区 
-vu8 USART_GPRS_R_State=0;					//串口GPRS接收状态
-vu16 USART_GPRS_R_Count=0;					//当前接收数据的字节数
+vu8 SPS_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN];			//串口GPRS数据接收缓冲区 
+vu8 SPS_GPRS_R_State=0;												//串口GPRS接收状态
+vu16 SPS_GPRS_R_Count=0;											//当前接收数据的字节数
+u8 SPS_GPRS_TIMER_TRIGGER_Count=0;  					//串口GPRS的时间计时器，跟TIM2相互关联，从而使得GPRS串口在接收IRQ处理程序中可以设置时间超时定时器
 
-vu8 USART_RFID_R_Buff[SPS_RFID_REC_MAXLEN];	//串口RFID数据接收缓冲区 
-vu8 USART_RFID_R_State=0;					//串口RFID接收状态
-vu16 USART_RFID_R_Count=0;					//当前接收数据的字节数 	  
+vu8 SPS_RFID_R_Buff[SPS_RFID_REC_MAXLEN];	//串口RFID数据接收缓冲区 
+vu8 SPS_RFID_R_State=0;					//串口RFID接收状态
+vu16 SPS_RFID_R_Count=0;					//当前接收数据的字节数 	  
 
-vu8 UART_BLE_R_Buff[SPS_BLE_REC_MAXLEN];	//串口BLE数据接收缓冲区 
-vu8 UART_BLE_R_State=0;					//串口BLE接收状态
-vu16 UART_BLE_R_Count=0;					//当前接收数据的字节数 	  
+vu8 SPS_BLE_R_Buff[SPS_BLE_REC_MAXLEN];	//串口BLE数据接收缓冲区 
+vu8 SPS_BLE_R_State=0;					//串口BLE接收状态
+vu16 SPS_BLE_R_Count=0;					//当前接收数据的字节数 	  
 
-vu8 UART_SPARE1_R_Buff[SPS_SPARE1_REC_MAXLEN];	//串口SPARE1数据接收缓冲区 
-vu8 UART_SPARE1_R_State=0;					//串口SPARE1接收状态
-vu16 UART_SPARE1_R_Count=0;					//当前接收数据的字节数 	  
+vu8 SPS_SPARE1_R_Buff[SPS_SPARE1_REC_MAXLEN];	//串口SPARE1数据接收缓冲区 
+vu8 SPS_SPARE1_R_State=0;					//串口SPARE1接收状态
+vu16 SPS_SPARE1_R_Count=0;					//当前接收数据的字节数 	  
 
 
 /*******************************************************************************
@@ -74,14 +75,17 @@ void SPS_GPRS_Init_Config(u32 bound)
   /*USART_GPRS NVIC配置*/
   NVIC_InitStructure.NVIC_IRQChannel = USART_GPRS_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=1;	//抢占优先级3
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;		//从优先级3
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQ通道使能
-	NVIC_Init(&NVIC_InitStructure);							//根据指定的参数初始化VIC寄存器 
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;			//从优先级3
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;					//IRQ通道使能
+	NVIC_Init(&NVIC_InitStructure);													//根据指定的参数初始化VIC寄存器 
 	  
-  USART_ITConfig(USART_GPRS, USART_IT_RXNE, ENABLE);			//使能串口1接收中断
-
+  USART_ITConfig(USART_GPRS, USART_IT_RXNE, ENABLE);			//使能串口1接收中断 Receive Data register not empty interrupt 
   USART_Cmd(USART_GPRS, ENABLE);                    			//使能串口 
-	USART_ClearFlag(USART_GPRS, USART_FLAG_TC);					//清除发送完成标志
+	USART_ClearFlag(USART_GPRS, USART_FLAG_TC);							//清除发送完成标志 Transmission complete interrupt
+	
+	//挂载中断
+	BSP_IntVectSet(USART_GPRS_INT_VECTOR, SPS_GPRS_IRQHandler);
+  BSP_IntEn(USART_GPRS_INT_VECTOR);
 }
 
 
@@ -115,41 +119,70 @@ void SPS_GPRS_SendData(vs8* buff, u16 len)
 void SPS_GPRS_IRQHandler(void)                	
 {
 	u8 Res=0;
-
-	if(USART_GetITStatus(USART_GPRS, USART_IT_RXNE) != RESET) //接收中断(接收到的数据必须是0x0d 0x0a结尾)
+	SPS_GPRS_TIMER_TRIGGER_Count=0;
+	//要不要设计成这样的：中断进来后立即禁止再次重入，等待接收R_BUFFER被处理好了后再行ENABLE该中断？
+	//还是我们有更好的方式，比如直接采用USART_IT_RXNE比特位，这个比特位一旦拉高后，不会再次进来了？
+	//当然还有一种方式来规避这个问题，就是接收到了数据后立即发送给任务模块，这个接收就继续了。
+	//由于状态机控制的复杂性，如果不是要做正常的双向通信机制，我们这里将采用与TIMER配合的轮询方式来工作
+	//USART_ITConfig(USART_GPRS, USART_IT_RXNE, DISABLE);
+	
+	// 原始代码中，使用了USART_IT_RXNE进行判定，而非USART_FLAG_RXNE，后续需要仔细确定，到底该如何？
+	if(USART_GetITStatus(USART_GPRS, USART_FLAG_RXNE) != RESET) //接收中断(接收到的数据必须是0x0d 0x0a结尾)
 	{
-		Res =USART_ReceiveData(USART_GPRS); //读取接收到的数据(USART_GPRS->DR)
+		USART_ClearITPendingBit(USART_GPRS, USART_IT_RXNE);
+		Res = USART_ReceiveData(USART_GPRS); //读取接收到的数据(USART_GPRS->DR)
 		
-		USART_GPRS_R_Buff[USART_GPRS_R_Count++] = Res;
-		if(USART_GPRS_R_State == 0)//数据接收未完成
+		SPS_GPRS_R_Buff[SPS_GPRS_R_Count++] = Res;
+		if(SPS_GPRS_R_State == 0)//数据接收未完成
 		{
 			if(Res == 0x0d)//接收到0x0d,下一个字节接收到0x0a则接收完成
 			{
-				USART_GPRS_R_State =2;
+				SPS_GPRS_R_State =2;
 			}
 		}
-		else if(USART_GPRS_R_State == 2)
+		else if(SPS_GPRS_R_State == 2)
 		{
-			if(Res == 0x0a)//上一个字节接收到0x0d,这个字节接收到oxoa则接收完成
+			if(Res == 0x0a)//上一个字节接收到0x0d,这个字节接收到0xoa则接收完成
 			{
-				USART_GPRS_R_State =1;//数据接收完成
+				SPS_GPRS_R_State =1;//数据接收完成
 			}
 			else//接收错误
 			{
-				USART_GPRS_R_State =0;
-				USART_GPRS_R_Count =0;
+				SPS_GPRS_R_State =0;
+				SPS_GPRS_R_Count =0;
 			}
 		}
-		if(USART_GPRS_R_Count >= SPS_GPRS_REC_MAXLEN)//接收数据长度走出接收数据缓冲区
+		if(SPS_GPRS_R_Count >= SPS_GPRS_REC_MAXLEN)//接收数据长度走出接收数据缓冲区
 		{
-			if((USART_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN-2] != 0x0d) || (USART_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN-1] != 0x0a))
+			if((SPS_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN-2] != 0x0d) || (SPS_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN-1] != 0x0a))
 			{
-				USART_GPRS_R_Count =0;
-				USART_GPRS_R_State =0;
+				SPS_GPRS_R_Count =0;
+				SPS_GPRS_R_State =0;
 			}
 		} 		 
 	} 
 } 	
+
+/*******************************************************************************
+* 函数名  : SPS_GPRS_IRQHandler
+* 描述    : 串口1中断服务程序
+* 输入    : 无
+* 返回    : 无 
+* 说明    : 
+* 本函数是原始函数，放在这里，只是为了对比而已
+*******************************************************************************/
+//void SPS_GPRS_IRQHandler(void)                	
+//{
+//			u8 Res=0;
+//      SPS_GPRS_TIMER_TRIGGER_Count=0;
+//			Res= USART_ReceiveData(USART_GPRS);		//将接收到的字符串存到缓存中
+//			SPS_GPRS_R_Buff[SPS_GPRS_R_Count]= Res; 
+//			SPS_GPRS_R_Count++;                			//缓存指针向后移动
+//			if(SPS_GPRS_R_Count > SPS_GPRS_REC_MAXLEN)       		//如果缓存满,将缓存指针指向缓存的首地址
+//			{
+//				SPS_GPRS_R_Count = 0;
+//			}
+//} 	
 
 /*******************************************************************************
 * 函数名  : USART_RFID_Init_Config
@@ -202,9 +235,12 @@ void SPS_RFID_Init_Config(u32 bound)
 	NVIC_Init(&NVIC_InitStructure);							//根据指定的参数初始化VIC寄存器 
 	  
   USART_ITConfig(USART_RFID, USART_IT_RXNE, ENABLE);			//使能串口1接收中断
-
   USART_Cmd(USART_RFID, ENABLE);                    			//使能串口 
 	USART_ClearFlag(USART_RFID, USART_FLAG_TC);					//清除发送完成标志
+	
+	//挂载中断
+	BSP_IntVectSet(USART_RFID_INT_VECTOR, SPS_RFID_IRQHandler);
+  BSP_IntEn(USART_RFID_INT_VECTOR);
 }
 
 
@@ -243,32 +279,32 @@ void SPS_RFID_IRQHandler(void)
 	{
 		Res =USART_ReceiveData(USART_RFID); //读取接收到的数据(USART_RFID->DR)
 		
-		USART_RFID_R_Buff[USART_RFID_R_Count++] = Res;
-		if(USART_RFID_R_State == 0)//数据接收未完成
+		SPS_RFID_R_Buff[SPS_RFID_R_Count++] = Res;
+		if(SPS_RFID_R_State == 0)//数据接收未完成
 		{
 			if(Res == 0x0d)//接收到0x0d,下一个字节接收到0x0a则接收完成
 			{
-				USART_RFID_R_State =2;
+				SPS_RFID_R_State =2;
 			}
 		}
-		else if(USART_RFID_R_State == 2)
+		else if(SPS_RFID_R_State == 2)
 		{
 			if(Res == 0x0a)//上一个字节接收到0x0d,这个字节接收到oxoa则接收完成
 			{
-				USART_RFID_R_State =1;//数据接收完成
+				SPS_RFID_R_State =1;//数据接收完成
 			}
 			else//接收错误
 			{
-				USART_RFID_R_State =0;
-				USART_RFID_R_Count =0;
+				SPS_RFID_R_State =0;
+				SPS_RFID_R_Count =0;
 			}
 		}
-		if(USART_RFID_R_Count >= SPS_RFID_REC_MAXLEN)//接收数据长度走出接收数据缓冲区
+		if(SPS_RFID_R_Count >= SPS_RFID_REC_MAXLEN)//接收数据长度走出接收数据缓冲区
 		{
-			if((USART_RFID_R_Buff[SPS_RFID_REC_MAXLEN-2] != 0x0d) || (USART_RFID_R_Buff[SPS_RFID_REC_MAXLEN-1] != 0x0a))
+			if((SPS_RFID_R_Buff[SPS_RFID_REC_MAXLEN-2] != 0x0d) || (SPS_RFID_R_Buff[SPS_RFID_REC_MAXLEN-1] != 0x0a))
 			{
-				USART_RFID_R_Count =0;
-				USART_RFID_R_State =0;
+				SPS_RFID_R_Count =0;
+				SPS_RFID_R_State =0;
 			}
 		} 		 
 	} 
@@ -325,9 +361,12 @@ void SPS_BLE_Init_Config(u32 bound)
 	NVIC_Init(&NVIC_InitStructure);							//根据指定的参数初始化VIC寄存器 
 	  
   USART_ITConfig(UART_BLE, USART_IT_RXNE, ENABLE);			//使能串口1接收中断
-
   USART_Cmd(UART_BLE, ENABLE);                    			//使能串口 
 	USART_ClearFlag(UART_BLE, USART_FLAG_TC);					//清除发送完成标志
+	
+	//挂载中断
+	BSP_IntVectSet(UART_BLE_INT_VECTOR, SPS_BLE_IRQHandler);
+  BSP_IntEn(UART_BLE_INT_VECTOR);
 }
 
 
@@ -366,32 +405,32 @@ void SPS_BLE_IRQHandler(void)
 	{
 		Res =USART_ReceiveData(UART_BLE); //读取接收到的数据(UART_BLE->DR)
 		
-		UART_BLE_R_Buff[UART_BLE_R_Count++] = Res;
-		if(UART_BLE_R_State == 0)//数据接收未完成
+		SPS_BLE_R_Buff[SPS_BLE_R_Count++] = Res;
+		if(SPS_BLE_R_State == 0)//数据接收未完成
 		{
 			if(Res == 0x0d)//接收到0x0d,下一个字节接收到0x0a则接收完成
 			{
-				UART_BLE_R_State =2;
+				SPS_BLE_R_State =2;
 			}
 		}
-		else if(UART_BLE_R_State == 2)
+		else if(SPS_BLE_R_State == 2)
 		{
 			if(Res == 0x0a)//上一个字节接收到0x0d,这个字节接收到oxoa则接收完成
 			{
-				UART_BLE_R_State =1;//数据接收完成
+				SPS_BLE_R_State =1;//数据接收完成
 			}
 			else//接收错误
 			{
-				UART_BLE_R_State =0;
-				UART_BLE_R_Count =0;
+				SPS_BLE_R_State =0;
+				SPS_BLE_R_Count =0;
 			}
 		}
-		if(UART_BLE_R_Count >= SPS_BLE_REC_MAXLEN)//接收数据长度走出接收数据缓冲区
+		if(SPS_BLE_R_Count >= SPS_BLE_REC_MAXLEN)//接收数据长度走出接收数据缓冲区
 		{
-			if((UART_BLE_R_Buff[SPS_BLE_REC_MAXLEN-2] != 0x0d) || (UART_BLE_R_Buff[SPS_BLE_REC_MAXLEN-1] != 0x0a))
+			if((SPS_BLE_R_Buff[SPS_BLE_REC_MAXLEN-2] != 0x0d) || (SPS_BLE_R_Buff[SPS_BLE_REC_MAXLEN-1] != 0x0a))
 			{
-				UART_BLE_R_Count =0;
-				UART_BLE_R_State =0;
+				SPS_BLE_R_Count =0;
+				SPS_BLE_R_State =0;
 			}
 		} 		 
 	} 
@@ -448,9 +487,12 @@ void SPS_SPARE1_Init_Config(u32 bound)
 	NVIC_Init(&NVIC_InitStructure);							//根据指定的参数初始化VIC寄存器 
 	  
   USART_ITConfig(UART_SPARE1, USART_IT_RXNE, ENABLE);			//使能串口1接收中断
-
   USART_Cmd(UART_SPARE1, ENABLE);                    			//使能串口 
 	USART_ClearFlag(UART_SPARE1, USART_FLAG_TC);					//清除发送完成标志
+
+	//挂载中断
+	BSP_IntVectSet(UART_SPARE1_INT_VECTOR, SPS_SPARE1_IRQHandler);
+  BSP_IntEn(UART_SPARE1_INT_VECTOR);
 }
 
 
@@ -489,32 +531,32 @@ void SPS_SPARE1_IRQHandler(void)
 	{
 		Res =USART_ReceiveData(UART_SPARE1); //读取接收到的数据(UART_SPARE1->DR)
 		
-		UART_SPARE1_R_Buff[UART_SPARE1_R_Count++] = Res;
-		if(UART_SPARE1_R_State == 0)//数据接收未完成
+		SPS_SPARE1_R_Buff[SPS_SPARE1_R_Count++] = Res;
+		if(SPS_SPARE1_R_State == 0)//数据接收未完成
 		{
 			if(Res == 0x0d)//接收到0x0d,下一个字节接收到0x0a则接收完成
 			{
-				UART_SPARE1_R_State =2;
+				SPS_SPARE1_R_State =2;
 			}
 		}
-		else if(UART_SPARE1_R_State == 2)
+		else if(SPS_SPARE1_R_State == 2)
 		{
 			if(Res == 0x0a)//上一个字节接收到0x0d,这个字节接收到oxoa则接收完成
 			{
-				UART_SPARE1_R_State =1;//数据接收完成
+				SPS_SPARE1_R_State =1;//数据接收完成
 			}
 			else//接收错误
 			{
-				UART_SPARE1_R_State =0;
-				UART_SPARE1_R_Count =0;
+				SPS_SPARE1_R_State =0;
+				SPS_SPARE1_R_Count =0;
 			}
 		}
-		if(UART_SPARE1_R_Count >= SPS_SPARE1_REC_MAXLEN)//接收数据长度走出接收数据缓冲区
+		if(SPS_SPARE1_R_Count >= SPS_SPARE1_REC_MAXLEN)//接收数据长度走出接收数据缓冲区
 		{
-			if((UART_SPARE1_R_Buff[SPS_SPARE1_REC_MAXLEN-2] != 0x0d) || (UART_SPARE1_R_Buff[SPS_SPARE1_REC_MAXLEN-1] != 0x0a))
+			if((SPS_SPARE1_R_Buff[SPS_SPARE1_REC_MAXLEN-2] != 0x0d) || (SPS_SPARE1_R_Buff[SPS_SPARE1_REC_MAXLEN-1] != 0x0a))
 			{
-				UART_SPARE1_R_Count =0;
-				UART_SPARE1_R_State =0;
+				SPS_SPARE1_R_Count =0;
+				SPS_SPARE1_R_State =0;
 			}
 		} 		 
 	} 
@@ -547,7 +589,7 @@ _sys_exit(int x)
 * 返回    : 无 
 * 说明    : 重定义putc函数，这样可以使用printf函数从串口1打印输出
 *******************************************************************************/
-int fputc(int ch, FILE *f)
+int sps_fputc(int ch, FILE *f)
 {
  /* e.g. 给USART写一个字符 */
  USART_SendData(USART_GPRS, (uint8_t) ch);
@@ -565,10 +607,15 @@ int fputc(int ch, FILE *f)
 * 返回    : 无 
 * 说明    : 重定义getc函数，这样可以使用scanff函数从串口1输入数据
 *******************************************************************************/
-int fgetc(FILE *f)
+int sps_fgetc(FILE *f)
 {
  /* 等待串口1输入数据 */
  while (USART_GetFlagStatus(USART_GPRS, USART_FLAG_RXNE) == RESET);
 
  return (int)USART_ReceiveData(USART_GPRS);
 }	
+
+
+
+
+

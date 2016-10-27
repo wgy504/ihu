@@ -47,18 +47,6 @@ extern "C" {
 	(BitAction)(1-(GPIO_ReadOutputDataBit(LED_F205_TIMER_IND_PORT, LED_F205_TIMER_IND_PIN))))	
 #define LED_F205RG_TIMER_IND_CLK_ENABLE()		RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE)
 
-//Old
-//#define GPIO_LED         GPIOC 	
-//#define led1_output      GPIO_Pin_2 | GPIO_Pin_3  //ZJL: 为了测试目的，PIN2是板载管脚，PIN3是外接管脚
-//#define led1_on()        GPIO_SetBits(GPIO_LED, led1_output)		
-//#define led1_off()       GPIO_ResetBits(GPIO_LED, led1_output)
-//#define led1_negation()  GPIO_WriteBit(GPIO_LED, led1_output, (BitAction)(1-(GPIO_ReadOutputDataBit(GPIO_LED, led1_output))))	
-
-//void led_init (void);
-//void led_all_on (void);
-//void led_all_off (void);
-//void led_all_negation (void);
-
 //ZJL: 另外一种方式，就是直接使用LED宏定义搞定
 #define LED_F205RG_onoff(port, pin, onoff) if (onoff) GPIO_SetBits(port, pin); else GPIO_ResetBits (port, pin);
 

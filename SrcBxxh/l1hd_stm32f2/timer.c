@@ -11,7 +11,7 @@ extern u8 Times;
 * 返回    : 无 
 * 说明    : 1s延时
 *******************************************************************************/
-void Timer2_Init_Config(void)
+void TIM_USART_GPRS_Init_Config(void)
 {
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 	NVIC_InitTypeDef NVIC_InitStructure;
@@ -32,8 +32,12 @@ void Timer2_Init_Config(void)
 	NVIC_Init(&NVIC_InitStructure); 							//初始化NVIC寄存器
 	 
 	TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE ); 				//使能TIM2指定的中断
-	
 	TIM_Cmd(TIM2, ENABLE);  									//使能TIMx外设
+	
+	//挂载中断，挂载到TIM2上，显示挂载，而不是通过TIM2_IQRHandler的隐式挂载
+	BSP_IntVectSet(TIM_USART_GPRS_INT_VECTOR, TIM_USART_GPRS_IRQHandler);
+  BSP_IntEn(TIM_USART_GPRS_INT_VECTOR);
+	
 }	 
 
 

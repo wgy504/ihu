@@ -1136,6 +1136,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\..\SrcBxxh\l1vmucos\vmucoslayer.h</FilePath>
             </File>
+            <File>
+              <FileName>gprs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1vmucos\gprs.c</FilePath>
+            </File>
+            <File>
+              <FileName>gprs.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1vmucos\gprs.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

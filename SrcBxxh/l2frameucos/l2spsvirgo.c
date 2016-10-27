@@ -42,19 +42,18 @@ FsmStateItem_t FsmSpsvirgo[] =
 };
 
 //Global variables defination
-vu8 SPS_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN];	//串口1数据接收缓冲区 
-vu8 SPS_GPRS_R_State;						//串口1接收状态
-vu16 SPS_GPRS_R_Count;						//当前接收数据的字节数 	 
-vu8 SPS_RFID_R_Buff[SPS_RFID_REC_MAXLEN];	//串口1数据接收缓冲区 
-vu8 SPS_RFID_R_State;						//串口1接收状态
-vu16 SPS_RFID_R_Count;						//当前接收数据的字节数 	 
-vu8 SPS_BLE_R_Buff[SPS_BLE_REC_MAXLEN];	//串口1数据接收缓冲区 
-vu8 SPS_BLE_R_State;						//串口1接收状态
-vu16 SPS_BLE_R_Count;						//当前接收数据的字节数 	 
-vu8 SPS_SPARE1_R_Buff[SPS_SPARE1_REC_MAXLEN];	//串口1数据接收缓冲区 
-vu8 SPS_SPARE1_R_State;						//串口1接收状态
-vu16 SPS_SPARE1_R_Count;						//当前接收数据的字节数 	 
-
+extern vu8 SPS_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN];	//串口1数据接收缓冲区 
+extern vu8 SPS_GPRS_R_State;						//串口1接收状态
+extern vu16 SPS_GPRS_R_Count;						//当前接收数据的字节数 	 
+extern vu8 SPS_RFID_R_Buff[SPS_RFID_REC_MAXLEN];	//串口1数据接收缓冲区 
+extern vu8 SPS_RFID_R_State;						//串口1接收状态
+extern vu16 SPS_RFID_R_Count;						//当前接收数据的字节数 	 
+extern vu8 SPS_BLE_R_Buff[SPS_BLE_REC_MAXLEN];	//串口1数据接收缓冲区 
+extern vu8 SPS_BLE_R_State;						//串口1接收状态
+extern vu16 SPS_BLE_R_Count;						//当前接收数据的字节数 	 
+extern vu8 SPS_SPARE1_R_Buff[SPS_SPARE1_REC_MAXLEN];	//串口1数据接收缓冲区 
+extern vu8 SPS_SPARE1_R_State;						//串口1接收状态
+extern vu16 SPS_SPARE1_R_Count;						//当前接收数据的字节数 	 
 
 //Main Entry
 //Input parameter would be useless, but just for similar structure purpose
