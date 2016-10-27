@@ -11,9 +11,10 @@
 #include "stm32f2xx.h"
 #include "usart.h"	  
 	
-vu8 SPS_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN];	//串口GPRS数据接收缓冲区 
-vu8 SPS_GPRS_R_State=0;					//串口GPRS接收状态
-vu16 SPS_GPRS_R_Count=0;					//当前接收数据的字节数
+vu8 SPS_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN];			//串口GPRS数据接收缓冲区 
+vu8 SPS_GPRS_R_State=0;												//串口GPRS接收状态
+vu16 SPS_GPRS_R_Count=0;											//当前接收数据的字节数
+u8 SPS_GPRS_TIMER_TRIGGER_Count=0;  					//串口GPRS的时间计时器，跟TIM2相互关联，从而使得GPRS串口在接收IRQ处理程序中可以设置时间超时定时器
 
 vu8 SPS_RFID_R_Buff[SPS_RFID_REC_MAXLEN];	//串口RFID数据接收缓冲区 
 vu8 SPS_RFID_R_State=0;					//串口RFID接收状态
@@ -118,7 +119,7 @@ void SPS_GPRS_SendData(vs8* buff, u16 len)
 void SPS_GPRS_IRQHandler(void)                	
 {
 	u8 Res=0;
-	
+	SPS_GPRS_TIMER_TRIGGER_Count=0;
 	//要不要设计成这样的：中断进来后立即禁止再次重入，等待接收R_BUFFER被处理好了后再行ENABLE该中断？
 	//还是我们有更好的方式，比如直接采用USART_IT_RXNE比特位，这个比特位一旦拉高后，不会再次进来了？
 	//当然还有一种方式来规避这个问题，就是接收到了数据后立即发送给任务模块，这个接收就继续了。
@@ -129,7 +130,7 @@ void SPS_GPRS_IRQHandler(void)
 	if(USART_GetITStatus(USART_GPRS, USART_FLAG_RXNE) != RESET) //接收中断(接收到的数据必须是0x0d 0x0a结尾)
 	{
 		USART_ClearITPendingBit(USART_GPRS, USART_IT_RXNE);
-		Res =USART_ReceiveData(USART_GPRS); //读取接收到的数据(USART_GPRS->DR)
+		Res = USART_ReceiveData(USART_GPRS); //读取接收到的数据(USART_GPRS->DR)
 		
 		SPS_GPRS_R_Buff[SPS_GPRS_R_Count++] = Res;
 		if(SPS_GPRS_R_State == 0)//数据接收未完成
@@ -161,6 +162,27 @@ void SPS_GPRS_IRQHandler(void)
 		} 		 
 	} 
 } 	
+
+/*******************************************************************************
+* 函数名  : SPS_GPRS_IRQHandler
+* 描述    : 串口1中断服务程序
+* 输入    : 无
+* 返回    : 无 
+* 说明    : 
+* 本函数是原始函数，放在这里，只是为了对比而已
+*******************************************************************************/
+//void SPS_GPRS_IRQHandler(void)                	
+//{
+//			u8 Res=0;
+//      SPS_GPRS_TIMER_TRIGGER_Count=0;
+//			Res= USART_ReceiveData(USART_GPRS);		//将接收到的字符串存到缓存中
+//			SPS_GPRS_R_Buff[SPS_GPRS_R_Count]= Res; 
+//			SPS_GPRS_R_Count++;                			//缓存指针向后移动
+//			if(SPS_GPRS_R_Count > SPS_GPRS_REC_MAXLEN)       		//如果缓存满,将缓存指针指向缓存的首地址
+//			{
+//				SPS_GPRS_R_Count = 0;
+//			}
+//} 	
 
 /*******************************************************************************
 * 函数名  : USART_RFID_Init_Config

@@ -11,6 +11,7 @@
 #define SPS_RFID_REC_MAXLEN 200	//最大接收数据长度
 #define SPS_BLE_REC_MAXLEN 200	//最大接收数据长度
 #define SPS_SPARE1_REC_MAXLEN 200	//最大接收数据长度
+#define SPS_PRINT_REC_MAXLEN 200	//最大接收数据长度
 
 //USART1 - GPRS，用于GPRS模块的串口控制
 #define USART_GPRS                        USART1

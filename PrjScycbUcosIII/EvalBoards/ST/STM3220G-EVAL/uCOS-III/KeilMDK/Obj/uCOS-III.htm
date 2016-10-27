@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Obj\uCOS-III.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Obj\uCOS-III.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Thu Oct 27 14:08:34 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Thu Oct 27 17:04:10 2016
 <BR><P>
 <H3>Maximum Stack Usage =        724 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -3959,7 +3959,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[266]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_spileo_hw_init
 </UL>
 
-<P><STRONG><a name="[21b]"></a>SPS_GPRS_IRQHandler</STRONG> (Thumb, 136 bytes, Stack size 8 bytes, usart.o(.text))
+<P><STRONG><a name="[21b]"></a>SPS_GPRS_IRQHandler</STRONG> (Thumb, 142 bytes, Stack size 8 bytes, usart.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = SPS_GPRS_IRQHandler &rArr; USART_GetITStatus
 </UL>
 <BR>[Calls]<UL><LI><a href="#[112]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_ReceiveData
@@ -4043,7 +4043,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> usart.o(.text)
 </UL>
-<P><STRONG><a name="[226]"></a>SPS_BLE_Init_Config</STRONG> (Thumb, 270 bytes, Stack size 40 bytes, usart.o(.text))
+<P><STRONG><a name="[226]"></a>SPS_BLE_Init_Config</STRONG> (Thumb, 274 bytes, Stack size 40 bytes, usart.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 108 + Unknown Stack Size
 <LI>Call Chain = SPS_BLE_Init_Config &rArr; USART_Init &rArr; RCC_GetClocksFreq
 </UL>
@@ -4566,11 +4566,11 @@ Global Symbols
 <LI>Call Chain = ihu_message_queue_create &rArr; IhuErrorPrint &rArr; BSP_Ser_WrStr &rArr; BSP_Ser_WrByteUnlocked &rArr; BSP_OS_SemWait &rArr; OSSemPend &rArr; OS_Pend &rArr; OS_TaskBlock &rArr; OS_TickListInsert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OSQCreate
+<LI><a href="#[215]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy4
 <LI><a href="#[243]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strcat
 <LI><a href="#[233]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strerror
 <LI><a href="#[234]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_errno_addr
 <LI><a href="#[213]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrint
-<LI><a href="#[215]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[251]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_task_create_and_run
 </UL>
@@ -4709,8 +4709,8 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> l1timer_ucos.o(.data)
 </UL>
 <P><STRONG><a name="[256]"></a>ihu_clock_unix_to_ymd</STRONG> (Thumb, 24 bytes, Stack size 24 bytes, vmucoslayer.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[257]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;localtime
-<LI><a href="#[215]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy4
+<BR><BR>[Calls]<UL><LI><a href="#[215]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy4
+<LI><a href="#[257]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;localtime
 </UL>
 
 <P><STRONG><a name="[33b]"></a>ihu_isr_install</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, vmucoslayer.o(.text), UNUSED)
@@ -6327,8 +6327,8 @@ Local Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 396 + Unknown Stack Size
 <LI>Call Chain = spileo_rx_complete &rArr; spileo_start_transmit &rArr; IhuErrorPrint &rArr; BSP_Ser_WrStr &rArr; BSP_Ser_WrByteUnlocked &rArr; BSP_OS_SemWait &rArr; OSSemPend &rArr; OS_Pend &rArr; OS_TaskBlock &rArr; OS_TickListInsert
 </UL>
-<BR>[Calls]<UL><LI><a href="#[214]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;spileo_start_transmit
-<LI><a href="#[215]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy4
+<BR>[Calls]<UL><LI><a href="#[215]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy4
+<LI><a href="#[214]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;spileo_start_transmit
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> spi_itf.o(.text)
 </UL>
