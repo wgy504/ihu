@@ -9,7 +9,7 @@
 **********************************************************************************/
 
 #include "stm32f2xx.h"
-#include "usart.h"	  
+#include "l1hd_usart.h"	  
 	
 vu8 SPS_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN];			//串口GPRS数据接收缓冲区 
 vu8 SPS_GPRS_R_State=0;												//串口GPRS接收状态

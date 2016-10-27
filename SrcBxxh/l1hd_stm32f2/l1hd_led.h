@@ -19,8 +19,8 @@
 *-----------------------------------------------------------------------------------------------------------
 */
 
-#ifndef  __LED_H
-#define  __LED_H
+#ifndef  __L1HD_LED_H
+#define  __L1HD_LED_H
 
 #ifdef __cplusplus
 extern "C" {

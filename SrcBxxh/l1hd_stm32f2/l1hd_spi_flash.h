@@ -19,8 +19,8 @@
 *-----------------------------------------------------------------------------------------------------------
 */
 
-#ifndef  __SPI_FLASH_H
-#define  __SPI_FLASH_H
+#ifndef  __L1HD_SPI_FLASH_H
+#define  __L1HD_SPI_FLASH_H
 
 #ifdef __cplusplus
 extern "C" {

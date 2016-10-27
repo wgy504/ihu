@@ -9,56 +9,51 @@
 *                                                                             —————39board工作室
 *
 *----------------------------------------------------------------------------------------------------------
-* File name:             key.h
-* Author:                alvan 
-* Version:               V1.0
-* Date:                  2014-7-29
-* Description:		        
+* File name:          rtc.h
+* Author:             alvan 
+* Version:            V1.0
+* Date:               2014-01-10
+* Description:		
 * Function List:		
 * History:    		
 *-----------------------------------------------------------------------------------------------------------
 */
 
-#ifndef  __KEY_H
-#define  __KEY_H
+#ifndef  __L1HD_RTC_H
+#define  __L1HD_RTC_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-    
+
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f2xx.h"
 	
-#define GPIO_CTR_Key                         GPIOB
-#define GPIO_Pin_CTR_Key                     GPIO_Pin_7
-#define RCC_AHB1Periph_GPIO_CTR_Key          RCC_AHB1Periph_GPIOB    
-		
-#define KEY_VALUE_URSER_BUTTON               0x01
+#define  CALENDAR_START_YEAR	              	2000
+#define  CALENDAR_END_YEAR	                  2079		
+#define  CALENDAR_START_YEAR_FIRST_DATE	      6	
+
+typedef struct rtc_time_struct        //定时器的结构体
+{ 
+    u32 year;
+    u8  month;
+    u8  day;
+    u8  week;
+    u8  hour;
+    u8  minute;
+    u8  second;
+}struct_rtc_time;  
 	
-    
-#define get_key_user_button                  GPIO_ReadInputDataBit(GPIO_CTR_Key, GPIO_Pin_CTR_Key)
-    
+
+extern struct_rtc_time g_current_time;     
+
+u8  rtc_init (void);
+
+void rtc_set_time(struct_rtc_time temp_data);
+
+void rtc_get_time(void);
 	
-void  key_init (void);
 
-u8  get_key_state (void);
-
-//从另外一个例程中得到的程序
-//KEY端口定义
-#define KEY_RCC     RCC_AHB1Periph_GPIOC                            
-#define KEY_PORT	GPIOC   
-#define KEY1        GPIO_Pin_10    
-#define KEY2        GPIO_Pin_11    
-
-//按键标置
-#define KEY_DOWN	0
-#define KEY_UP		1
-
-void Key_GPIO_Config(void);
-u8 Key_Down_Detection(GPIO_TypeDef* GPIOx, u16 GPIO_Pin);
-u8 Key_Down_Scan(void);
-
-	
 #ifdef __cplusplus
 }
 #endif
