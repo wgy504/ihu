@@ -57,7 +57,8 @@ void func_spsvirgo_time_out_period_scan(void);
 
 //Global API
 extern void TIM_USART_GPRS_Init_Config(void);
-extern void SPS_GPRS_GSM_test_selection(u8 option);
+extern void SPS_GPRS_GSM_working_procedure_selection(u8 option);
+extern u8  l1hd_f205_rtc_init (void);
 
 #endif /* L2FRAME_L2SPSVIRGO_H_ */
 

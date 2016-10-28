@@ -73,9 +73,10 @@ void SPS_GPRS_Init_Config(u32 bound)
 	USART_Init(USART_GPRS, &USART_InitStructure);										//初始化串口1
 
   /*USART_GPRS NVIC配置*/
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
   NVIC_InitStructure.NVIC_IRQChannel = USART_GPRS_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=1;	//抢占优先级3
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;			//从优先级3
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;			//从优先级3
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;					//IRQ通道使能
 	NVIC_Init(&NVIC_InitStructure);													//根据指定的参数初始化VIC寄存器 
 	  
@@ -115,10 +116,64 @@ void SPS_GPRS_SendData(vs8* buff, u16 len)
 * 返回    : 无 
 * 说明    : 1)、只启动了USART_GPRS中断接收，未启动USART_GPRS中断发送。
 *           2)、接收到0x0d 0x0a(回车、"\r\n")代表帧数据接收完成
+* 本函数是原始函数，放在这里，只是为了对比而已
+*******************************************************************************/
+//void SPS_GPRS_IRQHandler(void)                	
+//{
+//	u8 Res=0;
+//	SPS_GPRS_TIMER_TRIGGER_Count=0;
+//	//要不要设计成这样的：中断进来后立即禁止再次重入，等待接收R_BUFFER被处理好了后再行ENABLE该中断？
+//	//还是我们有更好的方式，比如直接采用USART_IT_RXNE比特位，这个比特位一旦拉高后，不会再次进来了？
+//	//当然还有一种方式来规避这个问题，就是接收到了数据后立即发送给任务模块，这个接收就继续了。
+//	//由于状态机控制的复杂性，如果不是要做正常的双向通信机制，我们这里将采用与TIMER配合的轮询方式来工作
+//	//USART_ITConfig(USART_GPRS, USART_IT_RXNE, DISABLE);
+//	
+//	// 原始代码中，使用了USART_IT_RXNE进行判定，而非USART_FLAG_RXNE，后续需要仔细确定，到底该如何？
+//	if(USART_GetITStatus(USART_GPRS, USART_FLAG_RXNE) != RESET) //接收中断(接收到的数据必须是0x0d 0x0a结尾)
+//	{
+//		USART_ClearITPendingBit(USART_GPRS, USART_IT_RXNE);
+//		Res = USART_ReceiveData(USART_GPRS); //读取接收到的数据(USART_GPRS->DR)
+//		
+//		SPS_GPRS_R_Buff[SPS_GPRS_R_Count++] = Res;
+//		if(SPS_GPRS_R_State == 0)//数据接收未完成
+//		{
+//			if(Res == 0x0d)//接收到0x0d,下一个字节接收到0x0a则接收完成
+//			{
+//				SPS_GPRS_R_State =2;
+//			}
+//		}
+//		else if(SPS_GPRS_R_State == 2)
+//		{
+//			if(Res == 0x0a)//上一个字节接收到0x0d,这个字节接收到0xoa则接收完成
+//			{
+//				SPS_GPRS_R_State =1;//数据接收完成
+//			}
+//			else//接收错误
+//			{
+//				SPS_GPRS_R_State =0;
+//				SPS_GPRS_R_Count =0;
+//			}
+//		}
+//		if(SPS_GPRS_R_Count >= SPS_GPRS_REC_MAXLEN)//接收数据长度走出接收数据缓冲区
+//		{
+//			if((SPS_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN-2] != 0x0d) || (SPS_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN-1] != 0x0a))
+//			{
+//				SPS_GPRS_R_Count =0;
+//				SPS_GPRS_R_State =0;
+//			}
+//		} 		 
+//	} 
+//}
+
+/*******************************************************************************
+* 函数名  : SPS_GPRS_IRQHandler
+* 描述    : 串口1中断服务程序
+* 输入    : 无
+* 返回    : 无 
+* 说明    : 
 *******************************************************************************/
 void SPS_GPRS_IRQHandler(void)                	
 {
-	u8 Res=0;
 	SPS_GPRS_TIMER_TRIGGER_Count=0;
 	//要不要设计成这样的：中断进来后立即禁止再次重入，等待接收R_BUFFER被处理好了后再行ENABLE该中断？
 	//还是我们有更好的方式，比如直接采用USART_IT_RXNE比特位，这个比特位一旦拉高后，不会再次进来了？
@@ -127,62 +182,17 @@ void SPS_GPRS_IRQHandler(void)
 	//USART_ITConfig(USART_GPRS, USART_IT_RXNE, DISABLE);
 	
 	// 原始代码中，使用了USART_IT_RXNE进行判定，而非USART_FLAG_RXNE，后续需要仔细确定，到底该如何？
-	if(USART_GetITStatus(USART_GPRS, USART_FLAG_RXNE) != RESET) //接收中断(接收到的数据必须是0x0d 0x0a结尾)
+	if(USART_GetITStatus(USART_GPRS, USART_IT_RXNE) != RESET) //接收中断
 	{
+		USART_ClearFlag(USART_GPRS, USART_FLAG_RXNE); 
 		USART_ClearITPendingBit(USART_GPRS, USART_IT_RXNE);
-		Res = USART_ReceiveData(USART_GPRS); //读取接收到的数据(USART_GPRS->DR)
-		
-		SPS_GPRS_R_Buff[SPS_GPRS_R_Count++] = Res;
-		if(SPS_GPRS_R_State == 0)//数据接收未完成
+		SPS_GPRS_R_Buff[SPS_GPRS_R_Count++] = USART_ReceiveData(USART_GPRS); //读取接收到的数据(USART_GPRS->DR)
+		if(SPS_GPRS_R_Count > SPS_GPRS_REC_MAXLEN)       		//如果缓存满,将缓存指针指向缓存的首地址
 		{
-			if(Res == 0x0d)//接收到0x0d,下一个字节接收到0x0a则接收完成
-			{
-				SPS_GPRS_R_State =2;
-			}
+			SPS_GPRS_R_Count = 0;
 		}
-		else if(SPS_GPRS_R_State == 2)
-		{
-			if(Res == 0x0a)//上一个字节接收到0x0d,这个字节接收到0xoa则接收完成
-			{
-				SPS_GPRS_R_State =1;//数据接收完成
-			}
-			else//接收错误
-			{
-				SPS_GPRS_R_State =0;
-				SPS_GPRS_R_Count =0;
-			}
-		}
-		if(SPS_GPRS_R_Count >= SPS_GPRS_REC_MAXLEN)//接收数据长度走出接收数据缓冲区
-		{
-			if((SPS_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN-2] != 0x0d) || (SPS_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN-1] != 0x0a))
-			{
-				SPS_GPRS_R_Count =0;
-				SPS_GPRS_R_State =0;
-			}
-		} 		 
-	} 
-} 	
-
-/*******************************************************************************
-* 函数名  : SPS_GPRS_IRQHandler
-* 描述    : 串口1中断服务程序
-* 输入    : 无
-* 返回    : 无 
-* 说明    : 
-* 本函数是原始函数，放在这里，只是为了对比而已
-*******************************************************************************/
-//void SPS_GPRS_IRQHandler(void)                	
-//{
-//			u8 Res=0;
-//      SPS_GPRS_TIMER_TRIGGER_Count=0;
-//			Res= USART_ReceiveData(USART_GPRS);		//将接收到的字符串存到缓存中
-//			SPS_GPRS_R_Buff[SPS_GPRS_R_Count]= Res; 
-//			SPS_GPRS_R_Count++;                			//缓存指针向后移动
-//			if(SPS_GPRS_R_Count > SPS_GPRS_REC_MAXLEN)       		//如果缓存满,将缓存指针指向缓存的首地址
-//			{
-//				SPS_GPRS_R_Count = 0;
-//			}
-//} 	
+	}
+}
 
 /*******************************************************************************
 * 函数名  : USART_RFID_Init_Config

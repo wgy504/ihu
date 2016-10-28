@@ -23,7 +23,10 @@ void TIM_USART_GPRS_Init_Config(void)
 	TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;		//设置时钟分割:TDTS = TIM_CKD_DIV1
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;	//TIM向上计数模式
 	TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);				//根据TIM_TimeBaseInitStruct中指定的参数初始化TIMx的时间基数单位
-
+  TIM_ClearFlag(TIM2, TIM_FLAG_Update);
+  TIM_ARRPreloadConfig(TIM2, ENABLE);
+	//TIM_PrescalerConfig(TIM2,1600, TIM_PSCReloadMode_Update );
+	
 	/*中断优先级NVIC设置*/
 	NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;				//TIM2中断
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;	//先占优先级1级
@@ -36,8 +39,7 @@ void TIM_USART_GPRS_Init_Config(void)
 	
 	//挂载中断，挂载到TIM2上，显示挂载，而不是通过TIM2_IQRHandler的隐式挂载
 	BSP_IntVectSet(TIM_USART_GPRS_INT_VECTOR, TIM_USART_GPRS_IRQHandler);
-  BSP_IntEn(TIM_USART_GPRS_INT_VECTOR);
-	
+  BSP_IntEn(TIM_USART_GPRS_INT_VECTOR);	
 }	 
 
 

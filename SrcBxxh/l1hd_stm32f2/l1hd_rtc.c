@@ -96,7 +96,7 @@ void RTC_Config(void)
 * Others:        	
 *---------------------------------------------------------------------------------------------------------
 */
-u8  rtc_init (void)
+u8  l1hd_f205_rtc_init (void)
 { 
     RTC_InitTypeDef RTC_InitStructure;
     

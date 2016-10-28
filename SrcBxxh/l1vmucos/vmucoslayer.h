@@ -266,6 +266,9 @@ extern void ihu_timer_routine_handler_10ms(void);
 //extern int sprintf(char * __restrict /*s*/, const char * __restrict /*format*/, ...) __attribute__((__nonnull__(1,2)));
 //extern int arch_printf(const char *fmt, ...);
 
+//映射底层驱动函数
+#define ihu_l1hd_rtc_init l1hd_f205_rtc_init
+
 //LED专门对付一般性的驱动函数，对其进行映射，以便保持上层模块的一致性
 #define ihu_l1hd_led_f2board_init LED_F205_board_init
 #define ihu_l1hd_led_f2board_on LED_F205_board_on

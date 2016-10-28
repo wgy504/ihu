@@ -25,12 +25,21 @@
 #define TIM_USART_GPRS_ID 		TIM2
 #define SPS_GPRS_TTS_MAX_len 200 //定义最多播放的字节数
 
+//工作调用流
+extern void SPS_GPRS_GSM_working_procedure_selection(u8 option);
+extern u8 SPS_GPRS_GSM_gsm_info_procedure(void);//GSM信息显示(信号质量,电池电量,日期时间)
+extern u8 SPS_GPRS_GSM_module_procedure(void);//模块信息检测
+extern u8 SPS_GPRS_GSM_call_procedure(void);//拨号测试程序
+extern u8 SPS_GPRS_GSM_sms_procedure(void); //短信工作流程
+extern u8 SPS_GPRS_GSM_gprs_procedure(void);//GPRS数据传输测试程序
+extern u8 SPS_GPRS_GSM_bs_procedure(void);//基站定位
+extern u8 SPS_GPRS_GSM_tts_procedure(void);//TTS文本语音测试程序
 
-//工作流函数
-u8 SPS_GPRS_gsm_test_main(void);
+
+//循环工作流函数
+u8 SPS_GPRS_gsm_loop_test_main(void);
 void SPS_GPRS_GSM_test_loop(void);//模块测试主程序
-extern void SPS_GPRS_GSM_test_selection(u8 option);
-u8 SPS_GPRS_GSM_gsminfo(void);//GSM信息显示(信号质量,电池电量,日期时间)
+u8 SPS_GPRS_GSM_gsm_test_info(void);//GSM信息显示(信号质量,电池电量,日期时间)
 u8 SPS_GPRS_GSM_mtest(void);//模块信息检测
 u8 SPS_GPRS_GSM_call_test(void);//拨号测试程序
 u8 SPS_GPRS_GSM_sms_test(void);//短信测试程序
