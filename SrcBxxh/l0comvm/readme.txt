@@ -733,7 +733,7 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 完善GSM/GPRS控制的过程，整合不同例子中的精华并结合到一起
 = PRINT暂时保留，还没有被优化掉
 = TIM_Cmd(TIM2, ENABLE); 使能TIM2时，程序挂了。如果不打开TIM2，则SPS_GPRS_Send_AT_Cmd需要等待定时器超时后才能得到AT回复，此时也会死等而挂掉
-
+= GPRS通了，基本达成了验证的目标
 
 
 
