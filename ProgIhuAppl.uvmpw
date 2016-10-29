@@ -17,6 +17,10 @@
 
   <project>
     <PathAndName>.\PrjScycbUcosIII\EvalBoards\ST\STM3220G-EVAL\uCOS-III\KeilMDK\uCOS-III-Scycb.uvgui.uvproj</PathAndName>
+  </project>
+
+  <project>
+    <PathAndName>.\PrjCclFreeRTOS\PrjCclFreeRTOS\MDK-ARM\PrjCclFreeRTOS.uvprojx</PathAndName>
     <NodeIsActive>1</NodeIsActive>
     <NodeIsExpanded>1</NodeIsExpanded>
   </project>

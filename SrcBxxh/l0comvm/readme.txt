@@ -735,9 +735,9 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = TIM_Cmd(TIM2, ENABLE); 使能TIM2时，程序挂了。如果不打开TIM2，则SPS_GPRS_Send_AT_Cmd需要等待定时器超时后才能得到AT回复，此时也会死等而挂掉
 = GPRS通了，基本达成了验证的目标
 
-
-
-
+//= ZJL/XH, 2016 Oct.29, CURRENT_SW_DELIVERY R03.41
+= 尝试STM32CubeMX工具，并创建<PrjCclFreeRTOS>项目，看看是否可以自动生成底层HAL驱动，并是被FreeRTOS形成底层平台系统
+= 
 
 
 
