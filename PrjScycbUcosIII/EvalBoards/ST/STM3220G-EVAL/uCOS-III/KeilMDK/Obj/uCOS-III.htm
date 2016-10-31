@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Obj\uCOS-III.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Obj\uCOS-III.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Fri Oct 28 16:52:05 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Mon Oct 31 15:05:51 2016
 <BR><P>
 <H3>Maximum Stack Usage =        724 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -146,7 +146,7 @@ Function Pointers
  <LI><a href="#[253]">SPS_GPRS_IRQHandler</a> from l1hd_usart.o(.text) referenced from l1hd_usart.o(.text)
  <LI><a href="#[25a]">SPS_RFID_IRQHandler</a> from l1hd_usart.o(.text) referenced from l1hd_usart.o(.text)
  <LI><a href="#[260]">SPS_SPARE1_IRQHandler</a> from l1hd_usart.o(.text) referenced from l1hd_usart.o(.text)
- <LI><a href="#[a5]">TIM_USART_GPRS_IRQHandler</a> from mod_gprs.o(.text) referenced from l1hd_timer.o(.text)
+ <LI><a href="#[a5]">TIM_USART_GPRS_IRQHandler</a> from mod_bare_gprs.o(.text) referenced from l1hd_timer.o(.text)
  <LI><a href="#[ab]">__main</a> from __main.o(!!!main) referenced from cstartup.o(.text)
  <LI><a href="#[a9]">_get_lc_ctype</a> from lc_ctype_c.o(locale$$code) referenced from rt_ctype_table.o(.text)
  <LI><a href="#[a8]">_printf_input_char</a> from _printf_char_common.o(.text) referenced from _printf_char_common.o(.text)
@@ -5289,7 +5289,7 @@ Global Symbols
 
 <P><STRONG><a name="[3fb]"></a>ihu_vm_check_task_que_status_and_action</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, vmucoslayer.o(.text), UNUSED)
 
-<P><STRONG><a name="[290]"></a>SPS_GPRS_SendString</STRONG> (Thumb, 38 bytes, Stack size 8 bytes, mod_gprs.o(.text))
+<P><STRONG><a name="[290]"></a>SPS_GPRS_SendString</STRONG> (Thumb, 38 bytes, Stack size 8 bytes, mod_bare_gprs.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = SPS_GPRS_SendString
 </UL>
 <BR>[Calls]<UL><LI><a href="#[11d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendData
@@ -5302,7 +5302,7 @@ Global Symbols
 <LI><a href="#[291]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_send_AT_command
 </UL>
 
-<P><STRONG><a name="[292]"></a>SPS_GPRS_clear_receive_buffer</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, mod_gprs.o(.text))
+<P><STRONG><a name="[292]"></a>SPS_GPRS_clear_receive_buffer</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, mod_bare_gprs.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[2a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Wait_CREG
 <LI><a href="#[2a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_connect_server
 <LI><a href="#[2a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_GSM_module_procedure
@@ -5313,7 +5313,7 @@ Global Symbols
 <LI><a href="#[291]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_send_AT_command
 </UL>
 
-<P><STRONG><a name="[291]"></a>SPS_GPRS_send_AT_command</STRONG> (Thumb, 110 bytes, Stack size 24 bytes, mod_gprs.o(.text))
+<P><STRONG><a name="[291]"></a>SPS_GPRS_send_AT_command</STRONG> (Thumb, 110 bytes, Stack size 24 bytes, mod_bare_gprs.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = SPS_GPRS_send_AT_command &rArr; strstr
 </UL>
 <BR>[Calls]<UL><LI><a href="#[11d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendData
@@ -5334,7 +5334,7 @@ Global Symbols
 <LI><a href="#[294]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_GSM_tts_procedure
 </UL>
 
-<P><STRONG><a name="[294]"></a>SPS_GPRS_GSM_tts_procedure</STRONG> (Thumb, 216 bytes, Stack size 264 bytes, mod_gprs.o(.text))
+<P><STRONG><a name="[294]"></a>SPS_GPRS_GSM_tts_procedure</STRONG> (Thumb, 216 bytes, Stack size 264 bytes, mod_bare_gprs.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 620 + Unknown Stack Size
 <LI>Call Chain = SPS_GPRS_GSM_tts_procedure &rArr; IhuDebugPrint &rArr; BSP_Ser_WrStr &rArr; BSP_Ser_WrByteUnlocked &rArr; BSP_OS_SemWait &rArr; OSSemPend &rArr; OS_Pend &rArr; OS_TaskBlock &rArr; OS_TickListInsert
 </UL>
@@ -5349,7 +5349,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[2a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_GSM_working_procedure_selection
 </UL>
 
-<P><STRONG><a name="[295]"></a>USART_PRINT_SendString</STRONG> (Thumb, 38 bytes, Stack size 8 bytes, mod_gprs.o(.text))
+<P><STRONG><a name="[295]"></a>USART_PRINT_SendString</STRONG> (Thumb, 38 bytes, Stack size 8 bytes, mod_bare_gprs.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = USART_PRINT_SendString
 </UL>
 <BR>[Calls]<UL><LI><a href="#[11d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendData
@@ -5358,7 +5358,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[297]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_GSM_bs_procedure
 </UL>
 
-<P><STRONG><a name="[296]"></a>USART_PRINT_Data</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, mod_gprs.o(.text))
+<P><STRONG><a name="[296]"></a>USART_PRINT_Data</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, mod_bare_gprs.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = USART_PRINT_Data
 </UL>
 <BR>[Calls]<UL><LI><a href="#[11d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendData
@@ -5368,7 +5368,7 @@ Global Symbols
 <LI><a href="#[297]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_GSM_bs_procedure
 </UL>
 
-<P><STRONG><a name="[297]"></a>SPS_GPRS_GSM_bs_procedure</STRONG> (Thumb, 318 bytes, Stack size 16 bytes, mod_gprs.o(.text))
+<P><STRONG><a name="[297]"></a>SPS_GPRS_GSM_bs_procedure</STRONG> (Thumb, 318 bytes, Stack size 16 bytes, mod_bare_gprs.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 372 + Unknown Stack Size
 <LI>Call Chain = SPS_GPRS_GSM_bs_procedure &rArr; IhuDebugPrint &rArr; BSP_Ser_WrStr &rArr; BSP_Ser_WrByteUnlocked &rArr; BSP_OS_SemWait &rArr; OSSemPend &rArr; OS_Pend &rArr; OS_TaskBlock &rArr; OS_TickListInsert
 </UL>
@@ -5382,7 +5382,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[2a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_GSM_working_procedure_selection
 </UL>
 
-<P><STRONG><a name="[299]"></a>SPS_GPRS_Data_byte_send</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, mod_gprs.o(.text))
+<P><STRONG><a name="[299]"></a>SPS_GPRS_Data_byte_send</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, mod_bare_gprs.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = SPS_GPRS_Data_byte_send
 </UL>
 <BR>[Calls]<UL><LI><a href="#[11d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendData
@@ -5391,13 +5391,13 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[29b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_GSM_gprs_procedure
 </UL>
 
-<P><STRONG><a name="[29c]"></a>SPS_GPRS_change_str_Data</STRONG> (Thumb, 38 bytes, Stack size 12 bytes, mod_gprs.o(.text))
+<P><STRONG><a name="[29c]"></a>SPS_GPRS_change_str_Data</STRONG> (Thumb, 38 bytes, Stack size 12 bytes, mod_bare_gprs.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = SPS_GPRS_change_str_Data
 </UL>
 <BR>[Called By]<UL><LI><a href="#[29b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_GSM_gprs_procedure
 </UL>
 
-<P><STRONG><a name="[29a]"></a>USART_PRINT_Send_Len</STRONG> (Thumb, 44 bytes, Stack size 16 bytes, mod_gprs.o(.text))
+<P><STRONG><a name="[29a]"></a>USART_PRINT_Send_Len</STRONG> (Thumb, 44 bytes, Stack size 16 bytes, mod_bare_gprs.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = USART_PRINT_Send_Len
 </UL>
 <BR>[Calls]<UL><LI><a href="#[11d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendData
@@ -5407,7 +5407,7 @@ Global Symbols
 <LI><a href="#[29b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_GSM_gprs_procedure
 </UL>
 
-<P><STRONG><a name="[29b]"></a>SPS_GPRS_GSM_gprs_procedure</STRONG> (Thumb, 1364 bytes, Stack size 232 bytes, mod_gprs.o(.text))
+<P><STRONG><a name="[29b]"></a>SPS_GPRS_GSM_gprs_procedure</STRONG> (Thumb, 1364 bytes, Stack size 232 bytes, mod_bare_gprs.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 588 + Unknown Stack Size
 <LI>Call Chain = SPS_GPRS_GSM_gprs_procedure &rArr; IhuDebugPrint &rArr; BSP_Ser_WrStr &rArr; BSP_Ser_WrByteUnlocked &rArr; BSP_OS_SemWait &rArr; OSSemPend &rArr; OS_Pend &rArr; OS_TaskBlock &rArr; OS_TickListInsert
 </UL>
@@ -5426,7 +5426,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[2a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_GSM_working_procedure_selection
 </UL>
 
-<P><STRONG><a name="[29d]"></a>SPS_GPRS_GSM_sms_procedure</STRONG> (Thumb, 188 bytes, Stack size 64 bytes, mod_gprs.o(.text))
+<P><STRONG><a name="[29d]"></a>SPS_GPRS_GSM_sms_procedure</STRONG> (Thumb, 188 bytes, Stack size 64 bytes, mod_bare_gprs.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 420 + Unknown Stack Size
 <LI>Call Chain = SPS_GPRS_GSM_sms_procedure &rArr; IhuDebugPrint &rArr; BSP_Ser_WrStr &rArr; BSP_Ser_WrByteUnlocked &rArr; BSP_OS_SemWait &rArr; OSSemPend &rArr; OS_Pend &rArr; OS_TaskBlock &rArr; OS_TickListInsert
 </UL>
@@ -5441,7 +5441,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[2a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_GSM_working_procedure_selection
 </UL>
 
-<P><STRONG><a name="[29e]"></a>SPS_GPRS_GSM_call_procedure</STRONG> (Thumb, 1472 bytes, Stack size 80 bytes, mod_gprs.o(.text))
+<P><STRONG><a name="[29e]"></a>SPS_GPRS_GSM_call_procedure</STRONG> (Thumb, 1472 bytes, Stack size 80 bytes, mod_bare_gprs.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 484 + Unknown Stack Size
 <LI>Call Chain = SPS_GPRS_GSM_call_procedure &rArr; ihu_usleep &rArr; IhuErrorPrint &rArr; BSP_Ser_WrStr &rArr; BSP_Ser_WrByteUnlocked &rArr; BSP_OS_SemWait &rArr; OSSemPend &rArr; OS_Pend &rArr; OS_TaskBlock &rArr; OS_TickListInsert
 </UL>
@@ -5457,7 +5457,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[2a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_GSM_working_procedure_selection
 </UL>
 
-<P><STRONG><a name="[29f]"></a>SPS_GPRS_GSM_gsm_info_procedure</STRONG> (Thumb, 296 bytes, Stack size 40 bytes, mod_gprs.o(.text))
+<P><STRONG><a name="[29f]"></a>SPS_GPRS_GSM_gsm_info_procedure</STRONG> (Thumb, 296 bytes, Stack size 40 bytes, mod_bare_gprs.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 396 + Unknown Stack Size
 <LI>Call Chain = SPS_GPRS_GSM_gsm_info_procedure &rArr; IhuDebugPrint &rArr; BSP_Ser_WrStr &rArr; BSP_Ser_WrByteUnlocked &rArr; BSP_OS_SemWait &rArr; OSSemPend &rArr; OS_Pend &rArr; OS_TaskBlock &rArr; OS_TickListInsert
 </UL>
@@ -5470,7 +5470,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[2a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_GSM_working_procedure_selection
 </UL>
 
-<P><STRONG><a name="[2a0]"></a>SPS_GPRS_GSM_module_procedure</STRONG> (Thumb, 1044 bytes, Stack size 32 bytes, mod_gprs.o(.text))
+<P><STRONG><a name="[2a0]"></a>SPS_GPRS_GSM_module_procedure</STRONG> (Thumb, 1044 bytes, Stack size 32 bytes, mod_bare_gprs.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 388 + Unknown Stack Size
 <LI>Call Chain = SPS_GPRS_GSM_module_procedure &rArr; IhuDebugPrint &rArr; BSP_Ser_WrStr &rArr; BSP_Ser_WrByteUnlocked &rArr; BSP_OS_SemWait &rArr; OSSemPend &rArr; OS_Pend &rArr; OS_TaskBlock &rArr; OS_TickListInsert
 </UL>
@@ -5483,7 +5483,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[2a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_GSM_working_procedure_selection
 </UL>
 
-<P><STRONG><a name="[2a1]"></a>SPS_GPRS_GSM_working_procedure_selection</STRONG> (Thumb, 154 bytes, Stack size 16 bytes, mod_gprs.o(.text))
+<P><STRONG><a name="[2a1]"></a>SPS_GPRS_GSM_working_procedure_selection</STRONG> (Thumb, 154 bytes, Stack size 16 bytes, mod_bare_gprs.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 636 + Unknown Stack Size
 <LI>Call Chain = SPS_GPRS_GSM_working_procedure_selection &rArr; SPS_GPRS_GSM_tts_procedure &rArr; IhuDebugPrint &rArr; BSP_Ser_WrStr &rArr; BSP_Ser_WrByteUnlocked &rArr; BSP_OS_SemWait &rArr; OSSemPend &rArr; OS_Pend &rArr; OS_TaskBlock &rArr; OS_TickListInsert
 </UL>
@@ -5501,7 +5501,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[2bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_spsvirgo_time_out_period_scan
 </UL>
 
-<P><STRONG><a name="[2a2]"></a>SPS_GPRS_connect_server</STRONG> (Thumb, 188 bytes, Stack size 8 bytes, mod_gprs.o(.text), UNUSED)
+<P><STRONG><a name="[2a2]"></a>SPS_GPRS_connect_server</STRONG> (Thumb, 188 bytes, Stack size 8 bytes, mod_bare_gprs.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[291]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_send_AT_command
 <LI><a href="#[292]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_clear_receive_buffer
 <LI><a href="#[290]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_SendString
@@ -5510,15 +5510,15 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[2a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_data_connection_and_receive_process
 </UL>
 
-<P><STRONG><a name="[3fc]"></a>SPS_GPRS_Rec_Server_Data</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, mod_gprs.o(.text), UNUSED)
+<P><STRONG><a name="[3fc]"></a>SPS_GPRS_Rec_Server_Data</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, mod_bare_gprs.o(.text), UNUSED)
 
-<P><STRONG><a name="[2a3]"></a>SPS_GPRS_Set_ATE0</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, mod_gprs.o(.text), UNUSED)
+<P><STRONG><a name="[2a3]"></a>SPS_GPRS_Set_ATE0</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, mod_bare_gprs.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[291]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_send_AT_command
 </UL>
 <BR>[Called By]<UL><LI><a href="#[2a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_data_connection_and_receive_process
 </UL>
 
-<P><STRONG><a name="[2a4]"></a>SPS_GPRS_Wait_CREG</STRONG> (Thumb, 92 bytes, Stack size 16 bytes, mod_gprs.o(.text), UNUSED)
+<P><STRONG><a name="[2a4]"></a>SPS_GPRS_Wait_CREG</STRONG> (Thumb, 92 bytes, Stack size 16 bytes, mod_bare_gprs.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[ed]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrint
 <LI><a href="#[292]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_clear_receive_buffer
 <LI><a href="#[290]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_SendString
@@ -5527,7 +5527,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[2a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_data_connection_and_receive_process
 </UL>
 
-<P><STRONG><a name="[2a5]"></a>SPS_GPRS_data_connection_and_receive_process</STRONG> (Thumb, 54 bytes, Stack size 8 bytes, mod_gprs.o(.text), UNUSED)
+<P><STRONG><a name="[2a5]"></a>SPS_GPRS_data_connection_and_receive_process</STRONG> (Thumb, 54 bytes, Stack size 8 bytes, mod_bare_gprs.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[ed]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrint
 <LI><a href="#[2a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Wait_CREG
 <LI><a href="#[2a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Set_ATE0
@@ -5536,11 +5536,11 @@ Global Symbols
 <LI><a href="#[274]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_usleep
 </UL>
 
-<P><STRONG><a name="[2a6]"></a>USART_PRINT_IRQHandler</STRONG> (Thumb, 116 bytes, Stack size 8 bytes, mod_gprs.o(.text), UNUSED)
+<P><STRONG><a name="[2a6]"></a>USART_PRINT_IRQHandler</STRONG> (Thumb, 116 bytes, Stack size 8 bytes, mod_bare_gprs.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[113]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_ReceiveData
 </UL>
 
-<P><STRONG><a name="[a5]"></a>TIM_USART_GPRS_IRQHandler</STRONG> (Thumb, 124 bytes, Stack size 8 bytes, mod_gprs.o(.text))
+<P><STRONG><a name="[a5]"></a>TIM_USART_GPRS_IRQHandler</STRONG> (Thumb, 124 bytes, Stack size 8 bytes, mod_bare_gprs.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = TIM_USART_GPRS_IRQHandler &rArr; TIM_GetITStatus
 </UL>
 <BR>[Calls]<UL><LI><a href="#[2a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_ClearITPendingBit
@@ -5548,17 +5548,17 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> l1hd_timer.o(.text)
 </UL>
-<P><STRONG><a name="[2aa]"></a>SPS_GPRS_Swap</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, mod_gprs.o(.text), UNUSED)
+<P><STRONG><a name="[2aa]"></a>SPS_GPRS_Swap</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, mod_bare_gprs.o(.text), UNUSED)
 <BR><BR>[Called By]<UL><LI><a href="#[2a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_change_Data_str
 </UL>
 
-<P><STRONG><a name="[2a9]"></a>SPS_GPRS_change_Data_str</STRONG> (Thumb, 76 bytes, Stack size 20 bytes, mod_gprs.o(.text), UNUSED)
+<P><STRONG><a name="[2a9]"></a>SPS_GPRS_change_Data_str</STRONG> (Thumb, 76 bytes, Stack size 20 bytes, mod_bare_gprs.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[2aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPS_GPRS_Swap
 </UL>
 
-<P><STRONG><a name="[3fd]"></a>SPS_GPRS_change_hex_str</STRONG> (Thumb, 100 bytes, Stack size 20 bytes, mod_gprs.o(.text), UNUSED)
+<P><STRONG><a name="[3fd]"></a>SPS_GPRS_change_hex_str</STRONG> (Thumb, 100 bytes, Stack size 20 bytes, mod_bare_gprs.o(.text), UNUSED)
 
-<P><STRONG><a name="[2ab]"></a>SPS_GPRS_Find_char</STRONG> (Thumb, 422 bytes, Stack size 8 bytes, mod_gprs.o(.text), UNUSED)
+<P><STRONG><a name="[2ab]"></a>SPS_GPRS_Find_char</STRONG> (Thumb, 422 bytes, Stack size 8 bytes, mod_bare_gprs.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[293]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strstr
 </UL>
 

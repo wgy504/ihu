@@ -41,6 +41,7 @@
 "prjcclfreertos\startup_stm32f205xx.o"
 "prjcclfreertos\vmfreeoslayer.o"
 "prjcclfreertos\l1timer_freeos.o"
+"prjcclfreertos\mod_hal_gprs.o"
 "prjcclfreertos\l2adclibra.o"
 "prjcclfreertos\l2didocap.o"
 "prjcclfreertos\l2ethorion.o"

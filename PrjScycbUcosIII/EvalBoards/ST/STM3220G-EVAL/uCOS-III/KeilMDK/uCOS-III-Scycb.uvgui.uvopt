@@ -2044,8 +2044,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\SrcBxxh\l1vmucos\mod_gprs.c</PathWithFileName>
-      <FilenameWithoutPath>mod_gprs.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\..\..\SrcBxxh\l1vmucos\mod_bare_gprs.c</PathWithFileName>
+      <FilenameWithoutPath>mod_bare_gprs.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2056,8 +2056,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\SrcBxxh\l1vmucos\mod_gprs.h</PathWithFileName>
-      <FilenameWithoutPath>mod_gprs.h</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\..\..\SrcBxxh\l1vmucos\mod_bare_gprs.h</PathWithFileName>
+      <FilenameWithoutPath>mod_bare_gprs.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

@@ -76,7 +76,7 @@
 ".\obj\l1hd_usart.o"
 ".\obj\l1timer_ucos.o"
 ".\obj\vmucoslayer.o"
-".\obj\mod_gprs.o"
+".\obj\mod_bare_gprs.o"
 ".\obj\l2adclibra.o"
 ".\obj\l2didocap.o"
 ".\obj\l2ethorion.o"

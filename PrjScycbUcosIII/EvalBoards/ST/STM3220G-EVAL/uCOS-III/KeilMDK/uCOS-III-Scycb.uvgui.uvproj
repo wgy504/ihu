@@ -1142,14 +1142,14 @@
               <FilePath>..\..\..\..\..\..\SrcBxxh\l1vmucos\vmucoslayer.h</FilePath>
             </File>
             <File>
-              <FileName>mod_gprs.c</FileName>
+              <FileName>mod_bare_gprs.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\SrcBxxh\l1vmucos\mod_gprs.c</FilePath>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1vmucos\mod_bare_gprs.c</FilePath>
             </File>
             <File>
-              <FileName>mod_gprs.h</FileName>
+              <FileName>mod_bare_gprs.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\..\SrcBxxh\l1vmucos\mod_gprs.h</FilePath>
+              <FilePath>..\..\..\..\..\..\SrcBxxh\l1vmucos\mod_bare_gprs.h</FilePath>
             </File>
           </Files>
         </Group>

@@ -668,6 +668,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l1vmfreeos\l1timer_freeos.h</FilePath>
             </File>
+            <File>
+              <FileName>mod_hal_gprs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\mod_hal_gprs.c</FilePath>
+            </File>
+            <File>
+              <FileName>mod_hal_gprs.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\mod_hal_gprs.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

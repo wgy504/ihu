@@ -11,7 +11,7 @@
     <View>
       <WinId>38003</WinId>
       <ViewName>Registers</ViewName>
-      <TableColWidths>115 171</TableColWidths>
+      <TableColWidths>115 143</TableColWidths>
     </View>
     <View>
       <WinId>346</WinId>
@@ -61,10 +61,10 @@
   <WindowSettings>
     <LogicAnalizer>
       <ShowLACursor>1</ShowLACursor>
-      <ShowSignalInfo>1</ShowSignalInfo>
+      <ShowSignalInfo>128</ShowSignalInfo>
       <ShowCycles>0</ShowCycles>
-      <LeftSideBarSize>0</LeftSideBarSize>
-      <TimeBaseIndex>-1</TimeBaseIndex>
+      <LeftSideBarSize>65536</LeftSideBarSize>
+      <TimeBaseIndex>-65536</TimeBaseIndex>
     </LogicAnalizer>
   </WindowSettings>
 
@@ -75,8 +75,8 @@
       <flags>2</flags>
       <showCmd>3</showCmd>
       <MinPosition>
-        <xPos>-32000</xPos>
-        <yPos>-32000</yPos>
+        <xPos>-1</xPos>
+        <yPos>-1</yPos>
       </MinPosition>
       <MaxPosition>
         <xPos>-1</xPos>
