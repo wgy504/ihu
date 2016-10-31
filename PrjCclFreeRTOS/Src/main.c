@@ -44,6 +44,7 @@
 #include "main.h"
 #include "stm32f2xx_hal.h"
 #include "cmsis_os.h"
+#include "vmfreeoslayer.h"
 
 /* USER CODE BEGIN Includes */
 
@@ -211,9 +212,11 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
+	//¹ÒÔØVMFOµ½Õâ¶ù
+	ihu_vm_main();
+	
   /* USER CODE END RTOS_QUEUES */
  
-
   /* Start scheduler */
   osKernelStart();
   

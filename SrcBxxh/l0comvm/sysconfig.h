@@ -282,40 +282,49 @@
 	#define IHU_TRACE_MSG_ON IHU_TRACE_MSG_MODE_ALL
 	
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-        //可选项通信端口的全局定义，未来需要通过ConfigXml进一步优化
-        #define IHU_COMM_BACK_HAWL_CON 1 //0=NULL, 1=ETHERNET, 2=WIFI, 3=3G4G, 4=USBNET, 5/OTHERS=INVALID
-        #define IHU_COMM_FRONT_ADC 1 //1=ON, 0/OTHERS=OFF
-        #define IHU_COMM_FRONT_I2C 1 //1=ON, 0/OTHERS=OFF
-        #define IHU_COMM_FRONT_PWM 1 //1=ON, 0/OTHERS=OFF
-        #define IHU_COMM_FRONT_SPS 1 //1=ON, 0/OTHERS=OFF
-        #define IHU_COMM_FRONT_SPI 1 //1=ON, 0/OTHERS=OFF
-        #define IHU_COMM_FRONT_GPIO 1 //1=ON, 0/OTHERS=OFF
-        #define IHU_COMM_FRONT_DIDO 1 //1=ON, 0/OTHERS=OFF
-        #define IHU_COMM_FRONT_LED 1 //1=ON, 0/OTHERS=OFF
-        #define IHU_COMM_FRONT_ETH 1 //1=ON, 0/OTHERS=OFF
-        #define IHU_MAIN_CTRL_CCL 1 //1=ON, 0/OTHERS=OFF
-        //定义后台连接网络的接口
-        //现在采用这种互斥的方式进行定义，以后需要等待HWINV进行PnP，确保多种接口即插即用，随时切换
-        //多种接口之间的优先级关系，则有程序任务自动决定：ETHERNET > WIFI > USB-OTG2 > 3G4G
-        //当前版本的做法是，多种接口均启动起来，但如何使用，由CLOUDCONT按照优先级和COMM_BACK_HAWL_CON定义唯一决定
-        //Timer setting
-        #define IHU_EMC_TIMER_DURATION_PERIOD_READ 600
-        //Series Port config
-        #define IHU_SERIESPORT_NUM_FOR_GPS_DEFAULT  1
-        //定义后台CLOUD连接到服务器
-        #define IHU_CLOUDXHUI_HTTP_ADDRESS_LOCAL "http://127.0.0.1/test.php"
-        //定义后台CLOUD FTP 的地址
-        #define IHU_CLOUDXHUI_FTP_ADDRESS "ftp://121.40.185.177"
-        //local SW storage address
-        #define  IHU_SW_DOWNLOAD_DIR_DEFAULT "/home/pi/ihu_sw_download/"
-        #define  IHU_SW_ACTIVE_DIR_DEFAULT "/home/pi/ihu_sw_active/"
-        #define  IHU_SW_BACKUP_DIR_DEFAULT "/home/pi/ihu_sw_backup/"
-        //系统定义的服务器以及本机名称，用于与服务器之间的通信
-        #define IHU_CLOUDXHUI_BH_INTERFACE_STANDARD IHU_CLOUDXHUI_BH_INTERFACE_STANDARD_XML
-        //DEBUG开关，缺省打开
-        #define IHU_TRACE_DEBUG_ON IHU_TRACE_DEBUG_ALL_ON //利用以上标示位，确定TRACE的级别
-        //TRACE开关，缺省打开
-        #define IHU_TRACE_MSG_ON IHU_TRACE_MSG_MODE_ALL
+	//可选项通信端口的全局定义，未来需要通过ConfigXml进一步优化
+	#define IHU_COMM_BACK_HAWL_CON 1 //0=NULL, 1=ETHERNET, 2=WIFI, 3=3G4G, 4=USBNET, 5/OTHERS=INVALID
+	#define IHU_COMM_FRONT_ADC 1 //1=ON, 0/OTHERS=OFF
+	#define IHU_COMM_FRONT_I2C 1 //1=ON, 0/OTHERS=OFF
+	#define IHU_COMM_FRONT_PWM 1 //1=ON, 0/OTHERS=OFF
+	#define IHU_COMM_FRONT_SPS 1 //1=ON, 0/OTHERS=OFF
+	#define IHU_COMM_FRONT_SPI 1 //1=ON, 0/OTHERS=OFF
+	#define IHU_COMM_FRONT_GPIO 1 //1=ON, 0/OTHERS=OFF
+	#define IHU_COMM_FRONT_DIDO 1 //1=ON, 0/OTHERS=OFF
+	#define IHU_COMM_FRONT_LED 1 //1=ON, 0/OTHERS=OFF
+	#define IHU_COMM_FRONT_ETH 1 //1=ON, 0/OTHERS=OFF
+	#define IHU_MAIN_CTRL_CCL 1 //1=ON, 0/OTHERS=OFF
+	//定义后台连接网络的接口
+	//现在采用这种互斥的方式进行定义，以后需要等待HWINV进行PnP，确保多种接口即插即用，随时切换
+	//多种接口之间的优先级关系，则有程序任务自动决定：ETHERNET > WIFI > USB-OTG2 > 3G4G
+	//当前版本的做法是，多种接口均启动起来，但如何使用，由CLOUDCONT按照优先级和COMM_BACK_HAWL_CON定义唯一决定
+	//Timer setting 
+	#define IHU_ADCLIBRA_TIMER_DURATION_PERIOD_SCAN 300
+	#define IHU_DIDOCAP_TIMER_DURATION_PERIOD_SCAN 300
+	#define IHU_ETHORION_TIMER_DURATION_PERIOD_SCAN 200
+	#define IHU_GPIOCANCER_TIMER_DURATION_PERIOD_SCAN 200
+	#define IHU_I2CARIERS_TIMER_DURATION_PERIOD_SCAN 200
+	#define IHU_LEDPISCES_TIMER_DURATION_PERIOD_SCAN 2
+	#define IHU_PWMTAURUS_TIMER_DURATION_PERIOD_SCAN 300
+	#define IHU_SPILEO_TIMER_DURATION_PERIOD_SCAN 400
+	#define IHU_SPSVIRGO_TIMER_DURATION_PERIOD_SCAN 5
+	#define IHU_CCL_TIMER_DURATION_PERIOD_SCAN 400
+	//Series Port config
+	#define IHU_SERIESPORT_NUM_FOR_GPS_DEFAULT  1
+	//定义后台CLOUD连接到服务器
+	#define IHU_CLOUDXHUI_HTTP_ADDRESS_LOCAL "http://127.0.0.1/test.php"
+	//定义后台CLOUD FTP 的地址
+	#define IHU_CLOUDXHUI_FTP_ADDRESS "ftp://121.40.185.177"
+	//local SW storage address
+	#define  IHU_SW_DOWNLOAD_DIR_DEFAULT "/home/pi/ihu_sw_download/"
+	#define  IHU_SW_ACTIVE_DIR_DEFAULT "/home/pi/ihu_sw_active/"
+	#define  IHU_SW_BACKUP_DIR_DEFAULT "/home/pi/ihu_sw_backup/"
+	//系统定义的服务器以及本机名称，用于与服务器之间的通信
+	#define IHU_CLOUDXHUI_BH_INTERFACE_STANDARD IHU_CLOUDXHUI_BH_INTERFACE_STANDARD_XML
+	//DEBUG开关，缺省打开
+	#define IHU_TRACE_DEBUG_ON IHU_TRACE_DEBUG_ALL_ON //利用以上标示位，确定TRACE的级别
+	//TRACE开关，缺省打开
+	#define IHU_TRACE_MSG_ON IHU_TRACE_MSG_MODE_ALL
 	
 #else //IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID
 #endif //IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID

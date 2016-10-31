@@ -34,7 +34,8 @@ typedef struct SysEngParElementSensor
 	INT32 pwmtaurusPeriodScanTimer;
 	INT32 spileoPeriodScanTimer;
 	INT32 spsvirgoPeriodScanTimer;
-	INT32 scycbPeriodScanTimer;	
+	INT32 scycbPeriodScanTimer;
+	INT32 cclPeriodScanTimer;	
 }SysEngParElementSensorTimer_t;
 
 //Series port config

@@ -743,7 +743,10 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 
 //= ZJL/XH, 2016 Oct.31, CURRENT_SW_DELIVERY R03.42
 = 集成并移植VMFO到CCL项目中
-
+= 集成了所有L2L3任务模块，外加VMFO挂载，最终在L0无优化条件下生成如下
+  Program Size: Code=52096 RO-data=3380 RW-data=1152 ZI-data=43216  
+  "PrjCclFreeRTOS\PrjCclFreeRTOS.axf" - 0 Error(s), 0 Warning(s).
+= 对其SCYCB项目和CCL项目在SYSTEM DIMENSION方面的定义
 
 
 

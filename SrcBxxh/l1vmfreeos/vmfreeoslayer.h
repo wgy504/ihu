@@ -278,6 +278,7 @@ extern char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK];    //消息名字符串
 extern IhuSysEngParTable_t zIhuSysEngPar;                   //工参
 extern time_t zIhuSystemTimeUnix;                           //系统时钟TimeStamp
 extern struct tm zIhuSystemTimeYmd;                        	//系统时钟YMD
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID)
 extern FsmStateItem_t FsmTimer[];                           //状态机
 //extern FsmStateItem_t FsmAdclibra[];                        //状态机
 //extern FsmStateItem_t FsmSpileo[];                          //状态机
@@ -288,9 +289,18 @@ extern FsmStateItem_t FsmTimer[];                           //状态机
 //extern FsmStateItem_t FsmDidocap[];                         //状态机
 //extern FsmStateItem_t FsmLedpisces[];                       //状态机
 //extern FsmStateItem_t FsmEthorion[];                        //状态机
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID)
 extern FsmStateItem_t FsmEmc68x[];                          	//状态机
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+extern FsmStateItem_t FsmTimer[];                           //状态机
+extern FsmStateItem_t FsmAdclibra[];                        //状态机
+extern FsmStateItem_t FsmSpileo[];                          //状态机
+extern FsmStateItem_t FsmI2caries[];                        //状态机
+extern FsmStateItem_t FsmPwmtaurus[];                       //状态机
+extern FsmStateItem_t FsmSpsvirgo[];                        //状态机
+extern FsmStateItem_t FsmGpiocancer[];                      //状态机
+extern FsmStateItem_t FsmDidocap[];                         //状态机
+extern FsmStateItem_t FsmLedpisces[];                       //状态机
+extern FsmStateItem_t FsmEthorion[];                        //状态机
 extern FsmStateItem_t FsmCcl[];                          			//状态机
 #else
 #endif

@@ -52,6 +52,21 @@ enum IHU_TIMER_ID_1S_ALL
 {
 	TIMER_ID_1S_MIN = 0,
 	TIMER_ID_1S_VMFO_INIT_FB,
+	TIMER_ID_1S_ADCLIBRA_PERIOD_SCAN,
+	TIMER_ID_1S_DIDOCAP_PERIOD_SCAN,
+	TIMER_ID_1S_ETHORION_PERIOD_SCAN,
+	TIMER_ID_1S_GPIOCANCER_PERIOD_SCAN,
+	TIMER_ID_1S_I2CARIES_PERIOD_SCAN,
+	TIMER_ID_1S_LEDPISCES_PERIOD_SCAN,
+	TIMER_ID_1S_PWMTAURUS_PERIOD_SCAN,
+	TIMER_ID_1S_SPILEO_PERIOD_SCAN,
+	TIMER_ID_1S_SPSVIRGO_PERIOD_SCAN,
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID)	
+	TIMER_ID_1S_EMC68X_PERIOD_SCAN,
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)	
+	TIMER_ID_1S_CCL_PERIOD_SCAN,
+	#else
+#endif	
 	TIMER_ID_1S_MAX,
 };
 enum IHU_TIMER_ID_10MS_ALL
@@ -117,6 +132,7 @@ extern OPSTAT fsm_timer_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr
 extern OPSTAT fsm_timer_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_timer_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_timer_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+//用法中，TIMER_DUR就是多少秒为单位
 extern OPSTAT ihu_timer_start(UINT8 task_id, UINT8 timer_id, UINT32 t_dur, UINT8 t_type, UINT8 t_res);
 extern OPSTAT ihu_timer_stop(UINT8 task_id, UINT8 timer_id, UINT8 t_res);
 
