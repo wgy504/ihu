@@ -748,7 +748,8 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
   "PrjCclFreeRTOS\PrjCclFreeRTOS.axf" - 0 Error(s), 0 Warning(s).
 = 对其SCYCB项目和CCL项目在SYSTEM DIMENSION方面的定义
 = 垃圾集成GPRS模块到CCL项目
-
+= 验证了STM32CubeMX工具对于配置的改动，并不会造成手工录入代码的丢失问题
+= 删去PrjCclNoOs项目，简化整个目录结构
 
 
 

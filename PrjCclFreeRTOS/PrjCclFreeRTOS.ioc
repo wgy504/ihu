@@ -1,9 +1,9 @@
 #MicroXplorer Configuration settings - do not modify
-ADC1.Channel-4\#ChannelRegularConversion=ADC_CHANNEL_1
-ADC1.IPParameters=Rank-4\#ChannelRegularConversion,Channel-4\#ChannelRegularConversion,SamplingTime-4\#ChannelRegularConversion,NbrOfConversionFlag,master
+ADC1.Channel-20\#ChannelRegularConversion=ADC_CHANNEL_1
+ADC1.IPParameters=Rank-20\#ChannelRegularConversion,Channel-20\#ChannelRegularConversion,SamplingTime-20\#ChannelRegularConversion,NbrOfConversionFlag,master
 ADC1.NbrOfConversionFlag=1
-ADC1.Rank-4\#ChannelRegularConversion=1
-ADC1.SamplingTime-4\#ChannelRegularConversion=ADC_SAMPLETIME_3CYCLES
+ADC1.Rank-20\#ChannelRegularConversion=1
+ADC1.SamplingTime-20\#ChannelRegularConversion=ADC_SAMPLETIME_3CYCLES
 ADC1.master=1
 ADC2.Channel-0\#ChannelRegularConversion=ADC_CHANNEL_10
 ADC2.IPParameters=Rank-0\#ChannelRegularConversion,Channel-0\#ChannelRegularConversion,SamplingTime-0\#ChannelRegularConversion,NbrOfConversionFlag
@@ -177,6 +177,8 @@ NVIC.UsageFault_IRQn=true\:0\:0\:false\:false\:true\:false
 NVIC.WWDG_IRQn=true\:0\:0\:false\:false\:true\:false
 PA0-WKUP.Mode=SYS_WakeUp0
 PA0-WKUP.Signal=SYS_WKUP
+PA1.GPIOParameters=GPIO_Label
+PA1.GPIO_Label=ADC1_IN1_TEST1
 PA1.Signal=ADCx_IN1
 PA10.GPIOParameters=GPIO_Label
 PA10.GPIO_Label=USART1_RX_GPRS
