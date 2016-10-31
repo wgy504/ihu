@@ -51,25 +51,45 @@ static INT8 strGlobalPrintChar[IHU_PRINT_CHAR_SIZE];
 //请服从最长长度TASK_NAME_MAX_LENGTH的定义，不然Debug/Trace打印出的信息也会出错
 //全局变量：任务打印命名
 //从极致优化内存的角度，这里浪费了一个TASK对应的内存空间（MIN=0)，但它却极大的改善了程序编写的效率，值得浪费！！！
-char *zIhuTaskNameList[MAX_TASK_NUM_IN_ONE_IHU] ={
-	"MIN", 
-	"VMFO",
-	"TIMER",
-//	"ADCLIBRA",
-//	"SPILEO",
-//	"I2CARIES",
-//	"PWMTAURUS",
-//	"SPSVIRGO",
-//	"GPIOCANCER",
-//	"DIDOCAP",
-//	"LEDPISCES",
-//	"ETHORION",
-	"EMC68X",
-	"MAX"};
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID)
+  char *zIhuTaskNameList[MAX_TASK_NUM_IN_ONE_IHU] ={
+    "MIN",
+    "VMFO",
+    "TIMER",
+  //	"ADCLIBRA",
+  //	"SPILEO",
+  //	"I2CARIES",
+  //	"PWMTAURUS",
+  //	"SPSVIRGO",
+  //	"GPIOCANCER",
+  //	"DIDOCAP",
+  //	"LEDPISCES",
+  //	"ETHORION",
+    "EMC68X",
+    "MAX"};
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+  char *zIhuTaskNameList[MAX_TASK_NUM_IN_ONE_IHU] ={
+    "MIN",
+    "VMFO",
+    "TIMER",
+  //  "ADCLIBRA",
+  //  "SPILEO",
+  //  "I2CARIES",
+  //  "PWMTAURUS",
+  //  "SPSVIRGO",
+  //  "GPIOCANCER",
+  //  "DIDOCAP",
+  //  "LEDPISCES",
+  //  "ETHORION",
+    "CCL",
+    "MAX"};
+#else
+#endif
 
 //消息ID的定义全局表，方便TRACE函数使用
 //请服从MSG_NAME_MAX_LENGTH的最长定义，不然出错
 //全局变量：消息打印命名
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID)
 char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK] ={
 	"MSG_ID_COM_MIN",
 	"MSG_ID_COM_INIT",
@@ -80,6 +100,19 @@ char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK] ={
 	"MSG_ID_COM_HEART_BEAT_FB",
 	"MSG_ID_XXX_NULL"
 };
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK] ={
+	"MSG_ID_COM_MIN",
+	"MSG_ID_COM_INIT",
+	"MSG_ID_COM_INIT_FB",
+	"MSG_ID_COM_RESTART",
+	"MSG_ID_COM_TIME_OUT",
+	"MSG_ID_COM_HEART_BEAT",
+	"MSG_ID_COM_HEART_BEAT_FB",
+	"MSG_ID_XXX_NULL"
+};
+#else
+#endif
 
 /*******************************************************************************
 **
@@ -245,7 +278,12 @@ void ihu_vm_system_init(void)
 //	if (IHU_COMM_FRONT_DIDO == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_DIDOCAP].pnpState = IHU_TASK_PNP_ON;
 //	if (IHU_COMM_FRONT_LED == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_LEDPISCES].pnpState = IHU_TASK_PNP_ON;
 //	if (IHU_COMM_FRONT_ETH == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_ETHORION].pnpState = IHU_TASK_PNP_ON;
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID)
 	if (IHU_MAIN_CTRL_EMC68X == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_EMC68X].pnpState = IHU_TASK_PNP_ON;			
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+	if (IHU_MAIN_CTRL_CCL == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_CCL].pnpState = IHU_TASK_PNP_ON;			
+#else
+#endif	
 	
 	return;
 }
@@ -836,7 +874,7 @@ OPSTAT ihu_message_queue_clean(UINT8 dest_id)
 //All in parameters
 OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)
 {
-	int ret = 0;
+	//int ret = 0;
 	char s1[TASK_NAME_MAX_LENGTH+2]="", s2[TASK_NAME_MAX_LENGTH+2]="", s3[MSG_NAME_MAX_LENGTH]="";
 	IhuMsgSruct_t msg;
 	
@@ -1293,6 +1331,7 @@ OPSTAT ihu_system_task_init_call(UINT8 task_id, FsmStateItem_t *p)
 //创建所有任务
 void ihu_task_create_all(void)
 {
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID)
 	//No need create VMFO environments /1
 	//if (zIhuTaskInfo[TASK_ID_VMFO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_VMFO, FsmVMFO);	
 
@@ -1340,7 +1379,59 @@ void ihu_task_create_all(void)
 	if (zIhuTaskInfo[TASK_ID_EMC68X].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_EMC68X, FsmEmc68x);
 	ihu_vm_send_init_msg_to_app_task(TASK_ID_EMC68X);
 	
+	IhuDebugPrint("VMFO: Create all task successfully!\n");	
+	
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+	//No need create VMFO environments /1
+	//if (zIhuTaskInfo[TASK_ID_VMFO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_VMFO, FsmVMFO);	
+
+	//Create task Timer environments /2
+	if (zIhuTaskInfo[TASK_ID_TIMER].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_TIMER, FsmTimer);
+	ihu_vm_send_init_msg_to_app_task(TASK_ID_TIMER);
+
+	//Create task ADCLIBRA environments /3
+//	if (zIhuTaskInfo[TASK_ID_ADCLIBRA].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_ADCLIBRA, FsmAdclibra);
+//	ihu_vm_send_init_msg_to_app_task(TASK_ID_ADCLIBRA);
+//
+//	//Create task SPILEO environments /4
+//	if (zIhuTaskInfo[TASK_ID_SPILEO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_SPILEO, FsmSpileo);
+//	ihu_vm_send_init_msg_to_app_task(TASK_ID_SPILEO);
+//
+//	//Create task I2CARIES environments /5
+//	if (zIhuTaskInfo[TASK_ID_I2CARIES].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_I2CARIES, FsmI2caries);
+//	ihu_vm_send_init_msg_to_app_task(TASK_ID_I2CARIES);
+//
+//	//Create task PWMTAURUS environments /6
+//	if (zIhuTaskInfo[TASK_ID_PWMTAURUS].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_PWMTAURUS, FsmPwmtaurus);
+//	ihu_vm_send_init_msg_to_app_task(TASK_ID_PWMTAURUS);
+//
+//	//Create task SPSVIRGO environments /7
+//	if (zIhuTaskInfo[TASK_ID_SPSVIRGO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_SPSVIRGO, FsmSpsvirgo);
+//	ihu_vm_send_init_msg_to_app_task(TASK_ID_SPSVIRGO);
+//
+//	//Create task GPIOCANCER environments /8
+//	if (zIhuTaskInfo[TASK_ID_GPIOCANCER].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_GPIOCANCER, FsmGpiocancer);
+//	ihu_vm_send_init_msg_to_app_task(TASK_ID_GPIOCANCER);
+//
+//	//Create task DIDOCAP environments /9
+//	if (zIhuTaskInfo[TASK_ID_DIDOCAP].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_DIDOCAP, FsmDidocap);
+//	ihu_vm_send_init_msg_to_app_task(TASK_ID_DIDOCAP);
+//
+//	//Create task LEDPISCES environments /10
+//	if (zIhuTaskInfo[TASK_ID_LEDPISCES].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_LEDPISCES, FsmLedpisces);
+//	ihu_vm_send_init_msg_to_app_task(TASK_ID_LEDPISCES);
+//
+//	//Create task ETHORION environments /11
+//	if (zIhuTaskInfo[TASK_ID_ETHORION].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_ETHORION, FsmEthorion);
+//	ihu_vm_send_init_msg_to_app_task(TASK_ID_ETHORION);
+	
+	//Create task EMC68X environments /12
+	if (zIhuTaskInfo[TASK_ID_CCL].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_CCL, FsmCcl);
+	ihu_vm_send_init_msg_to_app_task(TASK_ID_CCL);
+	
 	IhuDebugPrint("VMFO: Create all task successfully!\n");
+#else	
+#endif
 }
 
 void ihu_task_delete_all_and_queue(void)
@@ -1916,3 +2007,4 @@ OPSTAT ihu_vm_send_init_msg_to_app_task(UINT8 dest_id)
 	
 	return ret;
 }
+

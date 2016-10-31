@@ -332,7 +332,7 @@
               <MiscControls>--C99</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F205xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc; ../Drivers/STM32F2xx_HAL_Driver/Inc; ../Drivers/STM32F2xx_HAL_Driver/Inc/Legacy; ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3; ../Drivers/CMSIS/Device/ST/STM32F2xx/Include; ../Middlewares/Third_Party/FreeRTOS/Source/include; ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS; ../Drivers/CMSIS/Include</IncludePath>
+              <IncludePath>../Inc;../Drivers/STM32F2xx_HAL_Driver/Inc;../Drivers/STM32F2xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;../Drivers/CMSIS/Device/ST/STM32F2xx/Include;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Drivers/CMSIS/Include;..\..\SrcBxxh;..\..\SrcBxxh\l0comvm;..\..\SrcBxxh\l0commsgccl;..\..\SrcBxxh\l1vmfreeos;..\..\SrcBxxh\l2framefreeos;..\..\SrcBxxh\l2frame;..\..\SrcBxxh\l3applccl</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -594,6 +594,97 @@
               <FileName>startup_stm32f205xx.s</FileName>
               <FileType>2</FileType>
               <FilePath>startup_stm32f205xx.s</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Doc</GroupName>
+        </Group>
+        <Group>
+          <GroupName>l0comvm</GroupName>
+          <Files>
+            <File>
+              <FileName>commsgccl.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0commsgccl\commsgccl.h</FilePath>
+            </File>
+            <File>
+              <FileName>comtype.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0comvm\comtype.h</FilePath>
+            </File>
+            <File>
+              <FileName>sysconfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0comvm\sysconfig.h</FilePath>
+            </File>
+            <File>
+              <FileName>sysdim.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0comvm\sysdim.h</FilePath>
+            </File>
+            <File>
+              <FileName>sysengpar.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0comvm\sysengpar.h</FilePath>
+            </File>
+            <File>
+              <FileName>sysversion.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0comvm\sysversion.h</FilePath>
+            </File>
+            <File>
+              <FileName>readme.txt</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0comvm\readme.txt</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>l1vmfreeos</GroupName>
+          <Files>
+            <File>
+              <FileName>l1comdef_freeos.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\l1comdef_freeos.h</FilePath>
+            </File>
+            <File>
+              <FileName>vmfreeoslayer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\vmfreeoslayer.c</FilePath>
+            </File>
+            <File>
+              <FileName>vmfreeoslayer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\vmfreeoslayer.h</FilePath>
+            </File>
+            <File>
+              <FileName>l1timer_freeos.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\l1timer_freeos.c</FilePath>
+            </File>
+            <File>
+              <FileName>l1timer_freeos.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\l1timer_freeos.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>l2frame</GroupName>
+        </Group>
+        <Group>
+          <GroupName>l3applccl</GroupName>
+          <Files>
+            <File>
+              <FileName>l3ccl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l3applccl\l3ccl.c</FilePath>
+            </File>
+            <File>
+              <FileName>l3ccl.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l3applccl\l3ccl.h</FilePath>
             </File>
           </Files>
         </Group>

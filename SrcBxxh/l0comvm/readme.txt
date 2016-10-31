@@ -737,7 +737,15 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 
 //= ZJL/XH, 2016 Oct.29, CURRENT_SW_DELIVERY R03.41
 = 尝试STM32CubeMX工具，并创建<PrjCclFreeRTOS>项目，看看是否可以自动生成底层HAL驱动，并是被FreeRTOS形成底层平台系统
-= 
+= 增加CCL项目ID
+= 在VMFREEOS.x中区分不同OSAL和BARE两种情形：OSAL是DIALOG公司在1468x中增加的一层包络，但STM32CubeMX并没有这个东西，只能简单的使用BARE裸FreeRTOS操作系统
+= VM中项目的初始化，需要区分不同项目ID的情形
+
+//= ZJL/XH, 2016 Oct.31, CURRENT_SW_DELIVERY R03.42
+= 集成并移植VMFO到CCL项目中
+
+
+
 
 
 

@@ -55,7 +55,6 @@ ADC_HandleTypeDef hadc2;
 ADC_HandleTypeDef hadc3;
 
 CAN_HandleTypeDef hcan1;
-CAN_HandleTypeDef hcan2;
 
 I2C_HandleTypeDef hi2c1;
 
@@ -101,7 +100,6 @@ static void MX_ADC1_Init(void);
 static void MX_ADC2_Init(void);
 static void MX_ADC3_Init(void);
 static void MX_CAN1_Init(void);
-static void MX_CAN2_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_IWDG_Init(void);
 static void MX_RNG_Init(void);
@@ -153,7 +151,6 @@ int main(void)
   MX_ADC2_Init();
   MX_ADC3_Init();
   MX_CAN1_Init();
-  MX_CAN2_Init();
   MX_I2C1_Init();
   MX_IWDG_Init();
   MX_RNG_Init();
@@ -298,12 +295,6 @@ void SystemClock_Config(void)
 */
 static void MX_NVIC_Init(void)
 {
-  /* CAN1_RX0_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(CAN1_RX0_IRQn, 5, 0);
-  HAL_NVIC_EnableIRQ(CAN1_RX0_IRQn);
-  /* CAN1_RX1_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(CAN1_RX1_IRQn, 5, 0);
-  HAL_NVIC_EnableIRQ(CAN1_RX1_IRQn);
   /* I2C1_EV_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(I2C1_EV_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(I2C1_EV_IRQn);
@@ -334,12 +325,6 @@ static void MX_NVIC_Init(void)
   /* DMA2_Stream3_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA2_Stream3_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA2_Stream3_IRQn);
-  /* CAN2_RX0_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(CAN2_RX0_IRQn, 5, 0);
-  HAL_NVIC_EnableIRQ(CAN2_RX0_IRQn);
-  /* CAN2_RX1_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(CAN2_RX1_IRQn, 5, 0);
-  HAL_NVIC_EnableIRQ(CAN2_RX1_IRQn);
   /* USART6_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(USART6_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(USART6_IRQn);
@@ -470,29 +455,6 @@ static void MX_CAN1_Init(void)
   hcan1.Init.RFLM = DISABLE;
   hcan1.Init.TXFP = DISABLE;
   if (HAL_CAN_Init(&hcan1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-}
-
-/* CAN2 init function */
-static void MX_CAN2_Init(void)
-{
-
-  hcan2.Instance = CAN2;
-  hcan2.Init.Prescaler = 16;
-  hcan2.Init.Mode = CAN_MODE_NORMAL;
-  hcan2.Init.SJW = CAN_SJW_1TQ;
-  hcan2.Init.BS1 = CAN_BS1_1TQ;
-  hcan2.Init.BS2 = CAN_BS2_1TQ;
-  hcan2.Init.TTCM = DISABLE;
-  hcan2.Init.ABOM = DISABLE;
-  hcan2.Init.AWUM = DISABLE;
-  hcan2.Init.NART = DISABLE;
-  hcan2.Init.RFLM = DISABLE;
-  hcan2.Init.TXFP = DISABLE;
-  if (HAL_CAN_Init(&hcan2) != HAL_OK)
   {
     Error_Handler();
   }

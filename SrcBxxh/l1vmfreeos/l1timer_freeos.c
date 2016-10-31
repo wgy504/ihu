@@ -40,7 +40,7 @@ FsmStateItem_t FsmTimer[] =
 
 //Global variables defination
 IhuTimerTable_t zIhuTimerTable;
-OS_TIMER zIhuL1timer1s, zIhuL1timer10ms, zIhuL1timer1ms;
+TimerHandle_t zIhuL1timer1s, zIhuL1timer10ms, zIhuL1timer1ms;
 
 //Main Entry
 //Input parameter would be useless, but just for similar structure purpose
