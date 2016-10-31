@@ -751,11 +751,8 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 验证了STM32CubeMX工具对于配置的改动，并不会造成手工录入代码的丢失问题
 = 删去PrjCclNoOs项目，简化整个目录结构
 
-
-
- 
-
-
+//= ZJL/XH, 2016 Oct.31, CURRENT_SW_DELIVERY R03.43
+= 引入驱动程序部分L1BSP_STM32
 
 
 
@@ -775,7 +772,22 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 
 
 
-SCYCB项目未来任务目标
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CCL项目未来任务目标
 = SPI-GPIO互通小目标
 = 看门狗开启，自动重启
 = ucosiii/TICK级的休眠省电

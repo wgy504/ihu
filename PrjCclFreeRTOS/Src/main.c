@@ -298,6 +298,12 @@ void SystemClock_Config(void)
 */
 static void MX_NVIC_Init(void)
 {
+  /* WWDG_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(WWDG_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(WWDG_IRQn);
+  /* RTC_WKUP_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(RTC_WKUP_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(RTC_WKUP_IRQn);
   /* I2C1_EV_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(I2C1_EV_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(I2C1_EV_IRQn);
@@ -316,12 +322,21 @@ static void MX_NVIC_Init(void)
   /* USART3_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(USART3_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(USART3_IRQn);
+  /* RTC_Alarm_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(RTC_Alarm_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(RTC_Alarm_IRQn);
   /* UART4_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(UART4_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(UART4_IRQn);
   /* UART5_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(UART5_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(UART5_IRQn);
+  /* TIM6_DAC_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(TIM6_DAC_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
+  /* TIM7_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(TIM7_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(TIM7_IRQn);
   /* DMA2_Stream0_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
@@ -331,6 +346,9 @@ static void MX_NVIC_Init(void)
   /* USART6_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(USART6_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(USART6_IRQn);
+  /* HASH_RNG_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(HASH_RNG_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(HASH_RNG_IRQn);
 }
 
 /* ADC1 init function */

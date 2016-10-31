@@ -331,9 +331,6 @@ void HAL_RNG_MspInit(RNG_HandleTypeDef* hrng)
   /* USER CODE END RNG_MspInit 0 */
     /* Peripheral clock enable */
     __HAL_RCC_RNG_CLK_ENABLE();
-    /* Peripheral interrupt init */
-    HAL_NVIC_SetPriority(HASH_RNG_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(HASH_RNG_IRQn);
   /* USER CODE BEGIN RNG_MspInit 1 */
 
   /* USER CODE END RNG_MspInit 1 */
@@ -372,11 +369,6 @@ void HAL_RTC_MspInit(RTC_HandleTypeDef* hrtc)
   /* USER CODE END RTC_MspInit 0 */
     /* Peripheral clock enable */
     __HAL_RCC_RTC_ENABLE();
-    /* Peripheral interrupt init */
-    HAL_NVIC_SetPriority(RTC_WKUP_IRQn, 5, 0);
-    HAL_NVIC_EnableIRQ(RTC_WKUP_IRQn);
-    HAL_NVIC_SetPriority(RTC_Alarm_IRQn, 5, 0);
-    HAL_NVIC_EnableIRQ(RTC_Alarm_IRQn);
   /* USER CODE BEGIN RTC_MspInit 1 */
 
   /* USER CODE END RTC_MspInit 1 */
@@ -562,9 +554,6 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* htim_base)
   /* USER CODE END TIM6_MspInit 0 */
     /* Peripheral clock enable */
     __HAL_RCC_TIM6_CLK_ENABLE();
-    /* Peripheral interrupt init */
-    HAL_NVIC_SetPriority(TIM6_DAC_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
   /* USER CODE BEGIN TIM6_MspInit 1 */
 
   /* USER CODE END TIM6_MspInit 1 */
@@ -576,9 +565,6 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* htim_base)
   /* USER CODE END TIM7_MspInit 0 */
     /* Peripheral clock enable */
     __HAL_RCC_TIM7_CLK_ENABLE();
-    /* Peripheral interrupt init */
-    HAL_NVIC_SetPriority(TIM7_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(TIM7_IRQn);
   /* USER CODE BEGIN TIM7_MspInit 1 */
 
   /* USER CODE END TIM7_MspInit 1 */
@@ -918,9 +904,6 @@ void HAL_WWDG_MspInit(WWDG_HandleTypeDef* hwwdg)
   /* USER CODE END WWDG_MspInit 0 */
     /* Peripheral clock enable */
     __HAL_RCC_WWDG_CLK_ENABLE();
-    /* Peripheral interrupt init */
-    HAL_NVIC_SetPriority(WWDG_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(WWDG_IRQn);
   /* USER CODE BEGIN WWDG_MspInit 1 */
 
   /* USER CODE END WWDG_MspInit 1 */

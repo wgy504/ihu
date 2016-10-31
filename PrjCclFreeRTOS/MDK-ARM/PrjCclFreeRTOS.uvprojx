@@ -133,11 +133,11 @@
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
             <Capability>1</Capability>
-            <DriverSelection>4107</DriverSelection>
+            <DriverSelection>4103</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>STLink\ST-LINKIII-KEIL_SWO.dll</Flash2>
-          <Flash3></Flash3>
+          <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -332,7 +332,7 @@
               <MiscControls>--C99</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F205xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;   ../Drivers/STM32F2xx_HAL_Driver/Inc;   ../Drivers/STM32F2xx_HAL_Driver/Inc/Legacy;   ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;   ../Drivers/CMSIS/Device/ST/STM32F2xx/Include;   ../Middlewares/Third_Party/FreeRTOS/Source/include;   ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;   ../Drivers/CMSIS/Include;   ..\..\SrcBxxh;   ..\..\SrcBxxh\l0comvm;   ..\..\SrcBxxh\l0commsgccl;   ..\..\SrcBxxh\l1vmfreeos;   ..\..\SrcBxxh\l2framefreeos;   ..\..\SrcBxxh\l2frame;   ..\..\SrcBxxh\l3applccl</IncludePath>
+              <IncludePath>../Inc;../Drivers/STM32F2xx_HAL_Driver/Inc;../Drivers/STM32F2xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;../Drivers/CMSIS/Device/ST/STM32F2xx/Include;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Drivers/CMSIS/Include;..\..\SrcBxxh;..\..\SrcBxxh\l0comvm;..\..\SrcBxxh\l0commsgccl;..\..\SrcBxxh\l1vmfreeos;..\..\SrcBxxh\l1bsp_stm32;..\..\SrcBxxh\l2framefreeos;..\..\SrcBxxh\l2frame;..\..\SrcBxxh\l3applccl</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -677,6 +677,71 @@
               <FileName>mod_hal_gprs.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l1vmfreeos\mod_hal_gprs.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>l1bspstm32</GroupName>
+          <Files>
+            <File>
+              <FileName>bsp_BasicTIM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l1bspstm32\bsp_BasicTIM.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_BasicTIM.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l1bspstm32\bsp_BasicTIM.h</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_debug_usart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l1bspstm32\bsp_debug_usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_debug_usart.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l1bspstm32\bsp_debug_usart.h</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_key.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l1bspstm32\bsp_key.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_key.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l1bspstm32\bsp_key.h</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l1bspstm32\bsp_led.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_led.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l1bspstm32\bsp_led.h</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_usartx_RS485.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l1bspstm32\bsp_usartx_RS485.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_usartx_RS485.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l1bspstm32\bsp_usartx_RS485.h</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l1bspstm32\bsp_adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_adc.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l1bspstm32\bsp_adc.h</FilePath>
             </File>
           </Files>
         </Group>
