@@ -54,23 +54,14 @@ ADC_HandleTypeDef hadc1;
 ADC_HandleTypeDef hadc2;
 ADC_HandleTypeDef hadc3;
 
-CAN_HandleTypeDef hcan1;
-
 I2C_HandleTypeDef hi2c1;
-
-IWDG_HandleTypeDef hiwdg;
-
-RNG_HandleTypeDef hrng;
-
-RTC_HandleTypeDef hrtc;
 
 SPI_HandleTypeDef hspi1;
 SPI_HandleTypeDef hspi2;
 DMA_HandleTypeDef hdma_spi1_tx;
 DMA_HandleTypeDef hdma_spi1_rx;
-
-TIM_HandleTypeDef htim6;
-TIM_HandleTypeDef htim7;
+DMA_HandleTypeDef hdma_spi2_rx;
+DMA_HandleTypeDef hdma_spi2_tx;
 
 UART_HandleTypeDef huart4;
 UART_HandleTypeDef huart5;
@@ -78,8 +69,6 @@ UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 UART_HandleTypeDef huart3;
 UART_HandleTypeDef huart6;
-
-WWDG_HandleTypeDef hwwdg;
 
 osThreadId defaultTaskHandle;
 osThreadId myTask02Handle;
@@ -99,22 +88,15 @@ static void MX_DMA_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_ADC2_Init(void);
 static void MX_ADC3_Init(void);
-static void MX_CAN1_Init(void);
 static void MX_I2C1_Init(void);
-static void MX_IWDG_Init(void);
-static void MX_RNG_Init(void);
-static void MX_RTC_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_SPI2_Init(void);
-static void MX_TIM6_Init(void);
-static void MX_TIM7_Init(void);
 static void MX_UART4_Init(void);
 static void MX_UART5_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_USART3_UART_Init(void);
 static void MX_USART6_UART_Init(void);
-static void MX_WWDG_Init(void);
 void StartDefaultTask(void const * argument);
 void StartTask02(void const * argument);
 void Callback01(void const * argument);
@@ -150,22 +132,15 @@ int main(void)
   MX_ADC1_Init();
   MX_ADC2_Init();
   MX_ADC3_Init();
-  MX_CAN1_Init();
   MX_I2C1_Init();
-  MX_IWDG_Init();
-  MX_RNG_Init();
-  MX_RTC_Init();
   MX_SPI1_Init();
   MX_SPI2_Init();
-  MX_TIM6_Init();
-  MX_TIM7_Init();
   MX_UART4_Init();
   MX_UART5_Init();
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
   MX_USART6_UART_Init();
-  MX_WWDG_Init();
 
   /* Initialize interrupts */
   MX_NVIC_Init();
@@ -193,11 +168,11 @@ int main(void)
 
   /* Create the thread(s) */
   /* definition and creation of defaultTask */
-  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
+  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 512);
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
   /* definition and creation of myTask02 */
-  osThreadDef(myTask02, StartTask02, osPriorityNormal, 0, 128);
+  osThreadDef(myTask02, StartTask02, osPriorityNormal, 0, 512);
   myTask02Handle = osThreadCreate(osThread(myTask02), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
@@ -242,20 +217,13 @@ void SystemClock_Config(void)
 
   RCC_OscInitTypeDef RCC_OscInitStruct;
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
-  RCC_PeriphCLKInitTypeDef PeriphClkInitStruct;
 
     /**Initializes the CPU, AHB and APB busses clocks 
     */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_LSI;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = 16;
-  RCC_OscInitStruct.LSIState = RCC_LSI_ON;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
-  RCC_OscInitStruct.PLL.PLLM = 16;
-  RCC_OscInitStruct.PLL.PLLN = 192;
-  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-  RCC_OscInitStruct.PLL.PLLQ = 4;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -275,20 +243,13 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 
-  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_RTC;
-  PeriphClkInitStruct.RTCClockSelection = RCC_RTCCLKSOURCE_LSI;
-  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
     /**Configure the Systick interrupt time 
     */
-  HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
+  HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/8000);
 
     /**Configure the Systick 
     */
-  HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
+  HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK_DIV8);
 
   /* SysTick_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(SysTick_IRQn, 15, 0);
@@ -298,12 +259,6 @@ void SystemClock_Config(void)
 */
 static void MX_NVIC_Init(void)
 {
-  /* WWDG_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(WWDG_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(WWDG_IRQn);
-  /* RTC_WKUP_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(RTC_WKUP_IRQn, 5, 0);
-  HAL_NVIC_EnableIRQ(RTC_WKUP_IRQn);
   /* I2C1_EV_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(I2C1_EV_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(I2C1_EV_IRQn);
@@ -322,21 +277,12 @@ static void MX_NVIC_Init(void)
   /* USART3_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(USART3_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(USART3_IRQn);
-  /* RTC_Alarm_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(RTC_Alarm_IRQn, 5, 0);
-  HAL_NVIC_EnableIRQ(RTC_Alarm_IRQn);
   /* UART4_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(UART4_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(UART4_IRQn);
   /* UART5_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(UART5_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(UART5_IRQn);
-  /* TIM6_DAC_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(TIM6_DAC_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
-  /* TIM7_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(TIM7_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(TIM7_IRQn);
   /* DMA2_Stream0_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
@@ -346,9 +292,6 @@ static void MX_NVIC_Init(void)
   /* USART6_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(USART6_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(USART6_IRQn);
-  /* HASH_RNG_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(HASH_RNG_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(HASH_RNG_IRQn);
 }
 
 /* ADC1 init function */
@@ -459,29 +402,6 @@ static void MX_ADC3_Init(void)
 
 }
 
-/* CAN1 init function */
-static void MX_CAN1_Init(void)
-{
-
-  hcan1.Instance = CAN1;
-  hcan1.Init.Prescaler = 16;
-  hcan1.Init.Mode = CAN_MODE_NORMAL;
-  hcan1.Init.SJW = CAN_SJW_1TQ;
-  hcan1.Init.BS1 = CAN_BS1_1TQ;
-  hcan1.Init.BS2 = CAN_BS2_1TQ;
-  hcan1.Init.TTCM = DISABLE;
-  hcan1.Init.ABOM = DISABLE;
-  hcan1.Init.AWUM = DISABLE;
-  hcan1.Init.NART = DISABLE;
-  hcan1.Init.RFLM = DISABLE;
-  hcan1.Init.TXFP = DISABLE;
-  if (HAL_CAN_Init(&hcan1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-}
-
 /* I2C1 init function */
 static void MX_I2C1_Init(void)
 {
@@ -496,111 +416,6 @@ static void MX_I2C1_Init(void)
   hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
   hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
   if (HAL_I2C_Init(&hi2c1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-}
-
-/* IWDG init function */
-static void MX_IWDG_Init(void)
-{
-
-  hiwdg.Instance = IWDG;
-  hiwdg.Init.Prescaler = IWDG_PRESCALER_4;
-  hiwdg.Init.Reload = 4095;
-  if (HAL_IWDG_Init(&hiwdg) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-}
-
-/* RNG init function */
-static void MX_RNG_Init(void)
-{
-
-  hrng.Instance = RNG;
-  if (HAL_RNG_Init(&hrng) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-}
-
-/* RTC init function */
-static void MX_RTC_Init(void)
-{
-
-  RTC_TimeTypeDef sTime;
-  RTC_DateTypeDef sDate;
-  RTC_AlarmTypeDef sAlarm;
-
-    /**Initialize RTC Only 
-    */
-  hrtc.Instance = RTC;
-  hrtc.Init.HourFormat = RTC_HOURFORMAT_24;
-  hrtc.Init.AsynchPrediv = 127;
-  hrtc.Init.SynchPrediv = 255;
-  hrtc.Init.OutPut = RTC_OUTPUT_DISABLE;
-  hrtc.Init.OutPutPolarity = RTC_OUTPUT_POLARITY_HIGH;
-  hrtc.Init.OutPutType = RTC_OUTPUT_TYPE_OPENDRAIN;
-  if (HAL_RTC_Init(&hrtc) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-    /**Initialize RTC and set the Time and Date 
-    */
-  sTime.Hours = 0x0;
-  sTime.Minutes = 0x0;
-  sTime.Seconds = 0x0;
-  sTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
-  sTime.StoreOperation = RTC_STOREOPERATION_RESET;
-  if (HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BCD) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-  sDate.WeekDay = RTC_WEEKDAY_MONDAY;
-  sDate.Month = RTC_MONTH_APRIL;
-  sDate.Date = 0x2;
-  sDate.Year = 0x14;
-
-  if (HAL_RTC_SetDate(&hrtc, &sDate, RTC_FORMAT_BCD) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-    /**Enable the Alarm A 
-    */
-  sAlarm.AlarmTime.Hours = 0x1;
-  sAlarm.AlarmTime.Minutes = 0x0;
-  sAlarm.AlarmTime.Seconds = 0x0;
-  sAlarm.AlarmTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
-  sAlarm.AlarmTime.StoreOperation = RTC_STOREOPERATION_RESET;
-  sAlarm.AlarmMask = RTC_ALARMMASK_NONE;
-  sAlarm.AlarmDateWeekDaySel = RTC_ALARMDATEWEEKDAYSEL_DATE;
-  sAlarm.AlarmDateWeekDay = 0x1;
-  sAlarm.Alarm = RTC_ALARM_A;
-  if (HAL_RTC_SetAlarm_IT(&hrtc, &sAlarm, RTC_FORMAT_BCD) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-    /**Enable the Alarm B 
-    */
-  sAlarm.AlarmTime.Hours = 0x2;
-  sAlarm.AlarmDateWeekDay = 0x1;
-  sAlarm.Alarm = RTC_ALARM_B;
-  if (HAL_RTC_SetAlarm_IT(&hrtc, &sAlarm, RTC_FORMAT_BCD) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-    /**Enable the WakeUp 
-    */
-  if (HAL_RTCEx_SetWakeUpTimer_IT(&hrtc, 0, RTC_WAKEUPCLOCK_RTCCLK_DIV16) != HAL_OK)
   {
     Error_Handler();
   }
@@ -647,54 +462,6 @@ static void MX_SPI2_Init(void)
   hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
   hspi2.Init.CRCPolynomial = 10;
   if (HAL_SPI_Init(&hspi2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-}
-
-/* TIM6 init function */
-static void MX_TIM6_Init(void)
-{
-
-  TIM_MasterConfigTypeDef sMasterConfig;
-
-  htim6.Instance = TIM6;
-  htim6.Init.Prescaler = 0;
-  htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim6.Init.Period = 0;
-  if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&htim6, &sMasterConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-}
-
-/* TIM7 init function */
-static void MX_TIM7_Init(void)
-{
-
-  TIM_MasterConfigTypeDef sMasterConfig;
-
-  htim7.Instance = TIM7;
-  htim7.Init.Prescaler = 0;
-  htim7.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim7.Init.Period = 0;
-  if (HAL_TIM_Base_Init(&htim7) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&htim7, &sMasterConfig) != HAL_OK)
   {
     Error_Handler();
   }
@@ -815,22 +582,6 @@ static void MX_USART6_UART_Init(void)
 
 }
 
-/* WWDG init function */
-static void MX_WWDG_Init(void)
-{
-
-  hwwdg.Instance = WWDG;
-  hwwdg.Init.Prescaler = WWDG_PRESCALER_1;
-  hwwdg.Init.Window = 64;
-  hwwdg.Init.Counter = 64;
-  hwwdg.Init.EWIMode = WWDG_EWI_DISABLE;
-  if (HAL_WWDG_Init(&hwwdg) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-}
-
 /** 
   * Enable DMA controller clock
   */
@@ -838,6 +589,15 @@ static void MX_DMA_Init(void)
 {
   /* DMA controller clock enable */
   __HAL_RCC_DMA2_CLK_ENABLE();
+  __HAL_RCC_DMA1_CLK_ENABLE();
+
+  /* DMA interrupt init */
+  /* DMA1_Stream3_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Stream3_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream3_IRQn);
+  /* DMA1_Stream4_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Stream4_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream4_IRQn);
 
 }
 
@@ -916,7 +676,8 @@ void StartDefaultTask(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    osDelay(1000);
+		IhuDebugPrint("TASK01: This is a test!\n");
   }
   /* USER CODE END 5 */ 
 }
@@ -928,7 +689,8 @@ void StartTask02(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    osDelay(1000);
+		IhuDebugPrint("TASK02: This is a test!\n");
   }
   /* USER CODE END StartTask02 */
 }
@@ -937,29 +699,8 @@ void StartTask02(void const * argument)
 void Callback01(void const * argument)
 {
   /* USER CODE BEGIN Callback01 */
-  
+  IhuDebugPrint("Callback01: This is a test!\n");
   /* USER CODE END Callback01 */
-}
-
-/**
-  * @brief  Period elapsed callback in non blocking mode
-  * @note   This function is called  when TIM1 interrupt took place, inside
-  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
-  * a global variable "uwTick" used as application time base.
-  * @param  htim : TIM handle
-  * @retval None
-  */
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
-/* USER CODE BEGIN Callback 0 */
-
-/* USER CODE END Callback 0 */
-  if (htim->Instance == TIM1) {
-    HAL_IncTick();
-  }
-/* USER CODE BEGIN Callback 1 */
-
-/* USER CODE END Callback 1 */
 }
 
 /**

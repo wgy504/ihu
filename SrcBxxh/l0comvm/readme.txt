@@ -556,7 +556,7 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 调整全局消息数量和任务数量等性能数据，最终内存占用在70KB附近，以便充分测试128KB的内存以及配置。程序代码71KB，必须放在FLASH中执行。
 
 //= ZJL, 2016 Sep.21, IHU_EMCWX_CURRENT_SW_DELIVERY R03.24
-= 应用ucos的函数OSTaskCreate / OSTaskDel，完成了以下函数体
+= 应用ucosiii的函数OSTaskCreate / OSTaskDel，完成了以下函数体
 	extern OPSTAT ihu_task_create(UINT8 task_id, void *(*task_func)(void *), void *arg, int prio);
 	extern OPSTAT ihu_task_delete(UINT8 task_id);
     => CALLBACK不能支持修饰带来的风险
@@ -662,7 +662,7 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 修正vmfo编译中的问题：l2adc模块将需要分开，不然他们必须复用msgxxx.h的消息定义部分
 
 //= ZJL, 2016 Oct.11, CURRENT_SW_DELIVERY R03.34
-= 首次将VMFO嫁接到FreeOS上的1468x SDK 1.0.6官方例子上，基于SmartSnippets Studio v1.2.3编译通过
+= 首次将FreeRTOS VMFO嫁接到FreeRTOS上的1468x SDK 1.0.6官方例子上，基于SmartSnippets Studio v1.2.3编译通过
 = 编译环境不支持最新版Eclipse，下载调测还不明白是否支持KEIL5
 = 为了更好是使用该环节，请遵循以下步骤进行项目工程创建和环境设置，不然会出现意想不到的问题
   1. 不用使用自己的Eclipse，而使用SmartSnippets Studio V1.2.3，假设装在C盘上，c:\DiaSemi目录下
@@ -689,7 +689,7 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
   20. 原则上，下一次再打开项目，这个环境就是保持状态，而不再需要重新设置。
 
 //= ZJL, 2016 Oct.12, CURRENT_SW_DELIVERY R03.35
-= 完善修改EMC68x项目中VMFO的任务、消息、定时器、DELAY等函数体，跟FreeRTOS严格绑定，从而完成VMFO对FreeRTOS的落地
+= 完善修改EMC68x项目中FreeRTOS VMFO的任务、消息、定时器、DELAY等函数体，跟FreeRTOS严格绑定，从而完成VMFO对FreeRTOS的落地
 = 该VMFO是以freertos_retarget项目参考例子为基础的，其他例子暂时不能编译通过，等待新的SDK出来后再行转换。原则上，我们需要WECHAT例程
 = ihu_vm_main(void)挂在main函数里面，做为入口。未来一旦新SDK出来后，这个需要保持更迭。
 = 统一更新L3CI/L3PO的定义，在L1COM_DEF.H文件中
@@ -699,7 +699,7 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
   45896     856   28396   75148   1258c freertos_retarget.elf
 
 //= XX, 2016 Oct.12, CURRENT_SW_DELIVERY R03.36
-= 修改完善VMUO Printf，使用了PC10/11作为USART3的打印输出口，115200, TTL电平输出
+= 修改完善ucosiii VMUO Printf，使用了PC10/11作为USART3的打印输出口，115200, TTL电平输出
 = 修正SCYCB中ACTIVED状态，以及INIT状态下的处理
 = 增加SCYCB中TIME_OUT的处理样例
 = 修改MESSAGE_MAX_LENGTH = 64-6 = 58。一方面，PARTITION必须跟256/128/64/32对其，另一方面，TIME_OUT消息发送时，如果TRACE_ALL打印打开了，就不工作了
@@ -742,7 +742,7 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = VM中项目的初始化，需要区分不同项目ID的情形
 
 //= ZJL/XH, 2016 Oct.31, CURRENT_SW_DELIVERY R03.42
-= 集成并移植VMFO到CCL项目中
+= 集成并移植FreeROTS VMFO到CCL项目中
 = 集成了所有L2L3任务模块，外加VMFO挂载，最终在L0无优化条件下生成如下
   Program Size: Code=52096 RO-data=3380 RW-data=1152 ZI-data=43216  
   "PrjCclFreeRTOS\PrjCclFreeRTOS.axf" - 0 Error(s), 0 Warning(s).
@@ -752,10 +752,18 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 删去PrjCclNoOs项目，简化整个目录结构
 
 //= ZJL/XH, 2016 Oct.31, CURRENT_SW_DELIVERY R03.43
+= 继续修改和移植FreeRTOS的VMFO部分
 = 引入驱动程序部分L1BSP_STM32
-
-
-
+= 修改管脚配置，先将阻塞主程序执行的外设禁止掉，未来再完善
+= SP2必须以DMA方式工作，否则无法初始化成功
+= 任务创建的优先级必须小于7，否则无法创建成功
+= 打印在USART3口上，通过L0BSP_STM32进行映射
+= 核心任务的current_taskid机制不再起作用，因为任务启动和任务创建不在同一个时刻完成，而必须全部创建完成后才能进行
+= 选择合适大小的任务堆栈，核心OS堆栈不够，0x3C00 (15KB)改动到0x7C00，不然无法将9个应用级任务创建成功  
+= FsmProcessingLaunch(void)机制，将其改造OPSTAT FsmProcessingLaunch(UINT8 *p)，传入task_id参数，不然无法创建所有任务成功
+= 禁止xxxxbarexxx类型的API，暂时用不到，以免影响本VMFO的顺利执行
+= 除了第一个TIMER任务之外，其他任务无法被正常调度。。。验证TASK02可以被正常调度
+= 去掉了所有TIMER（6/7），改掉了TIM2位SYSTICK/System-wake，选择了USE_PORT_OPTIMISED_TASK_SELECTION选项，均没有效果
 
 
 

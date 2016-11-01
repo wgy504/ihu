@@ -42,22 +42,17 @@
 
 /* External variables --------------------------------------------------------*/
 extern I2C_HandleTypeDef hi2c1;
-extern RNG_HandleTypeDef hrng;
-extern RTC_HandleTypeDef hrtc;
 extern DMA_HandleTypeDef hdma_spi1_tx;
 extern DMA_HandleTypeDef hdma_spi1_rx;
+extern DMA_HandleTypeDef hdma_spi2_rx;
+extern DMA_HandleTypeDef hdma_spi2_tx;
 extern SPI_HandleTypeDef hspi2;
-extern TIM_HandleTypeDef htim6;
-extern TIM_HandleTypeDef htim7;
 extern UART_HandleTypeDef huart4;
 extern UART_HandleTypeDef huart5;
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
 extern UART_HandleTypeDef huart6;
-extern WWDG_HandleTypeDef hwwdg;
-
-extern TIM_HandleTypeDef htim1;
 
 /******************************************************************************/
 /*            Cortex-M3 Processor Interruption and Exception Handlers         */ 
@@ -161,6 +156,7 @@ void SysTick_Handler(void)
   /* USER CODE BEGIN SysTick_IRQn 0 */
 
   /* USER CODE END SysTick_IRQn 0 */
+  HAL_IncTick();
   osSystickHandler();
   /* USER CODE BEGIN SysTick_IRQn 1 */
 
@@ -175,45 +171,31 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
-* @brief This function handles Window watchdog interrupt.
+* @brief This function handles DMA1 stream3 global interrupt.
 */
-void WWDG_IRQHandler(void)
+void DMA1_Stream3_IRQHandler(void)
 {
-  /* USER CODE BEGIN WWDG_IRQn 0 */
+  /* USER CODE BEGIN DMA1_Stream3_IRQn 0 */
 
-  /* USER CODE END WWDG_IRQn 0 */
-  HAL_WWDG_IRQHandler(&hwwdg);
-  /* USER CODE BEGIN WWDG_IRQn 1 */
+  /* USER CODE END DMA1_Stream3_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_spi2_rx);
+  /* USER CODE BEGIN DMA1_Stream3_IRQn 1 */
 
-  /* USER CODE END WWDG_IRQn 1 */
+  /* USER CODE END DMA1_Stream3_IRQn 1 */
 }
 
 /**
-* @brief This function handles RTC wake-up interrupt through EXTI line 22.
+* @brief This function handles DMA1 stream4 global interrupt.
 */
-void RTC_WKUP_IRQHandler(void)
+void DMA1_Stream4_IRQHandler(void)
 {
-  /* USER CODE BEGIN RTC_WKUP_IRQn 0 */
+  /* USER CODE BEGIN DMA1_Stream4_IRQn 0 */
 
-  /* USER CODE END RTC_WKUP_IRQn 0 */
-  HAL_RTCEx_WakeUpTimerIRQHandler(&hrtc);
-  /* USER CODE BEGIN RTC_WKUP_IRQn 1 */
+  /* USER CODE END DMA1_Stream4_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_spi2_tx);
+  /* USER CODE BEGIN DMA1_Stream4_IRQn 1 */
 
-  /* USER CODE END RTC_WKUP_IRQn 1 */
-}
-
-/**
-* @brief This function handles TIM1 update interrupt and TIM10 global interrupt.
-*/
-void TIM1_UP_TIM10_IRQHandler(void)
-{
-  /* USER CODE BEGIN TIM1_UP_TIM10_IRQn 0 */
-
-  /* USER CODE END TIM1_UP_TIM10_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim1);
-  /* USER CODE BEGIN TIM1_UP_TIM10_IRQn 1 */
-
-  /* USER CODE END TIM1_UP_TIM10_IRQn 1 */
+  /* USER CODE END DMA1_Stream4_IRQn 1 */
 }
 
 /**
@@ -301,20 +283,6 @@ void USART3_IRQHandler(void)
 }
 
 /**
-* @brief This function handles RTC alarms A and B interrupt through EXTI line 17.
-*/
-void RTC_Alarm_IRQHandler(void)
-{
-  /* USER CODE BEGIN RTC_Alarm_IRQn 0 */
-
-  /* USER CODE END RTC_Alarm_IRQn 0 */
-  HAL_RTC_AlarmIRQHandler(&hrtc);
-  /* USER CODE BEGIN RTC_Alarm_IRQn 1 */
-
-  /* USER CODE END RTC_Alarm_IRQn 1 */
-}
-
-/**
 * @brief This function handles UART4 global interrupt.
 */
 void UART4_IRQHandler(void)
@@ -340,34 +308,6 @@ void UART5_IRQHandler(void)
   /* USER CODE BEGIN UART5_IRQn 1 */
 
   /* USER CODE END UART5_IRQn 1 */
-}
-
-/**
-* @brief This function handles TIM6 global interrupt, DAC1 and DAC2 underrun error interrupts.
-*/
-void TIM6_DAC_IRQHandler(void)
-{
-  /* USER CODE BEGIN TIM6_DAC_IRQn 0 */
-
-  /* USER CODE END TIM6_DAC_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim6);
-  /* USER CODE BEGIN TIM6_DAC_IRQn 1 */
-
-  /* USER CODE END TIM6_DAC_IRQn 1 */
-}
-
-/**
-* @brief This function handles TIM7 global interrupt.
-*/
-void TIM7_IRQHandler(void)
-{
-  /* USER CODE BEGIN TIM7_IRQn 0 */
-
-  /* USER CODE END TIM7_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim7);
-  /* USER CODE BEGIN TIM7_IRQn 1 */
-
-  /* USER CODE END TIM7_IRQn 1 */
 }
 
 /**
@@ -410,20 +350,6 @@ void USART6_IRQHandler(void)
   /* USER CODE BEGIN USART6_IRQn 1 */
 
   /* USER CODE END USART6_IRQn 1 */
-}
-
-/**
-* @brief This function handles HASH and RNG global interrupt.
-*/
-void HASH_RNG_IRQHandler(void)
-{
-  /* USER CODE BEGIN HASH_RNG_IRQn 0 */
-
-  /* USER CODE END HASH_RNG_IRQn 0 */
-  HAL_RNG_IRQHandler(&hrng);
-  /* USER CODE BEGIN HASH_RNG_IRQn 1 */
-
-  /* USER CODE END HASH_RNG_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

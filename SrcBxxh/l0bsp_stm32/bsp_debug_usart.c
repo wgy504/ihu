@@ -17,11 +17,14 @@
 
 /* 包含头文件 ----------------------------------------------------------------*/
 #include "bsp_debug_usart.h"
+#include "string.h"
+#include "sysdim.h"
 
 /* 私有类型定义 --------------------------------------------------------------*/
 /* 私有宏定义 ----------------------------------------------------------------*/
 /* 私有变量 ------------------------------------------------------------------*/
 UART_HandleTypeDef husart_debug;
+extern UART_HandleTypeDef huart3;
 
 /* 扩展变量 ------------------------------------------------------------------*/
 /* 私有函数原形 --------------------------------------------------------------*/
@@ -109,9 +112,20 @@ void MX_DEBUG_USART_Init(void)
   */
 int fputc(int ch, FILE *f)
 {
-  HAL_UART_Transmit(&husart_debug, (uint8_t *)&ch, 1, 0xffff);
+  HAL_UART_Transmit(&huart3, (uint8_t *)&ch, 1, 0xffff);
   return ch;
 }
+
+int BSP_STM32_uart_print_data_send(char *s)
+{
+	int i=0;
+	for (i=0; i<IHU_PRINT_CHAR_SIZE; i++){
+		if ((s[i]!='\0') &&(i<strlen(s))) HAL_UART_Transmit(&huart3, (uint8_t *)(s+i), 1, 0xffff);					
+	}
+	return 1;
+}
+
+
 
 /**
   * 函数功能: 重定向c库函数getchar,scanf到DEBUG_USARTx
@@ -122,7 +136,7 @@ int fputc(int ch, FILE *f)
 int fgetc(FILE * f)
 {
   uint8_t ch = 0;
-  HAL_UART_Receive(&husart_debug,&ch, 1, 0xffff);
+  HAL_UART_Receive(&huart3, &ch, 1, 0xffff);
   return ch;
 }
 

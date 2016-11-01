@@ -84,7 +84,7 @@ enum IHU_TASK_NAME_ID
 enum IHU_TASK_NAME_ID
 {
 	TASK_ID_MIN = 0,
-	TASK_ID_VMFO = 0,
+	TASK_ID_VMFO,
 	TASK_ID_TIMER,
 	TASK_ID_ADCLIBRA,
 	TASK_ID_SPILEO,
@@ -230,7 +230,7 @@ extern OPSTAT FsmInit(void);
 extern OPSTAT FsmAddNew(UINT8 task_id, FsmStateItem_t* pFsmStateItem);
 extern OPSTAT FsmRemove(UINT8 task_id);
 extern OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len);
-extern OPSTAT FsmProcessingLaunch(void);
+extern OPSTAT FsmProcessingLaunch(UINT8 *task);
 extern OPSTAT FsmSetState(UINT8 task_id, UINT8 newState);
 extern UINT8  FsmGetState(UINT8 task_id);
 
@@ -262,6 +262,9 @@ extern OPSTAT ihu_message_rcv_bare_rtos(UINT8 dest_id, IhuMsgSruct_t *msg);
 extern OPSTAT ihu_system_task_execute_bare_rtos(UINT8 task_id, FsmStateItem_t *p);
 extern void   ihu_task_execute_all_bare_rtos(void);
 
+
+//底层参考的BSP级别
+extern int BSP_STM32_uart_print_data_send(char *s);
 
 /*
  *	

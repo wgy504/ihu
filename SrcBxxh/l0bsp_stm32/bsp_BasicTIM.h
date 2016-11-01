@@ -37,7 +37,7 @@
 // 这里设置 BASIC_TIMx_PRESCALER=359；BASIC_TIMx_PERIOD=4000；
 
 /* 扩展变量 ------------------------------------------------------------------*/
-extern TIM_HandleTypeDef htimx;
+//extern TIM_HandleTypeDef htimx;
 /* 函数声明 ------------------------------------------------------------------*/
 
 void BASIC_TIMx_Init(void);

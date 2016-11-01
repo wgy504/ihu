@@ -25,6 +25,9 @@ extern UART_HandleTypeDef husart_debug;
 /* 函数声明 ------------------------------------------------------------------*/
 void MX_DEBUG_USART_Init(void);
 
+extern int fputc(int ch, FILE *f);
+extern int fgetc(FILE * f);
+extern int BSP_STM32_uart_print_data_send(char *s);
 
 #endif  /* __BSP_DEBUG_USART_H__ */
 

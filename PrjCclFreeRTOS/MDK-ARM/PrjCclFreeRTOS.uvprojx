@@ -332,7 +332,7 @@
               <MiscControls>--C99</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F205xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;../Drivers/STM32F2xx_HAL_Driver/Inc;../Drivers/STM32F2xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;../Drivers/CMSIS/Device/ST/STM32F2xx/Include;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Drivers/CMSIS/Include;..\..\SrcBxxh;..\..\SrcBxxh\l0comvm;..\..\SrcBxxh\l0commsgccl;..\..\SrcBxxh\l1vmfreeos;..\..\SrcBxxh\l1bsp_stm32;..\..\SrcBxxh\l2framefreeos;..\..\SrcBxxh\l2frame;..\..\SrcBxxh\l3applccl</IncludePath>
+              <IncludePath>../Inc;                    ../Drivers/STM32F2xx_HAL_Driver/Inc;                    ../Drivers/STM32F2xx_HAL_Driver/Inc/Legacy;                    ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;                    ../Drivers/CMSIS/Device/ST/STM32F2xx/Include;                    ../Middlewares/Third_Party/FreeRTOS/Source/include;                    ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;                    ../Drivers/CMSIS/Include;                    ..\..\SrcBxxh;                    ..\..\SrcBxxh\l0bsp_stm32;                    ..\..\SrcBxxh\l0comvm;                    ..\..\SrcBxxh\l0commsgccl;                    ..\..\SrcBxxh\l1vmfreeos;                    ..\..\SrcBxxh\l2framefreeos;                    ..\..\SrcBxxh\l2frame;                    ..\..\SrcBxxh\l3applccl</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -405,11 +405,6 @@
               <FileType>1</FileType>
               <FilePath>../Src/main.c</FilePath>
             </File>
-            <File>
-              <FileName>stm32f2xx_hal_timebase_TIM.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Src/stm32f2xx_hal_timebase_TIM.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -481,11 +476,6 @@
               <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_spi.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f2xx_hal_rng.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_rng.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32f2xx_hal_tim_ex.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_tim_ex.c</FilePath>
@@ -499,16 +489,6 @@
               <FileName>stm32f2xx_hal_rcc.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_rcc.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f2xx_hal_rtc_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_rtc_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f2xx_hal_iwdg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_iwdg.c</FilePath>
             </File>
             <File>
               <FileName>stm32f2xx_hal_pwr_ex.c</FileName>
@@ -526,11 +506,6 @@
               <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_dma_ex.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f2xx_hal_can.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_can.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32f2xx_hal.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal.c</FilePath>
@@ -539,11 +514,6 @@
               <FileName>stm32f2xx_hal_flash.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_flash.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f2xx_hal_wwdg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_wwdg.c</FilePath>
             </File>
             <File>
               <FileName>stm32f2xx_hal_pwr.c</FileName>
@@ -559,11 +529,6 @@
               <FileName>stm32f2xx_hal_adc_ex.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_adc_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f2xx_hal_rtc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_rtc.c</FilePath>
             </File>
             <File>
               <FileName>stm32f2xx_hal_gpio.c</FileName>
@@ -599,6 +564,71 @@
         </Group>
         <Group>
           <GroupName>Doc</GroupName>
+        </Group>
+        <Group>
+          <GroupName>l0bsp_stm32</GroupName>
+          <Files>
+            <File>
+              <FileName>bsp_adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_adc.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_adc.h</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_BasicTIM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_BasicTIM.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_BasicTIM.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_BasicTIM.h</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_debug_usart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_debug_usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_debug_usart.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_debug_usart.h</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_key.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_key.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_key.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_key.h</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_led.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_led.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_led.h</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_usartx_RS485.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_usartx_RS485.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_usartx_RS485.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_usartx_RS485.h</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>l0comvm</GroupName>
@@ -677,71 +707,6 @@
               <FileName>mod_hal_gprs.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l1vmfreeos\mod_hal_gprs.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>l1bspstm32</GroupName>
-          <Files>
-            <File>
-              <FileName>bsp_BasicTIM.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l1bspstm32\bsp_BasicTIM.c</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_BasicTIM.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l1bspstm32\bsp_BasicTIM.h</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_debug_usart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l1bspstm32\bsp_debug_usart.c</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_debug_usart.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l1bspstm32\bsp_debug_usart.h</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_key.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l1bspstm32\bsp_key.c</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_key.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l1bspstm32\bsp_key.h</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_led.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l1bspstm32\bsp_led.c</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_led.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l1bspstm32\bsp_led.h</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_usartx_RS485.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l1bspstm32\bsp_usartx_RS485.c</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_usartx_RS485.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l1bspstm32\bsp_usartx_RS485.h</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_adc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l1bspstm32\bsp_adc.c</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_adc.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l1bspstm32\bsp_adc.h</FilePath>
             </File>
           </Files>
         </Group>
