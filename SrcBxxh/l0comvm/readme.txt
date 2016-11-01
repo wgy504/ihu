@@ -764,7 +764,7 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 禁止xxxxbarexxx类型的API，暂时用不到，以免影响本VMFO的顺利执行
 = 除了第一个TIMER任务之外，其他任务无法被正常调度。。。验证TASK02可以被正常调度
 = 去掉了所有TIMER（6/7），改掉了TIM2位SYSTICK/System-wake，选择了USE_PORT_OPTIMISED_TASK_SELECTION选项，均没有效果
-
+= FsmProcessingLaunch传入的参数错误，导致了新任务启动不起来。修改了一种精巧的方式，应该成功了。
 
 
 

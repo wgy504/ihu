@@ -803,7 +803,7 @@ OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr,
 **------------------------------------------------------------------------------
 ** Return value : IHU_SUCCESS OR IHU_FAILURE
 *******************************************************************************/
-OPSTAT FsmProcessingLaunch(UINT8 *task)
+OPSTAT FsmProcessingLaunch(void *task)
 {
 	OPSTAT ret;
 	IhuMsgSruct_t rcv;
@@ -815,7 +815,7 @@ OPSTAT FsmProcessingLaunch(UINT8 *task)
 	//这里的currentTaskId通过currentTaskId是传不过来的，必须采用arg参数传递
 	//task_id = zIhuFsmTable.currentTaskId;
 	//zIhuFsmTable.currentTaskId = TASK_ID_INVALID;
-	task_id = (UINT8)*task;
+	task_id = (UINT8)*(char *)task;
 
 	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
@@ -1405,7 +1405,7 @@ OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 	}
 
 	//Create task and make it running for the 1st time
-	ret = ihu_task_create(task_id, /*CALLBACK*/(void *(*)(void *))FsmProcessingLaunch, (void *)&task_id, IHU_THREAD_PRIO);
+	ret = ihu_task_create(task_id, /*CALLBACK*/(void *(*)(void *))FsmProcessingLaunch, (void *)&(zIhuTaskInfo[task_id].TaskId), IHU_THREAD_PRIO);
 	if (ret == IHU_FAILURE)
 	{
 		zIhuRunErrCnt[TASK_ID_VMFO]++;

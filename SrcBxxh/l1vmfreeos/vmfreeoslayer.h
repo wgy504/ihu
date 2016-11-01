@@ -230,7 +230,7 @@ extern OPSTAT FsmInit(void);
 extern OPSTAT FsmAddNew(UINT8 task_id, FsmStateItem_t* pFsmStateItem);
 extern OPSTAT FsmRemove(UINT8 task_id);
 extern OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len);
-extern OPSTAT FsmProcessingLaunch(UINT8 *task);
+extern OPSTAT FsmProcessingLaunch(void *task);
 extern OPSTAT FsmSetState(UINT8 task_id, UINT8 newState);
 extern UINT8  FsmGetState(UINT8 task_id);
 
