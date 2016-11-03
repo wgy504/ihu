@@ -150,7 +150,7 @@ void LEDx_StateSet(uint8_t LEDx,LEDState_TypeDef state)
 * Others:        	
 *---------------------------------------------------------------------------------------------------------
 */
-//void LED_F205_board_init(void)
+//void BSP_STM32_LED_F205_board_init(void)
 //{ 	
 //	GPIO_InitTypeDef GPIO_InitStructure;
 //	LED_F205RG_BOARD_CLK_ENABLE();    /* 使能端口PORTC时钟                                  */  	 
@@ -258,7 +258,7 @@ void LEDx_StateSet(uint8_t LEDx,LEDState_TypeDef state)
 * Others:        	
 *---------------------------------------------------------------------------------------------------------
 */
-void LED_F205_board_on(void)
+void BSP_STM32_LED_F205_board_on(void)
 {
     LED_F205RG_board_on();
 }
@@ -276,7 +276,7 @@ void LED_F205_board_on(void)
 *---------------------------------------------------------------------------------------------------------
 */
 
-void   LED_F205_board_off (void)
+void   BSP_STM32_LED_F205_board_off (void)
 {
     LED_F205RG_board_off();
 }
@@ -294,7 +294,7 @@ void   LED_F205_board_off (void)
 *---------------------------------------------------------------------------------------------------------
 */
 
-void   LED_F205_board_negation (void)
+void   BSP_STM32_LED_F205_board_negation (void)
 {
     LED_F205RG_board_negation();
 }
@@ -407,7 +407,7 @@ void   LED_F205_board_negation (void)
 * Others:        	
 *---------------------------------------------------------------------------------------------------------
 */
-void  LED_F205_timer_ind_on (void)
+void  BSP_STM32_LED_F205_timer_ind_on (void)
 {
     LED_F205RG_timer_ind_on();
 }
@@ -425,7 +425,7 @@ void  LED_F205_timer_ind_on (void)
 *---------------------------------------------------------------------------------------------------------
 */
 
-void   LED_F205_timer_ind_off (void)
+void   BSP_STM32_LED_F205_timer_ind_off (void)
 {
     LED_F205RG_timer_ind_off();
 }
@@ -443,13 +443,13 @@ void   LED_F205_timer_ind_off (void)
 *---------------------------------------------------------------------------------------------------------
 */
 
-void   LED_F205_timer_ind_negation (void)
+void   BSP_STM32_LED_F205_timer_ind_negation (void)
 {
 	LED_F205RG_timer_ind_negation();
 }
 
 
-void LED_F205_onoff(GPIO_TypeDef* port, uint16_t pin, uint8_t onoff)
+void BSP_STM32_LED_F205_onoff(GPIO_TypeDef* port, uint16_t pin, uint8_t onoff)
 {
 	LED_F205RG_onoff(port, pin, onoff);
 }
