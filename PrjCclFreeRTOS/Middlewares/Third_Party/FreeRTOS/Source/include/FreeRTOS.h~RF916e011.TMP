@@ -725,7 +725,7 @@ extern "C" {
 #endif
 
 #ifndef configUSE_TIME_SLICING
-	#define configUSE_TIME_SLICING 0
+	#define configUSE_TIME_SLICING 1
 #endif
 
 #ifndef configINCLUDE_APPLICATION_DEFINED_PRIVILEGED_FUNCTIONS

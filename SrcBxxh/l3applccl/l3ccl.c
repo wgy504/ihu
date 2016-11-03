@@ -45,7 +45,7 @@ OPSTAT fsm_ccl_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 
 	//除了对全局变量进行操作之外，尽量不要做其它操作，因为该函数将被主任务/线程调用，不是本任务/线程调用
 	//该API就是给本任务一个提早介入的入口，可以帮着做些测试性操作
 	if (FsmSetState(TASK_ID_CCL, FSM_STATE_IDLE) == IHU_FAILURE){
-		IhuErrorPrint("CCL: Error Set FSM State at fsm_ccl_task_entry.");
+		IhuErrorPrint("CCL: Error Set FSM State at fsm_ccl_task_entry.\n");
 	}
 	return IHU_SUCCESS;
 }
@@ -93,7 +93,7 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 	
 	//打印报告进入常规状态
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
-		IhuDebugPrint("CCL: Enter FSM_STATE_CCL_ACTIVE status, Keeping refresh here!");
+		IhuDebugPrint("CCL: Enter FSM_STATE_CCL_ACTIVE status, Keeping refresh here!\n");
 	}
 
 	//返回
@@ -102,7 +102,7 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 
 OPSTAT fsm_ccl_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	IhuErrorPrint("CCL: Internal error counter reach DEAD level, SW-RESTART soon!");
+	IhuErrorPrint("CCL: Internal error counter reach DEAD level, SW-RESTART soon!\n");
 	fsm_ccl_init(0, 0, NULL, 0);
 	
 	return IHU_SUCCESS;

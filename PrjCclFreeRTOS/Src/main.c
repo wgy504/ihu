@@ -732,7 +732,7 @@ void StartDefaultTask(void const * argument)
   for(;;)
   {
     osDelay(1000);
-		IhuDebugPrint("TASK01: This is a test!\n");
+		//IhuDebugPrint("TASK01: This is a test!\n");
   }
   /* USER CODE END 5 */ 
 }
@@ -745,7 +745,7 @@ void StartTask02(void const * argument)
   for(;;)
   {
     osDelay(1000);
-		IhuDebugPrint("TASK02: This is a test!\n");
+		//IhuDebugPrint("TASK02: This is a test!\n");
   }
   /* USER CODE END StartTask02 */
 }
@@ -754,7 +754,7 @@ void StartTask02(void const * argument)
 void Callback01(void const * argument)
 {
   /* USER CODE BEGIN Callback01 */
-  IhuDebugPrint("Callback01: This is a test!\n");
+  //IhuDebugPrint("Callback01: This is a test!\n");
   /* USER CODE END Callback01 */
 }
 

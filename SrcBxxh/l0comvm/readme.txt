@@ -768,8 +768,8 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 验证了多各任务启动正常
 
 //= ZJL/XH, 2016 Nov.3, CURRENT_SW_DELIVERY R03.44 =>CCL项目
-= 着手解决CCL/Print问题
-
+= 着手解决CCL/Print问题：基本上解决，SLICING分片式关掉，不然一定会导致多个任务的打印内容重叠在一起
+= 未来如果的确需要SLICING机制，则需要启动独立的打印任务，以彻底解决该问题
 
 
 

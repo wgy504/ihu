@@ -45,7 +45,11 @@ time_t zIhuSystemTimeUnix = 1444341556;  //2015/8
 struct tm zIhuSystemTimeYmd;
 
 //全局公用打印字符串
-static char strGlobalPrintChar[IHU_PRINT_CHAR_SIZE];
+IhuPrintBufferChar_t zIhuPrintBufferChar[IHU_PRINT_BUFFER_NUMBER];
+//static char strGlobalPrintChar[IHU_PRINT_BUFFER_NUMBER][IHU_PRINT_CHAR_SIZE];
+//static char zStrIhuPrintFileLine[IHU_PRINT_BUFFER_NUMBER][IHU_PRINT_FILE_LINE_SIZE];
+unsigned int globalPrintIndex = 0;
+OS_MUTEX zIhuPrintMutex;
 
 //请确保，该全局字符串的定义跟Task_Id的顺序保持完全一致，不然后面的显示内容会出现差错
 //请服从最长长度TASK_NAME_MAX_LENGTH的定义，不然Debug/Trace打印出的信息也会出错
@@ -128,106 +132,136 @@ char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK] ={
 **
 **********************************************************************************/
 //正常打印
-void IhuDebugPrint(char *format, ...)
+void IhuDebugPrintFo(char *format, ...)
 {
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID)
-	va_list marker;
-	char strDebug[IHU_PRINT_CHAR_SIZE-50];	
-	
-	va_start(marker, format );
-	vsprintf(strDebug, format, marker);
-	
-	sprintf((char *)strGlobalPrintChar, "[DBG: %s, %s] ", __DATE__, __TIME__);
-	strcat((char *)strGlobalPrintChar, strDebug);
-		
-	// The trace is limited to 1000 characters.
-	if( (strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-2] != 0) && (strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-1] != 0) )
-	{
-		strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-3] = '!';
-		strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-2] = '\n';
-		strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-1] = '\0';
-	}
-
-	printf("%s", strGlobalPrintChar);
-	strGlobalPrintChar[0] = '\0';
-
-	//Reset variable arguments.
-	va_end(marker);	
-	
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-
 	va_list marker;
 	char strDebug[IHU_PRINT_CHAR_SIZE];
+	//char *ptrPrintBuffer;
+	UINT8 index=0;
+
+	index = globalPrintIndex;
+	memset(zIhuPrintBufferChar[index].PrintBuffer, 0, IHU_PRINT_CHAR_SIZE);
 	
 	va_start(marker, format );
 	vsnprintf(strDebug, IHU_PRINT_CHAR_SIZE-1, format, marker);
-	va_end(marker);
+	va_end(marker);	
 	
-	sprintf((char *)strGlobalPrintChar, "[DBG: %s, %s] ", __DATE__, __TIME__);
-	strncat((char *)strGlobalPrintChar, strDebug, IHU_PRINT_CHAR_SIZE-30);
-		
-	// The trace is limited to 1000 characters.
-	if( (strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-2] != 0) && (strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-1] != 0) )
+	// fetch a new print buffer
+//	ptrPrintBuffer = strGlobalPrintChar[globalPrintIndex++];
+//	if (globalPrintIndex >= IHU_PRINT_BUFFER_NUMBER)
+//		globalPrintIndex = 0;
+
+	
+//	sprintf((char *)ptrPrintBuffer, "%s, [DBG: %s, %s] ", zStrIhuPrintFileLine[globalPrintIndex], __DATE__, __TIME__);
+//	strncat((char *)ptrPrintBuffer, strDebug, IHU_PRINT_CHAR_SIZE - strlen(ptrPrintBuffer) - 1);
+
+	sprintf(zIhuPrintBufferChar[index].PrintBuffer, "%s, [DBG: %s, %s] ", zIhuPrintBufferChar[index].PrintHeader, __DATE__, __TIME__);
+	strncat(zIhuPrintBufferChar[index].PrintBuffer, strDebug, IHU_PRINT_CHAR_SIZE - strlen(zIhuPrintBufferChar[index].PrintBuffer) - 1);
+
+	// The trace is limited to 128 characters as defined at SYSDIM.H
+	if( (zIhuPrintBufferChar[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-2] != 0) && (zIhuPrintBufferChar[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-1] != 0) )
 	{
-		strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-3] = '!';
-		strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-2] = '\n';
-		strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-1] = '\0';
+		zIhuPrintBufferChar[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-3] = '!';
+		zIhuPrintBufferChar[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-2] = '\n';
+		zIhuPrintBufferChar[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-1] = '\0';
 	}
-	BSP_STM32_uart_print_data_send(strGlobalPrintChar);
 	
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID)
+	printf("%s", ptrPrintBuffer);
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)	
+	if (OS_MUTEX_GET(zIhuPrintMutex, IHU_PRINT_MUTEX_TIME_OUT_DURATION) != OS_MUTEX_TAKEN){
+		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		return;
+	}
+	BSP_STM32_uart_print_data_send(zIhuPrintBufferChar[index].PrintBuffer);
+	OS_MUTEX_PUT(zIhuPrintMutex);	
 #else
 #endif
+	
+	zIhuPrintBufferChar[index].PrintBuffer[0] = '\0';
 }
 
 //错误打印
-void IhuErrorPrint(char *format, ...)
+void IhuErrorPrintFo(char *format, ...)
 {
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID)
-	va_list marker;
-	char strDebug[IHU_PRINT_CHAR_SIZE-50];	
-	
-	va_start(marker, format );
-	vsprintf(strDebug, format, marker);
-	
-	sprintf((char *)strGlobalPrintChar, "[ERR: %s, %s] ", __DATE__, __TIME__);
-	strcat((char *)strGlobalPrintChar, strDebug);
-		
-	// The trace is limited to 1000 characters.
-	if( (strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-2] != 0) && (strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-1] != 0) )
-	{
-		strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-3] = '!';
-		strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-2] = '\n';
-		strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-1] = '\0';
-	}
-
-	printf("%s", strGlobalPrintChar);
-	strGlobalPrintChar[0] = '\0';
-
-	//Reset variable arguments.
-	va_end(marker);
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-
 	va_list marker;
 	char strDebug[IHU_PRINT_CHAR_SIZE];
-	
+	UINT8 index=0;
+
 	va_start(marker, format );
 	vsnprintf(strDebug, IHU_PRINT_CHAR_SIZE-1, format, marker);
-	va_end(marker);
+	va_end(marker);	
 	
-	sprintf((char *)strGlobalPrintChar, "[ERR: %s, %s] ", __DATE__, __TIME__);
-	strcat((char *)strGlobalPrintChar, strDebug);
-		
-	// The trace is limited to 1000 characters.
-	if( (strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-2] != 0) && (strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-1] != 0) )
-	{
-		strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-3] = '!';
-		strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-2] = '\n';
-		strGlobalPrintChar[IHU_PRINT_CHAR_SIZE-1] = '\0';
-	}
-	BSP_STM32_uart_print_data_send(strGlobalPrintChar);
+	index = globalPrintIndex;
+	memset(zIhuPrintBufferChar[index].PrintBuffer, 0, IHU_PRINT_CHAR_SIZE);
 
+	sprintf(zIhuPrintBufferChar[index].PrintBuffer, "%s, [ERR: %s, %s] ", zIhuPrintBufferChar[index].PrintHeader, __DATE__, __TIME__);
+	strncat(zIhuPrintBufferChar[index].PrintBuffer, strDebug, IHU_PRINT_CHAR_SIZE - strlen(zIhuPrintBufferChar[index].PrintBuffer) - 1);
+
+	// The trace is limited to 128 characters as defined at SYSDIM.H
+	if( (zIhuPrintBufferChar[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-2] != 0) && (zIhuPrintBufferChar[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-1] != 0) )
+	{
+		zIhuPrintBufferChar[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-3] = '!';
+		zIhuPrintBufferChar[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-2] = '\n';
+		zIhuPrintBufferChar[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-1] = '\0';
+	}
+	
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID)
+	printf("%s", ptrPrintBuffer);
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)	
+	if (OS_MUTEX_GET(zIhuPrintMutex, IHU_PRINT_MUTEX_TIME_OUT_DURATION) != OS_MUTEX_TAKEN){
+		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		return;
+	}
+	BSP_STM32_uart_print_data_send(zIhuPrintBufferChar[index].PrintBuffer);
+	OS_MUTEX_PUT(zIhuPrintMutex);	
 #else
 #endif
+	
+	zIhuPrintBufferChar[index].PrintBuffer[0] = '\0';
+}
+
+//独特的ID打印
+UINT8 IhuDebugPrintId(char *file, int line)
+{
+	char strLine[9];
+	UINT8 index=0;
+//	char *ptrPrintBuffer;
+//	
+//	ptrPrintBuffer = strGlobalPrintChar[globalPrintIndex++];
+//	if (globalPrintIndex >= IHU_PRINT_BUFFER_NUMBER)
+//		globalPrintIndex = 0;
+//	memset(ptrPrintBuffer, 0, IHU_PRINT_CHAR_SIZE);	
+//	snprintf(ptrPrintBuffer, 50, "[%s]", file);
+//	sprintf(strLine, "[%6d]", line);
+//	strcat(ptrPrintBuffer, strLine);
+
+//#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID)	
+//	printf("%s", strGlobalPrintChar);
+//#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)		
+//	if (OS_MUTEX_GET(zIhuPrintMutex, IHU_PRINT_MUTEX_TIME_OUT_DURATION) != OS_MUTEX_TAKEN){
+//		zIhuRunErrCnt[TASK_ID_VMFO]++;
+//		return;
+//	}
+//	BSP_STM32_uart_print_data_send(ptrPrintBuffer);
+//	OS_MUTEX_PUT(zIhuPrintMutex);	
+//#else
+//#endif
+	globalPrintIndex++;
+	if (globalPrintIndex >= IHU_PRINT_BUFFER_NUMBER) globalPrintIndex = 0;
+	index = globalPrintIndex;
+	memset(zIhuPrintBufferChar[index].PrintHeader, 0, IHU_PRINT_FILE_LINE_SIZE);
+	
+//	snprintf(zIhuPrintBufferChar[index].PrintHeader, 49, "[%s", file);
+//	if (strlen(zIhuPrintBufferChar[index].PrintHeader)<49){
+//		for (i=0; i<49-strlen(zIhuPrintBufferChar[index].PrintHeader); i++) strcat(zIhuPrintBufferChar[index].PrintHeader, " ");
+//	}
+//	strcat(zIhuPrintBufferChar[index].PrintHeader, "]");
+
+	snprintf(zIhuPrintBufferChar[index].PrintHeader, 50, "[%s]", file);
+	sprintf(strLine, "[%6d]", line);
+	strcat(zIhuPrintBufferChar[index].PrintHeader, strLine);
+	return index;
 }
 
 //交换U16的高位低位字节
@@ -257,6 +291,17 @@ void ihu_usleep(UINT32 usecond)
 void ihu_vm_system_init(void)
 {	
 	int i=0;
+	
+	//初始化打印缓冲区
+	globalPrintIndex = 0;
+	memset(&(zIhuPrintBufferChar[0].localIndex), 0, sizeof(IhuPrintBufferChar_t));
+	//采用OS_MUTEX_CREATE居然不成功，怪哉。。。
+	//OS_MUTEX_CREATE(zIhuPrintMutex);
+	zIhuPrintMutex = xSemaphoreCreateRecursiveMutex();
+	if (zIhuPrintMutex == NULL){
+		IhuDebugPrint("VMFO: Initialize VMFO failure, not continue any more...!\n");
+		return;
+	}
 
 	//INIT IHU itself
 	IhuDebugPrint("VMFO: CURRENT_PRJ=[%s], HW_TYPE=[%d], HW_MODULE=[%d], SW_REL=[%d], SW_DELIVER=[%d].\n", IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT, CURRENT_HW_TYPE, CURRENT_HW_MODULE, CURRENT_SW_RELEASE, CURRENT_SW_DELIVERY);
@@ -272,7 +317,7 @@ void ihu_vm_system_init(void)
 		strcpy(zIhuTaskInfo[i].TaskName, zIhuTaskNameList[i]);
 	}
 	memset(zIhuRunErrCnt, 0, sizeof(UINT32)*(TASK_ID_MAX-TASK_ID_MIN+1));
-
+	
 	//Init Fsm
 	FsmInit();
 	
@@ -1267,6 +1312,7 @@ OPSTAT ihu_message_rcv(UINT8 dest_id, IhuMsgSruct_t *msg)
 {
 	//Checking task_id range
 	if ((dest_id <= TASK_ID_MIN) || (dest_id >= TASK_ID_MAX)){
+		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Error on task_id, dest_id=%d!!!\n", dest_id);
 		return IHU_FAILURE;
 	}
