@@ -233,8 +233,8 @@ void func_ledpisces_time_out_period_scan(void)
 //			}
 //	}
 //对LED灯进行反转性测试，暂时没有任何实际意义，只是为了点亮灯，表示整个板子还活着
-//	ihu_l1hd_led_f2board_negation();
-//	ihu_l1hd_led_f2timer_ind_negation();	
+	ihu_l1hd_led_f2board_negation();
+	ihu_l1hd_led_f2timer_ind_negation();	
 
 }
 

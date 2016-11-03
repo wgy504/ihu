@@ -57,6 +57,43 @@ typedef enum
 void LED_GPIO_Init(void);
 void LEDx_StateSet(uint8_t LEDx,LEDState_TypeDef state);
 
+
+//旧式方式编写的函数
+//LED_F205_BOARD
+#define LED_F205_BOARD_PORT 						GPIOC
+#define LED_F205_BOARD_PIN							GPIO_PIN_2
+#define LED_F205RG_board_on()						HAL_GPIO_WritePin(LED_F205_BOARD_PORT, LED_F205_BOARD_PIN, GPIO_PIN_SET)
+#define LED_F205RG_board_off()					HAL_GPIO_WritePin(LED_F205_BOARD_PORT, LED_F205_BOARD_PIN, GPIO_PIN_RESET)
+#define LED_F205RG_board_negation() 	 	HAL_GPIO_TogglePin(LED_F205_BOARD_PORT, LED_F205_BOARD_PIN)
+#define LED_F205RG_BOARD_CLK_ENABLE()		RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE)
+	
+//LED_F205_TIMER_IND
+#define LED_F205_TIMER_IND_PORT 						GPIOC
+#define LED_F205_TIMER_IND_PIN							GPIO_PIN_3
+#define LED_F205RG_timer_ind_on()						HAL_GPIO_WritePin(LED_F205_TIMER_IND_PORT, LED_F205_TIMER_IND_PIN, GPIO_PIN_SET)
+#define LED_F205RG_timer_ind_off()					HAL_GPIO_WritePin(LED_F205_TIMER_IND_PORT, LED_F205_TIMER_IND_PIN, GPIO_PIN_RESET)
+#define LED_F205RG_timer_ind_negation() 	 	HAL_GPIO_TogglePin(LED_F205_TIMER_IND_PORT, LED_F205_TIMER_IND_PIN)
+#define LED_F205RG_TIMER_IND_CLK_ENABLE()		RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE)
+
+//ZJL: 另外一种方式，就是直接使用LED宏定义搞定
+#define LED_F205RG_onoff(port, pin, onoff) if (onoff) HAL_GPIO_WritePin(port, pin, GPIO_PIN_SET); else HAL_GPIO_WritePin(port, pin, GPIO_PIN_RESET);
+
+//全局函数定义
+extern void LED_F205_board_init(void);
+extern void LED_F205_board_on(void);
+extern void LED_F205_board_off(void);
+extern void LED_F205_board_negation(void);
+extern void LED_F205_timer_ind_init(void);
+extern void LED_F205_timer_ind_on(void);
+extern void LED_F205_timer_ind_off(void);
+extern void LED_F205_timer_ind_negation(void);
+extern void LED_F205_onoff(GPIO_TypeDef* port, uint16_t pin, uint8_t onoff);
+
+
+
+
+
+
 #endif  // __BSP_LED_H__
 
 /******************* (C) COPYRIGHT 2015-2020 硬石嵌入式开发团队 *****END OF FILE****/
