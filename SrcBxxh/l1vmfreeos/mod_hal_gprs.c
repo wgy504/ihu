@@ -14,10 +14,10 @@
 #include "mod_hal_gprs.h"
 
 //全局变量，引用外部
-INT8 	SPS_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN];		//串口GPRS数据接收缓冲区 
-INT8 	SPS_GPRS_R_State;												//串口GPRS接收状态
-INT16 SPS_GPRS_R_Count;												//当前接收数据的字节数
-UINT8 	SPS_GPRS_TIMER_TRIGGER_Count;  					//串口GPRS的时间计时器，貌似没有什么用
+extern INT8 	SPS_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN];		//串口GPRS数据接收缓冲区 
+extern INT8 	SPS_GPRS_R_State;												//串口GPRS接收状态
+extern INT16 SPS_GPRS_R_Count;												//当前接收数据的字节数
+extern UINT8 	SPS_GPRS_TIMER_TRIGGER_Count;  					//串口GPRS的时间计时器，貌似没有什么用
 
 //跟时钟/USART相关的本地变量
 UINT8 	SPS_GPRS_TIMER_WAIT_Duration=0;        		//传递等待时长

@@ -771,11 +771,11 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 着手解决CCL/Print问题：基本上解决，SLICING分片式关掉，不然一定会导致多个任务的打印内容重叠在一起
 = 未来如果的确需要SLICING机制，则需要启动独立的打印任务，以彻底解决该问题
 = LED灯恢复正常了
+= 时间戳是软件版本编译的固定日期时间，需要改进
+= 串口垃圾集成完成，待完善调测
 
-
-
-
-
+//= ZJL/XH, 2016 Nov.3, CURRENT_SW_DELIVERY R03.45 =>CCL项目
+= 
 
 
 
@@ -798,9 +798,9 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 CCL项目未来任务目标
 = SPI-GPIO互通小目标
 = 看门狗开启，自动重启
-= ucosiii/TICK级的休眠省电
+= FreeRTOS/ucosiii/TICK级的休眠省电
 = 打印任务的搞法，以便打开SLICING时间轮片机制功能
-= 打印中时间戳现实毫秒
+= 时间戳是软件版本编译的固定日期时间，需要改进
 
 
 

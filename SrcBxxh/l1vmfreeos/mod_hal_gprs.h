@@ -16,14 +16,15 @@
 
 #include "stm32f2xx_hal.h"
 #include "vmfreeoslayer.h"
+#include "bsp_debug_usart.h"
 
 #define TIM_USART_GPRS_ID 		TIM2
 #define SPS_GPRS_TTS_MAX_len 200 //定义最多播放的字节数
-#define SPS_GPRS_REC_MAXLEN 200	//最大接收数据长度
-#define SPS_RFID_REC_MAXLEN 200	//最大接收数据长度
-#define SPS_BLE_REC_MAXLEN 200	//最大接收数据长度
-#define SPS_SPARE1_REC_MAXLEN 200	//最大接收数据长度
-#define SPS_PRINT_REC_MAXLEN 200	//最大接收数据长度
+//#define SPS_GPRS_REC_MAXLEN 200	//最大接收数据长度
+//#define SPS_RFID_REC_MAXLEN 200	//最大接收数据长度
+//#define SPS_BLE_REC_MAXLEN 200	//最大接收数据长度
+//#define SPS_SPARE1_REC_MAXLEN 200	//最大接收数据长度
+//#define SPS_PRINT_REC_MAXLEN 200	//最大接收数据长度
 
 
 //工作调用流
