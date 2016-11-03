@@ -132,28 +132,19 @@ char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK] ={
 **
 **********************************************************************************/
 //正常打印
-void IhuDebugPrintFo(char *format, ...)
+void IhuDebugPrintFo(UINT8 index, char *format, ...)
 {
 	va_list marker;
 	char strDebug[IHU_PRINT_CHAR_SIZE];
 	//char *ptrPrintBuffer;
-	UINT8 index=0;
+	//UINT8 index=0;
 
-	index = globalPrintIndex;
+	//index = globalPrintIndex;
 	memset(zIhuPrintBufferChar[index].PrintBuffer, 0, IHU_PRINT_CHAR_SIZE);
 	
 	va_start(marker, format );
 	vsnprintf(strDebug, IHU_PRINT_CHAR_SIZE-1, format, marker);
 	va_end(marker);	
-	
-	// fetch a new print buffer
-//	ptrPrintBuffer = strGlobalPrintChar[globalPrintIndex++];
-//	if (globalPrintIndex >= IHU_PRINT_BUFFER_NUMBER)
-//		globalPrintIndex = 0;
-
-	
-//	sprintf((char *)ptrPrintBuffer, "%s, [DBG: %s, %s] ", zStrIhuPrintFileLine[globalPrintIndex], __DATE__, __TIME__);
-//	strncat((char *)ptrPrintBuffer, strDebug, IHU_PRINT_CHAR_SIZE - strlen(ptrPrintBuffer) - 1);
 
 	sprintf(zIhuPrintBufferChar[index].PrintBuffer, "%s, [DBG: %s, %s] ", zIhuPrintBufferChar[index].PrintHeader, __DATE__, __TIME__);
 	strncat(zIhuPrintBufferChar[index].PrintBuffer, strDebug, IHU_PRINT_CHAR_SIZE - strlen(zIhuPrintBufferChar[index].PrintBuffer) - 1);
@@ -182,17 +173,17 @@ void IhuDebugPrintFo(char *format, ...)
 }
 
 //错误打印
-void IhuErrorPrintFo(char *format, ...)
+void IhuErrorPrintFo(UINT8 index, char *format, ...)
 {
 	va_list marker;
 	char strDebug[IHU_PRINT_CHAR_SIZE];
-	UINT8 index=0;
+	//UINT8 index=0;
 
 	va_start(marker, format );
 	vsnprintf(strDebug, IHU_PRINT_CHAR_SIZE-1, format, marker);
 	va_end(marker);	
 	
-	index = globalPrintIndex;
+	//index = globalPrintIndex;
 	memset(zIhuPrintBufferChar[index].PrintBuffer, 0, IHU_PRINT_CHAR_SIZE);
 
 	sprintf(zIhuPrintBufferChar[index].PrintBuffer, "%s, [ERR: %s, %s] ", zIhuPrintBufferChar[index].PrintHeader, __DATE__, __TIME__);
@@ -304,6 +295,7 @@ void ihu_vm_system_init(void)
 	}
 
 	//INIT IHU itself
+	//IhuDebugTest("This is my test, i = %d!\n", i);
 	IhuDebugPrint("VMFO: CURRENT_PRJ=[%s], HW_TYPE=[%d], HW_MODULE=[%d], SW_REL=[%d], SW_DELIVER=[%d].\n", IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT, CURRENT_HW_TYPE, CURRENT_HW_MODULE, CURRENT_SW_RELEASE, CURRENT_SW_DELIVERY);
 	IhuDebugPrint("VMFO: BXXH(TM) IHU(c) Application Layer start and initialized, build at %s, %s.\n", __DATE__, __TIME__);
 

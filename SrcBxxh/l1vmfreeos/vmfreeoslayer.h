@@ -223,13 +223,12 @@ typedef struct IhuPrintBufferChar
  *
  */
 //全局API，不依赖具体操作系统
-void IhuDebugPrintFo(char *format, ...);
-void IhuErrorPrintFo(char *format, ...);
+void IhuDebugPrintFo(UINT8 index, char *format, ...);
+void IhuErrorPrintFo(UINT8 index, char *format, ...);
 UINT8 IhuDebugPrintId(char *file, int line);
-#define IhuDebugPrint IhuDebugPrintId(__FILE__, __LINE__), IhuDebugPrintFo
-#define IhuErrorPrint IhuDebugPrintId(__FILE__, __LINE__), IhuErrorPrintFo
-//#define IhuDebugPrint(format, ...) IhuDebugPrintFo(IhuDebugPrintId(__FILE__, __LINE__), (format), (...))
-
+#define IhuDebugPrint(...) (((void (*)(UINT8, const char *, ...))IhuDebugPrintFo)(IhuDebugPrintId(__FILE__, __LINE__), __VA_ARGS__))
+#define IhuErrorPrint(...) (((void (*)(UINT8, const char *, ...))IhuErrorPrintFo)(IhuDebugPrintId(__FILE__, __LINE__), __VA_ARGS__))	
+	
 extern void ihu_vm_system_init(void);  //系统级别的初始化
 extern void ihu_sleep(UINT32 second);
 extern void ihu_usleep(UINT32 usecond);  //resulution 10^(-6)s = 1 microsecond
