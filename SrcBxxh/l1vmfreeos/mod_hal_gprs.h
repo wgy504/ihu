@@ -55,7 +55,7 @@ void GPRS_UART_data_connection_and_receive_process(void);
 
 //核心函数
 void GPRS_UART_clear_receive_buffer(void);
-UINT8 GPRS_UART_send_AT_command(UINT8 *cmd, UINT8 *ack, UINT16 wait_time);
+UINT8 GPRS_UART_send_AT_command(UINT8 *cmd, UINT8 *ack, UINT16 wait_time);  //秒级！！！
 void GPRS_UART_SendString(char* s);
 #define GPRS_UART_SendLR() GPRS_UART_SendString("\r\n")
 void GPRS_UART_Wait_CREG(void);

@@ -35,17 +35,15 @@ int8_t SPS_GPRS_R_State=0;												//串口GPRS接收状态
 int16_t SPS_GPRS_R_Count=0;											//当前接收数据的字节数
 uint8_t SPS_GPRS_TIMER_TRIGGER_Count=0;  					//串口GPRS的时间计时器，跟TIM2相互关联，从而使得GPRS串口在接收IRQ处理程序中可以设置时间超时定时器
 
-int8_t SPS_RFID_R_Buff[SPS_RFID_REC_MAXLEN];	//串口RFID数据接收缓冲区 
-int8_t SPS_RFID_R_State=0;					//串口RFID接收状态
-int16_t SPS_RFID_R_Count=0;					//当前接收数据的字节数 	  
-
-int8_t SPS_BLE_R_Buff[SPS_BLE_REC_MAXLEN];	//串口BLE数据接收缓冲区 
-int8_t SPS_BLE_R_State=0;					//串口BLE接收状态
-int16_t SPS_BLE_R_Count=0;					//当前接收数据的字节数 	  
-
-int8_t SPS_SPARE1_R_Buff[SPS_SPARE1_REC_MAXLEN];	//串口SPARE1数据接收缓冲区 
-int8_t SPS_SPARE1_R_State=0;					//串口SPARE1接收状态
-int16_t SPS_SPARE1_R_Count=0;					//当前接收数据的字节数 	  
+//int8_t SPS_RFID_R_Buff[SPS_RFID_REC_MAXLEN];	//串口RFID数据接收缓冲区 
+//int8_t SPS_RFID_R_State=0;					//串口RFID接收状态
+//int16_t SPS_RFID_R_Count=0;					//当前接收数据的字节数 	  
+//int8_t SPS_BLE_R_Buff[SPS_BLE_REC_MAXLEN];	//串口BLE数据接收缓冲区 
+//int8_t SPS_BLE_R_State=0;					//串口BLE接收状态
+//int16_t SPS_BLE_R_Count=0;					//当前接收数据的字节数 	  
+//int8_t SPS_SPARE1_R_Buff[SPS_SPARE1_REC_MAXLEN];	//串口SPARE1数据接收缓冲区 
+//int8_t SPS_SPARE1_R_State=0;					//串口SPARE1接收状态
+//int16_t SPS_SPARE1_R_Count=0;					//当前接收数据的字节数 	  
 
 /* 扩展变量 ------------------------------------------------------------------*/
 /* 私有函数原形 --------------------------------------------------------------*/

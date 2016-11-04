@@ -25,7 +25,6 @@ UINT16 	GPRS_UART_TIMER_DELAY_Count=0;      				//延时变量
 UINT8 	GPRS_UART_TIMER_START_Flag=0;							//定时器0延时启动计数器
 UINT8 	GPRS_UART_TIMER_RECON_Count=0;							//链路重连接的时长计数器，防止超时
 
-
 /*************  本地变量声明	**************/
 UINT8 	SPS_PRINT_R_Buf[SPS_PRINT_REC_MAXLEN];		//串口1数据缓存区
 UINT8 	Time_UART_PRINT=0;  											//串口1计时器
@@ -1613,28 +1612,31 @@ void GPRS_UART_clear_receive_buffer(void)
 * 返回   : 0:正常  1:错误
 * 注意   : 
 * UINT8 GPRS_UART_send_AT_command(UINT8 *cmd, UINT8 *ack, UINT8 wait_time)  
+* 这里的发送，只有成功返回ACK对应的回复时，才算成功
 *******************************************************************************/
-UINT8 GPRS_UART_send_AT_command(UINT8 *cmd, UINT8 *ack, UINT16 wait_time) //in ms     
+UINT8 GPRS_UART_send_AT_command(UINT8 *cmd, UINT8 *ack, UINT16 wait_time) //in Second
 {
-	UINT8 res=1;
-	//UINT8 *c;
-	//c = cmd;										//保存字符串地址到c
+	//等待的时间长度，到底是以tick为单位的，还是以ms为单位的？经过验证，都是以ms为单位的，所以不用担心！！！
+	uint32_t tickTotal = wait_time * 1000 / SPS_UART_RX_MAX_DELAY_DURATION;
+	//uint32_t tickTotal = wait_time * 1000* configTICK_RATE_HZ / SPS_UART_RX_MAX_DELAY_DURATION;
+	uint8_t res = 1;
+
+	//清理接收缓冲区
 	GPRS_UART_clear_receive_buffer();
 	for (; *cmd!='\0'; cmd++)
 	{
-		//while(USART_GetFlagStatus(USART_GPRS, USART_FLAG_TC)==RESET);
-	  //USART_SendData(USART_GPRS, *cmd);
-//		while(!USART_GetFlagStatus(USART_GPRS, USART_FLAG_TXE)) ;
-//		USART_SendData(USART_GPRS, *cmd);
+		BSP_STM32_SPS_GPRS_SendData((uint8_t *)cmd, 1);
 	}
-
 	GPRS_UART_SendLR();	
-	if(wait_time==0)return res;
-	GPRS_UART_TIMER_DELAY_Count = 0;
-	GPRS_UART_TIMER_WAIT_Duration = wait_time;
-	GPRS_UART_TIMER_START_Flag = 1;
-	while(GPRS_UART_TIMER_START_Flag&res)                    
+	if(wait_time==0) return FAILURE;
+	
+	//等待固定时间
+	//osDelay(wait_time); 这里的周期就是以绝对ms为单位的
+	
+	while((tickTotal>0) && (res==1))
 	{
+		tickTotal--;
+		BSP_STM32_SPS_GPRS_RcvData((uint8_t*)SPS_GPRS_R_Buff, SPS_GPRS_REC_MAXLEN);
 		if(strstr((const char*)SPS_GPRS_R_Buff, (char*)ack)==NULL)
 			 res=1;
 		else
@@ -1642,7 +1644,8 @@ UINT8 GPRS_UART_send_AT_command(UINT8 *cmd, UINT8 *ack, UINT16 wait_time) //in m
 			 res=0;
 		}
 	}
-	return res;
+	if (res == 1) return FAILURE;
+	else return SUCCESS;	
 }
 
 /*******************************************************************************

@@ -226,7 +226,7 @@ void func_spsvirgo_time_out_period_scan(void)
 	zIhuGprsOperationFlag++;
 	
 	//只干活一次
-	//if (zIhuGprsOperationFlag == 1)	GPRS_UART_GSM_working_procedure_selection(2);
+	if (zIhuGprsOperationFlag == 1)	GPRS_UART_GSM_working_procedure_selection(2);
 	
 	IhuDebugPrint("SPSVIRGO: Time Out Test!\n");
 }

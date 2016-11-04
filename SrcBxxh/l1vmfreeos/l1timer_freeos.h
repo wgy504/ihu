@@ -35,6 +35,7 @@ enum FSM_STATE_TIMER
  *  全局TIMER常量定义
  *
  */
+//当前就是1ms的定时时钟！！！
 //Granularity of 1second and 10ms timer set
 #define IHU_TIMER_TICK_1_SEC 1000      //in second
 #define IHU_TIMER_TICK_10_MS 10  //in ms second
