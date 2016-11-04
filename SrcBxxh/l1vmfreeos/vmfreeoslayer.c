@@ -164,7 +164,7 @@ void IhuDebugPrintFo(UINT8 index, char *format, ...)
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		return;
 	}
-	BSP_STM32_uart_print_data_send(zIhuPrintBufferChar[index].PrintBuffer);
+	BSP_STM32_sps_print_data_send(zIhuPrintBufferChar[index].PrintBuffer);
 	OS_MUTEX_PUT(zIhuPrintMutex);	
 #else
 #endif
@@ -204,7 +204,7 @@ void IhuErrorPrintFo(UINT8 index, char *format, ...)
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		return;
 	}
-	BSP_STM32_uart_print_data_send(zIhuPrintBufferChar[index].PrintBuffer);
+	BSP_STM32_sps_print_data_send(zIhuPrintBufferChar[index].PrintBuffer);
 	OS_MUTEX_PUT(zIhuPrintMutex);	
 #else
 #endif
@@ -234,7 +234,7 @@ UINT8 IhuDebugPrintId(char *file, int line)
 //		zIhuRunErrCnt[TASK_ID_VMFO]++;
 //		return;
 //	}
-//	BSP_STM32_uart_print_data_send(ptrPrintBuffer);
+//	BSP_STM32_sps_print_data_send(ptrPrintBuffer);
 //	OS_MUTEX_PUT(zIhuPrintMutex);	
 //#else
 //#endif

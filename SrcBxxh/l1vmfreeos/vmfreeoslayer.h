@@ -32,11 +32,11 @@
 	#include "semphr.h"
 	
 	#include "bsp_adc.h"
-	#include "bsp_BasicTIM.h"
-	#include "bsp_debug_usart.h"	
+	#include "bsp_tim.h"
+	#include "bsp_usart.h"	
 	#include "bsp_key.h"
 	#include "bsp_led.h"
-	#include "bsp_usartx_RS485.h"
+	#include "bsp_rs485.h"
 #else	
 #endif
 
@@ -285,7 +285,7 @@ extern void   ihu_task_execute_all_bare_rtos(void);
 
 
 //底层参考的BSP级别
-extern int BSP_STM32_uart_print_data_send(char *s);
+extern int BSP_STM32_sps_print_data_send(char *s);
 
 /*
  *	
@@ -351,23 +351,14 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_led_f2_onff BSP_STM32_LED_F205_onoff
 
 //USART专门对付一般性的驱动函数，对其进行映射，以便保持上层模块的一致性
-#define ihu_l1hd_sps_gprs_init_config SPS_GPRS_Init_Config
-#define ihu_l1hd_sps_gprs_send_data SPS_GPRS_SendData
-#define ihu_l1hd_sps_rfid_init_config SPS_RFID_Init_Config
-#define ihu_l1hd_sps_rfid_send_data SPS_RFID_SendData
-#define ihu_l1hd_sps_ble_init_config SPS_BLE_Init_Config
-#define ihu_l1hd_sps_ble_send_data SPS_BLE_SendData
-#define ihu_l1hd_sps_spare1_init_config SPS_SPARE1_Init_Config
-#define ihu_l1hd_sps_spare1_send_data SPS_SPARE1_SendData
-
-
-
-
-
-
-
-
-
+#define ihu_l1hd_sps_gprs_init_config BSP_STM32_SPS_GPRS_Init_Config
+#define ihu_l1hd_sps_gprs_send_data BSP_STM32_SPS_GPRS_SendData
+#define ihu_l1hd_sps_rfid_init_config BSP_STM32_SPS_RFID_Init_Config
+#define ihu_l1hd_sps_rfid_send_data BSP_STM32_SPS_RFID_SendData
+#define ihu_l1hd_sps_ble_init_config BSP_STM32_SPS_BLE_Init_Config
+#define ihu_l1hd_sps_ble_send_data BSP_STM32_SPS_BLE_SendData
+#define ihu_l1hd_sps_spare1_init_config BSP_STM32_SPS_SPARE1_Init_Config
+#define ihu_l1hd_sps_spare1_send_data BSP_STM32_SPS_SPARE1_SendData
 
 
 

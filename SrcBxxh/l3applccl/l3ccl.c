@@ -29,9 +29,18 @@ FsmStateItem_t FsmCcl[] =
   {MSG_ID_COM_RESTART,										FSM_STATE_IDLE,            									fsm_ccl_restart},
 
   //Task level initialization
-  {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_AVTIVE,         					fsm_ccl_restart},
-  {MSG_ID_COM_STOP,												FSM_STATE_CCL_AVTIVE,         					fsm_ccl_stop_rcv},
+  {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_INITED,         					fsm_ccl_restart},
+  {MSG_ID_COM_STOP,												FSM_STATE_CCL_INITED,         					fsm_ccl_stop_rcv},
 
+		//Task level actived status
+  {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_ACTIVED,         					fsm_ccl_restart},
+  {MSG_ID_COM_STOP,												FSM_STATE_CCL_ACTIVED,         					fsm_ccl_stop_rcv},
+	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CCL_ACTIVED,         				  fsm_ccl_time_out},
+	{MSG_ID_ADC_UL_DATA_PULL_BWD,						FSM_STATE_CCL_ACTIVED,         					fsm_ccl_adc_ul_data_pull_bwd},
+	{MSG_ID_ADC_UL_CTRL_CMD_RESP,						FSM_STATE_CCL_ACTIVED,         					fsm_ccl_adc_ul_ctrl_cmd_resp},
+	{MSG_ID_SPI_UL_DATA_PULL_BWD,						FSM_STATE_CCL_ACTIVED,         					fsm_ccl_spi_ul_data_pull_bwd},
+	{MSG_ID_SPI_UL_CTRL_CMD_RESP,						FSM_STATE_CCL_ACTIVED,         					fsm_ccl_spi_ul_ctrl_cmd_resp},
+	
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             									NULL},  //Ending
 };
@@ -83,7 +92,7 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 	zIhuRunErrCnt[TASK_ID_CCL] = 0;
 
 	//设置状态机到目标状态
-	if (FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_AVTIVE) == IHU_FAILURE){
+	if (FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_ACTIVED) == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_CCL]++;
 		IhuErrorPrint("CCL: Error Set FSM State!");
 		return IHU_FAILURE;
@@ -132,5 +141,109 @@ OPSTAT fsm_ccl_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 OPSTAT func_ccl_hw_init(void)
 {
 	return IHU_SUCCESS;
+}
+
+OPSTAT fsm_ccl_adc_ul_data_pull_bwd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{	
+	//入参检查
+	if ((param_ptr == NULL) || (dest_id != TASK_ID_CCL)){
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		IhuErrorPrint("CCL: Wrong input paramters!\n");
+		return IHU_FAILURE;
+	}
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT fsm_ccl_adc_ul_ctrl_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{	
+	//入参检查
+	if ((param_ptr == NULL) || (dest_id != TASK_ID_CCL)){
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		IhuErrorPrint("CCL: Wrong input paramters!\n");
+		return IHU_FAILURE;
+	}
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT fsm_ccl_spi_ul_data_pull_bwd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{	
+	//入参检查
+	if ((param_ptr == NULL) || (dest_id != TASK_ID_CCL)){
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		IhuErrorPrint("CCL: Wrong input paramters!\n");
+		return IHU_FAILURE;
+	}
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT fsm_ccl_spi_ul_ctrl_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{	
+	//入参检查
+	if ((param_ptr == NULL) || (dest_id != TASK_ID_CCL)){
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		IhuErrorPrint("CCL: Wrong input paramters!\n");
+		return IHU_FAILURE;
+	}
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+//TIMER_OUT Processing
+OPSTAT fsm_ccl_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{
+	int ret;
+	msg_struct_com_restart_t snd0;
+	msg_struct_com_time_out_t rcv;
+	
+	//Receive message and copy to local variable
+	memset(&rcv, 0, sizeof(msg_struct_com_time_out_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_com_time_out_t))){
+		IhuErrorPrint("CCL: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+
+	//钩子在此处，检查zIhuRunErrCnt[TASK_ID_CCL]是否超限
+	if (zIhuRunErrCnt[TASK_ID_CCL] > IHU_RUN_ERROR_LEVEL_2_MAJOR){
+		//减少重复RESTART的概率
+		zIhuRunErrCnt[TASK_ID_CCL] = zIhuRunErrCnt[TASK_ID_CCL] - IHU_RUN_ERROR_LEVEL_2_MAJOR;
+		memset(&snd0, 0, sizeof(msg_struct_com_restart_t));
+		snd0.length = sizeof(msg_struct_com_restart_t);
+		ret = ihu_message_send(MSG_ID_COM_RESTART, TASK_ID_CCL, TASK_ID_CCL, &snd0, snd0.length);
+		if (ret == IHU_FAILURE){
+			zIhuRunErrCnt[TASK_ID_CCL]++;
+			IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_CCL]);
+			return IHU_FAILURE;
+		}
+	}
+
+	//Period time out received
+	if ((rcv.timeId == TIMER_ID_1S_CCL_PERIOD_SCAN) &&(rcv.timeRes == TIMER_RESOLUTION_1S)){
+		//保护周期读数的优先级，强制抢占状态，并简化问题
+		if (FsmGetState(TASK_ID_CCL) != FSM_STATE_CCL_ACTIVED){
+			ret = FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_ACTIVED);
+			if (ret == IHU_FAILURE){
+				zIhuRunErrCnt[TASK_ID_CCL]++;
+				IhuErrorPrint("CCL: Error Set FSM State!\n");
+				return IHU_FAILURE;
+			}//FsmSetState
+		}
+		func_ccl_time_out_period_scan();
+	}
+
+	return IHU_SUCCESS;
+}
+
+void func_ccl_time_out_period_scan(void)
+{
+	IhuDebugPrint("CCL: Time Out Test!\n");
 }
 

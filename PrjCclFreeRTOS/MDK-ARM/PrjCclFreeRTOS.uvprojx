@@ -584,26 +584,6 @@
               <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_adc.h</FilePath>
             </File>
             <File>
-              <FileName>bsp_BasicTIM.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_BasicTIM.c</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_BasicTIM.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_BasicTIM.h</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_debug_usart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_debug_usart.c</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_debug_usart.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_debug_usart.h</FilePath>
-            </File>
-            <File>
               <FileName>bsp_key.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_key.c</FilePath>
@@ -624,14 +604,34 @@
               <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_led.h</FilePath>
             </File>
             <File>
-              <FileName>bsp_usartx_RS485.c</FileName>
+              <FileName>bsp_rs485.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_usartx_RS485.c</FilePath>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_rs485.c</FilePath>
             </File>
             <File>
-              <FileName>bsp_usartx_RS485.h</FileName>
+              <FileName>bsp_rs485.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_usartx_RS485.h</FilePath>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_rs485.h</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_tim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_tim.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_tim.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_tim.h</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_usart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_usart.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_usart.h</FilePath>
             </File>
           </Files>
         </Group>

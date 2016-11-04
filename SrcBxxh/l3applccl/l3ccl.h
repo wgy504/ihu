@@ -34,7 +34,7 @@
 enum FSM_STATE_CCL
 {
 	FSM_STATE_CCL_INITED = 0x02,
-	FSM_STATE_CCL_AVTIVE,
+	FSM_STATE_CCL_ACTIVED,
 	FSM_STATE_CCL_MAX,
 };
 //#define FSM_STATE_END   0xFE
@@ -48,9 +48,15 @@ extern OPSTAT fsm_ccl_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 extern OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_ccl_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_ccl_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT fsm_ccl_adc_ul_data_pull_bwd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT fsm_ccl_adc_ul_ctrl_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT fsm_ccl_spi_ul_data_pull_bwd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT fsm_ccl_spi_ul_ctrl_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT fsm_ccl_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 
 //Local API
 OPSTAT func_ccl_hw_init(void);
+void func_ccl_time_out_period_scan(void);
 
 #endif /* L3APPL_L3CCL_H_ */
 
