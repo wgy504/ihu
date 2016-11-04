@@ -35,6 +35,7 @@ extern int BSP_STM32_sps_print_data_receive(char *s, uint16_t len);
 
 extern int BSP_STM32_SPS_GPRS_SendData(uint8_t* buff, uint16_t len);
 extern int BSP_STM32_SPS_GPRS_RcvData(uint8_t* buff, uint16_t len);
+extern int BSP_STM32_SPS_GPRS_RcvData_timeout(uint8_t* buff, uint16_t len, uint32_t timeout);
 	
 extern int BSP_STM32_SPS_RFID_SendData(uint8_t* buff, uint16_t len);
 extern int BSP_STM32_SPS_RFID_RcvData(uint8_t* buff, uint16_t len);

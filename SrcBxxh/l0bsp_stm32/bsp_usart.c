@@ -128,6 +128,15 @@ int BSP_STM32_SPS_GPRS_RcvData(uint8_t* buff, uint16_t len)
 		return FAILURE;
 }
 
+int BSP_STM32_SPS_GPRS_RcvData_timeout(uint8_t* buff, uint16_t len, uint32_t timeout)
+{    
+	if (HAL_UART_Receive(&BSP_STM32_UART_GPRS, buff, len, timeout) == HAL_OK)
+		return SUCCESS;
+	else
+		return FAILURE;
+}
+
+
 /*******************************************************************************
 * 函数名  : USART_SendData
 * 描述    : USART_RFID发送数据缓冲区数据

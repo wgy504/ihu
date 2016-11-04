@@ -775,7 +775,10 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 串口垃圾集成完成，待完善调测
 
 //= ZJL/XH, 2016 Nov.3, CURRENT_SW_DELIVERY R03.45 =>CCL项目
-= 
+= 短信发送完成
+= 串口延时接收依然存在问题，OK并没有真正收到。。。
+
+
 
 
 
