@@ -271,6 +271,7 @@ void HAL_I2C_MspDeInit(I2C_HandleTypeDef* hi2c)
 
 }
 
+#if 0
 void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi)
 {
 
@@ -455,6 +456,7 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef* hspi)
   }
 
 }
+#endif
 
 void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* htim_base)
 {
