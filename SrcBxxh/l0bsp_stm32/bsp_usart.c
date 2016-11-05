@@ -28,22 +28,28 @@ extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
 extern UART_HandleTypeDef huart6;
+extern uint8_t zIhuUartRxBuffer[6];
 
 //从SCYCB项目中继承过来的全局变量，待定
-int8_t SPS_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN];			//串口GPRS数据接收缓冲区 
-int8_t SPS_GPRS_R_State=0;												//串口GPRS接收状态
-int16_t SPS_GPRS_R_Count=0;											//当前接收数据的字节数
-uint8_t SPS_GPRS_TIMER_TRIGGER_Count=0;  					//串口GPRS的时间计时器，跟TIM2相互关联，从而使得GPRS串口在接收IRQ处理程序中可以设置时间超时定时器
+int8_t BSP_STM32_SPS_GPRS_R_Buff[BSP_STM32_SPS_GPRS_REC_MAXLEN];			//串口GPRS数据接收缓冲区 
+int8_t BSP_STM32_SPS_GPRS_R_State=0;												//串口GPRS接收状态
+int16_t BSP_STM32_SPS_GPRS_R_Count=0;					//当前接收数据的字节数 	  
+int8_t BSP_STM32_SPS_RFID_R_Buff[BSP_STM32_SPS_RFID_REC_MAXLEN];			//串口RFID数据接收缓冲区 
+int8_t BSP_STM32_SPS_RFID_R_State=0;												//串口RFID接收状态
+int16_t BSP_STM32_SPS_RFID_R_Count=0;					//当前接收数据的字节数 	  
+int8_t BSP_STM32_SPS_BLE_R_Buff[BSP_STM32_SPS_BLE_REC_MAXLEN];			//串口BLE数据接收缓冲区 
+int8_t BSP_STM32_SPS_BLE_R_State=0;												//串口BLE接收状态
+int16_t BSP_STM32_SPS_BLE_R_Count=0;					//当前接收数据的字节数 	  
+int8_t BSP_STM32_SPS_PRINT_R_Buff[BSP_STM32_SPS_BLE_REC_MAXLEN];			//串口PRINT数据接收缓冲区 
+int8_t BSP_STM32_SPS_PRINT_R_State=0;												//串口PRINT接收状态
+int16_t BSP_STM32_SPS_PRINT_R_Count=0;					//当前接收数据的字节数 	  
+int8_t BSP_STM32_SPS_SPARE1_R_Buff[BSP_STM32_SPS_SPARE1_REC_MAXLEN];			//串口SPARE1数据接收缓冲区 
+int8_t BSP_STM32_SPS_SPARE1_R_State=0;												//串口SPARE1接收状态
+int16_t BSP_STM32_SPS_SPARE1_R_Count=0;					//当前接收数据的字节数 	  
+int8_t BSP_STM32_SPS_SPARE2_R_Buff[BSP_STM32_SPS_SPARE2_REC_MAXLEN];			//串口SPARE2数据接收缓冲区 
+int8_t BSP_STM32_SPS_SPARE2_R_State=0;												//串口SPARE2接收状态
+int16_t BSP_STM32_SPS_SPARE2_R_Count=0;					//当前接收数据的字节数 	  
 
-//int8_t SPS_RFID_R_Buff[SPS_RFID_REC_MAXLEN];	//串口RFID数据接收缓冲区 
-//int8_t SPS_RFID_R_State=0;					//串口RFID接收状态
-//int16_t SPS_RFID_R_Count=0;					//当前接收数据的字节数 	  
-//int8_t SPS_BLE_R_Buff[SPS_BLE_REC_MAXLEN];	//串口BLE数据接收缓冲区 
-//int8_t SPS_BLE_R_State=0;					//串口BLE接收状态
-//int16_t SPS_BLE_R_Count=0;					//当前接收数据的字节数 	  
-//int8_t SPS_SPARE1_R_Buff[SPS_SPARE1_REC_MAXLEN];	//串口SPARE1数据接收缓冲区 
-//int8_t SPS_SPARE1_R_State=0;					//串口SPARE1接收状态
-//int16_t SPS_SPARE1_R_Count=0;					//当前接收数据的字节数 	  
 
 /* 扩展变量 ------------------------------------------------------------------*/
 /* 私有函数原形 --------------------------------------------------------------*/
@@ -208,6 +214,64 @@ int BSP_STM32_SPS_SPARE1_RcvData(uint8_t* buff, uint16_t len)
 	else
 		return FAILURE;
 }
+
+
+/**
+  * 串口接口完成回调函数的处理
+  * 为什么需要重新执行HAL_UART_Receive_IT，待确定
+  */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
+{
+  if(UartHandle==&BSP_STM32_UART_GPRS)
+  {
+		memcpy(&BSP_STM32_SPS_GPRS_R_Buff[BSP_STM32_SPS_GPRS_R_Count], &zIhuUartRxBuffer[BSP_STM32_UART_GPRS_ID-1], 1);
+		BSP_STM32_SPS_GPRS_R_Count++;
+		if (BSP_STM32_SPS_GPRS_R_Count >= BSP_STM32_SPS_GPRS_REC_MAXLEN)
+			BSP_STM32_SPS_GPRS_R_Count = 0;
+		HAL_UART_Receive_IT(&BSP_STM32_UART_GPRS, &zIhuUartRxBuffer[BSP_STM32_UART_GPRS_ID-1], 1);
+  }
+//  else if(UartHandle==&BSP_STM32_UART_RFID)
+//  {
+//		BSP_STM32_SPS_RFID_R_Buff[BSP_STM32_SPS_RFID_R_Count] = zIhuUartRxBuffer[BSP_STM32_UART_RFID_ID-1];
+//		BSP_STM32_SPS_RFID_R_Count++;
+//		if (BSP_STM32_SPS_RFID_R_Count >= BSP_STM32_SPS_RFID_REC_MAXLEN)
+//			BSP_STM32_SPS_RFID_R_Count = 0;
+//		HAL_UART_Receive_IT(&BSP_STM32_UART_RFID, &zIhuUartRxBuffer[BSP_STM32_UART_RFID_ID-1], 1);
+//  }
+//  else if(UartHandle==&BSP_STM32_UART_PRINT)
+//  {
+//		BSP_STM32_SPS_PRINT_R_Buff[BSP_STM32_SPS_PRINT_R_Count] = zIhuUartRxBuffer[BSP_STM32_UART_PRINT_ID-1];
+//		BSP_STM32_SPS_PRINT_R_Count++;
+//		if (BSP_STM32_SPS_PRINT_R_Count >= BSP_STM32_SPS_PRINT_REC_MAXLEN)
+//			BSP_STM32_SPS_PRINT_R_Count = 0;
+//		HAL_UART_Receive_IT(&BSP_STM32_UART_PRINT, &zIhuUartRxBuffer[BSP_STM32_UART_PRINT_ID-1], 1);
+//  }	
+//  else if(UartHandle==&BSP_STM32_UART_BLE)
+//  {
+//		BSP_STM32_SPS_BLE_R_Buff[BSP_STM32_SPS_BLE_R_Count] = zIhuUartRxBuffer[BSP_STM32_UART_BLE_ID-1];
+//		BSP_STM32_SPS_BLE_R_Count++;
+//		if (BSP_STM32_SPS_BLE_R_Count >= BSP_STM32_SPS_BLE_REC_MAXLEN)
+//			BSP_STM32_SPS_BLE_R_Count = 0;
+//		HAL_UART_Receive_IT(&BSP_STM32_UART_BLE, &zIhuUartRxBuffer[BSP_STM32_UART_BLE_ID-1], 1);
+//  }	
+//  else if(UartHandle==&BSP_STM32_UART_SPARE1)
+//  {
+//		BSP_STM32_SPS_SPARE1_R_Buff[BSP_STM32_SPS_SPARE1_R_Count] = zIhuUartRxBuffer[BSP_STM32_UART_SPARE1_ID-1];
+//		BSP_STM32_SPS_SPARE1_R_Count++;
+//		if (BSP_STM32_SPS_SPARE1_R_Count >= BSP_STM32_SPS_SPARE1_REC_MAXLEN)
+//			BSP_STM32_SPS_SPARE1_R_Count = 0;
+//		HAL_UART_Receive_IT(&BSP_STM32_UART_SPARE1, &zIhuUartRxBuffer[BSP_STM32_UART_SPARE1_ID-1], 1);
+//  }	
+//  else if(UartHandle==&BSP_STM32_UART_SPARE2)
+//  {
+//		BSP_STM32_SPS_SPARE2_R_Buff[BSP_STM32_SPS_SPARE2_R_Count] = zIhuUartRxBuffer[BSP_STM32_UART_SPARE2_ID-1];
+//		BSP_STM32_SPS_SPARE2_R_Count++;
+//		if (BSP_STM32_SPS_SPARE2_R_Count >= BSP_STM32_SPS_SPARE2_REC_MAXLEN)
+//			BSP_STM32_SPS_SPARE2_R_Count = 0;
+//		HAL_UART_Receive_IT(&BSP_STM32_UART_SPARE2, &zIhuUartRxBuffer[BSP_STM32_UART_SPARE2_ID-1], 1);
+//  }
+}
+
 
 /**
   * 函数功能: 串口硬件初始化配置

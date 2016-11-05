@@ -80,6 +80,7 @@ osTimerId myTimer01Handle;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
+uint8_t zIhuUartRxBuffer[6];
 
 /* USER CODE END PV */
 
@@ -153,6 +154,13 @@ int main(void)
   MX_NVIC_Init();
 
   /* USER CODE BEGIN 2 */
+	/* 使能接收，进入中断回调函数 */
+  HAL_UART_Receive_IT(&huart1,&zIhuUartRxBuffer[0],1);
+//  HAL_UART_Receive_IT(&huart2,&zIhuUartRxBuffer[1],1);
+//  HAL_UART_Receive_IT(&huart3,&zIhuUartRxBuffer[2],1);
+//  HAL_UART_Receive_IT(&huart4,&zIhuUartRxBuffer[3],1);
+//  HAL_UART_Receive_IT(&huart5,&zIhuUartRxBuffer[4],1);
+//  HAL_UART_Receive_IT(&huart6,&zIhuUartRxBuffer[5],1);	
 
   /* USER CODE END 2 */
 
@@ -275,9 +283,6 @@ static void MX_NVIC_Init(void)
   /* SPI2_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(SPI2_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(SPI2_IRQn);
-  /* USART1_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(USART1_IRQn, 5, 0);
-  HAL_NVIC_EnableIRQ(USART1_IRQn);
   /* USART2_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(USART2_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(USART2_IRQn);
