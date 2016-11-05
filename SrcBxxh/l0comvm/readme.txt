@@ -780,6 +780,8 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 每次使用STM32CubeMX工具修改完之后，需要将FreeRTOS.h中的SLICING关掉，不然缺省会打开的
 = SLICING轮片式模式下，L1TIMER暂时存在问题，导致软定时器工作不正常，未来待解决
 = 串口接收完全搞定，GPRS/SMS函数完美的改好了！
+= XH恢复SPI接口的函数
+= HAL_SPI_MspInit / HAL_SPI_MspDeInit函数在bsp_spi中必须被禁止，不然重复定义
 
 
 
