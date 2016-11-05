@@ -7,11 +7,12 @@
 #include "string.h"  
 
 //从ucosiii移植过来的函数
-#define SPS_GPRS_REC_MAXLEN 200	//最大接收数据长度
-#define SPS_RFID_REC_MAXLEN 200	//最大接收数据长度
-#define SPS_BLE_REC_MAXLEN 200	//最大接收数据长度
-#define SPS_SPARE1_REC_MAXLEN 200	//最大接收数据长度
-#define SPS_PRINT_REC_MAXLEN 200	//最大接收数据长度
+#define BSP_STM32_SPS_GPRS_REC_MAXLEN 200	//最大接收数据长度
+#define BSP_STM32_SPS_RFID_REC_MAXLEN 200	//最大接收数据长度
+#define BSP_STM32_SPS_BLE_REC_MAXLEN 200	//最大接收数据长度
+#define BSP_STM32_SPS_PRINT_REC_MAXLEN 200	//最大接收数据长度
+#define BSP_STM32_SPS_SPARE1_REC_MAXLEN 200	//最大接收数据长度
+#define BSP_STM32_SPS_SPARE2_REC_MAXLEN 200	//最大接收数据长度
 
 //发送和接受数据的延迟时间长度
 #define FAILURE !SUCCESS
@@ -20,11 +21,17 @@
 
 //形成定义的交换矩阵
 #define BSP_STM32_UART_GPRS			huart1
+#define BSP_STM32_UART_GPRS_ID  1
 #define BSP_STM32_UART_RFID			huart2
+#define BSP_STM32_UART_RFID_ID  2
 #define BSP_STM32_UART_PRINT		huart3
+#define BSP_STM32_UART_PRINT_ID  3
 #define BSP_STM32_UART_BLE			huart4
+#define BSP_STM32_UART_BLE_ID  4
 #define BSP_STM32_UART_SPARE1		huart5
+#define BSP_STM32_UART_SPARE1_ID  5
 #define BSP_STM32_UART_SPARE2		huart6
+#define BSP_STM32_UART_SPARE2_ID  6
 
 //API函数
 extern int BSP_STM32_sps_print_fputc(int ch, FILE *f);

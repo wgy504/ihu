@@ -777,7 +777,7 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 //= ZJL/XH, 2016 Nov.3, CURRENT_SW_DELIVERY R03.45 =>CCL项目
 = 短信发送完成
 = 串口延时接收依然存在问题，OK并没有真正收到。。。
-
+= 每次使用STM32CubeMX工具修改完之后，需要将FreeRTOS.h中的SLICING关掉，不然缺省会打开的
 
 
 
