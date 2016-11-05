@@ -204,7 +204,7 @@ void func_ledpisces_time_out_period_scan(void)
 //	UINT8   second_buf;
 //	UINT16  temp;  
 
-	IhuDebugPrint("LEDPISCES: Time Out Test!\n");
+	//IhuDebugPrint("LEDPISCES: Time Out Test!\n");
 	
 //	if(W25Q32 == spi_flash_read_device_ID())
 //	{

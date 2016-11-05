@@ -93,7 +93,7 @@
     extern uint32_t SystemCoreClock;
 /* USER CODE BEGIN 0 */   	      
     extern void configureTimerForRunTimeStats(void);
-    extern unsigned long getRunTimeCounterValue(void);  
+    extern unsigned long getRunTimeCounterValue(void);		
 /* USER CODE END 0 */       
 #endif
 
@@ -190,6 +190,11 @@ standard names. */
 
 /* USER CODE BEGIN Defines */   	      
 /* Section where parameter definitions can be added (for instance, to override default ones in FreeRTOS.h) */
+//ZJL defined
+#define configUSE_TIME_SLICING 0
+
+
+
 /* USER CODE END Defines */ 
 
 #if defined(__ICCARM__) || defined(__CC_ARM) || defined(__GNUC__)

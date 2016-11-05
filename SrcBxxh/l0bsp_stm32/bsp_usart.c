@@ -90,17 +90,17 @@ int BSP_STM32_sps_print_data_send(char *s)
 //	}
 //	return 1;
 	if (HAL_UART_Transmit(&BSP_STM32_UART_PRINT, (uint8_t *)s, strlen(s), SPS_UART_TX_MAX_DELAY_DURATION) == HAL_OK)
-		return SUCCESS;
+		return BSP_SUCCESS;
 	else
-		return FAILURE;		
+		return BSP_FAILURE;		
 }
 
 int BSP_STM32_sps_print_data_receive(char *s, uint16_t len)
 {
 	if (HAL_UART_Receive(&BSP_STM32_UART_PRINT, (uint8_t *)s, len, SPS_UART_RX_MAX_DELAY_DURATION) == HAL_OK)
-		return SUCCESS;
+		return BSP_SUCCESS;
 	else
-		return FAILURE;
+		return BSP_FAILURE;
 }
 
 
@@ -121,25 +121,25 @@ int BSP_STM32_SPS_GPRS_SendData(uint8_t* buff, uint16_t len)
 //		HAL_UART_Transmit(&BSP_STM32_UART_GPRS, (uint8_t *)(buff+i), 1, 100);
 //	}
 	if (HAL_UART_Transmit(&BSP_STM32_UART_GPRS, (uint8_t *)buff, len, SPS_UART_TX_MAX_DELAY_DURATION) == HAL_OK)
-		return SUCCESS;
+		return BSP_SUCCESS;
 	else
-		return FAILURE;		
+		return BSP_FAILURE;		
 }
 
 int BSP_STM32_SPS_GPRS_RcvData(uint8_t* buff, uint16_t len)
 {    
 	if (HAL_UART_Receive(&BSP_STM32_UART_GPRS, buff, len, SPS_UART_RX_MAX_DELAY_DURATION) == HAL_OK)
-		return SUCCESS;
+		return BSP_SUCCESS;
 	else
-		return FAILURE;
+		return BSP_FAILURE;
 }
 
 int BSP_STM32_SPS_GPRS_RcvData_timeout(uint8_t* buff, uint16_t len, uint32_t timeout)
 {    
 	if (HAL_UART_Receive(&BSP_STM32_UART_GPRS, buff, len, timeout) == HAL_OK)
-		return SUCCESS;
+		return BSP_SUCCESS;
 	else
-		return FAILURE;
+		return BSP_FAILURE;
 }
 
 
@@ -154,17 +154,17 @@ int BSP_STM32_SPS_GPRS_RcvData_timeout(uint8_t* buff, uint16_t len, uint32_t tim
 int BSP_STM32_SPS_RFID_SendData(uint8_t* buff, uint16_t len)
 {    
 	if (HAL_UART_Transmit(&BSP_STM32_UART_RFID, (uint8_t *)buff, len, SPS_UART_TX_MAX_DELAY_DURATION) == HAL_OK)
-		return SUCCESS;
+		return BSP_SUCCESS;
 	else
-		return FAILURE;		
+		return BSP_FAILURE;		
 }
 
 int BSP_STM32_SPS_RFID_RcvData(uint8_t* buff, uint16_t len)
 {    
 	if (HAL_UART_Receive(&BSP_STM32_UART_RFID, buff, len, SPS_UART_RX_MAX_DELAY_DURATION) == HAL_OK)
-		return SUCCESS;
+		return BSP_SUCCESS;
 	else
-		return FAILURE;
+		return BSP_FAILURE;
 }
 
 /*******************************************************************************
@@ -178,17 +178,17 @@ int BSP_STM32_SPS_RFID_RcvData(uint8_t* buff, uint16_t len)
 int BSP_STM32_SPS_BLE_SendData(uint8_t* buff, uint16_t len)
 {    
 	if (HAL_UART_Transmit(&BSP_STM32_UART_BLE, (uint8_t *)buff, len, SPS_UART_TX_MAX_DELAY_DURATION) == HAL_OK)
-		return SUCCESS;
+		return BSP_SUCCESS;
 	else
-		return FAILURE;
+		return BSP_FAILURE;
 }
 
 int BSP_STM32_SPS_BLE_RcvData(uint8_t* buff, uint16_t len)
 {    
 	if (HAL_UART_Receive(&BSP_STM32_UART_BLE, buff, len, SPS_UART_RX_MAX_DELAY_DURATION) == HAL_OK)
-		return SUCCESS;
+		return BSP_SUCCESS;
 	else
-		return FAILURE;
+		return BSP_FAILURE;
 }
 
 /*******************************************************************************
@@ -202,17 +202,17 @@ int BSP_STM32_SPS_BLE_RcvData(uint8_t* buff, uint16_t len)
 int BSP_STM32_SPS_SPARE1_SendData(uint8_t* buff, uint16_t len)
 {    
 	if (HAL_UART_Transmit(&BSP_STM32_UART_SPARE1, (uint8_t *)buff, len, SPS_UART_TX_MAX_DELAY_DURATION) == HAL_OK)
-		return SUCCESS;
+		return BSP_SUCCESS;
 	else
-		return FAILURE;
+		return BSP_FAILURE;
 }
 
 int BSP_STM32_SPS_SPARE1_RcvData(uint8_t* buff, uint16_t len)
 {    
 	if (HAL_UART_Receive(&BSP_STM32_UART_SPARE1, buff, len, SPS_UART_RX_MAX_DELAY_DURATION) == HAL_OK)
-		return SUCCESS;
+		return BSP_SUCCESS;
 	else
-		return FAILURE;
+		return BSP_FAILURE;
 }
 
 
@@ -230,46 +230,46 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 			BSP_STM32_SPS_GPRS_R_Count = 0;
 		HAL_UART_Receive_IT(&BSP_STM32_UART_GPRS, &zIhuUartRxBuffer[BSP_STM32_UART_GPRS_ID-1], 1);
   }
-//  else if(UartHandle==&BSP_STM32_UART_RFID)
-//  {
-//		BSP_STM32_SPS_RFID_R_Buff[BSP_STM32_SPS_RFID_R_Count] = zIhuUartRxBuffer[BSP_STM32_UART_RFID_ID-1];
-//		BSP_STM32_SPS_RFID_R_Count++;
-//		if (BSP_STM32_SPS_RFID_R_Count >= BSP_STM32_SPS_RFID_REC_MAXLEN)
-//			BSP_STM32_SPS_RFID_R_Count = 0;
-//		HAL_UART_Receive_IT(&BSP_STM32_UART_RFID, &zIhuUartRxBuffer[BSP_STM32_UART_RFID_ID-1], 1);
-//  }
-//  else if(UartHandle==&BSP_STM32_UART_PRINT)
-//  {
-//		BSP_STM32_SPS_PRINT_R_Buff[BSP_STM32_SPS_PRINT_R_Count] = zIhuUartRxBuffer[BSP_STM32_UART_PRINT_ID-1];
-//		BSP_STM32_SPS_PRINT_R_Count++;
-//		if (BSP_STM32_SPS_PRINT_R_Count >= BSP_STM32_SPS_PRINT_REC_MAXLEN)
-//			BSP_STM32_SPS_PRINT_R_Count = 0;
-//		HAL_UART_Receive_IT(&BSP_STM32_UART_PRINT, &zIhuUartRxBuffer[BSP_STM32_UART_PRINT_ID-1], 1);
-//  }	
-//  else if(UartHandle==&BSP_STM32_UART_BLE)
-//  {
-//		BSP_STM32_SPS_BLE_R_Buff[BSP_STM32_SPS_BLE_R_Count] = zIhuUartRxBuffer[BSP_STM32_UART_BLE_ID-1];
-//		BSP_STM32_SPS_BLE_R_Count++;
-//		if (BSP_STM32_SPS_BLE_R_Count >= BSP_STM32_SPS_BLE_REC_MAXLEN)
-//			BSP_STM32_SPS_BLE_R_Count = 0;
-//		HAL_UART_Receive_IT(&BSP_STM32_UART_BLE, &zIhuUartRxBuffer[BSP_STM32_UART_BLE_ID-1], 1);
-//  }	
-//  else if(UartHandle==&BSP_STM32_UART_SPARE1)
-//  {
-//		BSP_STM32_SPS_SPARE1_R_Buff[BSP_STM32_SPS_SPARE1_R_Count] = zIhuUartRxBuffer[BSP_STM32_UART_SPARE1_ID-1];
-//		BSP_STM32_SPS_SPARE1_R_Count++;
-//		if (BSP_STM32_SPS_SPARE1_R_Count >= BSP_STM32_SPS_SPARE1_REC_MAXLEN)
-//			BSP_STM32_SPS_SPARE1_R_Count = 0;
-//		HAL_UART_Receive_IT(&BSP_STM32_UART_SPARE1, &zIhuUartRxBuffer[BSP_STM32_UART_SPARE1_ID-1], 1);
-//  }	
-//  else if(UartHandle==&BSP_STM32_UART_SPARE2)
-//  {
-//		BSP_STM32_SPS_SPARE2_R_Buff[BSP_STM32_SPS_SPARE2_R_Count] = zIhuUartRxBuffer[BSP_STM32_UART_SPARE2_ID-1];
-//		BSP_STM32_SPS_SPARE2_R_Count++;
-//		if (BSP_STM32_SPS_SPARE2_R_Count >= BSP_STM32_SPS_SPARE2_REC_MAXLEN)
-//			BSP_STM32_SPS_SPARE2_R_Count = 0;
-//		HAL_UART_Receive_IT(&BSP_STM32_UART_SPARE2, &zIhuUartRxBuffer[BSP_STM32_UART_SPARE2_ID-1], 1);
-//  }
+  else if(UartHandle==&BSP_STM32_UART_RFID)
+  {
+		BSP_STM32_SPS_RFID_R_Buff[BSP_STM32_SPS_RFID_R_Count] = zIhuUartRxBuffer[BSP_STM32_UART_RFID_ID-1];
+		BSP_STM32_SPS_RFID_R_Count++;
+		if (BSP_STM32_SPS_RFID_R_Count >= BSP_STM32_SPS_RFID_REC_MAXLEN)
+			BSP_STM32_SPS_RFID_R_Count = 0;
+		HAL_UART_Receive_IT(&BSP_STM32_UART_RFID, &zIhuUartRxBuffer[BSP_STM32_UART_RFID_ID-1], 1);
+  }
+  else if(UartHandle==&BSP_STM32_UART_PRINT)
+  {
+		BSP_STM32_SPS_PRINT_R_Buff[BSP_STM32_SPS_PRINT_R_Count] = zIhuUartRxBuffer[BSP_STM32_UART_PRINT_ID-1];
+		BSP_STM32_SPS_PRINT_R_Count++;
+		if (BSP_STM32_SPS_PRINT_R_Count >= BSP_STM32_SPS_PRINT_REC_MAXLEN)
+			BSP_STM32_SPS_PRINT_R_Count = 0;
+		HAL_UART_Receive_IT(&BSP_STM32_UART_PRINT, &zIhuUartRxBuffer[BSP_STM32_UART_PRINT_ID-1], 1);
+  }	
+  else if(UartHandle==&BSP_STM32_UART_BLE)
+  {
+		BSP_STM32_SPS_BLE_R_Buff[BSP_STM32_SPS_BLE_R_Count] = zIhuUartRxBuffer[BSP_STM32_UART_BLE_ID-1];
+		BSP_STM32_SPS_BLE_R_Count++;
+		if (BSP_STM32_SPS_BLE_R_Count >= BSP_STM32_SPS_BLE_REC_MAXLEN)
+			BSP_STM32_SPS_BLE_R_Count = 0;
+		HAL_UART_Receive_IT(&BSP_STM32_UART_BLE, &zIhuUartRxBuffer[BSP_STM32_UART_BLE_ID-1], 1);
+  }	
+  else if(UartHandle==&BSP_STM32_UART_SPARE1)
+  {
+		BSP_STM32_SPS_SPARE1_R_Buff[BSP_STM32_SPS_SPARE1_R_Count] = zIhuUartRxBuffer[BSP_STM32_UART_SPARE1_ID-1];
+		BSP_STM32_SPS_SPARE1_R_Count++;
+		if (BSP_STM32_SPS_SPARE1_R_Count >= BSP_STM32_SPS_SPARE1_REC_MAXLEN)
+			BSP_STM32_SPS_SPARE1_R_Count = 0;
+		HAL_UART_Receive_IT(&BSP_STM32_UART_SPARE1, &zIhuUartRxBuffer[BSP_STM32_UART_SPARE1_ID-1], 1);
+  }	
+  else if(UartHandle==&BSP_STM32_UART_SPARE2)
+  {
+		BSP_STM32_SPS_SPARE2_R_Buff[BSP_STM32_SPS_SPARE2_R_Count] = zIhuUartRxBuffer[BSP_STM32_UART_SPARE2_ID-1];
+		BSP_STM32_SPS_SPARE2_R_Count++;
+		if (BSP_STM32_SPS_SPARE2_R_Count >= BSP_STM32_SPS_SPARE2_REC_MAXLEN)
+			BSP_STM32_SPS_SPARE2_R_Count = 0;
+		HAL_UART_Receive_IT(&BSP_STM32_UART_SPARE2, &zIhuUartRxBuffer[BSP_STM32_UART_SPARE2_ID-1], 1);
+  }
 }
 
 

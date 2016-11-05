@@ -15,7 +15,8 @@
 #define BSP_STM32_SPS_SPARE2_REC_MAXLEN 200	//最大接收数据长度
 
 //发送和接受数据的延迟时间长度
-#define FAILURE !SUCCESS
+#define BSP_SUCCESS 0
+#define BSP_FAILURE -1
 #define SPS_UART_TX_MAX_DELAY_DURATION 100
 #define SPS_UART_RX_MAX_DELAY_DURATION 100
 

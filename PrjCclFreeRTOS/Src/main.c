@@ -155,12 +155,12 @@ int main(void)
 
   /* USER CODE BEGIN 2 */
 	/* 使能接收，进入中断回调函数 */
-  HAL_UART_Receive_IT(&huart1,&zIhuUartRxBuffer[0],1);
-//  HAL_UART_Receive_IT(&huart2,&zIhuUartRxBuffer[1],1);
-//  HAL_UART_Receive_IT(&huart3,&zIhuUartRxBuffer[2],1);
-//  HAL_UART_Receive_IT(&huart4,&zIhuUartRxBuffer[3],1);
-//  HAL_UART_Receive_IT(&huart5,&zIhuUartRxBuffer[4],1);
-//  HAL_UART_Receive_IT(&huart6,&zIhuUartRxBuffer[5],1);	
+  HAL_UART_Receive_IT(&huart1,&zIhuUartRxBuffer[0],1);	
+  HAL_UART_Receive_IT(&huart2,&zIhuUartRxBuffer[1],1);
+  HAL_UART_Receive_IT(&huart3,&zIhuUartRxBuffer[2],1);
+  HAL_UART_Receive_IT(&huart4,&zIhuUartRxBuffer[3],1);
+  HAL_UART_Receive_IT(&huart5,&zIhuUartRxBuffer[4],1);
+  HAL_UART_Receive_IT(&huart6,&zIhuUartRxBuffer[5],1);	
 
   /* USER CODE END 2 */
 

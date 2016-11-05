@@ -778,7 +778,8 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 短信发送完成
 = 串口延时接收依然存在问题，OK并没有真正收到。。。
 = 每次使用STM32CubeMX工具修改完之后，需要将FreeRTOS.h中的SLICING关掉，不然缺省会打开的
-
+= SLICING轮片式模式下，L1TIMER暂时存在问题，导致软定时器工作不正常，未来待解决
+= 串口接收完全搞定，GPRS/SMS函数完美的改好了！
 
 
 
