@@ -51,7 +51,7 @@ const char *GPRS_UART_string = "AT+CIPSTART=\"TCP\",\"14.125.48.205\",9015";//IP
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-OPSTAT GPRS_UART_GSM_working_procedure_selection(uint8_t option)
+OPSTAT GPRS_UART_GSM_working_procedure_selection(uint8_t option, uint8_t sub_opt)
 {
 	uint8_t repeatCnt = IHU_GPRS_UART_REPEAT_CNT;
 	
@@ -91,7 +91,7 @@ OPSTAT GPRS_UART_GSM_working_procedure_selection(uint8_t option)
 		return IHU_FAILURE;
 	}
 	
-	if (option == 1) return GPRS_UART_GSM_call_procedure();	//电话测试
+	if (option == 1) return GPRS_UART_GSM_call_procedure(sub_opt);	//电话测试
 	else if (option == 2) return GPRS_UART_GSM_sms_procedure();		//短信测试
 	else if (option == 3) return GPRS_UART_GSM_gprs_procedure();	//GPRS测试
 	else if (option == 4) return GPRS_UART_GSM_bs_procedure();		//基站测试
@@ -307,6 +307,7 @@ OPSTAT GPRS_UART_GSM_sms_procedure(void)
 	uint8_t loc=0;
 	
 	//设置短信发送模式
+	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: @@@@ SMS TEST @@@@!\n");
 	if (GPRS_UART_send_AT_command("AT+CMGF=1", (uint8_t *)"OK", 2) == IHU_SUCCESS){
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Set SMS Send mode correctly!\n");
 	}
@@ -406,101 +407,81 @@ OPSTAT GPRS_UART_GSM_sms_procedure(void)
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-OPSTAT GPRS_UART_GSM_call_procedure(void)
+OPSTAT GPRS_UART_GSM_call_procedure(uint8_t sub_opt)
 {	
 	uint8_t temp[50];
-	uint16_t len=0;
-	uint16_t i=0;
-	uint8_t mode=0;
-	uint8_t flag=0;
-  //uint8_t *p1=NULL;
-	IhuDebugPrint("VMFO: @@@@@@@@@@@DIAL TEST@@@@@@@@@@@\n");
-	IhuDebugPrint("VMFO: DIAL CALL: Input 'CALL xxxx + ENTER'\n");
-	IhuDebugPrint("VMFO: HAND-ON CALL: Input 'HAND-ON + ENTER'\n");
-  IhuDebugPrint("VMFO: HAND-OFF CALL: Input 'HAND-OFF + ENTER'\n");
-	IhuDebugPrint("VMFO: DTMF VOICE: Input 'Single Char + ENTER'\n");
-	IhuDebugPrint("VMFO: EXIT TEST: Input 'EXIT + ENTER'\n");
-	while(1)
-	{
-		if(SPS_PRINT_RX_STA&0x8000)
-		{
-			len=SPS_PRINT_RX_STA&0X3FFF;
-			SPS_PRINT_RX_STA=0;
-			if(strstr((const char*)BSP_STM32_SPS_PRINT_R_Buff,"EXIT"))return 0;
-			if(strstr((const char*)BSP_STM32_SPS_PRINT_R_Buff,"HAND-ON"))mode=1;
-			else
-			if(strstr((const char*)BSP_STM32_SPS_PRINT_R_Buff,"HAND-OFF"))mode=2;
-			else
-			if(strstr((const char*)BSP_STM32_SPS_PRINT_R_Buff,"CALL"))mode=3;
-			else
-			if(mode==0)mode=0;//无效
-			else 
-			{
-				mode=4;
-				flag=1;
-			}
-		}
-		switch(mode)
-		{
-			case 0://有来电
-				if(strstr((const char*)BSP_STM32_SPS_GPRS_R_Buff,"RING"))
-				{
-					GPRS_UART_clear_receive_buffer();
-					IhuDebugPrint("VMFO: CALL Coming\n");
-				}
-				break;
-			case 1:
-						 if(GPRS_UART_send_AT_command("ATA","OK",2)==0)//接听
-						 {
-							IhuDebugPrint("VMFO: Hand-on successful\n");
-						  mode=4; 
-						 }
-				break;
-			case 2:if(GPRS_UART_send_AT_command("ATH","OK",2)==0)//挂断
-							IhuDebugPrint("VMFO: Hand-off successful\n");		
-						 mode=0;
-				break;
-			case 3://拨号
-						IhuDebugPrint("VMFO:Call:");
-						//USART_PRINT_Send_Len((char*)BSP_STM32_SPS_PRINT_R_Buff+4,len-4);
-						strcpy((char*)temp,"ATD");
-						for(i=3;i<(len-4+3);i++)
-						temp[i]=BSP_STM32_SPS_PRINT_R_Buff[i+1];
-						temp[i++]=';';
-						temp[i++]='\0';
-						if(GPRS_UART_send_AT_command(temp,"OK",8)==0)
-						{
-							IhuDebugPrint("VMFO: Call successful\n");
-							mode=4;
-						}
-						else
-						{
-							IhuDebugPrint("VMFO: Please re-dial\n");
-						  mode=0;
-						}
-			  break;
-			case 4://发送DTMF
-				if(flag)
-				{
-				flag=0;
-				strcpy((char*)temp,"AT+VTS=");
-				temp[7]=BSP_STM32_SPS_PRINT_R_Buff[0];
-				temp[8]='\0';
-				GPRS_UART_send_AT_command(temp,"OK",3);
-				}
-				if(strstr((const char*)BSP_STM32_SPS_GPRS_R_Buff,"DTMF:"))
-				{
-          ihu_usleep(10);
-//					p1=(uint8_t*)strstr((const char*)(BSP_STM32_SPS_GPRS_R_Buff),":");
-					IhuDebugPrint("VMFO: Peer press key-down: ");
-					//USART_PRINT_Data(*(p1+1));
-					IhuDebugPrint("\r\n");	
-					GPRS_UART_clear_receive_buffer();
-				}
-				break;
-		}
+	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: @@@@ GSM CALL TEST @@@@!\n");		
 		
+	switch(sub_opt)
+	{
+		case 0://有来电
+			if(strstr((const char*)BSP_STM32_SPS_GPRS_R_Buff, "RING"))
+			{
+				GPRS_UART_clear_receive_buffer();
+				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: CALL Coming\n");
+			}
+			break;
+			
+		case 1:
+			if(GPRS_UART_send_AT_command("ATA", (uint8_t *)"OK", 2) == IHU_SUCCESS)//接听
+			{
+				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Hand-on successful\n");
+			}
+			else{
+				zIhuRunErrCnt[TASK_ID_VMFO]++;
+				IhuErrorPrint("VMFO: GSM Call hand-off failure!\n");
+				return IHU_FAILURE;		
+			}
+			break;
+		
+		case 2:if(GPRS_UART_send_AT_command("ATH", (uint8_t *)"OK", 2) == IHU_SUCCESS)//挂断
+			{
+				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Hand-off successful\n");
+			}else{
+				zIhuRunErrCnt[TASK_ID_VMFO]++;
+				IhuErrorPrint("VMFO: GSM Call hand-on failure!\n");
+				return IHU_FAILURE;				
+			}
+			break;
+		
+		case 3://拨号
+			memset(temp, 0, sizeof(temp));
+			strcpy((char*)temp, "ATD");
+			strcat((char*)temp, IHU_GPRS_GSM_CALLED_NUMBER);
+			strcat((char*)temp, ";");
+			//temp[strlen(temp)]= (uint8_t)';';
+			if(GPRS_UART_send_AT_command(temp, (uint8_t *)"OK", 8) == IHU_SUCCESS)
+			{
+				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Called number = %s, Call successful!\n", IHU_GPRS_GSM_CALLED_NUMBER);
+			}
+			else
+			{
+				zIhuRunErrCnt[TASK_ID_VMFO]++;
+				IhuErrorPrint("VMFO: Called failure, Please re-dial!\n");
+				return IHU_FAILURE;						
+			}
+			break;
+			
+		case 4://发送DTMF
+			memset(temp, 0, sizeof(temp));
+			strcpy((char*)temp, "AT+VTS=");
+			strcat((char*)temp, IHU_GPRS_GSM_DTMF_TEST);
+			if (GPRS_UART_send_AT_command(temp, (uint8_t *)"OK",3) != IHU_SUCCESS)
+			{
+				zIhuRunErrCnt[TASK_ID_VMFO]++;
+				IhuErrorPrint("VMFO: GSM Call, DTMF failure!\n");
+				return IHU_FAILURE;		
+			}
+			if(strstr((const char*)BSP_STM32_SPS_GPRS_R_Buff,"DTMF:"))
+			{
+				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Peer press key-down: %s\n", IHU_GPRS_GSM_DTMF_TEST);
+				GPRS_UART_clear_receive_buffer();
+			}
+			break;
+		default: 
+			break;
 	}
+	return IHU_SUCCESS;
 }
 
 
@@ -1578,16 +1559,16 @@ void GPRS_UART_connect_server(void)
 	GPRS_UART_clear_receive_buffer();
 	GPRS_UART_SendString("AT+CIPCLOSE=1");	//关闭连接
   ihu_usleep(100);
-	GPRS_UART_send_AT_command("AT+CIPSHUT","SHUT OK", 500);		//关闭移动场景
-	GPRS_UART_send_AT_command("AT+CGCLASS=\"B\"","OK", 500);//设置GPRS移动台类别为B,支持包交换和数据交换 
-	GPRS_UART_send_AT_command("AT+CGDCONT=1,\"IP\",\"CMNET\"","OK", 500);//设置PDP上下文,互联网接协议,接入点等信息
-	GPRS_UART_send_AT_command("AT+CGATT=1","OK", 500);//附着GPRS业务
-	GPRS_UART_send_AT_command("AT+CIPCSGP=1,\"CMNET\"","OK", 500);//设置为GPRS连接模式
-  GPRS_UART_send_AT_command("AT+CIPMUX=0","OK", 500);//设置为单路连接
-	GPRS_UART_send_AT_command("AT+CIPHEAD=1","OK", 500);//设置接收数据显示IP头(方便判断数据来源,仅在单路连接有效)
-	GPRS_UART_send_AT_command("AT+CIPMODE=1","OK", 500);//打开透传功能
-	GPRS_UART_send_AT_command("AT+CIPCCFG=4,5,200,1","OK", 500);//配置透传模式：单包重发次数:2,间隔1S发送一次,每次发送200的字节
-  GPRS_UART_send_AT_command((uint8_t *)GPRS_UART_string, "OK", 2000);//建立连接
+	GPRS_UART_send_AT_command("AT+CIPSHUT","SHUT OK", 3);		//关闭移动场景
+	GPRS_UART_send_AT_command("AT+CGCLASS=\"B\"","OK", 3);//设置GPRS移动台类别为B,支持包交换和数据交换 
+	GPRS_UART_send_AT_command("AT+CGDCONT=1,\"IP\",\"CMNET\"","OK", 3);//设置PDP上下文,互联网接协议,接入点等信息
+	GPRS_UART_send_AT_command("AT+CGATT=1","OK", 3);//附着GPRS业务
+	GPRS_UART_send_AT_command("AT+CIPCSGP=1,\"CMNET\"","OK", 3);//设置为GPRS连接模式
+  GPRS_UART_send_AT_command("AT+CIPMUX=0","OK", 3);//设置为单路连接
+	GPRS_UART_send_AT_command("AT+CIPHEAD=1","OK", 3);//设置接收数据显示IP头(方便判断数据来源,仅在单路连接有效)
+	GPRS_UART_send_AT_command("AT+CIPMODE=1","OK", 3);//打开透传功能
+	GPRS_UART_send_AT_command("AT+CIPCCFG=4,5,200,1","OK", 3);//配置透传模式：单包重发次数:2,间隔1S发送一次,每次发送200的字节
+  GPRS_UART_send_AT_command((uint8_t *)GPRS_UART_string, "OK", 5);//建立连接
   
   ihu_usleep(100);                                //等待串口数据接收完毕
   GPRS_UART_clear_receive_buffer();                                    //清串口接收缓存为透传模式准备
@@ -1844,7 +1825,7 @@ void GPRS_UART_Wait_CREG(void)
 *******************************************************************************/
 void GPRS_UART_Set_ATE0(void)
 {
-	GPRS_UART_send_AT_command("ATE0", "OK", 500);								//取消回显		
+	GPRS_UART_send_AT_command("ATE0", "OK", 2);								//取消回显		
 }
 
 

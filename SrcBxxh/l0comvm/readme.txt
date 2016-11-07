@@ -774,7 +774,7 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 时间戳是软件版本编译的固定日期时间，需要改进
 = 串口垃圾集成完成，待完善调测
 
-//= ZJL/XH, 2016 Nov.3, CURRENT_SW_DELIVERY R03.45 =>CCL项目
+//= ZJL/XH, 2016 Nov.4, CURRENT_SW_DELIVERY R03.45 =>CCL项目
 = 短信发送完成
 = 串口延时接收依然存在问题，OK并没有真正收到。。。
 = 每次使用STM32CubeMX工具修改完之后，需要将FreeRTOS.h中的SLICING关掉，不然缺省会打开的
@@ -783,8 +783,8 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = XH恢复SPI接口的函数
 = HAL_SPI_MspInit / HAL_SPI_MspDeInit函数在bsp_spi中必须被禁止，不然重复定义
 
-
-
+//= ZJL/XH, 2016 Nov.7, CURRENT_SW_DELIVERY R03.46 =>CCL项目
+= 继续完善GPRS模块的呼叫功能
 
 
 
