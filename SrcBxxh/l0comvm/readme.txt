@@ -812,6 +812,8 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 
 
 
+
+
 CCL项目未来任务目标
 = SPI-GPIO互通小目标
 = 看门狗开启，自动重启
