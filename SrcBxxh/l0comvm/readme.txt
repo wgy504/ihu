@@ -791,7 +791,8 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 更新PrjCclFreeRTOS到PrjCclFo@205RG项目，其它一切保持不变
 = 增加PrjCclFo@207VC项目，保持跟PrjCclFo@205RG完全一致
 = 需要修改Main.c以及FreeRTOSConfig.h，将VMFO以及SLICING配置项都改进去，然后一切都一模一样了
-
+= 增加PrjBfscFo@205RG项目，初始化BFSC组合秤的一些基本接口
+= 增加PrjBfscFo@207VC项目
 
 
 

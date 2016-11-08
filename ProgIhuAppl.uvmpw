@@ -25,7 +25,12 @@
 
   <project>
     <PathAndName>.\PrjCclFo@207VC\MDK-ARM\PrjCclFo@207VC.uvprojx</PathAndName>
+  </project>
+
+  <project>
+    <PathAndName>.\PrjBfscFo@205RG\MDK-ARM\PrjBfscFo@205RG.uvprojx</PathAndName>
     <NodeIsActive>1</NodeIsActive>
+    <NodeIsExpanded>1</NodeIsExpanded>
   </project>
 
 </ProjectWorkspace>

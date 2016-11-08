@@ -30,13 +30,26 @@
   #include "queue.h"
 	#include "timers.h"	
 	#include "semphr.h"
-	
 	#include "bsp_adc.h"
 	#include "bsp_tim.h"
 	#include "bsp_usart.h"	
 	#include "bsp_key.h"
 	#include "bsp_led.h"
 	#include "bsp_rs485.h"
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+  #include "commsgbfsc.h"
+  #include "FreeRTOS.h"
+	#include "task.h"
+  #include "queue.h"
+	#include "timers.h"	
+	#include "semphr.h"
+	#include "bsp_adc.h"
+	#include "bsp_tim.h"
+	#include "bsp_usart.h"	
+	#include "bsp_key.h"
+	#include "bsp_led.h"
+	#include "bsp_rs485.h"
+
 #else	
 #endif
 
@@ -44,7 +57,8 @@
 #define IHU_WORKING_FREE_RTOS_SELECTION_OSAL 2
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID)
   #define IHU_WORKING_FREE_RTOS_SELECTION IHU_WORKING_FREE_RTOS_SELECTION_OSAL
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+#elif ((IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)\
+	|| (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID))
   #define IHU_WORKING_FREE_RTOS_SELECTION IHU_WORKING_FREE_RTOS_SELECTION_BARE
 #else
 #endif
@@ -104,6 +118,25 @@ enum IHU_TASK_NAME_ID
 	TASK_ID_LEDPISCES,
 	TASK_ID_ETHORION,	
 	TASK_ID_CCL,
+	TASK_ID_MAX,
+	TASK_ID_INVALID = 0xFF,
+}; //end of IHU_TASK_NAME_ID
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+enum IHU_TASK_NAME_ID
+{
+	TASK_ID_MIN = 0,
+	TASK_ID_VMFO,
+	TASK_ID_TIMER,
+	TASK_ID_ADCLIBRA,
+	TASK_ID_SPILEO,
+	TASK_ID_I2CARIES,
+	TASK_ID_PWMTAURUS,
+	TASK_ID_SPSVIRGO,
+	TASK_ID_GPIOCANCER,
+	TASK_ID_DIDOCAP,
+	TASK_ID_LEDPISCES,
+	TASK_ID_ETHORION,	
+	TASK_ID_BFSC,
 	TASK_ID_MAX,
 	TASK_ID_INVALID = 0xFF,
 }; //end of IHU_TASK_NAME_ID
@@ -325,7 +358,19 @@ extern FsmStateItem_t FsmGpiocancer[];                      //状态机
 extern FsmStateItem_t FsmDidocap[];                         //状态机
 extern FsmStateItem_t FsmLedpisces[];                       //状态机
 extern FsmStateItem_t FsmEthorion[];                        //状态机
-extern FsmStateItem_t FsmCcl[];                          			//状态机
+extern FsmStateItem_t FsmCcl[];                          	  //状态机
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+extern FsmStateItem_t FsmTimer[];                           //状态机
+extern FsmStateItem_t FsmAdclibra[];                        //状态机
+extern FsmStateItem_t FsmSpileo[];                          //状态机
+extern FsmStateItem_t FsmI2caries[];                        //状态机
+extern FsmStateItem_t FsmPwmtaurus[];                       //状态机
+extern FsmStateItem_t FsmSpsvirgo[];                        //状态机
+extern FsmStateItem_t FsmGpiocancer[];                      //状态机
+extern FsmStateItem_t FsmDidocap[];                         //状态机
+extern FsmStateItem_t FsmLedpisces[];                       //状态机
+extern FsmStateItem_t FsmEthorion[];                        //状态机
+extern FsmStateItem_t FsmBfsc[];                          			//状态机
 #else
 #endif
 
