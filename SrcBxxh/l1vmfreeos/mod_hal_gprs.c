@@ -414,16 +414,18 @@ OPSTAT GPRS_UART_GSM_call_procedure(uint8_t sub_opt)
 		
 	switch(sub_opt)
 	{
-		case 0://有来电
+		//有来电
+		case 0:
 			if(strstr((const char*)BSP_STM32_SPS_GPRS_R_Buff, "RING"))
 			{
 				GPRS_UART_clear_receive_buffer();
 				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: CALL Coming\n");
 			}
-			break;
+		break;
 			
+		//接听	
 		case 1:
-			if(GPRS_UART_send_AT_command("ATA", (uint8_t *)"OK", 2) == IHU_SUCCESS)//接听
+			if(GPRS_UART_send_AT_command("ATA", (uint8_t *)"OK", 2) == IHU_SUCCESS)
 			{
 				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Hand-on successful\n");
 			}
@@ -432,9 +434,10 @@ OPSTAT GPRS_UART_GSM_call_procedure(uint8_t sub_opt)
 				IhuErrorPrint("VMFO: GSM Call hand-off failure!\n");
 				return IHU_FAILURE;		
 			}
-			break;
+		break;
 		
-		case 2:if(GPRS_UART_send_AT_command("ATH", (uint8_t *)"OK", 2) == IHU_SUCCESS)//挂断
+		//挂断
+		case 2:if(GPRS_UART_send_AT_command("ATH", (uint8_t *)"OK", 2) == IHU_SUCCESS)
 			{
 				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Hand-off successful\n");
 			}else{
@@ -442,9 +445,10 @@ OPSTAT GPRS_UART_GSM_call_procedure(uint8_t sub_opt)
 				IhuErrorPrint("VMFO: GSM Call hand-on failure!\n");
 				return IHU_FAILURE;				
 			}
-			break;
+		break;
 		
-		case 3://拨号
+		//拨号
+		case 3:
 			memset(temp, 0, sizeof(temp));
 			strcpy((char*)temp, "ATD");
 			strcat((char*)temp, IHU_GPRS_GSM_CALLED_NUMBER);
@@ -460,9 +464,10 @@ OPSTAT GPRS_UART_GSM_call_procedure(uint8_t sub_opt)
 				IhuErrorPrint("VMFO: Called failure, Please re-dial!\n");
 				return IHU_FAILURE;						
 			}
-			break;
+		break;
 			
-		case 4://发送DTMF
+		//发送DTMF
+		case 4:
 			memset(temp, 0, sizeof(temp));
 			strcpy((char*)temp, "AT+VTS=");
 			strcat((char*)temp, IHU_GPRS_GSM_DTMF_TEST);
@@ -477,9 +482,13 @@ OPSTAT GPRS_UART_GSM_call_procedure(uint8_t sub_opt)
 				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Peer press key-down: %s\n", IHU_GPRS_GSM_DTMF_TEST);
 				GPRS_UART_clear_receive_buffer();
 			}
-			break;
+		break;
+		
 		default: 
-			break;
+			zIhuRunErrCnt[TASK_ID_VMFO]++;
+			IhuErrorPrint("VMFO: Not supportted DTMF functions!\n");
+			return IHU_FAILURE;
+		//break;
 	}
 	return IHU_SUCCESS;
 }
