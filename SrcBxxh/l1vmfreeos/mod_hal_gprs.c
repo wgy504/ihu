@@ -93,7 +93,7 @@ OPSTAT GPRS_UART_GSM_working_procedure_selection(uint8_t option, uint8_t sub_opt
 	
 	if (option == 1) return GPRS_UART_GSM_call_procedure(sub_opt);	//电话测试
 	else if (option == 2) return GPRS_UART_GSM_sms_procedure();		//短信测试
-	else if (option == 3) return GPRS_UART_GSM_gprs_procedure();	//GPRS测试
+	else if (option == 3) return GPRS_UART_GSM_gprs_procedure(sub_opt);	//GPRS测试
 	else if (option == 4) return GPRS_UART_GSM_bs_procedure();		//基站测试
 	else if (option == 5) return GPRS_UART_GSM_tts_procedure();		//语音测试
 	else
@@ -502,152 +502,98 @@ OPSTAT GPRS_UART_GSM_call_procedure(uint8_t sub_opt)
 * 返回   : 
 * 注意   :  为了保持连接，每空闲隔10秒发送一次心跳
 *******************************************************************************/
-OPSTAT GPRS_UART_GSM_gprs_procedure(void)
+OPSTAT GPRS_UART_GSM_gprs_procedure(uint8_t sub_opt)
 {	
-  uint16_t len=0;
-	uint8_t mode=0;
 	uint8_t temp[200];
-	uint8_t flag=0;
-//	uint8_t *p1;
-//	uint8_t *p2;
-	IhuDebugPrint("VMFO: @@@@@@@@@@@@@@GPRS TEST@@@@@@@@@@@@@@@@@@@@@\n");
-	IhuDebugPrint("VMFO: Set Parameter: Set\"MODE\",\"IP\", Port+ Enter\n Eg: Set\"TCP\",\"125.89.18.79\",12345\n");
-	IhuDebugPrint("VMFO: Send content: Send + Content + Enter \n, Eg: This is a test!\n");
-	IhuDebugPrint("VMFO: Exit Test: Exit + Enter\n");
-	
-	while(1)
-	{
-		if(SPS_PRINT_RX_STA&0x8000)
-		{
-			len=SPS_PRINT_RX_STA&0X3FFF;
-			if(len>BSP_STM32_SPS_GPRS_REC_MAXLEN-2)len=BSP_STM32_SPS_GPRS_REC_MAXLEN-2;
-			SPS_PRINT_RX_STA=0;
-			if(strstr((const char*)BSP_STM32_SPS_PRINT_R_Buff,"EXIT"))mode=4;//退出
-			else
-			if(strstr((const char*)BSP_STM32_SPS_PRINT_R_Buff,"SET"))mode=1;//设置配置
-			else
-			if(strstr((const char*)BSP_STM32_SPS_PRINT_R_Buff,"SEND"))mode=2;//发送内容
-			else 												mode=0;			
-		}
-		else
-		{
-			if(strstr((const char*)BSP_STM32_SPS_GPRS_R_Buff,"CONNECT OK")&&(flag==1))//连接成功
-			{
-					IhuDebugPrint("VMFO: Connect Successful\n");
-					GPRS_UART_TIMER_RECON_Count=1;
-					flag=2;
-					mode=3;
-					GPRS_UART_clear_receive_buffer();
-			}else
-			if((flag==1)&&((strstr((const char*)BSP_STM32_SPS_GPRS_R_Buff,"CLOSED"))&&(GPRS_UART_TIMER_RECON_Count>10)))//连接失败或超时
-			{
-					IhuDebugPrint("VMFO: Connect failure\n");
-					
-				  //while(USART_GetFlagStatus(USART_PRINT, USART_FLAG_TC)==RESET); 
-					//USART_SendData(USART_PRINT ,GPRS_UART_TIMER_RECON_Count);//发送当前字符
-				
-					GPRS_UART_TIMER_RECON_Count=0;
-					flag=0;
-					mode=1; //重新连接
-					GPRS_UART_clear_receive_buffer();
-			}	
-			if((flag==2)&&(GPRS_UART_TIMER_RECON_Count>10))//每10秒一个心跳包
-			{
-				GPRS_UART_TIMER_RECON_Count=1;
-				mode=3;
-			}
-	  }
-    switch(mode)
-		{
-			case 0:        
-						if(strstr((const char*)BSP_STM32_SPS_GPRS_R_Buff,"+IPD"))//判断上位机是否有数据下发
-						{
-							IhuDebugPrint("VMFO: New content\n");
-//							p1=(uint8_t*)strstr((const char*)BSP_STM32_SPS_GPRS_R_Buff,",");
-//							p2=(uint8_t*)strstr((const char*)BSP_STM32_SPS_GPRS_R_Buff,":");
-							//USART_PRINT_Send_Len((char*)(p2+1),GPRS_UART_change_str_Data((p1+1),(p2-p1-1)));
-							IhuDebugPrint("\r\n");
-							GPRS_UART_clear_receive_buffer();
-						}
-			break;
-			case 1: 
-				     if(strstr((const char*)BSP_STM32_SPS_PRINT_R_Buff,"TCP")||strstr((const char*)BSP_STM32_SPS_PRINT_R_Buff,"UDP"))
-						 {
-                strcpy((char*)&temp,(const char*)"AT+CIPSTART=");
-							  memcpy((char*)&temp[12],(const char*)(&BSP_STM32_SPS_PRINT_R_Buff[4]),len-4);
-							  temp[len+12]='\0';
-							  GPRS_UART_send_AT_command("AT+CIPCLOSE=1","CLOSE OK",2);	//关闭连接
-								GPRS_UART_send_AT_command("AT+CIPSHUT","SHUT OK",2);		//关闭移动场景
- 							  GPRS_UART_send_AT_command("AT+CGCLASS=\"B\"","OK",2);//设置GPRS移动台类别为B,支持包交换和数据交换 
-								GPRS_UART_send_AT_command("AT+CGDCONT=1,\"IP\",\"CMNET\"","OK",2);//设置PDP上下文,互联网接协议,接入点等信息
-								GPRS_UART_send_AT_command("AT+CGATT=1","OK",2);//附着GPRS业务
-								GPRS_UART_send_AT_command("AT+CIPCSGP=1,\"CMNET\"","OK",2);//设置为GPRS连接模式
-								GPRS_UART_send_AT_command("AT+CIPHEAD=1","OK",2);//设置接收数据显示IP头(方便判断数据来源,仅在单路连接有效)
-                GPRS_UART_send_AT_command("AT+CIPMUX=0","OK",2);//设置单路连接
-                if(GPRS_UART_send_AT_command(temp,"OK",2 )==0)//发起连接
-								{
-                  IhuDebugPrint("VMFO: New connecting\n");
-									GPRS_UART_TIMER_RECON_Count=1;
-									flag=1;
-								}
-								else
-								{
-									IhuDebugPrint("VMFO: Enter error: Please re-enter\n");
-									GPRS_UART_TIMER_RECON_Count=0;
-									flag=0;
-								}
-						 }
-						 else
-						 {
-							  IhuDebugPrint("VMFO: Enter error: Please re-enter\n");
-						 }
-             mode=0;
-			break;
-			case 2:
-              if(flag==2)
-							{
-                IhuDebugPrint("VMFO: Begin to send..........\n");
-								if(GPRS_UART_send_AT_command("AT+CIPSEND",">",2)==0)
-								{
-										 BSP_STM32_SPS_PRINT_R_Buff[len]='\32';
-										 BSP_STM32_SPS_PRINT_R_Buff[len+1]='\0';
-										 if(GPRS_UART_send_AT_command(&BSP_STM32_SPS_PRINT_R_Buff[4],"SEND OK",8)==0)
-										 { 								
-													IhuDebugPrint("VMFO: Send successful\n");
-													GPRS_UART_TIMER_RECON_Count=1;
-										 }
-										 else
-											 IhuDebugPrint("VMFO: Send failure\n");
-										 
-								}else
-								{
-										 //GPRS_UART_Data_byte_send(0X1B);//ESC,取消发送
-                     IhuDebugPrint("VMFO: Send failure\n");
-								}
-						  }else IhuDebugPrint("VMFO: Not connected\n");
-							mode=0;
-			break;
-			case 3:
-						if(GPRS_UART_send_AT_command("AT+CIPSEND",">",2)==0)
-						{
-							//GPRS_UART_Data_byte_send(0x00);
-							//GPRS_UART_Data_byte_send(0X1A);//CTRL+Z,结束数据发送,启动一次传输								
-							IhuDebugPrint("VMFO: Heart-beat successful\n");
+	IhuDebugPrint("VMFO: @@@@  GPRS TEST  @@@@\n");
 
-								 
-						}else
-						{
-								 //GPRS_UART_Data_byte_send(0X1B);//ESC,取消发送
-							IhuDebugPrint("VMFO: Heart-beat failure\n");
-						}
-				mode=0;
-			break;
-			case 4:
-						GPRS_UART_send_AT_command("AT+CIPCLOSE=1","CLOSE OK",5);	//关闭连接
-						GPRS_UART_send_AT_command("AT+CIPSHUT","SHUT OK",5);		//关闭移动场景
-						return 1;
-		}      
+	switch(sub_opt)
+	{
+		//检查下发的数据
+		case 0:        
+			if(strstr((const char*)BSP_STM32_SPS_GPRS_R_Buff, "+IPD"))//判断上位机是否有数据下发
+			{
+				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: New content!\n");
+				//p1=(uint8_t*)strstr((const char*)BSP_STM32_SPS_GPRS_R_Buff,",");
+				//p2=(uint8_t*)strstr((const char*)BSP_STM32_SPS_GPRS_R_Buff,":");
+				//USART_PRINT_Send_Len((char*)(p2+1),GPRS_UART_change_str_Data((p1+1),(p2-p1-1)));
+				GPRS_UART_clear_receive_buffer();
+			}
+		break;
+			
+		//设置配置
+		case 1: 
+			memset(temp, 0, sizeof(temp));
+			strcpy((char*)&temp, (const char*)"AT+CIPSTART=");
+			strcat((char*)&temp, IHU_GPRS_GSM_GPRS_STREAM);
+			GPRS_UART_send_AT_command("AT+CIPCLOSE=1", (uint8_t*)"CLOSE OK", 2);	//关闭连接
+			GPRS_UART_send_AT_command("AT+CIPSHUT", (uint8_t*)"SHUT OK", 2);		//关闭移动场景
+			GPRS_UART_send_AT_command("AT+CGCLASS=\"B\"", (uint8_t*)"OK", 2);//设置GPRS移动台类别为B,支持包交换和数据交换 
+			GPRS_UART_send_AT_command("AT+CGDCONT=1,\"IP\",\"CMNET\"", (uint8_t*)"OK",2);//设置PDP上下文,互联网接协议,接入点等信息
+			GPRS_UART_send_AT_command("AT+CGATT=1", (uint8_t*)"OK", 2);//附着GPRS业务
+			GPRS_UART_send_AT_command("AT+CIPCSGP=1,\"CMNET\"", (uint8_t*)"OK", 2);//设置为GPRS连接模式
+			GPRS_UART_send_AT_command("AT+CIPHEAD=1", (uint8_t*)"OK", 2);//设置接收数据显示IP头(方便判断数据来源,仅在单路连接有效)
+			GPRS_UART_send_AT_command("AT+CIPMUX=0", (uint8_t*)"OK", 2);//设置单路连接
+			if(GPRS_UART_send_AT_command(temp, (uint8_t*)"OK", 2 ) == IHU_SUCCESS)//发起连接
+			{
+				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: New connecting!\n");
+			}else
+			{
+				zIhuRunErrCnt[TASK_ID_VMFO]++;
+				IhuErrorPrint("VMFO: Set GPRS parameter error!\n");
+				return IHU_FAILURE;
+			}
+		break;
+			
+		//发送内容	
+		case 2:
+			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Begin to send..........!\n");
+			if(GPRS_UART_send_AT_command("AT+CIPSEND", (uint8_t*)">", 2) == IHU_SUCCESS)
+			{
+				memset(temp, 0, sizeof(temp));
+				strcpy((char*)temp, IHU_GPRS_GSM_GPRS_CONTENT);
+				if(GPRS_UART_send_AT_command(temp, (uint8_t*)"SEND OK", 8) == IHU_SUCCESS)
+				{ 								
+					if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Send successful!\n");
+				}else
+				{
+					zIhuRunErrCnt[TASK_ID_VMFO]++;
+					IhuErrorPrint("VMFO: GPRS Send failure 1!\n");
+					return IHU_FAILURE;
+				}
+			}
+			else
+			{
+				BSP_STM32_SPS_GPRS_SendData((uint8_t *)0X1B, 1);//ESC,取消发送
+				zIhuRunErrCnt[TASK_ID_VMFO]++;
+				IhuErrorPrint("VMFO: GPRS Send failure2!\n");
+				return IHU_FAILURE;
+			}
+		break;
+			
+		//发送结束
+		case 3:
+			if(GPRS_UART_send_AT_command("AT+CIPSEND", (uint8_t*)">", 2)== IHU_SUCCESS)
+			{
+				BSP_STM32_SPS_GPRS_SendData((uint8_t *)0x00, 1);
+				BSP_STM32_SPS_GPRS_SendData((uint8_t *)0X1A, 1);//CTRL+Z,结束数据发送,启动一次传输								
+				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Heart-beat successful!\n");		 
+			}else
+			{
+				BSP_STM32_SPS_GPRS_SendData((uint8_t *)0X1B, 1);//ESC,取消发送
+				zIhuRunErrCnt[TASK_ID_VMFO]++;
+				IhuErrorPrint("VMFO: GPRS Send failure3!\n");
+				return IHU_FAILURE;
+			}
+		break;
+		
+		//退出	
+		case 4:
+			GPRS_UART_send_AT_command("AT+CIPCLOSE=1", (uint8_t*)"CLOSE OK", 5);	//关闭连接
+			GPRS_UART_send_AT_command("AT+CIPSHUT", (uint8_t*)"SHUT OK", 5);		//关闭移动场景
+			return 1;
 	}
+	return IHU_SUCCESS;
 }
 
 /*******************************************************************************

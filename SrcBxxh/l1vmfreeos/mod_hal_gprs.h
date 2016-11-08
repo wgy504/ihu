@@ -27,6 +27,8 @@
 #define IHU_GPRS_SMS_TEST_CONTENT   "THIS IS ZZZ TEST MESSAGE!"
 #define IHU_GPRS_GSM_CALLED_NUMBER "+8613701629240"
 #define IHU_GPRS_GSM_DTMF_TEST "X"
+#define IHU_GPRS_GSM_GPRS_STREAM "TCP"   //"UDP"
+#define IHU_GPRS_GSM_GPRS_CONTENT "THIS iS A PURE TEST!"
 
 //工作调用流
 extern OPSTAT GPRS_UART_GSM_working_procedure_selection(uint8_t option, uint8_t sub_opt);
@@ -34,7 +36,7 @@ extern OPSTAT GPRS_UART_GSM_gsm_info_procedure(void);//GSM信息显示(信号质
 extern OPSTAT GPRS_UART_GSM_module_procedure(void);//模块信息检测
 extern OPSTAT GPRS_UART_GSM_call_procedure(uint8_t sub_opt);//拨号测试程序
 extern OPSTAT GPRS_UART_GSM_sms_procedure(void); //短信工作流程
-extern OPSTAT GPRS_UART_GSM_gprs_procedure(void);//GPRS数据传输测试程序
+extern OPSTAT GPRS_UART_GSM_gprs_procedure(uint8_t sub_opt);//GPRS数据传输测试程序
 extern OPSTAT GPRS_UART_GSM_bs_procedure(void);//基站定位
 extern OPSTAT GPRS_UART_GSM_tts_procedure(void);//TTS文本语音测试程序
 
