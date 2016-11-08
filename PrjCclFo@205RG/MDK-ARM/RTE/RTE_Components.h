@@ -3,8 +3,8 @@
  * Auto generated Run-Time-Environment Component Configuration File
  *      *** Do not modify ! ***
  *
- * Project: 'PrjCclFreeRTOS' 
- * Target:  'PrjCclFreeRTOS' 
+ * Project: 'PrjCclFo@205RG' 
+ * Target:  'PrjCclFo@205RG' 
  */
 
 #ifndef RTE_COMPONENTS_H

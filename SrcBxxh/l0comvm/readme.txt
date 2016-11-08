@@ -788,6 +788,16 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 完成了GPRS的子函数功能，可以对GPRS模块进行呼叫、短信、GPRS连接等各种操作了
 
 //= ZJL/XH, 2016 Nov.7, CURRENT_SW_DELIVERY R03.47 =>CCL项目
+= 更新PrjCclFreeRTOS到PrjCclFo@205RG项目，其它一切保持不变
+
+
+
+
+
+
+
+
+
 
 
 
