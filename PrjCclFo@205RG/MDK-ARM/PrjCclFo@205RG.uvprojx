@@ -821,7 +821,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>L3Appl</GroupName>
+          <GroupName>L3appl</GroupName>
           <Files>
             <File>
               <FileName>l3ccl.c</FileName>
