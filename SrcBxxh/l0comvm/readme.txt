@@ -787,14 +787,14 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 继续完善GPRS模块的呼叫功能
 = 完成了GPRS的子函数功能，可以对GPRS模块进行呼叫、短信、GPRS连接等各种操作了
 
-//= ZJL/XH, 2016 Nov.7, CURRENT_SW_DELIVERY R03.47 =>CCL项目
+//= ZJL/XH, 2016 Nov.8, CURRENT_SW_DELIVERY R03.47 =>CCL项目
 = 更新PrjCclFreeRTOS到PrjCclFo@205RG项目，其它一切保持不变
 = 增加PrjCclFo@207VC项目，保持跟PrjCclFo@205RG完全一致
 = 需要修改Main.c以及FreeRTOSConfig.h，将VMFO以及SLICING配置项都改进去，然后一切都一模一样了
 = 增加PrjBfscFo@205RG项目，初始化BFSC组合秤的一些基本接口
 = 增加PrjBfscFo@207VC项目
 
-
+//= ZJL/XH, 2016 Nov.9, CURRENT_SW_DELIVERY R03.48 =>CCL项目
 
 
 
