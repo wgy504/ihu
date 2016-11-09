@@ -11,8 +11,8 @@
  ****************************************************************************************
  */
 
-#ifndef L1VUCOS_MOD_GPRS_H_
-#define L1VUCOS_MOD_GPRS_H_
+#ifndef L1FREERTOS_MOD_GPRS_H_
+#define L1FREERTOS_MOD_GPRS_H_
 
 #include "stm32f2xx_hal.h"
 #include "vmfreeoslayer.h"
@@ -25,32 +25,32 @@
 #define IHU_GPRS_UART_TTS_MAX_LEN 200 //定义最多播放的字节数
 #define IHU_GPRS_UART_REPEAT_CNT 3
 #define IHU_GPRS_SMS_TEST_CONTENT   "THIS IS ZZZ TEST MESSAGE!"
-#define IHU_GPRS_GSM_CALLED_NUMBER "+8613701629240"
-#define IHU_GPRS_GSM_DTMF_TEST "X"
-#define IHU_GPRS_GSM_GPRS_STREAM "TCP"   //"UDP"
-#define IHU_GPRS_GSM_GPRS_CONTENT "THIS iS A PURE TEST!"
+#define IHU_GPRS_SIM800A_CALLED_NUMBER "+8613701629240"
+#define IHU_GPRS_SIM800A_DTMF_TEST "X"
+#define IHU_GPRS_SIM800A_GPRS_STREAM "TCP"   //"UDP"
+#define IHU_GPRS_SIM800A_GPRS_CONTENT "THIS iS A PURE TEST!"
 
 //工作调用流
 extern OPSTAT GPRS_UART_GSM_working_procedure_selection(uint8_t option, uint8_t sub_opt);
-extern OPSTAT GPRS_UART_GSM_gsm_info_procedure(void);//GSM信息显示(信号质量,电池电量,日期时间)
-extern OPSTAT GPRS_UART_GSM_module_procedure(void);//模块信息检测
-extern OPSTAT GPRS_UART_GSM_call_procedure(uint8_t sub_opt);//拨号测试程序
-extern OPSTAT GPRS_UART_GSM_sms_procedure(void); //短信工作流程
-extern OPSTAT GPRS_UART_GSM_gprs_procedure(uint8_t sub_opt);//GPRS数据传输测试程序
-extern OPSTAT GPRS_UART_GSM_bs_procedure(void);//基站定位
-extern OPSTAT GPRS_UART_GSM_tts_procedure(void);//TTS文本语音测试程序
+extern OPSTAT GPRS_UART_SIM800A_gsm_info_procedure(void);//SIM800A信息显示(信号质量,电池电量,日期时间)
+extern OPSTAT GPRS_UART_SIM800A_module_procedure(void);//模块信息检测
+extern OPSTAT GPRS_UART_SIM800A_call_procedure(uint8_t sub_opt);//拨号测试程序
+extern OPSTAT GPRS_UART_SIM800A_sms_procedure(void); //短信工作流程
+extern OPSTAT GPRS_UART_SIM800A_gprs_procedure(uint8_t sub_opt);//GPRS数据传输测试程序
+extern OPSTAT GPRS_UART_SIM800A_bs_procedure(void);//基站定位
+extern OPSTAT GPRS_UART_SIM800A_tts_procedure(void);//TTS文本语音测试程序
 
 
 //循环工作流函数
 OPSTAT GPRS_UART_gsm_loop_test_main(void);
-void GPRS_UART_GSM_test_loop(void);//模块测试主程序
-OPSTAT GPRS_UART_GSM_gsm_test_info(void);//GSM信息显示(信号质量,电池电量,日期时间)
-OPSTAT GPRS_UART_GSM_mtest(void);//模块信息检测
-OPSTAT GPRS_UART_GSM_call_test(void);//拨号测试程序
-OPSTAT GPRS_UART_GSM_sms_test(void);//短信测试程序
-OPSTAT GPRS_UART_GSM_gprs_test(void);//GPRS数据传输测试程序
-OPSTAT GPRS_UART_GSM_jz_test(void);//基站定位
-OPSTAT GPRS_UART_GSM_tts_test(void);//TTS文本语音测试程序
+void GPRS_UART_SIM800A_test_loop(void);//模块测试主程序
+OPSTAT GPRS_UART_SIM800A_gsm_test_info(void);//SIM800A信息显示(信号质量,电池电量,日期时间)
+OPSTAT GPRS_UART_SIM800A_mtest(void);//模块信息检测
+OPSTAT GPRS_UART_SIM800A_call_test(void);//拨号测试程序
+OPSTAT GPRS_UART_SIM800A_sms_test(void);//短信测试程序
+OPSTAT GPRS_UART_SIM800A_gprs_test(void);//GPRS数据传输测试程序
+OPSTAT GPRS_UART_SIM800A_jz_test(void);//基站定位
+OPSTAT GPRS_UART_SIM800A_tts_test(void);//TTS文本语音测试程序
 void GPRS_UART_connect_server(void);
 void GPRS_UART_Rec_Server_Data(void);
 void GPRS_UART_data_connection_and_receive_process(void);
@@ -84,5 +84,5 @@ extern void USART_PRINT_IRQHandler(void);
 
 
 
-#endif /* L1VUCOS_MOD_GPRS_H_ */
+#endif /* L1FREERTOS_MOD_GPRS_H_ */
 

@@ -704,6 +704,16 @@
               <FilePath>..\..\SrcBxxh\l1vmfreeos\l1timer_freeos.h</FilePath>
             </File>
             <File>
+              <FileName>vmfreeoslayer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\vmfreeoslayer.c</FilePath>
+            </File>
+            <File>
+              <FileName>vmfreeoslayer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\vmfreeoslayer.h</FilePath>
+            </File>
+            <File>
               <FileName>mod_hal_gprs.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\SrcBxxh\l1vmfreeos\mod_hal_gprs.c</FilePath>
@@ -714,14 +724,24 @@
               <FilePath>..\..\SrcBxxh\l1vmfreeos\mod_hal_gprs.h</FilePath>
             </File>
             <File>
-              <FileName>vmfreeoslayer.c</FileName>
+              <FileName>mod_hal_ble.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l1vmfreeos\vmfreeoslayer.c</FilePath>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\mod_hal_ble.c</FilePath>
             </File>
             <File>
-              <FileName>vmfreeoslayer.h</FileName>
+              <FileName>mod_hal_ble.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l1vmfreeos\vmfreeoslayer.h</FilePath>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\mod_hal_ble.h</FilePath>
+            </File>
+            <File>
+              <FileName>mod_hal_rfid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\mod_hal_rfid.c</FilePath>
+            </File>
+            <File>
+              <FileName>mod_hal_rfid.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\mod_hal_rfid.h</FilePath>
             </File>
           </Files>
         </Group>

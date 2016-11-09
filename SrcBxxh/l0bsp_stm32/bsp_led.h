@@ -51,6 +51,12 @@ typedef enum
 #define LED3_OFF                      HAL_GPIO_WritePin(LED3_GPIO,LED3_GPIO_PIN,GPIO_PIN_RESET)  // 输出低电平
 #define LED3_TOGGLE                   HAL_GPIO_TogglePin(LED3_GPIO,LED3_GPIO_PIN)                // 输出反转
 
+//BLE串口模块的GPIO端口定义
+#define BLE_UART_PORT_PIN							GPIO_PIN_3  //纯属于测试，待修改
+#define BLE_UART_PORT									GPIOA
+#define BLE_UART_PORT_ENABLE()				HAL_GPIO_WritePin(BLE_UART_PORT, BLE_UART_PORT_PIN, GPIO_PIN_SET)    // 输出高电平
+#define BLE_UART_PORT_DISABLE()				HAL_GPIO_WritePin(BLE_UART_PORT, BLE_UART_PORT_PIN, GPIO_PIN_RESET)  // 输出高电平
+
 
 /* 扩展变量 ------------------------------------------------------------------*/
 /* 函数声明 ------------------------------------------------------------------*/
@@ -89,7 +95,7 @@ extern void BSP_STM32_LED_F205_timer_ind_off(void);
 extern void BSP_STM32_LED_F205_timer_ind_negation(void);
 extern void BSP_STM32_LED_F205_onoff(GPIO_TypeDef* port, uint16_t pin, uint8_t onoff);
 
-
+extern void BSP_STM32_LED_F205_board_on(void);
 
 
 

@@ -44,8 +44,8 @@ const char *GPRS_UART_string = "AT+CIPSTART=\"TCP\",\"14.125.48.205\",9015";//IP
 //Delay => ihu_usleep(ms)
 
 /*******************************************************************************
-* 函数名 : GPRS_UART_GSM_test_selection
-* 描述   : GSM主测试程序
+* 函数名 : GPRS_UART_SIM800A_test_selection
+* 描述   : SIM800A主测试程序
 * 输入   : 
 * 输出   : 
 * 返回   : 
@@ -60,7 +60,7 @@ OPSTAT GPRS_UART_GSM_working_procedure_selection(uint8_t option, uint8_t sub_opt
 	{
 		repeatCnt--;
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
-			IhuDebugPrint("VMFO: Not detect GPRS module, trying to reconnecting!\n");
+			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Not detect GPRS module, trying to reconnecting!\n");
 		}
 		ihu_usleep(200);
 		if (repeatCnt == 0){
@@ -78,24 +78,24 @@ OPSTAT GPRS_UART_GSM_working_procedure_selection(uint8_t option, uint8_t sub_opt
 	}
 	
 	//基础信息查阅
-	if (GPRS_UART_GSM_module_procedure() != IHU_SUCCESS){
+	if (GPRS_UART_SIM800A_module_procedure() != IHU_SUCCESS){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Can not detect basic info!\n");
 		return IHU_FAILURE;
 	}
 	
 	//查阅SIM卡信息
-	if(GPRS_UART_GSM_gsm_info_procedure() != IHU_SUCCESS){
+	if(GPRS_UART_SIM800A_gsm_info_procedure() != IHU_SUCCESS){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
-		IhuErrorPrint("VMFO: Get GPRS module GSM related info error!\n");
+		IhuErrorPrint("VMFO: Get GPRS module SIM800A related info error!\n");
 		return IHU_FAILURE;
 	}
 	
-	if (option == 1) return GPRS_UART_GSM_call_procedure(sub_opt);	//电话测试
-	else if (option == 2) return GPRS_UART_GSM_sms_procedure();		//短信测试
-	else if (option == 3) return GPRS_UART_GSM_gprs_procedure(sub_opt);	//GPRS测试
-	else if (option == 4) return GPRS_UART_GSM_bs_procedure();		//基站测试
-	else if (option == 5) return GPRS_UART_GSM_tts_procedure();		//语音测试
+	if (option == 1) return GPRS_UART_SIM800A_call_procedure(sub_opt);	//电话测试
+	else if (option == 2) return GPRS_UART_SIM800A_sms_procedure();		//短信测试
+	else if (option == 3) return GPRS_UART_SIM800A_gprs_procedure(sub_opt);	//GPRS测试
+	else if (option == 4) return GPRS_UART_SIM800A_bs_procedure();		//基站测试
+	else if (option == 5) return GPRS_UART_SIM800A_tts_procedure();		//语音测试
 	else
 	{
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
@@ -108,14 +108,14 @@ OPSTAT GPRS_UART_GSM_working_procedure_selection(uint8_t option, uint8_t sub_opt
 }
 
 /*******************************************************************************
-* 函数名 : GPRS_UART_GSM_module_procedure
-* 描述   : GSM/GPRS主测试控制部分
+* 函数名 : GPRS_UART_SIM800A_module_procedure
+* 描述   : SIM800A/GPRS主测试控制部分
 * 输入   : 
 * 输出   : 
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-OPSTAT GPRS_UART_GSM_module_procedure()
+OPSTAT GPRS_UART_SIM800A_module_procedure()
 {
 	char temp[20];
 	int8_t *p1; 
@@ -196,14 +196,14 @@ OPSTAT GPRS_UART_GSM_module_procedure()
 }
 
 /*******************************************************************************
-* 函数名 : GPRS_UART_GSM_gsm_info_procedure
-* 描述   : GSM/GPRS状态信息检测(信号质量,电池电量,日期时间)
+* 函数名 : GPRS_UART_SIM800A_gsm_info_procedure
+* 描述   : SIM800A/GPRS状态信息检测(信号质量,电池电量,日期时间)
 * 输入   : 
 * 输出   : 
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-OPSTAT GPRS_UART_GSM_gsm_info_procedure(void)
+OPSTAT GPRS_UART_SIM800A_gsm_info_procedure(void)
 {
 	char temp[20];
 	uint8_t *p1;
@@ -281,7 +281,7 @@ OPSTAT GPRS_UART_GSM_gsm_info_procedure(void)
 	else{
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Module not support TTS local voice.\n");
 	}
-	if(GPRS_UART_send_AT_command("AT+CIPGSMLOC=?", (uint8_t*)"OK", 2) == IHU_SUCCESS)
+	if(GPRS_UART_send_AT_command("AT+CIPSIM800ALOC=?", (uint8_t*)"OK", 2) == IHU_SUCCESS)
 	{
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Module support base station positioning, able to fetch position information.\n");
 	}
@@ -294,14 +294,14 @@ OPSTAT GPRS_UART_GSM_gsm_info_procedure(void)
 }
 
 /*******************************************************************************
-* 函数名 : GPRS_UART_GSM_sms_test
+* 函数名 : GPRS_UART_SIM800A_sms_test
 * 描述   : 短信测试代码
 * 输入   : 
 * 输出   : 
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-OPSTAT GPRS_UART_GSM_sms_procedure(void)
+OPSTAT GPRS_UART_SIM800A_sms_procedure(void)
 {
 	uint8_t temp[50];
 	uint8_t loc=0;
@@ -400,17 +400,17 @@ OPSTAT GPRS_UART_GSM_sms_procedure(void)
 }
 
 /*******************************************************************************
-* 函数名 : GPRS_UART_GSM_call_test
+* 函数名 : GPRS_UART_SIM800A_call_test
 * 描述   : 拨号测试代码
 * 输入   : 
 * 输出   : 
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-OPSTAT GPRS_UART_GSM_call_procedure(uint8_t sub_opt)
+OPSTAT GPRS_UART_SIM800A_call_procedure(uint8_t sub_opt)
 {	
 	uint8_t temp[50];
-	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: @@@@ GSM CALL TEST @@@@!\n");		
+	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: @@@@ SIM800A CALL TEST @@@@!\n");		
 		
 	switch(sub_opt)
 	{
@@ -431,7 +431,7 @@ OPSTAT GPRS_UART_GSM_call_procedure(uint8_t sub_opt)
 			}
 			else{
 				zIhuRunErrCnt[TASK_ID_VMFO]++;
-				IhuErrorPrint("VMFO: GSM Call hand-off failure!\n");
+				IhuErrorPrint("VMFO: SIM800A Call hand-off failure!\n");
 				return IHU_FAILURE;		
 			}
 		break;
@@ -442,7 +442,7 @@ OPSTAT GPRS_UART_GSM_call_procedure(uint8_t sub_opt)
 				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Hand-off successful\n");
 			}else{
 				zIhuRunErrCnt[TASK_ID_VMFO]++;
-				IhuErrorPrint("VMFO: GSM Call hand-on failure!\n");
+				IhuErrorPrint("VMFO: SIM800A Call hand-on failure!\n");
 				return IHU_FAILURE;				
 			}
 		break;
@@ -451,12 +451,12 @@ OPSTAT GPRS_UART_GSM_call_procedure(uint8_t sub_opt)
 		case 3:
 			memset(temp, 0, sizeof(temp));
 			strcpy((char*)temp, "ATD");
-			strcat((char*)temp, IHU_GPRS_GSM_CALLED_NUMBER);
+			strcat((char*)temp, IHU_GPRS_SIM800A_CALLED_NUMBER);
 			strcat((char*)temp, ";");
 			//temp[strlen(temp)]= (uint8_t)';';
 			if(GPRS_UART_send_AT_command(temp, (uint8_t *)"OK", 8) == IHU_SUCCESS)
 			{
-				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Called number = %s, Call successful!\n", IHU_GPRS_GSM_CALLED_NUMBER);
+				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Called number = %s, Call successful!\n", IHU_GPRS_SIM800A_CALLED_NUMBER);
 			}
 			else
 			{
@@ -470,16 +470,16 @@ OPSTAT GPRS_UART_GSM_call_procedure(uint8_t sub_opt)
 		case 4:
 			memset(temp, 0, sizeof(temp));
 			strcpy((char*)temp, "AT+VTS=");
-			strcat((char*)temp, IHU_GPRS_GSM_DTMF_TEST);
+			strcat((char*)temp, IHU_GPRS_SIM800A_DTMF_TEST);
 			if (GPRS_UART_send_AT_command(temp, (uint8_t *)"OK",3) != IHU_SUCCESS)
 			{
 				zIhuRunErrCnt[TASK_ID_VMFO]++;
-				IhuErrorPrint("VMFO: GSM Call, DTMF failure!\n");
+				IhuErrorPrint("VMFO: SIM800A Call, DTMF failure!\n");
 				return IHU_FAILURE;		
 			}
 			if(strstr((const char*)BSP_STM32_SPS_GPRS_R_Buff,"DTMF:"))
 			{
-				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Peer press key-down: %s\n", IHU_GPRS_GSM_DTMF_TEST);
+				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Peer press key-down: %s\n", IHU_GPRS_SIM800A_DTMF_TEST);
 				GPRS_UART_clear_receive_buffer();
 			}
 		break;
@@ -495,14 +495,14 @@ OPSTAT GPRS_UART_GSM_call_procedure(uint8_t sub_opt)
 
 
 /*******************************************************************************
-* 函数名 : GPRS_UART_GSM_gprs_test
+* 函数名 : GPRS_UART_SIM800A_gprs_test
 * 描述   : GPRS测试代码
 * 输入   : 
 * 输出   : 
 * 返回   : 
 * 注意   :  为了保持连接，每空闲隔10秒发送一次心跳
 *******************************************************************************/
-OPSTAT GPRS_UART_GSM_gprs_procedure(uint8_t sub_opt)
+OPSTAT GPRS_UART_SIM800A_gprs_procedure(uint8_t sub_opt)
 {	
 	uint8_t temp[200];
 	IhuDebugPrint("VMFO: @@@@  GPRS TEST  @@@@\n");
@@ -525,7 +525,7 @@ OPSTAT GPRS_UART_GSM_gprs_procedure(uint8_t sub_opt)
 		case 1: 
 			memset(temp, 0, sizeof(temp));
 			strcpy((char*)&temp, (const char*)"AT+CIPSTART=");
-			strcat((char*)&temp, IHU_GPRS_GSM_GPRS_STREAM);
+			strcat((char*)&temp, IHU_GPRS_SIM800A_GPRS_STREAM);
 			GPRS_UART_send_AT_command("AT+CIPCLOSE=1", (uint8_t*)"CLOSE OK", 2);	//关闭连接
 			GPRS_UART_send_AT_command("AT+CIPSHUT", (uint8_t*)"SHUT OK", 2);		//关闭移动场景
 			GPRS_UART_send_AT_command("AT+CGCLASS=\"B\"", (uint8_t*)"OK", 2);//设置GPRS移动台类别为B,支持包交换和数据交换 
@@ -551,7 +551,7 @@ OPSTAT GPRS_UART_GSM_gprs_procedure(uint8_t sub_opt)
 			if(GPRS_UART_send_AT_command("AT+CIPSEND", (uint8_t*)">", 2) == IHU_SUCCESS)
 			{
 				memset(temp, 0, sizeof(temp));
-				strcpy((char*)temp, IHU_GPRS_GSM_GPRS_CONTENT);
+				strcpy((char*)temp, IHU_GPRS_SIM800A_GPRS_CONTENT);
 				if(GPRS_UART_send_AT_command(temp, (uint8_t*)"SEND OK", 8) == IHU_SUCCESS)
 				{ 								
 					if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Send successful!\n");
@@ -597,14 +597,14 @@ OPSTAT GPRS_UART_GSM_gprs_procedure(uint8_t sub_opt)
 }
 
 /*******************************************************************************
-* 函数名 : GPRS_UART_GSM_jz_test
+* 函数名 : GPRS_UART_SIM800A_jz_test
 * 描述   : 基站定位测试代码
 * 输入   : 
 * 输出   : 
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-OPSTAT GPRS_UART_GSM_bs_procedure(void)
+OPSTAT GPRS_UART_SIM800A_bs_procedure(void)
 {
 //  uint8_t *p1, *p3;
 	//uint8_t *p2;
@@ -637,7 +637,7 @@ OPSTAT GPRS_UART_GSM_bs_procedure(void)
 			else
 			IhuDebugPrint("VMFO: ENTER ERROR\n");
 		}
-    if(GPRS_UART_send_AT_command("AT+CIPGSMLOC=1,1","OK",10)==0)//获取经纬度和时间
+    if(GPRS_UART_send_AT_command("AT+CIPSIM800ALOC=1,1","OK",10)==0)//获取经纬度和时间
 		{
         GPRS_UART_TIMER_RECON_Count=1;
 //// 			  p1=(uint8_t*)strstr((const char*)(BSP_STM32_SPS_GPRS_R_Buff),",");
@@ -671,14 +671,14 @@ OPSTAT GPRS_UART_GSM_bs_procedure(void)
 }
 
 /*******************************************************************************
-* 函数名 : GPRS_UART_GSM_tts_test
+* 函数名 : GPRS_UART_SIM800A_tts_test
 * 描述   : TTS文本语音测试代码
 * 输入   : 
 * 输出   : 
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-OPSTAT GPRS_UART_GSM_tts_procedure(void)
+OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 {
   uint16_t len=0;
   uint8_t temp_src[]="Hello, this is a test from BXXH!";
@@ -735,7 +735,7 @@ OPSTAT GPRS_UART_GSM_tts_procedure(void)
 //* 输入   : 
 //* 输出   : 
 //* 返回   : 
-//* 注意   : 串口2负责与GSM模块通信，串口1用于串口调试，可以避免在下载程序时数据
+//* 注意   : 串口2负责与SIM800A模块通信，串口1用于串口调试，可以避免在下载程序时数据
 //					 还发送到模块
 //*******************************************************************************/
 //OPSTAT GPRS_UART_gsm_loop_test_main(void)
@@ -745,22 +745,22 @@ OPSTAT GPRS_UART_GSM_tts_procedure(void)
 //	//SPS_GRPS忽略，因为调用模块本来就会初始发串口
 //	GPRS_UART_Init_Config(115200);
 //	TIM_USART_GPRS_Init_Config();
-//	IhuDebugPrint("VMFO: GSM Module SMS test procedure!\n");//打印信息
-//	IhuDebugPrint("VMFO: GSM Module Register network!\n");
-//  GPRS_UART_GSM_test_loop(); //GSM测试程序
+//	IhuDebugPrint("VMFO: SIM800A Module SMS test procedure!\n");//打印信息
+//	IhuDebugPrint("VMFO: SIM800A Module Register network!\n");
+//  GPRS_UART_SIM800A_test_loop(); //SIM800A测试程序
 //	return 1;
 //}
 
 
 ///*******************************************************************************
-//* 函数名 : GPRS_UART_GSM_test_loop
-//* 描述   : GSM主测试程序
+//* 函数名 : GPRS_UART_SIM800A_test_loop
+//* 描述   : SIM800A主测试程序
 //* 输入   : 
 //* 输出   : 
 //* 返回   : 
 //* 注意   : 
 //*******************************************************************************/
-//void GPRS_UART_GSM_test_loop(void)
+//void GPRS_UART_SIM800A_test_loop(void)
 //{
 //	uint8_t sim_ready=0;
 //	while(GPRS_UART_send_AT_command((uint8_t*)"AT",(uint8_t*)"OK",5))//查询是否应到AT指令
@@ -771,8 +771,8 @@ OPSTAT GPRS_UART_GSM_tts_procedure(void)
 //		ihu_usleep(400);  
 //	} 	 
 //	GPRS_UART_send_AT_command((uint8_t*)"ATE0",(uint8_t*)"OK",200);//不回显
-//	GPRS_UART_GSM_mtest();
-//	if(GPRS_UART_GSM_gsm_test_info()==0)
+//	GPRS_UART_SIM800A_mtest();
+//	if(GPRS_UART_SIM800A_gsm_test_info()==0)
 //	{
 //		sim_ready=1;
 //		IhuDebugPrint("VMFO: Please select: Chinese+Enter, then re-send\n"); 				    	 
@@ -790,18 +790,18 @@ OPSTAT GPRS_UART_GSM_tts_procedure(void)
 //			{
 //				SPS_PRINT_RX_STA=0;
 //				if(strstr((char*)BSP_STM32_SPS_PRINT_R_Buff,"DIAL"))
-//					GPRS_UART_GSM_call_test();	//电话测试
+//					GPRS_UART_SIM800A_call_test();	//电话测试
 //				else
 //				if(strstr((char*)BSP_STM32_SPS_PRINT_R_Buff,"SMS"))
-//					GPRS_UART_GSM_sms_test();		//短信测试
+//					GPRS_UART_SIM800A_sms_test();		//短信测试
 //				else
 //				if(strstr((char*)BSP_STM32_SPS_PRINT_R_Buff,"GPRS"))
-//					GPRS_UART_GSM_gprs_test();	//GPRS测试
+//					GPRS_UART_SIM800A_gprs_test();	//GPRS测试
 //				else
 //				if(strstr((char*)BSP_STM32_SPS_PRINT_R_Buff,"LOC"))
-//				  GPRS_UART_GSM_jz_test();		//基站测试
+//				  GPRS_UART_SIM800A_jz_test();		//基站测试
 //				else				if(strstr((char*)BSP_STM32_SPS_PRINT_R_Buff,"VOICE"))
-//					GPRS_UART_GSM_tts_test();		//语音测试
+//					GPRS_UART_SIM800A_tts_test();		//语音测试
 //				
 //				IhuDebugPrint("VMFO: Please select: Chinese+Enter, then re-send\n"); 				    	 
 //				IhuDebugPrint("VMFO: DIAL\t"); 				    	 
@@ -815,17 +815,17 @@ OPSTAT GPRS_UART_GSM_tts_procedure(void)
 //}
 
 ///*******************************************************************************
-//* 函数名 : GPRS_UART_GSM_mtest
-//* 描述   : GSM/GPRS主测试控制部分
+//* 函数名 : GPRS_UART_SIM800A_mtest
+//* 描述   : SIM800A/GPRS主测试控制部分
 //* 输入   : 
 //* 输出   : 
 //* 返回   : 
 //* 注意   : 
 //*******************************************************************************/
-//OPSTAT GPRS_UART_GSM_mtest()
+//OPSTAT GPRS_UART_SIM800A_mtest()
 //{
 //	uint8_t *p1; 
-//	IhuDebugPrint("VMFO: \nGSM/GPRS Test Program\n");  
+//	IhuDebugPrint("VMFO: \nSIM800A/GPRS Test Program\n");  
 //	GPRS_UART_clear_receive_buffer(); 
 //	if(GPRS_UART_send_AT_command((uint8_t*)"AT+CGMI",(uint8_t*)"OK",5)==0)//查询制造商名称
 //	{ 
@@ -863,14 +863,14 @@ OPSTAT GPRS_UART_GSM_tts_procedure(void)
 //}
 
 ///*******************************************************************************
-//* 函数名 : GPRS_UART_GSM_gsm_test_info
-//* 描述   : GSM/GPRS状态信息检测(信号质量,电池电量,日期时间)
+//* 函数名 : GPRS_UART_SIM800A_gsm_test_info
+//* 描述   : SIM800A/GPRS状态信息检测(信号质量,电池电量,日期时间)
 //* 输入   : 
 //* 输出   : 
 //* 返回   : 
 //* 注意   : 
 //*******************************************************************************/
-//OPSTAT GPRS_UART_GSM_gsm_test_info(void)
+//OPSTAT GPRS_UART_SIM800A_gsm_test_info(void)
 //{
 //	uint8_t *p1;
 //	uint8_t *p2;
@@ -927,7 +927,7 @@ OPSTAT GPRS_UART_GSM_tts_procedure(void)
 //		IhuDebugPrint("VMFO: Module not support TTS local voice");
 //    IhuDebugPrint("\r\n");			
 //	}
-//	if(GPRS_UART_send_AT_command("AT+CIPGSMLOC=?","OK",3)==0)
+//	if(GPRS_UART_send_AT_command("AT+CIPSIM800ALOC=?","OK",3)==0)
 //	{
 //		IhuDebugPrint("VMFO: Module support base station positioning, able to fetch position information");
 //    IhuDebugPrint("\r\n");	
@@ -942,14 +942,14 @@ OPSTAT GPRS_UART_GSM_tts_procedure(void)
 //	return res;
 //}
 ///*******************************************************************************
-//* 函数名 : GPRS_UART_GSM_call_test
+//* 函数名 : GPRS_UART_SIM800A_call_test
 //* 描述   : 拨号测试代码
 //* 输入   : 
 //* 输出   : 
 //* 返回   : 
 //* 注意   : 
 //*******************************************************************************/
-//OPSTAT GPRS_UART_GSM_call_test(void)
+//OPSTAT GPRS_UART_SIM800A_call_test(void)
 //{	
 //	uint8_t temp[50];
 //	uint16_t len=0;
@@ -1046,14 +1046,14 @@ OPSTAT GPRS_UART_GSM_tts_procedure(void)
 //	}
 //}
 ///*******************************************************************************
-//* 函数名 : GPRS_UART_GSM_sms_test
+//* 函数名 : GPRS_UART_SIM800A_sms_test
 //* 描述   : 短信测试代码
 //* 输入   : 
 //* 输出   : 
 //* 返回   : 
 //* 注意   : 
 //*******************************************************************************/
-//OPSTAT GPRS_UART_GSM_sms_test(void)
+//OPSTAT GPRS_UART_SIM800A_sms_test(void)
 //{
 //	uint16_t len=0;
 //	uint8_t mode=0;
@@ -1155,14 +1155,14 @@ OPSTAT GPRS_UART_GSM_tts_procedure(void)
 //}
 
 ///*******************************************************************************
-//* 函数名 : GPRS_UART_GSM_gprs_test
+//* 函数名 : GPRS_UART_SIM800A_gprs_test
 //* 描述   : GPRS测试代码
 //* 输入   : 
 //* 输出   : 
 //* 返回   : 
 //* 注意   :  为了保持连接，每空闲隔10秒发送一次心跳
 //*******************************************************************************/
-//OPSTAT GPRS_UART_GSM_gprs_test(void)
+//OPSTAT GPRS_UART_SIM800A_gprs_test(void)
 //{	
 //  uint16_t len=0;
 //	uint8_t mode=0;
@@ -1310,14 +1310,14 @@ OPSTAT GPRS_UART_GSM_tts_procedure(void)
 //}
 
 ///*******************************************************************************
-//* 函数名 : GPRS_UART_GSM_jz_test
+//* 函数名 : GPRS_UART_SIM800A_jz_test
 //* 描述   : 基站定位测试代码
 //* 输入   : 
 //* 输出   : 
 //* 返回   : 
 //* 注意   : 
 //*******************************************************************************/
-//OPSTAT GPRS_UART_GSM_jz_test(void)
+//OPSTAT GPRS_UART_SIM800A_jz_test(void)
 //{
 //  uint8_t *p1,*p2,*p3;
 //	IhuDebugPrint("VMFO: @@@@@@@@@@@@@@@@@@@@@Base Station POSITON TEST@@@@@@@@@@@@@@@@@@@@@@@@@\r\n");
@@ -1349,7 +1349,7 @@ OPSTAT GPRS_UART_GSM_tts_procedure(void)
 //			else
 //			IhuDebugPrint("VMFO: ENTER ERROR\n");
 //		}
-//    if(GPRS_UART_send_AT_command("AT+CIPGSMLOC=1,1","OK",10)==0)//获取经纬度和时间
+//    if(GPRS_UART_send_AT_command("AT+CIPSIM800ALOC=1,1","OK",10)==0)//获取经纬度和时间
 //		{
 //        GPRS_UART_TIMER_RECON_Count=1;
 // 			  p1=(uint8_t*)strstr((const char*)(BSP_STM32_SPS_GPRS_R_Buff),",");
@@ -1381,7 +1381,7 @@ OPSTAT GPRS_UART_GSM_tts_procedure(void)
 //}
 
 ///*******************************************************************************
-//* 函数名 : GSM_JZ_test
+//* 函数名 : SIM800A_JZ_test
 //* 描述   : 基站定位测试代码
 //* 输入   : 
 //* 输出   : 
@@ -1389,7 +1389,7 @@ OPSTAT GPRS_UART_GSM_tts_procedure(void)
 //* 注意   : 
 //*******************************************************************************/
 ///*
-//OPSTAT GPRS_UART_GSM_jz_test(void)
+//OPSTAT GPRS_UART_SIM800A_jz_test(void)
 //{
 //  uint8_t *p1,*p2,*p3;
 //	IhuDebugPrint("VMFO: @@@@@@@@@@@@@@@@@@@@@Base Station POSITON TEST@@@@@@@@@@@@@@@@@@@@@@@@@\n");
@@ -1421,7 +1421,7 @@ OPSTAT GPRS_UART_GSM_tts_procedure(void)
 //			else
 //			IhuDebugPrint("VMFO: Enter Error\n");
 //		}
-//    if(GPRS_UART_send_AT_command("AT+CIPGSMLOC=1,1","OK",10)==0)//获取经纬度和时间
+//    if(GPRS_UART_send_AT_command("AT+CIPSIM800ALOC=1,1","OK",10)==0)//获取经纬度和时间
 //		{
 //        GPRS_UART_TIMER_RECON_Count=1;
 // 			  p1=(uint8_t*)strstr((const char*)(BSP_STM32_SPS_GPRS_R_Buff),",");
@@ -1454,14 +1454,14 @@ OPSTAT GPRS_UART_GSM_tts_procedure(void)
 //*/
 
 ///*******************************************************************************
-//* 函数名 : GPRS_UART_GSM_tts_test
+//* 函数名 : GPRS_UART_SIM800A_tts_test
 //* 描述   : TTS文本语音测试代码
 //* 输入   : 
 //* 输出   : 
 //* 返回   : 
 //* 注意   : 
 //*******************************************************************************/
-//OPSTAT GPRS_UART_GSM_tts_test(void)
+//OPSTAT GPRS_UART_SIM800A_tts_test(void)
 //{
 //  uint16_t len=0;
 //  uint8_t temp_src[]="Hello, this is a test from BXXH!";
@@ -1681,7 +1681,7 @@ void GPRS_UART_clear_receive_buffer(void)
 * 描述   : 发送AT指令函数
 * 输入   : 发送数据的指针、发送等待时间(单位：S)
 * 输出   : 
-* 返回   : 0:正常  1:错误
+* 返回   : 1:正常  -2:错误
 * 注意   : 
 * OPSTAT GPRS_UART_send_AT_command(uint8_t *cmd, uint8_t *ack, uint8_t wait_time)  
 * 这里的发送，只有成功返回ACK对应的回复时，才算成功

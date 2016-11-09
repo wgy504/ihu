@@ -795,7 +795,10 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 增加PrjBfscFo@207VC项目
 
 //= ZJL/XH, 2016 Nov.9, CURRENT_SW_DELIVERY R03.48 =>CCL项目
-
+= 修改GSM模块为SIM800A
+= 基于HC05的BLE串口模块，基本完成获取MAC地址的函数
+= 新建RFID UART的基础函数
+= 试着利用HAL修改SPI访问函数
 
 
 

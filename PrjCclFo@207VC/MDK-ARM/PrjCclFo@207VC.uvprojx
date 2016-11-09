@@ -723,6 +723,26 @@
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l1vmfreeos\vmfreeoslayer.h</FilePath>
             </File>
+            <File>
+              <FileName>mod_hal_ble.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\mod_hal_ble.c</FilePath>
+            </File>
+            <File>
+              <FileName>mod_hal_ble.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\mod_hal_ble.h</FilePath>
+            </File>
+            <File>
+              <FileName>mod_hal_rfid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\mod_hal_rfid.c</FilePath>
+            </File>
+            <File>
+              <FileName>mod_hal_rfid.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\mod_hal_rfid.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
