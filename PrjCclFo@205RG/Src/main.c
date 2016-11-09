@@ -54,6 +54,9 @@ ADC_HandleTypeDef hadc1;
 ADC_HandleTypeDef hadc2;
 ADC_HandleTypeDef hadc3;
 
+CAN_HandleTypeDef hcan1;
+CAN_HandleTypeDef hcan2;
+
 I2C_HandleTypeDef hi2c1;
 
 SPI_HandleTypeDef hspi1;
@@ -82,6 +85,8 @@ osTimerId myTimer01Handle;
 /* Private variables ---------------------------------------------------------*/
 uint8_t zIhuUartRxBuffer[6];
 uint8_t zIhuSpiRxBuffer[2];
+uint8_t zIhuI2cRxBuffer[2];
+uint8_t zIhuCanRxBuffer[2];
 
 /* USER CODE END PV */
 
@@ -104,6 +109,8 @@ static void MX_USART3_UART_Init(void);
 static void MX_USART6_UART_Init(void);
 static void MX_TIM6_Init(void);
 static void MX_TIM7_Init(void);
+static void MX_CAN1_Init(void);
+static void MX_CAN2_Init(void);
 void StartDefaultTask(void const * argument);
 void StartTask02(void const * argument);
 void Callback01(void const * argument);
@@ -150,6 +157,8 @@ int main(void)
   MX_USART6_UART_Init();
   MX_TIM6_Init();
   MX_TIM7_Init();
+  MX_CAN1_Init();
+  MX_CAN2_Init();
 
   /* Initialize interrupts */
   MX_NVIC_Init();
@@ -164,7 +173,10 @@ int main(void)
   HAL_UART_Receive_IT(&huart6,&zIhuUartRxBuffer[5],1);
   HAL_SPI_Receive_IT(&hspi1,&zIhuSpiRxBuffer[0],1);
   HAL_SPI_Receive_IT(&hspi2,&zIhuSpiRxBuffer[1],1);
-
+  HAL_I2C_Slave_Receive_IT(&hi2c1,&zIhuI2cRxBuffer[0],1);
+//  HAL_CAN_Receive_IT(&hcan1,&zIhuI2cRxBuffer[0],1);
+//  HAL_CAN_Receive_IT(&hcan2,&zIhuI2cRxBuffer[1],1);
+	
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -411,6 +423,52 @@ static void MX_ADC3_Init(void)
   sConfig.Rank = 1;
   sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
   if (HAL_ADC_ConfigChannel(&hadc3, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+}
+
+/* CAN1 init function */
+static void MX_CAN1_Init(void)
+{
+
+  hcan1.Instance = CAN1;
+  hcan1.Init.Prescaler = 16;
+  hcan1.Init.Mode = CAN_MODE_NORMAL;
+  hcan1.Init.SJW = CAN_SJW_1TQ;
+  hcan1.Init.BS1 = CAN_BS1_1TQ;
+  hcan1.Init.BS2 = CAN_BS2_1TQ;
+  hcan1.Init.TTCM = DISABLE;
+  hcan1.Init.ABOM = DISABLE;
+  hcan1.Init.AWUM = DISABLE;
+  hcan1.Init.NART = DISABLE;
+  hcan1.Init.RFLM = DISABLE;
+  hcan1.Init.TXFP = DISABLE;
+  if (HAL_CAN_Init(&hcan1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+}
+
+/* CAN2 init function */
+static void MX_CAN2_Init(void)
+{
+
+  hcan2.Instance = CAN2;
+  hcan2.Init.Prescaler = 16;
+  hcan2.Init.Mode = CAN_MODE_NORMAL;
+  hcan2.Init.SJW = CAN_SJW_1TQ;
+  hcan2.Init.BS1 = CAN_BS1_1TQ;
+  hcan2.Init.BS2 = CAN_BS2_1TQ;
+  hcan2.Init.TTCM = DISABLE;
+  hcan2.Init.ABOM = DISABLE;
+  hcan2.Init.AWUM = DISABLE;
+  hcan2.Init.NART = DISABLE;
+  hcan2.Init.RFLM = DISABLE;
+  hcan2.Init.TXFP = DISABLE;
+  if (HAL_CAN_Init(&hcan2) != HAL_OK)
   {
     Error_Handler();
   }

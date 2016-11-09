@@ -36,6 +36,8 @@
 	#include "bsp_key.h"
 	#include "bsp_led.h"
 	#include "bsp_rs485.h"
+	#include "bsp_i2c.h"
+	
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
   #include "commsgbfsc.h"
   #include "FreeRTOS.h"
@@ -49,7 +51,8 @@
 	#include "bsp_key.h"
 	#include "bsp_led.h"
 	#include "bsp_rs485.h"
-
+	#include "bsp_i2c.h"
+	
 #else	
 #endif
 
@@ -392,6 +395,7 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_led_f2_onff BSP_STM32_LED_F205_onoff
 
 //USART专门对付一般性的驱动函数，对其进行映射，以便保持上层模块的一致性
+#define ihu_l1hd_sps_slave_hw_init				BSP_STM32_sps_slave_hw_init
 #define ihu_l1hd_sps_gprs_init_config 		BSP_STM32_SPS_GPRS_Init_Config
 #define ihu_l1hd_sps_gprs_send_data 			BSP_STM32_SPS_GPRS_SendData
 #define ihu_l1hd_sps_rfid_init_config 		BSP_STM32_SPS_RFID_Init_Config
@@ -401,14 +405,30 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_sps_spare1_init_config 	BSP_STM32_SPS_SPARE1_Init_Config
 #define ihu_l1hd_sps_spare1_send_data 		BSP_STM32_SPS_SPARE1_SendData
 #define ihu_l1hd_sps_print_send_data 			BSP_STM32_sps_print_data_send
+
 //extern int BSP_STM32_sps_print_data_send(char *s);
 
 //SPI专门对付一般性的驱动函数，对其进行映射，以便保持上层模块的一致性
+#define ihu_l1hd_spi_slave_hw_init				BSP_SPI_slave_hw_init
+#define ihu_l1hd_spi_slave_hw_init_sp			BSP_STM32_SPI_slave_hw_init
 #define ihu_l1hd_spi_iau_send_data 				BSP_STM32_SPI_IAU_SendData
 #define ihu_l1hd_spi_iau_receive_data 		BSP_STM32_SPI_IAU_RcvData
 #define ihu_l1hd_spi_spare1_send_data 		BSP_STM32_SPI_SPARE1_SendData
 #define ihu_l1hd_spi_spare1_receive_data 	BSP_STM32_SPI_SPARE1_RcvData
-#define ihu_l1hd_spi_slave_hw_init				BSP_SPI_slave_hw_init
+
+//I2C专门对付一般性的驱动函数，对其进行映射，以便保持上层模块的一致性
+#define ihu_l1hd_i2c_slave_hw_init				BSP_STM32_I2C_slave_hw_init
+#define ihu_l1hd_i2c_iau_send_data 				BSP_STM32_I2C_IAU_SendData
+#define ihu_l1hd_i2c_iau_receive_data 		BSP_STM32_I2C_IAU_RcvData
+#define ihu_l1hd_i2c_spare1_send_data 		BSP_STM32_I2C_SPARE1_SendData
+#define ihu_l1hd_i2c_spare1_receive_data 	BSP_STM32_I2C_SPARE1_RcvData
+
+//CAN专门对付一般性的驱动函数，对其进行映射，以便保持上层模块的一致性
+#define ihu_l1hd_can_slave_hw_init				BSP_STM32_CAN_slave_hw_init
+#define ihu_l1hd_can_iau_send_data 				BSP_STM32_CAN_IAU_SendData
+#define ihu_l1hd_can_iau_receive_data 		BSP_STM32_CAN_IAU_RcvData
+#define ihu_l1hd_can_spare1_send_data 		BSP_STM32_CAN_SPARE1_SendData
+#define ihu_l1hd_can_spare1_receive_data 	BSP_STM32_CAN_SPARE1_RcvData
 
 
 

@@ -1,6 +1,18 @@
-#include <string.h>
+/**
+  ******************************************************************************
+  * 文件名程: bsp_spi.c 
+  * 作    者: BXXH
+  * 版    本: V1.0
+  * 编写日期: 2016-10-04
+  * 功    能: 板载调试串口底层驱动程序：默认使用SPI
+  ******************************************************************************
+  * 
+  ******************************************************************************
+*/
+
+/* 包含头文件 ----------------------------------------------------------------*/
 #include "bsp_spi.h"
-#include "vmfreeoslayer.h"
+
 
 //ZJL定义
 int8_t 	BSP_STM32_SPI_IAU_R_Buff[BSP_STM32_SPI_IAU_REC_MAXLEN];				//串口SPI数据接收缓冲区 
@@ -10,6 +22,7 @@ int16_t BSP_STM32_SPI_IAU_R_Len=0;
 int8_t 	BSP_STM32_SPI_SPARE1_R_Buff[BSP_STM32_SPI_SPARE1_REC_MAXLEN];	//串口SPI数据接收缓冲区 
 int8_t 	BSP_STM32_SPI_SPARE1_R_State=0;																//串口SPI接收状态
 int16_t BSP_STM32_SPI_SPARE1_R_Count=0;																//当前接收数据的字节数 	  
+int16_t BSP_STM32_SPI_SPARE1_R_Len=0;
 extern SPI_HandleTypeDef hspi1;
 extern SPI_HandleTypeDef hspi2;
 extern uint8_t zIhuSpiRxBuffer[6];
@@ -483,3 +496,24 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *SpiHandle)
 }
 
 
+int BSP_STM32_SPI_slave_hw_init(void)
+{
+	uint16_t k;
+	for(k=0;k<BSP_STM32_SPI_IAU_REC_MAXLEN;k++)      //将缓存内容清零
+	{
+		BSP_STM32_SPI_IAU_R_Buff[k] = 0x00;
+	}
+  BSP_STM32_SPI_IAU_R_Count = 0;               //接收字符串的起始存储位置
+	BSP_STM32_SPI_IAU_R_State = 0;
+	BSP_STM32_SPI_IAU_R_Len = 0;
+
+	for(k=0;k<BSP_STM32_SPI_SPARE1_REC_MAXLEN;k++)      //将缓存内容清零
+	{
+		BSP_STM32_SPI_SPARE1_R_Buff[k] = 0x00;
+	}
+  BSP_STM32_SPI_SPARE1_R_Count = 0;               //接收字符串的起始存储位置
+	BSP_STM32_SPI_SPARE1_R_State = 0;
+	BSP_STM32_SPI_SPARE1_R_Len = 0;
+	
+	return BSP_SUCCESS;
+}

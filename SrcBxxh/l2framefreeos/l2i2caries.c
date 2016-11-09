@@ -143,6 +143,7 @@ OPSTAT fsm_i2caries_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 //Local APIs
 OPSTAT func_i2caries_hw_init(void)
 {
+	ihu_l1hd_i2c_slave_hw_init();
 	return IHU_SUCCESS;
 }
 

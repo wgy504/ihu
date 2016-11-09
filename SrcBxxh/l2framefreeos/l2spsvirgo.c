@@ -166,7 +166,7 @@ OPSTAT func_spsvirgo_hw_init(void)
 //	ihu_l1hd_sps_ble_init_config(115200);//UART_BLE初始化配置
 //	ihu_l1hd_sps_spare1_init_config(115200);//UART_SPARE1初始化配置
 //	TIM_USART_GPRS_Init_Config();  //初始化跟GPRS时钟相关的TIM
-	
+	ihu_l1hd_sps_slave_hw_init();
 	return IHU_SUCCESS;
 }
 

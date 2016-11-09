@@ -13,6 +13,7 @@ extern "C" {
 #include "string.h"
 #include "sysdim.h"
 #include "vmfreeoslayer.h"
+#include "bsp_usart.h"
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 	#include "commsgccl.h"
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
@@ -92,6 +93,7 @@ int BSP_SPI_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint16_t 
 #define BSP_STM32_SPI_IAU_ID  		2
 #define SPI_TX_MAX_DELAY_DURATION 100
 #define SPI_RX_MAX_DELAY_DURATION 100
+extern int BSP_STM32_SPI_slave_hw_init(void);
 extern int BSP_STM32_SPI_SPARE1_SendData(uint8_t* buff, uint16_t len);
 extern int BSP_STM32_SPI_SPARE1_RcvData(uint8_t* buff, uint16_t len);
 extern int BSP_STM32_SPI_IAU_SendData(uint8_t* buff, uint16_t len);

@@ -1,21 +1,18 @@
 /**
   ******************************************************************************
-  * 文件名程: bsp_debug_usart.c 
-  * 作    者: 硬石嵌入式开发团队
+  * 文件名程: bsp_usart.c 
+  * 作    者: BXXH
   * 版    本: V1.0
-  * 编写日期: 2015-10-04
+  * 编写日期: 2016-10-04
   * 功    能: 板载调试串口底层驱动程序：默认使用USART1
   ******************************************************************************
-  * 说明：
-  * 本例程配套硬石stm32开发板YS-F1Pro使用。
   * 
   ******************************************************************************
 */
 
 /* 包含头文件 ----------------------------------------------------------------*/
 #include "bsp_usart.h"
-#include "string.h"
-#include "sysdim.h"
+
 
 /* 私有类型定义 --------------------------------------------------------------*/
 /* 私有宏定义 ----------------------------------------------------------------*/
@@ -38,24 +35,82 @@ int16_t BSP_STM32_SPS_GRPS_R_Len=0;
 int8_t BSP_STM32_SPS_RFID_R_Buff[BSP_STM32_SPS_RFID_REC_MAXLEN];			//串口RFID数据接收缓冲区 
 int8_t BSP_STM32_SPS_RFID_R_State=0;												//串口RFID接收状态
 int16_t BSP_STM32_SPS_RFID_R_Count=0;					//当前接收数据的字节数 	  
+int16_t BSP_STM32_SPS_RFID_R_Len=0;
 int8_t BSP_STM32_SPS_BLE_R_Buff[BSP_STM32_SPS_BLE_REC_MAXLEN];			//串口BLE数据接收缓冲区 
 int8_t BSP_STM32_SPS_BLE_R_State=0;												//串口BLE接收状态
 int16_t BSP_STM32_SPS_BLE_R_Count=0;					//当前接收数据的字节数 	  
+int16_t BSP_STM32_SPS_BLE_R_Len=0;
 int8_t BSP_STM32_SPS_PRINT_R_Buff[BSP_STM32_SPS_BLE_REC_MAXLEN];			//串口PRINT数据接收缓冲区 
 int8_t BSP_STM32_SPS_PRINT_R_State=0;												//串口PRINT接收状态
 int16_t BSP_STM32_SPS_PRINT_R_Count=0;					//当前接收数据的字节数 	  
+int16_t BSP_STM32_SPS_PRINT_R_Len=0;
 int8_t BSP_STM32_SPS_SPARE1_R_Buff[BSP_STM32_SPS_SPARE1_REC_MAXLEN];			//串口SPARE1数据接收缓冲区 
 int8_t BSP_STM32_SPS_SPARE1_R_State=0;												//串口SPARE1接收状态
 int16_t BSP_STM32_SPS_SPARE1_R_Count=0;					//当前接收数据的字节数 	  
+int16_t BSP_STM32_SPS_SPARE1_R_Len=0;
 int8_t BSP_STM32_SPS_SPARE2_R_Buff[BSP_STM32_SPS_SPARE2_REC_MAXLEN];			//串口SPARE2数据接收缓冲区 
 int8_t BSP_STM32_SPS_SPARE2_R_State=0;												//串口SPARE2接收状态
 int16_t BSP_STM32_SPS_SPARE2_R_Count=0;					//当前接收数据的字节数 	  
+int16_t BSP_STM32_SPS_SPARE2_R_Len=0;
 
 
 /* 扩展变量 ------------------------------------------------------------------*/
 /* 私有函数原形 --------------------------------------------------------------*/
 /* 函数体 --------------------------------------------------------------------*/
 
+int BSP_STM32_sps_slave_hw_init(void)
+{
+	uint16_t k;
+	for(k=0;k<BSP_STM32_SPS_GPRS_REC_MAXLEN;k++)      //将缓存内容清零
+	{
+		BSP_STM32_SPS_GPRS_R_Buff[k] = 0x00;
+	}
+  BSP_STM32_SPS_GPRS_R_Count = 0;               //接收字符串的起始存储位置
+	BSP_STM32_SPS_GPRS_R_State = 0;
+	BSP_STM32_SPS_GRPS_R_Len = 0;
+
+	for(k=0;k<BSP_STM32_SPS_RFID_REC_MAXLEN;k++)      //将缓存内容清零
+	{
+		BSP_STM32_SPS_RFID_R_Buff[k] = 0x00;
+	}
+  BSP_STM32_SPS_RFID_R_Count = 0;               //接收字符串的起始存储位置
+	BSP_STM32_SPS_RFID_R_State = 0;
+	BSP_STM32_SPS_RFID_R_Len = 0;	
+
+	for(k=0;k<BSP_STM32_SPS_BLE_REC_MAXLEN;k++)      //将缓存内容清零
+	{
+		BSP_STM32_SPS_BLE_R_Buff[k] = 0x00;
+	}
+  BSP_STM32_SPS_BLE_R_Count = 0;               //接收字符串的起始存储位置
+	BSP_STM32_SPS_BLE_R_State = 0;
+	BSP_STM32_SPS_BLE_R_Len = 0;	
+	
+	for(k=0;k<BSP_STM32_SPS_PRINT_REC_MAXLEN;k++)      //将缓存内容清零
+	{
+		BSP_STM32_SPS_PRINT_R_Buff[k] = 0x00;
+	}
+  BSP_STM32_SPS_PRINT_R_Count = 0;               //接收字符串的起始存储位置
+	BSP_STM32_SPS_PRINT_R_State = 0;
+	BSP_STM32_SPS_PRINT_R_Len = 0;	
+
+	for(k=0;k<BSP_STM32_SPS_SPARE1_REC_MAXLEN;k++)      //将缓存内容清零
+	{
+		BSP_STM32_SPS_SPARE1_R_Buff[k] = 0x00;
+	}
+  BSP_STM32_SPS_SPARE1_R_Count = 0;               //接收字符串的起始存储位置
+	BSP_STM32_SPS_SPARE1_R_State = 0;
+	BSP_STM32_SPS_SPARE1_R_Len = 0;
+
+	for(k=0;k<BSP_STM32_SPS_SPARE2_REC_MAXLEN;k++)      //将缓存内容清零
+	{
+		BSP_STM32_SPS_SPARE2_R_Buff[k] = 0x00;
+	}
+  BSP_STM32_SPS_SPARE2_R_Count = 0;               //接收字符串的起始存储位置
+	BSP_STM32_SPS_SPARE2_R_State = 0;
+	BSP_STM32_SPS_SPARE2_R_Len = 0;
+	
+	return BSP_SUCCESS;
+}
 
 /**
   * 函数功能: 重定向c库函数printf到DEBUG_USARTx

@@ -59,6 +59,8 @@ typedef struct IHU_HUISTD_frameheader
 #define BSP_STM32_UART_SPARE2_ID  6
 
 //API函数
+extern int BSP_STM32_sps_slave_hw_init(void);
+
 extern int BSP_STM32_sps_print_fputc(int ch, FILE *f);
 extern int BSP_STM32_sps_print_fgetc(FILE * f);
 
@@ -206,4 +208,4 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle);
 
 #endif  /* __BSP_DEBUG_USART_H__ */
 
-/******************* (C) COPYRIGHT 2015-2020 硬石嵌入式开发团队 *****END OF FILE****/
+
