@@ -804,7 +804,7 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = SPSVIRGO/SPILEO对于L2FRAME数据的处理，暂时没有进一步进行消息级别的分解，这需要等待消息结构定义清楚后再行处理
 = CCL状态机也有待完善
 
-
+//= ZJL/XH, 2016 Nov.10, CURRENT_SW_DELIVERY R03.49 =>CCL项目
 
 
 
