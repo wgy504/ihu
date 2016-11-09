@@ -8,8 +8,17 @@ extern "C" {
 #endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-#include "stm32f2xx.h"
-
+#include "stm32f2xx_hal.h"
+#include "stdio.h"
+#include "string.h"
+#include "sysdim.h"
+#include "vmfreeoslayer.h"
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+	#include "commsgccl.h"
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+	#include "commsgbfsc.h"
+#else
+#endif
 
 /* SPI1: GPIOA.GPIO_PIN_7 conflict with ETH
          NSS  GPIOA.4, GPIOA.15
@@ -74,8 +83,9 @@ int BSP_SPI_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint16_t 
 
 //ZJL DEFINITION
 //常量定义
-#define BSP_STM32_SPI_IAU_REC_MAXLEN 200	//最大接收数据长度
-#define BSP_STM32_SPI_SPARE1_REC_MAXLEN 200	//最大接收数据长度
+//MAX_IHU_MSG_BODY_LENGTH-1是因为发送到上层SPILEO的数据缓冲区受到消息结构msg_struct_spileo_l2frame_rcv_t的影响
+#define BSP_STM32_SPI_IAU_REC_MAXLEN 			MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
+#define BSP_STM32_SPI_SPARE1_REC_MAXLEN 	MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
 #define BSP_STM32_SPI_SPARE1			hspi1
 #define BSP_STM32_SPI_SPARE1_ID  	1
 #define BSP_STM32_SPI_IAU					hspi2

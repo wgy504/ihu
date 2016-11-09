@@ -39,6 +39,7 @@ FsmStateItem_t FsmSpileo[] =
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_SPILEO_ACTIVED,         				  fsm_spileo_time_out},
   {MSG_ID_SPI_DL_DATA_PUSH_FWD,						FSM_STATE_SPILEO_ACTIVED,         					fsm_spileo_dl_data_push_fwd},
   {MSG_ID_SPI_DL_CTRL_CMD_REQ,						FSM_STATE_SPILEO_ACTIVED,         					fsm_spileo_dl_ctrl_cmd_req},
+  {MSG_ID_SPI_L2FRAME_RCV,								FSM_STATE_SPILEO_ACTIVED,         					fsm_spileo_l2frame_rcv},
 	
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             									NULL},  //Ending
@@ -228,5 +229,25 @@ void func_spileo_time_out_period_scan(void)
 	IhuDebugPrint("SPILEO: Time Out Test!\n");
 }
 
+//L2FRAME Receive Processing
+OPSTAT fsm_spileo_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{
+	//int ret;
+	msg_struct_spileo_l2frame_rcv_t rcv;
+	
+	//Receive message and copy to local variable
+	memset(&rcv, 0, sizeof(msg_struct_spileo_l2frame_rcv_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_spileo_l2frame_rcv_t))){
+		IhuErrorPrint("SPILEO: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_SPILEO]++;
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+
+	//对于缓冲区的数据，进行分别处理，将帧变成不同的消息，分门别类发送到L3模块进行处理
+	
+	
+	return IHU_SUCCESS;
+}
 
 

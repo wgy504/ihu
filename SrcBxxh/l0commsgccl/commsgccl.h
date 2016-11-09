@@ -80,12 +80,20 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_ADC_DL_CTRL_CMD_REQ,
 	MSG_ID_ADC_UL_CTRL_CMD_RESP,
 	
+	//LED
+	
+	//UART
+	MSG_ID_SPS_L2FRAME_SEND,
+	MSG_ID_SPS_L2FRAME_RCV,
+	
 	//SPI
+	MSG_ID_SPI_L2FRAME_SEND,
+	MSG_ID_SPI_L2FRAME_RCV,
 	MSG_ID_SPI_DL_DATA_PUSH_FWD,
 	MSG_ID_SPI_UL_DATA_PULL_BWD,
 	MSG_ID_SPI_DL_CTRL_CMD_REQ,
 	MSG_ID_SPI_UL_CTRL_CMD_RESP,
-	
+		
 	//END FLAG
 	MSG_ID_COM_MAX, //Ending point
 
@@ -130,6 +138,36 @@ typedef struct msg_struct_vmfo_1s_period_timtout
 {
 	UINT8 length;
 }msg_struct_vmfo_1s_period_timtout_t;
+
+//UART消息定义
+typedef struct msg_struct_spsvirgo_l2frame_send
+{
+	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-1];
+	UINT8 length;
+}msg_struct_spsvirgo_l2frame_send_t;
+typedef struct msg_struct_spsvirgo_l2frame_rcv
+{
+	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-1];
+	UINT8 length;
+}msg_struct_spsvirgo_l2frame_rcv_t;
+
+//SPI消息定义
+typedef struct msg_struct_spileo_l2frame_send
+{
+	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-1];
+	UINT8 length;
+}msg_struct_spileo_l2frame_send_t;
+typedef struct msg_struct_spileo_l2frame_rcv
+{
+	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-1];
+	UINT8 length;
+}msg_struct_spileo_l2frame_rcv_t;
+
+
+
+
+
+
 
 
 #endif /* L0COMVM_COMMSGCCL_H_ */

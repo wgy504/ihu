@@ -33,7 +33,8 @@ extern uint8_t zIhuUartRxBuffer[6];
 //从SCYCB项目中继承过来的全局变量，待定
 int8_t BSP_STM32_SPS_GPRS_R_Buff[BSP_STM32_SPS_GPRS_REC_MAXLEN];			//串口GPRS数据接收缓冲区 
 int8_t BSP_STM32_SPS_GPRS_R_State=0;												//串口GPRS接收状态
-int16_t BSP_STM32_SPS_GPRS_R_Count=0;					//当前接收数据的字节数 	  
+int16_t BSP_STM32_SPS_GPRS_R_Count=0;					//当前接收数据的字节数
+int16_t BSP_STM32_SPS_GRPS_R_Len=0;
 int8_t BSP_STM32_SPS_RFID_R_Buff[BSP_STM32_SPS_RFID_REC_MAXLEN];			//串口RFID数据接收缓冲区 
 int8_t BSP_STM32_SPS_RFID_R_State=0;												//串口RFID接收状态
 int16_t BSP_STM32_SPS_RFID_R_Count=0;					//当前接收数据的字节数 	  
@@ -222,12 +223,68 @@ int BSP_STM32_SPS_SPARE1_RcvData(uint8_t* buff, uint16_t len)
   */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 {
+	uint8_t res = 0;
+	msg_struct_spsvirgo_l2frame_rcv_t snd;
   if(UartHandle==&BSP_STM32_UART_GPRS)
   {
-		BSP_STM32_SPS_GPRS_R_Buff[BSP_STM32_SPS_GPRS_R_Count] = zIhuUartRxBuffer[BSP_STM32_UART_GPRS_ID-1];
-		BSP_STM32_SPS_GPRS_R_Count++;
+		res = zIhuUartRxBuffer[BSP_STM32_UART_GPRS_ID-1];
+		BSP_STM32_SPS_GPRS_R_Buff[BSP_STM32_SPS_GPRS_R_Count++] = res;
 		if (BSP_STM32_SPS_GPRS_R_Count >= BSP_STM32_SPS_GPRS_REC_MAXLEN)
 			BSP_STM32_SPS_GPRS_R_Count = 0;
+
+		//为了IDLE状态下提高效率，直接分解为IDLE和ELSE
+		if (BSP_STM32_SPS_GPRS_R_State == IHU_HUISTD_RX_STATE_IDLE)
+		{
+			//只有满足这么苛刻的条件，才算找到了帧头
+			if ((res == IHU_HUISTD_FRAME_START_CHAR) && (BSP_STM32_SPS_GPRS_R_Count == 1))
+			BSP_STM32_SPS_GPRS_R_State = IHU_HUISTD_RX_STATE_START;
+		}
+		else
+		{
+			//收到CHECKSUM
+			if((BSP_STM32_SPS_GPRS_R_State == IHU_HUISTD_RX_STATE_START) && (BSP_STM32_SPS_GPRS_R_Count == 2))
+			{
+				BSP_STM32_SPS_GPRS_R_State = IHU_HUISTD_RX_STATE_HEADER_CKSM;
+			}
+			//收到长度高位
+			else if((BSP_STM32_SPS_GPRS_R_State == IHU_HUISTD_RX_STATE_HEADER_CKSM) && (BSP_STM32_SPS_GPRS_R_Count == 3))
+			{
+				BSP_STM32_SPS_GPRS_R_State = IHU_HUISTD_RX_STATE_HEADER_LEN;
+			}
+			//收到长度低位
+			else if((BSP_STM32_SPS_GPRS_R_State == IHU_HUISTD_RX_STATE_HEADER_LEN) && (BSP_STM32_SPS_GPRS_R_Count == 4))
+			{
+				BSP_STM32_SPS_GRPS_R_Len = ((BSP_STM32_SPS_GPRS_R_Buff[2] <<8) + BSP_STM32_SPS_GPRS_R_Buff[3]);
+				//CHECKSUM及判定
+				if ((BSP_STM32_SPS_GPRS_R_Buff[1] == (BSP_STM32_SPS_GPRS_R_Buff[0] ^ BSP_STM32_SPS_GPRS_R_Buff[2]^BSP_STM32_SPS_GPRS_R_Buff[3])) &&\
+					(BSP_STM32_SPS_GRPS_R_Len < BSP_STM32_SPS_GPRS_REC_MAXLEN-4))
+				BSP_STM32_SPS_GPRS_R_State = IHU_HUISTD_RX_STATE_BODY;
+			}
+			//收到BODY位
+			else if((BSP_STM32_SPS_GPRS_R_State == IHU_HUISTD_RX_STATE_BODY) && (BSP_STM32_SPS_GRPS_R_Len > 1))
+			{
+				BSP_STM32_SPS_GRPS_R_Len--;
+			}
+			//收到BODY最后一位
+			else if((BSP_STM32_SPS_GPRS_R_State == IHU_HUISTD_RX_STATE_BODY) && (BSP_STM32_SPS_GRPS_R_Len == 1))
+			{
+				BSP_STM32_SPS_GPRS_R_State = IHU_HUISTD_RX_STATE_IDLE;
+				BSP_STM32_SPS_GRPS_R_Len = 0;
+				BSP_STM32_SPS_GPRS_R_Count = 0;
+				//发送数据到上层SPSVIRGO模块
+				memset(&snd, 0, sizeof(msg_struct_spsvirgo_l2frame_rcv_t));
+				memcpy(snd.data, &BSP_STM32_SPS_GPRS_R_Buff[4], ((BSP_STM32_SPS_GPRS_R_Buff[2]<<8)+BSP_STM32_SPS_GPRS_R_Buff[3]));
+				snd.length = sizeof(msg_struct_spsvirgo_l2frame_rcv_t);				
+				ihu_message_send(MSG_ID_SPS_L2FRAME_RCV, TASK_ID_SPSVIRGO, TASK_ID_VMFO, &snd, snd.length);				
+			}
+			//差错情况
+			else{
+				BSP_STM32_SPS_GPRS_R_State = IHU_HUISTD_RX_STATE_IDLE;
+				BSP_STM32_SPS_GRPS_R_Len = 0;
+				BSP_STM32_SPS_GPRS_R_Count = 0;
+			}
+		}
+		//重新设置中断
 		HAL_UART_Receive_IT(&BSP_STM32_UART_GPRS, &zIhuUartRxBuffer[BSP_STM32_UART_GPRS_ID-1], 1);
   }
   else if(UartHandle==&BSP_STM32_UART_RFID)

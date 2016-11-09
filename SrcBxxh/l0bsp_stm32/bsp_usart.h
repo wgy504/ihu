@@ -4,15 +4,39 @@
 /* 包含头文件 ----------------------------------------------------------------*/
 #include "stm32f2xx_hal.h"
 #include "stdio.h"
-#include "string.h"  
+#include "string.h"
+#include "sysdim.h"
+#include "vmfreeoslayer.h"
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+	#include "commsgccl.h"
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+	#include "commsgbfsc.h"
+#else
+#endif
 
 //从ucosiii移植过来的函数
-#define BSP_STM32_SPS_GPRS_REC_MAXLEN 200	//最大接收数据长度
-#define BSP_STM32_SPS_RFID_REC_MAXLEN 200	//最大接收数据长度
-#define BSP_STM32_SPS_BLE_REC_MAXLEN 200	//最大接收数据长度
-#define BSP_STM32_SPS_PRINT_REC_MAXLEN 200	//最大接收数据长度
-#define BSP_STM32_SPS_SPARE1_REC_MAXLEN 200	//最大接收数据长度
-#define BSP_STM32_SPS_SPARE2_REC_MAXLEN 200	//最大接收数据长度
+//MAX_IHU_MSG_BODY_LENGTH-1是因为发送到上层SPSVIRGO的数据缓冲区受到消息结构msg_struct_spsvirgo_l2frame_rcv_t的影响
+#define BSP_STM32_SPS_GPRS_REC_MAXLEN MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
+#define BSP_STM32_SPS_RFID_REC_MAXLEN MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
+#define BSP_STM32_SPS_BLE_REC_MAXLEN MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
+#define BSP_STM32_SPS_PRINT_REC_MAXLEN MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
+#define BSP_STM32_SPS_SPARE1_REC_MAXLEN MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
+#define BSP_STM32_SPS_SPARE2_REC_MAXLEN MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
+
+//GENERAL FRAME帧结构
+typedef struct IHU_HUISTD_frameheader
+{
+  uint8_t start;
+  uint8_t chksum;
+  uint16_t len;
+}IHU_HUISTD_frameheader_t;
+#define IHU_HUISTD_RX_STATE_IDLE 0
+#define IHU_HUISTD_RX_STATE_START 1
+#define IHU_HUISTD_RX_STATE_HEADER_CKSM 2
+#define IHU_HUISTD_RX_STATE_HEADER_LEN 3
+#define IHU_HUISTD_RX_STATE_BODY 4
+#define IHU_HUISTD_FRAME_START_CHAR 0xFE
+
 
 //发送和接受数据的延迟时间长度
 #define BSP_SUCCESS 0

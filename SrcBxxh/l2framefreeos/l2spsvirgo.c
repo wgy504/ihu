@@ -36,6 +36,7 @@ FsmStateItem_t FsmSpsvirgo[] =
   {MSG_ID_COM_RESTART,        						FSM_STATE_SPSVIRGO_ACTIVED,         					fsm_spsvirgo_restart},
   {MSG_ID_COM_STOP,												FSM_STATE_SPSVIRGO_ACTIVED,         					fsm_spsvirgo_stop_rcv},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_time_out},
+	{MSG_ID_SPS_L2FRAME_RCV,								FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_l2frame_rcv},
 	
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             									NULL},  //Ending
@@ -229,6 +230,27 @@ void func_spsvirgo_time_out_period_scan(void)
 	//if (zIhuGprsOperationFlag == 0)	GPRS_UART_GSM_working_procedure_selection(2, 0);
 	
 	//IhuDebugPrint("SPSVIRGO: Time Out Test!\n");
+}
+
+//L2FRAME Receive Processing
+OPSTAT fsm_spsvirgo_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{
+	//int ret;
+	msg_struct_spsvirgo_l2frame_rcv_t rcv;
+	
+	//Receive message and copy to local variable
+	memset(&rcv, 0, sizeof(msg_struct_spsvirgo_l2frame_rcv_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_spsvirgo_l2frame_rcv_t))){
+		IhuErrorPrint("SPSVIRGO: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+
+	//对于缓冲区的数据，进行分别处理，将帧变成不同的消息，分门别类发送到L3模块进行处理
+	
+	
+	return IHU_SUCCESS;
 }
 
 

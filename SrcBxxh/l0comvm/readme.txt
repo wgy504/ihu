@@ -799,6 +799,17 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 基于HC05的BLE串口模块，基本完成获取MAC地址的函数
 = 新建RFID UART的基础函数
 = 试着利用HAL修改SPI访问函数
+= UART/SPI的终端成帧处理
+= UART/SPI发送L2FRAME到SPSVIRGO/SPILEO模块
+= SPSVIRGO/SPILEO对于L2FRAME数据的处理，暂时没有进一步进行消息级别的分解，这需要等待消息结构定义清楚后再行处理
+= CCL状态机也有待完善
+
+
+
+
+
+
+
 
 
 
