@@ -54,7 +54,8 @@ extern int BSP_STM32_SPS_BLE_RcvData(uint8_t* buff, uint16_t len);
 extern int BSP_STM32_SPS_SPARE1_SendData(uint8_t* buff, uint16_t len);
 extern int BSP_STM32_SPS_SPARE1_RcvData(uint8_t* buff, uint16_t len);
 
-
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle);
+	
 /* 类型定义 ------------------------------------------------------------------*/
 
 

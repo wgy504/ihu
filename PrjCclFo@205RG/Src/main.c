@@ -81,6 +81,7 @@ osTimerId myTimer01Handle;
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 uint8_t zIhuUartRxBuffer[6];
+uint8_t zIhuSpiRxBuffer[2];
 
 /* USER CODE END PV */
 
@@ -160,7 +161,9 @@ int main(void)
   HAL_UART_Receive_IT(&huart3,&zIhuUartRxBuffer[2],1);
   HAL_UART_Receive_IT(&huart4,&zIhuUartRxBuffer[3],1);
   HAL_UART_Receive_IT(&huart5,&zIhuUartRxBuffer[4],1);
-  HAL_UART_Receive_IT(&huart6,&zIhuUartRxBuffer[5],1);	
+  HAL_UART_Receive_IT(&huart6,&zIhuUartRxBuffer[5],1);
+  HAL_SPI_Receive_IT(&hspi1,&zIhuSpiRxBuffer[0],1);
+  HAL_SPI_Receive_IT(&hspi2,&zIhuSpiRxBuffer[1],1);
 
   /* USER CODE END 2 */
 

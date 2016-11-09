@@ -224,7 +224,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 {
   if(UartHandle==&BSP_STM32_UART_GPRS)
   {
-		memcpy(&BSP_STM32_SPS_GPRS_R_Buff[BSP_STM32_SPS_GPRS_R_Count], &zIhuUartRxBuffer[BSP_STM32_UART_GPRS_ID-1], 1);
+		BSP_STM32_SPS_GPRS_R_Buff[BSP_STM32_SPS_GPRS_R_Count] = zIhuUartRxBuffer[BSP_STM32_UART_GPRS_ID-1];
 		BSP_STM32_SPS_GPRS_R_Count++;
 		if (BSP_STM32_SPS_GPRS_R_Count >= BSP_STM32_SPS_GPRS_REC_MAXLEN)
 			BSP_STM32_SPS_GPRS_R_Count = 0;

@@ -53,27 +53,40 @@ extern "C" {
 /* Definition for SPIx's NVIC */
 #define SPIx_IRQn                        SPI2_IRQn
 
-
-
-#define SPI_RX_STATE_START 0
-#define SPI_RX_STATE_HEADER 1
-#define SPI_RX_STATE_BODY 2
-
-
-#define EXT_BORAD_START_CHAR 0xFE
-#define EXT_BOARD_PADDING_CH 0x00
-
-typedef struct spileo_msgheader
+//GENERAL FRAME帧结构
+typedef struct BSP_SPI_msgheader
 {
   uint8_t start;
   uint8_t chksum;
   uint16_t len;
-}spileo_msgheader_t;
+}BSP_SPI_msgheader_t;
+#define SPI_RX_STATE_START 0
+#define SPI_RX_STATE_HEADER 1
+#define SPI_RX_STATE_BODY 2
+#define EXT_BORAD_START_CHAR 0xFE
+#define EXT_BOARD_PADDING_CH 0x00
 
 //Global APIs
-int spileo_slave_hw_init(int is_clock_phase_1edge, int is_clock_polarity_high);
-int spileo_start_transmit(SPI_HandleTypeDef *hspi, uint8_t *tx_buffer, uint16_t size);
-int spileo_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint16_t size);
+int BSP_SPI_slave_hw_init(int is_clock_phase_1edge, int is_clock_polarity_high);
+int BSP_SPI_start_transmit(SPI_HandleTypeDef *hspi, uint8_t *tx_buffer, uint16_t size);
+int BSP_SPI_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint16_t size);
+
+
+//ZJL DEFINITION
+//常量定义
+#define BSP_STM32_SPI_IAU_REC_MAXLEN 200	//最大接收数据长度
+#define BSP_STM32_SPI_SPARE1_REC_MAXLEN 200	//最大接收数据长度
+#define BSP_STM32_SPI_SPARE1			hspi1
+#define BSP_STM32_SPI_SPARE1_ID  	1
+#define BSP_STM32_SPI_IAU					hspi2
+#define BSP_STM32_SPI_IAU_ID  		2
+#define SPI_TX_MAX_DELAY_DURATION 100
+#define SPI_RX_MAX_DELAY_DURATION 100
+extern int BSP_STM32_SPI_SPARE1_SendData(uint8_t* buff, uint16_t len);
+extern int BSP_STM32_SPI_SPARE1_RcvData(uint8_t* buff, uint16_t len);
+extern int BSP_STM32_SPI_IAU_SendData(uint8_t* buff, uint16_t len);
+extern int BSP_STM32_SPI_IAU_RcvData(uint8_t* buff, uint16_t len);
+void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *SpiHandle);
 
 #ifdef __cplusplus
 }

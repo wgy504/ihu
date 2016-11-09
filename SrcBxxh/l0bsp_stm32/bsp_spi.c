@@ -2,29 +2,37 @@
 #include "bsp_spi.h"
 #include "vmfreeoslayer.h"
 
-///////////////////////////////////////////////////////////////////////////////////////
+//ZJL定义
+int8_t 	BSP_STM32_SPI_IAU_R_Buff[BSP_STM32_SPI_IAU_REC_MAXLEN];			//串口SPI数据接收缓冲区 
+int8_t 	BSP_STM32_SPI_IAU_R_State=0;																	//串口SPI接收状态
+int16_t BSP_STM32_SPI_IAU_R_Count=0;																	//当前接收数据的字节数 	  
+int8_t 	BSP_STM32_SPI_SPARE1_R_Buff[BSP_STM32_SPI_SPARE1_REC_MAXLEN];			//串口SPI数据接收缓冲区 
+int8_t 	BSP_STM32_SPI_SPARE1_R_State=0;																	//串口SPI接收状态
+int16_t BSP_STM32_SPI_SPARE1_R_Count=0;																	//当前接收数据的字节数 	  
+extern SPI_HandleTypeDef hspi1;
+extern SPI_HandleTypeDef hspi2;
+extern uint8_t zIhuSpiRxBuffer[6];
 
 /* SPI handler declaration */
 SPI_HandleTypeDef SpiHandle;
 #define SPILEO_BUF_SIZE 256
-uint8_t spileo_rx_buffer[SPILEO_BUF_SIZE];
-uint8_t spileo_tx_buffer[SPILEO_BUF_SIZE];
+uint8_t BSP_SPI_rx_buffer[SPILEO_BUF_SIZE];
+uint8_t BSP_SPI_tx_buffer[SPILEO_BUF_SIZE];
+uint32_t BSP_SPI_RxState;
 
-uint32_t spileo_RxState;
+static void BSP_SPI_tx_isr(SPI_HandleTypeDef *hspi);
+static void BSP_SPI_rx_isr(SPI_HandleTypeDef *hspi);
+static void BSP_SPI_tx_complete(SPI_HandleTypeDef *hspi);
+static void BSP_SPI_rx_complete(SPI_HandleTypeDef *hspi);
 
-static void spileo_tx_isr(SPI_HandleTypeDef *hspi);
-static void spileo_rx_isr(SPI_HandleTypeDef *hspi);
-static void spileo_tx_complete(SPI_HandleTypeDef *hspi);
-static void spileo_rx_complete(SPI_HandleTypeDef *hspi);
-
-uint8_t spileo_gen_chksum(spileo_msgheader_t *pMsgHeader)
+uint8_t BSP_SPI_gen_chksum(BSP_SPI_msgheader_t *pMsgHeader)
 {
 	uint8_t *pData = (uint8_t *)pMsgHeader;
 	
 	return pData[0]^pData[2]^pData[3];
 }
 
-static void spileo_rx_isr(SPI_HandleTypeDef *hspi)
+static void BSP_SPI_rx_isr(SPI_HandleTypeDef *hspi)
 {
   uint16_t tmp;
   
@@ -36,11 +44,11 @@ static void spileo_rx_isr(SPI_HandleTypeDef *hspi)
 	}
 	else
 	{
-	  spileo_msgheader_t *pMsgHeader = (spileo_msgheader_t *)hspi->pRxBuffPtr;
+	  BSP_SPI_msgheader_t *pMsgHeader = (BSP_SPI_msgheader_t *)hspi->pRxBuffPtr;
 	  
 	  hspi->pRxBuffPtr[hspi->RxXferCount++] = hspi->Instance->DR;
 
-	  switch(spileo_RxState)
+	  switch(BSP_SPI_RxState)
 	  {
 
 	  case SPI_RX_STATE_START:
@@ -50,27 +58,27 @@ static void spileo_rx_isr(SPI_HandleTypeDef *hspi)
 		  hspi->RxXferCount = 0;
 		}
 		else
-		  spileo_RxState = SPI_RX_STATE_HEADER;
+		  BSP_SPI_RxState = SPI_RX_STATE_HEADER;
 		break;
 		
 	  case SPI_RX_STATE_HEADER:
-		if(hspi->RxXferCount == sizeof(spileo_msgheader_t))
+		if(hspi->RxXferCount == sizeof(BSP_SPI_msgheader_t))
 		{
-		  if(spileo_gen_chksum(pMsgHeader) != pMsgHeader->chksum)
+		  if(BSP_SPI_gen_chksum(pMsgHeader) != pMsgHeader->chksum)
 		  {
 			hspi->RxXferCount = 0;
-			spileo_RxState = SPI_RX_STATE_START;
+			BSP_SPI_RxState = SPI_RX_STATE_START;
 		  }
 		  else
 		  {
-			spileo_RxState = SPI_RX_STATE_BODY;
+			BSP_SPI_RxState = SPI_RX_STATE_BODY;
 		  }
 		}
-		else if(hspi->RxXferCount > sizeof(spileo_msgheader_t))
+		else if(hspi->RxXferCount > sizeof(BSP_SPI_msgheader_t))
 		{
 			/* error case, just reset */
 			hspi->RxXferCount = 0;
-			spileo_RxState = SPI_RX_STATE_START;
+			BSP_SPI_RxState = SPI_RX_STATE_START;
 		}
 		break;
 		
@@ -78,22 +86,22 @@ static void spileo_rx_isr(SPI_HandleTypeDef *hspi)
 		if(hspi->RxXferCount == pMsgHeader->len)
 		{
 			// call user's callback after the receive is complete
-			spileo_rx_complete(hspi);
-			spileo_RxState = SPI_RX_STATE_START;
+			BSP_SPI_rx_complete(hspi);
+			BSP_SPI_RxState = SPI_RX_STATE_START;
 			hspi->RxXferCount = 0;
 		}
 
 		if(hspi->RxXferCount >= hspi->RxXferSize)
 		{
 		  hspi->RxXferCount = 0;
-		  spileo_RxState = SPI_RX_STATE_START;
+		  BSP_SPI_RxState = SPI_RX_STATE_START;
 		}
 		break;
 	  }
 	}
 }
 
-static void spileo_tx_isr(SPI_HandleTypeDef *hspi)
+static void BSP_SPI_tx_isr(SPI_HandleTypeDef *hspi)
 {
   if(hspi->TxXferCount >= hspi->TxXferSize)
 	{
@@ -112,7 +120,7 @@ static void spileo_tx_isr(SPI_HandleTypeDef *hspi)
 	  __HAL_SPI_CLEAR_OVRFLAG(hspi);
 
 	  // call user's callback after the transfer is complete
-		spileo_tx_complete(hspi);
+		BSP_SPI_tx_complete(hspi);
 	}
 }
 
@@ -129,21 +137,21 @@ void HAL_SPI_ErrorCallback(SPI_HandleTypeDef *hspi)
   IhuErrorPrint("SPI ErrorCode: 0x%08x\n\r", hspi->ErrorCode);
 }
 
-static void spileo_rx_complete(SPI_HandleTypeDef *hspi)
+static void BSP_SPI_rx_complete(SPI_HandleTypeDef *hspi)
 {
 /*
   IhuDebugPrint("spi RX complete (%d): packet 0x%08x 0x%08x 0x%08x\n\r", 
                 hspi->RxXferCount, *(uint32_t *)&hspi->pRxBuffPtr[0], *(uint32_t *)&hspi->pRxBuffPtr[4], *(uint32_t *)&hspi->pRxBuffPtr[8]);
 */
 
-  if(*(uint16_t *)(&spileo_rx_buffer[4]) == 0xEEEE)
+  if(*(uint16_t *)(&BSP_SPI_rx_buffer[4]) == 0xEEEE)
   {
     /* for loopback test */
-		spileo_msgheader_t *pMsgHeader = (spileo_msgheader_t *)spileo_rx_buffer;
+		BSP_SPI_msgheader_t *pMsgHeader = (BSP_SPI_msgheader_t *)BSP_SPI_rx_buffer;
 		uint16_t msglen = pMsgHeader->len > SPILEO_BUF_SIZE? SPILEO_BUF_SIZE: pMsgHeader->len;
 		
-		memcpy(spileo_tx_buffer, spileo_rx_buffer, msglen);
-		spileo_start_transmit(hspi, spileo_tx_buffer, msglen);
+		memcpy(BSP_SPI_tx_buffer, BSP_SPI_rx_buffer, msglen);
+		BSP_SPI_start_transmit(hspi, BSP_SPI_tx_buffer, msglen);
   }
 	else
 	{
@@ -151,12 +159,12 @@ static void spileo_rx_complete(SPI_HandleTypeDef *hspi)
   }
 }
 
-int spileo_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint16_t size)
+int BSP_SPI_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint16_t size)
 {
   OS_ENTER_CRITICAL_SECTION();
 
   /* set RX buffer */
-  spileo_RxState = SPI_RX_STATE_START;
+  BSP_SPI_RxState = SPI_RX_STATE_START;
   hspi->RxXferCount = 0;
   hspi->RxXferSize = size;
   hspi->pRxBuffPtr = rx_buffer;
@@ -176,7 +184,7 @@ int spileo_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint16_t s
   return 0;
 }
 
-static void spileo_tx_complete(SPI_HandleTypeDef *hspi)
+static void BSP_SPI_tx_complete(SPI_HandleTypeDef *hspi)
 {
 /*
 	IhuDebugPrint("spi TX complete: packet 0x%08x 0x%08x size %d\n\r", 
@@ -184,7 +192,7 @@ static void spileo_tx_complete(SPI_HandleTypeDef *hspi)
 */
 }
 
-int spileo_start_transmit(SPI_HandleTypeDef *hspi, uint8_t *tx_buffer, uint16_t size)
+int BSP_SPI_start_transmit(SPI_HandleTypeDef *hspi, uint8_t *tx_buffer, uint16_t size)
 {
   if(hspi->TxXferCount < hspi->TxXferSize)
   {
@@ -295,7 +303,7 @@ int spileo_start_transmit(SPI_HandleTypeDef *hspi, uint8_t *tx_buffer, uint16_t 
 //}
 
 
-int spileo_slave_hw_init(int is_clock_phase_1edge, int is_clock_polarity_high)
+int BSP_SPI_slave_hw_init(int is_clock_phase_1edge, int is_clock_polarity_high)
 {
 	SPI_HandleTypeDef *hspi = &SpiHandle;
 	
@@ -320,9 +328,9 @@ int spileo_slave_hw_init(int is_clock_phase_1edge, int is_clock_polarity_high)
   hspi->Init.Mode = SPI_MODE_SLAVE;
 	
 	// Please don't use STM32 offical function for receive or transmit
-	// Instead, use spileo_start_receive() and spileo_start_transmit()
-	hspi->RxISR = spileo_rx_isr;
-	hspi->TxISR = spileo_tx_isr;
+	// Instead, use BSP_SPI_start_receive() and BSP_SPI_start_transmit()
+	hspi->RxISR = BSP_SPI_rx_isr;
+	hspi->TxISR = BSP_SPI_tx_isr;
 	
 	if(HAL_SPI_Init(hspi) != HAL_OK)
 	{
@@ -335,9 +343,85 @@ int spileo_slave_hw_init(int is_clock_phase_1edge, int is_clock_polarity_high)
 	// BSP_IntVectSet(BSP_INT_ID_SPI2, HAL_SPI_IRQHandler);
 	// BSP_IntEn(BSP_INT_ID_SPI2);
 
-	spileo_start_receive(hspi, spileo_rx_buffer, SPILEO_BUF_SIZE);
+	BSP_SPI_start_receive(hspi, BSP_SPI_rx_buffer, SPILEO_BUF_SIZE);
 	
-	IhuDebugPrint("spileo_slave_hw_init() done.\n");
+	IhuDebugPrint("BSP_SPI_slave_hw_init() done.\n");
 	return 0;
 }
+
+//ZJL DEFINITION
+//利用串口一致的特性，完成SPI接口的接收
+//这里还没有成帧。完整的设计设计需要成帧，然后通过message_send将消息发送到L2SPILEO模块中
+/*******************************************************************************
+* 函数名  : SPI_SendData
+* 描述    : SPI_IAU发送数据缓冲区数据
+* 输入    : *buff：数据缓冲区指针，len：发送数据长度
+* 输出    : 无
+* 返回    : 无 
+* 说明    : 无
+*******************************************************************************/
+int BSP_STM32_SPI_IAU_SendData(uint8_t* buff, uint16_t len)
+{
+	if (HAL_SPI_Transmit(&BSP_STM32_SPI_IAU, (uint8_t *)buff, len, SPI_TX_MAX_DELAY_DURATION) == HAL_OK)
+		return BSP_SUCCESS;
+	else
+		return BSP_FAILURE;		
+}
+
+int BSP_STM32_SPI_IAU_RcvData(uint8_t* buff, uint16_t len)
+{    
+	if (HAL_SPI_Receive(&BSP_STM32_SPI_IAU, buff, len, SPI_TX_MAX_DELAY_DURATION) == HAL_OK)
+		return BSP_SUCCESS;
+	else
+		return BSP_FAILURE;
+}
+
+/*******************************************************************************
+* 函数名  : SPI_SendData
+* 描述    : SPI_SPARE1发送数据缓冲区数据
+* 输入    : *buff：数据缓冲区指针，len：发送数据长度
+* 输出    : 无
+* 返回    : 无 
+* 说明    : 无
+*******************************************************************************/
+int BSP_STM32_SPI_SPARE1_SendData(uint8_t* buff, uint16_t len)
+{
+	if (HAL_SPI_Transmit(&BSP_STM32_SPI_SPARE1, (uint8_t *)buff, len, SPI_TX_MAX_DELAY_DURATION) == HAL_OK)
+		return BSP_SUCCESS;
+	else
+		return BSP_FAILURE;		
+}
+
+int BSP_STM32_SPI_SPARE1_RcvData(uint8_t* buff, uint16_t len)
+{    
+	if (HAL_SPI_Receive(&BSP_STM32_SPI_SPARE1, buff, len, SPI_TX_MAX_DELAY_DURATION) == HAL_OK)
+		return BSP_SUCCESS;
+	else
+		return BSP_FAILURE;
+}
+
+/**
+  * SPI接口完成回调函数的处理
+  * 为什么需要重新执行HAL_SPI_Receive_IT，待确定
+  */
+void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *SpiHandle)
+{
+  if(SpiHandle==&BSP_STM32_SPI_IAU)
+  {
+		BSP_STM32_SPI_IAU_R_Buff[BSP_STM32_SPI_IAU_R_Count] = zIhuSpiRxBuffer[BSP_STM32_SPI_IAU_ID-1];
+		BSP_STM32_SPI_IAU_R_Count++;
+		if (BSP_STM32_SPI_IAU_R_Count >= BSP_STM32_SPI_IAU_REC_MAXLEN)
+			BSP_STM32_SPI_IAU_R_Count = 0;
+		HAL_SPI_Receive_IT(&BSP_STM32_SPI_IAU, &zIhuSpiRxBuffer[BSP_STM32_SPI_IAU_ID-1], 1);
+  }
+  else if(SpiHandle==&BSP_STM32_SPI_SPARE1)
+  {
+		BSP_STM32_SPI_SPARE1_R_Buff[BSP_STM32_SPI_SPARE1_R_Count] = zIhuSpiRxBuffer[BSP_STM32_SPI_SPARE1_ID-1];
+		BSP_STM32_SPI_SPARE1_R_Count++;
+		if (BSP_STM32_SPI_SPARE1_R_Count >= BSP_STM32_SPI_SPARE1_REC_MAXLEN)
+			BSP_STM32_SPI_SPARE1_R_Count = 0;
+		HAL_SPI_Receive_IT(&BSP_STM32_SPI_SPARE1, &zIhuSpiRxBuffer[BSP_STM32_SPI_SPARE1_ID-1], 1);
+  }
+}
+
 

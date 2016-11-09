@@ -174,7 +174,7 @@ OPSTAT fsm_spileo_dl_ctrl_cmd_req(UINT8 dest_id, UINT8 src_id, void * param_ptr,
 //Local APIs
 OPSTAT func_spileo_hw_init(void)
 {
-	return spileo_slave_hw_init(1, 1);
+	return ihu_l1hd_spi_slave_hw_init(1, 1);
 }
 
 OPSTAT fsm_spileo_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
