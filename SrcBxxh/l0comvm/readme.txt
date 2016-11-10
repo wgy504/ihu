@@ -809,6 +809,8 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = SPI中断会Calback函数导致无限循环，暂时禁止掉。
 = CAN总线由于没有对端，导致初始化超时失败。将Error_Handle函数禁止掉了，满足调试状态需求。未来正式情形下，需要打开，
 从而让WATCH_DOG来处理，从而自动RESET，不然会导致系统不稳定。
+= RTC给4个项目激活。IWDG/WWDG一旦激活，会出现故障，原因待调查清楚。
+
 
 
 

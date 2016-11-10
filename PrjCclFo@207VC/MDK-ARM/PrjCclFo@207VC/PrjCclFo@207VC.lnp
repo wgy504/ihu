@@ -19,6 +19,8 @@
 "prjcclfo@207vc\stm32f2xx_hal_uart.o"
 "prjcclfo@207vc\stm32f2xx_hal_tim.o"
 "prjcclfo@207vc\stm32f2xx_hal_can.o"
+"prjcclfo@207vc\stm32f2xx_hal_rtc_ex.o"
+"prjcclfo@207vc\stm32f2xx_hal_rtc.o"
 "prjcclfo@207vc\croutine.o"
 "prjcclfo@207vc\list.o"
 "prjcclfo@207vc\timers.o"
