@@ -41,30 +41,26 @@ FsmStateItem_t FsmCcl[] =
 //	{MSG_ID_SPI_UL_DATA_PULL_BWD,						FSM_STATE_CCL_ACTIVED,         					fsm_ccl_spi_ul_data_pull_bwd},
 //	{MSG_ID_SPI_UL_CTRL_CMD_RESP,						FSM_STATE_CCL_ACTIVED,         					fsm_ccl_spi_ul_ctrl_cmd_resp},
 	{MSG_ID_DIDO_PERIPH_SENSOR_STATUS_REP,	FSM_STATE_CCL_ACTIVED,         					fsm_ccl_dido_perip_sensor_status_rep},
-	{MSG_ID_SPS_BK_CLOUD_CMD,								FSM_STATE_CCL_ACTIVED,         					fsm_ccl_sps_bk_cloud_cmd_rcv},
 	
+	//FSM_STATE_CCL_CLOUD_INQUERY：等待后台回传指令（可能是正常开门触发的，也可能是关门超时，ACTIVE状态下EVENT定时查询报告，或者FATAL_FAULT触发）
+  {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_CLOUD_INQUERY,         		fsm_ccl_restart},
+	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CCL_CLOUD_INQUERY,         		fsm_ccl_time_out},
+	{MSG_ID_SPS_TO_CCL_CLOUD_FB,						FSM_STATE_CCL_CLOUD_INQUERY,         		fsm_ccl_sps_cloud_fb},	
 	
 	//FSM_STATE_CCL_TO_OPEN_DOOR：等待人工开门，超时则关门回归ACTIVE
   {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_TO_OPEN_DOOR,         		fsm_ccl_restart},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CCL_TO_OPEN_DOOR,         		fsm_ccl_time_out},
 	{MSG_ID_DIDO_PERIPH_SENSOR_STATUS_REP,	FSM_STATE_CCL_TO_OPEN_DOOR,         		fsm_ccl_dido_perip_sensor_status_rep},	
 
-	//FSM_STATE_CCL_DOOR_OPEN：启动定时，强行关门
+	//FSM_STATE_CCL_DOOR_OPEN：启动定时，监控门限和门锁
   {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_DOOR_OPEN,         				fsm_ccl_restart},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CCL_DOOR_OPEN,         				fsm_ccl_time_out},
 	{MSG_ID_DIDO_PERIPH_SENSOR_STATUS_REP,	FSM_STATE_CCL_DOOR_OPEN,         				fsm_ccl_dido_perip_sensor_status_rep},		
-
-	//FSM_STATE_CCL_TO_CLOSE_DOOR：告警关门，发送报告给后台。正常则回归。
-  {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_TO_CLOSE_DOOR,         		fsm_ccl_restart},
-	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CCL_TO_CLOSE_DOOR,         		fsm_ccl_time_out},
-	{MSG_ID_DIDO_PERIPH_SENSOR_STATUS_REP,	FSM_STATE_CCL_TO_CLOSE_DOOR,         		fsm_ccl_dido_perip_sensor_status_rep},
-	{MSG_ID_SPS_BK_CLOUD_CMD,								FSM_STATE_CCL_TO_CLOSE_DOOR,         		fsm_ccl_sps_bk_cloud_cmd_rcv},
 	
 	//FSM_STATE_CCL_FATAL_FAULT：严重错误状态，发送报告给后台，等待人工干预以后回归ACTIVE
   {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_FATAL_FAULT,         			fsm_ccl_restart},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CCL_FATAL_FAULT,         			fsm_ccl_time_out},
 	{MSG_ID_DIDO_PERIPH_SENSOR_STATUS_REP,	FSM_STATE_CCL_FATAL_FAULT,         			fsm_ccl_dido_perip_sensor_status_rep},
-	{MSG_ID_SPS_BK_CLOUD_CMD,								FSM_STATE_CCL_FATAL_FAULT,         			fsm_ccl_sps_bk_cloud_cmd_rcv},
 	
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             							NULL},  //Ending
@@ -256,7 +252,7 @@ OPSTAT fsm_ccl_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 		}
 	}
 
-	//Period time out received
+	//超长定时超时Period time out received
 	if ((rcv.timeId == TIMER_ID_1S_CCL_PERIOD_SCAN) &&(rcv.timeRes == TIMER_RESOLUTION_1S)){
 		//启动硬件扫描定时器
 		ret = ihu_timer_start(TASK_ID_CCL, TIMER_ID_1S_CCL_WORKING_STATUS_SCAN, zIhuSysEngPar.timer.cclWorkingStatusScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
@@ -265,6 +261,7 @@ OPSTAT fsm_ccl_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 			IhuErrorPrint("CCL: Error start timer!\n");
 			return IHU_FAILURE;
 		}
+		func_ccl_time_out_period_event_report();
 	}
 	
 	//周期性工作状态
@@ -307,23 +304,48 @@ OPSTAT fsm_ccl_dido_perip_sensor_status_rep(UINT8 dest_id, UINT8 src_id, void * 
 	state = FsmGetState(TASK_ID_CCL);
 	switch(state)
 	{
+		//回送后台周期报告
 		case 	FSM_STATE_CCL_ACTIVED:
 			break;
+				
+		//等待超时，或者门限开
 		case 	FSM_STATE_CCL_TO_OPEN_DOOR:
+			//门限开，进入DOOR_OPEN状态
+			//超时，则发送关门命令，进入ACTIVE状态
 			break;
+		
+		//等待超时，或者门限关
 		case 	FSM_STATE_CCL_DOOR_OPEN:
+			//门限关，锁关，则进入ACTIVE状态
+			//超时，则进入FATAL_FAULT状态		
 			break;
-		case 	FSM_STATE_CCL_TO_CLOSE_DOOR:
-			break;
+		
+		//出现问题，意味着不正常状态
 		case 	FSM_STATE_CCL_FATAL_FAULT:
+			//声光告警，并送告警给后台
+			//监控门限和门锁，一旦恢复，则送清除告警给后台，并进入ACTIVE状态
 			break;
+		
+		//不用理睬，报错处理，强行回到ACTIVE状态
 		default:
 			break;
+		
+		//注意，需要使用门开最长时间的超时定时器，以及后台反馈定时器，这两个定时器来控制状态
+		//这两个定时器的启动和停止，需要想好逻辑
+		//目前的技术定时器，TIMER_ID_1S_CCL_WORKING_STATUS_SCAN，需要改造		
 	}
 	//返回
 	return IHU_SUCCESS;
 }
 
+//超长时间，触发周期性汇报
+void func_ccl_time_out_period_event_report(void)
+{
+	//发送状态查询请求给DIDO模块
+	//MSG_ID_CCL_TO_DH_SENSOR_SCAN
+
+	//状态机不转移
+}
 
 //工作状态下的短定时扫描，可以当做计数器来使用
 void func_ccl_time_out_working_status_scan(void)
@@ -331,9 +353,28 @@ void func_ccl_time_out_working_status_scan(void)
 
 }
 
-//L2 UART_GPRS工作查询的结果
-OPSTAT fsm_ccl_sps_bk_cloud_cmd_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+//L2 SPS_GPRS工作查询的结果
+OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {	
+	//int ret = 0;
+	msg_struct_spsvirgo_to_ccl_cloud_fb_t rcv;
+	
+	//入参检查
+	//Receive message and copy to local variable
+	memset(&rcv, 0, sizeof(msg_struct_spsvirgo_to_ccl_cloud_fb_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_spsvirgo_to_ccl_cloud_fb_t))){
+		IhuErrorPrint("CCL: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);	
+	
+	//对收到的后台指令反馈结果进行处理
+	
+	//发送开门指令到DIDO模块
+	//MSG_ID_CCL_TO_DIDO_CTRL_CMD
+	
+	//状态转移
 
 	//返回
 	return IHU_SUCCESS;

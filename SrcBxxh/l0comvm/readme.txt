@@ -813,7 +813,8 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 完成CCL状态机框架
 
 //= ZJL/XH, 2016 Nov.10, CURRENT_SW_DELIVERY R03.50 =>CCL项目
-
+= 完成CCL状态机状态的定型
+= 完成CCL函数体的伪代码逻辑
 
 
 

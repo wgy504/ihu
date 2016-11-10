@@ -694,14 +694,14 @@
           <GroupName>L0comvm</GroupName>
           <Files>
             <File>
+              <FileName>commsgccl.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0commsgccl\commsgccl.h</FilePath>
+            </File>
+            <File>
               <FileName>comtype.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l0comvm\comtype.h</FilePath>
-            </File>
-            <File>
-              <FileName>readme.txt</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l0comvm\readme.txt</FilePath>
             </File>
             <File>
               <FileName>sysconfig.h</FileName>
@@ -724,9 +724,9 @@
               <FilePath>..\..\SrcBxxh\l0comvm\sysversion.h</FilePath>
             </File>
             <File>
-              <FileName>commsgccl.h</FileName>
+              <FileName>readme.txt</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l0commsgccl\commsgccl.h</FilePath>
+              <FilePath>..\..\SrcBxxh\l0comvm\readme.txt</FilePath>
             </File>
           </Files>
         </Group>

@@ -85,10 +85,10 @@ enum IHU_INTER_TASK_MSG_ID
 	//DIDO
 	MSG_ID_DIDO_PERIPH_SENSOR_STATUS_REP,
 
-	//UART
+	//SPS
 	MSG_ID_SPS_L2FRAME_SEND,
 	MSG_ID_SPS_L2FRAME_RCV,
-	MSG_ID_SPS_BK_CLOUD_CMD,
+	MSG_ID_SPS_TO_CCL_CLOUD_FB,
 	
 	//SPI
 	MSG_ID_SPI_L2FRAME_SEND,
@@ -107,7 +107,9 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_CAN_L2FRAME_RCV,
 
 	//CCL
-
+	MSG_ID_CCL_TO_BH_GPRS_CTRL_CMD,  	//Back hawl
+	MSG_ID_CCL_TO_DH_SENSOR_SCAN,   	//Device Handler
+	MSG_ID_CCL_TO_DIDO_CTRL_CMD,   		//Device Handler	
 
 	//END FLAG
 	MSG_ID_COM_MAX, //Ending point
@@ -168,7 +170,7 @@ typedef struct msg_struct_didocap_periph_sensor_status_rep
 	UINT8 length;
 }msg_struct_didocap_periph_sensor_status_rep_t;
 
-//UART消息定义
+//SPS消息定义
 typedef struct msg_struct_spsvirgo_l2frame_send
 {
 	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-1];
@@ -179,12 +181,11 @@ typedef struct msg_struct_spsvirgo_l2frame_rcv
 	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-1];
 	UINT8 length;
 }msg_struct_spsvirgo_l2frame_rcv_t;
-typedef struct msg_struct_spsvirgo_bk_cloud_cmd
+typedef struct msg_struct_spsvirgo_to_ccl_cloud_fb
 {
 	UINT8 cmdid;
 	UINT8 length;
-}msg_struct_spsvirgo_bk_cloud_cmd_t;
-
+}msg_struct_spsvirgo_to_ccl_cloud_fb_t;
 //SPI消息定义
 typedef struct msg_struct_spileo_l2frame_send
 {
@@ -222,6 +223,23 @@ typedef struct msg_struct_canvela_l2frame_rcv
 }msg_struct_canvela_l2frame_rcv_t;
 
 //CCL
+#define IHU_CCL_BH_CTRL_CMD_BUF_LEN 20
+typedef struct msg_struct_ccl_to_bh_gprs_ctrl_cmd
+{
+	UINT8 cmdid;
+	UINT8 dataBuf[IHU_CCL_BH_CTRL_CMD_BUF_LEN];
+	UINT8 length;
+}msg_struct_ccl_to_bh_gprs_ctrl_cmd_t;
+typedef struct msg_struct_ccl_to_dh_sensor_scan
+{
+	UINT8 cmdid;
+	UINT8 length;
+}msg_struct_ccl_to_dh_sensor_scan_t;
+typedef struct msg_struct_ccl_to_dido_ctrl_cmd
+{
+	UINT8 cmdid;
+	UINT8 length;
+}msg_struct_ccl_to_dido_ctrl_cmd_t;
 
 
 #endif /* L0COMVM_COMMSGCCL_H_ */

@@ -36,6 +36,8 @@ FsmStateItem_t FsmDidocap[] =
   {MSG_ID_COM_RESTART,        						FSM_STATE_DIDOCAP_ACTIVED,         					fsm_didocap_restart},
   {MSG_ID_COM_STOP,												FSM_STATE_DIDOCAP_ACTIVED,         					fsm_didocap_stop_rcv},
   {MSG_ID_COM_TIME_OUT,										FSM_STATE_DIDOCAP_ACTIVED,         					fsm_didocap_time_out},
+  {MSG_ID_CCL_TO_DH_SENSOR_SCAN,					FSM_STATE_DIDOCAP_ACTIVED,         					fsm_didocap_ccl_dh_sensor_scan},
+  {MSG_ID_CCL_TO_DIDO_CTRL_CMD,						FSM_STATE_DIDOCAP_ACTIVED,         					fsm_didocap_ccl_ctrl_cmd},
 	
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             									NULL},  //Ending
@@ -195,6 +197,52 @@ OPSTAT fsm_didocap_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 
 void func_didocap_time_out_period_scan(void)
 {
+	//定时将扫描结果发给上层
+	//MSG_ID_DIDO_PERIPH_SENSOR_STATUS_REP
+	
 	IhuDebugPrint("DIDOCAP: Time Out Test!\n");
 }
+
+OPSTAT fsm_didocap_ccl_dh_sensor_scan(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{
+	//int ret;
+	msg_struct_ccl_to_dh_sensor_scan_t rcv;
+	
+	//Receive message and copy to local variable
+	memset(&rcv, 0, sizeof(msg_struct_ccl_to_dh_sensor_scan_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_to_dh_sensor_scan_t))){
+		IhuErrorPrint("DIDOCAP: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+
+	//具体扫描处理
+	
+	//扫描后将结果发给上层
+	//MSG_ID_DIDO_PERIPH_SENSOR_STATUS_REP
+	
+	return IHU_SUCCESS;
+}
+
+OPSTAT fsm_didocap_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{
+	//int ret;
+	msg_struct_ccl_to_dido_ctrl_cmd_t rcv;
+	
+	//Receive message and copy to local variable
+	memset(&rcv, 0, sizeof(msg_struct_ccl_to_dido_ctrl_cmd_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_to_dido_ctrl_cmd_t))){
+		IhuErrorPrint("DIDOCAP: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+
+	//操作门锁
+
+	
+	return IHU_SUCCESS;
+}
+
 
