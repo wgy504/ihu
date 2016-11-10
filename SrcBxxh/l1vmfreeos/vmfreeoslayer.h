@@ -97,7 +97,7 @@ enum IHU_TASK_NAME_ID
 	TASK_ID_I2CARIES,
 	TASK_ID_PWMTAURUS,
 	TASK_ID_SPSVIRGO,
-	TASK_ID_GPIOCANCER,
+	TASK_ID_CANVELA,
 	TASK_ID_DIDOCAP,
 	TASK_ID_LEDPISCES,
 	TASK_ID_ETHORION,	
@@ -116,7 +116,7 @@ enum IHU_TASK_NAME_ID
 	TASK_ID_I2CARIES,
 	TASK_ID_PWMTAURUS,
 	TASK_ID_SPSVIRGO,
-	TASK_ID_GPIOCANCER,
+	TASK_ID_CANVELA,
 	TASK_ID_DIDOCAP,
 	TASK_ID_LEDPISCES,
 	TASK_ID_ETHORION,	
@@ -135,7 +135,7 @@ enum IHU_TASK_NAME_ID
 	TASK_ID_I2CARIES,
 	TASK_ID_PWMTAURUS,
 	TASK_ID_SPSVIRGO,
-	TASK_ID_GPIOCANCER,
+	TASK_ID_CANVELA,
 	TASK_ID_DIDOCAP,
 	TASK_ID_LEDPISCES,
 	TASK_ID_ETHORION,	
@@ -157,7 +157,7 @@ enum IHU_TASK_NAME_ID
 //	TASK_QUE_ID_I2CARIES,
 //	TASK_QUE_ID_PWMTAURUS,
 //	TASK_QUE_ID_SPSVIRGO,
-//	TASK_QUE_ID_GPIOCANCER,
+//	TASK_QUE_ID_CANVELA,
 //	TASK_QUE_ID_DIDOCAP,
 //	TASK_QUE_ID_LEDPISCES,
 //	TASK_QUE_ID_ETHORION,
@@ -341,7 +341,7 @@ extern FsmStateItem_t FsmTimer[];                           //状态机
 //extern FsmStateItem_t FsmI2caries[];                        //状态机
 //extern FsmStateItem_t FsmPwmtaurus[];                       //状态机
 //extern FsmStateItem_t FsmSpsvirgo[];                        //状态机
-//extern FsmStateItem_t FsmGpiocancer[];                      //状态机
+//extern FsmStateItem_t FsmCanvela[];                      //状态机
 //extern FsmStateItem_t FsmDidocap[];                         //状态机
 //extern FsmStateItem_t FsmLedpisces[];                       //状态机
 //extern FsmStateItem_t FsmEthorion[];                        //状态机
@@ -353,7 +353,7 @@ extern FsmStateItem_t FsmSpileo[];                          //状态机
 extern FsmStateItem_t FsmI2caries[];                        //状态机
 extern FsmStateItem_t FsmPwmtaurus[];                       //状态机
 extern FsmStateItem_t FsmSpsvirgo[];                        //状态机
-extern FsmStateItem_t FsmGpiocancer[];                      //状态机
+extern FsmStateItem_t FsmCanvela[];                      //状态机
 extern FsmStateItem_t FsmDidocap[];                         //状态机
 extern FsmStateItem_t FsmLedpisces[];                       //状态机
 extern FsmStateItem_t FsmEthorion[];                        //状态机
@@ -365,7 +365,7 @@ extern FsmStateItem_t FsmSpileo[];                          //状态机
 extern FsmStateItem_t FsmI2caries[];                        //状态机
 extern FsmStateItem_t FsmPwmtaurus[];                       //状态机
 extern FsmStateItem_t FsmSpsvirgo[];                        //状态机
-extern FsmStateItem_t FsmGpiocancer[];                      //状态机
+extern FsmStateItem_t FsmCanvela[];                      //状态机
 extern FsmStateItem_t FsmDidocap[];                         //状态机
 extern FsmStateItem_t FsmLedpisces[];                       //状态机
 extern FsmStateItem_t FsmEthorion[];                        //状态机

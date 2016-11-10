@@ -21,8 +21,6 @@
 
   <project>
     <PathAndName>.\PrjCclFo@205RG\MDK-ARM\PrjCclFo@205RG.uvprojx</PathAndName>
-    <NodeIsActive>1</NodeIsActive>
-    <NodeIsExpanded>1</NodeIsExpanded>
   </project>
 
   <project>
@@ -35,6 +33,8 @@
 
   <project>
     <PathAndName>.\PrjBfscFo@207VC\MDK-ARM\PrjBfscFo@207VC.uvprojx</PathAndName>
+    <NodeIsActive>1</NodeIsActive>
+    <NodeIsExpanded>1</NodeIsExpanded>
   </project>
 
 </ProjectWorkspace>

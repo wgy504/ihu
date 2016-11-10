@@ -50,12 +50,12 @@
 "prjcclfo@205rg\l2adclibra.o"
 "prjcclfo@205rg\l2didocap.o"
 "prjcclfo@205rg\l2ethorion.o"
-"prjcclfo@205rg\l2gpiocancer.o"
 "prjcclfo@205rg\l2i2caries.o"
 "prjcclfo@205rg\l2ledpisces.o"
 "prjcclfo@205rg\l2pwmtaurus.o"
 "prjcclfo@205rg\l2spileo.o"
 "prjcclfo@205rg\l2spsvirgo.o"
+"prjcclfo@205rg\l2canvela.o"
 "prjcclfo@205rg\l3ccl.o"
 --library_type=microlib --strict --scatter "PrjCclFo@205RG\PrjCclFo@205RG.sct"
 --diag_suppress=L6329 --summary_stderr --info summarysizes --map --xref --callgraph --symbols

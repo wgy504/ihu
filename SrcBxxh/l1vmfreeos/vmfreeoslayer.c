@@ -65,7 +65,7 @@ OS_MUTEX zIhuPrintMutex;
   //	"I2CARIES",
   //	"PWMTAURUS",
   //	"SPSVIRGO",
-  //	"GPIOCANCER",
+  //	"CANVELA",
   //	"DIDOCAP",
   //	"LEDPISCES",
   //	"ETHORION",
@@ -81,7 +81,7 @@ OS_MUTEX zIhuPrintMutex;
 		"I2CARIES",
 		"PWMTAURUS",
 		"SPSVIRGO",
-		"GPIOCANCER",
+		"CANVELA",
 		"DIDOCAP",
 		"LEDPISCES",
 		"ETHORION",
@@ -97,7 +97,7 @@ OS_MUTEX zIhuPrintMutex;
 		"I2CARIES",
 		"PWMTAURUS",
 		"SPSVIRGO",
-		"GPIOCANCER",
+		"CANVELA",
 		"DIDOCAP",
 		"LEDPISCES",
 		"ETHORION",
@@ -419,7 +419,7 @@ void ihu_vm_system_init(void)
 //	if (IHU_COMM_FRONT_I2C == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_I2CARIES].pnpState = IHU_TASK_PNP_ON;
 //	if (IHU_COMM_FRONT_PWM == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_PWMTAURUS].pnpState = IHU_TASK_PNP_ON;
 //	if (IHU_COMM_FRONT_SPS == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_SPSVIRGO].pnpState = IHU_TASK_PNP_ON;
-//	if (IHU_COMM_FRONT_GPIO == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_GPIOCANCER].pnpState = IHU_TASK_PNP_ON;
+//	if (IHU_COMM_FRONT_GPIO == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_CANVELA].pnpState = IHU_TASK_PNP_ON;
 //	if (IHU_COMM_FRONT_DIDO == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_DIDOCAP].pnpState = IHU_TASK_PNP_ON;
 //	if (IHU_COMM_FRONT_LED == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_LEDPISCES].pnpState = IHU_TASK_PNP_ON;
 //	if (IHU_COMM_FRONT_ETH == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_ETHORION].pnpState = IHU_TASK_PNP_ON;
@@ -447,7 +447,7 @@ void ihu_vm_system_init(void)
 	zIhuSysEngPar.timer.adclibraPeriodScanTimer = IHU_ADCLIBRA_TIMER_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.didocapPeriodScanTimer = IHU_DIDOCAP_TIMER_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.ethorionPeriodScanTimer = IHU_ETHORION_TIMER_DURATION_PERIOD_SCAN;
-	zIhuSysEngPar.timer.gpiocancerPeriodScanTimer = IHU_GPIOCANCER_TIMER_DURATION_PERIOD_SCAN;
+	zIhuSysEngPar.timer.canvelaPeriodScanTimer = IHU_CANVELA_TIMER_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.i2cariesPeriodScanTimer = IHU_I2CARIERS_TIMER_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.ledpiscesPeriodScanTimer = IHU_LEDPISCES_TIMER_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.pwmtaurusPeriodScanTimer = IHU_PWMTAURUS_TIMER_DURATION_PERIOD_SCAN;
@@ -505,7 +505,7 @@ void ihu_vm_system_init(void)
 	if (IHU_COMM_FRONT_I2C == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_I2CARIES].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_COMM_FRONT_PWM == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_PWMTAURUS].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_COMM_FRONT_SPS == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_SPSVIRGO].pnpState = IHU_TASK_PNP_ON;
-	if (IHU_COMM_FRONT_GPIO == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_GPIOCANCER].pnpState = IHU_TASK_PNP_ON;
+	if (IHU_COMM_FRONT_GPIO == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_CANVELA].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_COMM_FRONT_DIDO == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_DIDOCAP].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_COMM_FRONT_LED == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_LEDPISCES].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_COMM_FRONT_ETH == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_ETHORION].pnpState = IHU_TASK_PNP_ON;
@@ -532,7 +532,7 @@ void ihu_vm_system_init(void)
 	zIhuSysEngPar.timer.adclibraPeriodScanTimer = IHU_ADCLIBRA_TIMER_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.didocapPeriodScanTimer = IHU_DIDOCAP_TIMER_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.ethorionPeriodScanTimer = IHU_ETHORION_TIMER_DURATION_PERIOD_SCAN;
-	zIhuSysEngPar.timer.gpiocancerPeriodScanTimer = IHU_GPIOCANCER_TIMER_DURATION_PERIOD_SCAN;
+	zIhuSysEngPar.timer.canvelaPeriodScanTimer = IHU_CANVELA_TIMER_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.i2cariesPeriodScanTimer = IHU_I2CARIERS_TIMER_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.ledpiscesPeriodScanTimer = IHU_LEDPISCES_TIMER_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.pwmtaurusPeriodScanTimer = IHU_PWMTAURUS_TIMER_DURATION_PERIOD_SCAN;
@@ -590,7 +590,7 @@ void ihu_vm_system_init(void)
 	if (IHU_COMM_FRONT_I2C == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_I2CARIES].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_COMM_FRONT_PWM == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_PWMTAURUS].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_COMM_FRONT_SPS == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_SPSVIRGO].pnpState = IHU_TASK_PNP_ON;
-	if (IHU_COMM_FRONT_GPIO == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_GPIOCANCER].pnpState = IHU_TASK_PNP_ON;
+	if (IHU_COMM_FRONT_GPIO == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_CANVELA].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_COMM_FRONT_DIDO == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_DIDOCAP].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_COMM_FRONT_LED == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_LEDPISCES].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_COMM_FRONT_ETH == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_ETHORION].pnpState = IHU_TASK_PNP_ON;
@@ -1678,9 +1678,9 @@ void ihu_task_create_all(void)
 //	if (zIhuTaskInfo[TASK_ID_SPSVIRGO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_SPSVIRGO, FsmSpsvirgo);
 //	ihu_vm_send_init_msg_to_app_task(TASK_ID_SPSVIRGO);
 //
-//	//Create task GPIOCANCER environments /8
-//	if (zIhuTaskInfo[TASK_ID_GPIOCANCER].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_GPIOCANCER, FsmGpiocancer);
-//	ihu_vm_send_init_msg_to_app_task(TASK_ID_GPIOCANCER);
+//	//Create task CANVELA environments /8
+//	if (zIhuTaskInfo[TASK_ID_CANVELA].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_CANVELA, FsmCanvela);
+//	ihu_vm_send_init_msg_to_app_task(TASK_ID_CANVELA);
 //
 //	//Create task DIDOCAP environments /9
 //	if (zIhuTaskInfo[TASK_ID_DIDOCAP].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_DIDOCAP, FsmDidocap);
@@ -1728,9 +1728,9 @@ void ihu_task_create_all(void)
 	if (zIhuTaskInfo[TASK_ID_SPSVIRGO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_SPSVIRGO, FsmSpsvirgo);
 	ihu_vm_send_init_msg_to_app_task(TASK_ID_SPSVIRGO);
 
-	//Create task GPIOCANCER environments /8
-	if (zIhuTaskInfo[TASK_ID_GPIOCANCER].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_GPIOCANCER, FsmGpiocancer);
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_GPIOCANCER);
+	//Create task CANVELA environments /8
+	if (zIhuTaskInfo[TASK_ID_CANVELA].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_CANVELA, FsmCanvela);
+	ihu_vm_send_init_msg_to_app_task(TASK_ID_CANVELA);
 
 	//Create task DIDOCAP environments /9
 	if (zIhuTaskInfo[TASK_ID_DIDOCAP].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_DIDOCAP, FsmDidocap);
@@ -1778,9 +1778,9 @@ void ihu_task_create_all(void)
 	if (zIhuTaskInfo[TASK_ID_SPSVIRGO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_SPSVIRGO, FsmSpsvirgo);
 	ihu_vm_send_init_msg_to_app_task(TASK_ID_SPSVIRGO);
 
-	//Create task GPIOCANCER environments /8
-	if (zIhuTaskInfo[TASK_ID_GPIOCANCER].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_GPIOCANCER, FsmGpiocancer);
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_GPIOCANCER);
+	//Create task CANVELA environments /8
+	if (zIhuTaskInfo[TASK_ID_CANVELA].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_CANVELA, FsmCanvela);
+	ihu_vm_send_init_msg_to_app_task(TASK_ID_CANVELA);
 
 	//Create task DIDOCAP environments /9
 	if (zIhuTaskInfo[TASK_ID_DIDOCAP].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_DIDOCAP, FsmDidocap);

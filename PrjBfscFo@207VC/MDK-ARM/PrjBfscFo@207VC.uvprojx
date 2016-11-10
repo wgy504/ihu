@@ -332,7 +332,7 @@
               <MiscControls>--C99</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F207xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;../Drivers/STM32F2xx_HAL_Driver/Inc;../Drivers/STM32F2xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;../Drivers/CMSIS/Device/ST/STM32F2xx/Include;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Drivers/CMSIS/Include;..\..\SrcBxxh\l0bsp_stm32;..\..\SrcBxxh\l0commsgbfsc;..\..\SrcBxxh\l0comvm;..\..\SrcBxxh\l1vmfreeos;..\..\SrcBxxh\l2framefreeos;..\..\SrcBxxh\l3applbfsc</IncludePath>
+              <IncludePath>../Inc; ../Drivers/STM32F2xx_HAL_Driver/Inc; ../Drivers/STM32F2xx_HAL_Driver/Inc/Legacy; ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3; ../Drivers/CMSIS/Device/ST/STM32F2xx/Include; ../Middlewares/Third_Party/FreeRTOS/Source/include; ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS; ../Drivers/CMSIS/Include; ..\..\SrcBxxh\l0bsp_stm32; ..\..\SrcBxxh\l0commsgbfsc; ..\..\SrcBxxh\l0comvm; ..\..\SrcBxxh\l1vmfreeos; ..\..\SrcBxxh\l2framefreeos; ..\..\SrcBxxh\l3applbfsc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -535,6 +535,11 @@
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_uart.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f2xx_hal_can.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_can.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -642,6 +647,16 @@
               <FileName>bsp_usart.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_usart.h</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_i2c.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_i2c.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -759,16 +774,6 @@
               <FilePath>..\..\SrcBxxh\l2framefreeos\l2ethorion.h</FilePath>
             </File>
             <File>
-              <FileName>l2gpiocancer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l2framefreeos\l2gpiocancer.c</FilePath>
-            </File>
-            <File>
-              <FileName>l2gpiocancer.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l2framefreeos\l2gpiocancer.h</FilePath>
-            </File>
-            <File>
               <FileName>l2i2caries.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\SrcBxxh\l2framefreeos\l2i2caries.c</FilePath>
@@ -817,6 +822,16 @@
               <FileName>l2spsvirgo.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l2framefreeos\l2spsvirgo.h</FilePath>
+            </File>
+            <File>
+              <FileName>l2canvela.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l2framefreeos\l2canvela.c</FilePath>
+            </File>
+            <File>
+              <FileName>l2canvela.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l2framefreeos\l2canvela.h</FilePath>
             </File>
           </Files>
         </Group>

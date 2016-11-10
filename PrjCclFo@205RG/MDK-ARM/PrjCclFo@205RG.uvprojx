@@ -794,16 +794,6 @@
               <FilePath>..\..\SrcBxxh\l2framefreeos\l2ethorion.h</FilePath>
             </File>
             <File>
-              <FileName>l2gpiocancer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l2framefreeos\l2gpiocancer.c</FilePath>
-            </File>
-            <File>
-              <FileName>l2gpiocancer.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l2framefreeos\l2gpiocancer.h</FilePath>
-            </File>
-            <File>
               <FileName>l2i2caries.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\SrcBxxh\l2framefreeos\l2i2caries.c</FilePath>
@@ -852,6 +842,16 @@
               <FileName>l2spsvirgo.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l2framefreeos\l2spsvirgo.h</FilePath>
+            </File>
+            <File>
+              <FileName>l2canvela.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l2framefreeos\l2canvela.c</FilePath>
+            </File>
+            <File>
+              <FileName>l2canvela.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l2framefreeos\l2canvela.h</FilePath>
             </File>
           </Files>
         </Group>
