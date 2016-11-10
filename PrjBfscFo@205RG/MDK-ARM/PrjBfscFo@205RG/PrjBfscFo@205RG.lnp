@@ -42,6 +42,8 @@
 "prjbfscfo@205rg\bsp_tim.o"
 "prjbfscfo@205rg\bsp_usart.o"
 "prjbfscfo@205rg\bsp_i2c.o"
+"prjbfscfo@205rg\bsp_dido.o"
+"prjbfscfo@205rg\bsp_can.o"
 "prjbfscfo@205rg\l1timer_freeos.o"
 "prjbfscfo@205rg\mod_hal_gprs.o"
 "prjbfscfo@205rg\vmfreeoslayer.o"

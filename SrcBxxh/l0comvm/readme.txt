@@ -805,8 +805,10 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = CCL状态机也有待完善
 
 //= ZJL/XH, 2016 Nov.10, CURRENT_SW_DELIVERY R03.49 =>CCL项目
-
-
+= I2C、DIDO、CAN接口完成了垃圾集成。未来需要进一步优化。CAN的帧编解码，未来需要进一步修正。
+= SPI中断会Calback函数导致无限循环，暂时禁止掉。
+= CAN总线由于没有对端，导致初始化超时失败。将Error_Handle函数禁止掉了，满足调试状态需求。未来正式情形下，需要打开，
+从而让WATCH_DOG来处理，从而自动RESET，不然会导致系统不稳定。
 
 
 
@@ -834,6 +836,8 @@ CCL项目未来任务目标
 = FreeRTOS/ucosiii/TICK级的休眠省电
 = 打印任务的搞法，以便打开SLICING时间轮片机制功能
 = 时间戳是软件版本编译的固定日期时间，需要改进
+= 软件下载
+= FLASH磁盘功能
 
 
 

@@ -184,16 +184,16 @@ typedef struct msg_struct_i2caries_l2frame_rcv
 }msg_struct_i2caries_l2frame_rcv_t;
 
 //CAN消息定义
-typedef struct msg_struct_cancancer_l2frame_send
+typedef struct msg_struct_canvela_l2frame_send
 {
 	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-1];
 	UINT8 length;
-}msg_struct_cancancer_l2frame_send_t;
-typedef struct msg_struct_cancancer_l2frame_rcv
+}msg_struct_canvela_l2frame_send_t;
+typedef struct msg_struct_canvela_l2frame_rcv
 {
 	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-1];
 	UINT8 length;
-}msg_struct_cancancer_l2frame_rcv_t;
+}msg_struct_canvela_l2frame_rcv_t;
 
 
 

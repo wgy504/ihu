@@ -19,6 +19,7 @@
 #include "bsp_usart.h"
 #include "FreeRTOS.h"
 #include "cmsis_os.h"
+#include "bsp_dido.h"
 
 //全局使用的常亮定义
 #define IHU_BLE_UART_REPEAT_CNT 3

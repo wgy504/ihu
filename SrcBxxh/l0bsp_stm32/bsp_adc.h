@@ -39,4 +39,3 @@ void XIN_GPIO_Init(void);
 
 #endif /* __ADC_H__ */
 
-/******************* (C) COPYRIGHT 2015-2020 硬石嵌入式开发团队 *****END OF FILE****/

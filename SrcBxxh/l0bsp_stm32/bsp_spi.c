@@ -418,82 +418,82 @@ int BSP_STM32_SPI_SPARE1_RcvData(uint8_t* buff, uint16_t len)
   * SPI接口完成回调函数的处理
   * 为什么需要重新执行HAL_SPI_Receive_IT，待确定
   */
-void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *SpiHandle)
-{
-	uint8_t res = 0;
-	msg_struct_spileo_l2frame_rcv_t snd;
-	
-  if(SpiHandle==&BSP_STM32_SPI_IAU)
-  {
-		res = zIhuSpiRxBuffer[BSP_STM32_SPI_IAU_ID-1];
-		BSP_STM32_SPI_IAU_R_Buff[BSP_STM32_SPI_IAU_R_Count++] = res;
-		if (BSP_STM32_SPI_IAU_R_Count >= BSP_STM32_SPI_IAU_REC_MAXLEN)
-			BSP_STM32_SPI_IAU_R_Count = 0;
-		
-		//为了IDLE状态下提高效率，直接分解为IDLE和ELSE
-		if (BSP_STM32_SPI_IAU_R_State == IHU_HUISTD_RX_STATE_IDLE)
-		{
-			//只有满足这么苛刻的条件，才算找到了帧头
-			if ((res == IHU_HUISTD_FRAME_START_CHAR) && (BSP_STM32_SPI_IAU_R_Count == 1))
-			BSP_STM32_SPI_IAU_R_State = IHU_HUISTD_RX_STATE_START;
-		}
-		else
-		{
-			//收到CHECKSUM
-			if((BSP_STM32_SPI_IAU_R_State == IHU_HUISTD_RX_STATE_START) && (BSP_STM32_SPI_IAU_R_Count == 2))
-			{
-				BSP_STM32_SPI_IAU_R_State = IHU_HUISTD_RX_STATE_HEADER_CKSM;
-			}
-			//收到长度高位
-			else if((BSP_STM32_SPI_IAU_R_State == IHU_HUISTD_RX_STATE_HEADER_CKSM) && (BSP_STM32_SPI_IAU_R_Count == 3))
-			{
-				BSP_STM32_SPI_IAU_R_State = IHU_HUISTD_RX_STATE_HEADER_LEN;
-			}
-			//收到长度低位
-			else if((BSP_STM32_SPI_IAU_R_State == IHU_HUISTD_RX_STATE_HEADER_LEN) && (BSP_STM32_SPI_IAU_R_Count == 4))
-			{
-				BSP_STM32_SPI_IAU_R_Len = ((BSP_STM32_SPI_IAU_R_Buff[2] <<8) + BSP_STM32_SPI_IAU_R_Buff[3]);
-				//CHECKSUM及判定
-				if ((BSP_STM32_SPI_IAU_R_Buff[1] == (BSP_STM32_SPI_IAU_R_Buff[0] ^ BSP_STM32_SPI_IAU_R_Buff[2]^BSP_STM32_SPI_IAU_R_Buff[3])) &&\
-					(BSP_STM32_SPI_IAU_R_Len < BSP_STM32_SPI_IAU_REC_MAXLEN-4))
-				BSP_STM32_SPI_IAU_R_State = IHU_HUISTD_RX_STATE_BODY;
-			}
-			//收到BODY位
-			else if((BSP_STM32_SPI_IAU_R_State == IHU_HUISTD_RX_STATE_BODY) && (BSP_STM32_SPI_IAU_R_Len > 1))
-			{
-				BSP_STM32_SPI_IAU_R_Len--;
-			}
-			//收到BODY最后一位
-			else if((BSP_STM32_SPI_IAU_R_State == IHU_HUISTD_RX_STATE_BODY) && (BSP_STM32_SPI_IAU_R_Len == 1))
-			{
-				BSP_STM32_SPI_IAU_R_State = IHU_HUISTD_RX_STATE_IDLE;
-				BSP_STM32_SPI_IAU_R_Len = 0;
-				BSP_STM32_SPI_IAU_R_Count = 0;
-				//发送数据到上层SPILEO模块
-				memset(&snd, 0, sizeof(msg_struct_spileo_l2frame_rcv_t));
-				memcpy(snd.data, &BSP_STM32_SPI_IAU_R_Buff[4], ((BSP_STM32_SPI_IAU_R_Buff[2]<<8)+BSP_STM32_SPI_IAU_R_Buff[3]));
-				snd.length = sizeof(msg_struct_spileo_l2frame_rcv_t);
-				ihu_message_send(MSG_ID_SPI_L2FRAME_RCV, TASK_ID_SPILEO, TASK_ID_VMFO, &snd, snd.length);		
-			}
-			//差错情况
-			else{
-				BSP_STM32_SPI_IAU_R_State = IHU_HUISTD_RX_STATE_IDLE;
-				BSP_STM32_SPI_IAU_R_Len = 0;
-				BSP_STM32_SPI_IAU_R_Count = 0;
-			}
-		}
-		//重新设置中断		
-		HAL_SPI_Receive_IT(&BSP_STM32_SPI_IAU, &zIhuSpiRxBuffer[BSP_STM32_SPI_IAU_ID-1], 1);
-  }
-  else if(SpiHandle==&BSP_STM32_SPI_SPARE1)
-  {
-		BSP_STM32_SPI_SPARE1_R_Buff[BSP_STM32_SPI_SPARE1_R_Count] = zIhuSpiRxBuffer[BSP_STM32_SPI_SPARE1_ID-1];
-		BSP_STM32_SPI_SPARE1_R_Count++;
-		if (BSP_STM32_SPI_SPARE1_R_Count >= BSP_STM32_SPI_SPARE1_REC_MAXLEN)
-			BSP_STM32_SPI_SPARE1_R_Count = 0;
-		HAL_SPI_Receive_IT(&BSP_STM32_SPI_SPARE1, &zIhuSpiRxBuffer[BSP_STM32_SPI_SPARE1_ID-1], 1);
-  }
-}
+//void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *SpiHandle)
+//{
+//	uint8_t res = 0;
+//	msg_struct_spileo_l2frame_rcv_t snd;
+//	
+//  if(SpiHandle==&BSP_STM32_SPI_IAU)
+//  {
+//		res = zIhuSpiRxBuffer[BSP_STM32_SPI_IAU_ID-1];
+//		BSP_STM32_SPI_IAU_R_Buff[BSP_STM32_SPI_IAU_R_Count++] = res;
+//		if (BSP_STM32_SPI_IAU_R_Count >= BSP_STM32_SPI_IAU_REC_MAXLEN)
+//			BSP_STM32_SPI_IAU_R_Count = 0;
+//		
+//		//为了IDLE状态下提高效率，直接分解为IDLE和ELSE
+//		if (BSP_STM32_SPI_IAU_R_State == IHU_HUISTD_RX_STATE_IDLE)
+//		{
+//			//只有满足这么苛刻的条件，才算找到了帧头
+//			if ((res == IHU_HUISTD_FRAME_START_CHAR) && (BSP_STM32_SPI_IAU_R_Count == 1))
+//			BSP_STM32_SPI_IAU_R_State = IHU_HUISTD_RX_STATE_START;
+//		}
+//		else
+//		{
+//			//收到CHECKSUM
+//			if((BSP_STM32_SPI_IAU_R_State == IHU_HUISTD_RX_STATE_START) && (BSP_STM32_SPI_IAU_R_Count == 2))
+//			{
+//				BSP_STM32_SPI_IAU_R_State = IHU_HUISTD_RX_STATE_HEADER_CKSM;
+//			}
+//			//收到长度高位
+//			else if((BSP_STM32_SPI_IAU_R_State == IHU_HUISTD_RX_STATE_HEADER_CKSM) && (BSP_STM32_SPI_IAU_R_Count == 3))
+//			{
+//				BSP_STM32_SPI_IAU_R_State = IHU_HUISTD_RX_STATE_HEADER_LEN;
+//			}
+//			//收到长度低位
+//			else if((BSP_STM32_SPI_IAU_R_State == IHU_HUISTD_RX_STATE_HEADER_LEN) && (BSP_STM32_SPI_IAU_R_Count == 4))
+//			{
+//				BSP_STM32_SPI_IAU_R_Len = ((BSP_STM32_SPI_IAU_R_Buff[2] <<8) + BSP_STM32_SPI_IAU_R_Buff[3]);
+//				//CHECKSUM及判定
+//				if ((BSP_STM32_SPI_IAU_R_Buff[1] == (BSP_STM32_SPI_IAU_R_Buff[0] ^ BSP_STM32_SPI_IAU_R_Buff[2]^BSP_STM32_SPI_IAU_R_Buff[3])) &&\
+//					(BSP_STM32_SPI_IAU_R_Len < BSP_STM32_SPI_IAU_REC_MAXLEN-4))
+//				BSP_STM32_SPI_IAU_R_State = IHU_HUISTD_RX_STATE_BODY;
+//			}
+//			//收到BODY位
+//			else if((BSP_STM32_SPI_IAU_R_State == IHU_HUISTD_RX_STATE_BODY) && (BSP_STM32_SPI_IAU_R_Len > 1))
+//			{
+//				BSP_STM32_SPI_IAU_R_Len--;
+//			}
+//			//收到BODY最后一位
+//			else if((BSP_STM32_SPI_IAU_R_State == IHU_HUISTD_RX_STATE_BODY) && (BSP_STM32_SPI_IAU_R_Len == 1))
+//			{
+//				BSP_STM32_SPI_IAU_R_State = IHU_HUISTD_RX_STATE_IDLE;
+//				BSP_STM32_SPI_IAU_R_Len = 0;
+//				BSP_STM32_SPI_IAU_R_Count = 0;
+//				//发送数据到上层SPILEO模块
+//				memset(&snd, 0, sizeof(msg_struct_spileo_l2frame_rcv_t));
+//				memcpy(snd.data, &BSP_STM32_SPI_IAU_R_Buff[4], ((BSP_STM32_SPI_IAU_R_Buff[2]<<8)+BSP_STM32_SPI_IAU_R_Buff[3]));
+//				snd.length = sizeof(msg_struct_spileo_l2frame_rcv_t);
+//				ihu_message_send(MSG_ID_SPI_L2FRAME_RCV, TASK_ID_SPILEO, TASK_ID_VMFO, &snd, snd.length);		
+//			}
+//			//差错情况
+//			else{
+//				BSP_STM32_SPI_IAU_R_State = IHU_HUISTD_RX_STATE_IDLE;
+//				BSP_STM32_SPI_IAU_R_Len = 0;
+//				BSP_STM32_SPI_IAU_R_Count = 0;
+//			}
+//		}
+//		//重新设置中断		
+//		HAL_SPI_Receive_IT(&BSP_STM32_SPI_IAU, &zIhuSpiRxBuffer[BSP_STM32_SPI_IAU_ID-1], 1);
+//  }
+//  else if(SpiHandle==&BSP_STM32_SPI_SPARE1)
+//  {
+//		BSP_STM32_SPI_SPARE1_R_Buff[BSP_STM32_SPI_SPARE1_R_Count] = zIhuSpiRxBuffer[BSP_STM32_SPI_SPARE1_ID-1];
+//		BSP_STM32_SPI_SPARE1_R_Count++;
+//		if (BSP_STM32_SPI_SPARE1_R_Count >= BSP_STM32_SPI_SPARE1_REC_MAXLEN)
+//			BSP_STM32_SPI_SPARE1_R_Count = 0;
+//		HAL_SPI_Receive_IT(&BSP_STM32_SPI_SPARE1, &zIhuSpiRxBuffer[BSP_STM32_SPI_SPARE1_ID-1], 1);
+//  }
+//}
 
 
 int BSP_STM32_SPI_slave_hw_init(void)

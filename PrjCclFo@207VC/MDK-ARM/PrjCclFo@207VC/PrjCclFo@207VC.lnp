@@ -42,6 +42,8 @@
 "prjcclfo@207vc\bsp_tim.o"
 "prjcclfo@207vc\bsp_usart.o"
 "prjcclfo@207vc\bsp_i2c.o"
+"prjcclfo@207vc\bsp_dido.o"
+"prjcclfo@207vc\bsp_can.o"
 "prjcclfo@207vc\l1timer_freeos.o"
 "prjcclfo@207vc\mod_hal_gprs.o"
 "prjcclfo@207vc\vmfreeoslayer.o"

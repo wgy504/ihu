@@ -86,7 +86,6 @@ osTimerId myTimer01Handle;
 uint8_t zIhuUartRxBuffer[6];
 uint8_t zIhuSpiRxBuffer[2];
 uint8_t zIhuI2cRxBuffer[2];
-uint8_t zIhuCanRxBuffer[2];
 
 /* USER CODE END PV */
 
@@ -174,8 +173,8 @@ int main(void)
   HAL_SPI_Receive_IT(&hspi1,&zIhuSpiRxBuffer[0],1);
   HAL_SPI_Receive_IT(&hspi2,&zIhuSpiRxBuffer[1],1);
   HAL_I2C_Slave_Receive_IT(&hi2c1,&zIhuI2cRxBuffer[0],1);
-//  HAL_CAN_Receive_IT(&hcan1,&zIhuI2cRxBuffer[0],1);
-//  HAL_CAN_Receive_IT(&hcan2,&zIhuI2cRxBuffer[1],1);
+  HAL_CAN_Receive_IT(&hcan1, 0);
+  HAL_CAN_Receive_IT(&hcan2, 1);
 	
   /* USER CODE END 2 */
 
@@ -854,9 +853,10 @@ void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler */
   /* User can add his own implementation to report the HAL error return state */
-  while(1) 
-  {
-  }
+//	IhuErrorPrint("VMFO: Fatal error occured, but still move forward as test purposed!");
+//  while(1) 
+//  {
+//  }
   /* USER CODE END Error_Handler */ 
 }
 
