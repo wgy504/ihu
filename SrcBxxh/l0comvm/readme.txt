@@ -810,9 +810,9 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = CAN总线由于没有对端，导致初始化超时失败。将Error_Handle函数禁止掉了，满足调试状态需求。未来正式情形下，需要打开，
 从而让WATCH_DOG来处理，从而自动RESET，不然会导致系统不稳定。
 = RTC给4个项目激活。IWDG/WWDG一旦激活，会出现故障，原因待调查清楚。
+= 完成CCL状态机框架
 
-
-
+//= ZJL/XH, 2016 Nov.10, CURRENT_SW_DELIVERY R03.50 =>CCL项目
 
 
 

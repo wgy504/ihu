@@ -454,7 +454,8 @@ void ihu_vm_system_init(void)
 	zIhuSysEngPar.timer.spileoPeriodScanTimer = IHU_SPILEO_TIMER_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.spsvirgoPeriodScanTimer = IHU_SPSVIRGO_TIMER_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.cclPeriodScanTimer = IHU_CCL_TIMER_DURATION_PERIOD_SCAN;
-
+	zIhuSysEngPar.timer.cclWorkingStatusScanTimer = IHU_CCL_TIMER_DURATION_WORKING_STATUS_SCAN;
+	
 	//Series Port config
 	zIhuSysEngPar.serialport.SeriesPortForGPS = IHU_SERIESPORT_NUM_FOR_GPS_DEFAULT;
 

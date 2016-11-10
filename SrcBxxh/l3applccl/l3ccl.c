@@ -22,27 +22,52 @@ FsmStateItem_t FsmCcl[] =
 	//启始点，固定定义，不要改动, 使用ENTRY/END，意味者MSGID肯定不可能在某个高位区段中；考虑到所有任务共享MsgId，即使分段，也无法实现
 	//完全是为了给任务一个初始化的机会，按照状态转移机制，该函数不具备启动的机会，因为任务初始化后自动到FSM_STATE_IDLE
 	//如果没有必要进行初始化，可以设置为NULL
-	{MSG_ID_ENTRY,       										FSM_STATE_ENTRY,            								fsm_ccl_task_entry}, //Starting
+	{MSG_ID_ENTRY,       										FSM_STATE_ENTRY,            						fsm_ccl_task_entry}, //Starting
 
 	//System level initialization, only controlled by VMDA
-  {MSG_ID_COM_INIT,       								FSM_STATE_IDLE,            									fsm_ccl_init},
-  {MSG_ID_COM_RESTART,										FSM_STATE_IDLE,            									fsm_ccl_restart},
+  {MSG_ID_COM_INIT,       								FSM_STATE_IDLE,            							fsm_ccl_init},
+  {MSG_ID_COM_RESTART,										FSM_STATE_IDLE,            							fsm_ccl_restart},
 
   //Task level initialization
   {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_INITED,         					fsm_ccl_restart},
   {MSG_ID_COM_STOP,												FSM_STATE_CCL_INITED,         					fsm_ccl_stop_rcv},
 
-		//Task level actived status
+	//FSM_STATE_CCL_ACTIVED：激活状态，完成后台工作命令查询，发送开门命令给锁具。状态报告给后套。
   {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_ACTIVED,         					fsm_ccl_restart},
   {MSG_ID_COM_STOP,												FSM_STATE_CCL_ACTIVED,         					fsm_ccl_stop_rcv},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CCL_ACTIVED,         				  fsm_ccl_time_out},
-	{MSG_ID_ADC_UL_DATA_PULL_BWD,						FSM_STATE_CCL_ACTIVED,         					fsm_ccl_adc_ul_data_pull_bwd},
-	{MSG_ID_ADC_UL_CTRL_CMD_RESP,						FSM_STATE_CCL_ACTIVED,         					fsm_ccl_adc_ul_ctrl_cmd_resp},
-	{MSG_ID_SPI_UL_DATA_PULL_BWD,						FSM_STATE_CCL_ACTIVED,         					fsm_ccl_spi_ul_data_pull_bwd},
-	{MSG_ID_SPI_UL_CTRL_CMD_RESP,						FSM_STATE_CCL_ACTIVED,         					fsm_ccl_spi_ul_ctrl_cmd_resp},
+//	{MSG_ID_ADC_UL_DATA_PULL_BWD,						FSM_STATE_CCL_ACTIVED,         					fsm_ccl_adc_ul_data_pull_bwd},
+//	{MSG_ID_ADC_UL_CTRL_CMD_RESP,						FSM_STATE_CCL_ACTIVED,         					fsm_ccl_adc_ul_ctrl_cmd_resp},
+//	{MSG_ID_SPI_UL_DATA_PULL_BWD,						FSM_STATE_CCL_ACTIVED,         					fsm_ccl_spi_ul_data_pull_bwd},
+//	{MSG_ID_SPI_UL_CTRL_CMD_RESP,						FSM_STATE_CCL_ACTIVED,         					fsm_ccl_spi_ul_ctrl_cmd_resp},
+	{MSG_ID_DIDO_PERIPH_SENSOR_STATUS_REP,	FSM_STATE_CCL_ACTIVED,         					fsm_ccl_dido_perip_sensor_status_rep},
+	{MSG_ID_SPS_BK_CLOUD_CMD,								FSM_STATE_CCL_ACTIVED,         					fsm_ccl_sps_bk_cloud_cmd_rcv},
+	
+	
+	//FSM_STATE_CCL_TO_OPEN_DOOR：等待人工开门，超时则关门回归ACTIVE
+  {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_TO_OPEN_DOOR,         		fsm_ccl_restart},
+	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CCL_TO_OPEN_DOOR,         		fsm_ccl_time_out},
+	{MSG_ID_DIDO_PERIPH_SENSOR_STATUS_REP,	FSM_STATE_CCL_TO_OPEN_DOOR,         		fsm_ccl_dido_perip_sensor_status_rep},	
+
+	//FSM_STATE_CCL_DOOR_OPEN：启动定时，强行关门
+  {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_DOOR_OPEN,         				fsm_ccl_restart},
+	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CCL_DOOR_OPEN,         				fsm_ccl_time_out},
+	{MSG_ID_DIDO_PERIPH_SENSOR_STATUS_REP,	FSM_STATE_CCL_DOOR_OPEN,         				fsm_ccl_dido_perip_sensor_status_rep},		
+
+	//FSM_STATE_CCL_TO_CLOSE_DOOR：告警关门，发送报告给后台。正常则回归。
+  {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_TO_CLOSE_DOOR,         		fsm_ccl_restart},
+	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CCL_TO_CLOSE_DOOR,         		fsm_ccl_time_out},
+	{MSG_ID_DIDO_PERIPH_SENSOR_STATUS_REP,	FSM_STATE_CCL_TO_CLOSE_DOOR,         		fsm_ccl_dido_perip_sensor_status_rep},
+	{MSG_ID_SPS_BK_CLOUD_CMD,								FSM_STATE_CCL_TO_CLOSE_DOOR,         		fsm_ccl_sps_bk_cloud_cmd_rcv},
+	
+	//FSM_STATE_CCL_FATAL_FAULT：严重错误状态，发送报告给后台，等待人工干预以后回归ACTIVE
+  {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_FATAL_FAULT,         			fsm_ccl_restart},
+	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CCL_FATAL_FAULT,         			fsm_ccl_time_out},
+	{MSG_ID_DIDO_PERIPH_SENSOR_STATUS_REP,	FSM_STATE_CCL_FATAL_FAULT,         			fsm_ccl_dido_perip_sensor_status_rep},
+	{MSG_ID_SPS_BK_CLOUD_CMD,								FSM_STATE_CCL_FATAL_FAULT,         			fsm_ccl_sps_bk_cloud_cmd_rcv},
 	
   //结束点，固定定义，不要改动
-  {MSG_ID_END,            								FSM_STATE_END,             									NULL},  //Ending
+  {MSG_ID_END,            								FSM_STATE_END,             							NULL},  //Ending
 };
 
 //Global variables defination
@@ -61,7 +86,7 @@ OPSTAT fsm_ccl_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 
 
 OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	//int ret=0;
+	int ret=0;
 
 	//串行会送INIT_FB给VM，不然消息队列不够深度，此为节省内存机制
 	if ((src_id > TASK_ID_MIN) &&(src_id < TASK_ID_MAX)){
@@ -99,6 +124,12 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 	}
 	
 	//启动本地定时器，如果有必要
+	ret = ihu_timer_start(TASK_ID_CCL, TIMER_ID_1S_CCL_PERIOD_SCAN, zIhuSysEngPar.timer.cclPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+	if (ret == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		IhuErrorPrint("CCL: Error start timer!\n");
+		return IHU_FAILURE;
+	}
 	
 	//打印报告进入常规状态
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
@@ -227,6 +258,17 @@ OPSTAT fsm_ccl_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 
 	//Period time out received
 	if ((rcv.timeId == TIMER_ID_1S_CCL_PERIOD_SCAN) &&(rcv.timeRes == TIMER_RESOLUTION_1S)){
+		//启动硬件扫描定时器
+		ret = ihu_timer_start(TASK_ID_CCL, TIMER_ID_1S_CCL_WORKING_STATUS_SCAN, zIhuSysEngPar.timer.cclWorkingStatusScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+		if (ret == IHU_FAILURE){
+			zIhuRunErrCnt[TASK_ID_CCL]++;
+			IhuErrorPrint("CCL: Error start timer!\n");
+			return IHU_FAILURE;
+		}
+	}
+	
+	//周期性工作状态
+	if ((rcv.timeId == TIMER_ID_1S_CCL_WORKING_STATUS_SCAN) &&(rcv.timeRes == TIMER_RESOLUTION_1S)){
 		//保护周期读数的优先级，强制抢占状态，并简化问题
 		if (FsmGetState(TASK_ID_CCL) != FSM_STATE_CCL_ACTIVED){
 			ret = FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_ACTIVED);
@@ -236,14 +278,65 @@ OPSTAT fsm_ccl_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 				return IHU_FAILURE;
 			}//FsmSetState
 		}
-		func_ccl_time_out_period_scan();
-	}
+		func_ccl_time_out_working_status_scan();
+	}	
+	
+	
 
 	return IHU_SUCCESS;
 }
 
-void func_ccl_time_out_period_scan(void)
-{
-	IhuDebugPrint("CCL: Time Out Test!\n");
+//L2传感器送来的状态报告
+OPSTAT fsm_ccl_dido_perip_sensor_status_rep(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{	
+	//int ret = 0;
+	int state = 0;
+	msg_struct_didocap_periph_sensor_status_rep_t rcv;
+	
+	//入参检查
+	//Receive message and copy to local variable
+	memset(&rcv, 0, sizeof(msg_struct_didocap_periph_sensor_status_rep_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_didocap_periph_sensor_status_rep_t))){
+		IhuErrorPrint("CCL: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+	
+	//获取状态
+	state = FsmGetState(TASK_ID_CCL);
+	switch(state)
+	{
+		case 	FSM_STATE_CCL_ACTIVED:
+			break;
+		case 	FSM_STATE_CCL_TO_OPEN_DOOR:
+			break;
+		case 	FSM_STATE_CCL_DOOR_OPEN:
+			break;
+		case 	FSM_STATE_CCL_TO_CLOSE_DOOR:
+			break;
+		case 	FSM_STATE_CCL_FATAL_FAULT:
+			break;
+		default:
+			break;
+	}
+	//返回
+	return IHU_SUCCESS;
 }
+
+
+//工作状态下的短定时扫描，可以当做计数器来使用
+void func_ccl_time_out_working_status_scan(void)
+{
+
+}
+
+//L2 UART_GPRS工作查询的结果
+OPSTAT fsm_ccl_sps_bk_cloud_cmd_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{	
+
+	//返回
+	return IHU_SUCCESS;
+}
+
 

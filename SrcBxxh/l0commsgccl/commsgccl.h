@@ -81,10 +81,14 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_ADC_UL_CTRL_CMD_RESP,
 	
 	//LED
-	
+
+	//DIDO
+	MSG_ID_DIDO_PERIPH_SENSOR_STATUS_REP,
+
 	//UART
 	MSG_ID_SPS_L2FRAME_SEND,
 	MSG_ID_SPS_L2FRAME_RCV,
+	MSG_ID_SPS_BK_CLOUD_CMD,
 	
 	//SPI
 	MSG_ID_SPI_L2FRAME_SEND,
@@ -101,6 +105,9 @@ enum IHU_INTER_TASK_MSG_ID
 	//CAN
 	MSG_ID_CAN_L2FRAME_SEND,
 	MSG_ID_CAN_L2FRAME_RCV,
+
+	//CCL
+
 
 	//END FLAG
 	MSG_ID_COM_MAX, //Ending point
@@ -147,6 +154,20 @@ typedef struct msg_struct_vmfo_1s_period_timtout
 	UINT8 length;
 }msg_struct_vmfo_1s_period_timtout_t;
 
+//DIDO
+typedef struct msg_struct_didocap_periph_sensor_status_rep
+{
+	UINT8	lockDi1Status;
+	UINT8 lockDi2Status;
+	UINT8 doorDiStatus;
+	UINT8 smokeStatus;
+	UINT8 waterStatus;
+	UINT8 ShakeStatus;
+	UINT8 tempStatus;
+	UINT8 humidStatus;
+	UINT8 length;
+}msg_struct_didocap_periph_sensor_status_rep_t;
+
 //UART消息定义
 typedef struct msg_struct_spsvirgo_l2frame_send
 {
@@ -158,6 +179,11 @@ typedef struct msg_struct_spsvirgo_l2frame_rcv
 	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-1];
 	UINT8 length;
 }msg_struct_spsvirgo_l2frame_rcv_t;
+typedef struct msg_struct_spsvirgo_bk_cloud_cmd
+{
+	UINT8 cmdid;
+	UINT8 length;
+}msg_struct_spsvirgo_bk_cloud_cmd_t;
 
 //SPI消息定义
 typedef struct msg_struct_spileo_l2frame_send
@@ -195,7 +221,7 @@ typedef struct msg_struct_canvela_l2frame_rcv
 	UINT8 length;
 }msg_struct_canvela_l2frame_rcv_t;
 
-
+//CCL
 
 
 #endif /* L0COMVM_COMMSGCCL_H_ */
