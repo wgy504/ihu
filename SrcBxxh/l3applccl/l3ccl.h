@@ -38,7 +38,8 @@ enum FSM_STATE_CCL
 	FSM_STATE_CCL_CLOUD_INQUERY,
 	FSM_STATE_CCL_TO_OPEN_DOOR,
 	FSM_STATE_CCL_DOOR_OPEN,
-	FSM_STATE_CCL_FATAL_FAULT,	
+	FSM_STATE_CCL_FATAL_FAULT,
+	FSM_STATE_CCL_EVENT_REPORT,	
 	FSM_STATE_CCL_MAX,
 };
 //#define FSM_STATE_END   0xFE
@@ -48,18 +49,24 @@ enum FSM_STATE_CCL
 extern FsmStateItem_t FsmCcl[];
 
 //API
-extern OPSTAT fsm_ccl_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
-extern OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
-extern OPSTAT fsm_ccl_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
-extern OPSTAT fsm_ccl_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
-extern OPSTAT fsm_ccl_adc_ul_data_pull_bwd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
-extern OPSTAT fsm_ccl_adc_ul_ctrl_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
-extern OPSTAT fsm_ccl_spi_ul_data_pull_bwd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
-extern OPSTAT fsm_ccl_spi_ul_ctrl_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
-extern OPSTAT fsm_ccl_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
-extern OPSTAT fsm_ccl_dido_perip_sensor_status_rep(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
-extern OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
-
+OPSTAT fsm_ccl_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+OPSTAT fsm_ccl_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+OPSTAT fsm_ccl_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+OPSTAT fsm_ccl_adc_ul_data_pull_bwd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+OPSTAT fsm_ccl_adc_ul_ctrl_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+OPSTAT fsm_ccl_spi_ul_data_pull_bwd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+OPSTAT fsm_ccl_spi_ul_ctrl_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+OPSTAT fsm_ccl_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+OPSTAT fsm_ccl_dido_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+OPSTAT fsm_ccl_sps_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+OPSTAT fsm_ccl_dido_lock_trigger_event(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+OPSTAT fsm_ccl_dido_door_ilg_open_event(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+OPSTAT fsm_ccl_dido_lock_ilg_open_event(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+OPSTAT fsm_ccl_dido_door_open_event(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+OPSTAT fsm_ccl_lock_and_door_close_event(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+OPSTAT fsm_ccl_dido_sensor_warning_event(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 
 //Local API
 OPSTAT func_ccl_hw_init(void);

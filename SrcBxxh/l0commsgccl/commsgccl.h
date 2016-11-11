@@ -83,12 +83,19 @@ enum IHU_INTER_TASK_MSG_ID
 	//LED
 
 	//DIDO
-	MSG_ID_DIDO_PERIPH_SENSOR_STATUS_REP,
+	MSG_ID_DIDO_SENSOR_STATUS_RESP,
+	MSG_ID_DIDO_LOCK_TRIGGER_EVENT,
+	MSG_ID_DIDO_DOOR_ILG_OPEN_EVENT,
+	MSG_ID_DIDO_LOCK_ILG_OPEN_EVENT,
+	MSG_ID_DIDO_DOOR_OPEN_EVENT,
+	MSG_ID_DIDO_LOCK_C_DOOR_C_EVENT,
+	MSG_ID_DIDO_SENSOR_WARNING_EVENT,
 
 	//SPS
 	MSG_ID_SPS_L2FRAME_SEND,
 	MSG_ID_SPS_L2FRAME_RCV,
 	MSG_ID_SPS_TO_CCL_CLOUD_FB,
+	MSG_ID_SPS_SENSOR_STATUS_RESP,	
 	
 	//SPI
 	MSG_ID_SPI_L2FRAME_SEND,
@@ -107,9 +114,9 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_CAN_L2FRAME_RCV,
 
 	//CCL
-	MSG_ID_CCL_TO_BH_GPRS_CTRL_CMD,  	//Back hawl
-	MSG_ID_CCL_TO_DH_SENSOR_SCAN,   	//Device Handler
-	MSG_ID_CCL_TO_DIDO_CTRL_CMD,   		//Device Handler	
+	MSG_ID_CCL_TO_SPS_OPEN_AUTH_INQ,  	  //Back hawl
+	MSG_ID_CCL_TO_DH_SENSOR_STATUS_REQ, //Device Handler
+	MSG_ID_CCL_TO_DIDO_CTRL_CMD,   		  //Device Handler	
 
 	//END FLAG
 	MSG_ID_COM_MAX, //Ending point
@@ -162,13 +169,53 @@ typedef struct msg_struct_didocap_periph_sensor_status_rep
 	UINT8	lockDi1Status;
 	UINT8 lockDi2Status;
 	UINT8 doorDiStatus;
-	UINT8 smokeStatus;
-	UINT8 waterStatus;
-	UINT8 ShakeStatus;
-	UINT8 tempStatus;
-	UINT8 humidStatus;
+	UINT16 smokeStatus;
+	UINT16 waterStatus;
+	UINT16 ShakeStatus;
+	UINT16 tempStatus;
+	UINT16 humidStatus;
+	UINT16 d3axisStatus;
+	UINT16 powerStatus;
 	UINT8 length;
 }msg_struct_didocap_periph_sensor_status_rep_t;
+typedef struct msg_struct_dido_lock_trigger_event
+{
+	UINT8 cmdid;
+	UINT8 length;
+}msg_struct_dido_lock_trigger_event_t;
+typedef struct msg_struct_dido_door_ilg_open_event
+{
+	UINT8 cmdid;
+	UINT8 length;
+}msg_struct_dido_door_ilg_open_event_t;
+typedef struct msg_struct_dido_lock_ilg_open_event
+{
+	UINT8 cmdid;
+	UINT8 length;
+}msg_struct_dido_lock_ilg_open_event_t;
+typedef struct msg_struct_dido_door_open_event
+{
+	UINT8 cmdid;
+	UINT8 length;
+}msg_struct_dido_door_open_event_t;
+typedef struct msg_struct_dido_lock_c_door_c_event
+{
+	UINT8 cmdid;
+	UINT8 length;
+}msg_struct_dido_lock_c_door_c_event_t;
+typedef struct msg_struct_dido_sensor_warning_event
+{
+	UINT8 cmdid;
+	UINT16 waterThred;
+	UINT16 shakeThred;
+	UINT16 smokeThred;
+	UINT16 tempThred;
+	UINT16 humidThred;
+	UINT16 d3axisThre; //三轴传感器表达倾斜
+	UINT16 powerThred;
+	UINT8 length;
+}msg_struct_dido_sensor_warning_event_t;
+
 
 //SPS消息定义
 typedef struct msg_struct_spsvirgo_l2frame_send
@@ -186,6 +233,12 @@ typedef struct msg_struct_spsvirgo_to_ccl_cloud_fb
 	UINT8 cmdid;
 	UINT8 length;
 }msg_struct_spsvirgo_to_ccl_cloud_fb_t;
+typedef struct msg_struct_sps_periph_sensor_status_rep
+{
+	UINT16 rssiStatus;
+	UINT8 length;
+}msg_struct_sps_periph_sensor_status_rep_t;
+
 //SPI消息定义
 typedef struct msg_struct_spileo_l2frame_send
 {
@@ -224,17 +277,17 @@ typedef struct msg_struct_canvela_l2frame_rcv
 
 //CCL
 #define IHU_CCL_BH_CTRL_CMD_BUF_LEN 20
-typedef struct msg_struct_ccl_to_bh_gprs_ctrl_cmd
+typedef struct msg_struct_ccl_to_sps_open_auth_inq
 {
 	UINT8 cmdid;
 	UINT8 dataBuf[IHU_CCL_BH_CTRL_CMD_BUF_LEN];
 	UINT8 length;
-}msg_struct_ccl_to_bh_gprs_ctrl_cmd_t;
-typedef struct msg_struct_ccl_to_dh_sensor_scan
+}msg_struct_ccl_to_sps_open_auth_inq;
+typedef struct msg_struct_ccl_to_dh_sensor_status_req
 {
 	UINT8 cmdid;
 	UINT8 length;
-}msg_struct_ccl_to_dh_sensor_scan_t;
+}msg_struct_ccl_to_dh_sensor_status_req_t;
 typedef struct msg_struct_ccl_to_dido_ctrl_cmd
 {
 	UINT8 cmdid;

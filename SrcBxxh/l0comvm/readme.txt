@@ -815,7 +815,7 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 //= ZJL/XH, 2016 Nov.10, CURRENT_SW_DELIVERY R03.50 =>CCL项目
 = 完成CCL状态机状态的定型
 = 完成CCL函数体的伪代码逻辑
-
+= CCL状态机机制改为EVENT触发，触发逻辑在L2模块中进行判决，整个状态机比较理想了。
 
 
 
