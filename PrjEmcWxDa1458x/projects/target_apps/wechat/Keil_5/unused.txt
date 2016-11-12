@@ -1,4 +1,4 @@
-;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Sun Oct 23 10:52:23 2016
+;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Sat Nov 12 11:24:45 2016
 ;VERSION 0.2
 ;FILE adc.o
 ;FILE app.o
@@ -213,7 +213,6 @@ user_on_disconnect <= USED 0
 ;FILE vmdalayer.o
 IhuDebugPrint <= USED 0
 ihu_clock_unix_to_ymd <= USED 0
-ihu_sleep <= USED 0
 ;FILE wecaht_aes.o
 AES_Decrypt <= USED 0
 AES_Encrypt_PKCS7 <= USED 0

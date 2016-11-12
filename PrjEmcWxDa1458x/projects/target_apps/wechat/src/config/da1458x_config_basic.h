@@ -48,7 +48,9 @@
 /*      -  none                     Always active                                                               */
 /****************************************************************************************************************/
 #undef CFG_MEM_MAP_EXT_SLEEP
-#define CFG_MEM_MAP_DEEP_SLEEP
+//#define CFG_MEM_MAP_DEEP_SLEEP
+#define CFG_EXT_SLEEP
+//#define CFG_DEEP_SLEEP
 
 /****************************************************************************************************************/
 /* Determines maximum concurrent connections supported by application. It configures the heap memory allocated  */

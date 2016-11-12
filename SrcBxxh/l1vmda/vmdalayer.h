@@ -252,12 +252,12 @@ typedef struct IhuTimerElement
 	UINT32 elapse;
 	UINT8  status;
 }IhuTimerElement_t;
-typedef struct IhuTimerTable
-{
-	IhuTimerElement_t timer1s[MAX_TIMER_NUM_IN_ONE_IHU_1S];
-	IhuTimerElement_t timer10ms[MAX_TIMER_NUM_IN_ONE_IHU_10MS];
-	IhuTimerElement_t timer1ms[MAX_TIMER_NUM_IN_ONE_IHU_1MS];
-}IhuTimerTable_t;
+//typedef struct IhuTimerTable
+//{
+//	IhuTimerElement_t timer1s[MAX_TIMER_NUM_IN_ONE_IHU_1S];
+//	IhuTimerElement_t timer10ms[MAX_TIMER_NUM_IN_ONE_IHU_10MS];
+//	IhuTimerElement_t timer1ms[MAX_TIMER_NUM_IN_ONE_IHU_1MS];
+//}IhuTimerTable_t;
 
 #define TIMER_STATUS_DEACTIVE 1
 #define TIMER_STATUS_ACTIVE 2
@@ -289,10 +289,10 @@ extern FsmTable_t zIhuFsmTable;                             //状态机总表
 extern char *zIhuTaskNameList[MAX_TASK_NUM_IN_ONE_IHU];     //任务名字符串
 extern char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK];    //消息名字符串
 extern IhuSysEngParTable_t zIhuSysEngPar;                   //工参
-extern IhuTimerTable_t zIhuTimerTable;                      //定时器
+//extern IhuTimerTable_t zIhuTimerTable;                      //定时器
 extern time_t zIhuSystemTimeUnix;                           //系统时钟TimeStamp
 extern struct tm zIhuSystemTimeYmd;                        	//系统时钟YMD
-extern UINT32 zIhuSleepCnt[MAX_TASK_NUM_IN_ONE_IHU][MAX_SLEEP_NUM_IN_ONE_TASK];  //睡眠控制表
+//extern UINT32 zIhuSleepCnt[MAX_TASK_NUM_IN_ONE_IHU][MAX_SLEEP_NUM_IN_ONE_TASK];  //睡眠控制表
 //extern FsmStateItem_t FsmVmdashell[];                            //状态机
 //extern FsmStateItem_t FsmTimer[];                           //状态机
 //extern FsmStateItem_t FsmAsylibra[];                        //状态机

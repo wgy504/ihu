@@ -29,7 +29,7 @@ FsmTable_t zIhuFsmTable;
 IhuSysEngParTable_t zIhuSysEngPar; //全局工程参数控制表
 
 //全局SLEEP时长控制表
-UINT32 zIhuSleepCnt[MAX_TASK_NUM_IN_ONE_IHU][MAX_SLEEP_NUM_IN_ONE_TASK];
+//UINT32 zIhuSleepCnt[MAX_TASK_NUM_IN_ONE_IHU][MAX_SLEEP_NUM_IN_ONE_TASK];
 
 //全局时间
 time_t zIhuSystemTimeUnix = 1444341556;  //2015/8
@@ -1431,39 +1431,39 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //休眠多少轮时间长度，靠系统轮询次数来计数
 //实际上形成了一种周期休眠机制，由于它必须由轮训重入才能获得SUCCESS执行结果，从而得到控制权，所以小心使用该机制进行消息消耗性处理
 //它更容易当做周期性定时器来使用，而不是真正意义上的SLEEP从而挂起程序
-OPSTAT ihu_sleep(UINT32 cntDuration, UINT8 task_id, UINT8 seed)
-{
-	char strDebug[IHU_PRINT_CHAR_SIZE];
-	
-	//入参检查
-	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
-		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
-		sprintf(strDebug, "IHU-VM: Input Error on task_id, task_id=%d!!!", task_id);
-		IhuErrorPrint(strDebug);
-		return IHU_FAILURE;
-	}
-	if ((cntDuration <= 0) || (cntDuration > MAX_SLEEP_COUNTER_UP_LIMITATION)){
-		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
-		sprintf(strDebug, "IHU-VM: Input Error on cntDuration, cntDuration=%d!!!", cntDuration);
-		IhuErrorPrint(strDebug);
-		return IHU_FAILURE;
-	}
-	if (seed >= MAX_SLEEP_NUM_IN_ONE_TASK){
-		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
-		sprintf(strDebug, "IHU-VM: Input Error on seed, seed=%d!!!", seed);
-		IhuErrorPrint(strDebug);
-		return IHU_FAILURE;
-	}
+//OPSTAT ihu_sleep(UINT32 cntDuration, UINT8 task_id, UINT8 seed)
+//{
+//	char strDebug[IHU_PRINT_CHAR_SIZE];
+//	
+//	//入参检查
+//	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
+//		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
+//		sprintf(strDebug, "IHU-VM: Input Error on task_id, task_id=%d!!!", task_id);
+//		IhuErrorPrint(strDebug);
+//		return IHU_FAILURE;
+//	}
+//	if ((cntDuration <= 0) || (cntDuration > MAX_SLEEP_COUNTER_UP_LIMITATION)){
+//		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
+//		sprintf(strDebug, "IHU-VM: Input Error on cntDuration, cntDuration=%d!!!", cntDuration);
+//		IhuErrorPrint(strDebug);
+//		return IHU_FAILURE;
+//	}
+//	if (seed >= MAX_SLEEP_NUM_IN_ONE_TASK){
+//		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
+//		sprintf(strDebug, "IHU-VM: Input Error on seed, seed=%d!!!", seed);
+//		IhuErrorPrint(strDebug);
+//		return IHU_FAILURE;
+//	}
 
-	//计数
-	zIhuSleepCnt[task_id][seed]++;
-	if (zIhuSleepCnt[task_id][seed] >=cntDuration){
-		zIhuSleepCnt[task_id][seed] = 0;
-		return IHU_SUCCESS;
-	}else{
-		return IHU_FAILURE;
-	}
-}
+//	//计数
+//	zIhuSleepCnt[task_id][seed]++;
+//	if (zIhuSleepCnt[task_id][seed] >=cntDuration){
+//		zIhuSleepCnt[task_id][seed] = 0;
+//		return IHU_SUCCESS;
+//	}else{
+//		return IHU_FAILURE;
+//	}
+//}
 
 //Unix Time transfer to YMD time
 struct tm ihu_clock_unix_to_ymd(time_t t_unix)

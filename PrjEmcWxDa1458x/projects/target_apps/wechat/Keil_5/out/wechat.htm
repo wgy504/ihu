@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\out\wechat.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\out\wechat.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Sun Oct 23 10:52:23 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Sat Nov 12 11:24:45 2016
 <BR><P>
 <H3>Maximum Stack Usage =       1164 bytes + Unknown(Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -89,7 +89,7 @@ Function Pointers
  <LI><a href="#[27]">UART_Handler_func</a> from rom_symdef.txt(ABSOLUTE) referenced from jump_table.o(jump_table_mem_area)
  <LI><a href="#[f]">WKUP_QUADEC_Handler</a> from wkupct_quadec.o(.text) referenced from boot_vectors.o(RESET)
  <LI><a href="#[55]">__main</a> from entry.o(.ARM.Collect$$$$00000000) referenced from boot_vectors.o(.text)
- <LI><a href="#[65]">_sputc</a> from printf3.o(i._sputc) referenced from printf3.o(i.__0sprintf$3)
+ <LI><a href="#[65]">_sputc</a> from printf2.o(i._sputc) referenced from printf2.o(i.__0sprintf$2)
  <LI><a href="#[63]">app_easy_timer_canceled_handler</a> from app_easy_timer.o(.text) referenced from app_easy_timer.o(.text)
  <LI><a href="#[cb]">app_entry_point_handler</a> from app_entry_point.o(.text) referenced from app_task.o(.constdata)
  <LI><a href="#[cc]">app_gap_process_handler</a> from app_task.o(.text) referenced from app_entry_point.o(.constdata)
@@ -1129,7 +1129,6 @@ Global Symbols
 <LI><a href="#[f4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;arch_itoa (via Veneer)
 <LI><a href="#[149]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;my_llc_con_update_req_ind (via Veneer)
 <LI><a href="#[1a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rwip_slot_2_lpcycles (via Veneer)
-<LI><a href="#[258]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_core (via Veneer)
 </UL>
 
 <P><STRONG><a name="[173]"></a>__aeabi_idivmod</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, rom_symdef.txt(ABSOLUTE))
@@ -1237,7 +1236,7 @@ Global Symbols
 <P><STRONG><a name="[55]"></a>__main</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry.o(.ARM.Collect$$$$00000000))
 <BR>[Address Reference Count : 1]<UL><LI> boot_vectors.o(.text)
 </UL>
-<P><STRONG><a name="[2d6]"></a>_main_stk</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry2.o(.ARM.Collect$$$$00000001))
+<P><STRONG><a name="[2d5]"></a>_main_stk</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry2.o(.ARM.Collect$$$$00000001))
 
 <P><STRONG><a name="[ee]"></a>_main_scatterload</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry5.o(.ARM.Collect$$$$00000004))
 <BR><BR>[Calls]<UL><LI><a href="#[ef]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__scatterload
@@ -1247,15 +1246,15 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[ef]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__scatterload
 </UL>
 
-<P><STRONG><a name="[2d7]"></a>_main_clock</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry7b.o(.ARM.Collect$$$$00000008))
+<P><STRONG><a name="[2d6]"></a>_main_clock</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry7b.o(.ARM.Collect$$$$00000008))
 
-<P><STRONG><a name="[2d8]"></a>_main_cpp_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry8b.o(.ARM.Collect$$$$0000000A))
+<P><STRONG><a name="[2d7]"></a>_main_cpp_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry8b.o(.ARM.Collect$$$$0000000A))
 
-<P><STRONG><a name="[2d9]"></a>_main_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry9a.o(.ARM.Collect$$$$0000000B))
+<P><STRONG><a name="[2d8]"></a>_main_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry9a.o(.ARM.Collect$$$$0000000B))
 
-<P><STRONG><a name="[2da]"></a>__rt_final_cpp</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry10a.o(.ARM.Collect$$$$0000000D))
+<P><STRONG><a name="[2d9]"></a>__rt_final_cpp</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry10a.o(.ARM.Collect$$$$0000000D))
 
-<P><STRONG><a name="[2db]"></a>__rt_final_exit</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry11a.o(.ARM.Collect$$$$0000000F))
+<P><STRONG><a name="[2da]"></a>__rt_final_exit</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry11a.o(.ARM.Collect$$$$0000000F))
 
 <P><STRONG><a name="[54]"></a>SystemInit</STRONG> (Thumb, 62 bytes, Stack size 0 bytes, system_armcm0.o(.text))
 <BR>[Address Reference Count : 1]<UL><LI> boot_vectors.o(.text)
@@ -3489,7 +3488,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> mpbledemo2.o(.data)
 </UL>
 <P><STRONG><a name="[e4]"></a>mpbledemo2_data_produce_func</STRONG> (Thumb, 910 bytes, Stack size 120 bytes, mpbledemo2.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 784<LI>Call Chain = mpbledemo2_data_produce_func &rArr; ihu_get_mac_addr &rArr; vmda1458x_mac_addr_get &rArr; IhuErrorPrint &rArr; arch_printf &rArr; arch_snprintf &rArr; arch_vsnprintf &rArr; arch_itoa
+<BR><BR>[Stack]<UL><LI>Max Depth = 880<LI>Call Chain = mpbledemo2_data_produce_func &rArr; ihu_get_mac_addr &rArr; vmda1458x_mac_addr_get &rArr; IhuErrorPrint &rArr; arch_printf &rArr; arch_snprintf &rArr; arch_vsnprintf &rArr; arch_itoa
 </UL>
 <BR>[Calls]<UL><LI><a href="#[105]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy (via Veneer)
 <LI><a href="#[f1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ke_malloc (via Veneer)
@@ -3659,8 +3658,8 @@ Global Symbols
 <LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mpbledemo2_readEmcPeriodOpen
 </UL>
 
-<P><STRONG><a name="[24e]"></a>IhuErrorPrint</STRONG> (Thumb, 64 bytes, Stack size 216 bytes, vmdalayer.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 640<LI>Call Chain = IhuErrorPrint &rArr; arch_printf &rArr; arch_snprintf &rArr; arch_vsnprintf &rArr; arch_itoa
+<P><STRONG><a name="[24e]"></a>IhuErrorPrint</STRONG> (Thumb, 66 bytes, Stack size 312 bytes, vmdalayer.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 736<LI>Call Chain = IhuErrorPrint &rArr; arch_printf &rArr; arch_snprintf &rArr; arch_vsnprintf &rArr; arch_itoa
 </UL>
 <BR>[Calls]<UL><LI><a href="#[101]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;arch_printf
 <LI><a href="#[24f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen (via Veneer)
@@ -3702,7 +3701,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[253]"></a>vmda1458x_mac_addr_get</STRONG> (Thumb, 74 bytes, Stack size 24 bytes, vmdalayer.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 664<LI>Call Chain = vmda1458x_mac_addr_get &rArr; IhuErrorPrint &rArr; arch_printf &rArr; arch_snprintf &rArr; arch_vsnprintf &rArr; arch_itoa
+<BR><BR>[Stack]<UL><LI>Max Depth = 760<LI>Call Chain = vmda1458x_mac_addr_get &rArr; IhuErrorPrint &rArr; arch_printf &rArr; arch_snprintf &rArr; arch_vsnprintf &rArr; arch_itoa
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nvds_get (via Veneer)
 <LI><a href="#[24e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrint
@@ -3719,7 +3718,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[247]"></a>ihu_get_mac_addr</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, vmdalayer.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 664<LI>Call Chain = ihu_get_mac_addr &rArr; vmda1458x_mac_addr_get &rArr; IhuErrorPrint &rArr; arch_printf &rArr; arch_snprintf &rArr; arch_vsnprintf &rArr; arch_itoa
+<BR><BR>[Stack]<UL><LI>Max Depth = 760<LI>Call Chain = ihu_get_mac_addr &rArr; vmda1458x_mac_addr_get &rArr; IhuErrorPrint &rArr; arch_printf &rArr; arch_snprintf &rArr; arch_vsnprintf &rArr; arch_itoa
 </UL>
 <BR>[Calls]<UL><LI><a href="#[253]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vmda1458x_mac_addr_get
 </UL>
@@ -3759,7 +3758,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[1a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rwip_slot_2_lpcycles_rcx
 </UL>
 
-<P><STRONG><a name="[2dc]"></a>_float_round</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, fepilogue.o(.text), UNUSED)
+<P><STRONG><a name="[2db]"></a>_float_round</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, fepilogue.o(.text), UNUSED)
 
 <P><STRONG><a name="[255]"></a>_float_epilogue</STRONG> (Thumb, 114 bytes, Stack size 12 bytes, fepilogue.o(.text), UNUSED)
 <BR><BR>[Called By]<UL><LI><a href="#[1a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ui2f
@@ -3771,26 +3770,26 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_main_scatterload
 </UL>
 
-<P><STRONG><a name="[2dd]"></a>__scatterload_rt2</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, init.o(.text), UNUSED)
+<P><STRONG><a name="[2dc]"></a>__scatterload_rt2</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, init.o(.text), UNUSED)
 
-<P><STRONG><a name="[257]"></a>__0sprintf$3</STRONG> (Thumb, 36 bytes, Stack size 24 bytes, printf3.o(i.__0sprintf$3), UNUSED)
+<P><STRONG><a name="[257]"></a>__0sprintf$2</STRONG> (Thumb, 36 bytes, Stack size 24 bytes, printf2.o(i.__0sprintf$2), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[65]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sputc
 <LI><a href="#[258]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_core
 </UL>
 
-<P><STRONG><a name="[2de]"></a>__1sprintf$3</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printf3.o(i.__0sprintf$3), UNUSED)
+<P><STRONG><a name="[2dd]"></a>__1sprintf$2</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printf2.o(i.__0sprintf$2), UNUSED)
 
-<P><STRONG><a name="[250]"></a>__2sprintf</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printf3.o(i.__0sprintf$3))
+<P><STRONG><a name="[250]"></a>__2sprintf</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printf2.o(i.__0sprintf$2))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = __2sprintf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[24e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrint
 </UL>
 
-<P><STRONG><a name="[2df]"></a>__scatterload_copy</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_copy), UNUSED)
+<P><STRONG><a name="[2de]"></a>__scatterload_copy</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_copy), UNUSED)
 
-<P><STRONG><a name="[2e0]"></a>__scatterload_null</STRONG> (Thumb, 2 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_null), UNUSED)
+<P><STRONG><a name="[2df]"></a>__scatterload_null</STRONG> (Thumb, 2 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_null), UNUSED)
 
-<P><STRONG><a name="[2e1]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
+<P><STRONG><a name="[2e0]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
 
 <P><STRONG><a name="[1e0]"></a>free</STRONG> (Thumb, 80 bytes, Stack size 8 bytes, malloc.o(i.free))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = free
@@ -4336,16 +4335,14 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mpbledemo2_data_consume_func
 </UL>
 
-<P><STRONG><a name="[258]"></a>_printf_core</STRONG> (Thumb, 456 bytes, Stack size 88 bytes, printf3.o(i._printf_core), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[f5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uidivmod (via Veneer)
-</UL>
-<BR>[Called By]<UL><LI><a href="#[257]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__0sprintf$3
+<P><STRONG><a name="[258]"></a>_printf_core</STRONG> (Thumb, 210 bytes, Stack size 40 bytes, printf2.o(i._printf_core), UNUSED)
+<BR><BR>[Called By]<UL><LI><a href="#[257]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__0sprintf$2
 </UL>
 
-<P><STRONG><a name="[65]"></a>_sputc</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, printf3.o(i._sputc))
-<BR><BR>[Called By]<UL><LI><a href="#[257]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__0sprintf$3
+<P><STRONG><a name="[65]"></a>_sputc</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, printf2.o(i._sputc))
+<BR><BR>[Called By]<UL><LI><a href="#[257]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__0sprintf$2
 </UL>
-<BR>[Address Reference Count : 1]<UL><LI> printf3.o(i.__0sprintf$3)
+<BR>[Address Reference Count : 1]<UL><LI> printf2.o(i.__0sprintf$2)
 </UL><P>
 <H3>
 Undefined Global Symbols

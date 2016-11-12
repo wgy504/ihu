@@ -812,13 +812,13 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = RTC给4个项目激活。IWDG/WWDG一旦激活，会出现故障，原因待调查清楚。
 = 完成CCL状态机框架
 
-//= ZJL/XH, 2016 Nov.10, CURRENT_SW_DELIVERY R03.50 =>CCL项目
+//= ZJL/XH, 2016 Nov.11, CURRENT_SW_DELIVERY R03.50 =>CCL项目
 = 完成CCL状态机状态的定型
 = 完成CCL函数体的伪代码逻辑
 = CCL状态机机制改为EVENT触发，触发逻辑在L2模块中进行判决，整个状态机比较理想了。
 
-
-
+//= ZJL/JT, 2016 Nov.12, CURRENT_SW_DELIVERY R03.50 =>EMCWX项目
+= 修改da1458x_config_basic.h中的SLEEP模式，从CFG_MEM_MAP_DEEP_SLEEP改为CFG_EXT_SLEEP，实验为什么系统没有进入SLEEP模式
 
 
 
