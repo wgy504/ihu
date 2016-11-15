@@ -37,9 +37,10 @@ FsmStateItem_t FsmSpsvirgo[] =
   {MSG_ID_COM_STOP,												FSM_STATE_SPSVIRGO_ACTIVED,         					fsm_spsvirgo_stop_rcv},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_time_out},
 	{MSG_ID_SPS_L2FRAME_RCV,								FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_l2frame_rcv},
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 	{MSG_ID_CCL_TO_SPS_OPEN_AUTH_INQ,				FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_open_auth_inq},
 	{MSG_ID_CCL_TO_DH_SENSOR_STATUS_REQ,		FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_dh_sensor_status_req},	
-	
+#endif
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             									NULL},  //Ending
 };
@@ -256,6 +257,7 @@ OPSTAT fsm_spsvirgo_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 	return IHU_SUCCESS;
 }
 
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
 	//int ret;
@@ -301,6 +303,6 @@ OPSTAT fsm_spsvirgo_ccl_dh_sensor_status_req(UINT8 dest_id, UINT8 src_id, void *
 	
 	return IHU_SUCCESS;
 }
-
+#endif
 
 

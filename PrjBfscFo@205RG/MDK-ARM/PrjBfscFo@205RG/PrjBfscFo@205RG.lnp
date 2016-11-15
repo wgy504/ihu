@@ -23,6 +23,8 @@
 "prjbfscfo@205rg\stm32f2xx_hal_pwr.o"
 "prjbfscfo@205rg\stm32f2xx_hal_tim.o"
 "prjbfscfo@205rg\stm32f2xx_hal_can.o"
+"prjbfscfo@205rg\stm32f2xx_hal_rtc.o"
+"prjbfscfo@205rg\stm32f2xx_hal_rtc_ex.o"
 "prjbfscfo@205rg\list.o"
 "prjbfscfo@205rg\port.o"
 "prjbfscfo@205rg\cmsis_os.o"
