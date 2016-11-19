@@ -28,7 +28,8 @@ extern SPI_HandleTypeDef hspi2;
 extern uint8_t zIhuSpiRxBuffer[6];
 
 /* SPI handler declaration */
-SPI_HandleTypeDef SpiHandle;
+// SPI_HandleTypeDef SpiHandle;
+extern SPI_HandleTypeDef hspi2;
 #define SPILEO_BUF_SIZE 256
 uint8_t BSP_SPI_rx_buffer[SPILEO_BUF_SIZE];
 uint8_t BSP_SPI_tx_buffer[SPILEO_BUF_SIZE];
@@ -175,7 +176,9 @@ static void BSP_SPI_rx_complete(SPI_HandleTypeDef *hspi)
 
 int BSP_SPI_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint16_t size)
 {
-  OS_ENTER_CRITICAL_SECTION();
+	uint32_t flags;
+	
+  flags = ulPortSetInterruptMask();
 
   /* set RX buffer */
   BSP_SPI_RxState = SPI_RX_STATE_START;
@@ -183,7 +186,7 @@ int BSP_SPI_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint16_t 
   hspi->RxXferSize = size;
   hspi->pRxBuffPtr = rx_buffer;
 
-  OS_LEAVE_CRITICAL_SECTION();
+  vPortClearInterruptMask(flags);
   
   /* enable RXNE interrupt */
   __HAL_SPI_ENABLE_IT(hspi, (SPI_IT_RXNE | SPI_IT_ERR));
@@ -208,19 +211,21 @@ static void BSP_SPI_tx_complete(SPI_HandleTypeDef *hspi)
 
 int BSP_SPI_start_transmit(SPI_HandleTypeDef *hspi, uint8_t *tx_buffer, uint16_t size)
 {
+	uint32_t flags;
+	
   if(hspi->TxXferCount < hspi->TxXferSize)
   {
   	IhuErrorPrint("SPI transmit ongoing...\n");
   	return -1;
   }
 
-  OS_ENTER_CRITICAL_SECTION();
+  flags = ulPortSetInterruptMask();
   
   hspi->pTxBuffPtr = tx_buffer;
   hspi->TxXferCount = 0;
   hspi->TxXferSize = size;
   
-  OS_LEAVE_CRITICAL_SECTION();
+  vPortClearInterruptMask(flags);
 
   /* enable TXE interrupt */
   __HAL_SPI_ENABLE_IT(hspi, SPI_IT_TXE);
@@ -319,44 +324,20 @@ int BSP_SPI_start_transmit(SPI_HandleTypeDef *hspi, uint8_t *tx_buffer, uint16_t
 
 int BSP_SPI_slave_hw_init(int is_clock_phase_1edge, int is_clock_polarity_high)
 {
-	SPI_HandleTypeDef *hspi = &SpiHandle;
+	SPI_HandleTypeDef *hspi = &hspi2;
 	
-	/******************************************************************************
-	SPI init
-	******************************************************************************/
-	/*##-1- Configure the SPI peripheral #######################################*/
-	/* Set the SPI parameters */
-	hspi->Instance = SPIx;
-
-  hspi->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
-  hspi->Init.Direction		   = SPI_DIRECTION_2LINES;
-  hspi->Init.CLKPhase		   = is_clock_phase_1edge?SPI_PHASE_1EDGE:SPI_PHASE_2EDGE;
-  hspi->Init.CLKPolarity	   = is_clock_polarity_high?SPI_POLARITY_HIGH:SPI_POLARITY_LOW;
-  hspi->Init.CRCCalculation    = SPI_CRCCALCULATION_DISABLE;
-  hspi->Init.CRCPolynomial	   = 7;
-  hspi->Init.DataSize		   = SPI_DATASIZE_8BIT;
-  hspi->Init.FirstBit		   = SPI_FIRSTBIT_MSB;
-  hspi->Init.NSS			   = SPI_NSS_SOFT;
-  hspi->Init.TIMode 		   = SPI_TIMODE_DISABLE;
-
-  hspi->Init.Mode = SPI_MODE_SLAVE;
+	/* SPI hardware init is already done in main.c MX_SPI2_Init()
+	 * So there is no hw init in this function now.
+   */
 	
 	// Please don't use STM32 offical function for receive or transmit
 	// Instead, use BSP_SPI_start_receive() and BSP_SPI_start_transmit()
 	hspi->RxISR = BSP_SPI_rx_isr;
 	hspi->TxISR = BSP_SPI_tx_isr;
-	
-	if(HAL_SPI_Init(hspi) != HAL_OK)
-	{
-		/* Initialization Error */
-		IhuErrorPrint("HAL_SPI_Init() failed.\n");
-		return -1;
-	}
 
-	/* attach SPI interrupt */
-	// BSP_IntVectSet(BSP_INT_ID_SPI2, HAL_SPI_IRQHandler);
-	// BSP_IntEn(BSP_INT_ID_SPI2);
+	/* attach SPI interrupt: no more need in FreeRTOS */
 
+	/* start SPI receiving: Enable SPI and RX interrupt */
 	BSP_SPI_start_receive(hspi, BSP_SPI_rx_buffer, SPILEO_BUF_SIZE);
 	
 	IhuDebugPrint("BSP_SPI_slave_hw_init() done.\n");
