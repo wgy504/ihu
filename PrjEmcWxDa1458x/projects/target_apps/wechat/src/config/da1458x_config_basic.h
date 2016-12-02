@@ -47,10 +47,14 @@
 /*      -  CFG_MEM_MAP_DEEP_SLEEP   Deep sleep mode                                                             */
 /*      -  none                     Always active                                                               */
 /****************************************************************************************************************/
-#undef CFG_MEM_MAP_EXT_SLEEP
-//#define CFG_MEM_MAP_DEEP_SLEEP
+#define CFG_MEM_MAP_EXT_SLEEP
+#undef CFG_MEM_MAP_DEEP_SLEEP
 #define CFG_EXT_SLEEP
-//#define CFG_DEEP_SLEEP
+#undef CFG_DEEP_SLEEP
+
+#define CFG_POWER_OPTIMIZATIONS
+#define CFG_EMB
+#define CFG_EXTERNAL_WAKEUP
 
 /****************************************************************************************************************/
 /* Determines maximum concurrent connections supported by application. It configures the heap memory allocated  */
@@ -79,7 +83,10 @@
 /* controls the uart module used. If it is defined UART2 is used. If not, UART is used. uart or uart2 driver    */
 /* must be included in project respectively.                                                                    */
 /****************************************************************************************************************/
-#define CFG_PRINTF
+
+#undef CFG_PRINTF
+#undef CATCH_LOG
+
 #ifdef CFG_PRINTF
 	#define CFG_PRINTF_UART2
 #endif
@@ -102,7 +109,7 @@
 #define IHU_DEVELOPER_ENV_NAME_CZ 4
 #define IHU_DEVELOPER_ENV_NAME_LZH 5
 #define IHU_DEVELOPER_ENV_NAME_JT 6
-#define IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME IHU_DEVELOPER_ENV_NAME_MYC
+#define IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME IHU_DEVELOPER_ENV_NAME_JT
 //#define IHU_DEVELOPER_CURRENT_WORKING_ENV_NAME IHU_DEVELOPER_ENV_NAME_ZJL
 
 

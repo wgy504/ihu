@@ -107,7 +107,7 @@ int app_wechat_send_data_handler(ke_msg_id_t const msgid,
 //                                  ke_task_id_t const dest_id,
 //                                  ke_task_id_t const src_id);
 																	
-extern int arch_printf(const char *fmt, ...);
+//extern int arch_printf(const char *fmt, ...);
 extern void mpbledemo2_airsync_link_setup_period_report(void);
 extern int32_t mpbledemo2_sendData(uint8_t* ptrData, uint32_t lengthInByte);
 																	

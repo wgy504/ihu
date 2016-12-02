@@ -167,7 +167,7 @@ extern void vmda1458x_app_ble_push(unsigned char *p, int n);
 
 //外部引用的API
 extern _ARMABI int sprintf(char * __restrict /*s*/, const char * __restrict /*format*/, ...) __attribute__((__nonnull__(1,2)));
-extern int arch_printf(const char *fmt, ...);
+//extern int arch_printf(const char *fmt, ...);
 extern void ihu_task_vmdashell_init(void);
 extern void ihu_task_vmdashell_mainloop(void);
 

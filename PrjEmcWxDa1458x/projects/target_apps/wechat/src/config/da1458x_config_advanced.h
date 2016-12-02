@@ -27,8 +27,8 @@
 /* It must be undefined during development phase and for applications booting from external interfaces (UART,   */
 /* SPI , i2c)                                                                                                   */
 /****************************************************************************************************************/
-//#undef CFG_BOOT_FROM_OTP
-#define CFG_BOOT_FROM_OTP
+#undef CFG_BOOT_FROM_OTP
+//#define CFG_BOOT_FROM_OTP
 
 /****************************************************************************************************************/
 /* If defined NVDS structure is initialized with hardcoded values. If not defined the NDS structure is          */
@@ -56,12 +56,12 @@
 /****************************************************************************************************************/
 /* Periodic wakeup period to poll GTL iface. Time in BLE slots.                                                 */
 /****************************************************************************************************************/
-#define CFG_MAX_SLEEP_DURATION_PERIODIC_WAKEUP_MS                  500  // 0.5s
+#define CFG_MAX_SLEEP_DURATION_PERIODIC_WAKEUP_MS                  5000  // 5s
 
 /****************************************************************************************************************/
 /* Periodic wakeup period if GTL iface is not enabled. Time in BLE slots.                                        */
 /****************************************************************************************************************/
-#define CFG_MAX_SLEEP_DURATION_EXTERNAL_WAKEUP_MS                  10000  // 10s
+#define CFG_MAX_SLEEP_DURATION_EXTERNAL_WAKEUP_MS                  100000  // 100s
 
 /****************************************************************************************************************/
 /* Wakeup from external processor running host application.                                                     */

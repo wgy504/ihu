@@ -36,7 +36,7 @@
 
 #define USER_CONFIG                (1)
 //default sleep mode. Possible values 	ARCH_SLEEP_OFF,	ARCH_EXT_SLEEP_ON, ARCH_DEEP_SLEEP_ON
-const static sleep_state_t app_default_sleep_mode=ARCH_SLEEP_OFF;
+const static sleep_state_t app_default_sleep_mode=ARCH_EXT_SLEEP_ON;
 
 
 /*
@@ -83,10 +83,10 @@ static const struct advertise_configuration user_adv_conf = {
     .addr = {0x1, 0x2, 0x3, 0x4, 0x5, 0x6},
 
     /// Minimum interval for advertising
-    .intv_min = 1100,                    // 687.5ms (1100*0.625ms)
+    .intv_min = 9900,                    // 6187.5 ms (9900*0.625ms)
 
     /// Maximum interval for advertising
-    .intv_max = 1100,                    // 687.5ms (160*0.625ms)
+    .intv_max = 13200,                    // 8250ms (13200*0.625ms)
 
     /// Advertising channel map
     .channel_map = 0x7,

@@ -169,12 +169,12 @@ void IhuDebugPrint(char *p)
 	if (strlen(p) < IHU_PRINT_CHAR_SIZE-50){
 		//sprintf(strDebugPrintBuf, "DBG: %s, %s, %d, %s\r\n", __DATE__, __TIME__, __LINE__, p);
 		sprintf(strDebugPrintBuf, "DBG: %s, %s, %s\r\n", __DATE__, __TIME__, p);
-		arch_printf(strDebugPrintBuf);		
+//		arch_printf(strDebugPrintBuf);		
 	}
 	else{
 		strncpy(strDebugPrintBuf, p, IHU_PRINT_CHAR_SIZE-1);
-		arch_printf(strDebugPrintBuf);
-		arch_printf("\r\n");
+//		arch_printf(strDebugPrintBuf);
+//		arch_printf("\r\n");
 	}
 }
 
@@ -185,12 +185,12 @@ void IhuErrorPrint(char *p)
 	if (strlen(p) < IHU_PRINT_CHAR_SIZE-50){
 		//sprintf(strDebugPrintBuf, "ERR: %s, %s, %d, %s\r\n", __DATE__, __TIME__, __LINE__, p);
 		sprintf(strDebugPrintBuf, "ERR: %s, %s, %s\r\n", __DATE__, __TIME__, p);
-		arch_printf(strDebugPrintBuf);		
+//		arch_printf(strDebugPrintBuf);		
 	}
 	else{
 		strncpy(strDebugPrintBuf, p, IHU_PRINT_CHAR_SIZE-1);
-		arch_printf(strDebugPrintBuf);
-		arch_printf("\r\n");		
+//		arch_printf(strDebugPrintBuf);
+//		arch_printf("\r\n");		
 	}
 }
 

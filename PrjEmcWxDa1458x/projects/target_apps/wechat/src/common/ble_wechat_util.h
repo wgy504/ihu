@@ -6,7 +6,7 @@
 #include <string.h>
 
 #if defined (CFG_PRINTF)
-    #define CATCH_LOG
+//    #define CATCH_LOG
 #endif
 
 #define PRODUCT_TYPE_UNKNOWN 0

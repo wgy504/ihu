@@ -206,7 +206,7 @@ int app_wechat_period_bat_status_time_out_handler(ke_msg_id_t const msgid,
 extern const struct ke_state_handler wechat_state_handler[WECHAT_STATE_MAX];
 extern const struct ke_state_handler wechat_default_handler;
 extern ke_state_t wechat_state[WECHAT_IDX_MAX];
-extern int arch_printf(const char *fmt, ...);
+//extern int arch_printf(const char *fmt, ...);
 extern void mpbledemo2_airsync_link_setup_period_report(void);
 extern int32_t mpbledemo2_sendData(uint8_t* ptrData, uint32_t lengthInByte);
 extern void vmda1458x_timer_set(ke_msg_id_t const timerid, ke_task_id_t const taskid, uint16_t delay);

@@ -1,4 +1,4 @@
-;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Sat Nov 12 11:24:45 2016
+;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Fri Dec 02 22:53:26 2016
 ;VERSION 0.2
 ;FILE adc.o
 ;FILE app.o
@@ -53,15 +53,15 @@ app_msg_send_wakeup_ble <= USED 0
 ;FILE app_task.o
 ;FILE app_wechat.o
 ;FILE app_wechat_task.o
-;FILE arch_console.o
-arch_puts <= USED 0
 ;FILE arch_main.o
 ;FILE arch_patch.o
 ;FILE arch_sleep.o
 arch_ble_ext_wakeup_off <= USED 0
 arch_ble_ext_wakeup_on <= USED 0
 arch_ble_force_wakeup <= USED 0
+arch_force_active_mode <= USED 0
 arch_last_rwble_evt_get <= USED 0
+arch_restore_sleep_mode <= USED 0
 ;FILE arch_system.o
 arch_adv_time_calculate <= USED 0
 arch_set_pxact_gpio <= USED 0
@@ -203,9 +203,12 @@ systick_value <= USED 0
 systick_wait <= USED 0
 ;FILE trng.o
 ;FILE uart2.o
+uart2_finish_transfers <= USED 0
 uart2_flow_off <= USED 0
 uart2_flow_on <= USED 0
+uart2_init <= USED 0
 uart2_read <= USED 0
+uart2_write <= USED 0
 ;FILE user_periph_setup.o
 ;FILE user_wechat.o
 user_on_connection <= USED 0
