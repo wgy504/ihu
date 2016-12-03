@@ -27,8 +27,8 @@
 /* It must be undefined during development phase and for applications booting from external interfaces (UART,   */
 /* SPI , i2c)                                                                                                   */
 /****************************************************************************************************************/
-#undef CFG_BOOT_FROM_OTP
-//#define CFG_BOOT_FROM_OTP
+//#undef CFG_BOOT_FROM_OTP
+#define CFG_BOOT_FROM_OTP
 
 /****************************************************************************************************************/
 /* If defined NVDS structure is initialized with hardcoded values. If not defined the NDS structure is          */
