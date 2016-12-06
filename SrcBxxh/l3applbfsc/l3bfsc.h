@@ -35,6 +35,10 @@ enum FSM_STATE_BFSC
 {
 	FSM_STATE_BFSC_INITED = 0x02,
 	FSM_STATE_BFSC_ACTIVED,
+	FSM_STATE_BFSC_SCAN,
+	FSM_STATE_BFSC_WEIGHT_REPORT,
+	FSM_STATE_BFSC_ROLL_OUT,
+	FSM_STATE_BFSC_GIVE_UP,	
 	FSM_STATE_BFSC_MAX,
 };
 //#define FSM_STATE_END   0xFE
@@ -48,12 +52,18 @@ extern OPSTAT fsm_bfsc_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr,
 extern OPSTAT fsm_bfsc_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_bfsc_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_bfsc_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
-extern OPSTAT fsm_bfsc_adc_ul_data_pull_bwd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_bfsc_adc_ul_ctrl_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_bfsc_spi_ul_data_pull_bwd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_bfsc_spi_ul_ctrl_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_bfsc_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT fsm_bfsc_canvela_init_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT fsm_bfsc_adc_new_material_ws(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT fsm_bfsc_adc_material_drop(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT fsm_bfsc_canvela_roll_out_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT fsm_bfsc_canvela_give_up_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 
+
+	
 //Local API
 OPSTAT func_bfsc_hw_init(void);
 void func_bfsc_time_out_period_scan(void);

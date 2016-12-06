@@ -76,9 +76,10 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_VMFO_TIMER_1S_PERIOD,
 	
 	//ADC
-	MSG_ID_ADC_UL_DATA_PULL_BWD,
 	MSG_ID_ADC_DL_CTRL_CMD_REQ,
 	MSG_ID_ADC_UL_CTRL_CMD_RESP,
+	MSG_ID_ADC_NEW_MATERIAL_WS,
+	MSG_ID_ADC_MATERIAL_DROP,
 	
 	//LED
 	
@@ -101,7 +102,16 @@ enum IHU_INTER_TASK_MSG_ID
 	//CAN
 	MSG_ID_CAN_L2FRAME_SEND,
 	MSG_ID_CAN_L2FRAME_RCV,
-	
+	MSG_ID_CAN_L3BFSC_INIT_REQ,
+	MSG_ID_CAN_L3BFSC_ROLL_OUT_REQ,
+	MSG_ID_CAN_L3BFSC_GIVE_UP_REQ,
+
+	//L3BFSC
+	MSG_ID_L3BFSC_CAN_INIT_RESP,
+	MSG_ID_L3BFSC_CAN_NEW_WS_EVENT,
+	MSG_ID_L3BFSC_CAN_ROLL_OUT_RESP,
+	MSG_ID_L3BFSC_CAN_GIVE_UP_RESP,
+
 	//END FLAG
 	MSG_ID_COM_MAX, //Ending point
 
@@ -146,6 +156,21 @@ typedef struct msg_struct_vmfo_1s_period_timtout
 {
 	UINT8 length;
 }msg_struct_vmfo_1s_period_timtout_t;
+
+//ADC
+//MSG_ID_ADC_NEW_MATERIAL_WS,
+typedef struct msg_struct_adc_new_material_ws
+{
+	UINT32 wsValue;
+	UINT8 length;
+}msg_struct_adc_new_material_ws_t;
+
+//MSG_ID_ADC_MATERIAL_DROP,
+typedef struct msg_struct_adc_material_drop
+{
+	UINT8 length;
+}msg_struct_adc_material_drop_t;
+
 
 //UART消息定义
 typedef struct msg_struct_spsvirgo_l2frame_send
@@ -194,6 +219,50 @@ typedef struct msg_struct_canvela_l2frame_rcv
 	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-1];
 	UINT8 length;
 }msg_struct_canvela_l2frame_rcv_t;
+
+//MSG_ID_CAN_L3BFSC_INIT_REQ
+typedef struct msg_struct_canvela_l3bfsc_init_req
+{
+	UINT8 length;
+}msg_struct_canvela_l3bfsc_init_req_t;
+
+//MSG_ID_CAN_L3BFSC_ROLL_OUT_REQ,
+typedef struct msg_struct_canvela_l3bfsc_roll_out_req
+{
+	UINT8 length;
+}msg_struct_canvela_l3bfsc_roll_out_req_t;
+
+//MSG_ID_CAN_L3BFSC_GIVE_UP_REQ,
+typedef struct msg_struct_canvela_l3bfsc_give_up_req
+{
+	UINT8 length;
+}msg_struct_canvela_l3bfsc_give_up_req_t;
+
+//L3BFSC消息
+//MSG_ID_L3BFSC_CAN_INIT_RESP
+typedef struct msg_struct_l3bfsc_canvela_init_resp
+{
+	UINT8 length;
+}msg_struct_l3bfsc_canvela_init_resp_t;
+
+//MSG_ID_L3BFSC_CAN_NEW_WS_EVENT
+typedef struct msg_struct_l3bfsc_canvela_new_ws_event
+{
+	UINT32 wsValue;
+	UINT8 length;
+}msg_struct_l3bfsc_canvela_new_ws_event_t;
+
+//MSG_ID_L3BFSC_CAN_ROLL_OUT_RESP,
+typedef struct msg_struct_l3bfsc_canvela_roll_out_resp
+{
+	UINT8 length;
+}msg_struct_l3bfsc_canvela_roll_out_resp_t;
+
+//MSG_ID_L3BFSC_CAN_GIVE_UP_RESP,
+typedef struct msg_struct_l3bfsc_canvela_give_up_resp
+{
+	UINT8 length;
+}msg_struct_l3bfsc_canvela_give_up_resp_t;
 
 
 

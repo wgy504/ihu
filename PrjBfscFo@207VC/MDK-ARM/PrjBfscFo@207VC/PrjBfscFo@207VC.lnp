@@ -29,6 +29,8 @@
 "prjbfscfo@207vc\stm32f2xx_hal_flash.o"
 "prjbfscfo@207vc\stm32f2xx_hal_uart.o"
 "prjbfscfo@207vc\stm32f2xx_hal_can.o"
+"prjbfscfo@207vc\stm32f2xx_hal_rtc.o"
+"prjbfscfo@207vc\stm32f2xx_hal_rtc_ex.o"
 "prjbfscfo@207vc\main.o"
 "prjbfscfo@207vc\stm32f2xx_hal_msp.o"
 "prjbfscfo@207vc\freertos.o"
