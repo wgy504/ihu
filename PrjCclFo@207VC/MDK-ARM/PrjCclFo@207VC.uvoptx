@@ -82,12 +82,12 @@
         <Book>
           <Number>0</Number>
           <Title>Schematics (MCBSTM32F200)</Title>
-          <Path>d:\Keil_v5\ARM\PACK\Keil\STM32F2xx_DFP\2.6.0\MDK\Boards\Keil\MCBSTM32F200\Documentation\mcbstm32f200-schematics.pdf</Path>
+          <Path>C:\Keil_v5\ARM\PACK\Keil\STM32F2xx_DFP\2.6.0\MDK\Boards\Keil\MCBSTM32F200\Documentation\mcbstm32f200-schematics.pdf</Path>
         </Book>
         <Book>
           <Number>1</Number>
           <Title>User Manual (MCBSTM32F200)</Title>
-          <Path>d:\Keil_v5\ARM\PACK\Keil\STM32F2xx_DFP\2.6.0\MDK\Boards\Keil\MCBSTM32F200\Documentation\mcbstm32f200.chm</Path>
+          <Path>C:\Keil_v5\ARM\PACK\Keil\STM32F2xx_DFP\2.6.0\MDK\Boards\Keil\MCBSTM32F200\Documentation\mcbstm32f200.chm</Path>
         </Book>
         <Book>
           <Number>2</Number>

@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\out\wechat.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\out\wechat.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Sat Dec 03 11:28:08 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Tue Dec 06 12:50:02 2016
 <BR><P>
 <H3>Maximum Stack Usage =       1164 bytes + Unknown(Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -3383,7 +3383,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> mpbledemo2.o(.data)
 </UL>
 <P><STRONG><a name="[e3]"></a>mpbledemo2_data_produce_func</STRONG> (Thumb, 636 bytes, Stack size 120 bytes, mpbledemo2.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 384<LI>Call Chain = mpbledemo2_data_produce_func &rArr; ihu_get_mac_addr &rArr; vmda1458x_mac_addr_get &rArr; IhuErrorPrint &rArr; __2sprintf
+<BR><BR>[Stack]<UL><LI>Max Depth = 480<LI>Call Chain = mpbledemo2_data_produce_func &rArr; ihu_get_mac_addr &rArr; vmda1458x_mac_addr_get &rArr; IhuErrorPrint &rArr; __2sprintf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[f0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy (via Veneer)
 <LI><a href="#[154]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ke_free (via Veneer)
@@ -3541,8 +3541,8 @@ Global Symbols
 <LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mpbledemo2_readEmcPeriodOpen
 </UL>
 
-<P><STRONG><a name="[23b]"></a>IhuErrorPrint</STRONG> (Thumb, 46 bytes, Stack size 216 bytes, vmdalayer.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 240<LI>Call Chain = IhuErrorPrint &rArr; __2sprintf
+<P><STRONG><a name="[23b]"></a>IhuErrorPrint</STRONG> (Thumb, 48 bytes, Stack size 312 bytes, vmdalayer.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 336<LI>Call Chain = IhuErrorPrint &rArr; __2sprintf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[23c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen (via Veneer)
 <LI><a href="#[23d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
@@ -3583,7 +3583,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[240]"></a>vmda1458x_mac_addr_get</STRONG> (Thumb, 74 bytes, Stack size 24 bytes, vmdalayer.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 264<LI>Call Chain = vmda1458x_mac_addr_get &rArr; IhuErrorPrint &rArr; __2sprintf
+<BR><BR>[Stack]<UL><LI>Max Depth = 360<LI>Call Chain = vmda1458x_mac_addr_get &rArr; IhuErrorPrint &rArr; __2sprintf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nvds_get (via Veneer)
 <LI><a href="#[23b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrint
@@ -3600,7 +3600,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[234]"></a>ihu_get_mac_addr</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, vmdalayer.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 264<LI>Call Chain = ihu_get_mac_addr &rArr; vmda1458x_mac_addr_get &rArr; IhuErrorPrint &rArr; __2sprintf
+<BR><BR>[Stack]<UL><LI>Max Depth = 360<LI>Call Chain = ihu_get_mac_addr &rArr; vmda1458x_mac_addr_get &rArr; IhuErrorPrint &rArr; __2sprintf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[240]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vmda1458x_mac_addr_get
 </UL>

@@ -825,6 +825,14 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 void IhuDebugPrintFoEmc68x(char *format, ...);
 void IhuErrorPrintFoEmc68x(char *format, ...);
 = 将IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID修改为IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID，以反映实际情况
+= 修改所有L2FRAME对应的程序模块中有关EMC68X的名字改动
+
+//= ZJL, 2016 Dec.6, CURRENT_SW_DELIVERY R03.53 =>BFSC项目
+= 搭建BFSC应用层状态机框架
+
+
+
+
 
 
 
