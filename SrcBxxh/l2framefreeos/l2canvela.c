@@ -311,4 +311,175 @@ OPSTAT fsm_canvela_l3bfsc_give_up_resp(UINT8 dest_id, UINT8 src_id, void * param
 	return IHU_SUCCESS;
 }
 
+//生成FRAME函数
+OPSTAT func_canvela_frame_encode(UINT8 prefixcmdid, UINT8 optid, UINT8 optpar, UINT32 modbusval, strIhuCanvelaCmdFrame_t *pframe)
+{
+	//先检查输入参数
+	if ((optid <= IHU_CANVELA_OPTID_min) || (optid >= IHU_CANVELA_OPTID_max) || (pframe == NULL)){
+		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		IhuErrorPrint("CANVELA: Input parameters error!\n");
+		return IHU_FAILURE;
+	}
+
+	//按字节，生成消息结构帧
+	pframe->bfscCmdPrefixH = prefixcmdid;
+	pframe->bfscCmdPrefixL = IHU_CANVELA_CMD_PREFIXL;
+	pframe->bfscCmdId = IHU_CANVELA_CMD_BFSC_ID;
+	pframe->bfscOptId = optid;
+
+	//分别针对不同的OPTID进行帧的分类处理
+	switch(optid){
+	case IHU_CANVELA_OPTID_wegith_read:
+		//do nothing
+		break;
+
+	case IHU_CANVELA_OPTID_auto_zero_track:
+		//Modbus值起作用
+		pframe->bfscOptPar = modbusval & 0xFF;
+		pframe->bfscPar1 = ((modbusval & 0xFF00) >> 8) & 0xFF;
+		pframe->bfscPar2 = ((modbusval & 0xFF0000) >> 16) & 0xFF;
+		pframe->bfscPar3 = ((modbusval & 0xFF000000) >> 24) & 0xFF;
+		break;
+
+	case IHU_CANVELA_OPTID_min_sensitivity:
+		//Modbus值起作用
+		pframe->bfscOptPar = modbusval & 0xFF;
+		pframe->bfscPar1 = ((modbusval & 0xFF00) >> 8) & 0xFF;
+		pframe->bfscPar2 = ((modbusval & 0xFF0000) >> 16) & 0xFF;
+		pframe->bfscPar3 = ((modbusval & 0xFF000000) >> 24) & 0xFF;
+		break;
+
+	case IHU_CANVELA_OPTID_manual_set_zero:
+		//Modbus值起作用
+		pframe->bfscOptPar = modbusval & 0xFF;
+		pframe->bfscPar1 = ((modbusval & 0xFF00) >> 8) & 0xFF;
+		pframe->bfscPar2 = ((modbusval & 0xFF0000) >> 16) & 0xFF;
+		pframe->bfscPar3 = ((modbusval & 0xFF000000) >> 24) & 0xFF;
+		break;
+
+	case IHU_CANVELA_OPTID_static_detect_range:
+		//Modbus值起作用
+		pframe->bfscOptPar = modbusval & 0xFF;
+		pframe->bfscPar1 = ((modbusval & 0xFF00) >> 8) & 0xFF;
+		pframe->bfscPar2 = ((modbusval & 0xFF0000) >> 16) & 0xFF;
+		pframe->bfscPar3 = ((modbusval & 0xFF000000) >> 24) & 0xFF;
+		break;
+
+	case IHU_CANVELA_OPTID_static_detect_duration:
+		//Modbus值起作用
+		pframe->bfscOptPar = modbusval & 0xFF;
+		pframe->bfscPar1 = ((modbusval & 0xFF00) >> 8) & 0xFF;
+		pframe->bfscPar2 = ((modbusval & 0xFF0000) >> 16) & 0xFF;
+		pframe->bfscPar3 = ((modbusval & 0xFF000000) >> 24) & 0xFF;
+		break;
+
+	case IHU_CANVELA_OPTID_weight_scale_calibration:
+		pframe->bfscOptPar = optpar;
+		break;
+
+	case IHU_CANVELA_OPTID_motor_turn_around:
+		pframe->bfscOptPar = optpar;
+		break;
+
+	case IHU_CANVELA_OPTID_motor_speed:
+		//do nothing
+		break;
+
+	case IHU_CANVELA_OPTID_scale_range:
+		//do nothing
+		break;
+
+	default:
+		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		IhuErrorPrint("CANVELA: Input parameters error!\n");
+		return IHU_FAILURE;
+		//break;
+	}
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+//解码FRAME的函数
+OPSTAT func_canvela_frame_decode(strIhuCanvelaCmdFrame_t *pframe, UINT8 prefixcmdid, UINT8 optid, UINT8 optpar, UINT32 modbusval)
+{
+	//入参检查
+	if (pframe == NULL){
+		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		IhuErrorPrint("CANVELA: Input parameters error!\n");
+		return IHU_FAILURE;
+	}
+
+	//检查最重要的参数
+	if ((pframe->bfscCmdPrefixH <= IHU_CANVELA_PREFIXH_min) || (pframe->bfscCmdPrefixH >= IHU_CANVELA_PREFIXH_max) || (pframe->bfscCmdPrefixL != IHU_CANVELA_CMD_PREFIXL) || (pframe->bfscCmdId != IHU_CANVELA_CMD_BFSC_ID)){
+		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		IhuErrorPrint("CANVELA: Frame header error!\n");
+		return IHU_FAILURE;
+	}
+	prefixcmdid = pframe->bfscCmdId;
+	optid = pframe->bfscOptId;
+	if ((optid <=IHU_CANVELA_OPTID_min) || (optid >=IHU_CANVELA_OPTID_max)){
+		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		IhuErrorPrint("CANVELA: Encoding Canitf frame OptId error!\n");
+		return IHU_FAILURE;
+	}
+
+	//分类处理不同的情况
+	switch(optid){
+	case IHU_CANVELA_OPTID_wegith_read:
+		//do nothing
+		break;
+
+	case IHU_CANVELA_OPTID_auto_zero_track:
+		//Modbus值起作用
+		modbusval = pframe->bfscOptPar + (pframe->bfscPar1 << 8) + (pframe->bfscPar2 << 16) + (pframe->bfscPar3 << 24);
+		break;
+
+	case IHU_CANVELA_OPTID_min_sensitivity:
+		//Modbus值起作用
+		modbusval = pframe->bfscOptPar + (pframe->bfscPar1 << 8) + (pframe->bfscPar2 << 16) + (pframe->bfscPar3 << 24);
+		break;
+
+	case IHU_CANVELA_OPTID_manual_set_zero:
+		//Modbus值起作用
+		modbusval = pframe->bfscOptPar + (pframe->bfscPar1 << 8) + (pframe->bfscPar2 << 16) + (pframe->bfscPar3 << 24);
+		break;
+
+	case IHU_CANVELA_OPTID_static_detect_range:
+		//Modbus值起作用
+		modbusval = pframe->bfscOptPar + (pframe->bfscPar1 << 8) + (pframe->bfscPar2 << 16) + (pframe->bfscPar3 << 24);
+		break;
+
+	case IHU_CANVELA_OPTID_static_detect_duration:
+		//Modbus值起作用
+		modbusval = pframe->bfscOptPar + (pframe->bfscPar1 << 8) + (pframe->bfscPar2 << 16) + (pframe->bfscPar3 << 24);
+		break;
+
+	case IHU_CANVELA_OPTID_weight_scale_calibration:
+		optpar = pframe->bfscOptPar;
+		break;
+
+	case IHU_CANVELA_OPTID_motor_turn_around:
+		optpar = pframe->bfscOptPar;
+		break;
+
+	case IHU_CANVELA_OPTID_motor_speed:
+		//do nothing
+		break;
+
+	case IHU_CANVELA_OPTID_scale_range:
+		//do nothing
+		break;
+
+	default:
+		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		IhuErrorPrint("CANVELA: Input parameters error!\n");
+		return IHU_FAILURE;
+		//break;
+	}
+
+	//返回
+	return IHU_SUCCESS;
+}
+
 

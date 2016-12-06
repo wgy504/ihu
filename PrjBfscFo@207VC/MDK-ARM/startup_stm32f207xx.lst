@@ -696,7 +696,7 @@ ARM Macro Assembler    Page 11
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
 ork --depend=prjbfscfo@207vc\startup_stm32f207xx.d -oprjbfscfo@207vc\startup_st
-m32f207xx.o -I..\Inc -ID:\IHUPRJ\ihu\PrjBfscFo@207VC\MDK-ARM\RTE -IC:\Keil_v5\A
+m32f207xx.o -I..\Inc -ID:\IHUSRC\ihu\PrjBfscFo@207VC\MDK-ARM\RTE -IC:\Keil_v5\A
 RM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include -IC:\Keil_v5\ARM\PACK\Keil\STM32F2xx_DFP\
 2.6.0\Drivers\CMSIS\Device\ST\STM32F2xx\Include --predefine="__MICROLIB SETA 1"
  --predefine="__UVISION_VERSION SETA 518" --predefine="_RTE_ SETA 1" --predefin

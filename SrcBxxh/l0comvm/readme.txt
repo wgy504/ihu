@@ -2,19 +2,18 @@
 == 将修改方式放在最前面，以提高效率
 =================================================
 
+
+
+
 //近期需要完成的任务
 = FreeRTOS/ucosiii/TICK级的休眠省电
 
 //= ZJL, 2016 Dec.6, CURRENT_SW_DELIVERY R03.53 =>BFSC项目
 = 搭建BFSC应用层状态机框架
-
-
-
-
-
-
-
-
+= 完成BFSC的基本工作流程，特别是L3BFSC和CANVELA的工作交互消息
+= ADC采用假数据方式
+= 马达暂时没有反馈，待研究物理器件的操控方式来决定
+= CAN编解码，从HCU中复制过来
 
 
 L3 DEVELOPMENT FEATURE AND CONTENT LIST

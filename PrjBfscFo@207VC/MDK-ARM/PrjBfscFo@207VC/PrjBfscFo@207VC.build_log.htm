@@ -5,7 +5,7 @@
 <h2>Tool Versions:</h2>
 IDE-Version: ¦ÌVision V5.18.0.0
 Copyright (C) 2016 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: ZZ Microsoft, Microsoft, LIC=LJWGK-ZEPR1-AVU1J-U4SSR-Q96M5-JRGTF
+License Information: z MAMA, Microsoft, LIC=JDA30-BZJU5-68CFC-7RXXZ-QM63C-6Q9JT
  
 Tool Versions:
 Toolchain:       MDK-ARM Professional  Version: 5.18
@@ -21,16 +21,24 @@ Target DLL:      UL2CM3.DLL V1.157.5.0
 Dialog DLL:      TCM.DLL V1.14.8.0
  
 <h2>Project:</h2>
-D:\IHUPRJ\ihu\PrjBfscFo@207VC\MDK-ARM\PrjBfscFo@207VC.uvprojx
+D:\IHUSRC\ihu\PrjBfscFo@207VC\MDK-ARM\PrjBfscFo@207VC.uvprojx
 Project File Date:  11/10/2016
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 1 (build 61)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build Project 'PrjBfscFo@207VC' - Target 'PrjBfscFo@207VC'
+compiling l2canvela.c...
+D:\IHUSRC\ihu\SrcBxxh\l2framefreeos\l2canvela.c(404): warning:  #550-D: parameter "prefixcmdid" was set but never used
+  OPSTAT func_canvela_frame_decode(strIhuCanvelaCmdFrame_t *pframe, UINT8 prefixcmdid, UINT8 optid, UINT8 optpar, UINT32 modbusval)
+D:\IHUSRC\ihu\SrcBxxh\l2framefreeos\l2canvela.c(404): warning:  #550-D: parameter "optpar" was set but never used
+  OPSTAT func_canvela_frame_decode(strIhuCanvelaCmdFrame_t *pframe, UINT8 prefixcmdid, UINT8 optid, UINT8 optpar, UINT32 modbusval)
+D:\IHUSRC\ihu\SrcBxxh\l2framefreeos\l2canvela.c(404): warning:  #550-D: parameter "modbusval" was set but never used
+  OPSTAT func_canvela_frame_decode(strIhuCanvelaCmdFrame_t *pframe, UINT8 prefixcmdid, UINT8 optid, UINT8 optpar, UINT32 modbusval)
+..\..\SrcBxxh\l2framefreeos\l2canvela.c: 3 warnings, 0 errors
 compiling l3bfsc.c...
 linking...
 Program Size: Code=68320 RO-data=3428 RW-data=1512 ZI-data=71200  
-"PrjBfscFo@207VC\PrjBfscFo@207VC.axf" - 0 Error(s), 0 Warning(s).
+"PrjBfscFo@207VC\PrjBfscFo@207VC.axf" - 0 Error(s), 3 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -41,14 +49,14 @@ Package Vendor: ARM
    * Component: CORE Version: 4.3.0
 
 <h2>Collection of Component include folders:</h2>
-  D:\IHUPRJ\ihu\PrjBfscFo@207VC\MDK-ARM\RTE
+  D:\IHUSRC\ihu\PrjBfscFo@207VC\MDK-ARM\RTE
   C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include
   C:\Keil_v5\ARM\PACK\Keil\STM32F2xx_DFP\2.6.0\Drivers\CMSIS\Device\ST\STM32F2xx\Include
 
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:4.3.0
-Build Time Elapsed:  00:00:03
+Build Time Elapsed:  00:00:04
 </pre>
 </body>
 </html>

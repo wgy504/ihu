@@ -61,6 +61,8 @@ extern OPSTAT fsm_canvela_l3bfsc_give_up_resp(UINT8 dest_id, UINT8 src_id, void 
 //Local API
 OPSTAT func_canvela_hw_init(void);
 void func_canvela_time_out_period_scan(void);
+OPSTAT func_canvela_frame_encode(UINT8 prefixcmdid, UINT8 optid, UINT8 optpar, UINT32 modbusval, strIhuCanvelaCmdFrame_t *pframe);
+OPSTAT func_canvela_frame_decode(strIhuCanvelaCmdFrame_t *pframe, UINT8 prefixcmdid, UINT8 optid, UINT8 optpar, UINT32 modbusval);
 
 #endif /* L2FRAME_L2CANVELA_H_ */
 
