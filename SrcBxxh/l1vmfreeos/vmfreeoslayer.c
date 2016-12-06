@@ -55,7 +55,7 @@ OS_MUTEX zIhuPrintMutex;
 //请服从最长长度TASK_NAME_MAX_LENGTH的定义，不然Debug/Trace打印出的信息也会出错
 //全局变量：任务打印命名
 //从极致优化内存的角度，这里浪费了一个TASK对应的内存空间（MIN=0)，但它却极大的改善了程序编写的效率，值得浪费！！！
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID)
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
   char *zIhuTaskNameList[MAX_TASK_NUM_IN_ONE_IHU] ={
     "MIN",
     "VMFO",
@@ -109,7 +109,7 @@ OS_MUTEX zIhuPrintMutex;
 //消息ID的定义全局表，方便TRACE函数使用
 //请服从MSG_NAME_MAX_LENGTH的最长定义，不然出错
 //全局变量：消息打印命名
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID)
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
 char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK] ={
 	"MSG_ID_COM_MIN",
 	"MSG_ID_COM_INIT",
@@ -171,7 +171,9 @@ void IhuDebugPrintFo(UINT8 index, char *format, ...)
 {
 	va_list marker;
 	char strDebug[IHU_PRINT_CHAR_SIZE];
-	//char *ptrPrintBuffer;
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
+	char *ptrPrintBuffer;
+#endif
 	//UINT8 index=0;
 
 	//index = globalPrintIndex;
@@ -192,7 +194,7 @@ void IhuDebugPrintFo(UINT8 index, char *format, ...)
 		zIhuPrintBufferChar[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-1] = '\0';
 	}
 	
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID)
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
 	printf("%s", ptrPrintBuffer);
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)	
 	if (OS_MUTEX_GET(zIhuPrintMutex, IHU_PRINT_MUTEX_TIME_OUT_DURATION) != OS_MUTEX_TAKEN){
@@ -219,6 +221,9 @@ void IhuErrorPrintFo(UINT8 index, char *format, ...)
 {
 	va_list marker;
 	char strDebug[IHU_PRINT_CHAR_SIZE];
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
+        char *ptrPrintBuffer;
+#endif
 	//UINT8 index=0;
 
 	va_start(marker, format );
@@ -239,7 +244,7 @@ void IhuErrorPrintFo(UINT8 index, char *format, ...)
 		zIhuPrintBufferChar[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-1] = '\0';
 	}
 	
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID)
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
 	printf("%s", ptrPrintBuffer);
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)	
 	if (OS_MUTEX_GET(zIhuPrintMutex, IHU_PRINT_MUTEX_TIME_OUT_DURATION) != OS_MUTEX_TAKEN){
@@ -276,7 +281,7 @@ UINT8 IhuDebugPrintId(char *file, int line)
 //	sprintf(strLine, "[%6d]", line);
 //	strcat(ptrPrintBuffer, strLine);
 
-//#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID)	
+//#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
 //	printf("%s", strGlobalPrintChar);
 //#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)		
 //	if (OS_MUTEX_GET(zIhuPrintMutex, IHU_PRINT_MUTEX_TIME_OUT_DURATION) != OS_MUTEX_TAKEN){
@@ -303,6 +308,74 @@ UINT8 IhuDebugPrintId(char *file, int line)
 	strcat(zIhuPrintBufferChar[index].PrintHeader, strLine);
 	return index;
 }
+
+void IhuDebugPrintFoEmc68x(char *format, ...)
+{
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
+        va_list marker;
+        char strDebug[IHU_PRINT_CHAR_SIZE];
+
+        char *ptrPrintBuffer;
+        UINT8 index=0;
+
+        //index = globalPrintIndex;
+        memset(zIhuPrintBufferChar[index].PrintBuffer, 0, IHU_PRINT_CHAR_SIZE);
+
+        va_start(marker, format );
+        vsnprintf(strDebug, IHU_PRINT_CHAR_SIZE-1, format, marker);
+        va_end(marker);
+
+        sprintf(zIhuPrintBufferChar[index].PrintBuffer, "%s, [DBG: %s, %s] ", zIhuPrintBufferChar[index].PrintHeader, __DATE__, __TIME__);
+        strncat(zIhuPrintBufferChar[index].PrintBuffer, strDebug, IHU_PRINT_CHAR_SIZE - strlen(zIhuPrintBufferChar[index].PrintBuffer) - 1);
+
+        // The trace is limited to 128 characters as defined at SYSDIM.H
+        if( (zIhuPrintBufferChar[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-2] != 0) && (zIhuPrintBufferChar[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-1] != 0) )
+        {
+                zIhuPrintBufferChar[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-3] = '!';
+                zIhuPrintBufferChar[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-2] = '\n';
+                zIhuPrintBufferChar[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-1] = '\0';
+        }
+
+        printf("%s", ptrPrintBuffer);
+        zIhuPrintBufferChar[index].PrintBuffer[0] = '\0';
+#endif
+
+}
+
+//错误打印
+void IhuErrorPrintFoEmc68x(char *format, ...)
+{
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
+        va_list marker;
+        char strDebug[IHU_PRINT_CHAR_SIZE];
+        char *ptrPrintBuffer;
+        UINT8 index=0;
+
+        va_start(marker, format );
+        vsnprintf(strDebug, IHU_PRINT_CHAR_SIZE-1, format, marker);
+        va_end(marker);
+
+        //index = globalPrintIndex;
+        memset(zIhuPrintBufferChar[index].PrintBuffer, 0, IHU_PRINT_CHAR_SIZE);
+
+        sprintf(zIhuPrintBufferChar[index].PrintBuffer, "%s, [ERR: %s, %s] ", zIhuPrintBufferChar[index].PrintHeader, __DATE__, __TIME__);
+        strncat(zIhuPrintBufferChar[index].PrintBuffer, strDebug, IHU_PRINT_CHAR_SIZE - strlen(zIhuPrintBufferChar[index].PrintBuffer) - 1);
+
+        // The trace is limited to 128 characters as defined at SYSDIM.H
+        if( (zIhuPrintBufferChar[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-2] != 0) && (zIhuPrintBufferChar[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-1] != 0) )
+        {
+                zIhuPrintBufferChar[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-3] = '!';
+                zIhuPrintBufferChar[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-2] = '\n';
+                zIhuPrintBufferChar[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-1] = '\0';
+        }
+
+        printf("%s", ptrPrintBuffer);
+        zIhuPrintBufferChar[index].PrintBuffer[0] = '\0';
+#endif
+
+}
+
+
 
 //交换U16的高位低位字节
 uint16_t b2l_uint16(uint16_t in)
@@ -348,7 +421,7 @@ void ihu_vm_system_init(void)
 	IhuDebugPrint("VMFO: CURRENT_PRJ=[%s], HW_TYPE=[%d], HW_MODULE=[%d], SW_REL=[%d], SW_DELIVER=[%d].\n", IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT, CURRENT_HW_TYPE, CURRENT_HW_MODULE, CURRENT_SW_RELEASE, CURRENT_SW_DELIVERY);
 	IhuDebugPrint("VMFO: BXXH(TM) IHU(c) Application Layer start and initialized, build at %s, %s.\n", __DATE__, __TIME__);
 
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID)	
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
 	
 	//初始化全局变量TASK_ID/QUE_ID/TASK_STAT
 	memset(&(zIhuTaskInfo[0].TaskId), 0, sizeof(zIhuTaskInfo)*(TASK_ID_MAX-TASK_ID_MIN+1));
@@ -1651,7 +1724,7 @@ OPSTAT ihu_system_task_init_call(UINT8 task_id, FsmStateItem_t *p)
 //创建所有任务
 void ihu_task_create_all(void)
 {
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID)
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
 	//No need create VMFO environments /1
 	//if (zIhuTaskInfo[TASK_ID_VMFO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_VMFO, FsmVMFO);	
 

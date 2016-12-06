@@ -14,7 +14,7 @@
 #include "sysdim.h"
 #include "sysconfig.h"
 #include "sysengpar.h"
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID)
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
 	#include "commsgemc68.h"
   #include "osal.h"
   #include "resmgmt.h"
@@ -58,7 +58,7 @@
 
 #define IHU_WORKING_FREE_RTOS_SELECTION_BARE 1
 #define IHU_WORKING_FREE_RTOS_SELECTION_OSAL 2
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID)
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
   #define IHU_WORKING_FREE_RTOS_SELECTION IHU_WORKING_FREE_RTOS_SELECTION_OSAL
 #elif ((IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)\
 	|| (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID))
@@ -86,7 +86,7 @@
  *	 - 继续修改初始化函数void ihu_vm_system_init(void)
  *
  */
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID) 
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
 enum IHU_TASK_NAME_ID
 {
 	TASK_ID_MIN = 0,
@@ -269,9 +269,16 @@ typedef struct IhuPrintBufferChar
 void IhuDebugPrintFo(UINT8 index, char *format, ...);
 void IhuErrorPrintFo(UINT8 index, char *format, ...);
 UINT8 IhuDebugPrintId(char *file, int line);
+//Eclipse的编译器有些不一样，晕乎
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
+void IhuDebugPrintFoEmc68x(char *format, ...);
+void IhuErrorPrintFoEmc68x(char *format, ...);
+#define IhuDebugPrint IhuDebugPrintFoEmc68x
+#define IhuErrorPrint IhuErrorPrintFoEmc68x
+#else
 #define IhuDebugPrint(...) (((void (*)(UINT8, const char *, ...))IhuDebugPrintFo)(IhuDebugPrintId(__FILE__, __LINE__), __VA_ARGS__))
-#define IhuErrorPrint(...) (((void (*)(UINT8, const char *, ...))IhuErrorPrintFo)(IhuDebugPrintId(__FILE__, __LINE__), __VA_ARGS__))	
-	
+#define IhuErrorPrint(...) (((void (*)(UINT8, const char *, ...))IhuErrorPrintFo)(IhuDebugPrintId(__FILE__, __LINE__), __VA_ARGS__))
+#endif
 extern void ihu_vm_system_init(void);  //系统级别的初始化
 extern void ihu_sleep(UINT32 second);
 extern void ihu_usleep(UINT32 usecond);  //resulution 10^(-6)s = 1 microsecond
@@ -334,7 +341,7 @@ extern char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK];    //消息名字符串
 extern IhuSysEngParTable_t zIhuSysEngPar;                   //工参
 extern time_t zIhuSystemTimeUnix;                           //系统时钟TimeStamp
 extern struct tm zIhuSystemTimeYmd;                        	//系统时钟YMD
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID)
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
 extern FsmStateItem_t FsmTimer[];                           //状态机
 //extern FsmStateItem_t FsmAdclibra[];                        //状态机
 //extern FsmStateItem_t FsmSpileo[];                          //状态机
@@ -508,7 +515,7 @@ extern void ihu_timer_routine_handler_10ms(void);
 #endif
 	
 
-//来自于DA1468x - osal.h	
+//来自于DA1468x - osal.h
 #if (IHU_WORKING_FREE_RTOS_SELECTION == IHU_WORKING_FREE_RTOS_SELECTION_BARE)	
 
 	#define OS_FREERTOS   				/* Define this to use FreeRTOS */

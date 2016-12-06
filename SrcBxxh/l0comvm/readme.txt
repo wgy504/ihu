@@ -817,8 +817,16 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 = 完成CCL函数体的伪代码逻辑
 = CCL状态机机制改为EVENT触发，触发逻辑在L2模块中进行判决，整个状态机比较理想了。
 
-//= ZJL/JT, 2016 Nov.12, CURRENT_SW_DELIVERY R03.50 =>EMCWX项目
+//= ZJL/JT, 2016 Nov.12, CURRENT_SW_DELIVERY R03.51 =>EMCWX项目
 = 修改da1458x_config_basic.h中的SLEEP模式，从CFG_MEM_MAP_DEEP_SLEEP改为CFG_EXT_SLEEP，实验为什么系统没有进入SLEEP模式
+
+//= ZJL, 2016 Dec.6, CURRENT_SW_DELIVERY R03.52 =>EMCWX项目
+= 为了SmartSnippets下的编译，修改了以下打印函数，不然编译不过。这个函数是单为EMC68x设计，以后还需要进一步优化。
+void IhuDebugPrintFoEmc68x(char *format, ...);
+void IhuErrorPrintFoEmc68x(char *format, ...);
+= 将IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_EMC68X_ID修改为IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID，以反映实际情况
+
+
 
 
 
