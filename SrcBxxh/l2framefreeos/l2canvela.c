@@ -44,6 +44,9 @@ FsmStateItem_t FsmCanvela[] =
 	{MSG_ID_L3BFSC_CAN_ROLL_OUT_RESP,				FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_roll_out_resp}, //出料证实
 	{MSG_ID_L3BFSC_CAN_GIVE_UP_RESP,				FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_give_up_resp},	//退料证实
 	{MSG_ID_L3BFSC_CAN_ERROR_STATUS_REPORT,	FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_error_status_report},	//差错报告发送
+	{MSG_ID_ADC_CAN_MEAS_CMD_RESP,					FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_adc_meas_cmd_resp}, 
+	{MSG_ID_I2C_CAN_MOTO_CMD_RESP,					FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_i2c_mot_cmd_resp},	 
+	
 #endif
 	
   //结束点，固定定义，不要改动
@@ -527,6 +530,62 @@ OPSTAT fsm_canvela_l3bfsc_error_status_report(UINT8 dest_id, UINT8 src_id, void 
 	//返回
 	return IHU_SUCCESS;
 }
+
+//MSG_ID_ADC_CAN_MEAS_CMD_RESP
+OPSTAT fsm_canvela_adc_meas_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{
+	//int ret;
+	msg_struct_adclibra_canvela_meas_cmd_resp_t rcv;
+	
+	//收到消息并做参数检查
+	memset(&rcv, 0, sizeof(msg_struct_adclibra_canvela_meas_cmd_resp_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_adclibra_canvela_meas_cmd_resp_t))){
+		IhuErrorPrint("CANVELA: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+
+	//处理消息
+
+	//停止定时器
+	
+	//发送L2FRAME到底层
+	
+	//状态转移
+	
+	//返回
+	return IHU_SUCCESS;
+}
+
+//MSG_ID_I2C_CAN_MOTO_CMD_RESP
+OPSTAT fsm_canvela_i2c_mot_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{
+	//int ret;
+	msg_struct_i2caries_canvela_cmd_resp_t rcv;
+	
+	//收到消息并做参数检查
+	memset(&rcv, 0, sizeof(msg_struct_i2caries_canvela_cmd_resp_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_i2caries_canvela_cmd_resp_t))){
+		IhuErrorPrint("CANVELA: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+
+	//处理消息
+
+	//停止定时器
+	
+	//发送L2FRAME到底层
+	
+	//状态转移
+	
+	//返回
+	return IHU_SUCCESS;
+}
+
+
 
 #endif //#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
 

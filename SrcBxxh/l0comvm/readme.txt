@@ -6,8 +6,7 @@
 
 //= ZJL, 2016 Dec.7, CURRENT_SW_DELIVERY R03.55 =>BFSC项目
 = 完善整个命令系列
-
-
+= 完成CAN与ADC/I2C之间的控制命令框架
 
 
 

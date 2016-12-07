@@ -223,6 +223,7 @@ typedef struct msg_struct_i2caries_l2frame_rcv
 	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-1];
 	UINT8 length;
 }msg_struct_i2caries_l2frame_rcv_t;
+
 //MSG_ID_I2C_CAN_MOTO_CMD_RESP
 typedef struct msg_struct_i2caries_canvela_cmd_resp
 {

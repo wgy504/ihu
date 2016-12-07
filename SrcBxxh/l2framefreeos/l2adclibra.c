@@ -38,7 +38,9 @@ FsmStateItem_t FsmAdclibra[] =
   {MSG_ID_COM_TIME_OUT,										FSM_STATE_ADCLIBRA_ACTIVED,         				fsm_adclibra_time_out},
 
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
-  {MSG_ID_L3BFSC_ADC_CMD_STOP_MEASURE,		FSM_STATE_ADCLIBRA_ACTIVED,         				fsm_adclibra_l3bfsc_cmd_stop_measure},	
+  {MSG_ID_L3BFSC_ADC_CMD_STOP_MEASURE,		FSM_STATE_ADCLIBRA_ACTIVED,         				fsm_adclibra_l3bfsc_cmd_stop_measure},
+  {MSG_ID_CAN_ADC_MEAS_CMD_CTRL,					FSM_STATE_ADCLIBRA_ACTIVED,         				fsm_adclibra_can_meas_cmd_ctrl},
+	
 #endif
 
   //结束点，固定定义，不要改动
@@ -293,6 +295,7 @@ OPSTAT func_adclibra_time_out_bfsc_read_weight_scan(void)
 #endif
 
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+//MSG_ID_L3BFSC_ADC_CMD_STOP_MEASURE
 OPSTAT fsm_adclibra_l3bfsc_cmd_stop_measure(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
 	int ret = 0;
@@ -317,6 +320,40 @@ OPSTAT fsm_adclibra_l3bfsc_cmd_stop_measure(UINT8 dest_id, UINT8 src_id, void * 
 	
 	return IHU_SUCCESS;
 }
+
+//MSG_ID_CAN_ADC_MEAS_CMD_CTRL
+OPSTAT fsm_adclibra_can_meas_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{
+	int ret = 0;
+	msg_struct_canvela_adclibra_meas_cmd_ctrl_t rcv;
+	msg_struct_adclibra_canvela_meas_cmd_resp_t snd;
+	
+	//Receive message and copy to local variable
+	memset(&rcv, 0, sizeof(msg_struct_canvela_adclibra_meas_cmd_ctrl_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_canvela_adclibra_meas_cmd_ctrl_t))){
+		IhuErrorPrint("ADCLIBRA: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+	
+	//处理消息
+	
+	//依赖不同的控制命令，分门别类的处理
+
+	//发送回去消息
+	memset(&snd, 0, sizeof(msg_struct_adclibra_canvela_meas_cmd_resp_t));
+	snd.length = sizeof(msg_struct_adclibra_canvela_meas_cmd_resp_t);
+	ret = ihu_message_send(MSG_ID_ADC_CAN_MEAS_CMD_RESP, TASK_ID_CANVELA, TASK_ID_ADCLIBRA, &snd, snd.length);
+	if (ret == IHU_FAILURE){
+		IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_ADCLIBRA], zIhuTaskNameList[TASK_ID_CANVELA]);
+		return IHU_FAILURE;
+	}
+	
+	return IHU_SUCCESS;
+}
+
+
 #endif
 
 

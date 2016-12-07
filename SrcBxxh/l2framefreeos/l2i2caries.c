@@ -39,6 +39,8 @@ FsmStateItem_t FsmI2caries[] =
 	
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
   {MSG_ID_L3BFSC_I2C_CMD_STOP_MOTO,				FSM_STATE_I2CARIES_ACTIVED,         				fsm_i2caries_bfsc_cmd_stop_moto},	
+  {MSG_ID_CAN_I2C_MOTO_CMD_CTRL,					FSM_STATE_I2CARIES_ACTIVED,         				fsm_i2caries_i2c_moto_cmd_ctrl},	
+	
 #endif		
 	
   //结束点，固定定义，不要改动
@@ -203,6 +205,7 @@ void func_i2caries_time_out_period_scan(void)
 	IhuDebugPrint("I2CARIES: Time Out Test!\n");
 }
 
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 //MSG_ID_L3BFSC_I2C_CMD_STOP_MOTO Processing
 OPSTAT fsm_i2caries_bfsc_cmd_stop_moto(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
@@ -223,3 +226,41 @@ OPSTAT fsm_i2caries_bfsc_cmd_stop_moto(UINT8 dest_id, UINT8 src_id, void * param
 
 	return IHU_SUCCESS;
 }
+
+//MSG_ID_CAN_I2C_MOTO_CMD_CTRL
+OPSTAT fsm_i2caries_i2c_moto_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{
+	int ret = 0;
+	msg_struct_canvela_i2caries_moto_cmd_ctrl_t rcv;
+	msg_struct_i2caries_canvela_cmd_resp_t snd;
+	
+	//Receive message and copy to local variable
+	memset(&rcv, 0, sizeof(msg_struct_canvela_i2caries_moto_cmd_ctrl_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_canvela_i2caries_moto_cmd_ctrl_t))){
+		IhuErrorPrint("I2CARIES: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_I2CARIES]++;
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+
+	//消息处理
+	//命令下发给MOTO硬件
+	
+	//发送回去消息
+	memset(&snd, 0, sizeof(msg_struct_i2caries_canvela_cmd_resp_t));
+	snd.length = sizeof(msg_struct_i2caries_canvela_cmd_resp_t);
+	ret = ihu_message_send(MSG_ID_I2C_CAN_MOTO_CMD_RESP, TASK_ID_CANVELA, TASK_ID_I2CARIES, &snd, snd.length);
+	if (ret == IHU_FAILURE){
+		IhuErrorPrint("I2CARIES: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_I2CARIES], zIhuTaskNameList[TASK_ID_CANVELA]);
+		return IHU_FAILURE;
+	}	
+	
+	//返回
+	return IHU_SUCCESS;
+}
+
+#endif
+
+
+
+
