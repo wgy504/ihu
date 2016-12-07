@@ -22,11 +22,11 @@ FsmStateItem_t FsmBfsc[] =
 	//启始点，固定定义，不要改动, 使用ENTRY/END，意味者MSGID肯定不可能在某个高位区段中；考虑到所有任务共享MsgId，即使分段，也无法实现
 	//完全是为了给任务一个初始化的机会，按照状态转移机制，该函数不具备启动的机会，因为任务初始化后自动到FSM_STATE_IDLE
 	//如果没有必要进行初始化，可以设置为NULL
-	{MSG_ID_ENTRY,       										FSM_STATE_ENTRY,            								fsm_bfsc_task_entry}, //Starting
+	{MSG_ID_ENTRY,       										FSM_STATE_ENTRY,            							fsm_bfsc_task_entry}, //Starting
 
 	//System level initialization, only controlled by VMDA
-  {MSG_ID_COM_INIT,       								FSM_STATE_IDLE,            									fsm_bfsc_init},
-  {MSG_ID_COM_RESTART,										FSM_STATE_IDLE,            									fsm_bfsc_restart},
+  {MSG_ID_COM_INIT,       								FSM_STATE_IDLE,            								fsm_bfsc_init},
+  {MSG_ID_COM_RESTART,										FSM_STATE_IDLE,            								fsm_bfsc_restart},
 
   //Task level initialization
   {MSG_ID_COM_RESTART,        						FSM_STATE_BFSC_INITED,         						fsm_bfsc_restart},
@@ -36,8 +36,6 @@ FsmStateItem_t FsmBfsc[] =
   {MSG_ID_COM_RESTART,        						FSM_STATE_BFSC_ACTIVED,         					fsm_bfsc_restart},
   {MSG_ID_COM_STOP,												FSM_STATE_BFSC_ACTIVED,         					fsm_bfsc_stop_rcv},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_BFSC_ACTIVED,         				  fsm_bfsc_time_out},
-	{MSG_ID_ADC_UL_CTRL_CMD_RESP,						FSM_STATE_BFSC_ACTIVED,         					fsm_bfsc_adc_ul_ctrl_cmd_resp},
-	{MSG_ID_SPI_UL_DATA_PULL_BWD,						FSM_STATE_BFSC_ACTIVED,         					fsm_bfsc_spi_ul_data_pull_bwd},
 	{MSG_ID_CAN_L3BFSC_INIT_REQ,						FSM_STATE_BFSC_ACTIVED,         					fsm_bfsc_canvela_init_req},
 	
 
@@ -69,7 +67,7 @@ FsmStateItem_t FsmBfsc[] =
 	{MSG_ID_ADC_MATERIAL_DROP,							FSM_STATE_BFSC_GIVE_UP,         				  fsm_bfsc_adc_material_drop},   //放弃物料完成
 
   //结束点，固定定义，不要改动
-  {MSG_ID_END,            								FSM_STATE_END,             									NULL},  //Ending
+  {MSG_ID_END,            								FSM_STATE_END,             								NULL},  //Ending
 };
 
 //Global variables defination
@@ -167,45 +165,6 @@ OPSTAT fsm_bfsc_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 //Local APIs
 OPSTAT func_bfsc_hw_init(void)
 {
-	return IHU_SUCCESS;
-}
-
-OPSTAT fsm_bfsc_adc_ul_ctrl_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
-{	
-	//入参检查
-	if ((param_ptr == NULL) || (dest_id != TASK_ID_BFSC)){
-		zIhuRunErrCnt[TASK_ID_BFSC]++;
-		IhuErrorPrint("L3BFSC: Wrong input paramters!\n");
-		return IHU_FAILURE;
-	}
-
-	//返回
-	return IHU_SUCCESS;
-}
-
-OPSTAT fsm_bfsc_spi_ul_data_pull_bwd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
-{	
-	//入参检查
-	if ((param_ptr == NULL) || (dest_id != TASK_ID_BFSC)){
-		zIhuRunErrCnt[TASK_ID_BFSC]++;
-		IhuErrorPrint("L3BFSC: Wrong input paramters!\n");
-		return IHU_FAILURE;
-	}
-
-	//返回
-	return IHU_SUCCESS;
-}
-
-OPSTAT fsm_bfsc_spi_ul_ctrl_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
-{	
-	//入参检查
-	if ((param_ptr == NULL) || (dest_id != TASK_ID_BFSC)){
-		zIhuRunErrCnt[TASK_ID_BFSC]++;
-		IhuErrorPrint("L3BFSC: Wrong input paramters!\n");
-		return IHU_FAILURE;
-	}
-
-	//返回
 	return IHU_SUCCESS;
 }
 

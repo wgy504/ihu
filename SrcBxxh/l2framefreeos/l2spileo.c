@@ -30,15 +30,13 @@ FsmStateItem_t FsmSpileo[] =
   {MSG_ID_COM_RESTART,										FSM_STATE_IDLE,            									fsm_spileo_restart},
 
   //Task level initialization
-  {MSG_ID_COM_RESTART,        						FSM_STATE_SPILEO_INITED,         					fsm_spileo_restart},
-  {MSG_ID_COM_STOP,												FSM_STATE_SPILEO_INITED,         					fsm_spileo_stop_rcv},
+  {MSG_ID_COM_RESTART,        						FSM_STATE_SPILEO_INITED,         						fsm_spileo_restart},
+  {MSG_ID_COM_STOP,												FSM_STATE_SPILEO_INITED,         						fsm_spileo_stop_rcv},
 
 	//Task level actived status
   {MSG_ID_COM_RESTART,        						FSM_STATE_SPILEO_ACTIVED,         					fsm_spileo_restart},
   {MSG_ID_COM_STOP,												FSM_STATE_SPILEO_ACTIVED,         					fsm_spileo_stop_rcv},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_SPILEO_ACTIVED,         				  fsm_spileo_time_out},
-  {MSG_ID_SPI_DL_DATA_PUSH_FWD,						FSM_STATE_SPILEO_ACTIVED,         					fsm_spileo_dl_data_push_fwd},
-  {MSG_ID_SPI_DL_CTRL_CMD_REQ,						FSM_STATE_SPILEO_ACTIVED,         					fsm_spileo_dl_ctrl_cmd_req},
   {MSG_ID_SPI_L2FRAME_RCV,								FSM_STATE_SPILEO_ACTIVED,         					fsm_spileo_l2frame_rcv},
 	
   //结束点，固定定义，不要改动
@@ -139,34 +137,6 @@ OPSTAT fsm_spileo_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16
 		IhuErrorPrint("SPILEO: Error Set FSM State!\n");
 		return IHU_FAILURE;
 	}
-	
-	//返回
-	return IHU_SUCCESS;
-}
-
-OPSTAT fsm_spileo_dl_data_push_fwd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
-{	
-	//入参检查
-	if ((param_ptr == NULL) || (dest_id != TASK_ID_SPILEO)){
-		zIhuRunErrCnt[TASK_ID_SPILEO]++;
-		IhuErrorPrint("SPILEO: Wrong input paramters!\n");
-		return IHU_FAILURE;
-	}
-	
-	
-	//返回
-	return IHU_SUCCESS;
-}
-
-OPSTAT fsm_spileo_dl_ctrl_cmd_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
-{	
-	//入参检查
-	if ((param_ptr == NULL) || (dest_id != TASK_ID_SPILEO)){
-		zIhuRunErrCnt[TASK_ID_SPILEO]++;
-		IhuErrorPrint("SPILEO: Wrong input paramters!\n");
-		return IHU_FAILURE;
-	}
-	
 	
 	//返回
 	return IHU_SUCCESS;

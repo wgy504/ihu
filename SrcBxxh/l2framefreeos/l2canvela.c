@@ -37,11 +37,13 @@ FsmStateItem_t FsmCanvela[] =
   {MSG_ID_COM_STOP,												FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_stop_rcv},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CANVELA_ACTIVED,         				  fsm_canvela_time_out},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CANVELA_ACTIVED,         				  fsm_canvela_time_out},
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
 	{MSG_ID_L3BFSC_CAN_INIT_RESP,						FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_init_resp},	//初始化过程
 	{MSG_ID_L3BFSC_CAN_NEW_WS_EVENT,				FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_new_ws_event},	//收到新的物料
 	{MSG_ID_L3BFSC_CAN_ROLL_OUT_RESP,				FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_roll_out_resp},	//出料证实
 	{MSG_ID_L3BFSC_CAN_GIVE_UP_RESP,				FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_give_up_resp},	//退料证实
-
+#endif
+	
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             									NULL},  //Ending
 };
@@ -203,6 +205,8 @@ void func_canvela_time_out_period_scan(void)
 	IhuDebugPrint("CANVELA: Time Out Test!\n");
 }
 
+
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 //收到MSG_ID_L3BFSC_CAN_INIT_RESP以后的处理过程
 OPSTAT fsm_canvela_l3bfsc_init_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
@@ -481,5 +485,7 @@ OPSTAT func_canvela_frame_decode(strIhuCanvelaCmdFrame_t *pframe, UINT8 prefixcm
 	//返回
 	return IHU_SUCCESS;
 }
+
+#endif //#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
 
 
