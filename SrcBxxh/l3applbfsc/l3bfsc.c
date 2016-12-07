@@ -280,6 +280,7 @@ OPSTAT func_bfsc_time_out_roll_out_process(void)
 	int ret = 0;
 	msg_struct_l3bfsc_canvela_error_status_report_t snd;
 	msg_struct_l3bfsc_adc_cmd_stop_measure_t snd1;
+	msg_struct_l3bfsc_i2c_cmd_stop_moto_t snd2;	
 	
 	//发送错误报告给上位机
 	memset(&snd, 0, sizeof(msg_struct_l3bfsc_canvela_error_status_report_t));
@@ -321,9 +322,19 @@ OPSTAT func_bfsc_time_out_roll_out_process(void)
 			zIhuRunErrCnt[TASK_ID_BFSC]++;
 			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_BFSC], zIhuTaskNameList[TASK_ID_ADCLIBRA]);
 			return IHU_FAILURE;
-		}		
+		}
+		//发送命令给I2C-MOTO，停止测量工作
+		memset(&snd2, 0, sizeof(msg_struct_l3bfsc_i2c_cmd_stop_moto_t));
+		snd2.length = sizeof(msg_struct_l3bfsc_i2c_cmd_stop_moto_t);
+		ret = ihu_message_send(MSG_ID_L3BFSC_I2C_CMD_STOP_MOTO, TASK_ID_I2CARIES, TASK_ID_BFSC, &snd2, snd2.length);
+		if (ret == IHU_FAILURE){
+			zIhuRunErrCnt[TASK_ID_BFSC]++;
+			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_BFSC], zIhuTaskNameList[TASK_ID_I2CARIES]);
+			return IHU_FAILURE;
+		}
 	}
 	
+	//返回
 	return IHU_SUCCESS;	
 }
 
@@ -333,6 +344,7 @@ OPSTAT func_bfsc_time_out_give_up_process(void)
 	int ret = 0;
 	msg_struct_l3bfsc_canvela_error_status_report_t snd;
 	msg_struct_l3bfsc_adc_cmd_stop_measure_t snd1;
+	msg_struct_l3bfsc_i2c_cmd_stop_moto_t snd2;		
 	
 	//发送错误报告给上位机
 	memset(&snd, 0, sizeof(msg_struct_l3bfsc_canvela_error_status_report_t));
@@ -374,9 +386,19 @@ OPSTAT func_bfsc_time_out_give_up_process(void)
 			zIhuRunErrCnt[TASK_ID_BFSC]++;
 			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_BFSC], zIhuTaskNameList[TASK_ID_ADCLIBRA]);
 			return IHU_FAILURE;
+		}
+		//发送命令给I2C-MOTO，停止测量工作
+		memset(&snd2, 0, sizeof(msg_struct_l3bfsc_i2c_cmd_stop_moto_t));
+		snd2.length = sizeof(msg_struct_l3bfsc_i2c_cmd_stop_moto_t);
+		ret = ihu_message_send(MSG_ID_L3BFSC_I2C_CMD_STOP_MOTO, TASK_ID_I2CARIES, TASK_ID_BFSC, &snd2, snd2.length);
+		if (ret == IHU_FAILURE){
+			zIhuRunErrCnt[TASK_ID_BFSC]++;
+			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_BFSC], zIhuTaskNameList[TASK_ID_I2CARIES]);
+			return IHU_FAILURE;
 		}		
 	}
 	
+	//返回
 	return IHU_SUCCESS;
 }
 

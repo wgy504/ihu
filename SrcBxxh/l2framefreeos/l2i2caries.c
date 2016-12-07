@@ -33,9 +33,13 @@ FsmStateItem_t FsmI2caries[] =
   {MSG_ID_COM_STOP,												FSM_STATE_I2CARIES_INITED,         					fsm_i2caries_stop_rcv},
 
 	//Task level actived status
-  {MSG_ID_COM_RESTART,        						FSM_STATE_I2CARIES_ACTIVED,         					fsm_i2caries_restart},
-  {MSG_ID_COM_STOP,												FSM_STATE_I2CARIES_ACTIVED,         					fsm_i2caries_stop_rcv},
-	{MSG_ID_COM_TIME_OUT,										FSM_STATE_I2CARIES_ACTIVED,         				  fsm_i2caries_time_out},
+  {MSG_ID_COM_RESTART,        						FSM_STATE_I2CARIES_ACTIVED,         				fsm_i2caries_restart},
+  {MSG_ID_COM_STOP,												FSM_STATE_I2CARIES_ACTIVED,         				fsm_i2caries_stop_rcv},
+	{MSG_ID_COM_TIME_OUT,										FSM_STATE_I2CARIES_ACTIVED,         				fsm_i2caries_time_out},
+	
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+  {MSG_ID_L3BFSC_I2C_CMD_STOP_MOTO,				FSM_STATE_I2CARIES_ACTIVED,         				fsm_i2caries_bfsc_cmd_stop_moto},	
+#endif		
 	
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             									NULL},  //Ending
@@ -199,4 +203,23 @@ void func_i2caries_time_out_period_scan(void)
 	IhuDebugPrint("I2CARIES: Time Out Test!\n");
 }
 
+//MSG_ID_L3BFSC_I2C_CMD_STOP_MOTO Processing
+OPSTAT fsm_i2caries_bfsc_cmd_stop_moto(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{
+	//int ret = 0;
+	msg_struct_l3bfsc_i2c_cmd_stop_moto_t rcv;
+	
+	//Receive message and copy to local variable
+	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_i2c_cmd_stop_moto_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_i2c_cmd_stop_moto_t))){
+		IhuErrorPrint("I2CARIES: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_I2CARIES]++;
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
 
+	//消息处理
+	//命令下发给MOTO硬件
+
+	return IHU_SUCCESS;
+}

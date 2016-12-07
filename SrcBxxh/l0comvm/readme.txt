@@ -4,15 +4,16 @@
 //近期需要完成的任务
 = FreeRTOS/ucosiii/TICK级的休眠省电
 
+//= ZJL, 2016 Dec.7, CURRENT_SW_DELIVERY R03.55 =>BFSC项目
+= 完善整个命令系列
+
+
+
+
+
 //= ZJL, 2016 Dec.7, CURRENT_SW_DELIVERY R03.54 =>BFSC项目
 = 定时器处理过程完成
 = ADC测试假数据搞好
-
-
-
-
-
-
 
 //= ZJL, 2016 Dec.6, CURRENT_SW_DELIVERY R03.53 =>BFSC项目
 = 搭建BFSC应用层状态机框架

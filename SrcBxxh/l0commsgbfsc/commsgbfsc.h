@@ -78,7 +78,8 @@ enum IHU_INTER_TASK_MSG_ID
 	//ADC
 	MSG_ID_ADC_NEW_MATERIAL_WS,
 	MSG_ID_ADC_MATERIAL_DROP,
-	
+	MSG_ID_ADC_CAN_MEAS_CMD_RESP,
+
 	//LED
 	
 	//UART
@@ -92,10 +93,13 @@ enum IHU_INTER_TASK_MSG_ID
 	//I2C
 	MSG_ID_I2C_L2FRAME_SEND,
 	MSG_ID_I2C_L2FRAME_RCV,
+	MSG_ID_I2C_CAN_MOTO_CMD_RESP,
 	
 	//CAN
 	MSG_ID_CAN_L2FRAME_SEND,
 	MSG_ID_CAN_L2FRAME_RCV,
+	MSG_ID_CAN_ADC_MEAS_CMD_CTRL,
+	MSG_ID_CAN_I2C_MOTO_CMD_CTRL,
 	MSG_ID_CAN_L3BFSC_INIT_REQ,
 	MSG_ID_CAN_L3BFSC_ROLL_OUT_REQ,
 	MSG_ID_CAN_L3BFSC_GIVE_UP_REQ,
@@ -107,6 +111,7 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_L3BFSC_CAN_GIVE_UP_RESP,
 	MSG_ID_L3BFSC_CAN_ERROR_STATUS_REPORT,
 	MSG_ID_L3BFSC_ADC_CMD_STOP_MEASURE,
+	MSG_ID_L3BFSC_I2C_CMD_STOP_MOTO,
 	
 	//END FLAG
 	MSG_ID_COM_MAX, //Ending point
@@ -122,6 +127,14 @@ typedef struct com_gps_pos //
 	UINT32 gpsy;
 	UINT32 gpsz;
 }com_gps_pos_t;
+
+typedef struct com_ws_and_moto_cmd //
+{
+	UINT8 prefixcmdid;
+	UINT8 optid;
+	UINT8 optpar;
+	UINT32 modbusVal;
+}com_ws_and_moto_cmd_t;
 
 //公共消息定义
 typedef struct msg_struct_com_init //
@@ -154,6 +167,13 @@ typedef struct msg_struct_vmfo_1s_period_timtout
 }msg_struct_vmfo_1s_period_timtout_t;
 
 //ADC
+//MSG_ID_ADC_CAN_MEAS_CMD_RESP
+typedef struct msg_struct_adclibra_canvela_meas_cmd_resp
+{
+	com_ws_and_moto_cmd_t cmd;
+	UINT8 length;
+}msg_struct_adclibra_canvela_meas_cmd_resp_t;
+
 //MSG_ID_ADC_NEW_MATERIAL_WS,
 typedef struct msg_struct_adc_new_material_ws
 {
@@ -203,6 +223,13 @@ typedef struct msg_struct_i2caries_l2frame_rcv
 	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-1];
 	UINT8 length;
 }msg_struct_i2caries_l2frame_rcv_t;
+//MSG_ID_I2C_CAN_MOTO_CMD_RESP
+typedef struct msg_struct_i2caries_canvela_cmd_resp
+{
+	com_ws_and_moto_cmd_t cmd;	
+	UINT8 length;
+}msg_struct_i2caries_canvela_cmd_resp_t;
+
 
 //CAN消息定义
 typedef struct msg_struct_canvela_l2frame_send
@@ -215,6 +242,20 @@ typedef struct msg_struct_canvela_l2frame_rcv
 	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-1];
 	UINT8 length;
 }msg_struct_canvela_l2frame_rcv_t;
+
+//MSG_ID_CAN_ADC_MEAS_CMD_CTRL
+typedef struct msg_struct_canvela_adclibra_meas_cmd_ctrl
+{
+	com_ws_and_moto_cmd_t cmd;	
+	UINT8 length;
+}msg_struct_canvela_adclibra_meas_cmd_ctrl_t;
+
+//MSG_ID_CAN_I2C_MOTO_CMD_CTRL
+typedef struct msg_struct_canvela_i2caries_moto_cmd_ctrl
+{
+	com_ws_and_moto_cmd_t cmd;	
+	UINT8 length;
+}msg_struct_canvela_i2caries_moto_cmd_ctrl_t;
 
 //MSG_ID_CAN_L3BFSC_INIT_REQ
 typedef struct msg_struct_canvela_l3bfsc_init_req
@@ -274,5 +315,11 @@ typedef struct msg_struct_l3bfsc_adc_cmd_stop_measure
 {
 	UINT8 length;
 }msg_struct_l3bfsc_adc_cmd_stop_measure_t;
+
+//MSG_ID_L3BFSC_I2C_CMD_STOP_MOTO
+typedef struct msg_struct_l3bfsc_i2c_cmd_stop_moto
+{
+	UINT8 length;
+}msg_struct_l3bfsc_i2c_cmd_stop_moto_t;
 
 #endif /* L0COMVM_COMMSGBFSC_H_ */
