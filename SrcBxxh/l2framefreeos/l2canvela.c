@@ -37,11 +37,13 @@ FsmStateItem_t FsmCanvela[] =
   {MSG_ID_COM_STOP,												FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_stop_rcv},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CANVELA_ACTIVED,         				  fsm_canvela_time_out},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CANVELA_ACTIVED,         				  fsm_canvela_time_out},
+	
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
 	{MSG_ID_L3BFSC_CAN_INIT_RESP,						FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_init_resp},	//初始化过程
 	{MSG_ID_L3BFSC_CAN_NEW_WS_EVENT,				FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_new_ws_event},	//收到新的物料
-	{MSG_ID_L3BFSC_CAN_ROLL_OUT_RESP,				FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_roll_out_resp},	//出料证实
+	{MSG_ID_L3BFSC_CAN_ROLL_OUT_RESP,				FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_roll_out_resp}, //出料证实
 	{MSG_ID_L3BFSC_CAN_GIVE_UP_RESP,				FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_give_up_resp},	//退料证实
+	{MSG_ID_L3BFSC_CAN_ERROR_STATUS_REPORT,	FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_error_status_report},	//差错报告发送
 #endif
 	
   //结束点，固定定义，不要改动
@@ -210,25 +212,30 @@ void func_canvela_time_out_period_scan(void)
 //收到MSG_ID_L3BFSC_CAN_INIT_RESP以后的处理过程
 OPSTAT fsm_canvela_l3bfsc_init_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	//int ret;
+	int ret = 0;
 	msg_struct_l3bfsc_canvela_init_resp_t rcv;
 	
 	//收到消息并做参数检查
 	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_canvela_init_resp_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_canvela_init_resp_t))){
-		IhuErrorPrint("L3BFSC: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_BFSC]++;
+		IhuErrorPrint("CANVELA: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_CANVELA]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
 
 	//处理消息
-
-	//停止定时器
 	
-	//发送消息出去
-	
-	//状态转移
+	//发送FRAME出去
+	strIhuCanvelaCmdFrame_t snd;
+	memset(&snd, 0, sizeof(strIhuCanvelaCmdFrame_t));
+	ret = func_canvela_frame_encode(IHU_CANVELA_PREFIXH_node_resp, IHU_CANVELA_OPTID_node_set, 0, 0, &snd);
+	if (ret == IHU_FAILURE){
+		IhuErrorPrint("CANVELA: Encode CAN L2FRAME error!\n");
+		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		return IHU_FAILURE;		
+	}
+	//然后执行L2FRAME发送原语命令，通过中断函数将L2FRAME发送出去。这个待完善。
 	
 	//返回
 	return IHU_SUCCESS;
@@ -237,25 +244,30 @@ OPSTAT fsm_canvela_l3bfsc_init_resp(UINT8 dest_id, UINT8 src_id, void * param_pt
 //收到MSG_ID_L3BFSC_CAN_NEW_WS_EVENT以后的处理过程
 OPSTAT fsm_canvela_l3bfsc_new_ws_event(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	//int ret;
+	int ret = 0;
 	msg_struct_l3bfsc_canvela_new_ws_event_t rcv;
 	
 	//收到消息并做参数检查
 	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_canvela_new_ws_event_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_canvela_new_ws_event_t))){
-		IhuErrorPrint("L3BFSC: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_BFSC]++;
+		IhuErrorPrint("CANVELA: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_CANVELA]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
-
+	
 	//处理消息
-
-	//停止定时器
 	
-	//发送消息出去
-	
-	//状态转移
+	//发送FRAME出去
+	strIhuCanvelaCmdFrame_t snd;
+	memset(&snd, 0, sizeof(strIhuCanvelaCmdFrame_t));
+	ret = func_canvela_frame_encode(IHU_CANVELA_PREFIXH_ws_resp, IHU_CANVELA_OPTID_wegith_read, 0, rcv.wsValue, &snd);
+	if (ret == IHU_FAILURE){
+		IhuErrorPrint("CANVELA: Encode CAN L2FRAME error!\n");
+		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		return IHU_FAILURE;		
+	}
+	//然后执行L2FRAME发送原语命令，通过中断函数将L2FRAME发送出去。这个待完善。		
 	
 	//返回
 	return IHU_SUCCESS;
@@ -270,17 +282,15 @@ OPSTAT fsm_canvela_l3bfsc_roll_out_resp(UINT8 dest_id, UINT8 src_id, void * para
 	//收到消息并做参数检查
 	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_canvela_roll_out_resp_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_canvela_roll_out_resp_t))){
-		IhuErrorPrint("L3BFSC: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_BFSC]++;
+		IhuErrorPrint("CANVELA: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_CANVELA]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
 
 	//处理消息
-
-	//停止定时器
 	
-	//发送消息出去
+	//发送FRAME出去
 	
 	//状态转移
 	
@@ -297,17 +307,15 @@ OPSTAT fsm_canvela_l3bfsc_give_up_resp(UINT8 dest_id, UINT8 src_id, void * param
 	//收到消息并做参数检查
 	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_canvela_give_up_resp_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_canvela_give_up_resp_t))){
-		IhuErrorPrint("L3BFSC: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_BFSC]++;
+		IhuErrorPrint("CANVELA: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_CANVELA]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
 
 	//处理消息
-
-	//停止定时器
 	
-	//发送消息出去
+	//发送FRAME出去
 	
 	//状态转移
 	
@@ -393,6 +401,10 @@ OPSTAT func_canvela_frame_encode(UINT8 prefixcmdid, UINT8 optid, UINT8 optpar, U
 		//do nothing
 		break;
 
+	case IHU_CANVELA_OPTID_node_set:
+	//do nothing
+	break;
+	
 	default:
 		zIhuRunErrCnt[TASK_ID_CANVELA]++;
 		IhuErrorPrint("CANVELA: Input parameters error!\n");
@@ -474,7 +486,10 @@ OPSTAT func_canvela_frame_decode(strIhuCanvelaCmdFrame_t *pframe, UINT8 prefixcm
 	case IHU_CANVELA_OPTID_scale_range:
 		//do nothing
 		break;
-
+	
+	case IHU_CANVELA_OPTID_node_set:
+		//do nothing
+		break;
 	default:
 		zIhuRunErrCnt[TASK_ID_CANVELA]++;
 		IhuErrorPrint("CANVELA: Input parameters error!\n");
@@ -482,6 +497,33 @@ OPSTAT func_canvela_frame_decode(strIhuCanvelaCmdFrame_t *pframe, UINT8 prefixcm
 		//break;
 	}
 
+	//返回
+	return IHU_SUCCESS;
+}
+
+//MSG_ID_L3BFSC_CAN_ERROR_STATUS_REPORT的处理
+OPSTAT fsm_canvela_l3bfsc_error_status_report(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{
+	//int ret;
+	msg_struct_l3bfsc_canvela_error_status_report_t rcv;
+	
+	//收到消息并做参数检查
+	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_canvela_error_status_report_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_canvela_error_status_report_t))){
+		IhuErrorPrint("CANVELA: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+
+	//处理消息
+
+	//停止定时器
+	
+	//发送消息出去
+	
+	//状态转移
+	
 	//返回
 	return IHU_SUCCESS;
 }

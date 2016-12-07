@@ -36,7 +36,11 @@ FsmStateItem_t FsmAdclibra[] =
   {MSG_ID_COM_RESTART,        						FSM_STATE_ADCLIBRA_ACTIVED,         				fsm_adclibra_restart},
   {MSG_ID_COM_STOP,												FSM_STATE_ADCLIBRA_ACTIVED,         				fsm_adclibra_stop_rcv},
   {MSG_ID_COM_TIME_OUT,										FSM_STATE_ADCLIBRA_ACTIVED,         				fsm_adclibra_time_out},
-	
+
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+  {MSG_ID_L3BFSC_ADC_CMD_STOP_MEASURE,		FSM_STATE_ADCLIBRA_ACTIVED,         				fsm_adclibra_l3bfsc_cmd_stop_measure},	
+#endif
+
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             									NULL},  //Ending
 };
@@ -201,10 +205,12 @@ OPSTAT fsm_adclibra_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 		}
 		func_adclibra_time_out_period_scan();
 	}
-	
+
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
 	else if ((rcv.timeId == TIMER_ID_10MS_BFSC_ADCLIBRA_SCAN_TIMER) &&(rcv.timeRes == TIMER_RESOLUTION_10MS)){
 		func_adclibra_time_out_bfsc_read_weight_scan();
 	}
+#endif
 	
 	else{
 		zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
@@ -221,7 +227,8 @@ void func_adclibra_time_out_period_scan(void)
 	IhuDebugPrint("ADCLIBRA: Period Time Out Test, do nothing!\n");
 }
 
-void func_adclibra_time_out_bfsc_read_weight_scan(void)
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+OPSTAT func_adclibra_time_out_bfsc_read_weight_scan(void)
 {
 	int ret = 0;
 	//扫描ADC的数据，这里应该有采样，以及滤波算法
@@ -249,7 +256,7 @@ void func_adclibra_time_out_bfsc_read_weight_scan(void)
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
 			IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_ADCLIBRA], zIhuTaskNameList[TASK_ID_BFSC]);
-			return;
+			return IHU_FAILURE;
 		}
 	}
 	
@@ -268,7 +275,7 @@ void func_adclibra_time_out_bfsc_read_weight_scan(void)
 			if (ret == IHU_FAILURE){
 				zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
 				IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_ADCLIBRA], zIhuTaskNameList[TASK_ID_BFSC]);
-				return;
+				return IHU_FAILURE;
 			}
 		}//if (tempWeight != zIhuAdcBfscSensorWeightValue)
 	}
@@ -278,9 +285,40 @@ void func_adclibra_time_out_bfsc_read_weight_scan(void)
 	{
 		zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
 		IhuErrorPrint("ADCLIBRA: Wrong scan result!\n");
-		return;	
+		return IHU_FAILURE;	
 	}
+	
+	return IHU_SUCCESS;
 }
+#endif
+
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+OPSTAT fsm_adclibra_l3bfsc_cmd_stop_measure(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{
+	int ret = 0;
+	msg_struct_l3bfsc_adc_cmd_stop_measure_t rcv;
+	
+	//Receive message and copy to local variable
+	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_adc_cmd_stop_measure_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_adc_cmd_stop_measure_t))){
+		IhuErrorPrint("ADCLIBRA: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+	
+	//处理消息：停止扫描消息，不再干活，等待人工干预
+	ret = ihu_timer_stop(TASK_ID_ADCLIBRA, TIMER_ID_1S_ADCLIBRA_PERIOD_SCAN, TIMER_RESOLUTION_1S);
+	if (ret == IHU_FAILURE){
+		IhuErrorPrint("L3BFSC: Error stop timer!\n");
+		zIhuRunErrCnt[TASK_ID_BFSC]++;
+		return IHU_FAILURE;
+	}
+	
+	return IHU_SUCCESS;
+}
+#endif
+
 
 
 

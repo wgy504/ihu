@@ -348,6 +348,8 @@ typedef enum
 	IHU_CANVELA_PREFIXH_motor_resp = 0x60,
 	IHU_CANVELA_PREFIXH_ws_ctrl = 0x40,
 	IHU_CANVELA_PREFIXH_ws_resp = 0x43,
+	IHU_CANVELA_PREFIXH_node_ctrl = 0x50,	
+	IHU_CANVELA_PREFIXH_node_resp = 0x51,	
 	IHU_CANVELA_PREFIXH_heart_beat = 0x7F,  //心跳
 	IHU_CANVELA_PREFIXH_max,
 	IHU_CANVELA_PREFIXH_invalid = 0xFF,
@@ -368,6 +370,7 @@ typedef enum
 	IHU_CANVELA_OPTID_motor_turn_around = 0x20,
 	IHU_CANVELA_OPTID_motor_speed = 0x21,
 	IHU_CANVELA_OPTID_scale_range = 0x25,
+	IHU_CANVELA_OPTID_node_set = 0x26,
 	IHU_CANVELA_OPTID_max,
 	IHU_CANVELA_OPTID_invalid = 0xFF,
 }IhuCanvelaOptidEnmu;

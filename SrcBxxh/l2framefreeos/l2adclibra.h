@@ -51,11 +51,12 @@ extern OPSTAT fsm_adclibra_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 extern OPSTAT fsm_adclibra_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_adclibra_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_adclibra_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
-
+extern OPSTAT fsm_adclibra_l3bfsc_cmd_stop_measure(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+	
 //Local API
 OPSTAT func_adclibra_hw_init(void);
 void func_adclibra_time_out_period_scan(void);
-void func_adclibra_time_out_bfsc_read_weight_scan(void);
+OPSTAT func_adclibra_time_out_bfsc_read_weight_scan(void);
 
 #endif /* L2FRAME_L2ADCLIBRA_H_ */
 

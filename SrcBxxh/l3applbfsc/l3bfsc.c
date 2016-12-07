@@ -37,7 +37,6 @@ FsmStateItem_t FsmBfsc[] =
   {MSG_ID_COM_STOP,												FSM_STATE_BFSC_ACTIVED,         					fsm_bfsc_stop_rcv},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_BFSC_ACTIVED,         				  fsm_bfsc_time_out},
 	{MSG_ID_CAN_L3BFSC_INIT_REQ,						FSM_STATE_BFSC_ACTIVED,         					fsm_bfsc_canvela_init_req},
-	
 
 	//扫描模式工作状态：等待ADC上报合法的称重结果
   {MSG_ID_COM_RESTART,        						FSM_STATE_BFSC_SCAN,         							fsm_bfsc_restart},
@@ -50,27 +49,35 @@ FsmStateItem_t FsmBfsc[] =
   {MSG_ID_COM_RESTART,        						FSM_STATE_BFSC_WEIGHT_REPORT,         		fsm_bfsc_restart},
   {MSG_ID_COM_STOP,												FSM_STATE_BFSC_WEIGHT_REPORT,         		fsm_bfsc_stop_rcv},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_BFSC_WEIGHT_REPORT,         		fsm_bfsc_time_out},
+	{MSG_ID_ADC_NEW_MATERIAL_WS,						FSM_STATE_BFSC_WEIGHT_REPORT,         		fsm_bfsc_adc_new_material_ws}, //新的称重结果，此时也是允许上报的
 	{MSG_ID_CAN_L3BFSC_ROLL_OUT_REQ,				FSM_STATE_BFSC_WEIGHT_REPORT,         		fsm_bfsc_canvela_roll_out_req},//正常出料
 	{MSG_ID_CAN_L3BFSC_GIVE_UP_REQ,					FSM_STATE_BFSC_WEIGHT_REPORT,         		fsm_bfsc_canvela_give_up_req}, //抛弃物料
 	{MSG_ID_ADC_MATERIAL_DROP,							FSM_STATE_BFSC_WEIGHT_REPORT,         		fsm_bfsc_adc_material_drop},   //物料失重被拿走
 	
-	//出料输出等待状态：完成后进入SCAN状态
+	//出料输出等待状态：完成后进入SCAN状态。如果连续N次都未能成功，停止马达和称重传感器，并进入ERROR_TRAP状态。
   {MSG_ID_COM_RESTART,        						FSM_STATE_BFSC_ROLL_OUT,         					fsm_bfsc_restart},
   {MSG_ID_COM_STOP,												FSM_STATE_BFSC_ROLL_OUT,         					fsm_bfsc_stop_rcv},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_BFSC_ROLL_OUT,         					fsm_bfsc_time_out},
 	{MSG_ID_ADC_MATERIAL_DROP,							FSM_STATE_BFSC_ROLL_OUT,         				  fsm_bfsc_adc_material_drop},   //出料完成
 
-	//放弃物料输出等待状态：完成后进入SCAN状态
+	//放弃物料输出等待状态：完成后进入SCAN状态。如果连续N次都未能成功，停止马达和称重传感器，并进入ERROR_TRAP状态。
   {MSG_ID_COM_RESTART,        						FSM_STATE_BFSC_GIVE_UP,         					fsm_bfsc_restart},
   {MSG_ID_COM_STOP,												FSM_STATE_BFSC_GIVE_UP,         					fsm_bfsc_stop_rcv},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_BFSC_GIVE_UP,         					fsm_bfsc_time_out},
 	{MSG_ID_ADC_MATERIAL_DROP,							FSM_STATE_BFSC_GIVE_UP,         				  fsm_bfsc_adc_material_drop},   //放弃物料完成
+
+	//硬件出错，该传感器进入错误陷阱状态，不再工作，等待人工干预
+  {MSG_ID_COM_RESTART,        						FSM_STATE_BFSC_ERROR_TRAP,         				fsm_bfsc_restart},
+  {MSG_ID_COM_STOP,												FSM_STATE_BFSC_ERROR_TRAP,         				fsm_bfsc_stop_rcv},
+	{MSG_ID_COM_TIME_OUT,										FSM_STATE_BFSC_ERROR_TRAP,         				fsm_bfsc_time_out},
 
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             								NULL},  //Ending
 };
 
 //Global variables defination
+INT32 zIhuL3bfscLatestMeasureWeightValue = 0;
+UINT32 zIhuL3bfscMotoRecoverTimes = 0;
 
 //Main Entry
 //Input parameter would be useless, but just for similar structure purpose
@@ -86,7 +93,7 @@ OPSTAT fsm_bfsc_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16
 
 OPSTAT fsm_bfsc_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	//int ret=0;
+	int ret=0;
 
 	//串行会送INIT_FB给VM，不然消息队列不够深度，此为节省内存机制
 	if ((src_id > TASK_ID_MIN) &&(src_id < TASK_ID_MAX)){
@@ -115,6 +122,8 @@ OPSTAT fsm_bfsc_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 
 	//Global Variables
 	zIhuRunErrCnt[TASK_ID_BFSC] = 0;
+	zIhuL3bfscLatestMeasureWeightValue = 0;
+	zIhuL3bfscMotoRecoverTimes = 0;
 
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_ACTIVED) == IHU_FAILURE){
@@ -123,7 +132,13 @@ OPSTAT fsm_bfsc_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 		return IHU_FAILURE;
 	}
 	
-	//启动本地定时器，如果有必要
+	//启动本地定时器，如果有必要	
+	ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_1S_BFSC_PERIOD_SCAN, zIhuSysEngPar.timer.bfscPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+	if (ret == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_BFSC]++;
+		IhuErrorPrint("L3BFSC: Error start timer!\n");
+		return IHU_FAILURE;
+	}
 	
 	//打印报告进入常规状态
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
@@ -200,26 +215,170 @@ OPSTAT fsm_bfsc_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 
 	//Period time out received
 	if ((rcv.timeId == TIMER_ID_1S_BFSC_PERIOD_SCAN) &&(rcv.timeRes == TIMER_RESOLUTION_1S)){
-		//保护周期读数的优先级，强制抢占状态，并简化问题
-		if (FsmGetState(TASK_ID_BFSC) != FSM_STATE_BFSC_ACTIVED){
-			ret = FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_ACTIVED);
-			if (ret == IHU_FAILURE){
-				zIhuRunErrCnt[TASK_ID_BFSC]++;
-				IhuErrorPrint("L3BFSC: Error Set FSM State!\n");
-				return IHU_FAILURE;
-			}//FsmSetState
-		}
 		func_bfsc_time_out_period_scan();
 	}
 
+	else if ((rcv.timeId == TIMER_ID_1S_BFSC_L3BFSC_WAIT_WEIGHT_TIMER) &&(rcv.timeRes == TIMER_RESOLUTION_1S)){
+		func_bfsc_time_out_wait_weight_command_process();
+	}
+	
+	else if ((rcv.timeId == TIMER_ID_1S_BFSC_L3BFSC_ROLL_OUT_TIMER) &&(rcv.timeRes == TIMER_RESOLUTION_1S)){
+		func_bfsc_time_out_roll_out_process();
+	}
+	
+	else if ((rcv.timeId == TIMER_ID_1S_BFSC_L3BFSC_GIVE_UP_TIMER) &&(rcv.timeRes == TIMER_RESOLUTION_1S)){
+		func_bfsc_time_out_give_up_process();
+	}
+			
+	else{
+		zIhuRunErrCnt[TASK_ID_BFSC]++;
+		IhuErrorPrint("L3BFSC: Receive error timer ID!\n");
+		return IHU_FAILURE;
+	}
+	
 	return IHU_SUCCESS;
 }
 
-void func_bfsc_time_out_period_scan(void)
+//暂时无用，而只是为了回归状态的定时器
+OPSTAT func_bfsc_time_out_period_scan(void)
 {
-	IhuDebugPrint("L3BFSC: Time Out Test!\n");
+	IhuDebugPrint("L3BFSC: Time Out Test, do nothing!\n");
+
+	return IHU_SUCCESS;	
 }
 
+OPSTAT func_bfsc_time_out_wait_weight_command_process(void)
+{
+	int ret = 0;
+	msg_struct_l3bfsc_canvela_new_ws_event_t snd;
+	
+	//重发数据
+	memset(&snd, 0, sizeof(msg_struct_l3bfsc_canvela_new_ws_event_t));
+	snd.wsValue = zIhuL3bfscLatestMeasureWeightValue;
+	snd.length = sizeof(msg_struct_l3bfsc_canvela_new_ws_event_t);
+	ret = ihu_message_send(MSG_ID_L3BFSC_CAN_INIT_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length);
+	if (ret == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_BFSC]++;
+		IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_BFSC], zIhuTaskNameList[TASK_ID_CANVELA]);
+		return IHU_FAILURE;
+	}
+	
+	//启动定时器
+	ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_1S_BFSC_L3BFSC_WAIT_WEIGHT_TIMER, zIhuSysEngPar.timer.bfscL3bfscWaitWeightTimer, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
+	if (ret == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_BFSC]++;
+		IhuErrorPrint("L3BFSC: Error start timer!\n");
+		return IHU_FAILURE;
+	}
+	
+	return IHU_SUCCESS;	
+}
+
+//[组合]出料TIME OUT处理
+OPSTAT func_bfsc_time_out_roll_out_process(void)
+{
+	int ret = 0;
+	msg_struct_l3bfsc_canvela_error_status_report_t snd;
+	msg_struct_l3bfsc_adc_cmd_stop_measure_t snd1;
+	
+	//发送错误报告给上位机
+	memset(&snd, 0, sizeof(msg_struct_l3bfsc_canvela_error_status_report_t));
+	snd.length = sizeof(msg_struct_l3bfsc_canvela_error_status_report_t);
+	ret = ihu_message_send(MSG_ID_L3BFSC_CAN_ERROR_STATUS_REPORT, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length);
+	if (ret == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_BFSC]++;
+		IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_BFSC], zIhuTaskNameList[TASK_ID_CANVELA]);
+		return IHU_FAILURE;
+	}
+
+	//出错次数统计
+	zIhuL3bfscMotoRecoverTimes++;
+	
+	if (zIhuL3bfscMotoRecoverTimes < IHU_L3BFSC_MOTO_HW_ERROR_RECOVER_TIMES_MAX)
+	{
+		//继续启动定时器，并打开MOTO命令
+		
+		//重启定时器
+		ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_1S_BFSC_L3BFSC_ROLL_OUT_TIMER, zIhuSysEngPar.timer.bfscL3bfscRolloutTimer, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
+		if (ret == IHU_FAILURE){
+			zIhuRunErrCnt[TASK_ID_BFSC]++;
+			IhuErrorPrint("L3BFSC: Error start timer!\n");
+			return IHU_FAILURE;
+		}
+	}
+	else
+	{
+		//状态强行转移到ERROR_TRAP模式，等待人工恢复
+		if (FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_ERROR_TRAP) == IHU_FAILURE){
+			IhuErrorPrint("L3BFSC: Error Set FSM State!");	
+			return IHU_FAILURE;
+		}	
+		//发送命令给ADC，停止测量工作
+		memset(&snd1, 0, sizeof(msg_struct_l3bfsc_adc_cmd_stop_measure_t));
+		snd1.length = sizeof(msg_struct_l3bfsc_adc_cmd_stop_measure_t);
+		ret = ihu_message_send(MSG_ID_L3BFSC_ADC_CMD_STOP_MEASURE, TASK_ID_ADCLIBRA, TASK_ID_BFSC, &snd1, snd1.length);
+		if (ret == IHU_FAILURE){
+			zIhuRunErrCnt[TASK_ID_BFSC]++;
+			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_BFSC], zIhuTaskNameList[TASK_ID_ADCLIBRA]);
+			return IHU_FAILURE;
+		}		
+	}
+	
+	return IHU_SUCCESS;	
+}
+
+//[放弃]出料TIME OUT处理
+OPSTAT func_bfsc_time_out_give_up_process(void)
+{
+	int ret = 0;
+	msg_struct_l3bfsc_canvela_error_status_report_t snd;
+	msg_struct_l3bfsc_adc_cmd_stop_measure_t snd1;
+	
+	//发送错误报告给上位机
+	memset(&snd, 0, sizeof(msg_struct_l3bfsc_canvela_error_status_report_t));
+	snd.length = sizeof(msg_struct_l3bfsc_canvela_error_status_report_t);
+	ret = ihu_message_send(MSG_ID_L3BFSC_CAN_ERROR_STATUS_REPORT, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length);
+	if (ret == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_BFSC]++;
+		IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_BFSC], zIhuTaskNameList[TASK_ID_CANVELA]);
+		return IHU_FAILURE;
+	}
+
+	//出错次数统计
+	zIhuL3bfscMotoRecoverTimes++;
+	
+	if (zIhuL3bfscMotoRecoverTimes < IHU_L3BFSC_MOTO_HW_ERROR_RECOVER_TIMES_MAX)
+	{
+		//继续启动定时器，并打开MOTO命令
+		
+		//重启定时器
+		ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_1S_BFSC_L3BFSC_GIVE_UP_TIMER, zIhuSysEngPar.timer.bfscL3bfscGiveupTimer, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
+		if (ret == IHU_FAILURE){
+			zIhuRunErrCnt[TASK_ID_BFSC]++;
+			IhuErrorPrint("L3BFSC: Error start timer!\n");
+			return IHU_FAILURE;
+		}
+	}
+	else
+	{
+		//状态强行转移到ERROR_TRAP模式，等待人工恢复
+		if (FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_ERROR_TRAP) == IHU_FAILURE){
+			IhuErrorPrint("L3BFSC: Error Set FSM State!");	
+			return IHU_FAILURE;
+		}	
+		//发送命令给ADC，停止测量工作
+		memset(&snd1, 0, sizeof(msg_struct_l3bfsc_adc_cmd_stop_measure_t));
+		snd1.length = sizeof(msg_struct_l3bfsc_adc_cmd_stop_measure_t);
+		ret = ihu_message_send(MSG_ID_L3BFSC_ADC_CMD_STOP_MEASURE, TASK_ID_ADCLIBRA, TASK_ID_BFSC, &snd1, snd1.length);
+		if (ret == IHU_FAILURE){
+			zIhuRunErrCnt[TASK_ID_BFSC]++;
+			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_BFSC], zIhuTaskNameList[TASK_ID_ADCLIBRA]);
+			return IHU_FAILURE;
+		}		
+	}
+	
+	return IHU_SUCCESS;
+}
 
 //收到MSG_ID_CAN_L3BFSC_INIT_REQ以后的处理过程
 OPSTAT fsm_bfsc_canvela_init_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
@@ -238,7 +397,7 @@ OPSTAT fsm_bfsc_canvela_init_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 	memcpy(&rcv, param_ptr, param_len);
 
 	//处理消息
-
+	
 	//停止定时器
 	
 	//发送消息出去
@@ -268,23 +427,24 @@ OPSTAT fsm_bfsc_adc_new_material_ws(UINT8 dest_id, UINT8 src_id, void * param_pt
 	int ret;
 	msg_struct_adc_new_material_ws_t rcv;
 	msg_struct_l3bfsc_canvela_new_ws_event_t snd;
-
 	
 	//收到消息并做参数检查
 	memset(&rcv, 0, sizeof(msg_struct_adc_new_material_ws_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_adc_new_material_ws_t))){
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_adc_new_material_ws_t)) || (rcv.wsValue == 0)){
 		IhuErrorPrint("L3BFSC: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_BFSC]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
 
-	//处理消息
-
-	//停止定时器
+	//处理消息，存储最后收到的新测量值，以便定时超时后再复送
+	zIhuL3bfscLatestMeasureWeightValue = rcv.wsValue;
+	
+	//停止定时器：没有定时器可以停止
 	
 	//发送消息出去
 	memset(&snd, 0, sizeof(msg_struct_l3bfsc_canvela_new_ws_event_t));
+	snd.wsValue = rcv.wsValue;
 	snd.length = sizeof(msg_struct_l3bfsc_canvela_new_ws_event_t);
 	ret = ihu_message_send(MSG_ID_L3BFSC_CAN_INIT_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length);
 	if (ret == IHU_FAILURE){
@@ -292,6 +452,14 @@ OPSTAT fsm_bfsc_adc_new_material_ws(UINT8 dest_id, UINT8 src_id, void * param_pt
 		IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_BFSC], zIhuTaskNameList[TASK_ID_CANVELA]);
 		return IHU_FAILURE;
 	}
+	
+	//启动定时器
+	ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_1S_BFSC_L3BFSC_WAIT_WEIGHT_TIMER, zIhuSysEngPar.timer.bfscL3bfscWaitWeightTimer, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
+	if (ret == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_BFSC]++;
+		IhuErrorPrint("L3BFSC: Error start timer!\n");
+		return IHU_FAILURE;
+	}	
 	
 	//状态转移
 	if (FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_WEIGHT_REPORT) == IHU_FAILURE){
@@ -302,7 +470,6 @@ OPSTAT fsm_bfsc_adc_new_material_ws(UINT8 dest_id, UINT8 src_id, void * param_pt
 	//返回
 	return IHU_SUCCESS;
 }
-
 
 //收到MSG_ID_ADC_MATERIAL_DROP以后的处理过程
 OPSTAT fsm_bfsc_adc_material_drop(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
@@ -340,12 +507,17 @@ OPSTAT fsm_bfsc_adc_material_drop(UINT8 dest_id, UINT8 src_id, void * param_ptr,
 			IhuErrorPrint("L3BFSC: Error Set FSM State!");	
 			return IHU_FAILURE;
 		}
-
 	}
 	
-	//在出料条件下
+	//在[组合]出料条件下
 	else if (FsmGetState(TASK_ID_BFSC) == FSM_STATE_BFSC_ROLL_OUT){
 		//停止定时器
+		ret = ihu_timer_stop(TASK_ID_BFSC, TIMER_ID_1S_BFSC_L3BFSC_ROLL_OUT_TIMER, TIMER_RESOLUTION_1S);
+		if (ret == IHU_FAILURE){
+			IhuErrorPrint("L3BFSC: Error stop timer!\n");
+			zIhuRunErrCnt[TASK_ID_BFSC]++;
+			return IHU_FAILURE;
+		}
 		
 		//发送消息出去
 		memset(&snd1, 0, sizeof(msg_struct_l3bfsc_canvela_roll_out_resp_t));
@@ -365,9 +537,15 @@ OPSTAT fsm_bfsc_adc_material_drop(UINT8 dest_id, UINT8 src_id, void * param_ptr,
 		}
 	}
 
-	//在出料条件下
+	//在[放弃]出料条件下
 	else if (FsmGetState(TASK_ID_BFSC) == FSM_STATE_BFSC_GIVE_UP){
 		//停止定时器
+		ret = ihu_timer_stop(TASK_ID_BFSC, TIMER_ID_1S_BFSC_L3BFSC_GIVE_UP_TIMER, TIMER_RESOLUTION_1S);
+		if (ret == IHU_FAILURE){
+			IhuErrorPrint("L3BFSC: Error stop timer!\n");
+			zIhuRunErrCnt[TASK_ID_BFSC]++;
+			return IHU_FAILURE;
+		}
 		
 		//发送消息出去
 		memset(&snd2, 0, sizeof(msg_struct_l3bfsc_canvela_give_up_resp_t));
@@ -400,9 +578,8 @@ OPSTAT fsm_bfsc_adc_material_drop(UINT8 dest_id, UINT8 src_id, void * param_ptr,
 //收到MSG_ID_CAN_L3BFSC_ROLL_OUT_REQ以后的处理过程
 OPSTAT fsm_bfsc_canvela_roll_out_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	//int ret;
+	int ret = 0;
 	msg_struct_canvela_l3bfsc_roll_out_req_t rcv;
-
 	
 	//收到消息并做参数检查
 	memset(&rcv, 0, sizeof(msg_struct_canvela_l3bfsc_roll_out_req_t));
@@ -413,14 +590,26 @@ OPSTAT fsm_bfsc_canvela_roll_out_req(UINT8 dest_id, UINT8 src_id, void * param_p
 	}
 	memcpy(&rcv, param_ptr, param_len);
 
-	//处理消息：发送质量给马达，进行出料处理
-	//启动定时器
+	//停止定时器
+	ret = ihu_timer_stop(TASK_ID_BFSC, TIMER_ID_1S_BFSC_L3BFSC_WAIT_WEIGHT_TIMER, TIMER_RESOLUTION_1S);
+	if (ret == IHU_FAILURE){
+		IhuErrorPrint("L3BFSC: Error stop timer!\n");
+		zIhuRunErrCnt[TASK_ID_BFSC]++;
+		return IHU_FAILURE;
+	}
+	
+	//发送马达运转的指令
 	//等待出料完成
 	//如果差错，需要送出差错消息给上位机
-
-	//停止定时器
+	//处理消息：发送质量给马达，进行出料处理
 	
-	//发送消息出去
+	//启动定时器
+	ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_1S_BFSC_L3BFSC_ROLL_OUT_TIMER, zIhuSysEngPar.timer.bfscL3bfscRolloutTimer, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
+	if (ret == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_BFSC]++;
+		IhuErrorPrint("L3BFSC: Error start timer!\n");
+		return IHU_FAILURE;
+	}	
 	
 	//状态转移
 	if (FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_ROLL_OUT) == IHU_FAILURE){
@@ -436,9 +625,8 @@ OPSTAT fsm_bfsc_canvela_roll_out_req(UINT8 dest_id, UINT8 src_id, void * param_p
 //收到MSG_ID_CAN_L3BFSC_GIVE_UP_REQ以后的处理过程
 OPSTAT fsm_bfsc_canvela_give_up_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	//int ret;
+	int ret;
 	msg_struct_canvela_l3bfsc_give_up_req_t rcv;
-
 	
 	//收到消息并做参数检查
 	memset(&rcv, 0, sizeof(msg_struct_canvela_l3bfsc_give_up_req_t));
@@ -449,14 +637,26 @@ OPSTAT fsm_bfsc_canvela_give_up_req(UINT8 dest_id, UINT8 src_id, void * param_pt
 	}
 	memcpy(&rcv, param_ptr, param_len);
 
-	//处理消息：发送质量给马达，进行出料处理
-	//启动定时器
+	//停止定时器
+	ret = ihu_timer_stop(TASK_ID_BFSC, TIMER_ID_1S_BFSC_L3BFSC_WAIT_WEIGHT_TIMER, TIMER_RESOLUTION_1S);
+	if (ret == IHU_FAILURE){
+		IhuErrorPrint("L3BFSC: Error stop timer!\n");
+		zIhuRunErrCnt[TASK_ID_BFSC]++;
+		return IHU_FAILURE;
+	}
+	
+	//发送马达运转的指令
 	//等待出料完成
 	//如果差错，需要送出差错消息给上位机
-
-	//停止定时器
+	//处理消息：发送质量给马达，进行出料处理
 	
-	//发送消息出去
+	//启动定时器
+	ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_1S_BFSC_L3BFSC_GIVE_UP_TIMER, zIhuSysEngPar.timer.bfscL3bfscGiveupTimer, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
+	if (ret == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_BFSC]++;
+		IhuErrorPrint("L3BFSC: Error start timer!\n");
+		return IHU_FAILURE;
+	}
 	
 	//状态转移
 	if (FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_GIVE_UP) == IHU_FAILURE){

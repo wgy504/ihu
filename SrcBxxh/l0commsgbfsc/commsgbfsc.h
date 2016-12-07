@@ -105,7 +105,9 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_L3BFSC_CAN_NEW_WS_EVENT,
 	MSG_ID_L3BFSC_CAN_ROLL_OUT_RESP,
 	MSG_ID_L3BFSC_CAN_GIVE_UP_RESP,
-
+	MSG_ID_L3BFSC_CAN_ERROR_STATUS_REPORT,
+	MSG_ID_L3BFSC_ADC_CMD_STOP_MEASURE,
+	
 	//END FLAG
 	MSG_ID_COM_MAX, //Ending point
 
@@ -258,6 +260,19 @@ typedef struct msg_struct_l3bfsc_canvela_give_up_resp
 	UINT8 length;
 }msg_struct_l3bfsc_canvela_give_up_resp_t;
 
+//MSG_ID_L3BFSC_CAN_ERROR_STATUS_REPORT
+typedef struct msg_struct_l3bfsc_canvela_error_status_report
+{
+	UINT32 errId;
+	UINT32 errCause;
+	UINT32 errSource;
+	UINT8 length;
+}msg_struct_l3bfsc_canvela_error_status_report_t;
 
+//MSG_ID_L3BFSC_ADC_CMD_STOP_MEASURE
+typedef struct msg_struct_l3bfsc_adc_cmd_stop_measure
+{
+	UINT8 length;
+}msg_struct_l3bfsc_adc_cmd_stop_measure_t;
 
 #endif /* L0COMVM_COMMSGBFSC_H_ */

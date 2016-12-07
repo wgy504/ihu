@@ -38,7 +38,8 @@ enum FSM_STATE_BFSC
 	FSM_STATE_BFSC_SCAN,
 	FSM_STATE_BFSC_WEIGHT_REPORT,
 	FSM_STATE_BFSC_ROLL_OUT,
-	FSM_STATE_BFSC_GIVE_UP,	
+	FSM_STATE_BFSC_GIVE_UP,
+	FSM_STATE_BFSC_ERROR_TRAP,	
 	FSM_STATE_BFSC_MAX,
 };
 //#define FSM_STATE_END   0xFE
@@ -46,6 +47,9 @@ enum FSM_STATE_BFSC
 
 //Global variables
 extern FsmStateItem_t FsmBfsc[];
+
+//本地定义的常亮
+#define IHU_L3BFSC_MOTO_HW_ERROR_RECOVER_TIMES_MAX 10
 
 //API
 extern OPSTAT fsm_bfsc_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
@@ -59,11 +63,13 @@ extern OPSTAT fsm_bfsc_adc_material_drop(UINT8 dest_id, UINT8 src_id, void * par
 extern OPSTAT fsm_bfsc_canvela_roll_out_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_bfsc_canvela_give_up_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 
-
 	
 //Local API
 OPSTAT func_bfsc_hw_init(void);
-void func_bfsc_time_out_period_scan(void);
+OPSTAT func_bfsc_time_out_period_scan(void);
+OPSTAT func_bfsc_time_out_wait_weight_command_process(void);
+OPSTAT func_bfsc_time_out_roll_out_process(void);
+OPSTAT func_bfsc_time_out_give_up_process(void);
 
 #endif /* L3APPL_L3BFSC_H_ */
 
