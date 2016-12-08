@@ -68,11 +68,16 @@ extern OPSTAT fsm_i2caries_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr
 extern OPSTAT fsm_i2caries_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_i2caries_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_i2caries_bfsc_moto_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
-extern OPSTAT fsm_i2caries_i2c_moto_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT fsm_i2caries_bfsc_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+
+
 
 //Local API
 OPSTAT func_i2caries_hw_init(void);
 void func_i2caries_time_out_period_scan(void);
+void func_i2caries_bfsc_moto_control(INT8 mode, INT8 dir);
+void func_i2caries_bfsc_moto_set_speed(INT32 speed);
+void func_i2caries_bfsc_frame_send(strIhuI2cariesMotoFrame_t *frame);
 
 #endif /* L2FRAME_L2I2CARIES_H_ */
 

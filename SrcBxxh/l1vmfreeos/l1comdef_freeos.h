@@ -337,7 +337,8 @@ typedef struct strIhuCanvelaCmdFrame
 	UINT8 bfscPar1;
 	UINT8 bfscPar2;
 	UINT8 bfscPar3;
-}strIhuCanvelaCmdFrame_t;
+}strIhuCanvelaCmdFrame_t; 
+
 #define IHU_CANVELA_CMD_PREFIXL 0x00
 #define IHU_CANVELA_CMD_BFSC_ID 0x65
 typedef enum
@@ -371,6 +372,9 @@ typedef enum
 	IHU_CANVELA_OPTID_motor_speed = 0x21,  //电机设置速度
 	IHU_CANVELA_OPTID_scale_range = 0x25,  //量程
 	IHU_CANVELA_OPTID_node_set = 0x26,  //整个节点
+	IHU_CANVELA_OPTID_material_out_normal = 0x27,  //正常出料
+	IHU_CANVELA_OPTID_material_give_up = 0x27,  //放弃出料
+	IHU_CANVELA_OPTID_error_status = 0x28,  //错误状态	
 	IHU_CANVELA_OPTID_max,
 	IHU_CANVELA_OPTID_invalid = 0xFF,
 }IhuCanvelaOptidEnmu;
@@ -387,7 +391,13 @@ typedef enum
 }IhuCanvelaOptParEnmu;
 //如果是32为量值数据，则采用little_endian_windows的风格，低位在前
 
-
+//I2C-MOTO控制的L2FRAME格式
+typedef struct strIhuI2cariesMotoFrame
+{
+	UINT8 bfscI2cId;
+	UINT8 len;
+	UINT16 bfscI2cValue;	
+}strIhuI2cariesMotoFrame_t;
 
 
 #endif /* L1VMFREEOS_L1COMDEF_FREEOS_H_ */

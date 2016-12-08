@@ -6,6 +6,16 @@
 = 研究STM32的IAP功能
 = 在STM32板子上进行具体的测试
 
+//= ZJL, 2016 Dec.8, CURRENT_SW_DELIVERY R03.57 =>BFSC项目
+= 进一步改进ADC读写以及L2FRAME接收
+= 将I2C/CAN的接口操作跟HAL函数连在一起了
+= ADC的HAL函数待完善
+= 增加了以下CAN的新的操作字，这些命令字，后面需要自行设计CAN接口
+	IHU_CANVELA_OPTID_material_out_normal = 0x27,  //正常出料
+	IHU_CANVELA_OPTID_material_give_up = 0x27,  //放弃出料
+	IHU_CANVELA_OPTID_error_status = 0x28,  //错误状态	
+= 完成了心跳被动反馈。是否要下位机主动，待后期定义
+
 //= ZJL, 2016 Dec.8, CURRENT_SW_DELIVERY R03.56 =>BFSC项目
 = 对WS、MOTO的控制与启动、停止等命令
 = 对WS、MOTO命令控制的框架完成

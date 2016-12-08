@@ -39,8 +39,7 @@ FsmStateItem_t FsmAdclibra[] =
 
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
   {MSG_ID_L3BFSC_ADC_WS_CMD_CTRL,					FSM_STATE_ADCLIBRA_ACTIVED,         				fsm_adclibra_l3bfsc_ws_cmd_ctrl},
-  {MSG_ID_CAN_ADC_MEAS_CMD_CTRL,					FSM_STATE_ADCLIBRA_ACTIVED,         				fsm_adclibra_can_meas_cmd_ctrl},
-	
+	{MSG_ID_CAN_ADC_WS_MAN_SET_ZERO,				FSM_STATE_ADCLIBRA_ACTIVED,         				fsm_adclibra_canvela_ws_man_set_zero},	
 #endif
 
   //结束点，固定定义，不要改动
@@ -236,7 +235,7 @@ OPSTAT func_adclibra_time_out_bfsc_read_weight_scan(void)
 	//正常情况下，100MS的采样，已经足以够得着人工处理速度了。如果这是一条产线，按照每分钟200包、一秒钟3包的速度，300MS的一半两次采样，100MS<150MS，
 	//也足以应付各种情况了，所以设置为100MS应该是理论上最好的效果了，足够了
 	UINT32 tempWeight = 0;
-	tempWeight = rand() % 200;
+	tempWeight = func_adclibra_bfsc_read_weight();
 	
 	//传感器一直是0重量
 	if ((tempWeight == 0) && (zIhuAdcBfscWs.WeightExistCnt == 0))
@@ -290,14 +289,13 @@ OPSTAT func_adclibra_time_out_bfsc_read_weight_scan(void)
 	
 	return IHU_SUCCESS;
 }
-#endif
 
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
-//MSG_ID_L3BFSC_ADC_CMD_STOP_MEASURE
+//MSG_ID_L3BFSC_ADC_WS_CMD_CTRL
 OPSTAT fsm_adclibra_l3bfsc_ws_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	//int ret = 0;
+	int ret = 0;
 	msg_struct_l3bfsc_adc_ws_cmd_ctrl_t rcv;
+	msg_struct_adclibra_l3bfsc_meas_cmd_resp_t snd;
 	
 	//Receive message and copy to local variable
 	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t));
@@ -308,145 +306,174 @@ OPSTAT fsm_adclibra_l3bfsc_ws_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param
 	}
 	memcpy(&rcv, param_ptr, param_len);
 	
-	if (rcv.cmdId == IHU_BFSC_ADC_WS_CMD_TYPE_START){
+	//简单控制
+	if (rcv.cmdid == IHU_BFSC_ADC_WS_CMD_TYPE_START){
 		zIhuAdcBfscWs.WeightWorkingMode = IHU_BFSC_ADC_WEIGHT_WORKING_MODE_NORMAL;
 	}
-	else if (rcv.cmdId == IHU_BFSC_ADC_WS_CMD_TYPE_STOP){
+	//简单控制	
+	else if (rcv.cmdid == IHU_BFSC_ADC_WS_CMD_TYPE_STOP){
 		zIhuAdcBfscWs.WeightWorkingMode = IHU_BFSC_ADC_WEIGHT_WORKING_MODE_STOP;
 	}
+	//复杂控制	
+	else if (rcv.cmdid == IHU_BFSC_ADC_WS_CMD_TYPE_CTRL)
+	{
+		//入参检查
+		if (rcv.cmd.prefixcmdid != IHU_CANVELA_PREFIXH_ws_ctrl)
+		{
+			IhuErrorPrint("ADCLIBRA: Receive message error!\n");
+			zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
+			return IHU_FAILURE;
+		}
+		
+		//依赖不同的控制命令，分门别类的处理
+		//分别针对不同的OPTID进行帧的分类处理
+		memset(&snd, 0, sizeof(msg_struct_adclibra_l3bfsc_meas_cmd_resp_t));
+		switch(rcv.cmd.optid)
+			{
+				//重量读取
+				case IHU_CANVELA_OPTID_wegith_read:					
+					snd.cmd.modbusVal = func_adclibra_bfsc_read_weight();
+					break;
+
+				//（值设定及含义同modbus协议） 自动0点跟踪
+				case IHU_CANVELA_OPTID_auto_zero_track: 
+					//这个值的设定，将会使得每一次称重，自动清零，判定的标准是单体重量小于设定目标重量的10%
+					zIhuAdcBfscWs.WeightZeroTrackMode = IHU_BFSC_ADC_WEIGHT_ZERO_TRACK_MODE_ACTIVE; 
+					break;
+
+				//（值设定及含义同modbus协议） 最小灵敏度
+				case IHU_CANVELA_OPTID_min_sensitivity: 
+					zIhuAdcBfscWs.WeightMinSens = rcv.cmd.modbusVal;
+					break;
+
+				//（值设定及含义同modbus协议）  手动清零
+				case IHU_CANVELA_OPTID_manual_set_zero:  				
+					zIhuAdcBfscWs.WeightManSetZero = func_adclibra_bfsc_read_origin();
+					break;
+
+				//（值设定及含义同modbus协议） 静止检测范围
+				case IHU_CANVELA_OPTID_static_detect_range: 					
+					zIhuAdcBfscWs.WeightStaticRange = rcv.cmd.modbusVal;
+					break;
+
+				//（值设定及含义同modbus协议） 静止检测时间
+				case IHU_CANVELA_OPTID_static_detect_duration:
+					zIhuAdcBfscWs.WeightStaticDur = rcv.cmd.modbusVal;		
+					break;
+
+				//称量校准
+				case IHU_CANVELA_OPTID_weight_scale_calibration:
+					if (rcv.cmd.optpar == IHU_CANVELA_OPTPAR_weight_scale_calibration_0)
+					{
+						zIhuAdcBfscWs.WeightWorkingMode = IHU_BFSC_ADC_WEIGHT_WORKING_MODE_CAL;
+						zIhuAdcBfscWs.WeightCal0Kg = func_adclibra_bfsc_read_origin();
+					}
+					else if (rcv.cmd.optpar == IHU_CANVELA_OPTPAR_weight_scale_calibration_1kg)
+					{
+						zIhuAdcBfscWs.WeightWorkingMode = IHU_BFSC_ADC_WEIGHT_WORKING_MODE_CAL;						
+						zIhuAdcBfscWs.WeightCal1Kg = func_adclibra_bfsc_read_origin();
+					}
+					else if (rcv.cmd.optpar == IHU_CANVELA_OPTPAR_weight_scale_calibration_exit)
+					{
+						zIhuAdcBfscWs.WeightWorkingMode = IHU_BFSC_ADC_WEIGHT_WORKING_MODE_NORMAL;
+					}
+					else
+					{
+						IhuErrorPrint("ADCLIBRA: Receive message error!\n");
+						zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
+						return IHU_FAILURE;
+					}					
+					break;
+
+				//量程设置
+				case IHU_CANVELA_OPTID_scale_range:					
+					zIhuAdcBfscWs.WeightMaxScale = rcv.cmd.modbusVal;
+
+					break;
+
+				default:
+					zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
+					IhuErrorPrint("ADCLIBRA: Input parameters error!\n");
+					return IHU_FAILURE;
+					//break;
+			} //switch(rcv.cmd.optid)
+		
+
+		//发送回去消息	
+		snd.cmdid = IHU_ADC_BFSC_WS_CMD_TYPE_RESP;
+		snd.cmd.optid = rcv.cmd.optid;
+		snd.cmd.optpar = rcv.cmd.optpar;
+		snd.cmd.prefixcmdid = IHU_CANVELA_PREFIXH_ws_resp;
+		snd.length = sizeof(msg_struct_adclibra_l3bfsc_meas_cmd_resp_t);
+		ret = ihu_message_send(MSG_ID_ADC_L3BFSC_MEAS_CMD_RESP, TASK_ID_BFSC, TASK_ID_ADCLIBRA, &snd, snd.length);
+		if (ret == IHU_FAILURE){
+			zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
+			IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_ADCLIBRA], zIhuTaskNameList[TASK_ID_BFSC]);
+			return IHU_FAILURE;
+		}
+	}
+	
 	else{
 		IhuErrorPrint("ADCLIBRA: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
 		return IHU_FAILURE;
 	}
 	
-	//不再需要通过定制扫描定时器来处理
-	//处理消息：停止扫描消息，不再干活，等待人工干预
-	/*ret = ihu_timer_stop(TASK_ID_ADCLIBRA, TIMER_ID_1S_ADCLIBRA_PERIOD_SCAN, TIMER_RESOLUTION_1S);
-	if (ret == IHU_FAILURE){
-		IhuErrorPrint("L3BFSC: Error stop timer!\n");
-		zIhuRunErrCnt[TASK_ID_BFSC]++;
-		return IHU_FAILURE;
-	}*/
-	
 	return IHU_SUCCESS;
 }
 
-//MSG_ID_CAN_ADC_MEAS_CMD_CTRL
-OPSTAT fsm_adclibra_can_meas_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+//MSG_ID_CAN_ADC_WS_MAN_SET_ZERO
+OPSTAT fsm_adclibra_canvela_ws_man_set_zero(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	int ret = 0;
-	msg_struct_canvela_adclibra_meas_cmd_ctrl_t rcv;
-	msg_struct_adclibra_canvela_meas_cmd_resp_t snd;
-	
+	//int ret = 0;
+	msg_struct_canvela_adc_ws_man_set_zero_t rcv;
+
 	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_canvela_adclibra_meas_cmd_ctrl_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_canvela_adclibra_meas_cmd_ctrl_t))){
+	memset(&rcv, 0, sizeof(msg_struct_canvela_adc_ws_man_set_zero_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_canvela_adc_ws_man_set_zero_t))){
 		IhuErrorPrint("ADCLIBRA: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
 	
-	//入参检查
-	if (rcv.cmd.prefixcmdid != IHU_CANVELA_PREFIXH_ws_ctrl)
-	{
-		IhuErrorPrint("ADCLIBRA: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
-		return IHU_FAILURE;
-	}
-	
-	//依赖不同的控制命令，分门别类的处理
-	//分别针对不同的OPTID进行帧的分类处理
-	switch(rcv.cmd.optid)
-		{
-			//重量读取
-			case IHU_CANVELA_OPTID_wegith_read:  
-				//具体读取重量的干活指令
-				break;
-
-			//（值设定及含义同modbus协议） 自动0点跟踪
-			case IHU_CANVELA_OPTID_auto_zero_track: 
-				//这个值的设定，将会使得每一次称重，自动清零，判定的标准是单体重量小于设定目标重量的10%
-				zIhuAdcBfscWs.WeightZeroTrackMode = IHU_BFSC_ADC_WEIGHT_ZERO_TRACK_MODE_ACTIVE; 
-				break;
-
-			//（值设定及含义同modbus协议） 最小灵敏度
-			case IHU_CANVELA_OPTID_min_sensitivity: 
-				zIhuAdcBfscWs.WeightMinSens = rcv.cmd.modbusVal;
-				break;
-
-			//（值设定及含义同modbus协议）  手动清零
-			case IHU_CANVELA_OPTID_manual_set_zero:  				
-				//强行读取一次ADC数量
-				//将该称重数量赋给目标
-				zIhuAdcBfscWs.WeightManSetZero = rand() % 10;
-				break;
-
-			//（值设定及含义同modbus协议） 静止检测范围
-			case IHU_CANVELA_OPTID_static_detect_range: 
-				//具体读取重量的干活指令
-				zIhuAdcBfscWs.WeightStaticRange = rcv.cmd.modbusVal;
-				break;
-
-			//（值设定及含义同modbus协议） 静止检测时间
-			case IHU_CANVELA_OPTID_static_detect_duration:
-				//具体读取重量的干活指令
-				zIhuAdcBfscWs.WeightStaticDur = rcv.cmd.modbusVal;		
-				break;
-
-			//称量校准
-			case IHU_CANVELA_OPTID_weight_scale_calibration:
-				if (rcv.cmd.optpar == IHU_CANVELA_OPTPAR_weight_scale_calibration_0)
-				{
-					zIhuAdcBfscWs.WeightWorkingMode = IHU_BFSC_ADC_WEIGHT_WORKING_MODE_CAL;
-					//读取一次重量指令
-					zIhuAdcBfscWs.WeightCal0Kg = rand()%10;
-				}
-				else if (rcv.cmd.optpar == IHU_CANVELA_OPTPAR_weight_scale_calibration_1kg)
-				{
-					zIhuAdcBfscWs.WeightWorkingMode = IHU_BFSC_ADC_WEIGHT_WORKING_MODE_CAL;
-					//读取一次重量指令
-					zIhuAdcBfscWs.WeightCal1Kg = 1000 + rand()%100;
-				}
-				else if (rcv.cmd.optpar == IHU_CANVELA_OPTPAR_weight_scale_calibration_exit)
-				{
-					zIhuAdcBfscWs.WeightWorkingMode = IHU_BFSC_ADC_WEIGHT_WORKING_MODE_NORMAL;
-				}
-				else
-				{
-					IhuErrorPrint("ADCLIBRA: Receive message error!\n");
-					zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
-					return IHU_FAILURE;
-				}
-				//具体读取重量的干活指令
-				break;
-
-			//量程设置
-			case IHU_CANVELA_OPTID_scale_range:
-				//具体读取重量的干活指令
-				zIhuAdcBfscWs.WeightMaxScale = rcv.cmd.modbusVal;
-
-				break;
-
-			default:
-				zIhuRunErrCnt[TASK_ID_CANVELA]++;
-				IhuErrorPrint("ADCLIBRA: Input parameters error!\n");
-				return IHU_FAILURE;
-				//break;
-		} //switch(rcv.cmd.optid)
-	
-
-	//发送回去消息
-	memset(&snd, 0, sizeof(msg_struct_adclibra_canvela_meas_cmd_resp_t));
-	snd.length = sizeof(msg_struct_adclibra_canvela_meas_cmd_resp_t);
-	ret = ihu_message_send(MSG_ID_ADC_CAN_MEAS_CMD_RESP, TASK_ID_CANVELA, TASK_ID_ADCLIBRA, &snd, snd.length);
-	if (ret == IHU_FAILURE){
-		IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_ADCLIBRA], zIhuTaskNameList[TASK_ID_CANVELA]);
-		return IHU_FAILURE;
-	}
-	
+	//将ADC读数存入到控制表中
+	zIhuAdcBfscWs.WeightManSetZero = func_adclibra_bfsc_read_origin() - zIhuAdcBfscWs.WeightBasket;
 	return IHU_SUCCESS;
+}
+
+
+//根据读数，计算出应该得到的数据
+INT32 func_adclibra_bfsc_read_weight(void)
+{
+	INT32 tempVal = 0;
+	
+	//读取假数据
+	//需要直接访问ADC的HAL函数
+	tempVal = rand() % 1000;
+
+	//算法处理
+	//按道理，应该先对数据进行定标，再滤波，然后对照计算好的校准表，利用梯形线性差值，或者二次方B样条法，计算得到目标值
+	//目标值，还需要按照系统配置的参数，进行变换
+
+	//这里只考虑最为简单的减皮重和0值
+	tempVal = tempVal - zIhuAdcBfscWs.WeightBasket - zIhuAdcBfscWs.WeightManSetZero; 
+	
+	return tempVal;
+}
+
+//读取原始数值
+INT32 func_adclibra_bfsc_read_origin(void)
+{
+	INT32 tempVal = 0;
+	
+	//读取假数据
+	//需要直接访问ADC的HAL函数
+	tempVal = rand() % 1000;
+	
+	//这里只做定标，然后返回
+	
+	return tempVal;
 }
 
 

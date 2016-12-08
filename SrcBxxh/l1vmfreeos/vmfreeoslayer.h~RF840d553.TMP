@@ -52,7 +52,6 @@
 	#include "bsp_led.h"
 	#include "bsp_rs485.h"
 	#include "bsp_i2c.h"
-	#include "bsp_can.h"
 	
 #else	
 #endif

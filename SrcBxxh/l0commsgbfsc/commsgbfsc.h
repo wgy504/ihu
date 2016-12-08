@@ -78,7 +78,7 @@ enum IHU_INTER_TASK_MSG_ID
 	//ADC
 	MSG_ID_ADC_NEW_MATERIAL_WS,
 	MSG_ID_ADC_MATERIAL_DROP,
-	MSG_ID_ADC_CAN_MEAS_CMD_RESP,
+	MSG_ID_ADC_L3BFSC_MEAS_CMD_RESP,
 
 	//LED
 	
@@ -93,16 +93,16 @@ enum IHU_INTER_TASK_MSG_ID
 	//I2C
 	MSG_ID_I2C_L2FRAME_SEND,
 	MSG_ID_I2C_L2FRAME_RCV,
-	MSG_ID_I2C_CAN_MOTO_CMD_RESP,
+	MSG_ID_I2C_L3BFSC_MOTO_CMD_RESP,
 	
 	//CAN
 	MSG_ID_CAN_L2FRAME_SEND,
 	MSG_ID_CAN_L2FRAME_RCV,
-	MSG_ID_CAN_ADC_MEAS_CMD_CTRL,
-	MSG_ID_CAN_I2C_MOTO_CMD_CTRL,
+	MSG_ID_CAN_L3BFSC_CMD_CTRL,
 	MSG_ID_CAN_L3BFSC_INIT_REQ,
 	MSG_ID_CAN_L3BFSC_ROLL_OUT_REQ,
 	MSG_ID_CAN_L3BFSC_GIVE_UP_REQ,
+	MSG_ID_CAN_ADC_WS_MAN_SET_ZERO,   //这个是需要在任何状态下都支持的，所以需要在初始化之外穿越到目标
 
 	//L3BFSC
 	MSG_ID_L3BFSC_CAN_INIT_RESP,
@@ -112,6 +112,7 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_L3BFSC_CAN_ERROR_STATUS_REPORT,
 	MSG_ID_L3BFSC_ADC_WS_CMD_CTRL,
 	MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL,
+	MSG_ID_L3BFSC_CAN_CMD_RESP,
 	
 	//END FLAG
 	MSG_ID_COM_MAX, //Ending point
@@ -167,12 +168,17 @@ typedef struct msg_struct_vmfo_1s_period_timtout
 }msg_struct_vmfo_1s_period_timtout_t;
 
 //ADC
-//MSG_ID_ADC_CAN_MEAS_CMD_RESP
-typedef struct msg_struct_adclibra_canvela_meas_cmd_resp
+//MSG_ID_ADC_L3BFSC_MEAS_CMD_RESP
+typedef struct msg_struct_adclibra_l3bfsc_meas_cmd_resp
 {
+	UINT8 cmdid;
 	com_ws_and_moto_cmd_t cmd;
 	UINT8 length;
-}msg_struct_adclibra_canvela_meas_cmd_resp_t;
+}msg_struct_adclibra_l3bfsc_meas_cmd_resp_t;
+#define IHU_ADC_BFSC_WS_CMD_TYPE_NONE 0
+#define IHU_ADC_BFSC_WS_CMD_TYPE_START_CFM 1
+#define IHU_ADC_BFSC_WS_CMD_TYPE_STOP_CFM 2
+#define IHU_ADC_BFSC_WS_CMD_TYPE_RESP 3
 
 //MSG_ID_ADC_NEW_MATERIAL_WS,
 typedef struct msg_struct_adc_new_material_ws
@@ -213,50 +219,52 @@ typedef struct msg_struct_spileo_l2frame_rcv
 }msg_struct_spileo_l2frame_rcv_t;
 
 //I2C消息定义
+//MSG_ID_I2C_L2FRAME_SEND
 typedef struct msg_struct_i2caries_l2frame_send
 {
-	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-1];
+	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-1];	
 	UINT8 length;
 }msg_struct_i2caries_l2frame_send_t;
+//MSG_ID_I2C_L2FRAME_RCV
 typedef struct msg_struct_i2caries_l2frame_rcv
 {
 	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-1];
 	UINT8 length;
 }msg_struct_i2caries_l2frame_rcv_t;
 
-//MSG_ID_I2C_CAN_MOTO_CMD_RESP
-typedef struct msg_struct_i2caries_canvela_cmd_resp
+//MSG_ID_I2C_L3BFSC_MOTO_CMD_RESP
+typedef struct msg_struct_i2caries_l3bfsc_cmd_resp
 {
+	UINT8 cmdid;
 	com_ws_and_moto_cmd_t cmd;	
 	UINT8 length;
-}msg_struct_i2caries_canvela_cmd_resp_t;
-
+}msg_struct_i2caries_l3bfsc_cmd_resp_t;
+#define IHU_I2C_BFSC_WS_CMD_TYPE_NONE 0
+#define IHU_I2C_BFSC_WS_CMD_TYPE_START_CFM 1
+#define IHU_I2C_BFSC_WS_CMD_TYPE_STOP_CFM 2
+#define IHU_I2C_BFSC_WS_CMD_TYPE_RESP 3
 
 //CAN消息定义
+//MSG_ID_CAN_L2FRAME_SEND
 typedef struct msg_struct_canvela_l2frame_send
 {
 	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-1];
 	UINT8 length;
 }msg_struct_canvela_l2frame_send_t;
+
+//MSG_ID_CAN_L2FRAME_RCV
 typedef struct msg_struct_canvela_l2frame_rcv
 {
 	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-1];
 	UINT8 length;
 }msg_struct_canvela_l2frame_rcv_t;
 
-//MSG_ID_CAN_ADC_MEAS_CMD_CTRL
-typedef struct msg_struct_canvela_adclibra_meas_cmd_ctrl
+//MSG_ID_CAN_L3BFSC_CMD_CTRL
+typedef struct msg_struct_canvela_l3bfsc_cmd_ctrl
 {
 	com_ws_and_moto_cmd_t cmd;	
 	UINT8 length;
-}msg_struct_canvela_adclibra_meas_cmd_ctrl_t;
-
-//MSG_ID_CAN_I2C_MOTO_CMD_CTRL
-typedef struct msg_struct_canvela_i2caries_moto_cmd_ctrl
-{
-	com_ws_and_moto_cmd_t cmd;	
-	UINT8 length;
-}msg_struct_canvela_i2caries_moto_cmd_ctrl_t;
+}msg_struct_canvela_l3bfsc_cmd_ctrl_t;
 
 //MSG_ID_CAN_L3BFSC_INIT_REQ
 typedef struct msg_struct_canvela_l3bfsc_init_req
@@ -275,6 +283,12 @@ typedef struct msg_struct_canvela_l3bfsc_give_up_req
 {
 	UINT8 length;
 }msg_struct_canvela_l3bfsc_give_up_req_t;
+
+//MSG_ID_CAN_ADC_WS_MAN_SET_ZERO
+typedef struct msg_struct_canvela_adc_ws_man_set_zero
+{
+	UINT8 length;
+}msg_struct_canvela_adc_ws_man_set_zero_t;
 
 //L3BFSC消息
 //MSG_ID_L3BFSC_CAN_INIT_RESP
@@ -314,20 +328,37 @@ typedef struct msg_struct_l3bfsc_canvela_error_status_report
 //MSG_ID_L3BFSC_ADC_WS_CMD_CTRL
 typedef struct msg_struct_l3bfsc_adc_ws_cmd_ctrl
 {
-	UINT8 cmdId;
+	UINT8 cmdid;
+	com_ws_and_moto_cmd_t cmd;
 	UINT8 length;
 }msg_struct_l3bfsc_adc_ws_cmd_ctrl_t;
+#define IHU_BFSC_ADC_WS_CMD_TYPE_NONE 0
 #define IHU_BFSC_ADC_WS_CMD_TYPE_START 1
 #define IHU_BFSC_ADC_WS_CMD_TYPE_STOP 2
+#define IHU_BFSC_ADC_WS_CMD_TYPE_CTRL 3
 
 //MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL
 typedef struct msg_struct_l3bfsc_i2c_moto_cmd_ctrl
 {
-	UINT8 cmdId;
+	UINT8 cmdid;
+	com_ws_and_moto_cmd_t cmd;	
 	UINT8 length;
 }msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t;
+#define IHU_BFSC_I2C_MOTO_CMD_TYPE_NONE 0
 #define IHU_BFSC_I2C_MOTO_CMD_TYPE_START 1
 #define IHU_BFSC_I2C_MOTO_CMD_TYPE_STOP 2
+#define IHU_BFSC_I2C_MOTO_CMD_TYPE_CTRL 3
 
+//MSG_ID_L3BFSC_CAN_CMD_RESP
+typedef struct msg_struct_l3bfsc_canvela_cmd_resp
+{
+	UINT8 cmdid;
+	com_ws_and_moto_cmd_t cmd;	
+	UINT8 length;
+}msg_struct_l3bfsc_canvela_cmd_resp_t;
+#define IHU_BFSC_CAN_CMD_TYPE_NONE 0
+#define IHU_BFSC_CAN_CMD_TYPE_START_CFM 1
+#define IHU_BFSC_CAN_CMD_TYPE_STOP_CFM 2
+#define IHU_BFSC_CAN_CMD_TYPE_RESP 3
 
 #endif /* L0COMVM_COMMSGBFSC_H_ */
