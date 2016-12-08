@@ -25,7 +25,7 @@ DMA_HandleTypeDef hdma_adcx;
   * 返 回 值: 无
   * 说    明：无
   */
-void MX_ADCx_Init(void)
+void BSP_STM32_ADC_hw_init(void)
 {
   ADC_ChannelConfTypeDef sConfig;
 
@@ -127,5 +127,13 @@ void XIN_GPIO_Init(void)
   HAL_NVIC_EnableIRQ(XIN_EXTI_IRQn);
 
 }
+
+int BSP_STM32_ADC_Get_Value(void)
+{
+	return HAL_ADC_GetValue(&hadcx);
+}
+
+
+
 
 

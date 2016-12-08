@@ -730,7 +730,7 @@ OPSTAT func_canvela_frame_decode(strIhuCanvelaCmdFrame_t *pframe, UINT8 prefixcm
 void func_canvela_frame_send(strIhuCanvelaCmdFrame_t *pframe)
 {
 	//直接调用BSP_STM32的函数发送出去
-	ihu_l1hd_can_iau_send_data((UINT8 *)pframe, sizeof(strIhuCanvelaCmdFrame_t));
+	ihu_l1hd_can_bfsc_send_data((UINT8 *)pframe, sizeof(strIhuCanvelaCmdFrame_t));
 }
 
 #endif //#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
