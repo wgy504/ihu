@@ -45,13 +45,38 @@ enum FSM_STATE_ADCLIBRA
 //Global variables
 extern FsmStateItem_t FsmAdclibra[];
 
+//本地需要用到的核心参数
+typedef struct strIhuBfscAdcWeightPar
+{
+	INT32 WeightExistCnt;  //用于BFSC项目中判定扫描到的重物，是否一直有重量的情形
+	INT32 Weightvalue;  //用于BFSC项目中称重结果
+	INT32 WeightBasket;  //皮重
+	INT32 WeightManSetZero;  //手动清零重量
+	UINT8 WeightZeroTrackMode;  //这个值的设定，将会使得每一次称重，自动清零，判定的标准是单体重量小于设定目标重量的10%s
+	INT32 WeightMaxScale;   //重量最大量程
+	INT32 WeightMinSens;    //最小灵敏度值
+	INT32 WeightStaticRange; //静态量程范围
+	INT32 WeightStaticDur;  //静态时间时长
+	INT32 WeightCal0Kg;        //0KG的校准
+	INT32 WeightCal1Kg;         //1KG的校准
+	UINT8 WeightWorkingMode;  //秤工作模式
+}strIhuBfscAdcWeightPar_t;
+
+#define IHU_BFSC_ADC_WEIGHT_ZERO_TRACK_MODE_NONE 0
+#define IHU_BFSC_ADC_WEIGHT_ZERO_TRACK_MODE_ACTIVE 1
+
+#define IHU_BFSC_ADC_WEIGHT_WORKING_MODE_NONE 0
+#define IHU_BFSC_ADC_WEIGHT_WORKING_MODE_CAL 1
+#define IHU_BFSC_ADC_WEIGHT_WORKING_MODE_NORMAL 2
+#define IHU_BFSC_ADC_WEIGHT_WORKING_MODE_STOP 3
+
 //API
 extern OPSTAT fsm_adclibra_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_adclibra_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_adclibra_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_adclibra_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_adclibra_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
-extern OPSTAT fsm_adclibra_l3bfsc_cmd_stop_measure(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT fsm_adclibra_l3bfsc_ws_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_adclibra_can_meas_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 
 //Local API

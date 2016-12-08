@@ -3,12 +3,18 @@
 =================================================
 //近期需要完成的任务
 = FreeRTOS/ucosiii/TICK级的休眠省电
+= 研究STM32的IAP功能
+= 在STM32板子上进行具体的测试
+
+//= ZJL, 2016 Dec.8, CURRENT_SW_DELIVERY R03.56 =>BFSC项目
+= 对WS、MOTO的控制与启动、停止等命令
+= 对WS、MOTO命令控制的框架完成
+= 下面就需要继续研究ADC硬件的具体工作模式，形成ADC读数到称重的具体滤波算法，从而将读数转变为向上汇报的EVENT
+= MOTO亦然了。
 
 //= ZJL, 2016 Dec.7, CURRENT_SW_DELIVERY R03.55 =>BFSC项目
 = 完善整个命令系列
 = 完成CAN与ADC/I2C之间的控制命令框架
-
-
 
 //= ZJL, 2016 Dec.7, CURRENT_SW_DELIVERY R03.54 =>BFSC项目
 = 定时器处理过程完成

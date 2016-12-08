@@ -279,8 +279,8 @@ OPSTAT func_bfsc_time_out_roll_out_process(void)
 {
 	int ret = 0;
 	msg_struct_l3bfsc_canvela_error_status_report_t snd;
-	msg_struct_l3bfsc_adc_cmd_stop_measure_t snd1;
-	msg_struct_l3bfsc_i2c_cmd_stop_moto_t snd2;	
+	msg_struct_l3bfsc_adc_ws_cmd_ctrl_t snd1;
+	msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t snd2;	
 	
 	//发送错误报告给上位机
 	memset(&snd, 0, sizeof(msg_struct_l3bfsc_canvela_error_status_report_t));
@@ -315,18 +315,20 @@ OPSTAT func_bfsc_time_out_roll_out_process(void)
 			return IHU_FAILURE;
 		}	
 		//发送命令给ADC，停止测量工作
-		memset(&snd1, 0, sizeof(msg_struct_l3bfsc_adc_cmd_stop_measure_t));
-		snd1.length = sizeof(msg_struct_l3bfsc_adc_cmd_stop_measure_t);
-		ret = ihu_message_send(MSG_ID_L3BFSC_ADC_CMD_STOP_MEASURE, TASK_ID_ADCLIBRA, TASK_ID_BFSC, &snd1, snd1.length);
+		memset(&snd1, 0, sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t));
+		snd1.cmdId = IHU_BFSC_ADC_WS_CMD_TYPE_STOP;
+		snd1.length = sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t);
+		ret = ihu_message_send(MSG_ID_L3BFSC_ADC_WS_CMD_CTRL, TASK_ID_ADCLIBRA, TASK_ID_BFSC, &snd1, snd1.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_BFSC]++;
 			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_BFSC], zIhuTaskNameList[TASK_ID_ADCLIBRA]);
 			return IHU_FAILURE;
 		}
 		//发送命令给I2C-MOTO，停止测量工作
-		memset(&snd2, 0, sizeof(msg_struct_l3bfsc_i2c_cmd_stop_moto_t));
-		snd2.length = sizeof(msg_struct_l3bfsc_i2c_cmd_stop_moto_t);
-		ret = ihu_message_send(MSG_ID_L3BFSC_I2C_CMD_STOP_MOTO, TASK_ID_I2CARIES, TASK_ID_BFSC, &snd2, snd2.length);
+		memset(&snd2, 0, sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t));
+		snd2.cmdId = IHU_BFSC_I2C_MOTO_CMD_TYPE_STOP;
+		snd2.length = sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t);
+		ret = ihu_message_send(MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL, TASK_ID_I2CARIES, TASK_ID_BFSC, &snd2, snd2.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_BFSC]++;
 			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_BFSC], zIhuTaskNameList[TASK_ID_I2CARIES]);
@@ -343,8 +345,8 @@ OPSTAT func_bfsc_time_out_give_up_process(void)
 {
 	int ret = 0;
 	msg_struct_l3bfsc_canvela_error_status_report_t snd;
-	msg_struct_l3bfsc_adc_cmd_stop_measure_t snd1;
-	msg_struct_l3bfsc_i2c_cmd_stop_moto_t snd2;		
+	msg_struct_l3bfsc_adc_ws_cmd_ctrl_t snd1;
+	msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t snd2;		
 	
 	//发送错误报告给上位机
 	memset(&snd, 0, sizeof(msg_struct_l3bfsc_canvela_error_status_report_t));
@@ -379,23 +381,25 @@ OPSTAT func_bfsc_time_out_give_up_process(void)
 			return IHU_FAILURE;
 		}	
 		//发送命令给ADC，停止测量工作
-		memset(&snd1, 0, sizeof(msg_struct_l3bfsc_adc_cmd_stop_measure_t));
-		snd1.length = sizeof(msg_struct_l3bfsc_adc_cmd_stop_measure_t);
-		ret = ihu_message_send(MSG_ID_L3BFSC_ADC_CMD_STOP_MEASURE, TASK_ID_ADCLIBRA, TASK_ID_BFSC, &snd1, snd1.length);
+		memset(&snd1, 0, sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t));
+		snd1.length = sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t);
+		snd1.cmdId = IHU_BFSC_ADC_WS_CMD_TYPE_STOP;
+		ret = ihu_message_send(MSG_ID_L3BFSC_ADC_WS_CMD_CTRL, TASK_ID_ADCLIBRA, TASK_ID_BFSC, &snd1, snd1.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_BFSC]++;
 			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_BFSC], zIhuTaskNameList[TASK_ID_ADCLIBRA]);
 			return IHU_FAILURE;
 		}
 		//发送命令给I2C-MOTO，停止测量工作
-		memset(&snd2, 0, sizeof(msg_struct_l3bfsc_i2c_cmd_stop_moto_t));
-		snd2.length = sizeof(msg_struct_l3bfsc_i2c_cmd_stop_moto_t);
-		ret = ihu_message_send(MSG_ID_L3BFSC_I2C_CMD_STOP_MOTO, TASK_ID_I2CARIES, TASK_ID_BFSC, &snd2, snd2.length);
+		memset(&snd2, 0, sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t));
+		snd2.cmdId = IHU_BFSC_I2C_MOTO_CMD_TYPE_STOP;
+		snd2.length = sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t);
+		ret = ihu_message_send(MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL, TASK_ID_I2CARIES, TASK_ID_BFSC, &snd2, snd2.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_BFSC]++;
 			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_BFSC], zIhuTaskNameList[TASK_ID_I2CARIES]);
 			return IHU_FAILURE;
-		}		
+		}
 	}
 	
 	//返回
@@ -408,6 +412,9 @@ OPSTAT fsm_bfsc_canvela_init_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 	int ret;
 	msg_struct_canvela_l3bfsc_init_req_t rcv;
 	msg_struct_l3bfsc_canvela_init_resp_t snd;
+	msg_struct_l3bfsc_adc_ws_cmd_ctrl_t snd1;
+	msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t snd2;			
+	
 	
 	//收到消息并做参数检查
 	memset(&rcv, 0, sizeof(msg_struct_canvela_l3bfsc_init_req_t));
@@ -418,11 +425,29 @@ OPSTAT fsm_bfsc_canvela_init_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 	}
 	memcpy(&rcv, param_ptr, param_len);
 
-	//处理消息
+	//处理消息：命令并指令WS、MOTO开始干活
+	//发送命令给ADC，开始测量工作
+	memset(&snd1, 0, sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t));
+	snd1.length = sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t);
+	snd1.cmdId = IHU_BFSC_ADC_WS_CMD_TYPE_START;
+	ret = ihu_message_send(MSG_ID_L3BFSC_ADC_WS_CMD_CTRL, TASK_ID_ADCLIBRA, TASK_ID_BFSC, &snd1, snd1.length);
+	if (ret == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_BFSC]++;
+		IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_BFSC], zIhuTaskNameList[TASK_ID_ADCLIBRA]);
+		return IHU_FAILURE;
+	}
+	//发送命令给I2C-MOTO，开始测量工作
+	memset(&snd2, 0, sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t));
+	snd2.cmdId = IHU_BFSC_I2C_MOTO_CMD_TYPE_START;
+	snd2.length = sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t);
+	ret = ihu_message_send(MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL, TASK_ID_I2CARIES, TASK_ID_BFSC, &snd2, snd2.length);
+	if (ret == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_BFSC]++;
+		IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_BFSC], zIhuTaskNameList[TASK_ID_I2CARIES]);
+		return IHU_FAILURE;
+	}
 	
-	//停止定时器
-	
-	//发送消息出去
+	//发送反馈消息出去
 	memset(&snd, 0, sizeof(msg_struct_l3bfsc_canvela_init_resp_t));
 	snd.length = sizeof(msg_struct_l3bfsc_canvela_init_resp_t);
 	ret = ihu_message_send(MSG_ID_L3BFSC_CAN_INIT_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length);

@@ -110,8 +110,8 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_L3BFSC_CAN_ROLL_OUT_RESP,
 	MSG_ID_L3BFSC_CAN_GIVE_UP_RESP,
 	MSG_ID_L3BFSC_CAN_ERROR_STATUS_REPORT,
-	MSG_ID_L3BFSC_ADC_CMD_STOP_MEASURE,
-	MSG_ID_L3BFSC_I2C_CMD_STOP_MOTO,
+	MSG_ID_L3BFSC_ADC_WS_CMD_CTRL,
+	MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL,
 	
 	//END FLAG
 	MSG_ID_COM_MAX, //Ending point
@@ -133,7 +133,7 @@ typedef struct com_ws_and_moto_cmd //
 	UINT8 prefixcmdid;
 	UINT8 optid;
 	UINT8 optpar;
-	UINT32 modbusVal;
+	INT32 modbusVal;
 }com_ws_and_moto_cmd_t;
 
 //公共消息定义
@@ -177,7 +177,7 @@ typedef struct msg_struct_adclibra_canvela_meas_cmd_resp
 //MSG_ID_ADC_NEW_MATERIAL_WS,
 typedef struct msg_struct_adc_new_material_ws
 {
-	UINT32 wsValue;
+	INT32 wsValue;
 	UINT8 length;
 }msg_struct_adc_new_material_ws_t;
 
@@ -286,7 +286,7 @@ typedef struct msg_struct_l3bfsc_canvela_init_resp
 //MSG_ID_L3BFSC_CAN_NEW_WS_EVENT
 typedef struct msg_struct_l3bfsc_canvela_new_ws_event
 {
-	UINT32 wsValue;
+	INT32 wsValue;
 	UINT8 length;
 }msg_struct_l3bfsc_canvela_new_ws_event_t;
 
@@ -311,16 +311,23 @@ typedef struct msg_struct_l3bfsc_canvela_error_status_report
 	UINT8 length;
 }msg_struct_l3bfsc_canvela_error_status_report_t;
 
-//MSG_ID_L3BFSC_ADC_CMD_STOP_MEASURE
-typedef struct msg_struct_l3bfsc_adc_cmd_stop_measure
+//MSG_ID_L3BFSC_ADC_WS_CMD_CTRL
+typedef struct msg_struct_l3bfsc_adc_ws_cmd_ctrl
 {
+	UINT8 cmdId;
 	UINT8 length;
-}msg_struct_l3bfsc_adc_cmd_stop_measure_t;
+}msg_struct_l3bfsc_adc_ws_cmd_ctrl_t;
+#define IHU_BFSC_ADC_WS_CMD_TYPE_START 1
+#define IHU_BFSC_ADC_WS_CMD_TYPE_STOP 2
 
-//MSG_ID_L3BFSC_I2C_CMD_STOP_MOTO
-typedef struct msg_struct_l3bfsc_i2c_cmd_stop_moto
+//MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL
+typedef struct msg_struct_l3bfsc_i2c_moto_cmd_ctrl
 {
+	UINT8 cmdId;
 	UINT8 length;
-}msg_struct_l3bfsc_i2c_cmd_stop_moto_t;
+}msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t;
+#define IHU_BFSC_I2C_MOTO_CMD_TYPE_START 1
+#define IHU_BFSC_I2C_MOTO_CMD_TYPE_STOP 2
+
 
 #endif /* L0COMVM_COMMSGBFSC_H_ */

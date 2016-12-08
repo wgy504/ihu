@@ -38,7 +38,7 @@ FsmStateItem_t FsmI2caries[] =
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_I2CARIES_ACTIVED,         				fsm_i2caries_time_out},
 	
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
-  {MSG_ID_L3BFSC_I2C_CMD_STOP_MOTO,				FSM_STATE_I2CARIES_ACTIVED,         				fsm_i2caries_bfsc_cmd_stop_moto},	
+  {MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL,				FSM_STATE_I2CARIES_ACTIVED,         				fsm_i2caries_bfsc_moto_cmd_ctrl},	
   {MSG_ID_CAN_I2C_MOTO_CMD_CTRL,					FSM_STATE_I2CARIES_ACTIVED,         				fsm_i2caries_i2c_moto_cmd_ctrl},	
 	
 #endif		
@@ -48,6 +48,8 @@ FsmStateItem_t FsmI2caries[] =
 };
 
 //Global variables defination
+strIhuBfscI2cMotoPar_t zIhuI2cBfscMoto;
+
 
 //Main Entry
 //Input parameter would be useless, but just for similar structure purpose
@@ -92,6 +94,7 @@ OPSTAT fsm_i2caries_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 
 	//Global Variables
 	zIhuRunErrCnt[TASK_ID_I2CARIES] = 0;
+	memset(&zIhuI2cBfscMoto, 0, sizeof(strIhuBfscI2cMotoPar_t));
 
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_I2CARIES, FSM_STATE_I2CARIES_ACTIVED) == IHU_FAILURE){
@@ -207,14 +210,14 @@ void func_i2caries_time_out_period_scan(void)
 
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 //MSG_ID_L3BFSC_I2C_CMD_STOP_MOTO Processing
-OPSTAT fsm_i2caries_bfsc_cmd_stop_moto(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+OPSTAT fsm_i2caries_bfsc_moto_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
 	//int ret = 0;
-	msg_struct_l3bfsc_i2c_cmd_stop_moto_t rcv;
+	msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t rcv;
 	
 	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_i2c_cmd_stop_moto_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_i2c_cmd_stop_moto_t))){
+	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t))){
 		IhuErrorPrint("I2CARIES: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_I2CARIES]++;
 		return IHU_FAILURE;
@@ -222,6 +225,20 @@ OPSTAT fsm_i2caries_bfsc_cmd_stop_moto(UINT8 dest_id, UINT8 src_id, void * param
 	memcpy(&rcv, param_ptr, param_len);
 
 	//消息处理
+	if (rcv.cmdId == IHU_BFSC_I2C_MOTO_CMD_TYPE_START)
+	{
+		zIhuI2cBfscMoto.turnMode = IHU_BFSC_I2C_MOTO_TURN_MODE_START;
+	}
+	else if (rcv.cmdId == IHU_BFSC_I2C_MOTO_CMD_TYPE_STOP)
+	{
+		zIhuI2cBfscMoto.turnMode = IHU_BFSC_I2C_MOTO_TURN_MODE_START;
+	}
+	else{
+		IhuErrorPrint("I2CARIES: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_I2CARIES]++;
+		return IHU_FAILURE;		
+	}
+	
 	//命令下发给MOTO硬件
 
 	return IHU_SUCCESS;
@@ -243,8 +260,44 @@ OPSTAT fsm_i2caries_i2c_moto_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param_
 	}
 	memcpy(&rcv, param_ptr, param_len);
 
-	//消息处理
-	//命令下发给MOTO硬件
+	//依赖不同的控制命令，分门别类的处理
+	//分别针对不同的OPTID进行帧的分类处理
+	switch(rcv.cmd.optid)
+		{
+			case IHU_CANVELA_OPTID_motor_turn_around:  //电机转动
+				//具体读取重量的干活指令
+				if (rcv.cmd.optpar == IHU_CANVELA_OPTPAR_motor_turn_around_normal)
+				{
+					zIhuI2cBfscMoto.turnDir = IHU_BFSC_I2C_MOTO_TURN_DIRECTION_NOR;
+					zIhuI2cBfscMoto.turnMode = IHU_BFSC_I2C_MOTO_TURN_MODE_START;
+				}
+				else if (rcv.cmd.optpar == IHU_CANVELA_OPTPAR_motor_turn_around_normal)
+				{
+					zIhuI2cBfscMoto.turnDir = IHU_BFSC_I2C_MOTO_TURN_DIRECTION_REV;
+					zIhuI2cBfscMoto.turnMode = IHU_BFSC_I2C_MOTO_TURN_MODE_START;
+				}
+				else if (rcv.cmd.optpar == IHU_CANVELA_OPTPAR_motor_turn_around_stop)
+				{
+					zIhuI2cBfscMoto.turnMode = IHU_BFSC_I2C_MOTO_TURN_MODE_STOP;
+				}
+				else{
+					IhuErrorPrint("I2CARIES: Receive message error!\n");
+					zIhuRunErrCnt[TASK_ID_I2CARIES]++;
+					return IHU_FAILURE;
+				}
+				break;		
+				
+			case IHU_CANVELA_OPTID_motor_speed:  //电机设置速度
+				//具体读取重量的干活指令
+				zIhuI2cBfscMoto.speed = rcv.cmd.modbusVal;
+				break;
+			
+			default:
+				zIhuRunErrCnt[TASK_ID_CANVELA]++;
+				IhuErrorPrint("I2CARIES: Input parameters error!\n");
+				return IHU_FAILURE;
+				//break;
+		} //switch(rcv.cmd.optid)
 	
 	//发送回去消息
 	memset(&snd, 0, sizeof(msg_struct_i2caries_canvela_cmd_resp_t));
@@ -253,7 +306,7 @@ OPSTAT fsm_i2caries_i2c_moto_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param_
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("I2CARIES: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_I2CARIES], zIhuTaskNameList[TASK_ID_CANVELA]);
 		return IHU_FAILURE;
-	}	
+	}
 	
 	//返回
 	return IHU_SUCCESS;

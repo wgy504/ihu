@@ -360,17 +360,17 @@ typedef enum
 {
 	IHU_CANVELA_OPTID_none = 0,
 	IHU_CANVELA_OPTID_min = 0x01,
-	IHU_CANVELA_OPTID_wegith_read = 0x02,
-	IHU_CANVELA_OPTID_auto_zero_track = 0x09,  //（值设定及含义同modbus协议）
-	IHU_CANVELA_OPTID_min_sensitivity = 0x0A,  //（值设定及含义同modbus协议）
-	IHU_CANVELA_OPTID_manual_set_zero = 0x0C,  //（值设定及含义同modbus协议）
-	IHU_CANVELA_OPTID_static_detect_range = 0x0D, //（值设定及含义同modbus协议）
-	IHU_CANVELA_OPTID_static_detect_duration = 0x0E, //（值设定及含义同modbus协议）
-	IHU_CANVELA_OPTID_weight_scale_calibration = 0x10,
-	IHU_CANVELA_OPTID_motor_turn_around = 0x20,
-	IHU_CANVELA_OPTID_motor_speed = 0x21,
-	IHU_CANVELA_OPTID_scale_range = 0x25,
-	IHU_CANVELA_OPTID_node_set = 0x26,
+	IHU_CANVELA_OPTID_wegith_read = 0x02,  //重量读取
+	IHU_CANVELA_OPTID_auto_zero_track = 0x09,  //（值设定及含义同modbus协议） 自动0点跟踪
+	IHU_CANVELA_OPTID_min_sensitivity = 0x0A,  //（值设定及含义同modbus协议） 最小灵敏度
+	IHU_CANVELA_OPTID_manual_set_zero = 0x0C,  //（值设定及含义同modbus协议）  手动清零
+	IHU_CANVELA_OPTID_static_detect_range = 0x0D, //（值设定及含义同modbus协议） 静止检测范围
+	IHU_CANVELA_OPTID_static_detect_duration = 0x0E, //（值设定及含义同modbus协议） 静止检测时间
+	IHU_CANVELA_OPTID_weight_scale_calibration = 0x10, //称量校准
+	IHU_CANVELA_OPTID_motor_turn_around = 0x20,  //电机转动
+	IHU_CANVELA_OPTID_motor_speed = 0x21,  //电机设置速度
+	IHU_CANVELA_OPTID_scale_range = 0x25,  //量程
+	IHU_CANVELA_OPTID_node_set = 0x26,  //整个节点
 	IHU_CANVELA_OPTID_max,
 	IHU_CANVELA_OPTID_invalid = 0xFF,
 }IhuCanvelaOptidEnmu;

@@ -38,7 +38,7 @@ FsmStateItem_t FsmAdclibra[] =
   {MSG_ID_COM_TIME_OUT,										FSM_STATE_ADCLIBRA_ACTIVED,         				fsm_adclibra_time_out},
 
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
-  {MSG_ID_L3BFSC_ADC_CMD_STOP_MEASURE,		FSM_STATE_ADCLIBRA_ACTIVED,         				fsm_adclibra_l3bfsc_cmd_stop_measure},
+  {MSG_ID_L3BFSC_ADC_WS_CMD_CTRL,					FSM_STATE_ADCLIBRA_ACTIVED,         				fsm_adclibra_l3bfsc_ws_cmd_ctrl},
   {MSG_ID_CAN_ADC_MEAS_CMD_CTRL,					FSM_STATE_ADCLIBRA_ACTIVED,         				fsm_adclibra_can_meas_cmd_ctrl},
 	
 #endif
@@ -48,8 +48,7 @@ FsmStateItem_t FsmAdclibra[] =
 };
 
 //Global variables defination
-UINT32 zIhuAdcBfscScanSensorWeightExist = 0;  //用于BFSC项目中判定扫描到的重物，是否一直有重量的情形
-UINT32 zIhuAdcBfscSensorWeightValue = 0;  //用于BFSC项目中称重结果
+strIhuBfscAdcWeightPar_t zIhuAdcBfscWs;
 
 //Main Entry
 //Input parameter would be useless, but just for similar structure purpose
@@ -94,8 +93,7 @@ OPSTAT fsm_adclibra_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 
 	//Global Variables
 	zIhuRunErrCnt[TASK_ID_ADCLIBRA] = 0;
-	zIhuAdcBfscScanSensorWeightExist = 0;
-	zIhuAdcBfscSensorWeightValue = 0;
+	memset(&zIhuAdcBfscWs, 0, sizeof(strIhuBfscAdcWeightPar_t));
 
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_ADCLIBRA, FSM_STATE_ADCLIBRA_ACTIVED) == IHU_FAILURE){
@@ -210,7 +208,7 @@ OPSTAT fsm_adclibra_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
 	else if ((rcv.timeId == TIMER_ID_10MS_BFSC_ADCLIBRA_SCAN_TIMER) &&(rcv.timeRes == TIMER_RESOLUTION_10MS)){
-		func_adclibra_time_out_bfsc_read_weight_scan();
+		if (zIhuAdcBfscWs.WeightWorkingMode == IHU_BFSC_ADC_WEIGHT_WORKING_MODE_NORMAL) func_adclibra_time_out_bfsc_read_weight_scan();
 	}
 #endif
 	
@@ -241,15 +239,15 @@ OPSTAT func_adclibra_time_out_bfsc_read_weight_scan(void)
 	tempWeight = rand() % 200;
 	
 	//传感器一直是0重量
-	if ((tempWeight == 0) && (zIhuAdcBfscScanSensorWeightExist == 0))
+	if ((tempWeight == 0) && (zIhuAdcBfscWs.WeightExistCnt == 0))
 	{
 		//Do nothing
 	}
 	
 	//传感器突然变成了0重量
-	else if ((tempWeight == 0) && (zIhuAdcBfscScanSensorWeightExist > 0))
+	else if ((tempWeight == 0) && (zIhuAdcBfscWs.WeightExistCnt > 0))
 	{
-		zIhuAdcBfscScanSensorWeightExist = 0;
+		zIhuAdcBfscWs.WeightExistCnt = 0;
 		//发送MSG_ID_ADC_MATERIAL_DROP到L3BFSC
 		msg_struct_adc_material_drop_t snd1;
 		memset(&snd1, 0, sizeof(msg_struct_adc_material_drop_t));
@@ -265,11 +263,11 @@ OPSTAT func_adclibra_time_out_bfsc_read_weight_scan(void)
 	//传感器有新重量：这里的误差，得有算法来控制结果，只要是重量不一样，这里的程序就得上报，不管是不是真的有变化，以确保系统反应的敏感性
 	else if (tempWeight > 0)
 	{
-		zIhuAdcBfscScanSensorWeightExist++;
-		if (tempWeight != zIhuAdcBfscSensorWeightValue)
+		zIhuAdcBfscWs.WeightExistCnt++;
+		if (tempWeight != zIhuAdcBfscWs.Weightvalue)
 		{
 			//发送MSG_ID_ADC_NEW_MATERIAL_WS
-			zIhuAdcBfscSensorWeightValue = tempWeight;
+			zIhuAdcBfscWs.Weightvalue = tempWeight;
 			msg_struct_adc_new_material_ws_t snd2;
 			memset(&snd2, 0, sizeof(msg_struct_adc_new_material_ws_t));
 			snd2.length = sizeof(msg_struct_adc_new_material_ws_t);
@@ -296,27 +294,40 @@ OPSTAT func_adclibra_time_out_bfsc_read_weight_scan(void)
 
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 //MSG_ID_L3BFSC_ADC_CMD_STOP_MEASURE
-OPSTAT fsm_adclibra_l3bfsc_cmd_stop_measure(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+OPSTAT fsm_adclibra_l3bfsc_ws_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	int ret = 0;
-	msg_struct_l3bfsc_adc_cmd_stop_measure_t rcv;
+	//int ret = 0;
+	msg_struct_l3bfsc_adc_ws_cmd_ctrl_t rcv;
 	
 	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_adc_cmd_stop_measure_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_adc_cmd_stop_measure_t))){
+	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t))){
 		IhuErrorPrint("ADCLIBRA: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
 	
+	if (rcv.cmdId == IHU_BFSC_ADC_WS_CMD_TYPE_START){
+		zIhuAdcBfscWs.WeightWorkingMode = IHU_BFSC_ADC_WEIGHT_WORKING_MODE_NORMAL;
+	}
+	else if (rcv.cmdId == IHU_BFSC_ADC_WS_CMD_TYPE_STOP){
+		zIhuAdcBfscWs.WeightWorkingMode = IHU_BFSC_ADC_WEIGHT_WORKING_MODE_STOP;
+	}
+	else{
+		IhuErrorPrint("ADCLIBRA: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
+		return IHU_FAILURE;
+	}
+	
+	//不再需要通过定制扫描定时器来处理
 	//处理消息：停止扫描消息，不再干活，等待人工干预
-	ret = ihu_timer_stop(TASK_ID_ADCLIBRA, TIMER_ID_1S_ADCLIBRA_PERIOD_SCAN, TIMER_RESOLUTION_1S);
+	/*ret = ihu_timer_stop(TASK_ID_ADCLIBRA, TIMER_ID_1S_ADCLIBRA_PERIOD_SCAN, TIMER_RESOLUTION_1S);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("L3BFSC: Error stop timer!\n");
 		zIhuRunErrCnt[TASK_ID_BFSC]++;
 		return IHU_FAILURE;
-	}
+	}*/
 	
 	return IHU_SUCCESS;
 }
@@ -337,9 +348,94 @@ OPSTAT fsm_adclibra_can_meas_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param_
 	}
 	memcpy(&rcv, param_ptr, param_len);
 	
-	//处理消息
+	//入参检查
+	if (rcv.cmd.prefixcmdid != IHU_CANVELA_PREFIXH_ws_ctrl)
+	{
+		IhuErrorPrint("ADCLIBRA: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
+		return IHU_FAILURE;
+	}
 	
 	//依赖不同的控制命令，分门别类的处理
+	//分别针对不同的OPTID进行帧的分类处理
+	switch(rcv.cmd.optid)
+		{
+			//重量读取
+			case IHU_CANVELA_OPTID_wegith_read:  
+				//具体读取重量的干活指令
+				break;
+
+			//（值设定及含义同modbus协议） 自动0点跟踪
+			case IHU_CANVELA_OPTID_auto_zero_track: 
+				//这个值的设定，将会使得每一次称重，自动清零，判定的标准是单体重量小于设定目标重量的10%
+				zIhuAdcBfscWs.WeightZeroTrackMode = IHU_BFSC_ADC_WEIGHT_ZERO_TRACK_MODE_ACTIVE; 
+				break;
+
+			//（值设定及含义同modbus协议） 最小灵敏度
+			case IHU_CANVELA_OPTID_min_sensitivity: 
+				zIhuAdcBfscWs.WeightMinSens = rcv.cmd.modbusVal;
+				break;
+
+			//（值设定及含义同modbus协议）  手动清零
+			case IHU_CANVELA_OPTID_manual_set_zero:  				
+				//强行读取一次ADC数量
+				//将该称重数量赋给目标
+				zIhuAdcBfscWs.WeightManSetZero = rand() % 10;
+				break;
+
+			//（值设定及含义同modbus协议） 静止检测范围
+			case IHU_CANVELA_OPTID_static_detect_range: 
+				//具体读取重量的干活指令
+				zIhuAdcBfscWs.WeightStaticRange = rcv.cmd.modbusVal;
+				break;
+
+			//（值设定及含义同modbus协议） 静止检测时间
+			case IHU_CANVELA_OPTID_static_detect_duration:
+				//具体读取重量的干活指令
+				zIhuAdcBfscWs.WeightStaticDur = rcv.cmd.modbusVal;		
+				break;
+
+			//称量校准
+			case IHU_CANVELA_OPTID_weight_scale_calibration:
+				if (rcv.cmd.optpar == IHU_CANVELA_OPTPAR_weight_scale_calibration_0)
+				{
+					zIhuAdcBfscWs.WeightWorkingMode = IHU_BFSC_ADC_WEIGHT_WORKING_MODE_CAL;
+					//读取一次重量指令
+					zIhuAdcBfscWs.WeightCal0Kg = rand()%10;
+				}
+				else if (rcv.cmd.optpar == IHU_CANVELA_OPTPAR_weight_scale_calibration_1kg)
+				{
+					zIhuAdcBfscWs.WeightWorkingMode = IHU_BFSC_ADC_WEIGHT_WORKING_MODE_CAL;
+					//读取一次重量指令
+					zIhuAdcBfscWs.WeightCal1Kg = 1000 + rand()%100;
+				}
+				else if (rcv.cmd.optpar == IHU_CANVELA_OPTPAR_weight_scale_calibration_exit)
+				{
+					zIhuAdcBfscWs.WeightWorkingMode = IHU_BFSC_ADC_WEIGHT_WORKING_MODE_NORMAL;
+				}
+				else
+				{
+					IhuErrorPrint("ADCLIBRA: Receive message error!\n");
+					zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
+					return IHU_FAILURE;
+				}
+				//具体读取重量的干活指令
+				break;
+
+			//量程设置
+			case IHU_CANVELA_OPTID_scale_range:
+				//具体读取重量的干活指令
+				zIhuAdcBfscWs.WeightMaxScale = rcv.cmd.modbusVal;
+
+				break;
+
+			default:
+				zIhuRunErrCnt[TASK_ID_CANVELA]++;
+				IhuErrorPrint("ADCLIBRA: Input parameters error!\n");
+				return IHU_FAILURE;
+				//break;
+		} //switch(rcv.cmd.optid)
+	
 
 	//发送回去消息
 	memset(&snd, 0, sizeof(msg_struct_adclibra_canvela_meas_cmd_resp_t));

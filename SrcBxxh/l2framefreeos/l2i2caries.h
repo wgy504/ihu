@@ -46,13 +46,28 @@ enum FSM_STATE_I2CARIES
 //Global variables
 extern FsmStateItem_t FsmI2caries[];
 
+//本地需要用到的核心参数
+typedef struct strIhuBfscI2cMotoPar
+{
+	INT32 speed;  //设置的速度
+	UINT8 turnDir;  //转动的方向
+	UINT8 turnMode;  //是否转动
+}strIhuBfscI2cMotoPar_t;
+
+#define IHU_BFSC_I2C_MOTO_TURN_DIRECTION_NONE 0
+#define IHU_BFSC_I2C_MOTO_TURN_DIRECTION_NOR 1
+#define IHU_BFSC_I2C_MOTO_TURN_DIRECTION_REV 2
+#define IHU_BFSC_I2C_MOTO_TURN_MODE_NONE 0
+#define IHU_BFSC_I2C_MOTO_TURN_MODE_START 1
+#define IHU_BFSC_I2C_MOTO_TURN_MODE_STOP 2
+
 //API
 extern OPSTAT fsm_i2caries_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_i2caries_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_i2caries_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_i2caries_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_i2caries_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
-extern OPSTAT fsm_i2caries_bfsc_cmd_stop_moto(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT fsm_i2caries_bfsc_moto_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_i2caries_i2c_moto_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 
 //Local API
