@@ -120,6 +120,17 @@ OPSTAT fsm_canvela_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 		IhuDebugPrint("CANVELA: Enter FSM_STATE_CANVELA_ACTIVE status, Keeping refresh here!\n");
 	}
 
+	//测试代码，纯粹为了启动整个业务流程
+	ihu_sleep(3);
+	msg_struct_canvela_l3bfsc_init_req_t snd1;
+	memset(&snd1, 0, sizeof(msg_struct_canvela_l3bfsc_init_req_t));
+	snd1.length = sizeof(msg_struct_canvela_l3bfsc_init_req_t);
+	ret = ihu_message_send(MSG_ID_CAN_L3BFSC_INIT_REQ, TASK_ID_BFSC, TASK_ID_CANVELA, &snd1, snd1.length);
+	if (ret == IHU_FAILURE){
+		IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CANVELA], zIhuTaskNameList[TASK_ID_BFSC]);
+		return IHU_FAILURE;
+	}
+	
 	//返回
 	return IHU_SUCCESS;
 }

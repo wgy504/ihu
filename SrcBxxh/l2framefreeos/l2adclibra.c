@@ -450,8 +450,8 @@ INT32 func_adclibra_bfsc_read_weight(void)
 	
 	//读取假数据
 	//需要直接访问ADC的HAL函数
-	//tempVal = rand() % 1000;
-	tempVal = ihu_l1hd_adc_bfsc_get_value();
+	tempVal = rand() % 1000;
+	//tempVal = ihu_l1hd_adc_bfsc_get_value();
 
 	//算法处理
 	//按道理，应该先对数据进行定标，再滤波，然后对照计算好的校准表，利用梯形线性差值，或者二次方B样条法，计算得到目标值

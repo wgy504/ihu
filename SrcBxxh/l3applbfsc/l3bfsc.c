@@ -259,7 +259,7 @@ OPSTAT func_bfsc_time_out_wait_weight_command_process(void)
 	memset(&snd, 0, sizeof(msg_struct_l3bfsc_canvela_new_ws_event_t));
 	snd.wsValue = zIhuL3bfscLatestMeasureWeightValue;
 	snd.length = sizeof(msg_struct_l3bfsc_canvela_new_ws_event_t);
-	ret = ihu_message_send(MSG_ID_L3BFSC_CAN_INIT_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length);
+	ret = ihu_message_send(MSG_ID_L3BFSC_CAN_NEW_WS_EVENT, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_BFSC]++;
 		IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_BFSC], zIhuTaskNameList[TASK_ID_CANVELA]);
@@ -650,7 +650,8 @@ OPSTAT fsm_bfsc_adc_new_material_ws(UINT8 dest_id, UINT8 src_id, void * param_pt
 	
 	//收到消息并做参数检查
 	memset(&rcv, 0, sizeof(msg_struct_adc_new_material_ws_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_adc_new_material_ws_t)) || (rcv.wsValue == 0)){
+	//if ((param_ptr == NULL || param_len > sizeof(msg_struct_adc_new_material_ws_t)) || (rcv.wsValue == 0)){
+	if (param_ptr == NULL || param_len > sizeof(msg_struct_adc_new_material_ws_t)){
 		IhuErrorPrint("L3BFSC: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_BFSC]++;
 		return IHU_FAILURE;
@@ -666,7 +667,7 @@ OPSTAT fsm_bfsc_adc_new_material_ws(UINT8 dest_id, UINT8 src_id, void * param_pt
 	memset(&snd, 0, sizeof(msg_struct_l3bfsc_canvela_new_ws_event_t));
 	snd.wsValue = rcv.wsValue;
 	snd.length = sizeof(msg_struct_l3bfsc_canvela_new_ws_event_t);
-	ret = ihu_message_send(MSG_ID_L3BFSC_CAN_INIT_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length);
+	ret = ihu_message_send(MSG_ID_L3BFSC_CAN_NEW_WS_EVENT, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_BFSC]++;
 		IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_BFSC], zIhuTaskNameList[TASK_ID_CANVELA]);
@@ -715,7 +716,7 @@ OPSTAT fsm_bfsc_adc_material_drop(UINT8 dest_id, UINT8 src_id, void * param_ptr,
 		//发送状态命令给上位机，表示这个空闲了	
 		memset(&snd, 0, sizeof(msg_struct_l3bfsc_canvela_new_ws_event_t));
 		snd.length = sizeof(msg_struct_l3bfsc_canvela_new_ws_event_t);
-		ret = ihu_message_send(MSG_ID_L3BFSC_CAN_INIT_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length);
+		ret = ihu_message_send(MSG_ID_L3BFSC_CAN_NEW_WS_EVENT, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_BFSC]++;
 			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_BFSC], zIhuTaskNameList[TASK_ID_CANVELA]);

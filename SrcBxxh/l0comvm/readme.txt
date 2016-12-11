@@ -6,7 +6,8 @@
 = 研究STM32的IAP功能
 = 在STM32板子上进行具体的测试
 
-
+//= ZJL, 2016 Dec.11, CURRENT_SW_DELIVERY R03.58 =>BFSC项目
+= 增加Init_Req的测试代码，启动这个流程
 
 
 //= ZJL, 2016 Dec.8, CURRENT_SW_DELIVERY R03.57 =>BFSC项目
