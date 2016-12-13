@@ -56,20 +56,21 @@ OPSTAT fsm_timer_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 
 OPSTAT fsm_timer_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
+	int ret = 0;
   //xTimerHandle timerStart;
 
-	//串行会送INIT_FB给VM，不然消息队列不够深度，此为节省内存机制
+	//串行回送INIT_FB给VMFO
+	ihu_usleep(dest_id * IHU_MODULE_START_DISTRIBUTION_DELAY_DURATION);
 	if ((src_id > TASK_ID_MIN) && (src_id < TASK_ID_MAX)){
-		//Send back MSG_ID_COM_INIT_FB to VM。由于消息队列不够深，所以不再回送FB证实。
-		//暂时不删除以下代码，留待未来使用
-//		msg_struct_com_init_fb_t snd;
-//		memset(&snd, 0, sizeof(msg_struct_com_init_fb_t));
-//		snd.length = sizeof(msg_struct_com_init_fb_t);
-//		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_TIMER, &snd, snd.length);
-//		if (ret == IHU_FAILURE){
-//			IhuErrorPrint("TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_TIMER], zIhuTaskNameList[src_id]);
-//			return IHU_FAILURE;
-//		}
+		//Send back MSG_ID_COM_INIT_FB to VM
+		msg_struct_com_init_fb_t snd;
+		memset(&snd, 0, sizeof(msg_struct_com_init_fb_t));
+		snd.length = sizeof(msg_struct_com_init_fb_t);
+		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_TIMER, &snd, snd.length);
+		if (ret == IHU_FAILURE){
+			IhuErrorPrint("TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_TIMER], zIhuTaskNameList[src_id]);
+			return IHU_FAILURE;
+		}
 	}
 
 	//INIT this task global variables zIhuTimerTable

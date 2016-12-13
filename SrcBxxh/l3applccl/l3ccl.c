@@ -95,17 +95,17 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 {
 	int ret=0;
 
-	//串行会送INIT_FB给VM，不然消息队列不够深度，此为节省内存机制
+	//串行回送INIT_FB给VMFO
 	if ((src_id > TASK_ID_MIN) &&(src_id < TASK_ID_MAX)){
-		//Send back MSG_ID_COM_INIT_FB to VM。由于消息队列不够深，所以不再回送FB证实。
-//		msg_struct_com_init_fb_t snd;
-//		memset(&snd, 0, sizeof(msg_struct_com_init_fb_t));
-//		snd.length = sizeof(msg_struct_com_init_fb_t);
-//		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_CCL, &snd, snd.length);
-//		if (ret == IHU_FAILURE){
-//			IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[src_id]);
-//			return IHU_FAILURE;
-//		}
+		//Send back MSG_ID_COM_INIT_FB to VMFO
+		msg_struct_com_init_fb_t snd;
+		memset(&snd, 0, sizeof(msg_struct_com_init_fb_t));
+		snd.length = sizeof(msg_struct_com_init_fb_t);
+		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_CCL, &snd, snd.length);
+		if (ret == IHU_FAILURE){
+			IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[src_id]);
+			return IHU_FAILURE;
+		}
 	}
 
 	//收到初始化消息后，进入初始化状态
@@ -384,10 +384,26 @@ OPSTAT fsm_ccl_sps_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param_
 //超长时间，触发周期性汇报
 void func_ccl_time_out_period_event_report(void)
 {
+	int ret = 0;
+	
+	//发送HeartBeat消息给VMFO模块，实现喂狗功能
+	msg_struct_com_heart_beat_t snd;
+	memset(&snd, 0, sizeof(msg_struct_com_heart_beat_t));
+	snd.length = sizeof(msg_struct_com_heart_beat_t);
+	ret = ihu_message_send(MSG_ID_COM_HEART_BEAT, TASK_ID_VMFO, TASK_ID_CCL, &snd, snd.length);
+	if (ret == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_VMFO]);
+		return ;
+	}
+	
 	//发送状态查询请求给DIDO模块
 	//MSG_ID_CCL_TO_DH_SENSOR_STATUS_REQ
 
 	//状态机转移
+	
+	//返回
+	return;			
 }
 
 //工作状态下的短定时扫描，可以当做计数器来使用

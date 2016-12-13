@@ -461,8 +461,8 @@ void ihu_vm_system_init(void)
 	IhuDebugPrint("VMFO: CURRENT_PRJ=[%s], HW_TYPE=[%d], HW_MODULE=[%d], SW_REL=[%d], SW_DELIVER=[%d].\n", IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT, CURRENT_HW_TYPE, CURRENT_HW_MODULE, CURRENT_SW_RELEASE, CURRENT_SW_DELIVERY);
 	IhuDebugPrint("VMFO: BXXH(TM) IHU(c) Application Layer start and initialized, build at %s, %s.\n", __DATE__, __TIME__);
 
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
 	
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)	
 	//初始化全局变量TASK_ID/QUE_ID/TASK_STAT
 	memset(&(zIhuTaskInfo[0].TaskId), 0, sizeof(zIhuTaskInfo)*(TASK_ID_MAX-TASK_ID_MIN+1));
 
@@ -525,7 +525,7 @@ void ihu_vm_system_init(void)
 		zIhuTaskInfo[i].pnpState = IHU_TASK_PNP_INVALID;
 	}
 	//肯定需要启动的任务模块
-	zIhuTaskInfo[TASK_ID_VMFO].pnpState = IHU_TASK_PNP_OFF;
+	zIhuTaskInfo[TASK_ID_VMFO].pnpState = IHU_TASK_PNP_ON;
 	zIhuTaskInfo[TASK_ID_TIMER].pnpState = IHU_TASK_PNP_ON;
 //	if (IHU_COMM_FRONT_ADC == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_ADCLIBRA].pnpState = IHU_TASK_PNP_ON;
 //	if (IHU_COMM_FRONT_SPI == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_SPILEO].pnpState = IHU_TASK_PNP_ON;
@@ -557,6 +557,7 @@ void ihu_vm_system_init(void)
 	zIhuSysEngPar.comm.commBackHawlCon = IHU_COMM_BACK_HAWL_CON;
 
 	//Sensor timer
+	zIhuSysEngPar.timer.vmfoPeriodScanTimer = IHU_VMFO_TIMER_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.adclibraPeriodScanTimer = IHU_ADCLIBRA_TIMER_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.didocapPeriodScanTimer = IHU_DIDOCAP_TIMER_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.ethorionPeriodScanTimer = IHU_ETHORION_TIMER_DURATION_PERIOD_SCAN;
@@ -612,7 +613,7 @@ void ihu_vm_system_init(void)
 		zIhuTaskInfo[i].pnpState = IHU_TASK_PNP_INVALID;
 	}
 	//肯定需要启动的任务模块
-	zIhuTaskInfo[TASK_ID_VMFO].pnpState = IHU_TASK_PNP_OFF;
+	zIhuTaskInfo[TASK_ID_VMFO].pnpState = IHU_TASK_PNP_ON;
 	zIhuTaskInfo[TASK_ID_TIMER].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_COMM_FRONT_ADC == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_ADCLIBRA].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_COMM_FRONT_SPI == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_SPILEO].pnpState = IHU_TASK_PNP_ON;
@@ -625,6 +626,7 @@ void ihu_vm_system_init(void)
 	if (IHU_COMM_FRONT_ETH == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_ETHORION].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_MAIN_CTRL_CCL == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_CCL].pnpState = IHU_TASK_PNP_ON;			
 
+	
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 	//初始化全局变量TASK_ID/QUE_ID/TASK_STAT
 	memset(&(zIhuTaskInfo[0].TaskId), 0, sizeof(zIhuTaskInfo)*(TASK_ID_MAX-TASK_ID_MIN+1));
@@ -643,6 +645,7 @@ void ihu_vm_system_init(void)
 	zIhuSysEngPar.comm.commBackHawlCon = IHU_COMM_BACK_HAWL_CON;
 
 	//Sensor timer
+	zIhuSysEngPar.timer.vmfoPeriodScanTimer = IHU_VMFO_TIMER_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.adclibraPeriodScanTimer = IHU_ADCLIBRA_TIMER_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.didocapPeriodScanTimer = IHU_DIDOCAP_TIMER_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.ethorionPeriodScanTimer = IHU_ETHORION_TIMER_DURATION_PERIOD_SCAN;
@@ -702,7 +705,7 @@ void ihu_vm_system_init(void)
 		zIhuTaskInfo[i].pnpState = IHU_TASK_PNP_INVALID;
 	}
 	//肯定需要启动的任务模块
-	zIhuTaskInfo[TASK_ID_VMFO].pnpState = IHU_TASK_PNP_OFF;
+	zIhuTaskInfo[TASK_ID_VMFO].pnpState = IHU_TASK_PNP_ON;
 	zIhuTaskInfo[TASK_ID_TIMER].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_COMM_FRONT_ADC == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_ADCLIBRA].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_COMM_FRONT_SPI == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_SPILEO].pnpState = IHU_TASK_PNP_ON;
@@ -1696,7 +1699,9 @@ OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 	}
 
 	//Create task and make it running for the 1st time
-	ret = ihu_task_create(task_id, /*CALLBACK*/(void *(*)(void *))FsmProcessingLaunch, (void *)&(zIhuTaskInfo[task_id].TaskId), IHU_THREAD_PRIO);
+	//让VMFO保持更高一级的优先级，以便VMFO及时处理守护程序的职责
+	if (task_id == TASK_ID_VMFO) ret = ihu_task_create(task_id, /*CALLBACK*/(void *(*)(void *))FsmProcessingLaunch, (void *)&(zIhuTaskInfo[task_id].TaskId), IHU_THREAD_PRIO+1);
+	else ret = ihu_task_create(task_id, /*CALLBACK*/(void *(*)(void *))FsmProcessingLaunch, (void *)&(zIhuTaskInfo[task_id].TaskId), IHU_THREAD_PRIO);
 	if (ret == IHU_FAILURE)
 	{
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
@@ -1770,8 +1775,9 @@ OPSTAT ihu_system_task_init_call(UINT8 task_id, FsmStateItem_t *p)
 void ihu_task_create_all(void)
 {
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
-	//No need create VMFO environments /1
-	//if (zIhuTaskInfo[TASK_ID_VMFO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_VMFO, FsmVMFO);	
+	//Create VMFO environments /1
+	if (zIhuTaskInfo[TASK_ID_VMFO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_VMFO, FsmVmfo);	
+	ihu_vm_send_init_msg_to_app_task(TASK_ID_VMFO);
 
 	//Create task Timer environments /2
 	if (zIhuTaskInfo[TASK_ID_TIMER].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_TIMER, FsmTimer);
@@ -1820,9 +1826,10 @@ void ihu_task_create_all(void)
 	IhuDebugPrint("VMFO: Create all task successfully!\n");	
 	
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-	//No need create VMFO environments /1
-	//if (zIhuTaskInfo[TASK_ID_VMFO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_VMFO, FsmVMFO);	
-
+	//Create VMFO environments /1
+	if (zIhuTaskInfo[TASK_ID_VMFO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_VMFO, FsmVmfo);	
+	ihu_vm_send_init_msg_to_app_task(TASK_ID_VMFO);	
+	
 	//Create task Timer environments /2
 	if (zIhuTaskInfo[TASK_ID_TIMER].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_TIMER, FsmTimer);
 	ihu_vm_send_init_msg_to_app_task(TASK_ID_TIMER);
@@ -1870,8 +1877,9 @@ void ihu_task_create_all(void)
 	IhuDebugPrint("VMFO: Create all task successfully!\n");
 
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
-	//No need create VMFO environments /1
-	//if (zIhuTaskInfo[TASK_ID_VMFO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_VMFO, FsmVMFO);	
+	//Create VMFO environments /1
+	if (zIhuTaskInfo[TASK_ID_VMFO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_VMFO, FsmVmfo);
+	ihu_vm_send_init_msg_to_app_task(TASK_ID_VMFO);	
 
 	//Create task Timer environments /2
 	if (zIhuTaskInfo[TASK_ID_TIMER].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_TIMER, FsmTimer);

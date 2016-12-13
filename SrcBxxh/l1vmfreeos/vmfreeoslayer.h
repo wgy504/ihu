@@ -23,6 +23,7 @@
   #include "hw_watchdog.h"
   #include "sys_clock_mgr.h"
   #include "sys_power_mgr.h"
+	
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
   #include "commsgccl.h"
   #include "FreeRTOS.h"
@@ -343,41 +344,44 @@ extern IhuSysEngParTable_t zIhuSysEngPar;                   //工参
 extern time_t zIhuSystemTimeUnix;                           //系统时钟TimeStamp
 extern struct tm zIhuSystemTimeYmd;                        	//系统时钟YMD
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
-extern FsmStateItem_t FsmTimer[];                           //状态机
+extern FsmStateItem_t FsmVmfo[];                           		//状态机
+extern FsmStateItem_t FsmTimer[];                           	//状态机
 //extern FsmStateItem_t FsmAdclibra[];                        //状态机
 //extern FsmStateItem_t FsmSpileo[];                          //状态机
 //extern FsmStateItem_t FsmI2caries[];                        //状态机
 //extern FsmStateItem_t FsmPwmtaurus[];                       //状态机
 //extern FsmStateItem_t FsmSpsvirgo[];                        //状态机
-//extern FsmStateItem_t FsmCanvela[];                      //状态机
+//extern FsmStateItem_t FsmCanvela[];                      		//状态机
 //extern FsmStateItem_t FsmDidocap[];                         //状态机
 //extern FsmStateItem_t FsmLedpisces[];                       //状态机
 //extern FsmStateItem_t FsmEthorion[];                        //状态机
 extern FsmStateItem_t FsmEmc68x[];                          	//状态机
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+extern FsmStateItem_t FsmVmfo[];                           	//状态机
 extern FsmStateItem_t FsmTimer[];                           //状态机
 extern FsmStateItem_t FsmAdclibra[];                        //状态机
 extern FsmStateItem_t FsmSpileo[];                          //状态机
 extern FsmStateItem_t FsmI2caries[];                        //状态机
 extern FsmStateItem_t FsmPwmtaurus[];                       //状态机
 extern FsmStateItem_t FsmSpsvirgo[];                        //状态机
-extern FsmStateItem_t FsmCanvela[];                      //状态机
+extern FsmStateItem_t FsmCanvela[];                      		//状态机
 extern FsmStateItem_t FsmDidocap[];                         //状态机
 extern FsmStateItem_t FsmLedpisces[];                       //状态机
 extern FsmStateItem_t FsmEthorion[];                        //状态机
 extern FsmStateItem_t FsmCcl[];                          	  //状态机
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+extern FsmStateItem_t FsmVmfo[];                           	//状态机
 extern FsmStateItem_t FsmTimer[];                           //状态机
 extern FsmStateItem_t FsmAdclibra[];                        //状态机
 extern FsmStateItem_t FsmSpileo[];                          //状态机
 extern FsmStateItem_t FsmI2caries[];                        //状态机
 extern FsmStateItem_t FsmPwmtaurus[];                       //状态机
 extern FsmStateItem_t FsmSpsvirgo[];                        //状态机
-extern FsmStateItem_t FsmCanvela[];                      //状态机
+extern FsmStateItem_t FsmCanvela[];                      		//状态机
 extern FsmStateItem_t FsmDidocap[];                         //状态机
 extern FsmStateItem_t FsmLedpisces[];                       //状态机
 extern FsmStateItem_t FsmEthorion[];                        //状态机
-extern FsmStateItem_t FsmBfsc[];                          			//状态机
+extern FsmStateItem_t FsmBfsc[];                          	//状态机 
 #else
 #endif
 
@@ -521,7 +525,7 @@ extern void ihu_timer_routine_handler_10ms(void);
 	#define portREMOVE_STATIC_QUALIFIER             1
 	#define portNOP()
 #else
-#endif
+#endif  //#if (IHU_WORKING_FREE_RTOS_SELECTION == IHU_WORKING_FREE_RTOS_SELECTION_BARE)
 	
 
 //来自于DA1468x - osal.h
@@ -820,7 +824,7 @@ extern void ihu_timer_routine_handler_10ms(void);
 	 * \return OS_MUTEX_CREATE_SUCCESS when mutex was created successfully, OS_MUTEX_CREATE_FAILED
 	 *         otherwise
 	 */
-#define OS_MUTEX_CREATE(mutex) \
+	#define OS_MUTEX_CREATE(mutex) \
         ({ \
                 (mutex) = xSemaphoreCreateRecursiveMutex(); \
                 mutex != NULL ? OS_MUTEX_CREATE_SUCCESS : OS_MUTEX_CREATE_FAILED; \
@@ -1578,7 +1582,6 @@ extern void ihu_timer_routine_handler_10ms(void);
 
 
 #else
-#endif
-
+#endif  //(IHU_WORKING_FREE_RTOS_SELECTION == IHU_WORKING_FREE_RTOS_SELECTION_BARE)	
 
 #endif /* L1VMFREEOS_VMFREEOSLAYER_H_ */

@@ -49,6 +49,7 @@
 "prjbfscfo@207vc\l1timer_freeos.o"
 "prjbfscfo@207vc\mod_hal_gprs.o"
 "prjbfscfo@207vc\vmfreeoslayer.o"
+"prjbfscfo@207vc\l1vmfo.o"
 "prjbfscfo@207vc\l2adclibra.o"
 "prjbfscfo@207vc\l2didocap.o"
 "prjbfscfo@207vc\l2ethorion.o"

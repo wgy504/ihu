@@ -1,7 +1,7 @@
 [PreviousGenFiles]
-HeaderPath=D:/IHUPRJ/ihu/PrjCclFo@205RG/Inc
+HeaderPath=D:/IHUSRC/ihu/PrjCclFo@205RG/Inc
 HeaderFiles=FreeRTOSConfig.h;stm32f2xx_it.h;stm32f2xx_hal_conf.h;main.h;
-SourcePath=D:/IHUPRJ/ihu/PrjCclFo@205RG/Src
+SourcePath=D:/IHUSRC/ihu/PrjCclFo@205RG/Src
 SourceFiles=FreeRTOSConfig.h;stm32f2xx_it.h;stm32f2xx_hal_conf.h;main.h;freertos.c;stm32f2xx_it.c;stm32f2xx_hal_msp.c;main.c;stm32f2xx_hal_timebase_TIM.c;
 
 [PreviousLibFiles]

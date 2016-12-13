@@ -1,4 +1,4 @@
-﻿/**
+/**
  ****************************************************************************************
  *
  * @file l2ledpisces.h
@@ -46,6 +46,22 @@ enum FSM_STATE_LEDPISCES
 
 //Global variables
 extern FsmStateItem_t FsmLedpisces[];
+
+//Local variables
+typedef enum{
+  BEEPState_OFF = 0,
+	BEEPState_ON,
+}StrBeepStateTypoeDef_t;
+
+//纯测试目的，未来需要弄到CubeMX中去
+//参看：硬石YS-F1Pro开发板开发手册（HAL库版本）
+#define IHU_IS_BEEP_STATE(STATE) (((STATE) == BEEPState_OFF) || ((STATE) == BEEPState_ON))
+#define IHU_BEEP_RCC_CLK_ENABLE() 					_HAL_RCC_GPIOD_CLK_ENABLE()
+#define BEEP_GPIO_PIN 					GPIO_PIN_7
+#define BEEP_GPIO 							GPIOD
+#define IHU_BEEP_ON 						HAL_GPIO_WritePin(BEEP_GPIO,BEEP_GPIO_PIN,GPIO_PIN_SET) // 输出高电平
+#define IHU_BEEP_OFF 						HAL_GPIO_WritePin(BEEP_GPIO,BEEP_GPIO_PIN,GPIO_PIN_RESET) // 输出低电平
+#define IHU_BEEP_TOGGLE 				HAL_GPIO_TogglePin(BEEP_GPIO,BEEP_GPIO_PIN) // 输出反转
 
 //API
 extern OPSTAT fsm_ledpisces_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);

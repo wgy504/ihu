@@ -1,4 +1,4 @@
-﻿/**
+/**
  ****************************************************************************************
  *
  * @file l2ethorion.c
@@ -59,17 +59,18 @@ OPSTAT fsm_ethorion_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 {
 	int ret=0;
 
-	//串行会送INIT_FB给VM，不然消息队列不够深度，此为节省内存机制
+	//串行回送INIT_FB给VMFO
+	ihu_usleep(dest_id * IHU_MODULE_START_DISTRIBUTION_DELAY_DURATION);
 	if ((src_id > TASK_ID_MIN) &&(src_id < TASK_ID_MAX)){
-		//Send back MSG_ID_COM_INIT_FB to VM。由于消息队列不够深，所以不再回送FB证实。
-//		msg_struct_com_init_fb_t snd;
-//		memset(&snd, 0, sizeof(msg_struct_com_init_fb_t));
-//		snd.length = sizeof(msg_struct_com_init_fb_t);
-//		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_ETHORION, &snd, snd.length);
-//		if (ret == IHU_FAILURE){
-//			IhuErrorPrint("ETHORION: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_ETHORION], zIhuTaskNameList[src_id]);
-//			return IHU_FAILURE;
-//		}
+		//Send back MSG_ID_COM_INIT_FB to VM
+		msg_struct_com_init_fb_t snd;
+		memset(&snd, 0, sizeof(msg_struct_com_init_fb_t));
+		snd.length = sizeof(msg_struct_com_init_fb_t);
+		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_ETHORION, &snd, snd.length);
+		if (ret == IHU_FAILURE){
+			IhuErrorPrint("ETHORION: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_ETHORION], zIhuTaskNameList[src_id]);
+			return IHU_FAILURE;
+		}
 	}
 
 	//收到初始化消息后，进入初始化状态
@@ -95,7 +96,6 @@ OPSTAT fsm_ethorion_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 	}
 	
 	//启动本地定时器，如果有必要
-	//测试性启动周期性定时器
 	ret = ihu_timer_start(TASK_ID_ETHORION, TIMER_ID_1S_ETHORION_PERIOD_SCAN, zIhuSysEngPar.timer.ethorionPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_ETHORION]++;
@@ -195,6 +195,19 @@ OPSTAT fsm_ethorion_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 
 void func_ethorion_time_out_period_scan(void)
 {
-	IhuDebugPrint("ETHORION: Time Out Test!\n");
+	int ret = 0;
+	
+	//发送HeartBeat消息给VMFO模块，实现喂狗功能
+	msg_struct_com_heart_beat_t snd;
+	memset(&snd, 0, sizeof(msg_struct_com_heart_beat_t));
+	snd.length = sizeof(msg_struct_com_heart_beat_t);
+	ret = ihu_message_send(MSG_ID_COM_HEART_BEAT, TASK_ID_VMFO, TASK_ID_ETHORION, &snd, snd.length);
+	if (ret == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_ETHORION]++;
+		IhuErrorPrint("ETHORION: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_ETHORION], zIhuTaskNameList[TASK_ID_VMFO]);
+		return;
+	}
+	
+	return;
 }
 

@@ -1,4 +1,4 @@
-﻿/**
+/**
  ****************************************************************************************
  *
  * @file l2didocap.c
@@ -62,17 +62,18 @@ OPSTAT fsm_didocap_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 {
 	int ret=0;
 
-	//串行会送INIT_FB给VM，不然消息队列不够深度，此为节省内存机制
+	//串行回送INIT_FB给VMFO
+	ihu_usleep(dest_id * IHU_MODULE_START_DISTRIBUTION_DELAY_DURATION);
 	if ((src_id > TASK_ID_MIN) &&(src_id < TASK_ID_MAX)){
-		//Send back MSG_ID_COM_INIT_FB to VM。由于消息队列不够深，所以不再回送FB证实。
-//		msg_struct_com_init_fb_t snd;
-//		memset(&snd, 0, sizeof(msg_struct_com_init_fb_t));
-//		snd.length = sizeof(msg_struct_com_init_fb_t);
-//		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_DIDOCAP, &snd, snd.length);
-//		if (ret == IHU_FAILURE){
-//			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[src_id]);
-//			return IHU_FAILURE;
-//		}
+		//Send back MSG_ID_COM_INIT_FB to VM
+		msg_struct_com_init_fb_t snd;
+		memset(&snd, 0, sizeof(msg_struct_com_init_fb_t));
+		snd.length = sizeof(msg_struct_com_init_fb_t);
+		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_DIDOCAP, &snd, snd.length);
+		if (ret == IHU_FAILURE){
+			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[src_id]);
+			return IHU_FAILURE;
+		}
 	}
 
 	//收到初始化消息后，进入初始化状态
@@ -198,6 +199,7 @@ OPSTAT fsm_didocap_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 
 void func_didocap_time_out_period_scan(void)
 {
+	int ret = 0;
 	//定时将扫描结果发给上层
 	//每一个发送消息，都需要判定L3CCL的状态，不然发送不成功。为了发送TRACE消息的完美，最好判定状态一下。再说，L3CCL不在合适的状态，本来就不应该处理
 	//不合适的消息和EVENT
@@ -208,8 +210,19 @@ void func_didocap_time_out_period_scan(void)
 	//MSG_ID_DIDO_LOCK_C_DOOR_C_EVENT,
 	//MSG_ID_DIDO_LOCK_C_DOOR_O_EVENT,
 	//MSG_ID_DIDO_SENSOR_WARNING_EVENT,
+
+	//发送HeartBeat消息给VMFO模块，实现喂狗功能
+	msg_struct_com_heart_beat_t snd;
+	memset(&snd, 0, sizeof(msg_struct_com_heart_beat_t));
+	snd.length = sizeof(msg_struct_com_heart_beat_t);
+	ret = ihu_message_send(MSG_ID_COM_HEART_BEAT, TASK_ID_VMFO, TASK_ID_DIDOCAP, &snd, snd.length);
+	if (ret == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+		IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_ADCLIBRA], zIhuTaskNameList[TASK_ID_DIDOCAP]);
+		return ;
+	}
 	
-	IhuDebugPrint("DIDOCAP: Time Out Test!\n");
+	return;
 }
 
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)

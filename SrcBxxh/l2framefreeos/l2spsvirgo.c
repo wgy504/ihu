@@ -1,4 +1,4 @@
-﻿/**
+/**
  ****************************************************************************************
  *
  * @file l2spsvirgo.c
@@ -77,17 +77,18 @@ OPSTAT fsm_spsvirgo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 {
 	int ret=0;
 
-	//串行会送INIT_FB给VM，不然消息队列不够深度，此为节省内存机制
+	//串行回送INIT_FB给VMFO
+	ihu_usleep(dest_id * IHU_MODULE_START_DISTRIBUTION_DELAY_DURATION);
 	if ((src_id > TASK_ID_MIN) &&(src_id < TASK_ID_MAX)){
-		//Send back MSG_ID_COM_INIT_FB to VM。由于消息队列不够深，所以不再回送FB证实。
-//		msg_struct_com_init_fb_t snd;
-//		memset(&snd, 0, sizeof(msg_struct_com_init_fb_t));
-//		snd.length = sizeof(msg_struct_com_init_fb_t);
-//		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_SPSVIRGO, &snd, snd.length);
-//		if (ret == IHU_FAILURE){
-//			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPSVIRGO], zIhuTaskNameList[src_id]);
-//			return IHU_FAILURE;
-//		}
+		//Send back MSG_ID_COM_INIT_FB to VMFO
+		msg_struct_com_init_fb_t snd;
+		memset(&snd, 0, sizeof(msg_struct_com_init_fb_t));
+		snd.length = sizeof(msg_struct_com_init_fb_t);
+		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_SPSVIRGO, &snd, snd.length);
+		if (ret == IHU_FAILURE){
+			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPSVIRGO], zIhuTaskNameList[src_id]);
+			return IHU_FAILURE;
+		}
 	}
 
 	//收到初始化消息后，进入初始化状态
@@ -222,6 +223,19 @@ OPSTAT fsm_spsvirgo_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 
 void func_spsvirgo_time_out_period_scan(void)
 {
+	int ret = 0;
+	
+	//发送HeartBeat消息给VMFO模块，实现喂狗功能
+	msg_struct_com_heart_beat_t snd;
+	memset(&snd, 0, sizeof(msg_struct_com_heart_beat_t));
+	snd.length = sizeof(msg_struct_com_heart_beat_t);
+	ret = ihu_message_send(MSG_ID_COM_HEART_BEAT, TASK_ID_VMFO, TASK_ID_SPSVIRGO, &snd, snd.length);
+	if (ret == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+		IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPSVIRGO], zIhuTaskNameList[TASK_ID_VMFO]);
+		return;
+	}
+	
 	ihu_l1hd_sps_gprs_send_data("This is my GPRS test!\n", 20);
 //	ihu_l1hd_sps_rfid_send_data("This is my RFID test!\n", 20);
 //	ihu_l1hd_sps_ble_send_data("This is my BLE test!\n", 20);
@@ -233,6 +247,8 @@ void func_spsvirgo_time_out_period_scan(void)
 	//if (zIhuGprsOperationFlag == 0)	GPRS_UART_GSM_working_procedure_selection(2, 0);
 	
 	//IhuDebugPrint("SPSVIRGO: Time Out Test!\n");
+	
+	return;	
 }
 
 //L2FRAME Receive Processing

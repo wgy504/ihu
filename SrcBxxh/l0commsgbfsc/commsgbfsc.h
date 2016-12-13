@@ -47,6 +47,7 @@ typedef struct IhuMsgSruct
 	INT8 msgBody[MAX_IHU_MSG_BODY_LENGTH];
 }IhuMsgSruct_t;
 
+//所有任务模块的优先级是一样的
 #define  IHU_THREAD_PRIO  10          //priority of the main loop de 1 a 99 max
 
 /*
@@ -138,28 +139,49 @@ typedef struct com_ws_and_moto_cmd //
 }com_ws_and_moto_cmd_t;
 
 //公共消息定义
+//MSG_ID_COM_INIT
 typedef struct msg_struct_com_init //
 {
 	UINT8 length;
 }msg_struct_com_init_t;
+
+//MSG_ID_COM_INIT_FB
 typedef struct msg_struct_com_init_fb //
 {
 	UINT8 length;
 }msg_struct_com_init_fb_t;
+
+//MSG_ID_COM_RESTART
 typedef struct  msg_struct_com_restart //
 {
 	UINT8 length;
 }msg_struct_com_restart_t;
+
+//MSG_ID_COM_TIME_OUT
 typedef struct  msg_struct_com_time_out //
 {
 	UINT32 timeId;
 	UINT8  timeRes;
 	UINT8 length;
 }msg_struct_com_time_out_t;
+
+//MSG_ID_COM_STOP
 typedef struct  msg_struct_com_stop //
 {
 	UINT8 length;
 }msg_struct_com_stop_t;
+
+//MSG_ID_COM_HEART_BEAT
+typedef struct  msg_struct_com_heart_beat //
+{
+	UINT8 length;
+}msg_struct_com_heart_beat_t;
+
+//MSG_ID_COM_HEART_BEAT_FB
+typedef struct  msg_struct_com_heart_beat_fb //
+{
+	UINT8 length;
+}msg_struct_com_heart_beat_fb_t;
 
 //VMFO消息定义
 typedef struct msg_struct_vmfo_1s_period_timtout

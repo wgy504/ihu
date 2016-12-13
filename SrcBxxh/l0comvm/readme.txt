@@ -2,13 +2,25 @@
 == 将修改方式放在最前面，以提高效率
 =================================================
 //近期需要完成的任务
-= FreeRTOS/ucosiii/TICK级的休眠省电
 = 研究STM32的IAP功能
-= 在STM32板子上进行具体的测试
+
+//= ZJL, 2016 Dec.13, CURRENT_SW_DELIVERY R03.59 =>BFSC项目
+= 在FreeRTOS中，通过使能#define configUSE_TICKLESS_IDLE 1，就可以达成休眠的状态
+= 未来可能还需要进一步优化功耗，可参看《安富莱_STM32-V4开发板_FreeRTOS教程（V1.0）》
+= 休眠模式下，调试器无法使用，可以使用以下函数使能调试器
+  调用库函数：DBGMCU_Config(DBGMCU_SLEEP, ENABLE);即可
+  调用库函数：DBGMCU_Config(DBGMCU_STOP, ENABLE);即可
+= 增加VMFO模块，将看门狗任务放在VMFO任务模块中
+= 因为增加了一个新任务，任务模块太多导致新任务创建不成功，将核心堆栈从7C00改为8C00后问题解决了
+= 将CCL/BFSC总共4个任务的核心堆栈都改为了8C00
+= 喂狗的过程需要通过CubeMX搞定，未来再搞，程序框架在VMFO中搭建完成。此为公共任务功能，也可以在其他项目中搞定，
+	但要记得及时同步到其它项目中来，不然初始化不匹配
+= 扬声器BEEP函数将写入LED模块中，未来需要搞一搞这个，这个就是标准的GPIO HAL接口函数而已
+= BFSC中还存在3个告警，是属于形参的问题，需要改进为结构并传递指针就没问题，等待未来搞算法时再优化
 
 //= ZJL, 2016 Dec.11, CURRENT_SW_DELIVERY R03.58 =>BFSC项目
 = 增加Init_Req的测试代码，启动这个流程
-
+= 在STM32板子上进行具体的测试
 
 //= ZJL, 2016 Dec.8, CURRENT_SW_DELIVERY R03.57 =>BFSC项目
 = 进一步改进ADC读写以及L2FRAME接收

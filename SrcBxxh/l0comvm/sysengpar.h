@@ -25,6 +25,7 @@ typedef struct SysEngParElementComm
 //Timer setting for sensor
 typedef struct SysEngParElementSensor
 {
+	INT32 vmfoPeriodScanTimer;	
 	INT32 adclibraPeriodScanTimer;
 	INT32 didocapPeriodScanTimer;
 	INT32 ethorionPeriodScanTimer;

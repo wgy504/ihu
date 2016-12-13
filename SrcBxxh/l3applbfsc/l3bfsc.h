@@ -17,6 +17,7 @@
 #include "l1comdef_freeos.h"
 #include "vmfreeoslayer.h"
 #include "l1timer_freeos.h"
+#include "l1vmfo.h"
 #include "l2adclibra.h"
 #include "l2spileo.h"
 #include "l2i2caries.h"
