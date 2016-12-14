@@ -36,10 +36,6 @@ FsmStateItem_t FsmCcl[] =
   {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_ACTIVED,         					fsm_ccl_restart},
   {MSG_ID_COM_STOP,												FSM_STATE_CCL_ACTIVED,         					fsm_ccl_stop_rcv},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CCL_ACTIVED,         				  fsm_ccl_time_out},
-//	{MSG_ID_ADC_UL_DATA_PULL_BWD,						FSM_STATE_CCL_ACTIVED,         					fsm_ccl_adc_ul_data_pull_bwd},
-//	{MSG_ID_ADC_UL_CTRL_CMD_RESP,						FSM_STATE_CCL_ACTIVED,         					fsm_ccl_adc_ul_ctrl_cmd_resp},
-//	{MSG_ID_SPI_UL_DATA_PULL_BWD,						FSM_STATE_CCL_ACTIVED,         					fsm_ccl_spi_ul_data_pull_bwd},
-//	{MSG_ID_SPI_UL_CTRL_CMD_RESP,						FSM_STATE_CCL_ACTIVED,         					fsm_ccl_spi_ul_ctrl_cmd_resp},
 	{MSG_ID_DIDO_LOCK_TRIGGER_EVENT,				FSM_STATE_CCL_ACTIVED,         					fsm_ccl_dido_lock_trigger_event},
 	{MSG_ID_DIDO_DOOR_ILG_OPEN_EVENT,				FSM_STATE_CCL_ACTIVED,         					fsm_ccl_dido_door_ilg_open_event},
 	{MSG_ID_DIDO_LOCK_ILG_OPEN_EVENT,				FSM_STATE_CCL_ACTIVED,         					fsm_ccl_dido_lock_ilg_open_event},
@@ -179,58 +175,6 @@ OPSTAT fsm_ccl_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 //Local APIs
 OPSTAT func_ccl_hw_init(void)
 {
-	return IHU_SUCCESS;
-}
-
-OPSTAT fsm_ccl_adc_ul_data_pull_bwd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
-{	
-	//入参检查
-	if ((param_ptr == NULL) || (dest_id != TASK_ID_CCL)){
-		zIhuRunErrCnt[TASK_ID_CCL]++;
-		IhuErrorPrint("CCL: Wrong input paramters!\n");
-		return IHU_FAILURE;
-	}
-
-	//返回
-	return IHU_SUCCESS;
-}
-
-OPSTAT fsm_ccl_adc_ul_ctrl_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
-{	
-	//入参检查
-	if ((param_ptr == NULL) || (dest_id != TASK_ID_CCL)){
-		zIhuRunErrCnt[TASK_ID_CCL]++;
-		IhuErrorPrint("CCL: Wrong input paramters!\n");
-		return IHU_FAILURE;
-	}
-
-	//返回
-	return IHU_SUCCESS;
-}
-
-OPSTAT fsm_ccl_spi_ul_data_pull_bwd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
-{	
-	//入参检查
-	if ((param_ptr == NULL) || (dest_id != TASK_ID_CCL)){
-		zIhuRunErrCnt[TASK_ID_CCL]++;
-		IhuErrorPrint("CCL: Wrong input paramters!\n");
-		return IHU_FAILURE;
-	}
-
-	//返回
-	return IHU_SUCCESS;
-}
-
-OPSTAT fsm_ccl_spi_ul_ctrl_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
-{	
-	//入参检查
-	if ((param_ptr == NULL) || (dest_id != TASK_ID_CCL)){
-		zIhuRunErrCnt[TASK_ID_CCL]++;
-		IhuErrorPrint("CCL: Wrong input paramters!\n");
-		return IHU_FAILURE;
-	}
-
-	//返回
 	return IHU_SUCCESS;
 }
 

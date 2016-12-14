@@ -7,7 +7,9 @@
 
 //= ZJL, 2016 Dec.14, CURRENT_SW_DELIVERY R03.60 =>CCL项目
 = 重新编译
-
+= 为了让L1VMFO有很高的优先级处理HEART_BEAT消息，从而完成喂狗任务，在创建任务的时候，特地为L1VMFO的优先级+1，很好的解决了该问题
+= 清理无效的CCL消息
+= 将SYSDIM中的参数调整到与BFSC一致
 
 
 

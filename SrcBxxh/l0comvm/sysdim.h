@@ -71,6 +71,12 @@
  * 为每一个项目，定义独立的性能配置数据
  *
  ***********************************************************************************/
+ 
+ /***********************************************************************************
+ *
+ * IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCWX_ID
+ *
+ ***********************************************************************************/
 //使用了VMDA-BLE独立裸操作系统
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCWX_ID)
 	//为不同的项目配置的系统性能
@@ -104,6 +110,12 @@
 	#define MAX_TIMER_SET_DURATION 100000
 
 
+
+/***********************************************************************************
+ *
+ * IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID
+ *
+ ***********************************************************************************/
 //使用了VMFO-FreeRTOS操作系统
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
 	#define MAX_TASK_NUM_IN_ONE_IHU 14
@@ -129,6 +141,14 @@
 	#define IHU_PRINT_BUFFER_NUMBER 10
 	//#define IHU_PRINT_MUTEX_TIME_OUT_DURATION 100	
 
+
+
+
+/***********************************************************************************
+ *
+ * IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID
+ *
+ ***********************************************************************************/
 //使用了VMUO-ucos操作系统
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID)
 	#define MAX_TASK_NUM_IN_ONE_IHU 16
@@ -153,6 +173,12 @@
 	#define IHU_PRINT_CHAR_SIZE 128
 
 
+
+/***********************************************************************************
+ *
+ * IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCCB_ID
+ *
+ ***********************************************************************************/
 //使用了VMUO-ucos操作系统
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCCB_ID)
 	#define MAX_TASK_NUM_IN_ONE_IHU 16
@@ -176,6 +202,13 @@
 	#define IHU_PRINT_CHAR_SIZE 1000
 
 
+
+
+/***********************************************************************************
+ *
+ * IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCSB_ID
+ *
+ ***********************************************************************************/
 //使用了VMUO-ucos操作系统
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCSB_ID)
 	#define MAX_TASK_NUM_IN_ONE_IHU 16
@@ -198,6 +231,14 @@
 //	#define MAX_SLEEP_COUNTER_UP_LIMITATION 50000
 	#define IHU_PRINT_CHAR_SIZE 1000
 
+
+
+
+/***********************************************************************************
+ *
+ * IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID
+ *
+ ***********************************************************************************/
 //使用了VMFO-FreeRTOS操作系统
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 	#define MAX_TASK_NUM_IN_ONE_IHU 16
@@ -206,7 +247,7 @@
 	//系统消息级
 	//maxmum state number and msg number in one task, no instance concept
 	//#define IHU_TASK_QUEUE_ID_START 1024
-	#define MAX_MSGID_NUM_IN_ONE_TASK 32 //一个任务中最多定义的消息数量，之前放254个，优化后更省内存，暂时用不了这么多
+	#define MAX_MSGID_NUM_IN_ONE_TASK 36 //一个任务中最多定义的消息数量，之前放254个，优化后更省内存，暂时用不了这么多
 	#define MASK_MSGID_NUM_IN_ONE_TASK 255 //消息号段在同一个任务中必须连续到这个范围内
 	#define MAX_STATE_NUM_IN_ONE_TASK 9  //一个任务之中最多定义的状态数量
 	#define MAX_FSM_STATE_ENTRY_NUM_IN_ONE_TASK 38   //一个任务之中，STATE-MSGID成对处理函数最多数量
@@ -223,6 +264,14 @@
 	#define IHU_PRINT_BUFFER_NUMBER 10
 	#define IHU_PRINT_MUTEX_TIME_OUT_DURATION 100
 
+
+
+
+/***********************************************************************************
+ *
+ * IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID
+ *
+ ***********************************************************************************/
 //使用了VMFO-FreeRTOS操作系统
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 	#define MAX_TASK_NUM_IN_ONE_IHU 16

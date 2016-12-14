@@ -62,11 +62,14 @@
 #define IHU_CLOUDXHUI_BH_INTERFACE_STANDARD_XML 1
 #define IHU_CLOUDXHUI_BH_INTERFACE_STANDARD_ZHB 2
 
-/*
+
+
+
+ /***********************************************************************************
  *
- *   EMCWX项目
+ * EMCWX项目 IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCWX_ID
  *
- */
+ ***********************************************************************************/
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCWX_ID)
 	//DEBUG开关，缺省打开
 	#define IHU_TRACE_DEBUG_ON IHU_TRACE_DEBUG_ALL_OFF //利用以上标示位，确定TRACE的级别
@@ -106,11 +109,14 @@
 	//月份的意义是，定时扫描，确保多少个月以内，文件数据必须保留，因为文件数据目前是按照时间月份进行存储的。使用天数进行计算，容易出现错误
 	//#define IHU_DATA_SAVE_DURATION_IN_MONTHS 3
 
-/*
+
+
+
+ /***********************************************************************************
  *
- *   EMC14681 EMC项目
+ * EMC14681 EMC项目 IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID
  *
- */
+ ***********************************************************************************/
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
 	//可选项通信端口的全局定义，未来需要通过ConfigXml进一步优化
 	#define IHU_COMM_BACK_HAWL_CON 1 //0=NULL, 1=ETHERNET, 2=WIFI, 3=3G4G, 4=USBNET, 5/OTHERS=INVALID
@@ -160,11 +166,14 @@
 	//模块启动的时间长度
 	#define IHU_MODULE_START_DISTRIBUTION_DELAY_DURATION  10  //in micro-second
 	
-/*
+
+
+
+ /***********************************************************************************
  *
- *   数采仪CB项目
+ * 数采仪CB项目 IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID
  *
- */
+ ***********************************************************************************/
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID)
 	//可选项通信端口的全局定义，未来需要通过ConfigXml进一步优化
 	#define IHU_COMM_BACK_HAWL_CON 1 //0=NULL, 1=ETHERNET, 2=WIFI, 3=3G4G, 4=USBNET, 5/OTHERS=INVALID
@@ -215,11 +224,14 @@
 	//模块启动的时间长度
 	#define IHU_MODULE_START_DISTRIBUTION_DELAY_DURATION  10  //in micro-second
 	
-/*
+
+
+
+ /***********************************************************************************
  *
- *   流水产线项目主控板
+ * 流水产线项目主控板 IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCCB_ID
  *
- */
+ ***********************************************************************************/
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCCB_ID)
 	//可选项通信端口的全局定义，未来需要通过ConfigXml进一步优化
 	#define IHU_COMM_BACK_HAWL_CON 1 //0=NULL, 1=ETHERNET, 2=WIFI, 3=3G4G, 4=USBNET, 5/OTHERS=INVALID
@@ -269,12 +281,15 @@
 	//模块启动的时间长度
 	#define IHU_MODULE_START_DISTRIBUTION_DELAY_DURATION  10  //in micro-second
 	
-/*
+
+
+
+ /***********************************************************************************
  *
- *   流水产线项目，传感器板
+ * 流水产线项目传感器板 IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCSB_ID
  *
- */
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCSB_ID)
+ ***********************************************************************************/
+ #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCSB_ID)
 	//可选项通信端口的全局定义，未来需要通过ConfigXml进一步优化
 	#define IHU_COMM_BACK_HAWL_CON 1 //0=NULL, 1=ETHERNET, 2=WIFI, 3=3G4G, 4=USBNET, 5/OTHERS=INVALID
 	#define IHU_COMM_FRONT_ADC 1 //1=ON, 0/OTHERS=OFF
@@ -324,7 +339,16 @@
 	//模块启动的时间长度
 	#define IHU_MODULE_START_DISTRIBUTION_DELAY_DURATION  10  //in micro-second
 	
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+
+
+
+
+ /***********************************************************************************
+ *
+ * IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID
+ *
+ ***********************************************************************************/
+ #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 	//可选项通信端口的全局定义，未来需要通过ConfigXml进一步优化
 	#define IHU_COMM_BACK_HAWL_CON 1 //0=NULL, 1=ETHERNET, 2=WIFI, 3=3G4G, 4=USBNET, 5/OTHERS=INVALID
 	#define IHU_COMM_FRONT_ADC 1 //1=ON, 0/OTHERS=OFF
@@ -348,7 +372,7 @@
 	#define IHU_ETHORION_TIMER_DURATION_PERIOD_SCAN 200
 	#define IHU_CANVELA_TIMER_DURATION_PERIOD_SCAN 200
 	#define IHU_I2CARIERS_TIMER_DURATION_PERIOD_SCAN 200
-	#define IHU_LEDPISCES_TIMER_DURATION_PERIOD_SCAN 200
+	#define IHU_LEDPISCES_TIMER_DURATION_PERIOD_SCAN 4
 	#define IHU_PWMTAURUS_TIMER_DURATION_PERIOD_SCAN 300
 	#define IHU_SPILEO_TIMER_DURATION_PERIOD_SCAN 400
 	#define IHU_SPSVIRGO_TIMER_DURATION_PERIOD_SCAN 200
@@ -377,6 +401,13 @@
 	//模块启动的时间长度
 	#define IHU_MODULE_START_DISTRIBUTION_DELAY_DURATION  10  //in micro-second
 	
+
+
+ /***********************************************************************************
+ *
+ * IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID
+ *
+ ***********************************************************************************/
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 	//可选项通信端口的全局定义，未来需要通过ConfigXml进一步优化
 	#define IHU_COMM_BACK_HAWL_CON 1 //0=NULL, 1=ETHERNET, 2=WIFI, 3=3G4G, 4=USBNET, 5/OTHERS=INVALID
@@ -405,7 +436,7 @@
 	#define IHU_LEDPISCES_TIMER_DURATION_PERIOD_SCAN 4
 	#define IHU_PWMTAURUS_TIMER_DURATION_PERIOD_SCAN 300
 	#define IHU_SPILEO_TIMER_DURATION_PERIOD_SCAN 400
-	#define IHU_SPSVIRGO_TIMER_DURATION_PERIOD_SCAN 5
+	#define IHU_SPSVIRGO_TIMER_DURATION_PERIOD_SCAN 400
 	#define IHU_BFSC_TIMER_DURATION_PERIOD_SCAN 400  //纯属于测试目的，暂时没有意义
 	#define IHU_BFSC_L3BFSC_WAIT_WEIGHT_DURATION 20
 	#define IHU_BFSC_L3BFSC_ROLL_OUT_DURATION 5
