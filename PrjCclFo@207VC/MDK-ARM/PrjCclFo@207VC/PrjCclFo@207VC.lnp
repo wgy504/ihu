@@ -51,6 +51,7 @@
 "prjcclfo@207vc\vmfreeoslayer.o"
 "prjcclfo@207vc\mod_hal_ble.o"
 "prjcclfo@207vc\mod_hal_rfid.o"
+"prjcclfo@207vc\l1vmfo.o"
 "prjcclfo@207vc\l2adclibra.o"
 "prjcclfo@207vc\l2didocap.o"
 "prjcclfo@207vc\l2ethorion.o"

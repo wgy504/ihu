@@ -121,6 +121,7 @@ OPSTAT fsm_canvela_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 		IhuDebugPrint("CANVELA: Enter FSM_STATE_CANVELA_ACTIVE status, Keeping refresh here!\n");
 	}
 
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
 	//测试代码，纯粹为了启动整个业务流程
 	ihu_sleep(3);
 	msg_struct_canvela_l3bfsc_init_req_t snd1;
@@ -131,6 +132,7 @@ OPSTAT fsm_canvela_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 		IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CANVELA], zIhuTaskNameList[TASK_ID_BFSC]);
 		return IHU_FAILURE;
 	}
+#endif
 	
 	//返回
 	return IHU_SUCCESS;

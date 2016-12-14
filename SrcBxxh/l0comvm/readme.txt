@@ -4,6 +4,13 @@
 //近期需要完成的任务
 = 研究STM32的IAP功能
 
+
+//= ZJL, 2016 Dec.14, CURRENT_SW_DELIVERY R03.60 =>CCL项目
+= 重新编译
+
+
+
+
 //= ZJL, 2016 Dec.13, CURRENT_SW_DELIVERY R03.59 =>BFSC项目
 = 在FreeRTOS中，通过使能#define configUSE_TICKLESS_IDLE 1，就可以达成休眠的状态
 = 未来可能还需要进一步优化功耗，可参看《安富莱_STM32-V4开发板_FreeRTOS教程（V1.0）》
