@@ -39,7 +39,7 @@ FsmStateItem_t FsmSpsvirgo[] =
 	{MSG_ID_SPS_L2FRAME_RCV,								FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_l2frame_rcv},
 	
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-	{MSG_ID_CCL_TO_SPS_OPEN_AUTH_INQ,				FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_open_auth_inq},
+	{MSG_ID_CCL_SPS_OPEN_AUTH_INQ,					FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_open_auth_inq},
 	{MSG_ID_CCL_COM_SENSOR_STATUS_REQ,			FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_sensor_status_req},
 	{MSG_ID_CCL_SPS_EVENT_REPORT_SEND,			FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_event_report_send},
 	{MSG_ID_CCL_COM_CTRL_CMD,								FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_ctrl_cmd},	
@@ -292,11 +292,11 @@ OPSTAT fsm_spsvirgo_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
 	//int ret;
-	msg_struct_ccl_to_sps_open_auth_inq rcv;
+	msg_struct_ccl_sps_open_auth_inq rcv; 
 	
 	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_ccl_to_sps_open_auth_inq));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_to_sps_open_auth_inq))){
+	memset(&rcv, 0, sizeof(msg_struct_ccl_sps_open_auth_inq));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_sps_open_auth_inq))){
 		IhuErrorPrint("SPSVIRGO: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;

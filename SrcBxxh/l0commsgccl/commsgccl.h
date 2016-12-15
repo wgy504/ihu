@@ -81,19 +81,16 @@ enum IHU_INTER_TASK_MSG_ID
 
 	//DIDO
 	MSG_ID_DIDO_CCL_SENSOR_STATUS_RESP,
-	MSG_ID_DIDO_EVENT_LOCK_TRIGGER,
-	MSG_ID_DIDO_EVENT_FAULT_TRIGGER,
-	MSG_ID_DIDO_LOCK_TRIGGER_EVENT,
-	MSG_ID_DIDO_DOOR_ILG_OPEN_EVENT,
-	MSG_ID_DIDO_LOCK_ILG_OPEN_EVENT,
-	MSG_ID_DIDO_DOOR_OPEN_EVENT,
-	MSG_ID_DIDO_LOCK_C_DOOR_C_EVENT,
-	MSG_ID_DIDO_SENSOR_WARNING_EVENT,
+	MSG_ID_DIDO_CCL_EVENT_LOCK_TRIGGER,
+	MSG_ID_DIDO_CCL_EVENT_FAULT_TRIGGER,
+	MSG_ID_DIDO_CCL_EVENT_STATUS_UPDATE,
+	MSG_ID_DIDO_CCL_DOOR_OPEN_EVENT,
+	MSG_ID_DIDO_CCL_LOCK_C_DOOR_C_EVENT,
 
 	//SPS
 	MSG_ID_SPS_L2FRAME_SEND,
 	MSG_ID_SPS_L2FRAME_RCV,
-	MSG_ID_SPS_TO_CCL_CLOUD_FB,
+	MSG_ID_SPS_CCL_CLOUD_FB,
 	MSG_ID_SPS_CCL_SENSOR_STATUS_RESP,
 	MSG_ID_SPS_CCL_EVENT_REPORT_CFM,
 	
@@ -114,7 +111,7 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_DCMI_CCL_SENSOR_STATUS_RESP,
 	
 	//CCL
-	MSG_ID_CCL_TO_SPS_OPEN_AUTH_INQ,  	  //Back hawl
+	MSG_ID_CCL_SPS_OPEN_AUTH_INQ,  	  //Back hawl
 	MSG_ID_CCL_COM_SENSOR_STATUS_REQ,
 	MSG_ID_CCL_COM_CTRL_CMD,
 	MSG_ID_CCL_SPS_EVENT_REPORT_SEND,
@@ -206,7 +203,6 @@ typedef struct msg_struct_vmfo_1s_period_timtout
 }msg_struct_vmfo_1s_period_timtout_t;
 
 //DIDO
-
 //MSG_ID_DIDO_CCL_SENSOR_STATUS_RESP
 typedef struct msg_struct_dido_ccl_sensor_status_rep
 {
@@ -215,64 +211,45 @@ typedef struct msg_struct_dido_ccl_sensor_status_rep
 	UINT8 length;
 }msg_struct_dido_ccl_sensor_status_rep_t;
 
-//MSG_ID_DIDO_EVENT_LOCK_TRIGGER
-typedef struct msg_struct_dido_event_lock_trigger
+//MSG_ID_DIDO_CCL_EVENT_LOCK_TRIGGER
+typedef struct msg_struct_dido_ccl_event_lock_trigger
 {
 	UINT8 cmdid;
 	UINT8 lockid;  //指示是哪一个锁触发的
 	UINT8 length;
-}msg_struct_dido_event_lock_trigger_t;
+}msg_struct_dido_ccl_event_lock_trigger_t;
 
-//MSG_ID_DIDO_EVENT_FAULT_TRIGGER
+//MSG_ID_DIDO_CCL_EVENT_FAULT_TRIGGER
 #define IHU_CCL_SENSOR_FAULT_REPORT_NUMBER_MAX 10
-typedef struct msg_struct_dido_event_fault_trigger
+typedef struct msg_struct_dido_ccl_event_fault_trigger
 {
 	UINT8 cmdid;
 	UINT8 lockid;  //指示是哪一个锁触发的
 	UINT8 faultBitmap[IHU_CCL_SENSOR_FAULT_REPORT_NUMBER_MAX];
 	com_sensor_status_t sensor;
 	UINT8 length;
-}msg_struct_dido_event_fault_trigger_t;
+}msg_struct_dido_ccl_event_fault_trigger_t;
 
-//
-typedef struct msg_struct_dido_lock_trigger_event
+//MSG_ID_DIDO_CCL_EVENT_STATUS_UPDATE
+typedef struct msg_struct_dido_ccl_status_update
 {
 	UINT8 cmdid;
 	UINT8 length;
-}msg_struct_dido_lock_trigger_event_t;
-typedef struct msg_struct_dido_door_ilg_open_event
-{
-	UINT8 cmdid;
-	UINT8 length;
-}msg_struct_dido_door_ilg_open_event_t;
-typedef struct msg_struct_dido_lock_ilg_open_event
-{
-	UINT8 cmdid;
-	UINT8 length;
-}msg_struct_dido_lock_ilg_open_event_t;
+}msg_struct_dido_ccl_status_update_t;
+
+//MSG_ID_DIDO_CCL_DOOR_OPEN_EVENT
 typedef struct msg_struct_dido_door_open_event
 {
 	UINT8 cmdid;
 	UINT8 length;
-}msg_struct_dido_door_open_event_t;
-typedef struct msg_struct_dido_lock_c_door_c_event
-{
-	UINT8 cmdid;
-	UINT8 length;
-}msg_struct_dido_lock_c_door_c_event_t;
-typedef struct msg_struct_dido_sensor_warning_event
-{
-	UINT8 cmdid;
-	UINT16 waterThred;
-	UINT16 shakeThred;
-	UINT16 smokeThred;
-	UINT16 tempThred;
-	UINT16 humidThred;
-	UINT16 d3axisThre; //三轴传感器表达倾斜
-	UINT16 powerThred;
-	UINT8 length;
-}msg_struct_dido_sensor_warning_event_t;
+}msg_struct_dido_ccl_door_open_event_t;
 
+//MSG_ID_DIDO_CCL_LOCK_C_DOOR_C_EVENT
+typedef struct msg_struct_dido_ccl_lock_c_door_c_event
+{
+	UINT8 cmdid;
+	UINT8 length;
+}msg_struct_dido_ccl_lock_c_door_c_event_t;
 
 //SPS消息定义
 typedef struct msg_struct_spsvirgo_l2frame_send
@@ -285,11 +262,13 @@ typedef struct msg_struct_spsvirgo_l2frame_rcv
 	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-1];
 	UINT8 length;
 }msg_struct_spsvirgo_l2frame_rcv_t;
-typedef struct msg_struct_spsvirgo_to_ccl_cloud_fb
+
+//MSG_ID_SPS_CCL_CLOUD_FB
+typedef struct msg_struct_spsvirgo_ccl_cloud_fb
 {
 	UINT8 cmdid;
 	UINT8 length;
-}msg_struct_spsvirgo_to_ccl_cloud_fb_t;
+}msg_struct_spsvirgo_ccl_cloud_fb_t;
 
 //MSG_ID_SPS_CCL_SENSOR_STATUS_RESP
 typedef struct msg_struct_sps_ccl_sensor_status_rep
@@ -360,16 +339,14 @@ typedef struct msg_struct_dcmi_ccl_sensor_status_rep
 }msg_struct_dcmi_ccl_sensor_status_rep_t;
 
 //CCL
-//MSG_ID_CCL_TO_SPS_OPEN_AUTH_INQ
+//MSG_ID_CCL_SPS_OPEN_AUTH_INQ
 #define IHU_CCL_BH_CTRL_CMD_BUF_LEN 20
-typedef struct msg_struct_ccl_to_sps_open_auth_inq
+typedef struct msg_struct_ccl_sps_open_auth_inq
 {
 	UINT8 cmdid;
 	UINT8 dataBuf[IHU_CCL_BH_CTRL_CMD_BUF_LEN];
 	UINT8 length;
-}msg_struct_ccl_to_sps_open_auth_inq;
-//MSG_ID_CCL_TO_DIDO_CTRL_CMD
-
+}msg_struct_ccl_sps_open_auth_inq;
 
 //MSG_ID_CCL_COM_SENSOR_STATUS_REQ
 typedef struct msg_struct_ccl_com_sensor_status_req

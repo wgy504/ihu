@@ -119,7 +119,8 @@ OPSTAT fsm_didocap_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 		IhuErrorPrint("DIDOCAP: Error start timer!\n");
 		return IHU_FAILURE;
 	}	
-	
+
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)	
 	//启动永恒的外部触发扫描
 	ret = ihu_timer_start(TASK_ID_DIDOCAP, TIMER_ID_1S_CCL_DIDO_TRIGGER_PERIOD_SCAN, zIhuSysEngPar.timer.cclDidoTriggerPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 	if (ret == IHU_FAILURE){
@@ -127,6 +128,7 @@ OPSTAT fsm_didocap_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 		IhuErrorPrint("DIDOCAP: Error start timer!\n");
 		return IHU_FAILURE;
 	}
+#endif
 	
 	//打印报告进入常规状态
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
@@ -214,7 +216,8 @@ OPSTAT fsm_didocap_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 		}
 		func_didocap_time_out_period_scan();
 	}	
-	
+
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)	
 	//永恒的外部触发扫描：只有在IHU_CCL_DIDO_WORKING_MODE_SLEEP模式下才会进行外部触发源的定时扫描
 	else if ((rcv.timeId == TIMER_ID_1S_CCL_DIDO_TRIGGER_PERIOD_SCAN) &&(rcv.timeRes == TIMER_RESOLUTION_1S)){
 		if ((zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_SLEEP) || (zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_FAULT)){
@@ -226,6 +229,7 @@ OPSTAT fsm_didocap_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 	else if ((rcv.timeId == TIMER_ID_1S_CCL_DIDO_WORKING_PERIOD_SCAN) &&(rcv.timeRes == TIMER_RESOLUTION_1S)){
 		if (zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_ACTIVE) func_didocap_time_out_work_mode_period_scan();
 	}
+#endif
 	
 	else{
 		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
@@ -255,6 +259,8 @@ void func_didocap_time_out_period_scan(void)
 	return;
 }
 
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+
 //定时扫描震动以及触发按键消息
 void func_didocap_time_out_external_trigger_period_scan(void)
 {
@@ -267,15 +273,15 @@ void func_didocap_time_out_external_trigger_period_scan(void)
 	//锁被触发，只有休眠模式下才被允许触发
 	if ((zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_SLEEP) && (temp == 1)){
 		//将周期扫描锁触发的结果发送给CCL
-		msg_struct_dido_event_lock_trigger_t snd0;
-		memset(&snd0, 0, sizeof(msg_struct_dido_event_lock_trigger_t));
+		msg_struct_dido_ccl_event_lock_trigger_t snd0;
+		memset(&snd0, 0, sizeof(msg_struct_dido_ccl_event_lock_trigger_t));
 		snd0.lockid = IHU_CCL_SENSOR_LOCK_NUMBER_MAX;
 		snd0.lockid = rand() % IHU_CCL_SENSOR_LOCK_NUMBER_MAX;
 		snd0.cmdid = IHU_CCL_DH_CMDID_EVENT_IND_LOCK_TRIGGER;
-		snd0.length = sizeof(msg_struct_dido_event_lock_trigger_t);
+		snd0.length = sizeof(msg_struct_dido_ccl_event_lock_trigger_t);
 		//存储做为上一次的状态
 		zIhuCclDidocapCtrlTable.sensor.lockiTriggerState[snd0.lockid] = IHU_CCL_SENSOR_STATE_ACTIVE;
-		ret = ihu_message_send(MSG_ID_DIDO_EVENT_LOCK_TRIGGER, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd0, snd0.length);
+		ret = ihu_message_send(MSG_ID_DIDO_CCL_EVENT_LOCK_TRIGGER, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd0, snd0.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
 			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[TASK_ID_CCL]);
@@ -286,14 +292,14 @@ void func_didocap_time_out_external_trigger_period_scan(void)
 	//震动被触发，只有休眠模式下才被允许触发
 	else if ((zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_SLEEP) && (temp == 2)){
 		//将周期扫描锁触发的结果发送给CCL
-		msg_struct_dido_event_lock_trigger_t snd1;
-		memset(&snd1, 0, sizeof(msg_struct_dido_event_lock_trigger_t));
+		msg_struct_dido_ccl_event_lock_trigger_t snd1;
+		memset(&snd1, 0, sizeof(msg_struct_dido_ccl_event_lock_trigger_t));
 		snd1.lockid = IHU_CCL_SENSOR_LOCK_NUMBER_MAX;
 		snd1.cmdid = IHU_CCL_DH_CMDID_EVENT_IND_SHAKE_TRIGGER;
-		snd1.length = sizeof(msg_struct_dido_event_lock_trigger_t);
+		snd1.length = sizeof(msg_struct_dido_ccl_event_lock_trigger_t);
 		//存储做为上一次的状态
 		zIhuCclDidocapCtrlTable.sensor.shakeState = IHU_CCL_SENSOR_STATE_ACTIVE;
-		ret = ihu_message_send(MSG_ID_DIDO_EVENT_LOCK_TRIGGER, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd1, snd1.length);
+		ret = ihu_message_send(MSG_ID_DIDO_CCL_EVENT_LOCK_TRIGGER, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd1, snd1.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
 			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[TASK_ID_CCL]);
@@ -304,8 +310,8 @@ void func_didocap_time_out_external_trigger_period_scan(void)
 	//出现差错，将导致状态机进入差错状态。如果在差错状态下，允许继续发送新的差错报告
 	else if (temp == 3){
 		//将周期扫描锁触发的结果发送给CCL
-		msg_struct_dido_event_fault_trigger_t snd2;
-		memset(&snd2, 0, sizeof(msg_struct_dido_event_fault_trigger_t));
+		msg_struct_dido_ccl_event_fault_trigger_t snd2;
+		memset(&snd2, 0, sizeof(msg_struct_dido_ccl_event_fault_trigger_t));
 		snd2.lockid = IHU_CCL_SENSOR_LOCK_NUMBER_MAX;
 		snd2.cmdid = IHU_CCL_DH_CMDID_EVENT_IND_FAULT_MULTI; //多重错误
 		//锁
@@ -335,8 +341,8 @@ void func_didocap_time_out_external_trigger_period_scan(void)
 		zIhuCclDidocapCtrlTable.sensor.batteryState = snd2.sensor.batteryState;
 		
 		//发送
-		snd2.length = sizeof(msg_struct_dido_event_fault_trigger_t);
-		ret = ihu_message_send(MSG_ID_DIDO_EVENT_FAULT_TRIGGER, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd2, snd2.length);
+		snd2.length = sizeof(msg_struct_dido_ccl_event_fault_trigger_t);
+		ret = ihu_message_send(MSG_ID_DIDO_CCL_EVENT_FAULT_TRIGGER, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd2, snd2.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
 			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[TASK_ID_CCL]);
@@ -347,8 +353,8 @@ void func_didocap_time_out_external_trigger_period_scan(void)
 	//完全恢复：只有FAULT模式下才谈得上恢复
 	else if ((temp == 4) && (zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_FAULT)){
 		//将周期扫描锁触发的结果发送给CCL
-		msg_struct_dido_event_fault_trigger_t snd3;
-		memset(&snd3, 0, sizeof(msg_struct_dido_event_fault_trigger_t));
+		msg_struct_dido_ccl_event_fault_trigger_t snd3;
+		memset(&snd3, 0, sizeof(msg_struct_dido_ccl_event_fault_trigger_t));
 		snd3.cmdid = IHU_CCL_DH_CMDID_EVENT_IND_FAULT_RECOVER; //错误恢复
 		for (i=0; i<IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
 			zIhuCclDidocapCtrlTable.sensor.doorState[i] = IHU_CCL_SENSOR_STATE_CLOSE;
@@ -360,8 +366,8 @@ void func_didocap_time_out_external_trigger_period_scan(void)
 		zIhuCclDidocapCtrlTable.sensor.batteryState = IHU_CCL_SENSOR_STATE_DEACTIVE;	
 		
 		//发送
-		snd3.length = sizeof(msg_struct_dido_event_fault_trigger_t);
-		ret = ihu_message_send(MSG_ID_DIDO_EVENT_FAULT_TRIGGER, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd3, snd3.length);
+		snd3.length = sizeof(msg_struct_dido_ccl_event_fault_trigger_t);
+		ret = ihu_message_send(MSG_ID_DIDO_CCL_EVENT_FAULT_TRIGGER, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd3, snd3.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
 			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[TASK_ID_CCL]);
@@ -381,8 +387,6 @@ void func_didocap_time_out_work_mode_period_scan(void)
 	return;
 }
 
-
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 OPSTAT fsm_didocap_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
 	int ret = 0, i=0;

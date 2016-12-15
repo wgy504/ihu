@@ -6,6 +6,15 @@
 
 
 
+//= ZJL, 2016 Dec.15, CURRENT_SW_DELIVERY R03.63 =>CCL项目
+
+
+
+
+
+
+
+
 //= ZJL, 2016 Dec.15, CURRENT_SW_DELIVERY R03.62 =>CCL项目
 = 完善正常的工作流程
 = ADC/I2C/DIDO/DCMI/SPS都搭建了工作模式，可以不用，但如果需要就可以用起来

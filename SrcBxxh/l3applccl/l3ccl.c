@@ -36,11 +36,7 @@ FsmStateItem_t FsmCcl[] =
   {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_ACTIVED,         					fsm_ccl_restart},
   {MSG_ID_COM_STOP,												FSM_STATE_CCL_ACTIVED,         					fsm_ccl_stop_rcv},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CCL_ACTIVED,         				  fsm_ccl_time_out},
-//	{MSG_ID_DIDO_LOCK_TRIGGER_EVENT,				FSM_STATE_CCL_ACTIVED,         					fsm_ccl_dido_lock_trigger_event},
-//	{MSG_ID_DIDO_DOOR_ILG_OPEN_EVENT,				FSM_STATE_CCL_ACTIVED,         					fsm_ccl_dido_door_ilg_open_event},
-//	{MSG_ID_DIDO_LOCK_ILG_OPEN_EVENT,				FSM_STATE_CCL_ACTIVED,         					fsm_ccl_dido_lock_ilg_open_event},
-//	{MSG_ID_DIDO_SENSOR_WARNING_EVENT,			FSM_STATE_CCL_ACTIVED,         					fsm_ccl_dido_sensor_warning_event},
-	{MSG_ID_SPS_TO_CCL_CLOUD_FB,						FSM_STATE_CCL_ACTIVED,         					fsm_ccl_sps_cloud_fb},	//证实的回复消息
+	{MSG_ID_SPS_CCL_CLOUD_FB,								FSM_STATE_CCL_ACTIVED,         					fsm_ccl_sps_cloud_fb},	//证实的回复消息
 	
 	//FSM_STATE_CCL_EVENT_REPORT：发送完整的状态报告给后台
   {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_EVENT_REPORT,         		fsm_ccl_restart},
@@ -54,29 +50,29 @@ FsmStateItem_t FsmCcl[] =
 	//FSM_STATE_CCL_CLOUD_INQUERY：等待后台回传指令，开门授权则进入TO_OPEN_DOOR状态，否则回到ACTIVED状态
   {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_CLOUD_INQUERY,         		fsm_ccl_restart},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CCL_CLOUD_INQUERY,         		fsm_ccl_time_out},
-	{MSG_ID_SPS_TO_CCL_CLOUD_FB,						FSM_STATE_CCL_CLOUD_INQUERY,         		fsm_ccl_sps_cloud_fb},
+	{MSG_ID_SPS_CCL_CLOUD_FB,								FSM_STATE_CCL_CLOUD_INQUERY,         		fsm_ccl_sps_cloud_fb},
 	
 	//FSM_STATE_CCL_TO_OPEN_DOOR：启动定时1分钟，等待人工开门，超时则关门回归ACTIVE
   {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_TO_OPEN_DOOR,         		fsm_ccl_restart},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CCL_TO_OPEN_DOOR,         		fsm_ccl_time_out},
-	{MSG_ID_DIDO_DOOR_OPEN_EVENT,						FSM_STATE_CCL_TO_OPEN_DOOR,         		fsm_ccl_dido_door_open_event},
+	{MSG_ID_DIDO_CCL_DOOR_OPEN_EVENT,				FSM_STATE_CCL_TO_OPEN_DOOR,         		fsm_ccl_dido_door_open_event},
 
 	//FSM_STATE_CCL_DOOR_OPEN：启动10分钟干活定时，监控门限和门锁，超时进入FATAL FAULT。正常关门则发送报告给后台，然后进入ACTIVED状态
   {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_DOOR_OPEN,         				fsm_ccl_restart},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CCL_DOOR_OPEN,         				fsm_ccl_time_out},
-	{MSG_ID_DIDO_LOCK_C_DOOR_C_EVENT,				FSM_STATE_CCL_DOOR_OPEN,         				fsm_ccl_lock_and_door_close_event},
+	{MSG_ID_DIDO_CCL_LOCK_C_DOOR_C_EVENT,		FSM_STATE_CCL_DOOR_OPEN,         				fsm_ccl_lock_and_door_close_event},
 	
 	//FSM_STATE_CCL_FATAL_FAULT：严重错误状态，发送报告给后台，等待人工干预以后回归ACTIVE
   {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_FATAL_FAULT,         			fsm_ccl_restart},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CCL_FATAL_FAULT,         			fsm_ccl_time_out},
-	{MSG_ID_SPS_TO_CCL_CLOUD_FB,						FSM_STATE_CCL_FATAL_FAULT,         			fsm_ccl_sps_cloud_fb},
-	{MSG_ID_DIDO_LOCK_C_DOOR_C_EVENT,				FSM_STATE_CCL_FATAL_FAULT,         			fsm_ccl_lock_and_door_close_event},	
+	{MSG_ID_SPS_CCL_CLOUD_FB,								FSM_STATE_CCL_FATAL_FAULT,         			fsm_ccl_sps_cloud_fb},
+	{MSG_ID_DIDO_CCL_LOCK_C_DOOR_C_EVENT,		FSM_STATE_CCL_FATAL_FAULT,         			fsm_ccl_lock_and_door_close_event},	
 
 	//FSM_STATE_CCL_SLEEP: 休眠状态，可以被允许触发，或进入工作模式，或进入差错模式
   {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_SLEEP,         						fsm_ccl_restart},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CCL_SLEEP,         						fsm_ccl_time_out},
-	{MSG_ID_DIDO_EVENT_LOCK_TRIGGER,				FSM_STATE_CCL_SLEEP,         						fsm_ccl_event_lock_trigger_to_work},
-	{MSG_ID_DIDO_EVENT_FAULT_TRIGGER,				FSM_STATE_CCL_SLEEP,         						fsm_ccl_event_fault_trigger_to_stop},	
+	{MSG_ID_DIDO_CCL_EVENT_LOCK_TRIGGER,		FSM_STATE_CCL_SLEEP,         						fsm_ccl_event_lock_trigger_to_work},
+	{MSG_ID_DIDO_CCL_EVENT_FAULT_TRIGGER,		FSM_STATE_CCL_SLEEP,         						fsm_ccl_event_fault_trigger_to_stop},	
 	
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             							NULL},  //Ending
@@ -536,12 +532,12 @@ void func_ccl_time_out_lock_work_active(void)
 OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {	
 	//int ret = 0;
-	msg_struct_spsvirgo_to_ccl_cloud_fb_t rcv;
+	msg_struct_spsvirgo_ccl_cloud_fb_t rcv;
 	
 	//入参检查
 	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_spsvirgo_to_ccl_cloud_fb_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_spsvirgo_to_ccl_cloud_fb_t))){
+	memset(&rcv, 0, sizeof(msg_struct_spsvirgo_ccl_cloud_fb_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_spsvirgo_ccl_cloud_fb_t))){
 		IhuErrorPrint("CCL: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_CCL]++;
 		return IHU_FAILURE;
@@ -563,91 +559,16 @@ OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 	return IHU_SUCCESS;
 }
 
-//收到门锁被触发
-OPSTAT fsm_ccl_dido_lock_trigger_event(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
-{	
-	//int ret = 0;
-	msg_struct_dido_lock_trigger_event_t rcv;
-	
-	//入参检查
-	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_dido_lock_trigger_event_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_dido_lock_trigger_event_t))){
-		IhuErrorPrint("CCL: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_CCL]++;
-		return IHU_FAILURE;
-	}
-	memcpy(&rcv, param_ptr, param_len);	
-	
-	//对收到的后台指令反馈结果进行处理
-	
-	//发送查询后台命令给SPS模块
-	//MSG_ID_CCL_TO_SPS_OPEN_AUTH_INQ
-		
-	//状态转移
-
-	//返回
-	return IHU_SUCCESS;
-}
-
-//门被非法打开
-OPSTAT fsm_ccl_dido_door_ilg_open_event(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
-{	
-	//int ret = 0;
-	msg_struct_dido_door_ilg_open_event_t rcv;
-	
-	//入参检查
-	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_dido_door_ilg_open_event_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_dido_door_ilg_open_event_t))){
-		IhuErrorPrint("CCL: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_CCL]++;
-		return IHU_FAILURE;
-	}
-	memcpy(&rcv, param_ptr, param_len);	
-	
-	//对收到的后台指令反馈结果进行处理
-		
-	//状态转移
-
-	//返回
-	return IHU_SUCCESS;
-}
-
-//锁被非法打开
-OPSTAT fsm_ccl_dido_lock_ilg_open_event(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
-{	
-	//int ret = 0;
-	msg_struct_dido_lock_ilg_open_event_t rcv;
-	
-	//入参检查
-	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_dido_lock_ilg_open_event_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_dido_lock_ilg_open_event_t))){
-		IhuErrorPrint("CCL: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_CCL]++;
-		return IHU_FAILURE;
-	}
-	memcpy(&rcv, param_ptr, param_len);	
-	
-	//对收到的后台指令反馈结果进行处理
-		
-	//状态转移
-
-	//返回
-	return IHU_SUCCESS;
-}
-
 //门被正常打开
 OPSTAT fsm_ccl_dido_door_open_event(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {	
 	//int ret = 0;
-	msg_struct_dido_door_open_event_t rcv;
+	msg_struct_dido_ccl_door_open_event_t rcv;
 	
 	//入参检查
 	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_dido_door_open_event_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_dido_door_open_event_t))){
+	memset(&rcv, 0, sizeof(msg_struct_dido_ccl_door_open_event_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_dido_ccl_door_open_event_t))){
 		IhuErrorPrint("CCL: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_CCL]++;
 		return IHU_FAILURE;
@@ -666,36 +587,12 @@ OPSTAT fsm_ccl_dido_door_open_event(UINT8 dest_id, UINT8 src_id, void * param_pt
 OPSTAT fsm_ccl_lock_and_door_close_event(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {	
 	//int ret = 0;
-	msg_struct_dido_lock_c_door_c_event_t rcv;
+	msg_struct_dido_ccl_lock_c_door_c_event_t rcv;
 	
 	//入参检查
 	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_dido_lock_c_door_c_event_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_dido_lock_c_door_c_event_t))){
-		IhuErrorPrint("CCL: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_CCL]++;
-		return IHU_FAILURE;
-	}
-	memcpy(&rcv, param_ptr, param_len);	
-	
-	//对收到的后台指令反馈结果进行处理
-		
-	//状态转移
-
-	//返回
-	return IHU_SUCCESS;
-}
-
-//门和锁均被正常关闭
-OPSTAT fsm_ccl_dido_sensor_warning_event(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
-{	
-	//int ret = 0;
-	msg_struct_dido_sensor_warning_event_t rcv;
-	
-	//入参检查
-	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_dido_sensor_warning_event_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_dido_sensor_warning_event_t))){
+	memset(&rcv, 0, sizeof(msg_struct_dido_ccl_lock_c_door_c_event_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_dido_ccl_lock_c_door_c_event_t))){
 		IhuErrorPrint("CCL: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_CCL]++;
 		return IHU_FAILURE;
@@ -714,13 +611,13 @@ OPSTAT fsm_ccl_dido_sensor_warning_event(UINT8 dest_id, UINT8 src_id, void * par
 OPSTAT fsm_ccl_event_lock_trigger_to_work(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {	
 	int ret = 0;
-	msg_struct_dido_event_lock_trigger_t rcv;
+	msg_struct_dido_ccl_event_lock_trigger_t rcv;
 	msg_struct_ccl_com_ctrl_cmd_t snd;
 	
 	//入参检查
 	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_dido_event_lock_trigger_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_dido_event_lock_trigger_t))){
+	memset(&rcv, 0, sizeof(msg_struct_dido_ccl_event_lock_trigger_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_dido_ccl_event_lock_trigger_t))){
 		IhuErrorPrint("CCL: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_CCL]++;
 		return IHU_FAILURE;
@@ -806,12 +703,12 @@ OPSTAT fsm_ccl_event_lock_trigger_to_work(UINT8 dest_id, UINT8 src_id, void * pa
 OPSTAT fsm_ccl_event_fault_trigger_to_stop(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {	
 	//int ret = 0;
-	msg_struct_dido_event_fault_trigger_t rcv;
+	msg_struct_dido_ccl_event_fault_trigger_t rcv;
 	
 	//入参检查
 	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_dido_event_fault_trigger_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_dido_event_fault_trigger_t))){
+	memset(&rcv, 0, sizeof(msg_struct_dido_ccl_event_fault_trigger_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_dido_ccl_event_fault_trigger_t))){
 		IhuErrorPrint("CCL: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_CCL]++;
 		return IHU_FAILURE;
