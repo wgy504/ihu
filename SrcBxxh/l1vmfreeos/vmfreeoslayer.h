@@ -116,12 +116,13 @@ enum IHU_TASK_NAME_ID
 	TASK_ID_ADCLIBRA,
 	TASK_ID_SPILEO,
 	TASK_ID_I2CARIES,
-	TASK_ID_PWMTAURUS,
+	//TASK_ID_PWMTAURUS,
 	TASK_ID_SPSVIRGO,
 	TASK_ID_CANVELA,
 	TASK_ID_DIDOCAP,
 	TASK_ID_LEDPISCES,
-	TASK_ID_ETHORION,	
+	TASK_ID_ETHORION,
+	TASK_ID_DCMIARIS,	
 	TASK_ID_CCL,
 	TASK_ID_MAX,
 	TASK_ID_INVALID = 0xFF,
@@ -362,12 +363,13 @@ extern FsmStateItem_t FsmTimer[];                           //状态机
 extern FsmStateItem_t FsmAdclibra[];                        //状态机
 extern FsmStateItem_t FsmSpileo[];                          //状态机
 extern FsmStateItem_t FsmI2caries[];                        //状态机
-extern FsmStateItem_t FsmPwmtaurus[];                       //状态机
+//extern FsmStateItem_t FsmPwmtaurus[];                       //状态机
 extern FsmStateItem_t FsmSpsvirgo[];                        //状态机
 extern FsmStateItem_t FsmCanvela[];                      		//状态机
 extern FsmStateItem_t FsmDidocap[];                         //状态机
 extern FsmStateItem_t FsmLedpisces[];                       //状态机
 extern FsmStateItem_t FsmEthorion[];                        //状态机
+extern FsmStateItem_t FsmDcmiaris[];                        //状态机
 extern FsmStateItem_t FsmCcl[];                          	  //状态机
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 extern FsmStateItem_t FsmVmfo[];                           	//状态机

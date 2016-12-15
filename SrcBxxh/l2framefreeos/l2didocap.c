@@ -36,10 +36,12 @@ FsmStateItem_t FsmDidocap[] =
   {MSG_ID_COM_RESTART,        						FSM_STATE_DIDOCAP_ACTIVED,         					fsm_didocap_restart},
   {MSG_ID_COM_STOP,												FSM_STATE_DIDOCAP_ACTIVED,         					fsm_didocap_stop_rcv},
   {MSG_ID_COM_TIME_OUT,										FSM_STATE_DIDOCAP_ACTIVED,         					fsm_didocap_time_out},
+	
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
   {MSG_ID_CCL_TO_DH_SENSOR_STATUS_REQ,		FSM_STATE_DIDOCAP_ACTIVED,         					fsm_didocap_ccl_dh_sensor_status_req},
   {MSG_ID_CCL_TO_DIDO_CTRL_CMD,						FSM_STATE_DIDOCAP_ACTIVED,         					fsm_didocap_ccl_ctrl_cmd},
 #endif
+
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             									NULL},  //Ending
 };

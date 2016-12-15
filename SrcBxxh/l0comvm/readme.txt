@@ -10,8 +10,7 @@
 = 为了让L1VMFO有很高的优先级处理HEART_BEAT消息，从而完成喂狗任务，在创建任务的时候，特地为L1VMFO的优先级+1，很好的解决了该问题
 = 清理无效的CCL消息
 = 将SYSDIM中的参数调整到与BFSC一致
-
-
+= 增加DCMIARIS模块，抑制了PWM模块
 
 //= ZJL, 2016 Dec.13, CURRENT_SW_DELIVERY R03.59 =>BFSC项目
 = 在FreeRTOS中，通过使能#define configUSE_TICKLESS_IDLE 1，就可以达成休眠的状态

@@ -17,16 +17,17 @@
 #include "l1comdef_freeos.h"
 #include "vmfreeoslayer.h"
 #include "l1timer_freeos.h"
+#include "l1vmfo.h"
 #include "l2adclibra.h"
 #include "l2spileo.h"
 #include "l2i2caries.h"
-#include "l2pwmtaurus.h"
+//#include "l2pwmtaurus.h"
 #include "l2spsvirgo.h"
 #include "l2canvela.h"
 #include "l2didocap.h"
 #include "l2ledpisces.h"
 #include "l2ethorion.h"
-#include "l1vmfo.h"
+#include "l2dcmiaris.h"
 
 //State definition
 //#define FSM_STATE_ENTRY  0x00
@@ -47,6 +48,16 @@ enum FSM_STATE_CCL
 
 //Global variables
 extern FsmStateItem_t FsmCcl[];
+
+//Local Variables
+//传感器在CCL上，由于涉及到消息数据结构，必须固定住，不然数据结构没法弄
+//DIDO: 门限DOOR，锁舌LOCKI，锁控LOCKO，温湿度数据DHT，水浸WATER，烟感SMOKE，电量数据BAT
+//SPS：将通过串口将RSSI数据报上来
+//I2C：暂时预留两路空余的传感器
+//GPRS-SPS
+//BLE-SPS
+//RFID-SPS
+//LED+BEEP: GPIO，都混装在LED模块中
 
 //API
 OPSTAT fsm_ccl_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);

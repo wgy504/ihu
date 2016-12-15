@@ -57,10 +57,10 @@
 "prjcclfo@207vc\l2ethorion.o"
 "prjcclfo@207vc\l2i2caries.o"
 "prjcclfo@207vc\l2ledpisces.o"
-"prjcclfo@207vc\l2pwmtaurus.o"
 "prjcclfo@207vc\l2spileo.o"
 "prjcclfo@207vc\l2spsvirgo.o"
 "prjcclfo@207vc\l2canvela.o"
+"prjcclfo@207vc\l2dcmiaris.o"
 "prjcclfo@207vc\l3ccl.o"
 --library_type=microlib --strict --scatter "PrjCclFo@207VC\PrjCclFo@207VC.sct"
 --diag_suppress=L6329 --summary_stderr --info summarysizes --map --xref --callgraph --symbols

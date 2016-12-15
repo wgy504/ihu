@@ -854,16 +854,6 @@
               <FilePath>..\..\SrcBxxh\l2framefreeos\l2ledpisces.h</FilePath>
             </File>
             <File>
-              <FileName>l2pwmtaurus.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l2framefreeos\l2pwmtaurus.c</FilePath>
-            </File>
-            <File>
-              <FileName>l2pwmtaurus.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l2framefreeos\l2pwmtaurus.h</FilePath>
-            </File>
-            <File>
               <FileName>l2spileo.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\SrcBxxh\l2framefreeos\l2spileo.c</FilePath>
@@ -892,6 +882,16 @@
               <FileName>l2canvela.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l2framefreeos\l2canvela.h</FilePath>
+            </File>
+            <File>
+              <FileName>l2dcmiaris.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l2framefreeos\l2dcmiaris.c</FilePath>
+            </File>
+            <File>
+              <FileName>l2dcmiaris.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l2framefreeos\l2dcmiaris.h</FilePath>
             </File>
           </Files>
         </Group>

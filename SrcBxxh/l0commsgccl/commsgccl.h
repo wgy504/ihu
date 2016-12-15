@@ -106,10 +106,12 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_CAN_L2FRAME_SEND,
 	MSG_ID_CAN_L2FRAME_RCV,
 
+	//DCMI
+	
 	//CCL
 	MSG_ID_CCL_TO_SPS_OPEN_AUTH_INQ,  	  //Back hawl
-	MSG_ID_CCL_TO_DH_SENSOR_STATUS_REQ, //Device Handler
-	MSG_ID_CCL_TO_DIDO_CTRL_CMD,   		  //Device Handler	
+	MSG_ID_CCL_TO_DH_SENSOR_STATUS_REQ,   //Device Handler
+	MSG_ID_CCL_TO_DIDO_CTRL_CMD,   		    //Device Handler	
 
 	//END FLAG
 	MSG_ID_COM_MAX, //Ending point
@@ -125,6 +127,49 @@ typedef struct com_gps_pos //
 	UINT32 gpsy;
 	UINT32 gpsz;
 }com_gps_pos_t;
+
+typedef struct com_sensor_status //
+{
+	UINT8 doorState[IHU_CCL_SENSOR_NUMBER_MAX];
+	UINT8 lockTongueState[IHU_CCL_SENSOR_NUMBER_MAX];
+	UINT8 lockiTriggerState[IHU_CCL_SENSOR_NUMBER_MAX];
+	UINT8 lockoEnableState[IHU_CCL_SENSOR_NUMBER_MAX];
+	UINT8 cameraState[IHU_CCL_SENSOR_NUMBER_MAX];
+	UINT8 smokeState;
+	UINT8 waterState;
+	UINT8 fallState;	
+	UINT8 shakeState;
+	INT16 batteryValue;
+	INT16 tempValue;
+	INT16 humidValue;
+	INT16 rssiValue;
+	INT16 rsv1Value;  //两个预留传感器之一
+	INT16 rsv2Value;	 //两个预留传感器之一
+}com_sensor_status_t;
+#define IHU_CCL_SENSOR_STATE_NONE 0
+#define IHU_CCL_SENSOR_STATE_CLOSE 1
+#define IHU_CCL_SENSOR_STATE_OPEN 2
+#define IHU_CCL_SENSOR_STATE_DEACTIVE 1
+#define IHU_CCL_SENSOR_STATE_ACTIVE 2
+
+
+//跟CCL独特相关的所有CMDID统一编码
+#define IHU_CCL_DH_CMDID_NONE 0
+#define IHU_CCL_DH_CMDID_REQ_STATUS_DOOR 1
+#define IHU_CCL_DH_CMDID_REQ_STATUS_LOCKI 2
+#define IHU_CCL_DH_CMDID_REQ_STATUS_RSSI 2
+#define IHU_CCL_DH_CMDID_REQ_STATUS_BATTERY 3
+#define IHU_CCL_DH_CMDID_REQ_STATUS_DIDO 4
+#define IHU_CCL_DH_CMDID_REQ_STATUS_SPS 5
+#define IHU_CCL_DH_CMDID_REQ_STATUS_I2C 6
+#define IHU_CCL_DH_CMDID_IND_STATUS_LOCKO 11
+#define IHU_CCL_DH_CMDID_RESP_STATUS_RSSI 12
+#define IHU_CCL_DH_CMDID_RESP_STATUS_BATTERY 13
+#define IHU_CCL_DH_CMDID_RESP_STATUS_DIDO 14
+#define IHU_CCL_DH_CMDID_RESP_STATUS_SPS 15
+#define IHU_CCL_DH_CMDID_RESP_STATUS_I2C 16
+#define IHU_CCL_DH_CMDID_HEART_BEAT 0xFE
+#define IHU_CCL_DH_CMDID_INVAID 0xFF
 
 //公共消息定义
 //MSG_ID_COM_INIT
@@ -178,20 +223,15 @@ typedef struct msg_struct_vmfo_1s_period_timtout
 }msg_struct_vmfo_1s_period_timtout_t;
 
 //DIDO
+
+//MSG_ID_DIDO_SENSOR_STATUS_RESP
 typedef struct msg_struct_didocap_periph_sensor_status_rep
 {
-	UINT8	lockDi1Status;
-	UINT8 lockDi2Status;
-	UINT8 doorDiStatus;
-	UINT16 smokeStatus;
-	UINT16 waterStatus;
-	UINT16 ShakeStatus;
-	UINT16 tempStatus;
-	UINT16 humidStatus;
-	UINT16 d3axisStatus;
-	UINT16 powerStatus;
+	com_sensor_status_t sensor;
 	UINT8 length;
 }msg_struct_didocap_periph_sensor_status_rep_t;
+
+//
 typedef struct msg_struct_dido_lock_trigger_event
 {
 	UINT8 cmdid;
@@ -290,6 +330,7 @@ typedef struct msg_struct_canvela_l2frame_rcv
 }msg_struct_canvela_l2frame_rcv_t;
 
 //CCL
+//MSG_ID_CCL_TO_SPS_OPEN_AUTH_INQ
 #define IHU_CCL_BH_CTRL_CMD_BUF_LEN 20
 typedef struct msg_struct_ccl_to_sps_open_auth_inq
 {
@@ -297,11 +338,15 @@ typedef struct msg_struct_ccl_to_sps_open_auth_inq
 	UINT8 dataBuf[IHU_CCL_BH_CTRL_CMD_BUF_LEN];
 	UINT8 length;
 }msg_struct_ccl_to_sps_open_auth_inq;
+
+//MSG_ID_CCL_TO_DH_SENSOR_STATUS_REQ
 typedef struct msg_struct_ccl_to_dh_sensor_status_req
 {
 	UINT8 cmdid;
 	UINT8 length;
 }msg_struct_ccl_to_dh_sensor_status_req_t;
+
+//MSG_ID_CCL_TO_DIDO_CTRL_CMD
 typedef struct msg_struct_ccl_to_dido_ctrl_cmd
 {
 	UINT8 cmdid;
