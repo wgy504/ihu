@@ -5,6 +5,12 @@
 = 研究STM32的IAP功能
 
 
+
+//= ZJL, 2016 Dec.15, CURRENT_SW_DELIVERY R03.61 =>CCL项目
+= 完善状态机
+= 完善EVENT_REPORT状态下的报告模式
+= 改动量非常大，故而形成一个单独的版本
+
 //= ZJL, 2016 Dec.14, CURRENT_SW_DELIVERY R03.60 =>CCL项目
 = 重新编译
 = 为了让L1VMFO有很高的优先级处理HEART_BEAT消息，从而完成喂狗任务，在创建任务的时候，特地为L1VMFO的优先级+1，很好的解决了该问题

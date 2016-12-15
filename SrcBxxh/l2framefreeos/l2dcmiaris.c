@@ -37,6 +37,11 @@ FsmStateItem_t FsmDcmiaris[] =
   {MSG_ID_COM_STOP,												FSM_STATE_DCMIARIS_ACTIVED,         					fsm_dcmiaris_stop_rcv},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_DCMIARIS_ACTIVED,         				  fsm_dcmiaris_time_out},
 
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+  {MSG_ID_CCL_DCMI_SENSOR_STATUS_REQ,			FSM_STATE_DCMIARIS_ACTIVED,         					fsm_dcmiaris_ccl_sensor_status_req},
+  {MSG_ID_CCL_DCMI_CTRL_CMD,							FSM_STATE_DCMIARIS_ACTIVED,         					fsm_dcmiaris_ccl_ctrl_cmd},
+#endif
+	
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             									NULL},  //Ending
 };
@@ -210,4 +215,72 @@ void func_dcmiaris_time_out_period_scan(void)
 	
 	return;
 }
+
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+OPSTAT fsm_dcmiaris_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{
+	int ret = 0, i=0;
+	msg_struct_ccl_dcmi_sensor_status_req_t rcv;
+	msg_struct_dcmi_ccl_sensor_status_rep_t snd;
+	
+	//Receive message and copy to local variable
+	memset(&rcv, 0, sizeof(msg_struct_ccl_dcmi_sensor_status_req_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_dcmi_sensor_status_req_t))){
+		IhuErrorPrint("DCMIARIS: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_DCMIARIS]++;
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+
+	//入参检查
+	if (rcv.cmdid != IHU_CCL_DH_CMDID_REQ_STATUS_DCMI){
+		IhuErrorPrint("DCMIARIS: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_DCMIARIS]++;
+		return IHU_FAILURE;
+	}
+	
+	//具体扫描处理
+	
+	//扫描后将结果发给上层
+	memset(&snd, 0, sizeof(msg_struct_dcmi_ccl_sensor_status_rep_t));
+	snd.cmdid = IHU_CCL_DH_CMDID_RESP_STATUS_DCMI;
+	for (i=0; i<IHU_CCL_SENSOR_NUMBER_MAX; i++){
+		snd.sensor.cameraState[i] = ((rand()%2 == 0)?IHU_CCL_SENSOR_STATE_DEACTIVE:IHU_CCL_SENSOR_STATE_ACTIVE);;
+	}
+	snd.length = sizeof(msg_struct_dcmi_ccl_sensor_status_rep_t);
+	ret = ihu_message_send(MSG_ID_DCMI_CCL_SENSOR_STATUS_RESP, TASK_ID_CCL, TASK_ID_DCMIARIS, &snd, snd.length);
+	if (ret == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_DCMIARIS]++;
+		IhuErrorPrint("DCMIARIS: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DCMIARIS], zIhuTaskNameList[TASK_ID_CCL]);
+		return IHU_FAILURE;
+	}
+			
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT fsm_dcmiaris_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{
+	//int ret;
+	msg_struct_ccl_dcmi_ctrl_cmd_t rcv;
+	
+	//Receive message and copy to local variable
+	memset(&rcv, 0, sizeof(msg_struct_ccl_dcmi_ctrl_cmd_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_dcmi_ctrl_cmd_t))){
+		IhuErrorPrint("DCMIARIS: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_DCMIARIS]++;
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+
+	//操作门锁
+
+	
+	return IHU_SUCCESS;
+}
+
+
+
+#else
+#endif
 

@@ -40,8 +40,13 @@ FsmStateItem_t FsmI2caries[] =
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
   {MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL,				FSM_STATE_I2CARIES_ACTIVED,         				fsm_i2caries_bfsc_moto_cmd_ctrl},	
   {MSG_ID_I2C_L2FRAME_RCV,								FSM_STATE_I2CARIES_ACTIVED,         				fsm_i2caries_bfsc_l2frame_rcv},	
-	
+
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+  {MSG_ID_CCL_I2C_SENSOR_STATUS_REQ,			FSM_STATE_I2CARIES_ACTIVED,         					fsm_i2caries_ccl_sensor_status_req},
+  {MSG_ID_CCL_I2C_CTRL_CMD,								FSM_STATE_I2CARIES_ACTIVED,         					fsm_i2caries_ccl_ctrl_cmd},
 #endif		
+
+
 	
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             									NULL},  //Ending
@@ -389,6 +394,71 @@ void func_i2caries_bfsc_frame_send(strIhuI2cariesMotoFrame_t *frame)
 }
 
 
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+OPSTAT fsm_i2caries_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{
+	int ret = 0;
+	msg_struct_ccl_i2c_sensor_status_req_t rcv;
+	msg_struct_i2c_ccl_sensor_status_rep_t snd;
+	
+	//Receive message and copy to local variable
+	memset(&rcv, 0, sizeof(msg_struct_ccl_i2c_sensor_status_req_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_i2c_sensor_status_req_t))){
+		IhuErrorPrint("I2CARIES: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_I2CARIES]++;
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+
+	//入参检查
+	if (rcv.cmdid != IHU_CCL_DH_CMDID_REQ_STATUS_I2C){
+		IhuErrorPrint("I2CARIES: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_I2CARIES]++;
+		return IHU_FAILURE;
+	}
+	
+	//具体扫描处理
+	
+	//扫描后将结果发给上层
+	memset(&snd, 0, sizeof(msg_struct_i2c_ccl_sensor_status_rep_t));
+	snd.cmdid = IHU_CCL_DH_CMDID_RESP_STATUS_I2C;
+	snd.sensor.rsv1Value = rand()%100;
+	snd.sensor.rsv2Value = rand()%100;
+	snd.length = sizeof(msg_struct_i2c_ccl_sensor_status_rep_t);
+	ret = ihu_message_send(MSG_ID_I2C_CCL_SENSOR_STATUS_RESP, TASK_ID_CCL, TASK_ID_I2CARIES, &snd, snd.length);
+	if (ret == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_I2CARIES]++;
+		IhuErrorPrint("I2CARIES: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_I2CARIES], zIhuTaskNameList[TASK_ID_CCL]);
+		return IHU_FAILURE;
+	}
+			
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT fsm_i2caries_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{
+	//int ret;
+	msg_struct_ccl_i2c_ctrl_cmd_t rcv;
+	
+	//Receive message and copy to local variable
+	memset(&rcv, 0, sizeof(msg_struct_ccl_i2c_ctrl_cmd_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_i2c_ctrl_cmd_t))){
+		IhuErrorPrint("I2CARIES: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_I2CARIES]++;
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+
+	//操作门锁
+
+	
+	return IHU_SUCCESS;
+}
+
+
+
+#else
 #endif
 
 

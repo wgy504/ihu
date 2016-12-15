@@ -80,7 +80,7 @@ enum IHU_INTER_TASK_MSG_ID
 	//LED
 
 	//DIDO
-	MSG_ID_DIDO_SENSOR_STATUS_RESP,
+	MSG_ID_DIDO_CCL_SENSOR_STATUS_RESP,
 	MSG_ID_DIDO_LOCK_TRIGGER_EVENT,
 	MSG_ID_DIDO_DOOR_ILG_OPEN_EVENT,
 	MSG_ID_DIDO_LOCK_ILG_OPEN_EVENT,
@@ -92,7 +92,8 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_SPS_L2FRAME_SEND,
 	MSG_ID_SPS_L2FRAME_RCV,
 	MSG_ID_SPS_TO_CCL_CLOUD_FB,
-	MSG_ID_SPS_SENSOR_STATUS_RESP,	
+	MSG_ID_SPS_CCL_SENSOR_STATUS_RESP,
+	MSG_ID_SPS_CCL_EVENT_REPORT_CFM,
 	
 	//SPI
 	MSG_ID_SPI_L2FRAME_SEND,
@@ -101,17 +102,26 @@ enum IHU_INTER_TASK_MSG_ID
 	//I2C
 	MSG_ID_I2C_L2FRAME_SEND,
 	MSG_ID_I2C_L2FRAME_RCV,
+	MSG_ID_I2C_CCL_SENSOR_STATUS_RESP,
 	
 	//CAN
 	MSG_ID_CAN_L2FRAME_SEND,
 	MSG_ID_CAN_L2FRAME_RCV,
 
 	//DCMI
+	MSG_ID_DCMI_CCL_SENSOR_STATUS_RESP,
 	
 	//CCL
 	MSG_ID_CCL_TO_SPS_OPEN_AUTH_INQ,  	  //Back hawl
-	MSG_ID_CCL_TO_DH_SENSOR_STATUS_REQ,   //Device Handler
-	MSG_ID_CCL_TO_DIDO_CTRL_CMD,   		    //Device Handler	
+	MSG_ID_CCL_DIDO_SENSOR_STATUS_REQ,   
+	MSG_ID_CCL_SPS_SENSOR_STATUS_REQ,   
+	MSG_ID_CCL_I2C_SENSOR_STATUS_REQ,   
+	MSG_ID_CCL_DCMI_SENSOR_STATUS_REQ,   
+	MSG_ID_CCL_DIDO_CTRL_CMD,
+	MSG_ID_CCL_SPS_CTRL_CMD,
+	MSG_ID_CCL_I2C_CTRL_CMD,
+	MSG_ID_CCL_DCMI_CTRL_CMD,
+	MSG_ID_CCL_SPS_EVENT_REPORT_SEND,
 
 	//END FLAG
 	MSG_ID_COM_MAX, //Ending point
@@ -162,12 +172,22 @@ typedef struct com_sensor_status //
 #define IHU_CCL_DH_CMDID_REQ_STATUS_DIDO 4
 #define IHU_CCL_DH_CMDID_REQ_STATUS_SPS 5
 #define IHU_CCL_DH_CMDID_REQ_STATUS_I2C 6
-#define IHU_CCL_DH_CMDID_IND_STATUS_LOCKO 11
+#define IHU_CCL_DH_CMDID_REQ_STATUS_DCMI 7
+#define IHU_CCL_DH_CMDID_RESP_STATUS_DOOR 11
+#define IHU_CCL_DH_CMDID_RESP_STATUS_LOCKI 12
 #define IHU_CCL_DH_CMDID_RESP_STATUS_RSSI 12
 #define IHU_CCL_DH_CMDID_RESP_STATUS_BATTERY 13
 #define IHU_CCL_DH_CMDID_RESP_STATUS_DIDO 14
 #define IHU_CCL_DH_CMDID_RESP_STATUS_SPS 15
 #define IHU_CCL_DH_CMDID_RESP_STATUS_I2C 16
+#define IHU_CCL_DH_CMDID_RESP_STATUS_DCMI 17
+
+#define IHU_CCL_DH_CMDID_EVENT_REPORT 20
+#define IHU_CCL_DH_CMDID_EVENT_IND_DOOR_C_TO_O 21
+#define IHU_CCL_DH_CMDID_EVENT_IND_DOOR_O_TO_C 22
+#define IHU_CCL_DH_CMDID_EVENT_IND_LOCK_C_TO_O 23
+#define IHU_CCL_DH_CMDID_EVENT_IND_LOCK_O_TO_C 24
+
 #define IHU_CCL_DH_CMDID_HEART_BEAT 0xFE
 #define IHU_CCL_DH_CMDID_INVAID 0xFF
 
@@ -224,12 +244,13 @@ typedef struct msg_struct_vmfo_1s_period_timtout
 
 //DIDO
 
-//MSG_ID_DIDO_SENSOR_STATUS_RESP
-typedef struct msg_struct_didocap_periph_sensor_status_rep
+//MSG_ID_DIDO_CCL_SENSOR_STATUS_RESP
+typedef struct msg_struct_dido_ccl_sensor_status_rep
 {
+	UINT8 cmdid;
 	com_sensor_status_t sensor;
 	UINT8 length;
-}msg_struct_didocap_periph_sensor_status_rep_t;
+}msg_struct_dido_ccl_sensor_status_rep_t;
 
 //
 typedef struct msg_struct_dido_lock_trigger_event
@@ -287,11 +308,21 @@ typedef struct msg_struct_spsvirgo_to_ccl_cloud_fb
 	UINT8 cmdid;
 	UINT8 length;
 }msg_struct_spsvirgo_to_ccl_cloud_fb_t;
-typedef struct msg_struct_sps_periph_sensor_status_rep
+
+//MSG_ID_SPS_CCL_SENSOR_STATUS_RESP
+typedef struct msg_struct_sps_ccl_sensor_status_rep
 {
-	UINT16 rssiStatus;
+	UINT8 cmdid;
+	com_sensor_status_t sensor;
 	UINT8 length;
-}msg_struct_sps_periph_sensor_status_rep_t;
+}msg_struct_sps_ccl_sensor_status_rep_t;
+
+//MSG_ID_SPS_CCL_EVENT_REPORT_CFM
+typedef struct msg_struct_sps_ccl_event_report_cfm
+{
+	UINT8 cmdid;
+	UINT8 length;
+}msg_struct_sps_ccl_event_report_cfm;
 
 //SPI消息定义
 typedef struct msg_struct_spileo_l2frame_send
@@ -317,6 +348,14 @@ typedef struct msg_struct_i2caries_l2frame_rcv
 	UINT8 length;
 }msg_struct_i2caries_l2frame_rcv_t;
 
+//MSG_ID_I2C_CCL_SENSOR_STATUS_RESP
+typedef struct msg_struct_i2c_ccl_sensor_status_rep
+{
+	UINT8 cmdid;
+	com_sensor_status_t sensor;
+	UINT8 length;
+}msg_struct_i2c_ccl_sensor_status_rep_t;
+
 //CAN消息定义
 typedef struct msg_struct_canvela_l2frame_send
 {
@@ -329,6 +368,15 @@ typedef struct msg_struct_canvela_l2frame_rcv
 	UINT8 length;
 }msg_struct_canvela_l2frame_rcv_t;
 
+//DCMI
+//MSG_ID_DCMI_CCL_SENSOR_STATUS_RESP
+typedef struct msg_struct_dcmi_ccl_sensor_status_rep
+{
+	UINT8 cmdid;
+	com_sensor_status_t sensor;
+	UINT8 length;
+}msg_struct_dcmi_ccl_sensor_status_rep_t;
+
 //CCL
 //MSG_ID_CCL_TO_SPS_OPEN_AUTH_INQ
 #define IHU_CCL_BH_CTRL_CMD_BUF_LEN 20
@@ -338,20 +386,73 @@ typedef struct msg_struct_ccl_to_sps_open_auth_inq
 	UINT8 dataBuf[IHU_CCL_BH_CTRL_CMD_BUF_LEN];
 	UINT8 length;
 }msg_struct_ccl_to_sps_open_auth_inq;
-
-//MSG_ID_CCL_TO_DH_SENSOR_STATUS_REQ
-typedef struct msg_struct_ccl_to_dh_sensor_status_req
-{
-	UINT8 cmdid;
-	UINT8 length;
-}msg_struct_ccl_to_dh_sensor_status_req_t;
-
 //MSG_ID_CCL_TO_DIDO_CTRL_CMD
-typedef struct msg_struct_ccl_to_dido_ctrl_cmd
+
+
+//MSG_ID_CCL_DIDO_SENSOR_STATUS_REQ
+typedef struct msg_struct_ccl_dido_sensor_status_req
 {
 	UINT8 cmdid;
 	UINT8 length;
-}msg_struct_ccl_to_dido_ctrl_cmd_t;
+}msg_struct_ccl_dido_sensor_status_req_t;
+
+//MSG_ID_CCL_SPS_SENSOR_STATUS_REQ
+typedef struct msg_struct_ccl_sps_sensor_status_req
+{
+	UINT8 cmdid;
+	UINT8 length;
+}msg_struct_ccl_sps_sensor_status_req_t;
+
+//MSG_ID_CCL_I2C_SENSOR_STATUS_REQ
+typedef struct msg_struct_ccl_i2c_sensor_status_req
+{
+	UINT8 cmdid;
+	UINT8 length;
+}msg_struct_ccl_i2c_sensor_status_req_t;
+
+//MSG_ID_CCL_DCMI_SENSOR_STATUS_REQ
+typedef struct msg_struct_ccl_dcmi_sensor_status_req
+{
+	UINT8 cmdid;
+	UINT8 length;
+}msg_struct_ccl_dcmi_sensor_status_req_t;
+
+//MSG_ID_CCL_DIDO_CTRL_CMD
+typedef struct msg_struct_ccl_dido_ctrl_cmd
+{
+	UINT8 cmdid;
+	UINT8 length;
+}msg_struct_ccl_dido_ctrl_cmd_t;
+
+//MSG_ID_CCL_SPS_CTRL_CMD
+typedef struct msg_struct_ccl_sps_ctrl_cmd
+{
+	UINT8 cmdid;
+	UINT8 length;
+}msg_struct_ccl_sps_ctrl_cmd_t;
+
+//MSG_ID_CCL_I2C_CTRL_CMD
+typedef struct msg_struct_ccl_i2c_ctrl_cmd
+{
+	UINT8 cmdid;
+	UINT8 length;
+}msg_struct_ccl_i2c_ctrl_cmd_t;
+
+//MSG_ID_CCL_DCMI_CTRL_CMD
+typedef struct msg_struct_ccl_dcmi_ctrl_cmd
+{
+	UINT8 cmdid;
+	UINT8 length;
+}msg_struct_ccl_dcmi_ctrl_cmd_t;
+
+//MSG_ID_CCL_SPS_EVENT_REPORT_SEND
+typedef struct msg_struct_ccl_sps_event_report_send
+{
+	UINT8 cmdid;
+	com_sensor_status_t sensor;
+	UINT8 length;
+}msg_struct_ccl_sps_event_report_send_t;
+
 
 
 #endif /* L0COMVM_COMMSGCCL_H_ */

@@ -40,7 +40,9 @@ FsmStateItem_t FsmSpsvirgo[] =
 	
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 	{MSG_ID_CCL_TO_SPS_OPEN_AUTH_INQ,				FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_open_auth_inq},
-	{MSG_ID_CCL_TO_DH_SENSOR_STATUS_REQ,		FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_dh_sensor_status_req},	
+	{MSG_ID_CCL_SPS_SENSOR_STATUS_REQ,			FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_sensor_status_req},
+	{MSG_ID_CCL_SPS_EVENT_REPORT_SEND,			FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_event_report_send},
+	{MSG_ID_CCL_SPS_CTRL_CMD,								FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_ctrl_cmd},	
 #endif
 
   //结束点，固定定义，不要改动
@@ -300,27 +302,99 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	return IHU_SUCCESS;
 }
 
-OPSTAT fsm_spsvirgo_ccl_dh_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+OPSTAT fsm_spsvirgo_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	//int ret;
-	msg_struct_ccl_to_dh_sensor_status_req_t rcv;
+	int ret = 0;
+	msg_struct_ccl_sps_sensor_status_req_t rcv;
+	msg_struct_sps_ccl_sensor_status_rep_t snd;
 	
 	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_ccl_to_dh_sensor_status_req_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_to_dh_sensor_status_req_t))){
+	memset(&rcv, 0, sizeof(msg_struct_ccl_sps_sensor_status_req_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_sps_sensor_status_req_t))){
 		IhuErrorPrint("SPSVIRGO: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
 
-	//对接收到的上层命令进行分解处理
+	//入参检查
+	if (rcv.cmdid != IHU_CCL_DH_CMDID_REQ_STATUS_SPS){
+		IhuErrorPrint("SPSVIRGO: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+		return IHU_FAILURE;
+	}
+	
+	//具体扫描处理
+	
+	//扫描后将结果发给上层
+	memset(&snd, 0, sizeof(msg_struct_sps_ccl_sensor_status_rep_t));
+	snd.cmdid = IHU_CCL_DH_CMDID_RESP_STATUS_SPS;
+	snd.sensor.rssiValue = rand()%100;
+	snd.length = sizeof(msg_struct_sps_ccl_sensor_status_rep_t);
+	ret = ihu_message_send(MSG_ID_SPS_CCL_SENSOR_STATUS_RESP, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
+	if (ret == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+		IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPSVIRGO], zIhuTaskNameList[TASK_ID_CCL]);
+		return IHU_FAILURE;
+	}
+			
+	//返回
+	return IHU_SUCCESS;
+}
+
+//发送周期性报告给后台
+OPSTAT fsm_spsvirgo_ccl_event_report_send(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{
+	//int ret = 0;
+	msg_struct_ccl_sps_event_report_send_t rcv;
+	
+	//Receive message and copy to local variable
+	memset(&rcv, 0, sizeof(msg_struct_ccl_sps_event_report_send_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_sps_event_report_send_t))){
+		IhuErrorPrint("SPSVIRGO: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+
+	//入参检查
+	if (rcv.cmdid != IHU_CCL_DH_CMDID_EVENT_REPORT){
+		IhuErrorPrint("SPSVIRGO: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+		return IHU_FAILURE;
+	}
 	
 	//干活
+	//具体的发送命令
+		
+	//返回
+	return IHU_SUCCESS;
+}
+
+
+
+OPSTAT fsm_spsvirgo_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{
+	//int ret;
+	msg_struct_ccl_sps_ctrl_cmd_t rcv;
+	
+	//Receive message and copy to local variable
+	memset(&rcv, 0, sizeof(msg_struct_ccl_sps_ctrl_cmd_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_sps_ctrl_cmd_t))){
+		IhuErrorPrint("SPSVIRGO: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+
+	//操作门锁
 
 	
 	return IHU_SUCCESS;
 }
+
+
+
 #endif
 
 

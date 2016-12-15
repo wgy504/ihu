@@ -38,8 +38,8 @@ FsmStateItem_t FsmDidocap[] =
   {MSG_ID_COM_TIME_OUT,										FSM_STATE_DIDOCAP_ACTIVED,         					fsm_didocap_time_out},
 	
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-  {MSG_ID_CCL_TO_DH_SENSOR_STATUS_REQ,		FSM_STATE_DIDOCAP_ACTIVED,         					fsm_didocap_ccl_dh_sensor_status_req},
-  {MSG_ID_CCL_TO_DIDO_CTRL_CMD,						FSM_STATE_DIDOCAP_ACTIVED,         					fsm_didocap_ccl_ctrl_cmd},
+  {MSG_ID_CCL_DIDO_SENSOR_STATUS_REQ,			FSM_STATE_DIDOCAP_ACTIVED,         					fsm_didocap_ccl_sensor_status_req},
+  {MSG_ID_CCL_DIDO_CTRL_CMD,							FSM_STATE_DIDOCAP_ACTIVED,         					fsm_didocap_ccl_ctrl_cmd},
 #endif
 
   //结束点，固定定义，不要改动
@@ -228,36 +228,62 @@ void func_didocap_time_out_period_scan(void)
 }
 
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-OPSTAT fsm_didocap_ccl_dh_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+OPSTAT fsm_didocap_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	//int ret;
-	msg_struct_ccl_to_dh_sensor_status_req_t rcv;
+	int ret = 0, i=0;
+	msg_struct_ccl_dido_sensor_status_req_t rcv;
+	msg_struct_dido_ccl_sensor_status_rep_t snd;
 	
 	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_ccl_to_dh_sensor_status_req_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_to_dh_sensor_status_req_t))){
+	memset(&rcv, 0, sizeof(msg_struct_ccl_dido_sensor_status_req_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_dido_sensor_status_req_t))){
 		IhuErrorPrint("DIDOCAP: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
 
+	//入参检查
+	if (rcv.cmdid != IHU_CCL_DH_CMDID_REQ_STATUS_DIDO){
+		IhuErrorPrint("DIDOCAP: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+		return IHU_FAILURE;
+	}
+	
 	//具体扫描处理
 	
 	//扫描后将结果发给上层
-	//MSG_ID_DIDO_SENSOR_STATUS_RESP
-	
+	memset(&snd, 0, sizeof(msg_struct_dido_ccl_sensor_status_rep_t));
+	snd.cmdid = IHU_CCL_DH_CMDID_RESP_STATUS_DIDO;
+	for (i=0; i<IHU_CCL_SENSOR_NUMBER_MAX; i++){
+		snd.sensor.doorState[i] = ((rand()%2 == 0)?IHU_CCL_SENSOR_STATE_CLOSE:IHU_CCL_SENSOR_STATE_OPEN);
+		snd.sensor.lockiTriggerState[i] = ((rand()%2 == 0)?IHU_CCL_SENSOR_STATE_DEACTIVE:IHU_CCL_SENSOR_STATE_ACTIVE);
+		snd.sensor.lockoEnableState[i] = ((rand()%2 == 0)?IHU_CCL_SENSOR_STATE_DEACTIVE:IHU_CCL_SENSOR_STATE_ACTIVE);;
+	}
+	snd.sensor.batteryValue = rand()%100;
+	snd.sensor.fallState = IHU_CCL_SENSOR_STATE_DEACTIVE;
+	snd.sensor.tempValue = rand()%100;
+	snd.sensor.humidValue = rand()%100;
+	snd.length = sizeof(msg_struct_dido_ccl_sensor_status_rep_t);
+	ret = ihu_message_send(MSG_ID_DIDO_CCL_SENSOR_STATUS_RESP, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd, snd.length);
+	if (ret == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+		IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[TASK_ID_CCL]);
+		return IHU_FAILURE;
+	}
+			
+	//返回
 	return IHU_SUCCESS;
 }
 
 OPSTAT fsm_didocap_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
 	//int ret;
-	msg_struct_ccl_to_dido_ctrl_cmd_t rcv;
+	msg_struct_ccl_dido_ctrl_cmd_t rcv;
 	
 	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_ccl_to_dido_ctrl_cmd_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_to_dido_ctrl_cmd_t))){
+	memset(&rcv, 0, sizeof(msg_struct_ccl_dido_ctrl_cmd_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_dido_ctrl_cmd_t))){
 		IhuErrorPrint("DIDOCAP: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
 		return IHU_FAILURE;

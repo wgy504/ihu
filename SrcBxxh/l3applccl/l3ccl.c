@@ -36,17 +36,20 @@ FsmStateItem_t FsmCcl[] =
   {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_ACTIVED,         					fsm_ccl_restart},
   {MSG_ID_COM_STOP,												FSM_STATE_CCL_ACTIVED,         					fsm_ccl_stop_rcv},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CCL_ACTIVED,         				  fsm_ccl_time_out},
-	{MSG_ID_DIDO_LOCK_TRIGGER_EVENT,				FSM_STATE_CCL_ACTIVED,         					fsm_ccl_dido_lock_trigger_event},
-	{MSG_ID_DIDO_DOOR_ILG_OPEN_EVENT,				FSM_STATE_CCL_ACTIVED,         					fsm_ccl_dido_door_ilg_open_event},
-	{MSG_ID_DIDO_LOCK_ILG_OPEN_EVENT,				FSM_STATE_CCL_ACTIVED,         					fsm_ccl_dido_lock_ilg_open_event},
-	{MSG_ID_DIDO_SENSOR_WARNING_EVENT,			FSM_STATE_CCL_ACTIVED,         					fsm_ccl_dido_sensor_warning_event},
+//	{MSG_ID_DIDO_LOCK_TRIGGER_EVENT,				FSM_STATE_CCL_ACTIVED,         					fsm_ccl_dido_lock_trigger_event},
+//	{MSG_ID_DIDO_DOOR_ILG_OPEN_EVENT,				FSM_STATE_CCL_ACTIVED,         					fsm_ccl_dido_door_ilg_open_event},
+//	{MSG_ID_DIDO_LOCK_ILG_OPEN_EVENT,				FSM_STATE_CCL_ACTIVED,         					fsm_ccl_dido_lock_ilg_open_event},
+//	{MSG_ID_DIDO_SENSOR_WARNING_EVENT,			FSM_STATE_CCL_ACTIVED,         					fsm_ccl_dido_sensor_warning_event},
 	{MSG_ID_SPS_TO_CCL_CLOUD_FB,						FSM_STATE_CCL_ACTIVED,         					fsm_ccl_sps_cloud_fb},	//证实的回复消息
 	
 	//FSM_STATE_CCL_EVENT_REPORT：发送完整的状态报告给后台
   {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_EVENT_REPORT,         		fsm_ccl_restart},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CCL_EVENT_REPORT,         		fsm_ccl_time_out},
-	{MSG_ID_DIDO_SENSOR_STATUS_RESP,				FSM_STATE_CCL_EVENT_REPORT,         		fsm_ccl_dido_sensor_status_resp},	
-	{MSG_ID_SPS_SENSOR_STATUS_RESP,					FSM_STATE_CCL_EVENT_REPORT,         		fsm_ccl_sps_sensor_status_resp},	
+	{MSG_ID_DIDO_CCL_SENSOR_STATUS_RESP,		FSM_STATE_CCL_EVENT_REPORT,         		fsm_ccl_dido_sensor_status_resp},	
+	{MSG_ID_SPS_CCL_SENSOR_STATUS_RESP,			FSM_STATE_CCL_EVENT_REPORT,         		fsm_ccl_sps_sensor_status_resp},	
+	{MSG_ID_I2C_CCL_SENSOR_STATUS_RESP,			FSM_STATE_CCL_EVENT_REPORT,         		fsm_ccl_i2c_sensor_status_resp},	
+	{MSG_ID_DCMI_CCL_SENSOR_STATUS_RESP,		FSM_STATE_CCL_EVENT_REPORT,         		fsm_ccl_dcmi_sensor_status_resp},
+	{MSG_ID_SPS_CCL_EVENT_REPORT_CFM,				FSM_STATE_CCL_EVENT_REPORT,         		fsm_ccl_sps_event_report_cfm},	
 	
 	//FSM_STATE_CCL_CLOUD_INQUERY：等待后台回传指令，开门授权则进入TO_OPEN_DOOR状态，否则回到ACTIVED状态
   {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_CLOUD_INQUERY,         		fsm_ccl_restart},
@@ -68,12 +71,17 @@ FsmStateItem_t FsmCcl[] =
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CCL_FATAL_FAULT,         			fsm_ccl_time_out},
 	{MSG_ID_SPS_TO_CCL_CLOUD_FB,						FSM_STATE_CCL_FATAL_FAULT,         			fsm_ccl_sps_cloud_fb},
 	{MSG_ID_DIDO_LOCK_C_DOOR_C_EVENT,				FSM_STATE_CCL_FATAL_FAULT,         			fsm_ccl_lock_and_door_close_event},	
+
+	//FSM_STATE_CCL_FATAL_FAULT：严重错误状态，发送报告给后台，等待人工干预以后回归ACTIVE
+  {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_SLEEP,         					fsm_ccl_restart},
+	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CCL_SLEEP,         					fsm_ccl_time_out},
 	
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             							NULL},  //Ending
 };
 
 //Global variables defination
+com_sensor_status_t zIhuCclSensorStatus;
 
 //Main Entry
 //Input parameter would be useless, but just for similar structure purpose
@@ -119,6 +127,7 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 
 	//Global Variables
 	zIhuRunErrCnt[TASK_ID_CCL] = 0;
+	memset(&zIhuCclSensorStatus, 0, sizeof(com_sensor_status_t));
 
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_ACTIVED) == IHU_FAILURE){
@@ -127,8 +136,16 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 		return IHU_FAILURE;
 	}
 	
-	//启动本地定时器，如果有必要
+	//启动心跳定时器，确保喂狗的基本功能
 	ret = ihu_timer_start(TASK_ID_CCL, TIMER_ID_1S_CCL_PERIOD_SCAN, zIhuSysEngPar.timer.cclPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+	if (ret == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		IhuErrorPrint("CCL: Error start timer!\n");
+		return IHU_FAILURE;
+	}
+
+	//启动超长周期定时汇报定时器
+	ret = ihu_timer_start(TASK_ID_CCL, TIMER_ID_1S_CCL_EVENT_REPORT_PEROID_SCAN, zIhuSysEngPar.timer.cclEventReportPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_CCL]++;
 		IhuErrorPrint("CCL: Error start timer!\n");
@@ -140,6 +157,14 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 		IhuDebugPrint("CCL: Enter FSM_STATE_CCL_ACTIVE status, Keeping refresh here!\n");
 	}
 
+	//进入休眠状态，等待被锁激活
+	func_ccl_close_all_sensor();
+	if (FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_SLEEP) == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		IhuErrorPrint("CCL: Error Set FSM State!");
+		return IHU_FAILURE;
+	}
+	
 	//返回
 	return IHU_SUCCESS;
 }
@@ -208,33 +233,26 @@ OPSTAT fsm_ccl_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 		}
 	}
 
-	//超长定时超时Period time out received，只有这个才会触发完整的事件汇报
+	//喂狗心跳定时器
 	if ((rcv.timeId == TIMER_ID_1S_CCL_PERIOD_SCAN) &&(rcv.timeRes == TIMER_RESOLUTION_1S)){
-		//启动硬件扫描定时器
-		ret = ihu_timer_start(TASK_ID_CCL, TIMER_ID_1S_CCL_WORKING_STATUS_SCAN, zIhuSysEngPar.timer.cclWorkingStatusScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
-		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_CCL]++;
-			IhuErrorPrint("CCL: Error start timer!\n");
-			return IHU_FAILURE;
-		}
 		func_ccl_time_out_period_event_report();
 	}
+
+	//超长周期定时器：一定要在SLEEP状态下才可以被激活，否则不应该不激活
+	else if ((rcv.timeId == TIMER_ID_1S_CCL_PERIOD_SCAN) &&(rcv.timeRes == TIMER_RESOLUTION_1S)){
+		if (FsmGetState(TASK_ID_CCL) == FSM_STATE_CCL_SLEEP) func_ccl_time_out_event_report_period_scan();
+	}
 	
-	//短周期性工作状态
-	if ((rcv.timeId == TIMER_ID_1S_CCL_WORKING_STATUS_SCAN) &&(rcv.timeRes == TIMER_RESOLUTION_1S)){
-		//保护周期读数的优先级，强制抢占状态，并简化问题
-		if (FsmGetState(TASK_ID_CCL) != FSM_STATE_CCL_ACTIVED){
-			ret = FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_ACTIVED);
-			if (ret == IHU_FAILURE){
-				zIhuRunErrCnt[TASK_ID_CCL]++;
-				IhuErrorPrint("CCL: Error Set FSM State!\n");
-				return IHU_FAILURE;
-			}//FsmSetState
-		}
-		func_ccl_time_out_working_status_scan();
+	//锁的正常激活工作周期
+	else if ((rcv.timeId == TIMER_ID_1S_CCL_LOCK_WORK_ACTIVE) &&(rcv.timeRes == TIMER_RESOLUTION_1S)){
+		func_ccl_time_out_lock_work_active();
 	}	
 	
-	
+	else{
+			zIhuRunErrCnt[TASK_ID_CCL]++;
+			IhuErrorPrint("CCL: Wrong timer parameter received!\n");
+			return IHU_FAILURE;		
+	}
 
 	return IHU_SUCCESS;
 }
@@ -242,60 +260,47 @@ OPSTAT fsm_ccl_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 //L2传感器送来的状态报告
 OPSTAT fsm_ccl_dido_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	//int ret = 0;
-	//int state = 0;
-	msg_struct_didocap_periph_sensor_status_rep_t rcv;
+	int ret = 0, i=0;
+	msg_struct_dido_ccl_sensor_status_rep_t rcv;
+	msg_struct_ccl_sps_sensor_status_req_t snd;
 	
 	//入参检查
 	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_didocap_periph_sensor_status_rep_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_didocap_periph_sensor_status_rep_t))){
+	memset(&rcv, 0, sizeof(msg_struct_dido_ccl_sensor_status_rep_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_dido_ccl_sensor_status_rep_t))){
 		IhuErrorPrint("CCL: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_CCL]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
 	
-	//获取状态
-	//以下方式不合适，应该充分利用状态机工作机制
-//	state = FsmGetState(TASK_ID_CCL);
-//	switch(state)
-//	{
-//		//回送后台周期报告
-//		case 	FSM_STATE_CCL_ACTIVED:
-//			break;
-//				
-//		//等待超时，或者门限开
-//		case 	FSM_STATE_CCL_TO_OPEN_DOOR:
-//			//门限开，进入DOOR_OPEN状态
-//			//超时，则发送关门命令，进入ACTIVE状态
-//			break;
-//		
-//		//等待超时，或者门限关
-//		case 	FSM_STATE_CCL_DOOR_OPEN:
-//			//门限关，锁关，则进入ACTIVE状态
-//			//超时，则进入FATAL_FAULT状态		
-//			break;
-//		
-//		//出现问题，意味着不正常状态
-//		case 	FSM_STATE_CCL_FATAL_FAULT:
-//			//声光告警，并送告警给后台
-//			//监控门限和门锁，一旦恢复，则送清除告警给后台，并进入ACTIVE状态
-//			break;
-//		
-//		//不用理睬，报错处理，强行回到ACTIVE状态
-//		default:
-//			break;
-//		
-//		//注意，需要使用门开最长时间的超时定时器，以及后台反馈定时器，这两个定时器来控制状态
-//		//这两个定时器的启动和停止，需要想好逻辑
-//		//目前的技术定时器，TIMER_ID_1S_CCL_WORKING_STATUS_SCAN，需要改造		
-//	}
-
-	//将传感器状态统一到一起，然后通过SPSVIRGO发送给后台
+	//入参检查
+	if (rcv.cmdid != IHU_CCL_DH_CMDID_RESP_STATUS_DIDO){
+		IhuErrorPrint("CCL: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		return IHU_FAILURE;		
+	}
+		
+	//获取报告数据
+	for (i=0; i<IHU_CCL_SENSOR_NUMBER_MAX; i++){
+		zIhuCclSensorStatus.doorState[i] = rcv.sensor.doorState[i];
+		zIhuCclSensorStatus.lockiTriggerState[i] = rcv.sensor.lockiTriggerState[i];
+		zIhuCclSensorStatus.lockoEnableState[i] = rcv.sensor.lockoEnableState[i];
+	}
+	zIhuCclSensorStatus.batteryValue = rcv.sensor.batteryValue;
+	zIhuCclSensorStatus.fallState = rcv.sensor.fallState;
+	zIhuCclSensorStatus.tempValue = rcv.sensor.tempValue;
+	zIhuCclSensorStatus.humidValue = rcv.sensor.humidValue;
 	
-	//状态转移
-
+	//按照顺序，继续扫描第二组SPS传感器的数据
+	memset(&snd, 0, sizeof(msg_struct_ccl_sps_sensor_status_req_t));
+	snd.length = sizeof(msg_struct_ccl_sps_sensor_status_req_t);
+	ret = ihu_message_send(MSG_ID_CCL_SPS_SENSOR_STATUS_REQ, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length);
+	if (ret == IHU_FAILURE){
+		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_SPSVIRGO]);
+		return IHU_FAILURE;
+	}
+	
 	//返回
 	return IHU_SUCCESS;
 }
@@ -303,30 +308,165 @@ OPSTAT fsm_ccl_dido_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param
 //L2传感器送来的状态报告
 OPSTAT fsm_ccl_sps_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	//int ret = 0;
-	//int state = 0;
-	msg_struct_sps_periph_sensor_status_rep_t rcv;
+	int ret = 0;
+	msg_struct_sps_ccl_sensor_status_rep_t rcv;
+	msg_struct_ccl_i2c_sensor_status_req_t snd;
 	
 	//入参检查
 	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_sps_periph_sensor_status_rep_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_sps_periph_sensor_status_rep_t))){
+	memset(&rcv, 0, sizeof(msg_struct_sps_ccl_sensor_status_rep_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_sps_ccl_sensor_status_rep_t))){
 		IhuErrorPrint("CCL: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_CCL]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
 	
-	//将传感器状态统一到一起，然后通过SPSVIRGO发送给后台
+	//入参检查
+	if (rcv.cmdid != IHU_CCL_DH_CMDID_RESP_STATUS_SPS){
+		IhuErrorPrint("CCL: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		return IHU_FAILURE;		
+	}
+		
+	//获取报告数据
+	zIhuCclSensorStatus.rssiValue = rcv.sensor.rssiValue;
 	
-	//状态转移
+	//按照顺序，继续扫描第三组I2C传感器的数据
+	memset(&snd, 0, sizeof(msg_struct_ccl_i2c_sensor_status_req_t));
+	snd.length = sizeof(msg_struct_ccl_i2c_sensor_status_req_t);
+	ret = ihu_message_send(MSG_ID_CCL_I2C_SENSOR_STATUS_REQ, TASK_ID_I2CARIES, TASK_ID_CCL, &snd, snd.length);
+	if (ret == IHU_FAILURE){
+		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_I2CARIES]);
+		return IHU_FAILURE;
+	}
 
 	//返回
 	return IHU_SUCCESS;
 }
 
+//L2传感器送来的状态报告
+OPSTAT fsm_ccl_i2c_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{
+	int ret = 0;
+	msg_struct_i2c_ccl_sensor_status_rep_t rcv;
+	msg_struct_ccl_dcmi_sensor_status_req_t snd;
+	
+	//入参检查
+	//Receive message and copy to local variable
+	memset(&rcv, 0, sizeof(msg_struct_i2c_ccl_sensor_status_rep_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_i2c_ccl_sensor_status_rep_t))){
+		IhuErrorPrint("CCL: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+	
+	//入参检查
+	if (rcv.cmdid != IHU_CCL_DH_CMDID_RESP_STATUS_I2C){
+		IhuErrorPrint("CCL: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		return IHU_FAILURE;		
+	}
+		
+	//获取报告数据
+	zIhuCclSensorStatus.rsv1Value = rcv.sensor.rsv1Value;
+	zIhuCclSensorStatus.rsv2Value = rcv.sensor.rsv2Value;
+	
+	//按照顺序，继续扫描第四组DCMI传感器的数据
+	memset(&snd, 0, sizeof(msg_struct_ccl_dcmi_sensor_status_req_t));
+	snd.length = sizeof(msg_struct_ccl_dcmi_sensor_status_req_t);
+	ret = ihu_message_send(MSG_ID_CCL_DCMI_SENSOR_STATUS_REQ, TASK_ID_DCMIARIS, TASK_ID_CCL, &snd, snd.length);
+	if (ret == IHU_FAILURE){
+		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_DCMIARIS]);
+		return IHU_FAILURE;
+	}
 
-//超长时间，触发周期性汇报
+	//返回
+	return IHU_SUCCESS;
+}
+
+//L2传感器送来的状态报告
+OPSTAT fsm_ccl_dcmi_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{
+	int ret = 0;
+	int i=0;
+	msg_struct_dcmi_ccl_sensor_status_rep_t rcv;
+	msg_struct_ccl_sps_event_report_send_t snd;
+	
+	//入参检查
+	//Receive message and copy to local variable
+	memset(&rcv, 0, sizeof(msg_struct_dcmi_ccl_sensor_status_rep_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_dcmi_ccl_sensor_status_rep_t))){
+		IhuErrorPrint("CCL: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+	
+	//入参检查
+	if (rcv.cmdid != IHU_CCL_DH_CMDID_RESP_STATUS_DCMI){
+		IhuErrorPrint("CCL: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		return IHU_FAILURE;		
+	}
+		
+	//获取报告数据
+	for (i=0; i<IHU_CCL_SENSOR_NUMBER_MAX; i++){
+		zIhuCclSensorStatus.cameraState[i] = rcv.sensor.cameraState[i];
+	}
+	
+	//发送SPS数据给串口，形成发送的报告
+	memset(&snd, 0, sizeof(msg_struct_ccl_sps_event_report_send_t));
+	snd.cmdid = IHU_CCL_DH_CMDID_EVENT_REPORT;
+	memcpy(&(snd.sensor), &zIhuCclSensorStatus, sizeof(com_sensor_status_t));
+	snd.length = sizeof(msg_struct_ccl_sps_event_report_send_t);
+	ret = ihu_message_send(MSG_ID_CCL_SPS_EVENT_REPORT_SEND, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length);
+	if (ret == IHU_FAILURE){
+		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_SPSVIRGO]);
+		return IHU_FAILURE;
+	}
+	
+	//返回
+	return IHU_SUCCESS;
+}
+
+//L2传感器送来的状态报告
+OPSTAT fsm_ccl_sps_event_report_cfm(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{
+	//int ret = 0;
+	msg_struct_sps_ccl_event_report_cfm rcv;
+	
+	//入参检查
+	//Receive message and copy to local variable
+	memset(&rcv, 0, sizeof(msg_struct_sps_ccl_event_report_cfm));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_sps_ccl_event_report_cfm))){
+		IhuErrorPrint("CCL: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+	
+	//入参检查
+	if (rcv.cmdid != IHU_CCL_DH_CMDID_EVENT_REPORT){
+		IhuErrorPrint("CCL: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		return IHU_FAILURE;		
+	}
+		
+	//进入SLEEP状态
+	func_ccl_close_all_sensor();
+	if (FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_SLEEP) == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		IhuErrorPrint("CCL: Error Set FSM State!");
+		return IHU_FAILURE;
+	}
+		
+	//返回
+	return IHU_SUCCESS;
+}
+
+//喂狗和心跳定时器工作
 void func_ccl_time_out_period_event_report(void)
 {
 	int ret = 0;
@@ -342,19 +482,51 @@ void func_ccl_time_out_period_event_report(void)
 		return ;
 	}
 	
-	//发送状态查询请求给DIDO模块
-	//MSG_ID_CCL_TO_DH_SENSOR_STATUS_REQ
-
-	//状态机转移
-	
 	//返回
 	return;			
 }
 
-//工作状态下的短定时扫描，可以当做计数器来使用
-void func_ccl_time_out_working_status_scan(void)
+//超长定时报告工作周期
+void func_ccl_time_out_event_report_period_scan(void)
 {
+	int ret = 0;
+	msg_struct_ccl_dido_sensor_status_req_t snd;
+
+	//先进入EVENT_REPORT状态
+	func_ccl_open_all_sensor();
+	if (FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_EVENT_REPORT) == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		IhuErrorPrint("CCL: Error Set FSM State!");
+		return;
+	}
+
+	//控制所有传感器，进入工作模式
+	//作为周期采样模式，这里是不必要的，只有在工作模式下才需要这个过程
 	
+	//准备接收数据的缓冲区
+	memset(&zIhuCclSensorStatus, 0, sizeof(com_sensor_status_t));
+	
+	//发送第一组DIDO采样命令
+	memset(&snd, 0, sizeof(msg_struct_ccl_dido_sensor_status_req_t));
+	snd.length = sizeof(msg_struct_ccl_dido_sensor_status_req_t);
+	ret = ihu_message_send(MSG_ID_CCL_DIDO_SENSOR_STATUS_REQ, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length);
+	if (ret == IHU_FAILURE){
+		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_DIDOCAP]);
+		return;
+	}
+		
+	//返回
+	return;
+}
+
+
+//锁的工作周期之内
+void func_ccl_time_out_lock_work_active(void)
+{
+	//发送状态查询请求给DIDO模块
+	//MSG_ID_CCL_TO_DH_SENSOR_STATUS_REQ
+
+	//状态机转移	
 
 }
 
@@ -535,4 +707,19 @@ OPSTAT fsm_ccl_dido_sensor_warning_event(UINT8 dest_id, UINT8 src_id, void * par
 	//返回
 	return IHU_SUCCESS;
 }
+
+//关掉所有的外设
+void func_ccl_close_all_sensor(void)
+{
+	
+
+}
+
+//打开所有的外设
+void func_ccl_open_all_sensor(void)
+{
+	
+
+}
+
 
