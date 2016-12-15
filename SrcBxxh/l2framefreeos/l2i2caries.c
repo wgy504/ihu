@@ -42,8 +42,8 @@ FsmStateItem_t FsmI2caries[] =
   {MSG_ID_I2C_L2FRAME_RCV,								FSM_STATE_I2CARIES_ACTIVED,         				fsm_i2caries_bfsc_l2frame_rcv},	
 
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-  {MSG_ID_CCL_I2C_SENSOR_STATUS_REQ,			FSM_STATE_I2CARIES_ACTIVED,         					fsm_i2caries_ccl_sensor_status_req},
-  {MSG_ID_CCL_I2C_CTRL_CMD,								FSM_STATE_I2CARIES_ACTIVED,         					fsm_i2caries_ccl_ctrl_cmd},
+  {MSG_ID_CCL_COM_SENSOR_STATUS_REQ,			FSM_STATE_I2CARIES_ACTIVED,         					fsm_i2caries_ccl_sensor_status_req},
+  {MSG_ID_CCL_COM_CTRL_CMD,								FSM_STATE_I2CARIES_ACTIVED,         					fsm_i2caries_ccl_ctrl_cmd},
 #endif		
 	
   //结束点，固定定义，不要改动
@@ -407,12 +407,12 @@ void func_i2caries_bfsc_frame_send(strIhuI2cariesMotoFrame_t *frame)
 OPSTAT fsm_i2caries_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
 	int ret = 0;
-	msg_struct_ccl_i2c_sensor_status_req_t rcv;
+	msg_struct_ccl_com_sensor_status_req_t rcv;
 	msg_struct_i2c_ccl_sensor_status_rep_t snd;
 	
 	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_ccl_i2c_sensor_status_req_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_i2c_sensor_status_req_t))){
+	memset(&rcv, 0, sizeof(msg_struct_ccl_com_sensor_status_req_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_com_sensor_status_req_t))){
 		IhuErrorPrint("I2CARIES: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_I2CARIES]++;
 		return IHU_FAILURE;
@@ -445,23 +445,32 @@ OPSTAT fsm_i2caries_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * pa
 	return IHU_SUCCESS;
 }
 
+//控制状态
 OPSTAT fsm_i2caries_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
 	//int ret;
-	msg_struct_ccl_i2c_ctrl_cmd_t rcv;
+	msg_struct_ccl_com_ctrl_cmd_t rcv;
 	
 	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_ccl_i2c_ctrl_cmd_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_i2c_ctrl_cmd_t))){
+	memset(&rcv, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_com_ctrl_cmd_t))){
 		IhuErrorPrint("I2CARIES: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_I2CARIES]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
 
-	//操作门锁
-
+	//操作状态
+	if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_ACTIVE) zIhuCclI2cariesCtrlTable.cclI2cWorkingMode = IHU_CCL_I2C_WORKING_MODE_ACTIVE;
+	else if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_SLEEP) zIhuCclI2cariesCtrlTable.cclI2cWorkingMode = IHU_CCL_I2C_WORKING_MODE_SLEEP;
+	else if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_FAULT) zIhuCclI2cariesCtrlTable.cclI2cWorkingMode = IHU_CCL_I2C_WORKING_MODE_FAULT;
+	else{
+		IhuErrorPrint("DIDOCAP: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+		return IHU_FAILURE;		
+	}
 	
+	//返回
 	return IHU_SUCCESS;
 }
 

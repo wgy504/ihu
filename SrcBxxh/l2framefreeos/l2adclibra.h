@@ -70,6 +70,13 @@ typedef struct strIhuBfscAdcWeightPar
 #define IHU_BFSC_ADC_WEIGHT_WORKING_MODE_NORMAL 2
 #define IHU_BFSC_ADC_WEIGHT_WORKING_MODE_STOP 3
 
+//ADC工作状态
+#define IHU_CCL_ADC_WORKING_MODE_NONE 0
+#define IHU_CCL_ADC_WORKING_MODE_SLEEP 1
+#define IHU_CCL_ADC_WORKING_MODE_ACTIVE 2
+#define IHU_CCL_ADC_WORKING_MODE_FAULT 3
+#define IHU_CCL_ADC_WORKING_MODE_INVALID 0xFF
+
 //本地需要用到的核心参数
 typedef struct strIhuCclAdcPar
 {	

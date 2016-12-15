@@ -115,14 +115,8 @@ enum IHU_INTER_TASK_MSG_ID
 	
 	//CCL
 	MSG_ID_CCL_TO_SPS_OPEN_AUTH_INQ,  	  //Back hawl
-	MSG_ID_CCL_DIDO_SENSOR_STATUS_REQ,   
-	MSG_ID_CCL_SPS_SENSOR_STATUS_REQ,   
-	MSG_ID_CCL_I2C_SENSOR_STATUS_REQ,   
-	MSG_ID_CCL_DCMI_SENSOR_STATUS_REQ,
-	MSG_ID_CCL_DIDO_CTRL_CMD,
-	MSG_ID_CCL_SPS_CTRL_CMD,
-	MSG_ID_CCL_I2C_CTRL_CMD,
-	MSG_ID_CCL_DCMI_CTRL_CMD,
+	MSG_ID_CCL_COM_SENSOR_STATUS_REQ,
+	MSG_ID_CCL_COM_CTRL_CMD,
 	MSG_ID_CCL_SPS_EVENT_REPORT_SEND,
 
 	//END FLAG
@@ -142,15 +136,16 @@ typedef struct com_gps_pos //
 
 typedef struct com_sensor_status //
 {
-	UINT8 doorState[IHU_CCL_SENSOR_NUMBER_MAX];
-	UINT8 lockTongueState[IHU_CCL_SENSOR_NUMBER_MAX];
-	UINT8 lockiTriggerState[IHU_CCL_SENSOR_NUMBER_MAX];
-	UINT8 lockoEnableState[IHU_CCL_SENSOR_NUMBER_MAX];
-	UINT8 cameraState[IHU_CCL_SENSOR_NUMBER_MAX];
+	UINT8 lockTongueState[IHU_CCL_SENSOR_LOCK_NUMBER_MAX];
+	UINT8 lockiTriggerState[IHU_CCL_SENSOR_LOCK_NUMBER_MAX];
+	UINT8 lockoEnableState[IHU_CCL_SENSOR_LOCK_NUMBER_MAX];
+	UINT8 doorState[IHU_CCL_SENSOR_LOCK_NUMBER_MAX];
+	UINT8 cameraState[IHU_CCL_SENSOR_LOCK_NUMBER_MAX];
 	UINT8 smokeState;
 	UINT8 waterState;
 	UINT8 fallState;	
 	UINT8 shakeState;
+	UINT8 batteryState;
 	INT16 batteryValue;
 	INT16 tempValue;
 	INT16 humidValue;
@@ -158,80 +153,6 @@ typedef struct com_sensor_status //
 	INT16 rsv1Value;  //两个预留传感器之一
 	INT16 rsv2Value;	 //两个预留传感器之一
 }com_sensor_status_t;
-#define IHU_CCL_SENSOR_STATE_NONE 0
-#define IHU_CCL_SENSOR_STATE_CLOSE 1
-#define IHU_CCL_SENSOR_STATE_OPEN 2
-#define IHU_CCL_SENSOR_STATE_DEACTIVE 1
-#define IHU_CCL_SENSOR_STATE_ACTIVE 2
-
-
-//跟CCL独特相关的所有CMDID统一编码
-#define IHU_CCL_DH_CMDID_NONE 0
-#define IHU_CCL_DH_CMDID_REQ_STATUS_DOOR 1
-#define IHU_CCL_DH_CMDID_REQ_STATUS_LOCKI 2
-#define IHU_CCL_DH_CMDID_REQ_STATUS_RSSI 2
-#define IHU_CCL_DH_CMDID_REQ_STATUS_BATTERY 3
-#define IHU_CCL_DH_CMDID_REQ_STATUS_DIDO 4
-#define IHU_CCL_DH_CMDID_REQ_STATUS_SPS 5
-#define IHU_CCL_DH_CMDID_REQ_STATUS_I2C 6
-#define IHU_CCL_DH_CMDID_REQ_STATUS_DCMI 7
-#define IHU_CCL_DH_CMDID_RESP_STATUS_DOOR 11
-#define IHU_CCL_DH_CMDID_RESP_STATUS_LOCKI 12
-#define IHU_CCL_DH_CMDID_RESP_STATUS_RSSI 12
-#define IHU_CCL_DH_CMDID_RESP_STATUS_BATTERY 13
-#define IHU_CCL_DH_CMDID_RESP_STATUS_DIDO 14
-#define IHU_CCL_DH_CMDID_RESP_STATUS_SPS 15
-#define IHU_CCL_DH_CMDID_RESP_STATUS_I2C 16
-#define IHU_CCL_DH_CMDID_RESP_STATUS_DCMI 17
-
-#define IHU_CCL_DH_CMDID_EVENT_REPORT 20
-#define IHU_CCL_DH_CMDID_EVENT_IND_DOOR_C_TO_O 21
-#define IHU_CCL_DH_CMDID_EVENT_IND_DOOR_O_TO_C 22
-#define IHU_CCL_DH_CMDID_EVENT_IND_LOCK_C_TO_O 23
-#define IHU_CCL_DH_CMDID_EVENT_IND_LOCK_O_TO_C 24
-#define IHU_CCL_DH_CMDID_EVENT_IND_LOCK_TRIGGER 30    //触发CCL进入工作状态
-#define IHU_CCL_DH_CMDID_EVENT_IND_SHAKE_TRIGGER 31   //触发CCL进入工作状态
-#define IHU_CCL_DH_CMDID_EVENT_IND_LOCK_AND_SHAKE 32  //触发CCL进入工作状态
-
-#define IHU_CCL_DH_CMDID_EVENT_IND_FAULT_DOOR_O 40    //触发CCL进入错误模式
-#define IHU_CCL_DH_CMDID_EVENT_IND_FAULT_LOCK_O 41    //触发CCL进入错误模式
-#define IHU_CCL_DH_CMDID_EVENT_IND_FAULT_BAT_WARNING 42    //触发CCL进入错误模式
-#define IHU_CCL_DH_CMDID_EVENT_IND_FAULT_FALL_WARNING 43    //触发CCL进入错误模式
-#define IHU_CCL_DH_CMDID_EVENT_IND_FAULT_SMOKE_WARNING 44    //触发CCL进入错误模式
-#define IHU_CCL_DH_CMDID_EVENT_IND_FAULT_WATER_WARNING 45    //触发CCL进入错误模式
-
-#define IHU_CCL_DH_CMDID_HEART_BEAT 0xFE
-#define IHU_CCL_DH_CMDID_INVAID 0xFF
-
-#define IHU_CCL_DIDO_WORKING_MODE_NONE 0
-#define IHU_CCL_DIDO_WORKING_MODE_SLEEP 1
-#define IHU_CCL_DIDO_WORKING_MODE_ACTIVE 2
-#define IHU_CCL_DIDO_WORKING_MODE_FAULT 3
-#define IHU_CCL_DIDO_WORKING_MODE_INVALID 0xFF
-
-#define IHU_CCL_ADC_WORKING_MODE_NONE 0
-#define IHU_CCL_ADC_WORKING_MODE_SLEEP 1
-#define IHU_CCL_ADC_WORKING_MODE_ACTIVE 2
-#define IHU_CCL_ADC_WORKING_MODE_FAULT 3
-#define IHU_CCL_ADC_WORKING_MODE_INVALID 0xFF
-
-#define IHU_CCL_I2C_WORKING_MODE_NONE 0
-#define IHU_CCL_I2C_WORKING_MODE_SLEEP 1
-#define IHU_CCL_I2C_WORKING_MODE_ACTIVE 2
-#define IHU_CCL_I2C_WORKING_MODE_FAULT 3
-#define IHU_CCL_I2C_WORKING_MODE_INVALID 0xFF
-
-#define IHU_CCL_SPS_WORKING_MODE_NONE 0
-#define IHU_CCL_SPS_WORKING_MODE_SLEEP 1
-#define IHU_CCL_SPS_WORKING_MODE_ACTIVE 2
-#define IHU_CCL_SPS_WORKING_MODE_INVALID 0xFF
-
-#define IHU_CCL_DCMI_WORKING_MODE_NONE 0
-#define IHU_CCL_DCMI_WORKING_MODE_SLEEP 1
-#define IHU_CCL_DCMI_WORKING_MODE_ACTIVE 2
-#define IHU_CCL_DCMI_WORKING_MODE_FAULT 3
-#define IHU_CCL_DCMI_WORKING_MODE_INVALID 0xFF
-
 
 //公共消息定义
 //MSG_ID_COM_INIT
@@ -303,10 +224,12 @@ typedef struct msg_struct_dido_event_lock_trigger
 }msg_struct_dido_event_lock_trigger_t;
 
 //MSG_ID_DIDO_EVENT_FAULT_TRIGGER
+#define IHU_CCL_SENSOR_FAULT_REPORT_NUMBER_MAX 10
 typedef struct msg_struct_dido_event_fault_trigger
 {
 	UINT8 cmdid;
 	UINT8 lockid;  //指示是哪一个锁触发的
+	UINT8 faultBitmap[IHU_CCL_SENSOR_FAULT_REPORT_NUMBER_MAX];
 	com_sensor_status_t sensor;
 	UINT8 length;
 }msg_struct_dido_event_fault_trigger_t;
@@ -448,61 +371,21 @@ typedef struct msg_struct_ccl_to_sps_open_auth_inq
 //MSG_ID_CCL_TO_DIDO_CTRL_CMD
 
 
-//MSG_ID_CCL_DIDO_SENSOR_STATUS_REQ
-typedef struct msg_struct_ccl_dido_sensor_status_req
+//MSG_ID_CCL_COM_SENSOR_STATUS_REQ
+typedef struct msg_struct_ccl_com_sensor_status_req
 {
 	UINT8 cmdid;
 	UINT8 length;
-}msg_struct_ccl_dido_sensor_status_req_t;
+}msg_struct_ccl_com_sensor_status_req_t;
 
-//MSG_ID_CCL_SPS_SENSOR_STATUS_REQ
-typedef struct msg_struct_ccl_sps_sensor_status_req
+//MSG_ID_CCL_COM_CTRL_CMD
+typedef struct msg_struct_ccl_com_ctrl_cmd
 {
+	UINT8 workmode;
 	UINT8 cmdid;
+	UINT8 lockid;
 	UINT8 length;
-}msg_struct_ccl_sps_sensor_status_req_t;
-
-//MSG_ID_CCL_I2C_SENSOR_STATUS_REQ
-typedef struct msg_struct_ccl_i2c_sensor_status_req
-{
-	UINT8 cmdid;
-	UINT8 length;
-}msg_struct_ccl_i2c_sensor_status_req_t;
-
-//MSG_ID_CCL_DCMI_SENSOR_STATUS_REQ
-typedef struct msg_struct_ccl_dcmi_sensor_status_req
-{
-	UINT8 cmdid;
-	UINT8 length;
-}msg_struct_ccl_dcmi_sensor_status_req_t;
-
-//MSG_ID_CCL_DIDO_CTRL_CMD
-typedef struct msg_struct_ccl_dido_ctrl_cmd
-{
-	UINT8 cmdid;
-	UINT8 length;
-}msg_struct_ccl_dido_ctrl_cmd_t;
-
-//MSG_ID_CCL_SPS_CTRL_CMD
-typedef struct msg_struct_ccl_sps_ctrl_cmd
-{
-	UINT8 cmdid;
-	UINT8 length;
-}msg_struct_ccl_sps_ctrl_cmd_t;
-
-//MSG_ID_CCL_I2C_CTRL_CMD
-typedef struct msg_struct_ccl_i2c_ctrl_cmd
-{
-	UINT8 cmdid;
-	UINT8 length;
-}msg_struct_ccl_i2c_ctrl_cmd_t;
-
-//MSG_ID_CCL_DCMI_CTRL_CMD
-typedef struct msg_struct_ccl_dcmi_ctrl_cmd
-{
-	UINT8 cmdid;
-	UINT8 length;
-}msg_struct_ccl_dcmi_ctrl_cmd_t;
+}msg_struct_ccl_com_ctrl_cmd_t;
 
 //MSG_ID_CCL_SPS_EVENT_REPORT_SEND
 typedef struct msg_struct_ccl_sps_event_report_send

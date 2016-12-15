@@ -72,9 +72,11 @@ FsmStateItem_t FsmCcl[] =
 	{MSG_ID_SPS_TO_CCL_CLOUD_FB,						FSM_STATE_CCL_FATAL_FAULT,         			fsm_ccl_sps_cloud_fb},
 	{MSG_ID_DIDO_LOCK_C_DOOR_C_EVENT,				FSM_STATE_CCL_FATAL_FAULT,         			fsm_ccl_lock_and_door_close_event},	
 
-	//FSM_STATE_CCL_FATAL_FAULT：严重错误状态，发送报告给后台，等待人工干预以后回归ACTIVE
-  {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_SLEEP,         					fsm_ccl_restart},
-	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CCL_SLEEP,         					fsm_ccl_time_out},
+	//FSM_STATE_CCL_SLEEP: 休眠状态，可以被允许触发，或进入工作模式，或进入差错模式
+  {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_SLEEP,         						fsm_ccl_restart},
+	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CCL_SLEEP,         						fsm_ccl_time_out},
+	{MSG_ID_DIDO_EVENT_LOCK_TRIGGER,				FSM_STATE_CCL_SLEEP,         						fsm_ccl_event_lock_trigger_to_work},
+	{MSG_ID_DIDO_EVENT_FAULT_TRIGGER,				FSM_STATE_CCL_SLEEP,         						fsm_ccl_event_fault_trigger_to_stop},	
 	
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             							NULL},  //Ending
@@ -262,7 +264,7 @@ OPSTAT fsm_ccl_dido_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param
 {
 	int ret = 0, i=0;
 	msg_struct_dido_ccl_sensor_status_rep_t rcv;
-	msg_struct_ccl_sps_sensor_status_req_t snd;
+	msg_struct_ccl_com_sensor_status_req_t snd;
 	
 	//入参检查
 	//Receive message and copy to local variable
@@ -282,7 +284,7 @@ OPSTAT fsm_ccl_dido_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param
 	}
 		
 	//获取报告数据
-	for (i=0; i<IHU_CCL_SENSOR_NUMBER_MAX; i++){
+	for (i=0; i<IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
 		zIhuCclSensorStatus.doorState[i] = rcv.sensor.doorState[i];
 		zIhuCclSensorStatus.lockiTriggerState[i] = rcv.sensor.lockiTriggerState[i];
 		zIhuCclSensorStatus.lockoEnableState[i] = rcv.sensor.lockoEnableState[i];
@@ -293,9 +295,9 @@ OPSTAT fsm_ccl_dido_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param
 	zIhuCclSensorStatus.humidValue = rcv.sensor.humidValue;
 	
 	//按照顺序，继续扫描第二组SPS传感器的数据
-	memset(&snd, 0, sizeof(msg_struct_ccl_sps_sensor_status_req_t));
-	snd.length = sizeof(msg_struct_ccl_sps_sensor_status_req_t);
-	ret = ihu_message_send(MSG_ID_CCL_SPS_SENSOR_STATUS_REQ, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length);
+	memset(&snd, 0, sizeof(msg_struct_ccl_com_sensor_status_req_t));
+	snd.length = sizeof(msg_struct_ccl_com_sensor_status_req_t);
+	ret = ihu_message_send(MSG_ID_CCL_COM_SENSOR_STATUS_REQ, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_SPSVIRGO]);
 		return IHU_FAILURE;
@@ -310,7 +312,7 @@ OPSTAT fsm_ccl_sps_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param_
 {
 	int ret = 0;
 	msg_struct_sps_ccl_sensor_status_rep_t rcv;
-	msg_struct_ccl_i2c_sensor_status_req_t snd;
+	msg_struct_ccl_com_sensor_status_req_t snd;
 	
 	//入参检查
 	//Receive message and copy to local variable
@@ -333,9 +335,9 @@ OPSTAT fsm_ccl_sps_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param_
 	zIhuCclSensorStatus.rssiValue = rcv.sensor.rssiValue;
 	
 	//按照顺序，继续扫描第三组I2C传感器的数据
-	memset(&snd, 0, sizeof(msg_struct_ccl_i2c_sensor_status_req_t));
-	snd.length = sizeof(msg_struct_ccl_i2c_sensor_status_req_t);
-	ret = ihu_message_send(MSG_ID_CCL_I2C_SENSOR_STATUS_REQ, TASK_ID_I2CARIES, TASK_ID_CCL, &snd, snd.length);
+	memset(&snd, 0, sizeof(msg_struct_ccl_com_sensor_status_req_t));
+	snd.length = sizeof(msg_struct_ccl_com_sensor_status_req_t);
+	ret = ihu_message_send(MSG_ID_CCL_COM_SENSOR_STATUS_REQ, TASK_ID_I2CARIES, TASK_ID_CCL, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_I2CARIES]);
 		return IHU_FAILURE;
@@ -350,7 +352,7 @@ OPSTAT fsm_ccl_i2c_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param_
 {
 	int ret = 0;
 	msg_struct_i2c_ccl_sensor_status_rep_t rcv;
-	msg_struct_ccl_dcmi_sensor_status_req_t snd;
+	msg_struct_ccl_com_sensor_status_req_t snd;
 	
 	//入参检查
 	//Receive message and copy to local variable
@@ -374,9 +376,9 @@ OPSTAT fsm_ccl_i2c_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param_
 	zIhuCclSensorStatus.rsv2Value = rcv.sensor.rsv2Value;
 	
 	//按照顺序，继续扫描第四组DCMI传感器的数据
-	memset(&snd, 0, sizeof(msg_struct_ccl_dcmi_sensor_status_req_t));
-	snd.length = sizeof(msg_struct_ccl_dcmi_sensor_status_req_t);
-	ret = ihu_message_send(MSG_ID_CCL_DCMI_SENSOR_STATUS_REQ, TASK_ID_DCMIARIS, TASK_ID_CCL, &snd, snd.length);
+	memset(&snd, 0, sizeof(msg_struct_ccl_com_sensor_status_req_t));
+	snd.length = sizeof(msg_struct_ccl_com_sensor_status_req_t);
+	ret = ihu_message_send(MSG_ID_CCL_COM_SENSOR_STATUS_REQ, TASK_ID_DCMIARIS, TASK_ID_CCL, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_DCMIARIS]);
 		return IHU_FAILURE;
@@ -412,7 +414,7 @@ OPSTAT fsm_ccl_dcmi_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param
 	}
 		
 	//获取报告数据
-	for (i=0; i<IHU_CCL_SENSOR_NUMBER_MAX; i++){
+	for (i=0; i<IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
 		zIhuCclSensorStatus.cameraState[i] = rcv.sensor.cameraState[i];
 	}
 	
@@ -490,7 +492,7 @@ void func_ccl_time_out_period_event_report(void)
 void func_ccl_time_out_event_report_period_scan(void)
 {
 	int ret = 0;
-	msg_struct_ccl_dido_sensor_status_req_t snd;
+	msg_struct_ccl_com_sensor_status_req_t snd;
 
 	//先进入EVENT_REPORT状态
 	func_ccl_open_all_sensor();
@@ -507,9 +509,9 @@ void func_ccl_time_out_event_report_period_scan(void)
 	memset(&zIhuCclSensorStatus, 0, sizeof(com_sensor_status_t));
 	
 	//发送第一组DIDO采样命令
-	memset(&snd, 0, sizeof(msg_struct_ccl_dido_sensor_status_req_t));
-	snd.length = sizeof(msg_struct_ccl_dido_sensor_status_req_t);
-	ret = ihu_message_send(MSG_ID_CCL_DIDO_SENSOR_STATUS_REQ, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length);
+	memset(&snd, 0, sizeof(msg_struct_ccl_com_sensor_status_req_t));
+	snd.length = sizeof(msg_struct_ccl_com_sensor_status_req_t);
+	ret = ihu_message_send(MSG_ID_CCL_COM_SENSOR_STATUS_REQ, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_DIDOCAP]);
 		return;
@@ -707,6 +709,123 @@ OPSTAT fsm_ccl_dido_sensor_warning_event(UINT8 dest_id, UINT8 src_id, void * par
 	//返回
 	return IHU_SUCCESS;
 }
+
+//触发激活系统到工作
+OPSTAT fsm_ccl_event_lock_trigger_to_work(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{	
+	int ret = 0;
+	msg_struct_dido_event_lock_trigger_t rcv;
+	msg_struct_ccl_com_ctrl_cmd_t snd;
+	
+	//入参检查
+	//Receive message and copy to local variable
+	memset(&rcv, 0, sizeof(msg_struct_dido_event_lock_trigger_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_dido_event_lock_trigger_t))){
+		IhuErrorPrint("CCL: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);	
+	
+	//打开所有接口
+	func_ccl_open_all_sensor();
+	
+	//控制DIDO到工作状态
+	memset(&snd, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
+	snd.length = sizeof(msg_struct_ccl_com_ctrl_cmd_t);
+	snd.workmode = IHU_CCL_DH_CMDID_WORK_MODE_ACTIVE;
+	ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length);
+	if (ret == IHU_FAILURE){
+		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_DIDOCAP]);
+		return IHU_FAILURE;
+	}
+
+	//控制SPS到工作状态
+	memset(&snd, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
+	snd.length = sizeof(msg_struct_ccl_com_ctrl_cmd_t);
+	snd.workmode = IHU_CCL_DH_CMDID_WORK_MODE_ACTIVE;
+	ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length);
+	if (ret == IHU_FAILURE){
+		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_SPSVIRGO]);
+		return IHU_FAILURE;
+	}
+
+	//控制I2C到工作状态
+	memset(&snd, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
+	snd.length = sizeof(msg_struct_ccl_com_ctrl_cmd_t);
+	snd.workmode = IHU_CCL_DH_CMDID_WORK_MODE_ACTIVE;
+	ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_I2CARIES, TASK_ID_CCL, &snd, snd.length);
+	if (ret == IHU_FAILURE){
+		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_I2CARIES]);
+		return IHU_FAILURE;
+	}
+
+	//控制DCMI到工作状态
+	memset(&snd, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
+	snd.length = sizeof(msg_struct_ccl_com_ctrl_cmd_t);
+	snd.workmode = IHU_CCL_DH_CMDID_WORK_MODE_ACTIVE;
+	ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DCMIARIS, TASK_ID_CCL, &snd, snd.length);
+	if (ret == IHU_FAILURE){
+		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_DCMIARIS]);
+		return IHU_FAILURE;
+	}
+	
+	//启动定时器：如果是在工作模式下，允许被重复触发
+	//具体的处理，等待工作模式的消息流处理过程：待完善
+	ret = ihu_timer_start(TASK_ID_CCL, TIMER_ID_1S_CCL_LOCK_WORK_ACTIVE, zIhuSysEngPar.timer.cclLockWorkActiveScanTimer, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
+	if (ret == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		IhuErrorPrint("CCL: Error start timer!\n");
+		return IHU_FAILURE;
+	}
+	
+	//控制其它锁具的触发
+	memset(&snd, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
+	snd.length = sizeof(msg_struct_ccl_com_ctrl_cmd_t);
+	snd.workmode = IHU_CCL_DH_CMDID_WORK_MODE_CTRL;
+	snd.cmdid = IHU_CCL_DH_CMDID_CMD_ENABLE_LOCK;
+	snd.lockid = rcv.lockid;
+	ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length);
+	if (ret == IHU_FAILURE){
+		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_DIDOCAP]);
+		return IHU_FAILURE;
+	}
+
+	//状态转移
+	if (FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_ACTIVED) == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		IhuErrorPrint("CCL: Error Set FSM State!");
+		return IHU_FAILURE;
+	}
+	
+	//返回
+	return IHU_SUCCESS;
+}
+
+//暴力开门等差错状态
+OPSTAT fsm_ccl_event_fault_trigger_to_stop(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{	
+	//int ret = 0;
+	msg_struct_dido_event_fault_trigger_t rcv;
+	
+	//入参检查
+	//Receive message and copy to local variable
+	memset(&rcv, 0, sizeof(msg_struct_dido_event_fault_trigger_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_dido_event_fault_trigger_t))){
+		IhuErrorPrint("CCL: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);	
+	
+	//对收到的后台指令反馈结果进行处理
+		
+	//状态转移
+
+	//返回
+	return IHU_SUCCESS;
+}
+
 
 //关掉所有的外设
 void func_ccl_close_all_sensor(void)

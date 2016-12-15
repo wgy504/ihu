@@ -40,9 +40,9 @@ FsmStateItem_t FsmSpsvirgo[] =
 	
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 	{MSG_ID_CCL_TO_SPS_OPEN_AUTH_INQ,				FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_open_auth_inq},
-	{MSG_ID_CCL_SPS_SENSOR_STATUS_REQ,			FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_sensor_status_req},
+	{MSG_ID_CCL_COM_SENSOR_STATUS_REQ,			FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_sensor_status_req},
 	{MSG_ID_CCL_SPS_EVENT_REPORT_SEND,			FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_event_report_send},
-	{MSG_ID_CCL_SPS_CTRL_CMD,								FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_ctrl_cmd},	
+	{MSG_ID_CCL_COM_CTRL_CMD,								FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_ctrl_cmd},	
 #endif
 
   //结束点，固定定义，不要改动
@@ -316,12 +316,12 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 OPSTAT fsm_spsvirgo_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
 	int ret = 0;
-	msg_struct_ccl_sps_sensor_status_req_t rcv;
+	msg_struct_ccl_com_sensor_status_req_t rcv;
 	msg_struct_sps_ccl_sensor_status_rep_t snd;
 	
 	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_ccl_sps_sensor_status_req_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_sps_sensor_status_req_t))){
+	memset(&rcv, 0, sizeof(msg_struct_ccl_com_sensor_status_req_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_com_sensor_status_req_t))){
 		IhuErrorPrint("SPSVIRGO: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
@@ -383,24 +383,32 @@ OPSTAT fsm_spsvirgo_ccl_event_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 }
 
 
-
+//控制状态
 OPSTAT fsm_spsvirgo_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
 	//int ret;
-	msg_struct_ccl_sps_ctrl_cmd_t rcv;
+	msg_struct_ccl_com_ctrl_cmd_t rcv;
 	
 	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_ccl_sps_ctrl_cmd_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_sps_ctrl_cmd_t))){
+	memset(&rcv, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_com_ctrl_cmd_t))){
 		IhuErrorPrint("SPSVIRGO: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
 
-	//操作门锁
-
+	//操作状态
+	if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_ACTIVE) zIhuCclSpsvirgoCtrlTable.cclSpsWorkingMode = IHU_CCL_SPS_WORKING_MODE_ACTIVE;
+	else if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_SLEEP) zIhuCclSpsvirgoCtrlTable.cclSpsWorkingMode = IHU_CCL_SPS_WORKING_MODE_SLEEP;
+	else if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_FAULT) zIhuCclSpsvirgoCtrlTable.cclSpsWorkingMode = IHU_CCL_SPS_WORKING_MODE_FAULT;
+	else{
+		IhuErrorPrint("DIDOCAP: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+		return IHU_FAILURE;		
+	}
 	
+	//返回
 	return IHU_SUCCESS;
 }
 

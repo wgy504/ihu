@@ -8,8 +8,11 @@
 
 //= ZJL, 2016 Dec.15, CURRENT_SW_DELIVERY R03.62 =>CCL项目
 = 完善正常的工作流程
-
-
+= ADC/I2C/DIDO/DCMI/SPS都搭建了工作模式，可以不用，但如果需要就可以用起来
+= 大致将CCL的工作分为SLEEP、FAULT、WORKING三种工作模式
+= FAULT对应于暴力开锁、水浸等情形
+= 目前的设计假设是：一旦进入到FAULT，模式后，不再能退出来，除非错误得到了恢复
+= 合并MSG_ID_CCL_COM_SENSOR_STATUS_REQ / MSG_ID_CCL_COM_CTRL_CMD消息，从而节省内存
 
 //= ZJL, 2016 Dec.15, CURRENT_SW_DELIVERY R03.61 =>CCL项目
 = 完善状态机

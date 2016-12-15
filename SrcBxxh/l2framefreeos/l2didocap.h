@@ -53,6 +53,21 @@ typedef struct strIhuCclDidoPar
 	com_sensor_status_t sensor;
 }strIhuCclDidoPar_t;
 
+#define IHU_CCL_DIDO_SENSOR_INDEX_LOCK 0
+#define IHU_CCL_DIDO_SENSOR_INDEX_DOOR 1
+#define IHU_CCL_DIDO_SENSOR_INDEX_SMOKE 2
+#define IHU_CCL_DIDO_SENSOR_INDEX_WATER 3
+#define IHU_CCL_DIDO_SENSOR_INDEX_FALL 4
+#define IHU_CCL_DIDO_SENSOR_INDEX_BAT 5
+
+//DIDO工作状态
+#define IHU_CCL_DIDO_WORKING_MODE_NONE 0
+#define IHU_CCL_DIDO_WORKING_MODE_SLEEP 1
+#define IHU_CCL_DIDO_WORKING_MODE_ACTIVE 2
+#define IHU_CCL_DIDO_WORKING_MODE_FAULT 3
+#define IHU_CCL_DIDO_WORKING_MODE_INVALID 0xFF
+
+
 //API
 extern OPSTAT fsm_didocap_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_didocap_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
@@ -68,6 +83,11 @@ OPSTAT func_didocap_hw_init(void);
 void func_didocap_time_out_period_scan(void);
 void func_didocap_time_out_external_trigger_period_scan(void);
 void func_didocap_time_out_work_mode_period_scan(void);
+void func_didocap_ccl_open_lock(UINT8 lockid);
+void func_didocap_ccl_close_lock(UINT8 lockid);
+void func_didocap_ccl_enable_lock(UINT8 lockid);
+
+
 
 #endif /* L2FRAME_L2DIDOCAP_H_ */
 

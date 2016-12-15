@@ -53,6 +53,14 @@ typedef struct strIhuCclDcmiPar
 	com_sensor_status_t sensor;
 }strIhuCclDcmiPar_t;
 
+
+//DCMI工作状态
+#define IHU_CCL_DCMI_WORKING_MODE_NONE 0
+#define IHU_CCL_DCMI_WORKING_MODE_SLEEP 1
+#define IHU_CCL_DCMI_WORKING_MODE_ACTIVE 2
+#define IHU_CCL_DCMI_WORKING_MODE_FAULT 3
+#define IHU_CCL_DCMI_WORKING_MODE_INVALID 0xFF
+
 //API
 extern OPSTAT fsm_dcmiaris_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_dcmiaris_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
