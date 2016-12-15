@@ -20,7 +20,9 @@
 	(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID))
 	#include "vmfreeoslayer.h"
 	#include "l1comdef_freeos.h"
-	#include "l1timer_freeos.h"		
+	#include "l1timer_freeos.h"
+	#include "l3ccl.h"
+	
 #elif ((IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID) ||\
 	(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCCB_ID) ||\
 	(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCSB_ID))
@@ -86,7 +88,10 @@ void func_didocap_time_out_work_mode_period_scan(void);
 void func_didocap_ccl_open_lock(UINT8 lockid);
 void func_didocap_ccl_close_lock(UINT8 lockid);
 void func_didocap_ccl_enable_lock(UINT8 lockid);
-
+bool func_didocap_ccl_any_door_open(void);
+bool func_didocap_ccl_all_door_and_lock_close(void);
+bool func_didocap_ccl_enable_lock_trigger(void);
+bool func_didocap_ccl_door_and_lock_status_change(void);
 
 
 #endif /* L2FRAME_L2DIDOCAP_H_ */

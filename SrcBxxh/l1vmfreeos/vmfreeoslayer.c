@@ -156,6 +156,7 @@ char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK] ={
 	"MSG_ID_SPS_CCL_CLOUD_FB",
 	"MSG_ID_SPS_CCL_SENSOR_STATUS_RESP",
 	"MSG_ID_SPS_CCL_EVENT_REPORT_CFM",
+	"MSG_ID_SPS_CCL_ERROR_REPORT_CFM",
 	
 	//SPI
 	"MSG_ID_SPI_L2FRAME_SEND",
@@ -178,6 +179,7 @@ char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK] ={
 	"MSG_ID_CCL_COM_SENSOR_STATUS_REQ",
 	"MSG_ID_CCL_COM_CTRL_CMD",
 	"MSG_ID_CCL_SPS_EVENT_REPORT_SEND",
+	"MSG_ID_CCL_SPS_ERROR_REPORT_SEND",
 
 	//END FLAG
 	"MSG_ID_COM_MAX", //Ending point
@@ -614,6 +616,7 @@ void ihu_vm_system_init(void)
 	zIhuSysEngPar.timer.cclPeriodScanTimer = IHU_CCL_TIMER_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.cclEventReportPeriodScanTimer = IHU_CCL_TIMER_DURATION_EVENT_REPORT_PEROID_SCAN;
 	zIhuSysEngPar.timer.cclLockWorkActiveScanTimer = IHU_CCL_TIMER_DURATION_LOCK_ACTIVE;
+	zIhuSysEngPar.timer.cclLockWorkWaitForOpenScanTimer = IHU_CCL_TIMER_DURATION_LOCK_WORK_WAIT_TO_OPEN;	
 	zIhuSysEngPar.timer.cclDidoTriggerPeriodScanTimer = IHU_CCL_TIMER_DURATION_DIDO_TRIGGER_PERIOD_SCAN;
 	zIhuSysEngPar.timer.cclDidoWorkingPeriodScanTimer = IHU_CCL_TIMER_DURATION_DIDO_WORKING_PERIOD_SCAN;
 	zIhuSysEngPar.timer.cclSpsWorkingPeriodScanTimer = IHU_CCL_TIMER_DURATION_SPS_WORKING_PERIOD_SCAN;

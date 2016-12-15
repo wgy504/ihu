@@ -7,13 +7,8 @@
 
 
 //= ZJL, 2016 Dec.15, CURRENT_SW_DELIVERY R03.63 =>CCL项目
-
-
-
-
-
-
-
+= 统一消息的定义，删掉无用的休息定义，以节省内存
+= 基本上完成上层应用的状态机流程
 
 //= ZJL, 2016 Dec.15, CURRENT_SW_DELIVERY R03.62 =>CCL项目
 = 完善正常的工作流程

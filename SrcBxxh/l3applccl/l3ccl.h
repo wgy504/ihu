@@ -35,7 +35,7 @@
 enum FSM_STATE_CCL
 {
 	FSM_STATE_CCL_INITED = 0x02,
-	FSM_STATE_CCL_ACTIVED,  			//IHU被唤醒，开始工作。开的原因可能是触发电源，也可能是定时触发
+	//FSM_STATE_CCL_ACTIVED,  			//IHU被唤醒，开始工作。开的原因可能是触发电源，也可能是定时触发
 	FSM_STATE_CCL_CLOUD_INQUERY,
 	FSM_STATE_CCL_TO_OPEN_DOOR,
 	FSM_STATE_CCL_DOOR_OPEN,
@@ -75,16 +75,18 @@ extern OPSTAT fsm_ccl_sps_event_report_cfm(UINT8 dest_id, UINT8 src_id, void * p
 extern OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_ccl_dido_door_open_event(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_ccl_lock_and_door_close_event(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
-
+extern OPSTAT fsm_ccl_dido_event_status_update(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+	
 extern OPSTAT fsm_ccl_event_lock_trigger_to_work(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_ccl_event_fault_trigger_to_stop(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
-
+extern OPSTAT fsm_ccl_sps_error_report_cfm(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 
 //Local API
 OPSTAT func_ccl_hw_init(void);
 void func_ccl_time_out_period_event_report(void);
 void func_ccl_time_out_event_report_period_scan(void);
-void func_ccl_time_out_lock_work_active(void);
+OPSTAT func_ccl_time_out_lock_work_active(void);
+OPSTAT func_ccl_time_out_lock_work_wait_door_for_open(void);
 void func_ccl_close_all_sensor(void);
 void func_ccl_open_all_sensor(void);
 

@@ -225,7 +225,7 @@ OPSTAT fsm_didocap_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 		}
 	}
 	
-	//工作模式下所有外部传感器的扫描
+	//工作模式下门和锁的扫描，只扫描门和锁！！！
 	else if ((rcv.timeId == TIMER_ID_1S_CCL_DIDO_WORKING_PERIOD_SCAN) &&(rcv.timeRes == TIMER_RESOLUTION_1S)){
 		if (zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_ACTIVE) func_didocap_time_out_work_mode_period_scan();
 	}
@@ -286,7 +286,7 @@ void func_didocap_time_out_external_trigger_period_scan(void)
 			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
 			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[TASK_ID_CCL]);
 			return ;
-		}		
+		}
 	}
 
 	//震动被触发，只有休眠模式下才被允许触发
@@ -379,9 +379,76 @@ void func_didocap_time_out_external_trigger_period_scan(void)
 	return;
 }
 
-//工作模式下的定时器处理
+//工作模式下的定时器处理：只扫描锁和门
 void func_didocap_time_out_work_mode_period_scan(void)
 {
+	int ret = 0;
+	//首先扫描是否有门开的信号
+	if (FsmGetState(TASK_ID_CCL) == FSM_STATE_CCL_TO_OPEN_DOOR){
+		if (func_didocap_ccl_any_door_open() == TRUE)
+		{
+			msg_struct_dido_ccl_door_open_event_t snd1;
+			memset(&snd1, 0, sizeof(msg_struct_dido_ccl_door_open_event_t));
+			snd1.cmdid = IHU_CCL_DH_CMDID_EVENT_IND_DOOR_C_TO_O;
+			snd1.length = sizeof(msg_struct_dido_ccl_door_open_event_t);
+			ret = ihu_message_send(MSG_ID_DIDO_CCL_DOOR_OPEN_EVENT, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd1, snd1.length);
+			if (ret == IHU_FAILURE){
+				zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+				IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[TASK_ID_CCL]);
+				return ;
+			}
+		}		
+	}
+
+	//再扫描是否所有锁和门都关闭：这就跟定时器允许FAULT下运行对上了
+	if ((FsmGetState(TASK_ID_CCL) == FSM_STATE_CCL_DOOR_OPEN) || (FsmGetState(TASK_ID_CCL) == FSM_STATE_CCL_FATAL_FAULT)){
+		if (func_didocap_ccl_any_door_open() == TRUE)
+		{
+			msg_struct_dido_ccl_lock_c_door_c_event_t snd2;
+			memset(&snd2, 0, sizeof(msg_struct_dido_ccl_lock_c_door_c_event_t));
+			snd2.cmdid = IHU_CCL_DH_CMDID_EVENT_IND_DOOR_LOCK_ALL_C;
+			snd2.length = sizeof(msg_struct_dido_ccl_lock_c_door_c_event_t);
+			ret = ihu_message_send(MSG_ID_DIDO_CCL_LOCK_C_DOOR_C_EVENT, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd2, snd2.length);
+			if (ret == IHU_FAILURE){
+				zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+				IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[TASK_ID_CCL]);
+				return ;
+			}
+		}
+	}
+
+	//扫描是否有重复触发信号
+	if (func_didocap_ccl_enable_lock_trigger() == TRUE)
+	{
+		msg_struct_dido_ccl_status_update_t snd3;
+		memset(&snd3, 0, sizeof(msg_struct_dido_ccl_status_update_t));
+		snd3.length = sizeof(msg_struct_dido_ccl_status_update_t);
+		snd3.cmdid = IHU_CCL_DH_CMDID_EVENT_IND_LOCK_TRIGGER;
+		ret = ihu_message_send(MSG_ID_DIDO_CCL_EVENT_STATUS_UPDATE, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd3, snd3.length);
+		if (ret == IHU_FAILURE){
+			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[TASK_ID_CCL]);
+			return ;
+		}		
+	}
+
+	//状态变化，则发送UPDATE消息给CCL
+	//这里的状态，需要再完善，CCL并不是特别关心，但有知晓权利
+	if (func_didocap_ccl_door_and_lock_status_change() == TRUE)
+	{
+		msg_struct_dido_ccl_status_update_t snd4;
+		memset(&snd4, 0, sizeof(msg_struct_dido_ccl_status_update_t));
+		snd4.length = sizeof(msg_struct_dido_ccl_status_update_t);
+		snd4.cmdid = IHU_CCL_DH_CMDID_EVENT_IND_LOCK_O_TO_C;
+		ret = ihu_message_send(MSG_ID_DIDO_CCL_EVENT_STATUS_UPDATE, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd4, snd4.length);
+		if (ret == IHU_FAILURE){
+			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[TASK_ID_CCL]);
+			return ;
+		}
+	}
+	
+	//其它的情形，不考虑
 	
 	//返回
 	return;
@@ -441,7 +508,7 @@ OPSTAT fsm_didocap_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * par
 //控制状态
 OPSTAT fsm_didocap_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	//int ret = 0;
+	int ret = 0;
 	int i = 0;
 	msg_struct_ccl_com_ctrl_cmd_t rcv;
 	
@@ -455,9 +522,38 @@ OPSTAT fsm_didocap_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 	memcpy(&rcv, param_ptr, param_len);
 
 	//操作状态
-	if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_ACTIVE) zIhuCclDidocapCtrlTable.cclDidoWorkingMode = IHU_CCL_DIDO_WORKING_MODE_ACTIVE;
-	else if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_SLEEP) zIhuCclDidocapCtrlTable.cclDidoWorkingMode = IHU_CCL_DIDO_WORKING_MODE_SLEEP;
-	else if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_FAULT) zIhuCclDidocapCtrlTable.cclDidoWorkingMode = IHU_CCL_DIDO_WORKING_MODE_FAULT;
+	if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_ACTIVE){		
+		zIhuCclDidocapCtrlTable.cclDidoWorkingMode = IHU_CCL_DIDO_WORKING_MODE_ACTIVE;
+		//启动工作扫描定时器
+		ret = ihu_timer_start(TASK_ID_DIDOCAP, TIMER_ID_1S_CCL_DIDO_WORKING_PERIOD_SCAN, zIhuSysEngPar.timer.cclDidoWorkingPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+		if (ret == IHU_FAILURE){
+			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+			IhuErrorPrint("DIDOCAP: Error start timer!\n");
+			return IHU_FAILURE;
+		}
+	}
+	else if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_SLEEP){
+		zIhuCclDidocapCtrlTable.cclDidoWorkingMode = IHU_CCL_DIDO_WORKING_MODE_SLEEP;
+		//停止工作定时器
+		ret = ihu_timer_stop(TASK_ID_DIDOCAP, TIMER_ID_1S_CCL_DIDO_WORKING_PERIOD_SCAN, TIMER_RESOLUTION_1S);
+		if (ret == IHU_FAILURE){
+			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+			IhuErrorPrint("DIDOCAP: Error start timer!\n");
+			return IHU_FAILURE;
+		}
+	}
+	
+	//在此模式下，依然需要随时扫描，等待关闭信息上报给CCL
+	else if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_FAULT){
+		zIhuCclDidocapCtrlTable.cclDidoWorkingMode = IHU_CCL_DIDO_WORKING_MODE_FAULT;
+		//启动工作扫描定时器
+		ret = ihu_timer_start(TASK_ID_DIDOCAP, TIMER_ID_1S_CCL_DIDO_WORKING_PERIOD_SCAN, zIhuSysEngPar.timer.cclDidoWorkingPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+		if (ret == IHU_FAILURE){
+			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+			IhuErrorPrint("DIDOCAP: Error start timer!\n");
+			return IHU_FAILURE;
+		}	
+	}
 	
 	//有具体命令的操作
 	else if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_CTRL){
@@ -471,13 +567,13 @@ OPSTAT fsm_didocap_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 			//给每一个锁具发送OPEN信号
 			for (i=0; i<IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
 				func_didocap_ccl_open_lock(i);
-			}			
+			}
 		}
 		else if (rcv.cmdid == IHU_CCL_DH_CMDID_CMD_DOOR_CLOSE){
 			//给每一个锁具发送CLOSE信号
 			for (i=0; i<IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
 				func_didocap_ccl_close_lock(i);
-			}			
+			}
 		}
 		else{
 		IhuErrorPrint("DIDOCAP: Receive message error on cmdid!\n");
@@ -505,6 +601,30 @@ void func_didocap_ccl_close_lock(UINT8 lockid)
 
 void func_didocap_ccl_enable_lock(UINT8 lockid)
 {
+}
+
+bool func_didocap_ccl_any_door_open(void)
+{
+
+	return TRUE;
+}
+
+bool func_didocap_ccl_all_door_and_lock_close(void)
+{
+	
+	return TRUE;
+}
+
+bool func_didocap_ccl_enable_lock_trigger(void)
+{
+	
+	return TRUE;
+}
+
+bool func_didocap_ccl_door_and_lock_status_change(void)
+{
+	
+	return TRUE;
 }
 
 #endif
