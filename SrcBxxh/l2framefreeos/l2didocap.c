@@ -50,7 +50,7 @@ FsmStateItem_t FsmDidocap[] =
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-UINT8 zIhuCclDidocapWorkingMode = 0;
+strIhuCclDidoPar_t zIhuCclDidocapCtrlTable;
 #else
 #endif
 
@@ -100,7 +100,8 @@ OPSTAT fsm_didocap_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 	zIhuRunErrCnt[TASK_ID_DIDOCAP] = 0;
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-	zIhuCclDidocapWorkingMode = IHU_CCL_DIDO_WORKING_MODE_SLEEP;  //初始化就进入SLEEP，然后就看是否有触发
+	memset(&zIhuCclDidocapCtrlTable, 0, sizeof(strIhuCclDidoPar_t));
+	zIhuCclDidocapCtrlTable.cclDidoWorkingMode = IHU_CCL_DIDO_WORKING_MODE_SLEEP;  //初始化就进入SLEEP，然后就看是否有触发
 #else
 #endif
 	
@@ -216,7 +217,14 @@ OPSTAT fsm_didocap_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 	
 	//永恒的外部触发扫描：只有在IHU_CCL_DIDO_WORKING_MODE_SLEEP模式下才会进行外部触发源的定时扫描
 	else if ((rcv.timeId == TIMER_ID_1S_CCL_DIDO_TRIGGER_PERIOD_SCAN) &&(rcv.timeRes == TIMER_RESOLUTION_1S)){
-		if (zIhuCclDidocapWorkingMode == IHU_CCL_DIDO_WORKING_MODE_SLEEP) func_didocap_time_out_external_trigger_period_scan();
+		if ((zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_SLEEP) || (zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_FAULT)){
+			func_didocap_time_out_external_trigger_period_scan();
+		}
+	}
+	
+	//工作模式下所有外部传感器的扫描
+	else if ((rcv.timeId == TIMER_ID_1S_CCL_DIDO_WORKING_PERIOD_SCAN) &&(rcv.timeRes == TIMER_RESOLUTION_1S)){
+		if (zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_ACTIVE) func_didocap_time_out_work_mode_period_scan();
 	}
 	
 	else{
@@ -280,6 +288,14 @@ void func_didocap_time_out_external_trigger_period_scan(void)
 		IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[TASK_ID_CCL]);
 		return ;
 	}	
+	
+	//返回
+	return;
+}
+
+//工作模式下的定时器处理
+void func_didocap_time_out_work_mode_period_scan(void)
+{
 	
 	//返回
 	return;

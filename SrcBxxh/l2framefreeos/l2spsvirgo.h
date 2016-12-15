@@ -47,6 +47,13 @@ enum FSM_STATE_SPSVIRGO
 //Global variables
 extern FsmStateItem_t FsmSpsvirgo[];
 
+//本地需要用到的核心参数
+typedef struct strIhuCclSpsPar
+{	
+	UINT8 cclSpsWorkingMode;
+	com_sensor_status_t sensor;
+}strIhuCclSpsPar_t;
+
 //API
 extern OPSTAT fsm_spsvirgo_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_spsvirgo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);

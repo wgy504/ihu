@@ -54,7 +54,7 @@ FsmStateItem_t FsmI2caries[] =
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 strIhuBfscI2cMotoPar_t zIhuI2cBfscMoto;
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-UINT8 zIhuCclI2cariesWorkingMode = 0;
+strIhuCclI2cPar_t zIhuCclI2cariesCtrlTable;
 #else
 #endif
 
@@ -102,11 +102,11 @@ OPSTAT fsm_i2caries_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 
 	//Global Variables
 	zIhuRunErrCnt[TASK_ID_I2CARIES] = 0;
-
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 	memset(&zIhuI2cBfscMoto, 0, sizeof(strIhuBfscI2cMotoPar_t));
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-	zIhuCclI2cariesWorkingMode = IHU_CCL_I2C_WORKING_MODE_SLEEP;  //初始化就进入SLEEP，然后就看是否有触发
+	memset(&zIhuCclI2cariesCtrlTable, 0, sizeof(strIhuCclI2cPar_t));
+	zIhuCclI2cariesCtrlTable.cclI2cWorkingMode = IHU_CCL_I2C_WORKING_MODE_SLEEP;  //初始化就进入SLEEP，然后就看是否有触发
 #else
 #endif
 	

@@ -49,7 +49,7 @@ FsmStateItem_t FsmDcmiaris[] =
 //Global variables defination
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-UINT8 zIhuCclDcmiarisWorkingMode = 0;
+strIhuCclDcmiPar_t zIhuCclDcmiarisCtrlTable;
 #else
 #endif
 
@@ -99,7 +99,8 @@ OPSTAT fsm_dcmiaris_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 	zIhuRunErrCnt[TASK_ID_DCMIARIS] = 0;
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-	zIhuCclDcmiarisWorkingMode = IHU_CCL_DCMI_WORKING_MODE_SLEEP;  //初始化就进入SLEEP，然后就看是否有触发
+	memset(&zIhuCclDcmiarisCtrlTable, 0, sizeof(strIhuCclDcmiPar_t));
+	zIhuCclDcmiarisCtrlTable.cclDcmiWorkingMode = IHU_CCL_DCMI_WORKING_MODE_SLEEP;  //初始化就进入SLEEP，然后就看是否有触发
 #else
 #endif	
 

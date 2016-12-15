@@ -70,6 +70,14 @@ typedef struct strIhuBfscAdcWeightPar
 #define IHU_BFSC_ADC_WEIGHT_WORKING_MODE_NORMAL 2
 #define IHU_BFSC_ADC_WEIGHT_WORKING_MODE_STOP 3
 
+//本地需要用到的核心参数
+typedef struct strIhuCclAdcPar
+{	
+	UINT8 cclAdcWorkingMode;
+	com_sensor_status_t sensor;
+}strIhuCclAdcPar_t;
+
+
 //API
 extern OPSTAT fsm_adclibra_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_adclibra_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);

@@ -46,6 +46,13 @@ enum FSM_STATE_DIDOCAP
 //Global variables
 extern FsmStateItem_t FsmDidocap[];
 
+//本地需要用到的核心参数
+typedef struct strIhuCclDidoPar
+{	
+	UINT8 cclDidoWorkingMode;
+	com_sensor_status_t sensor;
+}strIhuCclDidoPar_t;
+
 //API
 extern OPSTAT fsm_didocap_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_didocap_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
@@ -60,6 +67,7 @@ extern OPSTAT fsm_didocap_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param
 OPSTAT func_didocap_hw_init(void);
 void func_didocap_time_out_period_scan(void);
 void func_didocap_time_out_external_trigger_period_scan(void);
+void func_didocap_time_out_work_mode_period_scan(void);
 
 #endif /* L2FRAME_L2DIDOCAP_H_ */
 

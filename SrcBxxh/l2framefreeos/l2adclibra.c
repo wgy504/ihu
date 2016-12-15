@@ -50,7 +50,7 @@ FsmStateItem_t FsmAdclibra[] =
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 strIhuBfscAdcWeightPar_t zIhuAdcBfscWs;
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-UINT8 zIhuCclAdclibraWorkingMode = 0;
+strIhuCclAdcPar_t zIhuCclAdclibraCtrlTable;
 #else
 #endif
 
@@ -101,7 +101,8 @@ OPSTAT fsm_adclibra_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 	memset(&zIhuAdcBfscWs, 0, sizeof(strIhuBfscAdcWeightPar_t));
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-	zIhuCclAdclibraWorkingMode = IHU_CCL_ADC_WORKING_MODE_SLEEP;
+	memset(&zIhuCclAdclibraCtrlTable, 0, sizeof(strIhuCclAdcPar_t));
+	zIhuCclAdclibraCtrlTable.cclAdcWorkingMode = IHU_CCL_ADC_WORKING_MODE_SLEEP;  //初始化就进入SLEEP，然后就看是否有触发
 #else
 #endif
 

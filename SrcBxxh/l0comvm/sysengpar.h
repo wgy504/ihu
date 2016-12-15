@@ -52,6 +52,7 @@ typedef struct SysEngParElementSensor
 	INT32 cclSpsWorkingPeriodScanTimer;
 	INT32 cclI2cWorkingPeriodScanTimer;
 	INT32 cclDcmiWorkingPeriodScanTimer;
+	INT32 cclAdcWorkingPeriodScanTimer;	
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
 	INT32 bfscPeriodScanTimer;
 	INT32 bfscAdclibraScanTimer;
