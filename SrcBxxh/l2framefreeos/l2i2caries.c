@@ -45,15 +45,18 @@ FsmStateItem_t FsmI2caries[] =
   {MSG_ID_CCL_I2C_SENSOR_STATUS_REQ,			FSM_STATE_I2CARIES_ACTIVED,         					fsm_i2caries_ccl_sensor_status_req},
   {MSG_ID_CCL_I2C_CTRL_CMD,								FSM_STATE_I2CARIES_ACTIVED,         					fsm_i2caries_ccl_ctrl_cmd},
 #endif		
-
-
 	
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             									NULL},  //Ending
 };
 
 //Global variables defination
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 strIhuBfscI2cMotoPar_t zIhuI2cBfscMoto;
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+UINT8 zIhuCclI2cariesWorkingMode = 0;
+#else
+#endif
 
 //Main Entry
 //Input parameter would be useless, but just for similar structure purpose
@@ -99,8 +102,14 @@ OPSTAT fsm_i2caries_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 
 	//Global Variables
 	zIhuRunErrCnt[TASK_ID_I2CARIES] = 0;
-	memset(&zIhuI2cBfscMoto, 0, sizeof(strIhuBfscI2cMotoPar_t));
 
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+	memset(&zIhuI2cBfscMoto, 0, sizeof(strIhuBfscI2cMotoPar_t));
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+	zIhuCclI2cariesWorkingMode = IHU_CCL_I2C_WORKING_MODE_SLEEP;  //初始化就进入SLEEP，然后就看是否有触发
+#else
+#endif
+	
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_I2CARIES, FSM_STATE_I2CARIES_ACTIVED) == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_I2CARIES]++;

@@ -47,6 +47,11 @@ FsmStateItem_t FsmDcmiaris[] =
 };
 
 //Global variables defination
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+UINT8 zIhuCclDcmiarisWorkingMode = 0;
+#else
+#endif
 
 //Main Entry
 //Input parameter would be useless, but just for similar structure purpose
@@ -92,6 +97,12 @@ OPSTAT fsm_dcmiaris_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 
 	//Global Variables
 	zIhuRunErrCnt[TASK_ID_DCMIARIS] = 0;
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+	zIhuCclDcmiarisWorkingMode = IHU_CCL_DCMI_WORKING_MODE_SLEEP;  //初始化就进入SLEEP，然后就看是否有触发
+#else
+#endif	
+
 
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_DCMIARIS, FSM_STATE_DCMIARIS_ACTIVED) == IHU_FAILURE){

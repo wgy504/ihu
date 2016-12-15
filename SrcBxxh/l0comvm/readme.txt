@@ -6,6 +6,11 @@
 
 
 
+//= ZJL, 2016 Dec.15, CURRENT_SW_DELIVERY R03.62 =>CCL项目
+= 完善正常的工作流程
+
+
+
 //= ZJL, 2016 Dec.15, CURRENT_SW_DELIVERY R03.61 =>CCL项目
 = 完善状态机
 = 完善EVENT_REPORT状态下的报告模式

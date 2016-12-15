@@ -44,6 +44,10 @@ FsmStateItem_t FsmSpileo[] =
 };
 
 //Global variables defination
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+#else
+#endif
 
 //Main Entry
 //Input parameter would be useless, but just for similar structure purpose
@@ -89,7 +93,11 @@ OPSTAT fsm_spileo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 par
 
 	//Global Variables
 	zIhuRunErrCnt[TASK_ID_SPILEO] = 0;
-
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+#else
+#endif
+	
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_SPILEO, FSM_STATE_SPILEO_ACTIVED) == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_SPILEO]++;

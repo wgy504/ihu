@@ -47,6 +47,12 @@ FsmStateItem_t FsmDidocap[] =
 };
 
 //Global variables defination
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+UINT8 zIhuCclDidocapWorkingMode = 0;
+#else
+#endif
 
 //Main Entry
 //Input parameter would be useless, but just for similar structure purpose
@@ -92,7 +98,12 @@ OPSTAT fsm_didocap_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 
 	//Global Variables
 	zIhuRunErrCnt[TASK_ID_DIDOCAP] = 0;
-
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+	zIhuCclDidocapWorkingMode = IHU_CCL_DIDO_WORKING_MODE_SLEEP;  //初始化就进入SLEEP，然后就看是否有触发
+#else
+#endif
+	
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_DIDOCAP, FSM_STATE_DIDOCAP_ACTIVED) == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
@@ -100,14 +111,21 @@ OPSTAT fsm_didocap_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 		return IHU_FAILURE;
 	}
 	
-	//启动本地定时器，如果有必要
-	//测试性启动周期性定时器
+	//启动喂狗定时器
 	ret = ihu_timer_start(TASK_ID_DIDOCAP, TIMER_ID_1S_DIDOCAP_PERIOD_SCAN, zIhuSysEngPar.timer.didocapPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
 		IhuErrorPrint("DIDOCAP: Error start timer!\n");
 		return IHU_FAILURE;
 	}	
+	
+	//启动永恒的外部触发扫描
+	ret = ihu_timer_start(TASK_ID_DIDOCAP, TIMER_ID_1S_CCL_DIDO_TRIGGER_PERIOD_SCAN, zIhuSysEngPar.timer.cclDidoTriggerPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+	if (ret == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+		IhuErrorPrint("DIDOCAP: Error start timer!\n");
+		return IHU_FAILURE;
+	}
 	
 	//打印报告进入常规状态
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
@@ -194,12 +212,43 @@ OPSTAT fsm_didocap_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 			}//FsmSetState
 		}
 		func_didocap_time_out_period_scan();
+	}	
+	
+	//永恒的外部触发扫描：只有在IHU_CCL_DIDO_WORKING_MODE_SLEEP模式下才会进行外部触发源的定时扫描
+	else if ((rcv.timeId == TIMER_ID_1S_CCL_DIDO_TRIGGER_PERIOD_SCAN) &&(rcv.timeRes == TIMER_RESOLUTION_1S)){
+		if (zIhuCclDidocapWorkingMode == IHU_CCL_DIDO_WORKING_MODE_SLEEP) func_didocap_time_out_external_trigger_period_scan();
 	}
-
+	
+	else{
+		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+		IhuErrorPrint("DIDOCAP: Received wrong Timer ID!\n");
+		return IHU_FAILURE;		
+	}	
+	
 	return IHU_SUCCESS;
 }
 
+//喂狗心跳
 void func_didocap_time_out_period_scan(void)
+{
+	int ret = 0;
+
+	//发送HeartBeat消息给VMFO模块，实现喂狗功能
+	msg_struct_com_heart_beat_t snd;
+	memset(&snd, 0, sizeof(msg_struct_com_heart_beat_t));
+	snd.length = sizeof(msg_struct_com_heart_beat_t);
+	ret = ihu_message_send(MSG_ID_COM_HEART_BEAT, TASK_ID_VMFO, TASK_ID_DIDOCAP, &snd, snd.length);
+	if (ret == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+		IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[TASK_ID_VMFO]);
+		return ;
+	}
+	
+	return;
+}
+
+//定时扫描震动以及触发按键消息
+void func_didocap_time_out_external_trigger_period_scan(void)
 {
 	int ret = 0;
 	//定时将扫描结果发给上层
@@ -213,19 +262,29 @@ void func_didocap_time_out_period_scan(void)
 	//MSG_ID_DIDO_LOCK_C_DOOR_O_EVENT,
 	//MSG_ID_DIDO_SENSOR_WARNING_EVENT,
 
-	//发送HeartBeat消息给VMFO模块，实现喂狗功能
-	msg_struct_com_heart_beat_t snd;
-	memset(&snd, 0, sizeof(msg_struct_com_heart_beat_t));
-	snd.length = sizeof(msg_struct_com_heart_beat_t);
-	ret = ihu_message_send(MSG_ID_COM_HEART_BEAT, TASK_ID_VMFO, TASK_ID_DIDOCAP, &snd, snd.length);
+	//只会产生触发CCL醒来的触发命令
+	//扫描函数
+
+	//这是纯粹测试概率，让系统具备1/100的概率自动被触发，未来需要一旦跟硬件连接后可以被去掉
+	if (rand()%100 !=1) return;	
+	
+	//将扫描结果发送给CCL
+	msg_struct_dido_event_lock_trigger_t snd;
+	memset(&snd, 0, sizeof(msg_struct_dido_event_lock_trigger_t));
+	snd.lockid = rand() % IHU_CCL_SENSOR_NUMBER_MAX;
+	snd.cmdid = ((rand()%2 == 1)? IHU_CCL_DH_CMDID_EVENT_IND_LOCK_TRIGGER:IHU_CCL_DH_CMDID_EVENT_IND_SHAKE_TRIGGER);
+	snd.length = sizeof(msg_struct_dido_event_lock_trigger_t);
+	ret = ihu_message_send(MSG_ID_DIDO_EVENT_LOCK_TRIGGER, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
-		IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_ADCLIBRA], zIhuTaskNameList[TASK_ID_DIDOCAP]);
+		IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[TASK_ID_CCL]);
 		return ;
-	}
+	}	
 	
+	//返回
 	return;
 }
+
 
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 OPSTAT fsm_didocap_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)

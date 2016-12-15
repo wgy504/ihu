@@ -50,6 +50,8 @@ FsmStateItem_t FsmSpsvirgo[] =
 };
 
 //Global variables defination
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 //extern vu8 SPS_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN];	//串口1数据接收缓冲区 
 //extern vu8 SPS_GPRS_R_State;						//串口1接收状态
 //extern vu16 SPS_GPRS_R_Count;						//当前接收数据的字节数 	 
@@ -62,8 +64,11 @@ FsmStateItem_t FsmSpsvirgo[] =
 //extern vu8 SPS_SPARE1_R_Buff[SPS_SPARE1_REC_MAXLEN];	//串口1数据接收缓冲区 
 //extern vu8 SPS_SPARE1_R_State;						//串口1接收状态
 //extern vu16 SPS_SPARE1_R_Count;						//当前接收数据的字节数
-
 UINT8 zIhuGprsOperationFlag = 0;
+UINT8 zIhuCclSpsvirgoWorkingMode = 0;
+#else
+#endif
+
 
 //Main Entry
 //Input parameter would be useless, but just for similar structure purpose
@@ -109,8 +114,13 @@ OPSTAT fsm_spsvirgo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 
 	//Global Variables
 	zIhuRunErrCnt[TASK_ID_SPSVIRGO] = 0;
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 	zIhuGprsOperationFlag = 0;
-
+	zIhuCclSpsvirgoWorkingMode = IHU_CCL_SPS_WORKING_MODE_SLEEP;  //初始化就进入SLEEP，然后就看是否有触发
+#else
+#endif
+	
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_SPSVIRGO, FSM_STATE_SPSVIRGO_ACTIVED) == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;

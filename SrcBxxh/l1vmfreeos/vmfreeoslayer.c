@@ -621,6 +621,11 @@ void ihu_vm_system_init(void)
 	zIhuSysEngPar.timer.cclPeriodScanTimer = IHU_CCL_TIMER_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.cclEventReportPeriodScanTimer = IHU_CCL_TIMER_DURATION_EVENT_REPORT_PEROID_SCAN;
 	zIhuSysEngPar.timer.cclLockWorkActiveScanTimer = IHU_CCL_TIMER_DURATION_LOCK_ACTIVE;
+	zIhuSysEngPar.timer.cclDidoTriggerPeriodScanTimer = IHU_CCL_TIMER_DURATION_DIDO_TRIGGER_PERIOD_SCAN;
+	zIhuSysEngPar.timer.cclDidoWorkingPeriodScanTimer = IHU_CCL_TIMER_DURATION_DIDO_WORKING_PERIOD_SCAN;
+	zIhuSysEngPar.timer.cclSpsWorkingPeriodScanTimer = IHU_CCL_TIMER_DURATION_SPS_WORKING_PERIOD_SCAN;
+	zIhuSysEngPar.timer.cclI2cWorkingPeriodScanTimer = IHU_CCL_TIMER_DURATION_I2C_WORKING_PERIOD_SCAN;
+	zIhuSysEngPar.timer.cclDcmiWorkingPeriodScanTimer = IHU_CCL_TIMER_DURATION_DCMI_WORKING_PERIOD_SCAN;
 	
 	//Series Port config
 	zIhuSysEngPar.serialport.SeriesPortForGPS = IHU_SERIESPORT_NUM_FOR_GPS_DEFAULT;

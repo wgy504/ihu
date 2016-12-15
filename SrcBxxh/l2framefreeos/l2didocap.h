@@ -59,6 +59,7 @@ extern OPSTAT fsm_didocap_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param
 //Local API
 OPSTAT func_didocap_hw_init(void);
 void func_didocap_time_out_period_scan(void);
+void func_didocap_time_out_external_trigger_period_scan(void);
 
 #endif /* L2FRAME_L2DIDOCAP_H_ */
 
