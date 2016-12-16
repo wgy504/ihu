@@ -5,7 +5,7 @@
 = 研究STM32的IAP功能
 
 //= ZJL, 2016 Dec.16, CURRENT_SW_DELIVERY R03.64 =>CCL项目
-
+= 完善TIME OUT的处理过程
 
 
 
