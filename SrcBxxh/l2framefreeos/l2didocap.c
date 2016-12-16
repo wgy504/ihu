@@ -693,7 +693,7 @@ bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_recover(void)
 //SLEEP&FAULT模式下扫描：扫描出哪个门，如果是IHU_CCL_SENSOR_LOCK_NUMBER_MAX则意味着没有
 bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_door_open(UINT8 doorid)
 {
-	if (rand()%100 == 1)
+	if (rand()%1000 == 1)
 		return TRUE;
 	else
 		return FALSE;
@@ -702,7 +702,7 @@ bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_door_open(UINT8 doori
 //SLEEP&FAULT模式下扫描：扫描出哪个锁，如果是IHU_CCL_SENSOR_LOCK_NUMBER_MAX则意味着没有
 bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open(UINT8 lockid)
 {
-	if (rand()%100 == 1)
+	if (rand()%1000 == 1)
 		return TRUE;
 	else
 		return FALSE;
@@ -711,7 +711,7 @@ bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open(UINT8 locki
 //SLEEP&FAULT模式下扫描：扫描水
 bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_water(void)
 {
-	if (rand()%100 == 1)
+	if (rand()%1000 == 1)
 		return TRUE;
 	else
 		return FALSE;
@@ -720,7 +720,7 @@ bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_water(void)
 //SLEEP&FAULT模式下扫描：扫描烟
 bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_smoke(void)
 {
-	if (rand()%100 == 1)
+	if (rand()%1000 == 1)
 		return TRUE;
 	else
 		return FALSE;
@@ -729,7 +729,7 @@ bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_smoke(void)
 //SLEEP&FAULT模式下扫描：扫描倾
 bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_fall(void)
 {
-	if (rand()%100 == 1)
+	if (rand()%1000 == 1)
 		return TRUE;
 	else
 		return FALSE;
@@ -738,7 +738,7 @@ bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_fall(void)
 //SLEEP&FAULT模式下扫描：扫描电池
 bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_battery(void)
 {
-	if (rand()%100 == 1)
+	if (rand()%1000 == 1)
 		return TRUE;
 	else
 		return FALSE;
