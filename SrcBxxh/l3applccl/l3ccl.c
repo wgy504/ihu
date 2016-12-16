@@ -242,7 +242,7 @@ OPSTAT fsm_ccl_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 	}
 
 	//周期汇报，超长周期定时器：一定要在SLEEP状态下才可以被激活，否则不应该不激活
-	else if ((rcv.timeId == TIMER_ID_1S_CCL_PERIOD_SCAN) &&(rcv.timeRes == TIMER_RESOLUTION_1S)){
+	else if ((rcv.timeId == TIMER_ID_1S_CCL_EVENT_REPORT_PEROID_SCAN) &&(rcv.timeRes == TIMER_RESOLUTION_1S)){
 		if (FsmGetState(TASK_ID_CCL) == FSM_STATE_CCL_SLEEP) func_ccl_time_out_event_report_period_scan();
 	}
 	
@@ -302,6 +302,7 @@ OPSTAT fsm_ccl_dido_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param
 	
 	//按照顺序，继续扫描第二组SPS传感器的数据
 	memset(&snd, 0, sizeof(msg_struct_ccl_com_sensor_status_req_t));
+	snd.cmdid = IHU_CCL_DH_CMDID_REQ_STATUS_SPS;
 	snd.length = sizeof(msg_struct_ccl_com_sensor_status_req_t);
 	ret = ihu_message_send(MSG_ID_CCL_COM_SENSOR_STATUS_REQ, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length);
 	if (ret == IHU_FAILURE){
@@ -342,6 +343,7 @@ OPSTAT fsm_ccl_sps_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param_
 	
 	//按照顺序，继续扫描第三组I2C传感器的数据
 	memset(&snd, 0, sizeof(msg_struct_ccl_com_sensor_status_req_t));
+	snd.cmdid = IHU_CCL_DH_CMDID_REQ_STATUS_I2C;	
 	snd.length = sizeof(msg_struct_ccl_com_sensor_status_req_t);
 	ret = ihu_message_send(MSG_ID_CCL_COM_SENSOR_STATUS_REQ, TASK_ID_I2CARIES, TASK_ID_CCL, &snd, snd.length);
 	if (ret == IHU_FAILURE){
@@ -383,6 +385,7 @@ OPSTAT fsm_ccl_i2c_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param_
 	
 	//按照顺序，继续扫描第四组DCMI传感器的数据
 	memset(&snd, 0, sizeof(msg_struct_ccl_com_sensor_status_req_t));
+	snd.cmdid = IHU_CCL_DH_CMDID_REQ_STATUS_DCMI;	
 	snd.length = sizeof(msg_struct_ccl_com_sensor_status_req_t);
 	ret = ihu_message_send(MSG_ID_CCL_COM_SENSOR_STATUS_REQ, TASK_ID_DCMIARIS, TASK_ID_CCL, &snd, snd.length);
 	if (ret == IHU_FAILURE){
@@ -454,13 +457,6 @@ OPSTAT fsm_ccl_sps_event_report_cfm(UINT8 dest_id, UINT8 src_id, void * param_pt
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
-	
-	//入参检查
-	if (rcv.cmdid != IHU_CCL_DH_CMDID_EVENT_REPORT){
-		IhuErrorPrint("CCL: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_CCL]++;
-		return IHU_FAILURE;		
-	}
 		
 	//关闭所有接口
 	func_ccl_close_all_sensor();
@@ -521,6 +517,7 @@ void func_ccl_time_out_event_report_period_scan(void)
 	//由于消息队列的长度问题，这里采用串行发送接收模式，避免了多个接口的消息同时到达
 	//发送第一组DIDO采样命令
 	memset(&snd, 0, sizeof(msg_struct_ccl_com_sensor_status_req_t));
+	snd.cmdid = IHU_CCL_DH_CMDID_REQ_STATUS_DIDO;
 	snd.length = sizeof(msg_struct_ccl_com_sensor_status_req_t);
 	ret = ihu_message_send(MSG_ID_CCL_COM_SENSOR_STATUS_REQ, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length);
 	if (ret == IHU_FAILURE){

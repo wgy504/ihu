@@ -283,7 +283,6 @@ typedef struct msg_struct_sps_ccl_sensor_status_rep
 //MSG_ID_SPS_CCL_EVENT_REPORT_CFM
 typedef struct msg_struct_sps_ccl_event_report_cfm
 {
-	UINT8 cmdid;
 	UINT8 length;
 }msg_struct_sps_ccl_event_report_cfm_t;
 
