@@ -60,6 +60,14 @@ extern FsmStateItem_t FsmCcl[];
 //RFID-SPS
 //LED+BEEP: GPIO，都混装在LED模块中
 
+//本地需要用到的核心参数
+typedef struct strIhuCclCtrlPar
+{
+	com_sensor_status_t sensor;
+	UINT16  faultReportCnt;  //防止向后台送报告过于频繁，这里做一个分频控制
+}strIhuCclCtrlPar_t;
+#define IHU_CCL_FALULT_REPORT_TIMES_MAX 200
+
 //API
 extern OPSTAT fsm_ccl_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);

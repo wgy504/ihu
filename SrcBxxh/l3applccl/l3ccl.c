@@ -84,7 +84,7 @@ FsmStateItem_t FsmCcl[] =
 };
 
 //Global variables defination
-com_sensor_status_t zIhuCclSensorStatus;
+strIhuCclCtrlPar_t zIhuCclSensorStatus;
 
 //Main Entry
 //Input parameter would be useless, but just for similar structure purpose
@@ -130,7 +130,7 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 
 	//Global Variables
 	zIhuRunErrCnt[TASK_ID_CCL] = 0;
-	memset(&zIhuCclSensorStatus, 0, sizeof(com_sensor_status_t));
+	memset(&zIhuCclSensorStatus, 0, sizeof(strIhuCclCtrlPar_t));
 
 //	//设置状态机到目标状态
 //	if (FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_ACTIVED) == IHU_FAILURE){
@@ -291,14 +291,14 @@ OPSTAT fsm_ccl_dido_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param
 		
 	//获取报告数据
 	for (i=0; i<IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
-		zIhuCclSensorStatus.doorState[i] = rcv.sensor.doorState[i];
-		zIhuCclSensorStatus.lockiTriggerState[i] = rcv.sensor.lockiTriggerState[i];
-		zIhuCclSensorStatus.lockoEnableState[i] = rcv.sensor.lockoEnableState[i];
+		zIhuCclSensorStatus.sensor.doorState[i] = rcv.sensor.doorState[i];
+		zIhuCclSensorStatus.sensor.lockiTriggerState[i] = rcv.sensor.lockiTriggerState[i];
+		zIhuCclSensorStatus.sensor.lockoEnableState[i] = rcv.sensor.lockoEnableState[i];
 	}
-	zIhuCclSensorStatus.batteryValue = rcv.sensor.batteryValue;
-	zIhuCclSensorStatus.fallState = rcv.sensor.fallState;
-	zIhuCclSensorStatus.tempValue = rcv.sensor.tempValue;
-	zIhuCclSensorStatus.humidValue = rcv.sensor.humidValue;
+	zIhuCclSensorStatus.sensor.batteryValue = rcv.sensor.batteryValue;
+	zIhuCclSensorStatus.sensor.fallState = rcv.sensor.fallState;
+	zIhuCclSensorStatus.sensor.tempValue = rcv.sensor.tempValue;
+	zIhuCclSensorStatus.sensor.humidValue = rcv.sensor.humidValue;
 	
 	//按照顺序，继续扫描第二组SPS传感器的数据
 	memset(&snd, 0, sizeof(msg_struct_ccl_com_sensor_status_req_t));
@@ -338,7 +338,7 @@ OPSTAT fsm_ccl_sps_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param_
 	}
 		
 	//获取报告数据
-	zIhuCclSensorStatus.rssiValue = rcv.sensor.rssiValue;
+	zIhuCclSensorStatus.sensor.rssiValue = rcv.sensor.rssiValue;
 	
 	//按照顺序，继续扫描第三组I2C传感器的数据
 	memset(&snd, 0, sizeof(msg_struct_ccl_com_sensor_status_req_t));
@@ -378,8 +378,8 @@ OPSTAT fsm_ccl_i2c_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param_
 	}
 		
 	//获取报告数据
-	zIhuCclSensorStatus.rsv1Value = rcv.sensor.rsv1Value;
-	zIhuCclSensorStatus.rsv2Value = rcv.sensor.rsv2Value;
+	zIhuCclSensorStatus.sensor.rsv1Value = rcv.sensor.rsv1Value;
+	zIhuCclSensorStatus.sensor.rsv2Value = rcv.sensor.rsv2Value;
 	
 	//按照顺序，继续扫描第四组DCMI传感器的数据
 	memset(&snd, 0, sizeof(msg_struct_ccl_com_sensor_status_req_t));
@@ -421,13 +421,13 @@ OPSTAT fsm_ccl_dcmi_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param
 		
 	//获取报告数据
 	for (i=0; i<IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
-		zIhuCclSensorStatus.cameraState[i] = rcv.sensor.cameraState[i];
+		zIhuCclSensorStatus.sensor.cameraState[i] = rcv.sensor.cameraState[i];
 	}
 	
 	//发送SPS数据给串口，形成发送的报告
 	memset(&snd, 0, sizeof(msg_struct_ccl_sps_event_report_send_t));
 	snd.cmdid = IHU_CCL_DH_CMDID_EVENT_REPORT;
-	memcpy(&(snd.sensor), &zIhuCclSensorStatus, sizeof(com_sensor_status_t));
+	memcpy(&(snd.sensor), &zIhuCclSensorStatus.sensor, sizeof(com_sensor_status_t));
 	snd.length = sizeof(msg_struct_ccl_sps_event_report_send_t);
 	ret = ihu_message_send(MSG_ID_CCL_SPS_EVENT_REPORT_SEND, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length);
 	if (ret == IHU_FAILURE){
@@ -516,7 +516,7 @@ void func_ccl_time_out_event_report_period_scan(void)
 	//作为周期采样模式，这里是不必要的，只有在工作模式下才需要这个过程
 	
 	//准备接收数据的缓冲区
-	memset(&zIhuCclSensorStatus, 0, sizeof(com_sensor_status_t));
+	memset(&zIhuCclSensorStatus.sensor, 0, sizeof(com_sensor_status_t));
 	
 	//由于消息队列的长度问题，这里采用串行发送接收模式，避免了多个接口的消息同时到达
 	//发送第一组DIDO采样命令
@@ -1048,6 +1048,7 @@ OPSTAT fsm_ccl_event_fault_trigger_to_stop(UINT8 dest_id, UINT8 src_id, void * p
 	msg_struct_dido_ccl_event_fault_trigger_t rcv;
 	msg_struct_ccl_com_ctrl_cmd_t snd;
 	msg_struct_ccl_sps_fault_report_send_t snd1;
+	msg_struct_ccl_sps_close_report_send_t snd2;
 	
 	//入参检查
 	//Receive message and copy to local variable
@@ -1085,24 +1086,58 @@ OPSTAT fsm_ccl_event_fault_trigger_to_stop(UINT8 dest_id, UINT8 src_id, void * p
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_DCMIARIS]);
 		return IHU_FAILURE;
-	}	
-	
-	//发送差错状态报告给后台：真正的原因，待填入
-	memset(&snd1, 0, sizeof(msg_struct_ccl_sps_fault_report_send_t));
-	snd1.cause = IHU_CCL_FAULT_CAUSE_SENSOR_WARNING;
-	//待填入具体传感器告警内容
-	snd1.length = sizeof(msg_struct_ccl_sps_fault_report_send_t);
-	ret = ihu_message_send(MSG_ID_CCL_SPS_FAULT_REPORT_SEND, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd1, snd1.length);
-	if (ret == IHU_FAILURE){
-		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_SPSVIRGO]);
-		return IHU_FAILURE;
 	}
 	
-	//状态转移
-	if (FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_FATAL_FAULT) == IHU_FAILURE){
+	//分为状态恢复，或者新发生的差错
+	if (rcv.cmdid == IHU_CCL_DH_CMDID_EVENT_IND_FAULT_RECOVER){
+		//先确定正常的情形
+		if (FsmGetState(TASK_ID_CCL) != FSM_STATE_CCL_FATAL_FAULT){
+			zIhuRunErrCnt[TASK_ID_CCL]++;
+			IhuErrorPrint("CCL: Wrong state receive message!");
+			return IHU_FAILURE;			
+		}
+		//没有定时器
+		//直接发送恢复关门报告给后台，等待证实以后，执行所有关闭操作
+		memset(&snd2, 0, sizeof(msg_struct_ccl_sps_close_report_send_t));
+		snd2.cause = IHU_CCL_CLOSE_DOOR_BY_FAULT;
+		snd2.length = sizeof(msg_struct_ccl_sps_close_report_send_t);
+		ret = ihu_message_send(MSG_ID_CCL_SPS_CLOSE_REPORT_SEND, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd2, snd2.length);
+		if (ret == IHU_FAILURE){
+			IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_SPSVIRGO]);
+			return IHU_FAILURE;
+		}
+	}
+	
+	//继续差错故障状态
+	else if (rcv.cmdid == IHU_CCL_DH_CMDID_EVENT_IND_FAULT_RECOVER){
+		//首次控制，发送差错报告出去
+		if (zIhuCclSensorStatus.faultReportCnt == 0){
+			//发送差错状态报告给后台：真正的原因，待填入
+			memset(&snd1, 0, sizeof(msg_struct_ccl_sps_fault_report_send_t));
+			snd1.cause = IHU_CCL_FAULT_CAUSE_SENSOR_WARNING;
+			//待填入具体传感器告警内容
+			snd1.length = sizeof(msg_struct_ccl_sps_fault_report_send_t);
+			ret = ihu_message_send(MSG_ID_CCL_SPS_FAULT_REPORT_SEND, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd1, snd1.length);
+			if (ret == IHU_FAILURE){
+				zIhuRunErrCnt[TASK_ID_CCL]++;
+				IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_SPSVIRGO]);
+				return IHU_FAILURE;
+			}
+		}
+		zIhuCclSensorStatus.faultReportCnt = (zIhuCclSensorStatus.faultReportCnt+1)%IHU_CCL_FALULT_REPORT_TIMES_MAX;
+
+		//状态转移
+		if (FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_FATAL_FAULT) == IHU_FAILURE){
+			zIhuRunErrCnt[TASK_ID_CCL]++;
+			IhuErrorPrint("CCL: Error Set FSM State!");
+			return IHU_FAILURE;
+		}
+	}
+	
+	else{
 		zIhuRunErrCnt[TASK_ID_CCL]++;
-		IhuErrorPrint("CCL: Error Set FSM State!");
-		return IHU_FAILURE;
+		IhuErrorPrint("CCL: Wrong parameter received!");
+		return IHU_FAILURE;		
 	}
 
 	//返回

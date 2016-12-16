@@ -224,12 +224,9 @@ typedef struct msg_struct_dido_ccl_event_lock_trigger
 }msg_struct_dido_ccl_event_lock_trigger_t;
 
 //MSG_ID_DIDO_CCL_EVENT_FAULT_TRIGGER
-#define IHU_CCL_SENSOR_FAULT_REPORT_NUMBER_MAX 10
 typedef struct msg_struct_dido_ccl_event_fault_trigger
 {
 	UINT8 cmdid;
-	UINT8 lockid;  //指示是哪一个锁触发的
-	UINT8 faultBitmap[IHU_CCL_SENSOR_FAULT_REPORT_NUMBER_MAX];
 	com_sensor_status_t sensor;
 	UINT8 length;
 }msg_struct_dido_ccl_event_fault_trigger_t;

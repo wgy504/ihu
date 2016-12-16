@@ -53,6 +53,10 @@ typedef struct strIhuCclDidoPar
 {	
 	UINT8 cclDidoWorkingMode;
 	com_sensor_status_t sensor;
+	bool flagSensorLastTimeScanFault;
+	bool flagSensorThisTimeScanFault;
+	bool flagDoorLockLastTimeScanFault;  //单独为门锁建立的故障跟踪，以便防止关门锁信号与故障恢复报告之间的冲突
+	bool flagDoorLockThisTimeScanFault;
 }strIhuCclDidoPar_t;
 
 #define IHU_CCL_DIDO_SENSOR_INDEX_LOCK 0
@@ -85,14 +89,23 @@ OPSTAT func_didocap_hw_init(void);
 void func_didocap_time_out_period_scan(void);
 void func_didocap_time_out_external_trigger_period_scan(void);
 void func_didocap_time_out_work_mode_period_scan(void);
-void func_didocap_ccl_open_lock(UINT8 lockid);
-void func_didocap_ccl_close_lock(UINT8 lockid);
-void func_didocap_ccl_enable_lock(UINT8 lockid);
-bool func_didocap_ccl_any_door_open(void);
-bool func_didocap_ccl_all_door_and_lock_close(void);
-bool func_didocap_ccl_enable_lock_trigger(void);
-bool func_didocap_ccl_door_and_lock_status_change(void);
-
+void func_didocap_ccl_work_mode_dl_cmd_open_lock(UINT8 lockid);
+void func_didocap_ccl_work_mode_dl_cmd_close_lock(UINT8 lockid);
+void func_didocap_ccl_work_mode_dl_cmd_enable_lock(UINT8 lockid);
+bool func_didocap_ccl_work_mode_ul_scan_any_door_open(void);
+bool func_didocap_ccl_work_mode_ul_scan_all_door_and_lock_close(void);
+bool func_didocap_ccl_work_mode_ul_scan_enable_lock_trigger(void);
+bool func_didocap_ccl_work_mode_ul_scan_door_and_lock_status_change(void);
+bool func_didocap_ccl_sleep_mode_ul_scan_lock_trigger(void);
+bool func_didocap_ccl_sleep_mode_ul_scan_shake_trigger(void);
+bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_status(void);
+bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_door_open(UINT8 doorid);
+bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open(UINT8 lockid);
+bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_water(void);
+bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_smoke(void);
+bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_fall(void);
+bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_battery(void);
+bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_recover(void);
 
 #endif /* L2FRAME_L2DIDOCAP_H_ */
 

@@ -227,7 +227,9 @@ OPSTAT fsm_didocap_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 	
 	//工作模式下门和锁的扫描，只扫描门和锁！！！
 	else if ((rcv.timeId == TIMER_ID_1S_CCL_DIDO_WORKING_PERIOD_SCAN) &&(rcv.timeRes == TIMER_RESOLUTION_1S)){
-		if (zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_ACTIVE) func_didocap_time_out_work_mode_period_scan();
+		if ((zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_ACTIVE) || (zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_FAULT)) {
+			func_didocap_time_out_work_mode_period_scan();
+		}
 	}
 #endif
 	
@@ -265,14 +267,10 @@ void func_didocap_time_out_period_scan(void)
 //待改进这个扫描的事件，以便形成有价值的结果事件
 void func_didocap_time_out_external_trigger_period_scan(void)
 {
-	int ret = 0;
-	int temp = 0, i = 0;
-
-	//这是纯粹测试概率，让系统具备1/100的概率自动被触发，未来需要一旦跟硬件连接后可以被去掉
-	temp = rand()%100;
+	int ret = 0, i = 0;
 	
 	//锁被触发，只有休眠模式下才被允许触发
-	if ((zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_SLEEP) && (temp == 1)){
+	if ((zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_SLEEP) && (func_didocap_ccl_sleep_mode_ul_scan_lock_trigger() == TRUE)){
 		//将周期扫描锁触发的结果发送给CCL
 		msg_struct_dido_ccl_event_lock_trigger_t snd0;
 		memset(&snd0, 0, sizeof(msg_struct_dido_ccl_event_lock_trigger_t));
@@ -291,7 +289,7 @@ void func_didocap_time_out_external_trigger_period_scan(void)
 	}
 
 	//震动被触发，只有休眠模式下才被允许触发
-	else if ((zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_SLEEP) && (temp == 2)){
+	else if ((zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_SLEEP) && (func_didocap_ccl_sleep_mode_ul_scan_shake_trigger() == TRUE)){
 		//将周期扫描锁触发的结果发送给CCL
 		msg_struct_dido_ccl_event_lock_trigger_t snd1;
 		memset(&snd1, 0, sizeof(msg_struct_dido_ccl_event_lock_trigger_t));
@@ -309,50 +307,26 @@ void func_didocap_time_out_external_trigger_period_scan(void)
 	}
 
 	//出现差错，将导致状态机进入差错状态。如果在差错状态下，允许继续发送新的差错报告
-	else if (temp == 3){
+	//这种报告，可以在SLEEP下，也可以在FAULT状态下发送
+	//至于是不是向后方送太频繁，可以由CCL状态机控制，这里不控
+	else if (func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_status() == TRUE){
 		//将周期扫描锁触发的结果发送给CCL
 		msg_struct_dido_ccl_event_fault_trigger_t snd2;
 		memset(&snd2, 0, sizeof(msg_struct_dido_ccl_event_fault_trigger_t));
-		snd2.lockid = IHU_CCL_SENSOR_LOCK_NUMBER_MAX;
 		snd2.cmdid = IHU_CCL_DH_CMDID_EVENT_IND_FAULT_MULTI; //多重错误
-		//锁
-		snd2.lockid = rand() % IHU_CCL_SENSOR_LOCK_NUMBER_MAX;
-		snd2.sensor.lockTongueState[snd2.lockid] = ((rand()%2==1)?IHU_CCL_SENSOR_STATE_OPEN:IHU_CCL_SENSOR_STATE_CLOSE);
-		snd2.faultBitmap[IHU_CCL_DIDO_SENSOR_INDEX_LOCK] = (snd2.sensor.lockTongueState[snd2.lockid] == IHU_CCL_SENSOR_STATE_OPEN)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE;
-		zIhuCclDidocapCtrlTable.sensor.lockTongueState[snd2.lockid] = snd2.sensor.lockTongueState[snd2.lockid];	
-		//门
-		snd2.sensor.doorState[snd2.lockid] = ((rand()%2==1)?IHU_CCL_SENSOR_STATE_OPEN:IHU_CCL_SENSOR_STATE_CLOSE);
-		snd2.faultBitmap[IHU_CCL_DIDO_SENSOR_INDEX_DOOR] = (snd2.sensor.doorState[snd2.lockid] == IHU_CCL_SENSOR_STATE_OPEN)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE;
-		zIhuCclDidocapCtrlTable.sensor.doorState[snd2.lockid] = snd2.sensor.doorState[snd2.lockid];
-		//烟
-		snd2.sensor.smokeState = ((rand()%2==1)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE);
-		snd2.faultBitmap[IHU_CCL_DIDO_SENSOR_INDEX_SMOKE] = snd2.sensor.smokeState;
-		zIhuCclDidocapCtrlTable.sensor.waterState = snd2.sensor.smokeState;
-		//水
-		snd2.sensor.waterState = ((rand()%2==1)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE);
-		snd2.faultBitmap[IHU_CCL_DIDO_SENSOR_INDEX_WATER] = snd2.sensor.waterState;
-		zIhuCclDidocapCtrlTable.sensor.waterState = snd2.sensor.waterState;
-		//倒
-		snd2.sensor.fallState = ((rand()%2==1)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE);
-		snd2.faultBitmap[IHU_CCL_DIDO_SENSOR_INDEX_FALL] = snd2.sensor.fallState;
-		zIhuCclDidocapCtrlTable.sensor.fallState = snd2.sensor.fallState;
-		//电
-		snd2.sensor.batteryState = ((rand()%2==1)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE);
-		snd2.faultBitmap[IHU_CCL_DIDO_SENSOR_INDEX_FALL] = snd2.sensor.batteryState;
-		zIhuCclDidocapCtrlTable.sensor.batteryState = snd2.sensor.batteryState;
-		
-		//发送
+		memcpy(&snd2.sensor, &zIhuCclDidocapCtrlTable.sensor, sizeof(com_sensor_status_t));
+		//发送差错报告
 		snd2.length = sizeof(msg_struct_dido_ccl_event_fault_trigger_t);
 		ret = ihu_message_send(MSG_ID_DIDO_CCL_EVENT_FAULT_TRIGGER, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd2, snd2.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
 			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[TASK_ID_CCL]);
 			return ;
-		}		
+		}
 	}
 	
 	//完全恢复：只有FAULT模式下才谈得上恢复
-	else if ((temp == 4) && (zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_FAULT)){
+	else if ((zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_FAULT) && (func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_recover() == TRUE)){
 		//将周期扫描锁触发的结果发送给CCL
 		msg_struct_dido_ccl_event_fault_trigger_t snd3;
 		memset(&snd3, 0, sizeof(msg_struct_dido_ccl_event_fault_trigger_t));
@@ -373,7 +347,7 @@ void func_didocap_time_out_external_trigger_period_scan(void)
 			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
 			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[TASK_ID_CCL]);
 			return ;
-		}		
+		}
 	}
 	
 	//返回
@@ -384,9 +358,9 @@ void func_didocap_time_out_external_trigger_period_scan(void)
 void func_didocap_time_out_work_mode_period_scan(void)
 {
 	int ret = 0;
-	//首先扫描是否有门开的信号
-	if (FsmGetState(TASK_ID_CCL) == FSM_STATE_CCL_TO_OPEN_DOOR){
-		if (func_didocap_ccl_any_door_open() == TRUE)
+	//首先扫描是否有门开的信号：只有在WORK_MODE下被允许
+	if ((zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_ACTIVE) && (FsmGetState(TASK_ID_CCL) == FSM_STATE_CCL_TO_OPEN_DOOR)){
+		if (func_didocap_ccl_work_mode_ul_scan_any_door_open() == TRUE)
 		{
 			msg_struct_dido_ccl_door_open_event_t snd1;
 			memset(&snd1, 0, sizeof(msg_struct_dido_ccl_door_open_event_t));
@@ -402,8 +376,10 @@ void func_didocap_time_out_work_mode_period_scan(void)
 	}
 
 	//再扫描是否所有锁和门都关闭：这就跟定时器允许FAULT下运行对上了
+	//本来这个函数的入口就是(zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_ACTIVE || IHU_CCL_DIDO_WORKING_MODE_FAULT
+	//所以这里不用再做额外的判定了
 	if ((FsmGetState(TASK_ID_CCL) == FSM_STATE_CCL_DOOR_OPEN) || (FsmGetState(TASK_ID_CCL) == FSM_STATE_CCL_FATAL_FAULT)){
-		if (func_didocap_ccl_any_door_open() == TRUE)
+		if (func_didocap_ccl_work_mode_ul_scan_any_door_open() == TRUE)
 		{
 			msg_struct_dido_ccl_lock_c_door_c_event_t snd2;
 			memset(&snd2, 0, sizeof(msg_struct_dido_ccl_lock_c_door_c_event_t));
@@ -418,8 +394,9 @@ void func_didocap_time_out_work_mode_period_scan(void)
 		}
 	}
 
-	//扫描是否有重复触发信号
-	if (func_didocap_ccl_enable_lock_trigger() == TRUE)
+	//扫描是否有重复触发信号：这个信号的发送，只有在工作模式下。当FAULT模式下，不允许重复激活触发
+	//这个重复触发的目的是延长WORKING_ACTIVE定时器的长度，这是客户特别要的FEATURE
+	if ((zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_ACTIVE) && (func_didocap_ccl_work_mode_ul_scan_enable_lock_trigger() == TRUE))
 	{
 		msg_struct_dido_ccl_status_update_t snd3;
 		memset(&snd3, 0, sizeof(msg_struct_dido_ccl_status_update_t));
@@ -433,9 +410,10 @@ void func_didocap_time_out_work_mode_period_scan(void)
 		}		
 	}
 
-	//状态变化，则发送UPDATE消息给CCL
+	//WORK_MODE/FAULT_MODE下的状态变化，则发送UPDATE消息给CCL，暂时没有什么用途
 	//这里的状态，需要再完善，CCL并不是特别关心，但有知晓权利，是否有必要在未来继续扩大，留个口子吧
-	if (func_didocap_ccl_door_and_lock_status_change() == TRUE)
+	//由于差错状态下本来就有FAULT_REPORT模式，这里不要再添乱了
+	if ((zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_ACTIVE) && (func_didocap_ccl_work_mode_ul_scan_door_and_lock_status_change() == TRUE))
 	{
 		msg_struct_dido_ccl_status_update_t snd4;
 		memset(&snd4, 0, sizeof(msg_struct_dido_ccl_status_update_t));
@@ -533,6 +511,8 @@ OPSTAT fsm_didocap_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 			return IHU_FAILURE;
 		}
 	}
+	
+	//休眠操作，终于可以清静了，就留下慢扫描定时器了
 	else if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_SLEEP){
 		zIhuCclDidocapCtrlTable.cclDidoWorkingMode = IHU_CCL_DIDO_WORKING_MODE_SLEEP;
 		//停止工作定时器
@@ -545,6 +525,7 @@ OPSTAT fsm_didocap_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 	}
 	
 	//在此模式下，依然需要随时扫描，等待关闭信息上报给CCL
+	//在FAULT下，唯一等待就是DOOR_AND_LOCK_C事件，如果扫描到了，才能进SLEEP模式，所以一旦进入FAULT模式后，工作扫描定时器还要保留的
 	else if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_FAULT){
 		zIhuCclDidocapCtrlTable.cclDidoWorkingMode = IHU_CCL_DIDO_WORKING_MODE_FAULT;
 		//启动工作扫描定时器
@@ -561,19 +542,19 @@ OPSTAT fsm_didocap_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 		if (rcv.cmdid == IHU_CCL_DH_CMDID_CMD_ENABLE_LOCK){
 			//给每一个不是本身的锁具发送ENABLE信号
 			for (i=0; i<IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
-				if (i != rcv.lockid) func_didocap_ccl_enable_lock(i);
+				if (i != rcv.lockid) func_didocap_ccl_work_mode_dl_cmd_enable_lock(i);
 			}
 		}
 		else if (rcv.cmdid == IHU_CCL_DH_CMDID_CMD_DOOR_OPEN){
 			//给每一个锁具发送OPEN信号
 			for (i=0; i<IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
-				func_didocap_ccl_open_lock(i);
+				func_didocap_ccl_work_mode_dl_cmd_open_lock(i);
 			}
 		}
 		else if (rcv.cmdid == IHU_CCL_DH_CMDID_CMD_DOOR_CLOSE){
 			//给每一个锁具发送CLOSE信号
 			for (i=0; i<IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
-				func_didocap_ccl_close_lock(i);
+				func_didocap_ccl_work_mode_dl_cmd_close_lock(i);
 			}
 		}
 		else{
@@ -592,41 +573,207 @@ OPSTAT fsm_didocap_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 	return IHU_SUCCESS;
 }
 
-void func_didocap_ccl_open_lock(UINT8 lockid)
+//WORK_MODE下三种对外指令
+void func_didocap_ccl_work_mode_dl_cmd_open_lock(UINT8 lockid)
 {
 }
 
-void func_didocap_ccl_close_lock(UINT8 lockid)
+void func_didocap_ccl_work_mode_dl_cmd_close_lock(UINT8 lockid)
 {
 }
 
-void func_didocap_ccl_enable_lock(UINT8 lockid)
+void func_didocap_ccl_work_mode_dl_cmd_enable_lock(UINT8 lockid)
 {
 }
 
-bool func_didocap_ccl_any_door_open(void)
-{
 
-	return TRUE;
+//WORK_MODE下的四种EVENT扫描情况，目前暂时只需要这四种，不需要更多的
+bool func_didocap_ccl_work_mode_ul_scan_any_door_open(void)
+{
+	if (rand()%10 == 1)
+		return TRUE;
+	else
+		return FALSE;
 }
 
-bool func_didocap_ccl_all_door_and_lock_close(void)
+//WORK_MODE下的四种EVENT扫描情况，目前暂时只需要这四种，不需要更多的
+bool func_didocap_ccl_work_mode_ul_scan_all_door_and_lock_close(void)
 {
+	if (rand()%10 == 1)
+		return TRUE;
+	else
+		return FALSE;
+}
+
+//WORK_MODE下的四种EVENT扫描情况，目前暂时只需要这四种，不需要更多的
+bool func_didocap_ccl_work_mode_ul_scan_enable_lock_trigger(void)
+{
+	if (rand()%10 == 1)
+		return TRUE;
+	else
+		return FALSE;
+}
+
+//WORK_MODE下的四种EVENT扫描情况，目前暂时只需要这四种，不需要更多的
+bool func_didocap_ccl_work_mode_ul_scan_door_and_lock_status_change(void)
+{
+	if (rand()%10 == 1)
+		return TRUE;
+	else
+		return FALSE;
+}
+
+//SLEEP模式下扫描
+bool func_didocap_ccl_sleep_mode_ul_scan_lock_trigger(void)
+{
+	if (rand()%100 == 1)
+		return TRUE;
+	else
+		return FALSE;
+}
+
+//SLEEP模式下扫描
+bool func_didocap_ccl_sleep_mode_ul_scan_shake_trigger(void)
+{
+	if (rand()%100 == 1)
+		return TRUE;
+	else
+		return FALSE;
+}
+
+//SLEEP&FAULT模式下扫描：或者综合结果
+bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_status(void)
+{
+	int i = 0;
+	UINT8 tmp = 0;
+	UINT8 LockDoorCnt = 0;
 	
-	return TRUE;
+	for (i=0; i<IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
+		zIhuCclDidocapCtrlTable.sensor.doorState[i] = ((func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_door_open(i) == TRUE)?IHU_CCL_SENSOR_STATE_OPEN:IHU_CCL_SENSOR_STATE_CLOSE);
+		if (zIhuCclDidocapCtrlTable.sensor.doorState[i] == IHU_CCL_SENSOR_STATE_OPEN) {tmp++; LockDoorCnt++;}
+		zIhuCclDidocapCtrlTable.sensor.lockTongueState[i] = ((func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open(i) == TRUE)?IHU_CCL_SENSOR_STATE_OPEN:IHU_CCL_SENSOR_STATE_CLOSE);
+		if (zIhuCclDidocapCtrlTable.sensor.lockTongueState[i] == IHU_CCL_SENSOR_STATE_OPEN) {tmp++; LockDoorCnt++;}
+	}
+	zIhuCclDidocapCtrlTable.sensor.waterState = ((func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_water() == TRUE)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE);
+	if (zIhuCclDidocapCtrlTable.sensor.waterState == IHU_CCL_SENSOR_STATE_ACTIVE) tmp++;
+	zIhuCclDidocapCtrlTable.sensor.smokeState = ((func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_smoke() == TRUE)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE);
+	if (zIhuCclDidocapCtrlTable.sensor.smokeState == IHU_CCL_SENSOR_STATE_ACTIVE) tmp++;
+	zIhuCclDidocapCtrlTable.sensor.fallState = ((func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_fall() == TRUE)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE);
+	if (zIhuCclDidocapCtrlTable.sensor.fallState == IHU_CCL_SENSOR_STATE_ACTIVE) tmp++;
+	zIhuCclDidocapCtrlTable.sensor.batteryState = ((func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_battery() == TRUE)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE);
+	if (zIhuCclDidocapCtrlTable.sensor.batteryState == IHU_CCL_SENSOR_STATE_ACTIVE) tmp++;
+	
+	zIhuCclDidocapCtrlTable.flagSensorLastTimeScanFault = zIhuCclDidocapCtrlTable.flagSensorThisTimeScanFault;
+	zIhuCclDidocapCtrlTable.flagDoorLockLastTimeScanFault = zIhuCclDidocapCtrlTable.flagDoorLockThisTimeScanFault;
+	if (LockDoorCnt == 0) zIhuCclDidocapCtrlTable.flagDoorLockThisTimeScanFault = FALSE;
+	else zIhuCclDidocapCtrlTable.flagDoorLockThisTimeScanFault = TRUE;
+	
+	if (tmp == 0){
+		zIhuCclDidocapCtrlTable.flagSensorThisTimeScanFault = FALSE;
+		return FALSE;
+	}
+	else{
+		zIhuCclDidocapCtrlTable.flagSensorThisTimeScanFault = TRUE;
+		return TRUE;
+	}
 }
 
-bool func_didocap_ccl_enable_lock_trigger(void)
+//SLEEP&FAULT模式下扫描：是否恢复
+//恢复不能看门锁，不然跟关门信号冲突。关门信号留待差错模式下的关门信号扫描去完成
+bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_recover(void)
 {
-	
-	return TRUE;
+	bool flag;
+	flag = ((zIhuCclDidocapCtrlTable.flagDoorLockLastTimeScanFault == TRUE) && (zIhuCclDidocapCtrlTable.flagDoorLockThisTimeScanFault == FALSE));
+
+	if ((zIhuCclDidocapCtrlTable.flagSensorLastTimeScanFault == TRUE) && (zIhuCclDidocapCtrlTable.flagSensorThisTimeScanFault == FALSE) &&\
+		(flag == FALSE)) return TRUE;
+	else return FALSE;
 }
 
-bool func_didocap_ccl_door_and_lock_status_change(void)
+//SLEEP&FAULT模式下扫描：扫描出哪个门，如果是IHU_CCL_SENSOR_LOCK_NUMBER_MAX则意味着没有
+bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_door_open(UINT8 doorid)
 {
-	
-	return TRUE;
+	if (rand()%100 == 1)
+		return TRUE;
+	else
+		return FALSE;
+}
+
+//SLEEP&FAULT模式下扫描：扫描出哪个锁，如果是IHU_CCL_SENSOR_LOCK_NUMBER_MAX则意味着没有
+bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open(UINT8 lockid)
+{
+	if (rand()%100 == 1)
+		return TRUE;
+	else
+		return FALSE;
+}
+
+//SLEEP&FAULT模式下扫描：扫描水
+bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_water(void)
+{
+	if (rand()%100 == 1)
+		return TRUE;
+	else
+		return FALSE;
+}
+
+//SLEEP&FAULT模式下扫描：扫描烟
+bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_smoke(void)
+{
+	if (rand()%100 == 1)
+		return TRUE;
+	else
+		return FALSE;
+}
+
+//SLEEP&FAULT模式下扫描：扫描倾
+bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_fall(void)
+{
+	if (rand()%100 == 1)
+		return TRUE;
+	else
+		return FALSE;
+}
+
+//SLEEP&FAULT模式下扫描：扫描电池
+bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_battery(void)
+{
+	if (rand()%100 == 1)
+		return TRUE;
+	else
+		return FALSE;
 }
 
 #endif
+
+/*
+//锁
+snd2.lockid = rand() % IHU_CCL_SENSOR_LOCK_NUMBER_MAX;
+snd2.sensor.lockTongueState[snd2.lockid] = ((rand()%2==1)?IHU_CCL_SENSOR_STATE_OPEN:IHU_CCL_SENSOR_STATE_CLOSE);
+snd2.faultBitmap[IHU_CCL_DIDO_SENSOR_INDEX_LOCK] = (snd2.sensor.lockTongueState[snd2.lockid] == IHU_CCL_SENSOR_STATE_OPEN)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE;
+zIhuCclDidocapCtrlTable.sensor.lockTongueState[snd2.lockid] = snd2.sensor.lockTongueState[snd2.lockid];	
+//门
+snd2.sensor.doorState[snd2.lockid] = ((rand()%2==1)?IHU_CCL_SENSOR_STATE_OPEN:IHU_CCL_SENSOR_STATE_CLOSE);
+snd2.faultBitmap[IHU_CCL_DIDO_SENSOR_INDEX_DOOR] = (snd2.sensor.doorState[snd2.lockid] == IHU_CCL_SENSOR_STATE_OPEN)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE;
+zIhuCclDidocapCtrlTable.sensor.doorState[snd2.lockid] = snd2.sensor.doorState[snd2.lockid];
+//烟
+snd2.sensor.smokeState = ((rand()%2==1)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE);
+snd2.faultBitmap[IHU_CCL_DIDO_SENSOR_INDEX_SMOKE] = snd2.sensor.smokeState;
+zIhuCclDidocapCtrlTable.sensor.waterState = snd2.sensor.smokeState;
+//水
+snd2.sensor.waterState = ((rand()%2==1)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE);
+snd2.faultBitmap[IHU_CCL_DIDO_SENSOR_INDEX_WATER] = snd2.sensor.waterState;
+zIhuCclDidocapCtrlTable.sensor.waterState = snd2.sensor.waterState;
+//倒
+snd2.sensor.fallState = ((rand()%2==1)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE);
+snd2.faultBitmap[IHU_CCL_DIDO_SENSOR_INDEX_FALL] = snd2.sensor.fallState;
+zIhuCclDidocapCtrlTable.sensor.fallState = snd2.sensor.fallState;
+//电
+snd2.sensor.batteryState = ((rand()%2==1)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE);
+snd2.faultBitmap[IHU_CCL_DIDO_SENSOR_INDEX_FALL] = snd2.sensor.batteryState;
+zIhuCclDidocapCtrlTable.sensor.batteryState = snd2.sensor.batteryState;
+*/
+
+
+
 
