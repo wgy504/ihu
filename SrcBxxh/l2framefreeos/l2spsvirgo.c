@@ -43,7 +43,7 @@ FsmStateItem_t FsmSpsvirgo[] =
 	{MSG_ID_CCL_COM_SENSOR_STATUS_REQ,			FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_sensor_status_req},
 	{MSG_ID_CCL_SPS_EVENT_REPORT_SEND,			FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_event_report_send},
 	{MSG_ID_CCL_COM_CTRL_CMD,								FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_ctrl_cmd},	
-	{MSG_ID_CCL_SPS_ERROR_REPORT_SEND,			FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_error_report_send},	
+	{MSG_ID_CCL_SPS_FAULT_REPORT_SEND,	FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_fault_report_send},	
 #endif
 
   //结束点，固定定义，不要改动
@@ -436,15 +436,15 @@ OPSTAT fsm_spsvirgo_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 }
 
 //发送差错报告后的证实给CCL
-OPSTAT fsm_spsvirgo_ccl_error_report_send(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+OPSTAT fsm_spsvirgo_ccl_fault_report_send(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
 	int ret = 0;
-	msg_struct_ccl_sps_error_report_send_t rcv;
-	msg_struct_sps_ccl_error_report_cfm_t snd;
+	msg_struct_ccl_sps_fault_report_send_t rcv;
+	msg_struct_sps_ccl_fault_report_cfm_t snd;
 	
 	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_ccl_sps_error_report_send_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_sps_error_report_send_t))){
+	memset(&rcv, 0, sizeof(msg_struct_ccl_sps_fault_report_send_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_sps_fault_report_send_t))){
 		IhuErrorPrint("SPSVIRGO: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
@@ -455,9 +455,9 @@ OPSTAT fsm_spsvirgo_ccl_error_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 	//具体的发送命令
 	
 	//干完了之后，结果发送给CCL
-	memset(&snd, 0, sizeof(msg_struct_sps_ccl_error_report_cfm_t));
-	snd.length = sizeof(msg_struct_sps_ccl_error_report_cfm_t);
-	ret = ihu_message_send(MSG_ID_SPS_CCL_ERROR_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
+	memset(&snd, 0, sizeof(msg_struct_sps_ccl_fault_report_cfm_t));
+	snd.length = sizeof(msg_struct_sps_ccl_fault_report_cfm_t);
+	ret = ihu_message_send(MSG_ID_SPS_CCL_FAULT_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPSVIRGO], zIhuTaskNameList[TASK_ID_CCL]);

@@ -93,7 +93,7 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_SPS_CCL_CLOUD_FB,
 	MSG_ID_SPS_CCL_SENSOR_STATUS_RESP,
 	MSG_ID_SPS_CCL_EVENT_REPORT_CFM,
-	MSG_ID_SPS_CCL_ERROR_REPORT_CFM,
+	MSG_ID_SPS_CCL_FAULT_REPORT_CFM,
 	
 	//SPI
 	MSG_ID_SPI_L2FRAME_SEND,
@@ -116,7 +116,7 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_CCL_COM_SENSOR_STATUS_REQ,
 	MSG_ID_CCL_COM_CTRL_CMD,
 	MSG_ID_CCL_SPS_EVENT_REPORT_SEND,
-	MSG_ID_CCL_SPS_ERROR_REPORT_SEND,
+	MSG_ID_CCL_SPS_FAULT_REPORT_SEND,
 
 	//END FLAG
 	MSG_ID_COM_MAX, //Ending point
@@ -288,11 +288,11 @@ typedef struct msg_struct_sps_ccl_event_report_cfm
 	UINT8 length;
 }msg_struct_sps_ccl_event_report_cfm_t;
 
-//MSG_ID_SPS_CCL_ERROR_REPORT_CFM
-typedef struct msg_struct_sps_ccl_error_report_cfm
+//MSG_ID_SPS_CCL_FAULT_REPORT_CFM
+typedef struct msg_struct_sps_ccl_fault_report_cfm
 {
 	UINT8 length;
-}msg_struct_sps_ccl_error_report_cfm_t;
+}msg_struct_sps_ccl_fault_report_cfm_t;
 
 //SPI消息定义
 typedef struct msg_struct_spileo_l2frame_send
@@ -381,12 +381,12 @@ typedef struct msg_struct_ccl_sps_event_report_send
 	UINT8 length;
 }msg_struct_ccl_sps_event_report_send_t;
 
-//MSG_ID_CCL_SPS_ERROR_REPORT_SEND
-typedef struct msg_struct_ccl_sps_error_report_send
+//MSG_ID_CCL_SPS_FAULT_REPORT_SEND
+typedef struct msg_struct_ccl_sps_fault_report_send
 {
 	UINT8 cmdid;
 	com_sensor_status_t sensor;
 	UINT8 length;
-}msg_struct_ccl_sps_error_report_send_t;
+}msg_struct_ccl_sps_fault_report_send_t;
 
 #endif /* L0COMVM_COMMSGCCL_H_ */
