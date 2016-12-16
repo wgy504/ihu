@@ -94,6 +94,7 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_SPS_CCL_SENSOR_STATUS_RESP,
 	MSG_ID_SPS_CCL_EVENT_REPORT_CFM,
 	MSG_ID_SPS_CCL_FAULT_REPORT_CFM,
+	MSG_ID_SPS_CCL_CLOSE_REPORT_CFM,	
 	
 	//SPI
 	MSG_ID_SPI_L2FRAME_SEND,
@@ -112,11 +113,12 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_DCMI_CCL_SENSOR_STATUS_RESP,
 	
 	//CCL
-	MSG_ID_CCL_SPS_OPEN_AUTH_INQ,  	  //Back hawl
+	MSG_ID_CCL_SPS_OPEN_AUTH_INQ,  	   //后台查询
 	MSG_ID_CCL_COM_SENSOR_STATUS_REQ,
 	MSG_ID_CCL_COM_CTRL_CMD,
-	MSG_ID_CCL_SPS_EVENT_REPORT_SEND,
-	MSG_ID_CCL_SPS_FAULT_REPORT_SEND,
+	MSG_ID_CCL_SPS_EVENT_REPORT_SEND,  //周期汇报
+	MSG_ID_CCL_SPS_FAULT_REPORT_SEND,  //故障汇报
+	MSG_ID_CCL_SPS_CLOSE_REPORT_SEND,  //正常一次开关报告
 
 	//END FLAG
 	MSG_ID_COM_MAX, //Ending point
@@ -294,6 +296,12 @@ typedef struct msg_struct_sps_ccl_fault_report_cfm
 	UINT8 length;
 }msg_struct_sps_ccl_fault_report_cfm_t;
 
+//MSG_ID_SPS_CCL_CLOSE_REPORT_CFM
+typedef struct msg_struct_sps_ccl_close_report_cfm
+{
+	UINT8 length;
+}msg_struct_sps_ccl_close_report_cfm_t;
+
 //SPI消息定义
 typedef struct msg_struct_spileo_l2frame_send
 {
@@ -384,9 +392,21 @@ typedef struct msg_struct_ccl_sps_event_report_send
 //MSG_ID_CCL_SPS_FAULT_REPORT_SEND
 typedef struct msg_struct_ccl_sps_fault_report_send
 {
-	UINT8 cmdid;
+	UINT8 cause;
 	com_sensor_status_t sensor;
 	UINT8 length;
 }msg_struct_ccl_sps_fault_report_send_t;
+#define IHU_CCL_FAULT_CAUSE_SENSOR_WARNING 1
+#define IHU_CCL_FAULT_CAUSE_CLOSE_DOOR_TIME_OUT 2
+
+//MSG_ID_CCL_SPS_CLOSE_REPORT_SEND
+typedef struct msg_struct_ccl_sps_close_report_send
+{
+	UINT8 cause;
+	UINT8 length;
+}msg_struct_ccl_sps_close_report_send_t;
+#define IHU_CCL_CLOSE_DOOR_NORMAL 1
+#define IHU_CCL_CLOSE_DOOR_NOT_YET_OPEN 2
+#define IHU_CCL_CLOSE_DOOR_BY_FAULT 3
 
 #endif /* L0COMVM_COMMSGCCL_H_ */

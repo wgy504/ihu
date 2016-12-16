@@ -262,6 +262,7 @@ void func_didocap_time_out_period_scan(void)
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 
 //定时扫描震动以及触发按键消息
+//待改进这个扫描的事件，以便形成有价值的结果事件
 void func_didocap_time_out_external_trigger_period_scan(void)
 {
 	int ret = 0;
@@ -433,7 +434,7 @@ void func_didocap_time_out_work_mode_period_scan(void)
 	}
 
 	//状态变化，则发送UPDATE消息给CCL
-	//这里的状态，需要再完善，CCL并不是特别关心，但有知晓权利
+	//这里的状态，需要再完善，CCL并不是特别关心，但有知晓权利，是否有必要在未来继续扩大，留个口子吧
 	if (func_didocap_ccl_door_and_lock_status_change() == TRUE)
 	{
 		msg_struct_dido_ccl_status_update_t snd4;
