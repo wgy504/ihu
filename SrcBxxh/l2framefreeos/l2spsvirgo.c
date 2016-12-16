@@ -22,15 +22,15 @@ FsmStateItem_t FsmSpsvirgo[] =
 	//启始点，固定定义，不要改动, 使用ENTRY/END，意味者MSGID肯定不可能在某个高位区段中；考虑到所有任务共享MsgId，即使分段，也无法实现
 	//完全是为了给任务一个初始化的机会，按照状态转移机制，该函数不具备启动的机会，因为任务初始化后自动到FSM_STATE_IDLE
 	//如果没有必要进行初始化，可以设置为NULL
-	{MSG_ID_ENTRY,       										FSM_STATE_ENTRY,            								fsm_spsvirgo_task_entry}, //Starting
+	{MSG_ID_ENTRY,       										FSM_STATE_ENTRY,            									fsm_spsvirgo_task_entry}, //Starting
 
 	//System level initialization, only controlled by VMDA
-  {MSG_ID_COM_INIT,       								FSM_STATE_IDLE,            									fsm_spsvirgo_init},
-  {MSG_ID_COM_RESTART,										FSM_STATE_IDLE,            									fsm_spsvirgo_restart},
+  {MSG_ID_COM_INIT,       								FSM_STATE_IDLE,            										fsm_spsvirgo_init},
+  {MSG_ID_COM_RESTART,										FSM_STATE_IDLE,            										fsm_spsvirgo_restart},
 
   //Task level initialization
-  {MSG_ID_COM_RESTART,        						FSM_STATE_SPSVIRGO_INITED,         					fsm_spsvirgo_restart},
-  {MSG_ID_COM_STOP,												FSM_STATE_SPSVIRGO_INITED,         					fsm_spsvirgo_restart},
+  {MSG_ID_COM_RESTART,        						FSM_STATE_SPSVIRGO_INITED,         						fsm_spsvirgo_restart},
+  {MSG_ID_COM_STOP,												FSM_STATE_SPSVIRGO_INITED,         						fsm_spsvirgo_restart},
 
 	//Task level actived status
   {MSG_ID_COM_RESTART,        						FSM_STATE_SPSVIRGO_ACTIVED,         					fsm_spsvirgo_restart},
@@ -45,7 +45,6 @@ FsmStateItem_t FsmSpsvirgo[] =
 	{MSG_ID_CCL_COM_CTRL_CMD,								FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_ctrl_cmd},	
 	{MSG_ID_CCL_SPS_FAULT_REPORT_SEND,			FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_fault_report_send},
 	{MSG_ID_CCL_SPS_CLOSE_REPORT_SEND,			FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_close_door_report_send},
-	
 #endif
 
   //结束点，固定定义，不要改动
@@ -316,6 +315,7 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 
 	//干完了之后，结果发送给CCL
 	memset(&snd, 0, sizeof(msg_struct_spsvirgo_ccl_cloud_fb_t));
+	snd.authResult = ((rand()%2 == 1)?IHU_CCL_LOCK_AUTH_RESULT_OK:IHU_CCL_LOCK_AUTH_RESULT_NOK);
 	snd.length = sizeof(msg_struct_spsvirgo_ccl_cloud_fb_t);
 	ret = ihu_message_send(MSG_ID_SPS_CCL_CLOUD_FB, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 	if (ret == IHU_FAILURE){

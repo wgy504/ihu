@@ -4,6 +4,12 @@
 //近期需要完成的任务
 = 研究STM32的IAP功能
 
+//= ZJL, 2016 Dec.16, CURRENT_SW_DELIVERY R03.65 =>CCL项目
+= 核心堆栈不够，从8C00改为9C00，利用CubeMX修改
+= 未来可以消减不适用的任务，达到降低内存的目标。目前内存还够，所有其它任务模块就一起带着吧。
+
+
+
 //= ZJL, 2016 Dec.16, CURRENT_SW_DELIVERY R03.64 =>CCL项目
 = 完善TIME OUT的处理过程
 = 完善DIDOCAP的事件处理过程

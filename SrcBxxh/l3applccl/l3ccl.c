@@ -746,7 +746,7 @@ OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 	
 	else{
 		zIhuRunErrCnt[TASK_ID_CCL]++;
-		IhuErrorPrint("CCL: Error Set FSM State!");
+		IhuErrorPrint("CCL: Error received message parameter!");
 		return IHU_FAILURE;
 	}
 
@@ -1088,7 +1088,7 @@ OPSTAT fsm_ccl_event_fault_trigger_to_stop(UINT8 dest_id, UINT8 src_id, void * p
 		return IHU_FAILURE;
 	}
 	
-	//分为状态恢复，或者新发生的差错
+	//分为状态恢复
 	if (rcv.cmdid == IHU_CCL_DH_CMDID_EVENT_IND_FAULT_RECOVER){
 		//先确定正常的情形
 		if (FsmGetState(TASK_ID_CCL) != FSM_STATE_CCL_FATAL_FAULT){
@@ -1109,7 +1109,7 @@ OPSTAT fsm_ccl_event_fault_trigger_to_stop(UINT8 dest_id, UINT8 src_id, void * p
 	}
 	
 	//继续差错故障状态
-	else if (rcv.cmdid == IHU_CCL_DH_CMDID_EVENT_IND_FAULT_RECOVER){
+	else if (rcv.cmdid == IHU_CCL_DH_CMDID_EVENT_IND_FAULT_MULTI){
 		//首次控制，发送差错报告出去
 		if (zIhuCclSensorStatus.faultReportCnt == 0){
 			//发送差错状态报告给后台：真正的原因，待填入
