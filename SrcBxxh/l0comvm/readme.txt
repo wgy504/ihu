@@ -7,8 +7,8 @@
 //= ZJL, 2016 Dec.16, CURRENT_SW_DELIVERY R03.65 =>CCL项目
 = 核心堆栈不够，从8C00改为9C00，利用CubeMX修改
 = 未来可以消减不适用的任务，达到降低内存的目标。目前内存还够，所有其它任务模块就一起带着吧。
-
-
+= 修正了一些特别关键的BUG，比如VM中打印MSGID的小BUG，以及DIDOCAP中在EVENT_REPORT模式下不应该允许继续扫描外围传感器
+= 还修正了CCL DOOR_TO_OPEN状态下等待SPSVIRGO发送CLOSE_REPORT_CFM报告的问题，不然会导致状态机混乱
 
 //= ZJL, 2016 Dec.16, CURRENT_SW_DELIVERY R03.64 =>CCL项目
 = 完善TIME OUT的处理过程

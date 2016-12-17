@@ -99,6 +99,7 @@ OPSTAT func_ccl_time_out_lock_work_wait_door_for_open(void);
 void func_ccl_close_all_sensor(void);
 void func_ccl_open_all_sensor(void);
 
+	
 
 #endif /* L3APPL_L3CCL_H_ */
 

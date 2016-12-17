@@ -299,11 +299,14 @@ typedef struct msg_struct_sps_ccl_close_report_cfm
 }msg_struct_sps_ccl_close_report_cfm_t;
 
 //SPI消息定义
+//MSG_ID_SPI_L2FRAME_SEND
 typedef struct msg_struct_spileo_l2frame_send
 {
 	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-1];
 	UINT8 length;
 }msg_struct_spileo_l2frame_send_t;
+
+//MSG_ID_SPI_L2FRAME_RCV
 typedef struct msg_struct_spileo_l2frame_rcv
 {
 	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-1];

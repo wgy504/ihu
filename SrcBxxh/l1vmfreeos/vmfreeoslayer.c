@@ -184,7 +184,7 @@ char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK] ={
 	"MSG_ID_CCL_SPS_CLOSE_REPORT_SEND",  //正常一次开关报告
 
 	//END FLAG
-	"MSG_ID_COM_MAX", //Ending point
+	"MSG_ID_COM_MAX" //Ending point
 };
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK] ={
@@ -1112,7 +1112,8 @@ OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr,
 	}
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE)
 	{
-		IhuDebugPrint("VMFO: Call state function(0x%x) in state(%d) of task(0x%x) for msg(0x%x).\n", (UINT32)zIhuFsmTable.pFsmCtrlTable[dest_id].pFsmArray[state][mid].stateFunc, state, dest_id, mid);
+		//消息ID的顺序跟commsgxxx.h的中的定义可能不完全一样，导致这里直接POP出消息名字会出错，注意！
+		IhuDebugPrint("VMFO: Call state function(0x%x) in state(%d) of dest task(0x%x[%s]) for msg(0x%x[%s]), src=(0x%x[%s]).\n", (UINT32)zIhuFsmTable.pFsmCtrlTable[dest_id].pFsmArray[state][mid].stateFunc, state, dest_id, zIhuTaskNameList[dest_id], mid, zIhuMsgNameList[mid-1], src_id, zIhuTaskNameList[src_id]);
 	}
 
 	/*
@@ -1135,7 +1136,8 @@ OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr,
 			//Free memory, here do nothing.
 		}
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
-		IhuErrorPrint("VMFO: Receive invalid msg(%x)[%s] in state(%d) of task(0x%x)[%s].\n", mid, zIhuMsgNameList[mid], state, dest_id, zIhuTaskNameList[dest_id]);
+		//消息ID的顺序跟commsgxxx.h的中的定义可能不完全一样，导致这里直接POP出消息名字会出错，注意！		
+		IhuErrorPrint("VMFO: Receive invalid msg(%x)[%s] in state(%d) of task(0x%x)[%s] from task(0x%x)[%s].\n", mid, zIhuMsgNameList[mid-1], state, dest_id, zIhuTaskNameList[dest_id], src_id, zIhuTaskNameList[src_id]);
 		return IHU_FAILURE;
 	}
 

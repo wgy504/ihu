@@ -45,25 +45,26 @@ FsmStateItem_t FsmCcl[] =
 	{MSG_ID_SPS_CCL_SENSOR_STATUS_RESP,			FSM_STATE_CCL_EVENT_REPORT,         		fsm_ccl_sps_sensor_status_resp},	 //传感器采样
 	{MSG_ID_I2C_CCL_SENSOR_STATUS_RESP,			FSM_STATE_CCL_EVENT_REPORT,         		fsm_ccl_i2c_sensor_status_resp},	 //传感器采样
 	{MSG_ID_DCMI_CCL_SENSOR_STATUS_RESP,		FSM_STATE_CCL_EVENT_REPORT,         		fsm_ccl_dcmi_sensor_status_resp},  //传感器采样
-	{MSG_ID_SPS_CCL_EVENT_REPORT_CFM,				FSM_STATE_CCL_EVENT_REPORT,         		fsm_ccl_sps_event_report_cfm},    //发送周期报告的证实
+	{MSG_ID_SPS_CCL_EVENT_REPORT_CFM,				FSM_STATE_CCL_EVENT_REPORT,         		fsm_ccl_sps_event_report_cfm},    //发送周期报告的证实		
 	
 	//FSM_STATE_CCL_CLOUD_INQUERY：启动SESSION定时4.5分钟，等待后台回传指令，开门授权则进入TO_OPEN_DOOR状态，否则回到SLEEP状态
   {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_CLOUD_INQUERY,         		fsm_ccl_restart},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CCL_CLOUD_INQUERY,         		fsm_ccl_time_out},
-	{MSG_ID_SPS_CCL_CLOUD_FB,								FSM_STATE_CCL_CLOUD_INQUERY,         		fsm_ccl_sps_cloud_fb}, 							//后台反馈
+	{MSG_ID_SPS_CCL_CLOUD_FB,								FSM_STATE_CCL_CLOUD_INQUERY,         		fsm_ccl_sps_cloud_fb}, 							//后台反馈	
 	
 	//FSM_STATE_CCL_TO_OPEN_DOOR：启动30S开门定时，等待人工开门，超时则关门回归ACTIVE
   {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_TO_OPEN_DOOR,         		fsm_ccl_restart},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CCL_TO_OPEN_DOOR,         		fsm_ccl_time_out},
 	{MSG_ID_DIDO_CCL_DOOR_OPEN_EVENT,				FSM_STATE_CCL_TO_OPEN_DOOR,         		fsm_ccl_dido_door_open_event},      //开门事件
 	{MSG_ID_DIDO_CCL_EVENT_STATUS_UPDATE,		FSM_STATE_CCL_TO_OPEN_DOOR,         		fsm_ccl_dido_event_status_update},  //事件更新，重复触发
-
+	{MSG_ID_SPS_CCL_CLOSE_REPORT_CFM,				FSM_STATE_CCL_TO_OPEN_DOOR,         		fsm_ccl_sps_close_door_report_cfm},	//发送一次开关门报告的证实			
+	
 	//FSM_STATE_CCL_DOOR_OPEN：监控门限和门锁，大定时器超时进入FATAL FAULT。正常关门则发送报告给后台，然后进入ACTIVED状态
   {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_DOOR_OPEN,         				fsm_ccl_restart},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CCL_DOOR_OPEN,         				fsm_ccl_time_out},
 	{MSG_ID_DIDO_CCL_LOCK_C_DOOR_C_EVENT,		FSM_STATE_CCL_DOOR_OPEN,         				fsm_ccl_lock_and_door_close_event}, //关门事件
 	{MSG_ID_DIDO_CCL_EVENT_STATUS_UPDATE,		FSM_STATE_CCL_DOOR_OPEN,         				fsm_ccl_dido_event_status_update},  //事件更新，重复触发
-	{MSG_ID_SPS_CCL_CLOSE_REPORT_CFM,				FSM_STATE_CCL_DOOR_OPEN,         				fsm_ccl_sps_close_door_report_cfm},	//发送一次开关门报告的证实	
+	{MSG_ID_SPS_CCL_CLOSE_REPORT_CFM,				FSM_STATE_CCL_DOOR_OPEN,         				fsm_ccl_sps_close_door_report_cfm},	//发送一次开关门报告的证实		
 	
 	//FSM_STATE_CCL_FATAL_FAULT：严重错误状态，发送报告给后台，等待人工干预或者关门信号后回归SLEEP
   {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_FATAL_FAULT,         			fsm_ccl_restart},
@@ -71,7 +72,7 @@ FsmStateItem_t FsmCcl[] =
 	{MSG_ID_DIDO_CCL_LOCK_C_DOOR_C_EVENT,		FSM_STATE_CCL_FATAL_FAULT,         			fsm_ccl_lock_and_door_close_event},	  //关门事件
 	{MSG_ID_DIDO_CCL_EVENT_FAULT_TRIGGER,		FSM_STATE_CCL_FATAL_FAULT,         			fsm_ccl_event_fault_trigger_to_stop},  //暴力开门等差错事件
 	{MSG_ID_SPS_CCL_FAULT_REPORT_CFM,				FSM_STATE_CCL_FATAL_FAULT,         			fsm_ccl_sps_fault_report_cfm},			//发送故障报告的证实
-	{MSG_ID_SPS_CCL_CLOSE_REPORT_CFM,				FSM_STATE_CCL_FATAL_FAULT,         			fsm_ccl_sps_close_door_report_cfm},	//发送一次开关门报告的证实		
+	{MSG_ID_SPS_CCL_CLOSE_REPORT_CFM,				FSM_STATE_CCL_FATAL_FAULT,         			fsm_ccl_sps_close_door_report_cfm},	//发送一次开关门报告的证实	
 
 	//FSM_STATE_CCL_SLEEP: 休眠状态，可以被允许触发，或进入工作模式，或进入差错模式
   {MSG_ID_COM_RESTART,        						FSM_STATE_CCL_SLEEP,         						fsm_ccl_restart},
@@ -539,7 +540,7 @@ OPSTAT func_ccl_time_out_lock_work_active(void)
 	
 	//只需要去激活所有下位机
 	if (FsmGetState(TASK_ID_CCL) == FSM_STATE_CCL_CLOUD_INQUERY){
-		//去激活所有下位机
+		//去激活所有下位机，此时不需要发送后台命令，因为后台都连不上
 		memset(&snd, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
 		snd.length = sizeof(msg_struct_ccl_com_ctrl_cmd_t);
 		snd.workmode = IHU_CCL_DH_CMDID_WORK_MODE_SLEEP;
@@ -575,7 +576,7 @@ OPSTAT func_ccl_time_out_lock_work_active(void)
 		}		
 	}
 	
-	//待开门，意味着门还未开
+	//待开门，意味着门还未开：这里面也有个逻辑，就是必须也得等待CLOSE_REPORT_CFM的到来，不然也会出现问题
 	else if (FsmGetState(TASK_ID_CCL) == FSM_STATE_CCL_TO_OPEN_DOOR){
 		//停止开门定时器：这是因为卡边，大定时器到点但开门定时器还未到点
 		ret = ihu_timer_stop(TASK_ID_CCL, TIMER_ID_1S_CCL_LOCK_WORK_WAIT_TO_OPEN, TIMER_RESOLUTION_1S);
@@ -1172,5 +1173,7 @@ void func_ccl_open_all_sensor(void)
 {
 
 }
+
+
 
 

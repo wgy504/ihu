@@ -309,6 +309,7 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	//对接收到的上层命令进行分解处理
 	
 	//干活
+	ihu_sleep(2);
 	//GPRS_UART_GSM_working_procedure_selection(2, 0);
 	//这里有个挺有意思的现象：这里的命令还未执行完成，实际上后台的数据已经通过UART回来了，并通过ISR服务程序发送到SPSVIRGO的QUEUE中，但只有这里执行结束后，
 	//才会去接那个消息并执行结果。当然也存在着不正确或者没有结果的情况，那就靠CCL的状态机进行恢复了。
@@ -350,6 +351,7 @@ OPSTAT fsm_spsvirgo_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * pa
 	}
 	
 	//具体扫描处理
+	ihu_usleep(300);
 	
 	//扫描后将结果发给上层
 	memset(&snd, 0, sizeof(msg_struct_sps_ccl_sensor_status_rep_t));
@@ -392,7 +394,8 @@ OPSTAT fsm_spsvirgo_ccl_event_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 	
 	//干活
 	//具体的发送命令
-
+	ihu_sleep(2);
+	
 	//干完了之后，结果发送给CCL
 	memset(&snd, 0, sizeof(msg_struct_sps_ccl_event_report_cfm_t));
 	snd.length = sizeof(msg_struct_sps_ccl_event_report_cfm_t);
@@ -455,7 +458,8 @@ OPSTAT fsm_spsvirgo_ccl_fault_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 	
 	//干活
 	//具体的发送命令
-	
+	ihu_sleep(2);
+
 	//干完了之后，结果发送给CCL
 	memset(&snd, 0, sizeof(msg_struct_sps_ccl_fault_report_cfm_t));
 	snd.length = sizeof(msg_struct_sps_ccl_fault_report_cfm_t);
@@ -489,6 +493,7 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 	
 	//干活
 	//具体的发送命令
+	ihu_sleep(2);
 	
 	//干完了之后，结果发送给CCL
 	memset(&snd, 0, sizeof(msg_struct_sps_ccl_close_report_cfm_t));
