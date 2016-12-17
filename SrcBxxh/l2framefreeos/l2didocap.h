@@ -22,6 +22,7 @@
 	#include "l1comdef_freeos.h"
 	#include "l1timer_freeos.h"
 	#include "l3ccl.h"
+	#include "l2spsvirgo.h"	
 	
 #elif ((IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID) ||\
 	(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCCB_ID) ||\

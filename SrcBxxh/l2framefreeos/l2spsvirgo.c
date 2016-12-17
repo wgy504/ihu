@@ -46,7 +46,12 @@ FsmStateItem_t FsmSpsvirgo[] =
 	{MSG_ID_CCL_SPS_FAULT_REPORT_SEND,			FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_fault_report_send},
 	{MSG_ID_CCL_SPS_CLOSE_REPORT_SEND,			FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_close_door_report_send},
 #endif
-
+	
+	//Task level actived status
+  {MSG_ID_COM_RESTART,        						FSM_STATE_SPSVIRGO_COMMU,         						fsm_spsvirgo_restart},
+  {MSG_ID_COM_STOP,												FSM_STATE_SPSVIRGO_COMMU,         						fsm_spsvirgo_stop_rcv},
+	{MSG_ID_COM_TIME_OUT,										FSM_STATE_SPSVIRGO_COMMU,         				  	fsm_spsvirgo_time_out},
+		
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             									NULL},  //Ending
 };
@@ -306,6 +311,9 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	}
 	memcpy(&rcv, param_ptr, param_len);
 
+	//先进入通信状态
+	FsmSetState(TASK_ID_SPSVIRGO, FSM_STATE_SPSVIRGO_COMMU);
+	
 	//对接收到的上层命令进行分解处理
 	
 	//干活
@@ -314,6 +322,10 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	//这里有个挺有意思的现象：这里的命令还未执行完成，实际上后台的数据已经通过UART回来了，并通过ISR服务程序发送到SPSVIRGO的QUEUE中，但只有这里执行结束后，
 	//才会去接那个消息并执行结果。当然也存在着不正确或者没有结果的情况，那就靠CCL的状态机进行恢复了。
 
+		
+	//再进入正常状态
+	FsmSetState(TASK_ID_SPSVIRGO, FSM_STATE_SPSVIRGO_ACTIVED);
+	
 	//干完了之后，结果发送给CCL
 	memset(&snd, 0, sizeof(msg_struct_spsvirgo_ccl_cloud_fb_t));
 	snd.authResult = ((rand()%2 == 1)?IHU_CCL_LOCK_AUTH_RESULT_OK:IHU_CCL_LOCK_AUTH_RESULT_NOK);
@@ -324,7 +336,7 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 		IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPSVIRGO], zIhuTaskNameList[TASK_ID_CCL]);
 		return IHU_FAILURE;
 	}
-	
+
 	return IHU_SUCCESS;
 }
 
@@ -375,7 +387,7 @@ OPSTAT fsm_spsvirgo_ccl_event_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 	int ret = 0;
 	msg_struct_ccl_sps_event_report_send_t rcv;
 	msg_struct_sps_ccl_event_report_cfm_t snd;
-	
+		
 	//Receive message and copy to local variable
 	memset(&rcv, 0, sizeof(msg_struct_ccl_sps_event_report_send_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_sps_event_report_send_t))){
@@ -392,10 +404,16 @@ OPSTAT fsm_spsvirgo_ccl_event_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 		return IHU_FAILURE;
 	}
 	
+	//先进入通信状态
+	FsmSetState(TASK_ID_SPSVIRGO, FSM_STATE_SPSVIRGO_COMMU);
+
 	//干活
 	//具体的发送命令
 	ihu_sleep(2);
 	
+	//再进入正常状态
+	FsmSetState(TASK_ID_SPSVIRGO, FSM_STATE_SPSVIRGO_ACTIVED);
+
 	//干完了之后，结果发送给CCL
 	memset(&snd, 0, sizeof(msg_struct_sps_ccl_event_report_cfm_t));
 	snd.length = sizeof(msg_struct_sps_ccl_event_report_cfm_t);
@@ -446,7 +464,7 @@ OPSTAT fsm_spsvirgo_ccl_fault_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 	int ret = 0;
 	msg_struct_ccl_sps_fault_report_send_t rcv;
 	msg_struct_sps_ccl_fault_report_cfm_t snd;
-	
+
 	//Receive message and copy to local variable
 	memset(&rcv, 0, sizeof(msg_struct_ccl_sps_fault_report_send_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_sps_fault_report_send_t))){
@@ -456,10 +474,16 @@ OPSTAT fsm_spsvirgo_ccl_fault_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 	}
 	memcpy(&rcv, param_ptr, param_len);
 	
+	//先进入通信状态
+	FsmSetState(TASK_ID_SPSVIRGO, FSM_STATE_SPSVIRGO_COMMU);
+	
 	//干活
 	//具体的发送命令
 	ihu_sleep(2);
 
+	//再进入正常状态
+	FsmSetState(TASK_ID_SPSVIRGO, FSM_STATE_SPSVIRGO_ACTIVED);
+	
 	//干完了之后，结果发送给CCL
 	memset(&snd, 0, sizeof(msg_struct_sps_ccl_fault_report_cfm_t));
 	snd.length = sizeof(msg_struct_sps_ccl_fault_report_cfm_t);
@@ -469,7 +493,7 @@ OPSTAT fsm_spsvirgo_ccl_fault_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 		IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPSVIRGO], zIhuTaskNameList[TASK_ID_CCL]);
 		return IHU_FAILURE;
 	}	
-	
+
 	//返回
 	return IHU_SUCCESS;
 }
@@ -481,7 +505,7 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 	int ret = 0;
 	msg_struct_ccl_sps_close_report_send_t rcv;
 	msg_struct_sps_ccl_close_report_cfm_t snd;
-	
+
 	//Receive message and copy to local variable
 	memset(&rcv, 0, sizeof(msg_struct_ccl_sps_close_report_send_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_sps_close_report_send_t))){
@@ -491,9 +515,15 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 	}
 	memcpy(&rcv, param_ptr, param_len);
 	
+	//先进入通信状态
+	FsmSetState(TASK_ID_SPSVIRGO, FSM_STATE_SPSVIRGO_COMMU);
+	
 	//干活
 	//具体的发送命令
 	ihu_sleep(2);
+	
+	//再进入正常状态
+	FsmSetState(TASK_ID_SPSVIRGO, FSM_STATE_SPSVIRGO_ACTIVED);
 	
 	//干完了之后，结果发送给CCL
 	memset(&snd, 0, sizeof(msg_struct_sps_ccl_close_report_cfm_t));
@@ -504,7 +534,7 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 		IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPSVIRGO], zIhuTaskNameList[TASK_ID_CCL]);
 		return IHU_FAILURE;
 	}	
-	
+
 	//返回
 	return IHU_SUCCESS;
 }

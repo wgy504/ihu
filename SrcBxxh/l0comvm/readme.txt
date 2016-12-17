@@ -4,11 +4,14 @@
 //近期需要完成的任务
 = 研究STM32的IAP功能
 
+
 //= ZJL, 2016 Dec.16, CURRENT_SW_DELIVERY R03.65 =>CCL项目
 = 核心堆栈不够，从8C00改为9C00，利用CubeMX修改
 = 未来可以消减不适用的任务，达到降低内存的目标。目前内存还够，所有其它任务模块就一起带着吧。
 = 修正了一些特别关键的BUG，比如VM中打印MSGID的小BUG，以及DIDOCAP中在EVENT_REPORT模式下不应该允许继续扫描外围传感器
 = 还修正了CCL DOOR_TO_OPEN状态下等待SPSVIRGO发送CLOSE_REPORT_CFM报告的问题，不然会导致状态机混乱
+= 修正了DIDOCAP中func_didocap_time_out_external_trigger_period_scan的执行条件：在后台SPSVIRGO通信未结束的情况下，不能允许二次重入的FAULT_TRIGGER
+  事件。增加了判定条件FsmGetState(TASK_ID_SPSVIRGO) == FSM_STATE_SPSVIRGO_ACTIVED，而且在通信条件下TASK_ID_SPSVIRGO将进入FSM_STATE_SPSVIRGO_COMMU状态 
 
 //= ZJL, 2016 Dec.16, CURRENT_SW_DELIVERY R03.64 =>CCL项目
 = 完善TIME OUT的处理过程

@@ -221,7 +221,8 @@ OPSTAT fsm_didocap_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 	//永恒的外部触发扫描：只有在IHU_CCL_DIDO_WORKING_MODE_SLEEP模式下才会进行外部触发源的定时扫描
 	//在FSM_STATE_CCL_EVENT_REPORT@CCL下也会遇到问题，所以需要多加一个逻辑判定
 	else if ((rcv.timeId == TIMER_ID_1S_CCL_DIDO_TRIGGER_PERIOD_SCAN) &&(rcv.timeRes == TIMER_RESOLUTION_1S)){
-		if ((FsmGetState(TASK_ID_CCL) != FSM_STATE_CCL_EVENT_REPORT) && ((zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_SLEEP) || (zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_FAULT))){
+		if ((FsmGetState(TASK_ID_CCL) != FSM_STATE_CCL_EVENT_REPORT) && (FsmGetState(TASK_ID_SPSVIRGO) == FSM_STATE_SPSVIRGO_ACTIVED) &&\
+			((zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_SLEEP) || (zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_FAULT))){
 			func_didocap_time_out_external_trigger_period_scan();
 		}
 	}

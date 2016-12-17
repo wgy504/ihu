@@ -397,7 +397,6 @@
 	#define IHU_CCL_TIMER_DURATION_DCMI_WORKING_PERIOD_SCAN 3 //WORKING模式下外部传感器的定时扫描
 	#define IHU_CCL_TIMER_DURATION_ADC_WORKING_PERIOD_SCAN 3 //WORKING模式下外部传感器的定时扫描
 
-
 	//Series Port config
 	#define IHU_SERIESPORT_NUM_FOR_GPS_DEFAULT  1
 	//定义后台CLOUD连接到服务器
