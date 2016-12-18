@@ -79,6 +79,9 @@ FsmStateItem_t FsmCcl[] =
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CCL_SLEEP,         						fsm_ccl_time_out},
 	{MSG_ID_DIDO_CCL_EVENT_LOCK_TRIGGER,		FSM_STATE_CCL_SLEEP,         						fsm_ccl_event_lock_trigger_to_work},  //锁具激活触发
 	{MSG_ID_DIDO_CCL_EVENT_FAULT_TRIGGER,		FSM_STATE_CCL_SLEEP,         						fsm_ccl_event_fault_trigger_to_stop},	//暴力开门事件
+	//下面这两个入口，完全是为了一种妥协，不然需要再增加一个用于后台通信证实的状态，没有必要，因为这会导致内存占用增加。如果内存允许，当然更好。
+	{MSG_ID_SPS_CCL_FAULT_REPORT_CFM,				FSM_STATE_CCL_SLEEP,         						fsm_ccl_sps_fault_report_cfm},			//有可能发生定时器超时与SPS传输并发的问题
+	{MSG_ID_SPS_CCL_CLOSE_REPORT_CFM,				FSM_STATE_CCL_SLEEP,         						fsm_ccl_sps_close_door_report_cfm},	//有可能发生定时器超时与SPS传输并发的问题
 	
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             							NULL},  //Ending
