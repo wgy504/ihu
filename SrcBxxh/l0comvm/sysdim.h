@@ -254,7 +254,7 @@
 	//消息参数
 	#define MSG_NAME_MAX_LENGTH 70
 	#define MAX_IHU_MSG_BODY_LENGTH 205  //消息最长长度，这里比较短节省内存，按道理，没有图像和视频的情况下，是足够的
-	#define IHU_FILE_NAME_LENGTH_MAX 100
+	#define IHU_FILE_NAME_LENGTH_MAX 64
 	#define MAX_QUEUE_NUM_IN_ONE_TASK 4
   #define IHU_QUEUE_MAX_SIZE MAX_IHU_MSG_BODY_LENGTH + 6 //should be = MAX_IHU_MSG_BUF_LENGTH
 	//SLEEP控制表给任务模块可以给出
@@ -263,7 +263,6 @@
 	#define IHU_PRINT_FILE_LINE_SIZE 60
 	#define IHU_PRINT_BUFFER_NUMBER 10
 	#define IHU_PRINT_MUTEX_TIME_OUT_DURATION 100
-
 
 
 

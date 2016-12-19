@@ -28,6 +28,7 @@
 #include "l2ledpisces.h"
 #include "l2ethorion.h"
 #include "l2dcmiaris.h"
+#include "huixmlcodec.h"
 
 //State definition
 //#define FSM_STATE_ENTRY  0x00

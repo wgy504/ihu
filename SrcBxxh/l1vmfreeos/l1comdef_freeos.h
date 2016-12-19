@@ -458,4 +458,124 @@ typedef struct strIhuI2cariesMotoFrame
 #define IHU_CCL_LOCK_AUTH_RESULT_OK  1
 #define IHU_CCL_LOCK_AUTH_RESULT_NOK  2
 
+
+//后台接口协议定义
+typedef struct CloudDataSendBuf
+{
+	UINT16 bufferLen;
+	//char的意义是，底层均为字符串，而不是十六进制数据
+	char buf[MAX_IHU_MSG_BUF_LENGTH_CLOUD];  //内部还包括格式化的参数部分，这里需要再仔细考虑一下
+}CloudDataSendBuf_t;
+
+//跟后台的通信接口中，需要定义一些全局消息的结构体类型
+enum CloudBhMsgTypeEnum
+{
+	IHU_CLOUD_BH_MSG_TYPE_MIN = 0x00,
+	IHU_CLOUD_BH_MSG_TYPE_DEVICE_REPORT_UINT8,
+	IHU_CLOUD_BH_MSG_TYPE_DEVICE_CONTROL_UINT8,
+	IHU_CLOUD_BH_MSG_TYPE_HEAT_BEAT_UINT8,
+	IHU_CLOUD_BH_MSG_TYPE_BIZ_ITG_UINT8,
+	IHU_CLOUD_BH_MSG_TYPE_ALARM_REPORT_UINT8,//for alarm report
+	IHU_CLOUD_BH_MSG_TYPE_PM_REPORT_UINT8,//for pm report
+	IHU_CLOUD_BH_MSG_TYPE_MAX,
+};
+#define IHU_CLOUD_BH_MSG_TYPE_DEVICE_REPORT_STRING  "hcu_text"  //"hcu_text"
+#define IHU_CLOUD_BH_MSG_TYPE_DEVICE_CONTROL_STRING  "hcu_command" //"hcu_command"
+#define IHU_CLOUD_BH_MSG_TYPE_HEAT_BEAT_STRING "hcu_heart_beat"   //"hcu_heart_beat"  //心跳协议，里面的数据内容是空的
+#define IHU_CLOUD_BH_MSG_TYPE_BIZ_ITG_STRING "hcu_biz_itg"  //业务智能 hcu_biz_inteligence
+#define IHU_CLOUD_BH_MSG_TYPE_ALARM_REPORT_STRING "hcu_alarm"  //for alarm report
+#define IHU_CLOUD_BH_MSG_TYPE_PM_REPORT_STRING "hcu_pm"  //for pm report
+
+//XML格式定义
+//主体内容中，各个不同的字段完全按照这个优先级进行编码，解码时将由各种操作字的隐含必选关系进行解码，从而简化编码函数
+#define IHU_CLOUD_BH_ITF_STD_XML_HEAD_MAX_LENGTH IHU_FILE_NAME_LENGTH_MAX  //要传递HTTP名字会后台，只能扩大该域的长度
+typedef struct CloudBhItfDevReportStdXml
+{
+	char xml_l[6];
+	char ToUserName_l[22];
+	char ToUserName[IHU_CLOUD_BH_ITF_STD_XML_HEAD_MAX_LENGTH+1];
+	char ToUserName_r[17];
+	char FromUserName_l[24];
+	char FromUserName[IHU_CLOUD_BH_ITF_STD_XML_HEAD_MAX_LENGTH+1];
+	char FromUserName_r[19];
+	char CreateTime_l[13];
+	char CreateTime[IHU_CLOUD_BH_ITF_STD_XML_HEAD_MAX_LENGTH+1];
+	char CreateTime_r[14];
+	char MsgType_l[19];
+	char MsgType[IHU_CLOUD_BH_ITF_STD_XML_HEAD_MAX_LENGTH+1];
+	char MsgType_r[14];
+	char Content_l[19];
+	char conCmdId[3];
+	char conLen[3];  //1B
+	char conOptId[3]; //1B
+	char conBackType[3]; //1B
+	char conEqpId[3];  //1B
+	char conDataFormat[3]; //1B
+	char conEmc[5];   //2B
+	char conPm1d0[9];   //4B
+	char conPm2d5[9];   //4B
+	char conPm10d[9];   //4B
+	char conWinddir[5];   //2B
+	char conWindspd[5];   //2B
+	char conTemp[5];   //2B
+	char conHumid[5];   //2B
+	char conNoise[9];   //4B
+	char conEW[3];//1B
+	char conGpsx[9];   //4B
+	char conNS[3];//1B
+	char conGpsy[9];   //4B
+	char conGpsz[9];   //4B
+
+	//Added by Shanchun for alarm report
+	char conAlarmType[5];   //2B
+	char conAlarmContent[5];//2B
+
+	char conPmCloudVelaConnCnt[5];   //2B
+	char conPmCloudVelaConnFailCnt[5];   //2B
+	char conPmCloudVelaDiscCnt[5];//2B
+	char conPmSocketDiscCnt[5];//2B
+
+	//Added by Shanchun for control cmd
+	char conPowerOnOff[3];
+	char conInterSample[3];
+	char conMeausTimes[3];
+	char conNewEquId[3];
+	char conWorkCycle[3];
+
+	//Added by Shanchun for hcu sw download
+	char conSwDownload[3];
+
+	//Added by Shanchun for hcu inventory
+	char conHwUuid[12];//6B
+	char conHwType[3];//1B
+	char conHwVersion[5];//2B
+	char conSwDelivery[5];//1B
+	char conSwRelease[5];//2B
+
+	//Added by Shanchun for av upload
+	char conAvUpload[3];
+	//char conAvFileName[HCU_FILE_NAME_LENGTH_MAX];
+
+	char conTimeStamp[9]; //4B
+	char conNtimes[5];   //2B
+	char Content_r[14];
+	char FuncFlag_l[11];
+	char FuncFlag[IHU_CLOUD_BH_ITF_STD_XML_HEAD_MAX_LENGTH+1];
+	char FuncFlag_r[12];
+	char xml_r[7];
+}CloudBhItfDevReportStdXml_t;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #endif /* L1VMFREEOS_L1COMDEF_FREEOS_H_ */

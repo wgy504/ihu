@@ -58,11 +58,9 @@
 #define IHU_TRACE_MSG_MODE_COMBINE_DOUBLE_ALLOW 34  //通过模块和消息枚举
 #define IHU_TRACE_MSG_MODE_COMBINE_DOUBLE_RESTRICT 35  //通过模块和消息枚举
 
-//系统定义的服务器以及本机名称，用于HCU与服务器之间的通信
+//系统定义的服务器以及本机名称，用于IHU与后台服务器之间的通信
 #define IHU_CLOUDXHUI_BH_INTERFACE_STANDARD_XML 1
-#define IHU_CLOUDXHUI_BH_INTERFACE_STANDARD_ZHB 2
-
-
+#define IHU_CLOUDXHUI_BH_INTERFACE_STANDARD_SECOND 2
 
 
  /***********************************************************************************

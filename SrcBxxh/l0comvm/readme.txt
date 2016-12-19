@@ -4,11 +4,16 @@
 //近期需要完成的任务
 = 研究STM32的IAP功能
 
+//= ZJL, 2016 Dec.19, CURRENT_SW_DELIVERY R03.67 =>CCL项目
+= 后台编解码探索
+= 将HCU的代码先移植部分过来，待完善
+
 //= ZJL, 2016 Dec.18, CURRENT_SW_DELIVERY R03.66 =>CCL项目
 = 提高数据源产生的频率，从1000分之一提高到1/2
 = 为MSG_ID_SPS_CCL_FAULT_REPORT_CFM/MSG_ID_SPS_CCL_CLOSE_REPORT_CFM在SLEEP态建立入口，不然会造成时钟超时与SPS后台通信太久之间的矛盾
 = 出现了一个特别奇怪的问题，DICOCAP中送来的命令，比如EVENT_TRIGGER等，CCL再发送CTRL_CMD给L2FRAME模块，耗费3s甚至更长的时间，这是为什么？是消息打印口的问题
   还是中间调度的问题？待研究调查
+= 这个问题研究的结果是，串口助手打印时间戳出现的问题，消息发送正常，该问题关闭。
 
 //= ZJL, 2016 Dec.16, CURRENT_SW_DELIVERY R03.65 =>CCL项目
 = 核心堆栈不够，从8C00改为9C00，利用CubeMX修改

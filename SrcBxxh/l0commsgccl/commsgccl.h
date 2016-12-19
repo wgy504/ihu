@@ -38,6 +38,7 @@ typedef UINT8           		BOOL;
 //Under normal case, 1024Byte shall be enough for internal message communciation purpose.
 //If not enough, need modify here to enlarge
 #define MAX_IHU_MSG_BUF_LENGTH MAX_IHU_MSG_BODY_LENGTH+6
+#define MAX_IHU_MSG_BUF_LENGTH_CLOUD MAX_IHU_MSG_BODY_LENGTH-6
 typedef struct IhuMsgSruct
 {
 	UINT16 msgType;
@@ -407,5 +408,14 @@ typedef struct msg_struct_ccl_sps_close_report_send
 #define IHU_CCL_CLOSE_DOOR_NORMAL 1
 #define IHU_CCL_CLOSE_DOOR_NOT_YET_OPEN 2
 #define IHU_CCL_CLOSE_DOOR_BY_FAULT 3
+
+//来自底层的SPS数据结构部分
+//Used to common all different received data buffer
+typedef struct  msg_struct_ccl_com_cloud_data_rx //
+{
+	UINT16 length;
+	char buf[MAX_IHU_MSG_BUF_LENGTH_CLOUD];
+}msg_struct_ccl_com_cloud_data_rx_t;
+
 
 #endif /* L0COMVM_COMMSGCCL_H_ */
