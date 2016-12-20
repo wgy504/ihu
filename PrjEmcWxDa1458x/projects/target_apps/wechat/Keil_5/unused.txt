@@ -1,4 +1,4 @@
-;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Tue Dec 20 22:52:37 2016
+;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Tue Dec 20 23:13:33 2016
 ;VERSION 0.2
 ;FILE adc.o
 ;FILE app.o
@@ -246,7 +246,7 @@ AES_Decrypt <= USED 0
 AES_Encrypt_PKCS7 <= USED 0
 AES_Init <= USED 0
 AES_get_length <= USED 0
-;FILE wechat_1.o
+;FILE wechat.o
 wechat_disable <= USED 0
 wechat_enable_indication <= USED 0
 wechat_indication_cfm_send <= USED 0

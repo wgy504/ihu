@@ -144,7 +144,7 @@ void i2c_led_release(void);
  * @brief Polls until I2C eeprom is ready
  ****************************************************************************************
  */
-void i2c_wait_until_eeprom_ready(void);
+i2c_error_code i2c_wait_until_eeprom_ready(void);
 
 /**
  ****************************************************************************************
