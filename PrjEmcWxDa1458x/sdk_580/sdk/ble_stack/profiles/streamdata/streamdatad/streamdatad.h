@@ -5,9 +5,12 @@
  *
  * @brief StreamData Device profile attribute declarations
  *
- * Copyright (C) RivieraWaves 2009-2012
+ * Copyright (C) 2012. Dialog Semiconductor Ltd, unpublished work. This computer 
+ * program includes Confidential, Proprietary Information and is a Trade Secret of 
+ * Dialog Semiconductor Ltd.  All use, disclosure, and/or reproduction is prohibited 
+ * unless authorized in writing. All Rights Reserved.
  *
- * $Rev: $
+ * <bluetooth.support@diasemi.com> and contributors.
  *
  ****************************************************************************************
  */

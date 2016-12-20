@@ -198,6 +198,15 @@ static void spi_transmit_isr(void)
         
         if (spi_env.tx.size == 0)
         {
+            while (GetBits16(SPI_CTRL_REG1, SPI_BUSY) == 1) // Wait while SPI is busy
+            {
+                if (spi_data_rdy_getf())  // Still data in the SPI RX FIFO
+                {
+                    spi_rxtxreg_read();     // Get byte from SPI RX FIFO
+                    spi_int_bit_clear();    // Clear pending flag
+                }
+            }
+
             spi_dready_low();           // De-assert DREADY signal, transmit completed
             
             // Empty SPI Receive FIFO

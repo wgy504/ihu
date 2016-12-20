@@ -375,8 +375,6 @@ int arch_printf(const char *fmt, ...)
         // End of critical section
         GLOBAL_INT_RESTORE();
     }
-    
-    arch_printf_process();
 
     return 1;
 }

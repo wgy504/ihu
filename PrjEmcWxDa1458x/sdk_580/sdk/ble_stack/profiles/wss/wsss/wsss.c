@@ -32,6 +32,7 @@
     #include "atts_util.h"
     #include "prf_utils.h"
     #include "wsss.h"
+    #include "wsss_task.h"
 
     /*
      * WSS ATTRIBUTES
@@ -49,6 +50,14 @@
             sizeof(wss_svc),
             sizeof(wss_svc),
             (uint8_t*) &wss_svc
+        },
+        // WSS Included Service Declaration
+        [WSS_IDX_INCL_SVC]        =
+        {
+            ATT_DECL_INCLUDE,
+            PERM(RD, ENABLE),
+            sizeof(struct att_incl_desc), 0,
+            NULL
         },
 
         // Weight Scale Feature Characteristic Declaration
@@ -160,26 +169,26 @@
         if (pmeas_val->weight < 0)
             co_write16p(packed_meas, 0xFFFF);
         else
-            co_write16p(packed_meas, pmeas_val->flags & WSSS_MEAS_FLAG_UNIT_IMPERIAL
+            co_write16p(packed_meas, pmeas_val->flags & WSS_MEAS_FLAG_UNIT_IMPERIAL
                                     ? pmeas_val->weight / 0.01
                                     : pmeas_val->weight / 0.005);
         packed_meas += sizeof(uint16_t);
         
-        if (pmeas_val->flags & WSSS_MEAS_FLAG_TIME_STAMP)
+        if (pmeas_val->flags & WSS_MEAS_FLAG_TIME_STAMP)
             // Time Stamp
             packed_meas += prf_pack_date_time(packed_meas, &pmeas_val->datetime);
         
-        if (pmeas_val->flags & WSSS_MEAS_FLAG_USERID_PRESENT)
+        if (pmeas_val->flags & WSS_MEAS_FLAG_USERID_PRESENT)
             // User ID
             *packed_meas++ = pmeas_val->userid;
 
-        if ((pmeas_val->flags & WSSS_MEAS_FLAG_BMI_HT_PRESENT) && (pmeas_val->weight >= 0))    
+        if ((pmeas_val->flags & WSS_MEAS_FLAG_BMI_HT_PRESENT) && (pmeas_val->weight >= 0))
         {   // BMI
             co_write16p(packed_meas, pmeas_val->bmi / 0.1);
             packed_meas += sizeof(uint16_t);
             
             // Height
-            co_write16p(packed_meas, pmeas_val->flags & WSSS_MEAS_FLAG_UNIT_IMPERIAL
+            co_write16p(packed_meas, pmeas_val->flags & WSS_MEAS_FLAG_UNIT_IMPERIAL
                                    ? pmeas_val->height / 0.1
                                    : pmeas_val->height / 0.001);
             packed_meas += sizeof(uint16_t);
@@ -205,18 +214,18 @@
         // Flags & Weight always present
         uint8_t size = sizeof(int8_t) + sizeof(uint16_t);
         
-        if (flags & WSSS_MEAS_FLAG_TIME_STAMP)
+        if (flags & WSS_MEAS_FLAG_TIME_STAMP)
         {   // Time Stamp present
             struct prf_date_time datetime;
             size += sizeof(datetime.year) + sizeof(datetime.month) + sizeof(datetime.day)
                   + sizeof(datetime.hour) + sizeof(datetime.min) + sizeof(datetime.sec);
         }
         
-        if (flags & WSSS_MEAS_FLAG_USERID_PRESENT)
+        if (flags & WSS_MEAS_FLAG_USERID_PRESENT)
             // User ID present
             size += sizeof(uint8_t);
 
-        if (flags & WSSS_MEAS_FLAG_BMI_HT_PRESENT)
+        if (flags & WSS_MEAS_FLAG_BMI_HT_PRESENT)
             // BMI & Height present
             size += sizeof(uint16_t) * 2;
 

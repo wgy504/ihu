@@ -50,7 +50,8 @@ void user_on_disconnect( struct gapc_disconnect_ind const *param )
 }
 void app_advertise_complete (const uint8_t param)
 {    
-	default_app_on_adv_undirect_complete(param);
+	//removed from sdk 5.0.4
+	//default_app_on_adv_undirect_complete(param);
 } 
 
 #endif  //BLE_APP_PRESENT

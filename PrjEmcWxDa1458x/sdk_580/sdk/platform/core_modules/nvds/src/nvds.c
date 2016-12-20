@@ -144,13 +144,12 @@ void nvds_read_bdaddr_from_otp()
 
         // set OTP in read mode
         SetWord32(OTPC_MODE_REG, XPMC_MODE_MREAD);
-				
     }
     else
         otp_bdaddr = (uint8_t *)0x20000000 + BDADDR_OFFSET;   //where in OTP header is BDADDR
 
+
     memcpy(&dev_bdaddr, otp_bdaddr, sizeof(dev_bdaddr));
-		
     SetBits16(CLK_AMBA_REG, OTP_ENABLE, 0);     //disable OTP clock
 }
 

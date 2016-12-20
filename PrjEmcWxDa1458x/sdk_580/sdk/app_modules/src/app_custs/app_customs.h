@@ -23,7 +23,7 @@
  ****************************************************************************************
  */
  
-#include "rwip_config.h"             // SW configuration
+#include "user_profiles_config.h"
 
 #if (BLE_CUSTOM_SERVER)
 

@@ -124,7 +124,7 @@
         #if (USE_MEMORY_MAP == EXT_SLEEP_SETUP)
             #error "Memory map error! Device configured for Deep Sleep but the chosen Memory Map is not correct."
         #endif
-    #endif // CFG_DEEP_SLEEP
+    #endif // CFG_MEM_MAP_DEEP_SLEEP
 
     #ifdef CFG_MEM_MAP_EXT_SLEEP
         #if (USE_MEMORY_MAP != EXT_SLEEP_SETUP)

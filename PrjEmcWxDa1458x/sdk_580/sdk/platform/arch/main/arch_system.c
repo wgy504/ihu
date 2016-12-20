@@ -59,6 +59,17 @@
 #include "uart.h"
 #include "reg_uart.h"   // uart register
 
+/*
+ * DEFINES
+ ****************************************************************************************
+ */
+
+#if HW_CONFIG_PRO_DK
+    #define DEFAULT_XTAL16M_TRIM_VALUE (850)
+#else
+    #define DEFAULT_XTAL16M_TRIM_VALUE (1302)
+#endif
+
 /**
  * @addtogroup DRIVERS
  * @{
@@ -103,7 +114,8 @@ uint32_t lp_clk_sel __attribute__((section("retention_mem_area0"),zero_init));  
 uint32_t rcx_freq __attribute__((section("retention_mem_area0"),zero_init));
 uint8_t cal_enable  __attribute__((section("retention_mem_area0"),zero_init));
 uint32_t rcx_period __attribute__((section("retention_mem_area0"),zero_init));
-float rcx_slot_duration __attribute__((section("retention_mem_area0"),zero_init));;
+uint32_t rcx_slot_duration_num __attribute__((section("retention_mem_area0"), zero_init));
+uint32_t rcx_slot_duration_den __attribute__((section("retention_mem_area0"), zero_init));
 
 uint8_t force_rf_cal __attribute__((section("retention_mem_area0"),zero_init));
 
@@ -117,10 +129,12 @@ volatile uint8_t cs_table[(BLE_CONNECTION_MAX + 2) * REG_BLE_EM_WPB_SIZE * 2] __
 #endif
 #endif
 
+#if (RCX_MEASURE_ENABLED)
 uint32_t rcx_freq_min __attribute__((section("retention_mem_area0"),zero_init));
 uint32_t rcx_freq_max __attribute__((section("retention_mem_area0"),zero_init));
 uint32_t rcx_period_last __attribute__((section("retention_mem_area0"),zero_init));
 uint32_t rcx_period_diff __attribute__((section("retention_mem_area0"),zero_init));
+#endif
 
 #ifndef USE_ARCH_WKUPCT_DEB_TIME
 #define USE_ARCH_WKUPCT_DEB_TIME
@@ -214,7 +228,7 @@ static __inline void init_pwr_and_clk_ble(void)
     else if ( arch_clk_is_RCX20( ) )
     {
         SetBits16(CLK_RCX20K_REG, RCX20K_NTC, 0xB);
-        SetBits16(CLK_RCX20K_REG, RCX20K_BIAS, 1);
+        SetBits16(CLK_RCX20K_REG, RCX20K_BIAS, 0);
         SetBits16(CLK_RCX20K_REG, RCX20K_TRIM, 0);
         SetBits16(CLK_RCX20K_REG, RCX20K_LOWF, 1);
 
@@ -296,29 +310,29 @@ void read_rcx_freq(uint16_t cal_time)
         cal_enable = 0;
 
         rcx_freq = f;
-        rcx_period = ((float) 1000000/f) * 1024;
-        rcx_slot_duration = 0.000625 * (float)rcx_freq;
+        rcx_period = (64 * value) / cal_time;
+        rcx_slot_duration_num = (625 * cal_time * 16);
+        rcx_slot_duration_den = value;
 
-        if (RCX_MEASURE_ENABLED)
+#if (RCX_MEASURE_ENABLED)
+        if (rcx_period_last)
         {
-            if (rcx_period_last)
-            {
-                volatile int diff = rcx_period_last - rcx_period;
-                if (abs(diff) > rcx_period_diff)
-                    rcx_period_diff = abs(diff);
-            }
-            rcx_period_last = rcx_period;
-
-            if (rcx_freq_min == 0)
-            {
-                rcx_freq_min = rcx_freq;
-                rcx_freq_max = rcx_freq;
-            }
-            if (rcx_freq < rcx_freq_min)
-                rcx_freq_min = rcx_freq;
-            else if (rcx_freq > rcx_freq_max)
-                rcx_freq_max = rcx_freq;
+            volatile int diff = rcx_period_last - rcx_period;
+            if (abs(diff) > rcx_period_diff)
+                rcx_period_diff = abs(diff);
         }
+        rcx_period_last = rcx_period;
+
+        if (rcx_freq_min == 0)
+        {
+            rcx_freq_min = rcx_freq;
+            rcx_freq_max = rcx_freq;
+        }
+        if (rcx_freq < rcx_freq_min)
+            rcx_freq_min = rcx_freq;
+        else if (rcx_freq > rcx_freq_max)
+            rcx_freq_max = rcx_freq;
+#endif
     }
 }
 
@@ -726,25 +740,16 @@ uint8_t check_sys_startup_period(void)
 
         current_time = lld_evt_time_get();
 
-        if (current_time < startup_sleep_delay) // startup_sleep_delay after system startup to allow system to sleep
+        // startup_sleep_delay after system startup to allow system to sleep
+        if (current_time < startup_sleep_delay)
+        {
             ret_value = 1;
+        }
         else // After 2 seconds system can sleep
         {
             sys_startup_flag = false;
-            if ( (arch_get_sleep_mode() == 2) || (arch_get_sleep_mode() == 1) )
-            {
-                wdg_freeze();                           // Stop WDOG until debugger is removed
-                while ((GetWord16(SYS_STAT_REG) & DBG_IS_UP) == DBG_IS_UP) {};
-                SetBits16(SYS_CTRL_REG, DEBUGGER_ENABLE, 0);    // close debugger
-            }
-
-            if(USE_WDOG)
-                SetWord16(RESET_FREEZE_REG, FRZ_WDOG);  // Start WDOG
-
-            ret_value = 0;
         }
     }
-
     return ret_value;
 }
 
@@ -770,6 +775,24 @@ void set_xtal16m_trim_value(uint16_t trim_value)
     while( (GetWord16(CLK_CTRL_REG) & RUNNING_AT_XTAL16M) == 0 );   // wait for actual switch
 }
 
+/**
+ ****************************************************************************************
+ * @brief Check that XTAL 16 MHz clock is calibrated.
+ * @return void
+ * About: Check if XTAL 16 MHz clock is calibrated and if not make corrective actions.
+ ****************************************************************************************
+ */
+static __inline void xtal16_calibration_check(void)
+{
+    if(DEFAULT_XTAL16M_TRIM_VALUE_USED)
+    {
+    // Apply the default XTAL16 trim value if a trim value has not been programmed in OTP
+        if (0 == GetWord16(CLK_FREQ_TRIM_REG))
+        {
+            set_xtal16m_trim_value(DEFAULT_XTAL16M_TRIM_VALUE);
+        }
+    }
+}
 
 /*
  ********************* System initialisation related functions *******************
@@ -886,9 +909,18 @@ void system_init(void)
     if (BLE_GTL_PATCH)
         patch_gtl_task();
 
+#if !defined( __DA14581__)
     //Patch llc task
-    if (BLE_MEM_LEAK_PATCH)
-        patch_llc_task();
+    patch_llc_task();
+#endif
+
+#if !defined(__DA14581__)
+    patch_atts_task();
+#endif
+
+#if (BLE_HOST_PRESENT)
+    patch_gapc_task();
+#endif
 
     //Enable the BLE core
     SetBits32(BLE_RWBTLECNTL_REG, RWBLE_EN, 1);
@@ -980,5 +1012,61 @@ void arch_wkupct_tweak_deb_time(bool tweak)
         }
     }
 }
+
+void arch_uart_init_slow(uint16_t baudr, uint8_t mode)
+{
+    /// UART TX RX Channel
+    struct uart_txrxchannel
+    {
+        /// size
+        uint32_t  size;
+        /// buffer pointer
+        uint8_t  *bufptr;
+        /// call back function pointer
+        void (*callback) (uint8_t);
+    };
+    /// UART environment structure
+    struct uart_env_tag
+    {
+        /// tx channel
+        struct uart_txrxchannel tx;
+        /// rx channel
+        struct uart_txrxchannel rx;
+        /// error detect
+        uint8_t errordetect;
+    };
+    // ROM variable
+    extern struct uart_env_tag uart_env;
+
+    //ENABLE FIFO, REGISTER FCR IF UART_LCR_REG.DLAB=0
+    // XMIT FIFO RESET, RCVR FIFO RESET, FIFO ENABLED
+    SetBits16(UART_LCR_REG, UART_DLAB, 0);
+    SetWord16(UART_IIR_FCR_REG, 7);
+
+    //DISABLE INTERRUPTS, REGISTER IER IF UART_LCR_REG.DLAB=0
+    SetWord16(UART_IER_DLH_REG, 0);
+
+    // ACCESS DIVISORLATCH REGISTER FOR BAUDRATE, REGISTER UART_DLH/DLL_REG IF UART_LCR_REG.DLAB=1
+    SetBits16(UART_LCR_REG, UART_DLAB, 1);
+    SetWord16(UART_IER_DLH_REG, (baudr >> 8) & 0xFF);
+    SetWord16(UART_RBR_THR_DLL_REG, baudr & 0xFF);
+
+    // NO PARITY, 1 STOP BIT, 8 DATA LENGTH
+    SetWord16(UART_LCR_REG,mode);
+
+    //ENABLE TX INTERRUPTS, REGISTER IER IF UART_LCR_REG.DLAB=0
+    SetBits16(UART_LCR_REG, UART_DLAB, 0);
+
+    NVIC_EnableIRQ(UART_IRQn);
+    NVIC->ICPR[UART_IRQn] = 1; //clear eventual pending bit, but not necessary becasuse this is already cleared automatically in HW
+
+    // Configure UART environment
+    uart_env.errordetect = UART_ERROR_DETECT_DISABLED;
+    uart_env.rx.bufptr = NULL;
+    uart_env.rx.size = 0;
+    uart_env.tx.bufptr = NULL;
+    uart_env.tx.size = 0;
+}
+
 
 /// @}

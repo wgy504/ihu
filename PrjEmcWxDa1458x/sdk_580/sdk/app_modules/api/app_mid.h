@@ -1,19 +1,19 @@
 /**
-****************************************************************************************
-*
-* @file app_mid.h
-*
-* @brief A collection of macros that generate and send messages to the stack.
-*
-* Copyright (C) 2015. Dialog Semiconductor Ltd, unpublished work. This computer
+ ****************************************************************************************
+ *
+ * @file app_mid.h
+ *
+ * @brief A collection of macros that generate and send messages to the stack.
+ *
+ * Copyright (C) 2015. Dialog Semiconductor Ltd, unpublished work. This computer
  * program includes Confidential, Proprietary Information and is a Trade Secret of
  * Dialog Semiconductor Ltd.  All use, disclosure, and/or reproduction is prohibited
  * unless authorized in writing. All Rights Reserved.
-*
-* <bluetooth.support@diasemi.com> and contributors.
-*
-****************************************************************************************
-*/
+ *
+ * <bluetooth.support@diasemi.com> and contributors.
+ *
+ ****************************************************************************************
+ */
 
 #ifndef _APP_MID_H_
 #define _APP_MID_H_
@@ -69,7 +69,7 @@ __INLINE struct gapc_disconnect_cmd* app_disconnect_msg_create(uint8_t connectio
                                                    TASK_APP,
                                                    gapc_disconnect_cmd);
     cmd->operation=GAPC_DISCONNECT;
-    return (cmd);
+    return cmd;
 }
 
 /**
@@ -97,7 +97,7 @@ __INLINE struct gapc_connection_cfm* app_connect_cfm_msg_create(uint8_t connecti
     struct gapc_connection_cfm *cfm = KE_MSG_ALLOC(GAPC_CONNECTION_CFM,
             KE_BUILD_ID(TASK_GAPC, connection_idx), TASK_APP,
             gapc_connection_cfm);
-    return(cfm);
+    return cfm;
 }
 
 /**
@@ -123,7 +123,7 @@ __INLINE struct gapm_start_advertise_cmd* app_advertise_start_msg_create(void)
     struct gapm_start_advertise_cmd* cmd = KE_MSG_ALLOC(GAPM_START_ADVERTISE_CMD,
                                 TASK_GAPM, TASK_APP,
                                 gapm_start_advertise_cmd);
-    return(cmd);
+    return cmd;
 }
 
 /**
@@ -150,7 +150,7 @@ __INLINE struct gapm_cancel_cmd* app_gapm_cancel_msg_create(void)
                                 TASK_GAPM, TASK_APP,
                                 gapm_cancel_cmd);
     cmd->operation = GAPM_CANCEL;
-    return(cmd);
+    return cmd;
 }
 
 /**
@@ -201,7 +201,7 @@ __INLINE  struct gapc_param_update_cmd* app_param_update_msg_create(uint8_t conn
                                 KE_BUILD_ID(TASK_GAPC,connection_idx), TASK_APP,
                                 gapc_param_update_cmd);
   cmd->operation=GAPC_UPDATE_PARAMS;
-  return (cmd);
+  return cmd;
 }
 
 
@@ -228,7 +228,7 @@ __INLINE  struct gapm_start_connection_cmd* app_connect_start_msg_create(void)
 {
  struct gapm_start_connection_cmd* cmd=KE_MSG_ALLOC_DYN(GAPM_START_CONNECTION_CMD , TASK_GAPM, TASK_APP,
                                                 gapm_start_connection_cmd, CFG_MAX_CONNECTIONS * sizeof(struct gap_bdaddr));
- return(cmd);
+ return cmd;
 }
 
 /**
@@ -256,7 +256,7 @@ __INLINE  struct gapm_set_dev_config_cmd* app_gapm_configure_msg_create(void)
                                 TASK_GAPM, TASK_APP,
                                 gapm_set_dev_config_cmd);
   cmd->operation=GAPM_SET_DEV_CONFIG;
- return(cmd);
+ return cmd;
 }
 
 
@@ -283,7 +283,7 @@ __INLINE  void app_gapm_configure_msg_send(struct gapm_set_dev_config_cmd* cmd)
 __INLINE struct gapc_bond_cfm* app_gapc_bond_cfm_msg_create (uint8_t connection_idx)
 {
   struct gapc_bond_cfm* cmd=KE_MSG_ALLOC(GAPC_BOND_CFM, KE_BUILD_ID(TASK_GAPC, connection_idx), TASK_APP, gapc_bond_cfm);
-  return (cmd);
+  return cmd;
 }
 
 /**
@@ -301,27 +301,27 @@ __INLINE void app_gapc_bond_cfm_msg_send (struct gapc_bond_cfm* cmd)
 
 /**
  ****************************************************************************************
- * @brief Create a gap bond pairing response message.
- * @param[in] connection_idx The id of the connection.
- * @return The pointer to the created message.
+ * @brief Create a GAPC_BOND_CFM pairing response message.
+ * @param[in] connection_idx Connection index
+ * @return The pointer to the created message
  ****************************************************************************************
  */
 __INLINE struct gapc_bond_cfm* app_gapc_bond_cfm_pairing_rsp_msg_create(uint8_t connection_idx)
 {
-    struct gapc_bond_cfm* cmd = app_gapc_bond_cfm_msg_create( connection_idx );
-    cmd->request=GAPC_PAIRING_RSP;
-    cmd->accept=true;
-    return(cmd);
+    struct gapc_bond_cfm* cmd = app_gapc_bond_cfm_msg_create(connection_idx);
+    cmd->request = GAPC_PAIRING_RSP;
+    cmd->accept = 0x01;
+    return cmd;
 }
 
 /**
  ****************************************************************************************
  * @brief Send a gap bond pairing message.
  * @param[in] Pointer to the gap bond pairing message to send.
- * @return None.
+ * @return void
  ****************************************************************************************
  */
-__INLINE void app_gapc_bond_cfm_pairing_rsp_msg_send (struct gapc_bond_cfm* cmd)
+__INLINE void app_gapc_bond_cfm_pairing_rsp_msg_send(struct gapc_bond_cfm* cmd)
 {
     ke_msg_send(cmd);
 }
@@ -335,10 +335,10 @@ __INLINE void app_gapc_bond_cfm_pairing_rsp_msg_send (struct gapc_bond_cfm* cmd)
  */
 __INLINE struct gapc_bond_cfm* app_gapc_bond_cfm_tk_exch_msg_create(uint8_t connection_idx)
 {
-    struct gapc_bond_cfm* cmd = app_gapc_bond_cfm_msg_create( connection_idx );
-    cmd->request=GAPC_TK_EXCH;
-    cmd->accept=true;
-    return(cmd);
+    struct gapc_bond_cfm* cmd = app_gapc_bond_cfm_msg_create(connection_idx);
+    cmd->request = GAPC_TK_EXCH;
+    cmd->accept = 0x01;
+    return cmd;
 }
 /**
  ****************************************************************************************
@@ -347,52 +347,51 @@ __INLINE struct gapc_bond_cfm* app_gapc_bond_cfm_tk_exch_msg_create(uint8_t conn
  * @return void
  ****************************************************************************************
  */
-__INLINE void app_gapc_bond_cfm_tk_exch_msg_send (struct gapc_bond_cfm* cmd)
+__INLINE void app_gapc_bond_cfm_tk_exch_msg_send(struct gapc_bond_cfm* cmd)
 {
     ke_msg_send(cmd);
 }
 
 /**
  ****************************************************************************************
- * @brief Create a gap bond Connection Signature Resolving Key (CSRK) exchange message.
+ * @brief Create CSRK exchange message.
  * @param[in] connection_idx The id of the connection.
  * @return The pointer to the created message.
  ****************************************************************************************
  */
 __INLINE struct gapc_bond_cfm* app_gapc_bond_cfm_csrk_exch_msg_create(uint8_t connection_idx)
 {
-    struct gapc_bond_cfm* cmd = app_gapc_bond_cfm_msg_create( connection_idx );
-    cmd->request=GAPC_CSRK_EXCH;
-    cmd->accept=true;
-    return(cmd);
+    struct gapc_bond_cfm* cmd = app_gapc_bond_cfm_msg_create(connection_idx);
+    cmd->request = GAPC_CSRK_EXCH;
+    cmd->accept = 0x01;
+    return cmd;
 }
 
 /**
  ****************************************************************************************
- * @brief Send a gap bond CSRK exchange message.
+ * @brief Send a CSRK exchange message.
  * @param[in] Pointer to the gap bond CSRK exchange message to send.
  * @return void
  ****************************************************************************************
  */
- __INLINE void app_gapc_bond_cfm_csrk_exch_msg_send (struct gapc_bond_cfm* cmd)
+ __INLINE void app_gapc_bond_cfm_csrk_exch_msg_send(struct gapc_bond_cfm* cmd)
 {
     ke_msg_send(cmd);
 }
 
-
 /**
  ****************************************************************************************
- * @brief Create a gap bond Long Term Key (ltk) exchange message.
+ * @brief Create a gap bond Long Term Key (LTK) exchange message.
  * @param[in] connection_idx The id of the connection.
  * @return The pointer to the created message.
  ****************************************************************************************
  */
 __INLINE struct gapc_bond_cfm* app_gapc_bond_cfm_ltk_exch_msg_create(uint8_t connection_idx)
 {
-    struct gapc_bond_cfm* cmd = app_gapc_bond_cfm_msg_create( connection_idx );
-    cmd->request=GAPC_LTK_EXCH;
-    cmd->accept=true;
-    return(cmd);
+    struct gapc_bond_cfm* cmd = app_gapc_bond_cfm_msg_create(connection_idx);
+    cmd->request = GAPC_LTK_EXCH;
+    cmd->accept = 0x01;
+    return cmd;
 }
 
 /**
@@ -407,7 +406,6 @@ __INLINE void app_gapc_bond_cfm_ltk_exch_msg_send (struct gapc_bond_cfm* cmd)
     ke_msg_send(cmd);
 }
 
-
 /**
  ****************************************************************************************
  * @brief Create a gap encrypt confirmation message.
@@ -415,10 +413,10 @@ __INLINE void app_gapc_bond_cfm_ltk_exch_msg_send (struct gapc_bond_cfm* cmd)
  * @return The pointer to the created message.
  ****************************************************************************************
  */
-__INLINE struct gapc_encrypt_cfm* app_gapc_encrypt_cfm_msg_create (uint8_t connection_idx)
+__INLINE struct gapc_encrypt_cfm* app_gapc_encrypt_cfm_msg_create(uint8_t connection_idx)
 {
     struct gapc_encrypt_cfm* cmd = KE_MSG_ALLOC(GAPC_ENCRYPT_CFM, KE_BUILD_ID(TASK_GAPC, connection_idx), TASK_APP, gapc_encrypt_cfm);
-    return(cmd);
+    return cmd;
 }
 
 /**
@@ -428,7 +426,7 @@ __INLINE struct gapc_encrypt_cfm* app_gapc_encrypt_cfm_msg_create (uint8_t conne
  * @return void
  ****************************************************************************************
  */
-__INLINE void app_gapc_encrypt_cfm_msg_send (struct gapc_bond_cfm* cmd)
+__INLINE void app_gapc_encrypt_cfm_msg_send(struct gapc_bond_cfm* cmd)
 {
     ke_msg_send(cmd);
 }
@@ -448,7 +446,7 @@ __INLINE struct gapc_security_cmd* app_gapc_security_request_msg_create (uint8_t
   cmd->operation = GAPC_SECURITY_REQ;
   cmd->auth=auth;
 
-  return (cmd);
+  return cmd;
 }
 
 /**
@@ -476,7 +474,7 @@ __INLINE struct gapm_reset_cmd* app_gapm_reset_msg_create(void)
 
         cmd->operation = GAPM_RESET;
 
-        return(cmd);
+        return cmd;
 }
 
 /**
@@ -560,10 +558,15 @@ __INLINE void app_connect_confirm_op(uint8_t connection_id, enum gap_auth auth, 
  * @return void
  ****************************************************************************************
  */
-__INLINE void app_advertise_undirected_start_op (enum gapm_own_addr_src address_src_type, uint16_t interval, uint8_t channel_map, \
-                                                 enum gap_adv_mode advertise_mode,enum adv_filter_policy adv_filt_policy, \
-                                                 uint8_t* advertise_data, uint8_t advertise_data_len, \
-                                                 uint8_t* scan_response_data, uint8_t scan_response_data_len)
+__INLINE void app_advertise_undirected_start_op (enum gapm_own_addr_src address_src_type, 
+                                                 uint16_t interval, 
+                                                 uint8_t channel_map,
+                                                 enum gap_adv_mode advertise_mode,
+                                                 enum adv_filter_policy adv_filt_policy,
+                                                 uint8_t* advertise_data, 
+                                                 uint8_t advertise_data_len,
+                                                 uint8_t* scan_response_data, 
+                                                 uint8_t scan_response_data_len)
 {
     struct gapm_start_advertise_cmd* cmd;
     cmd = app_advertise_start_msg_create ();
@@ -869,10 +872,10 @@ __INLINE void app_gapc_bond_cfm_ltk_exch_op(uint8_t connection_idx, uint8_t* lon
     cmd->data.ltk.key_size = encryption_key_size;
     cmd->data.ltk.ediv = encryption_diversifier;
 
-    memcpy(&(cmd->data.ltk.randnb), &(random_number) , RAND_NB_LEN);
-    memcpy(&(cmd->data.ltk.ltk), &(long_term_key) , KEY_LEN);
+    memcpy(&(cmd->data.ltk.randnb), &(random_number), RAND_NB_LEN);
+    memcpy(&(cmd->data.ltk.ltk), &(long_term_key), KEY_LEN);
 
-   app_gapc_bond_cfm_ltk_exch_msg_send(cmd);
+    app_gapc_bond_cfm_ltk_exch_msg_send(cmd);
 }
 
 /**

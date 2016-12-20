@@ -1,3 +1,19 @@
+/**
+ ****************************************************************************************
+ *
+ * @file hardfault_handler.c
+ *
+ * @brief Hardfault handler source codoe file.
+ *
+ * Copyright (C) 2012. Dialog Semiconductor Ltd, unpublished work. This computer
+ * program includes Confidential, Proprietary Information and is a Trade Secret of
+ * Dialog Semiconductor Ltd.  All use, disclosure, and/or reproduction is prohibited
+ * unless authorized in writing. All Rights Reserved.
+ *
+ * <bluetooth.support@diasemi.com> and contributors.
+ *
+ ****************************************************************************************
+ */
 
 // HardFault_Handler() code added to boot_vectors.s
 
@@ -91,7 +107,7 @@ void dbg_prod_output(int mode, unsigned long *hardfault_args)
  * restart the debugger. Since the Retention RAM is not reset, the information will be
  * accessible via any Memory window.
  *
- * If SmartSnippets is used and P1[3] is available then the user may uncomment the call
+ * If SmartSnippets is used and P1[3] is available then the user may use the call
  * to set_pxact_gpio() to have a visual indication of the occurrence of a Hard Fault 
  * exception.
  */

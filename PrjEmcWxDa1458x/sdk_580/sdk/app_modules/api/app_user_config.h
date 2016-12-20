@@ -59,26 +59,6 @@
  ****************************************************************************************
  */
 
-struct security_configuration
-{
-    /// IO capabilities (@see gap_io_cap)
-    enum gap_io_cap iocap;
-    /// OOB information (@see gap_oob)
-    enum gap_oob oob;
-    /// Authentication (@see gap_auth)
-    enum gap_auth auth;
-    /// Encryption key size (7 to 16)
-    uint8_t key_size;
-    ///Initiator key distribution (@see gap_kdist)
-    enum gap_kdist ikey_dist;
-    ///Responder key distribution (@see gap_kdist)
-    enum gap_kdist rkey_dist;
-    /// Device security requirements (minimum security level). (@see gap_sec_req)
-    enum gap_sec_req sec_req;
-    struct gap_sec_key tk;
-    struct gap_sec_key csrk;
-};
-
 /*
  ****************************************************************************************
  *
@@ -98,9 +78,6 @@ struct advertise_configuration {
 
     /// Duration of resolvable address before regenerate it.
     uint16_t renew_dur;
-
-    /// Provided own static private random address (addr_src = GAPM_PROVIDED_RND_ADDR or GAPM_PROVIDED_RECON_ADDR)
-    uint8_t addr[BD_ADDR_LEN];
 
     /// Minimum interval for advertising
     uint16_t intv_min;
@@ -249,9 +226,6 @@ struct central_configuration {
     /// Duration of resolvable address before regenerate it.
     uint16_t renew_dur;
 
-    /// Provided own static private random address (addr_src = GAPM_PROVIDED_RND_ADDR or GAPM_PROVIDED_RECON_ADDR)
-    uint8_t addr[BD_ADDR_LEN];
-
     /// Scan interval
     uint16_t scan_interval;
 
@@ -333,6 +307,94 @@ struct central_configuration {
 
     /// Address type of the device 0=public/1=private random
     uint8_t peer_addr_7_type;
+};
+
+/*
+ ****************************************************************************************
+ *
+ * Security related configuration
+ *
+ ****************************************************************************************
+ */
+struct security_configuration
+{
+    /**************************************************************************************
+     * IO capabilities (@see gap_io_cap)
+     *
+     * - GAP_IO_CAP_DISPLAY_ONLY          Display Only
+     * - GAP_IO_CAP_DISPLAY_YES_NO        Display Yes No
+     * - GAP_IO_CAP_KB_ONLY               Keyboard Only
+     * - GAP_IO_CAP_NO_INPUT_NO_OUTPUT    No Input No Output
+     * - GAP_IO_CAP_KB_DISPLAY            Keyboard Display
+     *
+     **************************************************************************************
+     */
+    enum gap_io_cap iocap;
+
+    /**************************************************************************************
+     * OOB information (@see gap_oob)
+     *
+     * - GAP_OOB_AUTH_DATA_NOT_PRESENT    OOB Data not present
+     * - GAP_OOB_AUTH_DATA_PRESENT        OOB data present
+     *
+     **************************************************************************************
+     */
+    enum gap_oob oob;
+
+    /**************************************************************************************
+     * Authentication (@see gap_auth)
+     *
+     * - GAP_AUTH_REQ_NO_MITM_NO_BOND     No MITM No Bonding
+     * - GAP_AUTH_REQ_NO_MITM_BOND        No MITM Bonding
+     * - GAP_AUTH_REQ_MITM_NO_BOND        MITM No Bonding
+     * - GAP_AUTH_REQ_MITM_BOND           MITM and Bonding
+     *
+     **************************************************************************************
+     */
+    enum gap_auth auth;
+
+    /**************************************************************************************
+     * Device security requirements (minimum security level). (@see gap_sec_req)
+     *
+     * - GAP_NO_SEC                       No security (no authentication and encryption)
+     * - GAP_SEC1_NOAUTH_PAIR_ENC         Unauthenticated pairing with encryption
+     * - GAP_SEC1_AUTH_PAIR_ENC           Authenticated pairing with encryption
+     * - GAP_SEC2_NOAUTH_DATA_SGN         Unauthenticated pairing with data signing
+     * - GAP_SEC2_AUTH_DATA_SGN           Authentication pairing with data signing
+     * - GAP_SEC_UNDEFINED                Unrecognized security
+     *
+     **************************************************************************************
+     */
+    enum gap_sec_req sec_req;
+
+    /// Encryption key size (7 to 16) - LTK Key Size
+    uint8_t key_size;
+
+    /**************************************************************************************
+     * Initiator key distribution (@see gap_kdist)
+     *
+     * - GAP_KDIST_NONE                   No Keys to distribute
+     * - GAP_KDIST_ENCKEY                 LTK (Encryption key) in distribution
+     * - GAP_KDIST_IDKEY                  IRK (ID key)in distribution
+     * - GAP_KDIST_SIGNKEY                CSRK (Signature key) in distribution
+     * - Any combination of the above
+     *
+     **************************************************************************************
+     */
+    uint8_t ikey_dist;
+
+    /**************************************************************************************
+     * Responder key distribution (@see gap_kdist)
+     *
+     * - GAP_KDIST_NONE                   No Keys to distribute
+     * - GAP_KDIST_ENCKEY                 LTK (Encryption key) in distribution
+     * - GAP_KDIST_IDKEY                  IRK (ID key)in distribution
+     * - GAP_KDIST_SIGNKEY                CSRK (Signature key) in distribution
+     * - Any combination of the above
+     *
+     **************************************************************************************
+     */
+    uint8_t rkey_dist;
 };
 
 /// @} APP

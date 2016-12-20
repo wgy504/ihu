@@ -116,7 +116,8 @@ extern uint32_t rcx_freq;
 extern uint32_t lp_clk_sel;
 extern bool sys_startup_flag;
 extern uint8_t func_check_mem_flag;
-extern float rcx_slot_duration;
+extern uint32_t rcx_slot_duration_num;
+extern uint32_t rcx_slot_duration_den;
 extern uint8_t ke_mem_heaps_used;
 extern struct arch_sleep_env_tag sleep_env;
 
@@ -267,7 +268,7 @@ static uint32_t rwip_slot_2_lpcycles_rcx(uint32_t slot_cnt)
     // Sanity check: The number of slots should not be too high to avoid overflow
     ASSERT_ERR(slot_cnt < 1000000);
 
-    lpcycles = (uint32_t)(slot_cnt * rcx_slot_duration);
+    lpcycles = (uint32_t)((uint64_t)slot_cnt * rcx_slot_duration_num) / rcx_slot_duration_den;
     
     return(lpcycles);
 }
@@ -392,6 +393,15 @@ sleep_mode_t rwip_sleep(void)
         // Compute the duration up to the next software timer expires
         if (!ke_timer_sleep_check(&sleep_duration, rwip_env.wakeup_delay))
             break;
+         
+        // Check if a kernel timer has expired before the above ke_timer_sleep_check() 
+        // function call. If that happens the ke_timer_sleep_check() will incorrectly 
+        // allow the system to enter sleep, because the timeout of the first timer is 
+        // already in the past, and consequently the timer event will not be serviced 
+        // until the next system wake up (the rwip_sleep() function is being called 
+        // while the interrupts are disabled).
+        if (ble_intrawstat_get() & BLE_GROSSTGTIMINTRAWSTAT_BIT)
+            break;
 
         DBG_SWDIAG(SLEEP, ALGO, 3);
 
@@ -480,6 +490,15 @@ sleep_mode_t rwip_sleep(void)
                  ************************************************************************/
                 // Compute the duration up to the next software timer expires
                 if (!ke_timer_sleep_check(&sleep_duration, rwip_env.wakeup_delay))
+                    break;
+                
+                // Check if a kernel timer has expired before the above ke_timer_sleep_check() 
+                // function call. If that happens the ke_timer_sleep_check() will incorrectly 
+                // allow the system to enter sleep, because the timeout of the first timer is 
+                // already in the past, and consequently the timer event will not be serviced 
+                // until the next system wake up (the rwip_sleep() function is being called 
+                // while the interrupts are disabled).
+                if (ble_intrawstat_get() & BLE_GROSSTGTIMINTRAWSTAT_BIT)
                     break;
 
                 DBG_SWDIAG(SLEEP, ALGO, 3);

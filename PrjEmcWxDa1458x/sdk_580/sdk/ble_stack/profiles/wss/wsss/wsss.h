@@ -26,13 +26,18 @@
      ************************************************************************************
      */
 
+    /// UserData Service Server Role
+    #define BLE_WSS_SERVER              1
+    #if !defined (BLE_SERVER_PRF)
+        #define BLE_SERVER_PRF          1
+    #endif
+
     /*
      * INCLUDE FILES
      ************************************************************************************
      */
     #if (BLE_WSS_SERVER)
-        #include "prf_types.h"
-        #include "wsss_task.h"
+        #include "wss_common.h"
 
         /*
          * DEFINES
@@ -62,6 +67,7 @@
         enum
         {
             WSS_IDX_SVC,
+            WSS_IDX_INCL_SVC,
 
             WSS_IDX_FEATURE_CHAR,
             WSS_IDX_FEATURE_VAL,

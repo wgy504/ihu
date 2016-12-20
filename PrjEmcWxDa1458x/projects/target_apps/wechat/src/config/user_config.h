@@ -43,7 +43,7 @@ const static sleep_state_t app_default_sleep_mode=ARCH_EXT_SLEEP_ON;
  * LOCAL VARIABLES
  ****************************************************************************************
  */
-
+/*
 static const struct security_configuration user_security_configuration = {
     .oob            = GAP_OOB_AUTH_DATA_NOT_PRESENT,
     .key_size       = KEY_LEN,
@@ -58,6 +58,94 @@ static const struct security_configuration user_security_configuration = {
     .csrk={
             .key={0xAB,0xAB,0x45,0x55,0x23,0x01,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0},
         },
+};
+*/
+
+/*
+ ****************************************************************************************
+ *
+ * Security related configuration
+ *
+ ****************************************************************************************
+ */
+static const struct security_configuration user_security_conf = {
+    /**************************************************************************************
+     * IO capabilities (@see gap_io_cap)
+     *
+     * - GAP_IO_CAP_DISPLAY_ONLY          Display Only
+     * - GAP_IO_CAP_DISPLAY_YES_NO        Display Yes No
+     * - GAP_IO_CAP_KB_ONLY               Keyboard Only
+     * - GAP_IO_CAP_NO_INPUT_NO_OUTPUT    No Input No Output
+     * - GAP_IO_CAP_KB_DISPLAY            Keyboard Display
+     *
+     **************************************************************************************
+     */
+    .iocap          = GAP_IO_CAP_NO_INPUT_NO_OUTPUT,
+
+    /**************************************************************************************
+     * OOB information (@see gap_oob)
+     *
+     * - GAP_OOB_AUTH_DATA_NOT_PRESENT    OOB Data not present
+     * - GAP_OOB_AUTH_DATA_PRESENT        OOB data present
+     *
+     **************************************************************************************
+     */
+    .oob            = GAP_OOB_AUTH_DATA_NOT_PRESENT,
+
+    /**************************************************************************************
+     * Authentication (@see gap_auth)
+     *
+     * - GAP_AUTH_REQ_NO_MITM_NO_BOND     No MITM No Bonding
+     * - GAP_AUTH_REQ_NO_MITM_BOND        No MITM Bonding
+     * - GAP_AUTH_REQ_MITM_NO_BOND        MITM No Bonding
+     * - GAP_AUTH_REQ_MITM_BOND           MITM and Bonding
+     *
+     **************************************************************************************
+     */
+    .auth           = GAP_AUTH_REQ_NO_MITM_BOND,
+
+    /**************************************************************************************
+     * Device security requirements (minimum security level). (@see gap_sec_req)
+     *
+     * - GAP_NO_SEC                       No security (no authentication and encryption)
+     * - GAP_SEC1_NOAUTH_PAIR_ENC         Unauthenticated pairing with encryption
+     * - GAP_SEC1_AUTH_PAIR_ENC           Authenticated pairing with encryption
+     * - GAP_SEC2_NOAUTH_DATA_SGN         Unauthenticated pairing with data signing
+     * - GAP_SEC2_AUTH_DATA_SGN           Authentication pairing with data signing
+     * - GAP_SEC_UNDEFINED                Unrecognized security
+     *
+     **************************************************************************************
+     */
+    .sec_req        = GAP_NO_SEC,
+
+     /// Encryption key size (7 to 16) - LTK Key Size
+    .key_size       = KEY_LEN,
+
+    /**************************************************************************************
+     * Initiator key distribution (@see gap_kdist)
+     *
+     * - GAP_KDIST_NONE                   No Keys to distribute
+     * - GAP_KDIST_ENCKEY                 LTK (Encryption key) in distribution
+     * - GAP_KDIST_IDKEY                  IRK (ID key)in distribution
+     * - GAP_KDIST_SIGNKEY                CSRK (Signature key) in distribution
+     * - Any combination of the above
+     *
+     **************************************************************************************
+     */
+    .ikey_dist      = GAP_KDIST_SIGNKEY,
+
+    /**************************************************************************************
+     * Responder key distribution (@see gap_kdist)
+     *
+     * - GAP_KDIST_NONE                   No Keys to distribute
+     * - GAP_KDIST_ENCKEY                 LTK (Encryption key) in distribution
+     * - GAP_KDIST_IDKEY                  IRK (ID key)in distribution
+     * - GAP_KDIST_SIGNKEY                CSRK (Signature key) in distribution
+     * - Any combination of the above
+     *
+     **************************************************************************************
+     */
+    .rkey_dist      = GAP_KDIST_ENCKEY,
 };
 
 //---------------------------------------------------------------------
@@ -80,13 +168,13 @@ static const struct advertise_configuration user_adv_conf = {
     .renew_dur = 0,
 
     /// Provided own static private random address (addr_src = GAPM_PROVIDED_RND_ADDR or GAPM_PROVIDED_RECON_ADDR)
-    .addr = {0x1, 0x2, 0x3, 0x4, 0x5, 0x6},
+    // .addr = {0x1, 0x2, 0x3, 0x4, 0x5, 0x6},
 
     /// Minimum interval for advertising
-    .intv_min = 9900,                    // 6187.5 ms (9900*0.625ms)
+    .intv_min = 160,                    // 6187.5 ms (9900*0.625ms)
 
     /// Maximum interval for advertising
-    .intv_max = 13200,                    // 8250ms (13200*0.625ms)
+    .intv_max = 160,                    // 8250ms (13200*0.625ms)
 
     /// Advertising channel map
     .channel_map = 0x7,

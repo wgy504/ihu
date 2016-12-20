@@ -90,20 +90,21 @@ enum APP_MSG
     APP_MODULE_INIT_CMP_EVT = KE_FIRST_MSG(TASK_APP),
     
 #if BLE_PROX_REPORTER
-    APP_PXP_TIMER,
+    APP_PROXR_TIMER,
 #endif //BLE_PROX_REPORTER
 
 #if BLE_BAS_SERVER
-    APP_BATT_TIMER,
-    APP_BATT_ALERT_TIMER,
+    APP_BASS_TIMER,
+    APP_BASS_ALERT_TIMER,
 #endif //BLE_BAS_SERVER
 
 #if HAS_MULTI_BOND
     APP_ALT_PAIR_TIMER,
 #endif //HAS_MULTI_BOND
 
-    APP_CREATE_NEW_TIMER,
+    APP_CREATE_TIMER,
     APP_CANCEL_TIMER,
+    APP_MODIFY_TIMER,
     //Do not alter the order of the next messages 
     //they are considered a range
     APP_TIMER_API_MES0,

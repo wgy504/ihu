@@ -35,6 +35,7 @@
 #include "lans.h"
 #include "lans_task.h"
 #include "prf_utils.h"
+#include "ke_mem.h"
 #include <math.h>
 
 /*
@@ -695,6 +696,29 @@ static uint8_t lans_pack_ln_ctnl_point_cfm (struct lans_ln_ctnl_pt_cfm *param, u
         {
             // Set the request operation code
             rsp[1] = LANP_LN_CTNL_PT_NAVIGATION_CONTROL;
+            if (param->status == LANP_LN_CTNL_PT_RESP_SUCCESS)
+            {
+                switch(lans_env.navi_control)
+                {
+                    // Disable notifications
+                    case LANP_LN_CTNL_STOP_NAVI:
+                    case LANP_LN_CTNL_PAUSE_NAVI:
+                        lans_env.navi_enabled = false;
+                        break;
+
+                    // Enable notifications
+                    case LANP_LN_CTNL_START_NAVI:
+                    case LANP_LN_CTNL_RESUME_NAVI:
+                    case LANP_LN_CTNL_START_NST_WPT:
+                        lans_env.navi_enabled = true;
+                        break;
+
+                    // Do nothing
+                    case LANP_LN_CTNL_SKIP_WPT:
+                    default:
+                        break;
+                }
+            }
         } break;
 
         case (LANS_REQ_NUMBER_OF_ROUTES_OP_CODE):
@@ -832,6 +856,8 @@ static uint8_t lans_unpack_ln_ctnl_point_ind (struct gattc_write_cmd_ind const *
                     lans_env.operation = LANS_NAVIGATION_CONTROL_OP_CODE;
                     // Control value
                     req_ind->value.control_value = param->value[1];
+                    // Store value in the environment
+                    lans_env.navi_control = req_ind->value.control_value;
                 }
             }
         } break;
@@ -1198,18 +1224,25 @@ static int lans_ntf_loc_speed_cmd_handler(ke_msg_id_t const msgid,
             uint8_t pckd_loc_speed[LANP_LAN_LOC_SPEED_MAX_LEN];
             // Pack Location and speed
             uint8_t nb =  lans_pack_loc_speed_ntf(param, pckd_loc_speed);
+            // Get current MTU
+            uint8_t mtu = gattc_get_mtu(lans_env.con_info.conidx);
 
             // Split notification if necessary
-            
-            if (nb > (gattc_get_mtu(lans_env.con_info.conidx) - 3))
+            if (nb > (mtu - 3))
             {
-                uint8_t ntf1[ATT_DEFAULT_MTU - 3], len1 = LANP_LAN_LOC_SPEED_MIN_LEN;
+                // Maximize first notification with MTU value
+                uint8_t *ntf1 = (uint8_t *) ke_malloc(mtu-3, KE_MEM_NON_RETENTION);
+                uint8_t len1 = LANP_LAN_LOC_SPEED_MIN_LEN;
+            
+                // Split notification
                 lans_split_loc_speed_ntf(pckd_loc_speed, ntf1, &len1, lans_env.ntf, &lans_env.ntf_len);
 
                 // Set the value in the database
                 attmdb_att_set_value(LANS_HANDLE(LNS_IDX_LOC_SPEED_VAL), len1, (uint8_t *)&ntf1[0]);
                 // Send the notification
                 prf_server_send_event((prf_env_struct *)&lans_env, false, LANS_HANDLE(LNS_IDX_LOC_SPEED_VAL));
+                // Free memory
+                ke_free((uint8_t *)ntf1);
             }
             else
             {
@@ -1323,7 +1356,8 @@ static int lans_ntf_navigation_cmd_handler(ke_msg_id_t const msgid,
             }
 
             // Check if sending of notifications has been enabled
-            if (!LANS_IS_NTF_IND_ENABLED(LANS_PRF_CFG_FLAG_NAVIGATION_NTF))
+            if ((!LANS_IS_NTF_IND_ENABLED(LANS_PRF_CFG_FLAG_NAVIGATION_NTF)) ||
+                    (lans_env.navi_enabled != true))
             {
                 status = LAN_ERROR_IMPROPERLY_CONFIGURED;
                 break;

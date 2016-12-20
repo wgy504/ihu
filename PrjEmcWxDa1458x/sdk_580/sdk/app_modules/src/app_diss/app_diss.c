@@ -18,15 +18,14 @@
  ****************************************************************************************
  */
 
-#include "rwip_config.h"     // SW configuration
-
-#if (BLE_DIS_SERVER)
-
 /*
  * INCLUDE FILES
  ****************************************************************************************
  */
 
+#include "rwip_config.h"     // SW configuration
+
+#if (BLE_DIS_SERVER)
 #include "app_diss.h"                 // Device Information Service Application Definitions
 #include "app_diss_task.h"            // Device Information Service Application Task API
 #include "app.h"                     // Application Definitions
@@ -35,18 +34,12 @@
 #include "app_prf_perm_types.h"
 
 /*
- * LOCAL VARIABLES DECLARATIONS
- ****************************************************************************************
- */
-
-/*
  * FUNCTION DEFINITIONS
  ****************************************************************************************
  */
 
 void app_dis_init(void)
 {
-    return;
 }
 
 void app_diss_create_db(void)

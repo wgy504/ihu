@@ -21,7 +21,7 @@
 /**
  ****************************************************************************************
  * @addtogroup APP_SECURITY
- * @ingroup 
+ * @ingroup
  *
  * @brief Application security helper functions header file.
  *
@@ -94,17 +94,6 @@ struct gapc_encrypt_cfm* app_easy_security_encrypt_cfm_get_active(uint8_t connec
 
 /**
  ****************************************************************************************
- * @brief Set term key.
- * @param[in] connection_idx Connection Id index
- * @param[in] key            Pointer to key
- * @param[in] keylen         Length of the key
- * @return void
- ****************************************************************************************
-*/
-void app_easy_security_set_tk(uint8_t connection_idx, uint8_t *key, uint8_t keylen);
-
-/**
- ****************************************************************************************
  * @brief Set long term key loaded from security environment.
  * @param[in] connection_idx Connection Id index
  * @return void
@@ -165,12 +154,17 @@ void app_easy_security_send_pairing_rsp(uint8_t connection_idx);
 
 /**
  ****************************************************************************************
- * @brief Send confirm requested bond information using term key exchange.
+ * @brief Send bond confirmation message using TK exchange.
  * @param[in] connection_idx Connection Id index
+ * @param[in] key            Pointer to the key that will be sent over TK exchange message.
+ * @param[in] length         Length of the pass key in octets
  * @return void
+ * @note                     The #key can be either a 6-digit (4 octets) pass key or an
+ *                           OOB provided key. The max size of the OOB key is 128-bit
+ *                          (16 octets).
  ****************************************************************************************
 */
-void app_easy_security_tk_exch(uint8_t connection_idx);
+void app_easy_security_tk_exch(uint8_t connection_idx, uint8_t *key, uint8_t length);
 
 /**
  ****************************************************************************************

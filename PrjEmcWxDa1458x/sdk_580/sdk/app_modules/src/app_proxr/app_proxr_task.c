@@ -1,19 +1,19 @@
 /**
-****************************************************************************************
-*
-* @file app_proxr_task.c
-*
-* @brief Proximity Reporter application Task Implementation.
-*
-* Copyright (C) 2012. Dialog Semiconductor Ltd, unpublished work. This computer 
-* program includes Confidential, Proprietary Information and is a Trade Secret of 
-* Dialog Semiconductor Ltd.  All use, disclosure, and/or reproduction is prohibited 
-* unless authorized in writing. All Rights Reserved.
-*
-* <bluetooth.support@diasemi.com> and contributors.
-*
-****************************************************************************************
-*/
+ ****************************************************************************************
+ *
+ * @file app_proxr_task.c
+ *
+ * @brief Proximity Reporter application Task Implementation.
+ *
+ * Copyright (C) 2012. Dialog Semiconductor Ltd, unpublished work. This computer
+ * program includes Confidential, Proprietary Information and is a Trade Secret of
+ * Dialog Semiconductor Ltd.  All use, disclosure, and/or reproduction is prohibited
+ * unless authorized in writing. All Rights Reserved.
+ *
+ * <bluetooth.support@diasemi.com> and contributors.
+ *
+ ****************************************************************************************
+ */
 
 /**
  ****************************************************************************************
@@ -37,27 +37,23 @@
 #include "app_proxr_task.h"
 #include "app_task.h"                  // Application Task API
 #include "gpio.h"
-
 #include "arch_api.h"
 #include "app_entry_point.h"
 #include "user_callback_config.h"
+#include "app.h"
 
 /*
  * FUNCTION DEFINITIONS
  ****************************************************************************************
  */
 
-
-
 /**
  ****************************************************************************************
  * @brief Handles proximity reporter's profile database creation confirmation.
- *
  * @param[in] msgid     Id of the message received.
  * @param[in] param     Pointer to the parameters of the message.
  * @param[in] dest_id   ID of the receiving task instance.
  * @param[in] src_id    ID of the sending task instance.
- *
  * @return If the message was consumed or not.
  ****************************************************************************************
  */
@@ -82,16 +78,13 @@ static int proxr_create_db_cfm_handler(ke_msg_id_t const msgid,
     return (KE_MSG_CONSUMED);
 }
 
-
 /**
  ****************************************************************************************
  * @brief Handles disable indication from the Proximity Reporter profile.
- *
  * @param[in] msgid     Id of the message received.
  * @param[in] param     Pointer to the parameters of the message.
  * @param[in] dest_id   ID of the receiving task instance.
  * @param[in] src_id    ID of the sending task instance.
- *
  * @return If the message was consumed or not.
  ****************************************************************************************
  */
@@ -105,16 +98,13 @@ static int proxr_disable_ind_handler(ke_msg_id_t const msgid,
     return (KE_MSG_CONSUMED);
 }
 
-
 /**
  ****************************************************************************************
  * @brief Handles LLS Alert indication from proximity reporter profile
- *
  * @param[in] msgid     Id of the message received.
  * @param[in] param     Pointer to the parameters of the message.
  * @param[in] dest_id   ID of the receiving task instance (TASK_GAP).
  * @param[in] src_id    ID of the sending task instance.
- *
  * @return If the message was consumed or not.
  ****************************************************************************************
  */
@@ -129,16 +119,13 @@ static int proxr_lls_alert_ind_handler(ke_msg_id_t const msgid,
     return (KE_MSG_CONSUMED);
 }
 
-
 /**
  ****************************************************************************************
  * @brief Handles LLS or IAS Alert level value update by peer.
- *
  * @param[in] msgid     Id of the message received.
  * @param[in] param     Pointer to the parameters of the message.
  * @param[in] dest_id   ID of the receiving task instance (TASK_GAP).
  * @param[in] src_id    ID of the sending task instance.
- *
  * @return If the message was consumed or not.
  ****************************************************************************************
  */
@@ -154,16 +141,13 @@ static int proxr_level_upd_ind_handler(ke_msg_id_t const msgid,
     return (KE_MSG_CONSUMED);
 }
 
-
 /**
  ****************************************************************************************
  * @brief Handles proximity alert timer.
- *
  * @param[in] msgid     Id of the message received.
  * @param[in] param     Pointer to the parameters of the message.
  * @param[in] dest_id   ID of the receiving task instance (TASK_GAP).
  * @param[in] src_id    ID of the sending task instance.
- *
  * @return If the message was consumed or not.
  ****************************************************************************************
  */
@@ -174,30 +158,38 @@ static int app_proxr_timer_handler(ke_msg_id_t const msgid,
 {
     if (alert_state.blink_toggle)
     {
-        GPIO_SetInactive( alert_state.port, alert_state.pin);
+        GPIO_SetInactive(alert_state.port, alert_state.pin);
         alert_state.blink_toggle = 0;
     }
     else
     {
-        GPIO_SetActive( alert_state.port, alert_state.pin);
+        GPIO_SetActive(alert_state.port, alert_state.pin);
         alert_state.blink_toggle = 1;
     }
 
-    ke_timer_set(APP_PXP_TIMER, dest_id, alert_state.blink_timeout);
+    ke_timer_set(APP_PROXR_TIMER, dest_id, alert_state.blink_timeout);
 
     return (KE_MSG_CONSUMED);
 }
 
+/*
+ * GLOBAL VARIABLES DEFINITION
+ ****************************************************************************************
+ */
 
 static const struct ke_msg_handler app_proxr_process_handlers[] =
 {
-    {APP_PXP_TIMER,                         (ke_msg_func_t)app_proxr_timer_handler},
+    {APP_PROXR_TIMER,                         (ke_msg_func_t)app_proxr_timer_handler},
     {PROXR_CREATE_DB_CFM,                   (ke_msg_func_t)proxr_create_db_cfm_handler},
     {PROXR_DISABLE_IND,                     (ke_msg_func_t)proxr_disable_ind_handler},
     {PROXR_LLS_ALERT_IND,                   (ke_msg_func_t)proxr_lls_alert_ind_handler},
     {PROXR_LEVEL_UPD_IND,                   (ke_msg_func_t)proxr_level_upd_ind_handler},
 };
 
+/*
+ * FUNCTION DEFINITIONS
+ ****************************************************************************************
+ */
 
 enum process_event_response app_proxr_process_handler(ke_msg_id_t const msgid,
                                                       void const *param,

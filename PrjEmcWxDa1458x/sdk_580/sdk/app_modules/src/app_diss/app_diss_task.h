@@ -1,7 +1,7 @@
 /**
  ****************************************************************************************
  *
- * @file app_dis_task.h
+ * @file app_diss_task.h
  *
  * @brief Header file - APPDISTASK.
  *
@@ -11,8 +11,8 @@
  ****************************************************************************************
  */
 
-#ifndef APP_DIS_TASK_H_
-#define APP_DIS_TASK_H_
+#ifndef APP_DISS_TASK_H_
+#define APP_DISS_TASK_H_
 
 /**
  ****************************************************************************************
@@ -44,37 +44,29 @@
 #define APP_DIS_IDX_MAX        (1)
 
 /*
- * TASK DESCRIPTOR DECLARATIONS
+ * FUNCTION DECLARATIONS
  ****************************************************************************************
  */
 
 /**
  ****************************************************************************************
- * @brief Handles DIS Server profile database creation confirmation.
- * @return If the message was consumed or not.
+ * @brief Process handler for the Application DISS messages.
+ * @param[in] msgid   Id of the message received
+ * @param[in] param   Pointer to the parameters of the message
+ * @param[in] dest_id ID of the receiving task instance (probably unused)
+ * @param[in] src_id  ID of the sending task instance
+ * @param[in] msg_ret Result of the message handler
+ * @return Returns if the message is handled by the process handler
  ****************************************************************************************
  */
-
-int diss_create_db_cfm_handler(ke_msg_id_t const msgid,
-                                      struct diss_create_db_cfm const *param,
-                                      ke_task_id_t const dest_id,
-                                      ke_task_id_t const src_id);
-
-/**
- ****************************************************************************************
- * @brief Handles disable indication from the DIS Server profile.
- * @return If the message was consumed or not.
- ****************************************************************************************
- */
-
-int diss_disable_ind_handler(ke_msg_id_t const msgid,
-                                    struct diss_disable_ind const *param,
-                                    ke_task_id_t const dest_id,
-                                    ke_task_id_t const src_id);                                      
-
+enum process_event_response app_diss_process_handler(ke_msg_id_t const msgid,
+                                                     void const *param,
+                                                     ke_task_id_t const dest_id,
+                                                     ke_task_id_t const src_id,
+                                                     enum ke_msg_status_tag *msg_ret);
 
 #endif //(BLE_DIS_SERVER)
 
 /// @} APPDISTASK
 
-#endif //APP_DIS_TASK_H_
+#endif //APP_DISS_TASK_H_

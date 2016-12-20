@@ -102,7 +102,7 @@ void app_custs1_enable(uint16_t conhdl)
 
     // Fill in the parameter structure
     req->conhdl             = conhdl;
-    req->sec_lvl            = SRV_PERM_ENABLE;
+    req->sec_lvl            = get_user_prf_srv_perm(TASK_CUSTS1);
 
     // Send the message
     ke_msg_send(req);
@@ -174,7 +174,7 @@ void app_custs2_enable(uint16_t conhdl)
 
     // Fill in the parameter structure
     req->conhdl             = conhdl;
-    req->sec_lvl            = SRV_PERM_ENABLE;
+    req->sec_lvl            = get_user_prf_srv_perm(TASK_CUSTS2);
 
     // Send the message
     ke_msg_send(req);

@@ -68,6 +68,9 @@ enum
     ATTS_SEND_EVENT_CMD = KE_FIRST_MSG(TASK_ATTS),
     /// Response timeout indication
     ATTS_RTX_IND,
+
+    /// Read request indication
+    ATTS_READ_REQ_IND,
 };
 
 /* **********************************************************
@@ -89,6 +92,12 @@ struct atts_send_event_cmd
     bool     notify;
 };
 
+/// Read request indication.
+struct atts_read_req_ind
+{
+    /// Handle of the attribute to be read.
+    uint16_t handle;
+};
 
 /*
  * GLOBAL VARIABLE DECLARATIONS

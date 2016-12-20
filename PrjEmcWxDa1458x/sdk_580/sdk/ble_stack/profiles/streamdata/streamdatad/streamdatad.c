@@ -3,7 +3,7 @@
  *
  * @file streamdatad.c
  *
- * @brief Battery application.
+ * @brief StreamData Device profile
  *
  * Copyright (C) 2012. Dialog Semiconductor Ltd, unpublished work. This computer 
  * program includes Confidential, Proprietary Information and is a Trade Secret of 

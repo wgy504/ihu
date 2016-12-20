@@ -1,19 +1,19 @@
 /**
-****************************************************************************************
-*
-* @file app_proxr.h
-*
-* @brief Proximity Reporter application.
-*
-* Copyright (C) 2012. Dialog Semiconductor Ltd, unpublished work. This computer 
- * program includes Confidential, Proprietary Information and is a Trade Secret of 
- * Dialog Semiconductor Ltd.  All use, disclosure, and/or reproduction is prohibited 
+ ****************************************************************************************
+ *
+ * @file app_proxr.h
+ *
+ * @brief Proximity Reporter application.
+ *
+ * Copyright (C) 2012. Dialog Semiconductor Ltd, unpublished work. This computer
+ * program includes Confidential, Proprietary Information and is a Trade Secret of
+ * Dialog Semiconductor Ltd.  All use, disclosure, and/or reproduction is prohibited
  * unless authorized in writing. All Rights Reserved.
-*
-* <bluetooth.support@diasemi.com> and contributors.
-*
-****************************************************************************************
-*/
+ *
+ * <bluetooth.support@diasemi.com> and contributors.
+ *
+ ****************************************************************************************
+ */
 
 #ifndef _APP_PROXR_H_
 #define _APP_PROXR_H_
@@ -29,39 +29,38 @@
  ****************************************************************************************
  */
 
-
 /*
  * INCLUDE FILES
  ****************************************************************************************
  */
 
-#include "rwble_config.h"
-#include "gpio.h"
+#include "user_profiles_config.h"
 
 #if BLE_PROX_REPORTER
+#include "gpio.h"
 #include "proxr.h"
 
 /*
  * TYPE DEFINITIONS
  ****************************************************************************************
  */
+
 typedef struct
 {
-uint32_t blink_timeout;
-	
-uint8_t blink_toggle;
-	
-uint8_t lvl;
-	
-uint8_t ll_alert_lvl;
-	
-int8_t  txp_lvl;
-    
-GPIO_PORT port;
+    uint32_t blink_timeout;
 
-GPIO_PIN pin;
+    uint8_t blink_toggle;
 
-}app_alert_state;
+    uint8_t lvl;
+
+    uint8_t ll_alert_lvl;
+
+    int8_t  txp_lvl;
+
+    GPIO_PORT port;
+
+    GPIO_PIN pin;
+} app_alert_state;
 
 extern app_alert_state alert_state;
 
@@ -71,8 +70,10 @@ extern app_alert_state alert_state;
  */
 
 enum proxr_alert_ind_char_code
-{  PROXR_ALERT_IAS = PROXR_IAS_CHAR,
-   PROXR_ALERT_LLS = PROXR_LLS_CHAR};
+{
+    PROXR_ALERT_IAS = PROXR_IAS_CHAR,
+    PROXR_ALERT_LLS = PROXR_LLS_CHAR
+};
 
 /*
  * FUNCTION DECLARATIONS
@@ -81,13 +82,11 @@ enum proxr_alert_ind_char_code
 
 /**
  ****************************************************************************************
- * @brief Initialize Proximity Application.
- * param[in] port GPIO port
- * param[in] pin  GPIO pin
+ * @brief Initialize Proximity Reporter application.
  * @return void
  ****************************************************************************************
  */
-void app_proxr_init(GPIO_PORT port, GPIO_PIN pin);
+void app_proxr_init(void);
 
 /**
  ****************************************************************************************
@@ -162,7 +161,6 @@ void default_proxr_level_upd_ind_handler(uint8_t connection_idx, uint8_t alert_l
  ****************************************************************************************
  */
 void default_proxr_lls_alert_ind_handler(uint8_t connection_idx, uint8_t alert_lvl);
-
 
 #endif // (BLE_PROX_REPORTER)
 

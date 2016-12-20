@@ -343,9 +343,10 @@ uint32_t arch_adv_time_calculate(uint8_t adv_len, uint8_t scan_rsp_len);
 ##############################################################################
 */
 
-enum arch_main_loop_callback_ret{
-   GOTO_SLEEP = 0,
-   KEEP_POWERED};
+typedef enum {
+    GOTO_SLEEP = 0,
+    KEEP_POWERED
+} arch_main_loop_callback_ret_t;
 
 /*
  * Main loop callback functions' structure. Developer must set application's callback functions in
@@ -354,8 +355,8 @@ enum arch_main_loop_callback_ret{
  */
 struct arch_main_loop_callbacks {
     void (*app_on_init)(void);
-    enum arch_main_loop_callback_ret (*app_on_ble_powered)(void);
-    enum arch_main_loop_callback_ret (*app_on_system_powered)(void);
+    arch_main_loop_callback_ret_t (*app_on_ble_powered)(void);
+    arch_main_loop_callback_ret_t (*app_on_system_powered)(void);
     void (*app_before_sleep)(void);
     sleep_mode_t (*app_validate_sleep)(sleep_mode_t sleep_mode);
     void (*app_going_to_sleep)(sleep_mode_t sleep_mode);

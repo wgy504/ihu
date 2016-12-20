@@ -3,9 +3,14 @@
  *
  * @file app_bass.h
  *
- * @brief Battery Service Application entry point.
+ * @brief Battery server application header file.
  *
- * $Rev: $
+ * Copyright (C) 2012. Dialog Semiconductor Ltd, unpublished work. This computer
+ * program includes Confidential, Proprietary Information and is a Trade Secret of
+ * Dialog Semiconductor Ltd.  All use, disclosure, and/or reproduction is prohibited
+ * unless authorized in writing. All Rights Reserved.
+ *
+ * <bluetooth.support@diasemi.com> and contributors.
  *
  ****************************************************************************************
  */
@@ -24,20 +29,16 @@
  ****************************************************************************************
  */
 
-
 /*
  * INCLUDE FILES
  ****************************************************************************************
  */
 
-#include "rwble_config.h"
-#include "gpio.h"
-#include "battery.h"
+#include "user_profiles_config.h"
 
 #if (BLE_BAS_SERVER)
-
 #include <stdint.h>          // standard integer definition
-#include <co_bt.h>
+#include "gpio.h"
 
 extern uint8_t cur_batt_level;
 extern uint8_t batt_alert_en;
@@ -55,14 +56,6 @@ extern uint8_t bat_led_state;
  ****************************************************************************************
  */
 void app_batt_init(void);
-
-/**
- ****************************************************************************************
- *
- * Battery Service Application Functions
- *
- ****************************************************************************************
- */
 
 /**
  ****************************************************************************************
@@ -143,6 +136,14 @@ void app_batt_alert_start(void);
  ****************************************************************************************
  */
 void app_batt_alert_stop(void);
+
+/**
+ ****************************************************************************************
+ * @brief Reinit battery alert LED port. Must be called in periph_init().
+ * @return void
+ ****************************************************************************************
+ */
+void app_batt_port_reinit(void);
 
 #endif // (BLE_BAS_SERVER)
 

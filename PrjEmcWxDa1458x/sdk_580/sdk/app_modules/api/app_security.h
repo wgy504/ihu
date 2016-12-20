@@ -19,22 +19,16 @@
  */
 
 #ifndef _APP_SECURITY_H_
-    #define _APP_SECURITY_H_
-
+#define _APP_SECURITY_H_
 
 /*
  * INCLUDE FILES
  ****************************************************************************************
  */
 
-    #include "rwip_config.h"
-    #include "co_bt.h"
-    #include "gap.h"
-    #include "gapm.h"
-    #include "gapc_task.h"
-    //#include "app_easy_security.h"
-    #include "app.h"
-
+#include "co_bt.h"
+#include "gap.h"
+#include "app.h"
 
 /*
  * TYPE DEFINITIONS
@@ -43,6 +37,9 @@
 
 struct app_sec_env_tag
 {
+    // CSRK
+    struct gap_sec_key csrk;
+    
     // LTK
     struct gap_sec_key ltk;
     
@@ -52,6 +49,9 @@ struct app_sec_env_tag
     // EDIV
     uint16_t ediv;
     
+    // Remote IRK
+    struct gapc_irk irk;
+
     // LTK key size
     uint8_t key_size;
 
@@ -68,7 +68,6 @@ struct app_sec_env_tag
     uint8_t nvds_tag;
 };
 
-
 /*
  * GLOBAL VARIABLE DECLARATIONS
  ****************************************************************************************
@@ -77,7 +76,6 @@ struct app_sec_env_tag
 /// Application Security Environment
 extern struct app_sec_env_tag app_sec_env[APP_EASY_MAX_ACTIVE_CONNECTION];
 
-
 /*
  * FUNCTIONS DECLARATIONS
  ****************************************************************************************
@@ -85,22 +83,30 @@ extern struct app_sec_env_tag app_sec_env[APP_EASY_MAX_ACTIVE_CONNECTION];
 
 /**
  ****************************************************************************************
- * @brief Generate pin code.
- * @return uint32_t
+ * @brief Generate Temporary Key (pin code).
+ * @return pin code
  ****************************************************************************************
  */
 uint32_t app_sec_gen_tk(void);
 
 /**
  ****************************************************************************************
- * @brief Generates Long Term Key in app_sec_env
- * @param[in] connection_id Connection Id
+ * @brief Generate Long Term Key (LTK) and store it in #app_sec_env.
+ * @param[in] connection_idx Connection index
  * @param[in] key_size      Key size
  * @return void
  ****************************************************************************************
  */
-void app_sec_gen_ltk(uint8_t connection_id, uint8_t key_size);
+void app_sec_gen_ltk(uint8_t connection_idx, uint8_t key_size);
 
+/**
+ ****************************************************************************************
+ * @brief Generate Connection Signature Resolving Key (CSRK) and store it in #app_sec_env.
+ * @param[in] connection_idx Connection index
+ * @return void
+ ****************************************************************************************
+ */
+void app_sec_gen_csrk(uint8_t connection_idx);
 
 /// @} APP_SECURITY
 

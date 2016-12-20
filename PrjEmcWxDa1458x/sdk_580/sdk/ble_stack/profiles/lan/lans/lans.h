@@ -181,8 +181,14 @@ struct lans_env_tag
     /// Profile Notify/Indication Flags
     uint8_t prfl_ntf_ind_cfg;
 
-    /// bool notification pending
+    /// notification pending
     bool ntf_pending;
+
+    /// LN Navigation Control parameter
+    uint8_t navi_control;
+
+    /// LN Navigation enabled
+    bool navi_enabled;
 
     /// Buffer for subsequent notification
     uint8_t ntf[ATT_DEFAULT_MTU - 3];

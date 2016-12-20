@@ -35,7 +35,7 @@
  ****************************************************************************************
  */
 
-#include "rwble_config.h"
+#include "user_profiles_config.h"
 
 #if BLE_SPOTA_RECEIVER
 
@@ -145,6 +145,7 @@ typedef struct
     uint8_t     crc_clac;
     uint32_t    suota_image_len;
     void (*status_ind_func) (const uint8_t);
+    uint8_t     reboot_requested;
 }app_spota_state;
  
 

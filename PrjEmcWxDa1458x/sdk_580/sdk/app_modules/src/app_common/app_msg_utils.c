@@ -5,8 +5,12 @@
  *
  * @brief Application entry point
  *
- * Copyright (C) RivieraWaves 2009-2013
+ * Copyright (C) 2015. Dialog Semiconductor Ltd, unpublished work. This computer 
+ * program includes Confidential, Proprietary Information and is a Trade Secret of 
+ * Dialog Semiconductor Ltd.  All use, disclosure, and/or reproduction is prohibited 
+ * unless authorized in writing. All Rights Reserved.
  *
+ * <bluetooth.support@diasemi.com> and contributors.
  *
  ****************************************************************************************
  */

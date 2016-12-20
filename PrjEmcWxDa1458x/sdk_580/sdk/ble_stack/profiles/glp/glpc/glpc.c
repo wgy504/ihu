@@ -113,8 +113,8 @@ uint8_t glpc_unpack_meas_value(uint8_t *packed_meas, struct glp_meas* meas_val,
         cursor += 2;
 
         /* type and location are 2 nibble values */
-        meas_val->type = packed_meas[cursor] >> 4;
-        meas_val->location = packed_meas[cursor] & 0xF;
+        meas_val->location = packed_meas[cursor] >> 4;
+        meas_val->type = packed_meas[cursor] & 0xF;
 
         cursor += 1;
     }
@@ -171,8 +171,8 @@ uint8_t glpc_unpack_meas_ctx_value(uint8_t *packed_meas_ctx,
     if((meas_ctx_val->flags & GLP_CTX_TESTER_HEALTH_PRES) != 0)
     {
         // Tester and Health are 2 nibble values
-        meas_ctx_val->tester = packed_meas_ctx[cursor] >> 4;
-        meas_ctx_val->health = packed_meas_ctx[cursor] & 0xF;
+        meas_ctx_val->health = packed_meas_ctx[cursor] >> 4;
+        meas_ctx_val->tester = packed_meas_ctx[cursor] & 0xF;
         cursor += 1;
     }
 

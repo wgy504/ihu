@@ -256,6 +256,23 @@ enum lanp_ctnl_pt_resp_val
     LANP_LN_CTNL_PT_RESP_FAILED,
 };
 
+/// LANP Navigation Control parameter
+enum lanp_navi_control
+{
+    /// Stop Navigation
+    LANP_LN_CTNL_STOP_NAVI      = 0x00,
+    /// Start Navigation
+    LANP_LN_CTNL_START_NAVI     = 0x01,
+    /// Pause Navigation
+    LANP_LN_CTNL_PAUSE_NAVI     = 0x02,
+    /// Resume Navigation
+    LANP_LN_CTNL_RESUME_NAVI    = 0x03,
+    /// Skip waypoint on route
+    LANP_LN_CTNL_SKIP_WPT       = 0x04,
+    /// Start NAvigation from the nearest waypoint
+    LANP_LN_CTNL_START_NST_WPT  = 0x05,
+};
+
 /// LANP Navigation flags
 enum lanp_navi_flags
 {

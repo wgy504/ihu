@@ -53,21 +53,6 @@ __INLINE uint8_t spi_read_byte(void)
 
 /**
  ****************************************************************************************
- * @brief Write a byte to SPI. 
- *
- * @param[in] wr_byte: Byte to be transmitted. 
- ****************************************************************************************
- */
-__INLINE void spi_write_byte(uint8_t wr_byte)
-{
-    while (GetBits16(SPI_CTRL_REG,SPI_TXH)==1);    // Wait if SPI Tx FIFO is full
-    SetWord16(SPI_RX_TX_REG0, 0xFF&wr_byte);       // Send byte
-    while (GetBits16(SPI_CTRL_REG1,SPI_BUSY)==1);  // Wait while SPI is busy
-    GetWord16(SPI_RX_TX_REG0);                     // Get received byte
-}
-
-/**
- ****************************************************************************************
  * @brief Check for received data in SPI Rx FIFO. 
  *
  * @return SPI_INT_BIT value: 1 if there are received data available, 0 otherwise.
@@ -181,6 +166,25 @@ __INLINE uint8_t spi_rxtxreg_read(void)
 __INLINE void spi_int_bit_clear(void)
 {
     SetWord16(SPI_CLEAR_INT_REG, 0x01);
+}
+
+/**
+ ****************************************************************************************
+ * @brief Write a byte to SPI.
+ *
+ * @param[in] wr_byte: Byte to be transmitted.
+ ****************************************************************************************
+ */
+__INLINE void spi_write_byte(uint8_t wr_byte)
+{
+    while (GetBits16(SPI_CTRL_REG,SPI_TXH)==1);    // Wait if SPI Tx FIFO is full
+    SetWord16(SPI_RX_TX_REG0, 0xFF&wr_byte);       // Send byte
+
+    while(spi_data_rdy_getf())  // Still data in the SPI RX FIFO
+    {
+        spi_rxtxreg_read();     // Get byte from SPI RX FIFO
+        spi_int_bit_clear();    // Clear pending flag
+    }
 }
 
 #endif /// _REG_SPI_

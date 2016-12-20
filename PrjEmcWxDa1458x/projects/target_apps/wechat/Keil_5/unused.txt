@@ -1,4 +1,4 @@
-;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Tue Dec 06 12:50:02 2016
+;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Tue Dec 20 22:52:37 2016
 ;VERSION 0.2
 ;FILE adc.o
 ;FILE app.o
@@ -42,29 +42,38 @@ app_easy_security_tk_get_active <= USED 0
 app_easy_timer <= USED 0
 app_easy_timer_cancel <= USED 0
 app_easy_timer_cancel_all <= USED 0
-app_easy_timer_free_callback <= USED 0
 app_easy_timer_modify <= USED 0
 ;FILE app_entry_point.o
 ;FILE app_msg_utils.o
-app_check_BLE_active <= USED 0
 app_msg_send_wakeup_ble <= USED 0
 ;FILE app_security.o
 ;FILE app_security_task.o
 ;FILE app_task.o
 ;FILE app_wechat.o
+app_wechat_create_db <= USED 0
+app_wechat_enable <= USED 0
+ble_wechat_process_received_data <= USED 0
 ;FILE app_wechat_task.o
+app_wechat_create_db_cfm_handler <= USED 0
+app_wechat_disable_ind_handler <= USED 0
+app_wechat_enable_ind_handler <= USED 0
+app_wechat_process_handler <= USED 0
+app_wechat_send_data_handler <= USED 0
+app_wechat_send_indication_cfm_handler <= USED 0
+app_wechat_write_val_ind_handler <= USED 0
 ;FILE arch_main.o
 ;FILE arch_patch.o
 ;FILE arch_sleep.o
 arch_ble_ext_wakeup_off <= USED 0
 arch_ble_ext_wakeup_on <= USED 0
-arch_ble_force_wakeup <= USED 0
 arch_force_active_mode <= USED 0
+arch_get_sleep_mode <= USED 0
 arch_last_rwble_evt_get <= USED 0
 arch_restore_sleep_mode <= USED 0
 ;FILE arch_system.o
 arch_adv_time_calculate <= USED 0
 arch_set_pxact_gpio <= USED 0
+arch_uart_init_slow <= USED 0
 arch_wkupct_tweak_deb_time <= USED 0
 calibrate_rcx20 <= USED 0
 lld_sleep_lpcycles_2_us_rcx_func <= USED 0
@@ -74,10 +83,14 @@ set_xtal16m_trim_value <= USED 0
 ;FILE attm_db_128.o
 attm_svc_create_db_128 <= USED 0
 ;FILE atts_task.obj
+;FILE atts_util.obj
+dg_register_task_for_read_request <= USED 0
+dg_unregister_task_from_read_request <= USED 0
 ;FILE battery.o
 ;FILE ble_wechat_util.o
 t_htonl <= USED 0
 t_ntohl <= USED 0
+wechat_error_chack <= USED 0
 ;FILE boot_vectors.o
 ;FILE ch_map.obj
 ;FILE crc32.o
@@ -94,11 +107,13 @@ epb_set_float <= USED 0
 epb_set_sfixed32 <= USED 0
 epb_set_sint32 <= USED 0
 ;FILE epb_mmbp.o
+;FILE gapc_task.obj
 ;FILE gapm_util.obj
 ;FILE gpio.o
 GPIO_ConfigurePinPower <= USED 0
 GPIO_EnableIRQ <= USED 0
 GPIO_GetIRQInputLevel <= USED 0
+GPIO_GetPinStatus <= USED 0
 GPIO_RegisterCallback <= USED 0
 GPIO_SetIRQInputLevel <= USED 0
 ;FILE hardfault_handler.o
@@ -110,7 +125,6 @@ i2c_eeprom_release <= USED 0
 i2c_eeprom_write_byte <= USED 0
 i2c_eeprom_write_data <= USED 0
 i2c_eeprom_write_page <= USED 0
-i2c_send_address <= USED 0
 i2c_wait_until_eeprom_ready <= USED 0
 ;FILE i2c_led.o
 ihu_i2c_led_init <= USED 0
@@ -123,8 +137,12 @@ vmda1458x_led_off <= USED 0
 vmda1458x_led_on <= USED 0
 ;FILE jump_table.o
 dummyf <= USED 0
+;FILE ke_mem.obj
+log_ke_free <= USED 0
+log_ke_malloc <= USED 0
 ;FILE ke_task.obj
 ;FILE llc.obj
+;FILE llc_con_update_ind.obj
 ;FILE md5.o
 F <= USED 0
 G <= USED 0
@@ -135,10 +153,15 @@ count_padding_bits <= USED 0
 md5 <= USED 0
 rotate_left <= USED 0
 ;FILE mpbledemo2.o
+mpbledemo2_airsync_link_setup_period_report <= USED 0
+mpbledemo2_indication_state <= USED 0
+mpbledemo2_sendData <= USED 0
 ;FILE nmi_handler.o
 ;FILE nvds.o
 ;FILE prf_utils.o
 prf_pack_date_time <= USED 0
+prf_server_error_ind_send <= USED 0
+prf_server_send_event <= USED 0
 prf_unpack_date_time <= USED 0
 ;FILE pwm.o
 set_tmr_div <= USED 0
@@ -168,6 +191,7 @@ rf_nfm_disable <= USED 0
 rf_nfm_enable <= USED 0
 ;FILE rwble.o
 ;FILE rwip.o
+__ARM_common_ll_muluu <= USED 0
 ;FILE smpc.obj
 ;FILE smpc_task.obj
 ;FILE spi.o
@@ -216,13 +240,21 @@ user_on_disconnect <= USED 0
 ;FILE vmdalayer.o
 IhuDebugPrint <= USED 0
 ihu_clock_unix_to_ymd <= USED 0
+ihu_get_vin_ok_status <= USED 0
 ;FILE wecaht_aes.o
 AES_Decrypt <= USED 0
 AES_Encrypt_PKCS7 <= USED 0
 AES_Init <= USED 0
 AES_get_length <= USED 0
-;FILE wechat.o
+;FILE wechat_1.o
+wechat_disable <= USED 0
+wechat_enable_indication <= USED 0
+wechat_indication_cfm_send <= USED 0
+wechat_init <= USED 0
+wechat_send_write_val <= USED 0
 ;FILE wechat_task.o
+app_wechat_period_bat_status_time_out_handler <= USED 0
+app_wechat_period_ble_status_time_out_handler <= USED 0
 ;FILE wkupct_quadec.o
 quad_decoder_disable_irq <= USED 0
 quad_decoder_enable_irq <= USED 0

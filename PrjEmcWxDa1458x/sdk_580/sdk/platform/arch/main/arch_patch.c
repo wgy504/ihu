@@ -59,10 +59,9 @@ void log_ke_free(void* mem_ptr);
 #endif
 
 
-#ifdef __DA14581__
-struct l2cc_att_rd_req;
-uint8_t atts_read_resp_patch(uint8_t conidx, struct l2cc_att_rd_req* req);
 
+
+#ifdef __DA14581__
 struct advertising_pdu_params;
 struct co_buf_tx_node;
 struct lld_evt_tag *lld_adv_start_patch(struct advertising_pdu_params *adv_par,
@@ -85,6 +84,13 @@ int PATCHED_581_smpc_pairing_cfm_handler(ke_msg_id_t const msgid,
                                      
 extern bool my_smpc_check_pairing_feat(struct gapc_pairing *pair_feat);
 extern uint8_t my_smpc_check_param(struct l2cc_pdu *pdu);
+extern void patched_llc_con_update_ind(uint16_t conhdl, struct lld_evt_tag *evt_new);
+
+struct l2cc_att_rd_req;
+extern uint8_t atts_read_resp_patch(uint8_t conidx, struct l2cc_att_rd_req* req);
+
+void patched_lld_evt_int_extract(struct lld_evt_tag *evt);
+
 #else /* DA14580 */
 
 extern void smpc_send_pairing_req_ind(uint8_t conidx, uint8_t req_type);
@@ -110,6 +116,14 @@ struct gapm_start_advertise_cmd;
 extern uint8_t patched_gapm_adv_op_sanity(struct gapm_start_advertise_cmd *adv);
 
 extern uint8_t my_smpc_check_param(struct l2cc_pdu *pdu);
+
+struct lld_evt_tag;
+extern void patched_llc_con_update_ind(uint16_t conhdl, struct lld_evt_tag *evt_new);
+
+struct l2cc_att_rd_req;
+extern uint8_t atts_read_resp_patch(uint8_t conidx, struct l2cc_att_rd_req* req);
+extern uint8_t atts_read_resp(uint8_t conidx, struct l2cc_att_rd_req* req);
+
 #endif // __DA14581__
 
 /*
@@ -121,7 +135,19 @@ extern uint8_t my_smpc_check_param(struct l2cc_pdu *pdu);
 struct mem_usage_log mem_log[KE_MEM_BLOCK_MAX] __attribute__((section("retention_mem_area0"), zero_init));
 
 #ifdef __DA14581__
+
 uint32_t arch_adv_int __attribute__((section("retention_mem_area0"), zero_init));
+
+#else /* DA14580 */
+
+uint8_t (* const atts_read_resp_impl)(uint8_t conidx, struct l2cc_att_rd_req* req) =
+    #ifdef EXCLUDE_ATTS_READ_RESP_PATCH
+    atts_read_resp
+    #else
+    atts_read_resp_patch
+    #endif
+    ;
+
 #endif
 
 
@@ -169,108 +195,37 @@ extern struct llm_env_tag* llm_env[];
 extern const struct ke_msg_handler llm_default_state[];
 extern const struct ke_msg_handler llm_stopping[];
 
-extern int TASK_LLM_llm_le_set_evt_msk_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_le_rd_buff_size_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_le_rd_loc_supp_feats_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_le_set_rand_add_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_le_set_adv_param_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_le_rd_adv_ch_tx_pw_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_le_set_adv_data_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_le_set_adv_en_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_le_set_scan_rsp_data_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_le_set_scan_param_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_le_set_scan_en_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_le_create_con_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_le_create_con_cancel_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_le_set_host_ch_class_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_le_chnl_assess_timer_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_le_rd_wl_size_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_le_wl_clr_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_le_wl_dev_add_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_le_wl_dev_rem_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_le_enc_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_le_rand_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_le_rd_supp_states_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_le_test_rx_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_le_test_tx_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_le_test_end_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_le_set_host_ch_class_cmd_sto_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_reset_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_rd_bd_addr_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_rd_local_ver_info_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_rd_local_supp_cmds_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_set_cntl_host_flow_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_rd_local_supp_feats_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_set_evt_msk_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_host_buff_size_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_host_nb_comp_pkts_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_rd_buff_size_cmd_handler(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
-extern int TASK_LLM_llm_disconnect_mgt(ke_msg_id_t const msgid, void *param, ke_task_id_t const dest_id, ke_task_id_t const src_id);
+static inline int defer_task_handler(const struct ke_state_handler *state_handler,
+                                ke_msg_id_t const msgid,
+                                void *param,
+                                ke_task_id_t const dest_id,
+                                ke_task_id_t const src_id)
+{
+    ke_msg_func_t ke_handler_search(ke_msg_id_t const msg_id, struct ke_state_handler const *state_handler);
+
+    int status = KE_MSG_CONSUMED;
+    ke_msg_func_t func = ke_handler_search(msgid, state_handler); // search in this handler table
+
+    if(func)
+    {
+        status = func(msgid, param, dest_id, src_id);
+    }
+
+    return status;
+}
+
+static int llm_rom_default_handler(ke_msg_id_t const msgid, void *param,
+                                   ke_task_id_t const dest_id, ke_task_id_t const src_id)
+{
+    return defer_task_handler(&llm_default_handler, msgid, param, dest_id, src_id);
+}
 
 /// Specifies the default message handlers of LLM task
-static const struct ke_msg_handler my_llm_default_state[38] =
+static const struct ke_msg_handler my_llm_default_state[] =
 {
-    /// low energy commands
-    {LLM_LE_SET_EVT_MASK_CMD,        (ke_msg_func_t)TASK_LLM_llm_le_set_evt_msk_cmd_handler},
-    {LLM_LE_RD_BUFF_SIZE_CMD,        (ke_msg_func_t)TASK_LLM_llm_le_rd_buff_size_cmd_handler},
-    {LLM_LE_RD_LOCAL_SUPP_FEATS_CMD, (ke_msg_func_t)TASK_LLM_llm_le_rd_loc_supp_feats_cmd_handler},
-    {LLM_LE_SET_RAND_ADDR_CMD,       (ke_msg_func_t)TASK_LLM_llm_le_set_rand_add_cmd_handler},
+    {KE_MSG_DEFAULT_HANDLER, (ke_msg_func_t) llm_rom_default_handler },
 
-    #if (BLE_BROADCASTER || BLE_PERIPHERAL)
-    {LLM_LE_SET_ADV_PARAM_CMD,     (ke_msg_func_t)TASK_LLM_llm_le_set_adv_param_cmd_handler},
-    {LLM_LE_RD_ADV_CHNL_TX_PW_CMD, (ke_msg_func_t)TASK_LLM_llm_le_rd_adv_ch_tx_pw_cmd_handler},
-    {LLM_LE_SET_ADV_DATA_CMD,      (ke_msg_func_t)TASK_LLM_llm_le_set_adv_data_cmd_handler},
-    {LLM_LE_SET_ADV_EN_CMD,        (ke_msg_func_t)TASK_LLM_llm_le_set_adv_en_cmd_handler},
-    {LLM_LE_SET_SCAN_RSP_DATA_CMD, (ke_msg_func_t)TASK_LLM_llm_le_set_scan_rsp_data_cmd_handler},
-    #endif /* #if (BLE_BROADCASTER || BLE_PERIPHERAL) */
-
-    #if (BLE_OBSERVER || BLE_CENTRAL)
-    {LLM_LE_SET_SCAN_PARAM_CMD, (ke_msg_func_t)TASK_LLM_llm_le_set_scan_param_cmd_handler},
-    {LLM_LE_SET_SCAN_EN_CMD,    (ke_msg_func_t)TASK_LLM_llm_le_set_scan_en_cmd_handler},
-    #endif /* BLE_CENTRAL || BLE_OBSERVER */
-
-    #if (BLE_CENTRAL)
-    {LLM_LE_CREATE_CON_CMD,            (ke_msg_func_t)TASK_LLM_llm_le_create_con_cmd_handler},
-    {LLM_LE_CREATE_CON_CANCEL_CMD,     (ke_msg_func_t)TASK_LLM_llm_le_create_con_cancel_cmd_handler},
-    {LLM_LE_SET_HOST_CHNL_CLASSIF_CMD, (ke_msg_func_t)TASK_LLM_llm_le_set_host_ch_class_cmd_handler},
-    #if (BLE_CHNL_ASSESS)
-    {LLM_LE_CHNL_ASSESS_TIMER,         (ke_msg_func_t)TASK_LLM_llm_le_chnl_assess_timer_handler},
-    #endif //(BLE_CHNL_ASSESS)
-    #endif /* #if (BLE_CENTRAL) */
-
-    {LLM_LE_RD_WLST_SIZE_CMD,      (ke_msg_func_t)TASK_LLM_llm_le_rd_wl_size_cmd_handler},
-    {LLM_LE_CLEAR_WLST_CMD,        (ke_msg_func_t)TASK_LLM_llm_le_wl_clr_cmd_handler},
-    {LLM_LE_ADD_DEV_TO_WLST_CMD,   (ke_msg_func_t)TASK_LLM_llm_le_wl_dev_add_cmd_handler},
-    {LLM_LE_RMV_DEV_FROM_WLST_CMD, (ke_msg_func_t)TASK_LLM_llm_le_wl_dev_rem_cmd_handler},
-    {LLM_LE_ENC_CMD,               (ke_msg_func_t)TASK_LLM_llm_le_enc_cmd_handler},
-    {LLM_LE_RAND_CMD,              (ke_msg_func_t)TASK_LLM_llm_le_rand_cmd_handler},
-    {LLM_LE_RD_SUPP_STATES_CMD,    (ke_msg_func_t)TASK_LLM_llm_le_rd_supp_states_cmd_handler},
-
-    #if (BLE_TEST_MODE_SUPPORT)
-    {LLM_LE_TEST_RX_CMD,  (ke_msg_func_t)TASK_LLM_llm_le_test_rx_cmd_handler},
-    {LLM_LE_TEST_TX_CMD,  (ke_msg_func_t)TASK_LLM_llm_le_test_tx_cmd_handler},
-    {LLM_LE_TEST_END_CMD, (ke_msg_func_t)TASK_LLM_llm_le_test_end_cmd_handler},
-    #endif // BLE_TEST_MODE_SUPPORT
-
-    {LLM_LE_SET_HOST_CH_CLASS_CMD_STO, (ke_msg_func_t)TASK_LLM_llm_le_set_host_ch_class_cmd_sto_handler},
-
-    #if (BLE_OBSERVER || BLE_CENTRAL || BLE_PERIPHERAL)
-    /// indication from the LLD
     {LLD_DATA_IND, (ke_msg_func_t)my_lld_data_ind_handler},
-    #endif /* #if (BLE_OBSERVER || BLE_CENTRAL || BLE_PERIPHERAL) */
-
-    /// legacy commands
-    {LLM_RESET_CMD,                       (ke_msg_func_t)TASK_LLM_llm_reset_cmd_handler},
-    {LLM_RD_BD_ADDR_CMD,                  (ke_msg_func_t)TASK_LLM_llm_rd_bd_addr_cmd_handler},
-    {LLM_RD_LOCAL_VER_INFO_CMD,           (ke_msg_func_t)TASK_LLM_llm_rd_local_ver_info_cmd_handler},
-    {LLM_RD_LOCAL_SUPP_CMDS_CMD,          (ke_msg_func_t)TASK_LLM_llm_rd_local_supp_cmds_cmd_handler},
-    {LLM_SET_CNTLR_TO_HOST_FLOW_CNTL_CMD, (ke_msg_func_t)TASK_LLM_llm_set_cntl_host_flow_cmd_handler},
-    {LLM_RD_LOCAL_SUPP_FEATS_CMD,         (ke_msg_func_t)TASK_LLM_llm_rd_local_supp_feats_cmd_handler},
-    {LLM_SET_EVT_MASK_CMD,                (ke_msg_func_t)TASK_LLM_llm_set_evt_msk_cmd_handler},
-    {LLM_HOST_BUFFER_SIZE_CMD,            (ke_msg_func_t)TASK_LLM_llm_host_buff_size_cmd_handler},
-    {LLM_HOST_NB_COMPLETED_PKTS_CMD,      (ke_msg_func_t)TASK_LLM_llm_host_nb_comp_pkts_cmd_handler},
-    {LLM_RD_BUFF_SIZE_CMD,                (ke_msg_func_t)TASK_LLM_llm_rd_buff_size_cmd_handler},
-    {LLC_DISCO_IND,                       (ke_msg_func_t)TASK_LLM_llm_disconnect_mgt}
 };
 
 static const struct ke_state_handler my_llm_default_handler = KE_STATE_HANDLER(my_llm_default_state);
@@ -454,8 +409,112 @@ static bool cmp_abs_time(struct co_list_hdr const * timerA, struct co_list_hdr c
 
     return (((uint32_t)( (timeA - timeB) & 0xFFFF) ) > KE_TIMER_DELAY_MAX);
 }
-
 #endif
+
+// patch gapc_con_create
+#include "gapc.h"
+#include "gapc_task.h"
+#include "ke_mem.h"
+#include "ke_timer.h"
+#include <string.h>
+
+/**
+ ****************************************************************************************
+ * @brief Create environment for given connection index.
+ *
+ * @param[in] conidx connection record index
+ *
+ ****************************************************************************************
+ */
+static void gapc_create(uint8_t conidx)
+{
+    ASSERT_ERR(conidx < jump_table_struct[nb_links_user]);
+
+    // allocate environment variable for current GAP controller.
+    gapc_env[conidx] = (struct gapc_env_tag*) ke_malloc(sizeof(struct gapc_env_tag), KE_MEM_ENV);
+    // clear environment data.
+    memset(gapc_env[conidx], 0, sizeof(struct gapc_env_tag));
+    // set device into a ready state
+    ke_state_set(KE_BUILD_ID(TASK_GAPC, conidx), GAPC_READY);
+}
+
+
+uint8_t gapc_con_create_patch(struct llc_create_con_cmd_complete const *con_params,
+                        ke_task_id_t requester, struct bd_addr* laddr, uint8_t laddr_type)
+{
+#if BLE_EMB_PRESENT
+    uint8_t conidx = con_params->conhdl;
+
+    if(ke_state_get(KE_BUILD_ID(TASK_GAPC, conidx)) != GAPC_FREE)
+    {
+        // error, return wrong connection index.
+        conidx = GAP_INVALID_CONIDX;
+    }
+#else // ! BLE_EMB_PRESENT
+    uint8_t conidx;
+
+    // Find first available connection index
+    for (conidx = 0; conidx < jump_table_struct[nb_links_user]; conidx++)
+    {
+        // find first task index within free state.
+        if(ke_state_get(KE_BUILD_ID(TASK_GAPC, conidx)) == GAPC_FREE)
+        {
+            break;
+        }
+    }
+
+    // No free slot found
+    if(conidx == jump_table_struct[nb_links_user])
+    {
+        // error, return wrong connection index.
+        conidx = GAP_INVALID_CONIDX;
+    }
+#endif
+    else
+    {
+        // Create environment variable for current connection.
+        gapc_create(conidx);
+
+        // set default task to answer
+        gapc_env[conidx]->requester = requester;
+
+        // set specific connection parameters
+        gapc_env[conidx]->conhdl = con_params->conhdl;
+
+        GAPC_SET_FIELD(conidx, ROLE, con_params->role);
+
+        // keep peer address information
+        memcpy(&(gapc_env[conidx]->src[GAPC_INFO_PEER].addr), &(con_params->peer_addr),
+                sizeof(struct bd_addr));
+        gapc_env[conidx]->src[GAPC_INFO_PEER].addr_type = con_params->peer_addr_type;
+
+        // keep local address information used to create the link
+        memcpy(&(gapc_env[conidx]->src[GAPC_INFO_LOCAL].addr), laddr, sizeof(struct bd_addr));
+        gapc_env[conidx]->src[GAPC_INFO_LOCAL].addr_type = laddr_type;
+
+        if(requester != TASK_GAPM)
+        {
+            // Send connection indication message to task that requests connection.
+            struct gapc_connection_req_ind * connection_ind = KE_MSG_ALLOC(GAPC_CONNECTION_REQ_IND,
+                    APP_MAIN_TASK, KE_BUILD_ID(TASK_GAPC, conidx), gapc_connection_req_ind);
+
+            // fill parameters
+            connection_ind->conhdl         = con_params->conhdl;
+            connection_ind->peer_addr_type = con_params->peer_addr_type;
+            memcpy(&(connection_ind->peer_addr), &(con_params->peer_addr),
+                    sizeof(struct bd_addr));
+            connection_ind->con_interval   = con_params->con_interval;
+            connection_ind->con_latency    = con_params->con_latency;
+            connection_ind->sup_to         = con_params->sup_to;
+            connection_ind->clk_accuracy   = con_params->clk_accuracy;
+
+            // send indication
+            ke_msg_send(connection_ind);
+        }
+    }
+
+    return conidx;
+}
 
 
 /*
@@ -470,24 +529,34 @@ static const uint32_t * const patch_table[] =
     /* DA14581 */
     
 # if (BLE_HOST_PRESENT)
+    /* BLE host is present */
     [0] = (const uint32_t *) atts_read_resp_patch,
+    [1] = (const uint32_t *) lld_adv_start_patch,
     [2] = (const uint32_t *) my_smpc_check_pairing_feat,
     [3] = (const uint32_t *) my_smpc_check_param,
+    [4] = (const uint32_t *) gapc_con_create_patch,
+    #if (LOG_MEM_USAGE)
+    [5] = (const uint32_t *) log_ke_malloc,
+    [6] = (const uint32_t *) log_ke_free,
+    #else
+    [5] = (const uint32_t *) patched_llc_con_update_ind,
+    [6] = (const uint32_t *) patched_lld_evt_int_extract,
+    #endif
 # else
+    /* BLE host is NOT present */
     [0] = (const uint32_t *) llm_rd_local_supp_feats_cmd_handler,
-# endif
     [1] = (const uint32_t *) lld_adv_start_patch,
-# if (LOG_MEM_USAGE)
-    [6] = (const uint32_t *) log_ke_malloc,
-    [7] = (const uint32_t *) log_ke_free,
+    [2] = (const uint32_t *) patched_llc_con_update_ind,
+    [3] = (const uint32_t *) patched_lld_evt_int_extract,
 # endif
+
 
 #else
     
     /* DA14580 */
     
     (const uint32_t *) cmp_abs_time,
-    (const uint32_t *) l2cc_pdu_recv_ind_handler,
+    (const uint32_t *) gapc_con_create_patch,
     (const uint32_t *) smpc_send_pairing_req_ind,
     (const uint32_t *) smpc_check_pairing_feat,
     (const uint32_t *) smpc_pairing_cfm_handler,
@@ -496,12 +565,74 @@ static const uint32_t * const patch_table[] =
     (const uint32_t *) log_ke_free,	
 # else    
     (const uint32_t *) my_smpc_check_param,
-    (const uint32_t *) NULL,
+    (const uint32_t *) patched_llc_con_update_ind,
 # endif        
     (const uint32_t *) patched_gapm_adv_op_sanity,
     
 #endif //__DA14581__
 };
+
+struct patch_slot_t
+{
+    uint32_t addr;
+    uint32_t data;
+};
+
+static const struct patch_slot_t patch_slots[] =
+{
+#ifdef __DA14581__
+
+    /* DA14581 */
+
+    #if (BLE_HOST_PRESENT)
+
+    [0] = {0x00024b1C, 0xb5ffdf01}, //0x00024b1d lld_adv_start svc 1
+    [1] = {0x0002a8c4, 0xb5f8df00}, //0x0002a8c5 atts_read_resp svc 0
+    #pragma diag_suppress 1296
+    [2] = {0x00034538 + 8 * 8 + 4, (uint32_t)PATCHED_581_smpc_pairing_cfm_handler}, // smpc_default_state[8].func = &PATCHED_581_smpc_pairing_cfm_handler
+    #pragma diag_warning 1296
+    [3] = {0x0002c8e4, 0xdf02e7f5}, //0x0002c8e7 smpc_check_pairing_feat svc 2
+    [4] = {0x00031948, 0x4601df03}, //0x00031949 smpc_check_param svc 3
+    [5] = {0x0002e04c, 0xB081df04}, //0x0002e04d gapc_con_create svc 4
+        #if (LOG_MEM_USAGE)
+    [6] = {0x00031fcc, 0x468edf05}, //0x00031fcd ke_malloc svc 5
+    [7] = {0x0003208c, 0xdf06bdf8}, //0x0003208f ke_free svc 6
+        #else
+    [6] = {0x00022774, 0xdf05b662}, //0x00022775 llc_con_update_ind svc 5
+    [7] = {0x00025474, 0xdf06bdfe}, //0x0002628f lld_evt_int_extract svc 6
+        #endif
+
+    #else /* BLE host is NOT present */
+
+    [0] = {0x00024b1C, 0xb5ffdf01}, //0x00024b1d lld_adv_start --> svc 1
+    [1] = {0x000278f8, 0x4619df00}, //0x000278f9 llm_rd_local_supp_feats_cmd_handler -->  svc 0
+    [2] = {0x000278c0, 0x80c121d2}, // llm_rd_local_ver_info_cmd_handler - patch manufacturer ID - no svc entry
+    [3] = {0x0002299c, 0x80d020d2}, // llc_version_ind_pdu_send - patch manufacturer ID - no svc entry
+    [4] = {0x00023b40, 0xD02007C9}, // llc_data_req_handler patch for bluez. change the compare mask for llid get from 3 to 1. // no svc entry
+    [5] = {0x00022774, 0xdf02b662}, //0x00022775 llc_con_update_ind --> svc 2
+    [6] = {0x00025474, 0xdf03bdfe}, //0x0002628f lld_evt_int_extract --> svc 3
+
+    #endif
+
+#else /* DA14580 */
+
+    [0] = {0x00032794, 0xdf00b662}, //0x00032795 cmp_abs_time --> svc 0 (+ enabling of interrupts)
+    [1] = {0x0002e2a4, 0xB081df01}, //0x0002e2a5 gapc_con_create --> svc 1
+    [2] = {0x0002ca1c, 0xdf02bdf8}, //0x0002ca1f smpc_send_pairing_req_ind --> svc 2
+    [3] = {0x0002cb40, 0xdf03e7f5}, //0x0002cb43 smpc_check_pairing_feat --> svc 3
+    [4] = {0x0002d484, 0xb089df04}, //0x0002d485 smpc_pairing_cfm_handler --> svc 4
+        #if (LOG_MEM_USAGE)
+    [5] = {0x00032214, 0x468edf05}, //0x00032215 ke_malloc --> svc 5
+    [6] = {0x000322d4, 0xdf06bdf8}, //0x000322d7 ke_free --> svc 6
+        #else
+    [5] = {0x00031b94, 0xb500df05}, //0x00031b95 smpc_check_param -->  svc 5
+    [6] = {0x00022c1c, 0xdf06b662}, //0x00022c1d llc_con_update_ind --> svc 6
+        #endif
+    [7] = {0x00030cec, 0xdf07bd70}, //0x00030cef gapm_adv_op_sanity -->  svc 7
+
+#endif //__DA14581__
+};
+
 
 /*
  * EXPORTED FUNCTION DEFINITIONS
@@ -542,106 +673,20 @@ void SVC_Handler_c(unsigned int * svc_args)
 
 void patch_func(void)
 {
-#ifdef __DA14581__
-    
-    /* DA14581 */
-    
-    //0x00024b1d lld_adv_start
-    SetWord32(PATCH_ADDR0_REG, 0x00024b1C);
-    SetWord32(PATCH_DATA0_REG, 0xb5ffdf01); //lld_adv_start svc 1 (+ enabling of interrupts)
-    
-    if(BLE_HOST_PRESENT)
-    {        
-        //0x0002a8c5 atts_read_resp
-        SetWord32(PATCH_ADDR1_REG, 0x0002a8c4);
-        SetWord32(PATCH_DATA1_REG, 0xb5f8df00); //atts_read_resp svc 0 (+ enabling of interrupts)
-        
-        // replace SMPC_PAIRING_CFM handler in smpc_default_state handler table:
-        // smpc_default_state[8].func = &PATCHED_581_smpc_pairing_cfm_handler
-        SetWord32(PATCH_ADDR2_REG, 0x00034538 + 8 * 8 + 4);
-        SetWord32(PATCH_DATA2_REG, (uint32_t)&PATCHED_581_smpc_pairing_cfm_handler); //originally contained 0x0002d231 = the address of ROM function smpc_pairing_cfm_handler
-        //0x0002c8e7 smpc_check_pairing_feat
-        SetWord32(PATCH_ADDR3_REG, 0x0002c8e4);
-        SetWord32(PATCH_DATA3_REG, 0xdf02e7f5); //smpc_check_pairing_feat svc 2 
-        //0x00031949 smpc_check_param
-        SetWord32(PATCH_ADDR4_REG, 0x00031948);
-        SetWord32(PATCH_DATA4_REG, 0x4601df03); //smpc_check_param svc 3 
-    }
-    else
+    const int words = (sizeof(patch_slots) / sizeof(struct patch_slot_t)) * 2;
+    uint32_t *src = (uint32_t *) &patch_slots[0];
+    uint32_t *dest = (uint32_t *) PATCH_ADDR0_REG;
+
+    for (int idx = 0; idx < words; idx++)
     {
-        //0x000278f9 llm_rd_local_supp_feats_cmd_handler
-        SetWord32(PATCH_ADDR1_REG, 0x000278f8);
-        SetWord32(PATCH_DATA1_REG, 0x4619df00); //llm_rd_local_supp_feats_cmd_handler svc 0 
-
-        SetWord32(PATCH_ADDR2_REG, 0x000278c0); // llm_rd_local_ver_info_cmd_handler
-        SetWord32(PATCH_DATA2_REG, 0x80c121d2); // patch manufacturer ID
-
-        SetWord32(PATCH_ADDR3_REG, 0x0002299c); // llc_version_ind_pdu_send
-        SetWord32(PATCH_DATA3_REG, 0x80d020d2); // patch manufacturer ID
-
-    SetWord32(PATCH_ADDR4_REG, 0x00023b40); //  llc_data_req_handler patch for bluez. change the compare mask for llid get from 3 to 1. 
-    SetWord32(PATCH_DATA4_REG, 0xD02007C9); //
+        *dest++ = *src++;
     }
 
-    if (LOG_MEM_USAGE)
-    {
-        //0x00031fcd  ke_malloc
-        SetWord32(PATCH_ADDR6_REG, 0x00031fcc);
-        SetWord32(PATCH_DATA6_REG, 0x468edf06); //ke_malloc svc 6
-
-        //0x0003208f  ke_free
-        SetWord32(PATCH_ADDR7_REG, 0x0003208c);
-        SetWord32(PATCH_DATA7_REG, 0xdf07bdf8); //ke_free svc 7
-    }
-
-
-#else /* DA14580 */
-    
-    //0x00032795 cmp_abs_time
-    SetWord32(PATCH_ADDR0_REG, 0x00032794);
-    SetWord32(PATCH_DATA0_REG, 0xdf00b662); //cmp_abs_time svc 0 (+ enabling of interrupts)
-
-    //0x0002a32b l2cc_pdu_recv_ind_handler (atts)
-    SetWord32(PATCH_ADDR1_REG, 0x0002a328);
-    SetWord32(PATCH_DATA1_REG, 0xdf014770); //l2cc_pdu_recv_ind_handler svc 1
-
-    //0x0002ca1f  smpc_send_pairing_req_ind
-    SetWord32(PATCH_ADDR2_REG, 0x0002ca1c);
-    SetWord32(PATCH_DATA2_REG, 0xdf02bdf8); //smpc_send_pairing_req_ind svc 2
-
-    //0x0002cb43  smpc_check_pairing_feat
-    SetWord32(PATCH_ADDR3_REG, 0x0002cb40);
-    SetWord32(PATCH_DATA3_REG, 0xdf03e7f5); //smpc_check_pairing_feat svc 3
-
-    //0x0002d485  smpc_pairing_cfm_handler
-    SetWord32(PATCH_ADDR4_REG, 0x0002d484);
-    SetWord32(PATCH_DATA4_REG, 0xb089df04); //smpc_pairing_cfm_handler svc 4
-
-    if(LOG_MEM_USAGE)
-    {
-        //0x00032215  ke_malloc
-        SetWord32(PATCH_ADDR5_REG, 0x00032214);
-        SetWord32(PATCH_DATA5_REG, 0x468edf05); //ke_malloc svc 5
-
-        //0x000322d7  ke_free
-        SetWord32(PATCH_ADDR6_REG, 0x000322d4);
-        SetWord32(PATCH_DATA6_REG, 0xdf06bdf8); //ke_free svc 6
-    }
-    else
-    {
-        //0x00031b95  smpc_check_param
-        SetWord32(PATCH_ADDR5_REG, 0x00031b94);
-        SetWord32(PATCH_DATA5_REG, 0xb500df05); //smpc_check_param svc 5
-    }
-
-    //0x00030cef gapm_adv_op_sanity
-    SetWord32(PATCH_ADDR7_REG, 0x00030cec);
-    SetWord32(PATCH_DATA7_REG, 0xdf07bd70); //gapm_adv_op_sanity svc 7
-
+#ifndef __DA14581__
     NVIC_DisableIRQ(SVCall_IRQn);
     NVIC_SetPriority(SVCall_IRQn, 0);
     NVIC_EnableIRQ(SVCall_IRQn);
-#endif //__DA14581__
+#endif
 }
 
 /// @} PATCHES

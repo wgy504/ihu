@@ -487,7 +487,7 @@
 0x00032219 T ke_queue_extract
 0x00032257 T ke_queue_insert
 0x00032351 T ke_task_init
-0x00032357 T ke_task_init_func
+;0x00032357 T ke_task_init_func
 0x0003236b T ke_task_create
 0x000323cb T ke_task_delete
 0x00032429 T ke_state_set
@@ -760,3 +760,7 @@
 0x00027a21   T    TASK_LLM_llm_rd_buff_size_cmd_handler
 0x00027a43   T    TASK_LLM_lld_data_ind_handler
 0x00027ba9   T    TASK_LLM_llm_disconnect_mgt
+
+0x0002f229   T    gapc_get_operation
+0x00032297   T    ke_handler_search
+0x000324e5   T    ke_task_handler_get

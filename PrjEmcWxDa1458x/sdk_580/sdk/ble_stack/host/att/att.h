@@ -243,10 +243,14 @@ enum {
     ATT_SVC_CYCLING_POWER                       = 0x1818,
     /// Location and Navigation Service
     ATT_SVC_LOCATION_AND_NAVIGATION             = 0x1819,
+    /// Body Composition Service
+    ATT_SVC_BODY_COMPOSITION                    = 0x181B,
     /// User Data Service
     ATT_SVC_USER_DATA                           = 0x181C,
     /// Weight Scale Service
     ATT_SVC_WEIGHT_SCALE                        = 0x181D,
+    /// Bond Management Service
+    ATT_SVC_BOND_MANAGEMENT                     = 0x181E,
 
     /*------------------- UNITS ---------------------*/
     /// No defined unit
@@ -665,18 +669,76 @@ enum {
     ATT_CHAR_WS_FEAT                            = 0x2A9E,
     /// Weight Scale Measurement
     ATT_CHAR_WS_MEAS                            = 0x2A9D,
-    /// User height
-    ATT_CHAR_UDS_USER_HEIGHT                    = 0x2A8E,
+    /// User Aerobic Heart Rate Lower Limit
+    ATT_CHAR_UDS_USER_AEROBIC_HR_LOW_LIM        = 0x2A7E,
+    /// User Aerobic Threshold
+    ATT_CHAR_UDS_USER_AEROBIC_THRESHOLD         = 0x2A7F,
     /// User age
     ATT_CHAR_UDS_USER_AGE                       = 0x2A80,
-    /// User date of birth
+    /// User Anaerobic Heart Rate Lower Limit
+    ATT_CHAR_UDS_USER_ANAEROBIC_HR_LOW_LIM      = 0x2A81,
+    /// User Anaerobic Heart Rate Upper Limit
+    ATT_CHAR_UDS_USER_ANAEROBIC_HR_UP_LIM       = 0x2A82,
+    /// User Anaerobic Threshold
+    ATT_CHAR_UDS_USER_ANAEROBIC_THRESHOLD       = 0x2A83,
+    /// User Aerobic Heart Rate Upper Limit
+    ATT_CHAR_UDS_USER_AEROBIC_HR_UP_LIM         = 0x2A84,
+    /// User Date of Birth
     ATT_CHAR_UDS_USER_DATE_OF_BIRTH             = 0x2A85,
+    /// User Date of Threshold Assessment
+    ATT_CHAR_UDS_USER_DATE_OF_THRESHOLD_ASS     = 0x2A86,
+    /// User Email Address
+    ATT_CHAR_UDS_USER_EMAIL_ADDR                = 0x2A87,
+    /// User Fat Burn Heart Rate Lower Limit
+    ATT_CHAR_UDS_USER_FAT_BURN_HR_LOW_LIM       = 0x2A88,
+    /// User Fat Burn Heart Rate Upper Limit
+    ATT_CHAR_UDS_USER_FAT_BURN_HR_UP_LIM        = 0x2A89,
+    /// User First Name
+    ATT_CHAR_UDS_USER_FIRST_NAME                = 0x2A8A,
+    /// User Five Zone Heart Rate Limits
+    ATT_CHAR_UDS_USER_5ZONE_HR_LIM              = 0x2A8B,
+    /// User Gender
+    ATT_CHAR_UDS_USER_GENDER                    = 0x2A8C,
+    /// User Heart Rate Max
+    ATT_CHAR_UDS_USER_HEART_RATE_MAX            = 0x2A8D,
+    /// User height
+    ATT_CHAR_UDS_USER_HEIGHT                    = 0x2A8E,
+    /// User Hip Circumference
+    ATT_CHAR_UDS_USER_HIP_CIRCUMFERENCE         = 0x2A8F,
+    /// User Last Name
+    ATT_CHAR_UDS_USER_LAST_NAME                 = 0x2A90,
+    /// User Maximum Recommended Heart Rate
+    ATT_CHAR_UDS_USER_MAX_REC_HEART_RATE        = 0x2A91,
+    /// User Resting Heart Rate
+    ATT_CHAR_UDS_USER_RESTING_HEART_RATE        = 0x2A92,
+    /// User Sport Type for Aerobic and Anaerobic Thresholds
+    ATT_CHAR_UDS_USER_THRESHOLDS_SPORT_TYPE     = 0x2A93,
+    /// User Three Zone Heart Rate Limits
+    ATT_CHAR_UDS_USER_3ZONE_HR_LIM              = 0x2A94,
+    /// User Two Zone Heart Rate Limit
+    ATT_CHAR_UDS_USER_2ZONE_HR_LIM              = 0x2A95,
+    /// User VO2 Max
+    ATT_CHAR_UDS_USER_VO2_MAX                   = 0x2A96,
+    /// User Waist Circumference
+    ATT_CHAR_UDS_USER_WAIST_CIRCUMFERENCE       = 0x2A97,
+    /// User Weight
+    ATT_CHAR_UDS_USER_WEIGHT                    = 0x2A98,
     /// User database change increment
     ATT_CHAR_UDS_USER_DB_CHANGE_INCR            = 0x2A99,
     /// User Data Index
-    ATT_CHAR_UDS_USER_DATA_INDEX                = 0x2A9A,
+    ATT_CHAR_UDS_USER_INDEX                     = 0x2A9A,
+    /// Body Composition Feature
+    ATT_CHAR_BCS_FEATURE                        = 0x2A9B,
+    /// Body Composition Measurement
+    ATT_CHAR_BCS_MEAS                           = 0x2A9C,
     /// User Data Control Point
     ATT_CHAR_UDS_USER_CTRL_PT                   = 0x2A9F,
+    /// User Language
+    ATT_CHAR_UDS_USER_LANGUAGE                  = 0x2AA2,
+    // Bond Management Control Point
+    ATT_CHAR_BM_CTRL_PT                         = 0x2AA4,
+    // Bond Management Feature
+    ATT_CHAR_BM_FEAT                            = 0x2AA5,
     /// Last define
     ATT_LAST
 };

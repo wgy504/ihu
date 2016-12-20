@@ -26,29 +26,29 @@
 #include "rwip_config.h"        // SW configuration
 
 #if (BLE_APP_PRESENT)
-    #include "app_task.h"           // Application task Definition
-    #include "app.h"                // Application Definition
-    #include "gapm_task.h"          // GAP Manager Task API
-    #include "gapc_task.h"          // GAP Controller Task API
-    #include "co_math.h"            // Common Maths Definition
-    #include "app_api.h"            // Application task Definition
-    #include "app_prf_types.h"
-    #include "app_prf_perm_types.h"
+#include "app_task.h"           // Application task Definition
+#include "app.h"                // Application Definition
+#include "gapm_task.h"          // GAP Manager Task API
+#include "gapc_task.h"          // GAP Controller Task API
+#include "co_math.h"            // Common Maths Definition
+#include "app_api.h"            // Application task Definition
+#include "app_prf_types.h"
+#include "app_prf_perm_types.h"
 
-    #include "app_security.h"       // Application security Definition
-    #include "nvds.h"               // NVDS Definitions
+#include "app_security.h"       // Application security Definition
+#include "nvds.h"               // NVDS Definitions
 
-    #include "user_callback_config.h"
-    #include "app_default_handlers.h"
+#include "user_callback_config.h"
+#include "app_default_handlers.h"
 
-    #include "app_mid.h"
-    #include "ke_mem.h"
-    #include "app_adv_data.h"
-    #include "llm.h"
-    #if BLE_CUSTOM_SERVER
-        #include "user_custs_config.h"
-    #endif
+#include "app_mid.h"
+#include "ke_mem.h"
+#include "app_adv_data.h"
+#include "llm.h"
 
+#if BLE_CUSTOM_SERVER
+#include "user_custs_config.h"
+#endif
 
 /*
  * DEFINES
@@ -68,9 +68,6 @@ struct app_env_tag app_env[APP_EASY_MAX_ACTIVE_CONNECTION] __attribute__((sectio
 // Array that holds the service access rights set by user for the included profiles. The default value is "ENABLE"
 app_prf_srv_sec_t app_prf_srv_perm[PRFS_TASK_ID_MAX] __attribute__((section("retention_mem_area0"),zero_init)); //@RETENTION MEMORY
 
-//MYC 2016/10/02
-extern struct bd_addr dev_bdaddr;
-	
 const struct prf_func_callbacks prf_funcs[] =
 {
     #if BLE_PROX_REPORTER
@@ -97,11 +94,7 @@ const struct prf_func_callbacks prf_funcs[] =
     {TASK_SPOTAR,    app_spotar_create_db, app_spotar_enable},
     #endif
 
-    #if (BLE_WECHAT)
-    {TASK_WECHAT,    app_wechat_create_db, app_wechat_enable},
-    #endif
-
-    {TASK_NONE,    NULL, NULL},   // DO NOT MOVE. Mast always be last
+    {TASK_NONE,    NULL, NULL},   // DO NOT MOVE. Must always be last
 };
 
 
@@ -119,15 +112,17 @@ static const struct ke_task_desc TASK_DESC_APP = {NULL,
 
 static struct gapc_param_update_cmd *param_update_cmd[APP_EASY_GAP_MAX_CONNECTION] __attribute__((section("retention_mem_area0"),zero_init)); // @RETENTION MEMORY
 
-static struct gapm_set_dev_config_cmd *set_dev_config_cmd                           __attribute__((section("retention_mem_area0"),zero_init)); // @RETENTION MEMORY
+static struct gapm_set_dev_config_cmd *set_dev_config_cmd                          __attribute__((section("retention_mem_area0"),zero_init)); // @RETENTION MEMORY
 
-static struct gapm_start_advertise_cmd *adv_cmd                                     __attribute__((section("retention_mem_area0"),zero_init)); // @RETENTION MEMORY
+static struct gapm_start_advertise_cmd *adv_cmd                                    __attribute__((section("retention_mem_area0"),zero_init)); // @RETENTION MEMORY
 
-static struct gapm_start_connection_cmd *start_connection_cmd                       __attribute__((section("retention_mem_area0"),zero_init)); // @RETENTION MEMORY
+static struct gapm_start_connection_cmd *start_connection_cmd                      __attribute__((section("retention_mem_area0"),zero_init)); // @RETENTION MEMORY
 
-static timer_hnd adv_timer_id                                                       __attribute__((section("retention_mem_area0"),zero_init)); // @RETENTION MEMORY
+static timer_hnd adv_timer_id                                                      __attribute__((section("retention_mem_area0"),zero_init)); // @RETENTION MEMORY
 
 static void (*adv_timeout_callback)(void)                                          __attribute__((section("retention_mem_area0"),zero_init)); // @RETENTION MEMORY
+
+static struct bd_addr app_random_addr                                              __attribute__((section("retention_mem_area0"),zero_init)); //@ RETENTION MEMORY
 
 /*
  * FUNCTION DEFINITIONS
@@ -141,7 +136,6 @@ static void (*adv_timeout_callback)(void)                                       
  * @return true if the task_id has an entry in the user_prf_func.
  ****************************************************************************************
  */
-
 static bool app_task_in_user_app(enum KE_TASK_TYPE task_id)
 {
     uint8_t i=0;
@@ -164,7 +158,6 @@ static bool app_task_in_user_app(enum KE_TASK_TYPE task_id)
  * @return void
  ****************************************************************************************
  */
-
 void app_prf_enable (uint16_t conhdl)
  {
      uint8_t i=0;
@@ -205,7 +198,6 @@ void app_prf_enable (uint16_t conhdl)
 #endif
 }
 
-
 /**
  ****************************************************************************************
  * @brief Initialize the database for all the included profiles.
@@ -241,7 +233,7 @@ static bool app_db_init_next(void)
     }
 
 
-    #if BLE_CUSTOM1_SERVER
+    #if BLE_CUSTOM_SERVER
     {
         static uint8_t j __attribute__((section("retention_mem_area0"),zero_init)); //@RETENTION MEMORY;
         while( cust_prf_funcs[j].task_id != TASK_NONE )
@@ -323,6 +315,29 @@ static void app_easy_gap_place_name_ad_struct(uint8_t *len,
 
 /**
  ****************************************************************************************
+ * @brief Generate a 48-bit static random address. The static random address is generated
+ *        only once in a device power cycle and it is stored in the retention RAM.
+ *        The two MSB shall be equal to '1'.
+ * @return void
+ ****************************************************************************************
+ */
+static void generate_static_random_address()
+{
+    // Check if the static random address is already generated.
+    // If it is already generated the two MSB are equal to '1'
+    if (!(app_random_addr.addr[BD_ADDR_LEN - 1] & GAP_STATIC_ADDR))
+    {
+        // Generate static random address, 48-bits
+        co_write32p(&app_random_addr.addr[0], co_rand_word());
+        co_write16p(&app_random_addr.addr[4], co_rand_hword());
+
+        // The two MSB shall be equal to '1'
+        app_random_addr.addr[BD_ADDR_LEN - 1] |= GAP_STATIC_ADDR;
+    }
+}
+
+/**
+ ****************************************************************************************
  * @brief Create advertising message for nonconnectable undirected event (ADV_NONCONN_IND).
  * @return gapm_start_advertise_cmd Pointer to the advertising message
  ****************************************************************************************
@@ -335,20 +350,34 @@ static struct gapm_start_advertise_cmd* app_easy_gap_non_connectable_advertise_s
         struct gapm_start_advertise_cmd *cmd;
         cmd = app_advertise_start_msg_create();
         adv_cmd = cmd;
-        
+
         cmd->op.code = GAPM_ADV_NON_CONN;
-        cmd->op.addr_src = user_adv_conf.addr_src;
-        cmd->op.renew_dur = user_adv_conf.renew_dur;
-        if (user_adv_conf.addr_src == GAPM_PROVIDED_RND_ADDR)
+
+        ASSERT_ERROR(user_adv_conf.addr_src != GAPM_PROVIDED_RECON_ADDR);
+
+        // Case 'addr_src' equals to GAPM_GEN_STATIC_RND_ADDR:
+        // Use GAPM_PROVIDED_RND_ADDR address source type for GAPM_GEN_STATIC_RND_ADDR
+        // address source type. The static random address will be generated by the API code.
+        // If the user wants to use the GAPM_PROVIDED_RND_ADDR address source type, he
+        // can generate his own static random address in the user application layer.
+        if (user_adv_conf.addr_src == GAPM_GEN_STATIC_RND_ADDR)
         {
-            memcpy(cmd->op.addr.addr, user_adv_conf.addr, BD_ADDR_LEN*sizeof(uint8_t));
+            cmd->op.addr_src = GAPM_PROVIDED_RND_ADDR;
+            generate_static_random_address();
+            memcpy(cmd->op.addr.addr, app_random_addr.addr, BD_ADDR_LEN * sizeof(uint8_t));
         }
+        else
+        {
+            cmd->op.addr_src = user_adv_conf.addr_src;
+        }
+
+        cmd->op.renew_dur = user_adv_conf.renew_dur;
         cmd->intv_min = user_adv_conf.intv_min;
         cmd->intv_max = user_adv_conf.intv_max;
         cmd->channel_map = user_adv_conf.channel_map;
         cmd->info.host.mode = user_adv_conf.mode;
         cmd->info.host.adv_filt_policy = user_adv_conf.adv_filt_policy;
-        
+
         // Get advertising data and their data from NVDS.
         // Carefull to get data from the NVDS you need to have an array
         // of at least 32 positions.
@@ -358,13 +387,13 @@ static struct gapm_start_advertise_cmd* app_easy_gap_non_connectable_advertise_s
                                         APP_ADV_DATA_MAX_SIZE,
                                         ADV_DATA_LEN + 1,
                                         NVDS_TAG_APP_BLE_ADV_DATA);
-       
+
         // Zero the Scan Response Data
         cmd->info.host.scan_rsp_data_len = 0;
         memset(&cmd->info.host.scan_rsp_data[0], 0, SCAN_RSP_DATA_LEN);
-       
+
         // Get remaining space in the Advertising Data - 2 bytes are used for name length/flag
-        uint8_t adv_avail_space = APP_ADV_DATA_MAX_SIZE - adv_cmd->info.host.adv_data_len - 2;
+        int16_t adv_avail_space = APP_ADV_DATA_MAX_SIZE - adv_cmd->info.host.adv_data_len - 2;
         uint8_t device_name_length = 0;
         uint8_t device_name_temp_buf[NVDS_LEN_DEVICE_NAME];
         // Check if more data can be added to the Advertising Data
@@ -391,7 +420,7 @@ static struct gapm_start_advertise_cmd* app_easy_gap_non_connectable_advertise_s
             }
         }
     }
-    return(adv_cmd);
+    return adv_cmd;
 }
 
 /**
@@ -408,28 +437,42 @@ static struct gapm_start_advertise_cmd* app_easy_gap_undirected_advertise_start_
         struct gapm_start_advertise_cmd *cmd;
         cmd = app_advertise_start_msg_create();
         adv_cmd = cmd;
-       
+
         cmd->op.code = GAPM_ADV_UNDIRECT;
-        cmd->op.addr_src = user_adv_conf.addr_src;
-        cmd->op.renew_dur = user_adv_conf.renew_dur;
-        if (user_adv_conf.addr_src == GAPM_PROVIDED_RND_ADDR)
+
+        ASSERT_ERROR(user_adv_conf.addr_src != GAPM_PROVIDED_RECON_ADDR);
+
+        // Case 'addr_src' equals to GAPM_GEN_STATIC_RND_ADDR:
+        // Use GAPM_PROVIDED_RND_ADDR address source type for GAPM_GEN_STATIC_RND_ADDR
+        // address source type. The static random address will be generated by the API code.
+        // If the user wants to use the GAPM_PROVIDED_RND_ADDR address source type, he
+        // can generate his own static random address in the user application layer.
+        if (user_adv_conf.addr_src == GAPM_GEN_STATIC_RND_ADDR)
         {
-            memcpy(cmd->op.addr.addr, user_adv_conf.addr, BD_ADDR_LEN*sizeof(uint8_t));
+            cmd->op.addr_src = GAPM_PROVIDED_RND_ADDR;
+            generate_static_random_address();
+            memcpy(cmd->op.addr.addr, app_random_addr.addr, BD_ADDR_LEN * sizeof(uint8_t));
         }
+        else
+        {
+            cmd->op.addr_src = user_adv_conf.addr_src;
+        }
+
+        cmd->op.renew_dur = user_adv_conf.renew_dur;
         cmd->intv_min = user_adv_conf.intv_min;
         cmd->intv_max = user_adv_conf.intv_max;
         cmd->channel_map = user_adv_conf.channel_map;
         cmd->info.host.mode = user_adv_conf.mode;
         cmd->info.host.adv_filt_policy = user_adv_conf.adv_filt_policy;
-        
+
         // Get advertising data and their data from NVDS.
         // Carefull to get data from the NVDS you need to have an array
         // of at least 32 positions.
         // Although supported by NVDS you should not store in NVDS mode than ADV_DATA_LEN data.
         app_easy_gap_adv_read_from_NVDS(&cmd->info.host.adv_data_len,
                                         &cmd->info.host.adv_data[0],
-                                        APP_ADV_DATA_MAX_SIZE, 
-                                        ADV_DATA_LEN + 1, 
+                                        APP_ADV_DATA_MAX_SIZE,
+                                        ADV_DATA_LEN + 1,
                                         NVDS_TAG_APP_BLE_ADV_DATA);
 
         // Get scan response data and their length from NVDS.
@@ -443,8 +486,8 @@ static struct gapm_start_advertise_cmd* app_easy_gap_undirected_advertise_start_
                                         NVDS_TAG_APP_BLE_SCAN_RESP_DATA);
 
         // Get remaining space in the Advertising Data - 2 bytes are used for name length/flag
-        uint8_t adv_avail_space = APP_ADV_DATA_MAX_SIZE - adv_cmd->info.host.adv_data_len - 2;
-        uint8_t scan_avail_space = SCAN_RSP_DATA_LEN - adv_cmd->info.host.scan_rsp_data_len - 2;
+        int16_t adv_avail_space = APP_ADV_DATA_MAX_SIZE - adv_cmd->info.host.adv_data_len - 2;
+        int16_t scan_avail_space = SCAN_RSP_DATA_LEN - adv_cmd->info.host.scan_rsp_data_len - 2;
         uint8_t device_name_length = 0;
         uint8_t device_name_temp_buf[NVDS_LEN_DEVICE_NAME];
         // Check if data can be added to the Advertising data
@@ -468,37 +511,6 @@ static struct gapm_start_advertise_cmd* app_easy_gap_undirected_advertise_start_
             {
                 app_easy_gap_place_name_ad_struct(&cmd->info.host.adv_data_len, device_name_length,
                 &cmd->info.host.adv_data[cmd->info.host.adv_data_len], device_name_temp_buf);
-							
-								//MYC ADDED TO CHANGE the SEQUENCE of
-                //          0	 1	2  3  4  5  6  7  8  9 10 11 12	13 14 15 16 17 18 19 20 21 22 23 24 25		
-							  //02 01 06 09 FF 60 00 29 EF A5 72 39 D0 03 03 E7 FE 0B 09 42 41 58 49 41 4E 5F 42 4C 45
-							  //         LL -------- =======MAC======= LL -------- LL -- =B==A==X==I==A==N==_==B==L==E    
-							  //                               TO
-							  //         LL -------- LL -- =B==A==X==I==A==N==_==B==L==E LL -------- =======MAC=======
-							  uint8_t tempbuf[64];
-								memcpy(tempbuf, cmd->info.host.adv_data, 10);
-							  memcpy(&cmd->info.host.adv_data[0], &cmd->info.host.adv_data[10], device_name_length + 2 + 4);
-							  memcpy(&cmd->info.host.adv_data[device_name_length + 2 + 4], tempbuf, 10);
-							
-								if (APP_BOOT_FROM_OTP == 1)
-								{  //MYC use the MAC address can be well filled in Wechat broadcast message (2016/10/02)
-										cmd->info.host.adv_data[device_name_length + 2 + 4 + 4] = dev_bdaddr.addr[5];
-										cmd->info.host.adv_data[device_name_length + 2 + 4 + 5] = dev_bdaddr.addr[4];
-										cmd->info.host.adv_data[device_name_length + 2 + 4 + 6] = dev_bdaddr.addr[3];
-										cmd->info.host.adv_data[device_name_length + 2 + 4 + 7] = dev_bdaddr.addr[2];
-										cmd->info.host.adv_data[device_name_length + 2 + 4 + 8] = dev_bdaddr.addr[1];
-										cmd->info.host.adv_data[device_name_length + 2 + 4 + 9] = dev_bdaddr.addr[0];
-								}
-								else
-								{
-										cmd->info.host.adv_data[device_name_length + 2 + 4 + 4] = tempbuf[9];
-										cmd->info.host.adv_data[device_name_length + 2 + 4 + 5] = tempbuf[8];
-										cmd->info.host.adv_data[device_name_length + 2 + 4 + 6] = tempbuf[7];
-										cmd->info.host.adv_data[device_name_length + 2 + 4 + 7] = tempbuf[6];
-										cmd->info.host.adv_data[device_name_length + 2 + 4 + 8] = tempbuf[5];
-										cmd->info.host.adv_data[device_name_length + 2 + 4 + 9] = tempbuf[4];
-								}
-							
             }
             else if(scan_avail_space >= device_name_length)
             {
@@ -507,7 +519,7 @@ static struct gapm_start_advertise_cmd* app_easy_gap_undirected_advertise_start_
             }
          }
     }
-    return(adv_cmd);
+    return adv_cmd;
 }
 
 /**
@@ -524,20 +536,33 @@ static struct gapm_start_advertise_cmd* app_easy_gap_directed_advertise_start_cr
         struct gapm_start_advertise_cmd *cmd;
         cmd = app_advertise_start_msg_create();
         adv_cmd = cmd;
-        
-        cmd->op.addr_src = user_adv_conf.addr_src;
-        cmd->op.renew_dur = user_adv_conf.renew_dur;
-        if ((user_adv_conf.addr_src == GAPM_PROVIDED_RND_ADDR) || (user_adv_conf.addr_src == GAPM_PROVIDED_RECON_ADDR))
+
+         cmd->op.code = GAPM_ADV_DIRECT;
+
+        // Case 'addr_src' equals to GAPM_GEN_STATIC_RND_ADDR:
+        // Use GAPM_PROVIDED_RND_ADDR address source type for GAPM_GEN_STATIC_RND_ADDR
+        // address source type. The static random address will be generated by the API code.
+        // If the user wants to use the GAPM_PROVIDED_RND_ADDR address source type, he
+        // can generate his own static random address in the user application layer.
+        if (user_adv_conf.addr_src == GAPM_GEN_STATIC_RND_ADDR)
         {
-            memcpy(cmd->op.addr.addr, user_adv_conf.addr, BD_ADDR_LEN*sizeof(uint8_t));
+            cmd->op.addr_src = GAPM_PROVIDED_RND_ADDR;
+            generate_static_random_address();
+            memcpy(cmd->op.addr.addr, app_random_addr.addr, BD_ADDR_LEN * sizeof(uint8_t));
         }
+        else
+        {
+            cmd->op.addr_src = user_adv_conf.addr_src;
+        }
+
+        cmd->op.renew_dur = user_adv_conf.renew_dur;
         cmd->intv_min = LLM_ADV_INTERVAL_MIN;
         cmd->intv_max = LLM_ADV_INTERVAL_MAX;
         cmd->channel_map = user_adv_conf.channel_map;
         memcpy(cmd->info.direct.addr.addr, user_adv_conf.peer_addr, BD_ADDR_LEN*sizeof(uint8_t));
         cmd->info.direct.addr_type = user_adv_conf.peer_addr_type;
     }
-    return(adv_cmd);
+    return adv_cmd;
 }
 
 /**
@@ -555,7 +580,7 @@ static struct gapc_param_update_cmd* app_easy_gap_param_update_msg_create(uint8_
         cmd = app_param_update_msg_create(connection_idx);
         ASSERT_WARNING(connection_idx < APP_EASY_GAP_MAX_CONNECTION);
         param_update_cmd[connection_idx] = cmd;
-        
+
         #ifndef __DA14581__
             cmd->params.intv_max = user_connection_param_conf.intv_max;
             cmd->params.intv_min = user_connection_param_conf.intv_min;
@@ -570,7 +595,7 @@ static struct gapc_param_update_cmd* app_easy_gap_param_update_msg_create(uint8_
             cmd->ce_len_max = user_connection_param_conf.ce_len_max;
         #endif
     }
-    return (param_update_cmd[connection_idx]);
+    return param_update_cmd[connection_idx];
 }
 
 /**
@@ -587,14 +612,26 @@ static struct gapm_start_connection_cmd* app_easy_gap_start_connection_to_msg_cr
         struct gapm_start_connection_cmd *cmd;
         cmd = app_connect_start_msg_create();
         start_connection_cmd = cmd;
-        
+
         cmd->op.code = user_central_conf.code;
-        cmd->op.addr_src = user_central_conf.addr_src;
-        cmd->op.renew_dur = user_central_conf.renew_dur;
-        if ((user_central_conf.addr_src == GAPM_PROVIDED_RND_ADDR) || (user_central_conf.addr_src == GAPM_PROVIDED_RECON_ADDR))
+
+        // Case 'addr_src' equals to GAPM_GEN_STATIC_RND_ADDR:
+        // Use GAPM_PROVIDED_RND_ADDR address source type for GAPM_GEN_STATIC_RND_ADDR
+        // address source type. The static random address will be generated by the API code.
+        // If the user wants to use the GAPM_PROVIDED_RND_ADDR address source type, he
+        // can generate his own static random address in the user application layer.
+        if (user_adv_conf.addr_src == GAPM_GEN_STATIC_RND_ADDR)
         {
-            memcpy(cmd->op.addr.addr, user_central_conf.addr, BD_ADDR_LEN*sizeof(uint8_t));
+            cmd->op.addr_src = GAPM_PROVIDED_RND_ADDR;
+            generate_static_random_address();
+            memcpy(cmd->op.addr.addr, app_random_addr.addr, BD_ADDR_LEN*sizeof(uint8_t));
         }
+        else
+        {
+            cmd->op.addr_src = user_adv_conf.addr_src;
+        }
+
+        cmd->op.renew_dur = user_adv_conf.renew_dur;
         cmd->scan_interval = user_central_conf.scan_interval;
         cmd->scan_window = user_central_conf.scan_window;
         cmd->con_intv_min = user_central_conf.con_intv_min;
@@ -603,7 +640,7 @@ static struct gapm_start_connection_cmd* app_easy_gap_start_connection_to_msg_cr
         cmd->superv_to = user_central_conf.superv_to;
         cmd->ce_len_min = user_central_conf.ce_len_min;
         cmd->ce_len_max = user_central_conf.ce_len_max;
-        
+
         /// Number of peer device information present in message.
         /// Shall be 1 for GAPM_CONNECTION_DIRECT or GAPM_CONNECTION_NAME_REQUEST operations
         /// Shall be greater than 0 for other operations
@@ -614,17 +651,17 @@ static struct gapm_start_connection_cmd* app_easy_gap_start_connection_to_msg_cr
         else
         {
             cmd->nb_peers = CFG_MAX_CONNECTIONS;
-            
+
             #if (CFG_MAX_CONNECTIONS >= 1)
             memcpy(cmd->peers[0].addr.addr, user_central_conf.peer_addr_0, BD_ADDR_LEN*sizeof(uint8_t));
             cmd->peers[0].addr_type = user_central_conf.peer_addr_0_type;
             #endif
-            
+
             #if (CFG_MAX_CONNECTIONS >= 2)
             memcpy(cmd->peers[1].addr.addr, user_central_conf.peer_addr_1, BD_ADDR_LEN*sizeof(uint8_t));
             cmd->peers[1].addr_type = user_central_conf.peer_addr_1_type;
             #endif
-            
+
             #if (CFG_MAX_CONNECTIONS >= 3)
             memcpy(cmd->peers[2].addr.addr, user_central_conf.peer_addr_2, BD_ADDR_LEN*sizeof(uint8_t));
             cmd->peers[2].addr_type = user_central_conf.peer_addr_2_type;
@@ -634,29 +671,29 @@ static struct gapm_start_connection_cmd* app_easy_gap_start_connection_to_msg_cr
             memcpy(cmd->peers[3].addr.addr, user_central_conf.peer_addr_3, BD_ADDR_LEN*sizeof(uint8_t));
             cmd->peers[3].addr_type = user_central_conf.peer_addr_3_type;
             #endif
-            
+
             #if (CFG_MAX_CONNECTIONS >= 5)
             memcpy(cmd->peers[4].addr.addr, user_central_conf.peer_addr_4, BD_ADDR_LEN*sizeof(uint8_t));
             cmd->peers[4].addr_type = user_central_conf.peer_addr_4_type;
             #endif
-            
+
             #if (CFG_MAX_CONNECTIONS >= 6)
             memcpy(cmd->peers[5].addr.addr, user_central_conf.peer_addr_5, BD_ADDR_LEN*sizeof(uint8_t));
             cmd->peers[5].addr_type = user_central_conf.peer_addr_5_type;
             #endif
-            
+
             #if (CFG_MAX_CONNECTIONS >= 7)
             memcpy(cmd->peers[6].addr.addr, user_central_conf.peer_addr_6, BD_ADDR_LEN*sizeof(uint8_t));
             cmd->peers[6].addr_type = user_central_conf.peer_addr_6_type;
             #endif
-            
+
             #if (CFG_MAX_CONNECTIONS >= 8)
             memcpy(cmd->peers[7].addr.addr, user_central_conf.peer_addr_7, BD_ADDR_LEN*sizeof(uint8_t));
             cmd->peers[7].addr_type = user_central_conf.peer_addr_7_type;
             #endif
         }
     }
-    return (start_connection_cmd);
+    return start_connection_cmd;
 }
 
 /**
@@ -687,7 +724,7 @@ static struct gapm_set_dev_config_cmd* app_easy_gap_dev_config_create_msg(void)
         cmd->superv_to = user_gapm_conf.superv_to;
         cmd->flags = user_gapm_conf.flags;
     }
-    return (set_dev_config_cmd);
+    return set_dev_config_cmd;
 }
 
 /**
@@ -737,17 +774,7 @@ void app_init(void)
     // Reset the environment
     memset(&app_env[0], 0, sizeof(app_env));
 
-    bool security_default_val = true;
-
-    uint8_t length = NVDS_LEN_SECURITY_ENABLE;
-    // Get the security enable from the storage
-    if (nvds_get(NVDS_TAG_SECURITY_ENABLE, &length, (uint8_t *)&security_default_val) != NVDS_OK)
-    {
-        // Set true by default (several profiles requires security)
-        security_default_val = true;
-    }
-
-    for (uint8_t i = 0; i< APP_EASY_MAX_ACTIVE_CONNECTION; i++)
+    for (uint8_t i = 0; i < APP_EASY_MAX_ACTIVE_CONNECTION; i++)
     {
         // Set true by default (several profiles requires security)
         app_env[i].sec_en = true;
@@ -797,7 +824,7 @@ void app_easy_gap_undirected_advertise_start(void)
 
     // Send the message
     app_advertise_start_msg_send(cmd);
-    adv_cmd=NULL ;
+    adv_cmd = NULL ;
 
     // We are now connectable
     ke_state_set(TASK_APP, APP_CONNECTABLE);
@@ -835,8 +862,14 @@ void app_easy_gap_non_connectable_advertise_start(void)
     app_advertise_start_msg_send(cmd);
     adv_cmd = NULL ;
 
-    // We are now connectable
-    ke_state_set(TASK_APP, APP_CONNECTABLE);
+    uint8_t state = ke_state_get(TASK_APP);
+
+    // Check if we are not already in a connected state
+    if (!((state == APP_SECURITY) || (state == APP_CONNECTED) || (state == APP_PARAM_UPD)))
+    {
+        // We are now connectable
+        ke_state_set(TASK_APP, APP_CONNECTABLE);
+    }
 }
 
 void app_easy_gap_advertise_stop(void)
@@ -983,6 +1016,8 @@ void app_set_prf_srv_perm(enum KE_TASK_TYPE task_id, app_prf_srv_perm_t srv_perm
         {
             app_prf_srv_perm[i].task_id = task_id;
             app_prf_srv_perm[i].perm = srv_perm;
+            
+            break;
         }
     }
 }

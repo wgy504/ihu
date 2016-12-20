@@ -37,12 +37,7 @@
 
 #if (BLE_APP_PRESENT)
 
-#include "ke_task.h"        // Kernel Task
 #include "ke_msg.h"         // Kernel Message
-#include "gapm_task.h"        // 
-#include "gapc_task.h"        //
-#include "app_api.h"
-#include "app_prf_types.h"
 #include <stdint.h>         // Standard Integer
 
 /*
@@ -94,7 +89,6 @@ struct app_module_init_cmp_evt
     uint8_t status;
 };
 
-
 /*
  * GLOBAL VARIABLE DECLARATIONS
  ****************************************************************************************
@@ -104,7 +98,6 @@ extern const struct ke_state_handler app_default_handler;
 
 extern ke_state_t app_state[APP_IDX_MAX];
 
-
 /*
  * FUNCTION DECLARATIONS
  ****************************************************************************************
@@ -112,79 +105,21 @@ extern ke_state_t app_state[APP_IDX_MAX];
 
 /**
  ****************************************************************************************
- * @brief Handles ready indication from the GAP. - Reset the stack
+ * @brief Process handler for the Application GAP messages.
+ * @param[in] msgid   Id of the message received
+ * @param[in] param   Pointer to the parameters of the message
+ * @param[in] dest_id ID of the receiving task instance (probably unused)
+ * @param[in] src_id  ID of the sending task instance
+ * @param[in] msg_ret Result of the message handler
+ * @return Returns if the message is handled by the process handler
  ****************************************************************************************
  */
-int gapm_device_ready_ind_handler(ke_msg_id_t const msgid,
-                                         void const *param,
-                                         ke_task_id_t const dest_id,
-                                         ke_task_id_t const src_id);
-                                         
-/**
- ****************************************************************************************
- * @brief Handles GAP manager command complete events.
- ****************************************************************************************
- */
+enum process_event_response app_gap_process_handler (ke_msg_id_t const msgid,
+                                                     void const *param,
+                                                     ke_task_id_t const dest_id,
+                                                     ke_task_id_t const src_id,
+                                                     enum ke_msg_status_tag *msg_ret);
 
-int gapm_cmp_evt_handler(ke_msg_id_t const msgid,
-                                struct gapm_cmp_evt const *param,
-                                ke_task_id_t const dest_id,
-                                ke_task_id_t const src_id);
-
-/**
- ****************************************************************************************
- * @brief Handles connection complete event from the GAP. Will enable profile.
- ****************************************************************************************
- */
-int gapc_connection_req_ind_handler(ke_msg_id_t const msgid,
-                                           struct gapc_connection_req_ind const *param,
-                                           ke_task_id_t const dest_id,
-                                           ke_task_id_t const src_id);
-                                           
-
-/**
- ****************************************************************************************
- * @brief Handles GAP controller command complete events.
- ****************************************************************************************
- */
-int gapc_cmp_evt_handler(ke_msg_id_t const msgid,
-                                struct gapc_cmp_evt const *param,
-                                ke_task_id_t const dest_id,
-                                ke_task_id_t const src_id);
-
-
-/**
- ****************************************************************************************
- * @brief Handles disconnection complete event from the GAP.
- ****************************************************************************************
- */
-int gapc_disconnect_ind_handler(ke_msg_id_t const msgid,
-                                      struct gapc_disconnect_ind const *param,
-                                      ke_task_id_t const dest_id,
-                                      ke_task_id_t const src_id);
-
-/**
- ****************************************************************************************
- * @brief Handles Reception of advertise indication message during scanning.
- ****************************************************************************************
- */                                      
-int gapm_adv_report_ind_handler(ke_msg_id_t msgid,
-                                struct gapm_adv_report_ind *param,
-                                ke_task_id_t dest_id,
-                                ke_task_id_t src_id);
-                                      
-/**
- ****************************************************************************************
- * @brief Handles reception of the APP_MODULE_INIT_CMP_EVT messgage
- ****************************************************************************************
- */
-int app_module_init_cmp_evt_handler(ke_msg_id_t const msgid,
-                                           const struct app_module_init_cmp_evt *param,
-                                           ke_task_id_t const dest_id,
-                                           ke_task_id_t const src_id);
-
-
-                                      
 /// @} APPTASK
 
 #endif //(BLE_APP_PRESENT)

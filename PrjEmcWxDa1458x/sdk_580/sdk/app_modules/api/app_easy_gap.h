@@ -154,7 +154,15 @@ void app_easy_gap_advertise_with_timeout_stop(void);
 
 /**
  ****************************************************************************************
- * @brief Get undirected connection advertising message with filled parameters.
+ * @brief Get non connectable advertising message with filled parameters.
+ * @return gapm_start_advertise_cmd Pointer to advertising message
+ ****************************************************************************************
+*/
+struct gapm_start_advertise_cmd* app_easy_gap_non_connectable_advertise_get_active(void);
+
+/**
+ ****************************************************************************************
+ * @brief Get undirected connectable advertising message with filled parameters.
  * @return gapm_start_advertise_cmd Pointer to advertising message
  ****************************************************************************************
 */
@@ -162,7 +170,7 @@ struct gapm_start_advertise_cmd* app_easy_gap_undirected_advertise_get_active(vo
 
 /**
  ****************************************************************************************
- * @brief Get directed connection advertising message with filled parameters.
+ * @brief Get directed connectable advertising message with filled parameters.
  * @return gapm_start_advertise_cmd Pointer to advertising message
  ****************************************************************************************
 */

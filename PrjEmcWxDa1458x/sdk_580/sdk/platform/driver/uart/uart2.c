@@ -18,6 +18,7 @@
  * @{
  ****************************************************************************************
  */
+
 /*
  * INCLUDE FILES
  ****************************************************************************************
@@ -25,6 +26,7 @@
 #include <stddef.h>     // standard definition
 #include "uart.h"       // uart definition
 #include "reg_uart.h"   // uart register
+
 /*
  * DEFINES
  *****************************************************************************************
@@ -40,7 +42,7 @@ enum UART_ID
     MODEM_STAT         = 0,
     NO_INT_PEND        = 1,
     THR_EMPTY          = 2,
-    RECEIVED_AVAILABLE = 4,    
+    RECEIVED_AVAILABLE = 4,
     UART_TIMEOUT       = 12
 };
 
@@ -75,6 +77,7 @@ enum UART_FIFOSIZE
  * STRUCT DEFINITIONS
  *****************************************************************************************
  */
+
 /* TX and RX channel class holding data used for asynchronous read and write data
  * transactions
  */
@@ -104,12 +107,16 @@ struct uart2_env_tag
  * GLOBAL VARIABLE DEFINITIONS
  ****************************************************************************************
  */
+
 /// uart environment structure
 static struct uart2_env_tag uart2_env __attribute__((section("retention_mem_area0"),zero_init));
+
+
 /*
  * LOCAL FUNCTION DEFINITIONS
  ****************************************************************************************
  */
+
 /**
  ****************************************************************************************
  * @brief Serves the receive data available interrupt requests. It clears the requests and
@@ -117,7 +124,6 @@ static struct uart2_env_tag uart2_env __attribute__((section("retention_mem_area
  *
  ****************************************************************************************
  */
-
 static void uart2_rec_data_avail_isr(void)
 {
     void (*callback) (uint8_t) = NULL;
@@ -138,7 +144,7 @@ static void uart2_rec_data_avail_isr(void)
             uart2_env.rx.bufptr = NULL;
 
             // Disable Rx interrupt
-            uart2_rec_data_avail_setf(0);  //=SetBits16(UART2_IER_DLH_REG, ETBEI_dlh0, 0); 
+            uart2_rec_data_avail_setf(0);
 
             // Retrieve callback pointer
             callback = uart2_env.rx.callback;
@@ -169,7 +175,6 @@ static void uart2_rec_data_avail_isr(void)
  *
  ****************************************************************************************
  */
-
 static void uart2_rec_error_isr(void)
 {
     void (*callback) (uint8_t) = NULL;
@@ -266,33 +271,32 @@ static bool uart2_is_rx_fifo_empty(void)
  * EXPORTED FUNCTION DEFINITIONS
  ****************************************************************************************
  */
-void uart2_init(uint8_t baudr, uint8_t mode)
+void uart2_init(uint16_t baudr, uint8_t mode)
 {
 
     //ENABLE FIFO, REGISTER FCR IF UART2_LCR_REG.DLAB=0
     // XMIT FIFO RESET, RCVR FIFO RESET, FIFO ENABLED
     SetBits16(UART2_LCR_REG, UART_DLAB, 0);
-    SetWord16(UART2_IIR_FCR_REG,7); 
+    SetWord16(UART2_IIR_FCR_REG,7);
 
     //DISABLE INTERRUPTS, REGISTER IER IF UART2_LCR_REG.DLAB=0
     SetWord16(UART2_IER_DLH_REG, 0);
 
-    // ACCESS DIVISORLATCH REGISTER FOR BAUDRATE 115200, REGISTER UART_DLH/DLL_REG IF UART2_LCR_REG.DLAB=1
+    // ACCESS DIVISORLATCH REGISTER FOR BAUDRATE, REGISTER UART_DLH/DLL_REG IF UART2_LCR_REG.DLAB=1
     SetBits16(UART2_LCR_REG, UART_DLAB, 1);
-    SetWord16(UART2_IER_DLH_REG,0); // for serial clk 16MHz baudrate 115200 
-    SetWord16(UART2_IER_DLH_REG, (baudr&0xFF>>0x8));
-    SetWord16(UART2_RBR_THR_DLL_REG,baudr&0xFF); // set baudrate ~115200  = serial_clk/(16*9)
+    SetWord16(UART2_IER_DLH_REG, (baudr >> 8) & 0xFF);
+    SetWord16(UART2_RBR_THR_DLL_REG, baudr & 0xFF);
 
-    // NO PARITY, 1 STOP BIT, 8 DATA LENGTH AND 
+    // NO PARITY, 1 STOP BIT, 8 DATA LENGTH AND
     SetWord16(UART2_LCR_REG,mode);
 
     //ENABLE TX INTERRUPTS, REGISTER IER IF UART2_LCR_REG.DLAB=0
     SetBits16(UART2_LCR_REG, UART_DLAB, 0);
-		
-		NVIC_DisableIRQ(UART2_IRQn);
-		NVIC_SetPriority(UART2_IRQn,1);  
+
+    NVIC_DisableIRQ(UART2_IRQn);
+    NVIC_SetPriority(UART2_IRQn, 3);
     NVIC_EnableIRQ(UART2_IRQn);
-		NVIC_ClearPendingIRQ(UART2_IRQn);		
+    NVIC_ClearPendingIRQ(UART2_IRQn);
 
     // Configure UART environment
     uart2_env.errordetect = UART_ERROR_DETECT_DISABLED;
@@ -311,7 +315,7 @@ void uart2_flow_on(void)
 bool uart2_flow_off(void)
 {
     bool flow_off = true;
-		volatile unsigned int i;
+    volatile unsigned int i;
 
     do
     {
@@ -324,16 +328,10 @@ bool uart2_flow_off(void)
 
         // Configure modem (HW flow control disable, 'RTS flow off')
         SetWord32(UART2_MCR_REG, 0);
- 
-        // Wait for 1 character duration to ensure host has not started a transmission at the
-        // same time
-        for (i=0;i<350;i++);
 
         // Wait for 1 character duration to ensure host has not started a transmission at the
         // same time
-        #ifndef __GNUC__
-//        timer_wait(UART_CHAR_DURATION);
-        #endif //__GNUC__
+        for (i=0;i<350;i++);
 
         // Check if data has been received during wait time
         if(!uart2_is_rx_fifo_empty())
@@ -361,7 +359,7 @@ void uart2_finish_transfers(void)
     while(!uart2_thre_getf() || !uart2_temt_getf());
 }
 
-void uart2_read(uint8_t *bufptr, uint32_t size,void (*callback) (uint8_t))
+void uart2_read(uint8_t *bufptr, uint32_t size, void (*callback) (uint8_t))
 {
     // Sanity check
     ASSERT_ERR(bufptr != NULL);
@@ -371,13 +369,13 @@ void uart2_read(uint8_t *bufptr, uint32_t size,void (*callback) (uint8_t))
     // Prepare RX parameters
     uart2_env.rx.size = size;
     uart2_env.rx.bufptr = bufptr;
-		uart2_env.rx.callback = callback;	
+    uart2_env.rx.callback = callback;
 
     // Start data transaction
-    uart2_rec_data_avail_setf(1); //=SetBits16(UART2_IER_DLH_REG, ETBEI_dlh0, 1); 
+    uart2_rec_data_avail_setf(1);
 }
 
-void uart2_write(uint8_t *bufptr, uint32_t size,void (*callback) (uint8_t))
+void uart2_write(uint8_t *bufptr, uint32_t size, void (*callback) (uint8_t))
 {
     // Sanity check
     ASSERT_ERR(bufptr != NULL);
@@ -387,7 +385,7 @@ void uart2_write(uint8_t *bufptr, uint32_t size,void (*callback) (uint8_t))
     // Prepare TX parameters
     uart2_env.tx.size = size;
     uart2_env.tx.bufptr = bufptr;
-		uart2_env.tx.callback = callback; 
+    uart2_env.tx.callback = callback;
 
 
     /* start data transaction
@@ -404,7 +402,7 @@ void uart2_write(uint8_t *bufptr, uint32_t size,void (*callback) (uint8_t))
 void UART2_Handler(void)
 {
     uint32_t idd;
-	  idd = 0x0F & GetWord32(UART2_IIR_FCR_REG);
+    idd = 0x0F & GetWord32(UART2_IIR_FCR_REG);
     if(idd!=NO_INT_PEND)
     {
         switch(idd)
@@ -416,7 +414,7 @@ void UART2_Handler(void)
             }
             break;
           case RECEIVED_AVAILABLE:
-            uart2_rec_data_avail_isr();               
+            uart2_rec_data_avail_isr();
             break;
 
           case THR_EMPTY:

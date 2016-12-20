@@ -167,6 +167,8 @@
 /// Number of BLE profiles tasks
 #define BLE_PRF_TASK_SIZE   ( BLE_PROX_MONITOR       +  \
                               BLE_PROX_REPORTER      +  \
+                              BLE_BM_SERVER          +  \
+                              BLE_BM_CLIENT          +  \
                               BLE_STREAMDATA_DEVICE  +  \
                               BLE_STREAMDATA_HOST    +  \
                               BLE_FINDME_LOCATOR     +  \
@@ -208,7 +210,13 @@
                               BLE_ACCEL              +  \
                               BLE_WPT_CLIENT         +  \
                               BLE_UDS_SERVER         +  \
-                              BLE_WSS_SERVER)
+                              BLE_UDS_CLIENT         +  \
+                              BLE_BCS_SERVER         +  \
+                              BLE_BCS_CLIENT         +  \
+                              BLE_WSS_SERVER         +  \
+                              BLE_WSS_COLLECTOR      +  \
+                              BLE_CTS_SERVER         +  \
+                              BLE_CTS_CLIENT)
 
 /// Number of BLE HL tasks
 #define BLEHL_TASK_SIZE     BLE_HOST_TASK_SIZE + BLE_PRF_TASK_SIZE

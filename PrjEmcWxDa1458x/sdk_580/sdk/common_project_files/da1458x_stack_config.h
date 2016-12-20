@@ -61,9 +61,6 @@
     /* Coarse calibration */
     #define CFG_LUT_PATCH
 
-    /* Enables the Memory leak s/w patch */
-    #define CFG_MEM_LEAK_PATCH  
-
     #define CFG_MGCKMODA_PATCH_ENABLED  
 
     #undef CFG_HCI_BOTH_EIF

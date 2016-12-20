@@ -1,4 +1,4 @@
-#! armcc -E -I .\,.\..,.\..\src\config,.\..\..\..\..\..\sdk\common_project_files\ --cpu Cortex-M0
+#! armcc -E -I .\,.\..,.\..\src\config,.\..\..\..\..\sdk_580\sdk\common_project_files\ --cpu Cortex-M0
 
 #include "da1458x_config_basic.h"
 #include "da1458x_config_advanced.h"

@@ -1,19 +1,19 @@
 /**
-****************************************************************************************
-*
-* @file app_prf_perm_types.h
-*
-* @brief app - Service access permission rights api.
-*
-* Copyright (C) 2012. Dialog Semiconductor Ltd, unpublished work. This computer 
+ ****************************************************************************************
+ *
+ * @file app_prf_perm_types.h
+ *
+ * @brief app - Service access permission rights api.
+ *
+ * Copyright (C) 2012. Dialog Semiconductor Ltd, unpublished work. This computer 
  * program includes Confidential, Proprietary Information and is a Trade Secret of 
  * Dialog Semiconductor Ltd.  All use, disclosure, and/or reproduction is prohibited 
  * unless authorized in writing. All Rights Reserved.
-*
-* <bluetooth.support@diasemi.com> and contributors.
-*
-****************************************************************************************
-*/
+ *
+ * <bluetooth.support@diasemi.com> and contributors.
+ *
+ ****************************************************************************************
+ */
 
 #ifndef _APP_PRF_PERM_TYPES_H_
 #define _APP_PRF_PERM_TYPES_H_

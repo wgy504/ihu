@@ -388,6 +388,7 @@ void lld_sleep_compensate_func_patched(void)
  ****************************************************************************************
 */
 
+static uint8_t prev_rx __attribute__((section("retention_mem_area0"), zero_init));
 
 void skip_slave_latency_patch(uint8_t called_from)
 {
@@ -396,10 +397,10 @@ void skip_slave_latency_patch(uint8_t called_from)
 
     volatile uint8_t status;
     int em_idx;
-    uint8_t rx_cnt;
+    uint8_t rx_cnt = 0;
     volatile uint8_t rx_pkts;
     uint8_t hdl;
-    struct co_buf_rx_desc *rxdesc = NULL;
+    struct co_buf_rx_desc *rxdesc = 0;
     volatile unsigned char error_cnd;
     volatile unsigned char md_flag;
     volatile unsigned i;
@@ -412,8 +413,12 @@ void skip_slave_latency_patch(uint8_t called_from)
     // If no more events, exit
     if ((evt == NULL) || (!evt->prog))
         return;
+
     if (called_from == RX_END_SERVICE)
+    {
         rx_pkts = LLD_RX_IRQ_THRES;
+        prev_rx = 0;
+    }
     else
     {
         // Check if event has been handled by reading the exchange table status
@@ -432,25 +437,50 @@ void skip_slave_latency_patch(uint8_t called_from)
     if (rx_pkts > 0)
     {
         hdl = co_buf_rx_current_get();
-        while (rx_pkts--)
+        rxdesc = co_buf_rx_get(hdl);
+        while (--rx_pkts)
         {
-            rxdesc = co_buf_rx_get(hdl);
             hdl = co_buf_rx_next(hdl);
+            rxdesc = co_buf_rx_get(hdl);
         }
         status = rxdesc->rxstatus & 0x7F;
-        error_cnd = (status & (BLE_MIC_ERR_BIT | BLE_CRC_ERR_BIT | BLE_LEN_ERR_BIT | BLE_TYPE_ERR_BIT | BLE_SYNC_ERR_BIT));
+        error_cnd = (status & (BLE_MIC_ERR_BIT | BLE_CRC_ERR_BIT | BLE_LEN_ERR_BIT | BLE_TYPE_ERR_BIT | BLE_SYNC_ERR_BIT |  BLE_SN_ERR_BIT));
         md_flag = ble_rxmd_getf(hdl);
-        if (md_flag||error_cnd)
-            if (evt->inst_action == LLD_NO_ACTION)
-                evt->waiting_evt |= LLD_EVT_WAITING_INSTANT;
+
+        if (called_from == RX_END_SERVICE)
+        {
+            if (md_flag || error_cnd)
+                if ((evt->inst_action == LLD_NO_ACTION))
+                    prev_rx = 1;
+        }
+        else
+        {
+            prev_rx = 0;
+            if (md_flag || error_cnd)
+                if ((evt->inst_action == LLD_NO_ACTION))
+                {
+                    evt->waiting_evt |= LLD_EVT_WAITING_INSTANT;
+                }
+        }
     }
     else
     {
-        if (evt->inst_action == LLD_NO_ACTION)
-            evt->waiting_evt |= LLD_EVT_WAITING_INSTANT;
+        if (called_from != RX_END_SERVICE)
+        {
+            if (
+                ((rx_cnt != 0) && prev_rx) // Packets are multiple of four the last RX should tell us what to do
+                || (rx_cnt == 0)           // End evt with no receptions - missed the master?
+            )
+            {
+                if ((evt->inst_action == LLD_NO_ACTION))
+                        evt->waiting_evt |= LLD_EVT_WAITING_INSTANT;
+            }
+            prev_rx = 0;
+        }
     }
     #endif // (BLE_PERIPHERAL)
 }
+
 #else
 void skip_slave_latency_patch(uint8_t called_from)
 {
@@ -594,8 +624,6 @@ void $Sub$$BLE_FINETGTIM_Handler(void)
 void BLE_SLP_Handler(void)
 {
 	ble_regs_pop();
-    
-    SetBits16(SYS_CTRL_REG, DEBUGGER_ENABLE, 0);
 
 	SetBits16(GP_CONTROL_REG, BLE_WAKEUP_REQ, 0);   //just to be sure    
 
@@ -816,8 +844,6 @@ void BLE_SLP_Handler(void)
     power_up(); // power-up the BLE core
     
     wakeup_lp_comp = 0; // clear flag for next time
-    
-    SetBits16(SYS_CTRL_REG, DEBUGGER_ENABLE, 0);
 
     SetBits16(GP_CONTROL_REG, BLE_WAKEUP_REQ, 0);   //just to be sure    
 

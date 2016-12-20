@@ -168,7 +168,7 @@ void uart_init(uint8_t baudr, uint8_t mode);
  * @return void
  *****************************************************************************************
  */
-void uart2_init(uint8_t baudr, uint8_t mode);
+void uart2_init(uint16_t baudr, uint8_t mode);
 
 /**
  ****************************************************************************************

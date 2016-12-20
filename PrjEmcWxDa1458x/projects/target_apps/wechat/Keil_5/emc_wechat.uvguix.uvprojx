@@ -15,7 +15,7 @@
         <TargetCommonOption>
           <Device>ARMCM0</Device>
           <Vendor>ARM</Vendor>
-          <PackID>ARM.CMSIS.4.5.0</PackID>
+          <PackID>ARM.CMSIS.5.0.0</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IROM(0x0,0x0) IRAM(0x0,0x0) CPUTYPE("Cortex-M0") CLOCK(12000000) ESEL ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -128,8 +128,8 @@
         </DebugOption>
         <Utilities>
           <Flash1>
-            <UseTargetDll>0</UseTargetDll>
-            <UseExternalTool>1</UseExternalTool>
+            <UseTargetDll>1</UseTargetDll>
+            <UseExternalTool>0</UseExternalTool>
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
             <Capability>1</Capability>
@@ -1232,7 +1232,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>sdk_api</GroupName>
+          <GroupName>sdk_app_api</GroupName>
           <Files>
             <File>
               <FileName>app.h</FileName>
@@ -1295,16 +1295,6 @@
               <FilePath>.\..\..\..\..\sdk_580\sdk\app_modules\api\app_user_config.h</FilePath>
             </File>
             <File>
-              <FileName>arch_api.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\..\..\..\..\sdk_580\sdk\platform\arch\arch_api.h</FilePath>
-            </File>
-            <File>
-              <FileName>arch_wdg.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\..\..\..\..\sdk_580\sdk\platform\arch\main\arch_wdg.h</FilePath>
-            </File>
-            <File>
               <FileName>app_easy_security.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\..\..\..\..\sdk_580\sdk\app_modules\api\app_easy_security.h</FilePath>
@@ -1358,6 +1348,11 @@
               <FileName>da1458x_config_basic.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\..\src\config\da1458x_config_basic.h</FilePath>
+            </File>
+            <File>
+              <FileName>da1458x_stack_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\sdk_580\sdk\common_project_files\da1458x_stack_config.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1497,6 +1492,21 @@
         </Group>
         <Group>
           <GroupName>l3emcwx</GroupName>
+        </Group>
+        <Group>
+          <GroupName>sdk_arch_api</GroupName>
+          <Files>
+            <File>
+              <FileName>arch_wdg.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\..\..\..\..\sdk_580\sdk\platform\arch\main\arch_wdg.h</FilePath>
+            </File>
+            <File>
+              <FileName>arch_api.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\..\..\..\..\sdk_580\sdk\platform\arch\arch_api.h</FilePath>
+            </File>
+          </Files>
         </Group>
       </Groups>
     </Target>

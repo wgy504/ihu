@@ -32,7 +32,8 @@
 		 * INCLUDE FILES
 		 ****************************************************************************************
 		 */
-		#include "prf_types.h"
+
+        #include "wss_common.h"
 
         /*
          * DEFINES
@@ -40,7 +41,6 @@
          */
 
         #define WSSS_IDX_MAX        (1)
-        #define STORE_UNSENT_MEASUREMENTS
 
         /// Possible states of the DISS task
         enum
@@ -82,19 +82,6 @@
 
             /// Error indication to Host
             WSSS_ERROR_IND,
-        };
-
-        /// Weight Measurement Flags field bit values
-        enum
-        {
-            /// Imperial Measurement Units (weight in lb and height in inches)
-            WSSS_MEAS_FLAG_UNIT_IMPERIAL      = 0x01,
-            /// Time Stamp present
-            WSSS_MEAS_FLAG_TIME_STAMP         = 0x02,
-            /// User ID present
-            WSSS_MEAS_FLAG_USERID_PRESENT     = 0x04,
-            /// BMI & Height present
-            WSSS_MEAS_FLAG_BMI_HT_PRESENT     = 0x08,
         };
 
         /// Weight Measurement User id field
@@ -149,8 +136,11 @@
 
         /// Parameters of the @ref WSSS_CREATE_DB_REQ message
         struct wsss_create_db_req
-        {  /// Unused and unchecked parameter - Avoid to have an empty structure
-           uint8_t unused;
+        {
+            /// Indicates if BCS should be included
+            bool include_bcs_instance;
+            /// BCS reference for the inclusion
+            struct att_incl_desc bcs_ref;
         };
 
         /// Parameters of the @ref WSSS_CREATE_DB_CFM message
@@ -161,33 +151,16 @@
 
         /// Feature structure
         struct wss_feature
-        {   /// flags 
+        {   /// Flags
             uint32_t flags;
-        };
-
-        /// Weight measurement structure - shall be dynamically allocated
-        struct wss_wt_meas
-        {
-            /// flags 
-            uint8_t flags;
-            /// weight
-            float weight;
-            /// Time stamp 
-            struct prf_date_time datetime;
-            /// User ID
-            uint8_t userid;
-            /// BMI
-            float bmi;
-            /// Height
-            float height;
         };
 
         /// Parameters of the @ref WSSS_MEAS_VAL_SET_REQ message - shall be dynamically allocated
         struct wsss_meas_send_req
         {
-            /// flags 
+            /// Flags
             uint16_t conhdl;
-            /// weight measurement
+            /// Weight measurement
             struct wss_wt_meas meas_val;
         };
 
@@ -212,13 +185,13 @@
         /// Parameters of the @ref WSSS_MEAS_SEND_REQ message - shall be dynamically allocated
         struct wsss_unsent_meas_val
         {
-            // pointer to previous item
+            /// Pointer to previous item
             struct wsss_unsent_meas_val *prev;
 
-            // pointer to next item
+            /// Pointer to next item
             struct wsss_unsent_meas_val *next;
             
-            /// packed measurement value
+            /// Packed measurement value
             uint8_t packed_meas_val[1];
         };
 
@@ -228,9 +201,9 @@
             ///Connection handle
             uint16_t conhdl;
 
-            /// security level: b0= nothing, b1=unauthenticated, b2=authenticated, b3=authorized;
+            /// Security level: b0= nothing, b1=unauthenticated, b2=authenticated, b3=authorized;
             /// b1 or b2 and b3 can go together
-            /// it matches the permission bytes order of settings
+            /// It matches the permission bytes order of settings
             uint8_t sec_lvl;
 
             ///Type of connection - will someday depend on button press length; can be CFG or DISCOVERY

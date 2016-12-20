@@ -57,6 +57,7 @@ void lans_init(void)
     // Reset environment
     memset(&lans_env, 0, sizeof(lans_env));
     lans_env.ntf_pending = false;
+    lans_env.navi_enabled = false;
 
     // Create LANS task
     ke_task_create(TASK_LANS, &TASK_DESC_LANS);

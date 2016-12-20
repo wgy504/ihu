@@ -35,26 +35,30 @@
 
 struct app_callbacks
 {
-    void (*app_on_connection) (const uint8_t, struct gapc_connection_req_ind const *);
-    void (*app_on_disconnect) (struct gapc_disconnect_ind const *); //app disconnect
-    void (*app_on_update_params_rejected) (const uint8_t);
+    void (*app_on_connection)(const uint8_t, struct gapc_connection_req_ind const *);
+    void (*app_on_disconnect)(struct gapc_disconnect_ind const *);
+    void (*app_on_update_params_rejected)(const uint8_t);
     void (*app_on_update_params_complete)(void);
     void (*app_on_set_dev_config_complete)(void);
-    void (*app_on_adv_undirect_complete) (const uint8_t);
-    void (*app_on_adv_direct_complete) (const uint8_t);
+    void (*app_on_adv_nonconn_complete)(const uint8_t);
+    void (*app_on_adv_undirect_complete)(const uint8_t);
+    void (*app_on_adv_direct_complete)(const uint8_t);
     void (*app_on_db_init_complete)(void);
     void (*app_on_scanning_completed)(const uint8_t);
     void (*app_on_adv_report_ind)(struct gapm_adv_report_ind const *);
     void (*app_on_connect_failed)(void);
-    void (*app_on_pairing_request) (uint8_t const, struct gapc_bond_req_ind const *);
-    void (*app_on_tk_exch_nomitm) (uint8_t const, struct gapc_bond_req_ind const *);
+#if (BLE_APP_SEC)
+    void (*app_on_pairing_request)(const uint8_t, struct gapc_bond_req_ind const *);
+    void (*app_on_tk_exch_nomitm)(const uint8_t, struct gapc_bond_req_ind const *);
     void (*app_on_irk_exch)(struct gapc_bond_req_ind const *);
-    void (*app_on_csrk_exch) (uint8_t const, struct gapc_bond_req_ind const *);
-    void (*app_on_ltk_exch) (uint8_t const, struct gapc_bond_req_ind const *);
+    void (*app_on_csrk_exch)(const uint8_t, struct gapc_bond_req_ind const *);
+    void (*app_on_ltk_exch)(const uint8_t, struct gapc_bond_req_ind const *);
     void (*app_on_pairing_succeded)(void);
-    void (*app_on_encrypt_ind) (const uint8_t);
-    void (*app_on_mitm_passcode_req) (const uint8_t);
-    void (*app_on_encrypt_req_ind) (uint8_t const, struct gapc_encrypt_req_ind const *);
+    void (*app_on_encrypt_ind)(const uint8_t);
+    void (*app_on_mitm_passcode_req)(const uint8_t);
+    void (*app_on_encrypt_req_ind)(const uint8_t, struct gapc_encrypt_req_ind const *);
+    void (*app_on_security_req_ind)(const uint8_t);
+#endif
 };
 
 struct profile_callbacks

@@ -113,7 +113,7 @@ typedef enum SPI_ERASE_MODULE
     SECTOR_ERASE    = 0x20,
 } SPI_erase_module_t;
 
-#define	MAX_READY_WAIT_COUNT	200000
+#define	MAX_READY_WAIT_COUNT   2000000
 #define	MAX_COMMAND_SEND_COUNT 50
 
 /* Status Register Bits */

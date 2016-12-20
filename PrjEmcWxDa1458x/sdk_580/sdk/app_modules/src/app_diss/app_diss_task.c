@@ -1,7 +1,7 @@
 /**
  ****************************************************************************************
  *
- * @file app_dis_task.c
+ * @file app_diss_task.c
  *
  * @brief Device Information Service Application Task
  *
@@ -19,7 +19,6 @@
  */
 
 #include "rwip_config.h"        // SW Configuration
-#include <string.h>             // srtlen()
 
 #if (BLE_DIS_SERVER)
 
@@ -30,56 +29,34 @@
 
 #include "diss_task.h"          // Device Information Service Server Task API
 #include "diss.h"               // Device Information Service Definitions
-#include "app_diss.h"            // Device Information Service Application Definitions
-#include "app_diss_task.h"       // Device Information Service Application Task API
+#include "app_diss.h"           // Device Information Service Application Definitions
+#include "app_diss_task.h"      // Device Information Service Application Task API
 #include "app_task.h"           // Application Task API
-
-
+#include "app_entry_point.h"
+#include "app.h"
 
 /*
  * FUNCTION DEFINITIONS
  ****************************************************************************************
  */
-#include "app_entry_point.h"
-
-static const struct ke_msg_handler app_dis_process_handlers[]=
-{
-    {DISS_CREATE_DB_CFM,                    (ke_msg_func_t)diss_create_db_cfm_handler},
-    {DISS_DISABLE_IND,                      (ke_msg_func_t)diss_disable_ind_handler}, 
-};
-
-enum process_event_response app_dis_process_handler (ke_msg_id_t const msgid,
-                                         void const *param,
-                                         ke_task_id_t const dest_id,
-                                         ke_task_id_t const src_id, 
-                                         enum ke_msg_status_tag *msg_ret)
-{
-    return (app_std_process_event(msgid, param,src_id,dest_id,msg_ret, app_dis_process_handlers,
-                                         sizeof(app_dis_process_handlers)/sizeof(struct ke_msg_handler)));
-} 
-
-
 
 /**
  ****************************************************************************************
  * @brief Handles DIS Server profile database creation confirmation.
- *
- * @param[in] msgid     Id of the message received.
- * @param[in] param     Pointer to the parameters of the message.
- * @param[in] dest_id   ID of the receiving task instance (TASK_GAP).
- * @param[in] src_id    ID of the sending task instance.
- *
- * @return If the message was consumed or not.
+ * @param[in] msgid     Id of the message received
+ * @param[in] param     Pointer to the parameters of the message
+ * @param[in] dest_id   ID of the receiving task instance (TASK_GAP)
+ * @param[in] src_id    ID of the sending task instance
+ * @return If the message was consumed or not
  ****************************************************************************************
  */
-
-int diss_create_db_cfm_handler(ke_msg_id_t const msgid,
+static int diss_create_db_cfm_handler(ke_msg_id_t const msgid,
                                       struct diss_create_db_cfm const *param,
                                       ke_task_id_t const dest_id,
                                       ke_task_id_t const src_id)
 {
     uint8 len;
-    
+
     if (ke_state_get(dest_id) == APP_DB_INIT)
     {
         if (param->status == CO_ERROR_NO_ERROR)
@@ -132,8 +109,8 @@ int diss_create_db_cfm_handler(ke_msg_id_t const msgid,
 
                 // Send the message
                 ke_msg_send(req_id);
-            }            
-            
+            }
+
             // Set the software version in the DB. This is the reference design sw version
             {
                 len = strlen(APP_DIS_SW_REV);
@@ -150,7 +127,7 @@ int diss_create_db_cfm_handler(ke_msg_id_t const msgid,
                 // Send the message
                 ke_msg_send(req_id);
             }
-            
+
             // Set the firmware version in the DB. This is the common code sw version
             {
                 len = strlen(APP_DIS_FIRM_REV);
@@ -167,7 +144,7 @@ int diss_create_db_cfm_handler(ke_msg_id_t const msgid,
                 // Send the message
                 ke_msg_send(req_id);
             }
-            
+
             // Set the PNP ID in the DB
             {
                 uint16 ids[3];
@@ -187,7 +164,7 @@ int diss_create_db_cfm_handler(ke_msg_id_t const msgid,
 
                 // Send the message
                 ke_msg_send(req_id);
-            }                        
+            }
         }
 
         // Inform the Application Manager
@@ -206,17 +183,10 @@ int diss_create_db_cfm_handler(ke_msg_id_t const msgid,
 /**
  ****************************************************************************************
  * @brief Handles disable indication from the DIS Server profile.
- *
- * @param[in] msgid     Id of the message received.
- * @param[in] param     Pointer to the parameters of the message.
- * @param[in] dest_id   ID of the receiving task instance.
- * @param[in] src_id    ID of the sending task instance.
- *
- * @return If the message was consumed or not.
+ * @return If the message was consumed or not
  ****************************************************************************************
  */
-
-int diss_disable_ind_handler(ke_msg_id_t const msgid,
+static int diss_disable_ind_handler(ke_msg_id_t const msgid,
                                     struct diss_disable_ind const *param,
                                     ke_task_id_t const dest_id,
                                     ke_task_id_t const src_id)
@@ -225,9 +195,30 @@ int diss_disable_ind_handler(ke_msg_id_t const msgid,
 }
 
 /*
- * GLOBAL VARIABLE DEFINITIONS
+ * GLOBAL VARIABLES DEFINITION
  ****************************************************************************************
  */
+
+static const struct ke_msg_handler app_diss_process_handlers[]=
+{
+    {DISS_CREATE_DB_CFM,                    (ke_msg_func_t)diss_create_db_cfm_handler},
+    {DISS_DISABLE_IND,                      (ke_msg_func_t)diss_disable_ind_handler},
+};
+
+/*
+ * FUNCTION DEFINITIONS
+ ****************************************************************************************
+ */
+
+enum process_event_response app_diss_process_handler(ke_msg_id_t const msgid,
+                                                     void const *param,
+                                                     ke_task_id_t const dest_id,
+                                                     ke_task_id_t const src_id,
+                                                     enum ke_msg_status_tag *msg_ret)
+{
+    return (app_std_process_event(msgid, param, src_id, dest_id, msg_ret, app_diss_process_handlers,
+                                         sizeof(app_diss_process_handlers) / sizeof(struct ke_msg_handler)));
+}
 
 #endif //(BLE_DIS_SERVER)
 

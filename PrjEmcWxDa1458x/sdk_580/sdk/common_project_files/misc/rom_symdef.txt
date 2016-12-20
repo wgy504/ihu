@@ -790,3 +790,14 @@
 0x00027cf7   T    TASK_LLM_llm_rd_buff_size_cmd_handler
 0x00027d19   T    TASK_LLM_lld_data_ind_handler
 0x00027e6d   T    TASK_LLM_llm_disconnect_mgt
+
+0x0002a1dd   T    TASK_ATTS_atts_rtx_ind_handler
+0x0002a21f   T    TASK_ATTS_atts_send_event_cmd_handler
+0x0002a2dd   T    TASK_ATTS_smpc_sign_ind_handler
+0x0002a21f   T    TASK_ATTS_smpc_cmp_evt_handler
+0x0002a41f   T    TASK_ATTS_l2cc_data_send_rsp_handler
+
+0x0002f461   T    gapc_get_operation
+0x000324bf   T    ke_handler_search
+
+0x00022dc5   T    llc_pdu_send                             

@@ -429,10 +429,17 @@ enum KE_TASK_TYPE
     TASK_CPPC           = 53  ,   // Cycling Power Profile Client Task
     
     // Start of conditionally assigned task types
-#if (BLE_WECHAT)
+ #if (BLE_WECHAT)
     TASK_WECHAT    ,      // Wechat Task
-#endif    
-    
+#endif     
+    #if (BLE_BM_SERVER)
+    TASK_BMSS           ,   // BMSS Task
+    #endif
+
+    #if (BLE_BM_CLIENT)
+    TASK_BMSC         ,   // BMSC Task
+    #endif
+
     #if BLE_SPOTA_RECEIVER
     TASK_SPOTAR         ,   // SPOTA Receiver task
     #endif
@@ -473,8 +480,16 @@ enum KE_TASK_TYPE
     TASK_WSSS           ,   // Weight Scale Server Task
     #endif
 
+    #if BLE_WSS_COLLECTOR
+    TASK_WSSC           ,   // Weight Scale Collector Task
+    #endif
+
     #if BLE_UDS_SERVER
     TASK_UDSS           ,   // User Data Server Task
+    #endif
+
+    #if BLE_UDS_CLIENT
+    TASK_UDSC           ,   // User Data Server Task
     #endif
 
     #if BLE_SPS_SERVER
@@ -493,6 +508,22 @@ enum KE_TASK_TYPE
     TASK_DEVICE_CONFIG  ,   // Serial Proert Service Server Task
     #endif
 
+    #if (BLE_BCS_SERVER)
+    TASK_BCSS          ,   // Body Composition Server Task
+    #endif
+
+    #if (BLE_BCS_CLIENT)
+    TASK_BCSC          ,   // Body Composition Client Task
+    #endif
+
+    #if (BLE_CTS_SERVER)
+    TASK_CTSS          ,   // Current Time Server Task
+    #endif
+
+    #if (BLE_CTS_CLIENT)
+    TASK_CTSC          ,   // Current Time Client Task
+    #endif
+
     #if BLE_CUSTOM2_SERVER
 	TASK_CUSTS2		    ,	// 2nd Custom profile server
     #endif
@@ -503,7 +534,6 @@ enum KE_TASK_TYPE
 
     // End of conditionally assigned task types
     TASK_VMDA1458X           = 59  ,
-		
     TASK_HCI            = 60  ,
     TASK_HCIH           = 61  ,
 

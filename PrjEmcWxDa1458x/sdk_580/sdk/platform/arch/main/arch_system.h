@@ -28,8 +28,6 @@
  ****************************************************************************************
  */
 
-#define DEFAULT_XTAL16M_TRIM_VALUE (1302)
-
 extern uint32_t lp_clk_sel;
 
 /*
@@ -102,25 +100,6 @@ static __inline void xtal16__trim_init()
     SetBits16(CLK_16M_REG, XTAL16_CUR_SET, 0x5);
 }
 
-/**
- ****************************************************************************************
- * @brief Check that XTAL 16 MHz clock is calibrated.
- * @return void
- * About: Check if XTAL 16 MHz clock is calibrated and if not make corrective actions.
- ****************************************************************************************
- */
-static __inline void xtal16_calibration_check(void)
-{
-    if(DEFAULT_XTAL16M_TRIM_VALUE_USED)
-    {
-    // Apply the default XTAL16 trim value if a trim value has not been programmed in OTP
-        if (0 == GetWord16(CLK_FREQ_TRIM_REG))
-        {
-            set_xtal16m_trim_value(DEFAULT_XTAL16M_TRIM_VALUE);
-        }
-    }
-}
-
 void system_init(void);
 
 /**
@@ -141,6 +120,21 @@ void system_init(void);
  ****************************************************************************************
  */
 void arch_wkupct_tweak_deb_time(bool tweak);
+
+/**
+ ****************************************************************************************
+ * @brief UART initialization function for baudrates lower than 4800 bps.
+ *
+ * This function is a direct replacement of the uart_init() ROM function. Any application
+ * that requires a baudrate lower than 2400 bps must replace calls to uart_init() with
+ * with calls to arch_uart_init_slow().
+ *
+ * @param[in] baudr Baudrate value
+ * @param[in] mode  Mode
+ * @return void
+ *****************************************************************************************
+ */
+void arch_uart_init_slow(uint16_t baudr, uint8_t mode);
 
 #endif
 

@@ -296,7 +296,7 @@ static int gattc_cmp_evt_handler(ke_msg_id_t const msgid,
         }
     }
     }
-    else if(HRPC_CONNECTED)
+    else if(state == HRPC_CONNECTED)
     {
         switch(param->req_type)
         {

@@ -40,6 +40,16 @@
 #include "gapc.h"
 #include "app_prf_types.h"
 
+#if (BLE_BM_SERVER)
+#include "bmss.h"
+#include "bmss_task.h"
+#endif
+
+#if (BLE_BM_CLIENT)
+#include "bmsc.h"
+#include "bmsc_task.h"
+#endif
+
 #if (BLE_CUSTOM_SERVER)
 #include "user_custs_config.h"
 #endif // (BLE_CUSTOM_SERVER)
@@ -264,11 +274,6 @@
 #include "sample128_task.h"
 #endif // (BLE_SAMPLE128)
 
-#if (BLE_WECHAT)
-#include "wechat.h"
-#include "wechat_task.h"
-#endif // (BLE_WECHAT)
-
 #if (BLE_WPT_CLIENT)
 #include "wptc.h"
 #include "wptc_task.h"
@@ -294,10 +299,20 @@
 #include "udss_task.h"
 #endif // (BLE_UDS_SERVER)
 
+#if (BLE_UDS_CLIENT)
+#include "udsc.h"
+#include "udsc_task.h"
+#endif // (BLE_UDS_CLIENT)
+
 #if (BLE_WSS_SERVER)
 #include "wsss.h"
 #include "wsss_task.h"
 #endif // (BLE_WSS_SERVER)
+
+#if (BLE_WSS_COLLECTOR)
+#include "wssc.h"
+#include "wssc_task.h"
+#endif // (BLE_WSS_COLLECTOR)
 
 #if (BLE_ADC_NOTIFY)
 #include "adc_notify.h"
@@ -308,6 +323,26 @@
 #include "device_config.h"
 #include "device_config_task.h"
 #endif // (DEVICE_CONFIG)
+
+#if (BLE_BCS_SERVER)
+#include "bcss.h"
+#include "bcss_task.h"
+#endif // (BLE_BCS_SERVER)
+
+#if (BLE_BCS_CLIENT)
+#include "bcsc.h"
+#include "bcsc_task.h"
+#endif // (BLE_BCS_SERVER)
+
+#if (BLE_CTS_SERVER)
+#include "ctss.h"
+#include "ctss_task.h"
+#endif // (BLE_CTS_SERVER)
+
+#if (BLE_CTS_CLIENT)
+#include "ctsc.h"
+#include "ctsc_task.h"
+#endif // (BLE_CTS_CLIENT)
 
 #endif /* (BLE_SERVER_PRF || BLE_CLIENT_PRF) */
 
@@ -1162,10 +1197,36 @@ uint8_t prf_unpack_date_time(uint8_t *packed_date, struct prf_date_time* date_ti
     return 7;
 }
 
-
+/**
+ ****************************************************************************************
+ * @brief Fix the Characteristics Properties of the Service Changed Characteristic 
+ *        according to the  Erratum 3833, described in "ESR05 - ERRATA SERVICE RELEASE 
+ *        TO BLUETOOTH SPECIFICATIONS".
+ * @return void
+ ****************************************************************************************
+ */
+static void fix_service_changed_char_prop(void)
+{
+    // Support only "Indicate"
+    uint8_t value = 0x20;
+    
+    attmdb_att_partial_value_update(GATT_GET_ATT_HANDLE(GATT_IDX_CHAR_SVC_CHANGED), 0, 1,
+                                        (uint8_t*)&value);
+    attmdb_att_set_permission(GATT_GET_ATT_HANDLE(GATT_IDX_SVC_CHANGED), PERM(IND, ENABLE));
+}
 
 void prf_init_func(void)
 {
+    fix_service_changed_char_prop();
+    
+    #if (BLE_BM_SERVER)
+    bmss_init();
+    #endif
+
+    #if (BLE_BM_CLIENT)
+    bmsc_init();
+    #endif
+
     #if (BLE_ACCEL)
     accel_init();
     #endif // (BLE_ACCEL)
@@ -1177,7 +1238,6 @@ void prf_init_func(void)
     #if (BLE_HT_COLLECTOR)
     htpc_init();
     #endif // (BLE_HT_COLLECTOR)
-
 
     #if (BLE_DIS_CLIENT)
     disc_init();
@@ -1207,24 +1267,22 @@ void prf_init_func(void)
     hrpc_init();
     #endif // (BLE_HR_COLLECTOR)
 
-
     #if (BLE_PROX_MONITOR)
     proxm_init();
     #endif // (BLE_PROX_MONITOR)
 
-
     #if (BLE_STREAMDATA_HOST)
     streamdatah_init();
     #endif // (BLE_STREAMDATA_HOST)
+    
     #if (BLE_STREAMDATA_DEVICE)
     streamdatad_init();
     #endif // (BLE_STREAMDATA_DEVICE)
 
-
-    
     #if (BLE_SPS_CLIENT)
     sps_client_init();
     #endif // (BLE_SPS_CLIENT)
+    
     #if (BLE_SPS_SERVER)
     sps_server_init();
     #endif // (BLE_SPS_SERVER)
@@ -1236,8 +1294,6 @@ void prf_init_func(void)
     #if (BLE_SP_CLIENT)
     scppc_init();
     #endif // (BLE_SP_CLIENT)
-
-
 
     #if (BLE_BAS_CLIENT)
     basc_init();
@@ -1287,13 +1343,13 @@ void prf_init_func(void)
     cscps_init();
     #endif // (BLE_CSC_SENSOR)
 
-	#if (BLE_CP_COLLECTOR)
-	cppc_init();
-	#endif // (BLE_CP_COLLECTOR)
+    #if (BLE_CP_COLLECTOR)
+    cppc_init();
+    #endif // (BLE_CP_COLLECTOR)
 
-	#if (BLE_CP_SENSOR)
-	cpps_init();
-	#endif // (BLE_CP_SENSOR)
+    #if (BLE_CP_SENSOR)
+    cpps_init();
+    #endif // (BLE_CP_SENSOR)
 
     #if (BLE_LN_COLLECTOR)
     lanc_init();
@@ -1327,18 +1383,14 @@ void prf_init_func(void)
     sample128_init();
     #endif // (BLE_SAMPLE128)
     
-    #if (BLE_WECHAT)
-    wechat_init();
-    #endif // (BLE_WECHAT)
-    
-	#if (BLE_WPT_CLIENT)
+    #if (BLE_WPT_CLIENT)
     wptc_init();
     #endif // WPT_CLIENT
     
     #if (BLE_WPTS)
     wpts_init();
     #endif // BLE_WPTS
-	
+
     #if (BLE_IEU)  
     ieu_init();
     #endif // (BLE_IEU)
@@ -1346,15 +1398,23 @@ void prf_init_func(void)
     #if (BLE_MPU)   
     mpu_init();
     #endif // (BLE_MPU)
-	
+
     #if (BLE_UDS_SERVER)
     udss_init();
     #endif // (BLE_UDS_SERVER)
+
+    #if (BLE_UDS_CLIENT)
+    udsc_init();
+    #endif // (BLE_UDS_CLIENT)
 
     #if (BLE_WSS_SERVER)
     wsss_init();
     #endif // (BLE_WSS_SERVER)
     
+    #if (BLE_WSS_COLLECTOR)
+    wssc_init();
+    #endif // (BLE_WSS_COLLECTOR)
+
     #if (BLE_ADC_NOTIFY)
     adc_notify_init();
     #endif // (BLE_ADC_NOTIFY)
@@ -1366,25 +1426,42 @@ void prf_init_func(void)
     #if (BLE_PROX_REPORTER)
     proxr_init();
     #endif // (BLE_PROX_REPORTER)
+    
     #if (BLE_BAS_SERVER)
     bass_init();
     #endif // (BLE_BAS_SERVER)
+    
     #if (BLE_SPOTA_RECEIVER)
     spotar_init();
     #endif // (BLE_SPOTA_RECEIVER)
+    
     #if (BLE_DIS_SERVER)
     diss_init();
-    #endif // (BLE_DIS_SERVER)    
+    #endif // (BLE_DIS_SERVER)
+    
     #if (BLE_FINDME_LOCATOR)
     findl_init();
     #endif // (BLE_FINDME_LOCATOR)
+    
     #if (BLE_FINDME_TARGET)
     findt_init();
     #endif // (BLE_FINDME_TARGET)
    
-   /*--------------------------------------------------------------
-    * INISIALISE REQUIRED PROFILES
-    *-------------------------------------------------------------*/
+    #if (BLE_BCS_SERVER)
+    bcss_init();
+    #endif // (BLE_BCS_SERVER)
+    
+    #if (BLE_BCS_CLIENT)
+    bcsc_init();
+    #endif // (BLE_BCS_CLIENT)
+
+    #if (BLE_CTS_SERVER)
+    ctss_init();
+    #endif // (BLE_CTS_SERVER)
+
+    #if (BLE_CTS_CLIENT)
+    ctsc_init();
+    #endif // (BLE_CTS_CLIENT)
 
     #if (BLE_CUSTOM_SERVER)
     uint8_t i=0;
@@ -1397,7 +1474,6 @@ void prf_init_func(void)
         else i++;
     }
     #endif
-
 }
 
 void prf_cleanup_func(uint8_t conidx, uint16_t conhdl, uint8_t reason)
@@ -1407,6 +1483,22 @@ void prf_cleanup_func(uint8_t conidx, uint16_t conhdl, uint8_t reason)
     #endif //(BLE_CLIENT_PRF || BLE_TIP_SERVER || BLE_PAS_SERVER || BLE_AN_SERVER)
 
     //All profiles get this event, they must disable clean
+    #if (BLE_BM_SERVER)
+    if (ke_state_get(TASK_BMSS) == BMSS_CONNECTED)
+    {
+        gapc_send_disconect_ind(conidx, reason, conhdl, TASK_BMSS);
+    }
+    #endif // (BLE_BM_SERVER)
+
+    #if (BLE_BM_CLIENT)
+    prf_task_id = KE_BUILD_ID(TASK_BMSC, conidx);
+
+    if (ke_state_get(prf_task_id) != BMSC_IDLE)
+    {
+        gapc_send_disconect_ind(conidx, reason, conhdl, prf_task_id);
+    }
+    #endif // (BLE_BM_CLIENT)
+
     #if (BLE_ACCEL)
     if (ke_state_get(TASK_ACCEL) == ACCEL_ACTIVE)
     {
@@ -1457,16 +1549,15 @@ void prf_cleanup_func(uint8_t conidx, uint16_t conhdl, uint8_t reason)
     {
         gapc_send_disconect_ind(conidx, reason, conhdl, TASK_FINDT);
     }
-    #endif // #if BLE_PROX_REPORTER
+    #endif // #if BLE_FINDME_TARGET
 
     #if (BLE_FINDME_LOCATOR)
     prf_task_id = KE_BUILD_ID(TASK_FINDL, conidx);
-
     if (ke_state_get(prf_task_id) != FINDL_IDLE)
     {
         gapc_send_disconect_ind(conidx, reason, conhdl, prf_task_id);
     }
-    #endif // #if BLE_PROX_MONITOR
+    #endif // #if BLE_FINDME_LOCATOR
 
     #if (BLE_HT_THERMOM)
     if (ke_state_get(TASK_HTPT) == HTPT_CONNECTED)
@@ -1740,14 +1831,7 @@ void prf_cleanup_func(uint8_t conidx, uint16_t conhdl, uint8_t reason)
     {
         gapc_send_disconect_ind(conidx, reason, conhdl, TASK_SAMPLE128);
     }
-    #endif //(BLE_SAMPLE128)
-    
-    #if (BLE_WECHAT)
-    if (ke_state_get(TASK_WECHAT) == WECHAT_CONNECTED)
-    {
-        gapc_send_disconect_ind(conidx, reason, conhdl, TASK_WECHAT);
-    }
-    #endif //(BLE_WECHAT)
+    #endif //(BLE_PAS_SERVER)
     
     #if (BLE_IEU)  
     if (ke_state_get(TASK_IEU) == IEU_ACTIVE)
@@ -1785,6 +1869,13 @@ void prf_cleanup_func(uint8_t conidx, uint16_t conhdl, uint8_t reason)
     }
     #endif // (BLE_UDS_SERVER)
     
+    #if (BLE_UDS_CLIENT)
+    if (ke_state_get(TASK_UDSC) >= UDSC_CONNECTED)
+    {
+        gapc_send_disconect_ind(conidx, reason, conhdl, TASK_UDSC);
+    }
+    #endif // (BLE_UDS_CLIENT)
+
     #if (BLE_WSS_SERVER)
     if (ke_state_get(TASK_WSSS) >= WSSS_CONNECTED)
     {
@@ -1792,6 +1883,13 @@ void prf_cleanup_func(uint8_t conidx, uint16_t conhdl, uint8_t reason)
     }
     #endif // (BLE_WSS_SERVER)
     
+    #if (BLE_WSS_COLLECTOR)
+    if (ke_state_get(TASK_WSSC) >= WSSC_CONNECTED)
+    {
+        gapc_send_disconect_ind(conidx, reason, conhdl, TASK_WSSC);
+    }
+    #endif // (BLE_WSS_COLLECTOR)
+
     #if (BLE_ADC_NOTIFY)
     if (ke_state_get(TASK_ADC_NOTIFY) >= ADC_NOTIFY_CONNECTED)
     {
@@ -1824,20 +1922,7 @@ void prf_cleanup_func(uint8_t conidx, uint16_t conhdl, uint8_t reason)
         gapc_send_disconect_ind(conidx, reason, conhdl, TASK_PROXR);
     }
     #endif // #if BLE_PROX_REPORTER
-        #if (BLE_FINDME_TARGET)
-    if (ke_state_get(TASK_FINDT) == FINDT_CONNECTED)
-    {
-        gapc_send_disconect_ind(conidx, reason, conhdl, TASK_FINDT);
-    }
-    #endif // #if BLE_PROX_REPORTER
-    #if (BLE_FINDME_LOCATOR)
-    prf_task_id = KE_BUILD_ID(TASK_FINDL, conidx);
 
-    if (ke_state_get(prf_task_id) != FINDL_IDLE)
-    {
-        gapc_send_disconect_ind(conidx, reason, conhdl, prf_task_id);
-    }
-    #endif // #if BLE_PROX_MONITOR
     #if (BLE_SPOTA_RECEIVER)
     if (ke_state_get(TASK_SPOTAR) == SPOTAR_ACTIVE)
     {
@@ -1858,6 +1943,34 @@ void prf_cleanup_func(uint8_t conidx, uint16_t conhdl, uint8_t reason)
     }
     #endif         
  
+    #if (BLE_BCS_SERVER)
+    if (ke_state_get(TASK_BCSS) >= BCSS_CONNECTED)
+    {
+        gapc_send_disconect_ind(conidx, reason, conhdl, TASK_BCSS);
+    }
+    #endif // (BLE_WSS_SERVER)
+    #if (BLE_BCS_CLIENT)
+    prf_task_id = KE_BUILD_ID(TASK_BCSC, conidx);
+
+    if (ke_state_get(prf_task_id) != BCSC_IDLE)
+    {
+        gapc_send_disconect_ind(conidx, reason, conhdl, prf_task_id);
+    }
+    #endif // #if BLE_BCS_CLIENT
+
+    #if (BLE_CTS_SERVER)
+    if (ke_state_get(TASK_CTSS) >= CTSS_CONNECTED)
+    {
+        gapc_send_disconect_ind(conidx, reason, conhdl, TASK_CTSS);
+    }
+    #endif // (BLE_CTS_SERVER)
+
+    #if (BLE_CTS_CLIENT)
+    if (ke_state_get(TASK_CTSC) >= CTSC_CONNECTED)
+    {
+        gapc_send_disconect_ind(conidx, reason, conhdl, TASK_CTSC);
+    }
+    #endif // (BLE_CTS_CLIENT)
 }
 
 #endif /* ((BLE_SERVER_PRF || BLE_CLIENT_PRF)) */

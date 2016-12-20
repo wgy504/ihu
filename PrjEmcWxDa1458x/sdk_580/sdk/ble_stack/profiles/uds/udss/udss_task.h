@@ -5,8 +5,12 @@
  *
  * @brief Header file - UDSSTASK.
  *
- * Copyright (C) RivieraWaves 2009-2013
+ * Copyright (C) 2015. Dialog Semiconductor Ltd, unpublished work. This computer
+ * program includes Confidential, Proprietary Information and is a Trade Secret of
+ * Dialog Semiconductor Ltd.  All use, disclosure, and/or reproduction is prohibited
+ * unless authorized in writing. All Rights Reserved.
  *
+ * <bluetooth.support@diasemi.com> and contributors.
  *
  ****************************************************************************************
  */
@@ -29,10 +33,8 @@
  */
 #if (BLE_UDS_SERVER)
 
-#include <stdint.h>
 #include "ke_task.h"
 #include "udss.h"
-#include "prf_types.h"
 
 /*
  * DEFINES
@@ -71,6 +73,8 @@ enum
 
     ///Set the value of an attribute
     UDSS_SET_CHAR_VAL_REQ,	
+    /// Inform the application about the current user's char values
+    UDSS_CHAR_VAL_IND,
     
     /// User Control Point Request
     UDSS_UCP_REQ_IND,
@@ -88,18 +92,11 @@ enum
  ****************************************************************************************
  */
 
-struct date
-{
-    uint16_t year;
-    uint8_t month;
-    uint8_t day;
-};
-
 /// Parameters of the @ref UDSS_CREATE_DB_REQ message
 struct udss_create_db_req
 {
     ///Database configuration
-    uint16_t features;
+    uint32_t features;
 };
 
 /// Parameters of the @ref UDSS_CREATE_DB_CFM message
@@ -117,7 +114,18 @@ struct udss_set_char_val_req
     /// Value length
     uint8_t val_len;
     /// Value
-    uint8_t val[1];
+    uint8_t val[__ARRAY_EMPTY];
+};
+
+/// Parameters of the @ref UDSS_CHAR_VAL_IND message - shall be dynamically allocated
+struct udss_char_val_ind
+{
+    /// Characteristic Code
+    uint8_t char_code;
+    /// Value length
+    uint8_t val_len;
+    /// Value
+    uint8_t val[__ARRAY_EMPTY];
 };
 
 /// Parameters of the @ref UDSS_ENABLE_REQ message
@@ -125,20 +133,14 @@ struct udss_enable_req
 {
     ///Connection handle
     uint16_t conhdl;
-    /// security level: b0= nothing, b1=unauthenticated, b2=authenticated, b3=authorized; b1 or b2 and b3 can go together
+    /// Security level: b0= nothing, b1=unauthenticated, b2=authenticated, b3=authorized; b1 or b2 and b3 can go together
     uint8_t sec_lvl;
     ///Type of connection
     uint8_t con_type;
-    ///User height
-    uint8_t user_height;
-    ///User age
-    uint8_t user_age;
-    ///User date of birth
-    struct date user_date_of_birth;
-    ///User DB change increment
-    uint8_t user_db_change_incr;
-    ///User control point
-//    struct udss_user_control_point user_ctrl_point;
+    /// DB Change notification configuration
+    uint16_t db_change_ntf_en;
+    /// Control Point indication configuration
+    uint16_t cpt_ind_en;
 };
 
 /// Parameters of the @ref UDSS_DISABLE_IND message
@@ -164,16 +166,25 @@ struct udss_ucp_rsp_req
     uint16_t conhdl;
     ///User control point (ucp) response structure
     struct uds_ucp_rsp ucp_rsp;
-
-//    ///Number of records.
-//    uint16_t num_of_record;
-
-//    /// operation code
-//    uint8_t op_code;
-
-//    ///Command status
-//    uint8_t status;
 };
+
+/*
+ * FUNCTION DECLARATIONS
+ ****************************************************************************************
+ */
+
+/**
+ ****************************************************************************************
+ * @brief Read characteristic indication callback.
+ * This function is called on characteristic read and allows for custom response
+ * @param[in] handle Handle for the read characteristic
+ * @return Which value (if any) will be sent in read request response
+ *  - @ref READ_CLB_RESPOND_WITH_DB_VALUE if value should be taken from the database,
+ *  - @ref READ_CLB_DONT_RESPOND if no automatic response should be sent and
+ *               ReadClb_response() or other response will be sent manually
+ ****************************************************************************************
+ */
+char uds_read_char_cmd_ind(uint16_t handle);
 
 /*
  * TASK DESCRIPTOR DECLARATIONS

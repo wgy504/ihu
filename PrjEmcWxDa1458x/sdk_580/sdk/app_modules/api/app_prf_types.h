@@ -1,19 +1,19 @@
 /**
-****************************************************************************************
-*
-* @file app_prf_types.h
-*
-* @brief app - profiles related header file.
-*
-* Copyright (C) 2012. Dialog Semiconductor Ltd, unpublished work. This computer 
- * program includes Confidential, Proprietary Information and is a Trade Secret of 
- * Dialog Semiconductor Ltd.  All use, disclosure, and/or reproduction is prohibited 
+ ****************************************************************************************
+ *
+ * @file app_prf_types.h
+ *
+ * @brief app - profiles related header file.
+ *
+ * Copyright (C) 2012. Dialog Semiconductor Ltd, unpublished work. This computer
+ * program includes Confidential, Proprietary Information and is a Trade Secret of
+ * Dialog Semiconductor Ltd.  All use, disclosure, and/or reproduction is prohibited
  * unless authorized in writing. All Rights Reserved.
-*
-* <bluetooth.support@diasemi.com> and contributors.
-*
-****************************************************************************************
-*/
+ *
+ * <bluetooth.support@diasemi.com> and contributors.
+ *
+ ****************************************************************************************
+ */
 
 #ifndef APP_PRF_TYPES_H_
 #define APP_PRF_TYPES_H_
@@ -23,13 +23,14 @@
  ****************************************************************************************
  */
 
-#include "attm.h"      // const struct attm_desc_128 definition 
+#include "rwip_config.h"
+#include "attm_db_128.h"
 
 /*
  * TYPE DEFINITIONS
  ****************************************************************************************
  */
-    
+
  /// Format of a profile initialisation function
 typedef void (*prf_func_void_t)(void);
 typedef void (*prf_func_uint16_t)(uint16_t);
@@ -66,7 +67,6 @@ struct cust_prf_func_callbacks
 };
 
 extern const struct prf_func_callbacks prf_funcs[];
-extern const struct cust_prf_func_callbacks cust_prf_funcs[];
 
 /// @} APP
 

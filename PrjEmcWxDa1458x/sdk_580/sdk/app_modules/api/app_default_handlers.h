@@ -38,7 +38,6 @@
 #include "app_callback.h"
 #include "gapc_task.h"
 
-
 /**
  ****************************************************************************************
  * @brief Possible advertise scenarios.
@@ -120,15 +119,6 @@ void default_app_on_set_dev_config_complete(void);
 
 /**
  ****************************************************************************************
- * @brief Default function called on undirect advertising completion event.
- * @param[in] uint8_t        Command complete event message status
- * @return void
- ****************************************************************************************
- */
-void default_app_on_adv_undirect_complete(const uint8_t status);
-
-/**
- ****************************************************************************************
  * @brief Default function called on database initialization completion event.
  * @return void
  ****************************************************************************************
@@ -147,7 +137,7 @@ void default_app_on_pairing_request(uint8_t connection_idx, struct gapc_bond_req
 
 /**
  ****************************************************************************************
- * @brief Default function called on no-man-in-the-middle term key exchange event.
+ * @brief Default function called on no-man-in-the-middle TK exchange event.
  * @param[in] connection_idx Connection Id number
  * @param[in] param          Pointer to GAPC_BOND_REQ_IND message
  * @return void
@@ -157,7 +147,7 @@ void default_app_on_tk_exch_nomitm(uint8_t connection_idx, struct gapc_bond_req_
 
 /**
  ****************************************************************************************
- * @brief Default function called on connection signature resolving key exchange event.
+ * @brief Default function called on CSRK exchange event.
  * @param[in] connection_idx Connection Id number
  * @param[in] param          Pointer to GAPC_BOND_REQ_IND message
  * @return void
@@ -193,7 +183,6 @@ void default_app_on_encrypt_req_ind(uint8_t connection_idx, struct gapc_encrypt_
  */
 void default_advertise_operation(void);
 
-
 /**
  ****************************************************************************************
  * @brief Structure containing the operations used by the default handlers.
@@ -213,6 +202,7 @@ struct default_app_operations {
 #define EXECUTE_DEFAULT_OPERATION_VOID(func)     {if (user_default_app_operations.func!=NULL)\
                     user_default_app_operations.func();\
     }
+
 /// @} APP
 
 #endif // _APP_DEFAULT_HANDLERS_H_

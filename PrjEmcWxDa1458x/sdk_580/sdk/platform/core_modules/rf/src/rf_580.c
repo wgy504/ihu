@@ -356,8 +356,6 @@ void rf_reinit_func(void)
 
     SetBits16(CLK_RADIO_REG, RFCU_DIV, 1); //RFCU clock must always be 8MHz!
     SetBits16(CLK_RADIO_REG, RFCU_ENABLE, 1);
-    
-    SetBits16(PMU_CTRL_REG, RETENTION_MODE, 0xF);
 
     if ( arch_clk_is_XTAL32( ) )
     {

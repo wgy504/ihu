@@ -1,19 +1,19 @@
  /**
-****************************************************************************************
-*
-* @file attm_db_128.h
-*
-* @brief Header file of service database of 128bits long UUID.
-*
-* Copyright (C) 2014. Dialog Semiconductor Ltd, unpublished work. This computer 
+ ****************************************************************************************
+ *
+ * @file attm_db_128.h
+ *
+ * @brief Header file of service database of 128bits long UUID.
+ *
+ * Copyright (C) 2014. Dialog Semiconductor Ltd, unpublished work. This computer 
  * program includes Confidential, Proprietary Information and is a Trade Secret of 
  * Dialog Semiconductor Ltd.  All use, disclosure, and/or reproduction is prohibited 
  * unless authorized in writing. All Rights Reserved.
-*
-* <bluetooth.support@diasemi.com> and contributors.
-*
-****************************************************************************************
-*/
+ *
+ * <bluetooth.support@diasemi.com> and contributors.
+ *
+ ****************************************************************************************
+ */
  
  #ifndef __ATTM_DB_128_H
  #define __ATTM_DB_128_H

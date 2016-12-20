@@ -35,16 +35,7 @@
     #include "ke_mem.h"
     #include "prf_utils.h"
     #include "wsss.h"
-
-    #ifdef STORE_UNSENT_MEASUREMENTS
-    /*
-     * Unsent measurements queue
-     ****************************************************************************************
-     */
-    struct wsss_unsent_meas_val *q_head __attribute__((section("retention_mem_area0"), zero_init)),
-                                *q_tail __attribute__((section("retention_mem_area0"), zero_init));
-    int                         q_size  __attribute__((section("retention_mem_area0"), zero_init));
-    #endif
+    #include "wsss_task.h"
 
     /*
      * FUNCTION DEFINITIONS
@@ -66,18 +57,29 @@
                                           ke_task_id_t const dest_id,
                                           ke_task_id_t const src_id)
     {
+        uint8_t flags = ~0;
         //DB Creation Status
         uint8_t status;
 
         //Save profile id
         wsss_env.con_info.prf_id = TASK_WSSS;
 
+        // Turn the BCS inclusion declaration off if not desired
+        if (!param->include_bcs_instance)
+            flags &= ~(1 << WSS_IDX_INCL_SVC);
+
         /*---------------------------------------------------*
          * Weight Scale Service Creation
          *---------------------------------------------------*/
-        status = attm_svc_create_db(&wsss_env.shdl, NULL, WSS_IDX_NB,
+        status = attm_svc_create_db(&wsss_env.shdl, &flags, WSS_IDX_NB,
                                     wsss_env.att_tbl, dest_id, wsss_att_db);
         
+        // Set value for the BCS inclusion declaration
+        if (param->include_bcs_instance)
+            attmdb_att_set_value(wsss_env.shdl + WSS_IDX_INCL_SVC,
+                                                sizeof(struct att_incl_desc),
+                                                (uint8_t *)&param->bcs_ref);
+
         //Disable WSS
         attmdb_svc_set_permission(wsss_env.shdl, PERM(SVC, DISABLE));
 
@@ -90,135 +92,15 @@
         struct wsss_create_db_cfm *cfm = KE_MSG_ALLOC(WSSS_CREATE_DB_CFM, src_id,
                                                       TASK_WSSS,
                                                       wsss_create_db_cfm);
+        if (cfm)
+        {
         cfm->status = status;
         ke_msg_send(cfm);
-
-        return (KE_MSG_CONSUMED);
     }
-
-    #ifdef STORE_UNSENT_MEASUREMENTS    
-    /**
-     ****************************************************************************************
-     * @brief Removes an item from the queue.
-     * @param[in] sent_meas_val Pointer to the item to be removed
-     * @return void
-     ****************************************************************************************
-     */
-    static void dequeue(struct wsss_unsent_meas_val *sent_meas_val)
-    {
-        if (sent_meas_val == NULL)
-            return;
-        
-        if (sent_meas_val == q_head)
-            q_head = sent_meas_val->next;
-        else
-            sent_meas_val->prev->next = sent_meas_val->next;
-        
-        if (sent_meas_val == q_tail)
-            q_tail = sent_meas_val->prev;
-        else
-            sent_meas_val->next->prev = sent_meas_val->prev;
-        
-        ke_free(sent_meas_val);
-        q_size--;
-    }
-    
-    /**
-     ****************************************************************************************
-     * @brief Adds an item to the queue.
-     * @param[in] packed_meas_val Pointer to the packed measurement values
-     * @param[in] pval_size Size of the packed measurement values
-     * @return void
-     ****************************************************************************************
-     */
-    static void enqueue(uint8_t *packed_meas_val, uint8_t pval_size)
-    {
-        struct wsss_unsent_meas_val *unsent_meas_val = ke_malloc(pval_size +
-                                                                 2*sizeof(struct wsss_unsent_meas_val *),
-                                                                 KE_MEM_NON_RETENTION);
-        memcpy(unsent_meas_val->packed_meas_val, packed_meas_val, pval_size);
-        
-        if (!q_size)
-        {
-            q_head = unsent_meas_val;
-            q_head->prev = NULL;
-        }
-        else
-        {
-            if (q_size == 25)
-                dequeue(q_head);
-            q_tail->next = unsent_meas_val;
-            unsent_meas_val->prev = q_tail;
-        }
-        
-        q_tail = unsent_meas_val;
-        q_tail->next = NULL;
-        q_size++;
-    }
-    
-    /**
-     ****************************************************************************************
-     * @brief Handles reception of the @ref WSSS_MEAS_SEND_REQ message.
-     * @param[in] msgid Id of the message received (probably unused).
-     * @param[in] param Pointer to the parameters of the message.
-     * @param[in] dest_id ID of the receiving task instance (probably unused).
-     * @param[in] src_id ID of the sending task instance.
-     * @return If the message was consumed or not.
-     ****************************************************************************************
-     */
-    static int wsss_meas_send_req_handler(ke_msg_id_t const msgid,
-                                          struct wsss_meas_send_req const *param,
-                                          ke_task_id_t const dest_id,
-                                          ke_task_id_t const src_id)
-    {   
-        uint8_t status = PRF_ERR_OK,    // Request status
-                pval_size,              // Packed value size
-                *packed_meas_val;       // Pointer to unsent measurement
-        
-        struct prf_con_info *con_info = &wsss_env.con_info;
-        
-        //Save the application task id
-        con_info->appid = src_id;
-        
-        // Calculate measurement value size
-        pval_size = wsss_calc_meas_value_size(param->meas_val.flags);
-        
-        if(WSSS_IS_ENABLED(WSSS_WT_MEAS_IND_CFG))
-        {   // Allocate memory space for the measurement element
-            packed_meas_val = ke_malloc(pval_size, KE_MEM_NON_RETENTION);
-            
-            // Pack the Wt Measurement value
-            wsss_pack_meas_value(packed_meas_val, &param->meas_val);
-
-            if(!q_size && ke_state_get(TASK_WSSS) == WSSS_CONNECTED
-                       && gapc_get_conidx(param->conhdl) == con_info->conidx)
-            {
-                uint16_t shdl = wsss_env.shdl;
-                
-                //Update value in DB
-                attmdb_att_set_value(shdl + WSS_IDX_WT_MEAS_VAL, pval_size,
-                                     packed_meas_val);
-                
-                //send notification through GATT
-                prf_server_send_event((prf_env_struct*) &wsss_env, true,
-                                      shdl + WSS_IDX_WT_MEAS_VAL);
-            }
-                
-            wsss_meas_send_cfm_send(PRF_ERR_OK);
-            enqueue(packed_meas_val, pval_size);
-            ke_free(packed_meas_val);
-        }
-        else
-            status = PRF_ERR_IND_DISABLED;
-        
-        // verify that no error occurs
-        if (status != PRF_ERR_OK)
-            // Inform app that value has not been sent
-            wsss_meas_send_cfm_send(status);
 
         return (KE_MSG_CONSUMED);
     }    
-    #else
+
     /**
      ****************************************************************************************
      * @brief Handles reception of the @ref WSSS_MEAS_SEND_REQ message.
@@ -263,12 +145,12 @@
                     uint16_t shdl = wsss_env.shdl;
                     
                     //Update value in DB
-                    status = attmdb_att_set_value(shdl + WSS_IDX_WT_MEAS_VAL,
+                    status = attmdb_att_set_value(shdl + wsss_env.att_tbl[WSS_MEASUREMENT_CHAR] + 1,
                                                   pval_size, packed_meas_val);
                     
-                    //send notification through GATT
+                    // Send notification through GATT
                     prf_server_send_event((prf_env_struct*) &wsss_env, true,
-                                          shdl + WSS_IDX_WT_MEAS_VAL);
+                                          shdl + wsss_env.att_tbl[WSS_MEASUREMENT_CHAR] + 1);
                 }
                 else
                     //Wrong Connection Handle
@@ -282,14 +164,13 @@
         else
             status = PRF_ERR_IND_DISABLED;
         
-        // verify that no error occurs
+        // Verify that no error occurs
         if (status != PRF_ERR_OK)
             // Inform app that value has not been sent
             wsss_meas_send_cfm_send(status);
 
         return (KE_MSG_CONSUMED);
     }
-    #endif
 
 
     /**
@@ -327,7 +208,7 @@
         else
         {
             // Set Weight Scale Feature Value in database - Not supposed to change during connection
-            attmdb_att_set_value(shdl + WSS_IDX_FEATURE_VAL,
+            attmdb_att_set_value(shdl + wsss_env.att_tbl[WSS_FEATURE_CHAR] + 1,
                                  sizeof(struct wss_feature), (uint8_t*) &param->ws_feature);
 
             // Configure Weight Scale Measuremment IND Cfg in DB
@@ -340,7 +221,7 @@
             }
             
             //Set Wt. Meas. Char. IND Configuration in DB - 0 if not normal connection
-            attmdb_att_set_value(shdl + WSS_IDX_WT_MEAS_IND_CFG,
+            attmdb_att_set_value(shdl + wsss_env.att_tbl[WSS_MEASUREMENT_CHAR] + 2,
                                  sizeof(uint16_t), (uint8_t*) &indntf_cfg);
             
             //Enable Attributes + Set Security Level
@@ -350,27 +231,6 @@
             ke_state_set(TASK_WSSS, WSSS_CONNECTED);
         }
 
-        #ifdef STORE_UNSENT_MEASUREMENTS
-        // Unsent measurement size and attmdb_att_set_value status
-        uint8_t unsent_meas_size;
-        
-        /// Check if there are any unsent measurements
-        if (q_size)
-        {
-            //Calculate size of unsent measurement
-            unsent_meas_size = wsss_calc_meas_value_size(*q_head->packed_meas_val);
-            
-            //Update value in DB
-            attmdb_att_set_value(shdl + WSS_IDX_WT_MEAS_VAL,
-                                                    unsent_meas_size,
-                                                    q_head->packed_meas_val);
-            
-            //send notification through GATT
-            prf_server_send_event((prf_env_struct*) &wsss_env, true,
-                                  shdl + WSS_IDX_WT_MEAS_VAL);
-        }
-        #endif
-        
         return (KE_MSG_CONSUMED);
     }
 
@@ -400,7 +260,7 @@
             memcpy(&value, &param->value, sizeof(uint16_t));
 
             //Wt Measurement Char. - Client Char. Configuration
-            if (param->handle == wsss_env.shdl + WSS_IDX_WT_MEAS_IND_CFG)
+            if (param->handle == wsss_env.shdl + wsss_env.att_tbl[WSS_MEASUREMENT_CHAR] + 2)
                 if (value == PRF_CLI_STOP_NTFIND)
                     wsss_env.evt_cfg &= ~WSSS_WT_MEAS_IND_CFG;
                 else if (value == PRF_CLI_START_IND)
@@ -420,6 +280,8 @@
                                                                    con_info->appid,
                                                                    TASK_BLPS,
                                                                    wsss_cfg_indntf_ind);
+                    if (ind == NULL)
+                        return (KE_MSG_CONSUMED);
 
                     ind->conhdl = gapc_get_conhdl(con_info->conidx);
                     memcpy(&ind->cfg_val, &value, sizeof(uint16_t));
@@ -453,34 +315,7 @@
     {   
         if(param->req_type == GATTC_INDICATE)
         {
-            #ifdef STORE_UNSENT_MEASUREMENTS    
-            // Unsent measurement size
-            uint8_t unsent_meas_size;
-            
-            if(param->status == GATT_ERR_NO_ERROR)
-            {
-                dequeue(q_head);
-            
-                // Check if there are more unsent measurements
-                if(q_size)
-                {
-                    //Calculate size of unsent measurement
-                    unsent_meas_size = wsss_calc_meas_value_size(*q_head->packed_meas_val);
-                    
-                    uint16_t shdl = wsss_env.shdl;
-
-                    //Update value in DB
-                    attmdb_att_set_value(shdl + WSS_IDX_WT_MEAS_VAL,
-                                         unsent_meas_size, q_head->packed_meas_val);
-                    
-                    //send notification through GATT
-                    prf_server_send_event((prf_env_struct*) &wsss_env, true,
-                                          shdl + WSS_IDX_WT_MEAS_VAL);
-                }
-            }
-            #else
              wsss_meas_send_cfm_send(param->status);
-            #endif         
         }
         
         return (KE_MSG_CONSUMED);

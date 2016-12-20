@@ -60,17 +60,7 @@
 
 #include "arch_patch.h"
 
-// external function declarations
-void patch_llm_task(void);
-void patch_gtl_task(void);
-
-#if (BLE_MEM_LEAK_PATCH)
-    void patch_llc_task(void);
-#endif
-
-
 #include "arch_wdg.h"
-//#include "app_stream_queue.h"
 
 #include "user_callback_config.h"
 
@@ -124,8 +114,8 @@ static inline void arch_goto_sleep(sleep_mode_t current_sleep_mode);
 static inline void arch_switch_clock_goto_sleep(sleep_mode_t current_sleep_mode);
 static inline void arch_resume_from_sleep(void);
 static inline sleep_mode_t rwip_power_down(void);
-static inline bool app_asynch_trm(void);
-static inline bool app_asynch_proc(void);
+static inline arch_main_loop_callback_ret_t app_asynch_trm(void);
+static inline arch_main_loop_callback_ret_t app_asynch_proc(void);
 static inline void app_asynch_sleep_proc(void);
 static inline void app_sleep_prepare_proc(sleep_mode_t *sleep_mode);
 static inline void app_sleep_exit_proc(void);
@@ -167,7 +157,7 @@ int main_func(void)
             // schedule all pending events
             schedule_while_ble_on();
         }
-        while ((app_asynch_proc()));    //grant control to the application, try to go to power down
+        while (app_asynch_proc() != GOTO_SLEEP);    //grant control to the application, try to go to power down
                                                               //if the application returns GOTO_SLEEP
               //((STREAMDATA_QUEUE)&& stream_queue_more_data())); //grant control to the streamer, try to go to power down
                                                                 //if the application returns GOTO_SLEEP
@@ -189,16 +179,25 @@ int main_func(void)
                 //power down the radio and whatever is allowed
                 arch_goto_sleep(sleep_mode);
 
+                // In extended or deep sleep mode the watchdog timer is disabled
+                // (power domain PD_SYS is automatically OFF). Although, if the debugger
+                // is attached the watchdog timer remains enabled and must be explicitly
+                // disabled.
+                if ((GetWord16(SYS_STAT_REG) & DBG_IS_UP) == DBG_IS_UP)
+                {
+                    wdg_freeze();    // Stop watchdog timer
+                }
+                
                 //wait for an interrupt to resume operation
                 WFI();
-
+                
                 //resume operation
                 arch_resume_from_sleep();
             }
             else if (sleep_mode == mode_idle)
             {
                 if (((!BLE_APP_PRESENT) && check_gtl_state()) || (BLE_APP_PRESENT))
-                {
+                {   
                     //wait for an interrupt to resume operation
                     WFI();
                 }
@@ -206,11 +205,7 @@ int main_func(void)
             // restore interrupts
             GLOBAL_INT_START();
         }
-
-        if (USE_WDOG)
-        {
-            wdg_reload(WATCHDOG_DEFAULT_PERIOD);
-        }
+        wdg_reload(WATCHDOG_DEFAULT_PERIOD);
     }
 }
 
@@ -347,7 +342,7 @@ static inline void schedule_while_ble_on(void)
 
         //grant control to the application, try to go to sleep
         //if the application returns GOTO_SLEEP
-        if (app_asynch_trm())
+        if (app_asynch_trm() != GOTO_SLEEP)
         {
             continue; // so that rwip_schedule() is called again
         }
@@ -491,15 +486,19 @@ static inline void otp_prepare(uint32_t code_size)
  ****************************************************************************************
  * @brief Used for sending messages to kernel tasks generated from
  *        asynchronous events that have been processed in app_asynch_proc.
- * @return true to force calling of schedule(), else false
+ * @return KEEP_POWERED to force calling of schedule_while_ble_on(), else GOTO_SLEEP
  ****************************************************************************************
  */
-static inline bool app_asynch_trm(void)
+static inline arch_main_loop_callback_ret_t app_asynch_trm(void)
 {
     if (user_app_main_loop_callbacks.app_on_ble_powered != NULL)
-        return (user_app_main_loop_callbacks.app_on_ble_powered());
+    {
+        return user_app_main_loop_callbacks.app_on_ble_powered();
+    }
     else
-        return false;
+    {
+        return GOTO_SLEEP;
+    }
 }
 
 /**
@@ -507,15 +506,19 @@ static inline bool app_asynch_trm(void)
  * @brief Used for processing of asynchronous events at “user” level. The
  *        corresponding ISRs should be kept as short as possible and the
  *        remaining processing should be done at this point.
- * @return true to force calling of schedule(), else false
+ * @return KEEP_POWERED to force calling of schedule_while_ble_on(), else GOTO_SLEEP
  ****************************************************************************************
  */
-static inline bool app_asynch_proc(void)
+static inline arch_main_loop_callback_ret_t app_asynch_proc(void)
 {
     if (user_app_main_loop_callbacks.app_on_system_powered != NULL)
-        return (user_app_main_loop_callbacks.app_on_system_powered());
+    {
+        return user_app_main_loop_callbacks.app_on_system_powered();
+    }
     else
-        return false;
+    {
+        return GOTO_SLEEP;
+    }
 }
 
 /**

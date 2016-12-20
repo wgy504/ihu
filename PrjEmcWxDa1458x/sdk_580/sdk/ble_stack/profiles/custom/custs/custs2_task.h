@@ -1,19 +1,19 @@
 /**
-****************************************************************************************
-*
-* @file custs2_task.h
-*
-* @brief Custom Service profile task header file.
-*
-* Copyright (C) 2014. Dialog Semiconductor Ltd, unpublished work. This computer 
-* program includes Confidential, Proprietary Information and is a Trade Secret of 
-* Dialog Semiconductor Ltd.  All use, disclosure, and/or reproduction is prohibited 
-* unless authorized in writing. All Rights Reserved.
-*
-* <bluetooth.support@diasemi.com> and contributors.
-*
-****************************************************************************************
-*/
+ ****************************************************************************************
+ *
+ * @file custs2_task.h
+ *
+ * @brief Custom Service profile task header file.
+ *
+ * Copyright (C) 2014. Dialog Semiconductor Ltd, unpublished work. This computer 
+ * program includes Confidential, Proprietary Information and is a Trade Secret of 
+ * Dialog Semiconductor Ltd.  All use, disclosure, and/or reproduction is prohibited 
+ * unless authorized in writing. All Rights Reserved.
+ *
+ * <bluetooth.support@diasemi.com> and contributors.
+ *
+ ****************************************************************************************
+ */
 
 #ifndef __CUSTS2_TASK_PRF_H
 #define __CUSTS2_TASK_PRF_H

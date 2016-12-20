@@ -22,7 +22,6 @@
  ****************************************************************************************
  */
 
-
 /*
  * INCLUDE FILES
  ****************************************************************************************
@@ -30,7 +29,6 @@
 
 #include "rwble_config.h"
 
-#if (BLE_APP_PRESENT)
 #if (BLE_SPOTA_RECEIVER)
 
 #include "app.h"                     // application definitions
@@ -277,8 +275,15 @@ void app_spotar_read_mem(uint32_t mem_dev, uint32_t* mem_info)
 #endif //(!SPOTAR_UPDATE_DISABLE)
         
         case SPOTAR_REBOOT:
-            platform_reset(RESET_AFTER_SPOTA_UPDATE);
+        {
+            // Reboot is requested
+            spota_state.reboot_requested = 1;
+        
+            // Send disconnect command
+            app_easy_gap_disconnect(app_env[0].conidx);
+
             break;
+        }
         
         default:
             spotar_send_status_update_req((uint8_t) SPOTAR_INVAL_MEM_TYPE);
@@ -494,7 +499,7 @@ void app_spotar_pd_hdlr(void)
             }
             app_spotar_i2c_config(&i2c_conf);
             i2c_eeprom_init(i2c_conf.slave_addr, I2C_SPEED_MODE, I2C_ADDRESS_MODE, I2C_2BYTES_ADDR);            
-            ret = i2c_eeprom_write_data (spota_new_pd, (spota_state.mem_base_add + overall_len_in_bytes), spota_state.spota_pd_idx);
+            i2c_eeprom_write_data(spota_new_pd, (spota_state.mem_base_add + overall_len_in_bytes), spota_state.spota_pd_idx, &ret);
             i2c_wait_until_eeprom_ready();
             mem_info_ret = get_patching_spota_length( ((spota_state.mem_dev << 24) | spota_state.mem_base_add), spota_state.gpio_map);
             // Check if patch has been written to memory successfully            
@@ -640,7 +645,7 @@ void app_spotar_img_hdlr(void)
                     if (spota_state.suota_image_len < (spota_state.suota_img_idx + spota_state.suota_block_idx))
                         spota_state.suota_block_idx = spota_state.suota_image_len - spota_state.suota_img_idx;
                     
-                    ret = i2c_eeprom_write_data (spota_all_pd, (spota_state.mem_base_add + spota_state.suota_img_idx), spota_state.suota_block_idx);
+                    i2c_eeprom_write_data(spota_all_pd, (spota_state.mem_base_add + spota_state.suota_img_idx), spota_state.suota_block_idx, &ret);
                     if( ret !=  spota_state.suota_block_idx){
                         status = SPOTAR_EXT_MEM_WRITE_ERR;
                     }
@@ -997,10 +1002,14 @@ int app_read_image_headers(uint8_t image_bank, uint8_t* data, uint32_t data_len)
     }
     else
     {
-#if (!SPOTAR_I2C_DISABLE)        
+#if (!SPOTAR_I2C_DISABLE)
+        uint32_t ret_i2c;
         // For i2c eeprom, no need to delete entire image, just write 0xff to the header to invalidate image
-        ret = i2c_eeprom_write_data( mem_data_buff, spota_state.mem_base_add, sizeof(mem_data_buff) );
-        if( ret !=  CODE_OFFSET ) return SPOTAR_EXT_MEM_WRITE_ERR;
+        if (i2c_eeprom_write_data(mem_data_buff, spota_state.mem_base_add, sizeof(mem_data_buff), &ret_i2c) != I2C_NO_ERROR)
+        {
+            ret = -1;
+        }
+        if( ret_i2c !=  CODE_OFFSET ) return SPOTAR_EXT_MEM_WRITE_ERR;
 #else
         return SPOTAR_EXT_MEM_WRITE_ERR;
 #endif        
@@ -1020,11 +1029,11 @@ int app_read_image_headers(uint8_t image_bank, uint8_t* data, uint32_t data_len)
     if( spota_state.mem_dev == SPOTAR_IMG_SPI_FLASH )
     {
 #if (!SPOTAR_SPI_DISABLE)        
-        ret = spi_flash_write_data((uint8_t*) &data[CODE_OFFSET], spota_state.mem_base_add + CODE_OFFSET, data_len - CODE_OFFSET);	
+        ret = spi_flash_write_data((uint8_t*) &data[CODE_OFFSET], spota_state.mem_base_add + CODE_OFFSET, data_len - CODE_OFFSET);
         if( ret != (data_len - CODE_OFFSET) ) return SPOTAR_EXT_MEM_WRITE_ERR;
        
         // write header
-        ret = spi_flash_write_data((uint8_t*)pImageHeader, spota_state.mem_base_add, sizeof(image_header_t));		
+        ret = spi_flash_write_data((uint8_t*)pImageHeader, spota_state.mem_base_add, sizeof(image_header_t));
         if( ret != sizeof(image_header_t) ) return SPOTAR_EXT_MEM_WRITE_ERR;
 #else
         return SPOTAR_EXT_MEM_WRITE_ERR; 
@@ -1032,13 +1041,20 @@ int app_read_image_headers(uint8_t image_bank, uint8_t* data, uint32_t data_len)
     }
     else
     {
-#if (!SPOTAR_I2C_DISABLE)        
-        ret = i2c_eeprom_write_data((uint8_t*) &data[CODE_OFFSET], spota_state.mem_base_add + CODE_OFFSET, data_len - CODE_OFFSET);	
-        if( ret != (data_len - CODE_OFFSET) ) return SPOTAR_EXT_MEM_WRITE_ERR;
+#if (!SPOTAR_I2C_DISABLE)
+        uint32_t ret_i2c;
+        if (i2c_eeprom_write_data((uint8_t*) &data[CODE_OFFSET], spota_state.mem_base_add + CODE_OFFSET, data_len - CODE_OFFSET, &ret_i2c) != I2C_NO_ERROR)
+        {
+            ret = -1;
+        }
+        if( ret_i2c != (data_len - CODE_OFFSET) ) return SPOTAR_EXT_MEM_WRITE_ERR;
        
         // write header
-        ret = i2c_eeprom_write_data((uint8_t*)pImageHeader,spota_state.mem_base_add,sizeof(image_header_t));		
-        if( ret != sizeof(image_header_t) ) return SPOTAR_EXT_MEM_WRITE_ERR;
+        if (i2c_eeprom_write_data((uint8_t*)pImageHeader, spota_state.mem_base_add, sizeof(image_header_t), &ret_i2c) != I2C_NO_ERROR)
+        {
+            ret = -1;
+        }
+        if( ret_i2c != sizeof(image_header_t) ) return SPOTAR_EXT_MEM_WRITE_ERR;
 #else
         return SPOTAR_EXT_MEM_WRITE_ERR;
 #endif        
@@ -1188,15 +1204,22 @@ int app_read_ext_mem( uint8_t *rd_data_ptr, uint32_t address, uint32_t size )
     }
     else
     {
-#if (!SPOTAR_I2C_DISABLE)        
-        ret = i2c_eeprom_read_data( (uint8_t*)rd_data_ptr, (uint32_t)address, (uint32_t)size );
+#if (!SPOTAR_I2C_DISABLE)
+        uint32_t ret_i2c;
+        if (i2c_eeprom_read_data((uint8_t*)rd_data_ptr, (uint32_t)address, (uint32_t)size, &ret_i2c) != I2C_NO_ERROR)
+        {
+            ret = -1;
+        }
+        else
+        {
+            ret = ret_i2c;
+        }
 #endif
     }
     return ret;
 }
 #endif //(!SPOTAR_UPDATE_DISABLE)
 
-#endif //BLE_APP_PRESENT
 #endif //BLE_SPOTA_RECEIVER
 
 /// @} APP

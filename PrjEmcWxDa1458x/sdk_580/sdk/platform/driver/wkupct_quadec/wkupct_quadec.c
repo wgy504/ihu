@@ -15,10 +15,6 @@
  ****************************************************************************************
  */
 
-/* Important note: WKUP_ENABLED and QUADEC_ENABLED control the inclusion of the parts of the
- *                  code that add support for to wakeup timer and quadrature decoder respectively.
- */
-
 /* Important note: If, upon reception of interrupt from the wakeup timer or the quadrature
  *                  decoder, the system resumes from sleep mode and you wish to resume peripherals
  *                  functionality , it is necessary to include in your interrupt handler function(s)

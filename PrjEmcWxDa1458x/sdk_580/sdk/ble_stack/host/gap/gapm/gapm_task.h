@@ -258,7 +258,7 @@ enum gapm_operation
 };
 
 
-/// Configuration flag bit filed description
+/// Configuration flag bit field description
 enum gapm_cfg_flag
 {
     /// Privacy Support enabled

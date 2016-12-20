@@ -1,87 +1,102 @@
 /**
-****************************************************************************************
-*
-* @file app_findt.h
-*
-* @brief Findme Target application.
-*
-* Copyright (C) 2012. Dialog Semiconductor Ltd, unpublished work. This computer 
- * program includes Confidential, Proprietary Information and is a Trade Secret of 
- * Dialog Semiconductor Ltd.  All use, disclosure, and/or reproduction is prohibited 
+ ****************************************************************************************
+ *
+ * @file app_findme.h
+ *
+ * @brief Findme Target/Locator application.
+ *
+ * Copyright (C) 2012. Dialog Semiconductor Ltd, unpublished work. This computer
+ * program includes Confidential, Proprietary Information and is a Trade Secret of
+ * Dialog Semiconductor Ltd.  All use, disclosure, and/or reproduction is prohibited
  * unless authorized in writing. All Rights Reserved.
-*
-* <bluetooth.support@diasemi.com> and contributors.
-*
-****************************************************************************************
-*/
+ *
+ * <bluetooth.support@diasemi.com> and contributors.
+ *
+ ****************************************************************************************
+ */
 
-#ifndef APP_FINDT_H_
-#define APP_FINDT_H_
+#ifndef _APP_FINDME_H_
+#define _APP_FINDME_H_
 
 /**
  ****************************************************************************************
  * @addtogroup APP
  * @ingroup RICOW
  *
- * @brief Accelerometer Application entry point.
+ * @brief Findme Target/Locator Application entry point.
  *
  * @{
  ****************************************************************************************
  */
-
 
 /*
  * INCLUDE FILES
  ****************************************************************************************
  */
 
-#include "rwble_config.h"
+#include "user_profiles_config.h"
 
-#if BLE_FINDME_TARGET || BLE_FINDME_LOCATOR
-
-#include <stdint.h>          // standard integer definition
-#include <co_bt.h>
-
-#include "findl_task.h"
+#if BLE_FINDME_TARGET
 #include "findt_task.h"
+#endif
 
-
-/*
- * DEFINES
- ****************************************************************************************
- */
+#if BLE_FINDME_LOCATOR
+#include "findl_task.h"
+#endif
 
 /*
  * FUNCTION DECLARATIONS
  ****************************************************************************************
  */
 
+#if BLE_FINDME_TARGET
 /**
  ****************************************************************************************
- *
- * Proximity Application Functions
- *
+ * @brief Enable Findme Target profile.
+ * @param[in] conhdl            The connection handle
+ * @return void
  ****************************************************************************************
  */
-
-/**
- ****************************************************************************************
- * @brief Enable the proximity profile
- *
- ****************************************************************************************
- */
- 
 void app_findt_enable(uint16_t conhdl);
 
-void app_findl_enable(uint16_t conhdl);
+/**
+ ****************************************************************************************
+ * @brief Default Findme Target alert indication handler.
+ * @param[in] connection_idx    The connection id number
+ * @param[in] alert_lvl         The alert level
+ * @return void
+ ****************************************************************************************
+ */
+void default_findt_alert_ind_hnd(uint8_t connection_idx, uint8_t alert_lvl);
+#endif // BLE_FINDME_TARGET
 
-void app_findl_set_alert(void);
-
+#if BLE_FINDME_LOCATOR
+/**
+ ****************************************************************************************
+ * @brief Initialize Findme Locator profile.
+ * @return void
+ ****************************************************************************************
+ */
 void app_findl_init(void);
 
-void default_findt_alert_ind_hnd (uint8_t connection_idx, uint8_t alert_lvl);
-#endif //BLE_PROX_REPORTER
+/**
+ ****************************************************************************************
+ * @brief Enable Findme Locator profile.
+ * @param[in] conhdl            The connection handle
+ * @return void
+ ****************************************************************************************
+ */
+void app_findl_enable(uint16_t conhdl);
+
+/**
+ ****************************************************************************************
+ * @brief Send Immediate alert.
+ * @return void
+ ****************************************************************************************
+ */
+void app_findl_set_alert(void);
+#endif // BLE_FINDME_LOCATOR
 
 /// @} APP
 
-#endif // APP_H_
+#endif // _APP_FINDME_H_

@@ -54,7 +54,6 @@ enum process_event_response
     PR_EVENT_UNHANDLED
 };
 
-
 /// Format of a task message handler function
 typedef enum process_event_response(*process_event_func_t)(ke_msg_id_t const msgid,
                                                            void const *param,
@@ -75,11 +74,26 @@ typedef void(*catch_rest_event_func_t)(ke_msg_id_t const msgid,
 
 /**
  ****************************************************************************************
+ * @brief Application entry point handler.
+ * @param[in] msgid       Message Id
+ * @param[in] param       Pointer to message
+ * @param[in] dest_id     Destination task Id
+ * @param[in] src_id      Source task Id
+ * @return Message status
+ ****************************************************************************************
+ */
+int app_entry_point_handler(ke_msg_id_t const msgid,
+                            void const *param,
+                            ke_task_id_t const dest_id,
+                            ke_task_id_t const src_id);
+                                       
+/**
+ ****************************************************************************************
  * @brief Application standard process event handler.
  * @param[in] msgid       Message Id
  * @param[in] param       Pointer to message
  * @param[in] src_id      Source task Id
- * @param[in] dest_id     Source task Id
+ * @param[in] dest_id     Destination task Id
  * @param[in] msg_ret     Message status returned
  * @param[in] handlers    Pointer to message handlers
    @param[in] handler_num Handler number

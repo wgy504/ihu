@@ -29,22 +29,16 @@
  ****************************************************************************************
  */
 
-#include "rwip_config.h"     // SW Configuration
+#include "user_profiles_config.h"
 
 #if (BLE_DIS_SERVER)
-
 #include <stdint.h>          // Standard Integer Definition
 #include <co_bt.h>
 #include "ble_580_sw_version.h"
 #include "user_config_sw_ver.h"
 
 /*
- * DEFINES
- ****************************************************************************************
- */
-
-/*
- * FUNCTIONS DECLARATION
+ * FUNCTIONS DECLARATIONS
  ****************************************************************************************
  */
 

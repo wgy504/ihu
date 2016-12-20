@@ -5,8 +5,12 @@
  *
  * @brief Header file - User Data Service Server.
  *
- * Copyright (C) RivieraWaves 2009-2013
+ * Copyright (C) 2015. Dialog Semiconductor Ltd, unpublished work. This computer
+ * program includes Confidential, Proprietary Information and is a Trade Secret of
+ * Dialog Semiconductor Ltd.  All use, disclosure, and/or reproduction is prohibited
+ * unless authorized in writing. All Rights Reserved.
  *
+ * <bluetooth.support@diasemi.com> and contributors.
  *
  ****************************************************************************************
  */
@@ -23,6 +27,12 @@
  ****************************************************************************************
  */
 
+/// UserData Service Server Role
+#define BLE_UDS_SERVER              1
+#if !defined (BLE_SERVER_PRF)
+    #define BLE_SERVER_PRF          1
+#endif
+
 /*
  * INCLUDE FILES
  ****************************************************************************************
@@ -30,8 +40,20 @@
 #if (BLE_UDS_SERVER)
 
 #include "uds_common.h"
-#include "atts.h"
-#include "prf_types.h"
+
+/*
+ * MACROS
+ ****************************************************************************************
+ */
+
+/// Check if flag enable
+#define UDS_IS(FLAG) ((udss_env.flags & (1<< (UDS_##FLAG))) == (1<< (UDS_##FLAG)))
+
+/// Set flag enable
+#define UDS_SET(FLAG) (udss_env.flags |= (1<< (UDS_##FLAG)))
+
+/// Set flag disable
+#define UDS_CLEAR(FLAG) (udss_env.flags &= ~(1<< (UDS_##FLAG)))
 
 /*
  * DEFINES
@@ -53,56 +75,58 @@
  ****************************************************************************************
  */
 
-///Attributes State Machine
+/// Characteristics Code for Write Indications
 enum
 {
-    UDS_IDX_SVC,
-
-    UDS_IDX_USER_HEIGHT_CHAR,
-    UDS_IDX_USER_HEIGHT_VAL,
-
-    UDS_IDX_USER_AGE_CHAR,
-    UDS_IDX_USER_AGE_VAL,
-
-    UDS_IDX_USER_DATE_OF_BIRTH_CHAR,
-    UDS_IDX_USER_DATE_OF_BIRTH_VAL,
-
-    UDS_IDX_USER_DB_CHANGE_INCR_CHAR,
-    UDS_IDX_USER_DB_CHANGE_INCR_VAL,
-    UDS_IDX_USER_DB_CHANGE_INCR_NTF_CFG,
-
-    UDS_IDX_USER_INDEX_CHAR,
-    UDS_IDX_USER_INDEX_VAL,
-
-    UDS_IDX_USER_CTRL_POINT_CHAR,
-    UDS_IDX_USER_CTRL_POINT_VAL,
-
-    UDS_IDX_NB,
-};
-
-///Attribute Table Indexes
-enum
-{
-    UDS_USER_HEIGHT_CHAR,
+    UDS_USER_FIRST_NAME_CHAR,
+    UDS_USER_LAST_NAME_CHAR,
+    UDS_USER_EMAIL_ADDRESS_CHAR,
     UDS_USER_AGE_CHAR,
     UDS_USER_DATE_OF_BIRTH_CHAR,
+    UDS_USER_GENDER_CHAR,
+    UDS_USER_WEIGHT_CHAR,
+    UDS_USER_HEIGHT_CHAR,
+    UDS_USER_VO2_MAX_CHAR,
+    UDS_USER_HEART_RATE_MAX_CHAR,
+    UDS_USER_RESTING_HEART_RATE_CHAR,
+    UDS_USER_MAX_RECOMMENDED_HEART_RATE_CHAR,
+    UDS_USER_AEROBIC_THRESHOLD_CHAR,
+    UDS_USER_ANAEROBIC_THRESHOLD_CHAR,
+    UDS_USER_SPORT_TYPE_CHAR,
+    UDS_USER_DATE_OF_THRESHOLD_ASSESSMENT_CHAR,
+    UDS_USER_WAIST_CIRCUMFERENCE_CHAR,
+    UDS_USER_HIP_CIRCUMFERENCE_CHAR,
+    UDS_USER_FAT_BURN_HEART_RATE_LOW_LIMIT_CHAR,
+    UDS_USER_FAT_BURN_HEART_RATE_UP_LIMIT_CHAR,
+    UDS_USER_AEROBIC_HEART_RATE_LOW_LIMIT_CHAR,
+    UDS_USER_AEROBIC_HEART_RATE_UP_LIMIT_CHAR,
+    UDS_USER_ANEROBIC_HEART_RATE_LOW_LIMIT_CHAR,
+    UDS_USER_ANEROBIC_HEART_RATE_UP_LIMIT_CHAR,
+    UDS_USER_FIVE_ZONE_HEART_RATE_LIMITS_CHAR,
+    UDS_USER_THREE_ZONE_HEART_RATE_LIMITS_CHAR,
+    UDS_USER_TWO_ZONE_HEART_RATE_LIMIT_CHAR,
+    UDS_USER_LANGUAGE_CHAR,
     UDS_USER_DB_CHANGE_INCR_CHAR,
+    UDS_USER_DB_CHANGE_INCR_CFG,
     UDS_USER_INDEX_CHAR,
     UDS_USER_CTRL_POINT_CHAR,
+    UDS_USER_CTRL_POINT_CFG,
 
     UDS_CHAR_MAX,
 };
 
-///Characteristics Code for Write Indications
+/// Service processing flags
 enum
 {
-    UDSS_ERR_CHAR,
-    UDSS_USER_HEIGHT_CHAR,
-    UDSS_USER_AGE_CHAR,
-    UDSS_USER_DATE_OF_BIRTH_CHAR,
-    UDSS_USER_DB_CHANGE_INCR_CHAR,
-    UDSS_USER_CTRL_POINT_CHAR,
+    /// Flag used to know if there is an on-going user control point request
+    UDS_UCP_ON_GOING    = 0x01,
+    UDS_UCP_PENDING_REQ = 0x02,
 };
+
+/*
+ * STRUCTURES
+ ****************************************************************************************
+ */
 
 ///User Data Service Server Environment Variable
 struct udss_env_tag
@@ -112,29 +136,22 @@ struct udss_env_tag
 
     /// Service Start HandleVAL
     uint16_t shdl;
+    uint16_t ehdl;
 
-    /////Application that requests to send UCP response indication.
-    //ke_task_id_t ucp_ind_src;
+    /// Service processing flags
+    uint8_t flags;
 
     /// Attribute Table
     uint8_t att_tbl[UDS_CHAR_MAX];
+
+    /// If valid user is set and db entries are valid
+    bool db_valid;
 };
 
 /*
  * GLOBAL VARIABLE DECLARATIONS
  ****************************************************************************************
  */
-
-extern const struct attm_desc udss_att_db[UDS_IDX_NB];
-
-extern const att_svc_desc_t udss_dis_svc;
-
-extern const struct att_char_desc udss_user_height_char;
-extern const struct att_char_desc udss_user_age_char;
-extern const struct att_char_desc udss_user_date_of_birth_char;
-extern const struct att_char_desc udss_user_db_change_incr_char;
-extern const struct att_char_desc udss_user_index_char;
-extern const struct att_char_desc udss_user_ctrl_point_char;
 
 extern struct udss_env_tag udss_env;
 
@@ -153,28 +170,10 @@ void udss_init(void);
 
 /**
  ****************************************************************************************
- * @brief Check if an attribute shall be added or not in the database
- * @param features UDS features
- ****************************************************************************************
- */
-uint32_t udss_compute_cfg_flag(uint16_t features);
-
-/**
- ****************************************************************************************
- * @brief Check if the provided value length matches characteristic requirements
- * @param char_code Characteristic Code
- * @param val_len   Length of the Characteristic value
- ****************************************************************************************
- */
-uint8_t udss_check_val_len(uint8_t char_code, uint8_t val_len);
-
-/**
- ****************************************************************************************
  * @brief Unpack User Control request
- *
  * @param[in] packed_val User Control Point value packed
- * @param[out] racp_req User Control Request value
- *
+ * @param[in] length Packed User Control Point value length
+ * @param[out] ucp_req User Control Point Request value
  * @return status of unpacking
  ****************************************************************************************
  */
@@ -185,10 +184,8 @@ uint8_t udss_unpack_ucp_req(uint8_t *packed_val, uint16_t length,
 /**
  ****************************************************************************************
  * @brief Pack User Control response
- *
  * @param[out] packed_val User Control Point value packed
  * @param[in] ucp_rsp User Control Response value
- *
  * @return size of packed data
  ****************************************************************************************
  */
@@ -198,19 +195,19 @@ uint8_t udss_pack_ucp_rsp(uint8_t *packed_val,
 /**
  ****************************************************************************************
  * @brief Send User Control Response Indication
- *
  * @param[in] ucp_rsp user Control Response value
+ * @param[in] handle User Control Point Characteristic Value attribute handle
  * @param[in] ucp_ind_src Application that requests to send UCP response indication.
- *
  * @return PRF_ERR_IND_DISABLED if indication disabled by peer device, PRF_ERR_OK else.
  ****************************************************************************************
  */
-uint8_t udss_send_ucp_rsp(struct uds_ucp_rsp * ucp_rsp,
+uint8_t udss_send_ucp_rsp(struct uds_ucp_rsp * ucp_rsp, uint16_t handle,
                            ke_task_id_t ucp_ind_src);
 
 /**
  ****************************************************************************************
  * @brief Disable actions grouped in getting back to IDLE and sending configuration to requester task
+ * @param[in] conhdl Handle of connection for which this service is disabled
  ****************************************************************************************
  */
 void udss_disable(uint16_t conhdl); 
