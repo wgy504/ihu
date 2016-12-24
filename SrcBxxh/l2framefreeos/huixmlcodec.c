@@ -16,11 +16,8 @@
 //Task Global variables
 extern IhuSysEngParTable_t zIhuSysEngPar; //全局工程参数控制表
 
-
 //XML自定义标准的编码函数方式
-//完全自己手动编码的方式，未来可以灵活的改动
-//也可以考虑使用XML的标准函数来做，但其实最大的内容部分，也是靠手工编码的，并没有省略多少复杂度
-OPSTAT func_cloud_standard_xml_pack(CloudBhItfDevReportStdXml_t *xmlFormat, CloudDataSendBuf_t *buf)
+OPSTAT func_cloud_standard_xml_pack(StrCloudBhItfStdHuixml_t *xmlFormat, CloudDataSendBuf_t *buf)
 {	
 	//参数检查，其它参数无所谓
 	if (xmlFormat == NULL){
@@ -35,170 +32,70 @@ OPSTAT func_cloud_standard_xml_pack(CloudBhItfDevReportStdXml_t *xmlFormat, Clou
 	}
 
 	//格式固定区域
-	strcpy(xmlFormat->xml_l, "<xml>");
-	strcpy(xmlFormat->xml_r, "</xml>");
-	strcpy(xmlFormat->ToUserName_l, "<ToUserName><![CDATA[");
-	strcpy(xmlFormat->ToUserName_r, "]]></ToUserName>");
-	strcpy(xmlFormat->FromUserName_l, "<FromUserName><![CDATA[");
-	strcpy(xmlFormat->FromUserName_r, "]]></FromUserName>");
-	strcpy(xmlFormat->CreateTime_l, "<CreateTime>");
-	strcpy(xmlFormat->CreateTime_r, "</CreateTime>");
-	strcpy(xmlFormat->MsgType_l, "<MsgType><![CDATA[");
-	strcpy(xmlFormat->MsgType_r, "]]></MsgType>");
-	strcpy(xmlFormat->Content_l, "<Content><![CDATA[");
-	strcpy(xmlFormat->Content_r, "]]></Content>");
-	strcpy(xmlFormat->FuncFlag_l, "<FuncFlag>");
-	strcpy(xmlFormat->FuncFlag_r, "</FuncFlag>");
-
+	strcpy(xmlFormat->fixHead.xml_l, "<xml>");
+	strcpy(xmlFormat->fixHead.ToUserName_l, "<ToUserName><![CDATA[");
+	strcpy(xmlFormat->fixHead.ToUserName_r, "]]></ToUserName>");
+	strcpy(xmlFormat->fixHead.FromUserName_l, "<FromUserName><![CDATA[");
+	strcpy(xmlFormat->fixHead.FromUserName_r, "]]></FromUserName>");
+	strcpy(xmlFormat->fixHead.CreateTime_l, "<CreateTime>");
+	strcpy(xmlFormat->fixHead.CreateTime_r, "</CreateTime>");
+	strcpy(xmlFormat->fixHead.MsgType_l, "<MsgType><![CDATA[");
+	strcpy(xmlFormat->fixHead.MsgType_r, "]]></MsgType>");
+	strcpy(xmlFormat->fixHead.Content_l, "<Content><![CDATA[");
+	strcpy(xmlFormat->fixTail.Content_r, "]]></Content>");
+	strcpy(xmlFormat->fixTail.FuncFlag_l, "<FuncFlag>");
+	strcpy(xmlFormat->fixTail.FuncFlag_r, "</FuncFlag>");
+	strcpy(xmlFormat->fixTail.xml_r, "</xml>");
+	
 	//对于目前来说，数值固定内容
-	strcpy(xmlFormat->ToUserName, zIhuSysEngPar.cloud.cloudBhServerName);
-	strcpy(xmlFormat->FromUserName, zIhuSysEngPar.cloud.cloudBhIhuName);
-
-	UINT32 timeStamp = 0; //time(0); 如果取得时钟，待定
-  sprintf(xmlFormat->CreateTime, "%d", timeStamp);
+	strcpy(xmlFormat->fixHead.ToUserName, zIhuSysEngPar.cloud.cloudBhServerName);
+	strcpy(xmlFormat->fixHead.FromUserName, zIhuSysEngPar.cloud.cloudBhIhuName);
+	UINT32 timeStamp = 0; //time(0); 如何取得时间戳，待定
+  sprintf(xmlFormat->fixHead.CreateTime, "%d", timeStamp);
 
 	//MsgType参数，必须由调用函数填入，因为它才能知晓这是什么样的内容体
-	//strcpy(xmlFormat->MsgType, CLOUDVELA_BH_MSG_TYPE_DEVICE_REPORT);
-	if (strlen(xmlFormat->FuncFlag) <=0 )	sprintf(xmlFormat->FuncFlag, "%1d", 0);
+
+	//FuncFlag由上层填入，如果没有，这里自动填入0
+	if (strlen(xmlFormat->fixTail.FuncFlag) <=0 )	sprintf(xmlFormat->fixTail.FuncFlag, "%1d", 0);
 
 	//准备接龙字符串成为一整串
-	char s[MAX_IHU_MSG_BUF_LENGTH];
+	char s[MAX_IHU_MSG_BUF_LENGTH_CLOUD];
 	memset(s, 0, sizeof(s));
-	char da[MAX_IHU_MSG_BUF_LENGTH];
+	char da[MAX_IHU_MSG_BUF_LENGTH_CLOUD];
 	memset(da, 0, sizeof(da));
 	char tmp[3] = "";
 
 	//固定头部分
-	strcat(s, xmlFormat->xml_l);
-	strcat(s, xmlFormat->ToUserName_l);
-	strcat(s, xmlFormat->ToUserName);
-	strcat(s, xmlFormat->ToUserName_r);
-	strcat(s, xmlFormat->FromUserName_l);
-	strcat(s, xmlFormat->FromUserName);
-	strcat(s, xmlFormat->FromUserName_r);
-	strcat(s, xmlFormat->CreateTime_l);
-	strcat(s, xmlFormat->CreateTime);
-	strcat(s, xmlFormat->CreateTime_r);
-	strcat(s, xmlFormat->MsgType_l);
-	strcat(s, xmlFormat->MsgType);
-	strcat(s, xmlFormat->MsgType_r);
-	strcat(s, xmlFormat->Content_l);
-
+	strcat(s, xmlFormat->fixHead.xml_l);
+	strcat(s, xmlFormat->fixHead.ToUserName_l);
+	strcat(s, xmlFormat->fixHead.ToUserName);
+	strcat(s, xmlFormat->fixHead.ToUserName_r);
+	strcat(s, xmlFormat->fixHead.FromUserName_l);
+	strcat(s, xmlFormat->fixHead.FromUserName);
+	strcat(s, xmlFormat->fixHead.FromUserName_r);
+	strcat(s, xmlFormat->fixHead.CreateTime_l);
+	strcat(s, xmlFormat->fixHead.CreateTime);
+	strcat(s, xmlFormat->fixHead.CreateTime_r);
+	strcat(s, xmlFormat->fixHead.MsgType_l);
+	strcat(s, xmlFormat->fixHead.MsgType);
+	strcat(s, xmlFormat->fixHead.MsgType_r);
+	strcat(s, xmlFormat->fixHead.Content_l);
 	//顺序是编码的黄金规则，千万不能错，否则就无法解开了!!!
 	//char conCmdId[3];
-	strcat(s, xmlFormat->conCmdId);
+	strcat(s, xmlFormat->fixHead.conCmdId);
 
 	//所有变长部分
 	//char conOptId[3]; //1B
-	strcat(da, xmlFormat->conOptId);
-
-	//char conEqpId[3];  //1B
-	strcat(da, xmlFormat->conEqpId);
-
-	//char conBackType[3]; //1B
-	strcat(da, xmlFormat->conBackType);// by Shanchun: move it after EqpId to align with Pack sequence in Cloud
-
-	//char conDataFormat[3]; //1B
-	strcat(da, xmlFormat->conDataFormat);
-
-	//char conEmc[5];   //2B
-	strcat(da, xmlFormat->conEmc);
-
-	//char conPm1d0[9];   //4B
-	strcat(da, xmlFormat->conPm1d0);
-
-	//char conPm2d5[9];   //4B
-	strcat(da, xmlFormat->conPm2d5);
-
-	//char conPm10d[9];   //4B
-	strcat(da, xmlFormat->conPm10d);
-
-	//char conWinddir[5];   //2B
-	strcat(da, xmlFormat->conWinddir);
-
-	//char conWindspd[5];   //2B
-	strcat(da, xmlFormat->conWindspd);
-
-	//char conTemp[5];   //2B
-	strcat(da, xmlFormat->conTemp);
-
-	//char conHumid[5];   //2B
-	strcat(da, xmlFormat->conHumid);
-
-	//char conNoise[9];   //4B
-	strcat(da, xmlFormat->conNoise);
-
-	//char conew; //1B
-	strcat(da, xmlFormat->conEW);
-
-	//char conGpsx[9];   //4B
-	strcat(da, xmlFormat->conGpsx);
-
-	//char conns; //1B
-	strcat(da, xmlFormat->conNS);
-
-	//char conGpsy[9];   //4B
-	strcat(da, xmlFormat->conGpsy);
-
-	//char conGpsz[9];   //4B
-	strcat(da, xmlFormat->conGpsz);
-
-	//Adding by Shanchun for alarm report
-	//char conAlarmType[5]; //2B
-	strcat(da, xmlFormat->conAlarmType);
-
-	//char conAlarmContent[5]; //2B
-	strcat(da, xmlFormat->conAlarmContent);
-
-
-	//char conPmCloudVelaConnCnt[5];   //2B
-	strcat(da, xmlFormat->conPmCloudVelaConnCnt);
-	//char conPmCloudVelaConnFailCnt[5];   //2B
-	strcat(da, xmlFormat->conPmCloudVelaConnFailCnt);
-	//char conPmCloudVelaDiscCnt[5];//2B
-	strcat(da, xmlFormat->conPmCloudVelaDiscCnt);
-	//char conPmSocketDiscCnt[5];//2B
-	strcat(da, xmlFormat->conPmSocketDiscCnt);
-
-
-	//Adding by Shanchun for control cmd
-	//char conPowerOnOff[3]; //1B
-	strcat(da, xmlFormat->conPowerOnOff);
-
-	//char conInterSample[3]; //1B
-	strcat(da, xmlFormat->conInterSample);
-
-	//char conMeausTimes[3]; //1B
-	strcat(da, xmlFormat->conMeausTimes);
-
-	//char conNewEquId[3]; //1B
-	strcat(da, xmlFormat->conNewEquId);
-
-	//char conWorkCycle[3]; //1B
-	strcat(da, xmlFormat->conWorkCycle);
+	strcat(da, xmlFormat->fixHead.conOptId);
 
 	//char conSwDownload[3]; //1B
 	strcat(da, xmlFormat->conSwDownload);
-
 
 	//strcat(da, xmlFormat->conHwUuid);
 	strcat(da, xmlFormat->conHwType);
 	strcat(da, xmlFormat->conHwVersion);
 	strcat(da, xmlFormat->conSwDelivery);
 	strcat(da, xmlFormat->conSwRelease);
-
-
-	//char conSwInventory[3]; //1B
-	strcat(da, xmlFormat->conAvUpload);
-	//strcat(da, xmlFormat->conAvFileName);
-
-	//char conTimeStamp[9]; //4B
-	strcat(da, xmlFormat->conTimeStamp);
-
-	//char conNtimes[5];   //2B
-	strcat(da, xmlFormat->conNtimes);
-
-	IhuDebugPrint("SPSVIRGO: Send out data DA: %s!!!\n", da);
 
 	//获取变长部分的长度, Len=0的情况存在，比如Heart_Beat消息，这里为了统一处理函数的简化，不做过分的区别对待和处理，尽量让处理函数通用化
 	int len = 0;
@@ -222,13 +119,13 @@ OPSTAT func_cloud_standard_xml_pack(CloudBhItfDevReportStdXml_t *xmlFormat, Clou
 	strcat(s, da);
 
 	//Finish content part
-	strcat(s, xmlFormat->Content_r);
+	strcat(s, xmlFormat->fixTail.Content_r);
 
 	//固定尾部分
-	strcat(s, xmlFormat->FuncFlag_l);
-	strcat(s, xmlFormat->FuncFlag);
-	strcat(s, xmlFormat->FuncFlag_r);
-	strcat(s, xmlFormat->xml_r);
+	strcat(s, xmlFormat->fixTail.FuncFlag_l);
+	strcat(s, xmlFormat->fixTail.FuncFlag);
+	strcat(s, xmlFormat->fixTail.FuncFlag_r);
+	strcat(s, xmlFormat->fixTail.xml_r);
 
 	//存入返回参量中
 	strcpy(buf->buf, s);

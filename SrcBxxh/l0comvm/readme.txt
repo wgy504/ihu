@@ -7,6 +7,7 @@
 //= ZJL, 2016 Dec.19, CURRENT_SW_DELIVERY R03.67 =>CCL项目
 = 后台编解码探索
 = 将HCU的代码先移植部分过来，待完善
+= 24>>继续HUIXML的编解码任务
 
 //= ZJL, 2016 Dec.18, CURRENT_SW_DELIVERY R03.66 =>CCL项目
 = 提高数据源产生的频率，从1000分之一提高到1/2

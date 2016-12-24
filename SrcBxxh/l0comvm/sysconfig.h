@@ -399,6 +399,9 @@
 	#define IHU_SERIESPORT_NUM_FOR_GPS_DEFAULT  1
 	//定义后台CLOUD连接到服务器
 	#define IHU_CLOUDXHUI_HTTP_ADDRESS_LOCAL "http://127.0.0.1/test.php"
+	#define IHU_CLOUDXHUI_HTTP_ADDRESS_BH_SERVER "XHZN_HCU"
+	#define IHU_CLOUDXHUI_HCU_NAME_SELF "HCU_CL_0301"	
+	
 	//定义后台CLOUD FTP 的地址
 	#define IHU_CLOUDXHUI_FTP_ADDRESS "ftp://121.40.185.177"
 	//local SW storage address
