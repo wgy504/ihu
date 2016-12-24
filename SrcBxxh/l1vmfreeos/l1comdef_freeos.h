@@ -38,8 +38,201 @@ typedef struct IhuDiscDataSampleStorage
 	IhuDiscDataSampleStorageArray_t recordItem[IHU_DISC_DATA_SAMPLE_STORAGE_NBR_MAX];
 }IhuDiscDataSampleStorage_t;
 
-//自定义，服从自定义XML规范
-//CLOUD<->IHU之间自行定义的命令字
+//标准命令字统一定义
+typedef enum
+{
+	L3CI_uni_none                  = 0,
+	L3CI_uni_blood_glucose         = 1,  //血糖
+	L3CI_uni_single_sports         = 2,  //单次运动
+	L3CI_uni_single_sleep          = 3, //单次睡眠
+	L3CI_uni_body_fat              = 4,  //体脂
+	L3CI_uni_blood_pressure        = 5, //血压
+	L3CI_uni_runner_machine_report = 0x0A, //跑步机数据上报
+	L3CI_uni_runner_machine_control= 0x0B, //跑步机任务控制
+	L3CI_uni_gps                   = 0x0C, //GPS地址
+	L3CI_uni_Ihu_iau_control       = 0x10, //IHU与IAU之间控制命令
+	L3CI_uni_emc                   = 0x20, //电磁辐射强度
+	L3CI_uni_emc_accumulation      = 0x21, //电磁辐射剂量
+	L3CI_uni_co                    = 0x22, //一氧化碳
+	L3CI_uni_formaldehyde          = 0x23, //甲醛HCHO
+	L3CI_uni_alcohol               = 0x24, //酒精
+	L3CI_uni_pm25                  = 0x25, //PM1/2.5/10
+	L3CI_uni_windspd               = 0x26, //风速Wind Speed
+	L3CI_uni_winddir               = 0x27, //风向Wind Direction
+	L3CI_uni_temp                  = 0x28, //温度Temperature
+	L3CI_uni_humid                 = 0x29, //湿度Humidity
+	L3CI_uni_airprs                = 0x2A, //气压Air pressure
+	L3CI_uni_noise                 = 0x2B, //噪声Noise
+	L3CI_uni_hsmmp                 = 0x2C, //相机Camer or audio high speed
+	L3CI_uni_audio                 = 0x2D, //声音
+	L3CI_uni_video                 = 0x2E, //视频
+	L3CI_uni_picture               = 0x2F, //图片
+	L3CI_uni_lock                  = 0x30, //云控锁
+	L3CI_uni_water_meter           = 0x31, //水表
+	L3CI_uni_heat_meter            = 0x32, //热表
+	L3CI_uni_gas_meter             = 0x33, //气表
+	L3CI_uni_power_meter           = 0x34, //电表
+	L3CI_uni_light_strength        = 0x35, //光照强度
+	L3CI_uni_toxicgas              = 0x36, //有毒气体VOC
+	L3CI_uni_altitude              = 0x37, //海拔高度
+	L3CI_uni_moto                  = 0x38, //马达
+	L3CI_uni_switch                = 0x39, //继电器
+	L3CI_uni_transporter           = 0x3A, //导轨传送带
+	L3CI_uni_bfsc_comb_scale       = 0x3B, //组合秤
+	L3CI_uni_ccl_lock              = 0x40,  //智能锁
+	L3CI_uni_ccl_door              = 0x41, //光交箱门
+	L3CI_uni_ccl_rfid              = 0x42, //光交箱RFID模块
+	L3CI_uni_ccl_ble               = 0x43, //光交箱BLE模块
+	L3CI_uni_ccl_gprs              = 0x44, //光交箱GPRS模块
+	L3CI_uni_ccl_battery           = 0x45, //光交箱电池模块
+	L3CI_uni_ccl_shake             = 0x46, //光交箱震动
+	L3CI_uni_ccl_smoke             = 0x47, //光交箱烟雾
+	L3CI_uni_ccl_water             = 0x48, //光交箱水浸
+	L3CI_uni_ccl_temp              = 0x49, //光交箱温度
+	L3CI_uni_ccl_humid             = 0x4A, //光交箱湿度
+	L3CI_uni_ccl_fall              = 0x4B, //倾倒
+	L3CI_uni_ccl_state             = 0x4C, //状态聚合
+	L3CI_uni_itf_sps               = 0x50, //串口读取命令/返回结果
+	L3CI_uni_itf_adc               = 0x51, //ADC读取命令/返回结果
+	L3CI_uni_itf_dac               = 0x52, //DAC读取命令/返回结果
+	L3CI_uni_itf_i2c               = 0x53, //I2C读取命令/返回结果
+	L3CI_uni_itf_pwm               = 0x54, //PWM读取命令/返回结果
+	L3CI_uni_itf_di                = 0x55, //DI读取命令/返回结果
+	L3CI_uni_itf_do                = 0x56, //DO读取命令/返回结果
+	L3CI_uni_itf_can               = 0x57, //CAN读取命令/返回结果
+	L3CI_uni_itf_spi               = 0x58, //SPI读取命令/返回结果
+	L3CI_uni_itf_usb               = 0x59, //USB读取命令/返回结果
+	L3CI_uni_itf_eth               = 0x5A, //网口读取命令/返回结果
+	L3CI_uni_itf_485               = 0x5B, //485读取命令/返回结果
+	L3CI_uni_Ihu_inventory         = 0xA0,	//软件清单
+	L3CI_uni_sw_package            = 0xA1,	//软件版本体
+	L3CI_uni_alarm_info            = 0xB0, //for alarm report
+	L3CI_uni_performance_info      = 0xB1, // or PM report
+	L3CI_uni_equipment_info        = 0xF0,	//设备基本信息
+	L3CI_uni_personal_info         = 0xF1,	//个人基本信息
+	L3CI_uni_time_sync             = 0xF2,	//时间同步
+	L3CI_uni_read_data             = 0xF3,	//读取数据
+	L3CI_uni_clock_timeout         = 0xF4,	//定时闹钟及久坐提醒
+	L3CI_uni_sync_charging         = 0xF5,	//同步充电，双击情况
+	L3CI_uni_sync_trigger          = 0xF6,	//同步通知信息
+	L3CI_uni_cmd_control           = 0xFD,  //for cmd control by Shanchun
+	L3CI_uni_heart_beat            = 0xFE, //心跳
+	L3CI_uni_null                  = 0xFF, //无效
+}L3StandardHuiUniCmdDefId;
+
+//标准操作字统一定义
+typedef enum
+{
+  L3PO_uni_min                       = 0,
+	L3PO_uni_none                      = 0x00,   //无效                          
+	L3PO_uni_data_req                  = 0x01,   //Set Data Request, 或命令请求  
+	L3PO_uni_set_switch                = 0x02,   //Set Switch                    
+	L3PO_uni_set_modbus_address        = 0x03,   //Set Modbus Address            
+	L3PO_uni_set_work_cycle            = 0x04,   //Work cycle, in second         
+	L3PO_uni_set_sample_cycle          = 0x05,   //Set Sample cycle, in second   
+	L3PO_uni_set_sample_number         = 0x06,   //Set Sample number             
+	L3PO_uni_auth_resp                 = 0x10,   //授权应答                      
+	L3PO_uni_status_report_cfm         = 0x11,   //状态确认                      
+	L3PO_uni_data_report               = 0x81,   //Data Report，或命令响应       
+	L3PO_uni_read_switch               = 0x82,   //Read switch                   
+	L3PO_uni_read_modbus_address       = 0x83,   //Read Modbus Address           
+	L3PO_uni_read_work_cycle           = 0x84,   //Read Work Cycle               
+	L3PO_uni_read_sample_cycle         = 0x85,   //Read Sample Cycle             
+	L3PO_uni_read_sample_number        = 0x86,   //Read Sample Number            
+	L3PO_uni_auth_inq                  = 0x90,   //授权询问                      
+	L3PO_uni_status_report             = 0x91,   //状态报告    
+  L3PO_uni_max,
+}L3StandardHuiUniOptDefId;
+
+//标准IE信息单元字统一定义
+typedef enum
+{
+	L3IE_uni_min                        = 0x00, 
+	L3IE_uni_none                       = 0x00, 
+	L3IE_uni_state                      = 0x01, 
+	L3IE_uni_confirm                    = 0x02, 
+	L3IE_uni_auth                       = 0x03, 
+	L3IE_uni_warning                    = 0x04, 
+	L3IE_uni_action                     = 0x05, 
+	L3IE_uni_switch                     = 0x06, 
+	L3IE_uni_command                    = 0x07, 
+	L3IE_uni_back_type                  = 0x10, 
+	L3IE_uni_equp_id                    = 0x11, 
+	L3IE_uni_format_type                = 0x12, 
+	L3IE_uni_work_cycle                 = 0x13, 
+	L3IE_uni_sample_cycle               = 0x14, 
+	L3IE_uni_sample_number              = 0x15, 
+	L3IE_uni_unix_time                  = 0x16, 
+	L3IE_uni_ymd_time                   = 0x16, 
+	L3IE_uni_ntimes                     = 0x17, 
+	L3IE_uni_gps_x                      = 0x18, 
+	L3IE_uni_gps_y                      = 0x19, 
+	L3IE_uni_gps_z                      = 0x1A, 
+	L3IE_uni_gps_direction              = 0x1B, 
+	L3IE_uni_grade                      = 0x1C, 
+	L3IE_uni_percentage                 = 0x1E, 
+	L3IE_uni_file_name                  = 0x20, 
+	L3IE_uni_http_link                  = 0x21, 
+	L3IE_uni_segment_total              = 0x22, 
+	L3IE_uni_segment_index              = 0x23, 
+	L3IE_uni_glucose_value              = 0x30, 
+	L3IE_uni_sports_value               = 0x31, 
+	L3IE_uni_sleep_value                = 0x32, 
+	L3IE_uni_fat_value                  = 0x33, 
+	L3IE_uni_bood_pressure_value        = 0x34, 
+	L3IE_uni_emc_value                  = 0x35, 
+	L3IE_uni_co_value                   = 0x36, 
+	L3IE_uni_hcho_value                 = 0x37, 
+	L3IE_uni_alcohol_value              = 0x38, 
+	L3IE_uni_pm01_value                 = 0x39, 
+	L3IE_uni_pm25_value                 = 0x3A, 
+	L3IE_uni_pm10_value                 = 0x3B, 
+	L3IE_uni_windspd_value              = 0x3C, 
+	L3IE_uni_winddir_value              = 0x3D, 
+	L3IE_uni_temp_value                 = 0x3E, 
+	L3IE_uni_humid_value                = 0x3F, 
+	L3IE_uni_air_pressure_value         = 0x40, 
+	L3IE_uni_noise_value                = 0x41, 
+	L3IE_uni_hsmmp_value                = 0x42, 
+	L3IE_uni_audio_value                = 0x43, 
+	L3IE_uni_video_value                = 0x44, 
+	L3IE_uni_picture_value              = 0x45, 
+	L3IE_uni_water_meter_value          = 0x46, 
+	L3IE_uni_heat_meter_value           = 0x47, 
+	L3IE_uni_gas_meter_value            = 0x48, 
+	L3IE_uni_power_meter_value          = 0x49, 
+	L3IE_uni_light_strenght_value       = 0x4A, 
+	L3IE_uni_toxicgas_value             = 0x4B, 
+	L3IE_uni_altitude_value             = 0x4C, 
+	L3IE_uni_weight_value               = 0x4D, 
+	L3IE_uni_lock_state                 = 0x50, 
+	L3IE_uni_door_state                 = 0x51, 
+	L3IE_uni_shake_state                = 0x52, 
+	L3IE_uni_smoke_state                = 0x53, 
+	L3IE_uni_water_state                = 0x54, 
+	L3IE_uni_fall_state                 = 0x55, 
+	L3IE_uni_bat_state                  = 0x56, 
+	L3IE_uni_rssi_value                 = 0x57, 
+	L3IE_uni_general_value1             = 0x58, 
+	L3IE_uni_general_value2             = 0x58, 
+	L3IE_uni_general_value3             = 0x59, 
+	L3IE_uni_general_value4             = 0x5A, 
+	L3IE_uni_hw_type                    = 0x60, 
+	L3IE_uni_hw_id                      = 0x61, 
+	L3IE_uni_sw_rel                     = 0x62, 
+	L3IE_uni_sw_ver                     = 0x63, 
+	L3IE_uni_sw_body                    = 0x64, 
+	L3IE_uni_alarm_type                 = 0x65, 
+	L3IE_uni_alarm_value                = 0x66, 
+	L3IE_uni_pm_type                    = 0x67, 
+	L3IE_uni_pm_value                   = 0x68, 
+	L3IE_uni_max,
+}L3StandardHuiUniIeDefId;
+
+
+//为各个业务独自定义的方式
+//老旧定义方式，未来需要改进去掉
+//标准命令字统一定义
 typedef enum
 {
 	L3CI_none = 0,
@@ -81,17 +274,19 @@ typedef enum
 	L3CI_switch = 0x39, //继电器
 	L3CI_transporter = 0x3A, //导轨传送带
 	L3CI_bfsc_comb_scale = 0x3B, //组合秤
-	L3CI_fhys_cci = 0x40,  //智能锁
-	L3CI_fhys_door = 0x41, //光交箱门
-	L3CI_fhys_rfid = 0x42, //光交箱RFID模块
-	L3CI_fhys_ble = 0x43, //光交箱BLE模块
-	L3CI_fhys_gprs = 0x44, //光交箱GPRS模块
-	L3CI_fhys_battery = 0x45, //光交箱电池模块
-	L3CI_fhys_vibration = 0x46, //光交箱震动
-	L3CI_fhys_smoke = 0x47, //光交箱烟雾
-	L3CI_fhys_water = 0x48, //光交箱水浸
-	L3CI_fhys_temp = 0x49, //光交箱温度
-	L3CI_fhys_humid = 0x4A, //光交箱湿度
+	L3CI_ccl_lock = 0x40,  //智能锁
+	L3CI_ccl_door = 0x41, //光交箱门
+	L3CI_ccl_rfid = 0x42, //光交箱RFID模块
+	L3CI_ccl_ble = 0x43, //光交箱BLE模块
+	L3CI_ccl_gprs = 0x44, //光交箱GPRS模块
+	L3CI_ccl_battery = 0x45, //光交箱电池模块
+	L3CI_ccl_shake = 0x46, //光交箱震动
+	L3CI_ccl_smoke = 0x47, //光交箱烟雾
+	L3CI_ccl_water = 0x48, //光交箱水浸
+	L3CI_ccl_temp = 0x49, //光交箱温度
+	L3CI_ccl_humid = 0x4A, //光交箱湿度
+	L3CI_ccl_fall = 0x4B, //倾倒
+	L3CI_ccl_state = 0x4C, //状态聚合
 	L3CI_itf_sps = 0x50, //串口读取命令/返回结果
 	L3CI_itf_adc = 0x51, //ADC读取命令/返回结果
 	L3CI_itf_dac = 0x52, //DAC读取命令/返回结果
@@ -118,7 +313,8 @@ typedef enum
 	L3CI_cmd_control = 0xFD,  //for cmd control by Shanchun
 	L3CI_heart_beat = 0xFE, //心跳
 	L3CI_null = 0xFF, //无效
-}L3UserCmdIdDef;
+}L3StandardHuiCmdDefId;
+
 //IHU<->IAU HUITP接口之间定义的操作字
 //所有的操作字，需要极度的丰富化，以形成完整的处理任务模块
 typedef enum
@@ -486,10 +682,11 @@ enum CloudBhMsgTypeEnum
 #define IHU_CLOUD_BH_MSG_TYPE_ALARM_REPORT_STRING "hcu_alarm"  //for alarm report
 #define IHU_CLOUD_BH_MSG_TYPE_PM_REPORT_STRING "hcu_pm"  //for pm report
 
-//XML格式定义
+//HUIXML格式定义
 //主体内容中，各个不同的字段完全按照这个优先级进行编码，解码时将由各种操作字的隐含必选关系进行解码，从而简化编码函数
 #define IHU_CLOUD_BH_ITF_STD_XML_HEAD_MAX_LENGTH IHU_FILE_NAME_LENGTH_MAX  //要传递HTTP名字会后台，只能扩大该域的长度
-typedef struct CloudBhItfDevReportStdXml
+//固定头
+typedef struct CloudBhItfHuixmlFixHead
 {
 	char xml_l[6];
 	char ToUserName_l[22];
@@ -507,65 +704,342 @@ typedef struct CloudBhItfDevReportStdXml
 	char Content_l[19];
 	char conCmdId[3];
 	char conLen[3];  //1B
-	char conOptId[3]; //1B
-	char conBackType[3]; //1B
-	char conEqpId[3];  //1B
-	char conDataFormat[3]; //1B
-	char conEmc[5];   //2B
-	char conPm1d0[9];   //4B
-	char conPm2d5[9];   //4B
-	char conPm10d[9];   //4B
-	char conWinddir[5];   //2B
-	char conWindspd[5];   //2B
-	char conTemp[5];   //2B
-	char conHumid[5];   //2B
-	char conNoise[9];   //4B
-	char conEW[3];//1B
-	char conGpsx[9];   //4B
-	char conNS[3];//1B
-	char conGpsy[9];   //4B
-	char conGpsz[9];   //4B
+	char conOptId[3]; //1B	
+}CloudBhItfHuixmlFixHead_t;
 
-	//Added by Shanchun for alarm report
-	char conAlarmType[5];   //2B
-	char conAlarmContent[5];//2B
+//固定尾
+typedef struct CloudBhItfHuixmlFixTail
+{
+	char Content_r[14];
+	char FuncFlag_l[11];
+	char FuncFlag[IHU_CLOUD_BH_ITF_STD_XML_HEAD_MAX_LENGTH+1];
+	char FuncFlag_r[12];
+	char xml_r[7];
+}CloudBhItfHuixmlFixTail_t;
 
-	char conPmCloudVelaConnCnt[5];   //2B
-	char conPmCloudVelaConnFailCnt[5];   //2B
-	char conPmCloudVelaDiscCnt[5];//2B
-	char conPmSocketDiscCnt[5];//2B
+//软件清单结构定义
 
-	//Added by Shanchun for control cmd
-	char conPowerOnOff[3];
-	char conInterSample[3];
-	char conMeausTimes[3];
-	char conNewEquId[3];
-	char conWorkCycle[3];
+//CCL状态报告消息结构定义
+typedef struct CloudBhItfHuixmlCclStateReportLock
+{
+	//CCL状态报告：Lock的TLV参数
+	char cclLockId[3]; //1B
+	char cclLockLen[3]; //1B
+	char cclLockState[3]; //1B	
+}CloudBhItfHuixmlCclStateReportLock_t;
+typedef struct CloudBhItfHuixmlCclStateReportDoor
+{
+	//CCL状态报告：Door的TLV参数
+	char cclDoorId[3]; //1B
+	char cclDoorLen[3]; //1B
+	char cclDoorState[3]; //1B
+}CloudBhItfHuixmlCclStateReportDoor_t;
+typedef struct CloudBhItfHuixmlCclStateReportShake
+{
+	//CCL状态报告：Shake的TLV参数
+	char cclShakeId[3]; //1B
+	char cclShakeLen[3]; //1B
+	char cclShakeState[3]; //1B
+}CloudBhItfHuixmlCclStateReportShake_t;
+typedef struct CloudBhItfHuixmlCclStateReportSmoke
+{
+	//CCL状态报告：Smoke的TLV参数
+	char cclSmokeId[3]; //1B
+	char cclSmokeLen[3]; //1B
+	char cclSmokeState[3]; //1B
+}CloudBhItfHuixmlCclStateReportSmoke_t;
+typedef struct CloudBhItfHuixmlCclStateReportWater
+{
+	//CCL状态报告：Water的TLV参数
+	char cclWaterId[3]; //1B
+	char cclWaterLen[3]; //1B
+	char cclWaterState[3]; //1B
+}CloudBhItfHuixmlCclStateReportWater_t;
+typedef struct CloudBhItfHuixmlCclStateReportFall
+{
+	//CCL状态报告：Fall的TLV参数
+	char cclFallId[3]; //1B
+	char cclFallLen[3]; //1B
+	char cclFallState[3]; //1B
+}CloudBhItfHuixmlCclStateReportFall_t;
+typedef struct CloudBhItfHuixmlCclStateReportBat
+{
+	//CCL状态报告：Bat的TLV参数
+	char cclBatId[3]; //1B  电池告警状态
+	char cclBatLen[3]; //1B
+	char cclBatState[3]; //1B
+}CloudBhItfHuixmlCclStateReportBat_t;
+typedef struct CloudBhItfHuixmlCclStateReportTemp
+{
+	//CCL状态报告：Temp的TLV参数
+	char cclTempId[3]; //1B
+	char cclTempLen[5]; //2B
+	char cclTempVal[5]; //2B
+}CloudBhItfHuixmlCclStateReportTemp_t;
+typedef struct CloudBhItfHuixmlCclStateReportHumid
+{
+	//CCL状态报告：Humid的TLV参数
+	char cclHumidId[3]; //1B
+	char cclHumidLen[5]; //2B
+	char cclHumidVal[5]; //2B
+}CloudBhItfHuixmlCclStateReportHumid_t;
+typedef struct CloudBhItfHuixmlCclStateReportBattery
+{
+	//CCL状态报告：Humid的TLV参数
+	char cclBatteryId[3]; //1B  电池剩余电量数值
+	char cclBatteryLen[5]; //2B
+	char cclBatteryVal[5]; //2B
+}CloudBhItfHuixmlCclStateReportBattery_t;
+typedef struct CloudBhItfHuixmlCclStateReportRssi
+{
+	//CCL状态报告：Rssi的TLV参数
+	char cclRssiId[3]; //1B
+	char cclRssiLen[5]; //2B
+	char cclRssiVal[5]; //2B
+}CloudBhItfHuixmlCclStateReportRssi_t;
+typedef struct CloudBhItfHuixmlCclStateReportRsv1
+{
+	//CCL状态报告：Rsv1的TLV参数
+	char cclRsv1Id[3]; //1B
+	char cclRsv1Len[5]; //2B
+	char cclRsv1Val[5]; //2B
+}CloudBhItfHuixmlCclStateReportRsv1_t;
+typedef struct CloudBhItfHuixmlCclStateReportRsv2
+{
+	//CCL状态报告：Rsv2的TLV参数
+	char cclRsv2Id[3]; //1B
+	char cclRsv2Len[5]; //2B
+	char cclRsv2Val[5]; //2B
+}CloudBhItfHuixmlCclStateReportRsv2_t;
+typedef struct CloudBhItfHuixmlCclStateReport
+{
+	//CCL的状态报告TLV参数
+	CloudBhItfHuixmlCclStateReportLock_t cclLock;
+	CloudBhItfHuixmlCclStateReportDoor_t cclDoor;
+	CloudBhItfHuixmlCclStateReportShake_t cclShake;
+	CloudBhItfHuixmlCclStateReportSmoke_t cclSmoke;
+	CloudBhItfHuixmlCclStateReportWater_t cclWater;
+	CloudBhItfHuixmlCclStateReportFall_t cclFall;
+	CloudBhItfHuixmlCclStateReportBat_t cclBat;
+	CloudBhItfHuixmlCclStateReportTemp_t cclTemp;
+	CloudBhItfHuixmlCclStateReportHumid_t cclHumid;
+	CloudBhItfHuixmlCclStateReportBattery_t cclBattery;
+	CloudBhItfHuixmlCclStateReportRssi_t cclRssi;
+	CloudBhItfHuixmlCclStateReportRsv1_t cclRsv1;
+	CloudBhItfHuixmlCclStateReportRsv2_t cclRsv2;
+}CloudBhItfHuixmlCclStateReport_t;
 
-	//Added by Shanchun for hcu sw download
-	char conSwDownload[3];
 
+
+typedef struct StrCloudBhItfStdHuixml
+{
+	//固定头
+	CloudBhItfHuixmlFixHead_t fixHead;
+
+	//变长部分，未来演进为TLV标准结构
+	//每一个内容，都是一个标准的IE，全局唯一编码，确保编解码的简单高效
+	//为了进一步提高效率，所有ID编码，包括CMDID/OPTID/IEID，均采用哈夫曼变长编码，00预留，01-EF为常用断码，F0xx - FFxx表示长码
+		
+	//软件清单
 	//Added by Shanchun for hcu inventory
 	char conHwUuid[12];//6B
 	char conHwType[3];//1B
 	char conHwVersion[5];//2B
 	char conSwDelivery[5];//1B
 	char conSwRelease[5];//2B
-
-	//Added by Shanchun for av upload
-	char conAvUpload[3];
-	//char conAvFileName[HCU_FILE_NAME_LENGTH_MAX];
-
-	char conTimeStamp[9]; //4B
-	char conNtimes[5];   //2B
-	char Content_r[14];
-	char FuncFlag_l[11];
-	char FuncFlag[IHU_CLOUD_BH_ITF_STD_XML_HEAD_MAX_LENGTH+1];
-	char FuncFlag_r[12];
-	char xml_r[7];
-}CloudBhItfDevReportStdXml_t;
+		
+	//软件下载
+	//Added by Shanchun for hcu sw download
+	char conSwDownload[3];
+	
+	//CCL状态报告的TLV
+	CloudBhItfHuixmlCclStateReport_t cclStateReport;
+	
+	//固定尾
+	CloudBhItfHuixmlFixTail_t fixTail;
+}StrCloudBhItfStdHuixml_t;
 
 
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//  HUIXML纯消息结构
+//
+//////////////////////////////////////////////////////////////////////////////////////////////////
+typedef struct StrMsgHuixmlCdataHeadMsgId
+{
+	UINT8 cmdId;
+	UINT8 optId;
+}StrMsgHuixmlCdataHeadMsgId_t;
+typedef struct StrMsgHuixmlCdataHead
+{
+	StrMsgHuixmlCdataHeadMsgId_t msgId;
+	UINT16 msgLen;
+}StrMsgHuixmlCdataHead_t;
+typedef struct StrMsgHuixmlCdataStandardMessage
+{
+	StrMsgHuixmlCdataHead_t cdataHead;
+	UINT16 msgLen;
+	UINT8  data[MAX_IHU_MSG_BUF_LENGTH_CLOUD];   //最长长度再行琢磨
+}StrMsgHuixmlCdataStandardMessage_t;
+
+//CCL IE定义
+#define IHU_HUIXML_CCL_AUTH_CONTENT_LEN_MAX 20
+typedef struct StrIeHuixmlCclAuthReq
+{
+	UINT16 cclAuthReqId;
+	UINT16 cclAuthReqLen;
+	UINT8  cclAuthReqInd;  //带什么内容：RFID、BLE-MAC等信息
+	UINT8  cclAuthContent[IHU_HUIXML_CCL_AUTH_CONTENT_LEN_MAX];
+}StrIeHuixmlCclAuthReq_t;
+typedef struct StrIeHuixmlCclAuthResp
+{
+	UINT16 cclAuthRespId;
+	UINT16 cclAuthRepLen;
+	UINT8  cclAuthRespInd; //授权与否 
+}StrIeHuixmlCclAuthResp_t;
+#define IHU_HUIXML_CCL_AUTH_RESP_YES 1
+#define IHU_HUIXML_CCL_AUTH_RESP_NO 2
+
+
+//CCL状态报告消息结构定义
+typedef struct StrIeHuixmlCclStateReportLock
+{
+	//CCL状态报告：Lock的TLV参数
+	UINT16 cclLockId;
+	UINT16 cclLockLen;
+	UINT8  cclLockState;
+}StrIeHuixmlCclStateReportLock_t;
+typedef struct StrIeHuixmlCclStateReportDoor
+{
+	//CCL状态报告：Door的TLV参数
+	UINT16 cclDoorId; 
+	UINT16 cclDoorLen;
+	UINT8  cclDoorState; 
+}StrIeHuixmlCclStateReportDoor_t;
+typedef struct StrIeHuixmlCclStateReportShake
+{
+	//CCL状态报告：Shake的TLV参数
+	UINT16 cclShakeId; 
+	UINT16 cclShakeLen; 
+	UINT8  cclShakeState; 
+}StrIeHuixmlCclStateReportShake_t;
+typedef struct StrIeHuixmlCclStateReportSmoke
+{
+	//CCL状态报告：Smoke的TLV参数
+	UINT16 cclSmokeId; 
+	UINT16 cclSmokeLen; 
+	UINT8  cclSmokeState; 
+}StrIeHuixmlCclStateReportSmoke_t;
+typedef struct StrIeHuixmlCclStateReportWater
+{
+	//CCL状态报告：Water的TLV参数
+	UINT16 cclWaterId; 
+	UINT16 cclWaterLen; 
+	UINT8  cclWaterState; 
+}StrIeHuixmlCclStateReportWater_t;
+typedef struct StrIeHuixmlCclStateReportFall
+{
+	//CCL状态报告：Fall的TLV参数
+	UINT16 cclFallId; 
+	UINT16 cclFallLen; 
+	UINT8  cclFallState; 
+}StrIeHuixmlCclStateReportFall_t;
+typedef struct StrIeHuixmlCclStateReportBat
+{
+	//CCL状态报告：Bat的TLV参数
+	UINT16 cclBatId;   //电池告警状态
+	UINT16 cclBatLen;  
+	UINT8  cclBatState;  
+}StrIeHuixmlCclStateReportBat_t;
+typedef struct StrIeHuixmlCclStateReportTemp
+{
+	//CCL状态报告：Temp的TLV参数
+	UINT16 cclTempId;  
+	UINT16 cclTempLen;
+	UINT16 cclTempVal; 
+}StrIeHuixmlCclStateReportTemp_t;
+typedef struct StrIeHuixmlCclStateReportHumid
+{
+	//CCL状态报告：Humid的TLV参数
+	UINT16 cclHumidId; 
+	UINT16 cclHumidLen; 
+	UINT16 cclHumidVal; 
+}StrIeHuixmlCclStateReportHumid_t;
+typedef struct StrIeHuixmlCclStateReportBattery
+{
+	//CCL状态报告：Humid的TLV参数
+	UINT16 cclBatteryId; //   电池剩余电量数值
+	UINT16 cclBatteryLen;  
+	UINT16 cclBatteryVal; 
+}StrIeHuixmlCclStateReportBattery_t;
+typedef struct StrIeHuixmlCclStateReportRssi
+{
+	//CCL状态报告：Rssi的TLV参数
+	UINT16 cclRssiId;  
+	UINT16 cclRssiLen;  
+	UINT16 cclRssiVal;  
+}StrIeHuixmlCclStateReportRssi_t;
+typedef struct StrIeHuixmlCclStateReportRsv1
+{
+	//CCL状态报告：Rsv1的TLV参数
+	UINT16 cclRsv1Id;  
+	UINT16 cclRsv1Len; 
+	UINT16 cclRsv1Val; 
+}StrIeHuixmlCclStateReportRsv1_t;
+typedef struct StrIeHuixmlCclStateReportRsv2
+{
+	//CCL状态报告：Rsv2的TLV参数
+	UINT16 cclRsv2Id;  
+	UINT16 cclRsv2Len; 
+	UINT16 cclRsv2Val; 
+}StrIeHuixmlCclStateReportRsv2_t;
+//状态报告的证实IE
+typedef struct StrIeHuixmlCclStateReportCfm
+{
+	UINT16 cclStateReportId;
+	UINT16 cclStateReportLen;
+	UINT8  cclAuthRespInd; 
+}StrIeHuixmlCclStateReportCfm_t;
+
+//消息结构定义
+
+//授权申请
+typedef struct StrMsgHuixmlCclAuthReq
+{
+	StrMsgHuixmlCdataHead_t cdataHead;
+	StrIeHuixmlCclAuthReq_t cclAuthReq;
+}StrMsgHuixmlCclAuthReq_t;
+typedef struct StrMsgHuixmlCclAuthResp
+{
+	StrMsgHuixmlCdataHead_t cdataHead;
+	StrIeHuixmlCclAuthResp_t cclAuthResp;
+}StrMsgHuixmlCclAuthResp_t;
+
+//CCL的状态报告TLV参数
+typedef struct StrMsgHuixmlCclStateReport
+{
+	StrMsgHuixmlCdataHead_t cdataHead;
+	StrIeHuixmlCclStateReportLock_t cclLock;
+	StrIeHuixmlCclStateReportDoor_t cclDoor;
+	StrIeHuixmlCclStateReportShake_t cclShake;
+	StrIeHuixmlCclStateReportSmoke_t cclSmoke;
+	StrIeHuixmlCclStateReportWater_t cclWater;
+	StrIeHuixmlCclStateReportFall_t cclFall;
+	StrIeHuixmlCclStateReportBat_t cclBat;
+	StrIeHuixmlCclStateReportTemp_t cclTemp;
+	StrIeHuixmlCclStateReportHumid_t cclHumid;
+	StrIeHuixmlCclStateReportBattery_t cclBattery;
+	StrIeHuixmlCclStateReportRssi_t cclRssi;
+	StrIeHuixmlCclStateReportRsv1_t cclRsv1;
+	StrIeHuixmlCclStateReportRsv2_t cclRsv2;
+}StrMsgHuixmlCclStateReport_t;
+typedef struct StrMsgHuixmlCclStateReportCfm
+{
+	StrMsgHuixmlCdataHead_t cdataHead;
+	StrIeHuixmlCclStateReportLock_t cclLock;
+}StrMsgHuixmlCclStateReportCfm_t;
 
 
 
