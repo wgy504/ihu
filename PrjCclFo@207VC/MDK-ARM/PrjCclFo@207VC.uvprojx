@@ -734,6 +734,11 @@
           <GroupName>L1vmfo</GroupName>
           <Files>
             <File>
+              <FileName>l1huitp_freeos.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\l1huitp_freeos.h</FilePath>
+            </File>
+            <File>
               <FileName>l1comdef_freeos.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l1vmfreeos\l1comdef_freeos.h</FilePath>
