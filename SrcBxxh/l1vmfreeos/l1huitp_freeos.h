@@ -7411,284 +7411,517 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_485_confirm
 
 //软件清单
 //HUITP_MSGID_uni_inventory_min                    = 0xA000,	
-//HUITP_MSGID_uni_inventory_req                    = 0xA000,	
-//HUITP_MSGID_uni_inventory_resp                   = 0xA080, 
+//HUITP_MSGID_uni_inventory_req                    = 0xA000,
+typedef struct StrMsg_HUITP_MSGID_uni_inventory_req
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_req_t baseReq;
+}StrMsg_HUITP_MSGID_uni_inventory_req_t;
+
+//HUITP_MSGID_uni_inventory_resp                   = 0xA080,
+typedef struct StrMsg_HUITP_MSGID_uni_inventory_resp
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
+	StrIe_HUITP_IEID_uni_inventory_hw_type_t hwTypeRespValue;
+	StrIe_HUITP_IEID_uni_inventory_hw_id_t hwIdRespValue;
+	StrIe_HUITP_IEID_uni_inventory_sw_rel_t swRelRespValue;
+	StrIe_HUITP_IEID_uni_inventory_sw_ver_t swVerRespValue;
+}StrMsg_HUITP_MSGID_uni_inventory_resp_t;
+
 //HUITP_MSGID_uni_inventory_report                 = 0xA081, 
+typedef struct StrMsg_HUITP_MSGID_uni_inventory_report
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_report_t baseReport;
+	StrIe_HUITP_IEID_uni_inventory_hw_type_t hwTypeReportValue;
+	StrIe_HUITP_IEID_uni_inventory_hw_id_t hwIdReportValue;
+	StrIe_HUITP_IEID_uni_inventory_sw_rel_t swRelReportValue;
+	StrIe_HUITP_IEID_uni_inventory_sw_ver_t swVerReportValue;
+}StrMsg_HUITP_MSGID_uni_inventory_report_t;
+
 //HUITP_MSGID_uni_inventory_confirm                    = 0xA001, 
+typedef struct StrMsg_HUITP_MSGID_uni_inventory_confirm
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
+}StrMsg_HUITP_MSGID_uni_inventory_confirm_t;
+
 //HUITP_MSGID_uni_inventory_max,
 
 //软件版本体
 //HUITP_MSGID_uni_sw_package_min                   = 0xA100,	
-//HUITP_MSGID_uni_sw_package_req                   = 0xA100,	
-//HUITP_MSGID_uni_sw_package_resp                  = 0xA180,	 
-//HUITP_MSGID_uni_sw_package_report                = 0xA181,	 
-//HUITP_MSGID_uni_sw_package_confirm                   = 0xA101, 
+//HUITP_MSGID_uni_sw_package_req                   = 0xA100,
+typedef struct StrMsg_HUITP_MSGID_uni_sw_package_req
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_req_t baseReq;
+	StrIe_HUITP_IEID_uni_com_segment_total_t segTotal;
+	StrIe_HUITP_IEID_uni_com_segment_index_t segIndex;
+	StrIe_HUITP_IEID_uni_sw_package_body_t swPackageBody;
+}StrMsg_HUITP_MSGID_uni_sw_package_req_t;
+
+//HUITP_MSGID_uni_sw_package_resp                  = 0xA180,
+typedef struct StrMsg_HUITP_MSGID_uni_sw_package_resp
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
+	StrIe_HUITP_IEID_uni_com_segment_total_t segTotal;
+	StrIe_HUITP_IEID_uni_com_segment_index_t segIndex;
+}StrMsg_HUITP_MSGID_uni_sw_package_resp_t;
+
+//HUITP_MSGID_uni_sw_package_report                = 0xA181,
+typedef struct StrMsg_HUITP_MSGID_uni_sw_package_report
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_report_t baseReport;
+	StrIe_HUITP_IEID_uni_com_segment_total_t segTotal;
+	StrIe_HUITP_IEID_uni_com_segment_index_t segIndex;
+}StrMsg_HUITP_MSGID_uni_sw_package_report_t;
+
+//HUITP_MSGID_uni_sw_package_confirm                   = 0xA101,
+typedef struct StrMsg_HUITP_MSGID_uni_sw_package_confirm
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
+	StrIe_HUITP_IEID_uni_com_segment_total_t segTotal;
+	StrIe_HUITP_IEID_uni_com_segment_index_t segIndex;
+	StrIe_HUITP_IEID_uni_sw_package_body_t swPackageBody;
+}StrMsg_HUITP_MSGID_uni_sw_package_confirm_t;
+
 //HUITP_MSGID_uni_sw_package_max,
 
 //ALARM REPORT
 //HUITP_MSGID_uni_alarm_info_min                   = 0xB000, 
-//HUITP_MSGID_uni_alarm_info_req                   = 0xB000, 
-//HUITP_MSGID_uni_alarm_info_resp                  = 0xB080, 
-//HUITP_MSGID_uni_alarm_info_report                = 0xB081, 
+//HUITP_MSGID_uni_alarm_info_req                   = 0xB000,
+typedef struct StrMsg_HUITP_MSGID_uni_alarm_info_req
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_req_t baseReq;
+}StrMsg_HUITP_MSGID_uni_alarm_info_req_t;
+
+//HUITP_MSGID_uni_alarm_info_resp                  = 0xB080,
+typedef struct StrMsg_HUITP_MSGID_uni_alarm_info_resp
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
+	StrIe_HUITP_IEID_uni_alarm_info_value_t respValue;
+}StrMsg_HUITP_MSGID_uni_alarm_info_resp_t;
+
+//HUITP_MSGID_uni_alarm_info_report                = 0xB081,
+typedef struct StrMsg_HUITP_MSGID_uni_alarm_info_report
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_report_t baseReport;
+	StrIe_HUITP_IEID_uni_alarm_info_value_t reportValue;	
+}StrMsg_HUITP_MSGID_uni_alarm_info_report_t;
+
 //HUITP_MSGID_uni_alarm_info_confirm                   = 0xB001, 
+typedef struct StrMsg_HUITP_MSGID_uni_alarm_info_confirm
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
+}StrMsg_HUITP_MSGID_uni_alarm_info_confirm_t;
+
 //HUITP_MSGID_uni_alarm_info_max,
 
 //PM Report
 //HUITP_MSGID_uni_performance_info_min             = 0xB100, 
-//HUITP_MSGID_uni_performance_info_req             = 0xB100, 
+//HUITP_MSGID_uni_performance_info_req             = 0xB100,
+typedef struct StrMsg_HUITP_MSGID_uni_performance_info_req
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_req_t baseReq;
+}StrMsg_HUITP_MSGID_uni_performance_info_req_t;
+
 //HUITP_MSGID_uni_performance_info_resp            = 0xB180, 
+typedef struct StrMsg_HUITP_MSGID_uni_performance_info_resp
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
+	StrIe_HUITP_IEID_uni_performance_info_value_t respValue;
+}StrMsg_HUITP_MSGID_uni_performance_info_resp_t;
+
 //HUITP_MSGID_uni_performance_info_report          = 0xB181, 
-//HUITP_MSGID_uni_performance_info_confirm             = 0xB101, 
+typedef struct StrMsg_HUITP_MSGID_uni_performance_info_report
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_report_t baseReport;
+	StrIe_HUITP_IEID_uni_performance_info_value_t reportValue;	
+}StrMsg_HUITP_MSGID_uni_performance_info_report_t;
+
+//HUITP_MSGID_uni_performance_info_confirm             = 0xB101,
+typedef struct StrMsg_HUITP_MSGID_uni_performance_info_confirm
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
+}StrMsg_HUITP_MSGID_uni_performance_info_confirm_t;
+
 //HUITP_MSGID_uni_performance_info_max,
 
 //设备基本信息
 //HUITP_MSGID_uni_equipment_info_min               = 0xF000,	
-//HUITP_MSGID_uni_equipment_info_req               = 0xF000,	
-//HUITP_MSGID_uni_equipment_info_resp              = 0xF080, 
+//HUITP_MSGID_uni_equipment_info_req               = 0xF000,
+typedef struct StrMsg_HUITP_MSGID_uni_equipment_info_req
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_req_t baseReq;
+}StrMsg_HUITP_MSGID_uni_equipment_info_req_t;
+
+//HUITP_MSGID_uni_equipment_info_resp              = 0xF080,
+typedef struct StrMsg_HUITP_MSGID_uni_equipment_info_resp
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
+	StrIe_HUITP_IEID_uni_equipment_info_value_t respValue;
+}StrMsg_HUITP_MSGID_uni_equipment_info_resp_t;
+
 //HUITP_MSGID_uni_equipment_info_report            = 0xF081, 
+typedef struct StrMsg_HUITP_MSGID_uni_equipment_info_report
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_report_t baseReport;
+	StrIe_HUITP_IEID_uni_equipment_info_value_t reportValue;	
+}StrMsg_HUITP_MSGID_uni_equipment_info_report_t;
+
 //HUITP_MSGID_uni_equipment_info_confirm               = 0xF001, 
+typedef struct StrMsg_HUITP_MSGID_uni_equipment_info_confirm
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
+}StrMsg_HUITP_MSGID_uni_equipment_info_confirm_t;
+
 //HUITP_MSGID_uni_equipment_info_max,
 
 //个人基本信息
 //HUITP_MSGID_uni_personal_info_min                = 0xF100,	
 //HUITP_MSGID_uni_personal_info_req                = 0xF100,	
+typedef struct StrMsg_HUITP_MSGID_uni_personal_info_req
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_req_t baseReq;
+}StrMsg_HUITP_MSGID_uni_personal_info_req_t;
+
 //HUITP_MSGID_uni_personal_info_resp               = 0xF180, 
-//HUITP_MSGID_uni_personal_info_report             = 0xF181,	 
-//HUITP_MSGID_uni_personal_info_confirm                = 0xF101,	 
+typedef struct StrMsg_HUITP_MSGID_uni_personal_info_resp
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
+	StrIe_HUITP_IEID_uni_personal_info_value_t respValue;
+}StrMsg_HUITP_MSGID_uni_personal_info_resp_t;
+
+//HUITP_MSGID_uni_personal_info_report             = 0xF181,
+typedef struct StrMsg_HUITP_MSGID_uni_personal_info_report
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_report_t baseReport;
+	StrIe_HUITP_IEID_uni_personal_info_value_t reportValue;	
+}StrMsg_HUITP_MSGID_uni_personal_info_report_t;
+
+//HUITP_MSGID_uni_personal_info_confirm                = 0xF101,
+typedef struct StrMsg_HUITP_MSGID_uni_personal_info_confirm
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
+}StrMsg_HUITP_MSGID_uni_personal_info_confirm_t;
+
 //HUITP_MSGID_uni_personal_info_max,
 
 //时间同步
 //HUITP_MSGID_uni_time_sync_min                    = 0xF200,
-//HUITP_MSGID_uni_time_sync_req                    = 0xF200,	
-//HUITP_MSGID_uni_time_sync_resp                   = 0xF280,	 
-//HUITP_MSGID_uni_time_sync_report                 = 0xF281,	 
-//HUITP_MSGID_uni_time_sync_confirm                    = 0xF201, 
+//HUITP_MSGID_uni_time_sync_req                    = 0xF200,
+typedef struct StrMsg_HUITP_MSGID_uni_time_sync_req
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_req_t baseReq;
+}StrMsg_HUITP_MSGID_uni_time_sync_req_t;
+
+//HUITP_MSGID_uni_time_sync_resp                   = 0xF280,
+typedef struct StrMsg_HUITP_MSGID_uni_time_sync_resp
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
+	StrIe_HUITP_IEID_uni_time_sync_value_t respValue;
+}StrMsg_HUITP_MSGID_uni_time_sync_resp_t;
+
+//HUITP_MSGID_uni_time_sync_report                 = 0xF281,
+typedef struct StrMsg_HUITP_MSGID_uni_time_sync_report
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_report_t baseReport;
+	StrIe_HUITP_IEID_uni_time_sync_value_t reportValue;	
+}StrMsg_HUITP_MSGID_uni_time_sync_report_t;
+
+//HUITP_MSGID_uni_time_sync_confirm                    = 0xF201,
+typedef struct StrMsg_HUITP_MSGID_uni_time_sync_confirm
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
+}StrMsg_HUITP_MSGID_uni_time_sync_confirm_t;
+
 //HUITP_MSGID_uni_time_sync_max,
 
 //读取数据
 //HUITP_MSGID_uni_general_read_data_min            = 0xF300,	
-//HUITP_MSGID_uni_general_read_data_req            = 0xF300,	
-//HUITP_MSGID_uni_general_read_data_resp           = 0xF380,	 
-//HUITP_MSGID_uni_general_read_data_report         = 0xF381, 
+//HUITP_MSGID_uni_general_read_data_req            = 0xF300,
+typedef struct StrMsg_HUITP_MSGID_uni_general_read_data_req
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_req_t baseReq;
+}StrMsg_HUITP_MSGID_uni_general_read_data_req_t;
+
+//HUITP_MSGID_uni_general_read_data_resp           = 0xF380,
+typedef struct StrMsg_HUITP_MSGID_uni_general_read_data_resp
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
+	StrIe_HUITP_IEID_uni_general_read_data_value_t respValue;
+}StrMsg_HUITP_MSGID_uni_general_read_data_resp_t;
+
+//HUITP_MSGID_uni_general_read_data_report         = 0xF381,
+typedef struct StrMsg_HUITP_MSGID_uni_general_read_data_report
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_report_t baseReport;
+	StrIe_HUITP_IEID_uni_general_read_data_value_t reportValue;	
+}StrMsg_HUITP_MSGID_uni_general_read_data_report_t;
+
 //HUITP_MSGID_uni_general_read_data_confirm            = 0xF301, 
+typedef struct StrMsg_HUITP_MSGID_uni_general_read_data_confirm
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
+}StrMsg_HUITP_MSGID_uni_general_read_data_confirm_t;
+
 //HUITP_MSGID_uni_general_read_data_max,
 
 //定时闹钟及久坐提醒
 //HUITP_MSGID_uni_clock_timeout_min                = 0xF400,
 //HUITP_MSGID_uni_clock_timeout_req                = 0xF400,	
-//HUITP_MSGID_uni_clock_timeout_resp               = 0xF480,	 
-//HUITP_MSGID_uni_clock_timeout_report             = 0xF481, 
-//HUITP_MSGID_uni_clock_timeout_confirm                = 0xF401, 
+typedef struct StrMsg_HUITP_MSGID_uni_clock_timeout_req
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_req_t baseReq;
+}StrMsg_HUITP_MSGID_uni_clock_timeout_req_t;
+
+//HUITP_MSGID_uni_clock_timeout_resp               = 0xF480,
+typedef struct StrMsg_HUITP_MSGID_uni_clock_timeout_resp
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
+	StrIe_HUITP_IEID_uni_clock_timeout_value_t respValue;
+}StrMsg_HUITP_MSGID_uni_clock_timeout_resp_t;
+
+//HUITP_MSGID_uni_clock_timeout_report             = 0xF481,
+typedef struct StrMsg_HUITP_MSGID_uni_clock_timeout_report
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_report_t baseReport;
+	StrIe_HUITP_IEID_uni_clock_timeout_value_t reportValue;	
+}StrMsg_HUITP_MSGID_uni_clock_timeout_report_t;
+
+//HUITP_MSGID_uni_clock_timeout_confirm            = 0xF401,
+typedef struct StrMsg_HUITP_MSGID_uni_clock_timeout_confirm
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
+}StrMsg_HUITP_MSGID_uni_clock_timeout_confirm_t;
+
 //HUITP_MSGID_uni_clock_timeout_max,
 
 //同步充电，双击情况
 //HUITP_MSGID_uni_sync_charging_min                = 0xF500,	
-//HUITP_MSGID_uni_sync_charging_req                = 0xF500,	
-//HUITP_MSGID_uni_sync_charging_resp               = 0xF580,	 
-//HUITP_MSGID_uni_sync_charging_report             = 0xF581, 
-//HUITP_MSGID_uni_sync_charging_confirm                = 0xF501, 
+//HUITP_MSGID_uni_sync_charging_req                = 0xF500,
+typedef struct StrMsg_HUITP_MSGID_uni_sync_charging_req
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_req_t baseReq;
+}StrMsg_HUITP_MSGID_uni_sync_charging_req_t;
+
+//HUITP_MSGID_uni_sync_charging_resp               = 0xF580,
+typedef struct StrMsg_HUITP_MSGID_uni_sync_charging_resp
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
+	StrIe_HUITP_IEID_uni_sync_charging_value_t respValue;
+}StrMsg_HUITP_MSGID_uni_sync_charging_resp_t;
+
+//HUITP_MSGID_uni_sync_charging_report             = 0xF581,
+typedef struct StrMsg_HUITP_MSGID_uni_sync_charging_report
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_report_t baseReport;
+	StrIe_HUITP_IEID_uni_sync_charging_value_t reportValue;	
+}StrMsg_HUITP_MSGID_uni_sync_charging_report_t;
+
+//HUITP_MSGID_uni_sync_charging_confirm            = 0xF501,
+typedef struct StrMsg_HUITP_MSGID_uni_sync_charging_confirm
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
+}StrMsg_HUITP_MSGID_uni_sync_charging_confirm_t;
+
 //HUITP_MSGID_uni_sync_charging_max,
 
 //同步通知信息
 //HUITP_MSGID_uni_sync_trigger_min                 = 0xF600,	
-//HUITP_MSGID_uni_sync_trigger_req                 = 0xF600,	
-//HUITP_MSGID_uni_sync_trigger_resp                = 0xF680,	 
-//HUITP_MSGID_uni_sync_trigger_report              = 0xF681, 
-//HUITP_MSGID_uni_sync_trigger_confirm                 = 0xF601, 
+//HUITP_MSGID_uni_sync_trigger_req                 = 0xF600,
+typedef struct StrMsg_HUITP_MSGID_uni_sync_trigger_req
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_req_t baseReq;
+}StrMsg_HUITP_MSGID_uni_sync_trigger_req_t;
+
+//HUITP_MSGID_uni_sync_trigger_resp                = 0xF680,
+typedef struct StrMsg_HUITP_MSGID_uni_sync_trigger_resp
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
+	StrIe_HUITP_IEID_uni_sync_trigger_value_t respValue;
+}StrMsg_HUITP_MSGID_uni_sync_trigger_resp_t;
+
+//HUITP_MSGID_uni_sync_trigger_report              = 0xF681,
+typedef struct StrMsg_HUITP_MSGID_uni_sync_trigger_report
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_report_t baseReport;
+	StrIe_HUITP_IEID_uni_sync_trigger_value_t reportValue;	
+}StrMsg_HUITP_MSGID_uni_sync_trigger_report_t;
+
+//HUITP_MSGID_uni_sync_trigger_confirm             = 0xF601, 
+typedef struct StrMsg_HUITP_MSGID_uni_sync_trigger_confirm
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
+}StrMsg_HUITP_MSGID_uni_sync_trigger_confirm_t;
+
 //HUITP_MSGID_uni_sync_trigger_max,
 
 //CMD CONTROL
 //HUITP_MSGID_uni_cmd_ctrl_min                     = 0xFD00,  
-//HUITP_MSGID_uni_cmd_ctrl_req                     = 0xFD00,  
-//HUITP_MSGID_uni_cmd_ctrl_resp                    = 0xFD80,  
-//HUITP_MSGID_uni_cmd_ctrl_report                  = 0xFD81, 
-//HUITP_MSGID_uni_cmd_ctrl_confirm                     = 0xFD01,
+//HUITP_MSGID_uni_cmd_ctrl_req                     = 0xFD00,
+typedef struct StrMsg_HUITP_MSGID_uni_cmd_ctrl_req
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_req_t baseReq;
+	StrIe_HUITP_IEID_uni_cmd_ctrl_send_t cmdSend;
+}StrMsg_HUITP_MSGID_uni_cmd_ctrl_req_t;
+
+//HUITP_MSGID_uni_cmd_ctrl_resp                    = 0xFD80, 
+typedef struct StrMsg_HUITP_MSGID_uni_cmd_ctrl_resp
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
+	StrIe_HUITP_IEID_uni_cmd_ctrl_confirm_t cmdCfm;
+}StrMsg_HUITP_MSGID_uni_cmd_ctrl_resp_t;
+
+//HUITP_MSGID_uni_cmd_ctrl_report                  = 0xFD81,
+typedef struct StrMsg_HUITP_MSGID_uni_cmd_ctrl_report
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_report_t baseReport;
+	StrIe_HUITP_IEID_uni_cmd_ctrl_send_t cmdSend;
+}StrMsg_HUITP_MSGID_uni_cmd_ctrl_report_t;
+
+//HUITP_MSGID_uni_cmd_ctrl_confirm                 = 0xFD01,
+typedef struct StrMsg_HUITP_MSGID_uni_cmd_ctrl_confirm
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
+	StrIe_HUITP_IEID_uni_cmd_ctrl_confirm_t cmdCfm;
+}StrMsg_HUITP_MSGID_uni_cmd_ctrl_confirm_t;
+
 //HUITP_MSGID_uni_cmd_ctrl_max,	
 
 //心跳
 //HUITP_MSGID_uni_heart_beat_min                   = 0xFE00, 
 //HUITP_MSGID_uni_heart_beat_req                   = 0xFE00, 
+typedef struct StrMsg_HUITP_MSGID_uni_heart_beat_req
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_req_t baseReq;
+	StrIe_HUITP_IEID_uni_heart_beat_ping_t ping;
+}StrMsg_HUITP_MSGID_uni_heart_beat_req_t;
+
 //HUITP_MSGID_uni_heart_beat_resp                  = 0xFE80, 
-//HUITP_MSGID_uni_heart_beat_report                = 0xFE81,  
-//HUITP_MSGID_uni_heart_beat_confirm                   = 0xFE01, 
+typedef struct StrMsg_HUITP_MSGID_uni_heart_beat_resp
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
+	StrIe_HUITP_IEID_uni_heart_beat_pong_t pong;
+}StrMsg_HUITP_MSGID_uni_heart_beat_resp_t;
+
+//HUITP_MSGID_uni_heart_beat_report                = 0xFE81,
+typedef struct StrMsg_HUITP_MSGID_uni_heart_beat_report
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_report_t baseReport;
+	StrIe_HUITP_IEID_uni_heart_beat_ping_t ping;
+}StrMsg_HUITP_MSGID_uni_heart_beat_report_t;
+
+//HUITP_MSGID_uni_heart_beat_confirm               = 0xFE01, 
+typedef struct StrMsg_HUITP_MSGID_uni_heart_beat_confirm
+{
+	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
+	StrIe_HUITP_IEID_uni_heart_beat_pong_t pong;
+}StrMsg_HUITP_MSGID_uni_heart_beat_confirm_t;
+
 //HUITP_MSGID_uni_heart_beat_max,
 
 //无效
 //HUITP_MSGID_uni_null                             = 0xFF,	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-typedef struct StrMsgHuixmlCdataHeadMsgId
-{
-	UINT8 cmdId;
-	UINT8 optId;
-}StrMsgHuixmlCdataHeadMsgId_t;
-typedef struct StrMsgHuixmlCdataStandardMessage
-{
-	StrMsgHuixmlCdataHeadMsgId_t msgId;
-	UINT16 msgLen;
-	UINT8  data[MAX_IHU_MSG_BUF_LENGTH_CLOUD];   //最长长度再行琢磨
-}StrMsgHuixmlCdataStandardMessage_t;
-
-//CCL状态报告消息结构定义
-typedef struct StrIeHuixmlCclStateReportLock
-{
-	//CCL状态报告：Lock的TLV参数
-	UINT16 ieId;
-	UINT16 ieLen;
-	UINT8  cclLockState;
-}StrIeHuixmlCclStateReportLock_t;
-typedef struct StrIeHuixmlCclStateReportDoor
-{
-	//CCL状态报告：Door的TLV参数
-	UINT16 ieId;
-	UINT16 ieLen;
-	UINT8  cclDoorState; 
-}StrIeHuixmlCclStateReportDoor_t;
-typedef struct StrIeHuixmlCclStateReportShake
-{
-	//CCL状态报告：Shake的TLV参数
-	UINT16 ieId;
-	UINT16 ieLen;
-	UINT8  cclShakeState; 
-}StrIeHuixmlCclStateReportShake_t;
-typedef struct StrIeHuixmlCclStateReportSmoke
-{
-	//CCL状态报告：Smoke的TLV参数
-	UINT16 ieId;
-	UINT16 ieLen;
-	UINT8  cclSmokeState; 
-}StrIeHuixmlCclStateReportSmoke_t;
-typedef struct StrIeHuixmlCclStateReportWater
-{
-	//CCL状态报告：Water的TLV参数
-	UINT16 ieId;
-	UINT16 ieLen;
-	UINT8  cclWaterState; 
-}StrIeHuixmlCclStateReportWater_t;
-typedef struct StrIeHuixmlCclStateReportFall
-{
-	//CCL状态报告：Fall的TLV参数
-	UINT16 ieId;
-	UINT16 ieLen;
-	UINT8  cclFallState; 
-}StrIeHuixmlCclStateReportFall_t;
-typedef struct StrIeHuixmlCclStateReportBat
-{
-	//CCL状态报告：Bat的TLV参数 //电池告警状态
-	UINT16 ieId;
-	UINT16 ieLen;
-	UINT8  cclBatState;  
-}StrIeHuixmlCclStateReportBat_t;
-typedef struct StrIeHuixmlCclStateReportTemp
-{
-	//CCL状态报告：Temp的TLV参数
-	UINT16 ieId;
-	UINT16 ieLen;
-	UINT16 cclTempVal; 
-}StrIeHuixmlCclStateReportTemp_t;
-typedef struct StrIeHuixmlCclStateReportHumid
-{
-	//CCL状态报告：Humid的TLV参数
-	UINT16 ieId;
-	UINT16 ieLen;
-	UINT16 cclHumidVal; 
-}StrIeHuixmlCclStateReportHumid_t;
-typedef struct StrIeHuixmlCclStateReportBattery
-{
-	//CCL状态报告：Humid的TLV参数//   电池剩余电量数值
-	UINT16 ieId;
-	UINT16 ieLen;
-	UINT16 cclBatteryVal; 
-}StrIeHuixmlCclStateReportBattery_t;
-typedef struct StrIeHuixmlCclStateReportRssi
-{
-	//CCL状态报告：Rssi的TLV参数
-	UINT16 ieId;
-	UINT16 ieLen;
-	UINT16 cclRssiVal;  
-}StrIeHuixmlCclStateReportRssi_t;
-typedef struct StrIeHuixmlCclStateReportRsv1
-{
-	//CCL状态报告：Rsv1的TLV参数
-	UINT16 ieId;
-	UINT16 ieLen;
-	UINT16 cclRsv1Val; 
-}StrIeHuixmlCclStateReportRsv1_t;
-typedef struct StrIeHuixmlCclStateReportRsv2
-{
-	//CCL状态报告：Rsv2的TLV参数
-	UINT16 ieId;
-	UINT16 ieLen;
-	UINT16 cclRsv2Val; 
-}StrIeHuixmlCclStateReportRsv2_t;
-//状态报告的证实IE
-typedef struct StrIeHuixmlCclStateReportCfm
-{
-	UINT16 ieId;
-	UINT16 ieLen;
-	UINT8  cclAuthRespInd; 
-}StrIeHuixmlCclStateReportCfm_t;
-
-//消息结构定义
-
-//授权申请
-typedef struct StrMsgHuixmlCclAuthReq
-{
-	StrMsgHuixmlCdataHeadMsgId_t msgId;
-	UINT16 msgLen;
-	//StrIeHuixmlCclAuthReq_t cclAuthReq;
-}StrMsgHuixmlCclAuthReq_t;
-typedef struct StrMsgHuixmlCclAuthResp
-{
-	StrMsgHuixmlCdataHeadMsgId_t msgId;
-	UINT16 msgLen;
-	//StrIeHuixmlCclAuthResp_t cclAuthResp;
-}StrMsgHuixmlCclAuthResp_t;
-
-//CCL的状态报告TLV参数
-typedef struct StrMsgHuixmlCclStateReport
-{
-	StrMsgHuixmlCdataHeadMsgId_t msgId;
-	UINT16 msgLen;
-	StrIeHuixmlCclStateReportLock_t cclLock;
-	StrIeHuixmlCclStateReportDoor_t cclDoor;
-	StrIeHuixmlCclStateReportShake_t cclShake;
-	StrIeHuixmlCclStateReportSmoke_t cclSmoke;
-	StrIeHuixmlCclStateReportWater_t cclWater;
-	StrIeHuixmlCclStateReportFall_t cclFall;
-	StrIeHuixmlCclStateReportBat_t cclBat;
-	StrIeHuixmlCclStateReportTemp_t cclTemp;
-	StrIeHuixmlCclStateReportHumid_t cclHumid;
-	StrIeHuixmlCclStateReportBattery_t cclBattery;
-	StrIeHuixmlCclStateReportRssi_t cclRssi;
-	StrIeHuixmlCclStateReportRsv1_t cclRsv1;
-	StrIeHuixmlCclStateReportRsv2_t cclRsv2;
-}StrMsgHuixmlCclStateReport_t;
-typedef struct StrMsgHuixmlCclStateReportCfm
-{
-	StrMsgHuixmlCdataHeadMsgId_t msgId;
-	UINT16 msgLen;
-	StrIeHuixmlCclStateReportLock_t cclLock;
-}StrMsgHuixmlCclStateReportCfm_t;
-
-*/
 
 #endif /* L1HUITP_H_ */
