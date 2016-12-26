@@ -4,6 +4,10 @@
 //近期需要完成的任务
 = 研究STM32的IAP功能
 
+//= ZJL, 2016 Dec.26, CURRENT_SW_DELIVERY R03.69 =>CCL项目
+= 继续完善HUITP协议的编解码
+= 修改过多，check-in先
+
 //= ZJL, 2016 Dec.25, CURRENT_SW_DELIVERY R03.68 =>CCL项目
 = 持续HUIXML的编解码工作
 = 暂时完成了MSGID/IEID/IE Structure的定义
