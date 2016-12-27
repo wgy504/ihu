@@ -17,122 +17,155 @@
 extern IhuSysEngParTable_t zIhuSysEngPar; //全局工程参数控制表
 
 //XML自定义标准的编码函数方式
-OPSTAT func_cloud_standard_xml_pack(StrCloudBhItfStdHuixml_t *xmlFormat, CloudDataSendBuf_t *buf)
-{	
-	//参数检查，其它参数无所谓
-	if (xmlFormat == NULL){
-		IhuErrorPrint("SPSVIRGO: Error CloudBhItfDevReportStdXml_t pointer!\n");
+//inputLen：这是包括MsgHead在内的所有缓冲区长度，正常情况下=sizeof(StrMsg_HUITP_MSGID_uni_general_message_t)，或者IE_BODY+4
+OPSTAT func_cloud_standard_xml_pack(UINT8 msgType, char *funcFlag, UINT16 msgId, StrMsg_HUITP_MSGID_uni_general_message_t *inputPar, UINT16 inputLen, CloudDataSendBuf_t *output)
+{
+	//声明一个缓冲区长度，不能超越消息体内容的最长长度
+	char s[MAX_IHU_MSG_BUF_LENGTH_CLOUD - HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN];
+	//参数检查：特别要检查输入的数据长度，正常不能超过100，因为HUIXML的数据区= (500(最长消息长度)-300(XML头))/2=100，这在大多数情况下都够用的，但在
+	//文件传输的条件下有可能不够。幸好，文件下载使用FFP模式，不用再担心这个了。
+	if ((inputLen <4) || (inputPar == NULL) || (inputLen > (MAX_IHU_MSG_BUF_LENGTH_CLOUD - HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN)/2) || \
+		(inputLen > (sizeof(StrMsg_HUITP_MSGID_uni_general_message_t) - HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN)))
+	{
+		IhuErrorPrint("SPSVIRGO: Error input pointer or message length!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
 	}
-	if (buf == NULL){
+	if (output == NULL)
+	{
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		IhuErrorPrint("SPSVIRGO: Error CloudDataSendBuf_t pointer!\n");
 		return IHU_FAILURE;
 	}
+	
+	//准备输出缓冲区
+	memset(output, 0, sizeof(CloudDataSendBuf_t));
 
 	//格式固定区域
-	strcpy(xmlFormat->fixHead.xml_l, "<xml>");
-	strcpy(xmlFormat->fixHead.ToUserName_l, "<ToUserName><![CDATA[");
-	strcpy(xmlFormat->fixHead.ToUserName_r, "]]></ToUserName>");
-	strcpy(xmlFormat->fixHead.FromUserName_l, "<FromUserName><![CDATA[");
-	strcpy(xmlFormat->fixHead.FromUserName_r, "]]></FromUserName>");
-	strcpy(xmlFormat->fixHead.CreateTime_l, "<CreateTime>");
-	strcpy(xmlFormat->fixHead.CreateTime_r, "</CreateTime>");
-	strcpy(xmlFormat->fixHead.MsgType_l, "<MsgType><![CDATA[");
-	strcpy(xmlFormat->fixHead.MsgType_r, "]]></MsgType>");
-	strcpy(xmlFormat->fixHead.Content_l, "<Content><![CDATA[");
-	strcpy(xmlFormat->fixTail.Content_r, "]]></Content>");
-	strcpy(xmlFormat->fixTail.FuncFlag_l, "<FuncFlag>");
-	strcpy(xmlFormat->fixTail.FuncFlag_r, "</FuncFlag>");
-	strcpy(xmlFormat->fixTail.xml_r, "</xml>");
+	strcat(output->buf, "<xml>");
+	strcat(output->buf, "<ToUserName><![CDATA[");
+	strcat(output->buf, zIhuSysEngPar.cloud.cloudBhServerName);
+	strcat(output->buf, "]]></ToUserName>");
+	strcat(output->buf, "<FromUserName><![CDATA[");
+	strcat(output->buf, zIhuSysEngPar.cloud.cloudBhIhuName);
+	strcat(output->buf, "]]></FromUserName>");
+	strcat(output->buf, "<CreateTime>");
+	//time(0); 如何取得时间戳，待完成，FreeRTOS里暂时没找到合适取得时间戳的方法
+	UINT32 timeStamp = (UINT32)__TIME__; 
+  sprintf(s, "%d", timeStamp);
+	strcat(output->buf, s);
+	strcat(output->buf, "</CreateTime>");
 	
-	//对于目前来说，数值固定内容
-	strcpy(xmlFormat->fixHead.ToUserName, zIhuSysEngPar.cloud.cloudBhServerName);
-	strcpy(xmlFormat->fixHead.FromUserName, zIhuSysEngPar.cloud.cloudBhIhuName);
-	UINT32 timeStamp = 0; //time(0); 如何取得时间戳，待定
-  sprintf(xmlFormat->fixHead.CreateTime, "%d", timeStamp);
-
-	//MsgType参数，必须由调用函数填入，因为它才能知晓这是什么样的内容体
-
-	//FuncFlag由上层填入，如果没有，这里自动填入0
-	if (strlen(xmlFormat->fixTail.FuncFlag) <=0 )	sprintf(xmlFormat->fixTail.FuncFlag, "%1d", 0);
-
-	//准备接龙字符串成为一整串
-	char s[MAX_IHU_MSG_BUF_LENGTH_CLOUD];
-	memset(s, 0, sizeof(s));
-	char da[MAX_IHU_MSG_BUF_LENGTH_CLOUD];
-	memset(da, 0, sizeof(da));
-	char tmp[3] = "";
-
-	//固定头部分
-	strcat(s, xmlFormat->fixHead.xml_l);
-	strcat(s, xmlFormat->fixHead.ToUserName_l);
-	strcat(s, xmlFormat->fixHead.ToUserName);
-	strcat(s, xmlFormat->fixHead.ToUserName_r);
-	strcat(s, xmlFormat->fixHead.FromUserName_l);
-	strcat(s, xmlFormat->fixHead.FromUserName);
-	strcat(s, xmlFormat->fixHead.FromUserName_r);
-	strcat(s, xmlFormat->fixHead.CreateTime_l);
-	strcat(s, xmlFormat->fixHead.CreateTime);
-	strcat(s, xmlFormat->fixHead.CreateTime_r);
-	strcat(s, xmlFormat->fixHead.MsgType_l);
-	strcat(s, xmlFormat->fixHead.MsgType);
-	strcat(s, xmlFormat->fixHead.MsgType_r);
-	strcat(s, xmlFormat->fixHead.Content_l);
-	//顺序是编码的黄金规则，千万不能错，否则就无法解开了!!!
-	//char conCmdId[3];
-	strcat(s, xmlFormat->fixHead.conCmdId);
-
-	//所有变长部分
-	//char conOptId[3]; //1B
-	strcat(da, xmlFormat->fixHead.conOptId);
-
-	//char conSwDownload[3]; //1B
-	strcat(da, xmlFormat->conSwDownload);
-
-	//strcat(da, xmlFormat->conHwUuid);
-	strcat(da, xmlFormat->conHwType);
-	strcat(da, xmlFormat->conHwVersion);
-	strcat(da, xmlFormat->conSwDelivery);
-	strcat(da, xmlFormat->conSwRelease);
-
-	//获取变长部分的长度, Len=0的情况存在，比如Heart_Beat消息，这里为了统一处理函数的简化，不做过分的区别对待和处理，尽量让处理函数通用化
-	int len = 0;
-	len = strlen(da);
-	//if ((len < 0) || ((len % 2) != 0) || (len > MAX_IHU_MSG_BUF_LENGTH)){
-	if ((len < 0) || (len > MAX_IHU_MSG_BUF_LENGTH)){
-		IhuErrorPrint("SPSVIRGO: No data to be pack or too long length of data content %d!!!\n", len);
+	//Message Type content
+	strcat(output->buf, "<MsgType><![CDATA[");
+	if      (msgType == IHU_CLOUD_BH_MSG_TYPE_DEVICE_REPORT_UINT8) strcat(output->buf, IHU_CLOUD_BH_MSG_TYPE_DEVICE_REPORT_STRING);
+	else if (msgType == IHU_CLOUD_BH_MSG_TYPE_DEVICE_CONTROL_UINT8) strcat(output->buf, IHU_CLOUD_BH_MSG_TYPE_DEVICE_CONTROL_STRING);
+	else if (msgType == IHU_CLOUD_BH_MSG_TYPE_HEAT_BEAT_UINT8) strcat(output->buf, IHU_CLOUD_BH_MSG_TYPE_HEAT_BEAT_STRING);
+	else if (msgType == IHU_CLOUD_BH_MSG_TYPE_BIZ_ITG_UINT8) strcat(output->buf, IHU_CLOUD_BH_MSG_TYPE_BIZ_ITG_STRING);
+	else if (msgType == IHU_CLOUD_BH_MSG_TYPE_ALARM_REPORT_UINT8) strcat(output->buf, IHU_CLOUD_BH_MSG_TYPE_ALARM_REPORT_STRING);
+	else if (msgType == IHU_CLOUD_BH_MSG_TYPE_PM_REPORT_UINT8) strcat(output->buf, IHU_CLOUD_BH_MSG_TYPE_PM_REPORT_STRING);
+	else {
+		IhuErrorPrint("SPSVIRGO: Error Message Type input!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
 	}
+	strcat(output->buf, "]]></MsgType>");
+	
+	//Content starting
+	strcat(output->buf, "<Content><![CDATA[");
 
-	len = len / 2;  //字节长度，而非字符串长度
-
-
-	//如果长度=0,则正好，包含一个长度域=0的东东，非常好！省得底层收到的长度=1的HEART_BEAT消息
-	//char conLen[3];  //1B
-	sprintf(tmp, "%02X", len & 0xFF);
-	strcat(s, tmp);
-
-	//变长部分
-	strcat(s, da);
+	//筛选出变长的消息结构，独立进行处理，剩下的统一处理
+	switch(msgId)
+	{
+		case HUITP_MSGID_uni_ccl_lock_report:
+			if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX > HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER){
+				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+				IhuErrorPrint("SPSVIRGO: Error defination on max len of MSGID = HUITP_MSGID_uni_ccl_lock_report structure!\n");
+				return IHU_FAILURE;
+			}
+			else if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX < HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER){
+				//需要将缓冲区进行一定程度的移动
+				//由于UINT8  lockState[HUITP_IEID_UNI_CCL_LOCK_MAX_NUMBER]处于最后一块，所以还是不需要采取任何行动
+				//注意inputLen跟着系统配置的IHU_CCL_SENSOR_LOCK_NUMBER_MAX走，而非跟着HUITP_IEID_UNI_CCL_LOCK_MAX_NUMBER走
+			}
+			break;
+			
+		case HUITP_MSGID_uni_ccl_door_report:
+			if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX > HUITP_IEID_UNI_CCL_LOCK_MAX_NUMBER){
+				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+				IhuErrorPrint("SPSVIRGO: Error defination on max len of MSGID = HUITP_MSGID_uni_ccl_door_report structure!\n");
+				return IHU_FAILURE;
+			}
+			else if ((IHU_CCL_SENSOR_LOCK_NUMBER_MAX < HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER) || (IHU_CCL_SENSOR_LOCK_NUMBER_MAX < HUITP_IEID_UNI_CCL_LOCK_MAX_NUMBER)){
+				//需要将缓冲区进行一定程度的移动
+				//由于UINT8  lockState[HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER]处于最后一块，所以还是不需要采取任何行动
+				//注意inputLen跟着系统配置的IHU_CCL_SENSOR_LOCK_NUMBER_MAX走，而非跟着HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER走				
+			}	
+			break;
+			
+		case HUITP_MSGID_uni_ccl_state_report:
+			if ((IHU_CCL_SENSOR_LOCK_NUMBER_MAX > HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER) || (IHU_CCL_SENSOR_LOCK_NUMBER_MAX > HUITP_IEID_UNI_CCL_LOCK_MAX_NUMBER)){
+				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+				IhuErrorPrint("SPSVIRGO: Error defination on max len of MSGID = HUITP_MSGID_uni_ccl_state_report structure!\n");
+				return IHU_FAILURE;
+			}
+			else if ((IHU_CCL_SENSOR_LOCK_NUMBER_MAX < HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER) || (IHU_CCL_SENSOR_LOCK_NUMBER_MAX < HUITP_IEID_UNI_CCL_LOCK_MAX_NUMBER)){
+				//需要将缓冲区进行一定程度的移动
+				//将StrIe_HUITP_IEID_uni_ccl_door_state_t移上来
+				memcpy(inputPar+4+sizeof(StrIe_HUITP_IEID_uni_com_report_t)+IHU_CCL_SENSOR_LOCK_NUMBER_MAX,\
+					inputPar+4+sizeof(StrIe_HUITP_IEID_uni_com_report_t)+sizeof(StrIe_HUITP_IEID_uni_ccl_lock_state_t), IHU_CCL_SENSOR_LOCK_NUMBER_MAX);
+				//将剩下的移上来
+				memcpy(inputPar+4+sizeof(StrIe_HUITP_IEID_uni_com_report_t)+ 2*IHU_CCL_SENSOR_LOCK_NUMBER_MAX,\
+					inputPar+4+sizeof(StrIe_HUITP_IEID_uni_com_report_t)+sizeof(StrIe_HUITP_IEID_uni_ccl_lock_state_t)+sizeof(StrIe_HUITP_IEID_uni_ccl_door_state_t), \
+					inputLen-4-sizeof(StrIe_HUITP_IEID_uni_com_report_t)-2*IHU_CCL_SENSOR_LOCK_NUMBER_MAX);
+			}
+			break;
+					
+		case HUITP_MSGID_uni_sw_package_req:
+			//因为只有一个边长IE，且IE正好处于最后一个结构部分，所以不需要干啥
+			break;
+		
+		case HUITP_MSGID_uni_sw_package_confirm:
+			//因为只有一个边长IE，且IE正好处于最后一个结构部分，所以不需要干啥
+			break;
+		
+		default:
+			break;
+	}
+	
+	//准备接龙字符串成为一整串
+	memset(s, 0, sizeof(s));
+	int i = 0;
+	char tmp[3]="";
+	for (i=0; i<inputLen; i++){
+		memset(tmp, 0, sizeof(tmp));
+		sprintf(tmp, "%02X", (UINT8*)(inputPar+i));
+		strcat(s, tmp);
+	}
+	if ((strlen(s) < 4) || (strlen(s) > (MAX_IHU_MSG_BUF_LENGTH_CLOUD - HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN))){
+		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+		IhuErrorPrint("SPSVIRGO: No data to be pack or too long length of data content %d!\n", strlen(s));
+		return IHU_FAILURE;
+	}
+	//消息BODY的长度已经在msgLen中，不需要再填入，已经由上层在生成消息的时候填好了，所以这里不再需要再行统计
+	strcat(output->buf, s);	
 
 	//Finish content part
-	strcat(s, xmlFormat->fixTail.Content_r);
-
+	strcat(output->buf, "]]></Content>");
+	
 	//固定尾部分
-	strcat(s, xmlFormat->fixTail.FuncFlag_l);
-	strcat(s, xmlFormat->fixTail.FuncFlag);
-	strcat(s, xmlFormat->fixTail.FuncFlag_r);
-	strcat(s, xmlFormat->fixTail.xml_r);
+	strcat(output->buf, "<FuncFlag>");
+	if (funcFlag == NULL) strcat(output->buf, "0");
+	else strcat(output->buf, funcFlag);
+	strcat(output->buf, "</FuncFlag>");
+	strcat(output->buf, "</xml>");
 
-	//存入返回参量中
-	strcpy(buf->buf, s);
-	buf->bufferLen = strlen(s) + 4;
+	//存入返回参量中：这个长度域其实也没有太大的用处
+	output->bufferLen = strlen(s);
+
+	//返回
 	return IHU_SUCCESS;
 }
-
 
 /*
 OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)

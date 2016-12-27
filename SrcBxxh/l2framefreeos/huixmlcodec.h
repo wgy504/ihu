@@ -33,7 +33,7 @@
 #endif
 
 //XML message pack/unpack
-extern OPSTAT func_cloud_standard_xml_pack(StrCloudBhItfStdHuixml_t *xmlFormat, CloudDataSendBuf_t *buf);
+extern OPSTAT func_cloud_standard_xml_pack(UINT8 msgType, char *funcFlag, UINT16 msgId, StrMsg_HUITP_MSGID_uni_general_message_t *inputPar, UINT16 inputLen, CloudDataSendBuf_t *output);
 extern OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv);
 extern OPSTAT func_cloud_standard_xml_heart_beat_msg_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv);
 extern OPSTAT func_cloud_standard_xml_emc_msg_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv);
