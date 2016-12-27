@@ -21,7 +21,6 @@
 	#include "vmfreeoslayer.h"
 	#include "l1comdef_freeos.h"
 	#include "l1timer_freeos.h"
-	#include "l3ccl.h"
 	#include "l2spsvirgo.h"	
 	
 #elif ((IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID) ||\
@@ -33,6 +32,10 @@
 #else
 #endif
 
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+	#include "l3ccl.h"
+#else
+#endif
 
 //State definition
 //#define FSM_STATE_ENTRY  0x00
@@ -50,22 +53,23 @@ enum FSM_STATE_DIDOCAP
 extern FsmStateItem_t FsmDidocap[];
 
 //本地需要用到的核心参数
-typedef struct strIhuCclDidoPar
-{	
-	UINT8 cclDidoWorkingMode;
-	com_sensor_status_t sensor;
-	bool flagSensorLastTimeScanFault;
-	bool flagSensorThisTimeScanFault;
-	bool flagDoorLockLastTimeScanFault;  //单独为门锁建立的故障跟踪，以便防止关门锁信号与故障恢复报告之间的冲突
-	bool flagDoorLockThisTimeScanFault;
-}strIhuCclDidoPar_t;
-
-#define IHU_CCL_DIDO_SENSOR_INDEX_LOCK 0
-#define IHU_CCL_DIDO_SENSOR_INDEX_DOOR 1
-#define IHU_CCL_DIDO_SENSOR_INDEX_SMOKE 2
-#define IHU_CCL_DIDO_SENSOR_INDEX_WATER 3
-#define IHU_CCL_DIDO_SENSOR_INDEX_FALL 4
-#define IHU_CCL_DIDO_SENSOR_INDEX_BAT 5
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+	typedef struct strIhuCclDidoPar
+	{	
+		UINT8 cclDidoWorkingMode;
+		com_sensor_status_t sensor;
+		bool flagSensorLastTimeScanFault;
+		bool flagSensorThisTimeScanFault;
+		bool flagDoorLockLastTimeScanFault;  //单独为门锁建立的故障跟踪，以便防止关门锁信号与故障恢复报告之间的冲突
+		bool flagDoorLockThisTimeScanFault;
+	}strIhuCclDidoPar_t;
+	#define IHU_CCL_DIDO_SENSOR_INDEX_LOCK 0
+	#define IHU_CCL_DIDO_SENSOR_INDEX_DOOR 1
+	#define IHU_CCL_DIDO_SENSOR_INDEX_SMOKE 2
+	#define IHU_CCL_DIDO_SENSOR_INDEX_WATER 3
+	#define IHU_CCL_DIDO_SENSOR_INDEX_FALL 4
+	#define IHU_CCL_DIDO_SENSOR_INDEX_BAT 5
+#endif
 
 //DIDO工作状态
 #define IHU_CCL_DIDO_WORKING_MODE_NONE 0

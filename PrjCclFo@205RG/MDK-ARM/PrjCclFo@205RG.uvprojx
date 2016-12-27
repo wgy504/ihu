@@ -798,11 +798,36 @@
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l1vmfreeos\mod_hal_rfid.h</FilePath>
             </File>
+            <File>
+              <FileName>l1vmfo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\l1vmfo.c</FilePath>
+            </File>
+            <File>
+              <FileName>l1vmfo.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\l1vmfo.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>L2frame</GroupName>
           <Files>
+            <File>
+              <FileName>huitp.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l2framefreeos\huitp.h</FilePath>
+            </File>
+            <File>
+              <FileName>huixmlcodec.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l2framefreeos\huixmlcodec.h</FilePath>
+            </File>
+            <File>
+              <FileName>huixmlcodec.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l2framefreeos\huixmlcodec.c</FilePath>
+            </File>
             <File>
               <FileName>l2adclibra.c</FileName>
               <FileType>1</FileType>
@@ -854,16 +879,6 @@
               <FilePath>..\..\SrcBxxh\l2framefreeos\l2ledpisces.h</FilePath>
             </File>
             <File>
-              <FileName>l2pwmtaurus.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l2framefreeos\l2pwmtaurus.c</FilePath>
-            </File>
-            <File>
-              <FileName>l2pwmtaurus.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l2framefreeos\l2pwmtaurus.h</FilePath>
-            </File>
-            <File>
               <FileName>l2spileo.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\SrcBxxh\l2framefreeos\l2spileo.c</FilePath>
@@ -892,6 +907,16 @@
               <FileName>l2canvela.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l2framefreeos\l2canvela.h</FilePath>
+            </File>
+            <File>
+              <FileName>l2dcmiaris.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l2framefreeos\l2dcmiaris.c</FilePath>
+            </File>
+            <File>
+              <FileName>l2dcmiaris.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l2framefreeos\l2dcmiaris.h</FilePath>
             </File>
           </Files>
         </Group>

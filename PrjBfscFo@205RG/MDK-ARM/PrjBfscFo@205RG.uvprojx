@@ -768,6 +768,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l1vmfreeos\vmfreeoslayer.h</FilePath>
             </File>
+            <File>
+              <FileName>l1vmfo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\l1vmfo.c</FilePath>
+            </File>
+            <File>
+              <FileName>l1vmfo.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\l1vmfo.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

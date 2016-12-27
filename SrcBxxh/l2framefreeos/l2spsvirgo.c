@@ -69,21 +69,23 @@ FsmStateItem_t FsmSpsvirgo[] =
 
 //Global variables defination
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+	UINT8 zIhuGprsOperationFlag = 0;
+
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-//extern vu8 SPS_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN];	//串口1数据接收缓冲区 
-//extern vu8 SPS_GPRS_R_State;						//串口1接收状态
-//extern vu16 SPS_GPRS_R_Count;						//当前接收数据的字节数 	 
-//extern vu8 SPS_RFID_R_Buff[SPS_RFID_REC_MAXLEN];	//串口1数据接收缓冲区 
-//extern vu8 SPS_RFID_R_State;						//串口1接收状态
-//extern vu16 SPS_RFID_R_Count;						//当前接收数据的字节数 	 
-//extern vu8 SPS_BLE_R_Buff[SPS_BLE_REC_MAXLEN];	//串口1数据接收缓冲区 
-//extern vu8 SPS_BLE_R_State;						//串口1接收状态
-//extern vu16 SPS_BLE_R_Count;						//当前接收数据的字节数 	 
-//extern vu8 SPS_SPARE1_R_Buff[SPS_SPARE1_REC_MAXLEN];	//串口1数据接收缓冲区 
-//extern vu8 SPS_SPARE1_R_State;						//串口1接收状态
-//extern vu16 SPS_SPARE1_R_Count;						//当前接收数据的字节数
-UINT8 zIhuGprsOperationFlag = 0;
-strIhuCclSpsPar_t zIhuCclSpsvirgoCtrlTable;
+	//extern vu8 SPS_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN];	//串口1数据接收缓冲区 
+	//extern vu8 SPS_GPRS_R_State;						//串口1接收状态
+	//extern vu16 SPS_GPRS_R_Count;						//当前接收数据的字节数 	 
+	//extern vu8 SPS_RFID_R_Buff[SPS_RFID_REC_MAXLEN];	//串口1数据接收缓冲区 
+	//extern vu8 SPS_RFID_R_State;						//串口1接收状态
+	//extern vu16 SPS_RFID_R_Count;						//当前接收数据的字节数 	 
+	//extern vu8 SPS_BLE_R_Buff[SPS_BLE_REC_MAXLEN];	//串口1数据接收缓冲区 
+	//extern vu8 SPS_BLE_R_State;						//串口1接收状态
+	//extern vu16 SPS_BLE_R_Count;						//当前接收数据的字节数 	 
+	//extern vu8 SPS_SPARE1_R_Buff[SPS_SPARE1_REC_MAXLEN];	//串口1数据接收缓冲区 
+	//extern vu8 SPS_SPARE1_R_State;						//串口1接收状态
+	//extern vu16 SPS_SPARE1_R_Count;						//当前接收数据的字节数
+	UINT8 zIhuGprsOperationFlag = 0;
+	strIhuCclSpsPar_t zIhuCclSpsvirgoCtrlTable;
 #else
 #endif
 

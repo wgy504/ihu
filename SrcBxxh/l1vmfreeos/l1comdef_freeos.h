@@ -9,7 +9,6 @@
 #define L1VMFREEOS_L1COMDEF_FREEOS_H_
 
 #include "vmfreeoslayer.h"
-#include "l1huitp_freeos.h"
 
 
 //自定义存储数据结构

@@ -78,12 +78,13 @@ typedef struct strIhuBfscAdcWeightPar
 #define IHU_CCL_ADC_WORKING_MODE_INVALID 0xFF
 
 //本地需要用到的核心参数
-typedef struct strIhuCclAdcPar
-{	
-	UINT8 cclAdcWorkingMode;
-	com_sensor_status_t sensor;
-}strIhuCclAdcPar_t;
-
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+	typedef struct strIhuCclAdcPar
+	{	
+		UINT8 cclAdcWorkingMode;
+		com_sensor_status_t sensor;
+	}strIhuCclAdcPar_t;
+#endif
 
 //API
 extern OPSTAT fsm_adclibra_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);

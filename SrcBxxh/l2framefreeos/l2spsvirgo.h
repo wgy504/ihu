@@ -48,13 +48,14 @@ enum FSM_STATE_SPSVIRGO
 //Global variables
 extern FsmStateItem_t FsmSpsvirgo[];
 
-//本地需要用到的核心参数
-typedef struct strIhuCclSpsPar
-{	
-	UINT8 cclSpsWorkingMode;
-	com_sensor_status_t sensor;
-}strIhuCclSpsPar_t;
-
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+	//本地需要用到的核心参数
+	typedef struct strIhuCclSpsPar
+	{	
+		UINT8 cclSpsWorkingMode;
+		com_sensor_status_t sensor;
+	}strIhuCclSpsPar_t;
+#endif
 
 //SPS工作状态
 #define IHU_CCL_SPS_WORKING_MODE_NONE 0

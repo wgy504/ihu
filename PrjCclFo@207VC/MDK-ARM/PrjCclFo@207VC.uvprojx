@@ -734,11 +734,6 @@
           <GroupName>L1vmfo</GroupName>
           <Files>
             <File>
-              <FileName>l1huitp_freeos.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l1vmfreeos\l1huitp_freeos.h</FilePath>
-            </File>
-            <File>
               <FileName>l1comdef_freeos.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l1vmfreeos\l1comdef_freeos.h</FilePath>
@@ -808,6 +803,21 @@
         <Group>
           <GroupName>L2frame</GroupName>
           <Files>
+            <File>
+              <FileName>huitp.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l2framefreeos\huitp.h</FilePath>
+            </File>
+            <File>
+              <FileName>huixmlcodec.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l2framefreeos\huixmlcodec.h</FilePath>
+            </File>
+            <File>
+              <FileName>huixmlcodec.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l2framefreeos\huixmlcodec.c</FilePath>
+            </File>
             <File>
               <FileName>l2adclibra.c</FileName>
               <FileType>1</FileType>
@@ -897,16 +907,6 @@
               <FileName>l2dcmiaris.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l2framefreeos\l2dcmiaris.h</FilePath>
-            </File>
-            <File>
-              <FileName>huixmlcodec.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l2framefreeos\huixmlcodec.c</FilePath>
-            </File>
-            <File>
-              <FileName>huixmlcodec.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l2framefreeos\huixmlcodec.h</FilePath>
             </File>
           </Files>
         </Group>

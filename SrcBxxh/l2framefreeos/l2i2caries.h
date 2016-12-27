@@ -69,11 +69,13 @@ typedef struct strIhuBfscI2cMotoPar
 #define IHU_CCL_I2C_WORKING_MODE_INVALID 0xFF
 
 //本地需要用到的核心参数
-typedef struct strIhuCclI2cPar
-{	
-	UINT8 cclI2cWorkingMode;
-	com_sensor_status_t sensor;
-}strIhuCclI2cPar_t;
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+	typedef struct strIhuCclI2cPar
+	{	
+		UINT8 cclI2cWorkingMode;
+		com_sensor_status_t sensor;
+	}strIhuCclI2cPar_t;
+#endif
 
 //API
 extern OPSTAT fsm_i2caries_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);

@@ -1,12 +1,12 @@
 /*
- * l1huitp.h
+ * huitp.h
  *
  *  Created on: 2016年12月25日
  *      Author: test
  */
 
-#ifndef L1HUITP_H_
-#define L1HUITP_H_
+#ifndef HUITP_H_
+#define HUITP_H_
 
 #include "vmfreeoslayer.h"
 
@@ -7924,4 +7924,4 @@ typedef struct StrMsg_HUITP_MSGID_uni_heart_beat_confirm
 //无效
 //HUITP_MSGID_uni_null                             = 0xFF,	
 
-#endif /* L1HUITP_H_ */
+#endif /* HUITP_H_ */
