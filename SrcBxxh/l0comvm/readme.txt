@@ -4,6 +4,9 @@
 //近期需要完成的任务
 = 研究STM32的IAP功能
 
+//= ZJL, 2016 Dec.27, CURRENT_SW_DELIVERY R03.71 =>CCL项目
+= 解码基础部分
+
 //= ZJL, 2016 Dec.27, CURRENT_SW_DELIVERY R03.70 =>CCL项目
 = 为HUITP定义常量，解决字符串长度问题
 = 编译205VC，待删除，因为全部换成了207VC板子了

@@ -22,6 +22,8 @@ OPSTAT func_cloud_standard_xml_pack(UINT8 msgType, char *funcFlag, UINT16 msgId,
 {
 	//声明一个缓冲区长度，不能超越消息体内容的最长长度
 	char s[MAX_IHU_MSG_BUF_LENGTH_CLOUD - HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN];
+	UINT8 tt[HUITP_MSG_BUF_BODY_ONLY_MAX_LEN];
+	
 	//参数检查：特别要检查输入的数据长度，正常不能超过100，因为HUIXML的数据区= (500(最长消息长度)-300(XML头))/2=100，这在大多数情况下都够用的，但在
 	//文件传输的条件下有可能不够。幸好，文件下载使用FFP模式，不用再担心这个了。
 	if ((inputLen <4) || (inputPar == NULL) || (inputLen > (MAX_IHU_MSG_BUF_LENGTH_CLOUD - HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN)/2) || \
@@ -112,23 +114,20 @@ OPSTAT func_cloud_standard_xml_pack(UINT8 msgType, char *funcFlag, UINT16 msgId,
 			else if ((IHU_CCL_SENSOR_LOCK_NUMBER_MAX < HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER) || (IHU_CCL_SENSOR_LOCK_NUMBER_MAX < HUITP_IEID_UNI_CCL_LOCK_MAX_NUMBER)){
 				//需要将缓冲区进行一定程度的移动
 				//将StrIe_HUITP_IEID_uni_ccl_door_state_t移上来
-				memcpy(inputPar+4+sizeof(StrIe_HUITP_IEID_uni_com_report_t)+IHU_CCL_SENSOR_LOCK_NUMBER_MAX,\
-					inputPar+4+sizeof(StrIe_HUITP_IEID_uni_com_report_t)+sizeof(StrIe_HUITP_IEID_uni_ccl_lock_state_t), IHU_CCL_SENSOR_LOCK_NUMBER_MAX);
+				memset(tt, 0, sizeof(tt));
+				memcpy(tt, inputPar+4+sizeof(StrIe_HUITP_IEID_uni_com_report_t)+sizeof(StrIe_HUITP_IEID_uni_ccl_lock_state_t), IHU_CCL_SENSOR_LOCK_NUMBER_MAX);
+				memcpy(inputPar+4+sizeof(StrIe_HUITP_IEID_uni_com_report_t)+IHU_CCL_SENSOR_LOCK_NUMBER_MAX, tt, IHU_CCL_SENSOR_LOCK_NUMBER_MAX);
 				//将剩下的移上来
-				memcpy(inputPar+4+sizeof(StrIe_HUITP_IEID_uni_com_report_t)+ 2*IHU_CCL_SENSOR_LOCK_NUMBER_MAX,\
-					inputPar+4+sizeof(StrIe_HUITP_IEID_uni_com_report_t)+sizeof(StrIe_HUITP_IEID_uni_ccl_lock_state_t)+sizeof(StrIe_HUITP_IEID_uni_ccl_door_state_t), \
+				memset(tt, 0, sizeof(tt));
+				memcpy(tt, inputPar+4+sizeof(StrIe_HUITP_IEID_uni_com_report_t)+sizeof(StrIe_HUITP_IEID_uni_ccl_lock_state_t)+sizeof(StrIe_HUITP_IEID_uni_ccl_door_state_t), \
 					inputLen-4-sizeof(StrIe_HUITP_IEID_uni_com_report_t)-2*IHU_CCL_SENSOR_LOCK_NUMBER_MAX);
+				memcpy(inputPar+4+sizeof(StrIe_HUITP_IEID_uni_com_report_t)+ 2*IHU_CCL_SENSOR_LOCK_NUMBER_MAX, tt, \
+					inputLen-4-sizeof(StrIe_HUITP_IEID_uni_com_report_t)-2*IHU_CCL_SENSOR_LOCK_NUMBER_MAX);
+				//移动之后，将末尾清0
+				memset(inputPar+inputLen, 0, (HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER + HUITP_IEID_UNI_CCL_LOCK_MAX_NUMBER - 2*IHU_CCL_SENSOR_LOCK_NUMBER_MAX));
 			}
 			break;
-					
-		case HUITP_MSGID_uni_sw_package_req:
-			//因为只有一个边长IE，且IE正好处于最后一个结构部分，所以不需要干啥
-			break;
-		
-		case HUITP_MSGID_uni_sw_package_confirm:
-			//因为只有一个边长IE，且IE正好处于最后一个结构部分，所以不需要干啥
-			break;
-		
+			
 		default:
 			break;
 	}
@@ -167,6 +166,344 @@ OPSTAT func_cloud_standard_xml_pack(UINT8 msgType, char *funcFlag, UINT16 msgId,
 	return IHU_SUCCESS;
 }
 
+//解码接收到的消息
+OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
+{
+	UINT32 index=0, msgId=0, msgLen=0;
+	char tmp[5] = "";
+	UINT8 tt[HUITP_MSG_BUF_BODY_ONLY_MAX_LEN];
+	//int ret = 0;
+
+	//检查参数
+	if (rcv == NULL){
+		IhuErrorPrint("SPSVIRGO: Invalid received data buffer!\n");
+		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+		return IHU_FAILURE;
+	}
+	//控制命令不带XML格式头，接收的内容以裸控制命令，所以必须是偶数字节
+	if (((rcv->length %2) != 0) || (rcv->length > MAX_IHU_MSG_BUF_LENGTH_CLOUD) || (rcv->length < 8) || (rcv->length > (HUITP_MSG_BUF_BODY_ONLY_MAX_LEN*2))){
+		IhuErrorPrint("SPSVIRGO: Received invalid data length by XML content format!\n");
+		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+		return IHU_FAILURE;
+	}
+	
+	//解出msgId/msgLen
+	index = 0;
+	memset(tmp, 0, sizeof(tmp));
+	strncpy(tmp, &rcv->buf[index], 4);
+	msgId = strtoul(tmp, NULL, 16);
+	index = index + 4;
+	memset(tmp, 0, sizeof(tmp));
+	strncpy(tmp, &rcv->buf[index], 4);
+	msgLen = strtoul(tmp, NULL, 16);
+	if (msgLen > (MAX_IHU_MSG_BUF_LENGTH_CLOUD - HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN)/2){
+		IhuErrorPrint("SPSVIRGO: Invalid received data msgLen info!\n");
+		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+		return IHU_FAILURE;
+	}
+	index = index + 4;
+	
+	//解码到目标缓冲区
+	StrMsg_HUITP_MSGID_uni_general_message_t *pMsgBuf;
+	memset(pMsgBuf, 0, sizeof(StrMsg_HUITP_MSGID_uni_general_message_t));
+	pMsgBuf->msgId.cmdId = (msgId>>8)&0xFF;
+	pMsgBuf->msgId.optId = msgId&0xFF;
+	pMsgBuf->msgLen = msgLen;
+
+	for(index = 4; index < (rcv->length)/2; index++){
+		memset(tmp, 0, sizeof(tmp));
+		strncpy(tmp, &rcv->buf[index * 2], 2);
+		pMsgBuf->data[index-4] = strtoul(tmp, NULL, 16) & 0xFF;
+	}
+	
+	//通过msgId将变长的消息结构进行独立处理
+	//筛选出变长的消息结构，独立进行处理，剩下的统一处理
+	switch(msgId)
+	{
+		//解码接收不可能收到这个消息，这里只是展示处理技巧
+		case HUITP_MSGID_uni_ccl_lock_resp:
+			if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX > HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER){
+				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+				IhuErrorPrint("SPSVIRGO: Error defination on max len of MSGID = HUITP_MSGID_uni_ccl_lock_report structure!\n");
+				return IHU_FAILURE;
+			}
+			else if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX < HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER){
+				//需要将缓冲区进行一定程度的移动
+				//由于UINT8  lockState[HUITP_IEID_UNI_CCL_LOCK_MAX_NUMBER]处于最后一块，所以还是不需要采取任何行动
+				//注意跟着系统配置的IHU_CCL_SENSOR_LOCK_NUMBER_MAX走，而非跟着HUITP_IEID_UNI_CCL_LOCK_MAX_NUMBER走
+				if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_lock_resp_t) - 4 - (HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER - IHU_CCL_SENSOR_LOCK_NUMBER_MAX))){
+					zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+					IhuErrorPrint("SPSVIRGO: Error unpack message on length!\n");
+					return IHU_FAILURE;					
+				}
+				pMsgBuf->msgLen = sizeof(StrMsg_HUITP_MSGID_uni_ccl_lock_resp_t) - 4;
+			}		
+			break;
+			
+		//解码接收不可能收到这个消息，这里只是展示处理技巧
+		case HUITP_MSGID_uni_ccl_door_resp:
+			if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX > HUITP_IEID_UNI_CCL_LOCK_MAX_NUMBER){
+				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+				IhuErrorPrint("SPSVIRGO: Error defination on max len of MSGID = HUITP_MSGID_uni_ccl_door_report structure!\n");
+				return IHU_FAILURE;
+			}
+			else if ((IHU_CCL_SENSOR_LOCK_NUMBER_MAX < HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER) || (IHU_CCL_SENSOR_LOCK_NUMBER_MAX < HUITP_IEID_UNI_CCL_LOCK_MAX_NUMBER)){
+				//需要将缓冲区进行一定程度的移动
+				//由于UINT8  lockState[HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER]处于最后一块，所以还是不需要采取任何行动
+				//注意跟着系统配置的IHU_CCL_SENSOR_LOCK_NUMBER_MAX走，而非跟着HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER走
+				if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_door_resp_t) - 4 - (HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER - IHU_CCL_SENSOR_LOCK_NUMBER_MAX))){
+					zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+					IhuErrorPrint("SPSVIRGO: Error unpack message on length!\n");
+					return IHU_FAILURE;					
+				}
+				pMsgBuf->msgLen = sizeof(StrMsg_HUITP_MSGID_uni_ccl_door_resp_t) - 4;				
+			}
+			break;
+			
+		//解码接收不可能收到这个消息，这里只是展示处理技巧
+		case HUITP_MSGID_uni_ccl_state_resp:
+			if ((IHU_CCL_SENSOR_LOCK_NUMBER_MAX > HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER) || (IHU_CCL_SENSOR_LOCK_NUMBER_MAX > HUITP_IEID_UNI_CCL_LOCK_MAX_NUMBER)){
+				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+				IhuErrorPrint("SPSVIRGO: Error defination on max len of MSGID = HUITP_MSGID_uni_ccl_state_report structure!\n");
+				return IHU_FAILURE;
+			}
+			else if ((IHU_CCL_SENSOR_LOCK_NUMBER_MAX < HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER) || (IHU_CCL_SENSOR_LOCK_NUMBER_MAX < HUITP_IEID_UNI_CCL_LOCK_MAX_NUMBER)){
+				//需要将缓冲区进行一定程度的移动
+				//将剩下的移上来
+				if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_state_resp_t) - 4 - (HUITP_IEID_UNI_CCL_LOCK_MAX_NUMBER + HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER - 2 * IHU_CCL_SENSOR_LOCK_NUMBER_MAX))){
+					zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+					IhuErrorPrint("SPSVIRGO: Error unpack message on length!\n");
+					return IHU_FAILURE;					
+				}
+				//通过tt过度，不然有可能拷贝会自己覆盖自己
+				memset(tt, 0, sizeof(tt));
+				memcpy(tt, pMsgBuf+4+sizeof(StrIe_HUITP_IEID_uni_com_resp_t)+ 2*IHU_CCL_SENSOR_LOCK_NUMBER_MAX,\
+					sizeof(StrMsg_HUITP_MSGID_uni_ccl_state_resp_t)-4-sizeof(StrIe_HUITP_IEID_uni_com_resp_t)-sizeof(StrIe_HUITP_IEID_uni_ccl_lock_state_t) - sizeof(StrIe_HUITP_IEID_uni_ccl_door_state_t));
+				memcpy(pMsgBuf+4+sizeof(StrIe_HUITP_IEID_uni_com_resp_t)+sizeof(StrIe_HUITP_IEID_uni_ccl_lock_state_t)+sizeof(StrIe_HUITP_IEID_uni_ccl_door_state_t), tt, \
+					sizeof(StrMsg_HUITP_MSGID_uni_ccl_state_resp_t)-4-sizeof(StrIe_HUITP_IEID_uni_com_resp_t)-sizeof(StrIe_HUITP_IEID_uni_ccl_lock_state_t) - sizeof(StrIe_HUITP_IEID_uni_ccl_door_state_t));
+			
+				//将StrIe_HUITP_IEID_uni_ccl_door_state_t移下去
+				memset(tt, 0, sizeof(tt));
+				memcpy(tt, pMsgBuf+4+sizeof(StrIe_HUITP_IEID_uni_com_resp_t)+IHU_CCL_SENSOR_LOCK_NUMBER_MAX, IHU_CCL_SENSOR_LOCK_NUMBER_MAX);		
+				memcpy(pMsgBuf+4+sizeof(StrIe_HUITP_IEID_uni_com_resp_t)+sizeof(StrIe_HUITP_IEID_uni_ccl_lock_state_t), tt, IHU_CCL_SENSOR_LOCK_NUMBER_MAX);
+				//将LOCK_IE/DOOR_IE空余部分清0
+				memset(pMsgBuf+4+sizeof(StrIe_HUITP_IEID_uni_com_resp_t)+IHU_CCL_SENSOR_LOCK_NUMBER_MAX, 0, \
+					HUITP_IEID_UNI_CCL_LOCK_MAX_NUMBER - IHU_CCL_SENSOR_LOCK_NUMBER_MAX);
+				memset(pMsgBuf+4+sizeof(StrIe_HUITP_IEID_uni_com_resp_t)+sizeof(StrIe_HUITP_IEID_uni_ccl_lock_state_t)+IHU_CCL_SENSOR_LOCK_NUMBER_MAX, 0, \
+					HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER - IHU_CCL_SENSOR_LOCK_NUMBER_MAX);
+				pMsgBuf->msgLen = sizeof(StrMsg_HUITP_MSGID_uni_ccl_state_resp_t) - 4;
+			}
+			break;
+			
+		case HUITP_MSGID_uni_sw_package_req:
+			//因为只有一个边长IE，且IE正好处于最后一个结构部分，所以不需要干啥
+			//将消息长度恢复到消息结构长度，以便下面统一处理
+			pMsgBuf->msgLen = sizeof(StrMsg_HUITP_MSGID_uni_sw_package_req_t) - 4;
+			break;
+		
+		case HUITP_MSGID_uni_sw_package_confirm:
+			//因为只有一个边长IE，且IE正好处于最后一个结构部分，所以不需要干啥
+			//将消息长度恢复到消息结构长度，以便下面统一处理
+			pMsgBuf->msgLen = sizeof(StrMsg_HUITP_MSGID_uni_sw_package_confirm_t) - 4;
+			break;
+		
+		default:
+			break;
+	}
+	
+	//再来进行消息的统一处理
+	switch(msgId)
+	{
+		//心跳请求
+		case HUITP_MSGID_uni_heart_beat_req:
+		{
+			StrMsg_HUITP_MSGID_uni_heart_beat_req_t snd1;
+			memset(&snd1, 0, sizeof(StrMsg_HUITP_MSGID_uni_heart_beat_req_t));
+		}
+			break;
+
+		//心跳证实
+		case HUITP_MSGID_uni_heart_beat_confirm:
+		{
+		}
+			break;
+		
+		case HUITP_MSGID_uni_ccl_lock_req:	
+		{
+		}
+			break;
+			
+		case HUITP_MSGID_uni_ccl_lock_confirm:
+		{
+		}
+			break;
+			
+		case HUITP_MSGID_uni_ccl_lock_auth_resp:
+		{
+		}
+			break;
+			
+		case HUITP_MSGID_uni_ccl_door_req:
+		{
+		}
+			break;
+		
+		case HUITP_MSGID_uni_ccl_door_confirm:
+		{
+		}
+			break;
+				
+		case HUITP_MSGID_uni_ccl_rfid_req:
+		{
+		}
+			break;
+
+		case HUITP_MSGID_uni_ccl_rfid_confirm:
+		{
+		}
+			break;
+
+		case HUITP_MSGID_uni_ccl_ble_req:
+		{
+		}
+			break;
+
+		case HUITP_MSGID_uni_ccl_ble_confirm:
+		{
+		}
+			break;
+
+		case HUITP_MSGID_uni_ccl_gprs_req:
+		{
+		}
+			break;
+
+		case HUITP_MSGID_uni_ccl_gprs_confirm:
+		{
+		}
+			break;
+
+		case HUITP_MSGID_uni_ccl_battery_req:
+		{
+		}
+			break;
+
+		case HUITP_MSGID_uni_ccl_battery_confirm:
+		{
+		}
+			break;
+
+		case HUITP_MSGID_uni_ccl_shake_req:
+		{
+		}
+			break;
+
+		case HUITP_MSGID_uni_ccl_shake_confirm:
+		{
+		}
+			break;
+
+		case HUITP_MSGID_uni_ccl_smoke_req:
+		{
+		}
+			break;
+
+		case HUITP_MSGID_uni_ccl_smoke_confirm:
+		{
+		}
+			break;
+
+		case HUITP_MSGID_uni_ccl_water_req:
+		{
+		}
+			break;
+
+		case HUITP_MSGID_uni_ccl_water_confirm:
+		{
+		}
+			break;
+
+		case HUITP_MSGID_uni_ccl_temp_req:
+		{
+		}
+			break;
+
+		case HUITP_MSGID_uni_ccl_temp_confirm:
+		{
+		}
+			break;
+
+		case HUITP_MSGID_uni_ccl_humid_req:
+		{
+		}
+			break;
+
+		case HUITP_MSGID_uni_ccl_humid_confirm:
+		{
+		}
+			break;
+
+		case HUITP_MSGID_uni_ccl_fall_req:
+		{
+		}
+			break;
+
+		case HUITP_MSGID_uni_ccl_fall_confirm:
+		{
+		}
+			break;
+
+		case HUITP_MSGID_uni_ccl_state_req:
+		{
+		}
+			break;
+
+		case HUITP_MSGID_uni_ccl_state_confirm:
+		{
+		}
+			break;
+
+		default:
+		{
+		}
+			break;
+	}	
+	
+//	if (cmdId ==L3CI_heart_beat)
+//	{
+//		if (func_cloudvela_standard_xml_heart_beat_msg_unpack(rcv) == IHU_FAILURE){
+//			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+//			IhuErrorPrint("SPSVIRGO: Error unpack receiving message!\n");
+//			return IHU_FAILURE;
+//		}
+
+//		return IHU_SUCCESS;
+//	}
+
+//	switch(cmdId)
+//	{
+//		case L3CI_emc:
+
+//			if (func_cloudvela_standard_xml_emc_msg_unpack(rcv) == IHU_FAILURE){
+//				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+//				IhuErrorPrint("SPSVIRGO: Error unpack receiving message of EMC!\n");
+//				return IHU_FAILURE;
+//			}
+//			break;
+
+//		default:
+//			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+//			IhuErrorPrint("SPSVIRGO: Receive cloud data error with CmdId = %d\n", cmdId);
+//			return IHU_FAILURE;
+
+//			break;
+
+//	}
+
+	return IHU_SUCCESS;
+}
+
+
 /*
 OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 {
@@ -200,7 +537,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			return IHU_FAILURE;
 		}
 
-		return SUCCESS;
+		return IHU_SUCCESS;
 	}
 
 	switch(cmdId)
@@ -296,7 +633,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 
 	}
 
-	return SUCCESS;
+	return IHU_SUCCESS;
 }
 
 OPSTAT func_cloudvela_standard_xml_heart_beat_msg_unpack(msg_struct_com_cloudvela_data_rx_t *rcv)
@@ -342,7 +679,7 @@ OPSTAT func_cloudvela_standard_xml_heart_beat_msg_unpack(msg_struct_com_cloudvel
 		return IHU_FAILURE;
 	}
 
-	return SUCCESS;
+	return IHU_SUCCESS;
 }
 
 
@@ -567,7 +904,7 @@ OPSTAT func_cloudvela_standard_xml_emc_msg_unpack(msg_struct_com_cloudvela_data_
 		return IHU_FAILURE;
 	}
 
-	return SUCCESS;
+	return IHU_SUCCESS;
 }
 */
 
