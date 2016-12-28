@@ -4,6 +4,9 @@
 //近期需要完成的任务
 = 研究STM32的IAP功能
 
+//= ZJL, 2016 Dec.28, CURRENT_SW_DELIVERY R03.73 =>CCL项目
+= 修改vmmw_gprs中函数的名称，统一到VMMW这一个关键字上来
+
 //= ZJL, 2016 Dec.28, CURRENT_SW_DELIVERY R03.72 =>CCL项目
 = 继续解决VMMW_GPRS中间件在AT CMD下与CCL状态机组合工作的问题
 = 梳理整体通信机制=>

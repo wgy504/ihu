@@ -44,19 +44,19 @@ const char *GPRS_UART_string = "AT+CIPSTART=\"TCP\",\"14.125.48.205\",9015";//IP
 //Delay => ihu_usleep(ms)
 
 /*******************************************************************************
-* 函数名 : GPRS_UART_SIM800A_test_selection
+* 函数名 : ihu_vmmw_gprsmod_sim800a_test_selection
 * 描述   : SIM800A主测试程序
 * 输入   : 
 * 输出   : 
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-OPSTAT GPRS_UART_GSM_working_procedure_selection(uint8_t option, uint8_t sub_opt)
+OPSTAT ihu_vmmw_gprsmod_gsm_working_procedure_selection(uint8_t option, uint8_t sub_opt)
 {
-	uint8_t repeatCnt = IHU_GPRS_UART_REPEAT_CNT;
+	uint8_t repeatCnt = IHU_VMMW_GPRSMOD_REPEAT_CNT;
 	
 	//最大循环次数
-	while((repeatCnt > 0) &&(GPRS_UART_send_AT_command((uint8_t*)"AT", (uint8_t*)"OK", 2) != IHU_SUCCESS))//查询是否应到AT指令
+	while((repeatCnt > 0) &&(func_gprsmod_send_AT_command((uint8_t*)"AT", (uint8_t*)"OK", 2) != IHU_SUCCESS))//查询是否应到AT指令
 	{
 		repeatCnt--;
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
@@ -71,31 +71,31 @@ OPSTAT GPRS_UART_GSM_working_procedure_selection(uint8_t option, uint8_t sub_opt
 	}
 	
 	//不回显
-	if (GPRS_UART_send_AT_command((uint8_t*)"ATE0", (uint8_t*)"OK", 2) != IHU_SUCCESS) {
+	if (func_gprsmod_send_AT_command((uint8_t*)"ATE0", (uint8_t*)"OK", 2) != IHU_SUCCESS) {
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Can not set display status!\n");
 		return IHU_FAILURE;
 	}
 	
 	//基础信息查阅
-	if (GPRS_UART_SIM800A_module_procedure() != IHU_SUCCESS){
+	if (ihu_vmmw_gprsmod_module_procedure() != IHU_SUCCESS){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Can not detect basic info!\n");
 		return IHU_FAILURE;
 	}
 	
 	//查阅SIM卡信息
-	if(GPRS_UART_SIM800A_gsm_info_procedure() != IHU_SUCCESS){
+	if(ihu_vmmw_gprsmod_gsm_info_procedure() != IHU_SUCCESS){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Get GPRS module SIM800A related info error!\n");
 		return IHU_FAILURE;
 	}
 	
-	if (option == 1) return GPRS_UART_SIM800A_call_procedure(sub_opt);	//电话测试
-	else if (option == 2) return GPRS_UART_SIM800A_sms_procedure();		//短信测试
-	else if (option == 3) return GPRS_UART_SIM800A_gprs_procedure(sub_opt);	//GPRS测试
-	else if (option == 4) return GPRS_UART_SIM800A_bs_procedure();		//基站测试
-	else if (option == 5) return GPRS_UART_SIM800A_tts_procedure();		//语音测试
+	if (option == 1) return ihu_vmmw_gprsmod_call_procedure(sub_opt);	//电话测试
+	else if (option == 2) return ihu_vmmw_gprsmod_sms_procedure();		//短信测试
+	else if (option == 3) return ihu_vmmw_gprsmod_gprs_procedure(sub_opt);	//GPRS测试
+	else if (option == 4) return ihu_vmmw_gprsmod_bs_procedure();		//基站测试
+	else if (option == 5) return ihu_vmmw_gprsmod_tts_procedure();		//语音测试
 	else
 	{
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
@@ -108,29 +108,29 @@ OPSTAT GPRS_UART_GSM_working_procedure_selection(uint8_t option, uint8_t sub_opt
 }
 
 /*******************************************************************************
-* 函数名 : GPRS_UART_SIM800A_module_procedure
+* 函数名 : ihu_vmmw_gprsmod_module_procedure
 * 描述   : SIM800A/GPRS主测试控制部分
 * 输入   : 
 * 输出   : 
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-OPSTAT GPRS_UART_SIM800A_module_procedure()
+OPSTAT ihu_vmmw_gprsmod_module_procedure()
 {
 	char temp[20];
 	int8_t *p1; 
 	
-	GPRS_UART_clear_receive_buffer();
+	func_gprsmod_clear_receive_buffer();
 	
 	//查询制造商名称
-	if(GPRS_UART_send_AT_command((uint8_t*)"AT+CGMI",(uint8_t*)"OK", 2) == IHU_SUCCESS)
+	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CGMI",(uint8_t*)"OK", 2) == IHU_SUCCESS)
 	{ 
 		p1=(int8_t*)strstr((const char*)(BSP_STM32_SPS_GPRS_R_Buff+2),"\n");
 		strncpy(temp, (char*)BSP_STM32_SPS_GPRS_R_Buff+2, (p1-BSP_STM32_SPS_GPRS_R_Buff>=sizeof(temp))?sizeof(temp):(p1-BSP_STM32_SPS_GPRS_R_Buff));
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
 			IhuDebugPrint("VMFO: Maunfacture %s", temp);
 		}
-		GPRS_UART_clear_receive_buffer();
+		func_gprsmod_clear_receive_buffer();
 	}
 	else
 	{
@@ -140,14 +140,14 @@ OPSTAT GPRS_UART_SIM800A_module_procedure()
 	}
 	
 	//查询模块名字
-	if(GPRS_UART_send_AT_command("AT+CGMM", (uint8_t*)"OK", 2)== IHU_SUCCESS)
+	if(func_gprsmod_send_AT_command("AT+CGMM", (uint8_t*)"OK", 2)== IHU_SUCCESS)
 	{ 
 		p1=(int8_t*)strstr((const char*)(BSP_STM32_SPS_GPRS_R_Buff+2),"\n"); 
 		strncpy(temp, (char*)BSP_STM32_SPS_GPRS_R_Buff+2, (p1-BSP_STM32_SPS_GPRS_R_Buff>=sizeof(temp))?sizeof(temp):(p1-BSP_STM32_SPS_GPRS_R_Buff));
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
 			IhuDebugPrint("VMFO: Module Type %s", temp);
 		}
-		GPRS_UART_clear_receive_buffer();
+		func_gprsmod_clear_receive_buffer();
 	}
 	else
 	{
@@ -157,14 +157,14 @@ OPSTAT GPRS_UART_SIM800A_module_procedure()
 	}
 	
 	//查询产品序列号
-	if(GPRS_UART_send_AT_command("AT+CGSN", (uint8_t*)"OK", 2)== IHU_SUCCESS)
+	if(func_gprsmod_send_AT_command("AT+CGSN", (uint8_t*)"OK", 2)== IHU_SUCCESS)
 	{ 
 		p1=(int8_t*)strstr((const char*)(BSP_STM32_SPS_GPRS_R_Buff+2),"\n"); 
 		strncpy(temp, (char*)BSP_STM32_SPS_GPRS_R_Buff+2, (p1-BSP_STM32_SPS_GPRS_R_Buff>=sizeof(temp))?sizeof(temp):(p1-BSP_STM32_SPS_GPRS_R_Buff));
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
 			IhuDebugPrint("VMFO: Product Serial ID %s", temp);
 		}
-		GPRS_UART_clear_receive_buffer();		
+		func_gprsmod_clear_receive_buffer();		
 	}
 	else{
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
@@ -173,7 +173,7 @@ OPSTAT GPRS_UART_SIM800A_module_procedure()
 	}
 	
 	//查询本机号码
-	if(GPRS_UART_send_AT_command("AT+CNUM", (uint8_t*)"+CNUM", 2)== IHU_SUCCESS)
+	if(func_gprsmod_send_AT_command("AT+CNUM", (uint8_t*)"+CNUM", 2)== IHU_SUCCESS)
 	{ 
 		int8_t *p2;
 		p1=(int8_t*)strstr((const char*)(BSP_STM32_SPS_GPRS_R_Buff),"\""); 
@@ -183,7 +183,7 @@ OPSTAT GPRS_UART_SIM800A_module_procedure()
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
 			IhuDebugPrint("VMFO: Local Number %s", temp);		
 		}
-		GPRS_UART_clear_receive_buffer();		
+		func_gprsmod_clear_receive_buffer();		
 	}
 	else{
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
@@ -196,27 +196,27 @@ OPSTAT GPRS_UART_SIM800A_module_procedure()
 }
 
 /*******************************************************************************
-* 函数名 : GPRS_UART_SIM800A_gsm_info_procedure
+* 函数名 : ihu_vmmw_gprsmod_gsm_info_procedure
 * 描述   : SIM800A/GPRS状态信息检测(信号质量,电池电量,日期时间)
 * 输入   : 
 * 输出   : 
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-OPSTAT GPRS_UART_SIM800A_gsm_info_procedure(void)
+OPSTAT ihu_vmmw_gprsmod_gsm_info_procedure(void)
 {
 	char temp[20];
 	uint8_t *p1;
 	uint8_t *p2;
 	
-	GPRS_UART_clear_receive_buffer();
+	func_gprsmod_clear_receive_buffer();
 	
 	//查询SIM卡是否在位
-	if(GPRS_UART_send_AT_command("AT+CPIN?", (uint8_t*)"OK", 2) == IHU_SUCCESS)
+	if(func_gprsmod_send_AT_command("AT+CPIN?", (uint8_t*)"OK", 2) == IHU_SUCCESS)
 	{
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
 			IhuDebugPrint("VMFO: SIM card inserted!\n");
-			GPRS_UART_clear_receive_buffer(); 
+			func_gprsmod_clear_receive_buffer(); 
 		}
 	}
 	else{
@@ -226,7 +226,7 @@ OPSTAT GPRS_UART_SIM800A_gsm_info_procedure(void)
 	}
 
 	//查询运营商名字
-	if(GPRS_UART_send_AT_command("AT+COPS?", (uint8_t*)"OK", 2)== IHU_SUCCESS)		
+	if(func_gprsmod_send_AT_command("AT+COPS?", (uint8_t*)"OK", 2)== IHU_SUCCESS)		
 	{ 
 		p1=(uint8_t*)strstr((const char*)(BSP_STM32_SPS_GPRS_R_Buff),"\""); 
 		if(p1)//有有效数据
@@ -237,7 +237,7 @@ OPSTAT GPRS_UART_SIM800A_gsm_info_procedure(void)
 				IhuDebugPrint("VMFO: Operator: %s", temp);				
 			}
 		}
-		GPRS_UART_clear_receive_buffer(); 
+		func_gprsmod_clear_receive_buffer(); 
 	}
 	else 
 	{
@@ -247,7 +247,7 @@ OPSTAT GPRS_UART_SIM800A_gsm_info_procedure(void)
 	}
  
 	//查询信号质量
-	if(GPRS_UART_send_AT_command("AT+CSQ", (uint8_t*)"OK", 2) == IHU_SUCCESS)		
+	if(func_gprsmod_send_AT_command("AT+CSQ", (uint8_t*)"OK", 2) == IHU_SUCCESS)		
 	{ 
 		p1=(uint8_t*)strstr((const char*)(BSP_STM32_SPS_GPRS_R_Buff),":");
 		if(p1)
@@ -258,7 +258,7 @@ OPSTAT GPRS_UART_SIM800A_gsm_info_procedure(void)
 				IhuDebugPrint("VMFO: Singal quality: %s", temp);	
 			}			
 		}
-		GPRS_UART_clear_receive_buffer();
+		func_gprsmod_clear_receive_buffer();
 	}
 	else{
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
@@ -267,48 +267,48 @@ OPSTAT GPRS_UART_SIM800A_gsm_info_procedure(void)
 	}
 
 	//General information inquery
-  if(GPRS_UART_send_AT_command("AT+DDET=1", (uint8_t*)"OK", 2) == IHU_SUCCESS)
+  if(func_gprsmod_send_AT_command("AT+DDET=1", (uint8_t*)"OK", 2) == IHU_SUCCESS)
 	{
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Module support DTMF audio-decode, support key-down during peer conversation.\n");
 	}
 	else{
     if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Module not support DTMF audio-decode, Not support key-down during peer conversation.\n");
 	}
-	if(GPRS_UART_send_AT_command("AT+CTTS=?", (uint8_t*)"OK", 2) == IHU_SUCCESS)
+	if(func_gprsmod_send_AT_command("AT+CTTS=?", (uint8_t*)"OK", 2) == IHU_SUCCESS)
 	{
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Support TTS local voice, Support to convert TEXT into voice.\n");
 	}
 	else{
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Module not support TTS local voice.\n");
 	}
-	if(GPRS_UART_send_AT_command("AT+CIPSIM800ALOC=?", (uint8_t*)"OK", 2) == IHU_SUCCESS)
+	if(func_gprsmod_send_AT_command("AT+CIPSIM800ALOC=?", (uint8_t*)"OK", 2) == IHU_SUCCESS)
 	{
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Module support base station positioning, able to fetch position information.\n");
 	}
 	else{
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Module not support base station positioning.\n");
 	}
-	GPRS_UART_clear_receive_buffer();
+	func_gprsmod_clear_receive_buffer();
 	
 	return IHU_SUCCESS;
 }
 
 /*******************************************************************************
-* 函数名 : GPRS_UART_SIM800A_sms_test
+* 函数名 : func_gprsmod_sim800a_sms_test
 * 描述   : 短信测试代码
 * 输入   : 
 * 输出   : 
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-OPSTAT GPRS_UART_SIM800A_sms_procedure(void)
+OPSTAT ihu_vmmw_gprsmod_sms_procedure(void)
 {
 	uint8_t temp[50];
 	uint8_t loc=0;
 	
 	//设置短信发送模式
 	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: @@@@ SMS TEST @@@@!\n");
-	if (GPRS_UART_send_AT_command("AT+CMGF=1", (uint8_t *)"OK", 2) == IHU_SUCCESS){
+	if (func_gprsmod_send_AT_command("AT+CMGF=1", (uint8_t *)"OK", 2) == IHU_SUCCESS){
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Set SMS Send mode correctly!\n");
 	}
 	else{
@@ -318,7 +318,7 @@ OPSTAT GPRS_UART_SIM800A_sms_procedure(void)
 	}
 	
 	//设置短信上报模式，上报位置
-  if (GPRS_UART_send_AT_command("AT+CNMI=3,1,0,0,0", (uint8_t *)"OK", 2) == IHU_SUCCESS){
+  if (func_gprsmod_send_AT_command("AT+CNMI=3,1,0,0,0", (uint8_t *)"OK", 2) == IHU_SUCCESS){
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Set SMS report mode!\n");
 	}
 	else{
@@ -328,7 +328,7 @@ OPSTAT GPRS_UART_SIM800A_sms_procedure(void)
 	}
 
   //所有操作在SIM卡中进行
-	if (GPRS_UART_send_AT_command("AT+CPMS=\"SM\",\"SM\",\"SM\"", (uint8_t *)"OK", 2) == IHU_SUCCESS){
+	if (func_gprsmod_send_AT_command("AT+CPMS=\"SM\",\"SM\",\"SM\"", (uint8_t *)"OK", 2) == IHU_SUCCESS){
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Set SMS SIM card operation!\n");
 	}
 	else{
@@ -342,7 +342,7 @@ OPSTAT GPRS_UART_SIM800A_sms_procedure(void)
 	strcpy((char*)temp,(const char *)"AT+CSCA=\"");
 	strcat((char*)temp, IHU_GPRS_SMS_CENTER_NUMBER);
 	strcat((char*)temp, "\"");
-	if(GPRS_UART_send_AT_command(temp, (uint8_t *)"OK", 2) == IHU_SUCCESS){
+	if(func_gprsmod_send_AT_command(temp, (uint8_t *)"OK", 2) == IHU_SUCCESS){
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Set SMS center successful!\n");
 	}
 	else{
@@ -355,7 +355,7 @@ OPSTAT GPRS_UART_SIM800A_sms_procedure(void)
 	if(strstr((const char*)BSP_STM32_SPS_GPRS_R_Buff, "+CMTI:"))
 	{
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO:  New SMS! SMS Position: [%s]\n", BSP_STM32_SPS_GPRS_R_Buff);
-		GPRS_UART_clear_receive_buffer();
+		func_gprsmod_clear_receive_buffer();
 	}
 
 	//Step2: 发送短信
@@ -363,14 +363,14 @@ OPSTAT GPRS_UART_SIM800A_sms_procedure(void)
 	strcpy((char*)temp,(const char *)"AT+CMGS=\"");
 	strcat((char*)temp, IHU_GPRS_SMS_TARGET_NUMBER);
 	strcat((char*)temp, "\"");
-	GPRS_UART_send_AT_command(temp,">",2);//发送接收方号码
-	strcpy((char*)temp, IHU_GPRS_SMS_TEST_CONTENT);
+	func_gprsmod_send_AT_command(temp,">",2);//发送接收方号码
+	strcpy((char*)temp, IHU_VMMW_GPRSMOD_TEST_SMS_CONTENT);
 	loc = strlen((const char*)temp);
 	temp[loc]='\32';
 	temp[loc+1]=0x0D;	//Return
 	temp[loc+2]='\0';
 	//发送短信内容
-	if(GPRS_UART_send_AT_command(temp, (uint8_t *)"OK", 5) == IHU_SUCCESS){
+	if(func_gprsmod_send_AT_command(temp, (uint8_t *)"OK", 5) == IHU_SUCCESS){
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Send SMS successful!\n");
 	}
 	else{
@@ -387,27 +387,27 @@ OPSTAT GPRS_UART_SIM800A_sms_procedure(void)
 //	loc=strlen((const char*)temp);
 //	strcpy((char*)(&temp[loc]),(const char*)(p+2));
 //	loc=strlen((const char*)temp);
-//	if(GPRS_UART_send_AT_command(temp,"OK",5)==0)
+//	if(func_gprsmod_send_AT_command(temp,"OK",5)==0)
 //	{
 //		p=(uint8_t*)strstr((const char*)(BSP_STM32_SPS_GPRS_R_Buff+2),"\r\n");
 //		p1=(uint8_t*)strstr((const char*)(p+2),"\r\n");
 //		loc=p1-p;
 //		IhuDebugPrint("VMFO: SMS Content: ");
-//		USART_PRINT_Send_Len((char*)p+2,loc);
+//		func_gprsmod_print_send_len((char*)p+2,loc);
 //	}
-//	GPRS_UART_clear_receive_buffer();
+//	func_gprsmod_clear_receive_buffer();
 	return IHU_SUCCESS;
 }
 
 /*******************************************************************************
-* 函数名 : GPRS_UART_SIM800A_call_test
+* 函数名 : func_gprsmod_sim800a_call_test
 * 描述   : 拨号测试代码
 * 输入   : 
 * 输出   : 
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-OPSTAT GPRS_UART_SIM800A_call_procedure(uint8_t sub_opt)
+OPSTAT ihu_vmmw_gprsmod_call_procedure(uint8_t sub_opt)
 {	
 	uint8_t temp[50];
 	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: @@@@ SIM800A CALL TEST @@@@!\n");		
@@ -418,14 +418,14 @@ OPSTAT GPRS_UART_SIM800A_call_procedure(uint8_t sub_opt)
 		case 0:
 			if(strstr((const char*)BSP_STM32_SPS_GPRS_R_Buff, "RING"))
 			{
-				GPRS_UART_clear_receive_buffer();
+				func_gprsmod_clear_receive_buffer();
 				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: CALL Coming\n");
 			}
 		break;
 			
 		//接听	
 		case 1:
-			if(GPRS_UART_send_AT_command("ATA", (uint8_t *)"OK", 2) == IHU_SUCCESS)
+			if(func_gprsmod_send_AT_command("ATA", (uint8_t *)"OK", 2) == IHU_SUCCESS)
 			{
 				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Hand-on successful\n");
 			}
@@ -437,7 +437,7 @@ OPSTAT GPRS_UART_SIM800A_call_procedure(uint8_t sub_opt)
 		break;
 		
 		//挂断
-		case 2:if(GPRS_UART_send_AT_command("ATH", (uint8_t *)"OK", 2) == IHU_SUCCESS)
+		case 2:if(func_gprsmod_send_AT_command("ATH", (uint8_t *)"OK", 2) == IHU_SUCCESS)
 			{
 				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Hand-off successful\n");
 			}else{
@@ -451,12 +451,12 @@ OPSTAT GPRS_UART_SIM800A_call_procedure(uint8_t sub_opt)
 		case 3:
 			memset(temp, 0, sizeof(temp));
 			strcpy((char*)temp, "ATD");
-			strcat((char*)temp, IHU_GPRS_SIM800A_CALLED_NUMBER);
+			strcat((char*)temp, IHU_VMMW_GPRSMOD_TEST_CALLED_NUMBER);
 			strcat((char*)temp, ";");
 			//temp[strlen(temp)]= (uint8_t)';';
-			if(GPRS_UART_send_AT_command(temp, (uint8_t *)"OK", 8) == IHU_SUCCESS)
+			if(func_gprsmod_send_AT_command(temp, (uint8_t *)"OK", 8) == IHU_SUCCESS)
 			{
-				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Called number = %s, Call successful!\n", IHU_GPRS_SIM800A_CALLED_NUMBER);
+				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Called number = %s, Call successful!\n", IHU_VMMW_GPRSMOD_TEST_CALLED_NUMBER);
 			}
 			else
 			{
@@ -470,8 +470,8 @@ OPSTAT GPRS_UART_SIM800A_call_procedure(uint8_t sub_opt)
 		case 4:
 			memset(temp, 0, sizeof(temp));
 			strcpy((char*)temp, "AT+VTS=");
-			strcat((char*)temp, IHU_GPRS_SIM800A_DTMF_TEST);
-			if (GPRS_UART_send_AT_command(temp, (uint8_t *)"OK",3) != IHU_SUCCESS)
+			strcat((char*)temp, IHU_VMMW_GPRSMOD_TEST_DTMF_KEY);
+			if (func_gprsmod_send_AT_command(temp, (uint8_t *)"OK",3) != IHU_SUCCESS)
 			{
 				zIhuRunErrCnt[TASK_ID_VMFO]++;
 				IhuErrorPrint("VMFO: SIM800A Call, DTMF failure!\n");
@@ -479,8 +479,8 @@ OPSTAT GPRS_UART_SIM800A_call_procedure(uint8_t sub_opt)
 			}
 			if(strstr((const char*)BSP_STM32_SPS_GPRS_R_Buff,"DTMF:"))
 			{
-				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Peer press key-down: %s\n", IHU_GPRS_SIM800A_DTMF_TEST);
-				GPRS_UART_clear_receive_buffer();
+				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Peer press key-down: %s\n", IHU_VMMW_GPRSMOD_TEST_DTMF_KEY);
+				func_gprsmod_clear_receive_buffer();
 			}
 		break;
 		
@@ -495,14 +495,14 @@ OPSTAT GPRS_UART_SIM800A_call_procedure(uint8_t sub_opt)
 
 
 /*******************************************************************************
-* 函数名 : GPRS_UART_SIM800A_gprs_test
+* 函数名 : func_gprsmod_sim800a_gprs_test
 * 描述   : GPRS测试代码
 * 输入   : 
 * 输出   : 
 * 返回   : 
 * 注意   :  为了保持连接，每空闲隔10秒发送一次心跳
 *******************************************************************************/
-OPSTAT GPRS_UART_SIM800A_gprs_procedure(uint8_t sub_opt)
+OPSTAT ihu_vmmw_gprsmod_gprs_procedure(uint8_t sub_opt)
 {	
 	uint8_t temp[200];
 	IhuDebugPrint("VMFO: @@@@  GPRS TEST  @@@@\n");
@@ -516,8 +516,8 @@ OPSTAT GPRS_UART_SIM800A_gprs_procedure(uint8_t sub_opt)
 				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: New content!\n");
 				//p1=(uint8_t*)strstr((const char*)BSP_STM32_SPS_GPRS_R_Buff,",");
 				//p2=(uint8_t*)strstr((const char*)BSP_STM32_SPS_GPRS_R_Buff,":");
-				//USART_PRINT_Send_Len((char*)(p2+1),GPRS_UART_change_str_Data((p1+1),(p2-p1-1)));
-				GPRS_UART_clear_receive_buffer();
+				//func_gprsmod_print_send_len((char*)(p2+1),func_gprsmod_convert_str_to_int((p1+1),(p2-p1-1)));
+				func_gprsmod_clear_receive_buffer();
 			}
 		break;
 			
@@ -525,16 +525,16 @@ OPSTAT GPRS_UART_SIM800A_gprs_procedure(uint8_t sub_opt)
 		case 1: 
 			memset(temp, 0, sizeof(temp));
 			strcpy((char*)&temp, (const char*)"AT+CIPSTART=");
-			strcat((char*)&temp, IHU_GPRS_SIM800A_GPRS_STREAM);
-			GPRS_UART_send_AT_command("AT+CIPCLOSE=1", (uint8_t*)"CLOSE OK", 2);	//关闭连接
-			GPRS_UART_send_AT_command("AT+CIPSHUT", (uint8_t*)"SHUT OK", 2);		//关闭移动场景
-			GPRS_UART_send_AT_command("AT+CGCLASS=\"B\"", (uint8_t*)"OK", 2);//设置GPRS移动台类别为B,支持包交换和数据交换 
-			GPRS_UART_send_AT_command("AT+CGDCONT=1,\"IP\",\"CMNET\"", (uint8_t*)"OK",2);//设置PDP上下文,互联网接协议,接入点等信息
-			GPRS_UART_send_AT_command("AT+CGATT=1", (uint8_t*)"OK", 2);//附着GPRS业务
-			GPRS_UART_send_AT_command("AT+CIPCSGP=1,\"CMNET\"", (uint8_t*)"OK", 2);//设置为GPRS连接模式
-			GPRS_UART_send_AT_command("AT+CIPHEAD=1", (uint8_t*)"OK", 2);//设置接收数据显示IP头(方便判断数据来源,仅在单路连接有效)
-			GPRS_UART_send_AT_command("AT+CIPMUX=0", (uint8_t*)"OK", 2);//设置单路连接
-			if(GPRS_UART_send_AT_command(temp, (uint8_t*)"OK", 2 ) == IHU_SUCCESS)//发起连接
+			strcat((char*)&temp, IHU_VMMW_GPRSMOD_STREAM_CHOICE);
+			func_gprsmod_send_AT_command("AT+CIPCLOSE=1", (uint8_t*)"CLOSE OK", 2);	//关闭连接
+			func_gprsmod_send_AT_command("AT+CIPSHUT", (uint8_t*)"SHUT OK", 2);		//关闭移动场景
+			func_gprsmod_send_AT_command("AT+CGCLASS=\"B\"", (uint8_t*)"OK", 2);//设置GPRS移动台类别为B,支持包交换和数据交换 
+			func_gprsmod_send_AT_command("AT+CGDCONT=1,\"IP\",\"CMNET\"", (uint8_t*)"OK",2);//设置PDP上下文,互联网接协议,接入点等信息
+			func_gprsmod_send_AT_command("AT+CGATT=1", (uint8_t*)"OK", 2);//附着GPRS业务
+			func_gprsmod_send_AT_command("AT+CIPCSGP=1,\"CMNET\"", (uint8_t*)"OK", 2);//设置为GPRS连接模式
+			func_gprsmod_send_AT_command("AT+CIPHEAD=1", (uint8_t*)"OK", 2);//设置接收数据显示IP头(方便判断数据来源,仅在单路连接有效)
+			func_gprsmod_send_AT_command("AT+CIPMUX=0", (uint8_t*)"OK", 2);//设置单路连接
+			if(func_gprsmod_send_AT_command(temp, (uint8_t*)"OK", 2 ) == IHU_SUCCESS)//发起连接
 			{
 				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: New connecting!\n");
 			}else
@@ -548,11 +548,11 @@ OPSTAT GPRS_UART_SIM800A_gprs_procedure(uint8_t sub_opt)
 		//发送内容	
 		case 2:
 			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Begin to send..........!\n");
-			if(GPRS_UART_send_AT_command("AT+CIPSEND", (uint8_t*)">", 2) == IHU_SUCCESS)
+			if(func_gprsmod_send_AT_command("AT+CIPSEND", (uint8_t*)">", 2) == IHU_SUCCESS)
 			{
 				memset(temp, 0, sizeof(temp));
-				strcpy((char*)temp, IHU_GPRS_SIM800A_GPRS_CONTENT);
-				if(GPRS_UART_send_AT_command(temp, (uint8_t*)"SEND OK", 8) == IHU_SUCCESS)
+				strcpy((char*)temp, IHU_VMMW_GPRSMOD_STEAM_CONTENT);
+				if(func_gprsmod_send_AT_command(temp, (uint8_t*)"SEND OK", 8) == IHU_SUCCESS)
 				{ 								
 					if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Send successful!\n");
 				}else
@@ -573,7 +573,7 @@ OPSTAT GPRS_UART_SIM800A_gprs_procedure(uint8_t sub_opt)
 			
 		//发送结束
 		case 3:
-			if(GPRS_UART_send_AT_command("AT+CIPSEND", (uint8_t*)">", 2)== IHU_SUCCESS)
+			if(func_gprsmod_send_AT_command("AT+CIPSEND", (uint8_t*)">", 2)== IHU_SUCCESS)
 			{
 				BSP_STM32_SPS_GPRS_SendData((uint8_t *)0x00, 1);
 				BSP_STM32_SPS_GPRS_SendData((uint8_t *)0X1A, 1);//CTRL+Z,结束数据发送,启动一次传输								
@@ -589,36 +589,36 @@ OPSTAT GPRS_UART_SIM800A_gprs_procedure(uint8_t sub_opt)
 		
 		//退出	
 		case 4:
-			GPRS_UART_send_AT_command("AT+CIPCLOSE=1", (uint8_t*)"CLOSE OK", 5);	//关闭连接
-			GPRS_UART_send_AT_command("AT+CIPSHUT", (uint8_t*)"SHUT OK", 5);		//关闭移动场景
+			func_gprsmod_send_AT_command("AT+CIPCLOSE=1", (uint8_t*)"CLOSE OK", 5);	//关闭连接
+			func_gprsmod_send_AT_command("AT+CIPSHUT", (uint8_t*)"SHUT OK", 5);		//关闭移动场景
 			return 1;
 	}
 	return IHU_SUCCESS;
 }
 
 /*******************************************************************************
-* 函数名 : GPRS_UART_SIM800A_jz_test
+* 函数名 : func_gprsmod_sim800a_jz_test
 * 描述   : 基站定位测试代码
 * 输入   : 
 * 输出   : 
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-OPSTAT GPRS_UART_SIM800A_bs_procedure(void)
+OPSTAT ihu_vmmw_gprsmod_bs_procedure(void)
 {
 //  uint8_t *p1, *p3;
 	//uint8_t *p2;
 	IhuDebugPrint("VMFO: @@@@@@@@@@@@@@@@@@@@@Base Station POSITON TEST@@@@@@@@@@@@@@@@@@@@@@@@@\r\n");
 	IhuDebugPrint("VMFO: EXIT TEST: EXIT + ENTER\n");
-	GPRS_UART_send_AT_command("AT+SAPBR=3,1,\"Contype\",\"GPRS\"","OK",2);
-	GPRS_UART_send_AT_command("AT+SAPBR=3,1,\"APN\",\"CMNET\"","OK",2);
-  if(GPRS_UART_send_AT_command("AT+SAPBR=1,1","OK",5))//激活
+	func_gprsmod_send_AT_command("AT+SAPBR=3,1,\"Contype\",\"GPRS\"","OK",2);
+	func_gprsmod_send_AT_command("AT+SAPBR=3,1,\"APN\",\"CMNET\"","OK",2);
+  if(func_gprsmod_send_AT_command("AT+SAPBR=1,1","OK",5))//激活
 	{
 	
 		IhuDebugPrint("VMFO: Open failure, please conform module own this function or not\n");
 		return 1;		
 	}
-	if(GPRS_UART_send_AT_command("AT+SAPBR=2,1","OK",5))
+	if(func_gprsmod_send_AT_command("AT+SAPBR=2,1","OK",5))
 	{
     IhuDebugPrint("VMFO: Fetch local IP error\n");
 		return 2;
@@ -631,13 +631,13 @@ OPSTAT GPRS_UART_SIM800A_bs_procedure(void)
 			SPS_PRINT_RX_STA=0;
 			if(strstr((const char*)BSP_STM32_SPS_PRINT_R_Buff,"EXIT"))//退出
 			{
-				 GPRS_UART_send_AT_command("AT+SAPBR=0,1","OK",2);//关闭
+				 func_gprsmod_send_AT_command("AT+SAPBR=0,1","OK",2);//关闭
 				 return 0;
 			}
 			else
 			IhuDebugPrint("VMFO: ENTER ERROR\n");
 		}
-    if(GPRS_UART_send_AT_command("AT+CIPSIM800ALOC=1,1","OK",10)==0)//获取经纬度和时间
+    if(func_gprsmod_send_AT_command("AT+CIPSIM800ALOC=1,1","OK",10)==0)//获取经纬度和时间
 		{
         GPRS_UART_TIMER_RECON_Count=1;
 //// 			  p1=(uint8_t*)strstr((const char*)(BSP_STM32_SPS_GPRS_R_Buff),",");
@@ -646,18 +646,18 @@ OPSTAT GPRS_UART_SIM800A_bs_procedure(void)
 //				{	
 //					p2=(uint8_t*)strtok((char*)(p1),",");
 //          IhuDebugPrint("VMFO: Longitude:");
-//					//USART_PRINT_SendString((char *)p2);
-//					//USART_PRINT_Data('\t');
+//					//func_gprsmod_print_send_string((char *)p2);
+//					//func_gprsmod_print_data('\t');
 //					
 //					p2=(uint8_t*)strtok(NULL,",");
-//          //IhuDebugPrint("VMFO: Latitude:");USART_PRINT_SendString((char *)p2);USART_PRINT_Data('\t');
+//          //IhuDebugPrint("VMFO: Latitude:");func_gprsmod_print_send_string((char *)p2);func_gprsmod_print_data('\t');
 //					
 //					p2=(uint8_t*)strtok(NULL,",");
-//          //IhuDebugPrint("VMFO: Date:");USART_PRINT_SendString((char *)p2);USART_PRINT_Data('\t');
+//          //IhuDebugPrint("VMFO: Date:");func_gprsmod_print_send_string((char *)p2);func_gprsmod_print_data('\t');
 //					
 //					p2=(uint8_t*)strtok(NULL,",");
 //					*p3='\0';//插入结束符
-//          //IhuDebugPrint("VMFO: Time:");USART_PRINT_SendString((char *)p2);IhuDebugPrint("\r\n");
+//          //IhuDebugPrint("VMFO: Time:");func_gprsmod_print_send_string((char *)p2);IhuDebugPrint("\r\n");
 //				}
 		}
 		if(GPRS_UART_TIMER_RECON_Count>11)
@@ -671,24 +671,24 @@ OPSTAT GPRS_UART_SIM800A_bs_procedure(void)
 }
 
 /*******************************************************************************
-* 函数名 : GPRS_UART_SIM800A_tts_test
+* 函数名 : func_gprsmod_sim800a_tts_test
 * 描述   : TTS文本语音测试代码
 * 输入   : 
 * 输出   : 
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
+OPSTAT ihu_vmmw_gprsmod_tts_procedure(void)
 {
   uint16_t len=0;
   uint8_t temp_src[]="Hello, this is a test from BXXH!";
-	uint8_t temp[IHU_GPRS_UART_TTS_MAX_LEN+15];
+	uint8_t temp[IHU_VMMW_GPRSMOD_TTS_MAX_LEN+15];
 	uint8_t loc=0;
 	IhuDebugPrint("VMFO: @@@@@@@@@@@@@@@@@@@@@TTS TEXT VOICE TEST@@@@@@@@@@@@@@@@@@@@@@@\n");
 	IhuDebugPrint("VMFO: EXIT TEST: EXIT + ENTER\n");
 	IhuDebugPrint("VMFO: VOICE Brocasting: Please enter content + Enter\n");
   IhuDebugPrint("VMFO: Attention, support max 100 byte\n");
-	if(GPRS_UART_send_AT_command("AT+CTTS=?","OK",2))
+	if(func_gprsmod_send_AT_command("AT+CTTS=?","OK",2))
 	{
 		IhuDebugPrint("VMFO: Error: Please inquery this module own this function or not\n");
 		 return 1;
@@ -699,20 +699,20 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 	strcpy((char*)&temp[loc-1],(const char*)temp_src);
 	temp[loc+len-1]='\"';
 	temp[loc+len]='\0';
-  GPRS_UART_send_AT_command(temp,"OK",3);
+  func_gprsmod_send_AT_command(temp,"OK",3);
 	while(1)
 	{
 		if(SPS_PRINT_RX_STA&0x8000)
 		{
       len=SPS_PRINT_RX_STA&0X3FFF;
-			if(len>(IHU_GPRS_UART_TTS_MAX_LEN/2))len=(IHU_GPRS_UART_TTS_MAX_LEN/2);
+			if(len>(IHU_VMMW_GPRSMOD_TTS_MAX_LEN/2))len=(IHU_VMMW_GPRSMOD_TTS_MAX_LEN/2);
       SPS_PRINT_RX_STA=0;
 			if((len==4)&&(strstr((const char*)BSP_STM32_SPS_PRINT_R_Buff,"EXIT")))//退出	
 			return 0;
-			GPRS_UART_SendString("AT+CTTS=2,\"");
+			func_gprsmod_send_string("AT+CTTS=2,\"");
 			BSP_STM32_SPS_PRINT_R_Buff[len]='\"';
 			BSP_STM32_SPS_PRINT_R_Buff[len+1]='\0';
-			if(GPRS_UART_send_AT_command(BSP_STM32_SPS_PRINT_R_Buff,"OK",2))
+			if(func_gprsmod_send_AT_command(BSP_STM32_SPS_PRINT_R_Buff,"OK",2))
 				IhuDebugPrint("VMFO: Wait for previous frame accomplish\n");
 		}
 	}
@@ -738,7 +738,7 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 //* 注意   : 串口2负责与SIM800A模块通信，串口1用于串口调试，可以避免在下载程序时数据
 //					 还发送到模块
 //*******************************************************************************/
-//OPSTAT GPRS_UART_gsm_loop_test_main(void)
+//OPSTAT func_gprsmod_sim800a_gsm_loop_test_main(void)
 //{
 //	//Print忽略，因为PRINT_USART3已经在BSP_SER中初始化了
 //	//USART_PRINT_Init_Config(115200);
@@ -747,32 +747,32 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 //	TIM_USART_GPRS_Init_Config();
 //	IhuDebugPrint("VMFO: SIM800A Module SMS test procedure!\n");//打印信息
 //	IhuDebugPrint("VMFO: SIM800A Module Register network!\n");
-//  GPRS_UART_SIM800A_test_loop(); //SIM800A测试程序
+//  func_gprsmod_sim800a_test_loop(); //SIM800A测试程序
 //	return 1;
 //}
 
 
 ///*******************************************************************************
-//* 函数名 : GPRS_UART_SIM800A_test_loop
+//* 函数名 : func_gprsmod_sim800a_test_loop
 //* 描述   : SIM800A主测试程序
 //* 输入   : 
 //* 输出   : 
 //* 返回   : 
 //* 注意   : 
 //*******************************************************************************/
-//void GPRS_UART_SIM800A_test_loop(void)
+//OPSTAT func_gprsmod_sim800a_test_loop(void)
 //{
 //	uint8_t sim_ready=0;
-//	while(GPRS_UART_send_AT_command((uint8_t*)"AT",(uint8_t*)"OK",5))//查询是否应到AT指令
+//	while(func_gprsmod_send_AT_command((uint8_t*)"AT",(uint8_t*)"OK",5))//查询是否应到AT指令
 //	{
 //		IhuDebugPrint("VMFO: Not dected module!\n");
 //		ihu_usleep(800);
 //		IhuDebugPrint("VMFO: Trying to reconnecting!\n");
 //		ihu_usleep(400);  
 //	} 	 
-//	GPRS_UART_send_AT_command((uint8_t*)"ATE0",(uint8_t*)"OK",200);//不回显
-//	GPRS_UART_SIM800A_mtest();
-//	if(GPRS_UART_SIM800A_gsm_test_info()==0)
+//	func_gprsmod_send_AT_command((uint8_t*)"ATE0",(uint8_t*)"OK",200);//不回显
+//	func_gprsmod_sim800a_mtest();
+//	if(func_gprsmod_sim800a_gsm_test_info()==0)
 //	{
 //		sim_ready=1;
 //		IhuDebugPrint("VMFO: Please select: Chinese+Enter, then re-send\n"); 				    	 
@@ -790,18 +790,18 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 //			{
 //				SPS_PRINT_RX_STA=0;
 //				if(strstr((char*)BSP_STM32_SPS_PRINT_R_Buff,"DIAL"))
-//					GPRS_UART_SIM800A_call_test();	//电话测试
+//					func_gprsmod_sim800a_call_test();	//电话测试
 //				else
 //				if(strstr((char*)BSP_STM32_SPS_PRINT_R_Buff,"SMS"))
-//					GPRS_UART_SIM800A_sms_test();		//短信测试
+//					func_gprsmod_sim800a_sms_test();		//短信测试
 //				else
 //				if(strstr((char*)BSP_STM32_SPS_PRINT_R_Buff,"GPRS"))
-//					GPRS_UART_SIM800A_gprs_test();	//GPRS测试
+//					func_gprsmod_sim800a_gprs_test();	//GPRS测试
 //				else
 //				if(strstr((char*)BSP_STM32_SPS_PRINT_R_Buff,"LOC"))
-//				  GPRS_UART_SIM800A_jz_test();		//基站测试
+//				  func_gprsmod_sim800a_jz_test();		//基站测试
 //				else				if(strstr((char*)BSP_STM32_SPS_PRINT_R_Buff,"VOICE"))
-//					GPRS_UART_SIM800A_tts_test();		//语音测试
+//					func_gprsmod_sim800a_tts_test();		//语音测试
 //				
 //				IhuDebugPrint("VMFO: Please select: Chinese+Enter, then re-send\n"); 				    	 
 //				IhuDebugPrint("VMFO: DIAL\t"); 				    	 
@@ -815,100 +815,100 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 //}
 
 ///*******************************************************************************
-//* 函数名 : GPRS_UART_SIM800A_mtest
+//* 函数名 : func_gprsmod_sim800a_mtest
 //* 描述   : SIM800A/GPRS主测试控制部分
 //* 输入   : 
 //* 输出   : 
 //* 返回   : 
 //* 注意   : 
 //*******************************************************************************/
-//OPSTAT GPRS_UART_SIM800A_mtest()
+//OPSTAT func_gprsmod_sim800a_mtest()
 //{
 //	uint8_t *p1; 
 //	IhuDebugPrint("VMFO: \nSIM800A/GPRS Test Program\n");  
-//	GPRS_UART_clear_receive_buffer(); 
-//	if(GPRS_UART_send_AT_command((uint8_t*)"AT+CGMI",(uint8_t*)"OK",5)==0)//查询制造商名称
+//	func_gprsmod_clear_receive_buffer(); 
+//	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CGMI",(uint8_t*)"OK",5)==0)//查询制造商名称
 //	{ 
 //		IhuDebugPrint("VMFO: Maunfacture:");
 //		p1=(uint8_t*)strstr((const char*)(BSP_STM32_SPS_GPRS_R_Buff+2),"\r\n");
-//		USART_PRINT_Send_Len((char*)BSP_STM32_SPS_GPRS_R_Buff+2,p1-BSP_STM32_SPS_GPRS_R_Buff);
-//		GPRS_UART_clear_receive_buffer(); 		
+//		func_gprsmod_print_send_len((char*)BSP_STM32_SPS_GPRS_R_Buff+2,p1-BSP_STM32_SPS_GPRS_R_Buff);
+//		func_gprsmod_clear_receive_buffer(); 		
 //	} 
-//	if(GPRS_UART_send_AT_command("AT+CGMM","OK",5)==0)//查询模块名字
+//	if(func_gprsmod_send_AT_command("AT+CGMM","OK",5)==0)//查询模块名字
 //	{ 
 //		IhuDebugPrint("VMFO: Module Type:");
 //		p1=(uint8_t*)strstr((const char*)(BSP_STM32_SPS_GPRS_R_Buff+2),"\r\n"); 
-//		USART_PRINT_Send_Len((char*)BSP_STM32_SPS_GPRS_R_Buff+2,p1-BSP_STM32_SPS_GPRS_R_Buff);
-//		GPRS_UART_clear_receive_buffer();
+//		func_gprsmod_print_send_len((char*)BSP_STM32_SPS_GPRS_R_Buff+2,p1-BSP_STM32_SPS_GPRS_R_Buff);
+//		func_gprsmod_clear_receive_buffer();
 //	} 
-//	if(GPRS_UART_send_AT_command("AT+CGSN","OK",5)==0)//查询产品序列号
+//	if(func_gprsmod_send_AT_command("AT+CGSN","OK",5)==0)//查询产品序列号
 //	{ 
 //		IhuDebugPrint("VMFO: Product Serial ID:");
 //		p1=(uint8_t*)strstr((const char*)(BSP_STM32_SPS_GPRS_R_Buff+2),"\r\n"); 
-//		USART_PRINT_Send_Len((char*)BSP_STM32_SPS_GPRS_R_Buff+2,p1-BSP_STM32_SPS_GPRS_R_Buff);
-//		GPRS_UART_clear_receive_buffer();		
+//		func_gprsmod_print_send_len((char*)BSP_STM32_SPS_GPRS_R_Buff+2,p1-BSP_STM32_SPS_GPRS_R_Buff);
+//		func_gprsmod_clear_receive_buffer();		
 //	}
-//	if(GPRS_UART_send_AT_command("AT+CNUM","+CNUM",2)==0)//查询本机号码
+//	if(func_gprsmod_send_AT_command("AT+CNUM","+CNUM",2)==0)//查询本机号码
 //	{ 
 //		uint8_t *p2;
 //		IhuDebugPrint("VMFO: Local Number:");
 //		p1=(uint8_t*)strstr((const char*)(BSP_STM32_SPS_GPRS_R_Buff),"\""); 
 //		p2=(uint8_t*)strstr((const char*)(p1+1),"\"");
 //    p1=(uint8_t*)strstr((const char*)(p2+1),"\"");
-//		USART_PRINT_Send_Len((char*)(p1+1),11);
-//		GPRS_UART_clear_receive_buffer();		
+//		func_gprsmod_print_send_len((char*)(p1+1),11);
+//		func_gprsmod_clear_receive_buffer();		
 //	}
 //	IhuDebugPrint("\r\n");
 //	return 1;
 //}
 
 ///*******************************************************************************
-//* 函数名 : GPRS_UART_SIM800A_gsm_test_info
+//* 函数名 : func_gprsmod_sim800a_gsm_test_info
 //* 描述   : SIM800A/GPRS状态信息检测(信号质量,电池电量,日期时间)
 //* 输入   : 
 //* 输出   : 
 //* 返回   : 
 //* 注意   : 
 //*******************************************************************************/
-//OPSTAT GPRS_UART_SIM800A_gsm_test_info(void)
+//OPSTAT func_gprsmod_sim800a_gsm_test_info(void)
 //{
 //	uint8_t *p1;
 //	uint8_t *p2;
 //	uint8_t res=0;
-//	GPRS_UART_clear_receive_buffer();
-//	if(GPRS_UART_send_AT_command("AT+CPIN?","OK",3))
+//	func_gprsmod_clear_receive_buffer();
+//	if(func_gprsmod_send_AT_command("AT+CPIN?","OK",3))
 //	{
 //    IhuDebugPrint("VMFO: Please check whether SIM card inserted!\n");
 //		res|=1<<0;	//查询SIM卡是否在位 
 //	}
-//	GPRS_UART_clear_receive_buffer(); 
+//	func_gprsmod_clear_receive_buffer(); 
 //	
-//	if(GPRS_UART_send_AT_command("AT+COPS?","OK",3)==0)		//查询运营商名字
+//	if(func_gprsmod_send_AT_command("AT+COPS?","OK",3)==0)		//查询运营商名字
 //	{ 
 //		p1=(uint8_t*)strstr((const char*)(BSP_STM32_SPS_GPRS_R_Buff),"\""); 
 //		if(p1)//有有效数据
 //		{
 //			p2=(uint8_t*)strstr((const char*)(p1+1),"\"");				
 //			IhuDebugPrint("VMFO: Opertor:");
-//			USART_PRINT_Send_Len((char*)p1+1,p2-p1-1);
+//			func_gprsmod_print_send_len((char*)p1+1,p2-p1-1);
 //			IhuDebugPrint("\r\n");
 //		}
 //	}else res|=1<<1;
-//	GPRS_UART_clear_receive_buffer();
+//	func_gprsmod_clear_receive_buffer();
 // 
-//	if(GPRS_UART_send_AT_command("AT+CSQ","OK",3)==0)		//查询信号质量
+//	if(func_gprsmod_send_AT_command("AT+CSQ","OK",3)==0)		//查询信号质量
 //	{ 
 //		p1=(uint8_t*)strstr((const char*)(BSP_STM32_SPS_GPRS_R_Buff),":");
 //		if(p1)
 //		{
 //			p2=(uint8_t*)strstr((const char*)(p1+1),",");
 //			IhuDebugPrint("VMFO: Singal quality:");
-//			USART_PRINT_Send_Len((char*)p1+2,p2-p1-2);
+//			func_gprsmod_print_send_len((char*)p1+2,p2-p1-2);
 //			IhuDebugPrint("\r\n");
 //		}		
 //	}else res|=1<<2;
 
-//  if(GPRS_UART_send_AT_command("AT+DDET=1","OK",3)==0)
+//  if(func_gprsmod_send_AT_command("AT+DDET=1","OK",3)==0)
 //	{
 //		IhuDebugPrint("VMFO: Module support DTMF audio-decode, support key-down during peer conversation");
 //    IhuDebugPrint("\r\n");	
@@ -917,7 +917,7 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 //    IhuDebugPrint("VMFO: Module not support DTMF audio-decode, Not support key-down during peer conversation");
 //    IhuDebugPrint("\r\n");	
 //	}
-//	if(GPRS_UART_send_AT_command("AT+CTTS=?","OK",3)==0)
+//	if(func_gprsmod_send_AT_command("AT+CTTS=?","OK",3)==0)
 //	{
 //		IhuDebugPrint("VMFO: Support TTS local voice, Support to convert TEXT into voice");
 //    IhuDebugPrint("\r\n");	
@@ -927,7 +927,7 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 //		IhuDebugPrint("VMFO: Module not support TTS local voice");
 //    IhuDebugPrint("\r\n");			
 //	}
-//	if(GPRS_UART_send_AT_command("AT+CIPSIM800ALOC=?","OK",3)==0)
+//	if(func_gprsmod_send_AT_command("AT+CIPSIM800ALOC=?","OK",3)==0)
 //	{
 //		IhuDebugPrint("VMFO: Module support base station positioning, able to fetch position information");
 //    IhuDebugPrint("\r\n");	
@@ -937,19 +937,19 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 //		IhuDebugPrint("VMFO: Module not support base station positioning");
 //    IhuDebugPrint("\r\n");			
 //	}
-//	GPRS_UART_clear_receive_buffer();
+//	func_gprsmod_clear_receive_buffer();
 //	
 //	return res;
 //}
 ///*******************************************************************************
-//* 函数名 : GPRS_UART_SIM800A_call_test
+//* 函数名 : func_gprsmod_sim800a_call_test
 //* 描述   : 拨号测试代码
 //* 输入   : 
 //* 输出   : 
 //* 返回   : 
 //* 注意   : 
 //*******************************************************************************/
-//OPSTAT GPRS_UART_SIM800A_call_test(void)
+//OPSTAT func_gprsmod_sim800a_call_test(void)
 //{	
 //	uint8_t temp[50];
 //	uint16_t len=0;
@@ -988,30 +988,30 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 //			case 0://有来电
 //				if(strstr((const char*)BSP_STM32_SPS_GPRS_R_Buff,"RING"))
 //				{
-//					GPRS_UART_clear_receive_buffer();
+//					func_gprsmod_clear_receive_buffer();
 //					IhuDebugPrint("VMFO: CALL Coming\n");
 //				}
 //				break;
 //			case 1:
-//						 if(GPRS_UART_send_AT_command("ATA","OK",2)==0)//接听
+//						 if(func_gprsmod_send_AT_command("ATA","OK",2)==0)//接听
 //						 {
 //							IhuDebugPrint("VMFO: Hand-on successful\n");
 //						  mode=4; 
 //						 }
 //				break;
-//			case 2:if(GPRS_UART_send_AT_command("ATH","OK",2)==0)//挂断
+//			case 2:if(func_gprsmod_send_AT_command("ATH","OK",2)==0)//挂断
 //							IhuDebugPrint("VMFO: Hand-off successful\n");		
 //						 mode=0;
 //				break;
 //			case 3://拨号
 //						IhuDebugPrint("VMFO:Call:");
-//						USART_PRINT_Send_Len((char*)BSP_STM32_SPS_PRINT_R_Buff+4,len-4);
+//						func_gprsmod_print_send_len((char*)BSP_STM32_SPS_PRINT_R_Buff+4,len-4);
 //						strcpy((char*)temp,"ATD");
 //						for(i=3;i<(len-4+3);i++)
 //						temp[i]=BSP_STM32_SPS_PRINT_R_Buff[i+1];
 //						temp[i++]=';';
 //						temp[i++]='\0';
-//						if(GPRS_UART_send_AT_command(temp,"OK",8)==0)
+//						if(func_gprsmod_send_AT_command(temp,"OK",8)==0)
 //						{
 //							IhuDebugPrint("VMFO: Call successful\n");
 //							mode=4;
@@ -1029,16 +1029,16 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 //				strcpy((char*)temp,"AT+VTS=");
 //				temp[7]=BSP_STM32_SPS_PRINT_R_Buff[0];
 //				temp[8]='\0';
-//				GPRS_UART_send_AT_command(temp,"OK",3);
+//				func_gprsmod_send_AT_command(temp,"OK",3);
 //				}
 //				if(strstr((const char*)BSP_STM32_SPS_GPRS_R_Buff,"DTMF:"))
 //				{
 //          ihu_usleep(10);
 //					p1=(uint8_t*)strstr((const char*)(BSP_STM32_SPS_GPRS_R_Buff),":");
 //					IhuDebugPrint("VMFO: Peer press key-down: ");
-//					USART_PRINT_Data(*(p1+1));
+//					func_gprsmod_print_data(*(p1+1));
 //					IhuDebugPrint("\r\n");	
-//					GPRS_UART_clear_receive_buffer();
+//					func_gprsmod_clear_receive_buffer();
 //				}
 //				break;
 //		}
@@ -1046,14 +1046,14 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 //	}
 //}
 ///*******************************************************************************
-//* 函数名 : GPRS_UART_SIM800A_sms_test
+//* 函数名 : func_gprsmod_sim800a_sms_test
 //* 描述   : 短信测试代码
 //* 输入   : 
 //* 输出   : 
 //* 返回   : 
 //* 注意   : 
 //*******************************************************************************/
-//OPSTAT GPRS_UART_SIM800A_sms_test(void)
+//OPSTAT func_gprsmod_sim800a_sms_test(void)
 //{
 //	uint16_t len=0;
 //	uint8_t mode=0;
@@ -1065,9 +1065,9 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 //	IhuDebugPrint("VMFO: Send SMS: Please enter telephone number + content with ENTER. Eg: 137xxxx+ This is a test!\n");
 //  IhuDebugPrint("VMFO: Check SMS: Inquery xx, xx represent the storage position\n");
 //	IhuDebugPrint("VMFO: Exit test: Enter 'EXIT + ENTER'\n");
-//	GPRS_UART_send_AT_command("AT+CMGF=1","OK",2);//设置短信发送模式
-//  GPRS_UART_send_AT_command("AT+CNMI=3,1,0,0,0","OK",2);//设置短信上报模式，上报位置
-//  GPRS_UART_send_AT_command("AT+CPMS=\"SM\",\"SM\",\"SM\"","OK",3);		//所有操作在SIM卡中进行
+//	func_gprsmod_send_AT_command("AT+CMGF=1","OK",2);//设置短信发送模式
+//  func_gprsmod_send_AT_command("AT+CNMI=3,1,0,0,0","OK",2);//设置短信上报模式，上报位置
+//  func_gprsmod_send_AT_command("AT+CPMS=\"SM\",\"SM\",\"SM\"","OK",3);		//所有操作在SIM卡中进行
 //	while(1)
 //	{
 //		if(SPS_PRINT_RX_STA&0x8000)
@@ -1093,8 +1093,8 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 //          IhuDebugPrint("VMFO: New SMS\n");
 //					IhuDebugPrint("VMFO: SMS Position: ");
 //					p=(uint8_t*)strstr((const char*)BSP_STM32_SPS_GPRS_R_Buff,",");
-//					USART_PRINT_SendString((char*)p+1);
-//					GPRS_UART_clear_receive_buffer();
+//					func_gprsmod_print_send_string((char*)p+1);
+//					func_gprsmod_clear_receive_buffer();
 //				}
 //				break;
 //			case 1:
@@ -1108,12 +1108,12 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 //				loc=strlen((const char*)temp);
 //			  temp[loc]='\"';
 //				temp[loc+1]='\0';
-//				GPRS_UART_send_AT_command(temp,">",2);//发送接收方号码
+//				func_gprsmod_send_AT_command(temp,">",2);//发送接收方号码
 //        strcpy((char*)&temp,(const char*)(p+1));
 //			  loc=strlen((const char*)temp);
 //				temp[loc]='\32';
 //				temp[loc+1]='\0';
-//			  if(GPRS_UART_send_AT_command(temp,"OK",20)==0)//发送短信内容
+//			  if(func_gprsmod_send_AT_command(temp,"OK",20)==0)//发送短信内容
 //					IhuDebugPrint("VMFO: Send SMS successful\n");
 //        else
 //					IhuDebugPrint("VMFO: Send SMS failure\n");
@@ -1127,15 +1127,15 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 //			  loc=strlen((const char*)temp);
 //				strcpy((char*)(&temp[loc]),(const char*)(p+2));
 //				loc=strlen((const char*)temp);
-//			  if(GPRS_UART_send_AT_command(temp,"OK",5)==0)
+//			  if(func_gprsmod_send_AT_command(temp,"OK",5)==0)
 //				{
 //					p=(uint8_t*)strstr((const char*)(BSP_STM32_SPS_GPRS_R_Buff+2),"\r\n");
 //					p1=(uint8_t*)strstr((const char*)(p+2),"\r\n");
 //					loc=p1-p;
 //					IhuDebugPrint("VMFO: SMS Content: ");
-//					USART_PRINT_Send_Len((char*)p+2,loc);
+//					func_gprsmod_print_send_len((char*)p+2,loc);
 //				}
-//        GPRS_UART_clear_receive_buffer();
+//        func_gprsmod_clear_receive_buffer();
 //				mode=0;
 //				break;
 //			case 3:
@@ -1144,7 +1144,7 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 //				strcpy((char*)temp,(const char *)"AT+CSCA=");
 //			  loc=sizeof("AT+CSCA=");
 //				strcpy((char*)(&temp[loc-1]),(const char*)&BSP_STM32_SPS_PRINT_R_Buff[4]);
-//				if(GPRS_UART_send_AT_command(temp,"OK",3)==0)
+//				if(func_gprsmod_send_AT_command(temp,"OK",3)==0)
 //					IhuDebugPrint("VMFO: Set SMS center successful\n");
 //				else
 //					IhuDebugPrint("VMFO: Set SMS center failure\n");
@@ -1155,14 +1155,14 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 //}
 
 ///*******************************************************************************
-//* 函数名 : GPRS_UART_SIM800A_gprs_test
+//* 函数名 : func_gprsmod_sim800a_gprs_test
 //* 描述   : GPRS测试代码
 //* 输入   : 
 //* 输出   : 
 //* 返回   : 
 //* 注意   :  为了保持连接，每空闲隔10秒发送一次心跳
 //*******************************************************************************/
-//OPSTAT GPRS_UART_SIM800A_gprs_test(void)
+//OPSTAT func_gprsmod_sim800a_gprs_test(void)
 //{	
 //  uint16_t len=0;
 //	uint8_t mode=0;
@@ -1196,7 +1196,7 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 //					GPRS_UART_TIMER_RECON_Count=1;
 //					flag=2;
 //					mode=3;
-//					GPRS_UART_clear_receive_buffer();
+//					func_gprsmod_clear_receive_buffer();
 //			}else
 //			if((flag==1)&&((strstr((const char*)BSP_STM32_SPS_GPRS_R_Buff,"CLOSED"))&&(GPRS_UART_TIMER_RECON_Count>10)))//连接失败或超时
 //			{
@@ -1208,7 +1208,7 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 //					GPRS_UART_TIMER_RECON_Count=0;
 //					flag=0;
 //					mode=1; //重新连接
-//					GPRS_UART_clear_receive_buffer();
+//					func_gprsmod_clear_receive_buffer();
 //			}	
 //			if((flag==2)&&(GPRS_UART_TIMER_RECON_Count>10))//每10秒一个心跳包
 //			{
@@ -1224,9 +1224,9 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 //							IhuDebugPrint("VMFO: New content\n");
 //							p1=(uint8_t*)strstr((const char*)BSP_STM32_SPS_GPRS_R_Buff,",");
 //							p2=(uint8_t*)strstr((const char*)BSP_STM32_SPS_GPRS_R_Buff,":");
-//							USART_PRINT_Send_Len((char*)(p2+1),GPRS_UART_change_str_Data((p1+1),(p2-p1-1)));
+//							func_gprsmod_print_send_len((char*)(p2+1),func_gprsmod_convert_str_to_int((p1+1),(p2-p1-1)));
 //							IhuDebugPrint("\r\n");
-//							GPRS_UART_clear_receive_buffer();
+//							func_gprsmod_clear_receive_buffer();
 //						}
 //			break;
 //			case 1: 
@@ -1235,15 +1235,15 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 //                strcpy((char*)&temp,(const char*)"AT+CIPSTART=");
 //							  memcpy((char*)&temp[12],(const char*)(&BSP_STM32_SPS_PRINT_R_Buff[4]),len-4);
 //							  temp[len+12]='\0';
-//							  GPRS_UART_send_AT_command("AT+CIPCLOSE=1","CLOSE OK",2);	//关闭连接
-//								GPRS_UART_send_AT_command("AT+CIPSHUT","SHUT OK",2);		//关闭移动场景
-// 							  GPRS_UART_send_AT_command("AT+CGCLASS=\"B\"","OK",2);//设置GPRS移动台类别为B,支持包交换和数据交换 
-//								GPRS_UART_send_AT_command("AT+CGDCONT=1,\"IP\",\"CMNET\"","OK",2);//设置PDP上下文,互联网接协议,接入点等信息
-//								GPRS_UART_send_AT_command("AT+CGATT=1","OK",2);//附着GPRS业务
-//								GPRS_UART_send_AT_command("AT+CIPCSGP=1,\"CMNET\"","OK",2);//设置为GPRS连接模式
-//								GPRS_UART_send_AT_command("AT+CIPHEAD=1","OK",2);//设置接收数据显示IP头(方便判断数据来源,仅在单路连接有效)
-//                GPRS_UART_send_AT_command("AT+CIPMUX=0","OK",2);//设置单路连接
-//                if(GPRS_UART_send_AT_command(temp,"OK",2 )==0)//发起连接
+//							  func_gprsmod_send_AT_command("AT+CIPCLOSE=1","CLOSE OK",2);	//关闭连接
+//								func_gprsmod_send_AT_command("AT+CIPSHUT","SHUT OK",2);		//关闭移动场景
+// 							  func_gprsmod_send_AT_command("AT+CGCLASS=\"B\"","OK",2);//设置GPRS移动台类别为B,支持包交换和数据交换 
+//								func_gprsmod_send_AT_command("AT+CGDCONT=1,\"IP\",\"CMNET\"","OK",2);//设置PDP上下文,互联网接协议,接入点等信息
+//								func_gprsmod_send_AT_command("AT+CGATT=1","OK",2);//附着GPRS业务
+//								func_gprsmod_send_AT_command("AT+CIPCSGP=1,\"CMNET\"","OK",2);//设置为GPRS连接模式
+//								func_gprsmod_send_AT_command("AT+CIPHEAD=1","OK",2);//设置接收数据显示IP头(方便判断数据来源,仅在单路连接有效)
+//                func_gprsmod_send_AT_command("AT+CIPMUX=0","OK",2);//设置单路连接
+//                if(func_gprsmod_send_AT_command(temp,"OK",2 )==0)//发起连接
 //								{
 //                  IhuDebugPrint("VMFO: New connecting\n");
 //									GPRS_UART_TIMER_RECON_Count=1;
@@ -1266,11 +1266,11 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 //              if(flag==2)
 //							{
 //                IhuDebugPrint("VMFO: Begin to send..........\n");
-//								if(GPRS_UART_send_AT_command("AT+CIPSEND",">",2)==0)
+//								if(func_gprsmod_send_AT_command("AT+CIPSEND",">",2)==0)
 //								{
 //										 BSP_STM32_SPS_PRINT_R_Buff[len]='\32';
 //										 BSP_STM32_SPS_PRINT_R_Buff[len+1]='\0';
-//										 if(GPRS_UART_send_AT_command(&BSP_STM32_SPS_PRINT_R_Buff[4],"SEND OK",8)==0)
+//										 if(func_gprsmod_send_AT_command(&BSP_STM32_SPS_PRINT_R_Buff[4],"SEND OK",8)==0)
 //										 { 								
 //													IhuDebugPrint("VMFO: Send successful\n");
 //													GPRS_UART_TIMER_RECON_Count=1;
@@ -1280,57 +1280,57 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 //										 
 //								}else
 //								{
-//										 GPRS_UART_Data_byte_send(0X1B);//ESC,取消发送
+//										 func_gprsmod_data_byte_send(0X1B);//ESC,取消发送
 //                     IhuDebugPrint("VMFO: Send failure\n");
 //								}
 //						  }else IhuDebugPrint("VMFO: Not connected\n");
 //							mode=0;
 //			break;
 //			case 3:
-//						if(GPRS_UART_send_AT_command("AT+CIPSEND",">",2)==0)
+//						if(func_gprsmod_send_AT_command("AT+CIPSEND",">",2)==0)
 //						{
-//							GPRS_UART_Data_byte_send(0x00);
-//							GPRS_UART_Data_byte_send(0X1A);//CTRL+Z,结束数据发送,启动一次传输								
+//							func_gprsmod_data_byte_send(0x00);
+//							func_gprsmod_data_byte_send(0X1A);//CTRL+Z,结束数据发送,启动一次传输								
 //							IhuDebugPrint("VMFO: Heart-beat successful\n");
 
 //								 
 //						}else
 //						{
-//								 GPRS_UART_Data_byte_send(0X1B);//ESC,取消发送
+//								 func_gprsmod_data_byte_send(0X1B);//ESC,取消发送
 //							IhuDebugPrint("VMFO: Heart-beat failure\n");
 //						}
 //				mode=0;
 //			break;
 //			case 4:
-//						GPRS_UART_send_AT_command("AT+CIPCLOSE=1","CLOSE OK",5);	//关闭连接
-//						GPRS_UART_send_AT_command("AT+CIPSHUT","SHUT OK",5);		//关闭移动场景
+//						func_gprsmod_send_AT_command("AT+CIPCLOSE=1","CLOSE OK",5);	//关闭连接
+//						func_gprsmod_send_AT_command("AT+CIPSHUT","SHUT OK",5);		//关闭移动场景
 //						return 1;
 //		}      
 //	}
 //}
 
 ///*******************************************************************************
-//* 函数名 : GPRS_UART_SIM800A_jz_test
+//* 函数名 : func_gprsmod_sim800a_jz_test
 //* 描述   : 基站定位测试代码
 //* 输入   : 
 //* 输出   : 
 //* 返回   : 
 //* 注意   : 
 //*******************************************************************************/
-//OPSTAT GPRS_UART_SIM800A_jz_test(void)
+//OPSTAT func_gprsmod_sim800a_jz_test(void)
 //{
 //  uint8_t *p1,*p2,*p3;
 //	IhuDebugPrint("VMFO: @@@@@@@@@@@@@@@@@@@@@Base Station POSITON TEST@@@@@@@@@@@@@@@@@@@@@@@@@\r\n");
 //	IhuDebugPrint("VMFO: EXIT TEST: EXIT + ENTER\n");
-//	GPRS_UART_send_AT_command("AT+SAPBR=3,1,\"Contype\",\"GPRS\"","OK",2);
-//	GPRS_UART_send_AT_command("AT+SAPBR=3,1,\"APN\",\"CMNET\"","OK",2);
-//  if(GPRS_UART_send_AT_command("AT+SAPBR=1,1","OK",5))//激活
+//	func_gprsmod_send_AT_command("AT+SAPBR=3,1,\"Contype\",\"GPRS\"","OK",2);
+//	func_gprsmod_send_AT_command("AT+SAPBR=3,1,\"APN\",\"CMNET\"","OK",2);
+//  if(func_gprsmod_send_AT_command("AT+SAPBR=1,1","OK",5))//激活
 //	{
 //	
 //		IhuDebugPrint("VMFO: Open failure, please conform module own this function or not\n");
 //		return 1;		
 //	}
-//	if(GPRS_UART_send_AT_command("AT+SAPBR=2,1","OK",5))
+//	if(func_gprsmod_send_AT_command("AT+SAPBR=2,1","OK",5))
 //	{
 //    IhuDebugPrint("VMFO: Fetch local IP error\n");
 //		return 2;
@@ -1343,13 +1343,13 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 //			SPS_PRINT_RX_STA=0;
 //			if(strstr((const char*)BSP_STM32_SPS_PRINT_R_Buff,"EXIT"))//退出
 //			{
-//				 GPRS_UART_send_AT_command("AT+SAPBR=0,1","OK",2);//关闭
+//				 func_gprsmod_send_AT_command("AT+SAPBR=0,1","OK",2);//关闭
 //				 return 0;
 //			}
 //			else
 //			IhuDebugPrint("VMFO: ENTER ERROR\n");
 //		}
-//    if(GPRS_UART_send_AT_command("AT+CIPSIM800ALOC=1,1","OK",10)==0)//获取经纬度和时间
+//    if(func_gprsmod_send_AT_command("AT+CIPSIM800ALOC=1,1","OK",10)==0)//获取经纬度和时间
 //		{
 //        GPRS_UART_TIMER_RECON_Count=1;
 // 			  p1=(uint8_t*)strstr((const char*)(BSP_STM32_SPS_GPRS_R_Buff),",");
@@ -1357,17 +1357,17 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 //				if(p1)//有效数据
 //				{	
 //					p2=(uint8_t*)strtok((char*)(p1),",");
-//          IhuDebugPrint("VMFO: Longitude:");USART_PRINT_SendString((char *)p2);USART_PRINT_Data('\t');
+//          IhuDebugPrint("VMFO: Longitude:");func_gprsmod_print_send_string((char *)p2);func_gprsmod_print_data('\t');
 //					
 //					p2=(uint8_t*)strtok(NULL,",");
-//          IhuDebugPrint("VMFO: Latitude:");USART_PRINT_SendString((char *)p2);USART_PRINT_Data('\t');
+//          IhuDebugPrint("VMFO: Latitude:");func_gprsmod_print_send_string((char *)p2);func_gprsmod_print_data('\t');
 //					
 //					p2=(uint8_t*)strtok(NULL,",");
-//          IhuDebugPrint("VMFO: Date:");USART_PRINT_SendString((char *)p2);USART_PRINT_Data('\t');
+//          IhuDebugPrint("VMFO: Date:");func_gprsmod_print_send_string((char *)p2);func_gprsmod_print_data('\t');
 //					
 //					p2=(uint8_t*)strtok(NULL,",");
 //					*p3='\0';//插入结束符
-//          IhuDebugPrint("VMFO: Time:");USART_PRINT_SendString((char *)p2);IhuDebugPrint("\r\n");
+//          IhuDebugPrint("VMFO: Time:");func_gprsmod_print_send_string((char *)p2);IhuDebugPrint("\r\n");
 //				}
 //		}
 //		if(GPRS_UART_TIMER_RECON_Count>11)
@@ -1389,20 +1389,20 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 //* 注意   : 
 //*******************************************************************************/
 ///*
-//OPSTAT GPRS_UART_SIM800A_jz_test(void)
+//OPSTAT func_gprsmod_sim800a_jz_test(void)
 //{
 //  uint8_t *p1,*p2,*p3;
 //	IhuDebugPrint("VMFO: @@@@@@@@@@@@@@@@@@@@@Base Station POSITON TEST@@@@@@@@@@@@@@@@@@@@@@@@@\n");
 //	IhuDebugPrint("VMFO: EXIT TEST：EXIT + ENTER\n");
-//	GPRS_UART_send_AT_command("AT+SAPBR=3,1,\"Contype\",\"GPRS\"","OK",2);
-//	GPRS_UART_send_AT_command("AT+SAPBR=3,1,\"APN\",\"CMNET\"","OK",2);
-//  if(GPRS_UART_send_AT_command("AT+SAPBR=1,1","OK",5))//激活
+//	func_gprsmod_send_AT_command("AT+SAPBR=3,1,\"Contype\",\"GPRS\"","OK",2);
+//	func_gprsmod_send_AT_command("AT+SAPBR=3,1,\"APN\",\"CMNET\"","OK",2);
+//  if(func_gprsmod_send_AT_command("AT+SAPBR=1,1","OK",5))//激活
 //	{
 //		//sim900a_send_cmd("AT+SAPBR=0,1","OK",2);//关闭
 //		IhuDebugPrint("VMFO: Open failure, please conform module own this function or not\n");
 //		return 1;		
 //	}
-//	if(GPRS_UART_send_AT_command("AT+SAPBR=2,1","OK",5))
+//	if(func_gprsmod_send_AT_command("AT+SAPBR=2,1","OK",5))
 //	{
 //    IhuDebugPrint("VMFO: Fetch local IP error\n");
 //		return 2;
@@ -1415,13 +1415,13 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 //			SPS_PRINT_RX_STA=0;
 //			if(strstr(BSP_STM32_SPS_PRINT_R_Buff,"EXIT"))//退出
 //			{
-//				 GPRS_UART_send_AT_command("AT+SAPBR=0,1","OK",2);//关闭
+//				 func_gprsmod_send_AT_command("AT+SAPBR=0,1","OK",2);//关闭
 //				 return 0;
 //			}
 //			else
 //			IhuDebugPrint("VMFO: Enter Error\n");
 //		}
-//    if(GPRS_UART_send_AT_command("AT+CIPSIM800ALOC=1,1","OK",10)==0)//获取经纬度和时间
+//    if(func_gprsmod_send_AT_command("AT+CIPSIM800ALOC=1,1","OK",10)==0)//获取经纬度和时间
 //		{
 //        GPRS_UART_TIMER_RECON_Count=1;
 // 			  p1=(uint8_t*)strstr((const char*)(BSP_STM32_SPS_GPRS_R_Buff),",");
@@ -1429,17 +1429,17 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 //				if(p1)//有效数据
 //				{	
 //					p2=(uint8_t*)strtok((char*)(p1),",");
-//          IhuDebugPrint("VMFO: Logiture:");USART_PRINT_SendString(p2);UART1_SendData('\t');
+//          IhuDebugPrint("VMFO: Logiture:");func_gprsmod_print_send_string(p2);UART1_SendData('\t');
 //					
 //					p2=(uint8_t*)strtok(NULL,",");
-//          IhuDebugPrint("VMFO: Latitude:");USART_PRINT_SendString(p2);UART1_SendData('\t');
+//          IhuDebugPrint("VMFO: Latitude:");func_gprsmod_print_send_string(p2);UART1_SendData('\t');
 //					
 //					p2=(uint8_t*)strtok(NULL,",");
-//          IhuDebugPrint("VMFO: Date:");USART_PRINT_SendString(p2);UART1_SendData('\t');
+//          IhuDebugPrint("VMFO: Date:");func_gprsmod_print_send_string(p2);UART1_SendData('\t');
 //					
 //					p2=(uint8_t*)strtok(NULL,",");
 //					*p3='\0';//插入结束符
-//          IhuDebugPrint("VMFO: Time:");USART_PRINT_SendString(p2);IhuDebugPrint("\r\n");
+//          IhuDebugPrint("VMFO: Time:");func_gprsmod_print_send_string(p2);IhuDebugPrint("\r\n");
 //				}
 //		}
 //		if(GPRS_UART_TIMER_RECON_Count>11)
@@ -1454,24 +1454,24 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 //*/
 
 ///*******************************************************************************
-//* 函数名 : GPRS_UART_SIM800A_tts_test
+//* 函数名 : func_gprsmod_sim800a_tts_test
 //* 描述   : TTS文本语音测试代码
 //* 输入   : 
 //* 输出   : 
 //* 返回   : 
 //* 注意   : 
 //*******************************************************************************/
-//OPSTAT GPRS_UART_SIM800A_tts_test(void)
+//OPSTAT func_gprsmod_sim800a_tts_test(void)
 //{
 //  uint16_t len=0;
 //  uint8_t temp_src[]="Hello, this is a test from BXXH!";
-//	uint8_t temp[IHU_GPRS_UART_TTS_MAX_LEN+15];
+//	uint8_t temp[IHU_VMMW_GPRSMOD_TTS_MAX_LEN+15];
 //	uint8_t loc=0;
 //	IhuDebugPrint("VMFO: @@@@@@@@@@@@@@@@@@@@@TTS TEXT VOICE TEST@@@@@@@@@@@@@@@@@@@@@@@\n");
 //	IhuDebugPrint("VMFO: EXIT TEST: EXIT + ENTER\n");
 //	IhuDebugPrint("VMFO: VOICE Brocasting: Please enter content + Enter\n");
 //  IhuDebugPrint("VMFO: Attention, support max 100 byte\n");
-//	if(GPRS_UART_send_AT_command("AT+CTTS=?","OK",2))
+//	if(func_gprsmod_send_AT_command("AT+CTTS=?","OK",2))
 //	{
 //		IhuDebugPrint("VMFO: Error: Please inquery this module own this function or not\n");
 //		 return 1;
@@ -1482,20 +1482,20 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 //	strcpy((char*)&temp[loc-1],(const char*)temp_src);
 //	temp[loc+len-1]='\"';
 //	temp[loc+len]='\0';
-//  GPRS_UART_send_AT_command(temp,"OK",3);
+//  func_gprsmod_send_AT_command(temp,"OK",3);
 //	while(1)
 //	{
 //		if(SPS_PRINT_RX_STA&0x8000)
 //		{
 //      len=SPS_PRINT_RX_STA&0X3FFF;
-//			if(len>(IHU_GPRS_UART_TTS_MAX_LEN/2))len=(IHU_GPRS_UART_TTS_MAX_LEN/2);
+//			if(len>(IHU_VMMW_GPRSMOD_TTS_MAX_LEN/2))len=(IHU_VMMW_GPRSMOD_TTS_MAX_LEN/2);
 //      SPS_PRINT_RX_STA=0;
 //			if((len==4)&&(strstr((const char*)BSP_STM32_SPS_PRINT_R_Buff,"EXIT")))//退出	
 //			return 0;
-//			GPRS_UART_SendString("AT+CTTS=2,\"");
+//			func_gprsmod_send_string("AT+CTTS=2,\"");
 //			BSP_STM32_SPS_PRINT_R_Buff[len]='\"';
 //			BSP_STM32_SPS_PRINT_R_Buff[len+1]='\0';
-//			if(GPRS_UART_send_AT_command(BSP_STM32_SPS_PRINT_R_Buff,"OK",2))
+//			if(func_gprsmod_send_AT_command(BSP_STM32_SPS_PRINT_R_Buff,"OK",2))
 //				IhuDebugPrint("VMFO: Wait for previous frame accomplish\n");
 //		}
 //	}
@@ -1509,24 +1509,24 @@ OPSTAT GPRS_UART_SIM800A_tts_procedure(void)
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-void GPRS_UART_connect_server(void)
+void func_gprsmod_sim800a_connect_server(void)
 {
-	GPRS_UART_clear_receive_buffer();
-	GPRS_UART_SendString("AT+CIPCLOSE=1");	//关闭连接
+	func_gprsmod_clear_receive_buffer();
+	func_gprsmod_send_string("AT+CIPCLOSE=1");	//关闭连接
   ihu_usleep(100);
-	GPRS_UART_send_AT_command("AT+CIPSHUT","SHUT OK", 3);		//关闭移动场景
-	GPRS_UART_send_AT_command("AT+CGCLASS=\"B\"","OK", 3);//设置GPRS移动台类别为B,支持包交换和数据交换 
-	GPRS_UART_send_AT_command("AT+CGDCONT=1,\"IP\",\"CMNET\"","OK", 3);//设置PDP上下文,互联网接协议,接入点等信息
-	GPRS_UART_send_AT_command("AT+CGATT=1","OK", 3);//附着GPRS业务
-	GPRS_UART_send_AT_command("AT+CIPCSGP=1,\"CMNET\"","OK", 3);//设置为GPRS连接模式
-  GPRS_UART_send_AT_command("AT+CIPMUX=0","OK", 3);//设置为单路连接
-	GPRS_UART_send_AT_command("AT+CIPHEAD=1","OK", 3);//设置接收数据显示IP头(方便判断数据来源,仅在单路连接有效)
-	GPRS_UART_send_AT_command("AT+CIPMODE=1","OK", 3);//打开透传功能
-	GPRS_UART_send_AT_command("AT+CIPCCFG=4,5,200,1","OK", 3);//配置透传模式：单包重发次数:2,间隔1S发送一次,每次发送200的字节
-  GPRS_UART_send_AT_command((uint8_t *)GPRS_UART_string, "OK", 5);//建立连接
+	func_gprsmod_send_AT_command("AT+CIPSHUT","SHUT OK", 3);		//关闭移动场景
+	func_gprsmod_send_AT_command("AT+CGCLASS=\"B\"","OK", 3);//设置GPRS移动台类别为B,支持包交换和数据交换 
+	func_gprsmod_send_AT_command("AT+CGDCONT=1,\"IP\",\"CMNET\"","OK", 3);//设置PDP上下文,互联网接协议,接入点等信息
+	func_gprsmod_send_AT_command("AT+CGATT=1","OK", 3);//附着GPRS业务
+	func_gprsmod_send_AT_command("AT+CIPCSGP=1,\"CMNET\"","OK", 3);//设置为GPRS连接模式
+  func_gprsmod_send_AT_command("AT+CIPMUX=0","OK", 3);//设置为单路连接
+	func_gprsmod_send_AT_command("AT+CIPHEAD=1","OK", 3);//设置接收数据显示IP头(方便判断数据来源,仅在单路连接有效)
+	func_gprsmod_send_AT_command("AT+CIPMODE=1","OK", 3);//打开透传功能
+	func_gprsmod_send_AT_command("AT+CIPCCFG=4,5,200,1","OK", 3);//配置透传模式：单包重发次数:2,间隔1S发送一次,每次发送200的字节
+  func_gprsmod_send_AT_command((uint8_t *)GPRS_UART_string, "OK", 5);//建立连接
   
   ihu_usleep(100);                                //等待串口数据接收完毕
-  GPRS_UART_clear_receive_buffer();                                    //清串口接收缓存为透传模式准备
+  func_gprsmod_clear_receive_buffer();                                    //清串口接收缓存为透传模式准备
 }
 
 /*******************************************************************************
@@ -1537,7 +1537,7 @@ void GPRS_UART_connect_server(void)
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-void GPRS_UART_Rec_Server_Data(void)
+void func_gprsmod_sim800a_rec_server_data(void)
 {
 //p2指向发送数据，p1指向接收数据，这里可以使用BSP_STM32_SPS_GPRS_R_Count来判断
 //	if(p2!=p1)   		//说明还有数据未发出
@@ -1551,16 +1551,16 @@ void GPRS_UART_Rec_Server_Data(void)
 }
 
 //一个完整的数据流程，且不断回送数据
-void GPRS_UART_data_connection_and_receive_process(void)
+void func_gprsmod_sim800a_data_connection_and_receive_process(void)
 {
 	IhuDebugPrint("VMFO: GPRS Module GPRS register network!\n");
-	GPRS_UART_SendString("+++");//退出透传模式，避免模块还处于透传模式中
+	func_gprsmod_send_string("+++");//退出透传模式，避免模块还处于透传模式中
   ihu_usleep(500);  //500ms
-	GPRS_UART_Wait_CREG();   //等待模块注册成功
+	func_gprsmod_wait_CREG();   //等待模块注册成功
 	IhuDebugPrint("VMFO: GPRS Register Success!\n");
 	IhuDebugPrint("VMFO: GPRS Module connect server!\n");
-	GPRS_UART_Set_ATE0();    //取消回显
-	GPRS_UART_connect_server(); //设置GPRS参数
+	func_grpsmod_set_ATE0();    //取消回显
+	func_gprsmod_sim800a_connect_server(); //设置GPRS参数
 	IhuDebugPrint("VMFO: Connect success!\n");
 
 //	while(1)
@@ -1592,30 +1592,30 @@ void GPRS_UART_data_connection_and_receive_process(void)
 *
 * 本函数只是放在这儿，并没有被用上
 *******************************************************************************/
-void USART_PRINT_IRQHandler(void)                	
-{
-	uint8_t res;
+//void USART_PRINT_IRQHandler(void)                	
+//{
+//	uint8_t res;
 
-	//res=USART_ReceiveData(USART_PRINT);
-	Time_UART_PRINT=0;
-	if((SPS_PRINT_RX_STA&0x8000)==0)//接收未完成
-	{
-		if(SPS_PRINT_RX_STA&0x4000)//接收到了0x0d
-		{
-			if(res!=0x0a)SPS_PRINT_RX_STA=0;//接收错误,重新开始
-			else SPS_PRINT_RX_STA|=0x8000;	//接收完成了 
-		}else //还没收到0X0D
-		{	
-			if(res==0x0d)SPS_PRINT_RX_STA|=0x4000;
-			else
-			{
-				BSP_STM32_SPS_PRINT_R_Buff[SPS_PRINT_RX_STA&0X3FFF]=res;
-				SPS_PRINT_RX_STA++;
-				if(SPS_PRINT_RX_STA>(BSP_STM32_SPS_PRINT_REC_MAXLEN-1))SPS_PRINT_RX_STA=0;//接收数据错误,重新开始接收	  
-			}		 
-		}
-	}  
-} 
+//	//res=USART_ReceiveData(USART_PRINT);
+//	Time_UART_PRINT=0;
+//	if((SPS_PRINT_RX_STA&0x8000)==0)//接收未完成
+//	{
+//		if(SPS_PRINT_RX_STA&0x4000)//接收到了0x0d
+//		{
+//			if(res!=0x0a)SPS_PRINT_RX_STA=0;//接收错误,重新开始
+//			else SPS_PRINT_RX_STA|=0x8000;	//接收完成了 
+//		}else //还没收到0X0D
+//		{	
+//			if(res==0x0d)SPS_PRINT_RX_STA|=0x4000;
+//			else
+//			{
+//				BSP_STM32_SPS_PRINT_R_Buff[SPS_PRINT_RX_STA&0X3FFF]=res;
+//				SPS_PRINT_RX_STA++;
+//				if(SPS_PRINT_RX_STA>(BSP_STM32_SPS_PRINT_REC_MAXLEN-1))SPS_PRINT_RX_STA=0;//接收数据错误,重新开始接收	  
+//			}		 
+//		}
+//	}  
+//} 
 
 /*******************************************************************************
 * 函数名  : TIM2_IRQHandler
@@ -1625,47 +1625,47 @@ void USART_PRINT_IRQHandler(void)
 * 返回    : 无 
 * 说明    : 无
 *******************************************************************************/
-void TIM_USART_GPRS_IRQHandler(void)   //IHU_TIM_USART_GPRS_ID中断
-{
-	//if (TIM_GetITStatus(IHU_TIM_USART_GPRS_ID, TIM_IT_Update) != RESET)  //检查TIM3更新中断发生与否
-	{
-		//TIM_ClearITPendingBit(IHU_TIM_USART_GPRS_ID, TIM_IT_Update  );  //清除TIMx更新中断标志	
-		
-		//重连计数器
-		//GPRS_UART_TIMER_RECON_Count==1时启动计数，溢出自动停止
-		if(GPRS_UART_TIMER_RECON_Count>=1)GPRS_UART_TIMER_RECON_Count++;
-		
-		//延时计数器
-		if(GPRS_UART_TIMER_START_Flag) GPRS_UART_TIMER_DELAY_Count++;		
+//void TIM_USART_GPRS_IRQHandler(void)   //IHU_VMMW_GPRSMOD_TIM_CHAN_ID中断
+//{
+//	//if (TIM_GetITStatus(IHU_VMMW_GPRSMOD_TIM_CHAN_ID, TIM_IT_Update) != RESET)  //检查TIM3更新中断发生与否
+//	{
+//		//TIM_ClearITPendingBit(IHU_VMMW_GPRSMOD_TIM_CHAN_ID, TIM_IT_Update  );  //清除TIMx更新中断标志	
+//		
+//		//重连计数器
+//		//GPRS_UART_TIMER_RECON_Count==1时启动计数，溢出自动停止
+//		if(GPRS_UART_TIMER_RECON_Count>=1)GPRS_UART_TIMER_RECON_Count++;
+//		
+//		//延时计数器
+//		if(GPRS_UART_TIMER_START_Flag) GPRS_UART_TIMER_DELAY_Count++;		
 
-		//延迟到达后，不再计数，重新启动
-		if(GPRS_UART_TIMER_DELAY_Count > (GPRS_UART_TIMER_WAIT_Duration))
-		{
-			GPRS_UART_TIMER_START_Flag = 0;
-			GPRS_UART_TIMER_DELAY_Count = 0;
-		}
-		
-//		//接收IRQ的计数器，由GPRS_UART_IRQ触发
-//		SPS_GPRS_TIMER_TRIGGER_Count++;
-		
-		//正在接收状态中
-		if(SPS_PRINT_RX_STA&(~0x8000))
-		{
-			Time_UART_PRINT++;
-			if(Time_UART_PRINT>=200)SPS_PRINT_RX_STA=0;//接收超时，复位接收
-		}
-	}	
-}
+//		//延迟到达后，不再计数，重新启动
+//		if(GPRS_UART_TIMER_DELAY_Count > (GPRS_UART_TIMER_WAIT_Duration))
+//		{
+//			GPRS_UART_TIMER_START_Flag = 0;
+//			GPRS_UART_TIMER_DELAY_Count = 0;
+//		}
+//		
+////		//接收IRQ的计数器，由GPRS_UART_IRQ触发
+////		SPS_GPRS_TIMER_TRIGGER_Count++;
+//		
+//		//正在接收状态中
+//		if(SPS_PRINT_RX_STA&(~0x8000))
+//		{
+//			Time_UART_PRINT++;
+//			if(Time_UART_PRINT>=200)SPS_PRINT_RX_STA=0;//接收超时，复位接收
+//		}
+//	}	
+//}
 
 /*******************************************************************************
-* 函数名 : GPRS_UART_clear_receive_buffer
+* 函数名 : func_gprsmod_clear_receive_buffer
 * 描述   : 清除串口2缓存数据
 * 输入   : 
 * 输出   : 
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-void GPRS_UART_clear_receive_buffer(void)
+void func_gprsmod_clear_receive_buffer(void)
 {
 	uint16_t k;
 	for(k=0;k<BSP_STM32_SPS_GPRS_REC_MAXLEN;k++)      //将缓存内容清零
@@ -1677,16 +1677,16 @@ void GPRS_UART_clear_receive_buffer(void)
 
 
 /*******************************************************************************
-* 函数名 : GPRS_UART_send_AT_command
+* 函数名 : func_gprsmod_send_AT_command
 * 描述   : 发送AT指令函数
 * 输入   : 发送数据的指针、发送等待时间(单位：S)
 * 输出   : 
 * 返回   : 1:正常  -2:错误
 * 注意   : 
-* OPSTAT GPRS_UART_send_AT_command(uint8_t *cmd, uint8_t *ack, uint8_t wait_time)  
+* OPSTAT func_gprsmod_send_AT_command(uint8_t *cmd, uint8_t *ack, uint8_t wait_time)  
 * 这里的发送，只有成功返回ACK对应的回复时，才算成功
 *******************************************************************************/
-OPSTAT GPRS_UART_send_AT_command(uint8_t *cmd, uint8_t *ack, uint16_t wait_time) //in Second
+OPSTAT func_gprsmod_send_AT_command(uint8_t *cmd, uint8_t *ack, uint16_t wait_time) //in Second
 {
 	int res;
 	
@@ -1694,9 +1694,9 @@ OPSTAT GPRS_UART_send_AT_command(uint8_t *cmd, uint8_t *ack, uint16_t wait_time)
 	uint32_t tickTotal = wait_time * 1000 / SPS_UART_RX_MAX_DELAY_DURATION;
 
 	//清理接收缓冲区
-	GPRS_UART_clear_receive_buffer();
+	func_gprsmod_clear_receive_buffer();
 	BSP_STM32_SPS_GPRS_SendData((uint8_t *)cmd, strlen((char*)cmd));
-	GPRS_UART_SendLR();	
+	func_gprsmod_send_LR();	
 
 //	//接收，注意时钟刻度
 //	ihu_usleep(wait_time * 1000);
@@ -1727,7 +1727,7 @@ OPSTAT GPRS_UART_send_AT_command(uint8_t *cmd, uint8_t *ack, uint16_t wait_time)
 * 返回    : 无 
 * 说明    : 无
 *******************************************************************************/
-void GPRS_UART_SendString(char* s)
+void func_gprsmod_send_string(char* s)
 {
 	while(*s != '\0')//检测字符串结束符
 	{
@@ -1743,16 +1743,16 @@ void GPRS_UART_SendString(char* s)
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-void GPRS_UART_Wait_CREG(void)
+void func_gprsmod_wait_CREG(void)
 {
 	uint8_t i;
 	uint8_t k;
 	i = 0;
   while(i == 0)        			
 	{
-		GPRS_UART_clear_receive_buffer();        
-		GPRS_UART_SendString("AT+CREG?");   //查询等待模块注册成功
-		GPRS_UART_SendLR();
+		func_gprsmod_clear_receive_buffer();        
+		func_gprsmod_send_string("AT+CREG?");   //查询等待模块注册成功
+		func_gprsmod_send_LR();
 		ihu_usleep(500);  //等待500ms
 		for(k=0;k<BSP_STM32_SPS_GPRS_REC_MAXLEN;k++)      			
 		{
@@ -1778,22 +1778,22 @@ void GPRS_UART_Wait_CREG(void)
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-void GPRS_UART_Set_ATE0(void)
+void func_grpsmod_set_ATE0(void)
 {
-	GPRS_UART_send_AT_command("ATE0", "OK", 2);								//取消回显		
+	func_gprsmod_send_AT_command("ATE0", "OK", 2);								//取消回显		
 }
 
 
 
 ///*******************************************************************************
-//* º¯ÊýÃû  : USART_PRINT_Send_Len
+//* º¯ÊýÃû  : func_gprsmod_print_send_len
 //* ÃèÊö    : USART_PRINT·¢ËÍÒ»¶¨³¤¶ÈµÄ×Ö·û
 //* ÊäÈë    : *s×Ö·û´®Ö¸Õë£¬len£º×Ö·û³¤¶È
 //* Êä³ö    : ÎÞ
 //* ·µ»Ø    : ÎÞ 
 //* ËµÃ÷    : ÎÞ
 //*******************************************************************************/
-//void USART_PRINT_Send_Len(char *s,uint8_t len)
+//void func_gprsmod_print_send_len(char *s,uint8_t len)
 //{
 //	if(s!=0)
 //	while(len)//Checking end char
@@ -1805,20 +1805,20 @@ void GPRS_UART_Set_ATE0(void)
 //}	
 
 ///*******************************************************************************
-//* º¯ÊýÃû  : USART_PRINT_Data
+//* º¯ÊýÃû  : func_gprsmod_print_data
 //* ÃèÊö    : USART_PRINT·¢ËÍÒ»¸ö×Ö½Ú
 //* ÊäÈë    : byte Ò»¸ö×Ö½Ú
 //* Êä³ö    : ÎÞ
 //* ·µ»Ø    : ÎÞ 
 //* ËµÃ÷    : ÎÞ
 //*******************************************************************************/
-//void USART_PRINT_Data(char byte)
+//void func_gprsmod_print_data(char byte)
 //{
 //		while(USART_GetFlagStatus(USART_PRINT, USART_FLAG_TC)==RESET); 
 //		USART_SendData(USART_PRINT ,byte);//Send current char
 //}
 
-//void USART_PRINT_SendString(char* s)
+//void func_gprsmod_print_send_string(char* s)
 //{
 //	while(*s)//check end char
 //	{
@@ -1827,7 +1827,7 @@ void GPRS_UART_Set_ATE0(void)
 //	}
 //}
 
-//void GPRS_UART_Data_byte_send(char byte)
+//void func_gprsmod_data_byte_send(char byte)
 //{
 //		while(USART_GetFlagStatus(USART_GPRS, USART_FLAG_TC)==RESET); 
 //		USART_SendData(USART_GPRS ,byte);//Send current char
@@ -1846,14 +1846,14 @@ void GPRS_UART_Set_ATE0(void)
 *******************************************************************************/
 
 /*******************************************************************************
-* 函数名 : GPRS_UART_change_str_Data
+* 函数名 : func_gprsmod_convert_str_to_int
 * 描述   : 字符串转整型
 * 输入   : 
 * 输出   : 
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-OPSTAT GPRS_UART_change_str_Data(uint8_t *p,uint8_t len)
+OPSTAT func_gprsmod_convert_str_to_int(uint8_t *p,uint8_t len)
 {
   uint8_t i=0;
 	uint8_t value=0;
@@ -1865,14 +1865,14 @@ OPSTAT GPRS_UART_change_str_Data(uint8_t *p,uint8_t len)
 	return value;
 }
 /*******************************************************************************
-* 函数名 : GPRS_UART_Swap
+* 函数名 : func_gprsmod_two_char_swap
 * 描述   : 交换
 * 输入   : 
 * 输出   : 
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-void GPRS_UART_Swap(char *ch1, char *ch2)
+void func_gprsmod_two_char_swap(char *ch1, char *ch2)
 {
 	char tmp = *ch1;
 	*ch1 = *ch2;
@@ -1886,7 +1886,7 @@ void GPRS_UART_Swap(char *ch1, char *ch2)
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-void GPRS_UART_change_Data_str(int n, char str[])
+void func_gprsmod_convert_int_to_str(int n, char str[])
 {
 	int i, len;
 	for(i = 0; n != 0; ++i)
@@ -1898,19 +1898,19 @@ void GPRS_UART_change_Data_str(int n, char str[])
 	len = i;
 	/* 翻转 */
 	for(i = 0; i < len/2; ++i)
-		GPRS_UART_Swap(str+i, str+len-i-1);
+		func_gprsmod_two_char_swap(str+i, str+len-i-1);
 	str[len] = '\0';
 }
 
 /*******************************************************************************
-* 函数名 : GPRS_UART_change_hex_str
+* 函数名 : func_gprsmod_convert_hex_to_str
 * 描述   : 十六进制转换成字符串 如0xAC->'A''C';
 * 输入   : 
 * 输出   : 
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-void GPRS_UART_change_hex_str(uint8_t dest[],uint8_t src[],uint8_t len)
+void func_gprsmod_convert_hex_to_str(uint8_t dest[],uint8_t src[],uint8_t len)
 {
     uint8_t i=0;
     uint8_t temp_h;
@@ -1939,7 +1939,7 @@ void GPRS_UART_change_hex_str(uint8_t dest[],uint8_t src[],uint8_t len)
 * 返回   : unsigned char:1 找到指定字符，0 未找到指定字符 
 * 注意   : 
 *******************************************************************************/
-OPSTAT GPRS_UART_Find_char(char *a)
+OPSTAT func_gprsmod_find_char(char *a)
 { 
   if(strstr((char *)BSP_STM32_SPS_GPRS_R_Buff, a)!=NULL)
 	    return 1;

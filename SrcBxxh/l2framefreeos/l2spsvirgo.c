@@ -280,7 +280,7 @@ void func_spsvirgo_time_out_period_scan(void)
 	zIhuGprsOperationFlag++;
 	
 	//不干、只干活一次
-	//if (zIhuGprsOperationFlag == 0)	GPRS_UART_GSM_working_procedure_selection(2, 0);
+	//if (zIhuGprsOperationFlag == 0)	ihu_vmmw_gprsmod_gsm_working_procedure_selection(2, 0);
 	
 	//IhuDebugPrint("SPSVIRGO: Time Out Test!\n");
 	
@@ -345,7 +345,7 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	
 	//干活
 	ihu_sleep(2);
-	GPRS_UART_GSM_working_procedure_selection(2, 0);
+	ihu_vmmw_gprsmod_gsm_working_procedure_selection(2, 0);
 	ret = -1;
 	
 	//这里有个挺有意思的现象：这里的命令还未执行完成，实际上后台的数据已经通过UART回来了，并通过ISR服务程序发送到SPSVIRGO的QUEUE中，但只有这里执行结束后，
