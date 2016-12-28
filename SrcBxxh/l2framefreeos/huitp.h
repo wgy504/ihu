@@ -1300,7 +1300,9 @@ typedef enum
 	HUITP_IEID_uni_ccl_general_value1               = 0x4C00, 
 	HUITP_IEID_uni_ccl_general_value2               = 0x4C01, 
 	HUITP_IEID_uni_ccl_general_value3               = 0x4C02, 
-	HUITP_IEID_uni_ccl_general_value4               = 0x4C03, 
+	HUITP_IEID_uni_ccl_general_value4               = 0x4C03,
+	HUITP_IEID_uni_ccl_report_type                  = 0x4C04,
+	
 	HUITP_IEID_uni_ccl_state_max,
 
   //串口读取命令/返回结果
@@ -2542,6 +2544,19 @@ typedef struct StrIe_HUITP_IEID_uni_ccl_general_value4
 	UINT8  dataFormat;
 	UINT16 generalValue4;
 }StrIe_HUITP_IEID_uni_ccl_general_value4_t;
+
+//HUITP_IEID_uni_ccl_report_type                 = 0x4C04,
+typedef struct StrIe_HUITP_IEID_uni_ccl_report_type
+{
+	UINT16 ieId;
+	UINT16 ieLen;
+	UINT8  event;
+}StrIe_HUITP_IEID_uni_ccl_report_type_t;
+#define HUITP_IEID_UNI_CCL_REPORT_TYPE_NULL 0
+#define HUITP_IEID_UNI_CCL_REPORT_TYPE_PERIOD_EVENT 1
+#define HUITP_IEID_UNI_CCL_REPORT_TYPE_CLOSE_EVENT 2
+#define HUITP_IEID_UNI_CCL_REPORT_TYPE_FAULT_EVENT 3
+#define HUITP_IEID_UNI_CCL_REPORT_TYPE_INVALID 0xFF
 
 //HUITP_IEID_uni_ccl_state_max,
 
@@ -6935,6 +6950,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_resp
 	StrIe_HUITP_IEID_uni_ccl_general_value2_t general2Value;
 	StrIe_HUITP_IEID_uni_ccl_general_value3_t general3Value;
 	StrIe_HUITP_IEID_uni_ccl_general_value4_t general4Value;
+	StrIe_HUITP_IEID_uni_ccl_report_type_t reportType;
 }StrMsg_HUITP_MSGID_uni_ccl_state_resp_t;
 
 //HUITP_MSGID_uni_ccl_state_report                 = 0x4C81,
@@ -6957,6 +6973,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_report
 	StrIe_HUITP_IEID_uni_ccl_general_value2_t general2Value;
 	StrIe_HUITP_IEID_uni_ccl_general_value3_t general3Value;
 	StrIe_HUITP_IEID_uni_ccl_general_value4_t general4Value;
+	StrIe_HUITP_IEID_uni_ccl_report_type_t reportType;
 }StrMsg_HUITP_MSGID_uni_ccl_state_report_t;
 
 //HUITP_MSGID_uni_ccl_state_confirm                    = 0x4C01,
@@ -6965,6 +6982,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_confirm
 	StrMsg_HUITP_MSGID_uni_general_head_t msgId;
 	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
+	StrIe_HUITP_IEID_uni_ccl_report_type_t reportType;
 }StrMsg_HUITP_MSGID_uni_ccl_state_confirm_t;
 
 //HUITP_MSGID_uni_ccl_state_max,

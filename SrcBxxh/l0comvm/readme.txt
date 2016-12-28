@@ -20,6 +20,7 @@
   FEATURE，相比较而言，TELECOM FEATURE是最快最简单的，反而通信平台、管理逻辑、维护功能，更加困难和重要，而这些都是可以在不同项目
   之间复用传承的。
 ==============
+= 完成SPSVIRGO从L2FRAME/HUITP接收消息的处理程序框架和处理逻辑。
 
 //= ZJL, 2016 Dec.27, CURRENT_SW_DELIVERY R03.71 =>CCL项目
 = 解码基础部分

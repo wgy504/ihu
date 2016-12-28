@@ -284,20 +284,29 @@ typedef struct msg_struct_sps_ccl_sensor_status_rep
 //MSG_ID_SPS_CCL_EVENT_REPORT_CFM
 typedef struct msg_struct_sps_ccl_event_report_cfm
 {
+	UINT8 actionFlag;
 	UINT16 length;
 }msg_struct_sps_ccl_event_report_cfm_t;
+#define IHU_CCL_EVENT_REPORT_SEND_SUCCESS 1
+#define IHU_CCL_EVENT_REPORT_SEND_FAILURE 2
 
 //MSG_ID_SPS_CCL_FAULT_REPORT_CFM
 typedef struct msg_struct_sps_ccl_fault_report_cfm
 {
+	UINT8 actionFlag;
 	UINT16 length;
 }msg_struct_sps_ccl_fault_report_cfm_t;
+#define IHU_CCL_EVENT_FAULT_SEND_SUCCESS 1
+#define IHU_CCL_EVENT_FAULT_SEND_FAILURE 2
 
 //MSG_ID_SPS_CCL_CLOSE_REPORT_CFM
 typedef struct msg_struct_sps_ccl_close_report_cfm
 {
+	UINT8 actionFlag;
 	UINT16 length;
 }msg_struct_sps_ccl_close_report_cfm_t;
+#define IHU_CCL_EVENT_CLOSE_SEND_SUCCESS 1
+#define IHU_CCL_EVENT_CLOSE_SEND_FAILURE 2
 
 //SPI消息定义
 //MSG_ID_SPI_L2FRAME_SEND
