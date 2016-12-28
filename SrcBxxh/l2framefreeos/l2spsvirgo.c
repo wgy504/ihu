@@ -49,6 +49,7 @@ FsmStateItem_t FsmSpsvirgo[] =
 	
 	//通信状态：为了让其它任务有个判断，到底系统是否还处于通信状态，还是正常的激活状态
 	//特别是CCL中基于GPRS的通信，有可能超时非常长，必须等待和状态判定，不然会造成状态重入从而影响状态机的正常运转
+	//在这个状态下，还不允许有新的L2FRAME收到
   {MSG_ID_COM_RESTART,        						FSM_STATE_SPSVIRGO_COMMU,         						fsm_spsvirgo_restart},
   {MSG_ID_COM_STOP,												FSM_STATE_SPSVIRGO_COMMU,         						fsm_spsvirgo_stop_rcv},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_SPSVIRGO_COMMU,         				  	fsm_spsvirgo_time_out},
@@ -289,7 +290,7 @@ void func_spsvirgo_time_out_period_scan(void)
 //L2FRAME Receive Processing
 OPSTAT fsm_spsvirgo_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	//int ret;
+	int ret;
 	msg_struct_spsvirgo_l2frame_rcv_t rcv;
 	
 	//Receive message and copy to local variable
@@ -301,10 +302,24 @@ OPSTAT fsm_spsvirgo_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 	}
 	memcpy(&rcv, param_ptr, param_len);
 
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)	
 	//对于缓冲区的数据，进行分别处理，将帧变成不同的消息，分门别类发送到L3模块进行处理
 	//MSG_ID_SPS_TO_CCL_CLOUD_FB
+	msg_struct_ccl_com_cloud_data_rx_t *pMsgBuf;
+	memset(pMsgBuf, 0, sizeof(msg_struct_ccl_com_cloud_data_rx_t));
+	pMsgBuf = (msg_struct_ccl_com_cloud_data_rx_t *)(&rcv);
+	pMsgBuf->length = rcv.length;
+	ret = func_cloud_standard_xml_unpack(pMsgBuf);
+	if (ret == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+		IhuErrorPrint("SPSVIRGO: Unpack and processing receiving message error!\n");
+		return IHU_FAILURE;	
+	}
+	//后面对于收到的每一个消息的基础处理，都由CCL的消息处理函数具体完成
+
+#endif
 	
-	
+	//返回
 	return IHU_SUCCESS;
 }
 
@@ -552,6 +567,237 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 	return IHU_SUCCESS;
 }
 
-#endif
+OPSTAT func_cloud_spsvirgo_ccl_msg_heart_beat_req_received_handle(StrMsg_HUITP_MSGID_uni_heart_beat_req_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_heart_beat_confirm_received_handle(StrMsg_HUITP_MSGID_uni_heart_beat_confirm_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_lock_req_received_handle(StrMsg_HUITP_MSGID_uni_ccl_lock_req_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_lock_confirm_received_handle(StrMsg_HUITP_MSGID_uni_ccl_lock_confirm_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_lock_auth_resp_received_handle(StrMsg_HUITP_MSGID_uni_ccl_lock_auth_resp_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_door_req_received_handle(StrMsg_HUITP_MSGID_uni_ccl_door_req_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_door_confirm_received_handle(StrMsg_HUITP_MSGID_uni_ccl_door_confirm_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_rfid_req_received_handle(StrMsg_HUITP_MSGID_uni_ccl_rfid_req_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_rfid_confirm_received_handle(StrMsg_HUITP_MSGID_uni_ccl_rfid_confirm_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_ble_req_received_handle(StrMsg_HUITP_MSGID_uni_ccl_ble_req_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_ble_confirm_received_handle(StrMsg_HUITP_MSGID_uni_ccl_ble_confirm_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_gprs_req_received_handle(StrMsg_HUITP_MSGID_uni_ccl_gprs_req_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_gprs_confirm_received_handle(StrMsg_HUITP_MSGID_uni_ccl_gprs_confirm_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_battery_req_received_handle(StrMsg_HUITP_MSGID_uni_ccl_battery_req_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_battery_confirm_received_handle(StrMsg_HUITP_MSGID_uni_ccl_battery_confirm_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_shake_req_received_handle(StrMsg_HUITP_MSGID_uni_ccl_shake_req_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_shake_confirm_received_handle(StrMsg_HUITP_MSGID_uni_ccl_shake_confirm_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_smoke_req_received_handle(StrMsg_HUITP_MSGID_uni_ccl_smoke_req_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_smoke_confirm_received_handle(StrMsg_HUITP_MSGID_uni_ccl_smoke_confirm_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_water_req_received_handle(StrMsg_HUITP_MSGID_uni_ccl_water_req_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_water_confirm_received_handle(StrMsg_HUITP_MSGID_uni_ccl_water_confirm_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_temp_req_received_handle(StrMsg_HUITP_MSGID_uni_ccl_temp_req_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_temp_confirm_received_handle(StrMsg_HUITP_MSGID_uni_ccl_temp_confirm_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_humid_req_received_handle(StrMsg_HUITP_MSGID_uni_ccl_humid_req_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_humid_confirm_received_handle(StrMsg_HUITP_MSGID_uni_ccl_humid_confirm_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_fall_req_received_handle(StrMsg_HUITP_MSGID_uni_ccl_fall_req_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_fall_confirm_received_handle(StrMsg_HUITP_MSGID_uni_ccl_fall_confirm_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_state_req_received_handle(StrMsg_HUITP_MSGID_uni_ccl_state_req_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle(StrMsg_HUITP_MSGID_uni_ccl_state_confirm_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_inventory_req_received_handle(StrMsg_HUITP_MSGID_uni_inventory_req_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_inventory_confirm_received_handle(StrMsg_HUITP_MSGID_uni_inventory_confirm_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_sw_package_req_received_handle(StrMsg_HUITP_MSGID_uni_sw_package_req_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT func_cloud_spsvirgo_ccl_msg_sw_package_confirm_received_handle(StrMsg_HUITP_MSGID_uni_sw_package_confirm_t *rcv)
+{
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+#endif //#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 
 

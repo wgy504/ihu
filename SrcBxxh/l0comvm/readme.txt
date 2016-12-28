@@ -6,6 +6,9 @@
 
 //= ZJL, 2016 Dec.27, CURRENT_SW_DELIVERY R03.71 =>CCL项目
 = 解码基础部分
+= 解码函数完成：是基于非XML结构
+= 跟L2FRAME_RCV连起来了
+= 整个接收解码使用了强制消息结构转换，是否可行，未来需要进一步测试并验证
 
 //= ZJL, 2016 Dec.27, CURRENT_SW_DELIVERY R03.70 =>CCL项目
 = 为HUITP定义常量，解决字符串长度问题

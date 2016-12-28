@@ -149,7 +149,8 @@ typedef enum
 {
 	//无效
 	HUITP_MSGID_uni_none                             = 0x0000,
-	
+	HUITP_MSGID_uni_min                              = 0x0100,
+
 	//血糖
 	HUITP_MSGID_uni_blood_glucose_min                = 0x0100, 
 	HUITP_MSGID_uni_blood_glucose_req                = 0x0100, 
@@ -997,6 +998,7 @@ typedef enum
 	HUITP_MSGID_uni_heart_beat_max,
 
   //无效
+	HUITP_MSGID_uni_max,	
 	HUITP_MSGID_uni_null                             = 0xFF,	
 }HuitpMsgIdUniDefination;
 
