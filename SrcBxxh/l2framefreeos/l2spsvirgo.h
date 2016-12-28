@@ -129,10 +129,8 @@ extern OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_i
 OPSTAT func_spsvirgo_hw_init(void);
 void func_spsvirgo_time_out_period_scan(void);
 
-//Global API
-extern void TIM_USART_GPRS_Init_Config(void);
-extern void ihu_vmmw_gprsmod_gsm_working_procedure_selection(UINT8 option, UINT8 sub_opt);
-//extern u8  l1hd_f205_rtc_init (void);
+//External API
+extern void ihu_vmmw_gprsmod_gsm_all_working_selection(UINT8 option, UINT8 sub_opt);
 
 #endif /* L2FRAME_L2SPSVIRGO_H_ */
 

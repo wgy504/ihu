@@ -318,7 +318,7 @@ OPSTAT fsm_spsvirgo_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	int ret = 0;
+	int ret = 0, i = 0;
 	msg_struct_ccl_sps_open_auth_inq rcv;
 	msg_struct_spsvirgo_ccl_cloud_fb_t snd;
 	
@@ -335,10 +335,40 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	FsmSetState(TASK_ID_SPSVIRGO, FSM_STATE_SPSVIRGO_COMMU);
 	
 	//对接收到的上层命令进行分解处理
+	StrMsg_HUITP_MSGID_uni_ccl_lock_auth_inq_t pMsgProc;
+	UINT16 msgProcLen = sizeof(StrMsg_HUITP_MSGID_uni_ccl_lock_auth_inq_t);
+	memset(&pMsgProc, 0, msgProcLen);
+	pMsgProc.baseReq.ieId = HUITP_IEID_uni_com_req;
+	pMsgProc.baseReq.ieLen = sizeof(StrIe_HUITP_IEID_uni_com_req_t) - 4;
+	pMsgProc.baseReq.comReq = HUITP_IEID_UNI_COM_REQUEST_YES;
+	pMsgProc.authReq.ieId = HUITP_IEID_uni_ccl_lock_auth_req;
+	pMsgProc.authReq.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_lock_auth_req_t) - 4;
+	//唯一的锁触发，其它触发模式再考虑
+	pMsgProc.authReq.authReqType = HUITP_IEID_UNI_CCL_LOCK_AUTH_REQ_TYPE_LOCK;
+	for (i = 0; i < HUITP_IEID_UNI_CCL_LOCK_AUTH_REQ_MAX_LEN; i++){
+		pMsgProc.authReq.bleMacAddr[i] = 0xFF;
+		pMsgProc.authReq.rfidAddr[i] = 0xFF;
+	}
+	pMsgProc.msgId.cmdId = (HUITP_IEID_uni_ccl_lock_auth_req>>8)&0xFF;
+	pMsgProc.msgId.optId = HUITP_IEID_uni_ccl_lock_auth_req&0xFF;
+	pMsgProc.msgLen = msgProcLen - 4;
 	
-	//干活
+	//Pack message
+	StrMsg_HUITP_MSGID_uni_general_message_t pMsgInput;
+	memset(&pMsgInput, 0, sizeof(StrMsg_HUITP_MSGID_uni_general_message_t));
+	memcpy(&pMsgInput, &pMsgProc, msgProcLen);
+	CloudDataSendBuf_t pMsgOutput;
+	memset(&pMsgOutput, 0, sizeof(CloudDataSendBuf_t));	
+	ret = func_cloud_standard_xml_pack(IHU_CLOUD_BH_MSG_TYPE_DEVICE_REPORT_UINT8, NULL, HUITP_IEID_uni_ccl_lock_auth_req, &pMsgInput, msgProcLen, &pMsgOutput);
+	if (ret == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+		IhuErrorPrint("SPSVIRGO: Package message error!\n");
+		return IHU_FAILURE;
+	}
+	
+	//将组装好的消息发送到GPRSMOD模组中去，送往后台
 	ihu_sleep(2);
-	ihu_vmmw_gprsmod_gsm_working_procedure_selection(2, 0);
+	ihu_vmmw_gprsmod_gsm_all_working_selection(2, 0);
 	ret = -1;
 	
 	//这里有个挺有意思的现象：这里的命令还未执行完成，实际上后台的数据已经通过UART回来了，并通过ISR服务程序发送到SPSVIRGO的QUEUE中，但只有这里执行结束后，

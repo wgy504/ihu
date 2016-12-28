@@ -4,6 +4,16 @@
 //近期需要完成的任务
 = 研究STM32的IAP功能
 
+//= ZJL, 2016 Dec.28, CURRENT_SW_DELIVERY R03.74 =>CCL项目
+= Auth消息组装好，等待发送测试
+= 1. 其它三组event消息（Event/Close/Fault)
+= 2. unpack接收消息格式从裸格式转换为xml格式
+= 3. 发送的GPRS AT CMD的所有VMMW API需要清理完善，包括增加FTP API
+= 4. GPRS AT CMD的接收需要寻找</xml>关键字，提高效率，避免纯粹依靠TIME OUT
+= 5. BSP串口接收中断改进
+
+
+
 //= ZJL, 2016 Dec.28, CURRENT_SW_DELIVERY R03.73 =>CCL项目
 = 修改vmmw_gprs中函数的名称，统一到VMMW这一个关键字上来
 = 修改BSP程序中的函数及常量，统一命名方式

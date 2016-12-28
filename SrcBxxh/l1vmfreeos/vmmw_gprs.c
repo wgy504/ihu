@@ -51,7 +51,7 @@ const char *GPRS_UART_string = "AT+CIPSTART=\"TCP\",\"14.125.48.205\",9015";//IP
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-OPSTAT ihu_vmmw_gprsmod_gsm_working_procedure_selection(uint8_t option, uint8_t sub_opt)
+OPSTAT ihu_vmmw_gprsmod_gsm_all_working_selection(uint8_t option, uint8_t sub_opt)
 {
 	uint8_t repeatCnt = IHU_VMMW_GPRSMOD_REPEAT_CNT;
 	
@@ -78,24 +78,24 @@ OPSTAT ihu_vmmw_gprsmod_gsm_working_procedure_selection(uint8_t option, uint8_t 
 	}
 	
 	//基础信息查阅
-	if (ihu_vmmw_gprsmod_module_procedure() != IHU_SUCCESS){
+	if (ihu_vmmw_gprsmod_module_info_retrieve() != IHU_SUCCESS){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Can not detect basic info!\n");
 		return IHU_FAILURE;
 	}
 	
 	//查阅SIM卡信息
-	if(ihu_vmmw_gprsmod_gsm_info_procedure() != IHU_SUCCESS){
+	if(ihu_vmmw_gprsmod_gsm_info_retrieve() != IHU_SUCCESS){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Get GPRS module SIM800A related info error!\n");
 		return IHU_FAILURE;
 	}
 	
-	if (option == 1) return ihu_vmmw_gprsmod_call_procedure(sub_opt);	//电话测试
-	else if (option == 2) return ihu_vmmw_gprsmod_sms_procedure();		//短信测试
-	else if (option == 3) return ihu_vmmw_gprsmod_gprs_procedure(sub_opt);	//GPRS测试
-	else if (option == 4) return ihu_vmmw_gprsmod_bs_procedure();		//基站测试
-	else if (option == 5) return ihu_vmmw_gprsmod_tts_procedure();		//语音测试
+	if (option == 1) return ihu_vmmw_gprsmod_call_perform(sub_opt);	//电话测试
+	else if (option == 2) return ihu_vmmw_gprsmod_sms_transmit_with_confirm();		//短信测试
+	else if (option == 3) return ihu_vmmw_gprsmod_tcp_data_transmit_with_receive(sub_opt);	//GPRS测试
+	else if (option == 4) return ihu_vmmw_gprsmod_bs_position_perform();		//基站测试
+	else if (option == 5) return ihu_vmmw_gprsmod_tts_perform();		//语音测试
 	else
 	{
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
@@ -108,14 +108,14 @@ OPSTAT ihu_vmmw_gprsmod_gsm_working_procedure_selection(uint8_t option, uint8_t 
 }
 
 /*******************************************************************************
-* 函数名 : ihu_vmmw_gprsmod_module_procedure
+* 函数名 : ihu_vmmw_gprsmod_module_info_retrieve
 * 描述   : SIM800A/GPRS主测试控制部分
 * 输入   : 
 * 输出   : 
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-OPSTAT ihu_vmmw_gprsmod_module_procedure()
+OPSTAT ihu_vmmw_gprsmod_module_info_retrieve()
 {
 	char temp[20];
 	int8_t *p1; 
@@ -196,14 +196,14 @@ OPSTAT ihu_vmmw_gprsmod_module_procedure()
 }
 
 /*******************************************************************************
-* 函数名 : ihu_vmmw_gprsmod_gsm_info_procedure
+* 函数名 : ihu_vmmw_gprsmod_gsm_info_retrieve
 * 描述   : SIM800A/GPRS状态信息检测(信号质量,电池电量,日期时间)
 * 输入   : 
 * 输出   : 
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-OPSTAT ihu_vmmw_gprsmod_gsm_info_procedure(void)
+OPSTAT ihu_vmmw_gprsmod_gsm_info_retrieve(void)
 {
 	char temp[20];
 	uint8_t *p1;
@@ -301,7 +301,7 @@ OPSTAT ihu_vmmw_gprsmod_gsm_info_procedure(void)
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-OPSTAT ihu_vmmw_gprsmod_sms_procedure(void)
+OPSTAT ihu_vmmw_gprsmod_sms_transmit_with_confirm(void)
 {
 	uint8_t temp[50];
 	uint8_t loc=0;
@@ -407,7 +407,7 @@ OPSTAT ihu_vmmw_gprsmod_sms_procedure(void)
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-OPSTAT ihu_vmmw_gprsmod_call_procedure(uint8_t sub_opt)
+OPSTAT ihu_vmmw_gprsmod_call_perform(uint8_t sub_opt)
 {	
 	uint8_t temp[50];
 	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: @@@@ SIM800A CALL TEST @@@@!\n");		
@@ -495,14 +495,14 @@ OPSTAT ihu_vmmw_gprsmod_call_procedure(uint8_t sub_opt)
 
 
 /*******************************************************************************
-* 函数名 : func_gprsmod_sim800a_gprs_test
-* 描述   : GPRS测试代码
+* 函数名 : ihu_vmmw_gprsmod_tcp_data_transmit_with_receive
+* 描述   : GPRS数据发送与接收代码
 * 输入   : 
 * 输出   : 
 * 返回   : 
 * 注意   :  为了保持连接，每空闲隔10秒发送一次心跳
 *******************************************************************************/
-OPSTAT ihu_vmmw_gprsmod_gprs_procedure(uint8_t sub_opt)
+OPSTAT ihu_vmmw_gprsmod_tcp_data_transmit_with_receive(uint8_t sub_opt)
 {	
 	uint8_t temp[200];
 	IhuDebugPrint("VMFO: @@@@  GPRS TEST  @@@@\n");
@@ -604,7 +604,7 @@ OPSTAT ihu_vmmw_gprsmod_gprs_procedure(uint8_t sub_opt)
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-OPSTAT ihu_vmmw_gprsmod_bs_procedure(void)
+OPSTAT ihu_vmmw_gprsmod_bs_position_perform(void)
 {
 //  uint8_t *p1, *p3;
 	//uint8_t *p2;
@@ -678,7 +678,7 @@ OPSTAT ihu_vmmw_gprsmod_bs_procedure(void)
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-OPSTAT ihu_vmmw_gprsmod_tts_procedure(void)
+OPSTAT ihu_vmmw_gprsmod_tts_perform(void)
 {
   uint16_t len=0;
   uint8_t temp_src[]="Hello, this is a test from BXXH!";
