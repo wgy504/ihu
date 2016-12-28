@@ -28,27 +28,27 @@ extern UART_HandleTypeDef huart6;
 extern uint8_t zIhuUartRxBuffer[6];
 
 //从SCYCB项目中继承过来的全局变量，待定
-int8_t BSP_STM32_SPS_GPRS_R_Buff[BSP_STM32_SPS_GPRS_REC_MAXLEN];			//串口GPRS数据接收缓冲区 
+int8_t BSP_STM32_SPS_GPRS_R_Buff[IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN];			//串口GPRS数据接收缓冲区 
 int8_t BSP_STM32_SPS_GPRS_R_State=0;												//串口GPRS接收状态
 int16_t BSP_STM32_SPS_GPRS_R_Count=0;					//当前接收数据的字节数
 int16_t BSP_STM32_SPS_GRPS_R_Len=0;
-int8_t BSP_STM32_SPS_RFID_R_Buff[BSP_STM32_SPS_RFID_REC_MAXLEN];			//串口RFID数据接收缓冲区 
+int8_t BSP_STM32_SPS_RFID_R_Buff[IHU_BSP_STM32_SPS_RFID_REC_MAX_LEN];			//串口RFID数据接收缓冲区 
 int8_t BSP_STM32_SPS_RFID_R_State=0;												//串口RFID接收状态
 int16_t BSP_STM32_SPS_RFID_R_Count=0;					//当前接收数据的字节数 	  
 int16_t BSP_STM32_SPS_RFID_R_Len=0;
-int8_t BSP_STM32_SPS_BLE_R_Buff[BSP_STM32_SPS_BLE_REC_MAXLEN];			//串口BLE数据接收缓冲区 
+int8_t BSP_STM32_SPS_BLE_R_Buff[IHU_BSP_STM32_SPS_BLE_REC_MAX_LEN];			//串口BLE数据接收缓冲区 
 int8_t BSP_STM32_SPS_BLE_R_State=0;												//串口BLE接收状态
 int16_t BSP_STM32_SPS_BLE_R_Count=0;					//当前接收数据的字节数 	  
 int16_t BSP_STM32_SPS_BLE_R_Len=0;
-int8_t BSP_STM32_SPS_PRINT_R_Buff[BSP_STM32_SPS_BLE_REC_MAXLEN];			//串口PRINT数据接收缓冲区 
+int8_t BSP_STM32_SPS_PRINT_R_Buff[IHU_BSP_STM32_SPS_BLE_REC_MAX_LEN];			//串口PRINT数据接收缓冲区 
 int8_t BSP_STM32_SPS_PRINT_R_State=0;												//串口PRINT接收状态
 int16_t BSP_STM32_SPS_PRINT_R_Count=0;					//当前接收数据的字节数 	  
 int16_t BSP_STM32_SPS_PRINT_R_Len=0;
-int8_t BSP_STM32_SPS_SPARE1_R_Buff[BSP_STM32_SPS_SPARE1_REC_MAXLEN];			//串口SPARE1数据接收缓冲区 
+int8_t BSP_STM32_SPS_SPARE1_R_Buff[IHU_BSP_STM32_SPS_SPARE1_REC_MAX_LEN];			//串口SPARE1数据接收缓冲区 
 int8_t BSP_STM32_SPS_SPARE1_R_State=0;												//串口SPARE1接收状态
 int16_t BSP_STM32_SPS_SPARE1_R_Count=0;					//当前接收数据的字节数 	  
 int16_t BSP_STM32_SPS_SPARE1_R_Len=0;
-int8_t BSP_STM32_SPS_SPARE2_R_Buff[BSP_STM32_SPS_SPARE2_REC_MAXLEN];			//串口SPARE2数据接收缓冲区 
+int8_t BSP_STM32_SPS_SPARE2_R_Buff[IHU_BSP_STM32_SPS_SPARE2_REC_MAX_LEN];			//串口SPARE2数据接收缓冲区 
 int8_t BSP_STM32_SPS_SPARE2_R_State=0;												//串口SPARE2接收状态
 int16_t BSP_STM32_SPS_SPARE2_R_Count=0;					//当前接收数据的字节数 	  
 int16_t BSP_STM32_SPS_SPARE2_R_Len=0;
@@ -61,7 +61,7 @@ int16_t BSP_STM32_SPS_SPARE2_R_Len=0;
 int ihu_bsp_stm32_sps_slave_hw_init(void)
 {
 	uint16_t k;
-	for(k=0;k<BSP_STM32_SPS_GPRS_REC_MAXLEN;k++)      //将缓存内容清零
+	for(k=0;k<IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN;k++)      //将缓存内容清零
 	{
 		BSP_STM32_SPS_GPRS_R_Buff[k] = 0x00;
 	}
@@ -69,7 +69,7 @@ int ihu_bsp_stm32_sps_slave_hw_init(void)
 	BSP_STM32_SPS_GPRS_R_State = 0;
 	BSP_STM32_SPS_GRPS_R_Len = 0;
 
-	for(k=0;k<BSP_STM32_SPS_RFID_REC_MAXLEN;k++)      //将缓存内容清零
+	for(k=0;k<IHU_BSP_STM32_SPS_RFID_REC_MAX_LEN;k++)      //将缓存内容清零
 	{
 		BSP_STM32_SPS_RFID_R_Buff[k] = 0x00;
 	}
@@ -77,7 +77,7 @@ int ihu_bsp_stm32_sps_slave_hw_init(void)
 	BSP_STM32_SPS_RFID_R_State = 0;
 	BSP_STM32_SPS_RFID_R_Len = 0;	
 
-	for(k=0;k<BSP_STM32_SPS_BLE_REC_MAXLEN;k++)      //将缓存内容清零
+	for(k=0;k<IHU_BSP_STM32_SPS_BLE_REC_MAX_LEN;k++)      //将缓存内容清零
 	{
 		BSP_STM32_SPS_BLE_R_Buff[k] = 0x00;
 	}
@@ -85,7 +85,7 @@ int ihu_bsp_stm32_sps_slave_hw_init(void)
 	BSP_STM32_SPS_BLE_R_State = 0;
 	BSP_STM32_SPS_BLE_R_Len = 0;	
 	
-	for(k=0;k<BSP_STM32_SPS_PRINT_REC_MAXLEN;k++)      //将缓存内容清零
+	for(k=0;k<IHU_BSP_STM32_SPS_PRINT_REC_MAX_LEN;k++)      //将缓存内容清零
 	{
 		BSP_STM32_SPS_PRINT_R_Buff[k] = 0x00;
 	}
@@ -93,7 +93,7 @@ int ihu_bsp_stm32_sps_slave_hw_init(void)
 	BSP_STM32_SPS_PRINT_R_State = 0;
 	BSP_STM32_SPS_PRINT_R_Len = 0;	
 
-	for(k=0;k<BSP_STM32_SPS_SPARE1_REC_MAXLEN;k++)      //将缓存内容清零
+	for(k=0;k<IHU_BSP_STM32_SPS_SPARE1_REC_MAX_LEN;k++)      //将缓存内容清零
 	{
 		BSP_STM32_SPS_SPARE1_R_Buff[k] = 0x00;
 	}
@@ -101,7 +101,7 @@ int ihu_bsp_stm32_sps_slave_hw_init(void)
 	BSP_STM32_SPS_SPARE1_R_State = 0;
 	BSP_STM32_SPS_SPARE1_R_Len = 0;
 
-	for(k=0;k<BSP_STM32_SPS_SPARE2_REC_MAXLEN;k++)      //将缓存内容清零
+	for(k=0;k<IHU_BSP_STM32_SPS_SPARE2_REC_MAX_LEN;k++)      //将缓存内容清零
 	{
 		BSP_STM32_SPS_SPARE2_R_Buff[k] = 0x00;
 	}
@@ -120,7 +120,7 @@ int ihu_bsp_stm32_sps_slave_hw_init(void)
   */
 int ihu_bsp_stm32_sps_print_fputc(int ch, FILE *f)
 {
-  HAL_UART_Transmit(&BSP_STM32_UART_PRINT, (uint8_t *)&ch, 1, 0xffff);
+  HAL_UART_Transmit(&IHU_BSP_STM32_UART_PRINT_HANDLER, (uint8_t *)&ch, 1, 0xffff);
   return ch;
 }
 
@@ -133,7 +133,7 @@ int ihu_bsp_stm32_sps_print_fputc(int ch, FILE *f)
 int ihu_bsp_stm32_sps_print_fgetc(FILE * f)
 {
   uint8_t ch = 0;
-  HAL_UART_Receive(&BSP_STM32_UART_PRINT, &ch, 1, 0xffff);
+  HAL_UART_Receive(&IHU_BSP_STM32_UART_PRINT_HANDLER, &ch, 1, 0xffff);
   return ch;
 }
 
@@ -142,10 +142,10 @@ int ihu_bsp_stm32_sps_print_data_send(char *s)
 {
 //	int i=0;
 //	for (i=0; i<IHU_PRINT_CHAR_SIZE; i++){
-//		if ((s[i]!='\0') &&(i<strlen(s))) HAL_UART_Transmit(&BSP_STM32_UART_PRINT, (uint8_t *)(s+i), 1, 100);					
+//		if ((s[i]!='\0') &&(i<strlen(s))) HAL_UART_Transmit(&IHU_BSP_STM32_UART_PRINT_HANDLER, (uint8_t *)(s+i), 1, 100);					
 //	}
 //	return 1;
-	if (HAL_UART_Transmit(&BSP_STM32_UART_PRINT, (uint8_t *)s, strlen(s), SPS_UART_TX_MAX_DELAY_DURATION) == HAL_OK)
+	if (HAL_UART_Transmit(&IHU_BSP_STM32_UART_PRINT_HANDLER, (uint8_t *)s, strlen(s), SPS_UART_TX_MAX_DELAY_DURATION) == HAL_OK)
 		return BSP_SUCCESS;
 	else
 		return BSP_FAILURE;		
@@ -153,7 +153,7 @@ int ihu_bsp_stm32_sps_print_data_send(char *s)
 
 int ihu_bsp_stm32_sps_print_data_receive(char *s, uint16_t len)
 {
-	if (HAL_UART_Receive(&BSP_STM32_UART_PRINT, (uint8_t *)s, len, SPS_UART_RX_MAX_DELAY_DURATION) == HAL_OK)
+	if (HAL_UART_Receive(&IHU_BSP_STM32_UART_PRINT_HANDLER, (uint8_t *)s, len, SPS_UART_RX_MAX_DELAY_DURATION) == HAL_OK)
 		return BSP_SUCCESS;
 	else
 		return BSP_FAILURE;
@@ -174,9 +174,9 @@ int ihu_bsp_stm32_sps_gprs_send_data(uint8_t* buff, uint16_t len)
 
 //	for(i=0; i<len; i++)  
 //	{
-//		HAL_UART_Transmit(&BSP_STM32_UART_GPRS, (uint8_t *)(buff+i), 1, 100);
+//		HAL_UART_Transmit(&IHU_BSP_STM32_UART_GPRS_HANDLER, (uint8_t *)(buff+i), 1, 100);
 //	}
-	if (HAL_UART_Transmit(&BSP_STM32_UART_GPRS, (uint8_t *)buff, len, SPS_UART_TX_MAX_DELAY_DURATION) == HAL_OK)
+	if (HAL_UART_Transmit(&IHU_BSP_STM32_UART_GPRS_HANDLER, (uint8_t *)buff, len, SPS_UART_TX_MAX_DELAY_DURATION) == HAL_OK)
 		return BSP_SUCCESS;
 	else
 		return BSP_FAILURE;		
@@ -184,7 +184,7 @@ int ihu_bsp_stm32_sps_gprs_send_data(uint8_t* buff, uint16_t len)
 
 int ihu_bsp_stm32_sps_gprs_rcv_data(uint8_t* buff, uint16_t len)
 {    
-	if (HAL_UART_Receive(&BSP_STM32_UART_GPRS, buff, len, SPS_UART_RX_MAX_DELAY_DURATION) == HAL_OK)
+	if (HAL_UART_Receive(&IHU_BSP_STM32_UART_GPRS_HANDLER, buff, len, SPS_UART_RX_MAX_DELAY_DURATION) == HAL_OK)
 		return BSP_SUCCESS;
 	else
 		return BSP_FAILURE;
@@ -192,7 +192,7 @@ int ihu_bsp_stm32_sps_gprs_rcv_data(uint8_t* buff, uint16_t len)
 
 int ihu_bsp_stm32_sps_gprs_rcv_data_timeout(uint8_t* buff, uint16_t len, uint32_t timeout)
 {    
-	if (HAL_UART_Receive(&BSP_STM32_UART_GPRS, buff, len, timeout) == HAL_OK)
+	if (HAL_UART_Receive(&IHU_BSP_STM32_UART_GPRS_HANDLER, buff, len, timeout) == HAL_OK)
 		return BSP_SUCCESS;
 	else
 		return BSP_FAILURE;
@@ -209,7 +209,7 @@ int ihu_bsp_stm32_sps_gprs_rcv_data_timeout(uint8_t* buff, uint16_t len, uint32_
 *******************************************************************************/
 int ihu_bsp_stm32_sps_rfid_send_data(uint8_t* buff, uint16_t len)
 {    
-	if (HAL_UART_Transmit(&BSP_STM32_UART_RFID, (uint8_t *)buff, len, SPS_UART_TX_MAX_DELAY_DURATION) == HAL_OK)
+	if (HAL_UART_Transmit(&IHU_BSP_STM32_UART_RFID_HANDLER, (uint8_t *)buff, len, SPS_UART_TX_MAX_DELAY_DURATION) == HAL_OK)
 		return BSP_SUCCESS;
 	else
 		return BSP_FAILURE;		
@@ -217,7 +217,7 @@ int ihu_bsp_stm32_sps_rfid_send_data(uint8_t* buff, uint16_t len)
 
 int ihu_bsp_stm32_sps_rfid_rcv_data(uint8_t* buff, uint16_t len)
 {    
-	if (HAL_UART_Receive(&BSP_STM32_UART_RFID, buff, len, SPS_UART_RX_MAX_DELAY_DURATION) == HAL_OK)
+	if (HAL_UART_Receive(&IHU_BSP_STM32_UART_RFID_HANDLER, buff, len, SPS_UART_RX_MAX_DELAY_DURATION) == HAL_OK)
 		return BSP_SUCCESS;
 	else
 		return BSP_FAILURE;
@@ -233,7 +233,7 @@ int ihu_bsp_stm32_sps_rfid_rcv_data(uint8_t* buff, uint16_t len)
 *******************************************************************************/
 int ihu_bsp_stm32_sps_ble_send_data(uint8_t* buff, uint16_t len)
 {    
-	if (HAL_UART_Transmit(&BSP_STM32_UART_BLE, (uint8_t *)buff, len, SPS_UART_TX_MAX_DELAY_DURATION) == HAL_OK)
+	if (HAL_UART_Transmit(&IHU_BSP_STM32_UART_BLE_HANDLER, (uint8_t *)buff, len, SPS_UART_TX_MAX_DELAY_DURATION) == HAL_OK)
 		return BSP_SUCCESS;
 	else
 		return BSP_FAILURE;
@@ -241,7 +241,7 @@ int ihu_bsp_stm32_sps_ble_send_data(uint8_t* buff, uint16_t len)
 
 int ihu_bsp_stm32_sps_ble_rcv_data(uint8_t* buff, uint16_t len)
 {    
-	if (HAL_UART_Receive(&BSP_STM32_UART_BLE, buff, len, SPS_UART_RX_MAX_DELAY_DURATION) == HAL_OK)
+	if (HAL_UART_Receive(&IHU_BSP_STM32_UART_BLE_HANDLER, buff, len, SPS_UART_RX_MAX_DELAY_DURATION) == HAL_OK)
 		return BSP_SUCCESS;
 	else
 		return BSP_FAILURE;
@@ -257,7 +257,7 @@ int ihu_bsp_stm32_sps_ble_rcv_data(uint8_t* buff, uint16_t len)
 *******************************************************************************/
 int ihu_bsp_stm32_sps_spare1_send_data(uint8_t* buff, uint16_t len)
 {    
-	if (HAL_UART_Transmit(&BSP_STM32_UART_SPARE1, (uint8_t *)buff, len, SPS_UART_TX_MAX_DELAY_DURATION) == HAL_OK)
+	if (HAL_UART_Transmit(&IHU_BSP_STM32_UART_SPARE1_HANDLER, (uint8_t *)buff, len, SPS_UART_TX_MAX_DELAY_DURATION) == HAL_OK)
 		return BSP_SUCCESS;
 	else
 		return BSP_FAILURE;
@@ -265,7 +265,7 @@ int ihu_bsp_stm32_sps_spare1_send_data(uint8_t* buff, uint16_t len)
 
 int ihu_bsp_stm32_sps_spare1_rcv_data(uint8_t* buff, uint16_t len)
 {    
-	if (HAL_UART_Receive(&BSP_STM32_UART_SPARE1, buff, len, SPS_UART_RX_MAX_DELAY_DURATION) == HAL_OK)
+	if (HAL_UART_Receive(&IHU_BSP_STM32_UART_SPARE1_HANDLER, buff, len, SPS_UART_RX_MAX_DELAY_DURATION) == HAL_OK)
 		return BSP_SUCCESS;
 	else
 		return BSP_FAILURE;
@@ -280,50 +280,50 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 {
 	uint8_t res = 0;
 	msg_struct_spsvirgo_l2frame_rcv_t snd;
-  if(UartHandle==&BSP_STM32_UART_GPRS)
+  if(UartHandle==&IHU_BSP_STM32_UART_GPRS_HANDLER)
   {
-		res = zIhuUartRxBuffer[BSP_STM32_UART_GPRS_ID-1];
+		res = zIhuUartRxBuffer[IHU_BSP_STM32_UART_GPRS_HANDLER_ID-1];
 		BSP_STM32_SPS_GPRS_R_Buff[BSP_STM32_SPS_GPRS_R_Count++] = res;
-		if (BSP_STM32_SPS_GPRS_R_Count >= BSP_STM32_SPS_GPRS_REC_MAXLEN)
+		if (BSP_STM32_SPS_GPRS_R_Count >= IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN)
 			BSP_STM32_SPS_GPRS_R_Count = 0;
 
 		//为了IDLE状态下提高效率，直接分解为IDLE和ELSE
-		if (BSP_STM32_SPS_GPRS_R_State == IHU_HUISTD_RX_STATE_IDLE)
+		if (BSP_STM32_SPS_GPRS_R_State == IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE)
 		{
 			//只有满足这么苛刻的条件，才算找到了帧头
-			if ((res == IHU_HUISTD_FRAME_START_CHAR) && (BSP_STM32_SPS_GPRS_R_Count == 1))
-			BSP_STM32_SPS_GPRS_R_State = IHU_HUISTD_RX_STATE_START;
+			if ((res == IHU_HUITP_L2FRAME_STD_RX_START_FLAG_CHAR) && (BSP_STM32_SPS_GPRS_R_Count == 1))
+			BSP_STM32_SPS_GPRS_R_State = IHU_HUITP_L2FRAME_STD_RX_STATE_START;
 		}
 		else
 		{
 			//收到CHECKSUM
-			if((BSP_STM32_SPS_GPRS_R_State == IHU_HUISTD_RX_STATE_START) && (BSP_STM32_SPS_GPRS_R_Count == 2))
+			if((BSP_STM32_SPS_GPRS_R_State == IHU_HUITP_L2FRAME_STD_RX_STATE_START) && (BSP_STM32_SPS_GPRS_R_Count == 2))
 			{
-				BSP_STM32_SPS_GPRS_R_State = IHU_HUISTD_RX_STATE_HEADER_CKSM;
+				BSP_STM32_SPS_GPRS_R_State = IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_CKSM;
 			}
 			//收到长度高位
-			else if((BSP_STM32_SPS_GPRS_R_State == IHU_HUISTD_RX_STATE_HEADER_CKSM) && (BSP_STM32_SPS_GPRS_R_Count == 3))
+			else if((BSP_STM32_SPS_GPRS_R_State == IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_CKSM) && (BSP_STM32_SPS_GPRS_R_Count == 3))
 			{
-				BSP_STM32_SPS_GPRS_R_State = IHU_HUISTD_RX_STATE_HEADER_LEN;
+				BSP_STM32_SPS_GPRS_R_State = IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_LEN;
 			}
 			//收到长度低位
-			else if((BSP_STM32_SPS_GPRS_R_State == IHU_HUISTD_RX_STATE_HEADER_LEN) && (BSP_STM32_SPS_GPRS_R_Count == 4))
+			else if((BSP_STM32_SPS_GPRS_R_State == IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_LEN) && (BSP_STM32_SPS_GPRS_R_Count == 4))
 			{
 				BSP_STM32_SPS_GRPS_R_Len = ((BSP_STM32_SPS_GPRS_R_Buff[2] <<8) + BSP_STM32_SPS_GPRS_R_Buff[3]);
 				//CHECKSUM及判定
 				if ((BSP_STM32_SPS_GPRS_R_Buff[1] == (BSP_STM32_SPS_GPRS_R_Buff[0] ^ BSP_STM32_SPS_GPRS_R_Buff[2]^BSP_STM32_SPS_GPRS_R_Buff[3])) &&\
-					(BSP_STM32_SPS_GRPS_R_Len < BSP_STM32_SPS_GPRS_REC_MAXLEN-4))
-				BSP_STM32_SPS_GPRS_R_State = IHU_HUISTD_RX_STATE_BODY;
+					(BSP_STM32_SPS_GRPS_R_Len < IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN-4))
+				BSP_STM32_SPS_GPRS_R_State = IHU_HUITP_L2FRAME_STD_RX_STATE_BODY;
 			}
 			//收到BODY位
-			else if((BSP_STM32_SPS_GPRS_R_State == IHU_HUISTD_RX_STATE_BODY) && (BSP_STM32_SPS_GRPS_R_Len > 1))
+			else if((BSP_STM32_SPS_GPRS_R_State == IHU_HUITP_L2FRAME_STD_RX_STATE_BODY) && (BSP_STM32_SPS_GRPS_R_Len > 1))
 			{
 				BSP_STM32_SPS_GRPS_R_Len--;
 			}
 			//收到BODY最后一位
-			else if((BSP_STM32_SPS_GPRS_R_State == IHU_HUISTD_RX_STATE_BODY) && (BSP_STM32_SPS_GRPS_R_Len == 1))
+			else if((BSP_STM32_SPS_GPRS_R_State == IHU_HUITP_L2FRAME_STD_RX_STATE_BODY) && (BSP_STM32_SPS_GRPS_R_Len == 1))
 			{
-				BSP_STM32_SPS_GPRS_R_State = IHU_HUISTD_RX_STATE_IDLE;
+				BSP_STM32_SPS_GPRS_R_State = IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE;
 				BSP_STM32_SPS_GRPS_R_Len = 0;
 				BSP_STM32_SPS_GPRS_R_Count = 0;
 				//发送数据到上层SPSVIRGO模块
@@ -334,53 +334,53 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 			}
 			//差错情况
 			else{
-				BSP_STM32_SPS_GPRS_R_State = IHU_HUISTD_RX_STATE_IDLE;
+				BSP_STM32_SPS_GPRS_R_State = IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE;
 				BSP_STM32_SPS_GRPS_R_Len = 0;
 				BSP_STM32_SPS_GPRS_R_Count = 0;
 			}
 		}
 		//重新设置中断
-		HAL_UART_Receive_IT(&BSP_STM32_UART_GPRS, &zIhuUartRxBuffer[BSP_STM32_UART_GPRS_ID-1], 1);
+		HAL_UART_Receive_IT(&IHU_BSP_STM32_UART_GPRS_HANDLER, &zIhuUartRxBuffer[IHU_BSP_STM32_UART_GPRS_HANDLER_ID-1], 1);
   }
-  else if(UartHandle==&BSP_STM32_UART_RFID)
+  else if(UartHandle==&IHU_BSP_STM32_UART_RFID_HANDLER)
   {
-		BSP_STM32_SPS_RFID_R_Buff[BSP_STM32_SPS_RFID_R_Count] = zIhuUartRxBuffer[BSP_STM32_UART_RFID_ID-1];
+		BSP_STM32_SPS_RFID_R_Buff[BSP_STM32_SPS_RFID_R_Count] = zIhuUartRxBuffer[IHU_BSP_STM32_UART_RFID_HANDLER_ID-1];
 		BSP_STM32_SPS_RFID_R_Count++;
-		if (BSP_STM32_SPS_RFID_R_Count >= BSP_STM32_SPS_RFID_REC_MAXLEN)
+		if (BSP_STM32_SPS_RFID_R_Count >= IHU_BSP_STM32_SPS_RFID_REC_MAX_LEN)
 			BSP_STM32_SPS_RFID_R_Count = 0;
-		HAL_UART_Receive_IT(&BSP_STM32_UART_RFID, &zIhuUartRxBuffer[BSP_STM32_UART_RFID_ID-1], 1);
+		HAL_UART_Receive_IT(&IHU_BSP_STM32_UART_RFID_HANDLER, &zIhuUartRxBuffer[IHU_BSP_STM32_UART_RFID_HANDLER_ID-1], 1);
   }
-  else if(UartHandle==&BSP_STM32_UART_PRINT)
+  else if(UartHandle==&IHU_BSP_STM32_UART_PRINT_HANDLER)
   {
-		BSP_STM32_SPS_PRINT_R_Buff[BSP_STM32_SPS_PRINT_R_Count] = zIhuUartRxBuffer[BSP_STM32_UART_PRINT_ID-1];
+		BSP_STM32_SPS_PRINT_R_Buff[BSP_STM32_SPS_PRINT_R_Count] = zIhuUartRxBuffer[IHU_BSP_STM32_UART_PRINT_HANDLER_ID-1];
 		BSP_STM32_SPS_PRINT_R_Count++;
-		if (BSP_STM32_SPS_PRINT_R_Count >= BSP_STM32_SPS_PRINT_REC_MAXLEN)
+		if (BSP_STM32_SPS_PRINT_R_Count >= IHU_BSP_STM32_SPS_PRINT_REC_MAX_LEN)
 			BSP_STM32_SPS_PRINT_R_Count = 0;
-		HAL_UART_Receive_IT(&BSP_STM32_UART_PRINT, &zIhuUartRxBuffer[BSP_STM32_UART_PRINT_ID-1], 1);
+		HAL_UART_Receive_IT(&IHU_BSP_STM32_UART_PRINT_HANDLER, &zIhuUartRxBuffer[IHU_BSP_STM32_UART_PRINT_HANDLER_ID-1], 1);
   }	
-  else if(UartHandle==&BSP_STM32_UART_BLE)
+  else if(UartHandle==&IHU_BSP_STM32_UART_BLE_HANDLER)
   {
-		BSP_STM32_SPS_BLE_R_Buff[BSP_STM32_SPS_BLE_R_Count] = zIhuUartRxBuffer[BSP_STM32_UART_BLE_ID-1];
+		BSP_STM32_SPS_BLE_R_Buff[BSP_STM32_SPS_BLE_R_Count] = zIhuUartRxBuffer[IHU_BSP_STM32_UART_BLE_HANDLER_ID-1];
 		BSP_STM32_SPS_BLE_R_Count++;
-		if (BSP_STM32_SPS_BLE_R_Count >= BSP_STM32_SPS_BLE_REC_MAXLEN)
+		if (BSP_STM32_SPS_BLE_R_Count >= IHU_BSP_STM32_SPS_BLE_REC_MAX_LEN)
 			BSP_STM32_SPS_BLE_R_Count = 0;
-		HAL_UART_Receive_IT(&BSP_STM32_UART_BLE, &zIhuUartRxBuffer[BSP_STM32_UART_BLE_ID-1], 1);
+		HAL_UART_Receive_IT(&IHU_BSP_STM32_UART_BLE_HANDLER, &zIhuUartRxBuffer[IHU_BSP_STM32_UART_BLE_HANDLER_ID-1], 1);
   }	
-  else if(UartHandle==&BSP_STM32_UART_SPARE1)
+  else if(UartHandle==&IHU_BSP_STM32_UART_SPARE1_HANDLER)
   {
-		BSP_STM32_SPS_SPARE1_R_Buff[BSP_STM32_SPS_SPARE1_R_Count] = zIhuUartRxBuffer[BSP_STM32_UART_SPARE1_ID-1];
+		BSP_STM32_SPS_SPARE1_R_Buff[BSP_STM32_SPS_SPARE1_R_Count] = zIhuUartRxBuffer[IHU_BSP_STM32_UART_SPARE1_HANDLER_ID-1];
 		BSP_STM32_SPS_SPARE1_R_Count++;
-		if (BSP_STM32_SPS_SPARE1_R_Count >= BSP_STM32_SPS_SPARE1_REC_MAXLEN)
+		if (BSP_STM32_SPS_SPARE1_R_Count >= IHU_BSP_STM32_SPS_SPARE1_REC_MAX_LEN)
 			BSP_STM32_SPS_SPARE1_R_Count = 0;
-		HAL_UART_Receive_IT(&BSP_STM32_UART_SPARE1, &zIhuUartRxBuffer[BSP_STM32_UART_SPARE1_ID-1], 1);
+		HAL_UART_Receive_IT(&IHU_BSP_STM32_UART_SPARE1_HANDLER, &zIhuUartRxBuffer[IHU_BSP_STM32_UART_SPARE1_HANDLER_ID-1], 1);
   }	
-  else if(UartHandle==&BSP_STM32_UART_SPARE2)
+  else if(UartHandle==&IHU_BSP_STM32_UART_SPARE2_HANDLER)
   {
-		BSP_STM32_SPS_SPARE2_R_Buff[BSP_STM32_SPS_SPARE2_R_Count] = zIhuUartRxBuffer[BSP_STM32_UART_SPARE2_ID-1];
+		BSP_STM32_SPS_SPARE2_R_Buff[BSP_STM32_SPS_SPARE2_R_Count] = zIhuUartRxBuffer[IHU_BSP_STM32_UART_SPARE2_HANDLER_ID-1];
 		BSP_STM32_SPS_SPARE2_R_Count++;
-		if (BSP_STM32_SPS_SPARE2_R_Count >= BSP_STM32_SPS_SPARE2_REC_MAXLEN)
+		if (BSP_STM32_SPS_SPARE2_R_Count >= IHU_BSP_STM32_SPS_SPARE2_REC_MAX_LEN)
 			BSP_STM32_SPS_SPARE2_R_Count = 0;
-		HAL_UART_Receive_IT(&BSP_STM32_UART_SPARE2, &zIhuUartRxBuffer[BSP_STM32_UART_SPARE2_ID-1], 1);
+		HAL_UART_Receive_IT(&IHU_BSP_STM32_UART_SPARE2_HANDLER, &zIhuUartRxBuffer[IHU_BSP_STM32_UART_SPARE2_HANDLER_ID-1], 1);
   }
 }
 

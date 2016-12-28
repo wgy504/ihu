@@ -396,6 +396,11 @@ extern void ihu_timer_routine_handler_10ms(void);
 //extern int sprintf(char * __restrict /*s*/, const char * __restrict /*format*/, ...) __attribute__((__nonnull__(1,2)));
 //extern int arch_printf(const char *fmt, ...);
 
+/*
+ *	
+ *  底层BSP的函数映射
+ *
+ */
 
 //LED专门对付一般性的驱动函数，对其进行映射，以便保持上层模块的一致性
 #define ihu_l1hd_led_f2board_init 							ihu_bsp_stm32_led_f2board_init
@@ -447,10 +452,11 @@ extern void ihu_timer_routine_handler_10ms(void);
 
 
 
-
-
-
-
+/*
+ *	
+ *  移植FREERTOS所必须需要的环境
+ *
+ */
 
 //来自于DA1468x - Portmacro.h
 #if (IHU_WORKING_FREE_RTOS_SELECTION == IHU_WORKING_FREE_RTOS_SELECTION_BARE)

@@ -14,10 +14,10 @@
 #include "vmmw_gprs.h"
 
 //全局变量，引用外部
-extern int8_t BSP_STM32_SPS_GPRS_R_Buff[BSP_STM32_SPS_GPRS_REC_MAXLEN];			//串口GPRS数据接收缓冲区 
-extern int8_t BSP_STM32_SPS_GPRS_R_State;												//串口GPRS接收状态
-extern int16_t BSP_STM32_SPS_GPRS_R_Count;					//当前接收数据的字节数 	  
-extern uint8_t 	BSP_STM32_SPS_PRINT_R_Buff[BSP_STM32_SPS_PRINT_REC_MAXLEN];		//串口1数据缓存区
+extern int8_t BSP_STM32_SPS_GPRS_R_Buff[IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN];			//串口GPRS数据接收缓冲区 
+extern int8_t BSP_STM32_SPS_GPRS_R_State;																					//串口GPRS接收状态
+extern int16_t BSP_STM32_SPS_GPRS_R_Count;																				//当前接收数据的字节数 	  
+extern uint8_t 	BSP_STM32_SPS_PRINT_R_Buff[IHU_BSP_STM32_SPS_PRINT_REC_MAX_LEN];		//串口1数据缓存区
 
 //跟时钟/USART相关的本地变量
 uint8_t 	GPRS_UART_TIMER_WAIT_Duration=0;        		//传递等待时长
@@ -1668,7 +1668,7 @@ void func_gprsmod_sim800a_data_connection_and_receive_process(void)
 void func_gprsmod_clear_receive_buffer(void)
 {
 	uint16_t k;
-	for(k=0;k<BSP_STM32_SPS_GPRS_REC_MAXLEN;k++)      //将缓存内容清零
+	for(k=0;k<IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN;k++)      //将缓存内容清零
 	{
 		BSP_STM32_SPS_GPRS_R_Buff[k] = 0x00;
 	}
@@ -1754,7 +1754,7 @@ void func_gprsmod_wait_CREG(void)
 		func_gprsmod_send_string("AT+CREG?");   //查询等待模块注册成功
 		func_gprsmod_send_LR();
 		ihu_usleep(500);  //等待500ms
-		for(k=0;k<BSP_STM32_SPS_GPRS_REC_MAXLEN;k++)      			
+		for(k=0;k<IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN;k++)      			
 		{
 			if(BSP_STM32_SPS_GPRS_R_Buff[k] == ':')
 			{

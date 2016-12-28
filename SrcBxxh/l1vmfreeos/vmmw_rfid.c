@@ -14,7 +14,7 @@
 #include "vmmw_rfid.h"
 
 //全局变量，引用外部
-extern int8_t BSP_STM32_SPS_RFID_R_Buff[BSP_STM32_SPS_RFID_REC_MAXLEN];			//串口BLE数据接收缓冲区 
+extern int8_t BSP_STM32_SPS_RFID_R_Buff[IHU_BSP_STM32_SPS_RFID_REC_MAX_LEN];			//串口BLE数据接收缓冲区 
 extern int8_t BSP_STM32_SPS_RFID_R_State;												//串口RFID接收状态
 extern int16_t BSP_STM32_SPS_RFID_R_Count;					//当前接收数据的字节数 	  
 
@@ -65,7 +65,7 @@ OPSTAT RFID_UART_send_AT_command(uint8_t *cmd, uint8_t *ack, uint16_t wait_time)
 void RFID_UART_clear_receive_buffer(void)
 {
 	uint16_t k;
-	for(k=0;k<BSP_STM32_SPS_RFID_REC_MAXLEN;k++)      //将缓存内容清零
+	for(k=0;k<IHU_BSP_STM32_SPS_RFID_REC_MAX_LEN;k++)      //将缓存内容清零
 	{
 		BSP_STM32_SPS_RFID_R_Buff[k] = 0x00;
 	}

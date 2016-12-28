@@ -17,18 +17,18 @@
 
 //从ucosiii移植过来的函数
 //MAX_IHU_MSG_BODY_LENGTH-1是因为发送到上层SPSVIRGO的数据缓冲区受到消息结构msg_struct_spsvirgo_l2frame_rcv_t的影响
-#define BSP_STM32_I2C_IAU_REC_MAXLEN MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
-#define BSP_STM32_I2C_SPARE1_REC_MAXLEN MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
+#define IHU_BSP_STM32_I2C_IAU_REC_MAX_LEN 					MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
+#define IHU_BSP_STM32_I2C_SPARE1_REC_MAX_LEN 				MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
 
 //发送和接受数据的延迟时间长度
-#define I2C_TX_MAX_DELAY_DURATION 100
-#define I2C_RX_MAX_DELAY_DURATION 100
+#define IHU_BSP_STM32_I2C_TX_MAX_DELAY_DURATION 100
+#define IHU_BSP_STM32_I2C_RX_MAX_DELAY_DURATION 100
 
 //形成定义的交换矩阵
-#define BSP_STM32_I2C_IAU					hi2c1
-#define BSP_STM32_I2C_IAU_ID  		1
-#define BSP_STM32_I2C_SPARE1			hi2c1
-#define BSP_STM32_I2C_SPARE1_ID  	2
+#define IHU_BSP_STM32_I2C_IAU_HANDLER					hi2c1
+#define IHU_BSP_STM32_I2C_IAU_HANDLER_ID  		1
+#define IHU_BSP_STM32_I2C_SPARE1_HANDLER			hi2c1
+#define IHU_BSP_STM32_I2C_SPARE1_HANDLER_ID  	2
 
 //API函数
 extern int ihu_bsp_stm32_i2c_slave_hw_init(void);

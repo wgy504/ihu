@@ -64,17 +64,17 @@ extern "C" {
 #define SPIx_IRQn                        SPI2_IRQn
 
 //GENERAL FRAME帧结构
-typedef struct BSP_SPI_msgheader
+typedef struct IHU_HUITP_L2FRAME_STD_SPI_frame_header
 {
   uint8_t start;
   uint8_t chksum;
   uint16_t len;
-}BSP_SPI_msgheader_t;
-#define SPI_RX_STATE_START 0
-#define SPI_RX_STATE_HEADER 1
-#define SPI_RX_STATE_BODY 2
-#define EXT_BORAD_START_CHAR 0xFE
-#define EXT_BOARD_PADDING_CH 0x00
+}IHU_HUITP_L2FRAME_STD_SPI_frame_header_t;
+#define IHU_BSP_STM32_SPI_RX_STATE_START 0
+#define IHU_BSP_STM32_SPI_RX_STATE_HEADER 1
+#define IHU_BSP_STM32_SPI_RX_STATE_BODY 2
+#define IHU_BSP_STM32_SPI_EXT_BORAD_START_CHAR 0xFE
+#define IHU_BSP_STM32_SPI_EXT_BOARD_PADDING_CH 0x00
 
 //Global APIs, defined by XPH
 //需要将func_bsp_spi_slave_hw_init的工作内容融入到ihu_bsp_stm32_spi_slave_hw_init中去
@@ -85,14 +85,17 @@ int func_bsp_spi_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint
 //ZJL DEFINITION
 //常量定义
 //MAX_IHU_MSG_BODY_LENGTH-1是因为发送到上层SPILEO的数据缓冲区受到消息结构msg_struct_spileo_l2frame_rcv_t的影响
-#define BSP_STM32_SPI_IAU_REC_MAXLEN 			MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
-#define BSP_STM32_SPI_SPARE1_REC_MAXLEN 	MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
-#define BSP_STM32_SPI_SPARE1			hspi1
-#define BSP_STM32_SPI_SPARE1_ID  	1
-#define BSP_STM32_SPI_IAU					hspi2
-#define BSP_STM32_SPI_IAU_ID  		2
-#define SPI_TX_MAX_DELAY_DURATION 100
-#define SPI_RX_MAX_DELAY_DURATION 100
+#define IHU_BSP_STM32_SPI_IAU_REC_MAX_LEN 					MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
+#define IHU_BSP_STM32_SPI_SPARE1_REC_MAX_LEN 			MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
+
+//交换矩阵
+#define IHU_BSP_STM32_SPI_SPARE1_HANDLER					hspi1
+#define IHU_BSP_STM32_SPI_SPARE1_HANDLER_ID  			1
+#define IHU_BSP_STM32_SPI_IAU_HANDLER							hspi2
+#define IHU_BSP_STM32_SPI_IAU_HANDLER_ID  				2
+#define IHU_STM32_SPI_TX_MAX_DELAY_DURATION 		100
+
+//全局函数
 extern int ihu_bsp_stm32_spi_slave_hw_init(void);
 extern int ihu_bsp_stm32_spi_spare1_send_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_spi_spare1_rcv_data(uint8_t* buff, uint16_t len);
