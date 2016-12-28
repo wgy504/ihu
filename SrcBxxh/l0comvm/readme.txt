@@ -4,6 +4,10 @@
 //近期需要完成的任务
 = 研究STM32的IAP功能
 
+//= ZJL, 2016 Dec.28, CURRENT_SW_DELIVERY R03.72 =>CCL项目
+= 继续解决VMMW_GPRS中间件在AT CMD下与CCL状态机组合工作的问题
+
+
 //= ZJL, 2016 Dec.27, CURRENT_SW_DELIVERY R03.71 =>CCL项目
 = 解码基础部分
 = 解码函数完成：是基于非XML结构
