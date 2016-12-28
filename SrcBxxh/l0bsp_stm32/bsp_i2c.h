@@ -31,11 +31,12 @@
 #define BSP_STM32_I2C_SPARE1_ID  	2
 
 //API函数
-extern int BSP_STM32_I2C_slave_hw_init(void);
-extern int BSP_STM32_I2C_IAU_SendData(uint8_t* buff, uint16_t len);
-extern int BSP_STM32_I2C_IAU_RcvData(uint8_t* buff, uint16_t len);	
-extern int BSP_STM32_I2C_SPARE1_SendData(uint8_t* buff, uint16_t len);
-extern int BSP_STM32_I2C_SPARE1_RcvData(uint8_t* buff, uint16_t len);
+extern int ihu_bsp_stm32_i2c_slave_hw_init(void);
+extern int ihu_bsp_stm32_i2c_iau_send_data(uint8_t* buff, uint16_t len);
+extern int ihu_bsp_stm32_i2c_iau_rcv_data(uint8_t* buff, uint16_t len);	
+extern int ihu_bsp_stm32_i2c_spare1_send_data(uint8_t* buff, uint16_t len);
+extern int ihu_bsp_stm32_i2c_spare1_rcv_data(uint8_t* buff, uint16_t len);
+
 void HAL_I2C_RxCpltCallback(I2C_HandleTypeDef *I2cHandle);
 	
 

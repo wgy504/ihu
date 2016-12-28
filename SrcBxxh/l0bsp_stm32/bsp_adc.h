@@ -34,9 +34,9 @@
 extern ADC_HandleTypeDef hadcx;
 extern DMA_HandleTypeDef hdma_adcx;
 /* 函数声明 ------------------------------------------------------------------*/
-void BSP_STM32_ADC_hw_init(void);
+void ihu_bsp_stm32_adc_hw_init(void);
 void XIN_GPIO_Init(void);
-int BSP_STM32_ADC_Get_Value(void);
+int ihu_bsp_stm32_adc_get_sample_value(void);
 
 #endif /* __ADC_H__ */
 

@@ -564,7 +564,7 @@ OPSTAT ihu_vmmw_gprsmod_gprs_procedure(uint8_t sub_opt)
 			}
 			else
 			{
-				BSP_STM32_SPS_GPRS_SendData((uint8_t *)0X1B, 1);//ESC,取消发送
+				ihu_l1hd_sps_gprs_send_data((uint8_t *)0X1B, 1);//ESC,取消发送
 				zIhuRunErrCnt[TASK_ID_VMFO]++;
 				IhuErrorPrint("VMFO: GPRS Send failure2!\n");
 				return IHU_FAILURE;
@@ -575,12 +575,12 @@ OPSTAT ihu_vmmw_gprsmod_gprs_procedure(uint8_t sub_opt)
 		case 3:
 			if(func_gprsmod_send_AT_command("AT+CIPSEND", (uint8_t*)">", 2)== IHU_SUCCESS)
 			{
-				BSP_STM32_SPS_GPRS_SendData((uint8_t *)0x00, 1);
-				BSP_STM32_SPS_GPRS_SendData((uint8_t *)0X1A, 1);//CTRL+Z,结束数据发送,启动一次传输								
+				ihu_l1hd_sps_gprs_send_data((uint8_t *)0x00, 1);
+				ihu_l1hd_sps_gprs_send_data((uint8_t *)0X1A, 1);//CTRL+Z,结束数据发送,启动一次传输								
 				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Heart-beat successful!\n");		 
 			}else
 			{
-				BSP_STM32_SPS_GPRS_SendData((uint8_t *)0X1B, 1);//ESC,取消发送
+				ihu_l1hd_sps_gprs_send_data((uint8_t *)0X1B, 1);//ESC,取消发送
 				zIhuRunErrCnt[TASK_ID_VMFO]++;
 				IhuErrorPrint("VMFO: GPRS Send failure3!\n");
 				return IHU_FAILURE;
@@ -1695,7 +1695,7 @@ OPSTAT func_gprsmod_send_AT_command(uint8_t *cmd, uint8_t *ack, uint16_t wait_ti
 
 	//清理接收缓冲区
 	func_gprsmod_clear_receive_buffer();
-	BSP_STM32_SPS_GPRS_SendData((uint8_t *)cmd, strlen((char*)cmd));
+	ihu_l1hd_sps_gprs_send_data((uint8_t *)cmd, strlen((char*)cmd));
 	func_gprsmod_send_LR();	
 
 //	//接收，注意时钟刻度
@@ -1731,7 +1731,7 @@ void func_gprsmod_send_string(char* s)
 {
 	while(*s != '\0')//检测字符串结束符
 	{
-		BSP_STM32_SPS_GPRS_SendData((uint8_t *)s++, 1);
+		ihu_l1hd_sps_gprs_send_data((uint8_t *)s++, 1);
 	}
 }
 

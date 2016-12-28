@@ -78,20 +78,14 @@ void LEDx_StateSet(uint8_t LEDx,LEDState_TypeDef state);
 #define LED_F205RG_onoff(port, pin, onoff) if (onoff) HAL_GPIO_WritePin(port, pin, GPIO_PIN_SET); else HAL_GPIO_WritePin(port, pin, GPIO_PIN_RESET);
 
 //全局函数定义
-extern void BSP_STM32_LED_F205_board_init(void);
-extern void BSP_STM32_LED_F205_board_on(void);
-extern void BSP_STM32_LED_F205_board_off(void);
-extern void BSP_STM32_LED_F205_board_negation(void);
-extern void BSP_STM32_LED_F205_timer_ind_init(void);
-extern void BSP_STM32_LED_F205_timer_ind_on(void);
-extern void BSP_STM32_LED_F205_timer_ind_off(void);
-extern void BSP_STM32_LED_F205_timer_ind_negation(void);
-extern void BSP_STM32_LED_F205_onoff(GPIO_TypeDef* port, uint16_t pin, uint8_t onoff);
-
-extern void BSP_STM32_LED_F205_board_on(void);
-
-
-
+extern void ihu_bsp_stm32_led_f2board_init(void);
+extern void ihu_bsp_stm32_led_f2board_on(void);
+extern void ihu_bsp_stm32_led_f2board_off(void);
+extern void ihu_bsp_stm32_led_f2board_negation(void);
+extern void ihu_bsp_stm32_led_f2board_timer_ind_on(void);
+extern void ihu_bsp_stm32_led_f2board_timer_ind_off(void);
+extern void ihu_bsp_stm32_led_f2board_timer_ind_negation(void);
+extern void ihu_bsp_stm32_led_f2board_onoff(GPIO_TypeDef* port, uint16_t pin, uint8_t onoff);
 
 #endif  // __BSP_LED_H__
 

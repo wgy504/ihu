@@ -288,7 +288,7 @@ void IhuDebugPrintFo(UINT8 index, char *format, ...)
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		return;
 	}
-	BSP_STM32_sps_print_data_send(zIhuPrintBufferChar[index].PrintBuffer);
+	ihu_l1hd_sps_print_send_data(zIhuPrintBufferChar[index].PrintBuffer);
 	OS_MUTEX_PUT(zIhuPrintMutex);
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
 	if (OS_MUTEX_GET(zIhuPrintMutex, IHU_PRINT_MUTEX_TIME_OUT_DURATION) != OS_MUTEX_TAKEN){
@@ -338,7 +338,7 @@ void IhuErrorPrintFo(UINT8 index, char *format, ...)
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		return;
 	}
-	BSP_STM32_sps_print_data_send(zIhuPrintBufferChar[index].PrintBuffer);
+	ihu_l1hd_sps_print_send_data(zIhuPrintBufferChar[index].PrintBuffer);
 	OS_MUTEX_PUT(zIhuPrintMutex);
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
 	if (OS_MUTEX_GET(zIhuPrintMutex, IHU_PRINT_MUTEX_TIME_OUT_DURATION) != OS_MUTEX_TAKEN){

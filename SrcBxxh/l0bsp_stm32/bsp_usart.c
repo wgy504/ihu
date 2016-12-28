@@ -58,7 +58,7 @@ int16_t BSP_STM32_SPS_SPARE2_R_Len=0;
 /* 私有函数原形 --------------------------------------------------------------*/
 /* 函数体 --------------------------------------------------------------------*/
 
-int BSP_STM32_sps_slave_hw_init(void)
+int ihu_bsp_stm32_sps_slave_hw_init(void)
 {
 	uint16_t k;
 	for(k=0;k<BSP_STM32_SPS_GPRS_REC_MAXLEN;k++)      //将缓存内容清零
@@ -118,7 +118,7 @@ int BSP_STM32_sps_slave_hw_init(void)
   * 返 回 值: 无
   * 说    明：无
   */
-int BSP_STM32_sps_print_fputc(int ch, FILE *f)
+int ihu_bsp_stm32_sps_print_fputc(int ch, FILE *f)
 {
   HAL_UART_Transmit(&BSP_STM32_UART_PRINT, (uint8_t *)&ch, 1, 0xffff);
   return ch;
@@ -130,7 +130,7 @@ int BSP_STM32_sps_print_fputc(int ch, FILE *f)
   * 返 回 值: 无
   * 说    明：无
   */
-int BSP_STM32_sps_print_fgetc(FILE * f)
+int ihu_bsp_stm32_sps_print_fgetc(FILE * f)
 {
   uint8_t ch = 0;
   HAL_UART_Receive(&BSP_STM32_UART_PRINT, &ch, 1, 0xffff);
@@ -138,7 +138,7 @@ int BSP_STM32_sps_print_fgetc(FILE * f)
 }
 
 //数据发送的时间延迟，这里设置为无穷大0xffff，未来需要进一步优化
-int BSP_STM32_sps_print_data_send(char *s)
+int ihu_bsp_stm32_sps_print_data_send(char *s)
 {
 //	int i=0;
 //	for (i=0; i<IHU_PRINT_CHAR_SIZE; i++){
@@ -151,7 +151,7 @@ int BSP_STM32_sps_print_data_send(char *s)
 		return BSP_FAILURE;		
 }
 
-int BSP_STM32_sps_print_data_receive(char *s, uint16_t len)
+int ihu_bsp_stm32_sps_print_data_receive(char *s, uint16_t len)
 {
 	if (HAL_UART_Receive(&BSP_STM32_UART_PRINT, (uint8_t *)s, len, SPS_UART_RX_MAX_DELAY_DURATION) == HAL_OK)
 		return BSP_SUCCESS;
@@ -168,7 +168,7 @@ int BSP_STM32_sps_print_data_receive(char *s, uint16_t len)
 * 返回    : 无 
 * 说明    : 无
 *******************************************************************************/
-int BSP_STM32_SPS_GPRS_SendData(uint8_t* buff, uint16_t len)
+int ihu_bsp_stm32_sps_gprs_send_data(uint8_t* buff, uint16_t len)
 {    
 //	uint16_t i;
 
@@ -182,7 +182,7 @@ int BSP_STM32_SPS_GPRS_SendData(uint8_t* buff, uint16_t len)
 		return BSP_FAILURE;		
 }
 
-int BSP_STM32_SPS_GPRS_RcvData(uint8_t* buff, uint16_t len)
+int ihu_bsp_stm32_sps_gprs_rcv_data(uint8_t* buff, uint16_t len)
 {    
 	if (HAL_UART_Receive(&BSP_STM32_UART_GPRS, buff, len, SPS_UART_RX_MAX_DELAY_DURATION) == HAL_OK)
 		return BSP_SUCCESS;
@@ -190,7 +190,7 @@ int BSP_STM32_SPS_GPRS_RcvData(uint8_t* buff, uint16_t len)
 		return BSP_FAILURE;
 }
 
-int BSP_STM32_SPS_GPRS_RcvData_timeout(uint8_t* buff, uint16_t len, uint32_t timeout)
+int ihu_bsp_stm32_sps_gprs_rcv_data_timeout(uint8_t* buff, uint16_t len, uint32_t timeout)
 {    
 	if (HAL_UART_Receive(&BSP_STM32_UART_GPRS, buff, len, timeout) == HAL_OK)
 		return BSP_SUCCESS;
@@ -207,7 +207,7 @@ int BSP_STM32_SPS_GPRS_RcvData_timeout(uint8_t* buff, uint16_t len, uint32_t tim
 * 返回    : 无 
 * 说明    : 无
 *******************************************************************************/
-int BSP_STM32_SPS_RFID_SendData(uint8_t* buff, uint16_t len)
+int ihu_bsp_stm32_sps_rfid_send_data(uint8_t* buff, uint16_t len)
 {    
 	if (HAL_UART_Transmit(&BSP_STM32_UART_RFID, (uint8_t *)buff, len, SPS_UART_TX_MAX_DELAY_DURATION) == HAL_OK)
 		return BSP_SUCCESS;
@@ -215,7 +215,7 @@ int BSP_STM32_SPS_RFID_SendData(uint8_t* buff, uint16_t len)
 		return BSP_FAILURE;		
 }
 
-int BSP_STM32_SPS_RFID_RcvData(uint8_t* buff, uint16_t len)
+int ihu_bsp_stm32_sps_rfid_rcv_data(uint8_t* buff, uint16_t len)
 {    
 	if (HAL_UART_Receive(&BSP_STM32_UART_RFID, buff, len, SPS_UART_RX_MAX_DELAY_DURATION) == HAL_OK)
 		return BSP_SUCCESS;
@@ -231,7 +231,7 @@ int BSP_STM32_SPS_RFID_RcvData(uint8_t* buff, uint16_t len)
 * 返回    : 无 
 * 说明    : 无
 *******************************************************************************/
-int BSP_STM32_SPS_BLE_SendData(uint8_t* buff, uint16_t len)
+int ihu_bsp_stm32_sps_ble_send_data(uint8_t* buff, uint16_t len)
 {    
 	if (HAL_UART_Transmit(&BSP_STM32_UART_BLE, (uint8_t *)buff, len, SPS_UART_TX_MAX_DELAY_DURATION) == HAL_OK)
 		return BSP_SUCCESS;
@@ -239,7 +239,7 @@ int BSP_STM32_SPS_BLE_SendData(uint8_t* buff, uint16_t len)
 		return BSP_FAILURE;
 }
 
-int BSP_STM32_SPS_BLE_RcvData(uint8_t* buff, uint16_t len)
+int ihu_bsp_stm32_sps_ble_rcv_data(uint8_t* buff, uint16_t len)
 {    
 	if (HAL_UART_Receive(&BSP_STM32_UART_BLE, buff, len, SPS_UART_RX_MAX_DELAY_DURATION) == HAL_OK)
 		return BSP_SUCCESS;
@@ -255,7 +255,7 @@ int BSP_STM32_SPS_BLE_RcvData(uint8_t* buff, uint16_t len)
 * 返回    : 无 
 * 说明    : 无
 *******************************************************************************/
-int BSP_STM32_SPS_SPARE1_SendData(uint8_t* buff, uint16_t len)
+int ihu_bsp_stm32_sps_spare1_send_data(uint8_t* buff, uint16_t len)
 {    
 	if (HAL_UART_Transmit(&BSP_STM32_UART_SPARE1, (uint8_t *)buff, len, SPS_UART_TX_MAX_DELAY_DURATION) == HAL_OK)
 		return BSP_SUCCESS;
@@ -263,7 +263,7 @@ int BSP_STM32_SPS_SPARE1_SendData(uint8_t* buff, uint16_t len)
 		return BSP_FAILURE;
 }
 
-int BSP_STM32_SPS_SPARE1_RcvData(uint8_t* buff, uint16_t len)
+int ihu_bsp_stm32_sps_spare1_rcv_data(uint8_t* buff, uint16_t len)
 {    
 	if (HAL_UART_Receive(&BSP_STM32_UART_SPARE1, buff, len, SPS_UART_RX_MAX_DELAY_DURATION) == HAL_OK)
 		return BSP_SUCCESS;

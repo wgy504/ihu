@@ -36,7 +36,7 @@ int16_t BSP_STM32_CAN_SPARE1_R_Len=0;
 /* 私有函数原形 --------------------------------------------------------------*/
 /* 函数体 --------------------------------------------------------------------*/
 
-int BSP_STM32_CAN_slave_hw_init(void)
+int ihu_bsp_stm32_can_slave_hw_init(void)
 {
 	uint16_t k;
 	for(k=0;k<BSP_STM32_CAN_IAU_REC_MAXLEN;k++)      //将缓存内容清零
@@ -66,7 +66,7 @@ int BSP_STM32_CAN_slave_hw_init(void)
 * 返回    : 无 
 * 说明    : 无
 *******************************************************************************/
-int BSP_STM32_CAN_IAU_SendData(uint8_t* buff, uint16_t len)
+int ihu_bsp_stm32_can_send_data(uint8_t* buff, uint16_t len)
 { 
 	//这里是帧处理的过程，未来待完善数据的发送接收处理过程	
 	if (HAL_CAN_Transmit(&BSP_STM32_CAN_IAU, CAN_TX_MAX_DELAY_DURATION) == HAL_OK)
@@ -75,7 +75,7 @@ int BSP_STM32_CAN_IAU_SendData(uint8_t* buff, uint16_t len)
 		return BSP_FAILURE;		
 }
 
-int BSP_STM32_CAN_IAU_RcvData(uint8_t* buff, uint16_t len)
+int ihu_bsp_stm32_can_rcv_data(uint8_t* buff, uint16_t len)
 {    
 	//这里是帧处理的过程，未来待完善数据的发送接收处理过程	
 	if (HAL_CAN_Receive(&BSP_STM32_CAN_IAU, BSP_STM32_CAN_IAU_ID-1, CAN_TX_MAX_DELAY_DURATION) == HAL_OK)
@@ -94,7 +94,7 @@ int BSP_STM32_CAN_IAU_RcvData(uint8_t* buff, uint16_t len)
 * 返回    : 无 
 * 说明    : 无
 *******************************************************************************/
-int BSP_STM32_CAN_SPARE1_SendData(uint8_t* buff, uint16_t len)
+int ihu_bsp_stm32_can_spare1_send_data(uint8_t* buff, uint16_t len)
 {    
 	//这里是帧处理的过程，未来待完善数据的发送接收处理过程	
 	if (HAL_CAN_Transmit(&BSP_STM32_CAN_SPARE1, CAN_TX_MAX_DELAY_DURATION) == HAL_OK)
@@ -103,7 +103,7 @@ int BSP_STM32_CAN_SPARE1_SendData(uint8_t* buff, uint16_t len)
 		return BSP_FAILURE;		
 }
 
-int BSP_STM32_CAN_SPARE1_RcvData(uint8_t* buff, uint16_t len)
+int ihu_bsp_stm32_can_spare1_rcv_data(uint8_t* buff, uint16_t len)
 {    
 	//这里是帧处理的过程，未来待完善数据的发送接收处理过程	
 	if (HAL_CAN_Receive(&BSP_STM32_CAN_SPARE1, BSP_STM32_CAN_SPARE1_ID-1, CAN_RX_MAX_DELAY_DURATION) == HAL_OK)

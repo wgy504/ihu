@@ -31,14 +31,13 @@
 #define BSP_STM32_CAN_SPARE1_ID  	2
 
 //API函数
-extern int BSP_STM32_CAN_slave_hw_init(void);
-extern int BSP_STM32_CAN_IAU_SendData(uint8_t* buff, uint16_t len);
-extern int BSP_STM32_CAN_IAU_RcvData(uint8_t* buff, uint16_t len);	
-extern int BSP_STM32_CAN_SPARE1_SendData(uint8_t* buff, uint16_t len);
-extern int BSP_STM32_CAN_SPARE1_RcvData(uint8_t* buff, uint16_t len);
-void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef *CanHandle);
-	
+extern int ihu_bsp_stm32_can_slave_hw_init(void);
+extern int ihu_bsp_stm32_can_send_data(uint8_t* buff, uint16_t len);
+extern int ihu_bsp_stm32_can_rcv_data(uint8_t* buff, uint16_t len);	
+extern int ihu_bsp_stm32_can_spare1_send_data(uint8_t* buff, uint16_t len);
+extern int ihu_bsp_stm32_can_spare1_rcv_data(uint8_t* buff, uint16_t len);
 
+void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef *CanHandle);
 
 #endif  /* __BSP_DEBUG_CAN_H__ */
 

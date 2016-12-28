@@ -198,13 +198,6 @@ OPSTAT fsm_spsvirgo_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 //Local APIs
 OPSTAT func_spsvirgo_hw_init(void)
 {
-	//测试目的，PA9/PA10 = TX/RX
-//	ihu_l1hd_rtc_init(); //初始化时钟
-//	ihu_l1hd_sps_gprs_init_config(115200);//USART_GPRS初始化配置
-//	ihu_l1hd_sps_rfid_init_config(115200);//USART_RFID初始化配置
-//	ihu_l1hd_sps_ble_init_config(115200);//UART_BLE初始化配置
-//	ihu_l1hd_sps_spare1_init_config(115200);//UART_SPARE1初始化配置
-//	TIM_USART_GPRS_Init_Config();  //初始化跟GPRS时钟相关的TIM
 	ihu_l1hd_sps_slave_hw_init();
 	return IHU_SUCCESS;
 }

@@ -398,60 +398,57 @@ extern void ihu_timer_routine_handler_10ms(void);
 
 
 //LED专门对付一般性的驱动函数，对其进行映射，以便保持上层模块的一致性
-#define ihu_l1hd_led_f2board_init 				BSP_STM32_LED_F205_board_init
-#define ihu_l1hd_led_f2board_on 					BSP_STM32_LED_F205_board_on
-#define ihu_l1hd_led_f2board_off 					BSP_STM32_LED_F205_board_off
-#define ihu_l1hd_led_f2board_negation 		BSP_STM32_LED_F205_board_negation
-#define ihu_l1hd_led_f2timer_ind_init 		BSP_STM32_LED_F205_timer_ind_init
-#define ihu_l1hd_led_f2timer_ind_on 			BSP_STM32_LED_F205_timer_ind_on
-#define ihu_l1hd_led_f2timer_ind_off 			BSP_STM32_LED_F205_timer_ind_off
-#define ihu_l1hd_led_f2timer_ind_negation BSP_STM32_LED_F205_timer_ind_negation
-#define ihu_l1hd_led_f2_onff 							BSP_STM32_LED_F205_onoff
+#define ihu_l1hd_led_f2board_init 							ihu_bsp_stm32_led_f2board_init
+#define ihu_l1hd_led_f2board_on 								ihu_bsp_stm32_led_f2board_on
+#define ihu_l1hd_led_f2board_off 								ihu_bsp_stm32_led_f2board_off
+#define ihu_l1hd_led_f2board_negation 					ihu_bsp_stm32_led_f2board_negation
+#define ihu_l1hd_led_f2board_timer_ind_on 			ihu_bsp_stm32_led_f2board_timer_ind_on
+#define ihu_l1hd_led_f2board_timer_ind_off 			ihu_bsp_stm32_led_f2board_timer_ind_off
+#define ihu_l1hd_led_f2board_timer_ind_negation ihu_bsp_stm32_led_f2board_timer_ind_negation
+#define ihu_l1hd_led_f2board_onoff 							ihu_bsp_stm32_led_f2board_onoff
 
 //USART专门对付一般性的驱动函数，对其进行映射，以便保持上层模块的一致性
-#define ihu_l1hd_sps_slave_hw_init				BSP_STM32_sps_slave_hw_init
-#define ihu_l1hd_sps_gprs_init_config 		BSP_STM32_SPS_GPRS_Init_Config
-#define ihu_l1hd_sps_gprs_send_data 			BSP_STM32_SPS_GPRS_SendData
-#define ihu_l1hd_sps_rfid_init_config 		BSP_STM32_SPS_RFID_Init_Config
-#define ihu_l1hd_sps_rfid_send_data 			BSP_STM32_SPS_RFID_SendData
-#define ihu_l1hd_sps_ble_init_config 			BSP_STM32_SPS_BLE_Init_Config
-#define ihu_l1hd_sps_ble_send_data 				BSP_STM32_SPS_BLE_SendData
-#define ihu_l1hd_sps_spare1_init_config 	BSP_STM32_SPS_SPARE1_Init_Config
-#define ihu_l1hd_sps_spare1_send_data 		BSP_STM32_SPS_SPARE1_SendData
-#define ihu_l1hd_sps_print_send_data 			BSP_STM32_sps_print_data_send
-
-//extern int BSP_STM32_sps_print_data_send(char *s);
+#define ihu_l1hd_sps_slave_hw_init				ihu_bsp_stm32_sps_slave_hw_init
+#define ihu_l1hd_sps_gprs_send_data 		  ihu_bsp_stm32_sps_gprs_send_data
+#define ihu_l1hd_sps_rfid_send_data 			ihu_bsp_stm32_sps_rfid_send_data
+#define ihu_l1hd_sps_ble_send_data 				ihu_bsp_stm32_sps_ble_send_data
+#define ihu_l1hd_sps_spare1_send_data 		ihu_bsp_stm32_sps_spare1_send_data
+#define ihu_l1hd_sps_print_send_data 			ihu_bsp_stm32_sps_print_data_send
 
 //SPI专门对付一般性的驱动函数，对其进行映射，以便保持上层模块的一致性
-#define ihu_l1hd_spi_slave_hw_init				BSP_SPI_slave_hw_init
-#define ihu_l1hd_spi_slave_hw_init_sp			BSP_STM32_SPI_slave_hw_init
-#define ihu_l1hd_spi_iau_send_data 				BSP_STM32_SPI_IAU_SendData
-#define ihu_l1hd_spi_iau_receive_data 		BSP_STM32_SPI_IAU_RcvData
-#define ihu_l1hd_spi_spare1_send_data 		BSP_STM32_SPI_SPARE1_SendData
-#define ihu_l1hd_spi_spare1_receive_data 	BSP_STM32_SPI_SPARE1_RcvData
+#define ihu_l1hd_spi_slave_hw_init		  	ihu_bsp_stm32_spi_slave_hw_init
+#define ihu_l1hd_spi_iau_send_data 				ihu_bsp_stm32_spi_iau_send_data
+#define ihu_l1hd_spi_iau_receive_data 		ihu_bsp_stm32_spi_iau_rcv_data
+#define ihu_l1hd_spi_spare1_send_data 		ihu_bsp_stm32_spi_spare1_send_data
+#define ihu_l1hd_spi_spare1_receive_data 	ihu_bsp_stm32_spi_spare1_rcv_data
 
 //I2C专门对付一般性的驱动函数，对其进行映射，以便保持上层模块的一致性
-#define ihu_l1hd_i2c_slave_hw_init				BSP_STM32_I2C_slave_hw_init
-#define ihu_l1hd_i2c_iau_send_data 				BSP_STM32_I2C_IAU_SendData
-#define ihu_l1hd_i2c_iau_receive_data 		BSP_STM32_I2C_IAU_RcvData
-#define ihu_l1hd_i2c_spare1_send_data 		BSP_STM32_I2C_SPARE1_SendData
-#define ihu_l1hd_i2c_spare1_receive_data 	BSP_STM32_I2C_SPARE1_RcvData
+#define ihu_l1hd_i2c_slave_hw_init				ihu_bsp_stm32_i2c_slave_hw_init
+#define ihu_l1hd_i2c_iau_send_data 				ihu_bsp_stm32_i2c_iau_send_data
+#define ihu_l1hd_i2c_iau_receive_data 		ihu_bsp_stm32_i2c_iau_rcv_data
+#define ihu_l1hd_i2c_spare1_send_data 		ihu_bsp_stm32_i2c_spare1_send_data
+#define ihu_l1hd_i2c_spare1_receive_data 	ihu_bsp_stm32_i2c_spare1_rcv_data
 
 //CAN专门对付一般性的驱动函数，对其进行映射，以便保持上层模块的一致性
-#define ihu_l1hd_can_slave_hw_init				BSP_STM32_CAN_slave_hw_init
-#define ihu_l1hd_can_iau_send_data 				BSP_STM32_CAN_IAU_SendData
-#define ihu_l1hd_can_iau_receive_data 		BSP_STM32_CAN_IAU_RcvData
-#define ihu_l1hd_can_spare1_send_data 		BSP_STM32_CAN_SPARE1_SendData
-#define ihu_l1hd_can_spare1_receive_data 	BSP_STM32_CAN_SPARE1_RcvData
+#define ihu_l1hd_can_slave_hw_init				ihu_bsp_stm32_can_slave_hw_init
+#define ihu_l1hd_can_iau_send_data 				ihu_bsp_stm32_can_send_data
+#define ihu_l1hd_can_iau_receive_data 		ihu_bsp_stm32_can_rcv_data
+#define ihu_l1hd_can_spare1_send_data 		ihu_bsp_stm32_can_spare1_send_data
+#define ihu_l1hd_can_spare1_receive_data 	ihu_bsp_stm32_can_spare1_rcv_data
 
 //ADC专门对付一般性的驱动函数，对其进行映射，以便保持上层模块的一致性
-#define ihu_l1hd_adc_hw_init							BSP_STM32_ADC_hw_init
-#define ihu_l1hd_adc_iau_get_value 				BSP_STM32_ADC_Get_Value
+#define ihu_l1hd_adc_hw_init							ihu_bsp_stm32_adc_hw_init
+#define ihu_l1hd_adc_iau_get_value 				ihu_bsp_stm32_adc_get_sample_value
 
 //BFSC独有的映射
-#define ihu_l1hd_i2c_bfsc_send_data 			BSP_STM32_I2C_IAU_SendData
-#define ihu_l1hd_can_bfsc_send_data 			BSP_STM32_CAN_IAU_SendData
-#define ihu_l1hd_adc_bfsc_get_value 			BSP_STM32_ADC_Get_Value
+#define ihu_l1hd_i2c_bfsc_send_data 			ihu_bsp_stm32_i2c_iau_send_data
+#define ihu_l1hd_can_bfsc_send_data 			ihu_bsp_stm32_can_send_data
+#define ihu_l1hd_adc_bfsc_get_value 			ihu_bsp_stm32_adc_get_sample_value
+
+
+
+
+
 
 
 

@@ -166,7 +166,7 @@ static void BSP_SPI_rx_complete(SPI_HandleTypeDef *hspi)
 		uint16_t msglen = pMsgHeader->len > SPILEO_BUF_SIZE? SPILEO_BUF_SIZE: pMsgHeader->len;
 		
 		memcpy(BSP_SPI_tx_buffer, BSP_SPI_rx_buffer, msglen);
-		BSP_SPI_start_transmit(hspi, BSP_SPI_tx_buffer, msglen);
+		func_bsp_spi_start_transmit(hspi, BSP_SPI_tx_buffer, msglen);
   }
 	else
 	{
@@ -174,7 +174,7 @@ static void BSP_SPI_rx_complete(SPI_HandleTypeDef *hspi)
   }
 }
 
-int BSP_SPI_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint16_t size)
+int func_bsp_spi_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint16_t size)
 {
 	uint32_t flags;
 	
@@ -209,7 +209,7 @@ static void BSP_SPI_tx_complete(SPI_HandleTypeDef *hspi)
 */
 }
 
-int BSP_SPI_start_transmit(SPI_HandleTypeDef *hspi, uint8_t *tx_buffer, uint16_t size)
+int func_bsp_spi_start_transmit(SPI_HandleTypeDef *hspi, uint8_t *tx_buffer, uint16_t size)
 {
 	uint32_t flags;
 	
@@ -322,7 +322,7 @@ int BSP_SPI_start_transmit(SPI_HandleTypeDef *hspi, uint8_t *tx_buffer, uint16_t
 //}
 
 
-int BSP_SPI_slave_hw_init(int is_clock_phase_1edge, int is_clock_polarity_high)
+int func_bsp_spi_slave_hw_init(int is_clock_phase_1edge, int is_clock_polarity_high)
 {
 	SPI_HandleTypeDef *hspi = &hspi2;
 	
@@ -331,16 +331,16 @@ int BSP_SPI_slave_hw_init(int is_clock_phase_1edge, int is_clock_polarity_high)
    */
 	
 	// Please don't use STM32 offical function for receive or transmit
-	// Instead, use BSP_SPI_start_receive() and BSP_SPI_start_transmit()
+	// Instead, use func_bsp_spi_start_receive() and func_bsp_spi_start_transmit()
 	hspi->RxISR = BSP_SPI_rx_isr;
 	hspi->TxISR = BSP_SPI_tx_isr;
 
 	/* attach SPI interrupt: no more need in FreeRTOS */
 
 	/* start SPI receiving: Enable SPI and RX interrupt */
-	BSP_SPI_start_receive(hspi, BSP_SPI_rx_buffer, SPILEO_BUF_SIZE);
+	func_bsp_spi_start_receive(hspi, BSP_SPI_rx_buffer, SPILEO_BUF_SIZE);
 	
-	IhuDebugPrint("BSP_SPI_slave_hw_init() done.\n");
+	IhuDebugPrint("func_bsp_spi_slave_hw_init() done.\n");
 	return 0;
 }
 
@@ -355,7 +355,7 @@ int BSP_SPI_slave_hw_init(int is_clock_phase_1edge, int is_clock_polarity_high)
 * 返回    : 无 
 * 说明    : 无
 *******************************************************************************/
-int BSP_STM32_SPI_IAU_SendData(uint8_t* buff, uint16_t len)
+int ihu_bsp_stm32_spi_iau_send_data(uint8_t* buff, uint16_t len)
 {
 	if (HAL_SPI_Transmit(&BSP_STM32_SPI_IAU, (uint8_t *)buff, len, SPI_TX_MAX_DELAY_DURATION) == HAL_OK)
 		return BSP_SUCCESS;
@@ -363,7 +363,7 @@ int BSP_STM32_SPI_IAU_SendData(uint8_t* buff, uint16_t len)
 		return BSP_FAILURE;		
 }
 
-int BSP_STM32_SPI_IAU_RcvData(uint8_t* buff, uint16_t len)
+int ihu_bsp_stm32_spi_iau_rcv_data(uint8_t* buff, uint16_t len)
 {    
 	if (HAL_SPI_Receive(&BSP_STM32_SPI_IAU, buff, len, SPI_TX_MAX_DELAY_DURATION) == HAL_OK)
 		return BSP_SUCCESS;
@@ -379,7 +379,7 @@ int BSP_STM32_SPI_IAU_RcvData(uint8_t* buff, uint16_t len)
 * 返回    : 无 
 * 说明    : 无
 *******************************************************************************/
-int BSP_STM32_SPI_SPARE1_SendData(uint8_t* buff, uint16_t len)
+int ihu_bsp_stm32_spi_spare1_send_data(uint8_t* buff, uint16_t len)
 {
 	if (HAL_SPI_Transmit(&BSP_STM32_SPI_SPARE1, (uint8_t *)buff, len, SPI_TX_MAX_DELAY_DURATION) == HAL_OK)
 		return BSP_SUCCESS;
@@ -387,7 +387,7 @@ int BSP_STM32_SPI_SPARE1_SendData(uint8_t* buff, uint16_t len)
 		return BSP_FAILURE;		
 }
 
-int BSP_STM32_SPI_SPARE1_RcvData(uint8_t* buff, uint16_t len)
+int ihu_bsp_stm32_spi_spare1_rcv_data(uint8_t* buff, uint16_t len)
 {    
 	if (HAL_SPI_Receive(&BSP_STM32_SPI_SPARE1, buff, len, SPI_TX_MAX_DELAY_DURATION) == HAL_OK)
 		return BSP_SUCCESS;
@@ -476,8 +476,7 @@ int BSP_STM32_SPI_SPARE1_RcvData(uint8_t* buff, uint16_t len)
 //  }
 //}
 
-
-int BSP_STM32_SPI_slave_hw_init(void)
+int ihu_bsp_stm32_spi_slave_hw_init(void)
 {
 	uint16_t k;
 	for(k=0;k<BSP_STM32_SPI_IAU_REC_MAXLEN;k++)      //将缓存内容清零

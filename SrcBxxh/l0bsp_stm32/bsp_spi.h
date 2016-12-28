@@ -76,11 +76,11 @@ typedef struct BSP_SPI_msgheader
 #define EXT_BORAD_START_CHAR 0xFE
 #define EXT_BOARD_PADDING_CH 0x00
 
-//Global APIs
-int BSP_SPI_slave_hw_init(int is_clock_phase_1edge, int is_clock_polarity_high);
-int BSP_SPI_start_transmit(SPI_HandleTypeDef *hspi, uint8_t *tx_buffer, uint16_t size);
-int BSP_SPI_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint16_t size);
-
+//Global APIs, defined by XPH
+//需要将func_bsp_spi_slave_hw_init的工作内容融入到ihu_bsp_stm32_spi_slave_hw_init中去
+int func_bsp_spi_slave_hw_init(int is_clock_phase_1edge, int is_clock_polarity_high);
+int func_bsp_spi_start_transmit(SPI_HandleTypeDef *hspi, uint8_t *tx_buffer, uint16_t size);
+int func_bsp_spi_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint16_t size);
 
 //ZJL DEFINITION
 //常量定义
@@ -93,11 +93,12 @@ int BSP_SPI_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint16_t 
 #define BSP_STM32_SPI_IAU_ID  		2
 #define SPI_TX_MAX_DELAY_DURATION 100
 #define SPI_RX_MAX_DELAY_DURATION 100
-extern int BSP_STM32_SPI_slave_hw_init(void);
-extern int BSP_STM32_SPI_SPARE1_SendData(uint8_t* buff, uint16_t len);
-extern int BSP_STM32_SPI_SPARE1_RcvData(uint8_t* buff, uint16_t len);
-extern int BSP_STM32_SPI_IAU_SendData(uint8_t* buff, uint16_t len);
-extern int BSP_STM32_SPI_IAU_RcvData(uint8_t* buff, uint16_t len);
+extern int ihu_bsp_stm32_spi_slave_hw_init(void);
+extern int ihu_bsp_stm32_spi_spare1_send_data(uint8_t* buff, uint16_t len);
+extern int ihu_bsp_stm32_spi_spare1_rcv_data(uint8_t* buff, uint16_t len);
+extern int ihu_bsp_stm32_spi_iau_send_data(uint8_t* buff, uint16_t len);
+extern int ihu_bsp_stm32_spi_iau_rcv_data(uint8_t* buff, uint16_t len);
+
 void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *SpiHandle);
 
 #ifdef __cplusplus

@@ -6,6 +6,9 @@
 
 //= ZJL, 2016 Dec.28, CURRENT_SW_DELIVERY R03.73 =>CCL项目
 = 修改vmmw_gprs中函数的名称，统一到VMMW这一个关键字上来
+= 修改BSP程序中的函数及常量，统一命名方式
+= VMMW/APP模块只能访问VMFO的API，从而断绝上层与底层的关联，提高复用性
+
 
 //= ZJL, 2016 Dec.28, CURRENT_SW_DELIVERY R03.72 =>CCL项目
 = 继续解决VMMW_GPRS中间件在AT CMD下与CCL状态机组合工作的问题

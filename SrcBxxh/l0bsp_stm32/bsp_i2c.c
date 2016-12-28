@@ -36,7 +36,7 @@ int16_t BSP_STM32_I2C_SPARE1_R_Len=0;
 /* 私有函数原形 --------------------------------------------------------------*/
 /* 函数体 --------------------------------------------------------------------*/
 
-int BSP_STM32_I2C_slave_hw_init(void)
+int ihu_bsp_stm32_i2c_slave_hw_init(void)
 {
 	uint16_t k;
 	for(k=0;k<BSP_STM32_I2C_IAU_REC_MAXLEN;k++)      //将缓存内容清零
@@ -66,7 +66,7 @@ int BSP_STM32_I2C_slave_hw_init(void)
 * 返回    : 无 
 * 说明    : 无
 *******************************************************************************/
-int BSP_STM32_I2C_IAU_SendData(uint8_t* buff, uint16_t len)
+int ihu_bsp_stm32_i2c_iau_send_data(uint8_t* buff, uint16_t len)
 {    
 	if (HAL_I2C_Slave_Transmit(&BSP_STM32_I2C_IAU, (uint8_t *)buff, len, I2C_TX_MAX_DELAY_DURATION) == HAL_OK)
 		return BSP_SUCCESS;
@@ -74,7 +74,7 @@ int BSP_STM32_I2C_IAU_SendData(uint8_t* buff, uint16_t len)
 		return BSP_FAILURE;		
 }
 
-int BSP_STM32_I2C_IAU_RcvData(uint8_t* buff, uint16_t len)
+int ihu_bsp_stm32_i2c_iau_rcv_data(uint8_t* buff, uint16_t len)
 {    
 	if (HAL_I2C_Slave_Receive(&BSP_STM32_I2C_IAU, buff, len, I2C_TX_MAX_DELAY_DURATION) == HAL_OK)
 		return BSP_SUCCESS;
@@ -92,7 +92,7 @@ int BSP_STM32_I2C_IAU_RcvData(uint8_t* buff, uint16_t len)
 * 返回    : 无 
 * 说明    : 无
 *******************************************************************************/
-int BSP_STM32_I2C_SPARE1_SendData(uint8_t* buff, uint16_t len)
+int ihu_bsp_stm32_i2c_spare1_send_data(uint8_t* buff, uint16_t len)
 {    
 	if (HAL_I2C_Slave_Transmit(&BSP_STM32_I2C_SPARE1, (uint8_t *)buff, len, I2C_TX_MAX_DELAY_DURATION) == HAL_OK)
 		return BSP_SUCCESS;
@@ -100,7 +100,7 @@ int BSP_STM32_I2C_SPARE1_SendData(uint8_t* buff, uint16_t len)
 		return BSP_FAILURE;		
 }
 
-int BSP_STM32_I2C_SPARE1_RcvData(uint8_t* buff, uint16_t len)
+int ihu_bsp_stm32_i2c_spare1_rcv_data(uint8_t* buff, uint16_t len)
 {    
 	if (HAL_I2C_Slave_Receive(&BSP_STM32_I2C_SPARE1, buff, len, I2C_RX_MAX_DELAY_DURATION) == HAL_OK)
 		return BSP_SUCCESS;

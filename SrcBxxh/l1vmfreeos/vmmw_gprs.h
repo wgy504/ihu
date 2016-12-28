@@ -20,7 +20,7 @@
 #include "FreeRTOS.h"
 #include "cmsis_os.h"
 
-//全局使用的常亮定义
+//全局使用的常量定义
 #define IHU_VMMW_GPRSMOD_TIM_CHAN_ID 		TIM2
 #define IHU_VMMW_GPRSMOD_TTS_MAX_LEN 200 //定义最多播放的字节数
 #define IHU_VMMW_GPRSMOD_REPEAT_CNT 3
@@ -55,13 +55,13 @@ void func_gprsmod_sim800a_rec_server_data(void);
 void func_gprsmod_sim800a_data_connection_and_receive_process(void);
 
 //核心函数：跟采用哪一种GPRS模组没有太大关系
-void func_gprsmod_clear_receive_buffer(void);
 OPSTAT func_gprsmod_send_AT_command(uint8_t *cmd, uint8_t *ack, UINT16 wait_time);  //秒级！！！
-void func_gprsmod_send_string(char* s);
+void   func_gprsmod_clear_receive_buffer(void);
+void   func_gprsmod_wait_CREG(void);
+void   func_grpsmod_set_ATE0(void);
+void   func_gprsmod_data_byte_send(char byte);
+void   func_gprsmod_send_string(char* s);
 #define func_gprsmod_send_LR() func_gprsmod_send_string("\r\n")
-void func_gprsmod_wait_CREG(void);
-void func_grpsmod_set_ATE0(void);
-void func_gprsmod_data_byte_send(char byte);
 
 //公共函数，暂时得以保留
 OPSTAT func_gprsmod_find_char(char *a);
@@ -70,16 +70,12 @@ void   func_gprsmod_convert_int_to_str(int n, char str[]);//整型转字符
 void   func_gprsmod_two_char_swap(char *ch1, char *ch2);
 void   func_gprsmod_convert_hex_to_str(uint8_t dest[],uint8_t src[],uint8_t len);//十六进制转字符串
 
-//要被去掉的函数
+//要被去掉的函数，待完善
 void func_gprsmod_print_send_len(char *s, uint8_t len);
 void func_gprsmod_print_data(char byte);
 void func_gprsmod_print_send_string(char* s);
 //extern void USART_PRINT_IRQHandler(void);
 //extern void TIM_USART_GPRS_IRQHandler(void);
-
-//Working Procedure
-
-
 
 #endif /* L1FREERTOS_MOD_GPRS_H_ */
 

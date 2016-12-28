@@ -38,7 +38,7 @@ OPSTAT RFID_UART_send_AT_command(uint8_t *cmd, uint8_t *ack, uint16_t wait_time)
 
 	//清理接收缓冲区
 	RFID_UART_clear_receive_buffer();
-	BSP_STM32_SPS_RFID_SendData((uint8_t *)cmd, strlen((char*)cmd));
+	ihu_l1hd_sps_rfid_send_data((uint8_t *)cmd, strlen((char*)cmd));
 	RFID_UART_SendLR();	
 	
 	res = IHU_FAILURE;
@@ -84,7 +84,7 @@ void RFID_UART_SendString(char* s)
 {
 	while(*s != '\0')//检测字符串结束符
 	{
-		BSP_STM32_SPS_RFID_SendData((uint8_t *)s++, 1);
+		ihu_l1hd_sps_rfid_send_data((uint8_t *)s++, 1);
 	}
 }
 

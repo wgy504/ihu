@@ -152,7 +152,6 @@ OPSTAT fsm_ledpisces_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UIN
 OPSTAT func_ledpisces_hw_init(void)
 {
 //	ihu_l1hd_led_f2board_init();                          /* LED初始化                          */
-//	ihu_l1hd_led_f2timer_ind_init();
 	//key_init();                                         /* 按键初始化                         */
 	//spi_flash_init();                                   /* spi_flash硬件接口初始化            */
 	//rtc_init();   	
@@ -253,7 +252,7 @@ void func_ledpisces_time_out_period_scan(void)
 //	}
 //对LED灯进行反转性测试，暂时没有任何实际意义，只是为了点亮灯，表示整个板子还活着
 	ihu_l1hd_led_f2board_negation();
-	ihu_l1hd_led_f2timer_ind_negation();
+	ihu_l1hd_led_f2board_timer_ind_negation();
 	
 	return;
 }
