@@ -150,8 +150,7 @@ OPSTAT fsm_spsvirgo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 		return IHU_FAILURE;
 	}
 	
-	//启动本地定时器，如果有必要
-	//测试性启动周期性定时器
+	//测试性启动周期性定时器：正式工作后可以删掉这个工作逻辑机制
 	ret = ihu_timer_start(TASK_ID_SPSVIRGO, TIMER_ID_1S_SPSVIRGO_PERIOD_SCAN, zIhuSysEngPar.timer.spsvirgoPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
@@ -272,6 +271,7 @@ void func_spsvirgo_time_out_period_scan(void)
 		return;
 	}
 	
+	//纯粹测试目的，未来需要删掉
 	ihu_l1hd_sps_gprs_send_data("This is my GPRS test!\n", 20);
 //	ihu_l1hd_sps_rfid_send_data("This is my RFID test!\n", 20);
 //	ihu_l1hd_sps_ble_send_data("This is my BLE test!\n", 20);
@@ -346,7 +346,7 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	
 	//干活
 	ihu_sleep(2);
-	//GPRS_UART_GSM_working_procedure_selection(2, 0);
+	GPRS_UART_GSM_working_procedure_selection(2, 0);
 	//这里有个挺有意思的现象：这里的命令还未执行完成，实际上后台的数据已经通过UART回来了，并通过ISR服务程序发送到SPSVIRGO的QUEUE中，但只有这里执行结束后，
 	//才会去接那个消息并执行结果。当然也存在着不正确或者没有结果的情况，那就靠CCL的状态机进行恢复了。
 

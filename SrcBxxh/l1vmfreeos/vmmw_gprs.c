@@ -11,7 +11,7 @@
  ****************************************************************************************
  */
  
-#include "mod_hal_gprs.h"
+#include "vmmw_gprs.h"
 
 //全局变量，引用外部
 extern int8_t BSP_STM32_SPS_GPRS_R_Buff[BSP_STM32_SPS_GPRS_REC_MAXLEN];			//串口GPRS数据接收缓冲区 

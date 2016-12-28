@@ -1059,7 +1059,7 @@
 
   <Group>
     <GroupName>L1vmfo</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1130,8 +1130,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\SrcBxxh\l1vmfreeos\mod_hal_gprs.c</PathWithFileName>
-      <FilenameWithoutPath>mod_hal_gprs.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\SrcBxxh\l1vmfreeos\l1vmfo.c</PathWithFileName>
+      <FilenameWithoutPath>l1vmfo.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1142,8 +1142,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\SrcBxxh\l1vmfreeos\mod_hal_gprs.h</PathWithFileName>
-      <FilenameWithoutPath>mod_hal_gprs.h</FilenameWithoutPath>
+      <PathWithFileName>..\..\SrcBxxh\l1vmfreeos\l1vmfo.h</PathWithFileName>
+      <FilenameWithoutPath>l1vmfo.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1154,8 +1154,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\SrcBxxh\l1vmfreeos\mod_hal_ble.c</PathWithFileName>
-      <FilenameWithoutPath>mod_hal_ble.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\SrcBxxh\l1vmfreeos\vmmw_ble.c</PathWithFileName>
+      <FilenameWithoutPath>vmmw_ble.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1166,8 +1166,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\SrcBxxh\l1vmfreeos\mod_hal_ble.h</PathWithFileName>
-      <FilenameWithoutPath>mod_hal_ble.h</FilenameWithoutPath>
+      <PathWithFileName>..\..\SrcBxxh\l1vmfreeos\vmmw_ble.h</PathWithFileName>
+      <FilenameWithoutPath>vmmw_ble.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1178,8 +1178,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\SrcBxxh\l1vmfreeos\mod_hal_rfid.c</PathWithFileName>
-      <FilenameWithoutPath>mod_hal_rfid.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\SrcBxxh\l1vmfreeos\vmmw_gprs.c</PathWithFileName>
+      <FilenameWithoutPath>vmmw_gprs.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1190,8 +1190,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\SrcBxxh\l1vmfreeos\mod_hal_rfid.h</PathWithFileName>
-      <FilenameWithoutPath>mod_hal_rfid.h</FilenameWithoutPath>
+      <PathWithFileName>..\..\SrcBxxh\l1vmfreeos\vmmw_gprs.h</PathWithFileName>
+      <FilenameWithoutPath>vmmw_gprs.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1202,8 +1202,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\SrcBxxh\l1vmfreeos\l1vmfo.c</PathWithFileName>
-      <FilenameWithoutPath>l1vmfo.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\SrcBxxh\l1vmfreeos\vmmw_rfid.c</PathWithFileName>
+      <FilenameWithoutPath>vmmw_rfid.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1214,8 +1214,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\SrcBxxh\l1vmfreeos\l1vmfo.h</PathWithFileName>
-      <FilenameWithoutPath>l1vmfo.h</FilenameWithoutPath>
+      <PathWithFileName>..\..\SrcBxxh\l1vmfreeos\vmmw_rfid.h</PathWithFileName>
+      <FilenameWithoutPath>vmmw_rfid.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

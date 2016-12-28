@@ -11,7 +11,7 @@
  ****************************************************************************************
  */
  
-#include "mod_hal_rfid.h"
+#include "vmmw_rfid.h"
 
 //全局变量，引用外部
 extern int8_t BSP_STM32_SPS_RFID_R_Buff[BSP_STM32_SPS_RFID_REC_MAXLEN];			//串口BLE数据接收缓冲区 

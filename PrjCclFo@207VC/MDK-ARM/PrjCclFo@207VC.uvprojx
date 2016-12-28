@@ -749,16 +749,6 @@
               <FilePath>..\..\SrcBxxh\l1vmfreeos\l1timer_freeos.h</FilePath>
             </File>
             <File>
-              <FileName>mod_hal_gprs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l1vmfreeos\mod_hal_gprs.c</FilePath>
-            </File>
-            <File>
-              <FileName>mod_hal_gprs.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l1vmfreeos\mod_hal_gprs.h</FilePath>
-            </File>
-            <File>
               <FileName>vmfreeoslayer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\SrcBxxh\l1vmfreeos\vmfreeoslayer.c</FilePath>
@@ -769,26 +759,6 @@
               <FilePath>..\..\SrcBxxh\l1vmfreeos\vmfreeoslayer.h</FilePath>
             </File>
             <File>
-              <FileName>mod_hal_ble.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l1vmfreeos\mod_hal_ble.c</FilePath>
-            </File>
-            <File>
-              <FileName>mod_hal_ble.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l1vmfreeos\mod_hal_ble.h</FilePath>
-            </File>
-            <File>
-              <FileName>mod_hal_rfid.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l1vmfreeos\mod_hal_rfid.c</FilePath>
-            </File>
-            <File>
-              <FileName>mod_hal_rfid.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l1vmfreeos\mod_hal_rfid.h</FilePath>
-            </File>
-            <File>
               <FileName>l1vmfo.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\SrcBxxh\l1vmfreeos\l1vmfo.c</FilePath>
@@ -797,6 +767,36 @@
               <FileName>l1vmfo.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l1vmfreeos\l1vmfo.h</FilePath>
+            </File>
+            <File>
+              <FileName>vmmw_ble.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\vmmw_ble.c</FilePath>
+            </File>
+            <File>
+              <FileName>vmmw_ble.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\vmmw_ble.h</FilePath>
+            </File>
+            <File>
+              <FileName>vmmw_gprs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\vmmw_gprs.c</FilePath>
+            </File>
+            <File>
+              <FileName>vmmw_gprs.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\vmmw_gprs.h</FilePath>
+            </File>
+            <File>
+              <FileName>vmmw_rfid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\vmmw_rfid.c</FilePath>
+            </File>
+            <File>
+              <FileName>vmmw_rfid.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\vmmw_rfid.h</FilePath>
             </File>
           </Files>
         </Group>

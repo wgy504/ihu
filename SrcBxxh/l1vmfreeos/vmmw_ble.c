@@ -11,7 +11,7 @@
  ****************************************************************************************
  */
  
-#include "mod_hal_ble.h"
+#include "vmmw_ble.h"
 
 //全局变量，引用外部
 extern int8_t BSP_STM32_SPS_BLE_R_Buff[BSP_STM32_SPS_BLE_REC_MAXLEN];			//串口BLE数据接收缓冲区 

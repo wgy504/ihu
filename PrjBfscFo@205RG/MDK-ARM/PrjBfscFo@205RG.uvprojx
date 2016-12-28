@@ -749,16 +749,6 @@
               <FilePath>..\..\SrcBxxh\l1vmfreeos\l1timer_freeos.h</FilePath>
             </File>
             <File>
-              <FileName>mod_hal_gprs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l1vmfreeos\mod_hal_gprs.c</FilePath>
-            </File>
-            <File>
-              <FileName>mod_hal_gprs.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l1vmfreeos\mod_hal_gprs.h</FilePath>
-            </File>
-            <File>
               <FileName>vmfreeoslayer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\SrcBxxh\l1vmfreeos\vmfreeoslayer.c</FilePath>
@@ -777,6 +767,16 @@
               <FileName>l1vmfo.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l1vmfreeos\l1vmfo.h</FilePath>
+            </File>
+            <File>
+              <FileName>vmmw_gprs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\vmmw_gprs.c</FilePath>
+            </File>
+            <File>
+              <FileName>vmmw_gprs.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\vmmw_gprs.h</FilePath>
             </File>
           </Files>
         </Group>
