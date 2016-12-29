@@ -359,7 +359,7 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	memcpy(&pMsgInput, &pMsgProc, msgProcLen);
 	CloudDataSendBuf_t pMsgOutput;
 	memset(&pMsgOutput, 0, sizeof(CloudDataSendBuf_t));	
-	ret = func_cloud_standard_xml_pack(IHU_CLOUD_BH_MSG_TYPE_DEVICE_REPORT_UINT8, NULL, HUITP_IEID_uni_ccl_lock_auth_req, &pMsgInput, msgProcLen, &pMsgOutput);
+	ret = func_cloud_standard_xml_pack(HUITP_MSG_HUIXML_MSGTYPE_DEVICE_REPORT_ID, NULL, HUITP_IEID_uni_ccl_lock_auth_req, &pMsgInput, msgProcLen, &pMsgOutput);
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		IhuErrorPrint("SPSVIRGO: Package message error!\n");

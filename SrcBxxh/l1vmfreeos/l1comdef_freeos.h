@@ -10,7 +10,6 @@
 
 #include "vmfreeoslayer.h"
 
-
 //自定义存储数据结构
 //DISC data, 只存储周期性数据
 #define IHU_DISC_DATA_SAMPLE_STORAGE_NBR_MAX 5
@@ -39,151 +38,17 @@ typedef struct IhuDiscDataSampleStorage
 	IhuDiscDataSampleStorageArray_t recordItem[IHU_DISC_DATA_SAMPLE_STORAGE_NBR_MAX];
 }IhuDiscDataSampleStorage_t;
 
-//为各个业务独自定义的方式
-//老旧定义方式，未来需要改进去掉
-//标准命令字统一定义
-typedef enum
+/**************************************************************************************
+ *   HUITP标准链路层L2FRAME定义                                                           *
+ *************************************************************************************/
+//帧结构定义
+typedef struct StrHuiFrame
 {
-	L3CI_none = 0,
-	L3CI_blood_glucose = 1,  //血糖
-	L3CI_single_sports = 2,  //单次运动
-	L3CI_single_sleep = 3, //单次睡眠
-	L3CI_body_fat = 4,  //体脂
-	L3CI_blood_pressure = 5, //血压
-	L3CI_runner_machine_report = 0x0A, //跑步机数据上报
-	L3CI_runner_machine_control = 0x0B, //跑步机任务控制
-	L3CI_gps = 0x0C, //GPS地址
-	L3CI_Ihu_iau_control = 0x10, //IHU与IAU之间控制命令
-	L3CI_emc = 0x20, //电磁辐射强度
-	L3CI_emc_accumulation = 0x21, //电磁辐射剂量
-	L3CI_emc_indicator = 0x20, //电磁辐射强度
-	L3CI_co = 0x22, //一氧化碳
-	L3CI_formaldehyde = 0x23, //甲醛HCHO
-	L3CI_alcohol = 0x24, //酒精
-	L3CI_pm25 = 0x25, //PM1/2.5/10
-	L3CI_windspd = 0x26, //风速Wind Speed
-	L3CI_winddir = 0x27, //风向Wind Direction
-	L3CI_temp = 0x28, //温度Temperature
-	L3CI_humid = 0x29, //湿度Humidity
-	L3CI_airprs = 0x2A, //气压Air pressure
-	L3CI_noise = 0x2B, //噪声Noise
-	L3CI_hsmmp = 0x2C, //相机Camer or audio high speed
-	L3CI_audio = 0x2D, //声音
-	L3CI_video = 0x2E, //视频
-	L3CI_picture = 0x2F, //图片
-	L3CI_lock = 0x30, //云控锁
-	L3CI_water_meter = 0x31, //水表
-	L3CI_heat_meter = 0x32, //热表
-	L3CI_gas_meter = 0x33, //气表
-	L3CI_power_meter = 0x34, //电表
-	L3CI_light_strength = 0x35, //光照强度
-	L3CI_toxicgas = 0x36, //有毒气体VOC
-	L3CI_altitude = 0x37, //海拔高度
-	L3CI_moto = 0x38, //马达
-	L3CI_switch = 0x39, //继电器
-	L3CI_transporter = 0x3A, //导轨传送带
-	L3CI_bfsc_comb_scale = 0x3B, //组合秤
-	L3CI_ccl_lock = 0x40,  //智能锁
-	L3CI_ccl_door = 0x41, //光交箱门
-	L3CI_ccl_rfid = 0x42, //光交箱RFID模块
-	L3CI_ccl_ble = 0x43, //光交箱BLE模块
-	L3CI_ccl_gprs = 0x44, //光交箱GPRS模块
-	L3CI_ccl_battery = 0x45, //光交箱电池模块
-	L3CI_ccl_shake = 0x46, //光交箱震动
-	L3CI_ccl_smoke = 0x47, //光交箱烟雾
-	L3CI_ccl_water = 0x48, //光交箱水浸
-	L3CI_ccl_temp = 0x49, //光交箱温度
-	L3CI_ccl_humid = 0x4A, //光交箱湿度
-	L3CI_ccl_fall = 0x4B, //倾倒
-	L3CI_ccl_state = 0x4C, //状态聚合
-	L3CI_itf_sps = 0x50, //串口读取命令/返回结果
-	L3CI_itf_adc = 0x51, //ADC读取命令/返回结果
-	L3CI_itf_dac = 0x52, //DAC读取命令/返回结果
-	L3CI_itf_i2c = 0x53, //I2C读取命令/返回结果
-	L3CI_itf_pwm = 0x54, //PWM读取命令/返回结果
-	L3CI_itf_di = 0x55, //DI读取命令/返回结果
-	L3CI_itf_do = 0x56, //DO读取命令/返回结果
-	L3CI_itf_can = 0x57, //CAN读取命令/返回结果
-	L3CI_itf_spi = 0x58, //SPI读取命令/返回结果
-	L3CI_itf_usb = 0x59, //USB读取命令/返回结果
-	L3CI_itf_eth = 0x5A, //网口读取命令/返回结果
-	L3CI_itf_485 = 0x5B, //485读取命令/返回结果
-	L3CI_Ihu_inventory= 0xA0,	//软件清单
-	L3CI_sw_package = 0xA1,	//软件版本体
-	L3CI_alarm_info = 0xB0, //for alarm report
-	L3CI_performance_info = 0xB1, // or PM report
-	L3CI_equipment_info = 0xF0,	//设备基本信息
-	L3CI_personal_info = 0xF1,	//个人基本信息
-	L3CI_time_sync = 0xF2,	//时间同步
-	L3CI_read_data = 0xF3,	//读取数据
-	L3CI_clock_timeout = 0xF4,	//定时闹钟及久坐提醒
-	L3CI_sync_charging = 0xF5,	//同步充电，双击情况
-	L3CI_sync_trigger = 0xF6,	//同步通知信息
-	L3CI_cmd_control = 0xFD,  //for cmd control by Shanchun
-	L3CI_heart_beat = 0xFE, //心跳
-	L3CI_null = 0xFF, //无效
-}L3StandardHuiCmdDefId;
-
-//IHU<->IAU HUITP接口之间定义的操作字
-//所有的操作字，需要极度的丰富化，以形成完整的处理任务模块
-typedef enum
-{
-  L3PO_min = 0,
-  L3PO_none = 0,
-  L3PO_data_req = 0x01, //Data Request
-  L3PO_set_switch = 0x02,
-  L3PO_set_modbus_address =0x03,
-  L3PO_set_work_cycle = 0x04, //In second
-  L3PO_set_sample_cycle = 0x05, //In second
-  L3PO_set_sample_number = 0x06,
-  L3PO_data_report = 0x81, //Data Report
-  L3PO_read_switch = 0x82,
-  L3PO_read_modbus_address = 0x83,
-  L3PO_read_work_cycle = 0x84, //In second
-  L3PO_read_sample_cycle = 0x85, //In second
-  L3PO_read_sample_number = 0x86,
-  L3PO_max,
-}L3HuitpOptIdDef;
-
-//L3PO的通用定义，如果不属于任何传感器，则可以使用这个定义
-typedef enum
-{
-	L3PO_generic_min = 0,
-	L3PO_generic_none = 0,
-	L3PO_generic_data_req = 0x01, //Data Request
-	L3PO_generic_set_switch = 0x02,
-	L3PO_generic_set_modbus_address =0x03,
-	L3PO_generic_set_work_cycle = 0x04, //In second
-	L3PO_generic_set_sample_cycle = 0x05, //In second
-	L3PO_generic_set_sample_number = 0x06,
-	L3PO_generic_data_report = 0x81, //Data Report
-	L3PO_generic_read_switch = 0x82,
-	L3PO_generic_read_modbus_address = 0x83,
-	L3PO_generic_read_work_cycle = 0x84, //In second
-	L3PO_generic_read_sample_cycle = 0x85, //In second
-	L3PO_generic_read_sample_number = 0x86,
-	L3PO_generic_max,
-}L3GenericOptIdDef;
-
-//EMC特例
-typedef enum
-{
-	L3PO_emc_min = 0,
-	L3PO_emc_none = 0,
-	L3PO_emc_data_req = 0x01, //Data Request
-	L3PO_emc_set_switch = 0x02,
-	L3PO_emc_set_modbus_address =0x03,
-	L3PO_emc_set_work_cycle = 0x04, //In second
-	L3PO_emc_set_sample_cycle = 0x05, //In second
-	L3PO_emc_set_sample_number = 0x06,
-	L3PO_emc_data_report = 0x81, //Data Report
-	L3PO_emc_read_switch = 0x82,
-	L3PO_emc_read_modbus_address = 0x83,
-	L3PO_emc_read_work_cycle = 0x84, //In second
-	L3PO_emc_read_sample_cycle = 0x85, //In second
-	L3PO_emc_read_sample_number = 0x86,
-	L3PO_emc_max,
-}L3EmcOptIdDef;
+    UINT8 	start; //0xFE
+    UINT8 	checksum1; //加总头的结果
+    UINT16 	len; //0-1500，原则上不能超过系统定义的消息体长度
+    UINT8 	msgBody[];
+}StrHuiFrame_t;
 
 //BFSC特例
 typedef enum
@@ -198,111 +63,6 @@ typedef enum
 	L3PO_bfsc_stop_resp = 0x83, //stop
 	L3PO_bfsc_max,
 }L3BfscOptIdDef;
-
-//UINT8  cmdIdBackType; //指明是瞬时，还是周期性读数，针对读数到底是周期性的还是一次性的
-//内部定义，内部使用
-typedef enum
-{
-	L3CI_cmdid_back_type_none = 0,
-	L3CI_cmdid_back_type_instance = 1,
-	L3CI_cmdid_back_type_period = 2,
-	L3CI_cmdid_back_type_control = 3,
-	L3CI_cmdid_back_type_invalid = 0xFF,
-}L3UserCmdIdBackTypeDef;
-
-//ASYLIBRA的定义
-#define IHU_ASY_HEADER_MAGICNUMBER  0xFE
-#define IHU_ASY_HEADER_BVERSION  0x01
-
-//Defined at epb_MmBp.c, coming from Tecent or Google protobuf protocal!
-#define TAG_BaseResponse_ErrCode												0x08
-#define TAG_BaseResponse_ErrMsg													0x12
-#define TAG_AuthRequest_BaseRequest											0x0a
-#define TAG_AuthRequest_Md5DeviceTypeAndDeviceId				0x12
-#define TAG_AuthRequest_ProtoVersion										0x18
-#define TAG_AuthRequest_AuthProto												0x20
-#define TAG_AuthRequest_AuthMethod											0x28
-#define TAG_AuthRequest_AesSign													0x32
-#define TAG_AuthRequest_MacAddress											0x3a
-#define TAG_AuthRequest_TimeZone												0x52
-#define TAG_AuthRequest_Language												0x5a
-#define TAG_AuthRequest_DeviceName											0x62
-#define TAG_AuthResponse_BaseResponse										0x0a
-#define TAG_AuthResponse_AesSessionKey									0x12
-#define TAG_InitRequest_BaseRequest											0x0a
-#define TAG_InitRequest_RespFieldFilter									0x12
-#define TAG_InitRequest_Challenge												0x1a
-#define TAG_InitResponse_BaseResponse										0x0a
-#define TAG_InitResponse_UserIdHigh											0x10
-#define TAG_InitResponse_UserIdLow											0x18
-#define TAG_InitResponse_ChalleangeAnswer								0x20
-#define TAG_InitResponse_InitScence											0x28
-#define TAG_InitResponse_AutoSyncMaxDurationSecond			0x30
-#define TAG_InitResponse_UserNickName										0x5a
-#define TAG_InitResponse_PlatformType										0x60
-#define TAG_InitResponse_Model													0x6a
-#define TAG_InitResponse_Os															0x72
-#define TAG_InitResponse_Time														0x78
-#define TAG_InitResponse_TimeZone												0x8001
-#define TAG_InitResponse_TimeString											0x8a01
-#define TAG_SendDataRequest_BaseRequest									0x0a
-#define TAG_SendDataRequest_Data												0x12
-#define TAG_SendDataRequest_Type												0x18
-#define TAG_SendDataResponse_BaseResponse								0x0a
-#define TAG_SendDataResponse_Data												0x12
-#define TAG_RecvDataPush_BasePush												0x0a
-#define TAG_RecvDataPush_Data														0x12
-#define TAG_RecvDataPush_Type														0x18
-#define TAG_SwitchViewPush_BasePush											0x0a
-#define TAG_SwitchViewPush_SwitchViewOp									0x10
-#define TAG_SwitchViewPush_ViewId												0x18
-#define TAG_SwitchBackgroudPush_BasePush								0x0a
-#define TAG_SwitchBackgroudPush_SwitchBackgroundOp			0x10
-/*typedef enum
-{
-	ECI_none = 0,
-	ECI_req_auth = 10001,
-	ECI_req_sendData = 10002,
-	ECI_req_init = 10003,
-	ECI_resp_auth = 20001,
-	ECI_resp_sendData = 20002,
-	ECI_resp_init = 20003,
-	ECI_push_recvData = 30001,
-	ECI_push_switchView = 30002,
-	ECI_push_switchBackgroud = 30003,
-	ECI_err_decode = 29999
-} EmCmdId;
-*/
-
-//统一定义汇报给后台的数据格式
-typedef enum
-{
-	CLOUD_SENSOR_DATA_FORMAT_NULL = 0,
-	CLOUD_SENSOR_DATA_FOMAT_INT_ONLY = 1,
-	CLOUD_SENSOR_DATA_FOMAT_FLOAT_WITH_NF1 = 2,
-	CLOUD_SENSOR_DATA_FOMAT_FLOAT_WITH_NF2 = 3,
-	CLOUD_SENSOR_DATA_FOMAT_FLOAT_WITH_NF3 = 4,
-	CLOUD_SENSOR_DATA_FOMAT_FLOAT_WITH_NF4 = 5,
-	CLOUD_SENSOR_DATA_FOMAT_MAX = 0x10,
-	CLOUD_SENSOR_DATA_FOMAT_INVALID = 0xFF,
-}CloudDataFormatDef;
-
-//设备地址，用于支持多个设备的同时工作
-#define IHU_EMC_EQUID_DEFAULT 1
-
-
-/**************************************************************************************
- *   HUITP标准链路层FRAME定义                                                           *
- *************************************************************************************/
-//帧结构定义
-typedef struct StrHuiFrame
-{
-    UINT8 	start; //0xFE
-    UINT8 	checksum1; //加总头的结果
-    UINT16 	len; //0-1500，原则上不能超过系统定义的消息体长度
-    UINT8 	msgBody[];
-}StrHuiFrame_t;
-
 
 /**************************************************************************************
  *   CANITF接口的FRAME格式定义：因为CLOUD/L3BFSC/CANVELA都要用到这个定义                   *
@@ -440,12 +200,6 @@ typedef struct strIhuI2cariesMotoFrame
 #define IHU_CCL_DH_CMDID_EVENT_IND_LOCK_TRIGGER 30   	//触发CCL进入工作状态
 #define IHU_CCL_DH_CMDID_EVENT_IND_SHAKE_TRIGGER 31   //触发CCL进入工作状态
 #define IHU_CCL_DH_CMDID_EVENT_IND_LOCK_AND_SHAKE 32  //触发CCL进入工作状态
-//#define IHU_CCL_DH_CMDID_EVENT_IND_FAULT_DOOR_O 40    //触发CCL进入错误模式
-//#define IHU_CCL_DH_CMDID_EVENT_IND_FAULT_LOCK_O 41    //触发CCL进入错误模式
-//#define IHU_CCL_DH_CMDID_EVENT_IND_FAULT_BAT_WARNING 42    //触发CCL进入错误模式
-//#define IHU_CCL_DH_CMDID_EVENT_IND_FAULT_FALL_WARNING 43    //触发CCL进入错误模式
-//#define IHU_CCL_DH_CMDID_EVENT_IND_FAULT_SMOKE_WARNING 44    //触发CCL进入错误模式
-//#define IHU_CCL_DH_CMDID_EVENT_IND_FAULT_WATER_WARNING 45    //触发CCL进入错误模式
 #define IHU_CCL_DH_CMDID_EVENT_IND_FAULT_MULTI 40   //触发CCL进入错误模式
 #define IHU_CCL_DH_CMDID_EVENT_IND_FAULT_RECOVER 41    //触发CCL进入恢复正常
 #define IHU_CCL_DH_CMDID_WORK_MODE_SLEEP 60   	//强制进入新状态
@@ -472,201 +226,191 @@ typedef struct CloudDataSendBuf
 	char buf[MAX_IHU_MSG_BUF_LENGTH_CLOUD];  //内部还包括格式化的参数部分，这里需要再仔细考虑一下
 }CloudDataSendBuf_t;
 
-//跟后台的通信接口中，需要定义一些全局消息的结构体类型
-enum CloudBhMsgTypeEnum
-{
-	IHU_CLOUD_BH_MSG_TYPE_MIN = 0x00,
-	IHU_CLOUD_BH_MSG_TYPE_DEVICE_REPORT_UINT8,
-	IHU_CLOUD_BH_MSG_TYPE_DEVICE_CONTROL_UINT8,
-	IHU_CLOUD_BH_MSG_TYPE_HEAT_BEAT_UINT8,
-	IHU_CLOUD_BH_MSG_TYPE_BIZ_ITG_UINT8,
-	IHU_CLOUD_BH_MSG_TYPE_ALARM_REPORT_UINT8,//for alarm report
-	IHU_CLOUD_BH_MSG_TYPE_PM_REPORT_UINT8,//for pm report
-	IHU_CLOUD_BH_MSG_TYPE_MAX,
-};
-#define IHU_CLOUD_BH_MSG_TYPE_DEVICE_REPORT_STRING  "hcu_text"  //"hcu_text"
-#define IHU_CLOUD_BH_MSG_TYPE_DEVICE_CONTROL_STRING  "hcu_command" //"hcu_command"
-#define IHU_CLOUD_BH_MSG_TYPE_HEAT_BEAT_STRING "hcu_heart_beat"   //"hcu_heart_beat"  //心跳协议，里面的数据内容是空的
-#define IHU_CLOUD_BH_MSG_TYPE_BIZ_ITG_STRING "hcu_biz_itg"  //业务智能 hcu_biz_inteligence
-#define IHU_CLOUD_BH_MSG_TYPE_ALARM_REPORT_STRING "hcu_alarm"  //for alarm report
-#define IHU_CLOUD_BH_MSG_TYPE_PM_REPORT_STRING "hcu_pm"  //for pm report
+//老旧结构体定义，待清理出去
+////ASYLIBRA的定义
+//#define IHU_ASY_HEADER_MAGICNUMBER  0xFE
+//#define IHU_ASY_HEADER_BVERSION  0x01
 
-//HUIXML格式定义
-//主体内容中，各个不同的字段完全按照这个优先级进行编码，解码时将由各种操作字的隐含必选关系进行解码，从而简化编码函数
-#define IHU_CLOUD_BH_ITF_STD_XML_HEAD_MAX_LENGTH IHU_FILE_NAME_LENGTH_MAX  //要传递HTTP名字会后台，只能扩大该域的长度
-//固定头
-typedef struct CloudBhItfHuixmlFixHead
-{
-	char xml_l[6];
-	char ToUserName_l[22];
-	char ToUserName[IHU_CLOUD_BH_ITF_STD_XML_HEAD_MAX_LENGTH+1];
-	char ToUserName_r[17];
-	char FromUserName_l[24];
-	char FromUserName[IHU_CLOUD_BH_ITF_STD_XML_HEAD_MAX_LENGTH+1];
-	char FromUserName_r[19];
-	char CreateTime_l[13];
-	char CreateTime[IHU_CLOUD_BH_ITF_STD_XML_HEAD_MAX_LENGTH+1];
-	char CreateTime_r[14];
-	char MsgType_l[19];
-	char MsgType[IHU_CLOUD_BH_ITF_STD_XML_HEAD_MAX_LENGTH+1];
-	char MsgType_r[14];
-	char Content_l[19];
-	char conCmdId[3];
-	char conLen[3];  //1B
-	char conOptId[3]; //1B	
-}CloudBhItfHuixmlFixHead_t;
+////Defined at epb_MmBp.c, coming from Tecent or Google protobuf protocal!
+//#define TAG_BaseResponse_ErrCode												0x08
+//#define TAG_BaseResponse_ErrMsg													0x12
+//#define TAG_AuthRequest_BaseRequest											0x0a
+//#define TAG_AuthRequest_Md5DeviceTypeAndDeviceId				0x12
+//#define TAG_AuthRequest_ProtoVersion										0x18
+//#define TAG_AuthRequest_AuthProto												0x20
+//#define TAG_AuthRequest_AuthMethod											0x28
+//#define TAG_AuthRequest_AesSign													0x32
+//#define TAG_AuthRequest_MacAddress											0x3a
+//#define TAG_AuthRequest_TimeZone												0x52
+//#define TAG_AuthRequest_Language												0x5a
+//#define TAG_AuthRequest_DeviceName											0x62
+//#define TAG_AuthResponse_BaseResponse										0x0a
+//#define TAG_AuthResponse_AesSessionKey									0x12
+//#define TAG_InitRequest_BaseRequest											0x0a
+//#define TAG_InitRequest_RespFieldFilter									0x12
+//#define TAG_InitRequest_Challenge												0x1a
+//#define TAG_InitResponse_BaseResponse										0x0a
+//#define TAG_InitResponse_UserIdHigh											0x10
+//#define TAG_InitResponse_UserIdLow											0x18
+//#define TAG_InitResponse_ChalleangeAnswer								0x20
+//#define TAG_InitResponse_InitScence											0x28
+//#define TAG_InitResponse_AutoSyncMaxDurationSecond			0x30
+//#define TAG_InitResponse_UserNickName										0x5a
+//#define TAG_InitResponse_PlatformType										0x60
+//#define TAG_InitResponse_Model													0x6a
+//#define TAG_InitResponse_Os															0x72
+//#define TAG_InitResponse_Time														0x78
+//#define TAG_InitResponse_TimeZone												0x8001
+//#define TAG_InitResponse_TimeString											0x8a01
+//#define TAG_SendDataRequest_BaseRequest									0x0a
+//#define TAG_SendDataRequest_Data												0x12
+//#define TAG_SendDataRequest_Type												0x18
+//#define TAG_SendDataResponse_BaseResponse								0x0a
+//#define TAG_SendDataResponse_Data												0x12
+//#define TAG_RecvDataPush_BasePush												0x0a
+//#define TAG_RecvDataPush_Data														0x12
+//#define TAG_RecvDataPush_Type														0x18
+//#define TAG_SwitchViewPush_BasePush											0x0a
+//#define TAG_SwitchViewPush_SwitchViewOp									0x10
+//#define TAG_SwitchViewPush_ViewId												0x18
+//#define TAG_SwitchBackgroudPush_BasePush								0x0a
+//#define TAG_SwitchBackgroudPush_SwitchBackgroundOp			0x10
+////UINT8  cmdIdBackType; //指明是瞬时，还是周期性读数，针对读数到底是周期性的还是一次性的
+////内部定义，内部使用
+//typedef enum
+//{
+//	L3CI_cmdid_back_type_none = 0,
+//	L3CI_cmdid_back_type_instance = 1,
+//	L3CI_cmdid_back_type_period = 2,
+//	L3CI_cmdid_back_type_control = 3,
+//	L3CI_cmdid_back_type_invalid = 0xFF,
+//}L3UserCmdIdBackTypeDef;
 
-//固定尾
-typedef struct CloudBhItfHuixmlFixTail
-{
-	char Content_r[14];
-	char FuncFlag_l[11];
-	char FuncFlag[IHU_CLOUD_BH_ITF_STD_XML_HEAD_MAX_LENGTH+1];
-	char FuncFlag_r[12];
-	char xml_r[7];
-}CloudBhItfHuixmlFixTail_t;
+//为各个业务独自定义的方式
+//老旧定义方式，未来需要改进去掉
+//标准命令字统一定义
+//typedef enum
+//{
+//	L3CI_none = 0,
+//	L3CI_blood_glucose = 1,  //血糖
+//	L3CI_single_sports = 2,  //单次运动
+//	L3CI_single_sleep = 3, //单次睡眠
+//	L3CI_body_fat = 4,  //体脂
+//	L3CI_blood_pressure = 5, //血压
+//	L3CI_runner_machine_report = 0x0A, //跑步机数据上报
+//	L3CI_runner_machine_control = 0x0B, //跑步机任务控制
+//	L3CI_gps = 0x0C, //GPS地址
+//	L3CI_Ihu_iau_control = 0x10, //IHU与IAU之间控制命令
+//	L3CI_emc = 0x20, //电磁辐射强度
+//	L3CI_emc_accumulation = 0x21, //电磁辐射剂量
+//	L3CI_emc_indicator = 0x20, //电磁辐射强度
+//	L3CI_co = 0x22, //一氧化碳
+//	L3CI_formaldehyde = 0x23, //甲醛HCHO
+//	L3CI_alcohol = 0x24, //酒精
+//	L3CI_pm25 = 0x25, //PM1/2.5/10
+//	L3CI_windspd = 0x26, //风速Wind Speed
+//	L3CI_winddir = 0x27, //风向Wind Direction
+//	L3CI_temp = 0x28, //温度Temperature
+//	L3CI_humid = 0x29, //湿度Humidity
+//	L3CI_airprs = 0x2A, //气压Air pressure
+//	L3CI_noise = 0x2B, //噪声Noise
+//	L3CI_hsmmp = 0x2C, //相机Camer or audio high speed
+//	L3CI_audio = 0x2D, //声音
+//	L3CI_video = 0x2E, //视频
+//	L3CI_picture = 0x2F, //图片
+//	L3CI_lock = 0x30, //云控锁
+//	L3CI_water_meter = 0x31, //水表
+//	L3CI_heat_meter = 0x32, //热表
+//	L3CI_gas_meter = 0x33, //气表
+//	L3CI_power_meter = 0x34, //电表
+//	L3CI_light_strength = 0x35, //光照强度
+//	L3CI_toxicgas = 0x36, //有毒气体VOC
+//	L3CI_altitude = 0x37, //海拔高度
+//	L3CI_moto = 0x38, //马达
+//	L3CI_switch = 0x39, //继电器
+//	L3CI_transporter = 0x3A, //导轨传送带
+//	L3CI_bfsc_comb_scale = 0x3B, //组合秤
+//	L3CI_ccl_lock = 0x40,  //智能锁
+//	L3CI_ccl_door = 0x41, //光交箱门
+//	L3CI_ccl_rfid = 0x42, //光交箱RFID模块
+//	L3CI_ccl_ble = 0x43, //光交箱BLE模块
+//	L3CI_ccl_gprs = 0x44, //光交箱GPRS模块
+//	L3CI_ccl_battery = 0x45, //光交箱电池模块
+//	L3CI_ccl_shake = 0x46, //光交箱震动
+//	L3CI_ccl_smoke = 0x47, //光交箱烟雾
+//	L3CI_ccl_water = 0x48, //光交箱水浸
+//	L3CI_ccl_temp = 0x49, //光交箱温度
+//	L3CI_ccl_humid = 0x4A, //光交箱湿度
+//	L3CI_ccl_fall = 0x4B, //倾倒
+//	L3CI_ccl_state = 0x4C, //状态聚合
+//	L3CI_itf_sps = 0x50, //串口读取命令/返回结果
+//	L3CI_itf_adc = 0x51, //ADC读取命令/返回结果
+//	L3CI_itf_dac = 0x52, //DAC读取命令/返回结果
+//	L3CI_itf_i2c = 0x53, //I2C读取命令/返回结果
+//	L3CI_itf_pwm = 0x54, //PWM读取命令/返回结果
+//	L3CI_itf_di = 0x55, //DI读取命令/返回结果
+//	L3CI_itf_do = 0x56, //DO读取命令/返回结果
+//	L3CI_itf_can = 0x57, //CAN读取命令/返回结果
+//	L3CI_itf_spi = 0x58, //SPI读取命令/返回结果
+//	L3CI_itf_usb = 0x59, //USB读取命令/返回结果
+//	L3CI_itf_eth = 0x5A, //网口读取命令/返回结果
+//	L3CI_itf_485 = 0x5B, //485读取命令/返回结果
+//	L3CI_Ihu_inventory= 0xA0,	//软件清单
+//	L3CI_sw_package = 0xA1,	//软件版本体
+//	L3CI_alarm_info = 0xB0, //for alarm report
+//	L3CI_performance_info = 0xB1, // or PM report
+//	L3CI_equipment_info = 0xF0,	//设备基本信息
+//	L3CI_personal_info = 0xF1,	//个人基本信息
+//	L3CI_time_sync = 0xF2,	//时间同步
+//	L3CI_read_data = 0xF3,	//读取数据
+//	L3CI_clock_timeout = 0xF4,	//定时闹钟及久坐提醒
+//	L3CI_sync_charging = 0xF5,	//同步充电，双击情况
+//	L3CI_sync_trigger = 0xF6,	//同步通知信息
+//	L3CI_cmd_control = 0xFD,  //for cmd control by Shanchun
+//	L3CI_heart_beat = 0xFE, //心跳
+//	L3CI_null = 0xFF, //无效
+//}L3StandardHuiCmdDefId;
 
-//软件清单结构定义
+////IHU<->IAU HUITP接口之间定义的操作字
+////所有的操作字，需要极度的丰富化，以形成完整的处理任务模块
+//typedef enum
+//{
+//  L3PO_min = 0,
+//  L3PO_none = 0,
+//  L3PO_data_req = 0x01, //Data Request
+//  L3PO_set_switch = 0x02,
+//  L3PO_set_modbus_address =0x03,
+//  L3PO_set_work_cycle = 0x04, //In second
+//  L3PO_set_sample_cycle = 0x05, //In second
+//  L3PO_set_sample_number = 0x06,
+//  L3PO_data_report = 0x81, //Data Report
+//  L3PO_read_switch = 0x82,
+//  L3PO_read_modbus_address = 0x83,
+//  L3PO_read_work_cycle = 0x84, //In second
+//  L3PO_read_sample_cycle = 0x85, //In second
+//  L3PO_read_sample_number = 0x86,
+//  L3PO_max,
+//}L3HuitpOptIdDef;
 
-//CCL状态报告消息结构定义
-typedef struct CloudBhItfHuixmlCclStateReportLock
-{
-	//CCL状态报告：Lock的TLV参数
-	char cclLockId[3]; //1B
-	char cclLockLen[3]; //1B
-	char cclLockState[3]; //1B	
-}CloudBhItfHuixmlCclStateReportLock_t;
-typedef struct CloudBhItfHuixmlCclStateReportDoor
-{
-	//CCL状态报告：Door的TLV参数
-	char cclDoorId[3]; //1B
-	char cclDoorLen[3]; //1B
-	char cclDoorState[3]; //1B
-}CloudBhItfHuixmlCclStateReportDoor_t;
-typedef struct CloudBhItfHuixmlCclStateReportShake
-{
-	//CCL状态报告：Shake的TLV参数
-	char cclShakeId[3]; //1B
-	char cclShakeLen[3]; //1B
-	char cclShakeState[3]; //1B
-}CloudBhItfHuixmlCclStateReportShake_t;
-typedef struct CloudBhItfHuixmlCclStateReportSmoke
-{
-	//CCL状态报告：Smoke的TLV参数
-	char cclSmokeId[3]; //1B
-	char cclSmokeLen[3]; //1B
-	char cclSmokeState[3]; //1B
-}CloudBhItfHuixmlCclStateReportSmoke_t;
-typedef struct CloudBhItfHuixmlCclStateReportWater
-{
-	//CCL状态报告：Water的TLV参数
-	char cclWaterId[3]; //1B
-	char cclWaterLen[3]; //1B
-	char cclWaterState[3]; //1B
-}CloudBhItfHuixmlCclStateReportWater_t;
-typedef struct CloudBhItfHuixmlCclStateReportFall
-{
-	//CCL状态报告：Fall的TLV参数
-	char cclFallId[3]; //1B
-	char cclFallLen[3]; //1B
-	char cclFallState[3]; //1B
-}CloudBhItfHuixmlCclStateReportFall_t;
-typedef struct CloudBhItfHuixmlCclStateReportBat
-{
-	//CCL状态报告：Bat的TLV参数
-	char cclBatId[3]; //1B  电池告警状态
-	char cclBatLen[3]; //1B
-	char cclBatState[3]; //1B
-}CloudBhItfHuixmlCclStateReportBat_t;
-typedef struct CloudBhItfHuixmlCclStateReportTemp
-{
-	//CCL状态报告：Temp的TLV参数
-	char cclTempId[3]; //1B
-	char cclTempLen[5]; //2B
-	char cclTempVal[5]; //2B
-}CloudBhItfHuixmlCclStateReportTemp_t;
-typedef struct CloudBhItfHuixmlCclStateReportHumid
-{
-	//CCL状态报告：Humid的TLV参数
-	char cclHumidId[3]; //1B
-	char cclHumidLen[5]; //2B
-	char cclHumidVal[5]; //2B
-}CloudBhItfHuixmlCclStateReportHumid_t;
-typedef struct CloudBhItfHuixmlCclStateReportBattery
-{
-	//CCL状态报告：Humid的TLV参数
-	char cclBatteryId[3]; //1B  电池剩余电量数值
-	char cclBatteryLen[5]; //2B
-	char cclBatteryVal[5]; //2B
-}CloudBhItfHuixmlCclStateReportBattery_t;
-typedef struct CloudBhItfHuixmlCclStateReportRssi
-{
-	//CCL状态报告：Rssi的TLV参数
-	char cclRssiId[3]; //1B
-	char cclRssiLen[5]; //2B
-	char cclRssiVal[5]; //2B
-}CloudBhItfHuixmlCclStateReportRssi_t;
-typedef struct CloudBhItfHuixmlCclStateReportRsv1
-{
-	//CCL状态报告：Rsv1的TLV参数
-	char cclRsv1Id[3]; //1B
-	char cclRsv1Len[5]; //2B
-	char cclRsv1Val[5]; //2B
-}CloudBhItfHuixmlCclStateReportRsv1_t;
-typedef struct CloudBhItfHuixmlCclStateReportRsv2
-{
-	//CCL状态报告：Rsv2的TLV参数
-	char cclRsv2Id[3]; //1B
-	char cclRsv2Len[5]; //2B
-	char cclRsv2Val[5]; //2B
-}CloudBhItfHuixmlCclStateReportRsv2_t;
-typedef struct CloudBhItfHuixmlCclStateReport
-{
-	//CCL的状态报告TLV参数
-	CloudBhItfHuixmlCclStateReportLock_t cclLock;
-	CloudBhItfHuixmlCclStateReportDoor_t cclDoor;
-	CloudBhItfHuixmlCclStateReportShake_t cclShake;
-	CloudBhItfHuixmlCclStateReportSmoke_t cclSmoke;
-	CloudBhItfHuixmlCclStateReportWater_t cclWater;
-	CloudBhItfHuixmlCclStateReportFall_t cclFall;
-	CloudBhItfHuixmlCclStateReportBat_t cclBat;
-	CloudBhItfHuixmlCclStateReportTemp_t cclTemp;
-	CloudBhItfHuixmlCclStateReportHumid_t cclHumid;
-	CloudBhItfHuixmlCclStateReportBattery_t cclBattery;
-	CloudBhItfHuixmlCclStateReportRssi_t cclRssi;
-	CloudBhItfHuixmlCclStateReportRsv1_t cclRsv1;
-	CloudBhItfHuixmlCclStateReportRsv2_t cclRsv2;
-}CloudBhItfHuixmlCclStateReport_t;
-
-
-
-typedef struct StrCloudBhItfStdHuixml
-{
-	//固定头
-	CloudBhItfHuixmlFixHead_t fixHead;
-
-	//变长部分，未来演进为TLV标准结构
-	//每一个内容，都是一个标准的IE，全局唯一编码，确保编解码的简单高效
-	//为了进一步提高效率，所有ID编码，包括CMDID/OPTID/IEID，均采用哈夫曼变长编码，00预留，01-EF为常用断码，F0xx - FFxx表示长码
-		
-	//软件清单
-	//Added by Shanchun for hcu inventory
-	char conHwUuid[12];//6B
-	char conHwType[3];//1B
-	char conHwVersion[5];//2B
-	char conSwDelivery[5];//1B
-	char conSwRelease[5];//2B
-		
-	//软件下载
-	//Added by Shanchun for hcu sw download
-	char conSwDownload[3];
-	
-	//CCL状态报告的TLV
-	CloudBhItfHuixmlCclStateReport_t cclStateReport;
-	
-	//固定尾
-	CloudBhItfHuixmlFixTail_t fixTail;
-}StrCloudBhItfStdHuixml_t;
+////L3PO的通用定义，如果不属于任何传感器，则可以使用这个定义
+//typedef enum
+//{
+//	L3PO_generic_min = 0,
+//	L3PO_generic_none = 0,
+//	L3PO_generic_data_req = 0x01, //Data Request
+//	L3PO_generic_set_switch = 0x02,
+//	L3PO_generic_set_modbus_address =0x03,
+//	L3PO_generic_set_work_cycle = 0x04, //In second
+//	L3PO_generic_set_sample_cycle = 0x05, //In second
+//	L3PO_generic_set_sample_number = 0x06,
+//	L3PO_generic_data_report = 0x81, //Data Report
+//	L3PO_generic_read_switch = 0x82,
+//	L3PO_generic_read_modbus_address = 0x83,
+//	L3PO_generic_read_work_cycle = 0x84, //In second
+//	L3PO_generic_read_sample_cycle = 0x85, //In second
+//	L3PO_generic_read_sample_number = 0x86,
+//	L3PO_generic_max,
+//}L3GenericOptIdDef;
 
 
 #endif /* L1VMFREEOS_L1COMDEF_FREEOS_H_ */

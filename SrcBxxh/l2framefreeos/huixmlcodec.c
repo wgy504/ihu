@@ -44,37 +44,37 @@ OPSTAT func_cloud_standard_xml_pack(UINT8 msgType, char *funcFlag, UINT16 msgId,
 	memset(output, 0, sizeof(CloudDataSendBuf_t));
 
 	//格式固定区域
-	strcat(output->buf, "<xml>");
-	strcat(output->buf, "<ToUserName><![CDATA[");
+	strcat(output->buf, HUITP_MSG_HUIXML_CONSTANT_XML_HEAD_L);
+	strcat(output->buf, HUITP_MSG_HUIXML_CONSTANT_TO_USER_L);
 	strcat(output->buf, zIhuSysEngPar.cloud.cloudBhServerName);
-	strcat(output->buf, "]]></ToUserName>");
-	strcat(output->buf, "<FromUserName><![CDATA[");
+	strcat(output->buf, HUITP_MSG_HUIXML_CONSTANT_TO_USER_R);
+	strcat(output->buf, HUITP_MSG_HUIXML_CONSTANT_FROM_USER_L);
 	strcat(output->buf, zIhuSysEngPar.cloud.cloudBhIhuName);
-	strcat(output->buf, "]]></FromUserName>");
-	strcat(output->buf, "<CreateTime>");
+	strcat(output->buf, HUITP_MSG_HUIXML_CONSTANT_FROM_USER_R);
+	strcat(output->buf, HUITP_MSG_HUIXML_CONSTANT_CREATE_TIME_L);
 	//time(0); 如何取得时间戳，待完成，FreeRTOS里暂时没找到合适取得时间戳的方法
 	UINT32 timeStamp = (UINT32)__TIME__; 
   sprintf(s, "%d", timeStamp);
 	strcat(output->buf, s);
-	strcat(output->buf, "</CreateTime>");
+	strcat(output->buf, HUITP_MSG_HUIXML_CONSTANT_CREATE_TIME_R);
 	
 	//Message Type content
-	strcat(output->buf, "<MsgType><![CDATA[");
-	if      (msgType == IHU_CLOUD_BH_MSG_TYPE_DEVICE_REPORT_UINT8) strcat(output->buf, IHU_CLOUD_BH_MSG_TYPE_DEVICE_REPORT_STRING);
-	else if (msgType == IHU_CLOUD_BH_MSG_TYPE_DEVICE_CONTROL_UINT8) strcat(output->buf, IHU_CLOUD_BH_MSG_TYPE_DEVICE_CONTROL_STRING);
-	else if (msgType == IHU_CLOUD_BH_MSG_TYPE_HEAT_BEAT_UINT8) strcat(output->buf, IHU_CLOUD_BH_MSG_TYPE_HEAT_BEAT_STRING);
-	else if (msgType == IHU_CLOUD_BH_MSG_TYPE_BIZ_ITG_UINT8) strcat(output->buf, IHU_CLOUD_BH_MSG_TYPE_BIZ_ITG_STRING);
-	else if (msgType == IHU_CLOUD_BH_MSG_TYPE_ALARM_REPORT_UINT8) strcat(output->buf, IHU_CLOUD_BH_MSG_TYPE_ALARM_REPORT_STRING);
-	else if (msgType == IHU_CLOUD_BH_MSG_TYPE_PM_REPORT_UINT8) strcat(output->buf, IHU_CLOUD_BH_MSG_TYPE_PM_REPORT_STRING);
+	strcat(output->buf, HUITP_MSG_HUIXML_CONSTANT_MSG_TYPE_L);
+	if      (msgType == HUITP_MSG_HUIXML_MSGTYPE_DEVICE_REPORT_ID) strcat(output->buf, HUITP_MSG_HUIXML_MSGTYPE_DEVICE_REPORT_STRING);
+	else if (msgType == HUITP_MSG_HUIXML_MSGTYPE_DEVICE_CONTROL_ID) strcat(output->buf, HUITP_MSG_HUIXML_MSGTYPE_DEVICE_CONTROL_STRING);
+	else if (msgType == HUITP_MSG_HUIXML_MSGTYPE_HEAT_BEAT_ID) strcat(output->buf, HUITP_MSG_HUIXML_MSGTYPE_HEAT_BEAT_STRING);
+	else if (msgType == HUITP_MSG_HUIXML_MSGTYPE_BIZ_ITG_ID) strcat(output->buf, HUITP_MSG_HUIXML_MSGTYPE_BIZ_ITG_STRING);
+	else if (msgType == HUITP_MSG_HUIXML_MSGTYPE_ALARM_REPORT_ID) strcat(output->buf, HUITP_MSG_HUIXML_MSGTYPE_ALARM_REPORT_STRING);
+	else if (msgType == HUITP_MSG_HUIXML_MSGTYPE_PM_REPORT_ID) strcat(output->buf, HUITP_MSG_HUIXML_MSGTYPE_PM_REPORT_STRING);
 	else {
 		IhuErrorPrint("SPSVIRGO: Error Message Type input!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
 	}
-	strcat(output->buf, "]]></MsgType>");
+	strcat(output->buf, HUITP_MSG_HUIXML_CONSTANT_MSG_TYPE_R);
 	
 	//Content starting
-	strcat(output->buf, "<Content><![CDATA[");
+	strcat(output->buf, HUITP_MSG_HUIXML_CONSTANT_CONTENT_L);
 
 	//筛选出变长的消息结构，独立进行处理，剩下的统一处理
 	switch(msgId)
@@ -150,14 +150,14 @@ OPSTAT func_cloud_standard_xml_pack(UINT8 msgType, char *funcFlag, UINT16 msgId,
 	strcat(output->buf, s);	
 
 	//Finish content part
-	strcat(output->buf, "]]></Content>");
+	strcat(output->buf, HUITP_MSG_HUIXML_CONSTANT_CONTENT_R);
 	
 	//固定尾部分
-	strcat(output->buf, "<FuncFlag>");
+	strcat(output->buf, HUITP_MSG_HUIXML_CONSTANT_FUNC_FLAG_L);
 	if (funcFlag == NULL) strcat(output->buf, "0");
 	else strcat(output->buf, funcFlag);
-	strcat(output->buf, "</FuncFlag>");
-	strcat(output->buf, "</xml>");
+	strcat(output->buf, HUITP_MSG_HUIXML_CONSTANT_FUNC_FLAG_R);
+	strcat(output->buf, HUITP_MSG_HUIXML_CONSTANT_XML_HEAD_R);
 
 	//存入返回参量中：这个长度域其实也没有太大的用处
 	output->bufferLen = strlen(s);
@@ -167,25 +167,130 @@ OPSTAT func_cloud_standard_xml_pack(UINT8 msgType, char *funcFlag, UINT16 msgId,
 }
 
 //解码接收到的消息
+//该消息以CHAR为单位，从纯CDATA模式修改为<xml>格式，所以需要加入这个内容
 OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 {
 	UINT32 index=0, msgId=0, msgLen=0;
 	char tmp[5] = "";
 	UINT8 tt[HUITP_MSG_BUF_BODY_ONLY_MAX_LEN];
-	//int ret = 0;
-
+	int i = 0, ret = 0, dif = 0;
+	char *pIndexT1, *pIndexT2, pIndexT3;  //临时位置
+	UINT8 msgType;
+	UINT64 msgCreateTime;
+	char msgToUser[IHU_FILE_NAME_LENGTH_MAX], msgFromUser[IHU_FILE_NAME_LENGTH_MAX], msgFuncFlag[IHU_FILE_NAME_LENGTH_MAX];
+	char msgTmp[IHU_FILE_NAME_LENGTH_MAX];
+	
 	//检查参数
 	if (rcv == NULL){
-		IhuErrorPrint("SPSVIRGO: Invalid received data buffer!\n");
+		IhuErrorPrint("SPSVIRGO: Received message error, invalid received data buffer!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
 	}
 	//控制命令不带XML格式头，接收的内容以裸控制命令，所以必须是偶数字节
-	if (((rcv->length %2) != 0) || (rcv->length > MAX_IHU_MSG_BUF_LENGTH_CLOUD) || (rcv->length < 8) || (rcv->length > (HUITP_MSG_BUF_BODY_ONLY_MAX_LEN*2))){
-		IhuErrorPrint("SPSVIRGO: Received invalid data length by XML content format!\n");
+	if ((rcv->length > MAX_IHU_MSG_BUF_LENGTH_CLOUD) || (rcv->length < 8) || (rcv->length > (HUITP_MSG_BUF_BODY_ONLY_MAX_LEN*2))){
+		IhuErrorPrint("SPSVIRGO: Received message error, invalid data length by XML content format!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
 	}
+	
+	//寻找<xml>的头部
+	pIndexT1 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_XML_HEAD_L);
+	pIndexT2 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_XML_HEAD_R);
+	dif = pIndexT2 - pIndexT1  - strlen(HUITP_MSG_HUIXML_CONSTANT_XML_HEAD_L);
+	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_XML_HEAD_L))>= pIndexT2) || (dif > MAX_IHU_MSG_BUF_LENGTH_CLOUD)){
+		IhuErrorPrint("SPSVIRGO: Received message error, invalid format!\n");
+		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+		return IHU_FAILURE;
+	}
+	
+	//寻找<ToUserName>
+	pIndexT1 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_TO_USER_L);
+	pIndexT2 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_TO_USER_R);
+	dif = pIndexT2 - pIndexT1  - strlen(HUITP_MSG_HUIXML_CONSTANT_TO_USER_L);
+	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_TO_USER_L))>= pIndexT2) || (dif > IHU_FILE_NAME_LENGTH_MAX)){
+		IhuErrorPrint("SPSVIRGO: Received message error, invalid format!\n");
+		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+		return IHU_FAILURE;
+	}
+	memset(msgToUser, 0, sizeof(msgToUser));
+	i = 0;
+	pIndexT1 += strlen(HUITP_MSG_HUIXML_CONSTANT_TO_USER_L); //去掉头部
+	while(pIndexT1 < pIndexT2){
+		msgToUser[i++] = *pIndexT1++;
+	}	
+	if (strcmp(msgToUser, zIhuSysEngPar.cloud.cloudBhIhuName) !=0){
+		IhuErrorPrint("SPSVIRGO: Received message error, invalid toUser field!\n");
+		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+		return IHU_FAILURE;		
+	}
+	
+	//寻找<fromUserName>
+	pIndexT1 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_FROM_USER_L);
+	pIndexT2 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_FROM_USER_R);
+	dif = pIndexT2 - pIndexT1  - strlen(HUITP_MSG_HUIXML_CONSTANT_FROM_USER_L);
+	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_FROM_USER_L))>= pIndexT2) || (dif > IHU_FILE_NAME_LENGTH_MAX)){
+		IhuErrorPrint("SPSVIRGO: Received message error, invalid format!\n");
+		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+		return IHU_FAILURE;
+	}
+	memset(msgFromUser, 0, sizeof(msgFromUser));
+	i = 0;
+	pIndexT1 += strlen(HUITP_MSG_HUIXML_CONSTANT_FROM_USER_L); //去掉头部
+	while(pIndexT1 < pIndexT2){
+		msgFromUser[i++] = *pIndexT1++;
+	}	
+	if (strcmp(msgFromUser, zIhuSysEngPar.cloud.cloudBhServerName) !=0){
+		IhuErrorPrint("SPSVIRGO: Received message error, invalid fromUser field!\n");
+		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+		return IHU_FAILURE;		
+	}	
+	
+	//寻找<CreateTime>
+	pIndexT1 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_CREATE_TIME_L);
+	pIndexT2 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_CREATE_TIME_R);
+	dif = pIndexT2 - pIndexT1  - strlen(HUITP_MSG_HUIXML_CONSTANT_CREATE_TIME_L);
+	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_CREATE_TIME_L))>= pIndexT2) || (dif > HUITP_MSG_HUIXML_CONTSANT_CREATE_TIME_MAX_LEN)){
+		IhuErrorPrint("SPSVIRGO: Received message error, invalid format!\n");
+		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+		return IHU_FAILURE;
+	}
+	memset(msgTmp, 0, sizeof(msgTmp));
+	i = 0;
+	pIndexT1 += strlen(HUITP_MSG_HUIXML_CONSTANT_CREATE_TIME_L); //去掉头部
+	while(pIndexT1 < pIndexT2){
+		msgTmp[i++] = *pIndexT1++;
+	}
+	//暂时不判定，存下即可，以后再完善
+	msgCreateTime = strtoul(msgTmp, NULL, 10); //10进制，并非16进制
+	
+	//寻找<msgType>
+	pIndexT1 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_MSG_TYPE_L);
+	pIndexT2 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_MSG_TYPE_R);
+	dif = pIndexT2 - pIndexT1  - strlen(HUITP_MSG_HUIXML_CONSTANT_MSG_TYPE_L);
+	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_MSG_TYPE_L))>= pIndexT2) || (dif > IHU_FILE_NAME_LENGTH_MAX)){
+		IhuErrorPrint("SPSVIRGO: Received message error, invalid format!\n");
+		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+		return IHU_FAILURE;
+	}
+	memset(msgTmp, 0, sizeof(msgTmp));
+	i = 0;
+	pIndexT1 += strlen(HUITP_MSG_HUIXML_CONSTANT_MSG_TYPE_L); //去掉头部
+	while(pIndexT1 < pIndexT2){
+		msgTmp[i++] = *pIndexT1++;
+	}	
+	if (strcmp(msgTmp, HUITP_MSG_HUIXML_MSGTYPE_DEVICE_REPORT_STRING) ==0) msgType = HUITP_MSG_HUIXML_MSGTYPE_DEVICE_REPORT_ID;
+	else if (strcmp(msgTmp, HUITP_MSG_HUIXML_MSGTYPE_DEVICE_CONTROL_STRING) ==0) msgType = HUITP_MSG_HUIXML_MSGTYPE_DEVICE_CONTROL_ID;
+	else if (strcmp(msgTmp, HUITP_MSG_HUIXML_MSGTYPE_HEAT_BEAT_STRING) ==0) msgType = HUITP_MSG_HUIXML_MSGTYPE_HEAT_BEAT_ID;
+	else if (strcmp(msgTmp, HUITP_MSG_HUIXML_MSGTYPE_BIZ_ITG_STRING) ==0) msgType = HUITP_MSG_HUIXML_MSGTYPE_BIZ_ITG_ID;
+	else if (strcmp(msgTmp, HUITP_MSG_HUIXML_MSGTYPE_ALARM_REPORT_STRING) ==0) msgType = HUITP_MSG_HUIXML_MSGTYPE_ALARM_REPORT_ID;
+	else if (strcmp(msgTmp, HUITP_MSG_HUIXML_MSGTYPE_PM_REPORT_STRING) ==0) msgType = HUITP_MSG_HUIXML_MSGTYPE_PM_REPORT_ID;
+	else{
+		IhuErrorPrint("SPSVIRGO: Received message error, invalid format!\n");
+		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+		return IHU_FAILURE;	
+	}
+
+
 	
 	//解出msgId/msgLen
 	index = 0;

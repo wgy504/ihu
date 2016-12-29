@@ -6,6 +6,7 @@
 
 //= ZJL, 2016 Dec.28, CURRENT_SW_DELIVERY R03.74 =>CCL项目
 = Auth消息组装好，等待发送测试
+= 清理L1COMDEF.H中的无效定义，完全转向HUITP架构和消息结构定义
 = 1. 其它三组event消息（Event/Close/Fault)
 = 2. unpack接收消息格式从裸格式转换为xml格式
 = 3. 发送的GPRS AT CMD的所有VMMW API需要清理完善，包括增加FTP API
