@@ -146,7 +146,15 @@ extern INT16 func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv1_value(vo
 extern INT16 func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv2_value(void);
 extern INT16 func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value(void);
 
-extern void ihu_vmmw_gprsmod_gsm_all_working_selection(UINT8 option, UINT8 sub_opt);
+//GPRSMOD的模组操作
+extern OPSTAT ihu_vmmw_gprsmod_call_perform(char *callNumber);  //拨号测试程序
+extern OPSTAT ihu_vmmw_gprsmod_sms_transmit_with_confirm(char *input);   //短信工作流程
+extern OPSTAT ihu_vmmw_gprsmod_tcp_data_transmit_with_receive(char *input);  //GPRS数据传输测试程序
+extern OPSTAT ihu_vmmw_gprsmod_ftp_data_transmit_with_receive(char *input);  //FTP数据传输测试程序
+extern OPSTAT ihu_vmmw_gprsmod_bs_position_perform(void);    //基站定位
+extern OPSTAT ihu_vmmw_gprsmod_tts_perform(void);   //TTS文本语音测试程序
+
+
 
 #endif /* L2FRAME_L2SPSVIRGO_H_ */
 

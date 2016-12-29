@@ -40,8 +40,8 @@ typedef struct IHU_HUITP_L2FRAME_STD_UART_frame_header
 //发送和接受数据的延迟时间长度
 #define BSP_SUCCESS 0
 #define BSP_FAILURE -1
-#define SPS_UART_TX_MAX_DELAY_DURATION 100
-#define SPS_UART_RX_MAX_DELAY_DURATION 100
+#define IHU_BSP_STM32_SPS_TX_MAX_DELAY 100
+#define IHU_BSP_STM32_SPS_RX_MAX_DELAY 100
 
 //形成定义的交换矩阵
 #define IHU_BSP_STM32_UART_GPRS_HANDLER					huart1
@@ -59,19 +59,28 @@ typedef struct IHU_HUITP_L2FRAME_STD_UART_frame_header
 
 //API函数
 extern int ihu_bsp_stm32_sps_slave_hw_init(void);
+
 extern int ihu_bsp_stm32_sps_print_fputc(int ch, FILE *f);
 extern int ihu_bsp_stm32_sps_print_fgetc(FILE * f);
-extern int ihu_bsp_stm32_sps_print_data_send(char *s);
-extern int ihu_bsp_stm32_sps_print_data_receive(char *s, uint16_t len);
+
+extern int ihu_bsp_stm32_sps_print_send_data(char *s);
+extern int ihu_bsp_stm32_sps_print_rcv_data(char *s, uint16_t len);
+extern int ihu_bsp_stm32_sps_print_rcv_data_timeout(uint8_t* buff, uint16_t len, uint32_t timeout);
 extern int ihu_bsp_stm32_sps_gprs_send_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_sps_gprs_rcv_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_sps_gprs_rcv_data_timeout(uint8_t* buff, uint16_t len, uint32_t timeout);
 extern int ihu_bsp_stm32_sps_rfid_send_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_sps_rfid_rcv_data(uint8_t* buff, uint16_t len);
+extern int ihu_bsp_stm32_sps_rfid_rcv_data_timeout(uint8_t* buff, uint16_t len, uint32_t timeout);
 extern int ihu_bsp_stm32_sps_ble_send_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_sps_ble_rcv_data(uint8_t* buff, uint16_t len);
+extern int ihu_bsp_stm32_sps_ble_rcv_data_timeout(uint8_t* buff, uint16_t len, uint32_t timeout);
 extern int ihu_bsp_stm32_sps_spare1_send_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_sps_spare1_rcv_data(uint8_t* buff, uint16_t len);
+extern int ihu_bsp_stm32_sps_spare1_rcv_data_timeout(uint8_t* buff, uint16_t len, uint32_t timeout);
+extern int ihu_bsp_stm32_sps_spare2_send_data(uint8_t* buff, uint16_t len);
+extern int ihu_bsp_stm32_sps_spare2_rcv_data(uint8_t* buff, uint16_t len);
+extern int ihu_bsp_stm32_sps_spare2_rcv_data_timeout(uint8_t* buff, uint16_t len, uint32_t timeout);
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle);
 

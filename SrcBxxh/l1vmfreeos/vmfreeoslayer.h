@@ -413,12 +413,26 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_led_f2board_onoff 							ihu_bsp_stm32_led_f2board_onoff
 
 //USART专门对付一般性的驱动函数，对其进行映射，以便保持上层模块的一致性
-#define ihu_l1hd_sps_slave_hw_init				ihu_bsp_stm32_sps_slave_hw_init
-#define ihu_l1hd_sps_gprs_send_data 		  ihu_bsp_stm32_sps_gprs_send_data
-#define ihu_l1hd_sps_rfid_send_data 			ihu_bsp_stm32_sps_rfid_send_data
-#define ihu_l1hd_sps_ble_send_data 				ihu_bsp_stm32_sps_ble_send_data
-#define ihu_l1hd_sps_spare1_send_data 		ihu_bsp_stm32_sps_spare1_send_data
-#define ihu_l1hd_sps_print_send_data 			ihu_bsp_stm32_sps_print_data_send
+#define ihu_l1hd_sps_slave_hw_init							ihu_bsp_stm32_sps_slave_hw_init
+#define ihu_l1hd_sps_gprs_send_data 		  			ihu_bsp_stm32_sps_gprs_send_data
+#define ihu_l1hd_sps_gprs_rcv_data 		  				ihu_bsp_stm32_sps_gprs_rcv_data
+#define ihu_l1hd_sps_gprs_rcv_data_timeout 		  ihu_bsp_stm32_sps_gprs_rcv_data_timeout
+#define ihu_l1hd_sps_rfid_send_data 						ihu_bsp_stm32_sps_rfid_send_data
+#define ihu_l1hd_sps_rfid_rcv_data 		  				ihu_bsp_stm32_sps_rfid_rcv_data
+#define ihu_l1hd_sps_rfid_rcv_data_timeout 		  ihu_bsp_stm32_sps_rfid_rcv_data_timeout
+#define ihu_l1hd_sps_ble_send_data 							ihu_bsp_stm32_sps_ble_send_data
+#define ihu_l1hd_sps_ble_rcv_data 		  				ihu_bsp_stm32_sps_ble_rcv_data
+#define ihu_l1hd_sps_ble_rcv_data_timeout 		  ihu_bsp_stm32_sps_ble_rcv_data_timeout
+#define ihu_l1hd_sps_print_send_data 						ihu_bsp_stm32_sps_print_send_data
+#define ihu_l1hd_sps_print_rcv_data 		  			ihu_bsp_stm32_sps_print_rcv_data
+#define ihu_l1hd_sps_print_rcv_data_timeout 		ihu_bsp_stm32_sps_print_rcv_data_timeout
+#define ihu_l1hd_sps_spare1_send_data 					ihu_bsp_stm32_sps_spare1_send_data
+#define ihu_l1hd_sps_spare1_rcv_data 		  			ihu_bsp_stm32_sps_spare1_rcv_data
+#define ihu_l1hd_sps_spare1_rcv_data_timeout 		ihu_bsp_stm32_sps_spare1_rcv_data_timeout
+#define ihu_l1hd_sps_spare2_send_data 					ihu_bsp_stm32_sps_spare2_send_data
+#define ihu_l1hd_sps_spare2_rcv_data 		  			ihu_bsp_stm32_sps_spare2_rcv_data
+#define ihu_l1hd_sps_spare2_rcv_data_timeout 		ihu_bsp_stm32_sps_spare2_rcv_data_timeout
+
 
 //SPI专门对付一般性的驱动函数，对其进行映射，以便保持上层模块的一致性
 #define ihu_l1hd_spi_slave_hw_init		  	ihu_bsp_stm32_spi_slave_hw_init

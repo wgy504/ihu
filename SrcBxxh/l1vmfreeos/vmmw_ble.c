@@ -14,10 +14,10 @@
 #include "vmmw_ble.h"
 
 //全局变量，引用外部
-extern int8_t BSP_STM32_SPS_BLE_R_Buff[IHU_BSP_STM32_SPS_BLE_REC_MAX_LEN];			//串口BLE数据接收缓冲区 
-extern int8_t BSP_STM32_SPS_BLE_R_State;												//串口BLE接收状态
-extern int16_t BSP_STM32_SPS_BLE_R_Count;					//当前接收数据的字节数 	  
-
+extern int8_t zIhuBspStm32SpsBleRxBuff[IHU_BSP_STM32_SPS_BLE_REC_MAX_LEN];			//串口BLE数据接收缓冲区 
+extern int8_t zIhuBspStm32SpsBleRxState;																				//串口BLE接收状态
+extern int16_t zIhuBspStm32SpsBleRxCount;																				//当前接收数据的字节数 	  
+extern int16_t zIhuBspStm32SpsBleRxLen;
 
 /*******************************************************************************
 * 函数名 : BLE_UART_send_AT_command
@@ -34,7 +34,7 @@ OPSTAT BLE_UART_send_AT_command(uint8_t *cmd, uint8_t *ack, uint16_t wait_time) 
 	int res;
 	
 	//等待的时间长度，到底是以tick为单位的，还是以ms为单位的？经过验证，都是以ms为单位的，所以不用担心！！！
-	uint32_t tickTotal = wait_time * 1000 / SPS_UART_RX_MAX_DELAY_DURATION;
+	uint32_t tickTotal = wait_time * 1000 / IHU_BSP_STM32_SPS_RX_MAX_DELAY;
 
 	//清理接收缓冲区
 	BLE_UART_clear_receive_buffer();
@@ -44,9 +44,9 @@ OPSTAT BLE_UART_send_AT_command(uint8_t *cmd, uint8_t *ack, uint16_t wait_time) 
 	res = IHU_FAILURE;
 	while((tickTotal > 0) && (res == IHU_FAILURE))
 	{
-		ihu_usleep(SPS_UART_RX_MAX_DELAY_DURATION); //这里的周期就是以绝对ms为单位的
+		ihu_usleep(IHU_BSP_STM32_SPS_RX_MAX_DELAY); //这里的周期就是以绝对ms为单位的
 		tickTotal--;
-		if(strstr((const char*)BSP_STM32_SPS_BLE_R_Buff, (char*)ack)==NULL)
+		if(strstr((const char*)zIhuBspStm32SpsBleRxBuff, (char*)ack)==NULL)
 			 res = IHU_FAILURE;
 		else
 			 res = IHU_SUCCESS;
@@ -67,9 +67,9 @@ void BLE_UART_clear_receive_buffer(void)
 	uint16_t k;
 	for(k=0;k<IHU_BSP_STM32_SPS_BLE_REC_MAX_LEN;k++)      //将缓存内容清零
 	{
-		BSP_STM32_SPS_BLE_R_Buff[k] = 0x00;
+		zIhuBspStm32SpsBleRxBuff[k] = 0x00;
 	}
-  BSP_STM32_SPS_BLE_R_Count = 0;               //接收字符串的起始存储位置
+  zIhuBspStm32SpsBleRxCount = 0;               //接收字符串的起始存储位置
 }
 
 /*******************************************************************************
@@ -124,8 +124,8 @@ OPSTAT BLE_HC05_UART_fetch_mac_add_procedure(void)
 	//查阅版本
 	BLE_UART_clear_receive_buffer();
 	if (BLE_UART_send_AT_command((uint8_t*)"AT+VERSION?", (uint8_t*)"OK", 2) == IHU_SUCCESS) {
-		if(strstr((const char*)BSP_STM32_SPS_BLE_R_Buff, "+VERSION:") != NULL){
-			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: BLE Version = [%s]!\n", BSP_STM32_SPS_BLE_R_Buff);
+		if(strstr((const char*)zIhuBspStm32SpsBleRxBuff, "+VERSION:") != NULL){
+			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: BLE Version = [%s]!\n", zIhuBspStm32SpsBleRxBuff);
 		}
 	}else{
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
@@ -136,8 +136,8 @@ OPSTAT BLE_HC05_UART_fetch_mac_add_procedure(void)
 	//获取地址
 	BLE_UART_clear_receive_buffer();
 	if (BLE_UART_send_AT_command((uint8_t*)"AT+ADDR?", (uint8_t*)"OK", 2) == IHU_SUCCESS) {
-		if(strstr((const char*)BSP_STM32_SPS_BLE_R_Buff, "+ADDR::") != NULL){
-			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: BLE Address = [%s]!\n", BSP_STM32_SPS_BLE_R_Buff);
+		if(strstr((const char*)zIhuBspStm32SpsBleRxBuff, "+ADDR::") != NULL){
+			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: BLE Address = [%s]!\n", zIhuBspStm32SpsBleRxBuff);
 		}
 	}else{
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
