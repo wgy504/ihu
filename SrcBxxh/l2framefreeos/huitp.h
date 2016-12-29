@@ -1328,9 +1328,8 @@ typedef enum
 	HUITP_IEID_uni_ccl_state_min                    = 0x4C00, 
 	HUITP_IEID_uni_ccl_general_value1               = 0x4C00, 
 	HUITP_IEID_uni_ccl_general_value2               = 0x4C01, 
-	HUITP_IEID_uni_ccl_general_value3               = 0x4C02, 
-	HUITP_IEID_uni_ccl_general_value4               = 0x4C03,
-	HUITP_IEID_uni_ccl_report_type                  = 0x4C04,
+	HUITP_IEID_uni_ccl_dcmi_value                   = 0x4C02,
+	HUITP_IEID_uni_ccl_report_type                  = 0x4C03,
 	
 	HUITP_IEID_uni_ccl_state_max,
 
@@ -2440,7 +2439,7 @@ typedef struct StrIe_HUITP_IEID_uni_ccl_bat_value
 {
 	UINT16 ieId;
 	UINT16 ieLen;
-	UINT8  batFormat;
+	UINT8  dataFormat;
 	UINT16 batValue;
 }StrIe_HUITP_IEID_uni_ccl_bat_value_t;
 
@@ -2556,25 +2555,16 @@ typedef struct StrIe_HUITP_IEID_uni_ccl_general_value2
 	UINT16 generalValue2;
 }StrIe_HUITP_IEID_uni_ccl_general_value2_t;
 
-//HUITP_IEID_uni_ccl_general_value3               = 0x4C02,
-typedef struct StrIe_HUITP_IEID_uni_ccl_general_value3
+//HUITP_IEID_uni_ccl_dcmi_value                  = 0x4C02,
+typedef struct StrIe_HUITP_IEID_uni_ccl_dcmi_value
 {
 	UINT16 ieId;
 	UINT16 ieLen;
 	UINT8  dataFormat;
-	UINT16 generalValue3;
-}StrIe_HUITP_IEID_uni_ccl_general_value3_t;
+	UINT16 dcmiValue;
+}StrIe_HUITP_IEID_uni_ccl_dcmi_value_t;
 
-//HUITP_IEID_uni_ccl_general_value4               = 0x4C03,
-typedef struct StrIe_HUITP_IEID_uni_ccl_general_value4
-{
-	UINT16 ieId;
-	UINT16 ieLen;
-	UINT8  dataFormat;
-	UINT16 generalValue4;
-}StrIe_HUITP_IEID_uni_ccl_general_value4_t;
-
-//HUITP_IEID_uni_ccl_report_type                 = 0x4C04,
+//HUITP_IEID_uni_ccl_report_type                 = 0x4C03,
 typedef struct StrIe_HUITP_IEID_uni_ccl_report_type
 {
 	UINT16 ieId;
@@ -6977,8 +6967,8 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_resp
 	StrIe_HUITP_IEID_uni_ccl_bat_value_t batValue;
 	StrIe_HUITP_IEID_uni_ccl_general_value1_t general1Value;
 	StrIe_HUITP_IEID_uni_ccl_general_value2_t general2Value;
-	StrIe_HUITP_IEID_uni_ccl_general_value3_t general3Value;
-	StrIe_HUITP_IEID_uni_ccl_general_value4_t general4Value;
+	StrIe_HUITP_IEID_uni_ccl_rssi_value_t rssiValue;
+	StrIe_HUITP_IEID_uni_ccl_dcmi_value_t dcmiValue;
 	StrIe_HUITP_IEID_uni_ccl_report_type_t reportType;
 }StrMsg_HUITP_MSGID_uni_ccl_state_resp_t;
 
@@ -7000,8 +6990,8 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_report
 	StrIe_HUITP_IEID_uni_ccl_bat_value_t batValue;
 	StrIe_HUITP_IEID_uni_ccl_general_value1_t general1Value;
 	StrIe_HUITP_IEID_uni_ccl_general_value2_t general2Value;
-	StrIe_HUITP_IEID_uni_ccl_general_value3_t general3Value;
-	StrIe_HUITP_IEID_uni_ccl_general_value4_t general4Value;
+	StrIe_HUITP_IEID_uni_ccl_rssi_value_t rssiValue;
+	StrIe_HUITP_IEID_uni_ccl_dcmi_value_t dcmiValue;
 	StrIe_HUITP_IEID_uni_ccl_report_type_t reportType;
 }StrMsg_HUITP_MSGID_uni_ccl_state_report_t;
 

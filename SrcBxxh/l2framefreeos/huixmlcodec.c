@@ -173,12 +173,14 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 	UINT32 index=0, msgId=0, msgLen=0;
 	char tmp[5] = "";
 	UINT8 tt[HUITP_MSG_BUF_BODY_ONLY_MAX_LEN];
-	int i = 0, ret = 0, dif = 0;
-	char *pIndexT1, *pIndexT2, pIndexT3;  //临时位置
+	//int ret = 0;
+	int i = 0, dif = 0;
+	char *pIndexT1, *pIndexT2;  //临时位置
 	UINT8 msgType;
 	UINT64 msgCreateTime;
 	char msgToUser[IHU_FILE_NAME_LENGTH_MAX], msgFromUser[IHU_FILE_NAME_LENGTH_MAX], msgFuncFlag[IHU_FILE_NAME_LENGTH_MAX];
 	char msgTmp[IHU_FILE_NAME_LENGTH_MAX];
+	char msgContent[HUITP_MSG_BUF_WITH_HEAD_MAX_LEN];
 	
 	//检查参数
 	if (rcv == NULL){
@@ -260,8 +262,9 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 	while(pIndexT1 < pIndexT2){
 		msgTmp[i++] = *pIndexT1++;
 	}
-	//暂时不判定，存下即可，以后再完善
 	msgCreateTime = strtoul(msgTmp, NULL, 10); //10进制，并非16进制
+	//暂时不判定，存下即可，以后再完善
+	if (msgCreateTime == 0) {}
 	
 	//寻找<msgType>
 	pIndexT1 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_MSG_TYPE_L);
@@ -277,7 +280,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 	pIndexT1 += strlen(HUITP_MSG_HUIXML_CONSTANT_MSG_TYPE_L); //去掉头部
 	while(pIndexT1 < pIndexT2){
 		msgTmp[i++] = *pIndexT1++;
-	}	
+	}
 	if (strcmp(msgTmp, HUITP_MSG_HUIXML_MSGTYPE_DEVICE_REPORT_STRING) ==0) msgType = HUITP_MSG_HUIXML_MSGTYPE_DEVICE_REPORT_ID;
 	else if (strcmp(msgTmp, HUITP_MSG_HUIXML_MSGTYPE_DEVICE_CONTROL_STRING) ==0) msgType = HUITP_MSG_HUIXML_MSGTYPE_DEVICE_CONTROL_ID;
 	else if (strcmp(msgTmp, HUITP_MSG_HUIXML_MSGTYPE_HEAT_BEAT_STRING) ==0) msgType = HUITP_MSG_HUIXML_MSGTYPE_HEAT_BEAT_ID;
@@ -289,17 +292,52 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;	
 	}
+	//暂时不用，存下即可，以后再完善	
+	if (msgType == HUITP_MSG_HUIXML_MSGTYPE_DEVICE_REPORT_ID){}
 
-
+	//寻找<funcFlag>
+	pIndexT1 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_FUNC_FLAG_L);
+	pIndexT2 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_FUNC_FLAG_R);
+	dif = pIndexT2 - pIndexT1  - strlen(HUITP_MSG_HUIXML_CONSTANT_FUNC_FLAG_L);
+	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_FUNC_FLAG_L))>= pIndexT2) || (dif > IHU_FILE_NAME_LENGTH_MAX)){
+		IhuErrorPrint("SPSVIRGO: Received message error, invalid format!\n");
+		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+		return IHU_FAILURE;
+	}
+	memset(msgFuncFlag, 0, sizeof(msgFuncFlag));
+	i = 0;
+	pIndexT1 += strlen(HUITP_MSG_HUIXML_CONSTANT_FUNC_FLAG_L); //去掉头部
+	while(pIndexT1 < pIndexT2){
+		msgFuncFlag[i++] = *pIndexT1++;
+	}
+	//msgFuncFlag的用途未来待定
+	if (msgFuncFlag[0] == '0') {}
 	
-	//解出msgId/msgLen
+	//寻找<Content>：长度必须是偶数
+	pIndexT1 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_CONTENT_L);
+	pIndexT2 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_CONTENT_R);
+	dif = pIndexT2 - pIndexT1  - strlen(HUITP_MSG_HUIXML_CONSTANT_CONTENT_L);
+	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_CONTENT_L))>= pIndexT2) ||\
+		(dif > HUITP_MSG_BUF_WITH_HEAD_MAX_LEN) || (dif != ((dif/2)*2))){
+		IhuErrorPrint("SPSVIRGO: Received message error, invalid format!\n");
+		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+		return IHU_FAILURE;
+	}
+	memset(msgContent, 0, sizeof(msgContent));
+	i = 0;
+	pIndexT1 += strlen(HUITP_MSG_HUIXML_CONSTANT_CONTENT_L); //去掉头部
+	while(pIndexT1 < pIndexT2){
+		msgContent[i++] = *pIndexT1++;
+	}
+		
+	//msgContent中解出msgId/msgLen
 	index = 0;
 	memset(tmp, 0, sizeof(tmp));
-	strncpy(tmp, &rcv->buf[index], 4);
+	strncpy(tmp, &msgContent[index], 4);
 	msgId = strtoul(tmp, NULL, 16);
 	index = index + 4;
 	memset(tmp, 0, sizeof(tmp));
-	strncpy(tmp, &rcv->buf[index], 4);
+	strncpy(tmp, &msgContent[index], 4);
 	msgLen = strtoul(tmp, NULL, 16);
 	if ((msgId < HUITP_MSGID_uni_min) || (msgId > HUITP_MSGID_uni_max)){
 		IhuErrorPrint("SPSVIRGO: Invalid received data msgId info!\n");
@@ -319,10 +357,10 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 	pMsgBuf->msgId.cmdId = (msgId>>8)&0xFF;
 	pMsgBuf->msgId.optId = msgId&0xFF;
 	pMsgBuf->msgLen = msgLen;
-
-	for(index = 4; index < (rcv->length)/2; index++){
+	//转码，从CHAR进制转化为16进制
+	for(index = 4; index < dif/2; index++){
 		memset(tmp, 0, sizeof(tmp));
-		strncpy(tmp, &rcv->buf[index * 2], 2);
+		strncpy(tmp, &msgContent[index * 2], 2);
 		pMsgBuf->data[index-4] = strtoul(tmp, NULL, 16) & 0xFF;
 	}
 	

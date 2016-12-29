@@ -70,6 +70,9 @@ extern OPSTAT fsm_dcmiaris_time_out(UINT8 dest_id, UINT8 src_id, void * param_pt
 extern OPSTAT fsm_dcmiaris_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_dcmiaris_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 
+extern INT16 func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value(void);
+
+
 //Local API
 OPSTAT func_dcmiaris_hw_init(void);
 void func_dcmiaris_time_out_period_scan(void);

@@ -737,6 +737,15 @@ bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_fall(void)
 		return FALSE;
 }
 
+//SLEEP&FAULT模式下扫描：扫描震
+bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_shake(void)
+{
+	if (rand()%2 == 1)
+		return TRUE;
+	else
+		return FALSE;
+}
+
 //SLEEP&FAULT模式下扫描：扫描电池
 bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_battery(void)
 {
@@ -744,6 +753,24 @@ bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_battery(void)
 		return TRUE;
 	else
 		return FALSE;
+}
+
+//SLEEP&FAULT模式下扫描：扫描温度, 数据格式HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2
+INT16 func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_temp_value(void)
+{
+	return rand()% 1000000;
+}
+
+//SLEEP&FAULT模式下扫描：扫描湿度, 数据格式HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2
+INT16 func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_humid_value(void)
+{
+	return rand()% 1000000;
+}
+
+//SLEEP&FAULT模式下扫描：扫描电量, 数据格式HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2
+INT16 func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_bat_value(void)
+{
+	return rand()% 1000000;
 }
 
 #endif

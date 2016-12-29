@@ -125,11 +125,27 @@ extern OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_i
 	extern OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv);
 #endif
 
+extern INT16 func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rssi_value(void);
+
 //Local API
 OPSTAT func_spsvirgo_hw_init(void);
 void func_spsvirgo_time_out_period_scan(void);
 
 //External API
+extern bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_door_open(UINT8 doorid);
+extern bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open(UINT8 lockid);
+extern bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_water(void);
+extern bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_fall(void);
+extern bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_smoke(void);
+extern bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_shake(void);
+extern bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_battery(void);
+extern INT16 func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_temp_value(void);
+extern INT16 func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_humid_value(void);
+extern INT16 func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_bat_value(void);
+extern INT16 func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv1_value(void);
+extern INT16 func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv2_value(void);
+extern INT16 func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value(void);
+
 extern void ihu_vmmw_gprsmod_gsm_all_working_selection(UINT8 option, UINT8 sub_opt);
 
 #endif /* L2FRAME_L2SPSVIRGO_H_ */
