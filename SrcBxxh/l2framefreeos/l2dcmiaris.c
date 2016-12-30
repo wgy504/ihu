@@ -301,7 +301,7 @@ OPSTAT fsm_dcmiaris_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 }
 
 //SLEEP&FAULT模式下扫描：扫描DCMI, 数据格式HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2
-INT16 func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value(void)
+INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value(void)
 {
 	return rand()% 1000000;
 }

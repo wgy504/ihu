@@ -3,7 +3,7 @@
  *
  * @file mod_gprs.c
  *
- * @brief GPRS module control
+ * @brief GPRSMOD module control, (VMBMWC => Virtual Machine Based MiddleWare Components) 
  *
  * BXXH team
  * Created by ZJL, 20161027
@@ -21,14 +21,8 @@ extern int16_t 	zIhuBspStm32SpsGprsRxLen;
 extern uint8_t 	zIhuBspStm32SpsPrintRxBuff[IHU_BSP_STM32_SPS_PRINT_REC_MAX_LEN];			//串口1数据缓存区
 
 //待研究，以下全局变量是否必要
-//跟时钟/USART相关的本地变量
-uint8_t 	GPRS_UART_TIMER_WAIT_Duration=0;        		//传递等待时长
-uint16_t 	GPRS_UART_TIMER_DELAY_Count=0;      				//延时变量
-uint8_t 	GPRS_UART_TIMER_START_Flag=0;								//定时器0延时启动计数器
 uint8_t 	GPRS_UART_TIMER_RECON_Count=0;							//链路重连接的时长计数器，防止超时
-uint8_t 	Time_UART_PRINT=0;  												//串口1计时器
 uint16_t 	SPS_PRINT_RX_STA;
-const char *GPRS_UART_string = "AT+CIPSTART=\"TCP\",\"14.125.48.205\",9015";//IP登录服务器,需要根据自己的IP和端口做修改
 
 /*******************************************************************************
 *
@@ -46,14 +40,20 @@ const char *GPRS_UART_string = "AT+CIPSTART=\"TCP\",\"14.125.48.205\",9015";//IP
 * 输入   : 
 * 输出   : 
 * 返回   : 
-* 注意   : 
+* 注意   : SIM800A测试过，其它模块需要待测试改进，AT CMD可能不太一样
 *******************************************************************************/
-OPSTAT ihu_vmmw_gprsmod_call_perform(char *callNumber)
+OPSTAT ihu_vmmw_gprsmod_call_perform(char *calledNumber)
 {	
 	uint8_t temp[50];
-	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: @@@@ SIM800A CALL TEST @@@@!\n");		
-	uint8_t sub_opt = 1;
 	
+	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: CALL Session starting...!\n");	
+	//参数检查
+	if ((strlen(calledNumber) < 8) || (strlen(calledNumber) > 16)){
+		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		IhuErrorPrint("VMFO: invalid called number or other parameter received!\n");
+		return IHU_FAILURE;				
+	}
+		
 	//会话前的初始化
 	if (func_gprsmod_module_session_init() == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
@@ -61,84 +61,97 @@ OPSTAT ihu_vmmw_gprsmod_call_perform(char *callNumber)
 		return IHU_FAILURE;				
 	}
 	
-	switch(sub_opt)
+	//拨号
+	memset(temp, 0, sizeof(temp));
+	strcpy((char*)temp, "ATD");
+	strcat((char*)temp, calledNumber);
+	strcat((char*)temp, ";");
+	if(func_gprsmod_send_AT_command(temp, (uint8_t *)"OK", 8) == IHU_SUCCESS)
 	{
-		//有来电
-		case 0:
-			if(strstr((const char*)zIhuBspStm32SpsGprsRxBuff, "RING"))
-			{
-				func_gprsmod_clear_receive_buffer();
-				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: CALL Coming\n");
-			}
-		break;
-			
-		//接听	
-		case 1:
-			if(func_gprsmod_send_AT_command("ATA", (uint8_t *)"OK", 2) == IHU_SUCCESS)
-			{
-				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Hand-on successful\n");
-			}
-			else{
-				zIhuRunErrCnt[TASK_ID_VMFO]++;
-				IhuErrorPrint("VMFO: SIM800A Call hand-off failure!\n");
-				return IHU_FAILURE;		
-			}
-		break;
-		
-		//挂断
-		case 2:if(func_gprsmod_send_AT_command("ATH", (uint8_t *)"OK", 2) == IHU_SUCCESS)
-			{
-				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Hand-off successful\n");
-			}else{
-				zIhuRunErrCnt[TASK_ID_VMFO]++;
-				IhuErrorPrint("VMFO: SIM800A Call hand-on failure!\n");
-				return IHU_FAILURE;				
-			}
-		break;
-		
-		//拨号
-		case 3:
-			memset(temp, 0, sizeof(temp));
-			strcpy((char*)temp, "ATD");
-			strcat((char*)temp, IHU_VMMW_GPRSMOD_TEST_CALLED_NUMBER);
-			strcat((char*)temp, ";");
-			//temp[strlen(temp)]= (uint8_t)';';
-			if(func_gprsmod_send_AT_command(temp, (uint8_t *)"OK", 8) == IHU_SUCCESS)
-			{
-				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Called number = %s, Call successful!\n", IHU_VMMW_GPRSMOD_TEST_CALLED_NUMBER);
-			}
-			else
-			{
-				zIhuRunErrCnt[TASK_ID_VMFO]++;
-				IhuErrorPrint("VMFO: Called failure, Please re-dial!\n");
-				return IHU_FAILURE;						
-			}
-		break;
-			
-		//发送DTMF
-		case 4:
-			memset(temp, 0, sizeof(temp));
-			strcpy((char*)temp, "AT+VTS=");
-			strcat((char*)temp, IHU_VMMW_GPRSMOD_TEST_DTMF_KEY);
-			if (func_gprsmod_send_AT_command(temp, (uint8_t *)"OK",3) != IHU_SUCCESS)
-			{
-				zIhuRunErrCnt[TASK_ID_VMFO]++;
-				IhuErrorPrint("VMFO: SIM800A Call, DTMF failure!\n");
-				return IHU_FAILURE;		
-			}
-			if(strstr((const char*)zIhuBspStm32SpsGprsRxBuff,"DTMF:"))
-			{
-				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Peer press key-down: %s\n", IHU_VMMW_GPRSMOD_TEST_DTMF_KEY);
-				func_gprsmod_clear_receive_buffer();
-			}
-		break;
-		
-		default: 
-			zIhuRunErrCnt[TASK_ID_VMFO]++;
-			IhuErrorPrint("VMFO: Not supportted DTMF functions!\n");
-			return IHU_FAILURE;
-		//break;
+		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Called number = %s, Call successful!\n", calledNumber);
 	}
+	else
+	{
+		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		IhuErrorPrint("VMFO: Called failure, Please re-dial!\n");
+		return IHU_FAILURE;						
+	}
+		
+	//发送DTMF
+	memset(temp, 0, sizeof(temp));
+	strcpy((char*)temp, "AT+VTS=");
+	strcat((char*)temp, "X");
+	if (func_gprsmod_send_AT_command(temp, (uint8_t *)"OK", 3) != IHU_SUCCESS)
+	{
+		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		IhuErrorPrint("VMFO: SIM800A Call, DTMF failure!\n");
+		return IHU_FAILURE;		
+	}
+	if(strstr((const char*)zIhuBspStm32SpsGprsRxBuff,"DTMF:"))
+	{
+		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Peer press key-down: X\n");
+		func_gprsmod_clear_receive_buffer();
+	}
+				
+	//挂断
+	if(func_gprsmod_send_AT_command("ATH", (uint8_t *)"OK", 2) == IHU_SUCCESS)
+	{
+		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Hand-off successful\n");
+	}else{
+		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		IhuErrorPrint("VMFO: SIM800A Call hand-on failure!\n");
+		return IHU_FAILURE;				
+	}
+	func_gprsmod_clear_receive_buffer();
+		
+	//等待是否有来电：最长10s等待时间
+	func_gprsmod_clear_receive_buffer();
+	ihu_sleep(10);
+	if(strstr((const char*)zIhuBspStm32SpsGprsRxBuff, "RING"))
+	{
+		func_gprsmod_clear_receive_buffer();
+		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: CALL Coming\n");
+	}
+
+	//接听
+	if(func_gprsmod_send_AT_command("ATA", (uint8_t *)"OK", 2) == IHU_SUCCESS)
+	{
+		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Hand-on successful\n");
+	}
+	else{
+		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		IhuErrorPrint("VMFO: SIM800A Call hand-off failure!\n");
+		return IHU_FAILURE;		
+	}	
+	
+	//发送DTMF
+	memset(temp, 0, sizeof(temp));
+	strcpy((char*)temp, "AT+VTS=");
+	strcat((char*)temp, "X");
+	if (func_gprsmod_send_AT_command(temp, (uint8_t *)"OK",3) != IHU_SUCCESS)
+	{
+		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		IhuErrorPrint("VMFO: SIM800A Call, DTMF failure!\n");
+		return IHU_FAILURE;		
+	}
+	if(strstr((const char*)zIhuBspStm32SpsGprsRxBuff,"DTMF:"))
+	{
+		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Peer press key-down: X\n");
+		func_gprsmod_clear_receive_buffer();
+	}	
+	
+	//挂断
+	if(func_gprsmod_send_AT_command("ATH", (uint8_t *)"OK", 2) == IHU_SUCCESS)
+	{
+		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Hand-off successful\n");
+	}else{
+		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		IhuErrorPrint("VMFO: SIM800A Call hand-on failure!\n");
+		return IHU_FAILURE;				
+	}
+	func_gprsmod_clear_receive_buffer();
+	
+	//返回
 	return IHU_SUCCESS;
 }
 
@@ -149,22 +162,30 @@ OPSTAT ihu_vmmw_gprsmod_call_perform(char *callNumber)
 * 输入   : 
 * 输出   : 
 * 返回   : 
-* 注意   : 
+* 注意   : SIM800A测试过，其它模块需要待测试改进，AT CMD可能不太一样
 *******************************************************************************/
-OPSTAT ihu_vmmw_gprsmod_sms_transmit_with_confirm(char *input)
+OPSTAT ihu_vmmw_gprsmod_sms_transmit_with_confirm(char *calledNumber, char *input)
 {
 	uint8_t temp[50];
 	uint8_t loc=0;
+	uint8_t *p,*p1;
 
+	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: SMS Session starting...!\n");
+	//参数检查
+	if ((strlen(calledNumber) < 8) || (strlen(calledNumber) > 16) || (input == NULL)){
+		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		IhuErrorPrint("VMFO: invalid called number or other parameter received!\n");
+		return IHU_FAILURE;				
+	}
+	
 	//会话前的初始化
 	if (func_gprsmod_module_session_init() == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Init GPRSMOD hardware/software before sessioin failure!\n");
-		return IHU_FAILURE;				
+		return IHU_FAILURE;
 	}
 	
-	//设置短信发送模式
-	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: @@@@ SMS TEST @@@@!\n");
+	//设置短信发送模式	
 	if (func_gprsmod_send_AT_command("AT+CMGF=1", (uint8_t *)"OK", 2) == IHU_SUCCESS){
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Set SMS Send mode correctly!\n");
 	}
@@ -194,10 +215,10 @@ OPSTAT ihu_vmmw_gprsmod_sms_transmit_with_confirm(char *input)
 		return IHU_FAILURE;
 	}
 	
-	//Step0: 设置短信中心号
+	//设置短信中心号
 	memset(temp, 0, sizeof(temp));
 	strcpy((char*)temp,(const char *)"AT+CSCA=\"");
-	strcat((char*)temp, IHU_GPRS_SMS_CENTER_NUMBER);
+	strcat((char*)temp, IHU_VMMW_GPRSMOD_SMS_CENTER_NUMBER);
 	strcat((char*)temp, "\"");
 	if(func_gprsmod_send_AT_command(temp, (uint8_t *)"OK", 2) == IHU_SUCCESS){
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Set SMS center successful!\n");
@@ -208,23 +229,25 @@ OPSTAT ihu_vmmw_gprsmod_sms_transmit_with_confirm(char *input)
 		return IHU_FAILURE;		
 	}
 		
-	//Step1: Check SMS
+	//检查是否已经收到短信
 	if(strstr((const char*)zIhuBspStm32SpsGprsRxBuff, "+CMTI:"))
 	{
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO:  New SMS! SMS Position: [%s]\n", zIhuBspStm32SpsGprsRxBuff);
 		func_gprsmod_clear_receive_buffer();
 	}
 
-	//Step2: 发送短信
+	//发送短信
 	memset(temp, 0, sizeof(temp));
 	strcpy((char*)temp,(const char *)"AT+CMGS=\"");
-	strcat((char*)temp, IHU_GPRS_SMS_TARGET_NUMBER);
+	strcat((char*)temp, calledNumber);
 	strcat((char*)temp, "\"");
-	func_gprsmod_send_AT_command(temp,">",2);//发送接收方号码
-	strcpy((char*)temp, IHU_VMMW_GPRSMOD_TEST_SMS_CONTENT);
+	func_gprsmod_send_AT_command(temp, ">", 2);//发送接收方号码
+	memset(temp, 0, sizeof(temp));
+	strncpy((char*)temp, input, (sizeof(input) <= (sizeof(temp)-3))?sizeof(input):(sizeof(temp)-3));
 	loc = strlen((const char*)temp);
-	temp[loc]='\32';
-	temp[loc+1]=0x0D;	//Return
+	temp[loc]= IHU_VMWM_GPRSMOD_STRING_CHAR_EOF;  //0x1A, EOF
+	//0x0D, Return，其实这里也许不是很必要多加一个回车，因为func_gprsmod_send_AT_command里面会自动带LR的
+	temp[loc+1]= IHU_VMWM_GPRSMOD_STRING_CHAR_CR;	
 	temp[loc+2]='\0';
 	//发送短信内容
 	if(func_gprsmod_send_AT_command(temp, (uint8_t *)"OK", 5) == IHU_SUCCESS){
@@ -236,42 +259,49 @@ OPSTAT ihu_vmmw_gprsmod_sms_transmit_with_confirm(char *input)
 		return IHU_FAILURE;		
 	}
 
-//	//Step3: 查看短信
-//	IhuDebugPrint("VMFO: Inquery SMS\n");
-//	zIhuBspStm32SpsPrintRxBuff[len]='\0';//添加结束符;
-//	p=(uint8_t*)strstr((const char*)zIhuBspStm32SpsPrintRxBuff, ": ");
-//	strcpy((char*)temp,(const char*)"AT+CMGR=");
-//	loc=strlen((const char*)temp);
-//	strcpy((char*)(&temp[loc]),(const char*)(p+2));
-//	loc=strlen((const char*)temp);
-//	if(func_gprsmod_send_AT_command(temp,"OK",5)==0)
-//	{
-//		p=(uint8_t*)strstr((const char*)(zIhuBspStm32SpsGprsRxBuff+2),"\r\n");
-//		p1=(uint8_t*)strstr((const char*)(p+2),"\r\n");
-//		loc=p1-p;
-//		IhuDebugPrint("VMFO: SMS Content: ");
-//		func_gprsmod_print_send_len((char*)p+2,loc);
-//	}
-//	func_gprsmod_clear_receive_buffer();
+	//查看短信
+	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Inquery SMS.\n");
+	memset(temp, 0, sizeof(temp));
+	strcpy((char*)temp,(const char*)"AT+CMGR=1");  //固定读取第一条SMS
+	if(func_gprsmod_send_AT_command(temp, "OK", 5)==0)
+	{
+		p=(uint8_t*)strstr((const char*)(zIhuBspStm32SpsGprsRxBuff+2),"\r\n");
+		p1=(uint8_t*)strstr((const char*)(p+2),"\r\n");
+		//没找到，不报错，这也很正常的
+		if ((p == NULL) || (p1 == NULL) || (p>=p1)){
+			return IHU_SUCCESS;
+		}
+		loc=p1-p;
+		memset(temp, 0, sizeof(temp));
+		memcpy((char*)temp, (char*)p+2, loc);
+		IhuDebugPrint("VMFO: SMS received content: %s\n", temp);
+	}
+	func_gprsmod_clear_receive_buffer();
 	return IHU_SUCCESS;
 }
 
 
-
 /*******************************************************************************
-* 函数名 : ihu_vmmw_gprsmod_tcp_data_transmit_with_receive
+* 函数名 : ihu_vmmw_gprsmod_http_data_transmit_with_receive
 * 描述   : GPRS数据发送与接收代码
 * 输入   : 
 * 输出   : 
 * 返回   : 
 * 注意   :  为了保持连接，每空闲隔10秒发送一次心跳
 *******************************************************************************/
-OPSTAT ihu_vmmw_gprsmod_tcp_data_transmit_with_receive(char *input)
+OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input)
 {	
-	uint8_t temp[200];
-	IhuDebugPrint("VMFO: @@@@  GPRS TEST  @@@@\n");
-	uint8_t sub_opt = 3;
-
+	uint8_t temp[IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN+1];	
+	uint8_t *p1,*p2;
+	
+	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: HTTP Session starting...!\n");
+	//参数检查
+	if (input == NULL){
+		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		IhuErrorPrint("VMFO: invalid called number or other parameter received!\n");
+		return IHU_FAILURE;				
+	}
+	
 	//会话前的初始化
 	if (func_gprsmod_module_session_init() == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
@@ -279,97 +309,204 @@ OPSTAT ihu_vmmw_gprsmod_tcp_data_transmit_with_receive(char *input)
 		return IHU_FAILURE;				
 	}
 	
-	switch(sub_opt)
+	//检查是否有下发的数据：由于前面有初始化结果，一般不可能出现
+	if(strstr((const char*)zIhuBspStm32SpsGprsRxBuff, "+IPD"))//判断上位机是否有数据下发
 	{
-		//检查下发的数据
-		case 0:        
-			if(strstr((const char*)zIhuBspStm32SpsGprsRxBuff, "+IPD"))//判断上位机是否有数据下发
-			{
-				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: New content!\n");
-				//p1=(uint8_t*)strstr((const char*)zIhuBspStm32SpsGprsRxBuff,",");
-				//p2=(uint8_t*)strstr((const char*)zIhuBspStm32SpsGprsRxBuff,":");
-				//func_gprsmod_print_send_len((char*)(p2+1),func_gprsmod_convert_str_to_int((p1+1),(p2-p1-1)));
-				func_gprsmod_clear_receive_buffer();
-			}
-		break;
-			
-		//设置配置
-		case 1: 
+		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: New content received!\n");
+		p1=(uint8_t*)strstr((const char*)zIhuBspStm32SpsGprsRxBuff,",");
+		p2=(uint8_t*)strstr((const char*)zIhuBspStm32SpsGprsRxBuff,":");
+		if ((p1!=NULL) && (p2!=NULL) && (p1<p2)){
 			memset(temp, 0, sizeof(temp));
-			strcpy((char*)&temp, (const char*)"AT+CIPSTART=");
-			strcat((char*)&temp, IHU_VMMW_GPRSMOD_STREAM_CHOICE);
-			func_gprsmod_send_AT_command("AT+CIPCLOSE=1", (uint8_t*)"CLOSE OK", 2);	//关闭连接
-			func_gprsmod_send_AT_command("AT+CIPSHUT", (uint8_t*)"SHUT OK", 2);		//关闭移动场景
-			func_gprsmod_send_AT_command("AT+CGCLASS=\"B\"", (uint8_t*)"OK", 2);//设置GPRS移动台类别为B,支持包交换和数据交换 
-			func_gprsmod_send_AT_command("AT+CGDCONT=1,\"IP\",\"CMNET\"", (uint8_t*)"OK",2);//设置PDP上下文,互联网接协议,接入点等信息
-			func_gprsmod_send_AT_command("AT+CGATT=1", (uint8_t*)"OK", 2);//附着GPRS业务
-			func_gprsmod_send_AT_command("AT+CIPCSGP=1,\"CMNET\"", (uint8_t*)"OK", 2);//设置为GPRS连接模式
-			func_gprsmod_send_AT_command("AT+CIPHEAD=1", (uint8_t*)"OK", 2);//设置接收数据显示IP头(方便判断数据来源,仅在单路连接有效)
-			func_gprsmod_send_AT_command("AT+CIPMUX=0", (uint8_t*)"OK", 2);//设置单路连接
-			if(func_gprsmod_send_AT_command(temp, (uint8_t*)"OK", 2 ) == IHU_SUCCESS)//发起连接
-			{
-				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: New connecting!\n");
-			}else
-			{
-				zIhuRunErrCnt[TASK_ID_VMFO]++;
-				IhuErrorPrint("VMFO: Set GPRS parameter error!\n");
-				return IHU_FAILURE;
-			}
-		break;
-			
-		//发送内容	
-		case 2:
-			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Begin to send..........!\n");
-			if(func_gprsmod_send_AT_command("AT+CIPSEND", (uint8_t*)">", 2) == IHU_SUCCESS)
-			{
-				memset(temp, 0, sizeof(temp));
-				strcpy((char*)temp, IHU_VMMW_GPRSMOD_STEAM_CONTENT);
-				if(func_gprsmod_send_AT_command(temp, (uint8_t*)"SEND OK", 8) == IHU_SUCCESS)
-				{ 								
-					if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Send successful!\n");
-				}else
-				{
-					zIhuRunErrCnt[TASK_ID_VMFO]++;
-					IhuErrorPrint("VMFO: GPRS Send failure 1!\n");
-					return IHU_FAILURE;
-				}
-			}
-			else
-			{
-				ihu_l1hd_sps_gprs_send_data((uint8_t *)0X1B, 1);//ESC,取消发送
-				zIhuRunErrCnt[TASK_ID_VMFO]++;
-				IhuErrorPrint("VMFO: GPRS Send failure2!\n");
-				return IHU_FAILURE;
-			}
-		break;
-			
-		//发送结束
-		case 3:
-			if(func_gprsmod_send_AT_command("AT+CIPSEND", (uint8_t*)">", 2)== IHU_SUCCESS)
-			{
-				ihu_l1hd_sps_gprs_send_data((uint8_t *)0x00, 1);
-				ihu_l1hd_sps_gprs_send_data((uint8_t *)0X1A, 1);//CTRL+Z,结束数据发送,启动一次传输								
-				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Heart-beat successful!\n");		 
-			}else
-			{
-				ihu_l1hd_sps_gprs_send_data((uint8_t *)0X1B, 1);//ESC,取消发送
-				zIhuRunErrCnt[TASK_ID_VMFO]++;
-				IhuErrorPrint("VMFO: GPRS Send failure3!\n");
-				return IHU_FAILURE;
-			}
-		break;
-		
-		//退出	
-		case 4:
-			func_gprsmod_send_AT_command("AT+CIPCLOSE=1", (uint8_t*)"CLOSE OK", 5);	//关闭连接
-			func_gprsmod_send_AT_command("AT+CIPSHUT", (uint8_t*)"SHUT OK", 5);		//关闭移动场景
-			return 1;
+			memcpy(temp, p1+1, (p2-p1-1<sizeof(temp)?(p2-p1-1):sizeof(temp)));
+			//这里采用%x打印数据块可能比较好，但特别麻烦，反正就是打印下，无所谓
+			IhuDebugPrint("VMFO: received data in char = [%s]\n", temp); 
+		}
+		func_gprsmod_clear_receive_buffer();
 	}
+		
+	//设置配置
+	func_gprsmod_send_AT_command("AT+CIPCLOSE=1", (uint8_t*)"CLOSE OK", 2);	//关闭连接
+	func_gprsmod_send_AT_command("AT+CIPSHUT", (uint8_t*)"SHUT OK", 2);		//关闭移动场景
+	func_gprsmod_send_AT_command("AT+CGCLASS=\"B\"", (uint8_t*)"OK", 2);//设置GPRS移动台类别为B,支持包交换和数据交换 
+	func_gprsmod_send_AT_command("AT+CGDCONT=1,\"IP\",\"CMNET\"", (uint8_t*)"OK",2);//设置PDP上下文,互联网接协议,接入点等信息
+	func_gprsmod_send_AT_command("AT+CGATT=1", (uint8_t*)"OK", 2);//附着GPRS业务
+	func_gprsmod_send_AT_command("AT+CIPCSGP=1,\"CMNET\"", (uint8_t*)"OK", 2);//设置为GPRS连接模式
+	func_gprsmod_send_AT_command("AT+CIPHEAD=1", (uint8_t*)"OK", 2);//设置接收数据显示IP头(方便判断数据来源,仅在单路连接有效)
+	func_gprsmod_send_AT_command("AT+CIPMUX=0", (uint8_t*)"OK", 2);//设置单路连接
+	func_gprsmod_send_AT_command("AT+SAPBR=3,1,\"CONTYPE\",\"GPRS\"", (uint8_t*)"OK", 2); //设置GPRS/HTTP工作模式，打开承载
+	func_gprsmod_send_AT_command("AT+SAPBR=3,1,\"APN\",\"CMNET\"", (uint8_t*)"OK", 2); //设置GPRS/HTTP工作模式
+	func_gprsmod_send_AT_command("AT+SAPBR=1,1", (uint8_t*)"OK", 2); //设置GPRS/HTTP工作模式
+	
+	//发送内容=>POST
+	func_gprsmod_send_AT_command("AT+HTTPINIT", (uint8_t*)"OK", 2); //设置GPRS/HTTP工作模式
+	func_gprsmod_send_AT_command("AT+HTTPPARA=\"CID\",1", (uint8_t*)"OK", 2); //设置GPRS/HTTP工作模式，设置承载上下文标识
+	func_gprsmod_send_AT_command("AT+HTTPPARA=\"URL\",\"116.228.221.51:7015\"", (uint8_t*)"OK", 2); //设置GPRS/HTTP工作模式
+
+	func_gprsmod_send_AT_command("AT+HTTPDATA=10,10000", (uint8_t*)"OK", 2); //设置GPRS/HTTP工作模式
+	
+	func_gprsmod_send_AT_command("AT+HTTPACTION=1", (uint8_t*)"OK", 2); //设置GPRS/HTTP工作模式
+	
+	
+	
+	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Begin to send..........!\n");
+	if(func_gprsmod_send_AT_command("AT+CIPSEND", (uint8_t*)">", 2) == IHU_SUCCESS)
+	{
+		memset(temp, 0, sizeof(temp));
+		strcpy((char*)temp, "THIS IS A PURE TEST!");
+		if(func_gprsmod_send_AT_command(temp, (uint8_t*)"SEND OK", 8) == IHU_SUCCESS)
+		{ 								
+			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Send successful!\n");
+		}else
+		{
+			zIhuRunErrCnt[TASK_ID_VMFO]++;
+			IhuErrorPrint("VMFO: GPRS Send failure 1!\n");
+			return IHU_FAILURE;
+		}
+	}
+	else
+	{
+		ihu_l1hd_sps_gprs_send_data((uint8_t *)0X1B, 1);//ESC,取消发送
+		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		IhuErrorPrint("VMFO: GPRS Send failure2!\n");
+		return IHU_FAILURE;
+	}
+		
+	//发送结束
+	func_gprsmod_send_AT_command("AT+HTTPTERM", (uint8_t*)"OK", 2);	//关闭HTTP连接
+	func_gprsmod_send_AT_command("AT+SAPBR=0,1", (uint8_t*)"OK", 2);	//关闭HTTP连接
+	
+	if(func_gprsmod_send_AT_command("AT+CIPSEND", (uint8_t*)">", 2)== IHU_SUCCESS)
+	{
+		ihu_l1hd_sps_gprs_send_data((uint8_t *)0x00, 1);
+		ihu_l1hd_sps_gprs_send_data((uint8_t *)0X1A, 1);//CTRL+Z,结束数据发送,启动一次传输								
+		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Heart-beat successful!\n");		 
+	}else{
+		ihu_l1hd_sps_gprs_send_data((uint8_t *)0X1B, 1);//ESC,取消发送
+		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		IhuErrorPrint("VMFO: GPRS Send failure3!\n");
+		return IHU_FAILURE;
+	}
+	
+	//退出
+	func_gprsmod_send_AT_command("AT+CIPCLOSE=1", (uint8_t*)"CLOSE OK", 5);	//关闭连接
+	func_gprsmod_send_AT_command("AT+CIPSHUT", (uint8_t*)"SHUT OK", 5);		//关闭移动场景
+
 	return IHU_SUCCESS;
 }
 
-OPSTAT ihu_vmmw_gprsmod_ftp_data_transmit_with_receive(char *input)
+OPSTAT ihu_vmmw_gprsmod_tcp_data_transmit_with_receive(char *input)
+{	
+	uint8_t temp[IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN+1];	
+	uint8_t *p1,*p2;
+	
+	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: TCP Session starting...!\n");
+	//参数检查
+	if (input == NULL){
+		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		IhuErrorPrint("VMFO: invalid called number or other parameter received!\n");
+		return IHU_FAILURE;				
+	}
+	
+	//会话前的初始化
+	if (func_gprsmod_module_session_init() == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		IhuErrorPrint("VMFO: Init GPRSMOD hardware/software before sessioin failure!\n");
+		return IHU_FAILURE;				
+	}
+
+	//检查是否有下发的数据：由于前面有初始化结果，一般不可能出现
+	if(strstr((const char*)zIhuBspStm32SpsGprsRxBuff, "+IPD"))//判断上位机是否有数据下发
+	{
+		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: New content received!\n");
+		p1=(uint8_t*)strstr((const char*)zIhuBspStm32SpsGprsRxBuff,",");
+		p2=(uint8_t*)strstr((const char*)zIhuBspStm32SpsGprsRxBuff,":");
+		if ((p1!=NULL) && (p2!=NULL) && (p1<p2)){
+			memset(temp, 0, sizeof(temp));
+			memcpy(temp, p1+1, (p2-p1-1<sizeof(temp)?(p2-p1-1):sizeof(temp)));
+			//这里采用%x打印数据块可能比较好，但特别麻烦，反正就是打印下，无所谓
+			IhuDebugPrint("VMFO: received data in char = [%s]\n", temp); 
+		}
+		func_gprsmod_clear_receive_buffer();
+	}
+		
+	//设置配置
+	func_gprsmod_send_AT_command("AT+CIPCLOSE=1", (uint8_t*)"CLOSE OK", 2);	//关闭连接
+	func_gprsmod_send_AT_command("AT+CIPSHUT", (uint8_t*)"SHUT OK", 2);		//关闭移动场景
+	func_gprsmod_send_AT_command("AT+CGCLASS=\"B\"", (uint8_t*)"OK", 2);//设置GPRS移动台类别为B,支持包交换和数据交换 
+	func_gprsmod_send_AT_command("AT+CGDCONT=1,\"IP\",\"CMNET\"", (uint8_t*)"OK",2);//设置PDP上下文,互联网接协议,接入点等信息
+	func_gprsmod_send_AT_command("AT+CGATT=1", (uint8_t*)"OK", 2);//附着GPRS业务
+	func_gprsmod_send_AT_command("AT+CIPCSGP=1,\"CMNET\"", (uint8_t*)"OK", 2);//设置为GPRS连接模式
+	func_gprsmod_send_AT_command("AT+CIPHEAD=1", (uint8_t*)"OK", 2);//设置接收数据显示IP头(方便判断数据来源,仅在单路连接有效)
+	func_gprsmod_send_AT_command("AT+CIPMUX=0", (uint8_t*)"OK", 2);//设置单路连接
+	memset(temp, 0, sizeof(temp));
+	strcpy((char*)&temp, (const char*)"AT+CIPSTART=");
+	strcat((char*)&temp, "TCP");
+	if(func_gprsmod_send_AT_command(temp, (uint8_t*)"OK", 2 ) == IHU_SUCCESS)//发起连接
+	{
+		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: New connecting!\n");
+	}else
+	{
+		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		IhuErrorPrint("VMFO: Set GPRS parameter error!\n");
+		return IHU_FAILURE;
+	}
+		
+	//发送内容	
+	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Begin to send..........!\n");
+	if(func_gprsmod_send_AT_command("AT+CIPSEND", (uint8_t*)">", 2) == IHU_SUCCESS)
+	{
+		memset(temp, 0, sizeof(temp));
+		strcpy((char*)temp, "THIS iS A PURE TEST!");
+		if(func_gprsmod_send_AT_command(temp, (uint8_t*)"SEND OK", 8) == IHU_SUCCESS)
+		{ 								
+			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Send successful!\n");
+		}else
+		{
+			zIhuRunErrCnt[TASK_ID_VMFO]++;
+			IhuErrorPrint("VMFO: GPRS Send failure 1!\n");
+			return IHU_FAILURE;
+		}
+	}
+	else
+	{
+		ihu_l1hd_sps_gprs_send_data((uint8_t *)0X1B, 1);//ESC,取消发送
+		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		IhuErrorPrint("VMFO: GPRS Send failure2!\n");
+		return IHU_FAILURE;
+	}
+		
+	//发送结束
+	if(func_gprsmod_send_AT_command("AT+CIPSEND", (uint8_t*)">", 2)== IHU_SUCCESS)
+	{
+		ihu_l1hd_sps_gprs_send_data((uint8_t *)0x00, 1);
+		ihu_l1hd_sps_gprs_send_data((uint8_t *)0X1A, 1);//CTRL+Z,结束数据发送,启动一次传输								
+		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Heart-beat successful!\n");		 
+	}else
+	{
+		ihu_l1hd_sps_gprs_send_data((uint8_t *)0X1B, 1);//ESC,取消发送
+		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		IhuErrorPrint("VMFO: GPRS Send failure3!\n");
+		return IHU_FAILURE;
+	}
+	
+	//退出	
+	func_gprsmod_send_AT_command("AT+CIPCLOSE=1", (uint8_t*)"CLOSE OK", 5);	//关闭连接
+	func_gprsmod_send_AT_command("AT+CIPSHUT", (uint8_t*)"SHUT OK", 5);		//关闭移动场景
+		
+	return IHU_SUCCESS;
+}
+
+OPSTAT ihu_vmmw_gprsmod_udp_data_transmit_with_receive(char *input)
 {
+	
+	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: UDP Session starting...!\n");
+	//参数检查
+	if (input == NULL){
+		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		IhuErrorPrint("VMFO: invalid called number or other parameter received!\n");
+		return IHU_FAILURE;				
+	}
+	
 	//会话前的初始化
 	if (func_gprsmod_module_session_init() == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
@@ -379,6 +516,40 @@ OPSTAT ihu_vmmw_gprsmod_ftp_data_transmit_with_receive(char *input)
 		
 	return IHU_SUCCESS;
 }
+
+OPSTAT ihu_vmmw_gprsmod_ftp_data_transmit_with_receive(char *input)
+{
+	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: FTP Session starting...!\n");
+	//会话前的初始化
+	if (func_gprsmod_module_session_init() == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		IhuErrorPrint("VMFO: Init GPRSMOD hardware/software before sessioin failure!\n");
+		return IHU_FAILURE;				
+	}	
+		
+	return IHU_SUCCESS;
+}
+
+OPSTAT ihu_vmmw_gprsmod_email_data_transmit_with_receive(char *input)
+{
+	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: EMAIL Session starting...!\n");
+	//参数检查
+	if (input == NULL){
+		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		IhuErrorPrint("VMFO: invalid called number or other parameter received!\n");
+		return IHU_FAILURE;				
+	}
+	
+	//会话前的初始化
+	if (func_gprsmod_module_session_init() == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		IhuErrorPrint("VMFO: Init GPRSMOD hardware/software before sessioin failure!\n");
+		return IHU_FAILURE;				
+	}	
+		
+	return IHU_SUCCESS;
+}
+
 
 /*******************************************************************************
 * 函数名 : ihu_vmmw_gprsmod_bs_position_perform
@@ -386,21 +557,21 @@ OPSTAT ihu_vmmw_gprsmod_ftp_data_transmit_with_receive(char *input)
 * 输入   : 
 * 输出   : 
 * 返回   : 
-* 注意   : 
+* 注意   : SIM800A测试过，其它模块需要待测试改进，AT CMD可能不太一样
 *******************************************************************************/
 OPSTAT ihu_vmmw_gprsmod_bs_position_perform(void)
 {
-//  uint8_t *p1, *p3;
+	//uint8_t *p1, *p3;
 	//uint8_t *p2;
 	
+	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Base Station positioning Session starting...!\n");
 	//会话前的初始化
 	if (func_gprsmod_module_session_init() == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Init GPRSMOD hardware/software before sessioin failure!\n");
 		return IHU_FAILURE;				
 	}	
-	
-	IhuDebugPrint("VMFO: @@@@@@@@@@@@@@@@@@@@@Base Station POSITON TEST@@@@@@@@@@@@@@@@@@@@@@@@@\r\n");
+		
 	IhuDebugPrint("VMFO: EXIT TEST: EXIT + ENTER\n");
 	func_gprsmod_send_AT_command("AT+SAPBR=3,1,\"Contype\",\"GPRS\"","OK",2);
 	func_gprsmod_send_AT_command("AT+SAPBR=3,1,\"APN\",\"CMNET\"","OK",2);
@@ -468,7 +639,7 @@ OPSTAT ihu_vmmw_gprsmod_bs_position_perform(void)
 * 输入   : 
 * 输出   : 
 * 返回   : 
-* 注意   : 
+* 注意   : SIM800A测试过，其它模块需要待测试改进，AT CMD可能不太一样
 *******************************************************************************/
 OPSTAT ihu_vmmw_gprsmod_tts_perform(void)
 {
@@ -478,13 +649,13 @@ OPSTAT ihu_vmmw_gprsmod_tts_perform(void)
 	uint8_t loc=0;
 	
 	//会话前的初始化
+	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: TTS Session starting...!\n");
 	if (func_gprsmod_module_session_init() == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Init GPRSMOD hardware/software before sessioin failure!\n");
 		return IHU_FAILURE;				
 	}	
-	
-	IhuDebugPrint("VMFO: @@@@@@@@@@@@@@@@@@@@@TTS TEXT VOICE TEST@@@@@@@@@@@@@@@@@@@@@@@\n");
+		
 	IhuDebugPrint("VMFO: EXIT TEST: EXIT + ENTER\n");
 	IhuDebugPrint("VMFO: VOICE Brocasting: Please enter content + Enter\n");
   IhuDebugPrint("VMFO: Attention, support max 100 byte\n");
@@ -517,6 +688,39 @@ OPSTAT ihu_vmmw_gprsmod_tts_perform(void)
 		}
 	}
 }
+
+//获取RSSI数值，完全针对SIM800A模块
+//返回的数据格式将采用两位小数NF2格式，扩大100倍后取整
+int16_t ihu_vmmw_gprsmod_get_rssi_value(void)
+{
+	char temp[9];
+	char *p1, *p2;
+	int16_t rssi = 0;
+	float rssiTmp = 0;
+	
+	func_gprsmod_clear_receive_buffer();	
+	if (func_gprsmod_send_AT_command("AT+CSQ", (uint8_t *)"OK", 2) == IHU_SUCCESS){
+		memset(temp, 0, sizeof(temp));
+		p1=strstr((const char*)(zIhuBspStm32SpsGprsRxBuff), "+CSQ:");
+		p2=strstr((const char*)(zIhuBspStm32SpsGprsRxBuff), ",");
+		if ((p1 == NULL) || (p2 == NULL) || (p2 <= p1)) return -12000;
+		strncpy(temp, p1+5, ((p2-p1) <= sizeof(temp))?(p2-p1):sizeof(temp));
+		rssi = strtol(temp, NULL, 10);
+		if (rssi == 0) return -11500;
+		else if (rssi == 1) return -11100;
+		else if ((rssi >= 2) && (rssi <= 30)){
+			rssiTmp = -110 + (float)((rssi-2)*(110-54)/(30-2));
+			rssiTmp = rssiTmp * 100;
+			return (int16_t)(rssiTmp);
+		}
+		else if (rssi == 31) return -5400;
+		else return -12000;
+	}
+	else{
+		return -12000;
+	}	
+}
+
 
 /*******************************************************************************
 *
@@ -653,7 +857,7 @@ OPSTAT func_gprsmod_gsm_info_retrieve(void)
 			p2=(uint8_t*)strstr((const char*)(p1+1),"\"");
 			strncpy(temp, (char*)p1+1, (p2-p1-1>=sizeof(temp))?sizeof(temp):(p2-p1-1));
 			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
-				IhuDebugPrint("VMFO: Operator: %s", temp);				
+				IhuDebugPrint("VMFO: Operator: %s\n", temp);				
 			}
 		}
 		func_gprsmod_clear_receive_buffer(); 
@@ -674,7 +878,7 @@ OPSTAT func_gprsmod_gsm_info_retrieve(void)
 			p2=(uint8_t*)strstr((const char*)(p1+1),",");
 			strncpy(temp, (char*)p1+2, (p2-p1-2>=sizeof(temp))?sizeof(temp):(p2-p1-2));
 			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
-				IhuDebugPrint("VMFO: Singal quality: %s", temp);	
+				IhuDebugPrint("VMFO: Singal quality: %s\n", temp);	
 			}			
 		}
 		func_gprsmod_clear_receive_buffer();
@@ -686,6 +890,8 @@ OPSTAT func_gprsmod_gsm_info_retrieve(void)
 	}
 
 	//General information inquery
+	//下面的查询结果不影响该模块投入应用
+	//DTMF支持与否
   if(func_gprsmod_send_AT_command("AT+DDET=1", (uint8_t*)"OK", 2) == IHU_SUCCESS)
 	{
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Module support DTMF audio-decode, support key-down during peer conversation.\n");
@@ -693,6 +899,7 @@ OPSTAT func_gprsmod_gsm_info_retrieve(void)
 	else{
     if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Module not support DTMF audio-decode, Not support key-down during peer conversation.\n");
 	}
+	//TTS支持与否
 	if(func_gprsmod_send_AT_command("AT+CTTS=?", (uint8_t*)"OK", 2) == IHU_SUCCESS)
 	{
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Support TTS local voice, Support to convert TEXT into voice.\n");
@@ -700,7 +907,9 @@ OPSTAT func_gprsmod_gsm_info_retrieve(void)
 	else{
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Module not support TTS local voice.\n");
 	}
-	if(func_gprsmod_send_AT_command("AT+CIPSIM800ALOC=?", (uint8_t*)"OK", 2) == IHU_SUCCESS)
+	//基站定位支持与否：该AT命令跟SIM800A紧密结合，换做其他硬件模块，命令可能会发生变化 
+	//之前使用CIPSIM800ALOC，，目前改为CIPGSMLOC
+	if(func_gprsmod_send_AT_command("AT+CIPGSMLOC=?", (uint8_t*)"OK", 2) == IHU_SUCCESS)
 	{
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Module support base station positioning, able to fetch position information.\n");
 	}
@@ -709,6 +918,7 @@ OPSTAT func_gprsmod_gsm_info_retrieve(void)
 	}
 	func_gprsmod_clear_receive_buffer();
 	
+	//返回
 	return IHU_SUCCESS;
 }
 
@@ -759,7 +969,10 @@ OPSTAT func_gprsmod_module_session_init(void)
 		IhuErrorPrint("VMFO: Get GPRS module SIM800A related info error!\n");
 		return IHU_FAILURE;
 	}
-		
+	
+	//清除缓冲区
+	func_gprsmod_clear_receive_buffer();
+	
 	//正常返回
 	return IHU_SUCCESS;
 }
@@ -1027,6 +1240,8 @@ OPSTAT func_gprsmod_find_char(char *a)
 *******************************************************************************/
 void func_gprsmod_sim800a_connect_server(void)
 {
+	const char *GPRS_UART_string = "AT+CIPSTART=\"TCP\",\"14.125.48.205\",9015";//IP登录服务器,需要根据自己的IP和端口做修改
+
 	func_gprsmod_clear_receive_buffer();
 	func_gprsmod_send_string("AT+CIPCLOSE=1");	//关闭连接
   ihu_usleep(100);

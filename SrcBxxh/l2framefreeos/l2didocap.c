@@ -651,18 +651,18 @@ bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_status(void)
 	UINT8 LockDoorCnt = 0;
 	
 	for (i=0; i<IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
-		zIhuCclDidocapCtrlTable.sensor.doorState[i] = ((func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_door_open(i) == TRUE)?IHU_CCL_SENSOR_STATE_OPEN:IHU_CCL_SENSOR_STATE_CLOSE);
+		zIhuCclDidocapCtrlTable.sensor.doorState[i] = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_door_open_state(i) == TRUE)?IHU_CCL_SENSOR_STATE_OPEN:IHU_CCL_SENSOR_STATE_CLOSE);
 		if (zIhuCclDidocapCtrlTable.sensor.doorState[i] == IHU_CCL_SENSOR_STATE_OPEN) {tmp++; LockDoorCnt++;}
-		zIhuCclDidocapCtrlTable.sensor.lockTongueState[i] = ((func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open(i) == TRUE)?IHU_CCL_SENSOR_STATE_OPEN:IHU_CCL_SENSOR_STATE_CLOSE);
+		zIhuCclDidocapCtrlTable.sensor.lockTongueState[i] = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open_state(i) == TRUE)?IHU_CCL_SENSOR_STATE_OPEN:IHU_CCL_SENSOR_STATE_CLOSE);
 		if (zIhuCclDidocapCtrlTable.sensor.lockTongueState[i] == IHU_CCL_SENSOR_STATE_OPEN) {tmp++; LockDoorCnt++;}
 	}
-	zIhuCclDidocapCtrlTable.sensor.waterState = ((func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_water() == TRUE)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE);
+	zIhuCclDidocapCtrlTable.sensor.waterState = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_water_state() == TRUE)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE);
 	if (zIhuCclDidocapCtrlTable.sensor.waterState == IHU_CCL_SENSOR_STATE_ACTIVE) tmp++;
-	zIhuCclDidocapCtrlTable.sensor.smokeState = ((func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_smoke() == TRUE)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE);
+	zIhuCclDidocapCtrlTable.sensor.smokeState = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_smoke_state() == TRUE)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE);
 	if (zIhuCclDidocapCtrlTable.sensor.smokeState == IHU_CCL_SENSOR_STATE_ACTIVE) tmp++;
-	zIhuCclDidocapCtrlTable.sensor.fallState = ((func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_fall() == TRUE)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE);
+	zIhuCclDidocapCtrlTable.sensor.fallState = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_fall_state() == TRUE)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE);
 	if (zIhuCclDidocapCtrlTable.sensor.fallState == IHU_CCL_SENSOR_STATE_ACTIVE) tmp++;
-	zIhuCclDidocapCtrlTable.sensor.batteryState = ((func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_battery() == TRUE)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE);
+	zIhuCclDidocapCtrlTable.sensor.batteryState = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_bat_state() == TRUE)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE);
 	if (zIhuCclDidocapCtrlTable.sensor.batteryState == IHU_CCL_SENSOR_STATE_ACTIVE) tmp++;
 	
 	zIhuCclDidocapCtrlTable.flagSensorLastTimeScanFault = zIhuCclDidocapCtrlTable.flagSensorThisTimeScanFault;
@@ -693,7 +693,7 @@ bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_recover(void)
 }
 
 //SLEEP&FAULT模式下扫描：扫描出哪个门，如果是IHU_CCL_SENSOR_LOCK_NUMBER_MAX则意味着没有
-bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_door_open(UINT8 doorid)
+bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_door_open_state(UINT8 doorid)
 {
 	if (rand()%2 == 1)
 		return TRUE;
@@ -702,7 +702,7 @@ bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_door_open(UINT8 doori
 }
 
 //SLEEP&FAULT模式下扫描：扫描出哪个锁，如果是IHU_CCL_SENSOR_LOCK_NUMBER_MAX则意味着没有
-bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open(UINT8 lockid)
+bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open_state(UINT8 lockid)
 {
 	if (rand()%2 == 1)
 		return TRUE;
@@ -711,7 +711,7 @@ bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open(UINT8 locki
 }
 
 //SLEEP&FAULT模式下扫描：扫描水
-bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_water(void)
+bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_water_state(void)
 {
 	if (rand()%2 == 1)
 		return TRUE;
@@ -720,7 +720,7 @@ bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_water(void)
 }
 
 //SLEEP&FAULT模式下扫描：扫描烟
-bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_smoke(void)
+bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_smoke_state(void)
 {
 	if (rand()%2 == 1)
 		return TRUE;
@@ -729,7 +729,7 @@ bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_smoke(void)
 }
 
 //SLEEP&FAULT模式下扫描：扫描倾
-bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_fall(void)
+bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_fall_state(void)
 {
 	if (rand()%2 == 1)
 		return TRUE;
@@ -738,7 +738,7 @@ bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_fall(void)
 }
 
 //SLEEP&FAULT模式下扫描：扫描震
-bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_shake(void)
+bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_shake_state(void)
 {
 	if (rand()%2 == 1)
 		return TRUE;
@@ -747,7 +747,7 @@ bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_shake(void)
 }
 
 //SLEEP&FAULT模式下扫描：扫描电池
-bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_battery(void)
+bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_bat_state(void)
 {
 	if (rand()%2 == 1)
 		return TRUE;
@@ -756,19 +756,19 @@ bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_battery(void)
 }
 
 //SLEEP&FAULT模式下扫描：扫描温度, 数据格式HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2
-INT16 func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_temp_value(void)
+INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_temp_value(void)
 {
 	return rand()% 1000000;
 }
 
 //SLEEP&FAULT模式下扫描：扫描湿度, 数据格式HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2
-INT16 func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_humid_value(void)
+INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_humid_value(void)
 {
 	return rand()% 1000000;
 }
 
 //SLEEP&FAULT模式下扫描：扫描电量, 数据格式HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2
-INT16 func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_bat_value(void)
+INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_bat_value(void)
 {
 	return rand()% 1000000;
 }

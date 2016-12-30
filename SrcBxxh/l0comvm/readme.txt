@@ -8,6 +8,9 @@
 = 统一命名SPS中的全局变量，将代码风格标准化
 = 清理掉UART_BPS模块中的无用代码，将基于v3.5的老库彻底去掉，全部基于HAL标准库
 = 着重清理GPRSMOD的VMMW程序
+= 支持RSSI VALUE的读取
+= 改进所有传感器读取的函数API命名
+
 = 3. 发送的GPRS AT CMD的所有VMMW API需要清理完善，包括增加FTP API
 = 4. GPRS AT CMD的接收需要寻找</xml>关键字，提高效率，避免纯粹依靠TIME OUT
 = 5. BSP串口接收中断改进
