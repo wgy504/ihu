@@ -1,6 +1,10 @@
 #ifndef __BSP_DEBUG_USART_H__
 #define __BSP_DEBUG_USART_H__
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+	
 /* 包含头文件 ----------------------------------------------------------------*/
 #include "stm32f2xx_hal.h"
 #include "stdio.h"
@@ -14,7 +18,8 @@
 #else
 #endif
 
-//从ucosiii移植过来的函数
+//不能在这里出现管脚的任何配置和初始化，必须在STM32CubeMX中完成，这里使用STM32CubeMX给出的端口俗名
+
 //MAX_IHU_MSG_BODY_LENGTH-1是因为发送到上层SPSVIRGO的数据缓冲区受到消息结构msg_struct_spsvirgo_l2frame_rcv_t的影响
 //最大接收数据长度，实际处理的时候，我们得要知道，CHAR因为'\0'的原因会少一个字符
 #define IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN 				MAX_IHU_MSG_BODY_LENGTH-1
@@ -83,6 +88,7 @@ extern int ihu_bsp_stm32_sps_spare2_send_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_sps_spare2_rcv_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_sps_spare2_rcv_data_timeout(uint8_t* buff, uint16_t len, uint32_t timeout);
 
+//重载接收函数，以便通过IT中断方式搞定接收通信，否则需要通过轮询或者单独线程搞定，更加麻烦
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle);
 
 #endif  /* __BSP_DEBUG_USART_H__ */

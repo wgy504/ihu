@@ -1,5 +1,3 @@
-//
-
 #ifndef  __BSP_SPI_H
 #define  __BSP_SPI_H
 
@@ -21,6 +19,8 @@ extern "C" {
 #else
 #endif
 
+//不能在这里出现管脚的任何配置和初始化，必须在STM32CubeMX中完成，这里使用STM32CubeMX给出的端口俗名
+
 /* SPI1: GPIOA.GPIO_PIN_7 conflict with ETH
          NSS  GPIOA.4, GPIOA.15
          SCK  GPIOA.5, GPIOB.3
@@ -40,6 +40,8 @@ extern "C" {
 
  Here use SPI2: PB13, PB14, PB15 and PB9 (NSS, not care)
 */
+
+
 #define SPIx                             SPI2
 #define SPIx_CLK_ENABLE()                __HAL_RCC_SPI2_CLK_ENABLE()
 #define SPIx_SCK_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOB_CLK_ENABLE()
@@ -88,12 +90,16 @@ int func_bsp_spi_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint
 #define IHU_BSP_STM32_SPI_IAU_REC_MAX_LEN 					MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
 #define IHU_BSP_STM32_SPI_SPARE1_REC_MAX_LEN 			MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
 
+//发送和接受数据的延迟时间长度
+#define IHU_BSP_STM32_SPI_TX_MAX_DELAY 						100
+#define IHU_BSP_STM32_SPI_RX_MAX_DELAY 						100
+
 //交换矩阵
 #define IHU_BSP_STM32_SPI_SPARE1_HANDLER					hspi1
 #define IHU_BSP_STM32_SPI_SPARE1_HANDLER_ID  			1
 #define IHU_BSP_STM32_SPI_IAU_HANDLER							hspi2
 #define IHU_BSP_STM32_SPI_IAU_HANDLER_ID  				2
-#define IHU_STM32_SPI_TX_MAX_DELAY_DURATION 		100
+
 
 //全局函数
 extern int ihu_bsp_stm32_spi_slave_hw_init(void);
@@ -102,6 +108,7 @@ extern int ihu_bsp_stm32_spi_spare1_rcv_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_spi_iau_send_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_spi_iau_rcv_data(uint8_t* buff, uint16_t len);
 
+//重载接收函数，以便通过IT中断方式搞定接收通信，否则需要通过轮询或者单独线程搞定，更加麻烦
 void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *SpiHandle);
 
 #ifdef __cplusplus

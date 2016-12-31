@@ -1,8 +1,24 @@
 #ifndef __BSP_LED_H__
 #define __BSP_LED_H__
 
-/* 包含头文件 ----------------------------------------------------------------*/
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 #include "stm32f2xx_hal.h"
+#include "stdio.h"
+#include "string.h"
+#include "sysdim.h"
+#include "vmfreeoslayer.h"
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+	#include "commsgccl.h"
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+	#include "commsgbfsc.h"
+#else
+#endif
+
+//不能在这里出现管脚的任何配置和初始化，必须在STM32CubeMX中完成，这里使用STM32CubeMX给出的端口俗名
 
 /* 类型定义 ------------------------------------------------------------------*/
 typedef enum
@@ -58,6 +74,7 @@ void LEDx_StateSet(uint8_t LEDx,LEDState_TypeDef state);
 
 
 //旧式方式编写的函数
+//这一部分代码，特别是端口的配置部分，需要跟CubeMX32绑定起来，而不是自己随意定义。这个需要在未来改进。
 //LED_F205_BOARD
 #define LED_F205_BOARD_PORT 						GPIOC
 #define LED_F205_BOARD_PIN							GPIO_PIN_2

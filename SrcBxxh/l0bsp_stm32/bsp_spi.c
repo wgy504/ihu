@@ -357,7 +357,7 @@ int func_bsp_spi_slave_hw_init(int is_clock_phase_1edge, int is_clock_polarity_h
 *******************************************************************************/
 int ihu_bsp_stm32_spi_iau_send_data(uint8_t* buff, uint16_t len)
 {
-	if (HAL_SPI_Transmit(&IHU_BSP_STM32_SPI_IAU_HANDLER, (uint8_t *)buff, len, IHU_STM32_SPI_TX_MAX_DELAY_DURATION) == HAL_OK)
+	if (HAL_SPI_Transmit(&IHU_BSP_STM32_SPI_IAU_HANDLER, (uint8_t *)buff, len, IHU_BSP_STM32_SPI_TX_MAX_DELAY) == HAL_OK)
 		return BSP_SUCCESS;
 	else
 		return BSP_FAILURE;		
@@ -365,7 +365,7 @@ int ihu_bsp_stm32_spi_iau_send_data(uint8_t* buff, uint16_t len)
 
 int ihu_bsp_stm32_spi_iau_rcv_data(uint8_t* buff, uint16_t len)
 {    
-	if (HAL_SPI_Receive(&IHU_BSP_STM32_SPI_IAU_HANDLER, buff, len, IHU_STM32_SPI_TX_MAX_DELAY_DURATION) == HAL_OK)
+	if (HAL_SPI_Receive(&IHU_BSP_STM32_SPI_IAU_HANDLER, buff, len, IHU_BSP_STM32_SPI_TX_MAX_DELAY) == HAL_OK)
 		return BSP_SUCCESS;
 	else
 		return BSP_FAILURE;
@@ -381,7 +381,7 @@ int ihu_bsp_stm32_spi_iau_rcv_data(uint8_t* buff, uint16_t len)
 *******************************************************************************/
 int ihu_bsp_stm32_spi_spare1_send_data(uint8_t* buff, uint16_t len)
 {
-	if (HAL_SPI_Transmit(&IHU_BSP_STM32_SPI_SPARE1_HANDLER, (uint8_t *)buff, len, IHU_STM32_SPI_TX_MAX_DELAY_DURATION) == HAL_OK)
+	if (HAL_SPI_Transmit(&IHU_BSP_STM32_SPI_SPARE1_HANDLER, (uint8_t *)buff, len, IHU_BSP_STM32_SPI_TX_MAX_DELAY) == HAL_OK)
 		return BSP_SUCCESS;
 	else
 		return BSP_FAILURE;		
@@ -389,7 +389,7 @@ int ihu_bsp_stm32_spi_spare1_send_data(uint8_t* buff, uint16_t len)
 
 int ihu_bsp_stm32_spi_spare1_rcv_data(uint8_t* buff, uint16_t len)
 {    
-	if (HAL_SPI_Receive(&IHU_BSP_STM32_SPI_SPARE1_HANDLER, buff, len, IHU_STM32_SPI_TX_MAX_DELAY_DURATION) == HAL_OK)
+	if (HAL_SPI_Receive(&IHU_BSP_STM32_SPI_SPARE1_HANDLER, buff, len, IHU_BSP_STM32_SPI_TX_MAX_DELAY) == HAL_OK)
 		return BSP_SUCCESS;
 	else
 		return BSP_FAILURE;

@@ -22,14 +22,14 @@ extern CAN_HandleTypeDef hcan2;
 extern uint8_t zIhuCanRxBuffer[2];
 
 //从SCYCB项目中继承过来的全局变量，待定
-int8_t BSP_STM32_CAN_IAU_R_Buff[BSP_STM32_CAN_IAU_REC_MAXLEN];			//数据接收缓冲区 
-int8_t BSP_STM32_CAN_IAU_R_State=0;																	//接收状态
-int16_t BSP_STM32_CAN_IAU_R_Count=0;																//当前接收数据的字节数
-int16_t BSP_STM32_CAN_IAU_R_Len=0;
-int8_t BSP_STM32_CAN_SPARE1_R_Buff[BSP_STM32_CAN_SPARE1_REC_MAXLEN];	//数据接收缓冲区 
-int8_t BSP_STM32_CAN_SPARE1_R_State=0;												//接收状态
-int16_t BSP_STM32_CAN_SPARE1_R_Count=0;										//当前接收数据的字节数 	  
-int16_t BSP_STM32_CAN_SPARE1_R_Len=0;
+int8_t IHU_BSP_STM32_CAN_IAU_R_Buff[IHU_BSP_STM32_CAN_IAU_REC_MAX_LEN];			//数据接收缓冲区 
+int8_t IHU_BSP_STM32_CAN_IAU_R_State=0;																	//接收状态
+int16_t IHU_BSP_STM32_CAN_IAU_R_Count=0;																//当前接收数据的字节数
+int16_t IHU_BSP_STM32_CAN_IAU_R_Len=0;
+int8_t IHU_BSP_STM32_CAN_SPARE1_R_Buff[IHU_BSP_STM32_CAN_SPARE1_REC_MAX_LEN];	//数据接收缓冲区 
+int8_t IHU_BSP_STM32_CAN_SPARE1_R_State=0;												//接收状态
+int16_t IHU_BSP_STM32_CAN_SPARE1_R_Count=0;										//当前接收数据的字节数 	  
+int16_t IHU_BSP_STM32_CAN_SPARE1_R_Len=0;
 
 
 /* 扩展变量 ------------------------------------------------------------------*/
@@ -39,21 +39,21 @@ int16_t BSP_STM32_CAN_SPARE1_R_Len=0;
 int ihu_bsp_stm32_can_slave_hw_init(void)
 {
 	uint16_t k;
-	for(k=0;k<BSP_STM32_CAN_IAU_REC_MAXLEN;k++)      //将缓存内容清零
+	for(k=0;k<IHU_BSP_STM32_CAN_IAU_REC_MAX_LEN;k++)      //将缓存内容清零
 	{
-		BSP_STM32_CAN_IAU_R_Buff[k] = 0x00;
+		IHU_BSP_STM32_CAN_IAU_R_Buff[k] = 0x00;
 	}
-  BSP_STM32_CAN_IAU_R_Count = 0;               //接收字符串的起始存储位置
-	BSP_STM32_CAN_IAU_R_State = 0;
-	BSP_STM32_CAN_IAU_R_Len = 0;
+  IHU_BSP_STM32_CAN_IAU_R_Count = 0;               //接收字符串的起始存储位置
+	IHU_BSP_STM32_CAN_IAU_R_State = 0;
+	IHU_BSP_STM32_CAN_IAU_R_Len = 0;
 
-	for(k=0;k<BSP_STM32_CAN_SPARE1_REC_MAXLEN;k++)      //将缓存内容清零
+	for(k=0;k<IHU_BSP_STM32_CAN_SPARE1_REC_MAX_LEN;k++)      //将缓存内容清零
 	{
-		BSP_STM32_CAN_SPARE1_R_Buff[k] = 0x00;
+		IHU_BSP_STM32_CAN_SPARE1_R_Buff[k] = 0x00;
 	}
-  BSP_STM32_CAN_SPARE1_R_Count = 0;               //接收字符串的起始存储位置
-	BSP_STM32_CAN_SPARE1_R_State = 0;
-	BSP_STM32_CAN_SPARE1_R_Len = 0;	
+  IHU_BSP_STM32_CAN_SPARE1_R_Count = 0;               //接收字符串的起始存储位置
+	IHU_BSP_STM32_CAN_SPARE1_R_State = 0;
+	IHU_BSP_STM32_CAN_SPARE1_R_Len = 0;	
 	
 	return BSP_SUCCESS;
 }
@@ -69,7 +69,7 @@ int ihu_bsp_stm32_can_slave_hw_init(void)
 int ihu_bsp_stm32_can_send_data(uint8_t* buff, uint16_t len)
 { 
 	//这里是帧处理的过程，未来待完善数据的发送接收处理过程	
-	if (HAL_CAN_Transmit(&BSP_STM32_CAN_IAU, CAN_TX_MAX_DELAY_DURATION) == HAL_OK)
+	if (HAL_CAN_Transmit(&IHU_BSP_STM32_CAN_IAU_HANDLER, IHU_BSP_STM32_CAN_TX_MAX_DELAY) == HAL_OK)
 		return BSP_SUCCESS;
 	else
 		return BSP_FAILURE;		
@@ -78,7 +78,7 @@ int ihu_bsp_stm32_can_send_data(uint8_t* buff, uint16_t len)
 int ihu_bsp_stm32_can_rcv_data(uint8_t* buff, uint16_t len)
 {    
 	//这里是帧处理的过程，未来待完善数据的发送接收处理过程	
-	if (HAL_CAN_Receive(&BSP_STM32_CAN_IAU, BSP_STM32_CAN_IAU_ID-1, CAN_TX_MAX_DELAY_DURATION) == HAL_OK)
+	if (HAL_CAN_Receive(&IHU_BSP_STM32_CAN_IAU_HANDLER, IHU_BSP_STM32_CAN_IAU_HANDLER_ID-1, IHU_BSP_STM32_CAN_TX_MAX_DELAY) == HAL_OK)
 		return BSP_SUCCESS;
 	else
 		return BSP_FAILURE;
@@ -97,7 +97,7 @@ int ihu_bsp_stm32_can_rcv_data(uint8_t* buff, uint16_t len)
 int ihu_bsp_stm32_can_spare1_send_data(uint8_t* buff, uint16_t len)
 {    
 	//这里是帧处理的过程，未来待完善数据的发送接收处理过程	
-	if (HAL_CAN_Transmit(&BSP_STM32_CAN_SPARE1, CAN_TX_MAX_DELAY_DURATION) == HAL_OK)
+	if (HAL_CAN_Transmit(&IHU_BSP_STM32_CAN_SPARE1_HANDLER, IHU_BSP_STM32_CAN_TX_MAX_DELAY) == HAL_OK)
 		return BSP_SUCCESS;
 	else
 		return BSP_FAILURE;		
@@ -106,7 +106,7 @@ int ihu_bsp_stm32_can_spare1_send_data(uint8_t* buff, uint16_t len)
 int ihu_bsp_stm32_can_spare1_rcv_data(uint8_t* buff, uint16_t len)
 {    
 	//这里是帧处理的过程，未来待完善数据的发送接收处理过程	
-	if (HAL_CAN_Receive(&BSP_STM32_CAN_SPARE1, BSP_STM32_CAN_SPARE1_ID-1, CAN_RX_MAX_DELAY_DURATION) == HAL_OK)
+	if (HAL_CAN_Receive(&IHU_BSP_STM32_CAN_SPARE1_HANDLER, IHU_BSP_STM32_CAN_SPARE1_HANDLER_ID-1, IHU_BSP_STM32_CAN_RX_MAX_DELAY) == HAL_OK)
 		return BSP_SUCCESS;
 	else
 		return BSP_FAILURE;
@@ -120,77 +120,77 @@ void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef *CanHandle)
 {
 	uint8_t res = 0;
 	msg_struct_canvela_l2frame_rcv_t snd;
-  if(CanHandle==&BSP_STM32_CAN_IAU)
+  if(CanHandle==&IHU_BSP_STM32_CAN_IAU_HANDLER)
   {
 		//这里是帧处理的过程，未来待完善数据的接收处理过程
-		//res = zIhuCanRxBuffer[BSP_STM32_CAN_IAU_ID-1];
-		BSP_STM32_CAN_IAU_R_Buff[BSP_STM32_CAN_IAU_R_Count++] = res;
-		if (BSP_STM32_CAN_IAU_R_Count >= BSP_STM32_CAN_IAU_REC_MAXLEN)
-			BSP_STM32_CAN_IAU_R_Count = 0;
+		//res = zIhuCanRxBuffer[IHU_BSP_STM32_CAN_IAU_HANDLER_ID-1];
+		IHU_BSP_STM32_CAN_IAU_R_Buff[IHU_BSP_STM32_CAN_IAU_R_Count++] = res;
+		if (IHU_BSP_STM32_CAN_IAU_R_Count >= IHU_BSP_STM32_CAN_IAU_REC_MAX_LEN)
+			IHU_BSP_STM32_CAN_IAU_R_Count = 0;
 
 		//为了IDLE状态下提高效率，直接分解为IDLE和ELSE
-		if (BSP_STM32_CAN_IAU_R_State == IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE)
+		if (IHU_BSP_STM32_CAN_IAU_R_State == IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE)
 		{
 			//只有满足这么苛刻的条件，才算找到了帧头
-			if ((res == IHU_HUITP_L2FRAME_STD_RX_START_FLAG_CHAR) && (BSP_STM32_CAN_IAU_R_Count == 1))
-			BSP_STM32_CAN_IAU_R_State = IHU_HUITP_L2FRAME_STD_RX_STATE_START;
+			if ((res == IHU_HUITP_L2FRAME_STD_RX_START_FLAG_CHAR) && (IHU_BSP_STM32_CAN_IAU_R_Count == 1))
+			IHU_BSP_STM32_CAN_IAU_R_State = IHU_HUITP_L2FRAME_STD_RX_STATE_START;
 		}
 		else
 		{
 			//收到CHECKSUM
-			if((BSP_STM32_CAN_IAU_R_State == IHU_HUITP_L2FRAME_STD_RX_STATE_START) && (BSP_STM32_CAN_IAU_R_Count == 2))
+			if((IHU_BSP_STM32_CAN_IAU_R_State == IHU_HUITP_L2FRAME_STD_RX_STATE_START) && (IHU_BSP_STM32_CAN_IAU_R_Count == 2))
 			{
-				BSP_STM32_CAN_IAU_R_State = IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_CKSM;
+				IHU_BSP_STM32_CAN_IAU_R_State = IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_CKSM;
 			}
 			//收到长度高位
-			else if((BSP_STM32_CAN_IAU_R_State == IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_CKSM) && (BSP_STM32_CAN_IAU_R_Count == 3))
+			else if((IHU_BSP_STM32_CAN_IAU_R_State == IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_CKSM) && (IHU_BSP_STM32_CAN_IAU_R_Count == 3))
 			{
-				BSP_STM32_CAN_IAU_R_State = IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_LEN;
+				IHU_BSP_STM32_CAN_IAU_R_State = IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_LEN;
 			}
 			//收到长度低位
-			else if((BSP_STM32_CAN_IAU_R_State == IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_LEN) && (BSP_STM32_CAN_IAU_R_Count == 4))
+			else if((IHU_BSP_STM32_CAN_IAU_R_State == IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_LEN) && (IHU_BSP_STM32_CAN_IAU_R_Count == 4))
 			{
-				BSP_STM32_CAN_IAU_R_Len = ((BSP_STM32_CAN_IAU_R_Buff[2] <<8) + BSP_STM32_CAN_IAU_R_Buff[3]);
+				IHU_BSP_STM32_CAN_IAU_R_Len = ((IHU_BSP_STM32_CAN_IAU_R_Buff[2] <<8) + IHU_BSP_STM32_CAN_IAU_R_Buff[3]);
 				//CHECKSUM及判定
-				if ((BSP_STM32_CAN_IAU_R_Buff[1] == (BSP_STM32_CAN_IAU_R_Buff[0] ^ BSP_STM32_CAN_IAU_R_Buff[2]^BSP_STM32_CAN_IAU_R_Buff[3])) &&\
-					(BSP_STM32_CAN_IAU_R_Len < BSP_STM32_CAN_IAU_REC_MAXLEN-4))
-				BSP_STM32_CAN_IAU_R_State = IHU_HUITP_L2FRAME_STD_RX_STATE_BODY;
+				if ((IHU_BSP_STM32_CAN_IAU_R_Buff[1] == (IHU_BSP_STM32_CAN_IAU_R_Buff[0] ^ IHU_BSP_STM32_CAN_IAU_R_Buff[2]^IHU_BSP_STM32_CAN_IAU_R_Buff[3])) &&\
+					(IHU_BSP_STM32_CAN_IAU_R_Len < IHU_BSP_STM32_CAN_IAU_REC_MAX_LEN-4))
+				IHU_BSP_STM32_CAN_IAU_R_State = IHU_HUITP_L2FRAME_STD_RX_STATE_BODY;
 			}
 			//收到BODY位
-			else if((BSP_STM32_CAN_IAU_R_State == IHU_HUITP_L2FRAME_STD_RX_STATE_BODY) && (BSP_STM32_CAN_IAU_R_Len > 1))
+			else if((IHU_BSP_STM32_CAN_IAU_R_State == IHU_HUITP_L2FRAME_STD_RX_STATE_BODY) && (IHU_BSP_STM32_CAN_IAU_R_Len > 1))
 			{
-				BSP_STM32_CAN_IAU_R_Len--;
+				IHU_BSP_STM32_CAN_IAU_R_Len--;
 			}
 			//收到BODY最后一位
-			else if((BSP_STM32_CAN_IAU_R_State == IHU_HUITP_L2FRAME_STD_RX_STATE_BODY) && (BSP_STM32_CAN_IAU_R_Len == 1))
+			else if((IHU_BSP_STM32_CAN_IAU_R_State == IHU_HUITP_L2FRAME_STD_RX_STATE_BODY) && (IHU_BSP_STM32_CAN_IAU_R_Len == 1))
 			{
-				BSP_STM32_CAN_IAU_R_State = IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE;
-				BSP_STM32_CAN_IAU_R_Len = 0;
-				BSP_STM32_CAN_IAU_R_Count = 0;
+				IHU_BSP_STM32_CAN_IAU_R_State = IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE;
+				IHU_BSP_STM32_CAN_IAU_R_Len = 0;
+				IHU_BSP_STM32_CAN_IAU_R_Count = 0;
 				//发送数据到上层CANARIES模块
 				memset(&snd, 0, sizeof(msg_struct_canvela_l2frame_rcv_t));
-				memcpy(snd.data, &BSP_STM32_CAN_IAU_R_Buff[4], ((BSP_STM32_CAN_IAU_R_Buff[2]<<8)+BSP_STM32_CAN_IAU_R_Buff[3]));
+				memcpy(snd.data, &IHU_BSP_STM32_CAN_IAU_R_Buff[4], ((IHU_BSP_STM32_CAN_IAU_R_Buff[2]<<8)+IHU_BSP_STM32_CAN_IAU_R_Buff[3]));
 				snd.length = sizeof(msg_struct_canvela_l2frame_rcv_t);				
 				ihu_message_send(MSG_ID_SPS_L2FRAME_RCV, TASK_ID_CANVELA, TASK_ID_VMFO, &snd, snd.length);				
 			}
 			//差错情况
 			else{
-				BSP_STM32_CAN_IAU_R_State = IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE;
-				BSP_STM32_CAN_IAU_R_Len = 0;
-				BSP_STM32_CAN_IAU_R_Count = 0;
+				IHU_BSP_STM32_CAN_IAU_R_State = IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE;
+				IHU_BSP_STM32_CAN_IAU_R_Len = 0;
+				IHU_BSP_STM32_CAN_IAU_R_Count = 0;
 			}
 		}
 		//重新设置中断
-		HAL_CAN_Receive_IT(&BSP_STM32_CAN_IAU, BSP_STM32_CAN_IAU_ID-1);
+		HAL_CAN_Receive_IT(&IHU_BSP_STM32_CAN_IAU_HANDLER, IHU_BSP_STM32_CAN_IAU_HANDLER_ID-1);
   }
-  else if(CanHandle==&BSP_STM32_CAN_SPARE1)
+  else if(CanHandle==&IHU_BSP_STM32_CAN_SPARE1_HANDLER)
   {
 		//这里是帧处理的过程，未来待完善数据的接收处理过程		
-		//BSP_STM32_CAN_SPARE1_R_Buff[BSP_STM32_CAN_SPARE1_R_Count] = zIhuCanRxBuffer[BSP_STM32_CAN_SPARE1_ID-1];
-		BSP_STM32_CAN_SPARE1_R_Count++;
-		if (BSP_STM32_CAN_SPARE1_R_Count >= BSP_STM32_CAN_SPARE1_REC_MAXLEN)
-			BSP_STM32_CAN_SPARE1_R_Count = 0;
-		HAL_CAN_Receive_IT(&BSP_STM32_CAN_SPARE1, BSP_STM32_CAN_SPARE1_ID);
+		//IHU_BSP_STM32_CAN_SPARE1_R_Buff[IHU_BSP_STM32_CAN_SPARE1_R_Count] = zIhuCanRxBuffer[IHU_BSP_STM32_CAN_SPARE1_HANDLER_ID-1];
+		IHU_BSP_STM32_CAN_SPARE1_R_Count++;
+		if (IHU_BSP_STM32_CAN_SPARE1_R_Count >= IHU_BSP_STM32_CAN_SPARE1_REC_MAX_LEN)
+			IHU_BSP_STM32_CAN_SPARE1_R_Count = 0;
+		HAL_CAN_Receive_IT(&IHU_BSP_STM32_CAN_SPARE1_HANDLER, IHU_BSP_STM32_CAN_SPARE1_HANDLER_ID);
   }
 }
 

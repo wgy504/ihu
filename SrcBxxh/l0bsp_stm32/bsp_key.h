@@ -1,10 +1,24 @@
 #ifndef __BSP_KEY_H__
 #define __BSP_KEY_H__
 
-/* 包含头文件 ----------------------------------------------------------------*/
-#include "stm32f2xx_hal.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-/* 类型定义 --------------------------------------------------------------*/
+/////////////////////////////////////////////////////////////////////////////////////////////
+#include "stm32f2xx_hal.h"
+#include "stdio.h"
+#include "string.h"
+#include "sysdim.h"
+#include "vmfreeoslayer.h"
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+	#include "commsgccl.h"
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+	#include "commsgbfsc.h"
+#else
+#endif
+
+//不能在这里出现管脚的任何配置和初始化，必须在STM32CubeMX中完成，这里使用STM32CubeMX给出的端口俗名
 
 #define KEY_ON                        1
 #define KEY_OFF                       0
