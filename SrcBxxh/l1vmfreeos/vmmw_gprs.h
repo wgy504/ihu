@@ -56,10 +56,12 @@
 //向上提供全局统一服务的入口
 extern OPSTAT ihu_vmmw_gprsmod_call_perform(char *calledNumber);
 extern OPSTAT ihu_vmmw_gprsmod_sms_transmit_with_confirm(char *calledNumber, char *input);
-extern OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input);
-extern OPSTAT ihu_vmmw_gprsmod_tcp_data_transmit_with_receive(char *input); 
-extern OPSTAT ihu_vmmw_gprsmod_udp_data_transmit_with_receive(char *input);
-extern OPSTAT ihu_vmmw_gprsmod_ftp_data_transmit_with_receive(char *input);
+extern OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input);   //往后台发送的POST功能
+extern OPSTAT ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive(char *input);  //往后台发送的POST功能
+extern OPSTAT ihu_vmmw_gprsmod_tcp_u8_data_transmit_with_receive(int8_t *input);  //往后台发送的POST功能
+extern OPSTAT ihu_vmmw_gprsmod_udp_test_data_transmit_with_receive(char *input);  //往后台发送的POST功能
+extern OPSTAT ihu_vmmw_gprsmod_udp_8_data_transmit_with_receive(int8_t *input);    //往后台发送的POST功能
+extern OPSTAT ihu_vmmw_gprsmod_ftp_data_transmit_with_receive(int8_t *input);    //从后台GET数据的功能
 extern OPSTAT ihu_vmmw_gprsmod_email_data_transmit_with_receive(char *input);
 extern OPSTAT ihu_vmmw_gprsmod_bs_position_perform(void);
 extern OPSTAT ihu_vmmw_gprsmod_tts_perform(void);
@@ -84,6 +86,9 @@ OPSTAT func_gprsmod_convert_str_to_int(uint8_t *p,uint8_t len);//字符转整型
 void func_gprsmod_convert_int_to_str(int n, char str[]);//整型转字符
 void func_gprsmod_two_char_swap(char *ch1, char *ch2);
 void func_gprsmod_convert_hex_to_str(uint8_t dest[],uint8_t src[],uint8_t len);//十六进制转字符串
+
+//高级定义，简化程序的可读性
+#define IHU_ERROR_PRINT_GPRSMOD	zIhuRunErrCnt[TASK_ID_VMFO]++; IhuErrorPrint
 
 #endif /* L1FREERTOS_MOD_GPRS_H_ */
 

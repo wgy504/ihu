@@ -147,15 +147,8 @@ extern INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv2_value(voi
 extern INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value(void);
 
 //GPRSMOD的模组操作
-extern OPSTAT ihu_vmmw_gprsmod_call_perform(char *calledNumber);
-extern OPSTAT ihu_vmmw_gprsmod_sms_transmit_with_confirm(char *calledNumber, char *input);
 extern OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input);
-extern OPSTAT ihu_vmmw_gprsmod_tcp_data_transmit_with_receive(char *input); 
-extern OPSTAT ihu_vmmw_gprsmod_udp_data_transmit_with_receive(char *input);
-extern OPSTAT ihu_vmmw_gprsmod_ftp_data_transmit_with_receive(char *input);
-extern OPSTAT ihu_vmmw_gprsmod_email_data_transmit_with_receive(char *input);
-extern OPSTAT ihu_vmmw_gprsmod_bs_position_perform(void);
-extern OPSTAT ihu_vmmw_gprsmod_tts_perform(void);
+extern OPSTAT ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive(char *input); 
 extern int16_t ihu_vmmw_gprsmod_get_rssi_value(void);
 
 

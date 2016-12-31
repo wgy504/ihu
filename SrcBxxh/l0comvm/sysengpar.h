@@ -87,6 +87,7 @@ typedef struct SysEngParElementIhuSwDownload
 typedef struct SysEngParElementCloudXhui
 {
 	char  cloudHttpAddLocal[SYS_ENG_PAR_ELEMENT_CLOUDXHUI_LEN];
+	char  cloudBhServerAddr[SYS_ENG_PAR_ELEMENT_CLOUDXHUI_LEN];
 	char  cloudBhServerName[SYS_ENG_PAR_ELEMENT_CLOUDXHUI_LEN];
 	char  cloudBhIhuName[SYS_ENG_PAR_ELEMENT_CLOUDXHUI_LEN];
 	char  cloudFtpAdd[SYS_ENG_PAR_ELEMENT_CLOUDXHUI_LEN];
