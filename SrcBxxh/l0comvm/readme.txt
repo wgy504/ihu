@@ -5,8 +5,8 @@
 = 研究STM32的IAP功能
 
 //= ZJL, 2016 Dec.31, CURRENT_SW_DELIVERY R03.76 =>CCL项目
-= 3. 发送的GPRS AT CMD的所有VMMW API需要清理完善，包括增加FTP API
-= 4. GPRS AT CMD的接收需要寻找</xml>关键字，提高效率，避免纯粹依靠TIME OUT
+= 发送的GPRS AT CMD的所有VMMW API需要清理完善，包括增加FTP API
+= GPRS AT CMD的接收需要寻找</xml>关键字，提高效率，避免纯粹依靠TIME OUT
 = 5. BSP串口接收中断改进
 
 //= ZJL, 2016 Dec.30, CURRENT_SW_DELIVERY R03.75 =>CCL项目
