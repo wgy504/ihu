@@ -7,7 +7,8 @@
 //= ZJL, 2016 Dec.31, CURRENT_SW_DELIVERY R03.76 =>CCL项目
 = 发送的GPRS AT CMD的所有VMMW API需要清理完善，包括增加FTP API
 = GPRS AT CMD的接收需要寻找</xml>关键字，提高效率，避免纯粹依靠TIME OUT
-= 5. BSP串口接收中断改进
+= BSP串口接收中断改进：L2FRAME放在了SPARE1中，暂时不影响GPRS的使用
+= 因为GPRS的半双工模式，跟L2FRAME帧结构模式不兼容，暂时无法融合到一起，除非采用项目#ifdef方式，但本质上没啥区别了。
 
 //= ZJL, 2016 Dec.30, CURRENT_SW_DELIVERY R03.75 =>CCL项目
 = 统一命名SPS中的全局变量，将代码风格标准化

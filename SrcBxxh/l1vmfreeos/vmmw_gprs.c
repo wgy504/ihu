@@ -1169,8 +1169,7 @@ OPSTAT ihu_vmmw_gprsmod_bs_position_perform(StrVmmwGprsmodBasestationPosition_t 
 OPSTAT ihu_vmmw_gprsmod_tts_perform(char *input)
 {
   uint16_t len=0;
-  uint8_t temp_src[]="Hello, this is a test from BXXH!";
-	uint8_t temp[IHU_VMMW_GPRSMOD_TTS_MAX_LEN+15];
+	uint8_t temp[IHU_VMMW_GPRSMOD_TTS_MAX_LEN + 15];
 	uint8_t loc=0;
 	
 	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Base Station positioning Session starting...!\n");
@@ -1223,14 +1222,9 @@ OPSTAT ihu_vmmw_gprsmod_tts_perform(char *input)
 	strcpy((char*)&temp,(const char*)"AT+CTTS=2,\"");
 	loc=sizeof("AT+CTTS=2,\"");
   len=strlen((const char*)input);
-	strncpy((char*)&temp[loc-1],(const char*)input, (len < (50-loc))?len:(50-loc));
-	if (len < (50-loc)){
-		temp[loc+len-1]='\"';
-		temp[loc+len]='\0';
-	}else{
-		temp[48] = '\"';
-		temp[49] = '\0';
-	}	
+	strncpy((char*)&temp[loc-1],(const char*)input, (len < IHU_VMMW_GPRSMOD_TTS_MAX_LEN)?len:IHU_VMMW_GPRSMOD_TTS_MAX_LEN);
+	temp[loc+len-1]='\"';
+	temp[loc+len]='\0';
   if (func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"OK", 3) == IHU_FAILURE)
 	{
 		IHU_ERROR_PRINT_GPRSMOD("VMFO: GPRS support TTS failure!\n");

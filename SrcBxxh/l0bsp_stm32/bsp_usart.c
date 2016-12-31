@@ -323,12 +323,15 @@ int ihu_bsp_stm32_sps_spare2_rcv_data_timeout(uint8_t* buff, uint16_t len, uint3
 		return BSP_FAILURE;
 }
 
-
-
 /**
+  *
   * 串口接口完成回调函数的处理
   * 为什么需要重新执行HAL_UART_Receive_IT，待确定
-	* 这里既要考虑支持L2FRAME格式，也要考虑支持HUIXML格式的AT CMD模式，待完善
+	* 这里既要考虑支持L2FRAME格式，也要考虑支持HUIXML格式的AT CMD模式
+  * 因为GPRS和UART模式不可能重复，这里将L2FRAME放在SPARE1中断中，留待未来进一步使用。GPRS是非常明确的，不需要这个机制。
+  *
+  * L2FRAME需要未来进一步进行稳定性测试，暂时需要等待
+  *
   */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 {
@@ -340,59 +343,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 		zIhuBspStm32SpsGprsRxBuff[zIhuBspStm32SpsGprsRxCount++] = res;
 		if (zIhuBspStm32SpsGprsRxCount >= IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN)
 			zIhuBspStm32SpsGprsRxCount = 0;
-
-		//为了IDLE状态下提高效率，直接分解为IDLE和ELSE
-		if (zIhuBspStm32SpsGprsRxState == IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE)
-		{
-			//只有满足这么苛刻的条件，才算找到了帧头
-			if ((res == IHU_HUITP_L2FRAME_STD_RX_START_FLAG_CHAR) && (zIhuBspStm32SpsGprsRxCount == 1))
-			zIhuBspStm32SpsGprsRxState = IHU_HUITP_L2FRAME_STD_RX_STATE_START;
-		}
-		else
-		{
-			//收到CHECKSUM
-			if((zIhuBspStm32SpsGprsRxState == IHU_HUITP_L2FRAME_STD_RX_STATE_START) && (zIhuBspStm32SpsGprsRxCount == 2))
-			{
-				zIhuBspStm32SpsGprsRxState = IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_CKSM;
-			}
-			//收到长度高位
-			else if((zIhuBspStm32SpsGprsRxState == IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_CKSM) && (zIhuBspStm32SpsGprsRxCount == 3))
-			{
-				zIhuBspStm32SpsGprsRxState = IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_LEN;
-			}
-			//收到长度低位
-			else if((zIhuBspStm32SpsGprsRxState == IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_LEN) && (zIhuBspStm32SpsGprsRxCount == 4))
-			{
-				zIhuBspStm32SpsGprsRxLen = ((zIhuBspStm32SpsGprsRxBuff[2] <<8) + zIhuBspStm32SpsGprsRxBuff[3]);
-				//CHECKSUM及判定
-				if ((zIhuBspStm32SpsGprsRxBuff[1] == (zIhuBspStm32SpsGprsRxBuff[0] ^ zIhuBspStm32SpsGprsRxBuff[2]^zIhuBspStm32SpsGprsRxBuff[3])) &&\
-					(zIhuBspStm32SpsGprsRxLen < IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN-4))
-				zIhuBspStm32SpsGprsRxState = IHU_HUITP_L2FRAME_STD_RX_STATE_BODY;
-			}
-			//收到BODY位
-			else if((zIhuBspStm32SpsGprsRxState == IHU_HUITP_L2FRAME_STD_RX_STATE_BODY) && (zIhuBspStm32SpsGprsRxLen > 1))
-			{
-				zIhuBspStm32SpsGprsRxLen--;
-			}
-			//收到BODY最后一位
-			else if((zIhuBspStm32SpsGprsRxState == IHU_HUITP_L2FRAME_STD_RX_STATE_BODY) && (zIhuBspStm32SpsGprsRxLen == 1))
-			{
-				zIhuBspStm32SpsGprsRxState = IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE;
-				zIhuBspStm32SpsGprsRxLen = 0;
-				zIhuBspStm32SpsGprsRxCount = 0;
-				//发送数据到上层SPSVIRGO模块
-				memset(&snd, 0, sizeof(msg_struct_spsvirgo_l2frame_rcv_t));
-				memcpy(snd.data, &zIhuBspStm32SpsGprsRxBuff[4], ((zIhuBspStm32SpsGprsRxBuff[2]<<8)+zIhuBspStm32SpsGprsRxBuff[3]));
-				snd.length = sizeof(msg_struct_spsvirgo_l2frame_rcv_t);				
-				ihu_message_send(MSG_ID_SPS_L2FRAME_RCV, TASK_ID_SPSVIRGO, TASK_ID_VMFO, &snd, snd.length);				
-			}
-			//差错情况
-			else{
-				zIhuBspStm32SpsGprsRxState = IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE;
-				zIhuBspStm32SpsGprsRxLen = 0;
-				zIhuBspStm32SpsGprsRxCount = 0;
-			}
-		}
 		//重新设置中断
 		HAL_UART_Receive_IT(&IHU_BSP_STM32_UART_GPRS_HANDLER, &zIhuUartRxBuffer[IHU_BSP_STM32_UART_GPRS_HANDLER_ID-1], 1);
   }
@@ -402,6 +352,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 		zIhuBspStm32SpsRfidRxCount++;
 		if (zIhuBspStm32SpsRfidRxCount >= IHU_BSP_STM32_SPS_RFID_REC_MAX_LEN)
 			zIhuBspStm32SpsRfidRxCount = 0;
+		//重新设置中断
 		HAL_UART_Receive_IT(&IHU_BSP_STM32_UART_RFID_HANDLER, &zIhuUartRxBuffer[IHU_BSP_STM32_UART_RFID_HANDLER_ID-1], 1);
   }
   else if(UartHandle==&IHU_BSP_STM32_UART_PRINT_HANDLER)
@@ -410,6 +361,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 		zIhuBspStm32SpsPrintRxCount++;
 		if (zIhuBspStm32SpsPrintRxCount >= IHU_BSP_STM32_SPS_PRINT_REC_MAX_LEN)
 			zIhuBspStm32SpsPrintRxCount = 0;
+		//重新设置中断
 		HAL_UART_Receive_IT(&IHU_BSP_STM32_UART_PRINT_HANDLER, &zIhuUartRxBuffer[IHU_BSP_STM32_UART_PRINT_HANDLER_ID-1], 1);
   }	
   else if(UartHandle==&IHU_BSP_STM32_UART_BLE_HANDLER)
@@ -418,6 +370,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 		zIhuBspStm32SpsBleRxCount++;
 		if (zIhuBspStm32SpsBleRxCount >= IHU_BSP_STM32_SPS_BLE_REC_MAX_LEN)
 			zIhuBspStm32SpsBleRxCount = 0;
+		//重新设置中断
 		HAL_UART_Receive_IT(&IHU_BSP_STM32_UART_BLE_HANDLER, &zIhuUartRxBuffer[IHU_BSP_STM32_UART_BLE_HANDLER_ID-1], 1);
   }	
   else if(UartHandle==&IHU_BSP_STM32_UART_SPARE1_HANDLER)
@@ -426,6 +379,61 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 		zIhuBspStm32SpsSpare1RxCount++;
 		if (zIhuBspStm32SpsSpare1RxCount >= IHU_BSP_STM32_SPS_SPARE1_REC_MAX_LEN)
 			zIhuBspStm32SpsSpare1RxCount = 0;
+		
+		//这是为了L2FRAME处理方式
+		//为了IDLE状态下提高效率，直接分解为IDLE和ELSE
+		if (zIhuBspStm32SpsSpare1RxState == IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE)
+		{
+			//只有满足这么苛刻的条件，才算找到了帧头
+			if ((res == IHU_HUITP_L2FRAME_STD_RX_START_FLAG_CHAR) && (zIhuBspStm32SpsSpare1RxCount == 1))
+			zIhuBspStm32SpsSpare1RxState = IHU_HUITP_L2FRAME_STD_RX_STATE_START;
+		}
+		else
+		{
+			//收到CHECKSUM
+			if((zIhuBspStm32SpsSpare1RxState == IHU_HUITP_L2FRAME_STD_RX_STATE_START) && (zIhuBspStm32SpsSpare1RxCount == 2))
+			{
+				zIhuBspStm32SpsSpare1RxState = IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_CKSM;
+			}
+			//收到长度高位
+			else if((zIhuBspStm32SpsSpare1RxState == IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_CKSM) && (zIhuBspStm32SpsSpare1RxCount == 3))
+			{
+				zIhuBspStm32SpsSpare1RxState = IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_LEN;
+			}
+			//收到长度低位
+			else if((zIhuBspStm32SpsSpare1RxState == IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_LEN) && (zIhuBspStm32SpsSpare1RxCount == 4))
+			{
+				zIhuBspStm32SpsSpare1RxLen = ((zIhuBspStm32SpsSpare1RxBuff[2] <<8) + zIhuBspStm32SpsSpare1RxBuff[3]);
+				//CHECKSUM及判定
+				if ((zIhuBspStm32SpsSpare1RxBuff[1] == (zIhuBspStm32SpsSpare1RxBuff[0] ^ zIhuBspStm32SpsSpare1RxBuff[2]^zIhuBspStm32SpsSpare1RxBuff[3])) &&\
+					(zIhuBspStm32SpsSpare1RxLen < IHU_BSP_STM32_SPS_SPARE1_REC_MAX_LEN-4))
+				zIhuBspStm32SpsSpare1RxState = IHU_HUITP_L2FRAME_STD_RX_STATE_BODY;
+			}
+			//收到BODY位
+			else if((zIhuBspStm32SpsSpare1RxState == IHU_HUITP_L2FRAME_STD_RX_STATE_BODY) && (zIhuBspStm32SpsSpare1RxLen > 1))
+			{
+				zIhuBspStm32SpsSpare1RxLen--;
+			}
+			//收到BODY最后一位
+			else if((zIhuBspStm32SpsSpare1RxState == IHU_HUITP_L2FRAME_STD_RX_STATE_BODY) && (zIhuBspStm32SpsSpare1RxLen == 1))
+			{
+				zIhuBspStm32SpsSpare1RxState = IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE;
+				zIhuBspStm32SpsSpare1RxLen = 0;
+				zIhuBspStm32SpsSpare1RxCount = 0;
+				//发送数据到上层SPSVIRGO模块
+				memset(&snd, 0, sizeof(msg_struct_spsvirgo_l2frame_rcv_t));
+				memcpy(snd.data, &zIhuBspStm32SpsSpare1RxBuff[4], ((zIhuBspStm32SpsSpare1RxBuff[2]<<8)+zIhuBspStm32SpsSpare1RxBuff[3]));
+				snd.length = sizeof(msg_struct_spsvirgo_l2frame_rcv_t);				
+				ihu_message_send(MSG_ID_SPS_L2FRAME_RCV, TASK_ID_SPSVIRGO, TASK_ID_VMFO, &snd, snd.length);				
+			}
+			//差错情况
+			else{
+				zIhuBspStm32SpsSpare1RxState = IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE;
+				zIhuBspStm32SpsSpare1RxLen = 0;
+				zIhuBspStm32SpsSpare1RxCount = 0;
+			}
+		}
+		//重新设置中断
 		HAL_UART_Receive_IT(&IHU_BSP_STM32_UART_SPARE1_HANDLER, &zIhuUartRxBuffer[IHU_BSP_STM32_UART_SPARE1_HANDLER_ID-1], 1);
   }	
   else if(UartHandle==&IHU_BSP_STM32_UART_SPARE2_HANDLER)
@@ -434,6 +442,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 		zIhuBspStm32SpsSpare2RxCount++;
 		if (zIhuBspStm32SpsSpare2RxCount >= IHU_BSP_STM32_SPS_SPARE2_REC_MAX_LEN)
 			zIhuBspStm32SpsSpare2RxCount = 0;
+		//重新设置中断
 		HAL_UART_Receive_IT(&IHU_BSP_STM32_UART_SPARE2_HANDLER, &zIhuUartRxBuffer[IHU_BSP_STM32_UART_SPARE2_HANDLER_ID-1], 1);
   }
 }
