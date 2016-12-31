@@ -308,15 +308,19 @@ OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input)
 		func_gprsmod_clear_receive_buffer();
 	}
 		
-	//TCP设置配置
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPCLOSE=1", (uint8_t*)"CLOSE OK", 2);	//关闭连接
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPSHUT", (uint8_t*)"SHUT OK", 2);		//关闭移动场景
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CGCLASS=\"B\"", (uint8_t*)"OK", 2);//设置GPRS移动台类别为B,支持包交换和数据交换 
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CGDCONT=1,\"IP\",\"CMNET\"", (uint8_t*)"OK",2);//设置PDP上下文,互联网接协议,接入点等信息
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CGATT=1", (uint8_t*)"OK", 2);//附着GPRS业务
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPCSGP=1,\"CMNET\"", (uint8_t*)"OK", 2);//设置为GPRS连接模式
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPHEAD=1", (uint8_t*)"OK", 2);//设置接收数据显示IP头(方便判断数据来源,仅在单路连接有效)
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPMUX=0", (uint8_t*)"OK", 2);//设置单路连接
+	//设置GPRS/IP层配置
+	//设置GPRS移动台类别为B,支持包交换和数据交换 
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CGCLASS=\"B\"", (uint8_t*)"OK", 2);
+	//设置PDP上下文,互联网接协议,接入点等信息
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CGDCONT=1,\"IP\",\"CMNET\"", (uint8_t*)"OK",2);
+	//附着GPRS业务
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CGATT=1", (uint8_t*)"OK", 2);
+	//设置为GPRS连接模式
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPCSGP=1,\"CMNET\"", (uint8_t*)"OK", 2);
+	//设置接收数据显示IP头(方便判断数据来源,仅在单路连接有效)
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPHEAD=1", (uint8_t*)"OK", 2);
+	//设置单路连接
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPMUX=0", (uint8_t*)"OK", 2);
 	
 	//HTTP设置配置
 	func_gprsmod_send_AT_command((uint8_t*)"AT+SAPBR=3,1,\"CONTYPE\",\"GPRS\"", (uint8_t*)"OK", 2); //设置GPRS/HTTP工作模式，打开承载
@@ -362,7 +366,7 @@ OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input)
 		return IHU_FAILURE;
 	}
 		
-	//发送结束
+	//HTTP发送结束
 	func_gprsmod_send_AT_command((uint8_t*)"AT+HTTPTERM", (uint8_t*)"OK", 2);	//关闭HTTP连接
 	func_gprsmod_send_AT_command((uint8_t*)"AT+SAPBR=0,1", (uint8_t*)"OK", 2);	//关闭HTTP连接
 		
@@ -407,15 +411,21 @@ OPSTAT ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive(char *input)
 		func_gprsmod_clear_receive_buffer();
 	}
 		
-	//设置配置
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPCLOSE=1", (uint8_t*)"CLOSE OK", 2);	//关闭连接
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPSHUT", (uint8_t*)"SHUT OK", 2);		//关闭移动场景
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CGCLASS=\"B\"", (uint8_t*)"OK", 2);//设置GPRS移动台类别为B,支持包交换和数据交换 
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CGDCONT=1,\"IP\",\"CMNET\"", (uint8_t*)"OK",2);//设置PDP上下文,互联网接协议,接入点等信息
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CGATT=1", (uint8_t*)"OK", 2);//附着GPRS业务
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPCSGP=1,\"CMNET\"", (uint8_t*)"OK", 2);//设置为GPRS连接模式
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPHEAD=1", (uint8_t*)"OK", 2);//设置接收数据显示IP头(方便判断数据来源,仅在单路连接有效)
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPMUX=0", (uint8_t*)"OK", 2);//设置单路连接
+	//设置GPRS/IP层配置
+	//设置GPRS移动台类别为B,支持包交换和数据交换 
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CGCLASS=\"B\"", (uint8_t*)"OK", 2);
+	//设置PDP上下文,互联网接协议,接入点等信息
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CGDCONT=1,\"IP\",\"CMNET\"", (uint8_t*)"OK",2);
+	//附着GPRS业务
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CGATT=1", (uint8_t*)"OK", 2);
+	//设置为GPRS连接模式
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPCSGP=1,\"CMNET\"", (uint8_t*)"OK", 2);
+	//设置接收数据显示IP头(方便判断数据来源,仅在单路连接有效)
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPHEAD=1", (uint8_t*)"OK", 2);
+	//设置单路连接
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPMUX=0", (uint8_t*)"OK", 2);
+	
+	//TCPIP层面设置
 	memset(temp, 0, sizeof(temp));
 	strcpy((char*)&temp, (const char*)"AT+CIPSTART=");
 	strcat((char*)&temp, "TCP");
@@ -432,9 +442,7 @@ OPSTAT ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive(char *input)
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Begin to send..........!\n");
 	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CIPSEND", (uint8_t*)">", 2) == IHU_SUCCESS)
 	{
-		memset(temp, 0, sizeof(temp));
-		strcpy((char*)temp, input);
-		if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"SEND OK", 8) == IHU_SUCCESS)
+		if(func_gprsmod_send_AT_command((uint8_t*)input, (uint8_t*)"SEND OK", 8) == IHU_SUCCESS)
 		{ 								
 			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Send successful!\n");
 		}else
@@ -525,15 +533,21 @@ OPSTAT ihu_vmmw_gprsmod_tcp_u8_data_transmit_with_receive(int8_t *input)
 		func_gprsmod_clear_receive_buffer();
 	}
 		
-	//设置配置
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPCLOSE=1", (uint8_t*)"CLOSE OK", 2);	//关闭连接
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPSHUT", (uint8_t*)"SHUT OK", 2);		//关闭移动场景
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CGCLASS=\"B\"", (uint8_t*)"OK", 2);//设置GPRS移动台类别为B,支持包交换和数据交换 
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CGDCONT=1,\"IP\",\"CMNET\"", (uint8_t*)"OK",2);//设置PDP上下文,互联网接协议,接入点等信息
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CGATT=1", (uint8_t*)"OK", 2);//附着GPRS业务
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPCSGP=1,\"CMNET\"", (uint8_t*)"OK", 2);//设置为GPRS连接模式
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPHEAD=1", (uint8_t*)"OK", 2);//设置接收数据显示IP头(方便判断数据来源,仅在单路连接有效)
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPMUX=0", (uint8_t*)"OK", 2);//设置单路连接
+	//设置GPRS/IP层配置
+	//设置GPRS移动台类别为B,支持包交换和数据交换 
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CGCLASS=\"B\"", (uint8_t*)"OK", 2);
+	//设置PDP上下文,互联网接协议,接入点等信息
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CGDCONT=1,\"IP\",\"CMNET\"", (uint8_t*)"OK",2);
+	//附着GPRS业务
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CGATT=1", (uint8_t*)"OK", 2);
+	//设置为GPRS连接模式
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPCSGP=1,\"CMNET\"", (uint8_t*)"OK", 2);
+	//设置接收数据显示IP头(方便判断数据来源,仅在单路连接有效)
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPHEAD=1", (uint8_t*)"OK", 2);
+	//设置单路连接
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPMUX=0", (uint8_t*)"OK", 2);
+	
+	//TCPIP层面设置
 	memset(temp, 0, sizeof(temp));
 	strcpy((char*)&temp, (const char*)"AT+CIPSTART=");
 	strcat((char*)&temp, "TCP");
@@ -550,9 +564,7 @@ OPSTAT ihu_vmmw_gprsmod_tcp_u8_data_transmit_with_receive(int8_t *input)
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Begin to send..........!\n");
 	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CIPSEND", (uint8_t*)">", 2) == IHU_SUCCESS)
 	{
-		memset(temp, 0, sizeof(temp));
-		memcpy((int8_t*)temp, input, sizeof(input));
-		if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"SEND OK", 8) == IHU_SUCCESS)
+		if(func_gprsmod_send_AT_command((uint8_t*)input, (uint8_t*)"SEND OK", 8) == IHU_SUCCESS)
 		{ 								
 			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Send successful!\n");
 		}else
@@ -630,15 +642,21 @@ OPSTAT ihu_vmmw_gprsmod_udp_text_data_transmit_with_receive(char *input)
 		func_gprsmod_clear_receive_buffer();
 	}
 		
-	//设置配置
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPCLOSE=1", (uint8_t*)"CLOSE OK", 2);	//关闭连接
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPSHUT", (uint8_t*)"SHUT OK", 2);		//关闭移动场景
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CGCLASS=\"B\"", (uint8_t*)"OK", 2);//设置GPRS移动台类别为B,支持包交换和数据交换 
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CGDCONT=1,\"IP\",\"CMNET\"", (uint8_t*)"OK",2);//设置PDP上下文,互联网接协议,接入点等信息
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CGATT=1", (uint8_t*)"OK", 2);//附着GPRS业务
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPCSGP=1,\"CMNET\"", (uint8_t*)"OK", 2);//设置为GPRS连接模式
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPHEAD=1", (uint8_t*)"OK", 2);//设置接收数据显示IP头(方便判断数据来源,仅在单路连接有效)
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPMUX=0", (uint8_t*)"OK", 2);//设置单路连接
+	//设置GPRS/IP层配置
+	//设置GPRS移动台类别为B,支持包交换和数据交换 
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CGCLASS=\"B\"", (uint8_t*)"OK", 2);
+	//设置PDP上下文,互联网接协议,接入点等信息
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CGDCONT=1,\"IP\",\"CMNET\"", (uint8_t*)"OK",2);
+	//附着GPRS业务
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CGATT=1", (uint8_t*)"OK", 2);
+	//设置为GPRS连接模式
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPCSGP=1,\"CMNET\"", (uint8_t*)"OK", 2);
+	//设置接收数据显示IP头(方便判断数据来源,仅在单路连接有效)
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPHEAD=1", (uint8_t*)"OK", 2);
+	//设置单路连接
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPMUX=0", (uint8_t*)"OK", 2);
+	
+	//TCPIP层面设置
 	memset(temp, 0, sizeof(temp));
 	strcpy((char*)&temp, (const char*)"AT+CIPSTART=");
 	strcat((char*)&temp, "UDP");
@@ -655,9 +673,7 @@ OPSTAT ihu_vmmw_gprsmod_udp_text_data_transmit_with_receive(char *input)
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Begin to send..........!\n");
 	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CIPSEND", (uint8_t*)">", 2) == IHU_SUCCESS)
 	{
-		memset(temp, 0, sizeof(temp));
-		strcpy((char*)temp, input);
-		if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"SEND OK", 8) == IHU_SUCCESS)
+		if(func_gprsmod_send_AT_command((uint8_t*)input, (uint8_t*)"SEND OK", 8) == IHU_SUCCESS)
 		{ 								
 			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Send successful!\n");
 		}else
@@ -747,15 +763,21 @@ OPSTAT ihu_vmmw_gprsmod_udp_u8_data_transmit_with_receive(int8_t *input)
 		func_gprsmod_clear_receive_buffer();
 	}
 		
-	//设置配置
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPCLOSE=1", (uint8_t*)"CLOSE OK", 2);	//关闭连接
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPSHUT", (uint8_t*)"SHUT OK", 2);		//关闭移动场景
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CGCLASS=\"B\"", (uint8_t*)"OK", 2);//设置GPRS移动台类别为B,支持包交换和数据交换 
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CGDCONT=1,\"IP\",\"CMNET\"", (uint8_t*)"OK",2);//设置PDP上下文,互联网接协议,接入点等信息
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CGATT=1", (uint8_t*)"OK", 2);//附着GPRS业务
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPCSGP=1,\"CMNET\"", (uint8_t*)"OK", 2);//设置为GPRS连接模式
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPHEAD=1", (uint8_t*)"OK", 2);//设置接收数据显示IP头(方便判断数据来源,仅在单路连接有效)
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPMUX=0", (uint8_t*)"OK", 2);//设置单路连接
+	//设置GPRS/IP层配置
+	//设置GPRS移动台类别为B,支持包交换和数据交换 
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CGCLASS=\"B\"", (uint8_t*)"OK", 2);
+	//设置PDP上下文,互联网接协议,接入点等信息
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CGDCONT=1,\"IP\",\"CMNET\"", (uint8_t*)"OK",2);
+	//附着GPRS业务
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CGATT=1", (uint8_t*)"OK", 2);
+	//设置为GPRS连接模式
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPCSGP=1,\"CMNET\"", (uint8_t*)"OK", 2);
+	//设置接收数据显示IP头(方便判断数据来源,仅在单路连接有效)
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPHEAD=1", (uint8_t*)"OK", 2);
+	//设置单路连接
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPMUX=0", (uint8_t*)"OK", 2);
+	
+	//TCPIP层面设置
 	memset(temp, 0, sizeof(temp));
 	strcpy((char*)&temp, (const char*)"AT+CIPSTART=");
 	strcat((char*)&temp, "UDP");
@@ -772,9 +794,7 @@ OPSTAT ihu_vmmw_gprsmod_udp_u8_data_transmit_with_receive(int8_t *input)
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Begin to send..........!\n");
 	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CIPSEND", (uint8_t*)">", 2) == IHU_SUCCESS)
 	{
-		memset(temp, 0, sizeof(temp));
-		memcpy((int8_t*)temp, input, sizeof(input));
-		if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"SEND OK", 8) == IHU_SUCCESS)
+		if(func_gprsmod_send_AT_command((uint8_t*)input, (uint8_t*)"SEND OK", 8) == IHU_SUCCESS)
 		{ 								
 			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Send successful!\n");
 		}else
@@ -819,14 +839,14 @@ OPSTAT ihu_vmmw_gprsmod_udp_u8_data_transmit_with_receive(int8_t *input)
 }
 
 //从后台GET数据的功能
-OPSTAT ihu_vmmw_gprsmod_ftp_data_transmit_with_receive(int8_t *input)
+OPSTAT ihu_vmmw_gprsmod_ftp_data_transmit_with_receive(int8_t *output)
 {
 	uint8_t temp[IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN+1];	
-	uint8_t *p1,*p2;
+	//uint8_t *p1,*p2;
 	
 	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: FTP Session starting...!\n");
 	//参数检查
-	if (input == NULL){
+	if (output == NULL){
 		IHU_ERROR_PRINT_GPRSMOD("VMFO: invalid called number or other parameter received!\n");
 		return IHU_FAILURE;				
 	}
@@ -837,84 +857,74 @@ OPSTAT ihu_vmmw_gprsmod_ftp_data_transmit_with_receive(int8_t *input)
 		return IHU_FAILURE;				
 	}
 
-	//检查是否有下发的数据：由于前面有初始化结果，一般不可能出现
-	if(strstr((const char*)zIhuBspStm32SpsGprsRxBuff, "+IPD"))//判断上位机是否有数据下发
-	{
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: New content received!\n");
-		p1=(uint8_t*)strstr((const char*)zIhuBspStm32SpsGprsRxBuff,",");
-		p2=(uint8_t*)strstr((const char*)zIhuBspStm32SpsGprsRxBuff,":");
-		if ((p1!=NULL) && (p2!=NULL) && (p1<p2)){
-			memset(temp, 0, sizeof(temp));
-			memcpy(temp, p1+1, (p2-p1-1<sizeof(temp)?(p2-p1-1):sizeof(temp)));
-			//这里采用%x打印数据块可能比较好，但特别麻烦，反正就是打印下，无所谓
-			IhuDebugPrint("VMFO: received data in char = [%s]\n", temp); 
-		}
-		func_gprsmod_clear_receive_buffer();
-	}
-		
-	//设置配置
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPCLOSE=1", (uint8_t*)"CLOSE OK", 2);	//关闭连接
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPSHUT", (uint8_t*)"SHUT OK", 2);		//关闭移动场景
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CGCLASS=\"B\"", (uint8_t*)"OK", 2);//设置GPRS移动台类别为B,支持包交换和数据交换 
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CGDCONT=1,\"IP\",\"CMNET\"", (uint8_t*)"OK",2);//设置PDP上下文,互联网接协议,接入点等信息
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CGATT=1", (uint8_t*)"OK", 2);//附着GPRS业务
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPCSGP=1,\"CMNET\"", (uint8_t*)"OK", 2);//设置为GPRS连接模式
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPHEAD=1", (uint8_t*)"OK", 2);//设置接收数据显示IP头(方便判断数据来源,仅在单路连接有效)
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPMUX=0", (uint8_t*)"OK", 2);//设置单路连接
-	memset(temp, 0, sizeof(temp));
-	strcpy((char*)&temp, (const char*)"AT+CIPSTART=");
-	strcat((char*)&temp, "UDP");
-	if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"OK", 2 ) == IHU_SUCCESS)//发起连接
-	{
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: New connecting!\n");
-	}else
-	{
-		IHU_ERROR_PRINT_GPRSMOD("VMFO: Set GPRS parameter error!\n");
-		return IHU_FAILURE;
-	}
-		
-	//发送内容	
-	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Begin to send..........!\n");
-	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CIPSEND", (uint8_t*)">", 2) == IHU_SUCCESS)
-	{
-		memset(temp, 0, sizeof(temp));
-		memcpy((int8_t*)temp, input, sizeof(input));
-		if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"SEND OK", 8) == IHU_SUCCESS)
-		{ 								
-			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Send successful!\n");
-		}else
-		{
-			IHU_ERROR_PRINT_GPRSMOD("VMFO: GPRS Send failure 1!\n");
-			return IHU_FAILURE;
-		}
-
-		//接收数据：因为是U8，所以不需要做转化，而且将接收数据全部送上去，等待L2FRAME进行处理
-		msg_struct_spsvirgo_l2frame_rcv_t snd;
-		//发送数据到上层SPSVIRGO模块
-		memset(&snd, 0, sizeof(msg_struct_spsvirgo_l2frame_rcv_t));
-		memcpy(snd.data, (uint8_t*)zIhuBspStm32SpsGprsRxBuff, sizeof(zIhuBspStm32SpsGprsRxBuff));
-		snd.length = sizeof(msg_struct_spsvirgo_l2frame_rcv_t);
-		ihu_message_send(MSG_ID_SPS_L2FRAME_RCV, TASK_ID_SPSVIRGO, TASK_ID_VMFO, &snd, snd.length);
-	}
-	else
-	{
-		ihu_l1hd_sps_gprs_send_data((uint8_t *)0X1B, 1);//ESC,取消发送
-		IHU_ERROR_PRINT_GPRSMOD("VMFO: GPRS Send failure2!\n");
-		return IHU_FAILURE;
-	}
+	//设置GPRS/IP层配置
+	//设置GPRS移动台类别为B,支持包交换和数据交换 
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CGCLASS=\"B\"", (uint8_t*)"OK", 2);
+	//设置PDP上下文,互联网接协议,接入点等信息
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CGDCONT=1,\"IP\",\"CMNET\"", (uint8_t*)"OK",2);
+	//附着GPRS业务
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CGATT=1", (uint8_t*)"OK", 2);
+	//设置为GPRS连接模式
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPCSGP=1,\"CMNET\"", (uint8_t*)"OK", 2);
+	//设置接收数据显示IP头(方便判断数据来源,仅在单路连接有效)
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPHEAD=1", (uint8_t*)"OK", 2);
+	//设置单路连接
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPMUX=0", (uint8_t*)"OK", 2);
 	
-	//发送结束
-	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CIPSEND", (uint8_t*)">", 2)== IHU_SUCCESS)
-	{
-		ihu_l1hd_sps_gprs_send_data((uint8_t *)0x00, 1);
-		ihu_l1hd_sps_gprs_send_data((uint8_t *)0X1A, 1);//CTRL+Z,结束数据发送,启动一次传输								
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Heart-beat successful!\n");		 
-	}else
-	{
-		ihu_l1hd_sps_gprs_send_data((uint8_t *)0X1B, 1);//ESC,取消发送
-		IHU_ERROR_PRINT_GPRSMOD("VMFO: GPRS Send failure3!\n");
-		return IHU_FAILURE;
-	}
+	//FTP设置配置
+	//选择GPRS
+	func_gprsmod_send_AT_command((uint8_t*)"AT+SAPBR=3,1,\"CONTYPE\",\"GPRS\"", (uint8_t*)"OK", 2); 
+	//设置APN
+	func_gprsmod_send_AT_command((uint8_t*)"AT+SAPBR=3,1,\"APN\",\"CMNET\"", (uint8_t*)"OK", 2);
+	//激活PDP上下文
+	func_gprsmod_send_AT_command((uint8_t*)"AT+SAPBR=1,1", (uint8_t*)"OK", 2); 
+	//设置FTP格式
+	func_gprsmod_send_AT_command((uint8_t*)"AT+FTPCID=1", (uint8_t*)"OK", 2);  
+	//设置传输类型
+	func_gprsmod_send_AT_command((uint8_t*)"AT+FTPTYPE=\"A\"", (uint8_t*)"OK", 2);  
+	//设置传输类型  
+	func_gprsmod_send_AT_command((uint8_t*)"AT+FTPTYPE=\"A\"", (uint8_t*)"OK", 2);  
+	//设置FTP服务器
+	memset(temp, 0, sizeof(temp));
+	memcpy((char*)temp, "AT+FTPSERV=\"", sizeof("AT+FTPSERV=\""));
+	strcat((char*)temp, zIhuSysEngPar.cloud.cloudBhFtpSvrAddr);
+	strcat((char*)temp, "\"");
+	func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"OK", 2);
+	//设置FTP用户名 
+	memset(temp, 0, sizeof(temp));
+	memcpy((char*)temp, "AT+FTPUN=\"", sizeof("AT+FTPUN=\""));
+	strcat((char*)temp, IHU_CLOUDXHUI_FTP_BH_SERVER_USER_NAME);
+	strcat((char*)temp, "\"");
+	func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"OK", 2);
+	//设置FTP密码
+	memset(temp, 0, sizeof(temp));
+	memcpy((char*)temp, "AT+FTPPW=\"", sizeof("AT+FTPPW=\""));
+	strcat((char*)temp, IHU_CLOUDXHUI_FTP_BH_SERVER_USER_PSWD);
+	strcat((char*)temp, "\"");
+	func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"OK", 2);
+	//设置FTP下载的文件名
+	memset(temp, 0, sizeof(temp));
+	memcpy((char*)temp, "AT+FTPGETNAME=\"", sizeof("AT+FTPGETNAME=\""));
+	strcat((char*)temp, IHU_CLOUDXHUI_FTP_BH_SERVER_FILE_NAME);
+	strcat((char*)temp, "\"");
+	func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"OK", 2);
+	//设置FTP下载的目录
+	memset(temp, 0, sizeof(temp));
+	memcpy((char*)temp, "AT+FTPGETPATH=\"", sizeof("AT+FTPGETPATH=\""));
+	strcat((char*)temp, IHU_CLOUDXHUI_FTP_BH_SERVER_FILE_PATH);
+	strcat((char*)temp, "\"");
+	func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"OK", 2);
+	//执行该指令后，请一直处于等待状态，不要做其它操作，以OK免返回error。
+	//还需要等待这个+FTPGET:1,1，因为OK只是表示发送命令成了， 等到上报该信息后，在进行获取数据操作
+	func_gprsmod_send_AT_command((uint8_t*)"AT+FTPGET=1", (uint8_t*)"+FTPGET:1,1", 10); //10秒
+	//下载数据：先返回+FTPGET:2,1024，然后是数据，最后是OK信号
+	func_gprsmod_send_AT_command((uint8_t*)"AT+FTPGET=2,1024", (uint8_t*)"OK", 2);
+	// 主动查询数据获取结束
+	func_gprsmod_send_AT_command((uint8_t*)"AT+FTPGET=2,1024", (uint8_t*)"+FTPGET:2,0", 2);
+	//模块自动上报获取数据完成: +FTPGET:1,0，这个如何处理，待定
+	
+	//FTP发送结束
+	func_gprsmod_send_AT_command((uint8_t*)"AT+SAPBR=0,1", (uint8_t*)"OK", 2);	//关闭PDP上下文
 	
 	//退出	
 	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPCLOSE=1", (uint8_t*)"CLOSE OK", 5);	//关闭连接
@@ -923,11 +933,12 @@ OPSTAT ihu_vmmw_gprsmod_ftp_data_transmit_with_receive(int8_t *input)
 	return IHU_SUCCESS;
 }
 
-OPSTAT ihu_vmmw_gprsmod_email_data_transmit_with_receive(char *input)
+//往后台发送的POST功能
+OPSTAT ihu_vmmw_gprsmod_email_data_transmit_with_receive(char *emailAddr)
 {
 	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: EMAIL Session starting...!\n");
 	//参数检查
-	if (input == NULL){
+	if (emailAddr == NULL){
 		IHU_ERROR_PRINT_GPRSMOD("VMFO: invalid called number or other parameter received!\n");
 		return IHU_FAILURE;				
 	}
@@ -940,7 +951,6 @@ OPSTAT ihu_vmmw_gprsmod_email_data_transmit_with_receive(char *input)
 		
 	return IHU_SUCCESS;
 }
-
 
 /*******************************************************************************
 * 函数名 : ihu_vmmw_gprsmod_bs_position_perform

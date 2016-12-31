@@ -633,6 +633,7 @@ void ihu_vm_system_init(void)
 	strcpy(zIhuSysEngPar.cloud.cloudHttpAddLocal, IHU_CLOUDXHUI_HTTP_ADDRESS_LOCAL);
 	strcpy(zIhuSysEngPar.cloud.cloudBhServerAddr, IHU_CLOUDXHUI_HTTP_ADDRESS_BH_SERVER_ADDR);
 	strcpy(zIhuSysEngPar.cloud.cloudBhServerName, IHU_CLOUDXHUI_HTTP_ADDRESS_BH_SERVER_NAME);
+	strcpy(zIhuSysEngPar.cloud.cloudBhFtpSvrAddr, IHU_CLOUDXHUI_FTP_BH_SERVER_ADDR);	
 	strcpy(zIhuSysEngPar.cloud.cloudBhIhuName, IHU_CLOUDXHUI_HCU_NAME_SELF);
 	strcpy(zIhuSysEngPar.cloud.cloudFtpAdd, IHU_CLOUDXHUI_FTP_ADDRESS);
 	

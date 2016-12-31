@@ -61,8 +61,8 @@ extern OPSTAT ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive(char *input);
 extern OPSTAT ihu_vmmw_gprsmod_tcp_u8_data_transmit_with_receive(int8_t *input);  //往后台发送的POST功能
 extern OPSTAT ihu_vmmw_gprsmod_udp_test_data_transmit_with_receive(char *input);  //往后台发送的POST功能
 extern OPSTAT ihu_vmmw_gprsmod_udp_8_data_transmit_with_receive(int8_t *input);    //往后台发送的POST功能
-extern OPSTAT ihu_vmmw_gprsmod_ftp_data_transmit_with_receive(int8_t *input);    //从后台GET数据的功能
-extern OPSTAT ihu_vmmw_gprsmod_email_data_transmit_with_receive(char *input);
+extern OPSTAT ihu_vmmw_gprsmod_ftp_data_transmit_with_receive(int8_t *output);   //从后台GET数据的功能
+extern OPSTAT ihu_vmmw_gprsmod_email_data_transmit_with_receive(char *emailAddr); //往后台发送的POST功能
 extern OPSTAT ihu_vmmw_gprsmod_bs_position_perform(void);
 extern OPSTAT ihu_vmmw_gprsmod_tts_perform(void);
 extern int16_t ihu_vmmw_gprsmod_get_rssi_value(void);

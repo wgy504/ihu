@@ -401,6 +401,11 @@
 	#define IHU_CLOUDXHUI_HTTP_ADDRESS_LOCAL "http://127.0.0.1/test.php"
 	#define IHU_CLOUDXHUI_HTTP_ADDRESS_BH_SERVER_ADDR "http://www.hkrob.com/mfunhcu/l1mainentry/cloud_callback_hcu.php"
 	#define IHU_CLOUDXHUI_HTTP_ADDRESS_BH_SERVER_NAME "XHZN_HCU"
+	#define IHU_CLOUDXHUI_FTP_BH_SERVER_ADDR "http://www.hkrob.com/mfunhcu/l1mainentry/cloud_callback_hcu.php"
+	#define IHU_CLOUDXHUI_FTP_BH_SERVER_USER_NAME "test1234"
+	#define IHU_CLOUDXHUI_FTP_BH_SERVER_USER_PSWD "123456"
+	#define IHU_CLOUDXHUI_FTP_BH_SERVER_FILE_NAME "ihu_new_pkg.bin"
+	#define IHU_CLOUDXHUI_FTP_BH_SERVER_FILE_PATH "/"
 	#define IHU_CLOUDXHUI_HCU_NAME_SELF "HCU_CL_0499"
 	
 	//定义后台CLOUD FTP 的地址
