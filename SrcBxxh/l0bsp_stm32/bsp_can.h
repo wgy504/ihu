@@ -1,5 +1,5 @@
-#ifndef __BSP_DEBUG_CAN_H__
-#define __BSP_DEBUG_CAN_H__
+#ifndef __BSP_STM32_CAN_H
+#define __BSP_STM32_CAN_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -29,13 +29,13 @@ extern "C" {
 #define IHU_BSP_STM32_CAN_TX_MAX_DELAY 				100
 #define IHU_BSP_STM32_CAN_RX_MAX_DELAY 				100
 
-//形成定义的交换矩阵
-#define IHU_BSP_STM32_CAN_IAU_HANDLER					hcan1
-#define IHU_BSP_STM32_CAN_IAU_HANDLER_ID  		1
-#define IHU_BSP_STM32_CAN_SPARE1_HANDLER			hcan2
-#define IHU_BSP_STM32_CAN_SPARE1_HANDLER_ID  	2
+//本地定义的交换矩阵
+#define IHU_BSP_STM32_CAN_IAU_HANDLER								hcan1
+#define IHU_BSP_STM32_CAN_IAU_HANDLER_ID  					1
+#define IHU_BSP_STM32_CAN_SPARE1_HANDLER						hcan2
+#define IHU_BSP_STM32_CAN_SPARE1_HANDLER_ID  				2
 
-//API函数
+//全局函数
 extern int ihu_bsp_stm32_can_slave_hw_init(void);
 extern int ihu_bsp_stm32_can_send_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_can_rcv_data(uint8_t* buff, uint16_t len);	
@@ -45,6 +45,13 @@ extern int ihu_bsp_stm32_can_spare1_rcv_data(uint8_t* buff, uint16_t len);
 //重载接收函数，以便通过IT中断方式搞定接收通信，否则需要通过轮询或者单独线程搞定，更加麻烦
 void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef *CanHandle);
 
-#endif  /* __BSP_DEBUG_CAN_H__ */
+//Local APIs
+
+
+
+#ifdef __cplusplus
+}
+#endif
+#endif  /* __BSP_STM32_CAN_H */
 
 

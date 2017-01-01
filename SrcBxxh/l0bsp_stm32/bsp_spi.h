@@ -1,5 +1,5 @@
-#ifndef  __BSP_SPI_H
-#define  __BSP_SPI_H
+#ifndef  __BSP_STM32_SPI_H
+#define  __BSP_STM32_SPI_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -100,7 +100,6 @@ int func_bsp_spi_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint
 #define IHU_BSP_STM32_SPI_IAU_HANDLER							hspi2
 #define IHU_BSP_STM32_SPI_IAU_HANDLER_ID  				2
 
-
 //全局函数
 extern int ihu_bsp_stm32_spi_slave_hw_init(void);
 extern int ihu_bsp_stm32_spi_spare1_send_data(uint8_t* buff, uint16_t len);
@@ -111,10 +110,17 @@ extern int ihu_bsp_stm32_spi_iau_rcv_data(uint8_t* buff, uint16_t len);
 //重载接收函数，以便通过IT中断方式搞定接收通信，否则需要通过轮询或者单独线程搞定，更加麻烦
 void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *SpiHandle);
 
+
+//local API
+static void BSP_SPI_tx_isr(SPI_HandleTypeDef *hspi);
+static void BSP_SPI_rx_isr(SPI_HandleTypeDef *hspi);
+static void BSP_SPI_tx_complete(SPI_HandleTypeDef *hspi);
+static void BSP_SPI_rx_complete(SPI_HandleTypeDef *hspi);
+
+
 #ifdef __cplusplus
 }
 #endif
-
-#endif //__BSP_SPI_H
+#endif //__BSP_STM32_SPI_H
 
 

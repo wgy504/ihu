@@ -1,5 +1,5 @@
-#ifndef __BSP_DEBUG_USART_H__
-#define __BSP_DEBUG_USART_H__
+#ifndef __BSP_STM32_USART_H
+#define __BSP_STM32_USART_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -49,7 +49,7 @@ typedef struct IHU_HUITP_L2FRAME_STD_UART_frame_header
 #define IHU_BSP_STM32_SPS_TX_MAX_DELAY 100
 #define IHU_BSP_STM32_SPS_RX_MAX_DELAY 100
 
-//形成定义的交换矩阵
+//本地定义的交换矩阵
 #define IHU_BSP_STM32_UART_GPRS_HANDLER					huart1
 #define IHU_BSP_STM32_UART_GPRS_HANDLER_ID  		1
 #define IHU_BSP_STM32_UART_RFID_HANDLER					huart2
@@ -63,12 +63,11 @@ typedef struct IHU_HUITP_L2FRAME_STD_UART_frame_header
 #define IHU_BSP_STM32_UART_SPARE2_HANDLER				huart6
 #define IHU_BSP_STM32_UART_SPARE2_HANDLER_ID  	6
 
-//API函数
-extern int ihu_bsp_stm32_sps_slave_hw_init(void);
 
+//全局函数
+extern int ihu_bsp_stm32_sps_slave_hw_init(void);
 extern int ihu_bsp_stm32_sps_print_fputc(int ch, FILE *f);
 extern int ihu_bsp_stm32_sps_print_fgetc(FILE * f);
-
 extern int ihu_bsp_stm32_sps_print_send_data(char *s);
 extern int ihu_bsp_stm32_sps_print_rcv_data(char *s, uint16_t len);
 extern int ihu_bsp_stm32_sps_print_rcv_data_timeout(uint8_t* buff, uint16_t len, uint32_t timeout);
@@ -91,6 +90,13 @@ extern int ihu_bsp_stm32_sps_spare2_rcv_data_timeout(uint8_t* buff, uint16_t len
 //重载接收函数，以便通过IT中断方式搞定接收通信，否则需要通过轮询或者单独线程搞定，更加麻烦
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle);
 
-#endif  /* __BSP_DEBUG_USART_H__ */
+
+//Local APIs
+
+
+#ifdef __cplusplus
+}
+#endif
+#endif  /* __BSP_STM32_USART_H */
 
 

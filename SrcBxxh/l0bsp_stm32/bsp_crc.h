@@ -1,5 +1,5 @@
-#ifndef __BSP_STM32_DIDO_H
-#define __BSP_STM32_DIDO_H
+#ifndef __BSP_STM32_CRC_H
+#define __BSP_STM32_CRC_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -20,25 +20,25 @@ extern "C" {
 
 //不能在这里出现管脚的任何配置和初始化，必须在STM32CubeMX中完成，这里使用STM32CubeMX给出的端口俗名
 
-//BLE串口模块的使能GPIO端口定义
-#define BLE_UART_PORT_PIN							GPIO_PIN_3  //纯属于测试，待修改
-#define BLE_UART_PORT									GPIOA
-#define BLE_UART_PORT_ENABLE()				HAL_GPIO_WritePin(BLE_UART_PORT, BLE_UART_PORT_PIN, GPIO_PIN_SET)    // 输出高电平
-#define BLE_UART_PORT_DISABLE()				HAL_GPIO_WritePin(BLE_UART_PORT, BLE_UART_PORT_PIN, GPIO_PIN_RESET)  // 输出高电平
+
+
+
 
 
 //本地定义的交换矩阵
-
-
+#define IHU_BSP_STM32_CRC_HANDLER					hcrc
+#define IHU_BSP_STM32_CRC_HANDLER_ID  		1
 
 //全局函数
+extern uint32_t ihu_bsp_stm32_crc_caculate(uint32_t *inputData, uint16_t len);
 
 
 //Local APIs
 
 
+
 #ifdef __cplusplus
 }
 #endif
-#endif  // __BSP_STM32_DIDO_H
+#endif	/* __BSP_STM32_CRC_H */
 

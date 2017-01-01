@@ -1,5 +1,5 @@
-#ifndef __BASIC_TIM_H__
-#define __BASIC_TIM_H__
+#ifndef __BSP_STM32_TIM_H
+#define __BSP_STM32_TIM_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -52,11 +52,24 @@ extern "C" {
 // 比如需要产生20ms周期定时，可以设置为： 72MHz/（359+1）/4000=50Hz，即20ms周期
 // 这里设置 BASIC_TIMx_PRESCALER=359；BASIC_TIMx_PERIOD=4000；
 
-/* 扩展变量 ------------------------------------------------------------------*/
-//extern TIM_HandleTypeDef htimx;
-/* 函数声明 ------------------------------------------------------------------*/
 
+
+
+
+
+
+
+//本地定义的交换矩阵
+
+
+//全局函数
+
+
+//Local APIs
 void BASIC_TIMx_Init(void);
 
-#endif	/* __BASIC_TIM_H__ */
-/******************* (C) COPYRIGHT 2015-2020 硬石嵌入式开发团队 *****END OF FILE****/
+#ifdef __cplusplus
+}
+#endif
+#endif	/* __BSP_STM32_TIM_H */
+

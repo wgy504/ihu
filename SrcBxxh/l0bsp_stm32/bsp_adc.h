@@ -1,5 +1,5 @@
-#ifndef __ADC_H__
-#define	__ADC_H__
+#ifndef __BSP_STM32_ADC_H__
+#define	__BSP_STM32_ADC_H__
 
 #ifdef __cplusplus
 extern "C" {
@@ -20,9 +20,6 @@ extern "C" {
 
 //不能在这里出现管脚的任何配置和初始化，必须在STM32CubeMX中完成，这里使用STM32CubeMX给出的端口俗名
 
-
-/* 类型定义 ------------------------------------------------------------------*/
-/* 宏定义 --------------------------------------------------------------------*/
 // 注意：用作ADC采集的IO必须没有复用，否则采集电压会有影响
 /********************ADC输入通道（引脚）配置**************************/
 #define ADCx_RCC_CLK_ENABLE()            __HAL_RCC_ADC1_CLK_ENABLE()
@@ -47,13 +44,22 @@ extern "C" {
 #define XIN_EXTI_IRQn                    EXTI3_IRQn           
 #define XIN_EXTI_IRQHandler              EXTI3_IRQHandler
 
-/* 扩展变量 ------------------------------------------------------------------*/
-extern ADC_HandleTypeDef hadcx;
-extern DMA_HandleTypeDef hdma_adcx;
-/* 函数声明 ------------------------------------------------------------------*/
+
+//本地定义的交换矩阵
+
+
+//全局函数API
+
+
+
+//Local APIs
 void ihu_bsp_stm32_adc_hw_init(void);
 void XIN_GPIO_Init(void);
 int ihu_bsp_stm32_adc_get_sample_value(void);
 
-#endif /* __ADC_H__ */
+
+#ifdef __cplusplus
+}
+#endif
+#endif /* __BSP_STM32_ADC_H__ */
 

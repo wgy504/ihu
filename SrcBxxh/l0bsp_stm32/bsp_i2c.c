@@ -13,27 +13,21 @@
 /* 包含头文件 ----------------------------------------------------------------*/
 #include "bsp_i2c.h"
 
-/* 私有类型定义 --------------------------------------------------------------*/
-/* 私有宏定义 ----------------------------------------------------------------*/
-/* 私有变量 ------------------------------------------------------------------*/
 //从MAIN.x中继承过来的函数
 extern I2C_HandleTypeDef hi2c1;
 extern I2C_HandleTypeDef hi2c2;
 extern uint8_t zIhuI2cRxBuffer[2];
 
-//从SCYCB项目中继承过来的全局变量，待定
-int8_t BSP_STM32_I2C_IAU_R_Buff[IHU_BSP_STM32_I2C_IAU_REC_MAX_LEN];			//数据接收缓冲区 
-int8_t BSP_STM32_I2C_IAU_R_State=0;																	//接收状态
-int16_t BSP_STM32_I2C_IAU_R_Count=0;																//当前接收数据的字节数
-int16_t BSP_STM32_I2C_IAU_R_Len=0;
-int8_t BSP_STM32_I2C_SPARE1_R_Buff[IHU_BSP_STM32_I2C_SPARE1_REC_MAX_LEN];	//数据接收缓冲区 
-int8_t BSP_STM32_I2C_SPARE1_R_State=0;												//接收状态
-int16_t BSP_STM32_I2C_SPARE1_R_Count=0;										//当前接收数据的字节数 	  
-int16_t BSP_STM32_I2C_SPARE1_R_Len=0;
+//本地全局变量
+int8_t zIhuBspStm32I2cIauRxBuff[IHU_BSP_STM32_I2C_IAU_REC_MAX_LEN];			//数据接收缓冲区 
+int8_t zIhuBspStm32I2cIauRxState=0;																	//接收状态
+int16_t zIhuBspStm32I2cIauRxCount=0;																//当前接收数据的字节数
+int16_t zIhuBspStm32I2cIauRxLen=0;
+int8_t zIhuBspStm32I2cSpare1RxBuff[IHU_BSP_STM32_I2C_SPARE1_REC_MAX_LEN];	//数据接收缓冲区 
+int8_t zIhuBspStm32I2cSpare1RxState=0;												//接收状态
+int16_t zIhuBspStm32I2cSpare1RxCount=0;										//当前接收数据的字节数 	  
+int16_t zIhuBspStm32I2cSpare1RxLen=0;
 
-
-/* 扩展变量 ------------------------------------------------------------------*/
-/* 私有函数原形 --------------------------------------------------------------*/
 /* 函数体 --------------------------------------------------------------------*/
 
 int ihu_bsp_stm32_i2c_slave_hw_init(void)
@@ -41,19 +35,19 @@ int ihu_bsp_stm32_i2c_slave_hw_init(void)
 	uint16_t k;
 	for(k=0;k<IHU_BSP_STM32_I2C_IAU_REC_MAX_LEN;k++)      //将缓存内容清零
 	{
-		BSP_STM32_I2C_IAU_R_Buff[k] = 0x00;
+		zIhuBspStm32I2cIauRxBuff[k] = 0x00;
 	}
-  BSP_STM32_I2C_IAU_R_Count = 0;               //接收字符串的起始存储位置
-	BSP_STM32_I2C_IAU_R_State = 0;
-	BSP_STM32_I2C_IAU_R_Len = 0;
+  zIhuBspStm32I2cIauRxCount = 0;               //接收字符串的起始存储位置
+	zIhuBspStm32I2cIauRxState = 0;
+	zIhuBspStm32I2cIauRxLen = 0;
 
 	for(k=0;k<IHU_BSP_STM32_I2C_SPARE1_REC_MAX_LEN;k++)      //将缓存内容清零
 	{
-		BSP_STM32_I2C_SPARE1_R_Buff[k] = 0x00;
+		zIhuBspStm32I2cSpare1RxBuff[k] = 0x00;
 	}
-  BSP_STM32_I2C_SPARE1_R_Count = 0;               //接收字符串的起始存储位置
-	BSP_STM32_I2C_SPARE1_R_State = 0;
-	BSP_STM32_I2C_SPARE1_R_Len = 0;	
+  zIhuBspStm32I2cSpare1RxCount = 0;               //接收字符串的起始存储位置
+	zIhuBspStm32I2cSpare1RxState = 0;
+	zIhuBspStm32I2cSpare1RxLen = 0;	
 	
 	return BSP_SUCCESS;
 }
@@ -119,60 +113,60 @@ void HAL_I2C_RxCpltCallback(I2C_HandleTypeDef *I2cHandle)
   if(I2cHandle==&IHU_BSP_STM32_I2C_IAU_HANDLER)
   {
 		res = zIhuI2cRxBuffer[IHU_BSP_STM32_I2C_IAU_HANDLER_ID-1];
-		BSP_STM32_I2C_IAU_R_Buff[BSP_STM32_I2C_IAU_R_Count++] = res;
-		if (BSP_STM32_I2C_IAU_R_Count >= IHU_BSP_STM32_I2C_IAU_REC_MAX_LEN)
-			BSP_STM32_I2C_IAU_R_Count = 0;
+		zIhuBspStm32I2cIauRxBuff[zIhuBspStm32I2cIauRxCount++] = res;
+		if (zIhuBspStm32I2cIauRxCount >= IHU_BSP_STM32_I2C_IAU_REC_MAX_LEN)
+			zIhuBspStm32I2cIauRxCount = 0;
 
 		//为了IDLE状态下提高效率，直接分解为IDLE和ELSE
-		if (BSP_STM32_I2C_IAU_R_State == IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE)
+		if (zIhuBspStm32I2cIauRxState == IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE)
 		{
 			//只有满足这么苛刻的条件，才算找到了帧头
-			if ((res == IHU_HUITP_L2FRAME_STD_RX_START_FLAG_CHAR) && (BSP_STM32_I2C_IAU_R_Count == 1))
-			BSP_STM32_I2C_IAU_R_State = IHU_HUITP_L2FRAME_STD_RX_STATE_START;
+			if ((res == IHU_HUITP_L2FRAME_STD_RX_START_FLAG_CHAR) && (zIhuBspStm32I2cIauRxCount == 1))
+			zIhuBspStm32I2cIauRxState = IHU_HUITP_L2FRAME_STD_RX_STATE_START;
 		}
 		else
 		{
 			//收到CHECKSUM
-			if((BSP_STM32_I2C_IAU_R_State == IHU_HUITP_L2FRAME_STD_RX_STATE_START) && (BSP_STM32_I2C_IAU_R_Count == 2))
+			if((zIhuBspStm32I2cIauRxState == IHU_HUITP_L2FRAME_STD_RX_STATE_START) && (zIhuBspStm32I2cIauRxCount == 2))
 			{
-				BSP_STM32_I2C_IAU_R_State = IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_CKSM;
+				zIhuBspStm32I2cIauRxState = IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_CKSM;
 			}
 			//收到长度高位
-			else if((BSP_STM32_I2C_IAU_R_State == IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_CKSM) && (BSP_STM32_I2C_IAU_R_Count == 3))
+			else if((zIhuBspStm32I2cIauRxState == IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_CKSM) && (zIhuBspStm32I2cIauRxCount == 3))
 			{
-				BSP_STM32_I2C_IAU_R_State = IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_LEN;
+				zIhuBspStm32I2cIauRxState = IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_LEN;
 			}
 			//收到长度低位
-			else if((BSP_STM32_I2C_IAU_R_State == IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_LEN) && (BSP_STM32_I2C_IAU_R_Count == 4))
+			else if((zIhuBspStm32I2cIauRxState == IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_LEN) && (zIhuBspStm32I2cIauRxCount == 4))
 			{
-				BSP_STM32_I2C_IAU_R_Len = ((BSP_STM32_I2C_IAU_R_Buff[2] <<8) + BSP_STM32_I2C_IAU_R_Buff[3]);
+				zIhuBspStm32I2cIauRxLen = ((zIhuBspStm32I2cIauRxBuff[2] <<8) + zIhuBspStm32I2cIauRxBuff[3]);
 				//CHECKSUM及判定
-				if ((BSP_STM32_I2C_IAU_R_Buff[1] == (BSP_STM32_I2C_IAU_R_Buff[0] ^ BSP_STM32_I2C_IAU_R_Buff[2]^BSP_STM32_I2C_IAU_R_Buff[3])) &&\
-					(BSP_STM32_I2C_IAU_R_Len < IHU_BSP_STM32_I2C_IAU_REC_MAX_LEN-4))
-				BSP_STM32_I2C_IAU_R_State = IHU_HUITP_L2FRAME_STD_RX_STATE_BODY;
+				if ((zIhuBspStm32I2cIauRxBuff[1] == (zIhuBspStm32I2cIauRxBuff[0] ^ zIhuBspStm32I2cIauRxBuff[2]^zIhuBspStm32I2cIauRxBuff[3])) &&\
+					(zIhuBspStm32I2cIauRxLen < IHU_BSP_STM32_I2C_IAU_REC_MAX_LEN-4))
+				zIhuBspStm32I2cIauRxState = IHU_HUITP_L2FRAME_STD_RX_STATE_BODY;
 			}
 			//收到BODY位
-			else if((BSP_STM32_I2C_IAU_R_State == IHU_HUITP_L2FRAME_STD_RX_STATE_BODY) && (BSP_STM32_I2C_IAU_R_Len > 1))
+			else if((zIhuBspStm32I2cIauRxState == IHU_HUITP_L2FRAME_STD_RX_STATE_BODY) && (zIhuBspStm32I2cIauRxLen > 1))
 			{
-				BSP_STM32_I2C_IAU_R_Len--;
+				zIhuBspStm32I2cIauRxLen--;
 			}
 			//收到BODY最后一位
-			else if((BSP_STM32_I2C_IAU_R_State == IHU_HUITP_L2FRAME_STD_RX_STATE_BODY) && (BSP_STM32_I2C_IAU_R_Len == 1))
+			else if((zIhuBspStm32I2cIauRxState == IHU_HUITP_L2FRAME_STD_RX_STATE_BODY) && (zIhuBspStm32I2cIauRxLen == 1))
 			{
-				BSP_STM32_I2C_IAU_R_State = IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE;
-				BSP_STM32_I2C_IAU_R_Len = 0;
-				BSP_STM32_I2C_IAU_R_Count = 0;
+				zIhuBspStm32I2cIauRxState = IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE;
+				zIhuBspStm32I2cIauRxLen = 0;
+				zIhuBspStm32I2cIauRxCount = 0;
 				//发送数据到上层I2CARIES模块
 				memset(&snd, 0, sizeof(msg_struct_i2caries_l2frame_rcv_t));
-				memcpy(snd.data, &BSP_STM32_I2C_IAU_R_Buff[4], ((BSP_STM32_I2C_IAU_R_Buff[2]<<8)+BSP_STM32_I2C_IAU_R_Buff[3]));
+				memcpy(snd.data, &zIhuBspStm32I2cIauRxBuff[4], ((zIhuBspStm32I2cIauRxBuff[2]<<8)+zIhuBspStm32I2cIauRxBuff[3]));
 				snd.length = sizeof(msg_struct_i2caries_l2frame_rcv_t);				
 				ihu_message_send(MSG_ID_SPS_L2FRAME_RCV, TASK_ID_I2CARIES, TASK_ID_VMFO, &snd, snd.length);				
 			}
 			//差错情况
 			else{
-				BSP_STM32_I2C_IAU_R_State = IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE;
-				BSP_STM32_I2C_IAU_R_Len = 0;
-				BSP_STM32_I2C_IAU_R_Count = 0;
+				zIhuBspStm32I2cIauRxState = IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE;
+				zIhuBspStm32I2cIauRxLen = 0;
+				zIhuBspStm32I2cIauRxCount = 0;
 			}
 		}
 		//重新设置中断
@@ -180,10 +174,10 @@ void HAL_I2C_RxCpltCallback(I2C_HandleTypeDef *I2cHandle)
   }
 //  else if(I2cHandle==&IHU_BSP_STM32_I2C_SPARE1_HANDLER)
 //  {
-//		BSP_STM32_I2C_SPARE1_R_Buff[BSP_STM32_I2C_SPARE1_R_Count] = zIhuI2cRxBuffer[IHU_BSP_STM32_I2C_SPARE1_HANDLER_ID-1];
-//		BSP_STM32_I2C_SPARE1_R_Count++;
-//		if (BSP_STM32_I2C_SPARE1_R_Count >= IHU_BSP_STM32_I2C_SPARE1_REC_MAX_LEN)
-//			BSP_STM32_I2C_SPARE1_R_Count = 0;
+//		zIhuBspStm32I2cSpare1RxBuff[zIhuBspStm32I2cSpare1RxCount] = zIhuI2cRxBuffer[IHU_BSP_STM32_I2C_SPARE1_HANDLER_ID-1];
+//		zIhuBspStm32I2cSpare1RxCount++;
+//		if (zIhuBspStm32I2cSpare1RxCount >= IHU_BSP_STM32_I2C_SPARE1_REC_MAX_LEN)
+//			zIhuBspStm32I2cSpare1RxCount = 0;
 //		HAL_I2C_Slave_Receive_IT(&IHU_BSP_STM32_I2C_SPARE1_HANDLER, &zIhuI2cRxBuffer[IHU_BSP_STM32_I2C_SPARE1_HANDLER_ID-1], 1);
 //  }
 }

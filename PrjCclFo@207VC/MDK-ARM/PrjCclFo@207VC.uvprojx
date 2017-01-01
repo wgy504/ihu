@@ -688,6 +688,26 @@
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_can.h</FilePath>
             </File>
+            <File>
+              <FileName>bsp_wdog.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_wdog.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_wdog.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_wdog.h</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_crc.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_crc.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_crc.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
