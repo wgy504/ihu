@@ -4,13 +4,28 @@
 //近期需要完成的任务
 = 研究STM32的IAP功能
 
+//= ZJL, 2017 Jan.2, CURRENT_SW_DELIVERY R03.79 =>CCL项目
+= 将STM32CubeMX配置上了，IWdog/BEEP-LED/CRC硬件选上了
+= 删去FTP的异类定义
+= 删去CCL@205RG项目，207VC将成为唯一的工作环境了
+= WATCH_DOG的使用方法：
+  如果某一个项目工程想要打开WATCH_DOG，就需要将STM32CubeMX中的iwatch_dog打开使能，且将分频器设置为256/4095，最长32s的定时长度，然后将L1VMFO
+  的定时器设置为20s以内，并打开sysconfig.h中的IHU_WATCH_DOG_SET_ENABLE_OR_DISABLE使能标识
+  如果STM32CubeMX中的WATCH_DOG关闭，也需要将sysconfig.h中的项目IHU_WATCH_DOG_SET_ENABLE_OR_DISABLE使能标识关闭，不然编译不过
+  如果STM32CubeMX中的WATCH_DOG打开，但sysconfig.h中的项目IHU_WATCH_DOG_SET_ENABLE_OR_DISABLE使能标识关闭，会造成REFRESH不成立，会造成硬件板子不断重启
+= 归一化STM32CubeMX中管脚的命名，都形成了CUBEMX_PIN_F2_xxx的风格
+= 由于管脚冲突，SPI1以及USART6暂时删掉了。未来如果管脚不够，需要换144封装
+= 增加了GPRSMOD/RFID/BLE/SENSOR的电源控制GPIO口
+= 增加了LED指示，包括电源、通信状态以及主控程序工作状态
+= 增加了蜂鸣器BEEP的指示
+= 增加明确的LED相应拉高拉低程序，让上层简单调用工作
+= 完善了LED_POWER/LED_COMMU/LED_WORK_STATE/LED_BEEP的工作过程
+
 //= ZJL, 2017 Jan.1, CURRENT_SW_DELIVERY R03.78 =>CCL项目
 = 格式化BSP程序格式模板，预计命名规则
 = WATCH_DOG功能的完善，LSI分频器的设置，待研究
 = 增加BEEP BSP功能，基本配置等待STM32CubeMX的配置，继承自MAIN.h，初始化由MAIN自动搞定
 = 增加CRC BSP功能，基本配置等待STM32CubeMX的配置，继承自MAIN.h，初始化由MAIN自动搞定
-
-
 
 //= ZJL, 2016 Dec.31, CURRENT_SW_DELIVERY R03.77 =>CCL项目
 = 清理BSP程序模块中的老旧库配置参数部分

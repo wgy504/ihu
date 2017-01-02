@@ -300,8 +300,7 @@ OPSTAT fsm_vmfo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 		IhuDebugPrint("VMFO: Enter FSM_STATE_VMFO_ACTIVE status, Keeping refresh here!\n");
 	}
 
-	//启动IWDG的看门狗
-	ihu_l1hd_watch_dog_start();
+	//启动IWDG的看门狗：STM32CubeMX初始化已经自动启动了，这里就不需要了
 		
 	//返回
 	return IHU_SUCCESS;

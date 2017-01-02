@@ -91,7 +91,6 @@ typedef struct SysEngParElementCloudXhui
 	char  cloudBhServerName[SYS_ENG_PAR_ELEMENT_CLOUDXHUI_LEN];
 	char  cloudBhFtpSvrAddr[SYS_ENG_PAR_ELEMENT_CLOUDXHUI_LEN];
 	char  cloudBhIhuName[SYS_ENG_PAR_ELEMENT_CLOUDXHUI_LEN];
-	char  cloudFtpAdd[SYS_ENG_PAR_ELEMENT_CLOUDXHUI_LEN];
 	UINT8 cloudBhItfFrameStd;
 }SysEngParElementCloudXhui_t;
 

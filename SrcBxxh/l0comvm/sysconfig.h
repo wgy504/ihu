@@ -107,7 +107,10 @@
 	//月份的意义是，定时扫描，确保多少个月以内，文件数据必须保留，因为文件数据目前是按照时间月份进行存储的。使用天数进行计算，容易出现错误
 	//#define IHU_DATA_SAVE_DURATION_IN_MONTHS 3
 
-
+	//WATCH_DOG是否使能
+	#define IHU_WATCH_DOG_ENABLE 1
+	#define IHU_WATCH_DOG_DISABLE 2
+	#define IHU_WATCH_DOG_SET_ENABLE_OR_DISABLE IHU_WATCH_DOG_DISABLE
 
 
  /***********************************************************************************
@@ -133,7 +136,7 @@
 	//现在采用这种互斥的方式进行定义，以后需要等待HWINV进行PnP，确保多种接口即插即用，随时切换
 	//多种接口之间的优先级关系，则有程序任务自动决定：ETHERNET > WIFI > USB-OTG2 > 3G4G
 	//当前版本的做法是，多种接口均启动起来，但如何使用，由CLOUDCONT按照优先级和COMM_BACK_HAWL_CON定义唯一决定
-	//Timer setting
+	//Timer setting：心跳协议必须设置在20s以内，不然不能满足
 	#define IHU_VMFO_TIMER_DURATION_PERIOD_SCAN 300		
 	#define IHU_ADCLIBRA_TIMER_DURATION_PERIOD_SCAN 300
 	#define IHU_DIDOCAP_TIMER_DURATION_PERIOD_SCAN 300
@@ -150,8 +153,6 @@
 	#define IHU_SERIESPORT_NUM_FOR_GPS_DEFAULT  1
 	//定义后台CLOUD连接到服务器
 	#define IHU_CLOUDXHUI_HTTP_ADDRESS_LOCAL "http://127.0.0.1/test.php"
-	//定义后台CLOUD FTP 的地址
-	#define IHU_CLOUDXHUI_FTP_ADDRESS "ftp://121.40.185.177"
 	//local SW storage address
 	#define  IHU_SW_DOWNLOAD_DIR_DEFAULT "/home/pi/ihu_sw_download/"
 	#define  IHU_SW_ACTIVE_DIR_DEFAULT "/home/pi/ihu_sw_active/"
@@ -166,7 +167,10 @@
 	//模块启动的时间长度
 	#define IHU_MODULE_START_DISTRIBUTION_DELAY_DURATION  10  //in micro-second
 	
-
+	//WATCH_DOG是否使能
+	#define IHU_WATCH_DOG_ENABLE 1
+	#define IHU_WATCH_DOG_DISABLE 2
+	#define IHU_WATCH_DOG_SET_ENABLE_OR_DISABLE IHU_WATCH_DOG_DISABLE
 
 
  /***********************************************************************************
@@ -192,7 +196,7 @@
 	//现在采用这种互斥的方式进行定义，以后需要等待HWINV进行PnP，确保多种接口即插即用，随时切换
 	//多种接口之间的优先级关系，则有程序任务自动决定：ETHERNET > WIFI > USB-OTG2 > 3G4G
 	//当前版本的做法是，多种接口均启动起来，但如何使用，由CLOUDCONT按照优先级和COMM_BACK_HAWL_CON定义唯一决定
-	//Timer setting
+	//Timer setting：心跳协议必须设置在20s以内，不然不能满足
 	#define IHU_VMFO_TIMER_DURATION_PERIOD_SCAN 300		
 	#define IHU_ADCLIBRA_TIMER_DURATION_PERIOD_SCAN 300
 	#define IHU_DIDOCAP_TIMER_DURATION_PERIOD_SCAN 300
@@ -210,8 +214,6 @@
 	#define IHU_SERIESPORT_NUM_FOR_GPS_DEFAULT  1
 	//定义后台CLOUD连接到服务器
 	#define IHU_CLOUDXHUI_HTTP_ADDRESS_LOCAL "http://127.0.0.1/test.php"
-	//定义后台CLOUD FTP 的地址
-	#define IHU_CLOUDXHUI_FTP_ADDRESS "ftp://121.40.185.177"
 	//local SW storage address
 	#define  IHU_SW_DOWNLOAD_DIR_DEFAULT "/home/pi/ihu_sw_download/"
 	#define  IHU_SW_ACTIVE_DIR_DEFAULT "/home/pi/ihu_sw_active/"
@@ -226,7 +228,10 @@
 	//模块启动的时间长度
 	#define IHU_MODULE_START_DISTRIBUTION_DELAY_DURATION  10  //in micro-second
 	
-
+	//WATCH_DOG是否使能
+	#define IHU_WATCH_DOG_ENABLE 1
+	#define IHU_WATCH_DOG_DISABLE 2
+	#define IHU_WATCH_DOG_SET_ENABLE_OR_DISABLE IHU_WATCH_DOG_DISABLE
 
 
  /***********************************************************************************
@@ -252,7 +257,7 @@
 	//现在采用这种互斥的方式进行定义，以后需要等待HWINV进行PnP，确保多种接口即插即用，随时切换
 	//多种接口之间的优先级关系，则有程序任务自动决定：ETHERNET > WIFI > USB-OTG2 > 3G4G
 	//当前版本的做法是，多种接口均启动起来，但如何使用，由CLOUDCONT按照优先级和COMM_BACK_HAWL_CON定义唯一决定
-	//Timer setting
+	//Timer setting：心跳协议必须设置在20s以内，不然不能满足
 	#define IHU_VMFO_TIMER_DURATION_PERIOD_SCAN 300		
 	#define IHU_ADCLIBRA_TIMER_DURATION_PERIOD_SCAN 300
 	#define IHU_DIDOCAP_TIMER_DURATION_PERIOD_SCAN 300
@@ -269,8 +274,6 @@
 	#define IHU_SERIESPORT_NUM_FOR_GPS_DEFAULT  1
 	//定义后台CLOUD连接到服务器
 	#define IHU_CLOUDXHUI_HTTP_ADDRESS_LOCAL "http://127.0.0.1/test.php"
-	//定义后台CLOUD FTP 的地址
-	#define IHU_CLOUDXHUI_FTP_ADDRESS "ftp://121.40.185.177"
 	//local SW storage address
 	#define  IHU_SW_DOWNLOAD_DIR_DEFAULT "/home/pi/ihu_sw_download/"
 	#define  IHU_SW_ACTIVE_DIR_DEFAULT "/home/pi/ihu_sw_active/"
@@ -285,7 +288,10 @@
 	//模块启动的时间长度
 	#define IHU_MODULE_START_DISTRIBUTION_DELAY_DURATION  10  //in micro-second
 	
-
+	//WATCH_DOG是否使能
+	#define IHU_WATCH_DOG_ENABLE 1
+	#define IHU_WATCH_DOG_DISABLE 2
+	#define IHU_WATCH_DOG_SET_ENABLE_OR_DISABLE IHU_WATCH_DOG_DISABLE
 
 
  /***********************************************************************************
@@ -311,7 +317,7 @@
 	//现在采用这种互斥的方式进行定义，以后需要等待HWINV进行PnP，确保多种接口即插即用，随时切换
 	//多种接口之间的优先级关系，则有程序任务自动决定：ETHERNET > WIFI > USB-OTG2 > 3G4G
 	//当前版本的做法是，多种接口均启动起来，但如何使用，由CLOUDCONT按照优先级和COMM_BACK_HAWL_CON定义唯一决定
-	//Timer setting
+	//Timer setting：心跳协议必须设置在20s以内，不然不能满足
 	#define IHU_VMFO_TIMER_DURATION_PERIOD_SCAN 300		
 	#define IHU_ADCLIBRA_TIMER_DURATION_PERIOD_SCAN 300
 	#define IHU_DIDOCAP_TIMER_DURATION_PERIOD_SCAN 300
@@ -329,8 +335,6 @@
 	#define IHU_SERIESPORT_NUM_FOR_GPS_DEFAULT  1
 	//定义后台CLOUD连接到服务器
 	#define IHU_CLOUDXHUI_HTTP_ADDRESS_LOCAL "http://127.0.0.1/test.php"
-	//定义后台CLOUD FTP 的地址
-	#define IHU_CLOUDXHUI_FTP_ADDRESS "ftp://121.40.185.177"
 	//local SW storage address
 	#define  IHU_SW_DOWNLOAD_DIR_DEFAULT "/home/pi/ihu_sw_download/"
 	#define  IHU_SW_ACTIVE_DIR_DEFAULT "/home/pi/ihu_sw_active/"
@@ -345,7 +349,10 @@
 	//模块启动的时间长度
 	#define IHU_MODULE_START_DISTRIBUTION_DELAY_DURATION  10  //in micro-second
 	
-
+	//WATCH_DOG是否使能
+	#define IHU_WATCH_DOG_ENABLE 1
+	#define IHU_WATCH_DOG_DISABLE 2
+	#define IHU_WATCH_DOG_SET_ENABLE_OR_DISABLE IHU_WATCH_DOG_DISABLE
 
 
 
@@ -372,18 +379,18 @@
 	//现在采用这种互斥的方式进行定义，以后需要等待HWINV进行PnP，确保多种接口即插即用，随时切换
 	//多种接口之间的优先级关系，则有程序任务自动决定：ETHERNET > WIFI > USB-OTG2 > 3G4G
 	//当前版本的做法是，多种接口均启动起来，但如何使用，由CLOUDCONT按照优先级和COMM_BACK_HAWL_CON定义唯一决定
-	//Timer setting 
-	#define IHU_VMFO_TIMER_DURATION_PERIOD_SCAN 300		
-	#define IHU_ADCLIBRA_TIMER_DURATION_PERIOD_SCAN 300
-	#define IHU_DIDOCAP_TIMER_DURATION_PERIOD_SCAN 300
-	#define IHU_ETHORION_TIMER_DURATION_PERIOD_SCAN 200
-	#define IHU_CANVELA_TIMER_DURATION_PERIOD_SCAN 200
-	#define IHU_I2CARIERS_TIMER_DURATION_PERIOD_SCAN 200
-	#define IHU_LEDPISCES_TIMER_DURATION_PERIOD_SCAN 4
-	#define IHU_PWMTAURUS_TIMER_DURATION_PERIOD_SCAN 300
-	#define IHU_SPILEO_TIMER_DURATION_PERIOD_SCAN 400
+	//Timer setting：心跳协议必须设置在20s以内，不然不能满足
+	#define IHU_VMFO_TIMER_DURATION_PERIOD_SCAN 20		
+	#define IHU_ADCLIBRA_TIMER_DURATION_PERIOD_SCAN 20
+	#define IHU_DIDOCAP_TIMER_DURATION_PERIOD_SCAN 20
+	#define IHU_ETHORION_TIMER_DURATION_PERIOD_SCAN 20
+	#define IHU_CANVELA_TIMER_DURATION_PERIOD_SCAN 20
+	#define IHU_I2CARIERS_TIMER_DURATION_PERIOD_SCAN 20
+	#define IHU_LEDPISCES_TIMER_DURATION_PERIOD_SCAN 20
+	#define IHU_PWMTAURUS_TIMER_DURATION_PERIOD_SCAN 20
+	#define IHU_SPILEO_TIMER_DURATION_PERIOD_SCAN 20
 	#define IHU_SPSVIRGO_TIMER_DURATION_PERIOD_SCAN 20
-	#define IHU_DCMIARIS_TIMER_DURATION_PERIOD_SCAN 200
+	#define IHU_DCMIARIS_TIMER_DURATION_PERIOD_SCAN 20
 	#define IHU_CCL_TIMER_DURATION_PERIOD_SCAN 400
 	#define IHU_CCL_TIMER_DURATION_EVENT_REPORT_PEROID_SCAN  180 //为了测试目的，未来需要修改为28800  //8个小时一次
 	#define IHU_CCL_TIMER_DURATION_LOCK_ACTIVE 20 //为了加速测试268  //锁激活可以工作的时间为4.5分钟，之后就进入休眠状态，这里设置的小2S
@@ -408,8 +415,6 @@
 	#define IHU_CLOUDXHUI_FTP_BH_SERVER_FILE_PATH "/"
 	#define IHU_CLOUDXHUI_HCU_NAME_SELF "HCU_CL_0499"
 	
-	//定义后台CLOUD FTP 的地址
-	#define IHU_CLOUDXHUI_FTP_ADDRESS "ftp://121.40.185.177"
 	//local SW storage address
 	#define  IHU_SW_DOWNLOAD_DIR_DEFAULT "/home/pi/ihu_sw_download/"
 	#define  IHU_SW_ACTIVE_DIR_DEFAULT "/home/pi/ihu_sw_active/"
@@ -450,7 +455,11 @@
 	#else
 	#endif
 
-
+	//WATCH_DOG是否使能
+	#define IHU_WATCH_DOG_ENABLE 1
+	#define IHU_WATCH_DOG_DISABLE 2
+	#define IHU_WATCH_DOG_SET_ENABLE_OR_DISABLE IHU_WATCH_DOG_ENABLE
+	
 
 
 
@@ -478,7 +487,7 @@
 	//现在采用这种互斥的方式进行定义，以后需要等待HWINV进行PnP，确保多种接口即插即用，随时切换
 	//多种接口之间的优先级关系，则有程序任务自动决定：ETHERNET > WIFI > USB-OTG2 > 3G4G
 	//当前版本的做法是，多种接口均启动起来，但如何使用，由CLOUDCONT按照优先级和COMM_BACK_HAWL_CON定义唯一决定
-	//Timer setting 
+	//Timer setting：心跳协议必须设置在20s以内，不然不能满足
 	#define IHU_VMFO_TIMER_DURATION_PERIOD_SCAN 300	
 	#define IHU_ADCLIBRA_TIMER_DURATION_PERIOD_SCAN 300
 	#define IHU_DIDOCAP_TIMER_DURATION_PERIOD_SCAN 300
@@ -500,8 +509,6 @@
 	#define IHU_SERIESPORT_NUM_FOR_GPS_DEFAULT  1
 	//定义后台CLOUD连接到服务器
 	#define IHU_CLOUDXHUI_HTTP_ADDRESS_LOCAL "http://127.0.0.1/test.php"
-	//定义后台CLOUD FTP 的地址
-	#define IHU_CLOUDXHUI_FTP_ADDRESS "ftp://121.40.185.177"
 	//local SW storage address
 	#define  IHU_SW_DOWNLOAD_DIR_DEFAULT "/home/pi/ihu_sw_download/"
 	#define  IHU_SW_ACTIVE_DIR_DEFAULT "/home/pi/ihu_sw_active/"
@@ -516,6 +523,12 @@
 
 	//模块启动的时间长度
 	#define IHU_MODULE_START_DISTRIBUTION_DELAY_DURATION  10  //in micro-second
+
+	//WATCH_DOG是否使能
+	#define IHU_WATCH_DOG_ENABLE 1
+	#define IHU_WATCH_DOG_DISABLE 2
+	#define IHU_WATCH_DOG_SET_ENABLE_OR_DISABLE IHU_WATCH_DOG_DISABLE
+
 
 
 #else //IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID

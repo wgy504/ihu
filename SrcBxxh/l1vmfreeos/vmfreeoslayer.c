@@ -536,7 +536,6 @@ void ihu_vm_system_init(void)
 	strcpy(zIhuSysEngPar.cloud.cloudHttpAddLocal, IHU_CLOUDXHUI_HTTP_ADDRESS_LOCAL);
 
 	//for IHU SW FTP
-	strcpy(zIhuSysEngPar.cloud.cloudFtpAdd, IHU_CLOUDXHUI_FTP_ADDRESS);
 
 	//local SW storage address
 	strcpy(zIhuSysEngPar.swDownload.ihuSwDownloadDir, IHU_SW_DOWNLOAD_DIR_DEFAULT);
@@ -635,7 +634,6 @@ void ihu_vm_system_init(void)
 	strcpy(zIhuSysEngPar.cloud.cloudBhServerName, IHU_CLOUDXHUI_HTTP_ADDRESS_BH_SERVER_NAME);
 	strcpy(zIhuSysEngPar.cloud.cloudBhFtpSvrAddr, IHU_CLOUDXHUI_FTP_BH_SERVER_ADDR);	
 	strcpy(zIhuSysEngPar.cloud.cloudBhIhuName, IHU_CLOUDXHUI_HCU_NAME_SELF);
-	strcpy(zIhuSysEngPar.cloud.cloudFtpAdd, IHU_CLOUDXHUI_FTP_ADDRESS);
 	
 	//local SW storage address
 	strcpy(zIhuSysEngPar.swDownload.ihuSwDownloadDir, IHU_SW_DOWNLOAD_DIR_DEFAULT);
@@ -729,7 +727,6 @@ void ihu_vm_system_init(void)
 	strcpy(zIhuSysEngPar.cloud.cloudHttpAddLocal, IHU_CLOUDXHUI_HTTP_ADDRESS_LOCAL);
 
 	//for IHU SW FTP
-	strcpy(zIhuSysEngPar.cloud.cloudFtpAdd, IHU_CLOUDXHUI_FTP_ADDRESS);
 
 	//local SW storage address
 	strcpy(zIhuSysEngPar.swDownload.ihuSwDownloadDir, IHU_SW_DOWNLOAD_DIR_DEFAULT);

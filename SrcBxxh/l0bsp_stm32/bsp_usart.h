@@ -60,9 +60,12 @@ typedef struct IHU_HUITP_L2FRAME_STD_UART_frame_header
 #define IHU_BSP_STM32_UART_BLE_HANDLER_ID  			4
 #define IHU_BSP_STM32_UART_SPARE1_HANDLER				huart5
 #define IHU_BSP_STM32_UART_SPARE1_HANDLER_ID  	5
+
+#undef IHU_BSP_STM32_UART_SPARE2
+#ifdef IHU_BSP_STM32_UART_SPARE2
 #define IHU_BSP_STM32_UART_SPARE2_HANDLER				huart6
 #define IHU_BSP_STM32_UART_SPARE2_HANDLER_ID  	6
-
+#endif
 
 //全局函数
 extern int ihu_bsp_stm32_sps_slave_hw_init(void);

@@ -416,17 +416,25 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_adc_iau_get_value 				ihu_bsp_stm32_adc_get_sample_value
 
 //L0BSP=>L1HD: LED 
-#define ihu_l1hd_led_f2board_init 							ihu_bsp_stm32_led_f2board_init
+#define ihu_l1hd_led_power_f2board_ono 					ihu_bsp_stm32_led_power_f2board_on
+#define ihu_l1hd_led_power_f2board_off					ihu_bsp_stm32_led_power_f2board_off
+#define ihu_l1hd_led_power_f2board_toggle 			ihu_bsp_stm32_led_power_f2board_toggle
+#define ihu_l1hd_led_commu_f2board_ono 					ihu_bsp_stm32_led_commu_f2board_on
+#define ihu_l1hd_led_commu_f2board_off 					ihu_bsp_stm32_led_commu_f2board_off
+#define ihu_l1hd_led_commu_f2board_toggle 			ihu_bsp_stm32_led_commu_f2board_toggle
+#define ihu_l1hd_led_work_state_f2board_ono 		ihu_bsp_stm32_led_work_state_f2board_on
+#define ihu_l1hd_led_work_state_f2board_off 		ihu_bsp_stm32_led_work_state_f2board_off
+#define ihu_l1hd_led_work_state_f2board_toggle 	ihu_bsp_stm32_led_work_state_f2board_toggle
+#define ihu_l1hd_beep_f2board_ono 							ihu_bsp_stm32_beep_f2board_on
+#define ihu_l1hd_beep_f2board_off 							ihu_bsp_stm32_beep_f2board_off
+#define ihu_l1hd_beep_f2board_toggle 						ihu_bsp_stm32_beep_f2board_toggle
+//待去掉部分，纯粹用于207VC板子的测试
 #define ihu_l1hd_led_f2board_on 								ihu_bsp_stm32_led_f2board_on
 #define ihu_l1hd_led_f2board_off 								ihu_bsp_stm32_led_f2board_off
 #define ihu_l1hd_led_f2board_negation 					ihu_bsp_stm32_led_f2board_negation
 #define ihu_l1hd_led_f2board_timer_ind_on 			ihu_bsp_stm32_led_f2board_timer_ind_on
 #define ihu_l1hd_led_f2board_timer_ind_off 			ihu_bsp_stm32_led_f2board_timer_ind_off
 #define ihu_l1hd_led_f2board_timer_ind_negation ihu_bsp_stm32_led_f2board_timer_ind_negation
-#define ihu_l1hd_led_f2board_onoff 							ihu_bsp_stm32_led_f2board_onoff
-#define ihu_l1hd_beep_f2board_ono 							ihu_bsp_stm32_beep_f2board_on
-#define ihu_l1hd_beep_f2board_off 							ihu_bsp_stm32_beep_f2board_off
-#define ihu_l1hd_beep_f2board_toggle 						ihu_bsp_stm32_beep_f2board_toggle
 
 //L0BSP=>L1HD: USART
 #define ihu_l1hd_sps_slave_hw_init							ihu_bsp_stm32_sps_slave_hw_init
@@ -479,7 +487,6 @@ extern void ihu_timer_routine_handler_10ms(void);
 //L0BSP=>L1HD: DIDO
 
 //L0BSP=>L1HD: WDOG
-#define ihu_l1hd_watch_dog_start				 	ihu_bsp_stm32_watch_dog_start
 #define ihu_l1hd_watch_dog_refresh      	ihu_bsp_stm32_watch_dog_refresh
 
 //L0BSP=>L1HD: CRC

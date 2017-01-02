@@ -95,8 +95,12 @@ int func_bsp_spi_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint
 #define IHU_BSP_STM32_SPI_RX_MAX_DELAY 						100
 
 //交换矩阵
+#undef IHU_BSP_STM32_SPI_SPARE1
+#ifdef IHU_BSP_STM32_SPI_SPARE1
 #define IHU_BSP_STM32_SPI_SPARE1_HANDLER					hspi1
 #define IHU_BSP_STM32_SPI_SPARE1_HANDLER_ID  			1
+#endif
+
 #define IHU_BSP_STM32_SPI_IAU_HANDLER							hspi2
 #define IHU_BSP_STM32_SPI_IAU_HANDLER_ID  				2
 

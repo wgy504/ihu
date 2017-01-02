@@ -20,7 +20,9 @@ extern UART_HandleTypeDef huart5;
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
+#ifdef IHU_BSP_STM32_UART_SPARE2
 extern UART_HandleTypeDef huart6;
+#endif
 extern uint8_t zIhuUartRxBuffer[6];
 
 //基础接收缓冲区的全局变量，将用于所有串口的BSP驱动接收
@@ -293,6 +295,7 @@ int ihu_bsp_stm32_sps_spare1_rcv_data_timeout(uint8_t* buff, uint16_t len, uint3
 * 返回    : 无 
 * 说明    : 无
 *******************************************************************************/
+#ifdef IHU_BSP_STM32_UART_SPARE2
 int ihu_bsp_stm32_sps_spare2_send_data(uint8_t* buff, uint16_t len)
 {    
 	if (HAL_UART_Transmit(&IHU_BSP_STM32_UART_SPARE2_HANDLER, (uint8_t *)buff, len, IHU_BSP_STM32_SPS_TX_MAX_DELAY) == HAL_OK)
@@ -316,7 +319,7 @@ int ihu_bsp_stm32_sps_spare2_rcv_data_timeout(uint8_t* buff, uint16_t len, uint3
 	else
 		return BSP_FAILURE;
 }
-
+#endif
 /**
   *
   * 串口接口完成回调函数的处理
@@ -430,6 +433,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 		//重新设置中断
 		HAL_UART_Receive_IT(&IHU_BSP_STM32_UART_SPARE1_HANDLER, &zIhuUartRxBuffer[IHU_BSP_STM32_UART_SPARE1_HANDLER_ID-1], 1);
   }	
+#ifdef IHU_BSP_STM32_UART_SPARE2	
   else if(UartHandle==&IHU_BSP_STM32_UART_SPARE2_HANDLER)
   {
 		zIhuBspStm32SpsSpare2RxBuff[zIhuBspStm32SpsSpare2RxCount] = zIhuUartRxBuffer[IHU_BSP_STM32_UART_SPARE2_HANDLER_ID-1];
@@ -439,6 +443,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 		//重新设置中断
 		HAL_UART_Receive_IT(&IHU_BSP_STM32_UART_SPARE2_HANDLER, &zIhuUartRxBuffer[IHU_BSP_STM32_UART_SPARE2_HANDLER_ID-1], 1);
   }
+#endif	
 }
 
 

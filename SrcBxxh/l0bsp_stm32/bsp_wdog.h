@@ -7,6 +7,7 @@ extern "C" {
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 #include "stm32f2xx_hal.h"
+#include "cmsis_os.h"	
 #include "stdio.h"
 #include "string.h"
 #include "sysdim.h"
@@ -26,16 +27,16 @@ extern "C" {
 
 
 //本地定义的交换矩阵
-
+#define IHU_BSP_STM32_WATCH_DOG_HANDLER								hiwdg
+#define IHU_BSP_STM32_WATCH_DOG_HANDLER_ID  					1
 
 //全局函数
-extern int ihu_bsp_stm32_watch_dog_start(void);    //启动
+//最新版本的WATCH_DOG程序中，启动已经在初始化中自动完成了，所以应用程序就剩下定期喂狗了
+//extern int ihu_bsp_stm32_watch_dog_start(void);    //启动
 extern int ihu_bsp_stm32_watch_dog_refresh(void);  //喂狗
 
 
 //Local APIs
-void MX_IWDG_Init(uint8_t prv ,uint16_t rlv);
-
 
 #ifdef __cplusplus
 }

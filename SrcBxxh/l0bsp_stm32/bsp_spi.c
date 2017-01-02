@@ -14,7 +14,9 @@
 #include "bsp_spi.h"
 
 //从MAIN.x中继承过来的函数
+#ifdef IHU_BSP_STM32_SPI_SPARE1
 extern SPI_HandleTypeDef hspi1;
+#endif
 extern SPI_HandleTypeDef hspi2;
 extern uint8_t zIhuSpiRxBuffer[6];
 
@@ -377,6 +379,7 @@ int ihu_bsp_stm32_spi_iau_rcv_data(uint8_t* buff, uint16_t len)
 * 返回    : 无 
 * 说明    : 无
 *******************************************************************************/
+#ifdef IHU_BSP_STM32_SPI_SPARE1
 int ihu_bsp_stm32_spi_spare1_send_data(uint8_t* buff, uint16_t len)
 {
 	if (HAL_SPI_Transmit(&IHU_BSP_STM32_SPI_SPARE1_HANDLER, (uint8_t *)buff, len, IHU_BSP_STM32_SPI_TX_MAX_DELAY) == HAL_OK)
@@ -392,6 +395,7 @@ int ihu_bsp_stm32_spi_spare1_rcv_data(uint8_t* buff, uint16_t len)
 	else
 		return BSP_FAILURE;
 }
+#endif
 
 /**
   * SPI接口完成回调函数的处理

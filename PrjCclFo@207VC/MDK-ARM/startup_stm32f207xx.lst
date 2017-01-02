@@ -697,10 +697,10 @@ ARM Macro Assembler    Page 11
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
 ork --depend=prjcclfo@207vc\startup_stm32f207xx.d -oprjcclfo@207vc\startup_stm3
 2f207xx.o -I..\Inc -ID:\IHUSRC\ihu\PrjCclFo@207VC\MDK-ARM\RTE -IC:\Keil_v5\ARM\
-PACK\ARM\CMSIS\4.5.0\CMSIS\Include -IC:\Keil_v5\ARM\PACK\Keil\STM32F2xx_DFP\2.6
-.0\Drivers\CMSIS\Device\ST\STM32F2xx\Include --predefine="__MICROLIB SETA 1" --
-predefine="__UVISION_VERSION SETA 518" --predefine="_RTE_ SETA 1" --predefine="
-STM32F207xx SETA 1" --list=startup_stm32f207xx.lst startup_stm32f207xx.s
+PACK\Keil\STM32F2xx_DFP\2.6.0\Drivers\CMSIS\Device\ST\STM32F2xx\Include -IC:\Ke
+il_v5\ARM\CMSIS\Include --predefine="__MICROLIB SETA 1" --predefine="__UVISION_
+VERSION SETA 518" --predefine="STM32F207xx SETA 1" --list=startup_stm32f207xx.l
+st startup_stm32f207xx.s
 
 
 
@@ -1776,4 +1776,4 @@ Symbol: __main
       At line 191 in file startup_stm32f207xx.s
 Comment: __main used once
 2 symbols
-443 symbols in table
+442 symbols in table
