@@ -12,7 +12,7 @@
 #include "bsp_wdog.h" 
 
 //从MAIN.x中继承过来的函数
-#if (IHU_WATCH_DOG_SET_ENABLE_OR_DISABLE == IHU_WATCH_DOG_ENABLE)
+#if (IHU_WATCH_DOG_SET_ENABLE_OR_DISABLE == IHU_HARDWARE_WATCH_DOG_ENABLE)
 extern IWDG_HandleTypeDef hiwdg;
 #endif
 

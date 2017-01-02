@@ -708,6 +708,26 @@
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_wdog.h</FilePath>
             </File>
+            <File>
+              <FileName>bsp_calendar.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_calendar.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_calendar.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_calendar.h</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_rtc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_rtc.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_rtc.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_rtc.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

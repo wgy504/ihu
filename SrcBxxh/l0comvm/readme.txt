@@ -4,6 +4,13 @@
 //近期需要完成的任务
 = 研究STM32的IAP功能
 
+//= ZJL, 2017 Jan.2, CURRENT_SW_DELIVERY R03.80 =>CCL项目
+= 完善CRC过程，包括CRC硬件逻辑在STM32CubeMX中没有选用的情形下，需要通过sysconfig.h中的开关关闭，不然会出现编译问题
+= 完善RCC的配置，完全依靠STM32CubeMX
+= 创建RTC功能，包括日历功能
+= 发现日历有问题，双字节汉子无法编译通过，待研究完善
+= 日期的设定，目前依赖于STM32CubeMX的设定，人工设定暂时注释掉了（官方例子没这个问题），未来希望改进为同网络自动同步
+
 //= ZJL, 2017 Jan.2, CURRENT_SW_DELIVERY R03.79 =>CCL项目
 = 将STM32CubeMX配置上了，IWdog/BEEP-LED/CRC硬件选上了
 = 删去FTP的异类定义
