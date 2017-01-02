@@ -38,7 +38,7 @@ LR_IROM4 0x20000340 0x100 {
 }
 
 LR_IROM5 0x20000440 0x93c0 {
-    ER_IROM5 0x20000440 0x7ac0 {
+    ER_IROM5 0x20000440 0x7b80 {
        *(InRoot$$Sections)                      ; All library sections that must be in a
                                                 ; root region, for example, __main.o,
                                                 ; __scatter*.o, __dc*.o, and * Region$$Table

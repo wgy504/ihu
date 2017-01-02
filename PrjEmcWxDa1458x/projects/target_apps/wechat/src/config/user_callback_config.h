@@ -30,6 +30,10 @@
 #include "app_default_handlers.h"
 #include "app_wechat.h"
 #include "app_prf_types.h"
+#include "user_custs_config.h"
+#include "user_sleepmode.h"
+#include "user_sleepmode_task.h"
+
 /*
  * USER FUNCTION DECLARATIONS
  ****************************************************************************************
@@ -76,12 +80,12 @@ static const struct profile_callbacks user_profile_callbacks = {
 };
 
 static const struct app_callbacks user_app_callbacks = {
-    .app_on_connection              = default_app_on_connection,
-    .app_on_disconnect              = default_app_on_disconnect,
+    .app_on_connection              = user_app_connection,
+    .app_on_disconnect              = user_app_disconnect,
     .app_on_update_params_rejected  = NULL,
     .app_on_update_params_complete  = NULL,
     .app_on_set_dev_config_complete = default_app_on_set_dev_config_complete,
-    .app_on_adv_undirect_complete   = app_advertise_complete,
+    .app_on_adv_undirect_complete   = user_app_adv_undirect_complete,
     .app_on_adv_direct_complete     = NULL,
     .app_on_db_init_complete        = default_app_on_db_init_complete,
     .app_on_scanning_completed      = NULL,
@@ -100,11 +104,12 @@ static const struct app_callbacks user_app_callbacks = {
 
 // Default Handler Operations
 static const struct default_app_operations user_default_app_operations = {
-    .default_operation_adv = default_advertise_operation,
+    .default_operation_adv = user_app_adv_start,
 };
 
-static void (*const app_process_catch_rest_cb)(ke_msg_id_t const msgid, void const *param,
-                                         ke_task_id_t const dest_id, ke_task_id_t const src_id) = NULL;
+//static void (*const app_process_catch_rest_cb)(ke_msg_id_t const msgid, void const *param, ke_task_id_t const dest_id, ke_task_id_t const src_id) = (catch_rest_event_func_t)user_catch_rest_hndl;;
+static const catch_rest_event_func_t app_process_catch_rest_cb = (catch_rest_event_func_t)user_catch_rest_hndl;
+
 
 static const  struct arch_main_loop_callbacks user_app_main_loop_callbacks = {
     .app_on_init            = app_wechat_init,

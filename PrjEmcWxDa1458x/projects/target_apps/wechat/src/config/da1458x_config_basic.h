@@ -75,8 +75,8 @@
 /*      -   Enables Debug module and sets code execution in breakpoint in Hardfault and NMI (Watcdog) handleres.*/
 /*          It allows developer to hot attach debugger and get debug information                                */
 /****************************************************************************************************************/
-//#define CFG_DEVELOPMENT_DEBUG //TEST Version         
-#undef CFG_DEVELOPMENT_DEBUG //Volume production       
+#define CFG_DEVELOPMENT_DEBUG //TEST Version         
+//#undef CFG_DEVELOPMENT_DEBUG //Volume production       
 
 /****************************************************************************************************************/
 /*UART Console Print. Enables serial interface logging mechanism. If CFG_PRINTF is defined CFG_PRINTF_UART2     */

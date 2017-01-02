@@ -355,6 +355,109 @@ static const struct default_handlers_configuration  user_default_hnd_conf= {
  *
  ****************************************************************************************
  */
-static const struct central_configuration user_central_conf;
+static const struct central_configuration user_central_conf = {
+    /// GAPM requested operation:
+    /// - GAPM_CONNECTION_DIRECT: Direct connection operation
+    /// - GAPM_CONNECTION_AUTO: Automatic connection operation
+    /// - GAPM_CONNECTION_SELECTIVE: Selective connection operation
+    /// - GAPM_CONNECTION_NAME_REQUEST: Name Request operation (requires to start a direct
+    ///   connection)
+    .code = GAPM_CONNECTION_DIRECT,
+
+    /// Own BD address source of the device:
+    /// - GAPM_PUBLIC_ADDR: Public Address
+    /// - GAPM_PROVIDED_RND_ADDR: Provided random address
+    /// - GAPM_GEN_STATIC_RND_ADDR: Generated static random address
+    /// - GAPM_GEN_RSLV_ADDR: Generated resolvable private random address
+    /// - GAPM_GEN_NON_RSLV_ADDR: Generated non-resolvable private random address
+    /// - GAPM_PROVIDED_RECON_ADDR: Provided Reconnection address (only for GAPM_ADV_DIRECT)
+    .addr_src = GAPM_PUBLIC_ADDR,
+
+    /// Duration of resolvable address before regenerate it.
+    .renew_dur = 100,
+
+    /// Scan interval
+    .scan_interval = 0x180,
+
+    /// Scan window size
+    .scan_window = 0x160,
+
+     /// Minimum of connection interval
+    .con_intv_min = 100,
+
+    /// Maximum of connection interval
+    .con_intv_max = 100,
+
+    /// Connection latency
+    .con_latency = 0,
+
+    /// Link supervision timeout
+    .superv_to = 0x1F4,
+
+     /// Minimum CE length
+    .ce_len_min = 0,
+
+    /// Maximum CE length
+    .ce_len_max = 0x5,
+
+    /**************************************************************************************
+     * Peer device information, only for:
+     *
+     * - GAPM_CONNECTION_AUTO
+     * - GAPM_CONNECTION_SELECTIVE
+     *
+     * White list with peer addresses and the respective peer address type
+     **************************************************************************************
+     */
+
+    /// BD Address of device
+    .peer_addr_0 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0},
+
+    /// Address type of the device 0=public/1=private random
+    .peer_addr_0_type = 0,
+
+    /// BD Address of device
+    .peer_addr_1 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0},
+
+    /// Address type of the device 0=public/1=private random
+    .peer_addr_1_type = 0,
+
+    /// BD Address of device
+    .peer_addr_2 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0},
+
+    /// Address type of the device 0=public/1=private random
+    .peer_addr_2_type = 0,
+
+    /// BD Address of device
+    .peer_addr_3 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0},
+
+    /// Address type of the device 0=public/1=private random
+    .peer_addr_3_type = 0,
+
+    /// BD Address of device
+    .peer_addr_4 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0},
+
+    /// Address type of the device 0=public/1=private random
+    .peer_addr_4_type = 0,
+
+    /// BD Address of device
+    .peer_addr_5 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0},
+
+    /// Address type of the device 0=public/1=private random
+    .peer_addr_5_type = 0,
+
+    /// BD Address of device
+    .peer_addr_6 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0},
+
+    /// Address type of the device 0=public/1=private random
+    .peer_addr_6_type = 0,
+
+    /// BD Address of device
+    .peer_addr_7 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0},
+
+    /// Address type of the device 0=public/1=private random
+    .peer_addr_7_type = 0,
+};
+
 
 #endif // _USER_CONFIG_H_

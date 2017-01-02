@@ -96,6 +96,7 @@
 
 /* Enable WKUPCT. Required by wkupct_quadec driver. */
 #define WKUP_ENABLED
+#define QUADEC_ENABLED
 
 //#define HW_CONFIG_BASIC_DK
 
