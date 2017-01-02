@@ -37,6 +37,7 @@ extern int16_t 	zIhuBspStm32SpsGprsRxLen;
 * 返回   : 
 * 注意   : SIM800A测试过，其它模块需要待测试改进，AT CMD可能不太一样
 *******************************************************************************/
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 OPSTAT ihu_vmmw_gprsmod_call_perform(char *calledNumber)
 {	
 	uint8_t temp[50];
@@ -1266,7 +1267,7 @@ int16_t ihu_vmmw_gprsmod_get_rssi_value(void)
 		return -12000;
 	}	
 }
-
+#endif
 
 /*******************************************************************************
 *

@@ -134,6 +134,7 @@ void   ihu_bsp_stm32_led_f2board_timer_ind_negation (void)
   * 返 回 值: 无
   * 说    明：该函数使用类似HALA库函数的编程方法，方便理解HAL库函数编程思想。
   */
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 void ihu_bsp_stm32_beep_f2board_on(void)
 {
     BSP_STM32_BEEP_ON;/* 蜂鸣器响 */
@@ -193,7 +194,7 @@ void ihu_bsp_stm32_led_work_state_f2board_toggle(void)
 {
     BSP_STM32_LED_WORK_STATE_TOGGLE;
 }
-
+#endif //#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 
 
 

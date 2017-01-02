@@ -46,6 +46,8 @@
 "prjbfscfo@207vc\bsp_i2c.o"
 "prjbfscfo@207vc\bsp_dido.o"
 "prjbfscfo@207vc\bsp_can.o"
+"prjbfscfo@207vc\bsp_crc.o"
+"prjbfscfo@207vc\bsp_wdog.o"
 "prjbfscfo@207vc\l1timer_freeos.o"
 "prjbfscfo@207vc\vmfreeoslayer.o"
 "prjbfscfo@207vc\l1vmfo.o"

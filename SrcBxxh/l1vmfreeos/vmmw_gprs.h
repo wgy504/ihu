@@ -56,18 +56,20 @@
 
 //向上提供全局统一服务的入口
 //目前主要用了HTTP，其它的等待以后其它机会再测试，但都通过正式文档将其实现了
-extern OPSTAT ihu_vmmw_gprsmod_call_perform(char *calledNumber);
-extern OPSTAT ihu_vmmw_gprsmod_sms_transmit_with_confirm(char *calledNumber, char *input);
-extern OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input);   //往后台发送的POST功能
-extern OPSTAT ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive(char *input);  //往后台发送的POST功能
-extern OPSTAT ihu_vmmw_gprsmod_tcp_u8_data_transmit_with_receive(int8_t *input);  //往后台发送的POST功能
-extern OPSTAT ihu_vmmw_gprsmod_udp_test_data_transmit_with_receive(char *input);  //往后台发送的POST功能
-extern OPSTAT ihu_vmmw_gprsmod_udp_8_data_transmit_with_receive(int8_t *input);    //往后台发送的POST功能
-extern OPSTAT ihu_vmmw_gprsmod_ftp_data_transmit_with_receive(int8_t *output);   //从后台GET数据的功能
-extern OPSTAT ihu_vmmw_gprsmod_email_data_transmit_with_receive(char *emailAddr); //往后台发送的POST功能
-extern OPSTAT ihu_vmmw_gprsmod_bs_position_perform(StrVmmwGprsmodBasestationPosition_t *output);
-extern OPSTAT ihu_vmmw_gprsmod_tts_perform(char *input);
-extern int16_t ihu_vmmw_gprsmod_get_rssi_value(void);
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+	extern OPSTAT ihu_vmmw_gprsmod_call_perform(char *calledNumber);
+	extern OPSTAT ihu_vmmw_gprsmod_sms_transmit_with_confirm(char *calledNumber, char *input);
+	extern OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input);   //往后台发送的POST功能
+	extern OPSTAT ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive(char *input);  //往后台发送的POST功能
+	extern OPSTAT ihu_vmmw_gprsmod_tcp_u8_data_transmit_with_receive(int8_t *input);  //往后台发送的POST功能
+	extern OPSTAT ihu_vmmw_gprsmod_udp_test_data_transmit_with_receive(char *input);  //往后台发送的POST功能
+	extern OPSTAT ihu_vmmw_gprsmod_udp_8_data_transmit_with_receive(int8_t *input);    //往后台发送的POST功能
+	extern OPSTAT ihu_vmmw_gprsmod_ftp_data_transmit_with_receive(int8_t *output);   //从后台GET数据的功能
+	extern OPSTAT ihu_vmmw_gprsmod_email_data_transmit_with_receive(char *emailAddr); //往后台发送的POST功能
+	extern OPSTAT ihu_vmmw_gprsmod_bs_position_perform(StrVmmwGprsmodBasestationPosition_t *output);
+	extern OPSTAT ihu_vmmw_gprsmod_tts_perform(char *input);
+	extern int16_t ihu_vmmw_gprsmod_get_rssi_value(void);
+#endif
 
 //本地函数：目前以SIM800A为例子。如果不是SIM800A，则需要另换一套程序
 //由于目前只有SIM800A，所有的程序都以这个为基础。如果未来需要支持第二种以上的模组，本程序待改进

@@ -46,6 +46,8 @@
 "prjbfscfo@205rg\bsp_i2c.o"
 "prjbfscfo@205rg\bsp_dido.o"
 "prjbfscfo@205rg\bsp_can.o"
+"prjbfscfo@205rg\bsp_wdog.o"
+"prjbfscfo@205rg\bsp_crc.o"
 "prjbfscfo@205rg\l1timer_freeos.o"
 "prjbfscfo@205rg\vmfreeoslayer.o"
 "prjbfscfo@205rg\l1vmfo.o"
