@@ -27,8 +27,8 @@
 /* It must be undefined during development phase and for applications booting from external interfaces (UART,   */
 /* SPI , i2c)                                                                                                   */
 /****************************************************************************************************************/
-//#undef CFG_BOOT_FROM_OTP
-#define CFG_BOOT_FROM_OTP
+#undef CFG_BOOT_FROM_OTP
+//#define CFG_BOOT_FROM_OTP
 
 /****************************************************************************************************************/
 /* If defined NVDS structure is initialized with hardcoded values. If not defined the NDS structure is          */
@@ -56,12 +56,12 @@
 /****************************************************************************************************************/
 /* Periodic wakeup period to poll GTL iface. Time in BLE slots.                                                 */
 /****************************************************************************************************************/
-#define CFG_MAX_SLEEP_DURATION_PERIODIC_WAKEUP_MS                  5000  // 5s
+#define CFG_MAX_SLEEP_DURATION_PERIODIC_WAKEUP_MS                  500  // 0.5s
 
 /****************************************************************************************************************/
 /* Periodic wakeup period if GTL iface is not enabled. Time in BLE slots.                                        */
 /****************************************************************************************************************/
-#define CFG_MAX_SLEEP_DURATION_EXTERNAL_WAKEUP_MS                  100000  // 100s
+#define CFG_MAX_SLEEP_DURATION_EXTERNAL_WAKEUP_MS                  10000  // 10s
 
 /****************************************************************************************************************/
 /* Wakeup from external processor running host application.                                                     */
@@ -101,16 +101,15 @@
  * Scatterfile: Memory maps
  */
 #if defined(CFG_MEM_MAP_EXT_SLEEP) || !defined(CFG_MEM_MAP_DEEP_SLEEP)
-#define REINIT_DESCRIPT_BUF     0       //0: keep in RetRAM, 1: re-init is required (set to 0 when Extended Sleep is used)
-#define USE_MEMORY_MAP          EXT_SLEEP_SETUP
-
+	#define REINIT_DESCRIPT_BUF     0       //0: keep in RetRAM, 1: re-init is required (set to 0 when Extended Sleep is used)
+	#define USE_MEMORY_MAP          EXT_SLEEP_SETUP
 #else
-#define REINIT_DESCRIPT_BUF     0       //0: keep in RetRAM, 1: re-init is required (set to 0 when Extended Sleep is used)
-#define USE_MEMORY_MAP          DEEP_SLEEP_SETUP
-#define DB_HEAP_SZ              1024
-#define ENV_HEAP_SZ             328
-#define MSG_HEAP_SZ             1312
-#define NON_RET_HEAP_SZ         1024
+	#define REINIT_DESCRIPT_BUF     0       //0: keep in RetRAM, 1: re-init is required (set to 0 when Extended Sleep is used)
+	#define USE_MEMORY_MAP          DEEP_SLEEP_SETUP
+	#define DB_HEAP_SZ              1024
+	#define ENV_HEAP_SZ             328
+	#define MSG_HEAP_SZ             1312
+	#define NON_RET_HEAP_SZ         1024
 #endif
 
 /****************************************************************************************************************/
@@ -165,7 +164,8 @@
 //#endif
 	
 	
-#define CFG_NVDS_TAG_LPCLK_DRIFT            DRIFT_BLE_DFT
+//#define CFG_NVDS_TAG_LPCLK_DRIFT            DRIFT_BLE_DFT
+#define CFG_NVDS_TAG_LPCLK_DRIFT            DRIFT_500PPM
 #define CFG_NVDS_TAG_BLE_CA_TIMER_DUR       2000
 #define CFG_NVDS_TAG_BLE_CRA_TIMER_DUR      6
 #define CFG_NVDS_TAG_BLE_CA_MIN_RSSI        0x40

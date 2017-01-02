@@ -36,6 +36,8 @@
  */
  
 /// Add below the profiles that the application wishes to use by including the <profile_name>.h file.
+#include "diss.h"
+#include "custs1.h"
 
 /*
  * PROFILE CONFIGUARTION
@@ -87,7 +89,8 @@
  * -----------------------------------------------------------------------------------------
  */
  //Measured in timer units (10ms)
- #define APP_BASS_POLL_INTERVAL   (6000)  //  (6000*10ms)/60sec = Every 1 minutes
+ //#define APP_BASS_POLL_INTERVAL   (6000)  //  (6000*10ms)/60sec = Every 1 minutes
+ #define APP_BASS_POLL_INTERVAL   (600)  //  (600*10ms)/60sec = Every 6 seconds
  
 /// @} APP_CONFIG
 
