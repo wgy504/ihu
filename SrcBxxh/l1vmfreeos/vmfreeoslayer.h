@@ -38,6 +38,10 @@
 	#include "bsp_led.h"
 	#include "bsp_rs485.h"
 	#include "bsp_i2c.h"
+	#include "bsp_wdog.h"
+	#include "bsp_crc.h"
+	
+	
 	
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
   #include "commsgbfsc.h"
@@ -54,7 +58,11 @@
 	#include "bsp_rs485.h"
 	#include "bsp_i2c.h"
 	#include "bsp_can.h"
-	
+	#include "bsp_wdog.h"
+	#include "bsp_crc.h"
+
+
+
 #else	
 #endif
 
@@ -398,11 +406,16 @@ extern void ihu_timer_routine_handler_10ms(void);
 
 /*
  *	
- *  底层BSP的函数映射
+ *  底层L0BSP的函数映射，以便上层在未来更改BSP的时候，可以保持上层应用的不变性
+ *  映射到的目标函数命名为L1HD，意味着L1_Hardware_Driver抽象函数
  *
  */
 
-//LED专门对付一般性的驱动函数，对其进行映射，以便保持上层模块的一致性
+//L0BSP=>L1HD: ADC
+#define ihu_l1hd_adc_hw_init							ihu_bsp_stm32_adc_hw_init
+#define ihu_l1hd_adc_iau_get_value 				ihu_bsp_stm32_adc_get_sample_value
+
+//L0BSP=>L1HD: LED 
 #define ihu_l1hd_led_f2board_init 							ihu_bsp_stm32_led_f2board_init
 #define ihu_l1hd_led_f2board_on 								ihu_bsp_stm32_led_f2board_on
 #define ihu_l1hd_led_f2board_off 								ihu_bsp_stm32_led_f2board_off
@@ -411,8 +424,11 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_led_f2board_timer_ind_off 			ihu_bsp_stm32_led_f2board_timer_ind_off
 #define ihu_l1hd_led_f2board_timer_ind_negation ihu_bsp_stm32_led_f2board_timer_ind_negation
 #define ihu_l1hd_led_f2board_onoff 							ihu_bsp_stm32_led_f2board_onoff
+#define ihu_l1hd_beep_f2board_ono 							ihu_bsp_stm32_beep_f2board_on
+#define ihu_l1hd_beep_f2board_off 							ihu_bsp_stm32_beep_f2board_off
+#define ihu_l1hd_beep_f2board_toggle 						ihu_bsp_stm32_beep_f2board_toggle
 
-//USART专门对付一般性的驱动函数，对其进行映射，以便保持上层模块的一致性
+//L0BSP=>L1HD: USART
 #define ihu_l1hd_sps_slave_hw_init							ihu_bsp_stm32_sps_slave_hw_init
 #define ihu_l1hd_sps_gprs_send_data 		  			ihu_bsp_stm32_sps_gprs_send_data
 #define ihu_l1hd_sps_gprs_rcv_data 		  				ihu_bsp_stm32_sps_gprs_rcv_data
@@ -433,36 +449,60 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_sps_spare2_rcv_data 		  			ihu_bsp_stm32_sps_spare2_rcv_data
 #define ihu_l1hd_sps_spare2_rcv_data_timeout 		ihu_bsp_stm32_sps_spare2_rcv_data_timeout
 
-
-//SPI专门对付一般性的驱动函数，对其进行映射，以便保持上层模块的一致性
+//L0BSP=>L1HD: SPI
 #define ihu_l1hd_spi_slave_hw_init		  	ihu_bsp_stm32_spi_slave_hw_init
 #define ihu_l1hd_spi_iau_send_data 				ihu_bsp_stm32_spi_iau_send_data
 #define ihu_l1hd_spi_iau_receive_data 		ihu_bsp_stm32_spi_iau_rcv_data
 #define ihu_l1hd_spi_spare1_send_data 		ihu_bsp_stm32_spi_spare1_send_data
 #define ihu_l1hd_spi_spare1_receive_data 	ihu_bsp_stm32_spi_spare1_rcv_data
 
-//I2C专门对付一般性的驱动函数，对其进行映射，以便保持上层模块的一致性
+//L0BSP=>L1HD: I2C
 #define ihu_l1hd_i2c_slave_hw_init				ihu_bsp_stm32_i2c_slave_hw_init
 #define ihu_l1hd_i2c_iau_send_data 				ihu_bsp_stm32_i2c_iau_send_data
 #define ihu_l1hd_i2c_iau_receive_data 		ihu_bsp_stm32_i2c_iau_rcv_data
 #define ihu_l1hd_i2c_spare1_send_data 		ihu_bsp_stm32_i2c_spare1_send_data
 #define ihu_l1hd_i2c_spare1_receive_data 	ihu_bsp_stm32_i2c_spare1_rcv_data
 
-//CAN专门对付一般性的驱动函数，对其进行映射，以便保持上层模块的一致性
+//L0BSP=>L1HD: CAN
 #define ihu_l1hd_can_slave_hw_init				ihu_bsp_stm32_can_slave_hw_init
 #define ihu_l1hd_can_iau_send_data 				ihu_bsp_stm32_can_send_data
 #define ihu_l1hd_can_iau_receive_data 		ihu_bsp_stm32_can_rcv_data
 #define ihu_l1hd_can_spare1_send_data 		ihu_bsp_stm32_can_spare1_send_data
 #define ihu_l1hd_can_spare1_receive_data 	ihu_bsp_stm32_can_spare1_rcv_data
 
-//ADC专门对付一般性的驱动函数，对其进行映射，以便保持上层模块的一致性
-#define ihu_l1hd_adc_hw_init							ihu_bsp_stm32_adc_hw_init
-#define ihu_l1hd_adc_iau_get_value 				ihu_bsp_stm32_adc_get_sample_value
+//L0BSP=>L1HD: KEY
+
+//L0BSP=>L1HD: RS485
+
+//L0BSP=>L1HD: TIM
+
+//L0BSP=>L1HD: DIDO
+
+//L0BSP=>L1HD: WDOG
+#define ihu_l1hd_watch_dog_start				 	ihu_bsp_stm32_watch_dog_start
+#define ihu_l1hd_watch_dog_refresh      	ihu_bsp_stm32_watch_dog_refresh
+
+//L0BSP=>L1HD: CRC
+#define ihu_l1hd_crc_caculate			      	ihu_bsp_stm32_crc_caculate
+
 
 //BFSC独有的映射
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 #define ihu_l1hd_i2c_bfsc_send_data 			ihu_bsp_stm32_i2c_iau_send_data
 #define ihu_l1hd_can_bfsc_send_data 			ihu_bsp_stm32_can_send_data
 #define ihu_l1hd_adc_bfsc_get_value 			ihu_bsp_stm32_adc_get_sample_value
+#endif
+
+
+
+
+
+
+
+
+
+
+
 
 
 

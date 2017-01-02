@@ -1,10 +1,24 @@
-#ifndef __BSP_KEY_H__
-#define __BSP_KEY_H__
+#ifndef __BSP_STM32_KEY_H__
+#define __BSP_STM32_KEY_H__
 
-/* 包含头文件 ----------------------------------------------------------------*/
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 #include "stm32f2xx_hal.h"
+#include "stdio.h"
+#include "string.h"
+#include "sysdim.h"
+#include "vmfreeoslayer.h"
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+	#include "commsgccl.h"
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+	#include "commsgbfsc.h"
+#else
+#endif
 
-/* 类型定义 --------------------------------------------------------------*/
+//不能在这里出现管脚的任何配置和初始化，必须在STM32CubeMX中完成，这里使用STM32CubeMX给出的端口俗名
 
 #define KEY_ON                        1
 #define KEY_OFF                       0
@@ -22,15 +36,6 @@
 #define KEY2_GPIO_PIN                 GPIO_PIN_13
 #define KEY2_GPIO                     GPIOC
 //#define KEY2_DOWN_LEVEL               0  /* 根据原理图设计，KEY1按下时引脚为低电平，所以这里设置为0 */
-
-/* 扩展变量 ------------------------------------------------------------------*/
-/* 函数声明 ------------------------------------------------------------------*/
-//用户函数声明
-void KEY_GPIO_Init(void);
-uint8_t GetPinStateOfKey1(void);
-uint8_t GetPinStateOfKey2(void);
-//用户函数声明结束
-
 
 /*使能用户数据，每一个按键有一个变量可以供用户任意使用，如果不用
  *这个变量把括号内改成0即可；如果要用就改成1，但是这会浪费一个字
@@ -82,12 +87,26 @@ typedef struct
   
 }KEY;
 
-/*			函数声明：	*/
+
+//本地定义的交换矩阵
+
+
+//全局函数API
+
+
+
+//Local APIs
 void KeyCreate(KEY *p_Key,KEY_CALLBACK_PTR p_CallBack);
 void Key_RefreshState(KEY* theKey);
 uint8_t Key_AccessTimes(KEY* p_Key,ACCESS_TYPE opt);
 uint8_t Key_AccessState(KEY* p_Key,KEY_STATE *p_State);
+void KEY_GPIO_Init(void);
+uint8_t GetPinStateOfKey1(void);
+uint8_t GetPinStateOfKey2(void);
 
-#endif  // __BSP_KEY_H__
 
-/******************* (C) COPYRIGHT 2015-2020 硬石嵌入式开发团队 *****END OF FILE****/
+#ifdef __cplusplus
+}
+#endif
+#endif  // __BSP_STM32_KEY_H__
+

@@ -301,14 +301,8 @@ OPSTAT fsm_vmfo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 	}
 
 	//启动IWDG的看门狗
-	//下面的函数需要被VM重新定义
-	//IWDG的初始化需要通过CubeMX搞定
-	//步骤是先初始化，再启动，然后在方便的时候进行REFRESH
-	//HAL_IWDG_Start (IWDG_HandleTypeDef* hiwdg)
-	//HAL_IWDG_Refresh(IWDG_HandleTypeDef * hiwdg)
-	//Min-max timeout value @32KHz (LSI): ~125us / ~32.7s，所以各个人物的HEART-BEAT周期需要改进到10S以内，并让本周期取20s，以确保至少又一次落在
-	//本周期之内，再设置喂狗
-	
+	ihu_l1hd_watch_dog_start();
+		
 	//返回
 	return IHU_SUCCESS;
 }
@@ -428,7 +422,8 @@ OPSTAT fsm_vmfo_init_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 void func_vmfo_time_out_period_scan(void)
 {	
 	if (func_vmfo_heart_caculate_all_received() == TRUE){
-	//HAL_IWDG_Refresh(IWDG_HandleTypeDef * hiwdg)
+	//Min-max timeout value @32KHz (LSI): ~125us / ~32.7s，所以各个任务的HEART-BEAT周期需要改进到10S以内，并让本周期取20s，以确保至少又一次落在	
+	ihu_l1hd_watch_dog_refresh();	
 	}
 	return;
 }

@@ -4,15 +4,34 @@
 //近期需要完成的任务
 = 研究STM32的IAP功能
 
-//= ZJL, 2016 Dec.29, CURRENT_SW_DELIVERY R03.75 =>CCL项目
+//= ZJL, 2017 Jan.1, CURRENT_SW_DELIVERY R03.78 =>CCL项目
+= 格式化BSP程序格式模板，预计命名规则
+= WATCH_DOG功能的完善，LSI分频器的设置，待研究
+= 增加BEEP BSP功能，基本配置等待STM32CubeMX的配置，继承自MAIN.h，初始化由MAIN自动搞定
+= 增加CRC BSP功能，基本配置等待STM32CubeMX的配置，继承自MAIN.h，初始化由MAIN自动搞定
+
+
+
+//= ZJL, 2016 Dec.31, CURRENT_SW_DELIVERY R03.77 =>CCL项目
+= 清理BSP程序模块中的老旧库配置参数部分
+= 所有管脚配置必须都来自于STM32CubeMX，而且都应该由STM32CubeMX进行命名
+= 统一I2C/CAN/SPI接口的常量命名规范，保持跟UART一致
+= 准备同步测试FreeRTOS的休眠功能
+= 准备增加IAP的升级部分，将做为一种中间件放在L1VMFO目录下层次结构下，作为VMMW的核心功能。由于它要用到GPRSMOD的FTP功能，放在
+  VMMW中在层次上讲是合适的。
+
+//= ZJL, 2016 Dec.31, CURRENT_SW_DELIVERY R03.76 =>CCL项目
+= 发送的GPRS AT CMD的所有VMMW API需要清理完善，包括增加FTP API
+= GPRS AT CMD的接收需要寻找</xml>关键字，提高效率，避免纯粹依靠TIME OUT
+= BSP串口接收中断改进：L2FRAME放在了SPARE1中，暂时不影响GPRS的使用
+= 因为GPRS的半双工模式，跟L2FRAME帧结构模式不兼容，暂时无法融合到一起，除非采用项目#ifdef方式，但本质上没啥区别了。
+
+//= ZJL, 2016 Dec.30, CURRENT_SW_DELIVERY R03.75 =>CCL项目
 = 统一命名SPS中的全局变量，将代码风格标准化
 = 清理掉UART_BPS模块中的无用代码，将基于v3.5的老库彻底去掉，全部基于HAL标准库
 = 着重清理GPRSMOD的VMMW程序
-= 3. 发送的GPRS AT CMD的所有VMMW API需要清理完善，包括增加FTP API
-= 4. GPRS AT CMD的接收需要寻找</xml>关键字，提高效率，避免纯粹依靠TIME OUT
-= 5. BSP串口接收中断改进
-
-
+= 支持RSSI VALUE的读取
+= 改进所有传感器读取的函数API命名
 
 //= ZJL, 2016 Dec.29, CURRENT_SW_DELIVERY R03.74 =>CCL项目
 = Auth消息组装好，等待发送测试

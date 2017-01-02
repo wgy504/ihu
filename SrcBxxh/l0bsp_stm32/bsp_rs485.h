@@ -1,10 +1,25 @@
-#ifndef __BSP_USARTX_RS485_H__
-#define __BSP_USARTX_RS485_H__
+#ifndef __BSP_STM32_USARTX_RS485_H__
+#define __BSP_STM32_USARTX_RS485_H__
 
-/* 包含头文件 ----------------------------------------------------------------*/
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 #include "stm32f2xx_hal.h"
+#include "stdio.h"
+#include "string.h"
+#include "sysdim.h"
+#include "vmfreeoslayer.h"
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+	#include "commsgccl.h"
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+	#include "commsgbfsc.h"
+#else
+#endif
 
-/* 类型定义 ------------------------------------------------------------------*/
+//不能在这里出现管脚的任何配置和初始化，必须在STM32CubeMX中完成，这里使用STM32CubeMX给出的端口俗名
+
 /* 宏定义 --------------------------------------------------------------------*/
 #define USE_RS485                                    0    // 1：使用RS485通信   0：使用RS232通信
 
@@ -27,13 +42,19 @@
 #define RS485_RX_MODE()                              HAL_GPIO_WritePin(RS485_REDE_PORT,RS485_REDE_PIN,GPIO_PIN_RESET)
 #define RS485_TX_MODE()                              HAL_GPIO_WritePin(RS485_REDE_PORT,RS485_REDE_PIN,GPIO_PIN_SET)
 
-/* 扩展变量 ------------------------------------------------------------------*/
-extern UART_HandleTypeDef husartx_rs485;
 
-/* 函数声明 ------------------------------------------------------------------*/
+//本地定义的交换矩阵
+
+
+
+//全局函数定义
+
+
+//Local APIs
 void RS485_USARTx_Init(void);
 
+#ifdef __cplusplus
+}
+#endif
+#endif  /* __BSP_STM32_USARTX_RS485_H__ */
 
-#endif  /* __BSP_USARTX_RS485_H__ */
-
-/******************* (C) COPYRIGHT 2015-2020 硬石嵌入式开发团队 *****END OF FILE****/

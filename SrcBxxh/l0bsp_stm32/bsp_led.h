@@ -1,8 +1,24 @@
-#ifndef __BSP_LED_H__
-#define __BSP_LED_H__
+#ifndef __BSP_STM32_LED_H__
+#define __BSP_STM32_LED_H__
 
-/* 包含头文件 ----------------------------------------------------------------*/
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 #include "stm32f2xx_hal.h"
+#include "stdio.h"
+#include "string.h"
+#include "sysdim.h"
+#include "vmfreeoslayer.h"
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+	#include "commsgccl.h"
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+	#include "commsgbfsc.h"
+#else
+#endif
+
+//不能在这里出现管脚的任何配置和初始化，必须在STM32CubeMX中完成，这里使用STM32CubeMX给出的端口俗名
 
 /* 类型定义 ------------------------------------------------------------------*/
 typedef enum
@@ -51,13 +67,9 @@ typedef enum
 #define LED3_OFF                      HAL_GPIO_WritePin(LED3_GPIO,LED3_GPIO_PIN,GPIO_PIN_RESET)  // 输出低电平
 #define LED3_TOGGLE                   HAL_GPIO_TogglePin(LED3_GPIO,LED3_GPIO_PIN)                // 输出反转
 
-/* 扩展变量 ------------------------------------------------------------------*/
-/* 函数声明 ------------------------------------------------------------------*/
-void LED_GPIO_Init(void);
-void LEDx_StateSet(uint8_t LEDx,LEDState_TypeDef state);
-
 
 //旧式方式编写的函数
+//这一部分代码，特别是端口的配置部分，需要跟CubeMX32绑定起来，而不是自己随意定义。这个需要在未来改进。
 //LED_F205_BOARD
 #define LED_F205_BOARD_PORT 						GPIOC
 #define LED_F205_BOARD_PIN							GPIO_PIN_2
@@ -77,6 +89,24 @@ void LEDx_StateSet(uint8_t LEDx,LEDState_TypeDef state);
 //ZJL: 另外一种方式，就是直接使用LED宏定义搞定
 #define LED_F205RG_onoff(port, pin, onoff) if (onoff) HAL_GPIO_WritePin(port, pin, GPIO_PIN_SET); else HAL_GPIO_WritePin(port, pin, GPIO_PIN_RESET);
 
+/* BEEP类型定义 ------------------------------------------------------------------*/
+typedef enum
+{
+  BEEPState_OFF = 0,
+  BEEPState_ON,
+}BSP_STM32_BEEPState_TypeDef;
+#define BSP_STM32_BEEP_GPIO_PIN                 GPIO_PIN_7
+#define BSP_STM32_BEEP_GPIO                     GPIOD
+#define BSP_STM32_BEEP_ON                       HAL_GPIO_WritePin(BSP_STM32_BEEP_GPIO,BSP_STM32_BEEP_GPIO_PIN,GPIO_PIN_SET)    // 输出高电平
+#define BSP_STM32_BEEP_OFF                      HAL_GPIO_WritePin(BSP_STM32_BEEP_GPIO,BSP_STM32_BEEP_GPIO_PIN,GPIO_PIN_RESET)  // 输出低电平
+#define BSP_STM32_BEEP_TOGGLE                   HAL_GPIO_TogglePin(BSP_STM32_BEEP_GPIO,BSP_STM32_BEEP_GPIO_PIN)                // 输出反转
+
+
+
+//本地定义的交换矩阵
+
+
+
 //全局函数定义
 extern void ihu_bsp_stm32_led_f2board_init(void);
 extern void ihu_bsp_stm32_led_f2board_on(void);
@@ -86,7 +116,18 @@ extern void ihu_bsp_stm32_led_f2board_timer_ind_on(void);
 extern void ihu_bsp_stm32_led_f2board_timer_ind_off(void);
 extern void ihu_bsp_stm32_led_f2board_timer_ind_negation(void);
 extern void ihu_bsp_stm32_led_f2board_onoff(GPIO_TypeDef* port, uint16_t pin, uint8_t onoff);
+extern void ihu_bsp_stm32_beep_f2board_on(void);
+extern void ihu_bsp_stm32_beep_f2board_off(void);
+extern void ihu_bsp_stm32_beep_f2board_toggle(void);
 
-#endif  // __BSP_LED_H__
+//Local APIs
+void LED_GPIO_Init(void);
+void LEDx_StateSet(uint8_t LEDx,LEDState_TypeDef state);
 
-/******************* (C) COPYRIGHT 2015-2020 硬石嵌入式开发团队 *****END OF FILE****/
+
+
+#ifdef __cplusplus
+}
+#endif
+#endif  // __BSP_STM32_LED_H__
+

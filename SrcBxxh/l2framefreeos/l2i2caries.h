@@ -88,8 +88,9 @@ extern OPSTAT fsm_i2caries_bfsc_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void * 
 extern OPSTAT fsm_i2caries_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_i2caries_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 
-extern INT16 func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv1_value(void);
-extern INT16 func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv2_value(void);
+//全局函数
+extern INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv1_value(void);
+extern INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv2_value(void);
 	
 	
 //Local API

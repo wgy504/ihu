@@ -1,8 +1,24 @@
-#ifndef __BASIC_TIM_H__
-#define __BASIC_TIM_H__
+#ifndef __BSP_STM32_TIM_H
+#define __BSP_STM32_TIM_H
 
-/* 包含头文件 ----------------------------------------------------------------*/
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 #include "stm32f2xx_hal.h"
+#include "stdio.h"
+#include "string.h"
+#include "sysdim.h"
+#include "vmfreeoslayer.h"
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+	#include "commsgccl.h"
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+	#include "commsgbfsc.h"
+#else
+#endif
+
+//不能在这里出现管脚的任何配置和初始化，必须在STM32CubeMX中完成，这里使用STM32CubeMX给出的端口俗名
 
 /* 类型定义 ------------------------------------------------------------------*/
 /* 宏定义 --------------------------------------------------------------------*/
@@ -36,11 +52,24 @@
 // 比如需要产生20ms周期定时，可以设置为： 72MHz/（359+1）/4000=50Hz，即20ms周期
 // 这里设置 BASIC_TIMx_PRESCALER=359；BASIC_TIMx_PERIOD=4000；
 
-/* 扩展变量 ------------------------------------------------------------------*/
-//extern TIM_HandleTypeDef htimx;
-/* 函数声明 ------------------------------------------------------------------*/
 
+
+
+
+
+
+
+//本地定义的交换矩阵
+
+
+//全局函数
+
+
+//Local APIs
 void BASIC_TIMx_Init(void);
 
-#endif	/* __BASIC_TIM_H__ */
-/******************* (C) COPYRIGHT 2015-2020 硬石嵌入式开发团队 *****END OF FILE****/
+#ifdef __cplusplus
+}
+#endif
+#endif	/* __BSP_STM32_TIM_H */
+

@@ -1,6 +1,10 @@
-#ifndef __BSP_DEBUG_USART_H__
-#define __BSP_DEBUG_USART_H__
+#ifndef __BSP_STM32_USART_H
+#define __BSP_STM32_USART_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+	
 /* 包含头文件 ----------------------------------------------------------------*/
 #include "stm32f2xx_hal.h"
 #include "stdio.h"
@@ -14,14 +18,16 @@
 #else
 #endif
 
-//从ucosiii移植过来的函数
+//不能在这里出现管脚的任何配置和初始化，必须在STM32CubeMX中完成，这里使用STM32CubeMX给出的端口俗名
+
 //MAX_IHU_MSG_BODY_LENGTH-1是因为发送到上层SPSVIRGO的数据缓冲区受到消息结构msg_struct_spsvirgo_l2frame_rcv_t的影响
-#define IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN 				MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
-#define IHU_BSP_STM32_SPS_RFID_REC_MAX_LEN 				MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
-#define IHU_BSP_STM32_SPS_BLE_REC_MAX_LEN 				MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
-#define IHU_BSP_STM32_SPS_PRINT_REC_MAX_LEN 			MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
-#define IHU_BSP_STM32_SPS_SPARE1_REC_MAX_LEN 			MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
-#define IHU_BSP_STM32_SPS_SPARE2_REC_MAX_LEN 			MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
+//最大接收数据长度，实际处理的时候，我们得要知道，CHAR因为'\0'的原因会少一个字符
+#define IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN 				MAX_IHU_MSG_BODY_LENGTH-1
+#define IHU_BSP_STM32_SPS_RFID_REC_MAX_LEN 				MAX_IHU_MSG_BODY_LENGTH-1
+#define IHU_BSP_STM32_SPS_BLE_REC_MAX_LEN 				MAX_IHU_MSG_BODY_LENGTH-1
+#define IHU_BSP_STM32_SPS_PRINT_REC_MAX_LEN 			MAX_IHU_MSG_BODY_LENGTH-1
+#define IHU_BSP_STM32_SPS_SPARE1_REC_MAX_LEN 			MAX_IHU_MSG_BODY_LENGTH-1
+#define IHU_BSP_STM32_SPS_SPARE2_REC_MAX_LEN 			MAX_IHU_MSG_BODY_LENGTH-1
 
 //HUITP L2FRAME帧结构
 typedef struct IHU_HUITP_L2FRAME_STD_UART_frame_header
@@ -43,7 +49,7 @@ typedef struct IHU_HUITP_L2FRAME_STD_UART_frame_header
 #define IHU_BSP_STM32_SPS_TX_MAX_DELAY 100
 #define IHU_BSP_STM32_SPS_RX_MAX_DELAY 100
 
-//形成定义的交换矩阵
+//本地定义的交换矩阵
 #define IHU_BSP_STM32_UART_GPRS_HANDLER					huart1
 #define IHU_BSP_STM32_UART_GPRS_HANDLER_ID  		1
 #define IHU_BSP_STM32_UART_RFID_HANDLER					huart2
@@ -57,12 +63,11 @@ typedef struct IHU_HUITP_L2FRAME_STD_UART_frame_header
 #define IHU_BSP_STM32_UART_SPARE2_HANDLER				huart6
 #define IHU_BSP_STM32_UART_SPARE2_HANDLER_ID  	6
 
-//API函数
-extern int ihu_bsp_stm32_sps_slave_hw_init(void);
 
+//全局函数
+extern int ihu_bsp_stm32_sps_slave_hw_init(void);
 extern int ihu_bsp_stm32_sps_print_fputc(int ch, FILE *f);
 extern int ihu_bsp_stm32_sps_print_fgetc(FILE * f);
-
 extern int ihu_bsp_stm32_sps_print_send_data(char *s);
 extern int ihu_bsp_stm32_sps_print_rcv_data(char *s, uint16_t len);
 extern int ihu_bsp_stm32_sps_print_rcv_data_timeout(uint8_t* buff, uint16_t len, uint32_t timeout);
@@ -82,8 +87,16 @@ extern int ihu_bsp_stm32_sps_spare2_send_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_sps_spare2_rcv_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_sps_spare2_rcv_data_timeout(uint8_t* buff, uint16_t len, uint32_t timeout);
 
+//重载接收函数，以便通过IT中断方式搞定接收通信，否则需要通过轮询或者单独线程搞定，更加麻烦
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle);
 
-#endif  /* __BSP_DEBUG_USART_H__ */
+
+//Local APIs
+
+
+#ifdef __cplusplus
+}
+#endif
+#endif  /* __BSP_STM32_USART_H */
 
 

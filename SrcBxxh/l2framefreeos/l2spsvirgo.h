@@ -125,35 +125,31 @@ extern OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_i
 	extern OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv);
 #endif
 
-extern INT16 func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rssi_value(void);
+extern INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rssi_value(void);
 
 //Local API
 OPSTAT func_spsvirgo_hw_init(void);
 void func_spsvirgo_time_out_period_scan(void);
 
 //External API
-extern bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_door_open(UINT8 doorid);
-extern bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open(UINT8 lockid);
-extern bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_water(void);
-extern bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_fall(void);
-extern bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_smoke(void);
-extern bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_shake(void);
-extern bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_battery(void);
-extern INT16 func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_temp_value(void);
-extern INT16 func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_humid_value(void);
-extern INT16 func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_bat_value(void);
-extern INT16 func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv1_value(void);
-extern INT16 func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv2_value(void);
-extern INT16 func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value(void);
+extern bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_door_open_state(UINT8 doorid);
+extern bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open_state(UINT8 lockid);
+extern bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_water_state(void);
+extern bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_fall_state(void);
+extern bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_smoke_state(void);
+extern bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_shake_state(void);
+extern bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_bat_state(void);
+extern INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_temp_value(void);
+extern INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_humid_value(void);
+extern INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_bat_value(void);
+extern INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv1_value(void);
+extern INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv2_value(void);
+extern INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value(void);
 
 //GPRSMOD的模组操作
-extern OPSTAT ihu_vmmw_gprsmod_call_perform(char *callNumber);  //拨号测试程序
-extern OPSTAT ihu_vmmw_gprsmod_sms_transmit_with_confirm(char *input);   //短信工作流程
-extern OPSTAT ihu_vmmw_gprsmod_tcp_data_transmit_with_receive(char *input);  //GPRS数据传输测试程序
-extern OPSTAT ihu_vmmw_gprsmod_ftp_data_transmit_with_receive(char *input);  //FTP数据传输测试程序
-extern OPSTAT ihu_vmmw_gprsmod_bs_position_perform(void);    //基站定位
-extern OPSTAT ihu_vmmw_gprsmod_tts_perform(void);   //TTS文本语音测试程序
-
+extern OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input);
+extern OPSTAT ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive(char *input); 
+extern int16_t ihu_vmmw_gprsmod_get_rssi_value(void);
 
 
 #endif /* L2FRAME_L2SPSVIRGO_H_ */
