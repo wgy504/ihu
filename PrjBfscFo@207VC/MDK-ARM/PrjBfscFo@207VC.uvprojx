@@ -728,6 +728,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_rtc.h</FilePath>
             </File>
+            <File>
+              <FileName>bsp_cpuid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_cpuid.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_cpuid.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_cpuid.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

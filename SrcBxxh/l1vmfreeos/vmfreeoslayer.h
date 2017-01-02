@@ -492,6 +492,14 @@ extern void ihu_timer_routine_handler_10ms(void);
 //L0BSP=>L1HD: CRC
 #define ihu_l1hd_crc_caculate			      	ihu_bsp_stm32_crc_caculate
 
+//L0BSP=>L1HD: RTC
+#define ihu_l1hd_rtc_get_moonday		      ihu_bsp_stm32_rtc_get_moonday
+#define ihu_l1hd_rtc_get_china_calendar 	ihu_bsp_stm32_rtc_get_china_calendar
+#define ihu_l1hd_rtc_get_sky_earth				ihu_bsp_stm32_rtc_get_sky_earth
+#define ihu_l1hd_rtc_get_jieqi			      ihu_bsp_stm32_rtc_get_jieqi
+
+//L0BSP=>L1HD: CPUID
+#define ihu_l1hd_get_cpuid				      	ihu_bsp_stm32_get_cpuid
 
 //BFSC独有的映射
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)

@@ -344,7 +344,7 @@ uint8_t const table_week[12]={0,3,3,6,1,4,6,2,5,0,3,5}; //月修正数据表
 //支持从1900年到2099年的农历查询
 //支持从2000年到2050年的节气查询
 //子函数,用于读取数据表中农历月的大月或小月,如果该月为大返回1,为小返回0
-uint8_t GetMoonDay(uint8_t month_p,unsigned short table_addr)
+uint8_t ihu_bsp_stm32_rtc_get_moonday(uint8_t month_p,unsigned short table_addr)
 {
 	switch (month_p)
 	{
@@ -392,7 +392,7 @@ uint8_t GetMoonDay(uint8_t month_p,unsigned short table_addr)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////// 
-// 函数名称:GetChinaCalendar
+// 函数名称:ihu_bsp_stm32_rtc_get_china_calendar
 //功能描述:公农历转换(只允许1901-2099年)
 // 输　入:  year        公历年
 //          month       公历月
@@ -401,7 +401,7 @@ uint8_t GetMoonDay(uint8_t month_p,unsigned short table_addr)
 // 输　出:  1           成功
 //          0           失败																			 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-uint8_t GetChinaCalendar(uint16_t  year,uint8_t month,uint8_t day,uint8_t *p)
+uint8_t ihu_bsp_stm32_rtc_get_china_calendar(uint16_t  year,uint8_t month,uint8_t day,uint8_t *p)
 { 
 	uint8_t temp1,temp2,temp3,month_p,yearH,yearL;	
 	uint8_t flag_y;
@@ -439,7 +439,7 @@ uint8_t GetChinaCalendar(uint16_t  year,uint8_t month,uint8_t day,uint8_t *p)
 		month_p=1;
 							
 		flag_y=0;
-		if(GetMoonDay(month_p,table_addr)==0)	temp1=29; //小月29天
+		if(ihu_bsp_stm32_rtc_get_moonday(month_p,table_addr)==0)	temp1=29; //小月29天
 		else 									temp1=30; //大小30天
 		// 从数据表中取该年的闰月月份,如为0则该年无闰月  
 		temp2=year_code[table_addr]/16; 	
@@ -453,7 +453,7 @@ uint8_t GetChinaCalendar(uint16_t  year,uint8_t month,uint8_t day,uint8_t *p)
 				if(flag_y==0)month++;
 			}
 			else month++;
-			if(GetMoonDay(month_p,table_addr)==0)	temp1=29;
+			if(ihu_bsp_stm32_rtc_get_moonday(month_p,table_addr)==0)	temp1=29;
 			else 									temp1=30;
 		}
 		day=temp4+1;
@@ -475,7 +475,7 @@ uint8_t GetChinaCalendar(uint16_t  year,uint8_t month,uint8_t day,uint8_t *p)
 		else 			month_p=13; 
 
 		flag_y=0;
-		if(GetMoonDay(month_p,table_addr)==0)	temp1=29; 
+		if(ihu_bsp_stm32_rtc_get_moonday(month_p,table_addr)==0)	temp1=29; 
 		else 									temp1=30; 
 		while(temp3>temp1)
 		{
@@ -483,7 +483,7 @@ uint8_t GetChinaCalendar(uint16_t  year,uint8_t month,uint8_t day,uint8_t *p)
 			month_p--;
 			if(flag_y==0)		month--;
 			if(month==temp2)	flag_y=~flag_y;
-			if(GetMoonDay(month_p,table_addr)==0)	temp1=29;
+			if(ihu_bsp_stm32_rtc_get_moonday(month_p,table_addr)==0)	temp1=29;
 			else 									temp1=30;
 		}
 		day=temp1-temp3+1;
@@ -497,13 +497,13 @@ uint8_t GetChinaCalendar(uint16_t  year,uint8_t month,uint8_t day,uint8_t *p)
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
-// 函数名称:GetSkyEarth
+// 函数名称:ihu_bsp_stm32_rtc_get_sky_earth
 // 功能描述:输入公历日期得到一个甲子年(只允许1901-2099年)
 // 输　入:  year        公历年
 //          p           储存星期地址
 // 输　出:  无																							   
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-void GetSkyEarth(uint16_t year,uint8_t *p)
+void ihu_bsp_stm32_rtc_get_sky_earth(uint16_t year,uint8_t *p)
 {
 	uint8_t x;
 	
@@ -520,7 +520,7 @@ void GetSkyEarth(uint16_t year,uint8_t *p)
 	*p=x;
 }
 //将指定字符source复制no个给target
-void StrCopy(uint8_t *target,uint8_t const *source,uint8_t no)
+void func_bsp_stm32_rtc_get_jieqi(uint8_t *target,uint8_t const *source,uint8_t no)
 {
 	uint16_t i;	 
 	for(i=0;i<no;i++)
@@ -529,38 +529,38 @@ void StrCopy(uint8_t *target,uint8_t const *source,uint8_t no)
 	}
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
-// 函数名称:GetChinaCalendarStr
+// 函数名称:func_bsp_stm32_rtc_get_china_calendar_string
 // 功能描述:输入公历日期得到农历字符串	
-//          如:GetChinaCalendarStr(2007,02,06,str) 返回str="丙戌年腊月十九"
+//          如:func_bsp_stm32_rtc_get_china_calendar_string(2007,02,06,str) 返回str="丙戌年腊月十九"
 // 输　入:  year        公历年
 //          month       公历月
 //          day         公历日
 //          str         储存农历日期字符串地址   15Byte
 // 输　出:  无																							  
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-//void GetChinaCalendarStr(uint16_t year,uint8_t month,uint8_t day,uint8_t *str)
+//void func_bsp_stm32_rtc_get_china_calendar_string(uint16_t year,uint8_t month,uint8_t day,uint8_t *str)
 //{
 //	uint8_t NLyear[4];
 //	uint8_t SEyear;
 //	
-//	StrCopy(&str[0],(uint8_t *)"甲子年正月初一",15);
-//	if(GetChinaCalendar(year,month,day,(uint8_t *)NLyear)==0)	return;
-//	GetSkyEarth(NLyear[0]*100+NLyear[1],&SEyear);
-//	StrCopy(&str[0],(uint8_t *)  sky[SEyear%10],2);	//  甲
-//	StrCopy(&str[2],(uint8_t *)earth[SEyear%12],2);	//  子	
+//	func_bsp_stm32_rtc_get_jieqi(&str[0],(uint8_t *)"甲子年正月初一",15);
+//	if(ihu_bsp_stm32_rtc_get_china_calendar(year,month,day,(uint8_t *)NLyear)==0)	return;
+//	ihu_bsp_stm32_rtc_get_sky_earth(NLyear[0]*100+NLyear[1],&SEyear);
+//	func_bsp_stm32_rtc_get_jieqi(&str[0],(uint8_t *)  sky[SEyear%10],2);	//  甲
+//	func_bsp_stm32_rtc_get_jieqi(&str[2],(uint8_t *)earth[SEyear%12],2);	//  子	
 //	
-//	if(NLyear[2]==1)	StrCopy(&str[6],(uint8_t *)"正",2);
-//	else				StrCopy(&str[6],(uint8_t *)monthcode[NLyear[2]-1],2);		
+//	if(NLyear[2]==1)	func_bsp_stm32_rtc_get_jieqi(&str[6],(uint8_t *)"正",2);
+//	else				func_bsp_stm32_rtc_get_jieqi(&str[6],(uint8_t *)monthcode[NLyear[2]-1],2);		
 //	
-//	if(NLyear[3]>10) 	StrCopy(&str[10],(uint8_t *)nongliday[NLyear[3]/10],2);	
-//	else				StrCopy(&str[10],(uint8_t *)"初",2);
-//	StrCopy(&str[12],(uint8_t *)monthcode[(NLyear[3]-1)%10],2);
+//	if(NLyear[3]>10) 	func_bsp_stm32_rtc_get_jieqi(&str[10],(uint8_t *)nongliday[NLyear[3]/10],2);	
+//	else				func_bsp_stm32_rtc_get_jieqi(&str[10],(uint8_t *)"初",2);
+//	func_bsp_stm32_rtc_get_jieqi(&str[12],(uint8_t *)monthcode[(NLyear[3]-1)%10],2);
 //}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
-// 函数名称:GetJieQi
+// 函数名称:ihu_bsp_stm32_rtc_get_jieqi
 // 功能描述:输入公历日期得到本月24节气日期 day<15返回上半月节气,反之返回下半月	
-//          如:GetJieQiStr(2007,02,08,str) 返回str[0]=4
+//          如:func_bsp_stm32_rtc_get_jieqi_string(2007,02,08,str) 返回str[0]=4
 // 输　入:  year        公历年
 //          month       公历月
 //          day         公历日
@@ -568,7 +568,7 @@ void StrCopy(uint8_t *target,uint8_t const *source,uint8_t no)
 // 输　出:  1           成功
 //          0           失败																			  
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-uint8_t GetJieQi(uint16_t year,uint8_t month,uint8_t day,uint8_t *JQdate)
+uint8_t ihu_bsp_stm32_rtc_get_jieqi(uint16_t year,uint8_t month,uint8_t day,uint8_t *JQdate)
 {
 	uint8_t bak1,value,JQ;
 
@@ -591,9 +591,9 @@ uint8_t GetJieQi(uint16_t year,uint8_t month,uint8_t day,uint8_t *JQdate)
 }
 //static uint8_t const MonthDayMax[]={31,28,31,30,31,30,31,31,30,31,30,31,};
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
-// 函数名称:GetJieQiStr
+// 函数名称:func_bsp_stm32_rtc_get_jieqi_string
 // 功能描述:输入公历日期得到24节气字符串	
-//          如:GetJieQiStr(2007,02,08,str) 返回str="离雨水还有11天"
+//          如:func_bsp_stm32_rtc_get_jieqi_string(2007,02,08,str) 返回str="离雨水还有11天"
 // 输　入:  year        公历年
 //          month       公历月
 //          day         公历日
@@ -601,34 +601,34 @@ uint8_t GetJieQi(uint16_t year,uint8_t month,uint8_t day,uint8_t *JQdate)
 // 输　出:  1           成功
 //          0           失败																			  
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-//uint8_t GetJieQiStr(uint16_t year,uint8_t month,uint8_t day,uint8_t *str)
+//uint8_t func_bsp_stm32_rtc_get_jieqi_string(uint16_t year,uint8_t month,uint8_t day,uint8_t *str)
 //{
 //	uint8_t JQdate,JQ,MaxDay;
 
-//	if(GetJieQi(year,month,day,&JQdate)==0)	return 0;
+//	if(ihu_bsp_stm32_rtc_get_jieqi(year,month,day,&JQdate)==0)	return 0;
 
 //	JQ = (month-1) *2 ;                             //获得节气顺序标号(0～23
 //	if(day >= 15) JQ++;                             //判断是否是上半月
 
 //	if(day==JQdate)                                 //今天正是一个节气日
 //	{
-//		StrCopy(str,(uint8_t *)JieQiStr[JQ],5);
+//		func_bsp_stm32_rtc_get_jieqi(str,(uint8_t *)JieQiStr[JQ],5);
 //		return 1;
 //	}
 //	                                                //今天不是一个节气日
-//	StrCopy(str,(uint8_t *)"离立冬还有??天",15);
+//	func_bsp_stm32_rtc_get_jieqi(str,(uint8_t *)"离立冬还有??天",15);
 //	if(day<JQdate)                                  //如果今天日期小于本月的节气日期
 //	{
-//		StrCopy(&str[2],(uint8_t *)JieQiStr[JQ],4);
+//		func_bsp_stm32_rtc_get_jieqi(&str[2],(uint8_t *)JieQiStr[JQ],4);
 //		day=JQdate-day;
 //	} 
 //	else                                            //如果今天日期大于本月的节气日期
 //	{
 //             if((JQ+1) >23)  return 0;
-//		StrCopy(&str[2],(uint8_t *)JieQiStr[JQ+1],4);
+//		func_bsp_stm32_rtc_get_jieqi(&str[2],(uint8_t *)JieQiStr[JQ+1],4);
 //		if(day < 15)
 //		{
-//			GetJieQi(year,month,15,&JQdate);
+//			ihu_bsp_stm32_rtc_get_jieqi(year,month,15,&JQdate);
 //			day=JQdate-day;
 //		}
 //		else                                        //翻月
@@ -639,7 +639,7 @@ uint8_t GetJieQi(uint16_t year,uint8_t month,uint8_t day,uint8_t *JQdate)
 //				if((year%4==0)&&((year%100!=0)||(year%400==0))) MaxDay++;
 //			}
 //			if(++month==13)	month=1;
-//			GetJieQi(year,month,1,&JQdate);
+//			ihu_bsp_stm32_rtc_get_jieqi(year,month,1,&JQdate);
 //			day=MaxDay-day+JQdate;
 //		}
 //	}

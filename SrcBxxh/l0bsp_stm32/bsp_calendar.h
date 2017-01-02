@@ -35,17 +35,15 @@ extern uint8_t const *zodiac_sign[];
 
 
 //全局函数
-
+uint8_t ihu_bsp_stm32_rtc_get_moonday(uint8_t month_p,unsigned short table_addr);
+uint8_t ihu_bsp_stm32_rtc_get_china_calendar(uint16_t  year,uint8_t month,uint8_t day,uint8_t *p);
+void 		ihu_bsp_stm32_rtc_get_sky_earth(uint16_t year,uint8_t *p);
+uint8_t ihu_bsp_stm32_rtc_get_jieqi(uint16_t year,uint8_t month,uint8_t day,uint8_t *JQdate);
 
 //Local APIs
-uint8_t GetMoonDay(uint8_t month_p,unsigned short table_addr);
-uint8_t GetChinaCalendar(uint16_t  year,uint8_t month,uint8_t day,uint8_t *p);
-void GetSkyEarth(uint16_t year,uint8_t *p);
-void StrCopy(uint8_t *target,uint8_t const *source,uint8_t no);
-void GetChinaCalendarStr(uint16_t year,uint8_t month,uint8_t day,uint8_t *str);
-uint8_t GetJieQi(uint16_t year,uint8_t month,uint8_t day,uint8_t *JQdate);
-uint8_t GetJieQiStr(uint16_t year,uint8_t month,uint8_t day,uint8_t *str);
-
+void 		func_bsp_stm32_rtc_get_jieqi(uint8_t *target,uint8_t const *source,uint8_t no);
+uint8_t func_bsp_stm32_rtc_get_jieqi_string(uint16_t year,uint8_t month,uint8_t day,uint8_t *str);
+void 		func_bsp_stm32_rtc_get_china_calendar_string(uint16_t year,uint8_t month,uint8_t day,uint8_t *str);
 
 #ifdef __cplusplus
 }

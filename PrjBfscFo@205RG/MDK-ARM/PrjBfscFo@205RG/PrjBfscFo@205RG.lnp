@@ -50,6 +50,7 @@
 "prjbfscfo@205rg\bsp_crc.o"
 "prjbfscfo@205rg\bsp_calendar.o"
 "prjbfscfo@205rg\bsp_rtc.o"
+"prjbfscfo@205rg\bsp_cpuid.o"
 "prjbfscfo@205rg\l1timer_freeos.o"
 "prjbfscfo@205rg\vmfreeoslayer.o"
 "prjbfscfo@205rg\l1vmfo.o"
