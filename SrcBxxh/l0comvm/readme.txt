@@ -7,7 +7,9 @@
 //= ZJL, 2017 Jan.2, CURRENT_SW_DELIVERY R03.81 =>CCL项目
 = 增加ADC1采样CPU内部温度的工作逻辑，目前按照官方例子，ADC1采样CPU温度的参数配置还存在一定错误，不知是否能正常工作，待调查调测。
 = 完善ADC的工作函数，清理完毕ADC BSP的整个逻辑
-
+= 完善DIDO的所有控制逻辑
+= 统一格式化BLEMOD的函数命名
+= 统一格式化RFIDMOD的函数命名
 
 //= ZJL, 2017 Jan.2, CURRENT_SW_DELIVERY R03.80 =>CCL项目
 = 完善CRC过程，包括CRC硬件逻辑在STM32CubeMX中没有选用的情形下，需要通过sysconfig.h中的开关关闭，不然会出现编译问题

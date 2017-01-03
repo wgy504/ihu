@@ -20,16 +20,16 @@ extern int16_t zIhuBspStm32SpsBleRxCount;																				//当前接收数�
 extern int16_t zIhuBspStm32SpsBleRxLen;
 
 /*******************************************************************************
-* 函数名 : BLE_UART_send_AT_command
+* 函数名 : func_blemod_uart_send_AT_command
 * 描述   : 发送AT指令函数
 * 输入   : 发送数据的指针、发送等待时间(单位：S)
 * 输出   : 
 * 返回   : 1:正常  -1:错误
 * 注意   : 
-* OPSTAT BLE_UART_send_AT_command(uint8_t *cmd, uint8_t *ack, uint8_t wait_time)  
+* OPSTAT func_blemod_uart_send_AT_command(uint8_t *cmd, uint8_t *ack, uint8_t wait_time)  
 * 这里的发送，只有成功返回ACK对应的回复时，才算成功
 *******************************************************************************/
-OPSTAT BLE_UART_send_AT_command(uint8_t *cmd, uint8_t *ack, uint16_t wait_time) //in Second
+OPSTAT func_blemod_uart_send_AT_command(uint8_t *cmd, uint8_t *ack, uint16_t wait_time) //in Second
 {
 	int res;
 	
@@ -37,9 +37,9 @@ OPSTAT BLE_UART_send_AT_command(uint8_t *cmd, uint8_t *ack, uint16_t wait_time) 
 	uint32_t tickTotal = wait_time * 1000 / IHU_BSP_STM32_SPS_RX_MAX_DELAY;
 
 	//清理接收缓冲区
-	BLE_UART_clear_receive_buffer();
+	func_blemod_uart_clear_receive_buffer();
 	ihu_l1hd_sps_ble_send_data((uint8_t *)cmd, strlen((char*)cmd));
-	BLE_UART_SendLR();	
+	func_blemod_uart_send_LR();	
 	
 	res = IHU_FAILURE;
 	while((tickTotal > 0) && (res == IHU_FAILURE))
@@ -55,14 +55,14 @@ OPSTAT BLE_UART_send_AT_command(uint8_t *cmd, uint8_t *ack, uint16_t wait_time) 
 }
 
 /*******************************************************************************
-* 函数名 : BLE_UART_clear_receive_buffer
+* 函数名 : func_blemod_uart_clear_receive_buffer
 * 描述   : 清除串口2缓存数据
 * 输入   : 
 * 输出   : 
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-void BLE_UART_clear_receive_buffer(void)
+void func_blemod_uart_clear_receive_buffer(void)
 {
 	uint16_t k;
 	for(k=0;k<IHU_BSP_STM32_SPS_BLE_REC_MAX_LEN;k++)      //将缓存内容清零
@@ -80,7 +80,7 @@ void BLE_UART_clear_receive_buffer(void)
 * 返回    : 无 
 * 说明    : 无
 *******************************************************************************/
-void BLE_UART_SendString(char* s)
+void func_blemod_uart_send_string(char* s)
 {
 	while(*s != '\0')//检测字符串结束符
 	{
@@ -96,18 +96,18 @@ void BLE_UART_SendString(char* s)
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-OPSTAT BLE_HC05_UART_fetch_mac_add_procedure(void)
+OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_procedure(void)
 {
 	uint8_t repeatCnt = IHU_BLE_UART_REPEAT_CNT;
 //	uint8_t temp[50];
 //	uint8_t loc=0;
 	
 	//设置BLE模块拉高的工作状态
-	BLE_UART_PORT_ENABLE();
+	ihu_l1hd_dido_f2board_ble_power_ctrl_on();
 	
-	BLE_UART_clear_receive_buffer();
+	func_blemod_uart_clear_receive_buffer();
 	//最大循环次数
-	while((repeatCnt > 0) && (BLE_UART_send_AT_command((uint8_t*)"AT", (uint8_t*)"OK", 2) != IHU_SUCCESS))//查询是否应到AT指令
+	while((repeatCnt > 0) && (func_blemod_uart_send_AT_command((uint8_t*)"AT", (uint8_t*)"OK", 2) != IHU_SUCCESS))//查询是否应到AT指令
 	{
 		repeatCnt--;
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
@@ -122,8 +122,8 @@ OPSTAT BLE_HC05_UART_fetch_mac_add_procedure(void)
 	}
 	
 	//查阅版本
-	BLE_UART_clear_receive_buffer();
-	if (BLE_UART_send_AT_command((uint8_t*)"AT+VERSION?", (uint8_t*)"OK", 2) == IHU_SUCCESS) {
+	func_blemod_uart_clear_receive_buffer();
+	if (func_blemod_uart_send_AT_command((uint8_t*)"AT+VERSION?", (uint8_t*)"OK", 2) == IHU_SUCCESS) {
 		if(strstr((const char*)zIhuBspStm32SpsBleRxBuff, "+VERSION:") != NULL){
 			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: BLE Version = [%s]!\n", zIhuBspStm32SpsBleRxBuff);
 		}
@@ -134,8 +134,8 @@ OPSTAT BLE_HC05_UART_fetch_mac_add_procedure(void)
 	}	
 	
 	//获取地址
-	BLE_UART_clear_receive_buffer();
-	if (BLE_UART_send_AT_command((uint8_t*)"AT+ADDR?", (uint8_t*)"OK", 2) == IHU_SUCCESS) {
+	func_blemod_uart_clear_receive_buffer();
+	if (func_blemod_uart_send_AT_command((uint8_t*)"AT+ADDR?", (uint8_t*)"OK", 2) == IHU_SUCCESS) {
 		if(strstr((const char*)zIhuBspStm32SpsBleRxBuff, "+ADDR::") != NULL){
 			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: BLE Address = [%s]!\n", zIhuBspStm32SpsBleRxBuff);
 		}
@@ -148,7 +148,7 @@ OPSTAT BLE_HC05_UART_fetch_mac_add_procedure(void)
 	//如何将获得的地址返回给上层，待上层需求
 
 	//设置BLE模块拉低的蓝牙正常工作状态
-	BLE_UART_PORT_DISABLE();
+	ihu_l1hd_dido_f2board_ble_power_ctrl_off();
 
 	return IHU_SUCCESS;
 }

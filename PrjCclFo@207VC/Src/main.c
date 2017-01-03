@@ -168,7 +168,7 @@ int main(void)
   MX_NVIC_Init();
 
   /* USER CODE BEGIN 2 */
-	/* 使能接收，进入中断回调函数 */
+	/* 使能接收，进入中断回调函�? */
   HAL_UART_Receive_IT(&huart1,&zIhuUartRxBuffer[0],1);	
   HAL_UART_Receive_IT(&huart2,&zIhuUartRxBuffer[1],1);
   HAL_UART_Receive_IT(&huart3,&zIhuUartRxBuffer[2],1);
@@ -224,7 +224,7 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
-	//挂载VMFO到这儿
+	//挂载VMFO到这�?
 	ihu_vm_main();
 	
   /* USER CODE END RTOS_QUEUES */

@@ -20,16 +20,16 @@ extern int16_t	zIhuBspStm32SpsRfidRxCount;																					//当前接收数
 extern int16_t zIhuBspStm32SpsRfidRxLen;
 
 /*******************************************************************************
-* 函数名 : RFID_UART_send_AT_command
+* 函数名 : func_rfidmod_uart_send_AT_command
 * 描述   : 发送AT指令函数
 * 输入   : 发送数据的指针、发送等待时间(单位：S)
 * 输出   : 
 * 返回   : 1:正常  -1:错误
 * 注意   : 
-* OPSTAT RFID_UART_send_AT_command(uint8_t *cmd, uint8_t *ack, uint8_t wait_time)  
+* OPSTAT func_rfidmod_uart_send_AT_command(uint8_t *cmd, uint8_t *ack, uint8_t wait_time)  
 * 这里的发送，只有成功返回ACK对应的回复时，才算成功
 *******************************************************************************/
-OPSTAT RFID_UART_send_AT_command(uint8_t *cmd, uint8_t *ack, uint16_t wait_time) //in Second
+OPSTAT func_rfidmod_uart_send_AT_command(uint8_t *cmd, uint8_t *ack, uint16_t wait_time) //in Second
 {
 	int res;
 	
@@ -37,9 +37,9 @@ OPSTAT RFID_UART_send_AT_command(uint8_t *cmd, uint8_t *ack, uint16_t wait_time)
 	uint32_t tickTotal = wait_time * 1000 / IHU_BSP_STM32_SPS_RX_MAX_DELAY;
 
 	//清理接收缓冲区
-	RFID_UART_clear_receive_buffer();
+	func_rfidmod_uart_clear_receive_buffer();
 	ihu_l1hd_sps_rfid_send_data((uint8_t *)cmd, strlen((char*)cmd));
-	RFID_UART_SendLR();	
+	func_rfidmod_uart_send_LR();	
 	
 	res = IHU_FAILURE;
 	while((tickTotal > 0) && (res == IHU_FAILURE))
@@ -55,14 +55,14 @@ OPSTAT RFID_UART_send_AT_command(uint8_t *cmd, uint8_t *ack, uint16_t wait_time)
 }
 
 /*******************************************************************************
-* 函数名 : RFID_UART_clear_receive_buffer
+* 函数名 : func_rfidmod_uart_clear_receive_buffer
 * 描述   : 清除串口2缓存数据
 * 输入   : 
 * 输出   : 
 * 返回   : 
 * 注意   : 
 *******************************************************************************/
-void RFID_UART_clear_receive_buffer(void)
+void func_rfidmod_uart_clear_receive_buffer(void)
 {
 	uint16_t k;
 	for(k=0;k<IHU_BSP_STM32_SPS_RFID_REC_MAX_LEN;k++)      //将缓存内容清零
@@ -80,7 +80,7 @@ void RFID_UART_clear_receive_buffer(void)
 * 返回    : 无 
 * 说明    : 无
 *******************************************************************************/
-void RFID_UART_SendString(char* s)
+void func_rfidmod_uart_send_string(char* s)
 {
 	while(*s != '\0')//检测字符串结束符
 	{
