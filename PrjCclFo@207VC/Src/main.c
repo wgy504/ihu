@@ -89,6 +89,7 @@ osTimerId myTimer01Handle;
 uint8_t zIhuUartRxBuffer[6];
 uint8_t zIhuSpiRxBuffer[2];
 uint8_t zIhuI2cRxBuffer[2];
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -167,7 +168,7 @@ int main(void)
   MX_NVIC_Init();
 
   /* USER CODE BEGIN 2 */
-	/* Ê¹ÄÜ½ÓÊÕ£¬½øÈëÖÐ¶Ï»Øµ÷º¯Êý */
+	/* ä½¿èƒ½æŽ¥æ”¶ï¼Œè¿›å…¥ä¸­æ–­å›žè°ƒå‡½æ•° */
   HAL_UART_Receive_IT(&huart1,&zIhuUartRxBuffer[0],1);	
   HAL_UART_Receive_IT(&huart2,&zIhuUartRxBuffer[1],1);
   HAL_UART_Receive_IT(&huart3,&zIhuUartRxBuffer[2],1);
@@ -182,7 +183,8 @@ int main(void)
   HAL_SPI_Receive_IT(&hspi2,&zIhuSpiRxBuffer[1],1);
   HAL_I2C_Slave_Receive_IT(&hi2c1,&zIhuI2cRxBuffer[0],1);	
   HAL_CAN_Receive_IT(&hcan1, 0);
-  HAL_CAN_Receive_IT(&hcan2, 1);	
+  HAL_CAN_Receive_IT(&hcan2, 1);
+	
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -222,7 +224,7 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
-	//¹ÒÔØVMFOµ½Õâ¶ù
+	//æŒ‚è½½VMFOåˆ°è¿™å„¿
 	ihu_vm_main();
 	
   /* USER CODE END RTOS_QUEUES */
@@ -345,7 +347,7 @@ static void MX_ADC1_Init(void)
     /**Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
     */
   hadc1.Instance = ADC1;
-  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
   hadc1.Init.Resolution = ADC_RESOLUTION_12B;
   hadc1.Init.ScanConvMode = DISABLE;
   hadc1.Init.ContinuousConvMode = DISABLE;
@@ -354,7 +356,7 @@ static void MX_ADC1_Init(void)
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
   hadc1.Init.NbrOfConversion = 1;
   hadc1.Init.DMAContinuousRequests = DISABLE;
-  hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  hadc1.Init.EOCSelection = ADC_EOC_SEQ_CONV;
   if (HAL_ADC_Init(&hadc1) != HAL_OK)
   {
     Error_Handler();
@@ -362,7 +364,7 @@ static void MX_ADC1_Init(void)
 
     /**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
     */
-  sConfig.Channel = ADC_CHANNEL_1;
+  sConfig.Channel = ADC_CHANNEL_TEMPSENSOR;
   sConfig.Rank = 1;
   sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
@@ -381,7 +383,7 @@ static void MX_ADC2_Init(void)
     /**Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
     */
   hadc2.Instance = ADC2;
-  hadc2.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  hadc2.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
   hadc2.Init.Resolution = ADC_RESOLUTION_12B;
   hadc2.Init.ScanConvMode = DISABLE;
   hadc2.Init.ContinuousConvMode = DISABLE;
@@ -417,7 +419,7 @@ static void MX_ADC3_Init(void)
     /**Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
     */
   hadc3.Instance = ADC3;
-  hadc3.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  hadc3.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
   hadc3.Init.Resolution = ADC_RESOLUTION_12B;
   hadc3.Init.ScanConvMode = DISABLE;
   hadc3.Init.ContinuousConvMode = DISABLE;
