@@ -412,8 +412,20 @@ extern void ihu_timer_routine_handler_10ms(void);
  */
 
 //L0BSP=>L1HD: ADC
-#define ihu_l1hd_adc_hw_init							ihu_bsp_stm32_adc_hw_init
-#define ihu_l1hd_adc_iau_get_value 				ihu_bsp_stm32_adc_get_sample_value
+#define ihu_l1hd_adc_cpu_temp_start 						ihu_bsp_stm32_adc_cpu_temp_start
+#define ihu_l1hd_adc_cpu_temp_stop 							ihu_bsp_stm32_adc_cpu_temp_stop
+#define ihu_l1hd_adc1_start											ihu_bsp_stm32_adc1_start
+#define ihu_l1hd_adc1_get_sample_value 					ihu_bsp_stm32_adc1_get_sample_value
+#define ihu_l1hd_adc1_stop				 							ihu_bsp_stm32_adc1_stop
+#define ihu_l1hd_adc2_start 										ihu_bsp_stm32_adc2_start
+#define ihu_l1hd_adc2_get_sample_value 					ihu_bsp_stm32_adc2_get_sample_value
+#define ihu_l1hd_adc2_stop 											ihu_bsp_stm32_adc2_stop
+#define ihu_l1hd_adc3_start				 							ihu_bsp_stm32_adc3_start
+#define ihu_l1hd_adc3_get_sample_value 					ihu_bsp_stm32_adc3_get_sample_value
+#define ihu_l1hd_adc3_stop				 							ihu_bsp_stm32_adc3_stop
+#define ihu_l1hd_adc1_start_in_DMA_mode 				ihu_bsp_stm32_adc1_start_in_DMA_mode
+#define ihu_l1hd_adc2_start_in_DMA_mode					ihu_bsp_stm32_adc2_start_in_DMA_mode
+#define ihu_l1hd_adc3_start_in_DMA_mode					ihu_bsp_stm32_adc3_start_in_DMA_mode       
 
 //L0BSP=>L1HD: LED 
 #define ihu_l1hd_led_power_f2board_ono 					ihu_bsp_stm32_led_power_f2board_on
@@ -458,25 +470,25 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_sps_spare2_rcv_data_timeout 		ihu_bsp_stm32_sps_spare2_rcv_data_timeout
 
 //L0BSP=>L1HD: SPI
-#define ihu_l1hd_spi_slave_hw_init		  	ihu_bsp_stm32_spi_slave_hw_init
-#define ihu_l1hd_spi_iau_send_data 				ihu_bsp_stm32_spi_iau_send_data
-#define ihu_l1hd_spi_iau_receive_data 		ihu_bsp_stm32_spi_iau_rcv_data
-#define ihu_l1hd_spi_spare1_send_data 		ihu_bsp_stm32_spi_spare1_send_data
-#define ihu_l1hd_spi_spare1_receive_data 	ihu_bsp_stm32_spi_spare1_rcv_data
+#define ihu_l1hd_spi_slave_hw_init		  				ihu_bsp_stm32_spi_slave_hw_init
+#define ihu_l1hd_spi_iau_send_data 							ihu_bsp_stm32_spi_iau_send_data
+#define ihu_l1hd_spi_iau_receive_data 					ihu_bsp_stm32_spi_iau_rcv_data
+#define ihu_l1hd_spi_spare1_send_data 					ihu_bsp_stm32_spi_spare1_send_data
+#define ihu_l1hd_spi_spare1_receive_data 				ihu_bsp_stm32_spi_spare1_rcv_data
 
 //L0BSP=>L1HD: I2C
-#define ihu_l1hd_i2c_slave_hw_init				ihu_bsp_stm32_i2c_slave_hw_init
-#define ihu_l1hd_i2c_iau_send_data 				ihu_bsp_stm32_i2c_iau_send_data
-#define ihu_l1hd_i2c_iau_receive_data 		ihu_bsp_stm32_i2c_iau_rcv_data
-#define ihu_l1hd_i2c_spare1_send_data 		ihu_bsp_stm32_i2c_spare1_send_data
-#define ihu_l1hd_i2c_spare1_receive_data 	ihu_bsp_stm32_i2c_spare1_rcv_data
+#define ihu_l1hd_i2c_slave_hw_init							ihu_bsp_stm32_i2c_slave_hw_init
+#define ihu_l1hd_i2c_iau_send_data 							ihu_bsp_stm32_i2c_iau_send_data
+#define ihu_l1hd_i2c_iau_receive_data 					ihu_bsp_stm32_i2c_iau_rcv_data
+#define ihu_l1hd_i2c_spare1_send_data 					ihu_bsp_stm32_i2c_spare1_send_data
+#define ihu_l1hd_i2c_spare1_receive_data 				ihu_bsp_stm32_i2c_spare1_rcv_data
 
 //L0BSP=>L1HD: CAN
-#define ihu_l1hd_can_slave_hw_init				ihu_bsp_stm32_can_slave_hw_init
-#define ihu_l1hd_can_iau_send_data 				ihu_bsp_stm32_can_send_data
-#define ihu_l1hd_can_iau_receive_data 		ihu_bsp_stm32_can_rcv_data
-#define ihu_l1hd_can_spare1_send_data 		ihu_bsp_stm32_can_spare1_send_data
-#define ihu_l1hd_can_spare1_receive_data 	ihu_bsp_stm32_can_spare1_rcv_data
+#define ihu_l1hd_can_slave_hw_init							ihu_bsp_stm32_can_slave_hw_init
+#define ihu_l1hd_can_iau_send_data 							ihu_bsp_stm32_can_send_data
+#define ihu_l1hd_can_iau_receive_data 					ihu_bsp_stm32_can_rcv_data
+#define ihu_l1hd_can_spare1_send_data 					ihu_bsp_stm32_can_spare1_send_data
+#define ihu_l1hd_can_spare1_receive_data 				ihu_bsp_stm32_can_spare1_rcv_data
 
 //L0BSP=>L1HD: KEY
 
@@ -487,25 +499,25 @@ extern void ihu_timer_routine_handler_10ms(void);
 //L0BSP=>L1HD: DIDO
 
 //L0BSP=>L1HD: WDOG
-#define ihu_l1hd_watch_dog_refresh      	ihu_bsp_stm32_watch_dog_refresh
+#define ihu_l1hd_watch_dog_refresh      				ihu_bsp_stm32_watch_dog_refresh
 
 //L0BSP=>L1HD: CRC
-#define ihu_l1hd_crc_caculate			      	ihu_bsp_stm32_crc_caculate
+#define ihu_l1hd_crc_caculate			      				ihu_bsp_stm32_crc_caculate
 
 //L0BSP=>L1HD: RTC
-#define ihu_l1hd_rtc_get_moonday		      ihu_bsp_stm32_rtc_get_moonday
-#define ihu_l1hd_rtc_get_china_calendar 	ihu_bsp_stm32_rtc_get_china_calendar
-#define ihu_l1hd_rtc_get_sky_earth				ihu_bsp_stm32_rtc_get_sky_earth
-#define ihu_l1hd_rtc_get_jieqi			      ihu_bsp_stm32_rtc_get_jieqi
+#define ihu_l1hd_rtc_get_moonday		      			ihu_bsp_stm32_rtc_get_moonday
+#define ihu_l1hd_rtc_get_china_calendar 				ihu_bsp_stm32_rtc_get_china_calendar
+#define ihu_l1hd_rtc_get_sky_earth							ihu_bsp_stm32_rtc_get_sky_earth
+#define ihu_l1hd_rtc_get_jieqi			      			ihu_bsp_stm32_rtc_get_jieqi
 
 //L0BSP=>L1HD: CPUID
-#define ihu_l1hd_get_cpuid				      	ihu_bsp_stm32_get_cpuid
+#define ihu_l1hd_get_cpuid				      				ihu_bsp_stm32_get_cpuid
 
 //BFSC独有的映射
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
-#define ihu_l1hd_i2c_bfsc_send_data 			ihu_bsp_stm32_i2c_iau_send_data
-#define ihu_l1hd_can_bfsc_send_data 			ihu_bsp_stm32_can_send_data
-#define ihu_l1hd_adc_bfsc_get_value 			ihu_bsp_stm32_adc_get_sample_value
+#define ihu_l1hd_i2c_bfsc_send_data 						ihu_bsp_stm32_i2c_iau_send_data
+#define ihu_l1hd_can_bfsc_send_data 						ihu_bsp_stm32_can_send_data
+#define ihu_l1hd_adc_bfsc_get_value 						ihu_bsp_stm32_adc_get_sample_value
 #endif
 
 
