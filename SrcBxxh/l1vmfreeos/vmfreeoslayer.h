@@ -428,18 +428,30 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_adc3_start_in_DMA_mode					ihu_bsp_stm32_adc3_start_in_DMA_mode       
 
 //L0BSP=>L1HD: LED 
-#define ihu_l1hd_led_power_f2board_ono 					ihu_bsp_stm32_led_power_f2board_on
+#define ihu_l1hd_led_power_f2board_on 					ihu_bsp_stm32_led_power_f2board_on
 #define ihu_l1hd_led_power_f2board_off					ihu_bsp_stm32_led_power_f2board_off
 #define ihu_l1hd_led_power_f2board_toggle 			ihu_bsp_stm32_led_power_f2board_toggle
-#define ihu_l1hd_led_commu_f2board_ono 					ihu_bsp_stm32_led_commu_f2board_on
+#define ihu_l1hd_led_commu_f2board_on 					ihu_bsp_stm32_led_commu_f2board_on
 #define ihu_l1hd_led_commu_f2board_off 					ihu_bsp_stm32_led_commu_f2board_off
 #define ihu_l1hd_led_commu_f2board_toggle 			ihu_bsp_stm32_led_commu_f2board_toggle
-#define ihu_l1hd_led_work_state_f2board_ono 		ihu_bsp_stm32_led_work_state_f2board_on
+#define ihu_l1hd_led_work_state_f2board_on	 		ihu_bsp_stm32_led_work_state_f2board_on
 #define ihu_l1hd_led_work_state_f2board_off 		ihu_bsp_stm32_led_work_state_f2board_off
 #define ihu_l1hd_led_work_state_f2board_toggle 	ihu_bsp_stm32_led_work_state_f2board_toggle
 #define ihu_l1hd_beep_f2board_ono 							ihu_bsp_stm32_beep_f2board_on
 #define ihu_l1hd_beep_f2board_off 							ihu_bsp_stm32_beep_f2board_off
 #define ihu_l1hd_beep_f2board_toggle 						ihu_bsp_stm32_beep_f2board_toggle
+//LED->BFSC独特业务部分
+#define ihu_l1hd_led_serv1_f2board_on 					ihu_bsp_stm32_led_serv1_f2board_on
+#define ihu_l1hd_led_serv1_f2board_off					ihu_bsp_stm32_led_serv1_f2board_off
+#define ihu_l1hd_led_serv1_f2board_toggle 			ihu_bsp_stm32_led_serv1_f2board_toggle
+#define ihu_l1hd_led_serv2_f2board_on 					ihu_bsp_stm32_led_serv2_f2board_on
+#define ihu_l1hd_led_serv2_f2board_off					ihu_bsp_stm32_led_serv2_f2board_off
+#define ihu_l1hd_led_serv2_f2board_toggle 			ihu_bsp_stm32_led_serv2_f2board_toggle
+#define ihu_l1hd_led_serv3_f2board_on 					ihu_bsp_stm32_led_serv3_f2board_on
+#define ihu_l1hd_led_serv3_f2board_off					ihu_bsp_stm32_led_serv3_f2board_off
+#define ihu_l1hd_led_serv3_f2board_toggle 			ihu_bsp_stm32_led_serv3_f2board_toggle
+
+
 //待去掉部分，纯粹用于207VC板子的测试
 #define ihu_l1hd_led_f2board_on 								ihu_bsp_stm32_led_f2board_on
 #define ihu_l1hd_led_f2board_off 								ihu_bsp_stm32_led_f2board_off
