@@ -20,7 +20,7 @@
 
 /* 函数体 --------------------------------------------------------------------*/
 
-void ihu_bsp_stm32_get_cpuid(uint32_t *cpuid)
+void ihu_bsp_stm32_get_cpuid_f2board(uint32_t *cpuid)
 {
 	*cpuid = *(__IO uint32_t *)(0X1FFFF7F0); // 高字节
 	*(cpuid+1) = *(__IO uint32_t *)(0X1FFFF7EC); // 

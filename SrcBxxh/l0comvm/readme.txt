@@ -5,7 +5,8 @@
 = 研究STM32的IAP功能
 
 //= ZJL, 2017 Jan.4, CURRENT_SW_DELIVERY R03.83 =>CCL项目
-
+= 时间time()调整完成，跟当前RTC时间连在一起了
+= 设备型号，HUITP协议需要调整，且调整完毕。
 
 
 //= ZJL, 2017 Jan.4, CURRENT_SW_DELIVERY R03.82 =>BFSC项目
