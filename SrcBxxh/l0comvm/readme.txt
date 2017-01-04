@@ -7,7 +7,7 @@
 //= ZJL, 2017 Jan.4, CURRENT_SW_DELIVERY R03.83 =>CCL项目
 = 时间time()调整完成，跟当前RTC时间连在一起了
 = 设备型号，HUITP协议需要调整，且调整完毕。
-
+= 垃圾集成STM32_FLASH内部FLASH的访问函数，以及IAP升级程序
 
 //= ZJL, 2017 Jan.4, CURRENT_SW_DELIVERY R03.82 =>BFSC项目
 = 设置BFSC的原理图，并大范围调整管脚

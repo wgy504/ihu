@@ -753,6 +753,26 @@
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_cpuid.h</FilePath>
             </File>
+            <File>
+              <FileName>bsp_stmflash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_stmflash.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_stmflash.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_stmflash.h</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_iap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_iap.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_iap.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_iap.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
