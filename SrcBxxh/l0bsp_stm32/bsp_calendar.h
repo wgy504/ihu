@@ -35,10 +35,10 @@ extern uint8_t const *zodiac_sign[];
 
 
 //全局函数
-uint8_t ihu_bsp_stm32_rtc_get_moonday(uint8_t month_p,unsigned short table_addr);
-uint8_t ihu_bsp_stm32_rtc_get_china_calendar(uint16_t  year,uint8_t month,uint8_t day,uint8_t *p);
-void 		ihu_bsp_stm32_rtc_get_sky_earth(uint16_t year,uint8_t *p);
-uint8_t ihu_bsp_stm32_rtc_get_jieqi(uint16_t year,uint8_t month,uint8_t day,uint8_t *JQdate);
+extern uint8_t ihu_bsp_stm32_rtc_get_moonday(uint8_t month_p,unsigned short table_addr);
+extern uint8_t ihu_bsp_stm32_rtc_get_china_calendar(uint16_t  year,uint8_t month,uint8_t day,uint8_t *p);
+extern void 		ihu_bsp_stm32_rtc_get_sky_earth(uint16_t year,uint8_t *p);
+extern uint8_t ihu_bsp_stm32_rtc_get_jieqi(uint16_t year,uint8_t month,uint8_t day,uint8_t *JQdate);
 
 //Local APIs
 void 		func_bsp_stm32_rtc_get_jieqi(uint8_t *target,uint8_t const *source,uint8_t no);

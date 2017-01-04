@@ -146,5 +146,56 @@ uint8_t USART_Scanf(uint32_t value)
 //  HAL_RTCEx_BKUPWrite(&IHU_BSP_STM32_RTC_HANDLER, RTC_BKP_DR1, 0x32F1);
 //}
 
+//HAL_RTC_GetTime(),HAL_RTC_GetDate()
 
+#if (IHU_RTC_SET_ENABLE_OR_DISABLE == IHU_HARDWARE_RTC_ENABLE)
+uint32_t ihu_bsp_stm32_rtc_get_current_unix_time(void)
+{
+	RTC_DateTypeDef sdatestructure;
+	RTC_TimeTypeDef stimestructure;
+	
+	uint32_t secondvalue = 0;
+	HAL_RTC_GetDate(&IHU_BSP_STM32_RTC_HANDLER, &sdatestructure, RTC_FORMAT_BIN);
+	HAL_RTC_GetTime(&IHU_BSP_STM32_RTC_HANDLER, &stimestructure, RTC_FORMAT_BIN);	
+
+	//根据年月日的精确计算（闰年/大小月），未来再优化
+	secondvalue = (sdatestructure.Year+2000-1970)*365*24*3600 + sdatestructure.Month*30*24*3600 + sdatestructure.Date*24*3600 + \
+	  stimestructure.Hours*3600 + stimestructure.Minutes*60 + stimestructure.Seconds;
+	
+	return secondvalue;
+}
+
+//取得当前以字符串为标识的时间
+void ihu_bsp_stm32_rtc_get_current_ymdhms_time(char *output)
+{
+	RTC_DateTypeDef sdatestructure;
+	RTC_TimeTypeDef stimestructure;
+
+	HAL_RTC_GetDate(&IHU_BSP_STM32_RTC_HANDLER, &sdatestructure, RTC_FORMAT_BIN);
+	HAL_RTC_GetTime(&IHU_BSP_STM32_RTC_HANDLER, &stimestructure, RTC_FORMAT_BIN);	
+	//输出
+	sprintf(output, "%04d/%02d/%02d, %02d:%02d:%02d", sdatestructure.Year+2000, sdatestructure.Month, sdatestructure.Date, stimestructure.Hours, stimestructure.Minutes, stimestructure.Seconds);	
+}
+
+//取得当前以字符串为标识的日期
+void ihu_bsp_stm32_rtc_get_current_ymd_time(char *output)
+{
+	RTC_DateTypeDef sdatestructure;
+
+	HAL_RTC_GetDate(&IHU_BSP_STM32_RTC_HANDLER, &sdatestructure, RTC_FORMAT_BIN);
+	//输出
+	sprintf(output, "%04d/%02d/%02d", sdatestructure.Year+2000, sdatestructure.Month, sdatestructure.Date);	
+}
+
+//取得当前以字符串为标识的时间
+void ihu_bsp_stm32_rtc_get_current_hms_time(char *output)
+{
+	RTC_TimeTypeDef stimestructure;
+
+	HAL_RTC_GetTime(&IHU_BSP_STM32_RTC_HANDLER, &stimestructure, RTC_FORMAT_BIN);	
+	//输出
+	sprintf(output, "%02d:%02d:%02d", stimestructure.Hours, stimestructure.Minutes, stimestructure.Seconds);	
+}
+
+#endif
 

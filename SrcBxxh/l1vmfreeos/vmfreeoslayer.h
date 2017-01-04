@@ -40,6 +40,9 @@
 	#include "bsp_i2c.h"
 	#include "bsp_wdog.h"
 	#include "bsp_crc.h"
+	#include "bsp_rtc.h"
+	#include "bsp_calendar.h"
+	#include "bsp_cpuid.h"
 	
 	
 	
@@ -60,6 +63,9 @@
 	#include "bsp_can.h"
 	#include "bsp_wdog.h"
 	#include "bsp_crc.h"
+	#include "bsp_rtc.h"
+	#include "bsp_calendar.h"
+	#include "bsp_cpuid.h"
 
 
 
@@ -548,6 +554,10 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_crc_caculate			      				ihu_bsp_stm32_crc_caculate
 
 //L0BSP=>L1HD: RTC
+#define ihu_l1hd_rtc_get_current_unix_time		  ihu_bsp_stm32_rtc_get_current_unix_time
+#define ihu_l1hd_rtc_get_current_ymdhms_time		ihu_bsp_stm32_rtc_get_current_ymdhms_time
+#define ihu_l1hd_rtc_get_current_ymd_time				ihu_bsp_stm32_rtc_get_current_ymd_time
+#define ihu_l1hd_rtc_get_current_hms_time			  ihu_bsp_stm32_rtc_get_current_hms_time
 #define ihu_l1hd_rtc_get_moonday		      			ihu_bsp_stm32_rtc_get_moonday
 #define ihu_l1hd_rtc_get_china_calendar 				ihu_bsp_stm32_rtc_get_china_calendar
 #define ihu_l1hd_rtc_get_sky_earth							ihu_bsp_stm32_rtc_get_sky_earth

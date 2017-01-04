@@ -52,8 +52,8 @@ OPSTAT func_cloud_standard_xml_pack(UINT8 msgType, char *funcFlag, UINT16 msgId,
 	strcat(output->buf, zIhuSysEngPar.cloud.cloudBhIhuName);
 	strcat(output->buf, HUITP_MSG_HUIXML_CONSTANT_FROM_USER_R);
 	strcat(output->buf, HUITP_MSG_HUIXML_CONSTANT_CREATE_TIME_L);
-	//time(0); 如何取得时间戳，待完成，FreeRTOS里暂时没找到合适取得时间戳的方法
-	UINT32 timeStamp = (UINT32)__TIME__; 
+	//time(0)：取得RTC时间的方式，通过跟BSP相连，得到解决了
+	UINT32 timeStamp = ihu_l1hd_rtc_get_current_unix_time(); 
   sprintf(s, "%d", timeStamp);
 	strcat(output->buf, s);
 	strcat(output->buf, HUITP_MSG_HUIXML_CONSTANT_CREATE_TIME_R);
