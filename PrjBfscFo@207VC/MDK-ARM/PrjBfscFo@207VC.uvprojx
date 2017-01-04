@@ -332,7 +332,7 @@
               <MiscControls>--C99</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F207xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;     ../Drivers/STM32F2xx_HAL_Driver/Inc;     ../Drivers/STM32F2xx_HAL_Driver/Inc/Legacy;     ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;     ../Drivers/CMSIS/Device/ST/STM32F2xx/Include;     ../Middlewares/Third_Party/FreeRTOS/Source/include;     ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;     ../Drivers/CMSIS/Include;     ..\..\SrcBxxh\l0bsp_stm32;     ..\..\SrcBxxh\l0commsgbfsc;     ..\..\SrcBxxh\l0comvm;     ..\..\SrcBxxh\l1vmfreeos;     ..\..\SrcBxxh\l2framefreeos;     ..\..\SrcBxxh\l3applbfsc</IncludePath>
+              <IncludePath>../Inc;      ../Drivers/STM32F2xx_HAL_Driver/Inc;      ../Drivers/STM32F2xx_HAL_Driver/Inc/Legacy;      ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;      ../Drivers/CMSIS/Device/ST/STM32F2xx/Include;      ../Middlewares/Third_Party/FreeRTOS/Source/include;      ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;      ../Drivers/CMSIS/Include;      ..\..\SrcBxxh\l0bsp_stm32;      ..\..\SrcBxxh\l0commsgbfsc;      ..\..\SrcBxxh\l0comvm;      ..\..\SrcBxxh\l1vmfreeos;      ..\..\SrcBxxh\l2framefreeos;      ..\..\SrcBxxh\l3applbfsc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -496,11 +496,6 @@
               <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_rcc_ex.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f2xx_hal_i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_i2c.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32f2xx_hal_tim.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_tim.c</FilePath>
@@ -549,6 +544,26 @@
               <FileName>stm32f2xx_hal_rtc_ex.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_rtc_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f2xx_hal_dac_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_dac_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f2xx_hal_iwdg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_iwdg.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f2xx_hal_crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_crc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f2xx_hal_dac.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_dac.c</FilePath>
             </File>
           </Files>
         </Group>

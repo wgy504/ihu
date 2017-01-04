@@ -19,8 +19,6 @@
 	extern ADC_HandleTypeDef hadc3;
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 	extern ADC_HandleTypeDef hadc1;
-	extern ADC_HandleTypeDef hadc2;
-	extern ADC_HandleTypeDef hadc3;
 #endif
 
 //本地全局变量
@@ -57,46 +55,11 @@ void ihu_bsp_stm32_adc1_stop(void)
 	HAL_ADC_Stop(&IHU_BSP_STM32_ADC1_HANDLER);
 }
 
-//In normal mode
-void ihu_bsp_stm32_adc2_start(void)
-{
-	HAL_ADC_Start(&IHU_BSP_STM32_ADC2_HANDLER);
-}
-
-//In normal mode
-void ihu_bsp_stm32_adc2_stop(void)
-{
-	HAL_ADC_Stop(&IHU_BSP_STM32_ADC2_HANDLER);
-}
-
-//In normal mode
-void ihu_bsp_stm32_adc3_start(void)
-{
-	HAL_ADC_Start(&IHU_BSP_STM32_ADC3_HANDLER);
-}
-
-//In normal mode
-void ihu_bsp_stm32_adc3_stop(void)
-{
-	HAL_ADC_Stop(&IHU_BSP_STM32_ADC3_HANDLER);
-}
 
 //In normal mode
 int ihu_bsp_stm32_adc1_get_sample_value(void)
 {
 	return HAL_ADC_GetValue(&IHU_BSP_STM32_ADC1_HANDLER);
-}
-
-//In normal mode
-int ihu_bsp_stm32_adc2_get_sample_value(void)
-{
-	return HAL_ADC_GetValue(&IHU_BSP_STM32_ADC2_HANDLER);
-}
-
-//In normal mode
-int ihu_bsp_stm32_adc3_get_sample_value(void)
-{
-	return HAL_ADC_GetValue(&IHU_BSP_STM32_ADC3_HANDLER);
 }
 
 /**
@@ -122,6 +85,45 @@ void ihu_bsp_stm32_adc1_start_in_DMA_mode(void)
 {
   /* 启动AD转换并使能DMA传输和中断 */
   HAL_ADC_Start_DMA(&IHU_BSP_STM32_ADC1_HANDLER,(uint32_t *)&zIhuAdc1ConvertedValue, sizeof(zIhuAdc1ConvertedValue));  
+}
+
+#endif
+
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+//In normal mode
+void ihu_bsp_stm32_adc2_start(void)
+{
+	HAL_ADC_Start(&IHU_BSP_STM32_ADC2_HANDLER);
+}
+
+//In normal mode
+void ihu_bsp_stm32_adc2_stop(void)
+{
+	HAL_ADC_Stop(&IHU_BSP_STM32_ADC2_HANDLER);
+}
+
+//In normal mode
+void ihu_bsp_stm32_adc3_start(void)
+{
+	HAL_ADC_Start(&IHU_BSP_STM32_ADC3_HANDLER);
+}
+
+//In normal mode
+void ihu_bsp_stm32_adc3_stop(void)
+{
+	HAL_ADC_Stop(&IHU_BSP_STM32_ADC3_HANDLER);
+}
+
+//In normal mode
+int ihu_bsp_stm32_adc2_get_sample_value(void)
+{
+	return HAL_ADC_GetValue(&IHU_BSP_STM32_ADC2_HANDLER);
+}
+
+//In normal mode
+int ihu_bsp_stm32_adc3_get_sample_value(void)
+{
+	return HAL_ADC_GetValue(&IHU_BSP_STM32_ADC3_HANDLER);
 }
 
 //In DMA mode

@@ -4,7 +4,14 @@
 //近期需要完成的任务
 = 研究STM32的IAP功能
 
-//= ZJL, 2017 Jan.2, CURRENT_SW_DELIVERY R03.81 =>CCL项目
+//= ZJL, 2017 Jan.4, CURRENT_SW_DELIVERY R03.82 =>BFSC项目
+= 设置BFSC的原理图，并大范围调整管脚
+= 生成的自动代码，双编译通过
+= 基于207VC生成的管脚配置图，已经无法下行IMPORT到205RG了，所以准备放弃205RG项目了
+
+
+
+//= ZJL, 2017 Jan.3, CURRENT_SW_DELIVERY R03.81 =>CCL项目
 = 增加ADC1采样CPU内部温度的工作逻辑，目前按照官方例子，ADC1采样CPU温度的参数配置还存在一定错误，不知是否能正常工作，待调查调测。
 = 完善ADC的工作函数，清理完毕ADC BSP的整个逻辑
 = 完善DIDO的所有控制逻辑

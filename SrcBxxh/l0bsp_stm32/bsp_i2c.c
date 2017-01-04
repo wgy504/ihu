@@ -14,8 +14,10 @@
 #include "bsp_i2c.h"
 
 //从MAIN.x中继承过来的函数
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 extern I2C_HandleTypeDef hi2c1;
 extern I2C_HandleTypeDef hi2c2;
+#endif
 extern uint8_t zIhuI2cRxBuffer[2];
 
 //本地全局变量
@@ -52,6 +54,7 @@ int ihu_bsp_stm32_i2c_slave_hw_init(void)
 	return BSP_SUCCESS;
 }
 
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 /*******************************************************************************
 * 函数名  : I2C_SendData
 * 描述    : I2C_IAU发送数据缓冲区数据
@@ -181,7 +184,7 @@ void HAL_I2C_RxCpltCallback(I2C_HandleTypeDef *I2cHandle)
 //		HAL_I2C_Slave_Receive_IT(&IHU_BSP_STM32_I2C_SPARE1_HANDLER, &zIhuI2cRxBuffer[IHU_BSP_STM32_I2C_SPARE1_HANDLER_ID-1], 1);
 //  }
 }
-
+#endif
 
 
 

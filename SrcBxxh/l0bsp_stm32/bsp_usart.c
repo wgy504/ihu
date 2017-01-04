@@ -20,7 +20,7 @@ extern UART_HandleTypeDef huart5;
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
-#ifdef IHU_BSP_STM32_UART_SPARE2
+#ifdef IHU_BSP_STM32_UART6_PRESENT
 extern UART_HandleTypeDef huart6;
 #endif
 extern uint8_t zIhuUartRxBuffer[6];
@@ -295,10 +295,10 @@ int ihu_bsp_stm32_sps_spare1_rcv_data_timeout(uint8_t* buff, uint16_t len, uint3
 * 返回    : 无 
 * 说明    : 无
 *******************************************************************************/
-#ifdef IHU_BSP_STM32_UART_SPARE2
+#ifdef IHU_BSP_STM32_UART6_PRESENT
 int ihu_bsp_stm32_sps_spare2_send_data(uint8_t* buff, uint16_t len)
 {    
-	if (HAL_UART_Transmit(&IHU_BSP_STM32_UART_SPARE2_HANDLER, (uint8_t *)buff, len, IHU_BSP_STM32_SPS_TX_MAX_DELAY) == HAL_OK)
+	if (HAL_UART_Transmit(&IHU_BSP_STM32_UART6_PRESENT_HANDLER, (uint8_t *)buff, len, IHU_BSP_STM32_SPS_TX_MAX_DELAY) == HAL_OK)
 		return BSP_SUCCESS;
 	else
 		return BSP_FAILURE;
@@ -306,7 +306,7 @@ int ihu_bsp_stm32_sps_spare2_send_data(uint8_t* buff, uint16_t len)
 
 int ihu_bsp_stm32_sps_spare2_rcv_data(uint8_t* buff, uint16_t len)
 {    
-	if (HAL_UART_Receive(&IHU_BSP_STM32_UART_SPARE2_HANDLER, buff, len, IHU_BSP_STM32_SPS_RX_MAX_DELAY) == HAL_OK)
+	if (HAL_UART_Receive(&IHU_BSP_STM32_UART6_PRESENT_HANDLER, buff, len, IHU_BSP_STM32_SPS_RX_MAX_DELAY) == HAL_OK)
 		return BSP_SUCCESS;
 	else
 		return BSP_FAILURE;
@@ -314,7 +314,7 @@ int ihu_bsp_stm32_sps_spare2_rcv_data(uint8_t* buff, uint16_t len)
 
 int ihu_bsp_stm32_sps_spare2_rcv_data_timeout(uint8_t* buff, uint16_t len, uint32_t timeout)
 {    
-	if (HAL_UART_Receive(&IHU_BSP_STM32_UART_SPARE2_HANDLER, buff, len, timeout) == HAL_OK)
+	if (HAL_UART_Receive(&IHU_BSP_STM32_UART6_PRESENT_HANDLER, buff, len, timeout) == HAL_OK)
 		return BSP_SUCCESS;
 	else
 		return BSP_FAILURE;
@@ -433,15 +433,15 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 		//重新设置中断
 		HAL_UART_Receive_IT(&IHU_BSP_STM32_UART_SPARE1_HANDLER, &zIhuUartRxBuffer[IHU_BSP_STM32_UART_SPARE1_HANDLER_ID-1], 1);
   }	
-#ifdef IHU_BSP_STM32_UART_SPARE2	
-  else if(UartHandle==&IHU_BSP_STM32_UART_SPARE2_HANDLER)
+#ifdef IHU_BSP_STM32_UART6_PRESENT	
+  else if(UartHandle==&IHU_BSP_STM32_UART6_PRESENT_HANDLER)
   {
-		zIhuBspStm32SpsSpare2RxBuff[zIhuBspStm32SpsSpare2RxCount] = zIhuUartRxBuffer[IHU_BSP_STM32_UART_SPARE2_HANDLER_ID-1];
+		zIhuBspStm32SpsSpare2RxBuff[zIhuBspStm32SpsSpare2RxCount] = zIhuUartRxBuffer[IHU_BSP_STM32_UART6_PRESENT_HANDLER_ID-1];
 		zIhuBspStm32SpsSpare2RxCount++;
 		if (zIhuBspStm32SpsSpare2RxCount >= IHU_BSP_STM32_SPS_SPARE2_REC_MAX_LEN)
 			zIhuBspStm32SpsSpare2RxCount = 0;
 		//重新设置中断
-		HAL_UART_Receive_IT(&IHU_BSP_STM32_UART_SPARE2_HANDLER, &zIhuUartRxBuffer[IHU_BSP_STM32_UART_SPARE2_HANDLER_ID-1], 1);
+		HAL_UART_Receive_IT(&IHU_BSP_STM32_UART6_PRESENT_HANDLER, &zIhuUartRxBuffer[IHU_BSP_STM32_UART6_PRESENT_HANDLER_ID-1], 1);
   }
 #endif	
 }

@@ -398,8 +398,9 @@ void func_i2caries_bfsc_moto_set_speed(INT32 speed)
 //成帧了以后的数据
 void func_i2caries_bfsc_frame_send(strIhuI2cariesMotoFrame_t *frame)
 {
-	//通过I2C的HAL函数，直接发送出去	
-	ihu_l1hd_i2c_bfsc_send_data((UINT8*)frame, sizeof(strIhuI2cariesMotoFrame_t));
+	//通过I2C的HAL函数，直接发送出去
+	//这是到底通过什么接口发送出去，待确定
+	//ihu_l1hd_i2c_bfsc_send_data((UINT8*)frame, sizeof(strIhuI2cariesMotoFrame_t));
 }
 
 

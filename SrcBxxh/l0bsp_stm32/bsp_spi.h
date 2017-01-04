@@ -88,7 +88,7 @@ int func_bsp_spi_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint
 //常量定义
 //MAX_IHU_MSG_BODY_LENGTH-1是因为发送到上层SPILEO的数据缓冲区受到消息结构msg_struct_spileo_l2frame_rcv_t的影响
 #define IHU_BSP_STM32_SPI_IAU_REC_MAX_LEN 					MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
-#define IHU_BSP_STM32_SPI_SPARE1_REC_MAX_LEN 			MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
+#define IHU_BSP_STM32_SPI1_PRESENT_REC_MAX_LEN 			MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
 
 //发送和接受数据的延迟时间长度
 #define IHU_BSP_STM32_SPI_TX_MAX_DELAY 						100
@@ -96,13 +96,13 @@ int func_bsp_spi_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint
 
 //交换矩阵
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-#undef IHU_BSP_STM32_SPI_SPARE1
+#undef IHU_BSP_STM32_SPI1_PRESENT
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
-#define IHU_BSP_STM32_SPI_SPARE1
+#undef IHU_BSP_STM32_SPI1_PRESENT
 #endif
-#ifdef IHU_BSP_STM32_SPI_SPARE1
-#define IHU_BSP_STM32_SPI_SPARE1_HANDLER					hspi1
-#define IHU_BSP_STM32_SPI_SPARE1_HANDLER_ID  			1
+#ifdef IHU_BSP_STM32_SPI1_PRESENT
+#define IHU_BSP_STM32_SPI1_PRESENT_HANDLER					hspi1
+#define IHU_BSP_STM32_SPI1_PRESENT_HANDLER_ID  			1
 #endif
 
 #define IHU_BSP_STM32_SPI_IAU_HANDLER							hspi2
@@ -110,6 +110,7 @@ int func_bsp_spi_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint
 
 //全局函数
 extern int ihu_bsp_stm32_spi_slave_hw_init(void);
+
 extern int ihu_bsp_stm32_spi_spare1_send_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_spi_spare1_rcv_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_spi_iau_send_data(uint8_t* buff, uint16_t len);

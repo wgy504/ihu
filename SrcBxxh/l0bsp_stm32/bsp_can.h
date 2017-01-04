@@ -30,17 +30,28 @@ extern "C" {
 #define IHU_BSP_STM32_CAN_RX_MAX_DELAY 				100
 
 //本地定义的交换矩阵
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+#define IHU_BSP_STM32_CAN2_PRESENT
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+#undef IHU_BSP_STM32_CAN2_PRESENT
+#endif
+
 #define IHU_BSP_STM32_CAN_IAU_HANDLER								hcan1
 #define IHU_BSP_STM32_CAN_IAU_HANDLER_ID  					1
+
+#ifdef IHU_BSP_STM32_CAN2_PRESENT
 #define IHU_BSP_STM32_CAN_SPARE1_HANDLER						hcan2
 #define IHU_BSP_STM32_CAN_SPARE1_HANDLER_ID  				2
+#endif
 
 //全局函数
 extern int ihu_bsp_stm32_can_slave_hw_init(void);
 extern int ihu_bsp_stm32_can_send_data(uint8_t* buff, uint16_t len);
-extern int ihu_bsp_stm32_can_rcv_data(uint8_t* buff, uint16_t len);	
-extern int ihu_bsp_stm32_can_spare1_send_data(uint8_t* buff, uint16_t len);
-extern int ihu_bsp_stm32_can_spare1_rcv_data(uint8_t* buff, uint16_t len);
+extern int ihu_bsp_stm32_can_rcv_data(uint8_t* buff, uint16_t len);
+#ifdef IHU_BSP_STM32_CAN2_PRESENT
+	extern int ihu_bsp_stm32_can_spare1_send_data(uint8_t* buff, uint16_t len);
+	extern int ihu_bsp_stm32_can_spare1_rcv_data(uint8_t* buff, uint16_t len);
+#endif
 
 //重载接收函数，以便通过IT中断方式搞定接收通信，否则需要通过轮询或者单独线程搞定，更加麻烦
 void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef *CanHandle);

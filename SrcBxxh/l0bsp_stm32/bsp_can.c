@@ -15,7 +15,10 @@
 
 //从MAIN.x中继承过来的函数
 extern CAN_HandleTypeDef hcan1;
-extern CAN_HandleTypeDef hcan2;
+
+#ifdef IHU_BSP_STM32_CAN2_PRESENT
+	extern CAN_HandleTypeDef hcan2;
+#endif
 extern uint8_t zIhuCanRxBuffer[2];
 
 //本地全局变量
@@ -89,6 +92,7 @@ int ihu_bsp_stm32_can_rcv_data(uint8_t* buff, uint16_t len)
 * 返回    : 无 
 * 说明    : 无
 *******************************************************************************/
+#ifdef IHU_BSP_STM32_CAN2_PRESENT
 int ihu_bsp_stm32_can_spare1_send_data(uint8_t* buff, uint16_t len)
 {    
 	//这里是帧处理的过程，未来待完善数据的发送接收处理过程	
@@ -106,6 +110,7 @@ int ihu_bsp_stm32_can_spare1_rcv_data(uint8_t* buff, uint16_t len)
 	else
 		return BSP_FAILURE;
 }
+#endif
 
 /**
   * 串口接口完成回调函数的处理
@@ -178,6 +183,7 @@ void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef *CanHandle)
 		//重新设置中断
 		HAL_CAN_Receive_IT(&IHU_BSP_STM32_CAN_IAU_HANDLER, IHU_BSP_STM32_CAN_IAU_HANDLER_ID-1);
   }
+#ifdef IHU_BSP_STM32_CAN2_PRESENT	
   else if(CanHandle==&IHU_BSP_STM32_CAN_SPARE1_HANDLER)
   {
 		//这里是帧处理的过程，未来待完善数据的接收处理过程		
@@ -187,6 +193,7 @@ void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef *CanHandle)
 			zIhuBspStm32CanSpare1RxCount = 0;
 		HAL_CAN_Receive_IT(&IHU_BSP_STM32_CAN_SPARE1_HANDLER, IHU_BSP_STM32_CAN_SPARE1_HANDLER_ID);
   }
+#endif	
 }
 
 

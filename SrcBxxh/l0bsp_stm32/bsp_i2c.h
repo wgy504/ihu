@@ -30,21 +30,24 @@ extern "C" {
 #define IHU_BSP_STM32_I2C_RX_MAX_DELAY_DURATION 100
 
 //本地定义的交换矩阵
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 #define IHU_BSP_STM32_I2C_IAU_HANDLER					hi2c1
 #define IHU_BSP_STM32_I2C_IAU_HANDLER_ID  		1
 #define IHU_BSP_STM32_I2C_SPARE1_HANDLER			hi2c1
 #define IHU_BSP_STM32_I2C_SPARE1_HANDLER_ID  	2
+#endif
 
 //全局函数
 extern int ihu_bsp_stm32_i2c_slave_hw_init(void);
+
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 extern int ihu_bsp_stm32_i2c_iau_send_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_i2c_iau_rcv_data(uint8_t* buff, uint16_t len);	
 extern int ihu_bsp_stm32_i2c_spare1_send_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_i2c_spare1_rcv_data(uint8_t* buff, uint16_t len);
-
 //重载接收函数，以便通过IT中断方式搞定接收通信，否则需要通过轮询或者单独线程搞定，更加麻烦
 void HAL_I2C_RxCpltCallback(I2C_HandleTypeDef *I2cHandle);
-
+#endif
 
 //Local APIs
 
