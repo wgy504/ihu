@@ -26,13 +26,34 @@ extern "C" {
 #define STM32_FLASH_SIZE        512  // 所选STM32的FLASH容量大小(单位为K)
 #define STM32_FLASH_WREN        1    // stm32芯片内容FLASH 写入使能(0，禁用;1，使能)
 
+//STM32固定位置的标签存储内容，由烧录器写入
+typedef struct StrStm32F2EquidStorage
+{
+	char  		equLable[20];
+	uint16_t 	equType;
+	uint16_t 	hwId;
+	uint16_t 	swRelId;
+	uint16_t 	swVerId;
+	uint8_t  	swUpgradeFlag;
+	uint8_t 	rsv1;
+	uint8_t 	rsv2;
+	uint8_t 	rsv3;	
+}StrStm32F2EquidStorage_t;
+#define IHU_BSP_STM32_F2_EQUID_STORAGE_UPGRADE_NONE 0
+#define IHU_BSP_STM32_F2_EQUID_STORAGE_UPGRADE_NO 1
+#define IHU_BSP_STM32_F2_EQUID_STORAGE_UPGRADE_YES_STABLE 2
+#define IHU_BSP_STM32_F2_EQUID_STORAGE_UPGRADE_YES_TRAIL 3
+#define IHU_BSP_STM32_F2_EQUID_STORAGE_UPGRADE_YES_PATCH 4
+#define IHU_BSP_STM32_F2_EQUID_STORAGE_UPGRADE_YES_INVALID 0xFF
 
+#define IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_ADD_FIX 0x80001FDE //根据具体的芯片型号，由uboot确定后再确定
+#define IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_SIZE 0x20      //32BYTE
 
 //本地定义的交换矩阵
 
 
 //全局函数
-
+extern void ihu_bsp_stm32_f2board_equid_get(StrStm32F2EquidStorage_t *equ);
 
 //Local APIs
 uint16_t STMFLASH_ReadHalfWord(uint32_t faddr);		  //读出半字

@@ -566,6 +566,9 @@ extern void ihu_timer_routine_handler_10ms(void);
 //L0BSP=>L1HD: CPUID
 #define ihu_l1hd_get_cpuid_f2board				      ihu_bsp_stm32_get_cpuid_f2board
 
+//L0BSP=>L1HD: STMFLASH/IAP
+#define ihu_l1hd_f2board_equid_get				      ihu_bsp_stm32_f2board_equid_get
+
 //BFSC独有的映射
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 #define ihu_l1hd_i2c_bfsc_send_data 						ihu_bsp_stm32_i2c_iau_send_data
