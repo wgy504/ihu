@@ -4,10 +4,13 @@
 //近期需要完成的任务
 = 研究STM32的IAP功能
 
-//= ZJL, 2017 Jan.4, CURRENT_SW_DELIVERY R03.83 =>CCL项目
+//= ZJL, 2017 Jan.5, CURRENT_SW_DELIVERY R03.83 =>CCL项目
 = 时间time()调整完成，跟当前RTC时间连在一起了
 = 设备型号，HUITP协议需要调整，且调整完毕。
-= 垃圾集成STM32_FLASH内部FLASH的访问函数，以及IAP升级程序
+= 垃圾集成STM32_FLASH内部FLASH的访问函数，以及IAP升级程序。
+= IAP程序将成为独立的uboot，暂时不再继续搞了。STMFLASH访问程序暂时留着，因为未来还将需要方位FLASH固定地址的数据段。
+= 当前先定义32BYTE，用于存储设备标签（20B），设备型号（2B），硬件标识（2B），软件大版本（2B），软件小版本（2B），是否升级以及升级类型（1B）、保留（3B）。
+= IAP做成的uboot，等待独立做成项目任务
 
 //= ZJL, 2017 Jan.4, CURRENT_SW_DELIVERY R03.82 =>BFSC项目
 = 设置BFSC的原理图，并大范围调整管脚
