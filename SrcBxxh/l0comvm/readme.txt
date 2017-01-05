@@ -11,6 +11,7 @@
 = IAP程序将成为独立的uboot，暂时不再继续搞了。STMFLASH访问程序暂时留着，因为未来还将需要方位FLASH固定地址的数据段。
 = 当前先定义32BYTE，用于存储设备标签（20B），设备型号（2B），硬件标识（2B），软件大版本（2B），软件小版本（2B），是否升级以及升级类型（1B）、保留（3B）。
 = IAP做成的uboot，等待独立做成项目任务
+= 增加了PrjUbootStm32F2基于UART/ETH的官方IAP程序例子，放在IHU目录下了。在项目清单中，只放了UART的IAP例子，供研究参考之用。
 
 //= ZJL, 2017 Jan.4, CURRENT_SW_DELIVERY R03.82 =>BFSC项目
 = 设置BFSC的原理图，并大范围调整管脚

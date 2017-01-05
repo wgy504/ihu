@@ -8,15 +8,19 @@
   <WorkspaceName>WorkSpace</WorkspaceName>
 
   <project>
-    <PathAndName>.\PrjEmcWxDa1458x\projects\target_apps\wechat\Keil_5\emc_wechat.uvguix.uvprojx</PathAndName>
-  </project>
-
-  <project>
     <PathAndName>.\DA1458x_SDK\5.0.3\utilities\secondary_bootloader\emcwx_secondary_bootloader.uvprojx</PathAndName>
   </project>
 
   <project>
+    <PathAndName>.\PrjEmcWxDa1458x\projects\target_apps\wechat\Keil_5\emc_wechat.uvguix.uvprojx</PathAndName>
+  </project>
+
+  <project>
     <PathAndName>.\PrjScycbUcosIII\EvalBoards\ST\STM3220G-EVAL\uCOS-III\KeilMDK\uCOS-III-Scycb.uvgui.uvproj</PathAndName>
+  </project>
+
+  <project>
+    <PathAndName>.\PrjUbootStm32F2xxAn3374\Project\STM32F2xx_IAP\MDK-ARM\PrjUbootStm32F2.uvproj</PathAndName>
   </project>
 
   <project>
