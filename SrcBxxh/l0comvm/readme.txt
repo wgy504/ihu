@@ -4,8 +4,9 @@
 //近期需要完成的任务
 = 研究STM32的IAP功能
 
-//= ZJL, 2017 Jan.5, CURRENT_SW_DELIVERY R03.84 =>CCL项目
-= 建立设备信息读取的API
+//= ZJL, 2017 Jan.6, CURRENT_SW_DELIVERY R03.84 =>CCL项目
+= 建立设备信息StrStm32F2EquidStorage_t读取的API
+= 完善HW TYPE PRODUCT CATELOG信息域，在SYSCONFIG.H进行了单独的明确的定义，以便未来可以跟StrStm32F2EquidStorage_t进行交叉验证
 
 
 //= ZJL, 2017 Jan.5, CURRENT_SW_DELIVERY R03.83 =>CCL项目
