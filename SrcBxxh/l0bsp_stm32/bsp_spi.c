@@ -16,7 +16,7 @@
 //从MAIN.x中继承过来的函数
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 SPI_HandleTypeDef hspi1; //MAIN中为定义，这里重新定义是为了复用
-extern SPI_HandleTypeDef hspi2;
+SPI_HandleTypeDef hspi2; //MAIN中为定义，这里重新定义是为了复用
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 SPI_HandleTypeDef hspi1;  //MAIN中为定义，这里重新定义是为了复用
 extern SPI_HandleTypeDef hspi2;

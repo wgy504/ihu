@@ -50,15 +50,6 @@
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
-ADC_HandleTypeDef hadc1;
-ADC_HandleTypeDef hadc2;
-ADC_HandleTypeDef hadc3;
-
-CAN_HandleTypeDef hcan1;
-CAN_HandleTypeDef hcan2;
-
-CRC_HandleTypeDef hcrc;
-
 DCMI_HandleTypeDef hdcmi;
 
 I2C_HandleTypeDef hi2c1;
@@ -67,14 +58,7 @@ IWDG_HandleTypeDef hiwdg;
 
 RTC_HandleTypeDef hrtc;
 
-SPI_HandleTypeDef hspi2;
-DMA_HandleTypeDef hdma_spi2_rx;
-DMA_HandleTypeDef hdma_spi2_tx;
-
-TIM_HandleTypeDef htim6;
-
 UART_HandleTypeDef huart4;
-UART_HandleTypeDef huart5;
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 UART_HandleTypeDef huart3;
@@ -96,22 +80,12 @@ uint8_t zIhuI2cRxBuffer[2];
 void SystemClock_Config(void);
 void Error_Handler(void);
 static void MX_GPIO_Init(void);
-static void MX_DMA_Init(void);
-static void MX_ADC1_Init(void);
-static void MX_ADC2_Init(void);
-static void MX_ADC3_Init(void);
 static void MX_I2C1_Init(void);
-static void MX_SPI2_Init(void);
-static void MX_TIM6_Init(void);
 static void MX_UART4_Init(void);
-static void MX_UART5_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_USART3_UART_Init(void);
-static void MX_CAN1_Init(void);
-static void MX_CAN2_Init(void);
 static void MX_RTC_Init(void);
-static void MX_CRC_Init(void);
 static void MX_IWDG_Init(void);
 static void MX_DCMI_Init(void);
 void StartDefaultTask(void const * argument);
@@ -145,22 +119,12 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_DMA_Init();
-  MX_ADC1_Init();
-  MX_ADC2_Init();
-  MX_ADC3_Init();
   MX_I2C1_Init();
-  MX_SPI2_Init();
-  MX_TIM6_Init();
   MX_UART4_Init();
-  MX_UART5_Init();
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
-  MX_CAN1_Init();
-  MX_CAN2_Init();
   MX_RTC_Init();
-  MX_CRC_Init();
   MX_IWDG_Init();
   MX_DCMI_Init();
 
@@ -168,18 +132,17 @@ int main(void)
   MX_NVIC_Init();
 
   /* USER CODE BEGIN 2 */
-	/* 使能接收，进入中断回调函�? */
   HAL_UART_Receive_IT(&huart1,&zIhuUartRxBuffer[0],1);	
   HAL_UART_Receive_IT(&huart2,&zIhuUartRxBuffer[1],1);
   HAL_UART_Receive_IT(&huart3,&zIhuUartRxBuffer[2],1);
   HAL_UART_Receive_IT(&huart4,&zIhuUartRxBuffer[3],1);
-  HAL_UART_Receive_IT(&huart5,&zIhuUartRxBuffer[4],1);
+  //HAL_UART_Receive_IT(&huart5,&zIhuUartRxBuffer[4],1);
   //HAL_UART_Receive_IT(&huart6,&zIhuUartRxBuffer[5],1);
   //HAL_SPI_Receive_IT(&hspi1,&zIhuSpiRxBuffer[0],1);
-  HAL_SPI_Receive_IT(&hspi2,&zIhuSpiRxBuffer[1],1);
+  //HAL_SPI_Receive_IT(&hspi2,&zIhuSpiRxBuffer[1],1);
   HAL_I2C_Slave_Receive_IT(&hi2c1,&zIhuI2cRxBuffer[0],1);	
-  HAL_CAN_Receive_IT(&hcan1, 0);
-  HAL_CAN_Receive_IT(&hcan2, 1);
+  //HAL_CAN_Receive_IT(&hcan1, 0);
+  //HAL_CAN_Receive_IT(&hcan2, 1);
 	
   /* USER CODE END 2 */
 
@@ -220,7 +183,7 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
-	//挂载VMFO到这�?
+	//Self defined main task entry
 	ihu_vm_main();
 	
   /* USER CODE END RTOS_QUEUES */
@@ -317,9 +280,6 @@ static void MX_NVIC_Init(void)
   /* I2C1_ER_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(I2C1_ER_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(I2C1_ER_IRQn);
-  /* SPI2_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(SPI2_IRQn, 5, 0);
-  HAL_NVIC_EnableIRQ(SPI2_IRQn);
   /* USART2_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(USART2_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(USART2_IRQn);
@@ -329,175 +289,6 @@ static void MX_NVIC_Init(void)
   /* UART4_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(UART4_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(UART4_IRQn);
-  /* UART5_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(UART5_IRQn, 5, 0);
-  HAL_NVIC_EnableIRQ(UART5_IRQn);
-}
-
-/* ADC1 init function */
-static void MX_ADC1_Init(void)
-{
-
-  ADC_ChannelConfTypeDef sConfig;
-
-    /**Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
-    */
-  hadc1.Instance = ADC1;
-  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
-  hadc1.Init.Resolution = ADC_RESOLUTION_12B;
-  hadc1.Init.ScanConvMode = DISABLE;
-  hadc1.Init.ContinuousConvMode = DISABLE;
-  hadc1.Init.DiscontinuousConvMode = DISABLE;
-  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
-  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc1.Init.NbrOfConversion = 1;
-  hadc1.Init.DMAContinuousRequests = DISABLE;
-  hadc1.Init.EOCSelection = ADC_EOC_SEQ_CONV;
-  if (HAL_ADC_Init(&hadc1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-    /**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
-    */
-  sConfig.Channel = ADC_CHANNEL_TEMPSENSOR;
-  sConfig.Rank = 1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
-  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-}
-
-/* ADC2 init function */
-static void MX_ADC2_Init(void)
-{
-
-  ADC_ChannelConfTypeDef sConfig;
-
-    /**Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
-    */
-  hadc2.Instance = ADC2;
-  hadc2.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
-  hadc2.Init.Resolution = ADC_RESOLUTION_12B;
-  hadc2.Init.ScanConvMode = DISABLE;
-  hadc2.Init.ContinuousConvMode = DISABLE;
-  hadc2.Init.DiscontinuousConvMode = DISABLE;
-  hadc2.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
-  hadc2.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc2.Init.NbrOfConversion = 1;
-  hadc2.Init.DMAContinuousRequests = DISABLE;
-  hadc2.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
-  if (HAL_ADC_Init(&hadc2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-    /**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
-    */
-  sConfig.Channel = ADC_CHANNEL_10;
-  sConfig.Rank = 1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
-  if (HAL_ADC_ConfigChannel(&hadc2, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-}
-
-/* ADC3 init function */
-static void MX_ADC3_Init(void)
-{
-
-  ADC_ChannelConfTypeDef sConfig;
-
-    /**Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
-    */
-  hadc3.Instance = ADC3;
-  hadc3.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
-  hadc3.Init.Resolution = ADC_RESOLUTION_12B;
-  hadc3.Init.ScanConvMode = DISABLE;
-  hadc3.Init.ContinuousConvMode = DISABLE;
-  hadc3.Init.DiscontinuousConvMode = DISABLE;
-  hadc3.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
-  hadc3.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc3.Init.NbrOfConversion = 1;
-  hadc3.Init.DMAContinuousRequests = DISABLE;
-  hadc3.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
-  if (HAL_ADC_Init(&hadc3) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-    /**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
-    */
-  sConfig.Channel = ADC_CHANNEL_11;
-  sConfig.Rank = 1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
-  if (HAL_ADC_ConfigChannel(&hadc3, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-}
-
-/* CAN1 init function */
-static void MX_CAN1_Init(void)
-{
-
-  hcan1.Instance = CAN1;
-  hcan1.Init.Prescaler = 16;
-  hcan1.Init.Mode = CAN_MODE_NORMAL;
-  hcan1.Init.SJW = CAN_SJW_1TQ;
-  hcan1.Init.BS1 = CAN_BS1_1TQ;
-  hcan1.Init.BS2 = CAN_BS2_1TQ;
-  hcan1.Init.TTCM = DISABLE;
-  hcan1.Init.ABOM = DISABLE;
-  hcan1.Init.AWUM = DISABLE;
-  hcan1.Init.NART = DISABLE;
-  hcan1.Init.RFLM = DISABLE;
-  hcan1.Init.TXFP = DISABLE;
-  if (HAL_CAN_Init(&hcan1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-}
-
-/* CAN2 init function */
-static void MX_CAN2_Init(void)
-{
-
-  hcan2.Instance = CAN2;
-  hcan2.Init.Prescaler = 16;
-  hcan2.Init.Mode = CAN_MODE_NORMAL;
-  hcan2.Init.SJW = CAN_SJW_1TQ;
-  hcan2.Init.BS1 = CAN_BS1_1TQ;
-  hcan2.Init.BS2 = CAN_BS2_1TQ;
-  hcan2.Init.TTCM = DISABLE;
-  hcan2.Init.ABOM = DISABLE;
-  hcan2.Init.AWUM = DISABLE;
-  hcan2.Init.NART = DISABLE;
-  hcan2.Init.RFLM = DISABLE;
-  hcan2.Init.TXFP = DISABLE;
-  if (HAL_CAN_Init(&hcan2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-}
-
-/* CRC init function */
-static void MX_CRC_Init(void)
-{
-
-  hcrc.Instance = CRC;
-  if (HAL_CRC_Init(&hcrc) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
 }
 
 /* DCMI init function */
@@ -600,53 +391,6 @@ static void MX_RTC_Init(void)
 
 }
 
-/* SPI2 init function */
-static void MX_SPI2_Init(void)
-{
-
-  hspi2.Instance = SPI2;
-  hspi2.Init.Mode = SPI_MODE_MASTER;
-  hspi2.Init.Direction = SPI_DIRECTION_2LINES;
-  hspi2.Init.DataSize = SPI_DATASIZE_8BIT;
-  hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
-  hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
-  hspi2.Init.NSS = SPI_NSS_HARD_OUTPUT;
-  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_4;
-  hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
-  hspi2.Init.TIMode = SPI_TIMODE_DISABLE;
-  hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
-  hspi2.Init.CRCPolynomial = 10;
-  if (HAL_SPI_Init(&hspi2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-}
-
-/* TIM6 init function */
-static void MX_TIM6_Init(void)
-{
-
-  TIM_MasterConfigTypeDef sMasterConfig;
-
-  htim6.Instance = TIM6;
-  htim6.Init.Prescaler = 0;
-  htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim6.Init.Period = 0;
-  if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&htim6, &sMasterConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-}
-
 /* UART4 init function */
 static void MX_UART4_Init(void)
 {
@@ -660,25 +404,6 @@ static void MX_UART4_Init(void)
   huart4.Init.HwFlowCtl = UART_HWCONTROL_NONE;
   huart4.Init.OverSampling = UART_OVERSAMPLING_16;
   if (HAL_UART_Init(&huart4) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-}
-
-/* UART5 init function */
-static void MX_UART5_Init(void)
-{
-
-  huart5.Instance = UART5;
-  huart5.Init.BaudRate = 115200;
-  huart5.Init.WordLength = UART_WORDLENGTH_8B;
-  huart5.Init.StopBits = UART_STOPBITS_1;
-  huart5.Init.Parity = UART_PARITY_NONE;
-  huart5.Init.Mode = UART_MODE_TX_RX;
-  huart5.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart5.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart5) != HAL_OK)
   {
     Error_Handler();
   }
@@ -739,24 +464,6 @@ static void MX_USART3_UART_Init(void)
   {
     Error_Handler();
   }
-
-}
-
-/** 
-  * Enable DMA controller clock
-  */
-static void MX_DMA_Init(void) 
-{
-  /* DMA controller clock enable */
-  __HAL_RCC_DMA1_CLK_ENABLE();
-
-  /* DMA interrupt init */
-  /* DMA1_Stream3_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Stream3_IRQn, 5, 0);
-  HAL_NVIC_EnableIRQ(DMA1_Stream3_IRQn);
-  /* DMA1_Stream4_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Stream4_IRQn, 5, 0);
-  HAL_NVIC_EnableIRQ(DMA1_Stream4_IRQn);
 
 }
 

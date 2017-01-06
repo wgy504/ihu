@@ -152,3 +152,12 @@ OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_procedure(void)
 
 	return IHU_SUCCESS;
 }
+
+
+
+
+
+
+
+
+

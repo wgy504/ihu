@@ -15,8 +15,8 @@
 //从MAIN.x中继承过来的函数
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 	extern ADC_HandleTypeDef hadc1;
-	extern ADC_HandleTypeDef hadc2;
-	extern ADC_HandleTypeDef hadc3;
+	ADC_HandleTypeDef hadc2; //MAIN中为定义，这里重新定义是为了复用
+	ADC_HandleTypeDef hadc3; //MAIN中为定义，这里重新定义是为了复用
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 	extern ADC_HandleTypeDef hadc1;
 	ADC_HandleTypeDef hadc2;  //MAIN中为定义，这里重新定义是为了复用

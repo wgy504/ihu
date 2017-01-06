@@ -174,6 +174,34 @@ uint8_t func_bsp_stm32_dido_dht11_read_temp_and_humidity(StrDht11DataTypeDef_t *
 
 
 
+/***********************   DS18B20 连接引脚定义  **************************/
+//独立的绝对管脚定义，未来使用时，需要将此关键映射到MAIN.h中指定的管脚
+#define BSP_STM32_DIDO_DS18B20_Dout_GPIO_CLK_ENABLE()              __HAL_RCC_GPIOD_CLK_ENABLE()
+#define BSP_STM32_DIDO_DS18B20_Dout_PORT                           GPIOD
+#define BSP_STM32_DIDO_DS18B20_Dout_PIN                            GPIO_PIN_3
+#define BSP_STM32_DIDO_DS18B20_Dout_LOW()                          HAL_GPIO_WritePin(BSP_STM32_DIDO_DS18B20_Dout_PORT,BSP_STM32_DIDO_DS18B20_Dout_PIN,GPIO_PIN_RESET) 
+#define BSP_STM32_DIDO_DS18B20_Dout_HIGH()                         HAL_GPIO_WritePin(BSP_STM32_DIDO_DS18B20_Dout_PORT,BSP_STM32_DIDO_DS18B20_Dout_PIN,GPIO_PIN_SET)
+#define BSP_STM32_DIDO_DS18B20_Data_IN()	                         HAL_GPIO_ReadPin(BSP_STM32_DIDO_DS18B20_Dout_PORT,BSP_STM32_DIDO_DS18B20_Dout_PIN)
+
+//External APIs
+extern uint8_t ihu_bsp_stm32_dido_ds18b20_init(void);
+extern int16_t ihu_bsp_stm32_dido_f2board_ds18b20_temp_read(void);
+
+//Local APIs
+void func_bsp_stm32_dido_ds18b20_read_id( uint8_t * ds18b20_id);
+float func_bsp_stm32_dido_ds18b20_get_temp_skip_rom(void);
+float func_bsp_stm32_dido_ds18b20_get_temp_match_rom(uint8_t *ds18b20_id);
+static void func_bsp_stm32_dido_ds18b20_set_mode_IPU(void);
+static void func_bsp_stm32_dido_ds18b20_set_mode_out_PP(void);
+static void func_bsp_stm32_dido_ds18b20_reset(void);
+static uint8_t func_bsp_stm32_dido_ds18b20_presence(void);
+static uint8_t func_bsp_stm32_dido_ds18b20_read_bit(void);
+static uint8_t func_bsp_stm32_dido_ds18b20_read_byte(void);
+static void func_bsp_stm32_dido_ds18b20_write_byte(uint8_t dat);
+static void func_bsp_stm32_dido_ds18b20_skip_rom(void);
+static void func_bsp_stm32_dido_ds18b20_match_rom(void);
+
+
 #ifdef __cplusplus
 }
 #endif

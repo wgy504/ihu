@@ -578,14 +578,39 @@ OPSTAT fsm_didocap_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 //WORK_MODE下三种对外指令
 void func_didocap_ccl_work_mode_dl_cmd_open_lock(UINT8 lockid)
 {
+	if (lockid == IHU_CCL_SENSOR_LOCK_NUMBER_MAX){
+		if (lockid >= 1) ihu_l1hd_dido_f2board_lock1_do1_on();
+		if (lockid >= 2) ihu_l1hd_dido_f2board_lock2_do1_on();
+		if (lockid >= 3) ihu_l1hd_dido_f2board_lock3_do1_on();
+		if (lockid >= 4) ihu_l1hd_dido_f2board_lock4_do1_on();
+	}
+	if (lockid < IHU_CCL_SENSOR_LOCK_NUMBER_MAX){
+		if (lockid == 1) ihu_l1hd_dido_f2board_lock1_do1_on();
+		if (lockid == 2) ihu_l1hd_dido_f2board_lock2_do1_on();
+		if (lockid == 3) ihu_l1hd_dido_f2board_lock3_do1_on();
+		if (lockid == 4) ihu_l1hd_dido_f2board_lock4_do1_on();		
+	}
 }
 
 void func_didocap_ccl_work_mode_dl_cmd_close_lock(UINT8 lockid)
 {
+	if (lockid == IHU_CCL_SENSOR_LOCK_NUMBER_MAX){
+		if (lockid >= 1) ihu_l1hd_dido_f2board_lock1_do1_off();
+		if (lockid >= 2) ihu_l1hd_dido_f2board_lock2_do1_off();
+		if (lockid >= 3) ihu_l1hd_dido_f2board_lock3_do1_off();
+		if (lockid >= 4) ihu_l1hd_dido_f2board_lock4_do1_off();
+	}
+	if (lockid < IHU_CCL_SENSOR_LOCK_NUMBER_MAX){
+		if (lockid == 1) ihu_l1hd_dido_f2board_lock1_do1_off();
+		if (lockid == 2) ihu_l1hd_dido_f2board_lock2_do1_off();
+		if (lockid == 3) ihu_l1hd_dido_f2board_lock3_do1_off();
+		if (lockid == 4) ihu_l1hd_dido_f2board_lock4_do1_off();		
+	}
 }
 
 void func_didocap_ccl_work_mode_dl_cmd_enable_lock(UINT8 lockid)
 {
+
 }
 
 

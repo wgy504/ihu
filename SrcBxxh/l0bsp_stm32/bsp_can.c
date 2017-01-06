@@ -15,8 +15,8 @@
 
 //从MAIN.x中继承过来的函数
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-extern CAN_HandleTypeDef hcan1;
-extern CAN_HandleTypeDef hcan2;
+CAN_HandleTypeDef hcan1;
+CAN_HandleTypeDef hcan2;
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 extern CAN_HandleTypeDef hcan1;
 CAN_HandleTypeDef hcan2; //MAIN中未定义，这里重新定义是为了复用

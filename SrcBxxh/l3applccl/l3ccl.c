@@ -1166,16 +1166,24 @@ OPSTAT fsm_ccl_sps_fault_report_cfm(UINT8 dest_id, UINT8 src_id, void * param_pt
 	return IHU_SUCCESS;
 }
 
-//关掉所有的外设
-void func_ccl_close_all_sensor(void)
-{
-}
-
 //打开所有的外设
 void func_ccl_open_all_sensor(void)
 {
-
+	ihu_l1hd_dido_f2board_gprsmod_power_ctrl_on();
+	ihu_l1hd_dido_f2board_ble_power_ctrl_on();
+	ihu_l1hd_dido_f2board_rfid_power_ctrl_on();
+	ihu_l1hd_dido_f2board_sensor_power_ctrl_on();
 }
+
+//关掉所有的外设
+void func_ccl_close_all_sensor(void)
+{
+	ihu_l1hd_dido_f2board_gprsmod_power_ctrl_off();
+	ihu_l1hd_dido_f2board_ble_power_ctrl_off();	
+	ihu_l1hd_dido_f2board_rfid_power_ctrl_off();
+	ihu_l1hd_dido_f2board_sensor_power_ctrl_off();
+}
+
 
 
 

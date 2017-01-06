@@ -76,12 +76,12 @@ OS_MUTEX zIhuPrintMutex;
     "MIN",
     "VMFO",
     "TIMER",
-		"ADCLIBRA",
-		"SPILEO",
+		//"ADCLIBRA", //该项目中抑制了该任务模块
+		//"SPILEO",  //该项目中抑制了该任务模块
 		"I2CARIES",
 		//"PWMTAURUS",  //该项目中抑制了该任务模块
 		"SPSVIRGO",
-		"CANVELA",
+		//"CANVELA",  //该项目中抑制了该任务模块
 		"DIDOCAP",
 		"LEDPISCES",
 		//"ETHORION", //该项目中抑制了该任务模块
@@ -672,12 +672,12 @@ void ihu_vm_system_init(void)
 	//肯定需要启动的任务模块
 	zIhuTaskInfo[TASK_ID_VMFO].pnpState = IHU_TASK_PNP_ON;
 	zIhuTaskInfo[TASK_ID_TIMER].pnpState = IHU_TASK_PNP_ON;
-	if (IHU_COMM_FRONT_ADC == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_ADCLIBRA].pnpState = IHU_TASK_PNP_ON;
-	if (IHU_COMM_FRONT_SPI == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_SPILEO].pnpState = IHU_TASK_PNP_ON;
+	//if (IHU_COMM_FRONT_ADC == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_ADCLIBRA].pnpState = IHU_TASK_PNP_ON;
+	//if (IHU_COMM_FRONT_SPI == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_SPILEO].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_COMM_FRONT_I2C == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_I2CARIES].pnpState = IHU_TASK_PNP_ON;
 	//if (IHU_COMM_FRONT_PWM == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_PWMTAURUS].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_COMM_FRONT_SPS == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_SPSVIRGO].pnpState = IHU_TASK_PNP_ON;
-	if (IHU_COMM_FRONT_GPIO == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_CANVELA].pnpState = IHU_TASK_PNP_ON;
+	//if (IHU_COMM_FRONT_GPIO == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_CANVELA].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_COMM_FRONT_DIDO == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_DIDOCAP].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_COMM_FRONT_LED == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_LEDPISCES].pnpState = IHU_TASK_PNP_ON;
 	//if (IHU_COMM_FRONT_ETH == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_ETHORION].pnpState = IHU_TASK_PNP_ON;
@@ -1835,15 +1835,17 @@ OPSTAT ihu_system_task_init_call(UINT8 task_id, FsmStateItem_t *p)
 //创建所有任务
 void ihu_task_create_all(void)
 {
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
 	//Create VMFO environments /1
 	if (zIhuTaskInfo[TASK_ID_VMFO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_VMFO, FsmVmfo);	
 	ihu_vm_send_init_msg_to_app_task(TASK_ID_VMFO);
 
 	//Create task Timer environments /2
 	if (zIhuTaskInfo[TASK_ID_TIMER].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_TIMER, FsmTimer);
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_TIMER);
+	ihu_vm_send_init_msg_to_app_task(TASK_ID_TIMER);	
 
+	//未来考虑使用handler初始化所有的状态机入口，从而不再需要这个ifdef的方式
+	
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
 	//Create task ADCLIBRA environments /3
 //	if (zIhuTaskInfo[TASK_ID_ADCLIBRA].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_ADCLIBRA, FsmAdclibra);
 //	ihu_vm_send_init_msg_to_app_task(TASK_ID_ADCLIBRA);
@@ -1887,21 +1889,13 @@ void ihu_task_create_all(void)
 	IhuDebugPrint("VMFO: Create all task successfully!\n");	
 	
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-	//Create VMFO environments /1
-	if (zIhuTaskInfo[TASK_ID_VMFO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_VMFO, FsmVmfo);	
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_VMFO);	
-	
-	//Create task Timer environments /2
-	if (zIhuTaskInfo[TASK_ID_TIMER].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_TIMER, FsmTimer);
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_TIMER);
-
 	//Create task ADCLIBRA environments /3
-	if (zIhuTaskInfo[TASK_ID_ADCLIBRA].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_ADCLIBRA, FsmAdclibra);
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_ADCLIBRA);
+//	if (zIhuTaskInfo[TASK_ID_ADCLIBRA].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_ADCLIBRA, FsmAdclibra);
+//	ihu_vm_send_init_msg_to_app_task(TASK_ID_ADCLIBRA);
 
 	//Create task SPILEO environments /4
-	if (zIhuTaskInfo[TASK_ID_SPILEO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_SPILEO, FsmSpileo);
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_SPILEO);
+//	if (zIhuTaskInfo[TASK_ID_SPILEO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_SPILEO, FsmSpileo);
+//	ihu_vm_send_init_msg_to_app_task(TASK_ID_SPILEO);
 
 	//Create task I2CARIES environments /5
 	if (zIhuTaskInfo[TASK_ID_I2CARIES].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_I2CARIES, FsmI2caries);
@@ -1916,8 +1910,8 @@ void ihu_task_create_all(void)
 	ihu_vm_send_init_msg_to_app_task(TASK_ID_SPSVIRGO);
 
 	//Create task CANVELA environments /8
-	if (zIhuTaskInfo[TASK_ID_CANVELA].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_CANVELA, FsmCanvela);
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_CANVELA);
+//	if (zIhuTaskInfo[TASK_ID_CANVELA].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_CANVELA, FsmCanvela);
+//	ihu_vm_send_init_msg_to_app_task(TASK_ID_CANVELA);
 
 	//Create task DIDOCAP environments /9
 	if (zIhuTaskInfo[TASK_ID_DIDOCAP].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_DIDOCAP, FsmDidocap);
@@ -1942,13 +1936,6 @@ void ihu_task_create_all(void)
 	IhuDebugPrint("VMFO: Create all task successfully!\n");
 
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
-	//Create VMFO environments /1
-	if (zIhuTaskInfo[TASK_ID_VMFO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_VMFO, FsmVmfo);
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_VMFO);	
-
-	//Create task Timer environments /2
-	if (zIhuTaskInfo[TASK_ID_TIMER].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_TIMER, FsmTimer);
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_TIMER);
 
 	//Create task ADCLIBRA environments /3
 	if (zIhuTaskInfo[TASK_ID_ADCLIBRA].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_ADCLIBRA, FsmAdclibra);

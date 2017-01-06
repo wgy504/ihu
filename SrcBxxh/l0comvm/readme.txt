@@ -2,7 +2,12 @@
 == 将修改方式放在最前面，以提高效率
 =================================================
 //近期需要完成的任务
-= 研究STM32的IAP功能
+
+//= ZJL, 2017 Jan.6, CURRENT_SW_DELIVERY R03.85 =>CCL项目
+= 精简CCL项目的硬件配置
+= 去掉无用的BSP和任务模块
+= 极大的优化了FLASH和RAM占用，预期进一步优化了功耗。
+= 将DIDO对锁具的操作，跟底层BSP操作API连起来
 
 //= ZJL, 2017 Jan.6, CURRENT_SW_DELIVERY R03.84 =>CCL项目
 = 建立设备信息StrStm32F2EquidStorage_t读取的API
@@ -23,6 +28,7 @@
 = 当前先定义32BYTE，用于存储设备标签（20B），设备型号（2B），硬件标识（2B），软件大版本（2B），软件小版本（2B），是否升级以及升级类型（1B）、保留（3B）。
 = IAP做成的uboot，等待独立做成项目任务
 = 增加了PrjUbootStm32F2基于UART/ETH的官方IAP程序例子，放在IHU目录下了。在项目清单中，只放了UART的IAP例子，供研究参考之用。
+= 等待外包IAP任务完成后，再行集成
 
 //= ZJL, 2017 Jan.4, CURRENT_SW_DELIVERY R03.82 =>BFSC项目
 = 设置BFSC的原理图，并大范围调整管脚

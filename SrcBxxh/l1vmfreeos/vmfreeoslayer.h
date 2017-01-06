@@ -31,15 +31,10 @@
   #include "queue.h"
 	#include "timers.h"	
 	#include "semphr.h"
-	#include "bsp_adc.h"
-	#include "bsp_tim.h"
 	#include "bsp_usart.h"	
-	#include "bsp_key.h"
 	#include "bsp_led.h"
-	#include "bsp_rs485.h"
 	#include "bsp_i2c.h"
 	#include "bsp_wdog.h"
-	#include "bsp_crc.h"
 	#include "bsp_rtc.h"
 	#include "bsp_calendar.h"
 	#include "bsp_cpuid.h"
@@ -102,17 +97,17 @@
 enum IHU_TASK_NAME_ID
 {
 	TASK_ID_MIN = 0,
-	TASK_ID_VMFO = 0,
+	TASK_ID_VMFO,
 	TASK_ID_TIMER,
-	TASK_ID_ADCLIBRA,
-	TASK_ID_SPILEO,
-	TASK_ID_I2CARIES,
-	TASK_ID_PWMTAURUS,
-	TASK_ID_SPSVIRGO,
-	TASK_ID_CANVELA,
-	TASK_ID_DIDOCAP,
-	TASK_ID_LEDPISCES,
-	TASK_ID_ETHORION,	
+//	TASK_ID_ADCLIBRA,
+//	TASK_ID_SPILEO,
+//	TASK_ID_I2CARIES,
+//	TASK_ID_PWMTAURUS,
+//	TASK_ID_SPSVIRGO,
+//	TASK_ID_CANVELA,
+//	TASK_ID_DIDOCAP,
+//	TASK_ID_LEDPISCES,
+//	TASK_ID_ETHORION,	
 	TASK_ID_EMC68X,
 	TASK_ID_MAX,
 	TASK_ID_INVALID = 0xFF,
@@ -123,12 +118,12 @@ enum IHU_TASK_NAME_ID
 	TASK_ID_MIN = 0,
 	TASK_ID_VMFO,
 	TASK_ID_TIMER,
-	TASK_ID_ADCLIBRA,
-	TASK_ID_SPILEO,
+	//TASK_ID_ADCLIBRA,
+	//TASK_ID_SPILEO,
 	TASK_ID_I2CARIES,
 	//TASK_ID_PWMTAURUS,
 	TASK_ID_SPSVIRGO,
-	TASK_ID_CANVELA,
+	//TASK_ID_CANVELA,
 	TASK_ID_DIDOCAP,
 	TASK_ID_LEDPISCES,
 	//TASK_ID_ETHORION,
@@ -553,6 +548,9 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_dido_f2board_rfid_power_ctrl_off      ihu_bsp_stm32_dido_f2board_rfid_power_ctrl_off   
 #define ihu_l1hd_dido_f2board_sensor_power_ctrl_on     ihu_bsp_stm32_dido_f2board_sensor_power_ctrl_on  
 #define ihu_l1hd_dido_f2board_sensor_power_ctrl_off    ihu_bsp_stm32_dido_f2board_sensor_power_ctrl_off 
+#define ihu_l1hd_dido_f2board_ds18b20_init    					ihu_bsp_stm32_dido_ds18b20_init
+#define ihu_l1hd_dido_f2board_ds18b20_temp_read     		ihu_bsp_stm32_dido_f2board_ds18b20_temp_read 
+
 
 //L0BSP=>L1HD: WDOG
 #define ihu_l1hd_watch_dog_refresh      				ihu_bsp_stm32_watch_dog_refresh
