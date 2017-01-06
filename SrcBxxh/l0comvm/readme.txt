@@ -7,7 +7,8 @@
 //= ZJL, 2017 Jan.6, CURRENT_SW_DELIVERY R03.84 =>CCL项目
 = 建立设备信息StrStm32F2EquidStorage_t读取的API
 = 完善HW TYPE PRODUCT CATELOG信息域，在SYSCONFIG.H进行了单独的明确的定义，以便未来可以跟StrStm32F2EquidStorage_t进行交叉验证
-
+= 集成DHT11温湿度传感器
+= 集成PMU6050加速度陀螺仪传感器
 
 //= ZJL, 2017 Jan.5, CURRENT_SW_DELIVERY R03.83 =>CCL项目
 = 时间time()调整完成，跟当前RTC时间连在一起了

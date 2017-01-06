@@ -184,7 +184,297 @@ void HAL_I2C_RxCpltCallback(I2C_HandleTypeDef *I2cHandle)
 //		HAL_I2C_Slave_Receive_IT(&IHU_BSP_STM32_I2C_SPARE1_HANDLER, &zIhuI2cRxBuffer[IHU_BSP_STM32_I2C_SPARE1_HANDLER_ID-1], 1);
 //  }
 }
-#endif
+
+
+/**
+  * 函数功能: I2C通信错误处理函数
+  * 输入参数: 无
+  * 返 回 值: 无
+  * 说    明: 一般在I2C通信超时时调用该函数
+  */
+static void I2C_IHU_BSP_STM32_MPU6050_Error (void)
+{
+  /* 反初始化I2C通信总线 */
+  HAL_I2C_DeInit(&IHU_BSP_STM32_I2C_IHU_BSP_STM32_MPU6050_HANDLER);
+  
+  /* 重新初始化I2C通信总线*/
+  //MX_I2C1_Init();
+	//考虑到这里需要重新初始化，不再真正执行重新初始化
+}
+
+/**
+  * 函数功能: 通过I2C写入一个值到指定寄存器内
+  * 输入参数: Addr：I2C设备地址
+  *           Reg：目标寄存器
+  *           Value：值
+  * 返 回 值: 无
+  * 说    明: 无
+  */
+void func_bsp_stm32_i2c_mpu6050_write_data(uint16_t Addr, uint8_t Reg, uint8_t Value)
+{
+  HAL_StatusTypeDef status = HAL_OK;
+  
+  status = HAL_I2C_Mem_Write(&IHU_BSP_STM32_I2C_IHU_BSP_STM32_MPU6050_HANDLER, Addr, (uint16_t)Reg, I2C_MEMADD_SIZE_8BIT, &Value, 1, EVAL_I2Cx_TIMEOUT_MAX);
+  
+  /* 检测I2C通信状态 */
+  if(status != HAL_OK)
+  {
+    /* 调用I2C通信错误处理函数 */
+    I2C_IHU_BSP_STM32_MPU6050_Error();
+  }
+}
+
+/**
+  * 函数功能: 通过I2C写入一段数据到指定寄存器内
+  * 输入参数: Addr：I2C设备地址
+  *           Reg：目标寄存器
+  *           RegSize：寄存器尺寸(8位或者16位)
+  *           pBuffer：缓冲区指针
+  *           Length：缓冲区长度
+  * 返 回 值: HAL_StatusTypeDef：操作结果
+  * 说    明: 在循环调用是需加一定延时时间
+  */
+HAL_StatusTypeDef func_bsp_stm32_i2c_mpu6050_write_buffer(uint16_t Addr, uint8_t Reg, uint16_t RegSize, uint8_t *pBuffer, uint16_t Length)
+{
+  HAL_StatusTypeDef status = HAL_OK;
+  
+  status = HAL_I2C_Mem_Write(&IHU_BSP_STM32_I2C_IHU_BSP_STM32_MPU6050_HANDLER, Addr, (uint16_t)Reg, RegSize, pBuffer, Length, EVAL_I2Cx_TIMEOUT_MAX); 
+
+  /* 检测I2C通信状态 */
+  if(status != HAL_OK)
+  {
+    /* 调用I2C通信错误处理函数 */
+    I2C_IHU_BSP_STM32_MPU6050_Error();
+  }        
+  return status;
+}
+
+
+/**
+  * 函数功能: 通过I2C读取一个指定寄存器内容
+  * 输入参数: Addr：I2C设备地址
+  *           Reg：目标寄存器
+  * 返 回 值: uint8_t：寄存器内容
+  * 说    明: 无
+  */
+uint8_t func_bsp_stm32_i2c_mpu6050_read_data(uint16_t Addr, uint8_t Reg)
+{
+  HAL_StatusTypeDef status = HAL_OK;
+  uint8_t value = 0;
+  
+  status = HAL_I2C_Mem_Read(&IHU_BSP_STM32_I2C_IHU_BSP_STM32_MPU6050_HANDLER, Addr, Reg, I2C_MEMADD_SIZE_8BIT, &value, 1, EVAL_I2Cx_TIMEOUT_MAX);
+ 
+  /* 检测I2C通信状态 */
+  if(status != HAL_OK)
+  {
+    /* 调用I2C通信错误处理函数 */
+    I2C_IHU_BSP_STM32_MPU6050_Error();
+  
+  }
+  return value;
+}
+
+/**
+  * 函数功能: 通过I2C读取一段寄存器内容存放到指定的缓冲区内
+  * 输入参数: Addr：I2C设备地址
+  *           Reg：目标寄存器
+  *           RegSize：寄存器尺寸(8位或者16位)
+  *           pBuffer：缓冲区指针
+  *           Length：缓冲区长度
+  * 返 回 值: HAL_StatusTypeDef：操作结果
+  * 说    明: 无
+  */
+HAL_StatusTypeDef func_bsp_stm32_i2c_mpu6050_read_buffer(uint16_t Addr, uint8_t Reg, uint16_t RegSize, uint8_t *pBuffer, uint16_t Length)
+{
+  HAL_StatusTypeDef status = HAL_OK;
+
+  status = HAL_I2C_Mem_Read(&IHU_BSP_STM32_I2C_IHU_BSP_STM32_MPU6050_HANDLER, Addr, (uint16_t)Reg, RegSize, pBuffer, Length, EVAL_I2Cx_TIMEOUT_MAX);
+  
+  /* 检测I2C通信状态 */
+  if(status != HAL_OK)
+  {
+    /* 调用I2C通信错误处理函数 */
+    I2C_IHU_BSP_STM32_MPU6050_Error();
+  }        
+  return status;
+}
+
+/**
+  * 函数功能: 检测I2C设备是否处于准备好可以通信状态
+  * 输入参数: DevAddress：I2C设备地址
+  *           Trials：尝试测试次数
+  * 返 回 值: HAL_StatusTypeDef：操作结果
+  * 说    明: 无
+  */
+HAL_StatusTypeDef func_bsp_stm32_i2c_mpu6050_is_device_ready(uint16_t DevAddress, uint32_t Trials)
+{ 
+  return (HAL_I2C_IsDeviceReady(&IHU_BSP_STM32_I2C_IHU_BSP_STM32_MPU6050_HANDLER, DevAddress, Trials, EVAL_I2Cx_TIMEOUT_MAX));
+}
+
+/**
+  * 函数功能: 写数据到MPU6050寄存器
+  * 输入参数: 无
+  * 返 回 值: 无
+  * 说    明: 无
+  */ 
+void IHU_BSP_STM32_MPU6050_WriteReg(uint8_t reg_add,uint8_t reg_dat)
+{
+  func_bsp_stm32_i2c_mpu6050_write_data(IHU_BSP_STM32_MPU6050_SLAVE_ADDRESS,reg_add,reg_dat);
+}
+
+/**
+  * 函数功能: 从MPU6050寄存器读取数据
+  * 输入参数: 无
+  * 返 回 值: 无
+  * 说    明: 无
+  */ 
+void IHU_BSP_STM32_MPU6050_ReadData(uint8_t reg_add,unsigned char *Read,uint8_t num)
+{
+  func_bsp_stm32_i2c_mpu6050_read_buffer(IHU_BSP_STM32_MPU6050_SLAVE_ADDRESS,reg_add,I2C_MEMADD_SIZE_8BIT,Read,num);
+}
+
+/**
+  * 函数功能: 初始化MPU6050芯片
+  * 输入参数: 无
+  * 返 回 值: 无
+  * 说    明: 无
+  */ 
+void ihu_bsp_stm32_i2c_mpu6050_init(void)
+{
+  int i=0,j=0;
+  //在初始化之前要延时一段时间，若没有延时，则断电后再上电数据可能会出错
+  for(i=0;i<1000;i++)
+  {
+    for(j=0;j<1000;j++)
+    {
+      ;
+    }
+  }
+	IHU_BSP_STM32_MPU6050_WriteReg(IHU_BSP_STM32_MPU6050_RA_PWR_MGMT_1, 0x00);	    //解除休眠状态
+	IHU_BSP_STM32_MPU6050_WriteReg(IHU_BSP_STM32_MPU6050_RA_SMPLRT_DIV , 0x07);	    //陀螺仪采样率，1KHz
+	IHU_BSP_STM32_MPU6050_WriteReg(IHU_BSP_STM32_MPU6050_RA_CONFIG , 0x06);	        //低通滤波器的设置，截止频率是1K，带宽是5K
+	IHU_BSP_STM32_MPU6050_WriteReg(IHU_BSP_STM32_MPU6050_RA_ACCEL_CONFIG , 0x00);	  //配置加速度传感器工作在2G模式，不自检
+	IHU_BSP_STM32_MPU6050_WriteReg(IHU_BSP_STM32_MPU6050_RA_GYRO_CONFIG, 0x18);     //陀螺仪自检及测量范围，典型值：0x18(不自检，2000deg/s)
+}
+
+/**
+  * 函数功能: 读取MPU6050的ID
+  * 输入参数: 无
+  * 返 回 值: 无
+  * 说    明: 无
+  */ 
+uint8_t func_bsp_stm32_i2c_mpu6050_return_id(void)
+{
+	unsigned char Re = 0;
+    IHU_BSP_STM32_MPU6050_ReadData(IHU_BSP_STM32_MPU6050_RA_WHO_AM_I,&Re,1);    //读器件地址
+	if(Re != 0x68)
+	{
+		return 0;
+	}
+	else
+	{
+		printf("MPU6050 ID = %d\r\n",Re);
+		return 1;
+	}
+		
+}
+
+/**
+  * 函数功能: 读取MPU6050的加速度数据
+  * 输入参数: 无
+  * 返 回 值: 无
+  * 说    明: 无
+  */ 
+void func_bsp_stm32_i2c_mpu6050_read_acc(int16_t *accData)
+{
+    uint8_t buf[6];
+    IHU_BSP_STM32_MPU6050_ReadData(IHU_BSP_STM32_MPU6050_ACC_OUT, buf, 6);
+    accData[0] = (buf[0] << 8) | buf[1];
+    accData[1] = (buf[2] << 8) | buf[3];
+    accData[2] = (buf[4] << 8) | buf[5];
+}
+
+/**
+  * 函数功能: 读取MPU6050的角速度数据
+  * 输入参数: 无
+  * 返 回 值: 无
+  * 说    明: 无
+  */ 
+void func_bsp_stm32_i2c_mpu6050_read_gyro(int16_t *gyroData)
+{
+    uint8_t buf[6];
+    IHU_BSP_STM32_MPU6050_ReadData(IHU_BSP_STM32_MPU6050_GYRO_OUT,buf,6);
+    gyroData[0] = (buf[0] << 8) | buf[1];
+    gyroData[1] = (buf[2] << 8) | buf[3];
+    gyroData[2] = (buf[4] << 8) | buf[5];
+}
+
+/**
+  * 函数功能: 读取MPU6050的原始温度数据
+  * 输入参数: 无
+  * 返 回 值: 无
+  * 说    明: 无
+  */ 
+void func_bsp_stm32_i2c_mpu6050_read_temp(int16_t *tempData)
+{
+	uint8_t buf[2];
+    IHU_BSP_STM32_MPU6050_ReadData(IHU_BSP_STM32_MPU6050_RA_TEMP_OUT_H,buf,2);     //读取温度值
+    *tempData = (buf[0] << 8) | buf[1];
+}
+
+/**
+  * 函数功能: 读取MPU6050的温度数据，转化成摄氏度
+  * 输入参数: 无
+  * 返 回 值: 无
+  * 说    明: 无
+  */ 
+void func_bsp_stm32_i2c_mpu6050_return_temp(int16_t*Temperature)
+{
+	int16_t temp3;
+	uint8_t buf[2];
+	
+	IHU_BSP_STM32_MPU6050_ReadData(IHU_BSP_STM32_MPU6050_RA_TEMP_OUT_H,buf,2);     //读取温度值
+  temp3= (buf[0] << 8) | buf[1];
+	*Temperature=(((double) (temp3 + 13200)) / 280)-13;
+}
+
+//加速度调用之前，必须使用
+//int16_t accData[3];
+int8_t ihu_bsp_stm32_i2c_mpu6050_acc_read(int16_t *accData)
+{
+	if (func_bsp_stm32_i2c_mpu6050_return_id() == 0)
+		return IHU_FAILURE;
+	else{
+		func_bsp_stm32_i2c_mpu6050_read_acc(accData);
+		return IHU_SUCCESS;
+	}
+}
+
+//陀螺仪调用之前，必须使用
+//int16_t gyroData[3];
+int8_t ihu_bsp_stm32_i2c_mpu6050_gyro_read(int16_t *gyroData)
+{
+	if (func_bsp_stm32_i2c_mpu6050_return_id() == 0)
+		return IHU_FAILURE;
+	else{
+		 func_bsp_stm32_i2c_mpu6050_read_gyro(gyroData);
+		return IHU_SUCCESS;
+	}
+}
+
+//温度调用之前，必须使用
+//int16_t tempData;
+int8_t ihu_bsp_stm32_i2c_mpu6050_temp_read(int16_t tempData)
+{
+	if (func_bsp_stm32_i2c_mpu6050_return_id() == 0)
+		return IHU_FAILURE;
+	else{
+		 func_bsp_stm32_i2c_mpu6050_return_temp(&tempData);
+		return IHU_SUCCESS;
+	}
+}
+
+#endif  //(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 
 
 
