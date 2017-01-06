@@ -26,7 +26,7 @@
 #include "l2canvela.h"
 #include "l2didocap.h"
 #include "l2ledpisces.h"
-#include "l2ethorion.h"
+//#include "l2ethorion.h"
 #include "l2dcmiaris.h"
 #include "huixmlcodec.h"
 

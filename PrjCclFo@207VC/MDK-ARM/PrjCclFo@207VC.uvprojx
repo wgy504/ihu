@@ -924,16 +924,6 @@
               <FilePath>..\..\SrcBxxh\l2framefreeos\l2didocap.h</FilePath>
             </File>
             <File>
-              <FileName>l2ethorion.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l2framefreeos\l2ethorion.c</FilePath>
-            </File>
-            <File>
-              <FileName>l2ethorion.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l2framefreeos\l2ethorion.h</FilePath>
-            </File>
-            <File>
               <FileName>l2i2caries.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\SrcBxxh\l2framefreeos\l2i2caries.c</FilePath>

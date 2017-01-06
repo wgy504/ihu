@@ -56,9 +56,7 @@
 	#include "bsp_adc.h"
 	#include "bsp_tim.h"
 	#include "bsp_usart.h"	
-	#include "bsp_key.h"
 	#include "bsp_led.h"
-	#include "bsp_rs485.h"
 	#include "bsp_i2c.h"
 	#include "bsp_can.h"
 	#include "bsp_wdog.h"
@@ -66,7 +64,6 @@
 	#include "bsp_rtc.h"
 	#include "bsp_calendar.h"
 	#include "bsp_cpuid.h"
-
 
 
 #else	
@@ -382,7 +379,7 @@ extern FsmStateItem_t FsmSpsvirgo[];                        //状态机
 extern FsmStateItem_t FsmCanvela[];                      		//状态机
 extern FsmStateItem_t FsmDidocap[];                         //状态机
 extern FsmStateItem_t FsmLedpisces[];                       //状态机
-extern FsmStateItem_t FsmEthorion[];                        //状态机
+//extern FsmStateItem_t FsmEthorion[];                        //状态机
 extern FsmStateItem_t FsmDcmiaris[];                        //状态机
 extern FsmStateItem_t FsmCcl[];                          	  //状态机
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
@@ -396,7 +393,7 @@ extern FsmStateItem_t FsmSpsvirgo[];                        //状态机
 extern FsmStateItem_t FsmCanvela[];                      		//状态机
 extern FsmStateItem_t FsmDidocap[];                         //状态机
 extern FsmStateItem_t FsmLedpisces[];                       //状态机
-extern FsmStateItem_t FsmEthorion[];                        //状态机
+//extern FsmStateItem_t FsmEthorion[];                        //状态机
 extern FsmStateItem_t FsmBfsc[];                          	//状态机 
 #else
 #endif

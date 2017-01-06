@@ -84,7 +84,7 @@ OS_MUTEX zIhuPrintMutex;
 		"CANVELA",
 		"DIDOCAP",
 		"LEDPISCES",
-		"ETHORION",
+		//"ETHORION", //该项目中抑制了该任务模块
 		"DCMIARIS",
     "CCL",
     "MAX"};
@@ -101,7 +101,7 @@ OS_MUTEX zIhuPrintMutex;
 		"CANVELA",
 		"DIDOCAP",
 		"LEDPISCES",
-		"ETHORION",
+		//"ETHORION", //该项目中抑制了该任务模块
     "BFSC",
     "MAX"};
 #else
@@ -680,7 +680,7 @@ void ihu_vm_system_init(void)
 	if (IHU_COMM_FRONT_GPIO == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_CANVELA].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_COMM_FRONT_DIDO == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_DIDOCAP].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_COMM_FRONT_LED == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_LEDPISCES].pnpState = IHU_TASK_PNP_ON;
-	if (IHU_COMM_FRONT_ETH == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_ETHORION].pnpState = IHU_TASK_PNP_ON;
+	//if (IHU_COMM_FRONT_ETH == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_ETHORION].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_COMM_FRONT_DCMI == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_DCMIARIS].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_MAIN_CTRL_CCL == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_CCL].pnpState = IHU_TASK_PNP_ON;			
 
@@ -773,7 +773,7 @@ void ihu_vm_system_init(void)
 	if (IHU_COMM_FRONT_GPIO == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_CANVELA].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_COMM_FRONT_DIDO == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_DIDOCAP].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_COMM_FRONT_LED == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_LEDPISCES].pnpState = IHU_TASK_PNP_ON;
-	if (IHU_COMM_FRONT_ETH == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_ETHORION].pnpState = IHU_TASK_PNP_ON;
+	//if (IHU_COMM_FRONT_ETH == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_ETHORION].pnpState = IHU_TASK_PNP_ON;
 	//if (IHU_COMM_FRONT_DCMI == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_DCMIARIS].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_MAIN_CTRL_BFSC == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_BFSC].pnpState = IHU_TASK_PNP_ON;	
 #else
@@ -1928,10 +1928,10 @@ void ihu_task_create_all(void)
 	ihu_vm_send_init_msg_to_app_task(TASK_ID_LEDPISCES);
 
 	//Create task ETHORION environments /11
-	if (zIhuTaskInfo[TASK_ID_ETHORION].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_ETHORION, FsmEthorion);
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_ETHORION);
+//	if (zIhuTaskInfo[TASK_ID_ETHORION].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_ETHORION, FsmEthorion);
+//	ihu_vm_send_init_msg_to_app_task(TASK_ID_ETHORION);
 
-	//Create task ETHORION environments /11.5
+	//Create task DCMIARIS environments /11.5
 	if (zIhuTaskInfo[TASK_ID_DCMIARIS].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_DCMIARIS, FsmDcmiaris);
 	ihu_vm_send_init_msg_to_app_task(TASK_ID_DCMIARIS);
 
@@ -1983,10 +1983,10 @@ void ihu_task_create_all(void)
 	ihu_vm_send_init_msg_to_app_task(TASK_ID_LEDPISCES);
 
 	//Create task ETHORION environments /11
-	if (zIhuTaskInfo[TASK_ID_ETHORION].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_ETHORION, FsmEthorion);
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_ETHORION);
+//	if (zIhuTaskInfo[TASK_ID_ETHORION].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_ETHORION, FsmEthorion);
+//	ihu_vm_send_init_msg_to_app_task(TASK_ID_ETHORION);
 	
-	//Create task ETHORION environments /11.5
+	//Create task DCMIARIS environments /11.5
 //	if (zIhuTaskInfo[TASK_ID_DCMIARIS].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_DCMIARIS, FsmDcmiaris);
 //	ihu_vm_send_init_msg_to_app_task(TASK_ID_DCMIARIS);
 	
