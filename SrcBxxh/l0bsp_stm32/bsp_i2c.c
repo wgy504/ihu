@@ -16,10 +16,10 @@
 //从MAIN.x中继承过来的函数
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 extern I2C_HandleTypeDef hi2c1;
-I2C_HandleTypeDef hi2c2;  //MAIN中为定义，这里重新定义是为了复用
+I2C_HandleTypeDef hi2c2;  //MAIN中未定义，这里重新定义是为了复用
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 extern I2C_HandleTypeDef hi2c1;
-I2C_HandleTypeDef hi2c2;  //MAIN中为定义，这里重新定义是为了复用
+I2C_HandleTypeDef hi2c2;  //MAIN中未定义，这里重新定义是为了复用
 #endif
 extern uint8_t zIhuI2cRxBuffer[2];
 
@@ -194,10 +194,10 @@ void HAL_I2C_RxCpltCallback(I2C_HandleTypeDef *I2cHandle)
   * 返 回 值: 无
   * 说    明: 一般在I2C通信超时时调用该函数
   */
-static void I2C_IHU_BSP_STM32_MPU6050_Error (void)
+static void I2C_BSP_STM32_MPU6050_Error (void)
 {
   /* 反初始化I2C通信总线 */
-  HAL_I2C_DeInit(&IHU_BSP_STM32_I2C_IHU_BSP_STM32_MPU6050_HANDLER);
+  HAL_I2C_DeInit(&IHU_BSP_STM32_I2C_BSP_STM32_MPU6050_HANDLER);
   
   /* 重新初始化I2C通信总线*/
   //MX_I2C1_Init();
@@ -216,13 +216,13 @@ void func_bsp_stm32_i2c_mpu6050_write_data(uint16_t Addr, uint8_t Reg, uint8_t V
 {
   HAL_StatusTypeDef status = HAL_OK;
   
-  status = HAL_I2C_Mem_Write(&IHU_BSP_STM32_I2C_IHU_BSP_STM32_MPU6050_HANDLER, Addr, (uint16_t)Reg, I2C_MEMADD_SIZE_8BIT, &Value, 1, IHU_BSP_STM32_I2C_TIMEOUT_TX_MAX);
+  status = HAL_I2C_Mem_Write(&IHU_BSP_STM32_I2C_BSP_STM32_MPU6050_HANDLER, Addr, (uint16_t)Reg, I2C_MEMADD_SIZE_8BIT, &Value, 1, IHU_BSP_STM32_I2C_TIMEOUT_TX_MAX);
   
   /* 检测I2C通信状态 */
   if(status != HAL_OK)
   {
     /* 调用I2C通信错误处理函数 */
-    I2C_IHU_BSP_STM32_MPU6050_Error();
+    I2C_BSP_STM32_MPU6050_Error();
   }
 }
 
@@ -240,13 +240,13 @@ HAL_StatusTypeDef func_bsp_stm32_i2c_mpu6050_write_buffer(uint16_t Addr, uint8_t
 {
   HAL_StatusTypeDef status = HAL_OK;
   
-  status = HAL_I2C_Mem_Write(&IHU_BSP_STM32_I2C_IHU_BSP_STM32_MPU6050_HANDLER, Addr, (uint16_t)Reg, RegSize, pBuffer, Length, IHU_BSP_STM32_I2C_TIMEOUT_TX_MAX); 
+  status = HAL_I2C_Mem_Write(&IHU_BSP_STM32_I2C_BSP_STM32_MPU6050_HANDLER, Addr, (uint16_t)Reg, RegSize, pBuffer, Length, IHU_BSP_STM32_I2C_TIMEOUT_TX_MAX); 
 
   /* 检测I2C通信状态 */
   if(status != HAL_OK)
   {
     /* 调用I2C通信错误处理函数 */
-    I2C_IHU_BSP_STM32_MPU6050_Error();
+    I2C_BSP_STM32_MPU6050_Error();
   }        
   return status;
 }
@@ -264,13 +264,13 @@ uint8_t func_bsp_stm32_i2c_mpu6050_read_data(uint16_t Addr, uint8_t Reg)
   HAL_StatusTypeDef status = HAL_OK;
   uint8_t value = 0;
   
-  status = HAL_I2C_Mem_Read(&IHU_BSP_STM32_I2C_IHU_BSP_STM32_MPU6050_HANDLER, Addr, Reg, I2C_MEMADD_SIZE_8BIT, &value, 1, IHU_BSP_STM32_I2C_TIMEOUT_TX_MAX);
+  status = HAL_I2C_Mem_Read(&IHU_BSP_STM32_I2C_BSP_STM32_MPU6050_HANDLER, Addr, Reg, I2C_MEMADD_SIZE_8BIT, &value, 1, IHU_BSP_STM32_I2C_TIMEOUT_TX_MAX);
  
   /* 检测I2C通信状态 */
   if(status != HAL_OK)
   {
     /* 调用I2C通信错误处理函数 */
-    I2C_IHU_BSP_STM32_MPU6050_Error();
+    I2C_BSP_STM32_MPU6050_Error();
   
   }
   return value;
@@ -290,13 +290,13 @@ HAL_StatusTypeDef func_bsp_stm32_i2c_mpu6050_read_buffer(uint16_t Addr, uint8_t 
 {
   HAL_StatusTypeDef status = HAL_OK;
 
-  status = HAL_I2C_Mem_Read(&IHU_BSP_STM32_I2C_IHU_BSP_STM32_MPU6050_HANDLER, Addr, (uint16_t)Reg, RegSize, pBuffer, Length, IHU_BSP_STM32_I2C_TIMEOUT_TX_MAX);
+  status = HAL_I2C_Mem_Read(&IHU_BSP_STM32_I2C_BSP_STM32_MPU6050_HANDLER, Addr, (uint16_t)Reg, RegSize, pBuffer, Length, IHU_BSP_STM32_I2C_TIMEOUT_TX_MAX);
   
   /* 检测I2C通信状态 */
   if(status != HAL_OK)
   {
     /* 调用I2C通信错误处理函数 */
-    I2C_IHU_BSP_STM32_MPU6050_Error();
+    I2C_BSP_STM32_MPU6050_Error();
   }        
   return status;
 }
@@ -310,7 +310,7 @@ HAL_StatusTypeDef func_bsp_stm32_i2c_mpu6050_read_buffer(uint16_t Addr, uint8_t 
   */
 HAL_StatusTypeDef func_bsp_stm32_i2c_mpu6050_is_device_ready(uint16_t DevAddress, uint32_t Trials)
 { 
-  return (HAL_I2C_IsDeviceReady(&IHU_BSP_STM32_I2C_IHU_BSP_STM32_MPU6050_HANDLER, DevAddress, Trials, IHU_BSP_STM32_I2C_TIMEOUT_TX_MAX));
+  return (HAL_I2C_IsDeviceReady(&IHU_BSP_STM32_I2C_BSP_STM32_MPU6050_HANDLER, DevAddress, Trials, IHU_BSP_STM32_I2C_TIMEOUT_TX_MAX));
 }
 
 /**
@@ -319,9 +319,9 @@ HAL_StatusTypeDef func_bsp_stm32_i2c_mpu6050_is_device_ready(uint16_t DevAddress
   * 返 回 值: 无
   * 说    明: 无
   */ 
-void IHU_BSP_STM32_MPU6050_WriteReg(uint8_t reg_add,uint8_t reg_dat)
+void BSP_STM32_MPU6050_WriteReg(uint8_t reg_add,uint8_t reg_dat)
 {
-  func_bsp_stm32_i2c_mpu6050_write_data(IHU_BSP_STM32_MPU6050_SLAVE_ADDRESS,reg_add,reg_dat);
+  func_bsp_stm32_i2c_mpu6050_write_data(BSP_STM32_MPU6050_SLAVE_ADDRESS,reg_add,reg_dat);
 }
 
 /**
@@ -330,9 +330,9 @@ void IHU_BSP_STM32_MPU6050_WriteReg(uint8_t reg_add,uint8_t reg_dat)
   * 返 回 值: 无
   * 说    明: 无
   */ 
-void IHU_BSP_STM32_MPU6050_ReadData(uint8_t reg_add,unsigned char *Read,uint8_t num)
+void BSP_STM32_MPU6050_ReadData(uint8_t reg_add,unsigned char *Read,uint8_t num)
 {
-  func_bsp_stm32_i2c_mpu6050_read_buffer(IHU_BSP_STM32_MPU6050_SLAVE_ADDRESS,reg_add,I2C_MEMADD_SIZE_8BIT,Read,num);
+  func_bsp_stm32_i2c_mpu6050_read_buffer(BSP_STM32_MPU6050_SLAVE_ADDRESS,reg_add,I2C_MEMADD_SIZE_8BIT,Read,num);
 }
 
 /**
@@ -352,11 +352,11 @@ void ihu_bsp_stm32_i2c_mpu6050_init(void)
       ;
     }
   }
-	IHU_BSP_STM32_MPU6050_WriteReg(IHU_BSP_STM32_MPU6050_RA_PWR_MGMT_1, 0x00);	    //解除休眠状态
-	IHU_BSP_STM32_MPU6050_WriteReg(IHU_BSP_STM32_MPU6050_RA_SMPLRT_DIV , 0x07);	    //陀螺仪采样率，1KHz
-	IHU_BSP_STM32_MPU6050_WriteReg(IHU_BSP_STM32_MPU6050_RA_CONFIG , 0x06);	        //低通滤波器的设置，截止频率是1K，带宽是5K
-	IHU_BSP_STM32_MPU6050_WriteReg(IHU_BSP_STM32_MPU6050_RA_ACCEL_CONFIG , 0x00);	  //配置加速度传感器工作在2G模式，不自检
-	IHU_BSP_STM32_MPU6050_WriteReg(IHU_BSP_STM32_MPU6050_RA_GYRO_CONFIG, 0x18);     //陀螺仪自检及测量范围，典型值：0x18(不自检，2000deg/s)
+	BSP_STM32_MPU6050_WriteReg(BSP_STM32_MPU6050_RA_PWR_MGMT_1, 0x00);	    //解除休眠状态
+	BSP_STM32_MPU6050_WriteReg(BSP_STM32_MPU6050_RA_SMPLRT_DIV , 0x07);	    //陀螺仪采样率，1KHz
+	BSP_STM32_MPU6050_WriteReg(BSP_STM32_MPU6050_RA_CONFIG , 0x06);	        //低通滤波器的设置，截止频率是1K，带宽是5K
+	BSP_STM32_MPU6050_WriteReg(BSP_STM32_MPU6050_RA_ACCEL_CONFIG , 0x00);	  //配置加速度传感器工作在2G模式，不自检
+	BSP_STM32_MPU6050_WriteReg(BSP_STM32_MPU6050_RA_GYRO_CONFIG, 0x18);     //陀螺仪自检及测量范围，典型值：0x18(不自检，2000deg/s)
 }
 
 /**
@@ -368,7 +368,7 @@ void ihu_bsp_stm32_i2c_mpu6050_init(void)
 uint8_t func_bsp_stm32_i2c_mpu6050_return_id(void)
 {
 	unsigned char Re = 0;
-    IHU_BSP_STM32_MPU6050_ReadData(IHU_BSP_STM32_MPU6050_RA_WHO_AM_I,&Re,1);    //读器件地址
+    BSP_STM32_MPU6050_ReadData(BSP_STM32_MPU6050_RA_WHO_AM_I,&Re,1);    //读器件地址
 	if(Re != 0x68)
 	{
 		return 0;
@@ -390,7 +390,7 @@ uint8_t func_bsp_stm32_i2c_mpu6050_return_id(void)
 void func_bsp_stm32_i2c_mpu6050_read_acc(int16_t *accData)
 {
     uint8_t buf[6];
-    IHU_BSP_STM32_MPU6050_ReadData(IHU_BSP_STM32_MPU6050_ACC_OUT, buf, 6);
+    BSP_STM32_MPU6050_ReadData(BSP_STM32_MPU6050_ACC_OUT, buf, 6);
     accData[0] = (buf[0] << 8) | buf[1];
     accData[1] = (buf[2] << 8) | buf[3];
     accData[2] = (buf[4] << 8) | buf[5];
@@ -405,7 +405,7 @@ void func_bsp_stm32_i2c_mpu6050_read_acc(int16_t *accData)
 void func_bsp_stm32_i2c_mpu6050_read_gyro(int16_t *gyroData)
 {
     uint8_t buf[6];
-    IHU_BSP_STM32_MPU6050_ReadData(IHU_BSP_STM32_MPU6050_GYRO_OUT,buf,6);
+    BSP_STM32_MPU6050_ReadData(BSP_STM32_MPU6050_GYRO_OUT,buf,6);
     gyroData[0] = (buf[0] << 8) | buf[1];
     gyroData[1] = (buf[2] << 8) | buf[3];
     gyroData[2] = (buf[4] << 8) | buf[5];
@@ -420,7 +420,7 @@ void func_bsp_stm32_i2c_mpu6050_read_gyro(int16_t *gyroData)
 void func_bsp_stm32_i2c_mpu6050_read_temp(int16_t *tempData)
 {
 	uint8_t buf[2];
-    IHU_BSP_STM32_MPU6050_ReadData(IHU_BSP_STM32_MPU6050_RA_TEMP_OUT_H,buf,2);     //读取温度值
+    BSP_STM32_MPU6050_ReadData(BSP_STM32_MPU6050_RA_TEMP_OUT_H,buf,2);     //读取温度值
     *tempData = (buf[0] << 8) | buf[1];
 }
 
@@ -435,7 +435,7 @@ void func_bsp_stm32_i2c_mpu6050_return_temp(int16_t*Temperature)
 	int16_t temp3;
 	uint8_t buf[2];
 	
-	IHU_BSP_STM32_MPU6050_ReadData(IHU_BSP_STM32_MPU6050_RA_TEMP_OUT_H,buf,2);     //读取温度值
+	BSP_STM32_MPU6050_ReadData(BSP_STM32_MPU6050_RA_TEMP_OUT_H,buf,2);     //读取温度值
   temp3= (buf[0] << 8) | buf[1];
 	*Temperature=(((double) (temp3 + 13200)) / 280)-13;
 }

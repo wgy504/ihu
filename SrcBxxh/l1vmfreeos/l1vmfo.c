@@ -196,10 +196,10 @@ OPSTAT fsm_vmfo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 		zIhuVmfoTaskInitCtrlInfo[TASK_ID_LEDPISCES].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
 	}
 
-	if (zIhuTaskInfo[TASK_ID_ETHORION].pnpState == IHU_TASK_PNP_ON){
-		zIhuVmfoTaskInitCtrlInfo[TASK_ID_ETHORION].active = IHU_VMFO_TASK_ACTIVE;
-		zIhuVmfoTaskInitCtrlInfo[TASK_ID_ETHORION].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-	}
+//	if (zIhuTaskInfo[TASK_ID_ETHORION].pnpState == IHU_TASK_PNP_ON){
+//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_ETHORION].active = IHU_VMFO_TASK_ACTIVE;
+//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_ETHORION].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
+//	}
 
 	if (zIhuTaskInfo[TASK_ID_DCMIARIS].pnpState == IHU_TASK_PNP_ON){
 		zIhuVmfoTaskInitCtrlInfo[TASK_ID_DCMIARIS].active = IHU_VMFO_TASK_ACTIVE;
@@ -233,35 +233,35 @@ OPSTAT fsm_vmfo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 		zIhuVmfoTaskInitCtrlInfo[TASK_ID_I2CARIES].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
 	}
 
-	if (zIhuTaskInfo[TASK_ID_PWMTAURUS].pnpState == IHU_TASK_PNP_ON){
-		zIhuVmfoTaskInitCtrlInfo[TASK_ID_PWMTAURUS].active = IHU_VMFO_TASK_ACTIVE;
-		zIhuVmfoTaskInitCtrlInfo[TASK_ID_PWMTAURUS].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-	}
+//	if (zIhuTaskInfo[TASK_ID_PWMTAURUS].pnpState == IHU_TASK_PNP_ON){
+//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_PWMTAURUS].active = IHU_VMFO_TASK_ACTIVE;
+//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_PWMTAURUS].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
+//	}
 
-	if (zIhuTaskInfo[TASK_ID_SPSVIRGO].pnpState == IHU_TASK_PNP_ON){
-		zIhuVmfoTaskInitCtrlInfo[TASK_ID_SPSVIRGO].active = IHU_VMFO_TASK_ACTIVE;
-		zIhuVmfoTaskInitCtrlInfo[TASK_ID_SPSVIRGO].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-	}
+//	if (zIhuTaskInfo[TASK_ID_SPSVIRGO].pnpState == IHU_TASK_PNP_ON){
+//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_SPSVIRGO].active = IHU_VMFO_TASK_ACTIVE;
+//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_SPSVIRGO].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
+//	}
 	
 	if (zIhuTaskInfo[TASK_ID_CANVELA].pnpState == IHU_TASK_PNP_ON){
 		zIhuVmfoTaskInitCtrlInfo[TASK_ID_CANVELA].active = IHU_VMFO_TASK_ACTIVE;
 		zIhuVmfoTaskInitCtrlInfo[TASK_ID_CANVELA].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
 	}
 	
-	if (zIhuTaskInfo[TASK_ID_DIDOCAP].pnpState == IHU_TASK_PNP_ON){
-		zIhuVmfoTaskInitCtrlInfo[TASK_ID_DIDOCAP].active = IHU_VMFO_TASK_ACTIVE;
-		zIhuVmfoTaskInitCtrlInfo[TASK_ID_DIDOCAP].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-	}
+//	if (zIhuTaskInfo[TASK_ID_DIDOCAP].pnpState == IHU_TASK_PNP_ON){
+//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_DIDOCAP].active = IHU_VMFO_TASK_ACTIVE;
+//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_DIDOCAP].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
+//	}
 
 	if (zIhuTaskInfo[TASK_ID_LEDPISCES].pnpState == IHU_TASK_PNP_ON){
 		zIhuVmfoTaskInitCtrlInfo[TASK_ID_LEDPISCES].active = IHU_VMFO_TASK_ACTIVE;
 		zIhuVmfoTaskInitCtrlInfo[TASK_ID_LEDPISCES].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
 	}
 
-	if (zIhuTaskInfo[TASK_ID_ETHORION].pnpState == IHU_TASK_PNP_ON){
-		zIhuVmfoTaskInitCtrlInfo[TASK_ID_ETHORION].active = IHU_VMFO_TASK_ACTIVE;
-		zIhuVmfoTaskInitCtrlInfo[TASK_ID_ETHORION].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-	}
+//	if (zIhuTaskInfo[TASK_ID_ETHORION].pnpState == IHU_TASK_PNP_ON){
+//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_ETHORION].active = IHU_VMFO_TASK_ACTIVE;
+//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_ETHORION].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
+//	}
 
 //	if (zIhuTaskInfo[TASK_ID_DCMIARIS].pnpState == IHU_TASK_PNP_ON){
 //		zIhuVmfoTaskInitCtrlInfo[TASK_ID_DCMIARIS].active = IHU_VMFO_TASK_ACTIVE;

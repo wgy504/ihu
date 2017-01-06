@@ -54,7 +54,6 @@
 	#include "timers.h"	
 	#include "semphr.h"
 	#include "bsp_adc.h"
-	#include "bsp_tim.h"
 	#include "bsp_usart.h"	
 	#include "bsp_led.h"
 	#include "bsp_i2c.h"
@@ -132,7 +131,7 @@ enum IHU_TASK_NAME_ID
 	TASK_ID_CANVELA,
 	TASK_ID_DIDOCAP,
 	TASK_ID_LEDPISCES,
-	TASK_ID_ETHORION,
+	//TASK_ID_ETHORION,
 	TASK_ID_DCMIARIS,	
 	TASK_ID_CCL,
 	TASK_ID_MAX,
@@ -147,12 +146,13 @@ enum IHU_TASK_NAME_ID
 	TASK_ID_ADCLIBRA,
 	TASK_ID_SPILEO,
 	TASK_ID_I2CARIES,
-	TASK_ID_PWMTAURUS,
-	TASK_ID_SPSVIRGO,
+	//TASK_ID_PWMTAURUS,
+	//TASK_ID_SPSVIRGO,
 	TASK_ID_CANVELA,
-	TASK_ID_DIDOCAP,
+	//TASK_ID_DIDOCAP,
 	TASK_ID_LEDPISCES,
-	TASK_ID_ETHORION,	
+	//TASK_ID_ETHORION,
+	//TASK_ID_DCMIARIS,	
 	TASK_ID_BFSC,
 	TASK_ID_MAX,
 	TASK_ID_INVALID = 0xFF,
@@ -388,10 +388,10 @@ extern FsmStateItem_t FsmTimer[];                           //状态机
 extern FsmStateItem_t FsmAdclibra[];                        //状态机
 extern FsmStateItem_t FsmSpileo[];                          //状态机
 extern FsmStateItem_t FsmI2caries[];                        //状态机
-extern FsmStateItem_t FsmPwmtaurus[];                       //状态机
-extern FsmStateItem_t FsmSpsvirgo[];                        //状态机
+//extern FsmStateItem_t FsmPwmtaurus[];                       //状态机
+//extern FsmStateItem_t FsmSpsvirgo[];                        //状态机
 extern FsmStateItem_t FsmCanvela[];                      		//状态机
-extern FsmStateItem_t FsmDidocap[];                         //状态机
+//extern FsmStateItem_t FsmDidocap[];                         //状态机
 extern FsmStateItem_t FsmLedpisces[];                       //状态机
 //extern FsmStateItem_t FsmEthorion[];                        //状态机
 extern FsmStateItem_t FsmBfsc[];                          	//状态机 

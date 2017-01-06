@@ -15,14 +15,22 @@
 
 //从MAIN.x中继承过来的函数
 //UART_HandleTypeDef husart_debug;
-extern UART_HandleTypeDef huart4;
-extern UART_HandleTypeDef huart5;
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
-#ifdef IHU_BSP_STM32_UART6_PRESENT
-extern UART_HandleTypeDef huart6;
+extern UART_HandleTypeDef huart4;
+extern UART_HandleTypeDef huart5;
+UART_HandleTypeDef huart6; //MAIN中未定义，这里重新定义是为了复用
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+extern UART_HandleTypeDef huart1;
+extern UART_HandleTypeDef huart2;
+extern UART_HandleTypeDef huart3;
+extern UART_HandleTypeDef huart4;
+extern UART_HandleTypeDef huart5;
+UART_HandleTypeDef huart6; //MAIN中未定义，这里重新定义是为了复用
 #endif
+
 extern uint8_t zIhuUartRxBuffer[6];
 
 //基础接收缓冲区的全局变量，将用于所有串口的BSP驱动接收
@@ -333,7 +341,6 @@ int ihu_bsp_stm32_sps_spare2_rcv_data_timeout(uint8_t* buff, uint16_t len, uint3
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 {
 	uint8_t res = 0;
-	msg_struct_spsvirgo_l2frame_rcv_t snd;
   if(UartHandle==&IHU_BSP_STM32_UART_GPRS_HANDLER)
   {
 		res = zIhuUartRxBuffer[IHU_BSP_STM32_UART_GPRS_HANDLER_ID-1];
@@ -412,8 +419,11 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 				zIhuBspStm32SpsSpare1RxLen--;
 			}
 			//收到BODY最后一位
+			//BFSC项目暂时没有SPS串口双向通信，只能先删掉	
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)			
 			else if((zIhuBspStm32SpsSpare1RxState == IHU_HUITP_L2FRAME_STD_RX_STATE_BODY) && (zIhuBspStm32SpsSpare1RxLen == 1))
 			{
+				msg_struct_spsvirgo_l2frame_rcv_t snd;
 				zIhuBspStm32SpsSpare1RxState = IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE;
 				zIhuBspStm32SpsSpare1RxLen = 0;
 				zIhuBspStm32SpsSpare1RxCount = 0;
@@ -423,6 +433,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 				snd.length = sizeof(msg_struct_spsvirgo_l2frame_rcv_t);				
 				ihu_message_send(MSG_ID_SPS_L2FRAME_RCV, TASK_ID_SPSVIRGO, TASK_ID_VMFO, &snd, snd.length);				
 			}
+#endif	
 			//差错情况
 			else{
 				zIhuBspStm32SpsSpare1RxState = IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE;
@@ -432,8 +443,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 		}
 		//重新设置中断
 		HAL_UART_Receive_IT(&IHU_BSP_STM32_UART_SPARE1_HANDLER, &zIhuUartRxBuffer[IHU_BSP_STM32_UART_SPARE1_HANDLER_ID-1], 1);
-  }	
-#ifdef IHU_BSP_STM32_UART6_PRESENT	
+  }
   else if(UartHandle==&IHU_BSP_STM32_UART6_PRESENT_HANDLER)
   {
 		zIhuBspStm32SpsSpare2RxBuff[zIhuBspStm32SpsSpare2RxCount] = zIhuUartRxBuffer[IHU_BSP_STM32_UART6_PRESENT_HANDLER_ID-1];
@@ -443,7 +453,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 		//重新设置中断
 		HAL_UART_Receive_IT(&IHU_BSP_STM32_UART6_PRESENT_HANDLER, &zIhuUartRxBuffer[IHU_BSP_STM32_UART6_PRESENT_HANDLER_ID-1], 1);
   }
-#endif	
 }
 
 

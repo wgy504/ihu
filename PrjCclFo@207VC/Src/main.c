@@ -174,12 +174,8 @@ int main(void)
   HAL_UART_Receive_IT(&huart3,&zIhuUartRxBuffer[2],1);
   HAL_UART_Receive_IT(&huart4,&zIhuUartRxBuffer[3],1);
   HAL_UART_Receive_IT(&huart5,&zIhuUartRxBuffer[4],1);
-#ifdef IHU_BSP_STM32_UART_SPARE2	
-  HAL_UART_Receive_IT(&huart6,&zIhuUartRxBuffer[5],1);
-#endif
-#ifdef IHU_BSP_STM32_SPI_SPARE1
-  HAL_SPI_Receive_IT(&hspi1,&zIhuSpiRxBuffer[0],1);
-#endif	
+  //HAL_UART_Receive_IT(&huart6,&zIhuUartRxBuffer[5],1);
+  //HAL_SPI_Receive_IT(&hspi1,&zIhuSpiRxBuffer[0],1);
   HAL_SPI_Receive_IT(&hspi2,&zIhuSpiRxBuffer[1],1);
   HAL_I2C_Slave_Receive_IT(&hi2c1,&zIhuI2cRxBuffer[0],1);	
   HAL_CAN_Receive_IT(&hcan1, 0);

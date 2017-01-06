@@ -639,16 +639,6 @@
               <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_spi.h</FilePath>
             </File>
             <File>
-              <FileName>bsp_tim.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_tim.c</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_tim.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_tim.h</FilePath>
-            </File>
-            <File>
               <FileName>bsp_usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_usart.c</FilePath>
@@ -818,16 +808,6 @@
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l1vmfreeos\l1vmfo.h</FilePath>
             </File>
-            <File>
-              <FileName>vmmw_gprs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l1vmfreeos\vmmw_gprs.c</FilePath>
-            </File>
-            <File>
-              <FileName>vmmw_gprs.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l1vmfreeos\vmmw_gprs.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -842,16 +822,6 @@
               <FileName>l2adclibra.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l2framefreeos\l2adclibra.h</FilePath>
-            </File>
-            <File>
-              <FileName>l2didocap.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l2framefreeos\l2didocap.c</FilePath>
-            </File>
-            <File>
-              <FileName>l2didocap.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l2framefreeos\l2didocap.h</FilePath>
             </File>
             <File>
               <FileName>l2i2caries.c</FileName>
@@ -874,16 +844,6 @@
               <FilePath>..\..\SrcBxxh\l2framefreeos\l2ledpisces.h</FilePath>
             </File>
             <File>
-              <FileName>l2pwmtaurus.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l2framefreeos\l2pwmtaurus.c</FilePath>
-            </File>
-            <File>
-              <FileName>l2pwmtaurus.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l2framefreeos\l2pwmtaurus.h</FilePath>
-            </File>
-            <File>
               <FileName>l2spileo.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\SrcBxxh\l2framefreeos\l2spileo.c</FilePath>
@@ -892,16 +852,6 @@
               <FileName>l2spileo.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l2framefreeos\l2spileo.h</FilePath>
-            </File>
-            <File>
-              <FileName>l2spsvirgo.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l2framefreeos\l2spsvirgo.c</FilePath>
-            </File>
-            <File>
-              <FileName>l2spsvirgo.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l2framefreeos\l2spsvirgo.h</FilePath>
             </File>
             <File>
               <FileName>l2canvela.c</FileName>

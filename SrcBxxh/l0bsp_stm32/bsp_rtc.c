@@ -12,7 +12,9 @@
 #include "bsp_rtc.h"
 
 //从MAIN.x中继承过来的函数
-#if (IHU_RTC_SET_ENABLE_OR_DISABLE == IHU_HARDWARE_RTC_ENABLE)
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+extern RTC_HandleTypeDef hrtc;
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 extern RTC_HandleTypeDef hrtc;
 #endif
 
@@ -148,7 +150,6 @@ uint8_t USART_Scanf(uint32_t value)
 
 //HAL_RTC_GetTime(),HAL_RTC_GetDate()
 
-#if (IHU_RTC_SET_ENABLE_OR_DISABLE == IHU_HARDWARE_RTC_ENABLE)
 uint32_t ihu_bsp_stm32_rtc_get_current_unix_time(void)
 {
 	RTC_DateTypeDef sdatestructure;
@@ -197,5 +198,4 @@ void ihu_bsp_stm32_rtc_get_current_hms_time(char *output)
 	sprintf(output, "%02d:%02d:%02d", stimestructure.Hours, stimestructure.Minutes, stimestructure.Seconds);	
 }
 
-#endif
 

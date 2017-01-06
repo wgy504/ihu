@@ -28,10 +28,8 @@ extern "C" {
 
 
 //本地定义的交换矩阵
-#if (IHU_RTC_SET_ENABLE_OR_DISABLE == IHU_HARDWARE_RTC_ENABLE)
 #define IHU_BSP_STM32_RTC_HANDLER					hrtc
 #define IHU_BSP_STM32_RTC_HANDLER_ID  		1
-#endif
 
 //全局函数
 extern uint32_t ihu_bsp_stm32_rtc_get_current_unix_time(void);

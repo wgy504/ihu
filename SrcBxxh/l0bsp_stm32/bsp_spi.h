@@ -95,18 +95,10 @@ int func_bsp_spi_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint
 #define IHU_BSP_STM32_SPI_RX_MAX_DELAY 						100
 
 //交换矩阵
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-#undef IHU_BSP_STM32_SPI1_PRESENT
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
-#undef IHU_BSP_STM32_SPI1_PRESENT
-#endif
-#ifdef IHU_BSP_STM32_SPI1_PRESENT
 #define IHU_BSP_STM32_SPI1_PRESENT_HANDLER					hspi1
 #define IHU_BSP_STM32_SPI1_PRESENT_HANDLER_ID  			1
-#endif
-
-#define IHU_BSP_STM32_SPI_IAU_HANDLER							hspi2
-#define IHU_BSP_STM32_SPI_IAU_HANDLER_ID  				2
+#define IHU_BSP_STM32_SPI_IAU_HANDLER								hspi2
+#define IHU_BSP_STM32_SPI_IAU_HANDLER_ID  					2
 
 //全局函数
 extern int ihu_bsp_stm32_spi_slave_hw_init(void);

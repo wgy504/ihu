@@ -168,18 +168,12 @@ int main(void)
   HAL_UART_Receive_IT(&huart3,&zIhuUartRxBuffer[2],1);
   HAL_UART_Receive_IT(&huart4,&zIhuUartRxBuffer[3],1);
   HAL_UART_Receive_IT(&huart5,&zIhuUartRxBuffer[4],1);
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-  HAL_UART_Receive_IT(&huart6,&zIhuUartRxBuffer[5],1);
-#endif
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-  HAL_SPI_Receive_IT(&hspi1,&zIhuSpiRxBuffer[0],1);
-#endif	
+  //HAL_UART_Receive_IT(&huart6,&zIhuUartRxBuffer[5],1);
+  //HAL_SPI_Receive_IT(&hspi1,&zIhuSpiRxBuffer[0],1);
   HAL_SPI_Receive_IT(&hspi2,&zIhuSpiRxBuffer[1],1);
   HAL_I2C_Slave_Receive_IT(&hi2c1,&zIhuI2cRxBuffer[0],1);
   HAL_CAN_Receive_IT(&hcan1, 0);
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)	
-  HAL_CAN_Receive_IT(&hcan2, 1);
-#endif
+  //HAL_CAN_Receive_IT(&hcan2, 1);
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */

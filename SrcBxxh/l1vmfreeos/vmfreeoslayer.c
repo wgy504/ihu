@@ -96,10 +96,10 @@ OS_MUTEX zIhuPrintMutex;
 		"ADCLIBRA",
 		"SPILEO",
 		"I2CARIES",
-		"PWMTAURUS",
-		"SPSVIRGO",
+		//"PWMTAURUS", //该项目中抑制了该任务模块
+		//"SPSVIRGO", //该项目中抑制了该任务模块
 		"CANVELA",
-		"DIDOCAP",
+		//"DIDOCAP", //该项目中抑制了该任务模块
 		"LEDPISCES",
 		//"ETHORION", //该项目中抑制了该任务模块
     "BFSC",
@@ -768,10 +768,10 @@ void ihu_vm_system_init(void)
 	if (IHU_COMM_FRONT_ADC == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_ADCLIBRA].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_COMM_FRONT_SPI == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_SPILEO].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_COMM_FRONT_I2C == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_I2CARIES].pnpState = IHU_TASK_PNP_ON;
-	if (IHU_COMM_FRONT_PWM == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_PWMTAURUS].pnpState = IHU_TASK_PNP_ON;
-	if (IHU_COMM_FRONT_SPS == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_SPSVIRGO].pnpState = IHU_TASK_PNP_ON;
+	//if (IHU_COMM_FRONT_PWM == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_PWMTAURUS].pnpState = IHU_TASK_PNP_ON;
+	//if (IHU_COMM_FRONT_SPS == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_SPSVIRGO].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_COMM_FRONT_GPIO == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_CANVELA].pnpState = IHU_TASK_PNP_ON;
-	if (IHU_COMM_FRONT_DIDO == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_DIDOCAP].pnpState = IHU_TASK_PNP_ON;
+	//if (IHU_COMM_FRONT_DIDO == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_DIDOCAP].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_COMM_FRONT_LED == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_LEDPISCES].pnpState = IHU_TASK_PNP_ON;
 	//if (IHU_COMM_FRONT_ETH == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_ETHORION].pnpState = IHU_TASK_PNP_ON;
 	//if (IHU_COMM_FRONT_DCMI == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_DCMIARIS].pnpState = IHU_TASK_PNP_ON;
@@ -1963,20 +1963,20 @@ void ihu_task_create_all(void)
 	ihu_vm_send_init_msg_to_app_task(TASK_ID_I2CARIES);
 
 	//Create task PWMTAURUS environments /6
-	if (zIhuTaskInfo[TASK_ID_PWMTAURUS].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_PWMTAURUS, FsmPwmtaurus);
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_PWMTAURUS);
+//	if (zIhuTaskInfo[TASK_ID_PWMTAURUS].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_PWMTAURUS, FsmPwmtaurus);
+//	ihu_vm_send_init_msg_to_app_task(TASK_ID_PWMTAURUS);
 
 	//Create task SPSVIRGO environments /7
-	if (zIhuTaskInfo[TASK_ID_SPSVIRGO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_SPSVIRGO, FsmSpsvirgo);
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_SPSVIRGO);
+//	if (zIhuTaskInfo[TASK_ID_SPSVIRGO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_SPSVIRGO, FsmSpsvirgo);
+//	ihu_vm_send_init_msg_to_app_task(TASK_ID_SPSVIRGO);
 
 	//Create task CANVELA environments /8
 	if (zIhuTaskInfo[TASK_ID_CANVELA].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_CANVELA, FsmCanvela);
 	ihu_vm_send_init_msg_to_app_task(TASK_ID_CANVELA);
 
 	//Create task DIDOCAP environments /9
-	if (zIhuTaskInfo[TASK_ID_DIDOCAP].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_DIDOCAP, FsmDidocap);
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_DIDOCAP);
+//	if (zIhuTaskInfo[TASK_ID_DIDOCAP].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_DIDOCAP, FsmDidocap);
+//	ihu_vm_send_init_msg_to_app_task(TASK_ID_DIDOCAP);
 
 	//Create task LEDPISCES environments /10
 	if (zIhuTaskInfo[TASK_ID_LEDPISCES].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_LEDPISCES, FsmLedpisces);

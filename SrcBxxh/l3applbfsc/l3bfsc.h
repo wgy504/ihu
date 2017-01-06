@@ -21,10 +21,10 @@
 #include "l2adclibra.h"
 #include "l2spileo.h"
 #include "l2i2caries.h"
-#include "l2pwmtaurus.h"
-#include "l2spsvirgo.h"
+//#include "l2pwmtaurus.h"
+//#include "l2spsvirgo.h"
 #include "l2canvela.h"
-#include "l2didocap.h"
+//#include "l2didocap.h"
 #include "l2ledpisces.h"
 //#include "l2ethorion.h"
 

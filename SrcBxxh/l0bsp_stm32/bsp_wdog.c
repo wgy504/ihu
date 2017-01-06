@@ -12,7 +12,9 @@
 #include "bsp_wdog.h" 
 
 //从MAIN.x中继承过来的函数
-#if (IHU_WATCH_DOG_SET_ENABLE_OR_DISABLE == IHU_HARDWARE_WATCH_DOG_ENABLE)
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+extern IWDG_HandleTypeDef hiwdg;
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 extern IWDG_HandleTypeDef hiwdg;
 #endif
 
@@ -68,9 +70,7 @@ int ihu_bsp_stm32_watch_dog_start(void)
 //因为系统配置中WATCH DOG没有打开，导致这里编译不通过，暂时注释掉
 int ihu_bsp_stm32_watch_dog_refresh(void)
 {   
-#if (IHU_WATCH_DOG_SET_ENABLE_OR_DISABLE == IHU_WATCH_DOG_ENABLE)
 	HAL_IWDG_Refresh(&IHU_BSP_STM32_WATCH_DOG_HANDLER);
-#endif
 	return BSP_SUCCESS;
 }
 

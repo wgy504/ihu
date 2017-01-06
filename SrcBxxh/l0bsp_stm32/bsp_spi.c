@@ -14,10 +14,14 @@
 #include "bsp_spi.h"
 
 //从MAIN.x中继承过来的函数
-#ifdef IHU_BSP_STM32_SPI1_PRESENT
-extern SPI_HandleTypeDef hspi1;
-#endif
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+SPI_HandleTypeDef hspi1; //MAIN中为定义，这里重新定义是为了复用
 extern SPI_HandleTypeDef hspi2;
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+SPI_HandleTypeDef hspi1;  //MAIN中为定义，这里重新定义是为了复用
+extern SPI_HandleTypeDef hspi2;
+#endif
+
 extern uint8_t zIhuSpiRxBuffer[6];
 
 //本地全局变量
@@ -30,9 +34,6 @@ int8_t 	zIhuBspStm32SpiSpare1RxState=0;																//串口SPI接收状态
 int16_t zIhuBspStm32SpiSpare1RxCount=0;																//当前接收数据的字节数 	  
 int16_t zIhuBspStm32SpiSpare1RxLen=0;
 
-/* SPI handler declaration */
-// SPI_HandleTypeDef SpiHandle;
-extern SPI_HandleTypeDef hspi2;
 #define SPILEO_BUF_SIZE 256
 uint8_t BSP_SPI_rx_buffer[SPILEO_BUF_SIZE];
 uint8_t BSP_SPI_tx_buffer[SPILEO_BUF_SIZE];
@@ -379,7 +380,6 @@ int ihu_bsp_stm32_spi_iau_rcv_data(uint8_t* buff, uint16_t len)
 * 返回    : 无 
 * 说明    : 无
 *******************************************************************************/
-#ifdef IHU_BSP_STM32_SPI1_PRESENT
 int ihu_bsp_stm32_spi_spare1_send_data(uint8_t* buff, uint16_t len)
 {
 	if (HAL_SPI_Transmit(&IHU_BSP_STM32_SPI1_PRESENT_HANDLER, (uint8_t *)buff, len, IHU_BSP_STM32_SPI_TX_MAX_DELAY) == HAL_OK)
@@ -395,7 +395,6 @@ int ihu_bsp_stm32_spi_spare1_rcv_data(uint8_t* buff, uint16_t len)
 	else
 		return BSP_FAILURE;
 }
-#endif
 
 /**
   * SPI接口完成回调函数的处理

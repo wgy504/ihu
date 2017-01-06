@@ -12,7 +12,9 @@
 #include "bsp_crc.h" 
 
 //从MAIN.x中继承过来的函数
-#if (IHU_CRC_SET_ENABLE_OR_DISABLE == IHU_HARDWARE_CRC_ENABLE)
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+extern CRC_HandleTypeDef hcrc;
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 extern CRC_HandleTypeDef hcrc;
 #endif
 
@@ -25,11 +27,7 @@ extern CRC_HandleTypeDef hcrc;
 
 uint32_t ihu_bsp_stm32_crc_caculate(uint32_t *inputData, uint16_t len)
 {
-#if (IHU_CRC_SET_ENABLE_OR_DISABLE == IHU_HARDWARE_CRC_ENABLE)	
 	return HAL_CRC_Accumulate(&IHU_BSP_STM32_CRC_HANDLER, (uint32_t *)inputData, len);
-#else
-	return 0;
-#endif
 }
 
 
