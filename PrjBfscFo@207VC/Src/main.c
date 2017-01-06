@@ -58,6 +58,8 @@ CRC_HandleTypeDef hcrc;
 
 DAC_HandleTypeDef hdac;
 
+I2C_HandleTypeDef hi2c1;
+
 IWDG_HandleTypeDef hiwdg;
 
 RTC_HandleTypeDef hrtc;
@@ -107,6 +109,7 @@ static void MX_RTC_Init(void);
 static void MX_CRC_Init(void);
 static void MX_DAC_Init(void);
 static void MX_IWDG_Init(void);
+static void MX_I2C1_Init(void);
 void StartDefaultTask(void const * argument);
 void StartTask02(void const * argument);
 void Callback01(void const * argument);
@@ -153,6 +156,7 @@ int main(void)
   MX_CRC_Init();
   MX_DAC_Init();
   MX_IWDG_Init();
+  MX_I2C1_Init();
 
   /* Initialize interrupts */
   MX_NVIC_Init();
@@ -171,9 +175,7 @@ int main(void)
   HAL_SPI_Receive_IT(&hspi1,&zIhuSpiRxBuffer[0],1);
 #endif	
   HAL_SPI_Receive_IT(&hspi2,&zIhuSpiRxBuffer[1],1);
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
   HAL_I2C_Slave_Receive_IT(&hi2c1,&zIhuI2cRxBuffer[0],1);
-#endif
   HAL_CAN_Receive_IT(&hcan1, 0);
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)	
   HAL_CAN_Receive_IT(&hcan2, 1);
@@ -417,6 +419,26 @@ static void MX_DAC_Init(void)
   sConfig.DAC_Trigger = DAC_TRIGGER_NONE;
   sConfig.DAC_OutputBuffer = DAC_OUTPUTBUFFER_ENABLE;
   if (HAL_DAC_ConfigChannel(&hdac, &sConfig, DAC_CHANNEL_1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+}
+
+/* I2C1 init function */
+static void MX_I2C1_Init(void)
+{
+
+  hi2c1.Instance = I2C1;
+  hi2c1.Init.ClockSpeed = 100000;
+  hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
+  hi2c1.Init.OwnAddress1 = 0;
+  hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+  hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+  hi2c1.Init.OwnAddress2 = 0;
+  hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+  hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+  if (HAL_I2C_Init(&hi2c1) != HAL_OK)
   {
     Error_Handler();
   }

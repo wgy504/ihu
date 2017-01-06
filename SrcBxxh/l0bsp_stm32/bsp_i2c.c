@@ -16,7 +16,10 @@
 //从MAIN.x中继承过来的函数
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 extern I2C_HandleTypeDef hi2c1;
-extern I2C_HandleTypeDef hi2c2;
+I2C_HandleTypeDef hi2c2;  //MAIN中为定义，这里重新定义是为了复用
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+extern I2C_HandleTypeDef hi2c1;
+I2C_HandleTypeDef hi2c2;  //MAIN中为定义，这里重新定义是为了复用
 #endif
 extern uint8_t zIhuI2cRxBuffer[2];
 
@@ -54,7 +57,6 @@ int ihu_bsp_stm32_i2c_slave_hw_init(void)
 	return BSP_SUCCESS;
 }
 
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 /*******************************************************************************
 * 函数名  : I2C_SendData
 * 描述    : I2C_IAU发送数据缓冲区数据
@@ -214,7 +216,7 @@ void func_bsp_stm32_i2c_mpu6050_write_data(uint16_t Addr, uint8_t Reg, uint8_t V
 {
   HAL_StatusTypeDef status = HAL_OK;
   
-  status = HAL_I2C_Mem_Write(&IHU_BSP_STM32_I2C_IHU_BSP_STM32_MPU6050_HANDLER, Addr, (uint16_t)Reg, I2C_MEMADD_SIZE_8BIT, &Value, 1, EVAL_I2Cx_TIMEOUT_MAX);
+  status = HAL_I2C_Mem_Write(&IHU_BSP_STM32_I2C_IHU_BSP_STM32_MPU6050_HANDLER, Addr, (uint16_t)Reg, I2C_MEMADD_SIZE_8BIT, &Value, 1, IHU_BSP_STM32_I2C_TIMEOUT_TX_MAX);
   
   /* 检测I2C通信状态 */
   if(status != HAL_OK)
@@ -238,7 +240,7 @@ HAL_StatusTypeDef func_bsp_stm32_i2c_mpu6050_write_buffer(uint16_t Addr, uint8_t
 {
   HAL_StatusTypeDef status = HAL_OK;
   
-  status = HAL_I2C_Mem_Write(&IHU_BSP_STM32_I2C_IHU_BSP_STM32_MPU6050_HANDLER, Addr, (uint16_t)Reg, RegSize, pBuffer, Length, EVAL_I2Cx_TIMEOUT_MAX); 
+  status = HAL_I2C_Mem_Write(&IHU_BSP_STM32_I2C_IHU_BSP_STM32_MPU6050_HANDLER, Addr, (uint16_t)Reg, RegSize, pBuffer, Length, IHU_BSP_STM32_I2C_TIMEOUT_TX_MAX); 
 
   /* 检测I2C通信状态 */
   if(status != HAL_OK)
@@ -262,7 +264,7 @@ uint8_t func_bsp_stm32_i2c_mpu6050_read_data(uint16_t Addr, uint8_t Reg)
   HAL_StatusTypeDef status = HAL_OK;
   uint8_t value = 0;
   
-  status = HAL_I2C_Mem_Read(&IHU_BSP_STM32_I2C_IHU_BSP_STM32_MPU6050_HANDLER, Addr, Reg, I2C_MEMADD_SIZE_8BIT, &value, 1, EVAL_I2Cx_TIMEOUT_MAX);
+  status = HAL_I2C_Mem_Read(&IHU_BSP_STM32_I2C_IHU_BSP_STM32_MPU6050_HANDLER, Addr, Reg, I2C_MEMADD_SIZE_8BIT, &value, 1, IHU_BSP_STM32_I2C_TIMEOUT_TX_MAX);
  
   /* 检测I2C通信状态 */
   if(status != HAL_OK)
@@ -288,7 +290,7 @@ HAL_StatusTypeDef func_bsp_stm32_i2c_mpu6050_read_buffer(uint16_t Addr, uint8_t 
 {
   HAL_StatusTypeDef status = HAL_OK;
 
-  status = HAL_I2C_Mem_Read(&IHU_BSP_STM32_I2C_IHU_BSP_STM32_MPU6050_HANDLER, Addr, (uint16_t)Reg, RegSize, pBuffer, Length, EVAL_I2Cx_TIMEOUT_MAX);
+  status = HAL_I2C_Mem_Read(&IHU_BSP_STM32_I2C_IHU_BSP_STM32_MPU6050_HANDLER, Addr, (uint16_t)Reg, RegSize, pBuffer, Length, IHU_BSP_STM32_I2C_TIMEOUT_TX_MAX);
   
   /* 检测I2C通信状态 */
   if(status != HAL_OK)
@@ -308,7 +310,7 @@ HAL_StatusTypeDef func_bsp_stm32_i2c_mpu6050_read_buffer(uint16_t Addr, uint8_t 
   */
 HAL_StatusTypeDef func_bsp_stm32_i2c_mpu6050_is_device_ready(uint16_t DevAddress, uint32_t Trials)
 { 
-  return (HAL_I2C_IsDeviceReady(&IHU_BSP_STM32_I2C_IHU_BSP_STM32_MPU6050_HANDLER, DevAddress, Trials, EVAL_I2Cx_TIMEOUT_MAX));
+  return (HAL_I2C_IsDeviceReady(&IHU_BSP_STM32_I2C_IHU_BSP_STM32_MPU6050_HANDLER, DevAddress, Trials, IHU_BSP_STM32_I2C_TIMEOUT_TX_MAX));
 }
 
 /**
@@ -474,7 +476,6 @@ int8_t ihu_bsp_stm32_i2c_mpu6050_temp_read(int16_t tempData)
 	}
 }
 
-#endif  //(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 
 
 

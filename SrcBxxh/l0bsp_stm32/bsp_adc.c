@@ -19,6 +19,8 @@
 	extern ADC_HandleTypeDef hadc3;
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 	extern ADC_HandleTypeDef hadc1;
+	ADC_HandleTypeDef hadc2;  //MAIN中为定义，这里重新定义是为了复用
+	ADC_HandleTypeDef hadc3;	//MAIN中为定义，这里重新定义是为了复用
 #endif
 
 //本地全局变量
@@ -28,9 +30,6 @@ uint16_t zIhuAdc1ConvertedValue[BSP_STM32_ADC_ARRAY_NUMBER];
 uint16_t zIhuAdc2ConvertedValue[BSP_STM32_ADC_ARRAY_NUMBER];
 uint16_t zIhuAdc3ConvertedValue[BSP_STM32_ADC_ARRAY_NUMBER];
 
-
-#if ((IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID) ||\
-(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID))
 //In IT mode
 void ihu_bsp_stm32_adc_cpu_temp_start(void)
 {
@@ -87,9 +86,6 @@ void ihu_bsp_stm32_adc1_start_in_DMA_mode(void)
   HAL_ADC_Start_DMA(&IHU_BSP_STM32_ADC1_HANDLER,(uint32_t *)&zIhuAdc1ConvertedValue, sizeof(zIhuAdc1ConvertedValue));  
 }
 
-#endif
-
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 //In normal mode
 void ihu_bsp_stm32_adc2_start(void)
 {
@@ -140,5 +136,4 @@ void ihu_bsp_stm32_adc3_start_in_DMA_mode(void)
   HAL_ADC_Start_DMA(&IHU_BSP_STM32_ADC3_HANDLER,(uint32_t *)&zIhuAdc3ConvertedValue, sizeof(zIhuAdc3ConvertedValue));  
 }
 
-#endif //IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID, IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID
 

@@ -9,6 +9,8 @@
 = 完善HW TYPE PRODUCT CATELOG信息域，在SYSCONFIG.H进行了单独的明确的定义，以便未来可以跟StrStm32F2EquidStorage_t进行交叉验证
 = 集成DHT11温湿度传感器
 = 集成PMU6050加速度陀螺仪传感器
+= 找到了一种BSP优化#ifdef的方法：如果某种设备没有被MAIN定义，则需要在BSP中重新定义下，然后就可以共享所有的BSP函数了
+= 如果某个设备完全在该项目都没有定义，则将该设备的BSP从该项目中清除即可
 
 //= ZJL, 2017 Jan.5, CURRENT_SW_DELIVERY R03.83 =>CCL项目
 = 时间time()调整完成，跟当前RTC时间连在一起了

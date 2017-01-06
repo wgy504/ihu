@@ -20,7 +20,7 @@ extern "C" {
 
 //不能在这里出现管脚的任何配置和初始化，必须在STM32CubeMX中完成，这里使用STM32CubeMX给出的端口俗名
 
-#define EVAL_I2Cx_TIMEOUT_MAX                   3000
+#define IHU_BSP_STM32_I2C_TIMEOUT_TX_MAX                   3000
 
 	
 //MAX_IHU_MSG_BODY_LENGTH-1是因为发送到上层SPSVIRGO的数据缓冲区受到消息结构msg_struct_spsvirgo_l2frame_rcv_t的影响
@@ -32,48 +32,39 @@ extern "C" {
 #define IHU_BSP_STM32_I2C_RX_MAX_DELAY_DURATION 100
 
 //本地定义的交换矩阵
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-	#define IHU_BSP_STM32_I2C_IAU_HANDLER					hi2c1
-	#define IHU_BSP_STM32_I2C_IAU_HANDLER_ID  		1
-	#define IHU_BSP_STM32_I2C_SPARE1_HANDLER			hi2c1
-	#define IHU_BSP_STM32_I2C_SPARE1_HANDLER_ID  	2
-	//增加MPU6050陀螺仪的I2C控制传感器
-	#define IHU_BSP_STM32_I2C_IHU_BSP_STM32_MPU6050_HANDLER					hi2c1
-	#define IHU_BSP_STM32_I2C_IHU_BSP_STM32_MPU6050_HANDLER_ID  		1
-#endif
+#define IHU_BSP_STM32_I2C_IAU_HANDLER					hi2c1
+#define IHU_BSP_STM32_I2C_IAU_HANDLER_ID  		1
+#define IHU_BSP_STM32_I2C_SPARE1_HANDLER			hi2c1
+#define IHU_BSP_STM32_I2C_SPARE1_HANDLER_ID  	2
+//增加MPU6050陀螺仪的I2C控制传感器
+#define IHU_BSP_STM32_I2C_IHU_BSP_STM32_MPU6050_HANDLER					hi2c1
+#define IHU_BSP_STM32_I2C_IHU_BSP_STM32_MPU6050_HANDLER_ID  		1
 
 //全局函数
 extern int ihu_bsp_stm32_i2c_slave_hw_init(void);
-
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-	extern int ihu_bsp_stm32_i2c_iau_send_data(uint8_t* buff, uint16_t len);
-	extern int ihu_bsp_stm32_i2c_iau_rcv_data(uint8_t* buff, uint16_t len);	
-	extern int ihu_bsp_stm32_i2c_spare1_send_data(uint8_t* buff, uint16_t len);
-	extern int ihu_bsp_stm32_i2c_spare1_rcv_data(uint8_t* buff, uint16_t len);
-	//重载接收函数，以便通过IT中断方式搞定接收通信，否则需要通过轮询或者单独线程搞定，更加麻烦
-	void HAL_I2C_RxCpltCallback(I2C_HandleTypeDef *I2cHandle);
-	//MPU6050必须先初始化，然后才能读取加速度/陀螺仪位置/温度数据
-	extern void 	ihu_bsp_stm32_i2c_mpu6050_init(void);
-	extern int8_t ihu_bsp_stm32_i2c_mpu6050_acc_read(int16_t *accData);
-	extern int8_t ihu_bsp_stm32_i2c_mpu6050_gyro_read(int16_t *gyroData);
-	extern int8_t ihu_bsp_stm32_i2c_mpu6050_temp_read(int16_t tempData);	
-#endif
-
+extern int ihu_bsp_stm32_i2c_iau_send_data(uint8_t* buff, uint16_t len);
+extern int ihu_bsp_stm32_i2c_iau_rcv_data(uint8_t* buff, uint16_t len);	
+extern int ihu_bsp_stm32_i2c_spare1_send_data(uint8_t* buff, uint16_t len);
+extern int ihu_bsp_stm32_i2c_spare1_rcv_data(uint8_t* buff, uint16_t len);
+//重载接收函数，以便通过IT中断方式搞定接收通信，否则需要通过轮询或者单独线程搞定，更加麻烦
+void HAL_I2C_RxCpltCallback(I2C_HandleTypeDef *I2cHandle);
+//MPU6050必须先初始化，然后才能读取加速度/陀螺仪位置/温度数据
+extern void 	ihu_bsp_stm32_i2c_mpu6050_init(void);
+extern int8_t ihu_bsp_stm32_i2c_mpu6050_acc_read(int16_t *accData);
+extern int8_t ihu_bsp_stm32_i2c_mpu6050_gyro_read(int16_t *gyroData);
+extern int8_t ihu_bsp_stm32_i2c_mpu6050_temp_read(int16_t tempData);
 
 //Local APIs
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-	void               func_bsp_stm32_i2c_mpu6050_write_data(uint16_t Addr, uint8_t Reg, uint8_t Value);
-	HAL_StatusTypeDef  func_bsp_stm32_i2c_mpu6050_write_buffer(uint16_t Addr, uint8_t Reg, uint16_t RegSize, uint8_t *pBuffer, uint16_t Length);
-	uint8_t            func_bsp_stm32_i2c_mpu6050_read_data(uint16_t Addr, uint8_t Reg);
-	HAL_StatusTypeDef  func_bsp_stm32_i2c_mpu6050_read_buffer(uint16_t Addr, uint8_t Reg, uint16_t RegSize, uint8_t *pBuffer, uint16_t Length);
-	HAL_StatusTypeDef  func_bsp_stm32_i2c_mpu6050_is_device_ready(uint16_t DevAddress, uint32_t Trials);
-	void func_bsp_stm32_i2c_mpu6050_read_temp(int16_t *tempData);
-	void func_bsp_stm32_i2c_mpu6050_read_gyro(int16_t *gyroData);
-	void func_bsp_stm32_i2c_mpu6050_read_acc(int16_t *accData);
-	void func_bsp_stm32_i2c_mpu6050_return_temp(int16_t*Temperature);	
-	uint8_t func_bsp_stm32_i2c_mpu6050_return_id(void);
-	
-#endif
+void func_bsp_stm32_i2c_mpu6050_write_data(uint16_t Addr, uint8_t Reg, uint8_t Value);
+HAL_StatusTypeDef  func_bsp_stm32_i2c_mpu6050_write_buffer(uint16_t Addr, uint8_t Reg, uint16_t RegSize, uint8_t *pBuffer, uint16_t Length);
+uint8_t func_bsp_stm32_i2c_mpu6050_read_data(uint16_t Addr, uint8_t Reg);
+HAL_StatusTypeDef  func_bsp_stm32_i2c_mpu6050_read_buffer(uint16_t Addr, uint8_t Reg, uint16_t RegSize, uint8_t *pBuffer, uint16_t Length);
+HAL_StatusTypeDef  func_bsp_stm32_i2c_mpu6050_is_device_ready(uint16_t DevAddress, uint32_t Trials);
+void func_bsp_stm32_i2c_mpu6050_read_temp(int16_t *tempData);
+void func_bsp_stm32_i2c_mpu6050_read_gyro(int16_t *gyroData);
+void func_bsp_stm32_i2c_mpu6050_read_acc(int16_t *accData);
+void func_bsp_stm32_i2c_mpu6050_return_temp(int16_t*Temperature);	
+uint8_t func_bsp_stm32_i2c_mpu6050_return_id(void);
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
