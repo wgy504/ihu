@@ -303,7 +303,6 @@ int ihu_bsp_stm32_sps_spare1_rcv_data_timeout(uint8_t* buff, uint16_t len, uint3
 * 返回    : 无 
 * 说明    : 无
 *******************************************************************************/
-#ifdef IHU_BSP_STM32_UART6_PRESENT
 int ihu_bsp_stm32_sps_spare2_send_data(uint8_t* buff, uint16_t len)
 {    
 	if (HAL_UART_Transmit(&IHU_BSP_STM32_UART6_PRESENT_HANDLER, (uint8_t *)buff, len, IHU_BSP_STM32_SPS_TX_MAX_DELAY) == HAL_OK)
@@ -327,7 +326,7 @@ int ihu_bsp_stm32_sps_spare2_rcv_data_timeout(uint8_t* buff, uint16_t len, uint3
 	else
 		return BSP_FAILURE;
 }
-#endif
+
 /**
   *
   * 串口接口完成回调函数的处理

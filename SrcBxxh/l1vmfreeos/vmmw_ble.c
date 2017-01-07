@@ -19,6 +19,17 @@ extern int8_t zIhuBspStm32SpsBleRxState;																				//串口BLE接收状
 extern int16_t zIhuBspStm32SpsBleRxCount;																				//当前接收数据的字节数 	  
 extern int16_t zIhuBspStm32SpsBleRxLen;
 
+
+BLTDev bltDevList;   //蓝牙设备列表，在main文件中定义
+#define DEFAULT_HC05_ROLE           0 // 默认从模式
+//#define DEFAULT_HC05_ROLE           1 // 默认主模式
+BLTDev bltDevList;
+char sendData[1024];
+char linebuff[1024];
+uint8_t aRxBuffer;
+static __IO uint32_t TimingDelay=0;
+
+
 /*******************************************************************************
 * 函数名 : func_blemod_uart_send_AT_command
 * 描述   : 发送AT指令函数
@@ -89,6 +100,34 @@ void func_blemod_uart_send_string(char* s)
 }
 
 /*******************************************************************************
+* 函数名 : Find
+* 描述   : 判断缓存中是否含有指定的字符串
+* 输入   : 
+* 输出   : 
+* 返回   : unsigned char:1 找到指定字符，0 未找到指定字符 
+* 注意   : 
+*******************************************************************************/
+OPSTAT func_blemod_find_char(char *a)
+{ 
+  if(strstr((char *)zIhuBspStm32SpsBleRxBuff, a)!=NULL)
+	    return IHU_SUCCESS;
+	else
+		return IHU_FAILURE;
+}
+
+/**
+  * 函数功能: 获取接收到的数据和长度 
+  * 输入参数: 无
+  * 返 回 值: 无
+  * 说    明：无
+  */
+char *ihu_bsp_stm32_ble_get_rebuff(uint16_t *len) 
+{
+    *len = zIhuBspStm32SpsBleRxCount;
+    return (char *)zIhuBspStm32SpsBleRxBuff;
+}
+
+/*******************************************************************************
 * 函数名 : BLE_UART_fetch_mac_add_procedure
 * 描述   : 获取BLE MAC地址测试代码
 * 输入   : 
@@ -98,7 +137,7 @@ void func_blemod_uart_send_string(char* s)
 *******************************************************************************/
 OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_procedure(void)
 {
-	uint8_t repeatCnt = IHU_BLE_UART_REPEAT_CNT;
+	uint8_t repeatCnt = IHU_VMMW_BLEMOD_UART_REPEAT_CNT;
 //	uint8_t temp[50];
 //	uint8_t loc=0;
 	
@@ -153,11 +192,552 @@ OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_procedure(void)
 	return IHU_SUCCESS;
 }
 
+/**
+  * 函数功能: 向HC05模块发送命令并检查OK。只适用于具有OK应答的命令
+  * 输入参数: cmd：待发送命令
+  *           clean：1：清除接收缓冲区内容
+  *                  0：保留接收缓冲区内容
+  * 返 回 值: 命令应答状态：1：无OK应答
+  *                         0：成功发送并接收到OK应答
+  * 说    明：无
+  */
+uint8_t func_blemod_uart_hc05_send_cmd(char* cmd,uint8_t clean)
+{	 		 
+	uint8_t retry=5;
+	uint8_t i;
+	
+	while(retry--)
+	{
+		HC05_EN_HIGHT();
+		HAL_Delay(10);
+		//HAL_UART_Transmit(&husartx_rs485,(uint8_t *)cmd,strlen(cmd),1000);
+			func_blemod_uart_send_string(cmd);
+    for(i=0;i<20;i++)
+    { 
+      uint16_t len;
+      char * redata;
+      
+      HAL_Delay(10);      
+      redata = ihu_bsp_stm32_ble_get_rebuff(&len); 
+      if(len>0)
+      {
+        if(redata[0]!=0)
+        {
+          if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: send CMD: %s",cmd);
+          if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: receive %s",redata);
+        }
+        if(strstr(redata,"OK"))				
+        {          
+          if(clean==1)
+            func_blemod_uart_clear_receive_buffer();
+          return 0;
+        }
+      }
+      else
+      {					
+        HAL_Delay(100);
+      }		
+    }
+    if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: HC05 send CMD fail %d times",retry);
+  }	
+	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: HC05 send CMD fail ");
+	if(clean==1)
+		func_blemod_uart_clear_receive_buffer();
+	return 1 ;
+}
+
+/**
+  * 函数功能: 初始化GPIO及检测HC05模块
+  * 输入参数: 无
+  * 返 回 值: 无
+  * 说    明：无
+  */
+void func_blemod_uart_hc05_init(void)
+{
+	uint8_t i;	
+	//HC05_GPIO_Config();
+	//HC05_USARTx_Init();	
+	for(i=0;i<BLTDEV_MAX_NUM;i++)
+	{
+		sprintf(bltDevList.unpraseAddr[i]," ");
+		sprintf(bltDevList.name[i]," ");
+	}	
+	bltDevList.num = 0;
+}
+
+/**
+  * 函数功能: 把接收到的字符串转化成16进制形式的数字变量(主要用于转化蓝牙地址)
+  * 输入参数: str：待转换字符串
+  * 返 回 值: 无
+  * 说    明：无
+  */
+unsigned long htoul(const char *str)
+{
+  long result = 0;
+
+  if (!str)
+    return 0;
+
+  while (*str)
+  {
+    uint8_t value;
+
+    if (*str >= 'a' && *str <= 'f')
+      value = (*str - 'a') + 10;
+    else if (*str >= 'A' && *str <= 'F')
+      value = (*str - 'A') + 10;
+    else if (*str >= '0' && *str <= '9')
+      value = *str - '0';
+    else
+      break;
+
+    result = (result * 16) + value;
+    ++str;
+  }
+  return result;
+}
 
 
+/**
+  * 函数功能: 在str中，跳过它前面的prefix字符串,
+  * 输入参数: 无
+  * 返 回 值: 无
+  * 说    明：无
+  */
+char *skipPrefix(char *str, size_t str_length, const char *prefix)
+{
+  uint16_t prefix_length = strlen(prefix);
+  if (!str || str_length == 0 || !prefix)
+    return 0;
+  if (str_length >= prefix_length && strncmp(str, prefix, prefix_length) == 0)
+    return str + prefix_length;
+  return 0;
+}
+
+/**
+  * 函数功能: 从stream中获取一行字符串到line中
+  * 输入参数: line,存储获得行的字符串数组
+  *           stream，原字符串数据流       max_size，stream的大小   
+  * 返 回 值: line的长度，若stream中没有‘\0’，'\r'，'\n'，则返回0
+  * 说    明：无
+  */
+int func_blemod_uart_hc05_get_line(char* line, char* stream ,int max_size)  
+{  
+  char *p;	
+  int len = 0;  
+  p=stream;
+  while( *p != '\0' && len < max_size )
+  {  
+    line[len++] = *p;  
+    p++;
+    if('\n' == *p || '\r'==*p)  
+        break;  
+  }
+  if(*p != '\0' && *p != '\n' && *p != '\r')
+    return 0;
+  line[len] = '\0';  
+  return len;  
+} 
+
+/**
+  * 函数功能: 向HC05写入命令，不检查模块的响应
+  * 输入参数: arg，命令参数，为0时不带参数，若command也为0时，发送"AT"命令
+  * 返 回 值: 无
+  * 说    明：无
+  */
+void writeCommand(const char *command, const char *arg)
+{
+  char str_buf[50];
+
+  HC05_EN_HIGHT();
+  HAL_Delay(10);
+
+  if (arg && arg[0] != 0)
+    sprintf(str_buf,"AT+%s%s",command,arg);
+  else if (command && command[0] != 0)
+  {
+    sprintf(str_buf,"AT+%s",command);
+  }
+  else
+    sprintf(str_buf,"AT");
+  
+  if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: CMD send:%s\n",str_buf);
+  func_blemod_uart_send_string(str_buf);
+ // HAL_UART_Transmit(&husartx_rs485,(uint8_t *)str_buf,strlen(str_buf),1000);
+}
 
 
+/**
+  * 函数功能: 扫描周边的蓝牙设备，并存储到设备列表中
+  * 输入参数: 无
+  * 返 回 值: 无
+  * 说    明：无
+  */
+uint8_t parseBluetoothAddress(BLTDev *bltDev)
+{
+  /* Address should look like "+ADDR:<NAP>:<UAP>:<LAP>",
+   * where actual address will look like "1234:56:abcdef".
+   */
+	char* redata;
+	uint16_t len;
+	char linebuff[50];
+	uint16_t linelen;
+	uint16_t getlen=0;
+	uint8_t linenum=0;	
+	uint8_t i;
+	char *p;
 
+	func_blemod_uart_send_AT_command((uint8_t*)"AT+INQ", (uint8_t*)"OK", 2);
+	redata =ihu_bsp_stm32_ble_get_rebuff(&len);
+	if(redata[0] != 0 && strstr(redata, "+INQ:") != 0)
+	{
+		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: rebuf =%s\n",redata);
 
+getNewLine:
+		while(getlen < len-2*linenum )
+		{	
+			linelen = func_blemod_uart_hc05_get_line(linebuff,redata+getlen+2*linenum,len);
+			if(linelen>50 && linelen != 0)
+			{
+				func_blemod_uart_send_AT_command((uint8_t*)"AT+INQC", (uint8_t*)"OK", 2);//退出前中断查询
+				return 1;
+			}
+			getlen += linelen;
+			linenum++;			
+			p = skipPrefix(linebuff,linelen,"+INQ:");
+			if(p!=0)
+			{
+				uint8_t num ;
+				num = bltDev->num;
+				func_blemod_uart_hc05_str_blt_addr(bltDev,':');
+				for(i=0;i<=num;i++)
+				{
+					if(strstr(linebuff,bltDev->unpraseAddr[i]) != NULL)	
+					{
+						goto getNewLine;	//!=null时，表示该地址与解码语句的地址相同
+					}
+				}							
+				/*若蓝牙设备不在列表中，对地址进行解码*/	
+				bltDev->addr[num].NAP = htoul(p);			
+				p = strchr(p,':');
 
+				if (p == 0)
+				{
+					func_blemod_uart_send_AT_command((uint8_t*)"AT+INQC", (uint8_t*)"OK", 2);//退出前中断查询
+					return 1;
+				}
+				bltDev->addr[num].UAP = htoul(++p);
+				p = strchr(p,':');
+				if (p == 0)
+				{
+					func_blemod_uart_hc05_send_cmd("AT+INQC",1);//退出前中断查询
+					return 1;
+				}
+				bltDev->addr[num].LAP = htoul(++p);
+				/*存储蓝牙地址(字符串形式)*/
+				sprintf(bltDev->unpraseAddr[num],"%X:%X:%X",bltDev->addr[num].NAP,bltDev->addr[num].UAP,bltDev->addr[num].LAP);
+				bltDev->num++;
+			}
+		}
+		func_blemod_uart_clear_receive_buffer();
+		func_blemod_uart_send_AT_command((uint8_t*)"AT+INQC", (uint8_t*)"OK", 2);//退出前中断查询
+		return 0;
+	}	
+	else
+	{
+		func_blemod_uart_clear_receive_buffer();
+		func_blemod_uart_send_AT_command((uint8_t*)"AT+INQC", (uint8_t*)"OK", 2);//退出前中断查询
+		return 1;	
+	}
+}
+
+/**
+  * 函数功能: 把蓝牙地址转化成字符串形式
+  * 输入参数: 无
+  * 返 回 值: 无
+  * 说    明：无
+  */
+void func_blemod_uart_hc05_str_blt_addr(BLTDev *bltDev,char delimiter)  
+{
+	uint8_t i;
+	
+	if(bltDev->num==0)
+	{
+		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: /*******No other BLT Device********/\n");
+	}
+	else
+	{
+		for(i=0;i<bltDev->num;i++)
+		{
+			sprintf(bltDev->unpraseAddr[i],"%X%c%X%c%X",bltDev->addr[i].NAP,delimiter,bltDev->addr[i].UAP,delimiter,bltDev->addr[i].LAP);
+		}
+	}
+}
+
+/**
+  * 函数功能: 获取远程蓝牙设备的名称
+  * 输入参数: bltDev ，蓝牙设备列表指针
+  * 返 回 值: 0获取成功，非0不成功
+  * 说    明：无
+  */
+uint8_t func_blemod_uart_hc05_get_remote_device_name(BLTDev *bltDev)
+{
+	uint8_t i;
+	char *redata;
+	uint16_t len;
+	
+	char linebuff[50];
+	uint16_t linelen;
+	char *p;
+	
+	char cmdbuff[100];
+	
+	func_blemod_uart_hc05_str_blt_addr(bltDev,',');
+
+	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: device num =%d",bltDev->num);
+	
+	for(i=0;i<bltDev->num;i++)
+	{
+		sprintf(cmdbuff,"AT+RNAME?%s",bltDev->unpraseAddr[i]);
+		func_blemod_uart_send_AT_command((uint8_t*)cmdbuff, (uint8_t*)"OK", 2);
+		redata =ihu_bsp_stm32_ble_get_rebuff(&len);
+		if(redata[0] != 0 && strstr(redata, "OK") != 0)
+		{
+			linelen = func_blemod_uart_hc05_get_line(linebuff,redata,len);
+			if(linelen>50 && linelen !=0 ) linebuff[linelen]='\0';	//超长截断
+					
+			p = skipPrefix(linebuff,linelen,"+RNAME:");
+			if(p!=0)
+			{
+				strcpy(bltDev->name[i],p);
+			}
+		}
+		else
+		{
+			func_blemod_uart_clear_receive_buffer();
+			return 1;	
+		}
+		func_blemod_uart_clear_receive_buffer();
+	}
+	return 0;
+}
+
+/**
+  * 函数功能: 输出蓝牙设备列表
+  * 输入参数: 无
+  * 返 回 值: 无
+  * 说    明：无
+  */
+void func_blemod_uart_hc05_print_blt_info(BLTDev *bltDev)  
+{
+	uint8_t i;
+	if(bltDev->num==0)
+	{
+		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: /*******No remote BLT Device or in SLAVE mode********/\n");
+	}
+	else
+	{
+		//IhuDebugPrint("VMFO: 扫描到 %d 个蓝牙设备\n", bltDev->num);
+
+		for(i=0;i<bltDev->num;i++)
+		{
+			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: /*******Device[%d]********/\n",i);	
+			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Device Addr: %s\n",bltDev->unpraseAddr[i]);
+			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Device name: %s\n",bltDev->name[i]);
+		}
+	}
+}
+
+/**
+  * 函数功能: 扫描蓝牙设备，并连接名称中含有"HC05"的设备
+  * 输入参数: 无
+  * 返 回 值: 0获取成功，非0不成功
+  * 说    明：无
+  */
+uint8_t func_blemod_uart_hc05_link(void)
+{
+	uint8_t i=0;
+	char cmdbuff[100];
+	
+	parseBluetoothAddress(&bltDevList);
+	func_blemod_uart_hc05_get_remote_device_name(&bltDevList);
+	func_blemod_uart_hc05_print_blt_info(&bltDevList);
+	
+	for(i=0;i<=bltDevList.num;i++)
+	{
+		if(strstr(bltDevList.name[i],"HC05") != NULL) //非NULL表示找到有名称部分为HC05的设备
+		{
+			//IhuDebugPrint("VMFO: 搜索到远程HC05模块，即将进行配对连接...\n");
+			func_blemod_uart_hc05_str_blt_addr(&bltDevList,',');		
+			//配对
+			sprintf(cmdbuff,"AT+PAIR=%s,20",bltDevList.unpraseAddr[i]);
+			func_blemod_uart_send_AT_command((uint8_t*)cmdbuff, (uint8_t*)"OK", 2);
+			//连接	
+			sprintf(cmdbuff,"AT+LINK=%s",bltDevList.unpraseAddr[i]);
+			return func_blemod_uart_send_AT_command((uint8_t*)cmdbuff, (uint8_t*)"OK", 2);		
+		}
+	}
+	return 1;
+}
+
+//测试整个过程
+void ihu_vmmw_blemd_hc05_working_process(void)
+{
+  uint8_t hc05_connect=0; // 0:未连接       1：连接成功，可以进行数据传输
+  uint8_t hc05_mode=0;  // 0：SPP规范      1：AT模式
+  char hc05_mode_str[10]="SLAVE";
+  uint8_t hc05_role=DEFAULT_HC05_ROLE;  // 0：从模式       1：主模式
+	char* redata;
+	uint16_t len;
+	char hc05_name[30]="HC05_SLAVE";
+  char hc05_nameCMD[40];
+	
+  func_blemod_uart_hc05_init();
+  HC05_EN_LOW(); 	
+
+	HAL_Delay(500);
+  while(hc05_mode==0)
+  {
+    HC05_EN_HIGHT(); 
+    HAL_Delay(500);
+    func_blemod_uart_clear_receive_buffer();
+    /* 发送一个AT指令 */
+		func_blemod_uart_send_AT_command((uint8_t *)"AT", "OK", 2);	
+  }  	
+	
+	if(hc05_mode==1)  //  AT模式
+  {    
+    /*复位、恢复默认状态*/
+    func_blemod_uart_send_AT_command((uint8_t*)"AT+RESET", (uint8_t*)"OK", 2);	
+    HAL_Delay(800);
+    
+    func_blemod_uart_send_AT_command((uint8_t*)"AT+ORGL", (uint8_t*)"OK", 2);
+    HAL_Delay(200);
+
+    if(hc05_role==0) // 从模式
+    {
+      if(func_blemod_uart_send_AT_command((uint8_t*)"AT+ROLE=0", (uint8_t*)"OK", 2) == IHU_SUCCESS)	
+      {				
+        HAL_Delay(100);        
+        sprintf(hc05_mode_str,"SLAVE");
+        if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: hc05_mode  = %s\n",hc05_mode_str);	
+
+        sprintf(hc05_name,"HC05_%s_%d",hc05_mode_str,(uint8_t)rand());
+        sprintf(hc05_nameCMD,"AT+NAME=%s",hc05_name);
+        
+        if(func_blemod_uart_send_AT_command((uint8_t*)hc05_nameCMD, (uint8_t*)"OK", 2) == 0)
+          if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO：Euqipment has been changed to be [%s]!\n",hc05_name);
+        else{
+					zIhuRunErrCnt[TASK_ID_VMFO]++;
+					IhuErrorPrint("VMFO: change name error!\n");
+					return;					
+				}
+      }
+    }
+    else
+    {
+      if(func_blemod_uart_send_AT_command((uint8_t*)"AT+ROLE=1", (uint8_t*)"OK", 2) == 0)	
+      {
+        HAL_Delay(100);        
+        sprintf(hc05_mode_str,"MASTER");
+        IhuDebugPrint("VMFO: HC05 mode  = %s\n",hc05_mode_str);          
+        sprintf(hc05_name,"HC05_%s_%d",hc05_mode_str,(uint8_t)rand());
+        sprintf(hc05_nameCMD,"AT+NAME=%s",hc05_name);	        
+        if(func_blemod_uart_send_AT_command((uint8_t*)hc05_nameCMD, (uint8_t*)"OK", 2) == 0){
+          if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO：Euqipment has been changed to be [%s]!\n",hc05_name);
+        }else{
+					zIhuRunErrCnt[TASK_ID_VMFO]++;
+					IhuErrorPrint("VMFO: change name error!\n");
+					return;						
+				}
+      }
+    }
+    //清空蓝牙设备列表
+    bltDevList.num = 0;
+  }
+  else
+  {  
+    hc05_connect=1;
+  }
+
+	while(1)
+	{
+		//搜索蓝牙模块，并进行连接
+		if(hc05_connect==0)
+		{
+      HAL_Delay(100);
+			if(hc05_role == 1)	//主模式
+			{
+				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Scaning BLE equipment...\n");				
+				while(func_blemod_uart_hc05_link()==1)
+        {          
+        }
+			}
+			else	//从模式
+			{
+        func_blemod_uart_send_AT_command((uint8_t*)"AT+INQ", (uint8_t*)"OK", 2);//模块在查询状态，才能容易被其它设备搜索到
+        HAL_Delay(1000);        
+			}
+      hc05_connect=1;
+      func_blemod_uart_send_AT_command((uint8_t*)"AT+INIT", (uint8_t*)"OK", 2);
+      HAL_Delay(100);
+      func_blemod_uart_send_AT_command((uint8_t*)"AT+CLASS=0", (uint8_t*)"OK", 2);
+      HAL_Delay(100);
+      func_blemod_uart_send_AT_command((uint8_t*)"AT+INQM=1,9,48", (uint8_t*)"OK", 2);  
+      HAL_Delay(1000);
+      func_blemod_uart_clear_receive_buffer();
+      HC05_EN_HIGHT(); 
+      HAL_Delay(500);        
+      HC05_EN_HIGHT(); 
+      HAL_Delay(500);   
+		}
+		//连接后每隔一段时间检查接收缓冲区
+		if(hc05_connect==1)
+		{
+      uint16_t linelen;
+
+      /*获取数据*/
+      redata = ihu_bsp_stm32_ble_get_rebuff(&len); 
+      linelen = func_blemod_uart_hc05_get_line(linebuff,redata,len);    
+      /*检查数据是否有更新*/
+      if(linelen<200 && linelen != 0)
+      {				                
+        if(strcmp(redata,"AT+LED1=ON")==0)
+        {
+          func_blemod_uart_send_string("+LED1:ON\r\nOK\r\n");
+
+        }
+        else if(strcmp(redata,"AT+LED1=OFF")==0)
+        {
+          func_blemod_uart_send_string("+LED1:OFF\r\nOK\r\n");
+        }
+        else
+        {
+          if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: receive:[%s]\n",redata);
+                     switch(redata[len-1]-'0')
+           {
+             case 0:
+              
+             break;
+              
+             case 1:
+              
+             break;
+             
+        } 
+        }  
+        /*处理数据后，清空接收蓝牙模块数据的缓冲区*/
+        func_blemod_uart_clear_receive_buffer();       
+      }
+		}		
+		//连接后每隔一段时间通过蓝牙模块发送字符串
+		if(hc05_connect==1)
+		{
+			static uint8_t testdata=0;
+			sprintf(sendData,"%s>>testdata=%d\r\n",hc05_name,testdata++);
+			func_blemod_uart_send_string(sendData);			
+		}		
+	}
+	
+}
 

@@ -63,6 +63,46 @@ typedef struct IHU_HUITP_L2FRAME_STD_UART_frame_header
 #define IHU_BSP_STM32_UART6_PRESENT_HANDLER			huart6
 #define IHU_BSP_STM32_UART6_PRESENT_HANDLER_ID  6
 
+
+/*蓝牙地址，数字形式，分NAP，UAP，LAP段*/			
+#define BLTDEV_MAX_NUM  5
+typedef  struct 
+{
+	uint16_t  NAP;
+	uint8_t 	UAP;
+	uint32_t  LAP;
+}BLTAddr;
+typedef  struct 
+{
+	uint8_t num;		//扫描到的蓝牙设备数量	
+	BLTAddr addr[BLTDEV_MAX_NUM];	//蓝牙设备地址，数字形式
+	char unpraseAddr[BLTDEV_MAX_NUM][50];	//蓝牙设备地址，字符串形式，方便扫描时和连接时使用
+	char name[BLTDEV_MAX_NUM][50];	//蓝牙设备的名字
+}BLTDev;
+
+enum
+{
+  HC05_DEFAULT_TIMEOUT = 200,
+  HC05_INQUIRY_DEFAULT_TIMEOUT = 10000,
+  HC05_PAIRING_DEFAULT_TIMEOUT = 10000,
+  HC05_PASSWORD_MAXLEN = 16,
+  HC05_PASSWORD_BUFSIZE = HC05_PASSWORD_MAXLEN + 1,
+  HC05_NAME_MAXLEN = 32,
+  HC05_NAME_BUFSIZE = HC05_NAME_MAXLEN + 1,
+  HC05_ADDRESS_MAXLEN = 14,
+  HC05_ADDRESS_BUFSIZE = HC05_ADDRESS_MAXLEN + 1,
+};
+		
+/* 宏定义 --------------------------------------------------------------------*/
+#define HC05_USART          	          USART2
+
+#define HC05_EN_GPIO_CLK() 	            __HAL_RCC_GPIOF_CLK_ENABLE()		/* GPIO端口时钟 */
+#define HC05_EN_GPIO_PORT    	          GPIOF			              /* GPIO端口 */
+#define HC05_EN_GPIO_PIN		            GPIO_PIN_11		          /* 连接到HC05 EN引脚的GPIO */
+#define HC05_EN_HIGHT()		              HAL_GPIO_WritePin(HC05_EN_GPIO_PORT,HC05_EN_GPIO_PIN,GPIO_PIN_SET);	
+#define HC05_EN_LOW()				            HAL_GPIO_WritePin(HC05_EN_GPIO_PORT,HC05_EN_GPIO_PIN,GPIO_PIN_RESET);	
+
+
 //全局函数
 extern int ihu_bsp_stm32_sps_slave_hw_init(void);
 extern int ihu_bsp_stm32_sps_print_fputc(int ch, FILE *f);
