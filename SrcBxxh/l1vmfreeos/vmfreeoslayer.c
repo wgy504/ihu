@@ -76,7 +76,7 @@ OS_MUTEX zIhuPrintMutex;
     "MIN",
     "VMFO",
     "TIMER",
-		//"ADCLIBRA", //该项目中抑制了该任务模块
+		"ADCLIBRA",
 		//"SPILEO",  //该项目中抑制了该任务模块
 		"I2CARIES",
 		//"PWMTAURUS",  //该项目中抑制了该任务模块
@@ -673,7 +673,7 @@ void ihu_vm_system_init(void)
 	//肯定需要启动的任务模块
 	zIhuTaskInfo[TASK_ID_VMFO].pnpState = IHU_TASK_PNP_ON;
 	zIhuTaskInfo[TASK_ID_TIMER].pnpState = IHU_TASK_PNP_ON;
-	//if (IHU_COMM_FRONT_ADC == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_ADCLIBRA].pnpState = IHU_TASK_PNP_ON;
+	if (IHU_COMM_FRONT_ADC == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_ADCLIBRA].pnpState = IHU_TASK_PNP_ON;
 	//if (IHU_COMM_FRONT_SPI == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_SPILEO].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_COMM_FRONT_I2C == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_I2CARIES].pnpState = IHU_TASK_PNP_ON;
 	//if (IHU_COMM_FRONT_PWM == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_PWMTAURUS].pnpState = IHU_TASK_PNP_ON;
@@ -1892,8 +1892,8 @@ void ihu_task_create_all(void)
 	
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 	//Create task ADCLIBRA environments /3
-//	if (zIhuTaskInfo[TASK_ID_ADCLIBRA].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_ADCLIBRA, FsmAdclibra);
-//	ihu_vm_send_init_msg_to_app_task(TASK_ID_ADCLIBRA);
+	if (zIhuTaskInfo[TASK_ID_ADCLIBRA].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_ADCLIBRA, FsmAdclibra);
+	ihu_vm_send_init_msg_to_app_task(TASK_ID_ADCLIBRA);
 
 	//Create task SPILEO environments /4
 //	if (zIhuTaskInfo[TASK_ID_SPILEO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_SPILEO, FsmSpileo);

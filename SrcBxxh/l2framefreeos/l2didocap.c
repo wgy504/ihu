@@ -894,10 +894,12 @@ bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_smoke_state(void)
 //目前这一版硬件暂时不支持FALL倾倒/三轴MPU6050传感器
 bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_fall_state(void)
 {
-	if (rand()%2 == 1)
-		return TRUE;
-	else
-		return FALSE;
+	return ((ihu_l1hd_dido_f2board_fall_read()==FALSE)?FALSE:TRUE);
+	
+//	if (rand()%2 == 1)
+//		return TRUE;
+//	else
+//		return FALSE;
 }
 
 //SLEEP&FAULT模式下扫描：扫描震
@@ -915,10 +917,12 @@ bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_shake_state(void)
 //电池的读数，待确定是ADC还是使用DIDO的方式去读取
 bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_bat_state(void)
 {
-	if (rand()%2 == 1)
-		return TRUE;
-	else
-		return FALSE;
+	return ((ihu_adclibra_ccl_scan_battery_warning_level()==FALSE)?FALSE:TRUE);
+	
+//	if (rand()%2 == 1)
+//		return TRUE;
+//	else
+//		return FALSE;
 }
 
 //SLEEP&FAULT模式下扫描：扫描温度, 数据格式HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2
@@ -942,7 +946,8 @@ INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_humid_value(void)
 //待完善，是否需要使用ADC通道
 INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_bat_value(void)
 {
-	return rand()% 1000000;
+	return ihu_l1hd_adc1_ccl_get_battery_value();
+	//return rand()% 1000000;
 }
 
 #endif

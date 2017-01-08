@@ -130,6 +130,7 @@ typedef struct StrDht11DataTypeDef
 	extern void    ihu_bsp_stm32_dido_f2board_dht11_init( void );
 	extern int16_t ihu_bsp_stm32_dido_f2board_dht11_temp_read(void);
 	extern int16_t ihu_bsp_stm32_dido_f2board_dht11_humid_read(void);
+	extern int16_t ihu_bsp_stm32_dido_f2board_fall_read(void);
 	extern int16_t ihu_bsp_stm32_dido_f2board_shake_read(void);
 	extern int16_t ihu_bsp_stm32_dido_f2board_smoke_read(void);
 	extern int16_t ihu_bsp_stm32_dido_f2board_water_read(void);

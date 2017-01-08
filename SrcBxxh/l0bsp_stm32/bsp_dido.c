@@ -43,6 +43,14 @@ int16_t ihu_bsp_stm32_dido_f2board_dht11_humid_read(void)
 	}
 }
 
+int16_t ihu_bsp_stm32_dido_f2board_fall_read(void)
+{
+	if (BSP_STM32_DIDO_FALL_READ == GPIO_PIN_RESET)
+		return FALSE;
+	else
+		return TRUE;
+}				
+
 int16_t ihu_bsp_stm32_dido_f2board_shake_read(void)
 {
 	if (BSP_STM32_DIDO_SHAKE_READ == GPIO_PIN_RESET)

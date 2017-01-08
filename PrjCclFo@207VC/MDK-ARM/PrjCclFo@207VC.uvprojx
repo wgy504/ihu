@@ -332,7 +332,7 @@
               <MiscControls>--C99</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F207xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;                  ../Drivers/STM32F2xx_HAL_Driver/Inc;                  ../Drivers/STM32F2xx_HAL_Driver/Inc/Legacy;                  ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;                  ../Drivers/CMSIS/Device/ST/STM32F2xx/Include;                  ../Middlewares/Third_Party/FreeRTOS/Source/include;                  ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;                  ../Drivers/CMSIS/Include;                  ..\..\SrcBxxh\l0bsp_stm32;                  ..\..\SrcBxxh\l0commsgccl;                  ..\..\SrcBxxh\l0comvm;                  ..\..\SrcBxxh\l1vmfreeos;                  ..\..\SrcBxxh\l2framefreeos;                  ..\..\SrcBxxh\l3applccl</IncludePath>
+              <IncludePath>../Inc;                   ../Drivers/STM32F2xx_HAL_Driver/Inc;                   ../Drivers/STM32F2xx_HAL_Driver/Inc/Legacy;                   ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;                   ../Drivers/CMSIS/Device/ST/STM32F2xx/Include;                   ../Middlewares/Third_Party/FreeRTOS/Source/include;                   ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;                   ../Drivers/CMSIS/Include;                   ..\..\SrcBxxh\l0bsp_stm32;                   ..\..\SrcBxxh\l0commsgccl;                   ..\..\SrcBxxh\l0comvm;                   ..\..\SrcBxxh\l1vmfreeos;                   ..\..\SrcBxxh\l2framefreeos;                   ..\..\SrcBxxh\l3applccl</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -480,6 +480,16 @@
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_dcmi.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f2xx_hal_adc_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_adc_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f2xx_hal_adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_adc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -578,6 +588,16 @@
         <Group>
           <GroupName>L0bsp_stm32</GroupName>
           <Files>
+            <File>
+              <FileName>bsp_adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_adc.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_adc.h</FilePath>
+            </File>
             <File>
               <FileName>bsp_led.c</FileName>
               <FileType>1</FileType>
@@ -797,6 +817,16 @@
               <FileName>huixmlcodec.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\SrcBxxh\l2framefreeos\huixmlcodec.c</FilePath>
+            </File>
+            <File>
+              <FileName>l2adclibra.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l2framefreeos\l2adclibra.c</FilePath>
+            </File>
+            <File>
+              <FileName>l2adclibra.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l2framefreeos\l2adclibra.h</FilePath>
             </File>
             <File>
               <FileName>l2didocap.c</FileName>

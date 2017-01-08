@@ -1,4 +1,4 @@
-﻿/**
+/**
  ****************************************************************************************
  *
  * @file l2adclibra.c
@@ -507,6 +507,14 @@ INT32 func_adclibra_bfsc_read_origin(void)
 #endif
 
 
+//CCL项目下通过扫描电池判定是否有电量过高或者过低的告警
+bool ihu_adclibra_ccl_scan_battery_warning_level(void)
+{
+	if ((ihu_l1hd_adc1_ccl_get_battery_value() > IHU_CCL_ADC_BATTERY_WARNING_MAX_VALUE) || (ihu_l1hd_adc1_ccl_get_battery_value() < IHU_CCL_ADC_BATTERY_WARNING_MIN_VALUE))
+		return TRUE;
+	else
+		return FALSE;
+}
 
 
 

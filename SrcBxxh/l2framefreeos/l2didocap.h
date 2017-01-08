@@ -1,4 +1,4 @@
-﻿/**
+/**
  ****************************************************************************************
  *
  * @file l2didocap.h
@@ -21,9 +21,10 @@
 	#include "vmfreeoslayer.h"
 	#include "l1comdef_freeos.h"
 	#include "l1timer_freeos.h"
-	#include "l2spsvirgo.h"	
 	#include "bsp_dido.h"	
-	
+	#include "l2spsvirgo.h"
+	#include "l2adclibra.h"	
+	#include "l2ledpisces.h"	
 	
 #elif ((IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID) ||\
 	(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCCB_ID) ||\
@@ -79,7 +80,6 @@ extern FsmStateItem_t FsmDidocap[];
 #define IHU_CCL_DIDO_WORKING_MODE_ACTIVE 2
 #define IHU_CCL_DIDO_WORKING_MODE_FAULT 3
 #define IHU_CCL_DIDO_WORKING_MODE_INVALID 0xFF
-
 
 //API
 extern OPSTAT fsm_didocap_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);

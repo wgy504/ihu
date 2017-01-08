@@ -1,4 +1,4 @@
-﻿/**
+/**
  ****************************************************************************************
  *
  * @file l2adclibra.h
@@ -21,6 +21,8 @@
 	#include "vmfreeoslayer.h"
 	#include "l1comdef_freeos.h"
 	#include "l1timer_freeos.h"	
+	#include "bsp_adc.h"	
+	
 #elif ((IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID) ||\
 	(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCCB_ID) ||\
 	(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCSB_ID))
@@ -86,6 +88,10 @@ typedef struct strIhuBfscAdcWeightPar
 	}strIhuCclAdcPar_t;
 #endif
 
+//CCL项目中所需要使用到的电池告警范围	
+#define IHU_CCL_ADC_BATTERY_WARNING_MIN_VALUE			420 //对应4.2v的水平
+#define IHU_CCL_ADC_BATTERY_WARNING_MAX_VALUE			800 //对应8v的水平	
+	
 //API
 extern OPSTAT fsm_adclibra_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_adclibra_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
@@ -95,6 +101,8 @@ extern OPSTAT fsm_adclibra_time_out(UINT8 dest_id, UINT8 src_id, void * param_pt
 extern OPSTAT fsm_adclibra_l3bfsc_ws_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_adclibra_canvela_ws_man_set_zero(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 
+extern bool ihu_adclibra_ccl_scan_battery_warning_level(void);	
+	
 //Local API
 OPSTAT func_adclibra_hw_init(void);
 void func_adclibra_time_out_period_scan(void);

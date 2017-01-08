@@ -31,7 +31,8 @@
   #include "queue.h"
 	#include "timers.h"	
 	#include "semphr.h"
-	#include "bsp_usart.h"	
+	#include "bsp_adc.h"
+	#include "bsp_usart.h"
 	#include "bsp_led.h"
 	#include "bsp_i2c.h"
 	#include "bsp_wdog.h"
@@ -118,7 +119,7 @@ enum IHU_TASK_NAME_ID
 	TASK_ID_MIN = 0,
 	TASK_ID_VMFO,
 	TASK_ID_TIMER,
-	//TASK_ID_ADCLIBRA,
+	TASK_ID_ADCLIBRA,
 	//TASK_ID_SPILEO,
 	TASK_ID_I2CARIES,
 	//TASK_ID_PWMTAURUS,
@@ -425,6 +426,7 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_adc1_start_in_DMA_mode 				ihu_bsp_stm32_adc1_start_in_DMA_mode
 #define ihu_l1hd_adc2_start_in_DMA_mode					ihu_bsp_stm32_adc2_start_in_DMA_mode
 #define ihu_l1hd_adc3_start_in_DMA_mode					ihu_bsp_stm32_adc3_start_in_DMA_mode       
+#define ihu_l1hd_adc1_ccl_get_battery_value			ihu_bsp_stm32_adc1_ccl_get_battery_value
 
 //L0BSP=>L1HD: LED 
 #define ihu_l1hd_led_power_f2board_on 					ihu_bsp_stm32_led_power_f2board_on
@@ -517,7 +519,8 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_dido_f2board_dht11_init               ihu_bsp_stm32_dido_f2board_dht11_init
 #define ihu_l1hd_dido_f2board_dht11_temp_read          ihu_bsp_stm32_dido_f2board_dht11_temp_read   
 #define ihu_l1hd_dido_f2board_dht11_humid_read         ihu_bsp_stm32_dido_f2board_dht11_humid_read   
-#define ihu_l1hd_dido_f2board_shake_read               ihu_bsp_stm32_dido_f2board_shake_read            
+#define ihu_l1hd_dido_f2board_fall_read                ihu_bsp_stm32_dido_f2board_fall_read
+#define ihu_l1hd_dido_f2board_shake_read               ihu_bsp_stm32_dido_f2board_shake_read
 #define ihu_l1hd_dido_f2board_smoke_read               ihu_bsp_stm32_dido_f2board_smoke_read            
 #define ihu_l1hd_dido_f2board_water_read               ihu_bsp_stm32_dido_f2board_water_read            
 #define ihu_l1hd_dido_f2board_lock1_di1_trigger_read   ihu_bsp_stm32_dido_f2board_lock1_di1_trigger_read

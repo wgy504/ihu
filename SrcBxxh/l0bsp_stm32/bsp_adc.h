@@ -47,6 +47,8 @@ extern void ihu_bsp_stm32_adc2_stop(void);
 extern void ihu_bsp_stm32_adc3_start(void);
 extern int 	ihu_bsp_stm32_adc3_get_sample_value(void);
 extern void ihu_bsp_stm32_adc3_stop(void);
+extern int16_t ihu_bsp_stm32_adc1_ccl_get_battery_value(void);
+	
 //In DMA mode
 //在该模式下，初始化启动以后，就一直直接访问共享内存中的采样结果即可，不用再关心具体的干活过程
 extern void ihu_bsp_stm32_adc1_start_in_DMA_mode(void);

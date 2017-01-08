@@ -54,11 +54,24 @@ void ihu_bsp_stm32_adc1_stop(void)
 	HAL_ADC_Stop(&IHU_BSP_STM32_ADC1_HANDLER);
 }
 
-
 //In normal mode
 int ihu_bsp_stm32_adc1_get_sample_value(void)
 {
 	return HAL_ADC_GetValue(&IHU_BSP_STM32_ADC1_HANDLER);
+}
+
+//In normal mode
+//定标，未来再完善，这里给出的数值只是NF2两位小数数据
+//目前STM32CubeMX选择的12bit，所以应该将该小数转化为有意义的数据
+int16_t ihu_bsp_stm32_adc1_ccl_get_battery_value(void)
+{
+	float temp = 0;
+	
+	ihu_bsp_stm32_adc1_start();
+	temp = (float)HAL_ADC_GetValue(&IHU_BSP_STM32_ADC1_HANDLER);
+	temp = temp / 4096 * 100;
+	ihu_bsp_stm32_adc1_stop();
+	return (((int)temp)&0xFFFF);
 }
 
 /**
