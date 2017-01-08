@@ -584,7 +584,7 @@ void func_didocap_ccl_work_mode_dl_cmd_open_lock(UINT8 lockid)
 		if (lockid >= 3) ihu_l1hd_dido_f2board_lock3_do1_on();
 		if (lockid >= 4) ihu_l1hd_dido_f2board_lock4_do1_on();
 	}
-	if (lockid < IHU_CCL_SENSOR_LOCK_NUMBER_MAX){
+	else if (lockid < IHU_CCL_SENSOR_LOCK_NUMBER_MAX){
 		if (lockid == 1) ihu_l1hd_dido_f2board_lock1_do1_on();
 		if (lockid == 2) ihu_l1hd_dido_f2board_lock2_do1_on();
 		if (lockid == 3) ihu_l1hd_dido_f2board_lock3_do1_on();
@@ -600,7 +600,7 @@ void func_didocap_ccl_work_mode_dl_cmd_close_lock(UINT8 lockid)
 		if (lockid >= 3) ihu_l1hd_dido_f2board_lock3_do1_off();
 		if (lockid >= 4) ihu_l1hd_dido_f2board_lock4_do1_off();
 	}
-	if (lockid < IHU_CCL_SENSOR_LOCK_NUMBER_MAX){
+	else if (lockid < IHU_CCL_SENSOR_LOCK_NUMBER_MAX){
 		if (lockid == 1) ihu_l1hd_dido_f2board_lock1_do1_off();
 		if (lockid == 2) ihu_l1hd_dido_f2board_lock2_do1_off();
 		if (lockid == 3) ihu_l1hd_dido_f2board_lock3_do1_off();
@@ -610,13 +610,39 @@ void func_didocap_ccl_work_mode_dl_cmd_close_lock(UINT8 lockid)
 
 void func_didocap_ccl_work_mode_dl_cmd_enable_lock(UINT8 lockid)
 {
-
+	if (lockid == IHU_CCL_SENSOR_LOCK_NUMBER_MAX){
+		if (lockid >= 1) ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_LOCK1, 11);	//时间长度为1个周期
+		if (lockid >= 2) ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_LOCK2, 11);	//时间长度为1个周期
+		if (lockid >= 3) ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_LOCK3, 11);	//时间长度为1个周期
+		if (lockid >= 4) ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_LOCK4, 11);	//时间长度为1个周期
+	}
+	else if (lockid < IHU_CCL_SENSOR_LOCK_NUMBER_MAX){
+		if (lockid == 1) ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_LOCK1, 11);	//时间长度为1个周期
+		if (lockid == 2) ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_LOCK2, 11);	//时间长度为1个周期
+		if (lockid == 3) ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_LOCK3, 11);	//时间长度为1个周期
+		if (lockid == 4) ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_LOCK4, 11);	//时间长度为1个周期
+	}	
 }
 
 
 //WORK_MODE下的四种EVENT扫描情况，目前暂时只需要这四种，不需要更多的
+//寻找任何开门的信号
+//TRUE：至少一个门开，FLASE：所有门均关。
 bool func_didocap_ccl_work_mode_ul_scan_any_door_open(void)
 {
+	int i = 0;
+	bool flag = FALSE;
+
+	//寻找唯一的污染源
+	for (i = 0; i<IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
+		if (i==0) flag = (flag || ihu_l1hd_dido_f2board_door1_restriction_read());
+		else if (i==1) flag = (flag || ihu_l1hd_dido_f2board_door2_restriction_read());
+		else if (i==2) flag = (flag || ihu_l1hd_dido_f2board_door3_restriction_read());
+		else if (i==3) flag = (flag || ihu_l1hd_dido_f2board_door4_restriction_read());		
+	}
+	
+	//return flag;
+	
 	if (rand()%2 == 1)
 		return TRUE;
 	else
@@ -624,8 +650,36 @@ bool func_didocap_ccl_work_mode_ul_scan_any_door_open(void)
 }
 
 //WORK_MODE下的四种EVENT扫描情况，目前暂时只需要这四种，不需要更多的
+//寻找是否所有门锁均关闭
+//TRUE：所有门均关闭，FLASE：至少有一个门打开。
 bool func_didocap_ccl_work_mode_ul_scan_all_door_and_lock_close(void)
 {
+	int i = 0;
+	bool flag = FALSE;
+
+	//寻找唯一的污染源
+	for (i = 0; i<IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
+		if (i==0){
+			flag = (flag || ihu_l1hd_dido_f2board_door1_restriction_read());
+			flag = (flag || ihu_l1hd_dido_f2board_lock1_di2_tongue_read());
+		}
+		if (i==1){
+			flag = (flag || ihu_l1hd_dido_f2board_door2_restriction_read());
+			flag = (flag || ihu_l1hd_dido_f2board_lock2_di2_tongue_read());
+		}
+		if (i==2){
+			flag = (flag || ihu_l1hd_dido_f2board_door3_restriction_read());
+			flag = (flag || ihu_l1hd_dido_f2board_lock3_di2_tongue_read());
+		}
+		if (i==3){
+			flag = (flag || ihu_l1hd_dido_f2board_door4_restriction_read());
+			flag = (flag || ihu_l1hd_dido_f2board_lock4_di2_tongue_read());
+		}
+	}
+	flag = ~flag;  //全部关闭才得到TRUE的结果
+
+	//return flag;
+	
 	if (rand()%2 == 1)
 		return TRUE;
 	else
@@ -633,8 +687,23 @@ bool func_didocap_ccl_work_mode_ul_scan_all_door_and_lock_close(void)
 }
 
 //WORK_MODE下的四种EVENT扫描情况，目前暂时只需要这四种，不需要更多的
+//寻找任何的锁触发信号
+//TRUE：至少一个锁触发被激活，FLASE：所有锁触发均关。
 bool func_didocap_ccl_work_mode_ul_scan_enable_lock_trigger(void)
 {
+	int i = 0;
+	bool flag = FALSE;
+
+	//寻找唯一的触发源
+	for (i = 0; i<IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
+		if (i==0) flag = (flag || ihu_l1hd_dido_f2board_lock1_di1_trigger_read());
+		else if (i==1) flag = (flag || ihu_l1hd_dido_f2board_lock2_di1_trigger_read());
+		else if (i==2) flag = (flag || ihu_l1hd_dido_f2board_lock3_di1_trigger_read());
+		else if (i==3) flag = (flag || ihu_l1hd_dido_f2board_lock4_di1_trigger_read());		
+	}
+	
+	//return flag;
+	
 	if (rand()%2 == 1)
 		return TRUE;
 	else
@@ -642,8 +711,35 @@ bool func_didocap_ccl_work_mode_ul_scan_enable_lock_trigger(void)
 }
 
 //WORK_MODE下的四种EVENT扫描情况，目前暂时只需要这四种，不需要更多的
+//速锁是否至少一个门或者锁具被打开
+//TRUE：至少一个门或者锁具开，FLASE：所有门锁均关。
 bool func_didocap_ccl_work_mode_ul_scan_door_and_lock_status_change(void)
 {
+	int i = 0;
+	bool flag = FALSE;
+
+	//寻找唯一的污染源
+	for (i = 0; i<IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
+		if (i==0){
+			flag = (flag || ihu_l1hd_dido_f2board_door1_restriction_read());
+			flag = (flag || ihu_l1hd_dido_f2board_lock1_di2_tongue_read());
+		}
+		if (i==1){
+			flag = (flag || ihu_l1hd_dido_f2board_door2_restriction_read());
+			flag = (flag || ihu_l1hd_dido_f2board_lock2_di2_tongue_read());
+		}
+		if (i==2){
+			flag = (flag || ihu_l1hd_dido_f2board_door3_restriction_read());
+			flag = (flag || ihu_l1hd_dido_f2board_lock3_di2_tongue_read());
+		}
+		if (i==3){
+			flag = (flag || ihu_l1hd_dido_f2board_door4_restriction_read());
+			flag = (flag || ihu_l1hd_dido_f2board_lock4_di2_tongue_read());
+		}
+	}
+	
+	//return flag;
+	
 	if (rand()%2 == 1)
 		return TRUE;
 	else
@@ -651,8 +747,23 @@ bool func_didocap_ccl_work_mode_ul_scan_door_and_lock_status_change(void)
 }
 
 //SLEEP模式下扫描
+//寻找任何的锁触发信号
+//TRUE：至少一个锁触发被激活，FLASE：所有锁触发均关。
 bool func_didocap_ccl_sleep_mode_ul_scan_lock_trigger(void)
 {
+	int i = 0;
+	bool flag = FALSE;
+
+	//寻找唯一的触发源
+	for (i = 0; i<IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
+		if (i==0) flag = (flag || ihu_l1hd_dido_f2board_lock1_di1_trigger_read());
+		else if (i==1) flag = (flag || ihu_l1hd_dido_f2board_lock2_di1_trigger_read());
+		else if (i==2) flag = (flag || ihu_l1hd_dido_f2board_lock3_di1_trigger_read());
+		else if (i==3) flag = (flag || ihu_l1hd_dido_f2board_lock4_di1_trigger_read());		
+	}
+	
+	//return flag;
+	
 	if (rand()%2 == 1)
 		return TRUE;
 	else
@@ -662,6 +773,8 @@ bool func_didocap_ccl_sleep_mode_ul_scan_lock_trigger(void)
 //SLEEP模式下扫描
 bool func_didocap_ccl_sleep_mode_ul_scan_shake_trigger(void)
 {
+	//return ihu_l1hd_dido_f2board_shake_read();
+
 	if (rand()%2 == 1)
 		return TRUE;
 	else
@@ -709,7 +822,7 @@ bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_status(void)
 //恢复不能看门锁，不然跟关门信号冲突。关门信号留待差错模式下的关门信号扫描去完成
 bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_recover(void)
 {
-	bool flag;
+	bool flag = FALSE;
 	flag = ((zIhuCclDidocapCtrlTable.flagDoorLockLastTimeScanFault == TRUE) && (zIhuCclDidocapCtrlTable.flagDoorLockThisTimeScanFault == FALSE));
 
 	if ((zIhuCclDidocapCtrlTable.flagSensorLastTimeScanFault == TRUE) && (zIhuCclDidocapCtrlTable.flagSensorThisTimeScanFault == FALSE) &&\
@@ -720,6 +833,16 @@ bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_recover(void)
 //SLEEP&FAULT模式下扫描：扫描出哪个门，如果是IHU_CCL_SENSOR_LOCK_NUMBER_MAX则意味着没有
 bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_door_open_state(UINT8 doorid)
 {
+//	if (doorid < IHU_CCL_SENSOR_LOCK_NUMBER_MAX){
+//		if (doorid==0) return ihu_l1hd_dido_f2board_door1_restriction_read();
+//		else if (doorid==1) return ihu_l1hd_dido_f2board_door2_restriction_read();
+//		else if (doorid==2) return ihu_l1hd_dido_f2board_door3_restriction_read();
+//		else if (doorid==3) return ihu_l1hd_dido_f2board_door4_restriction_read();
+//	}else{
+//	//DOORID出错了
+//	return TRUE;
+//	}		
+	
 	if (rand()%2 == 1)
 		return TRUE;
 	else

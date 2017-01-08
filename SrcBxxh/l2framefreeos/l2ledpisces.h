@@ -20,7 +20,10 @@
 	(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID))
 	#include "vmfreeoslayer.h"
 	#include "l1comdef_freeos.h"
-	#include "l1timer_freeos.h"		
+	#include "l1timer_freeos.h"
+	#include "bsp_led.h"
+	#include "bsp_dido.h"
+	
 #elif ((IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID) ||\
 	(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCCB_ID) ||\
 	(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCSB_ID))
@@ -30,7 +33,6 @@
 	#include "l1hd_led.h"
 #else
 #endif
-
 
 //State definition
 //#define FSM_STATE_ENTRY  0x00
@@ -47,16 +49,56 @@ enum FSM_STATE_LEDPISCES
 //Global variables
 extern FsmStateItem_t FsmLedpisces[];
 
+//GPIO Based LED and Output Wave Gennerator, 简称GALOWAG / Galowag
+//总控表结构 //暂时只能支持秒级计数器
+typedef struct GlobalGalowagCtrlTable
+{
+	UINT8 galId;
+	UINT8 galState;
+	UINT16 galPattenOn;
+	UINT16 galPattenOff;
+	UINT16 galPattenCycle;
+	UINT32 galTotalDuration;
+	UINT16 galPeriodWorkCounter;
+	UINT32 galTotalWorkCounter;
+	void (*galFuncOn)(void);
+	void (*galFuncOff)(void);
+}GlobalGalowagCtrlTable_t;
+enum GLOBAL_GALOWAG_CTRL_TABLE_ID
+{
+	GALOWAG_CTRL_ID_MIN = 0x00,
+	GALOWAG_CTRL_ID_GLOBAL_POWER,
+	GALOWAG_CTRL_ID_GLOBAL_COMMU,
+	GALOWAG_CTRL_ID_GLOBAL_WORK_STATE,
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)	
+	GALOWAG_CTRL_ID_CCL_LOCK1,
+	GALOWAG_CTRL_ID_CCL_LOCK2,
+	GALOWAG_CTRL_ID_CCL_LOCK3,
+	GALOWAG_CTRL_ID_CCL_LOCK4,
+#endif
+	GALOWAG_CTRL_ID_MAX,
+};
+enum GLOBAL_LED_LIGHT_CTRL_TABLE_STATE
+{
+	GALOWAG_CTRL_STATE_MIN = 0x00,
+	GALOWAG_CTRL_STATE_ON,
+	GALOWAG_CTRL_STATE_OFF,
+	GALOWAG_CTRL_STATE_MAX,
+};
+
 //API
 extern OPSTAT fsm_ledpisces_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_ledpisces_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_ledpisces_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_ledpisces_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_ledpisces_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT ihu_ledpisces_galowag_start(UINT8 galId, UINT32 galDur);
+extern OPSTAT ihu_ledpisces_galowag_stop(UINT8 galId);
 
 //Local API
 OPSTAT func_ledpisces_hw_init(void);
 void func_ledpisces_time_out_period_scan(void);
+void func_ledpisces_time_out_galowag_scan(void);
 
 #endif /* L2FRAME_L2LEDPISCES_H_ */
 

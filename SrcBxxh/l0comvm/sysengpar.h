@@ -33,6 +33,7 @@ typedef struct SysEngParElementSensor
 	INT32 canvelaPeriodScanTimer;
 	INT32 i2cariesPeriodScanTimer;
 	INT32 ledpiscesPeriodScanTimer;
+	INT32 ledpiscesGalowagScanTimer;
 	INT32 pwmtaurusPeriodScanTimer;
 	INT32 spileoPeriodScanTimer;
 	INT32 spsvirgoPeriodScanTimer;

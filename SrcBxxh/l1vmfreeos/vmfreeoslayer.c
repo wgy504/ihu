@@ -611,6 +611,7 @@ void ihu_vm_system_init(void)
 	zIhuSysEngPar.timer.canvelaPeriodScanTimer = IHU_CANVELA_TIMER_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.i2cariesPeriodScanTimer = IHU_I2CARIERS_TIMER_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.ledpiscesPeriodScanTimer = IHU_LEDPISCES_TIMER_DURATION_PERIOD_SCAN;
+	zIhuSysEngPar.timer.ledpiscesGalowagScanTimer = IHU_LEDPISCES_TIMER_GALOWAG_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.pwmtaurusPeriodScanTimer = IHU_PWMTAURUS_TIMER_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.spileoPeriodScanTimer = IHU_SPILEO_TIMER_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.spsvirgoPeriodScanTimer = IHU_SPSVIRGO_TIMER_DURATION_PERIOD_SCAN;
@@ -710,6 +711,7 @@ void ihu_vm_system_init(void)
 	zIhuSysEngPar.timer.canvelaPeriodScanTimer = IHU_CANVELA_TIMER_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.i2cariesPeriodScanTimer = IHU_I2CARIERS_TIMER_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.ledpiscesPeriodScanTimer = IHU_LEDPISCES_TIMER_DURATION_PERIOD_SCAN;
+	zIhuSysEngPar.timer.ledpiscesGalowagScanTimer = IHU_LEDPISCES_TIMER_GALOWAG_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.pwmtaurusPeriodScanTimer = IHU_PWMTAURUS_TIMER_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.spileoPeriodScanTimer = IHU_SPILEO_TIMER_DURATION_PERIOD_SCAN;
 	zIhuSysEngPar.timer.spsvirgoPeriodScanTimer = IHU_SPSVIRGO_TIMER_DURATION_PERIOD_SCAN;

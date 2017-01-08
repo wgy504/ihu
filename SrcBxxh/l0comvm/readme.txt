@@ -3,9 +3,12 @@
 =================================================
 //近期需要完成的任务
 
+//= ZJL, 2017 Jan.8, CURRENT_SW_DELIVERY R03.87 =>CCL项目
+= 增加GALOWAG工作机制，解决输出方波和LED灯光闪烁的问题
+= 继续完善对于LOCK三种工作模式的输出控制
+
 //= ZJL, 2017 Jan.7, CURRENT_SW_DELIVERY R03.86 =>CCL项目
 = 集成BLE蓝牙操纵模块的完整功能，这个本来是用在5204型号之中
-
 
 //= ZJL, 2017 Jan.6, CURRENT_SW_DELIVERY R03.85 =>CCL项目
 = 精简CCL项目的硬件配置

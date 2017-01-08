@@ -436,7 +436,7 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_led_work_state_f2board_on	 		ihu_bsp_stm32_led_work_state_f2board_on
 #define ihu_l1hd_led_work_state_f2board_off 		ihu_bsp_stm32_led_work_state_f2board_off
 #define ihu_l1hd_led_work_state_f2board_toggle 	ihu_bsp_stm32_led_work_state_f2board_toggle
-#define ihu_l1hd_beep_f2board_ono 							ihu_bsp_stm32_beep_f2board_on
+#define ihu_l1hd_beep_f2board_on	 							ihu_bsp_stm32_beep_f2board_on
 #define ihu_l1hd_beep_f2board_off 							ihu_bsp_stm32_beep_f2board_off
 #define ihu_l1hd_beep_f2board_toggle 						ihu_bsp_stm32_beep_f2board_toggle
 //LED->BFSC独特业务部分
