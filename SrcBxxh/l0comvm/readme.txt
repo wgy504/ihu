@@ -6,6 +6,7 @@
 //= ZJL, 2017 Jan.8, CURRENT_SW_DELIVERY R03.87 =>CCL项目
 = 增加GALOWAG工作机制，解决输出方波和LED灯光闪烁的问题
 = 继续完善对于LOCK三种工作模式的输出控制
+= 将DIDO所有工作的传感器跟BSP均连接起来了
 
 //= ZJL, 2017 Jan.7, CURRENT_SW_DELIVERY R03.86 =>CCL项目
 = 集成BLE蓝牙操纵模块的完整功能，这个本来是用在5204型号之中

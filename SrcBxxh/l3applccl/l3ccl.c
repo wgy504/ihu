@@ -1173,6 +1173,9 @@ void func_ccl_open_all_sensor(void)
 	ihu_l1hd_dido_f2board_ble_power_ctrl_on();
 	ihu_l1hd_dido_f2board_rfid_power_ctrl_on();
 	ihu_l1hd_dido_f2board_sensor_power_ctrl_on();
+	//未来需要确定，温度传感器等耗电的传感器是否在用GPIO控制开关在控
+	//打开温湿度传感器
+	ihu_l1hd_dido_f2board_dht11_init();
 }
 
 //关掉所有的外设

@@ -833,50 +833,65 @@ bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_recover(void)
 //SLEEP&FAULT模式下扫描：扫描出哪个门，如果是IHU_CCL_SENSOR_LOCK_NUMBER_MAX则意味着没有
 bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_door_open_state(UINT8 doorid)
 {
-//	if (doorid < IHU_CCL_SENSOR_LOCK_NUMBER_MAX){
-//		if (doorid==0) return ihu_l1hd_dido_f2board_door1_restriction_read();
-//		else if (doorid==1) return ihu_l1hd_dido_f2board_door2_restriction_read();
-//		else if (doorid==2) return ihu_l1hd_dido_f2board_door3_restriction_read();
-//		else if (doorid==3) return ihu_l1hd_dido_f2board_door4_restriction_read();
-//	}else{
-//	//DOORID出错了
-//	return TRUE;
-//	}		
+	if (doorid < IHU_CCL_SENSOR_LOCK_NUMBER_MAX){
+		if (doorid==0) return ((ihu_l1hd_dido_f2board_door1_restriction_read()==FALSE)?FALSE:TRUE);
+		else if (doorid==1) return ((ihu_l1hd_dido_f2board_door2_restriction_read()==FALSE)?FALSE:TRUE);
+		else if (doorid==2) return ((ihu_l1hd_dido_f2board_door3_restriction_read()==FALSE)?FALSE:TRUE);
+		else if (doorid==3) return ((ihu_l1hd_dido_f2board_door4_restriction_read()==FALSE)?FALSE:TRUE);
+	}
 	
-	if (rand()%2 == 1)
-		return TRUE;
-	else
-		return FALSE;
+	//DOORID出错了
+	return TRUE;
+	
+//	if (rand()%2 == 1)
+//		return TRUE;
+//	else
+//		return FALSE;
 }
 
 //SLEEP&FAULT模式下扫描：扫描出哪个锁，如果是IHU_CCL_SENSOR_LOCK_NUMBER_MAX则意味着没有
 bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open_state(UINT8 lockid)
 {
-	if (rand()%2 == 1)
-		return TRUE;
-	else
-		return FALSE;
+	if (lockid < IHU_CCL_SENSOR_LOCK_NUMBER_MAX){
+		if (lockid==0) return ((ihu_l1hd_dido_f2board_lock1_di2_tongue_read()==FALSE)?FALSE:TRUE);
+		else if (lockid==1) return ((ihu_l1hd_dido_f2board_lock2_di2_tongue_read()==FALSE)?FALSE:TRUE);
+		else if (lockid==2) return ((ihu_l1hd_dido_f2board_lock3_di2_tongue_read()==FALSE)?FALSE:TRUE);
+		else if (lockid==3) return ((ihu_l1hd_dido_f2board_lock3_di2_tongue_read()==FALSE)?FALSE:TRUE);
+	}
+	
+	//lockid出错了
+	return TRUE;
+	
+//	if (rand()%2 == 1)
+//		return TRUE;
+//	else
+//		return FALSE;
 }
 
 //SLEEP&FAULT模式下扫描：扫描水
 bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_water_state(void)
 {
-	if (rand()%2 == 1)
-		return TRUE;
-	else
-		return FALSE;
+	return ((ihu_l1hd_dido_f2board_water_read()==FALSE)?FALSE:TRUE);
+	
+//	if (rand()%2 == 1)
+//		return TRUE;
+//	else
+//		return FALSE;
 }
 
 //SLEEP&FAULT模式下扫描：扫描烟
 bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_smoke_state(void)
 {
-	if (rand()%2 == 1)
-		return TRUE;
-	else
-		return FALSE;
+	return ((ihu_l1hd_dido_f2board_smoke_read()==FALSE)?FALSE:TRUE);
+	
+//	if (rand()%2 == 1)
+//		return TRUE;
+//	else
+//		return FALSE;
 }
 
 //SLEEP&FAULT模式下扫描：扫描倾
+//目前这一版硬件暂时不支持FALL倾倒/三轴MPU6050传感器
 bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_fall_state(void)
 {
 	if (rand()%2 == 1)
@@ -888,13 +903,16 @@ bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_fall_state(void)
 //SLEEP&FAULT模式下扫描：扫描震
 bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_shake_state(void)
 {
-	if (rand()%2 == 1)
-		return TRUE;
-	else
-		return FALSE;
+	return ((ihu_l1hd_dido_f2board_shake_read()==FALSE)?FALSE:TRUE);
+
+//	if (rand()%2 == 1)
+//		return TRUE;
+//	else
+//		return FALSE;
 }
 
 //SLEEP&FAULT模式下扫描：扫描电池
+//电池的读数，待确定是ADC还是使用DIDO的方式去读取
 bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_bat_state(void)
 {
 	if (rand()%2 == 1)
@@ -904,52 +922,30 @@ bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_bat_state(void)
 }
 
 //SLEEP&FAULT模式下扫描：扫描温度, 数据格式HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2
+//注意，该传感器的读取需要被初始化。如果该传感器是被电源控制，则温度传感器在SLEEP模式下可能不会有读数
+//如果只是周期性扫描中报告该数据，则周期性扫描必须先打开所有外设，包括传感器的电源，那就没有问题了
 INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_temp_value(void)
 {
-	return rand()% 1000000;
+	return ihu_l1hd_dido_f2board_dht11_temp_read();
+	
+	//return rand()% 1000000;
 }
 
 //SLEEP&FAULT模式下扫描：扫描湿度, 数据格式HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2
 INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_humid_value(void)
 {
-	return rand()% 1000000;
+	return ihu_l1hd_dido_f2board_dht11_humid_read();
+	//return rand()% 1000000;
 }
 
 //SLEEP&FAULT模式下扫描：扫描电量, 数据格式HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2
+//待完善，是否需要使用ADC通道
 INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_bat_value(void)
 {
 	return rand()% 1000000;
 }
 
 #endif
-
-/*
-//锁
-snd2.lockid = rand() % IHU_CCL_SENSOR_LOCK_NUMBER_MAX;
-snd2.sensor.lockTongueState[snd2.lockid] = ((rand()%2==1)?IHU_CCL_SENSOR_STATE_OPEN:IHU_CCL_SENSOR_STATE_CLOSE);
-snd2.faultBitmap[IHU_CCL_DIDO_SENSOR_INDEX_LOCK] = (snd2.sensor.lockTongueState[snd2.lockid] == IHU_CCL_SENSOR_STATE_OPEN)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE;
-zIhuCclDidocapCtrlTable.sensor.lockTongueState[snd2.lockid] = snd2.sensor.lockTongueState[snd2.lockid];	
-//门
-snd2.sensor.doorState[snd2.lockid] = ((rand()%2==1)?IHU_CCL_SENSOR_STATE_OPEN:IHU_CCL_SENSOR_STATE_CLOSE);
-snd2.faultBitmap[IHU_CCL_DIDO_SENSOR_INDEX_DOOR] = (snd2.sensor.doorState[snd2.lockid] == IHU_CCL_SENSOR_STATE_OPEN)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE;
-zIhuCclDidocapCtrlTable.sensor.doorState[snd2.lockid] = snd2.sensor.doorState[snd2.lockid];
-//烟
-snd2.sensor.smokeState = ((rand()%2==1)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE);
-snd2.faultBitmap[IHU_CCL_DIDO_SENSOR_INDEX_SMOKE] = snd2.sensor.smokeState;
-zIhuCclDidocapCtrlTable.sensor.waterState = snd2.sensor.smokeState;
-//水
-snd2.sensor.waterState = ((rand()%2==1)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE);
-snd2.faultBitmap[IHU_CCL_DIDO_SENSOR_INDEX_WATER] = snd2.sensor.waterState;
-zIhuCclDidocapCtrlTable.sensor.waterState = snd2.sensor.waterState;
-//倒
-snd2.sensor.fallState = ((rand()%2==1)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE);
-snd2.faultBitmap[IHU_CCL_DIDO_SENSOR_INDEX_FALL] = snd2.sensor.fallState;
-zIhuCclDidocapCtrlTable.sensor.fallState = snd2.sensor.fallState;
-//电
-snd2.sensor.batteryState = ((rand()%2==1)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE);
-snd2.faultBitmap[IHU_CCL_DIDO_SENSOR_INDEX_FALL] = snd2.sensor.batteryState;
-zIhuCclDidocapCtrlTable.sensor.batteryState = snd2.sensor.batteryState;
-*/
 
 
 

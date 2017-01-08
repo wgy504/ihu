@@ -493,7 +493,7 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_i2c_iau_receive_data 					ihu_bsp_stm32_i2c_iau_rcv_data
 #define ihu_l1hd_i2c_spare1_send_data 					ihu_bsp_stm32_i2c_spare1_send_data
 #define ihu_l1hd_i2c_spare1_receive_data 				ihu_bsp_stm32_i2c_spare1_rcv_data
-//MPU6050读取必须先初始化，然后再读取
+//三轴传感器MPU6050读取必须先初始化，然后再读取
 #define ihu_l1hd_i2c_mpu6050_init 							ihu_bsp_stm32_i2c_mpu6050_init
 #define ihu_l1hd_i2c_mpu6050_acc_read 					ihu_bsp_stm32_i2c_mpu6050_acc_read
 #define ihu_l1hd_i2c_mpu6050_gyro_read 					ihu_bsp_stm32_i2c_mpu6050_gyro_read
@@ -513,7 +513,7 @@ extern void ihu_timer_routine_handler_10ms(void);
 //L0BSP=>L1HD: TIM
 
 //L0BSP=>L1HD: DIDO
-//DHT11的使用：必须先单独初始化，然后才能使用
+//温湿度DHT11的使用：必须先单独初始化，然后才能使用
 #define ihu_l1hd_dido_f2board_dht11_init               ihu_bsp_stm32_dido_f2board_dht11_init
 #define ihu_l1hd_dido_f2board_dht11_temp_read          ihu_bsp_stm32_dido_f2board_dht11_temp_read   
 #define ihu_l1hd_dido_f2board_dht11_humid_read         ihu_bsp_stm32_dido_f2board_dht11_humid_read   
