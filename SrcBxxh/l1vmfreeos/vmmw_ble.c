@@ -133,13 +133,12 @@ char *ihu_bsp_stm32_ble_get_rebuff(uint16_t *len)
 * 输入   : 
 * 输出   : 
 * 返回   : 
-* 注意   : 
+* 注意   : 通过参数传递指针进来，从而获得MAC地址信息，待完善
 *******************************************************************************/
-OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_procedure(void)
+OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_procedure(char *macAddr, uint8_t len)
 {
 	uint8_t repeatCnt = IHU_VMMW_BLEMOD_UART_REPEAT_CNT;
-//	uint8_t temp[50];
-//	uint8_t loc=0;
+	uint8_t *p1, *p2;
 	
 	//设置BLE模块拉高的工作状态
 	ihu_l1hd_dido_f2board_ble_power_ctrl_on();
@@ -175,75 +174,23 @@ OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_procedure(void)
 	//获取地址
 	func_blemod_uart_clear_receive_buffer();
 	if (func_blemod_uart_send_AT_command((uint8_t*)"AT+ADDR?", (uint8_t*)"OK", 2) == IHU_SUCCESS) {
-		if(strstr((const char*)zIhuBspStm32SpsBleRxBuff, "+ADDR::") != NULL){
-			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: BLE Address = [%s]!\n", zIhuBspStm32SpsBleRxBuff);
+		p1 = (uint8_t*)strstr((const char*)zIhuBspStm32SpsBleRxBuff, "+ADDR:");
+		p2 = (uint8_t*)strstr((const char*)p1, "\r");
+		if ((p1!=NULL) && (p2!=NULL) && (p1<p2)){
+			p1 = p1 + sizeof("+ADDR:");
+			strncpy(macAddr, (char*)p1, ((p2-p1)<len)?(p2-p1):len);
+			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: BLE Address = [%s]!\n", p1);
 		}
 	}else{
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: BLE fetch address failure!\n");
 		return IHU_FAILURE;
 	}
-	
-	//如何将获得的地址返回给上层，待上层需求
-
+		
 	//设置BLE模块拉低的蓝牙正常工作状态
 	ihu_l1hd_dido_f2board_ble_power_ctrl_off();
 
 	return IHU_SUCCESS;
-}
-
-/**
-  * 函数功能: 向HC05模块发送命令并检查OK。只适用于具有OK应答的命令
-  * 输入参数: cmd：待发送命令
-  *           clean：1：清除接收缓冲区内容
-  *                  0：保留接收缓冲区内容
-  * 返 回 值: 命令应答状态：1：无OK应答
-  *                         0：成功发送并接收到OK应答
-  * 说    明：无
-  */
-uint8_t func_blemod_uart_hc05_send_cmd(char* cmd,uint8_t clean)
-{	 		 
-	uint8_t retry=5;
-	uint8_t i;
-	
-	while(retry--)
-	{
-		HC05_EN_HIGHT();
-		HAL_Delay(10);
-		//HAL_UART_Transmit(&husartx_rs485,(uint8_t *)cmd,strlen(cmd),1000);
-			func_blemod_uart_send_string(cmd);
-    for(i=0;i<20;i++)
-    { 
-      uint16_t len;
-      char * redata;
-      
-      HAL_Delay(10);      
-      redata = ihu_bsp_stm32_ble_get_rebuff(&len); 
-      if(len>0)
-      {
-        if(redata[0]!=0)
-        {
-          if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: send CMD: %s",cmd);
-          if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: receive %s",redata);
-        }
-        if(strstr(redata,"OK"))				
-        {          
-          if(clean==1)
-            func_blemod_uart_clear_receive_buffer();
-          return 0;
-        }
-      }
-      else
-      {					
-        HAL_Delay(100);
-      }		
-    }
-    if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: HC05 send CMD fail %d times",retry);
-  }	
-	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: HC05 send CMD fail ");
-	if(clean==1)
-		func_blemod_uart_clear_receive_buffer();
-	return 1 ;
 }
 
 /**
@@ -339,33 +286,6 @@ int func_blemod_uart_hc05_get_line(char* line, char* stream ,int max_size)
   return len;  
 } 
 
-/**
-  * 函数功能: 向HC05写入命令，不检查模块的响应
-  * 输入参数: arg，命令参数，为0时不带参数，若command也为0时，发送"AT"命令
-  * 返 回 值: 无
-  * 说    明：无
-  */
-void writeCommand(const char *command, const char *arg)
-{
-  char str_buf[50];
-
-  HC05_EN_HIGHT();
-  HAL_Delay(10);
-
-  if (arg && arg[0] != 0)
-    sprintf(str_buf,"AT+%s%s",command,arg);
-  else if (command && command[0] != 0)
-  {
-    sprintf(str_buf,"AT+%s",command);
-  }
-  else
-    sprintf(str_buf,"AT");
-  
-  if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: CMD send:%s\n",str_buf);
-  func_blemod_uart_send_string(str_buf);
- // HAL_UART_Transmit(&husartx_rs485,(uint8_t *)str_buf,strlen(str_buf),1000);
-}
-
 
 /**
   * 函数功能: 扫描周边的蓝牙设备，并存储到设备列表中
@@ -373,7 +293,7 @@ void writeCommand(const char *command, const char *arg)
   * 返 回 值: 无
   * 说    明：无
   */
-uint8_t parseBluetoothAddress(BLTDev *bltDev)
+uint8_t func_belmod_uart_hc05_scan_bluetooth_address(BLTDev *bltDev)
 {
   /* Address should look like "+ADDR:<NAP>:<UAP>:<LAP>",
    * where actual address will look like "1234:56:abcdef".
@@ -409,7 +329,7 @@ getNewLine:
 			{
 				uint8_t num ;
 				num = bltDev->num;
-				func_blemod_uart_hc05_str_blt_addr(bltDev,':');
+				func_blemod_uart_hc05_blt_addr_convert_str(bltDev,':');
 				for(i=0;i<=num;i++)
 				{
 					if(strstr(linebuff,bltDev->unpraseAddr[i]) != NULL)	
@@ -430,7 +350,7 @@ getNewLine:
 				p = strchr(p,':');
 				if (p == 0)
 				{
-					func_blemod_uart_hc05_send_cmd("AT+INQC",1);//退出前中断查询
+					func_blemod_uart_send_AT_command((uint8_t*)"AT+INQC", (uint8_t*)"OK", 1);//退出前中断查询
 					return 1;
 				}
 				bltDev->addr[num].LAP = htoul(++p);
@@ -457,7 +377,7 @@ getNewLine:
   * 返 回 值: 无
   * 说    明：无
   */
-void func_blemod_uart_hc05_str_blt_addr(BLTDev *bltDev,char delimiter)  
+void func_blemod_uart_hc05_blt_addr_convert_str(BLTDev *bltDev, char delimiter)  
 {
 	uint8_t i;
 	
@@ -492,7 +412,7 @@ uint8_t func_blemod_uart_hc05_get_remote_device_name(BLTDev *bltDev)
 	
 	char cmdbuff[100];
 	
-	func_blemod_uart_hc05_str_blt_addr(bltDev,',');
+	func_blemod_uart_hc05_blt_addr_convert_str(bltDev,',');
 
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: device num =%d",bltDev->num);
 	
@@ -554,12 +474,12 @@ void func_blemod_uart_hc05_print_blt_info(BLTDev *bltDev)
   * 返 回 值: 0获取成功，非0不成功
   * 说    明：无
   */
-uint8_t func_blemod_uart_hc05_link(void)
+uint8_t func_blemod_uart_hc05_link_remote_device(void)
 {
 	uint8_t i=0;
 	char cmdbuff[100];
 	
-	parseBluetoothAddress(&bltDevList);
+	func_belmod_uart_hc05_scan_bluetooth_address(&bltDevList);
 	func_blemod_uart_hc05_get_remote_device_name(&bltDevList);
 	func_blemod_uart_hc05_print_blt_info(&bltDevList);
 	
@@ -568,7 +488,7 @@ uint8_t func_blemod_uart_hc05_link(void)
 		if(strstr(bltDevList.name[i],"HC05") != NULL) //非NULL表示找到有名称部分为HC05的设备
 		{
 			//IhuDebugPrint("VMFO: 搜索到远程HC05模块，即将进行配对连接...\n");
-			func_blemod_uart_hc05_str_blt_addr(&bltDevList,',');		
+			func_blemod_uart_hc05_blt_addr_convert_str(&bltDevList,',');		
 			//配对
 			sprintf(cmdbuff,"AT+PAIR=%s,20",bltDevList.unpraseAddr[i]);
 			func_blemod_uart_send_AT_command((uint8_t*)cmdbuff, (uint8_t*)"OK", 2);
@@ -581,7 +501,8 @@ uint8_t func_blemod_uart_hc05_link(void)
 }
 
 //测试整个过程
-void ihu_vmmw_blemd_hc05_working_process(void)
+//由于BLE蓝牙详细过程涉及到具体的需求，暂时放在这里，未来待完善。
+void ihu_vmmw_blemod_hc05_working_process(void)
 {
   uint8_t hc05_connect=0; // 0:未连接       1：连接成功，可以进行数据传输
   uint8_t hc05_mode=0;  // 0：SPP规范      1：AT模式
@@ -593,19 +514,19 @@ void ihu_vmmw_blemd_hc05_working_process(void)
   char hc05_nameCMD[40];
 	
   func_blemod_uart_hc05_init();
-  HC05_EN_LOW(); 	
+  //HC05_EN_LOW(); 	
 
 	HAL_Delay(500);
   while(hc05_mode==0)
   {
-    HC05_EN_HIGHT(); 
+    //HC05_EN_HIGHT(); 
     HAL_Delay(500);
     func_blemod_uart_clear_receive_buffer();
     /* 发送一个AT指令 */
-		func_blemod_uart_send_AT_command((uint8_t *)"AT", "OK", 2);	
+		func_blemod_uart_send_AT_command((uint8_t *)"AT", (uint8_t*)"OK", 2);	
   }  	
 	
-	if(hc05_mode==1)  //  AT模式
+	if(hc05_mode==1)  //AT模式
   {    
     /*复位、恢复默认状态*/
     func_blemod_uart_send_AT_command((uint8_t*)"AT+RESET", (uint8_t*)"OK", 2);	
@@ -614,7 +535,7 @@ void ihu_vmmw_blemd_hc05_working_process(void)
     func_blemod_uart_send_AT_command((uint8_t*)"AT+ORGL", (uint8_t*)"OK", 2);
     HAL_Delay(200);
 
-    if(hc05_role==0) // 从模式
+    if(hc05_role==0) //从模式
     {
       if(func_blemod_uart_send_AT_command((uint8_t*)"AT+ROLE=0", (uint8_t*)"OK", 2) == IHU_SUCCESS)	
       {				
@@ -669,7 +590,7 @@ void ihu_vmmw_blemd_hc05_working_process(void)
 			if(hc05_role == 1)	//主模式
 			{
 				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Scaning BLE equipment...\n");				
-				while(func_blemod_uart_hc05_link()==1)
+				while(func_blemod_uart_hc05_link_remote_device()==1)
         {          
         }
 			}
@@ -686,9 +607,9 @@ void ihu_vmmw_blemd_hc05_working_process(void)
       func_blemod_uart_send_AT_command((uint8_t*)"AT+INQM=1,9,48", (uint8_t*)"OK", 2);  
       HAL_Delay(1000);
       func_blemod_uart_clear_receive_buffer();
-      HC05_EN_HIGHT(); 
+      //HC05_EN_HIGHT(); 
       HAL_Delay(500);        
-      HC05_EN_HIGHT(); 
+      //HC05_EN_HIGHT(); 
       HAL_Delay(500);   
 		}
 		//连接后每隔一段时间检查接收缓冲区

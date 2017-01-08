@@ -94,13 +94,12 @@ enum
 };
 		
 /* 宏定义 --------------------------------------------------------------------*/
-#define HC05_USART          	          USART2
-
-#define HC05_EN_GPIO_CLK() 	            __HAL_RCC_GPIOF_CLK_ENABLE()		/* GPIO端口时钟 */
-#define HC05_EN_GPIO_PORT    	          GPIOF			              /* GPIO端口 */
-#define HC05_EN_GPIO_PIN		            GPIO_PIN_11		          /* 连接到HC05 EN引脚的GPIO */
-#define HC05_EN_HIGHT()		              HAL_GPIO_WritePin(HC05_EN_GPIO_PORT,HC05_EN_GPIO_PIN,GPIO_PIN_SET);	
-#define HC05_EN_LOW()				            HAL_GPIO_WritePin(HC05_EN_GPIO_PORT,HC05_EN_GPIO_PIN,GPIO_PIN_RESET);	
+//#define HC05_USART          	          USART2
+//#define HC05_EN_GPIO_CLK() 	            __HAL_RCC_GPIOF_CLK_ENABLE()		/* GPIO端口时钟 */
+//#define HC05_EN_GPIO_PORT    	          GPIOF			              /* GPIO端口 */
+//#define HC05_EN_GPIO_PIN		            GPIO_PIN_11		          /* 连接到HC05 EN引脚的GPIO */
+//#define HC05_EN_HIGHT()		              HAL_GPIO_WritePin(HC05_EN_GPIO_PORT,HC05_EN_GPIO_PIN,GPIO_PIN_SET);	
+//#define HC05_EN_LOW()				            HAL_GPIO_WritePin(HC05_EN_GPIO_PORT,HC05_EN_GPIO_PIN,GPIO_PIN_RESET);	
 
 
 //全局函数
