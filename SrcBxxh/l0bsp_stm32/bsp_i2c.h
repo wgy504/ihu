@@ -24,21 +24,37 @@ extern "C" {
 
 	
 //MAX_IHU_MSG_BODY_LENGTH-1是因为发送到上层SPSVIRGO的数据缓冲区受到消息结构msg_struct_spsvirgo_l2frame_rcv_t的影响
-#define IHU_BSP_STM32_I2C_IAU_REC_MAX_LEN 					MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
-#define IHU_BSP_STM32_I2C_SPARE1_REC_MAX_LEN 				MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
+#define IHU_BSP_STM32_I2C1_REC_MAX_LEN 					MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
+#define IHU_BSP_STM32_I2C2_REC_MAX_LEN 					MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
 
 //发送和接受数据的延迟时间长度
 #define IHU_BSP_STM32_I2C_TX_MAX_DELAY_DURATION 100
 #define IHU_BSP_STM32_I2C_RX_MAX_DELAY_DURATION 100
 
+//因为是互斥的，所以以下必须通过开关量来判定，callback函数到底该采用哪种方式进行工作
+#define BSP_STM32_I2C_WORK_MODE_IAU 1
+#define BSP_STM32_I2C_WORK_MODE_MPU6050 2
+#define BSP_STM32_I2C_WORK_MODE_CCL_SENSOR 3
+#define BSP_STM32_I2C_WORK_MODE_CHOICE BSP_STM32_I2C_WORK_MODE_CCL_SENSOR
+
 //本地定义的交换矩阵
-#define IHU_BSP_STM32_I2C_IAU_HANDLER					hi2c1
-#define IHU_BSP_STM32_I2C_IAU_HANDLER_ID  		1
-#define IHU_BSP_STM32_I2C_SPARE1_HANDLER			hi2c1
-#define IHU_BSP_STM32_I2C_SPARE1_HANDLER_ID  	2
-//增加MPU6050陀螺仪的I2C控制传感器
-#define IHU_BSP_STM32_I2C_BSP_STM32_MPU6050_HANDLER					hi2c1
-#define IHU_BSP_STM32_I2C_BSP_STM32_MPU6050_HANDLER_ID  		1
+//IAU模块，工作在SLAVE模式下
+#define IHU_BSP_STM32_I2C_IAU_HANDLER							hi2c1
+#define IHU_BSP_STM32_I2C_IAU_HANDLER_ID  				1
+#define IHU_BSP_STM32_I2C_SPARE1_HANDLER					hi2c1
+#define IHU_BSP_STM32_I2C_SPARE1_HANDLER_ID  			2
+
+//MPU6050陀螺仪的I2C控制传感器，工作在MASTER模式下
+#define IHU_BSP_STM32_I2C_MPU6050_HANDLER					hi2c1
+#define IHU_BSP_STM32_I2C_MPU6050_HANDLER_ID  		1
+#define IHU_BSP_STM32_I2C_MPU6050_SENSOR_SLAVE_ADDRESS	    0x30F  //被控从模式设备的地址
+#define IHU_BSP_STM32_I2C_MPU6050_FIX_FRAME_LEN	    0x10  //通信帧长度，用于接收帧控制
+
+//CCL所对应的I2C控制传感器，工作在MASTER模式下
+#define IHU_BSP_STM32_I2C_CCL_SENSOR_HANDLER			hi2c1
+#define IHU_BSP_STM32_I2C_CCL_SENSOR_HANDLER_ID  	1
+#define IHU_BSP_STM32_I2C_CCL_SENSOR_SLAVE_ADDRESS	    0x30F    //被控从模式设备的地址
+#define IHU_BSP_STM32_I2C_CCL_FIX_FRAME_LEN	    0x10  //通信帧长度，用于接收帧控制
 
 //全局函数
 extern int ihu_bsp_stm32_i2c_slave_hw_init(void);
@@ -53,6 +69,10 @@ extern void 	ihu_bsp_stm32_i2c_mpu6050_init(void);
 extern int8_t ihu_bsp_stm32_i2c_mpu6050_acc_read(int16_t *accData);
 extern int8_t ihu_bsp_stm32_i2c_mpu6050_gyro_read(int16_t *gyroData);
 extern int8_t ihu_bsp_stm32_i2c_mpu6050_temp_read(int16_t tempData);
+//CCL传感器发送控制数据
+extern int ihu_bsp_stm32_i2c_ccl_send_data(uint8_t* buff, uint16_t len);
+extern int ihu_bsp_stm32_i2c_ccl_sensor_rcv_data(uint8_t* buff, uint16_t len);
+
 
 //Local APIs
 void func_bsp_stm32_i2c_mpu6050_write_data(uint16_t Addr, uint8_t Reg, uint8_t Value);

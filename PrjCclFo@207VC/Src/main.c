@@ -144,7 +144,13 @@ int main(void)
   //HAL_UART_Receive_IT(&huart6,&zIhuUartRxBuffer[5],1);
   //HAL_SPI_Receive_IT(&hspi1,&zIhuSpiRxBuffer[0],1);
   //HAL_SPI_Receive_IT(&hspi2,&zIhuSpiRxBuffer[1],1);
-  HAL_I2C_Slave_Receive_IT(&hi2c1,&zIhuI2cRxBuffer[0],1);	
+#if (BSP_STM32_I2C_WORK_MODE_CHOICE == BSP_STM32_I2C_WORK_MODE_IAU)
+  HAL_I2C_Slave_Receive_IT(&hi2c1, &zIhuI2cRxBuffer[0], 1);
+#elif (BSP_STM32_I2C_WORK_MODE_CHOICE == BSP_STM32_I2C_WORK_MODE_MPU6050)
+	HAL_I2C_Master_Receive_IT(&hi2c1, (uint16_t)IHU_BSP_STM32_I2C_MPU6050_SENSOR_SLAVE_ADDRESS, &zIhuI2cRxBuffer[0], 1);	
+#elif (BSP_STM32_I2C_WORK_MODE_CHOICE == BSP_STM32_I2C_WORK_MODE_CCL_SENSOR)
+	HAL_I2C_Master_Receive_IT(&hi2c1, (uint16_t)IHU_BSP_STM32_I2C_CCL_SENSOR_SLAVE_ADDRESS, &zIhuI2cRxBuffer[0], 1);	
+#endif
   //HAL_CAN_Receive_IT(&hcan1, 0);
   //HAL_CAN_Receive_IT(&hcan2, 1);
 	

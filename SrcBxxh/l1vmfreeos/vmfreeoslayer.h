@@ -500,6 +500,9 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_i2c_mpu6050_acc_read 					ihu_bsp_stm32_i2c_mpu6050_acc_read
 #define ihu_l1hd_i2c_mpu6050_gyro_read 					ihu_bsp_stm32_i2c_mpu6050_gyro_read
 #define ihu_l1hd_i2c_mpu6050_temp_read 					ihu_bsp_stm32_i2c_mpu6050_temp_read
+//CCL SENSOR传感器
+#define ihu_l1hd_i2c_ccl_send_data 							ihu_bsp_stm32_i2c_ccl_send_data
+#define ihu_l1hd_i2c_ccl_sensor_rcv_data 				ihu_bsp_stm32_i2c_ccl_sensor_rcv_data
 
 //L0BSP=>L1HD: CAN
 #define ihu_l1hd_can_slave_hw_init							ihu_bsp_stm32_can_slave_hw_init
