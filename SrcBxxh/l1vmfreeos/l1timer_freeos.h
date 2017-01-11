@@ -113,8 +113,8 @@ enum IHU_TIMER_ID_1MS_ALL
 //System level timer global variables
 typedef struct IhuTimerElement
 {
-	UINT32 timerId;
-	UINT32 taskId;
+	UINT8  timerId;
+	UINT8  taskId;
 	UINT32 tDuration;
 	UINT8  timerType;
 	UINT8  timerRes; //Timer Resolution

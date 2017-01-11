@@ -6,8 +6,9 @@
 //= ZJL, 2017 Jan.11, CURRENT_SW_DELIVERY R03.90 =>CCL项目
 = CCL中ADCLIBRA模块的sysconfig.h中打开标志位没开，造成message queue发送陷入系统错误，修正
 = 由于iwdg造成系统不断重启，暂时去掉，未来再加入。
-
-
+= FreeRTOS配置中的Minimal_STACK_SIZE从128扩大为256，不然会出现HardFault_Handler陷入的崩溃问题
+= 将TIMER中的字节调整一下，去掉UINT32的定义
+= xml_pack将导致hardfault，先注释掉，再调测。
 
 
 //= ZJL, 2017 Jan.10, CURRENT_SW_DELIVERY R03.89 =>CCL项目
