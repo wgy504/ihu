@@ -430,11 +430,12 @@ OPSTAT fsm_vmfo_init_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 }
 
 //喂狗处理过程
+//由于iwdg造成系统不断重启，暂时去掉，未来再加入
 void func_vmfo_time_out_period_scan(void)
 {	
 	if (func_vmfo_heart_caculate_all_received() == TRUE){
 	//Min-max timeout value @32KHz (LSI): ~125us / ~32.7s，所以各个任务的HEART-BEAT周期需要改进到10S以内，并让本周期取20s，以确保至少又一次落在	
-	ihu_l1hd_watch_dog_refresh();	
+	//ihu_l1hd_watch_dog_refresh();	
 	}
 	return;
 }

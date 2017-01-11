@@ -56,8 +56,6 @@ DCMI_HandleTypeDef hdcmi;
 
 I2C_HandleTypeDef hi2c1;
 
-IWDG_HandleTypeDef hiwdg;
-
 RTC_HandleTypeDef hrtc;
 
 UART_HandleTypeDef huart4;
@@ -88,7 +86,6 @@ static void MX_USART1_UART_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_USART3_UART_Init(void);
 static void MX_RTC_Init(void);
-static void MX_IWDG_Init(void);
 static void MX_DCMI_Init(void);
 static void MX_ADC1_Init(void);
 void StartDefaultTask(void const * argument);
@@ -128,7 +125,6 @@ int main(void)
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
   MX_RTC_Init();
-  MX_IWDG_Init();
   MX_DCMI_Init();
   MX_ADC1_Init();
 
@@ -228,12 +224,10 @@ void SystemClock_Config(void)
 
     /**Initializes the CPU, AHB and APB busses clocks 
     */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_LSI
-                              |RCC_OSCILLATORTYPE_LSE;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_LSE;
   RCC_OscInitStruct.LSEState = RCC_LSE_ON;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = 16;
-  RCC_OscInitStruct.LSIState = RCC_LSI_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
   RCC_OscInitStruct.PLL.PLLM = 16;
@@ -372,20 +366,6 @@ static void MX_I2C1_Init(void)
   hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
   hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
   if (HAL_I2C_Init(&hi2c1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-}
-
-/* IWDG init function */
-static void MX_IWDG_Init(void)
-{
-
-  hiwdg.Instance = IWDG;
-  hiwdg.Init.Prescaler = IWDG_PRESCALER_256;
-  hiwdg.Init.Reload = 4095;
-  if (HAL_IWDG_Init(&hiwdg) != HAL_OK)
   {
     Error_Handler();
   }
