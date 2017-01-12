@@ -3,6 +3,14 @@
 =================================================
 //近期需要完成的任务
 
+//= ZJL, 2017 Jan.12, CURRENT_SW_DELIVERY R03.91 =>CCL项目
+
+
+
+
+
+
+
 //= ZJL, 2017 Jan.11, CURRENT_SW_DELIVERY R03.90 =>CCL项目
 = CCL中ADCLIBRA模块的sysconfig.h中打开标志位没开，造成message queue发送陷入系统错误，修正
 = 由于iwdg造成系统不断重启，暂时去掉，未来再加入。
@@ -15,7 +23,7 @@
 = 将IHU_CCL_TIMER_DURATION_DIDO_TRIGGER_PERIOD_SCAN=500推向远处，系统死机的时间的确不断加长，这说明它跟BSP无关，的确是由DIDO触发引起的TIM异常
 = 异常的函数是HAL_TIM_IRQHandler，这个中断不断进入导致死循环
 = 陷入__weak void HAL_TIMEx_CommutationCallback(TIM_HandleTypeDef *htim)以后，出不来，导致死机了
-
+= STM32CubeMXz中去掉TIM试试，同时打开了所有的debug/trace信息
 
 //= ZJL, 2017 Jan.10, CURRENT_SW_DELIVERY R03.89 =>CCL项目
 = 尝试将DCMI的读取以及摄像头捕获功能集成进来，当做BSP方式。来源：STM32Cube_FW_F2_V1.4.0，官网和云上
