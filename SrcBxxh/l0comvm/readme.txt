@@ -9,7 +9,7 @@
 = 将消息队列改为3个，解决HAL_TIM_IRQHandler问题。原因不太明确，但应该跟系统堆栈不够相关
 = 新出现了MSG_ID_SPS_CCL_CLOSE_REPORT_CFM发送之后必然出现无效消息的问题
 = 将#define MAX_QUEUE_NUM_IN_ONE_TASK 4，解决了上面消息发送总出现错位比特的问题。带来的问题是，系统区改为了0xAC00，总内存占用115KB了
-
+= 又将HUITP中有关总消息的长度由505改为405，队列数量由4改为3，貌似情况还算稳定，跑一晚上试试。
 
 
 //= ZJL, 2017 Jan.11, CURRENT_SW_DELIVERY R03.90 =>CCL项目
