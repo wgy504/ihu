@@ -780,7 +780,6 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 {
 	int ret = 0, i = 0;
 	msg_struct_ccl_sps_close_report_send_t rcv;
-	msg_struct_sps_ccl_close_report_cfm_t snd;
 
 	//Receive message and copy to local variable
 	memset(&rcv, 0, sizeof(msg_struct_ccl_sps_close_report_send_t));
@@ -906,6 +905,7 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 	FsmSetState(TASK_ID_SPSVIRGO, FSM_STATE_SPSVIRGO_ACTIVED);
 	
 	if (ret == IHU_FAILURE){
+		msg_struct_sps_ccl_close_report_cfm_t snd;		
 		//干完了之后，结果发送给CCL
 		memset(&snd, 0, sizeof(msg_struct_sps_ccl_close_report_cfm_t));
 		snd.actionFlag = IHU_CCL_EVENT_CLOSE_SEND_FAILURE;
@@ -916,8 +916,6 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPSVIRGO], zIhuTaskNameList[TASK_ID_CCL]);
 			return IHU_FAILURE;
 		}
-		IhuDebugPrint("SPSVIRGO: Close door report cfm send 1!\n");
-
 	}
 
 	//返回
@@ -1205,8 +1203,6 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle(StrMsg_HUIT
 			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPSVIRGO], zIhuTaskNameList[TASK_ID_CCL]);
 			return IHU_FAILURE;
 		}
-		IhuDebugPrint("SPSVIRGO: Close door report cfm send 2!\n");
-		
 	}
 	else if (rcv->reportType.event == HUITP_IEID_UNI_CCL_REPORT_TYPE_FAULT_EVENT){
 		msg_struct_sps_ccl_fault_report_cfm_t snd;
