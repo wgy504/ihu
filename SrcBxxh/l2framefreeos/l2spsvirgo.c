@@ -617,8 +617,8 @@ OPSTAT fsm_spsvirgo_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 	else if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_SLEEP) zIhuCclSpsvirgoCtrlTable.cclSpsWorkingMode = IHU_CCL_SPS_WORKING_MODE_SLEEP;
 	else if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_FAULT) zIhuCclSpsvirgoCtrlTable.cclSpsWorkingMode = IHU_CCL_SPS_WORKING_MODE_FAULT;
 	else{
-		IhuErrorPrint("DIDOCAP: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+		IhuErrorPrint("SPSVIRGO: Receive message error!\n");
+		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;		
 	}
 	
@@ -915,7 +915,9 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPSVIRGO], zIhuTaskNameList[TASK_ID_CCL]);
 			return IHU_FAILURE;
-		}	
+		}
+		IhuDebugPrint("SPSVIRGO: Close door report cfm send 1!\n");
+
 	}
 
 	//返回
@@ -1202,7 +1204,9 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle(StrMsg_HUIT
 			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPSVIRGO], zIhuTaskNameList[TASK_ID_CCL]);
 			return IHU_FAILURE;
-		}	
+		}
+		IhuDebugPrint("SPSVIRGO: Close door report cfm send 2!\n");
+		
 	}
 	else if (rcv->reportType.event == HUITP_IEID_UNI_CCL_REPORT_TYPE_FAULT_EVENT){
 		msg_struct_sps_ccl_fault_report_cfm_t snd;

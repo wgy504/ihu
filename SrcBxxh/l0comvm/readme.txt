@@ -4,12 +4,10 @@
 //近期需要完成的任务
 
 //= ZJL, 2017 Jan.12, CURRENT_SW_DELIVERY R03.91 =>CCL项目
-
-
-
-
-
-
+= 将系统堆栈改为0x8C00，试图简化RAM空间的耗用，结果空间不够
+= 将系统堆栈改为0x8C00，不然空间不够，所有的任务不能一起创建出来
+= 将消息队列改为3个，解决HAL_TIM_IRQHandler问题。原因不太明确，但应该跟系统堆栈不够相关
+= 新出现了MSG_ID_SPS_CCL_CLOSE_REPORT_CFM发送之后必然出现无效消息的问题
 
 //= ZJL, 2017 Jan.11, CURRENT_SW_DELIVERY R03.90 =>CCL项目
 = CCL中ADCLIBRA模块的sysconfig.h中打开标志位没开，造成message queue发送陷入系统错误，修正

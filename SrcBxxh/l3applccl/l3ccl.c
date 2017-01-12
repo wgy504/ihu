@@ -869,6 +869,8 @@ OPSTAT fsm_ccl_sps_close_door_report_cfm(UINT8 dest_id, UINT8 src_id, void * par
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
+	
+	IhuDebugPrint("CCL: Close door report cfm received, at state [%d]!\n", FsmGetState(TASK_ID_CCL));
 		
 	//去激活所有下位机
 	memset(&snd, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
