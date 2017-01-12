@@ -9,6 +9,12 @@
 = FreeRTOS配置中的Minimal_STACK_SIZE从128扩大为256，不然会出现HardFault_Handler陷入的崩溃问题
 = 将TIMER中的字节调整一下，去掉UINT32的定义
 = xml_pack将导致hardfault，先注释掉，再调测。
+= TIM调整到TIM6/7，时钟调整到位，跟BFSC保持一致
+= 系统堆栈调整到0x9C00
+= 修改sysconfig.h中的定时器，以期发现问题的相关性
+= 将IHU_CCL_TIMER_DURATION_DIDO_TRIGGER_PERIOD_SCAN=500推向远处，系统死机的时间的确不断加长，这说明它跟BSP无关，的确是由DIDO触发引起的TIM异常
+= 异常的函数是HAL_TIM_IRQHandler，这个中断不断进入导致死循环
+= 陷入__weak void HAL_TIMEx_CommutationCallback(TIM_HandleTypeDef *htim)以后，出不来，导致死机了
 
 
 //= ZJL, 2017 Jan.10, CURRENT_SW_DELIVERY R03.89 =>CCL项目
