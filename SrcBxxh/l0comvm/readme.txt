@@ -3,6 +3,10 @@
 =================================================
 //近期需要完成的任务
 
+//= ZJL, 2017 Jan.13, CURRENT_SW_DELIVERY R03.92 =>CCL项目
+= 调测LED闪灯任务
+
+
 //= ZJL, 2017 Jan.12, CURRENT_SW_DELIVERY R03.91 =>CCL项目
 = 将系统堆栈改为0x8C00，试图简化RAM空间的耗用，结果空间不够
 = 将系统堆栈改为0x9C00，不然空间不够，所有的任务不能一起创建出来
@@ -10,7 +14,6 @@
 = 新出现了MSG_ID_SPS_CCL_CLOSE_REPORT_CFM发送之后必然出现无效消息的问题
 = 将#define MAX_QUEUE_NUM_IN_ONE_TASK 4，解决了上面消息发送总出现错位比特的问题。带来的问题是，系统区改为了0xAC00，总内存占用115KB了
 = 又将HUITP中有关总消息的长度由505改为405，队列数量由4改为3，貌似情况还算稳定，跑一晚上试试。
-
 
 //= ZJL, 2017 Jan.11, CURRENT_SW_DELIVERY R03.90 =>CCL项目
 = CCL中ADCLIBRA模块的sysconfig.h中打开标志位没开，造成message queue发送陷入系统错误，修正
