@@ -73,19 +73,6 @@ FsmStateItem_t FsmSpsvirgo[] =
 	UINT8 zIhuGprsOperationFlag = 0;
 
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-	//extern vu8 SPS_GPRS_R_Buff[SPS_GPRS_REC_MAXLEN];	//串口1数据接收缓冲区 
-	//extern vu8 SPS_GPRS_R_State;						//串口1接收状态
-	//extern vu16 SPS_GPRS_R_Count;						//当前接收数据的字节数 	 
-	//extern vu8 SPS_RFID_R_Buff[SPS_RFID_REC_MAXLEN];	//串口1数据接收缓冲区 
-	//extern vu8 SPS_RFID_R_State;						//串口1接收状态
-	//extern vu16 SPS_RFID_R_Count;						//当前接收数据的字节数 	 
-	//extern vu8 SPS_BLE_R_Buff[SPS_BLE_REC_MAXLEN];	//串口1数据接收缓冲区 
-	//extern vu8 SPS_BLE_R_State;						//串口1接收状态
-	//extern vu16 SPS_BLE_R_Count;						//当前接收数据的字节数 	 
-	//extern vu8 SPS_SPARE1_R_Buff[SPS_SPARE1_REC_MAXLEN];	//串口1数据接收缓冲区 
-	//extern vu8 SPS_SPARE1_R_State;						//串口1接收状态
-	//extern vu16 SPS_SPARE1_R_Count;						//当前接收数据的字节数
-	UINT8 zIhuGprsOperationFlag = 0;
 	strIhuCclSpsPar_t zIhuCclSpsvirgoCtrlTable;
 #else
 #endif
@@ -137,7 +124,6 @@ OPSTAT fsm_spsvirgo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 	zIhuRunErrCnt[TASK_ID_SPSVIRGO] = 0;
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-	zIhuGprsOperationFlag = 0;
 	memset(&zIhuCclSpsvirgoCtrlTable, 0, sizeof(strIhuCclSpsPar_t));
 	zIhuCclSpsvirgoCtrlTable.cclSpsWorkingMode = IHU_CCL_SPS_WORKING_MODE_SLEEP;  //初始化就进入SLEEP，然后就看是否有触发
 #else
@@ -264,20 +250,6 @@ void func_spsvirgo_time_out_period_scan(void)
 		return;
 	}
 	
-	//纯粹测试目的，未来需要删掉
-	IhuDebugPrint("SPSVIRGO: My test!\n");
-	ihu_l1hd_sps_gprs_send_data("This is my GPRS test!\n", 20);
-//	ihu_l1hd_sps_rfid_send_data("This is my RFID test!\n", 20);
-//	ihu_l1hd_sps_ble_send_data("This is my BLE test!\n", 20);
-//	ihu_l1hd_sps_spare1_send_data("This is my SPARE1 test!\n", 30);
-
-	zIhuGprsOperationFlag++;
-	
-	//不干、只干活一次
-	//if (zIhuGprsOperationFlag == 0)	ihu_vmmw_gprsmod_gsm_working_procedure_selection(2, 0);
-	
-	//IhuDebugPrint("SPSVIRGO: Time Out Test!\n");
-	
 	return;	
 }
 
@@ -362,17 +334,18 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	memcpy(&pMsgInput, &pMsgProc, msgProcLen);
 	CloudDataSendBuf_t pMsgOutput;
 	memset(&pMsgOutput, 0, sizeof(CloudDataSendBuf_t));	
-//	ret = func_cloud_standard_xml_pack(HUITP_MSG_HUIXML_MSGTYPE_DEVICE_REPORT_ID, NULL, HUITP_MSGID_uni_ccl_lock_auth_inq, &pMsgInput, msgProcLen, &pMsgOutput);
-//	if (ret == IHU_FAILURE){
-//		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-//		IhuErrorPrint("SPSVIRGO: Package message error!\n");
-//		return IHU_FAILURE;
-//	}
+	ret = func_cloud_standard_xml_pack(HUITP_MSG_HUIXML_MSGTYPE_DEVICE_REPORT_ID, NULL, HUITP_MSGID_uni_ccl_lock_auth_inq, &pMsgInput, msgProcLen, &pMsgOutput);
+	if (ret == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+		IhuErrorPrint("SPSVIRGO: Package message error!\n");
+		return IHU_FAILURE;
+	}
 	
 	//将组装好的消息发送到GPRSMOD模组中去，送往后台
-	ihu_sleep(2);
-//	ret = ihu_vmmw_gprsmod_http_data_transmit_with_receive((char *)(pMsgOutput.buf));
-	ret = -1;
+	//ihu_sleep(2);
+	ret = ihu_vmmw_gprsmod_http_data_transmit_with_receive((char *)(pMsgOutput.buf));	
+	//IhuDebugPrint("SPSVIRGO: transmit data out, ret = %d\n", ret);
+	//ret = -1;
 	
 	//这里有个挺有意思的现象：这里的命令还未执行完成，实际上后台的数据已经通过UART回来了，并通过ISR服务程序发送到SPSVIRGO的QUEUE中，但只有这里执行结束后，
 	//才会去接那个消息并执行结果。当然也存在着不正确或者没有结果的情况，那就靠CCL的状态机进行恢复了。

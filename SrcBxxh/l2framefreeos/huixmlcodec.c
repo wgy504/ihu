@@ -1,4 +1,4 @@
-﻿/**
+/**
  ****************************************************************************************
  *
  * @file huixmlcodec.c
@@ -136,9 +136,11 @@ OPSTAT func_cloud_standard_xml_pack(UINT8 msgType, char *funcFlag, UINT16 msgId,
 	memset(s, 0, sizeof(s));
 	int i = 0;
 	char tmp[3]="";
+	UINT8 tmpU8 = 0;
 	for (i=0; i<inputLen; i++){
 		memset(tmp, 0, sizeof(tmp));
-		sprintf(tmp, "%02X", (UINT8*)(inputPar+i));
+		memcpy(&tmpU8, inputPar+i, 1);
+		sprintf(tmp, "%02X", tmpU8);
 		strcat(s, tmp);
 	}
 	if ((strlen(s) < 4) || (strlen(s) > (MAX_IHU_MSG_BUF_LENGTH_CLOUD - HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN))){

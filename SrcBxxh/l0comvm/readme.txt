@@ -4,8 +4,9 @@
 //近期需要完成的任务
 
 //= ZJL, 2017 Jan.13, CURRENT_SW_DELIVERY R03.92 =>CCL项目
-= 调测LED闪灯任务
-
+= 调测LED闪灯任务：PC2上的207VC调测LED输出管脚，之前并没有在STM32CubeMX中拉出，导致没有初始化。拉出后，采用GALOWAG工作机制，非常正常。
+= 修正xml_pack函数中导致hardfault的硬逻辑错误，地址访问出错
+= HTTP的AT CMD走到最后一步发送数据，出错，导致再次出现HardFault，需要再研究SIM800A/HTTP的数据发送过程
 
 //= ZJL, 2017 Jan.12, CURRENT_SW_DELIVERY R03.91 =>CCL项目
 = 将系统堆栈改为0x8C00，试图简化RAM空间的耗用，结果空间不够

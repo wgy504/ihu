@@ -55,7 +55,7 @@ GlobalGalowagCtrlTable_t zIhuGalogwagCtrlTable[] =
 	{GALOWAG_CTRL_ID_MIN, GALOWAG_CTRL_STATE_MIN, 0, 0, 0, 0, 0, 0, NULL, NULL},//Starting
 	{GALOWAG_CTRL_ID_GLOBAL_POWER, GALOWAG_CTRL_STATE_OFF, 0, 0, 0, 0, 0, 0, NULL, NULL},
 	{GALOWAG_CTRL_ID_GLOBAL_COMMU, GALOWAG_CTRL_STATE_OFF, 0, 0, 0, 0, 0, 0, NULL, NULL},
-	{GALOWAG_CTRL_ID_GLOBAL_WORK_STATE, GALOWAG_CTRL_STATE_OFF, 2, 2, 4, 0xFFFF, 0, 0, ihu_l1hd_led_f2board_timer_ind_on, ihu_l1hd_led_f2board_timer_ind_off},
+	{GALOWAG_CTRL_ID_GLOBAL_WORK_STATE, GALOWAG_CTRL_STATE_OFF, 2, 2, 4, 0xFFFF, 0, 0, ihu_l1hd_led_f2board_on, ihu_l1hd_led_f2board_off},
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)	
 	{GALOWAG_CTRL_ID_CCL_LOCK1, GALOWAG_CTRL_STATE_OFF, 1, 10, 11, 22, 0, 0, ihu_l1hd_dido_f2board_lock1_do1_on, ihu_l1hd_dido_f2board_lock1_do1_off},
 	{GALOWAG_CTRL_ID_CCL_LOCK2, GALOWAG_CTRL_STATE_OFF, 1, 10, 11, 22, 0, 0, ihu_l1hd_dido_f2board_lock2_do1_on, ihu_l1hd_dido_f2board_lock2_do1_off},

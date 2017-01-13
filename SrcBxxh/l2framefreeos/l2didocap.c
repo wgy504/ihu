@@ -223,22 +223,23 @@ OPSTAT fsm_didocap_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 	else if ((rcv.timeId == TIMER_ID_1S_CCL_DIDO_TRIGGER_PERIOD_SCAN) &&(rcv.timeRes == TIMER_RESOLUTION_1S)){
 		if ((FsmGetState(TASK_ID_CCL) != FSM_STATE_CCL_EVENT_REPORT) && (FsmGetState(TASK_ID_SPSVIRGO) == FSM_STATE_SPSVIRGO_ACTIVED) &&\
 			((zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_SLEEP) || (zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_FAULT))){
-			func_didocap_time_out_external_trigger_period_scan();
+			func_didocap_time_out_sleep_mode_external_trigger_period_scan();
 		}
 	}
 	
 	//工作模式下门和锁的扫描，只扫描门和锁！！！
-	else if ((rcv.timeId == TIMER_ID_1S_CCL_DIDO_WORKING_PERIOD_SCAN) &&(rcv.timeRes == TIMER_RESOLUTION_1S)){
+	else if ((rcv.timeId == TIMER_ID_1S_CCL_DIDO_WORKING_PERIOD_SCAN) &&(rcv.timeRes == TIMER_RESOLUTION_1S) && (FsmGetState(TASK_ID_SPSVIRGO) == FSM_STATE_SPSVIRGO_ACTIVED)){
 		if ((zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_ACTIVE) || (zIhuCclDidocapCtrlTable.cclDidoWorkingMode == IHU_CCL_DIDO_WORKING_MODE_FAULT)) {
 			func_didocap_time_out_work_mode_period_scan();
 		}
 	}
 #endif
 	
+	//其实是此时的定时器由于状态推移的原因被推掉了，不是真正出错
 	else{
-		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
-		IhuErrorPrint("DIDOCAP: Received wrong Timer ID!\n");
-		return IHU_FAILURE;		
+//		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+//		IhuErrorPrint("DIDOCAP: Received wrong Timer ID!\n");
+//		return IHU_FAILURE;		
 	}	
 	
 	return IHU_SUCCESS;
@@ -267,7 +268,7 @@ void func_didocap_time_out_period_scan(void)
 
 //定时扫描震动以及触发按键消息
 //待改进这个扫描的事件，以便形成有价值的结果事件
-void func_didocap_time_out_external_trigger_period_scan(void)
+void func_didocap_time_out_sleep_mode_external_trigger_period_scan(void)
 {
 	int ret = 0, i = 0;
 	
