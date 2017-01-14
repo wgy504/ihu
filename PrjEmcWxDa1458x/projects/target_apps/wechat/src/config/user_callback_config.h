@@ -30,9 +30,13 @@
 #include "app_default_handlers.h"
 #include "app_wechat.h"
 #include "app_prf_types.h"
+#include "user_profile.h"
+
+/*
 #include "user_custs_config.h"
 #include "user_sleepmode.h"
 #include "user_sleepmode_task.h"
+*/
 
 /*
  * USER FUNCTION DECLARATIONS
