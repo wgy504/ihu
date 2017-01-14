@@ -303,50 +303,95 @@ OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input)
 		}
 		func_gprsmod_clear_receive_buffer();
 	}
-		
+	
+	//为了防止上一次通信的影响，先发送结束
+	func_gprsmod_send_AT_command((uint8_t*)"AT+HTTPTERM", (uint8_t*)"OK", 1);	//关闭HTTP连接
+	func_gprsmod_send_AT_command((uint8_t*)"AT+SAPBR=0,1", (uint8_t*)"OK", 1);	//关闭HTTP连接
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPCLOSE=1", (uint8_t*)"CLOSE OK", 1);	//关闭连接
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CIPSHUT", (uint8_t*)"SHUT OK", 1);		//关闭移动场景
+	
 	//设置GPRS/IP层配置
 	//设置GPRS移动台类别为B,支持包交换和数据交换 
 	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CGCLASS=\"B\"", (uint8_t*)"OK", 2) == IHU_FAILURE){
-		IHU_ERROR_PRINT_GPRSMOD("VMFO: GPRS setting failure!\n");
+		IHU_ERROR_PRINT_GPRSMOD("VMFO: GPRS setting failure 1!\n");
 		return IHU_FAILURE;
 	}
 	//设置PDP上下文,互联网接协议,接入点等信息
 	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CGDCONT=1,\"IP\",\"CMNET\"", (uint8_t*)"OK",2) == IHU_FAILURE){
-		IHU_ERROR_PRINT_GPRSMOD("VMFO: GPRS setting failure!\n");
+		IHU_ERROR_PRINT_GPRSMOD("VMFO: GPRS setting failure 2!\n");
 		return IHU_FAILURE;
 	}
 	//附着GPRS业务
 	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CGATT=1", (uint8_t*)"OK", 2) == IHU_FAILURE){
-		IHU_ERROR_PRINT_GPRSMOD("VMFO: GPRS setting failure!\n");
+		IHU_ERROR_PRINT_GPRSMOD("VMFO: GPRS setting failure 3!\n");
 		return IHU_FAILURE;
 	}
 	//设置为GPRS连接模式
 	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CIPCSGP=1,\"CMNET\"", (uint8_t*)"OK", 2) == IHU_FAILURE){
-		IHU_ERROR_PRINT_GPRSMOD("VMFO: GPRS setting failure!\n");
+		IHU_ERROR_PRINT_GPRSMOD("VMFO: GPRS setting failure 4!\n");
 		return IHU_FAILURE;
 	}
 	//设置接收数据显示IP头(方便判断数据来源,仅在单路连接有效)
 	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CIPHEAD=1", (uint8_t*)"OK", 2) == IHU_FAILURE){
-		IHU_ERROR_PRINT_GPRSMOD("VMFO: GPRS setting failure!\n");
+		IHU_ERROR_PRINT_GPRSMOD("VMFO: GPRS setting failure 5!\n");
 		return IHU_FAILURE;
 	}
 	//设置单路连接
 	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CIPMUX=0", (uint8_t*)"OK", 2) == IHU_FAILURE){
-		IHU_ERROR_PRINT_GPRSMOD("VMFO: GPRS setting failure!\n");
+		IHU_ERROR_PRINT_GPRSMOD("VMFO: GPRS setting failure 6!\n");
+		return IHU_FAILURE;
+	}
+	//先确认是否设置好了：设置APN
+	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CSTT", (uint8_t*)"OK", 2) == IHU_FAILURE){
+		IHU_ERROR_PRINT_GPRSMOD("VMFO: GPRS setting failure 7!\n");
+		return IHU_FAILURE;
+	}
+	//先确认是否设置好了：激活移动场景
+	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CIICR", (uint8_t*)"OK", 2) == IHU_FAILURE){
+		IHU_ERROR_PRINT_GPRSMOD("VMFO: GPRS setting failure 8!\n");
+		return IHU_FAILURE;
+	}
+	//先确认是否设置好了：获得本地IP
+	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CIFSR", (uint8_t*)"OK", 2) == IHU_FAILURE){
+		IHU_ERROR_PRINT_GPRSMOD("VMFO: GPRS setting failure 9!\n");
 		return IHU_FAILURE;
 	}
 	
 	//HTTP设置配置
-	func_gprsmod_send_AT_command((uint8_t*)"AT+SAPBR=3,1,\"CONTYPE\",\"GPRS\"", (uint8_t*)"OK", 2); //设置GPRS/HTTP工作模式，打开承载
-	func_gprsmod_send_AT_command((uint8_t*)"AT+SAPBR=3,1,\"APN\",\"CMNET\"", (uint8_t*)"OK", 2); //设置GPRS/HTTP工作模式
-	func_gprsmod_send_AT_command((uint8_t*)"AT+SAPBR=1,1", (uint8_t*)"OK", 2); //设置GPRS/HTTP工作模式	
-	func_gprsmod_send_AT_command((uint8_t*)"AT+HTTPINIT", (uint8_t*)"OK", 2); //设置GPRS/HTTP工作模式
-	func_gprsmod_send_AT_command((uint8_t*)"AT+HTTPPARA=\"CID\",1", (uint8_t*)"OK", 2); //HTTP参数配置
+	//设置GPRS/HTTP工作模式，打开承载
+	if(func_gprsmod_send_AT_command((uint8_t*)"AT+SAPBR=3,1,\"CONTYPE\",\"GPRS\"", (uint8_t*)"OK", 2) == IHU_FAILURE){
+		IHU_ERROR_PRINT_GPRSMOD("VMFO: HTTP setting failure 1!\n");
+		return IHU_FAILURE;
+	}	
+	//设置GPRS/HTTP工作模式
+	if(func_gprsmod_send_AT_command((uint8_t*)"AT+SAPBR=3,1,\"APN\",\"CMNET\"", (uint8_t*)"OK", 2) == IHU_FAILURE){
+		IHU_ERROR_PRINT_GPRSMOD("VMFO: HTTP setting failure 2!\n");
+		return IHU_FAILURE;
+	}	
+	//设置GPRS/HTTP工作模式	
+	if(func_gprsmod_send_AT_command((uint8_t*)"AT+SAPBR=1,1", (uint8_t*)"OK", 2) == IHU_FAILURE){
+		IHU_ERROR_PRINT_GPRSMOD("VMFO: HTTP setting failure 3!\n");
+		return IHU_FAILURE;
+	}	
+	//设置GPRS/HTTP工作模式
+	if(func_gprsmod_send_AT_command((uint8_t*)"AT+HTTPINIT", (uint8_t*)"OK", 2) == IHU_FAILURE){
+		IHU_ERROR_PRINT_GPRSMOD("VMFO: HTTP setting failure 4!\n");
+		return IHU_FAILURE;
+	}		
+	//HTTP参数配置
+	if(func_gprsmod_send_AT_command((uint8_t*)"AT+HTTPPARA=\"CID\",1", (uint8_t*)"OK", 2) == IHU_FAILURE){
+		IHU_ERROR_PRINT_GPRSMOD("VMFO: HTTP setting failure 5!\n");
+		return IHU_FAILURE;
+	}			
+	//HTTP参数配置
 	memset(temp, 0, sizeof(temp));
 	memcpy((char*)temp, "AT+HTTPPARA=\"URL\",\"", sizeof("AT+HTTPPARA=\"URL\",\""));
 	strcat((char*)temp, zIhuSysEngPar.cloud.cloudBhServerAddr);
 	strcat((char*)temp, "\"");
-	func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"OK", 2); //HTTP参数配置
+	if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"OK", 2) == IHU_FAILURE){
+		IHU_ERROR_PRINT_GPRSMOD("VMFO: HTTP setting failure 6!\n");
+		return IHU_FAILURE;
+	}			
 	
 	//组装并发送内容, 发送POST内容：尝试HTTP方式
 	memset(temp, 0, sizeof(temp));
