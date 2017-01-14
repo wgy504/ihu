@@ -15,7 +15,7 @@
         <TargetCommonOption>
           <Device>ARMCM0</Device>
           <Vendor>ARM</Vendor>
-          <PackID>ARM.CMSIS.4.5.0</PackID>
+          <PackID>ARM.CMSIS.5.0.0</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IROM(0x0,0x0) IRAM(0x0,0x0) CPUTYPE("Cortex-M0") CLOCK(12000000) ESEL ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -491,6 +491,11 @@
               <FilePath>..\..\..\..\sdk_580\sdk\platform\patch_code\DA14580\obj\atts_util.obj</FilePath>
             </File>
             <File>
+              <FileName>ke_mem.obj</FileName>
+              <FileType>3</FileType>
+              <FilePath>..\..\..\..\sdk_580\sdk\platform\patch_code\DA14580\obj\ke_mem.obj</FilePath>
+            </File>
+            <File>
               <FileName>gapc_task.obj</FileName>
               <FileType>3</FileType>
               <FilePath>..\..\..\..\sdk_580\sdk\platform\patch_code\DA14580\obj\gapc_task.obj</FilePath>
@@ -499,11 +504,6 @@
               <FileName>llc_con_update_ind.obj</FileName>
               <FileType>3</FileType>
               <FilePath>..\..\..\..\sdk_580\sdk\platform\patch_code\DA14580\obj\llc_con_update_ind.obj</FilePath>
-            </File>
-            <File>
-              <FileName>ke_mem.obj</FileName>
-              <FileType>3</FileType>
-              <FilePath>..\..\..\..\sdk_580\sdk\platform\patch_code\DA14580\obj\ke_mem.obj</FilePath>
             </File>
             <File>
               <FileName>uart_ext_wkup.c</FileName>
@@ -1438,6 +1438,11 @@
               <FileName>wecaht_aes.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\common\wecaht_aes.c</FilePath>
+            </File>
+            <File>
+              <FileName>user_profile.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\user_profile.c</FilePath>
             </File>
           </Files>
         </Group>

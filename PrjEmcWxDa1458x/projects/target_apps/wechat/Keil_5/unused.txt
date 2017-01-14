@@ -1,4 +1,4 @@
-;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Mon Jan 02 15:15:48 2017
+;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Sat Jan 14 13:59:57 2017
 ;VERSION 0.2
 ;FILE adc.o
 ;FILE app.o
@@ -25,13 +25,15 @@ app_custs1_process_handler <= USED 0
 ;FILE app_default_handlers.o
 default_advertise_operation <= USED 0
 default_app_on_disconnect <= USED 0
-default_app_on_init <= USED 0
 ;FILE app_diss.o
-app_dis_init <= USED 0
 ;FILE app_diss_task.o
 ;FILE app_easy_msg_utils.o
 app_easy_msg_free_callback <= USED 0
+app_easy_msg_modify <= USED 0
+app_easy_msg_set <= USED 0
+app_easy_wakeup <= USED 0
 app_easy_wakeup_free <= USED 0
+app_easy_wakeup_set <= USED 0
 ;FILE app_easy_security.o
 app_easy_security_csrk_get_active <= USED 0
 app_easy_security_encrypt_cfm_get_active <= USED 0
@@ -65,7 +67,12 @@ app_wechat_write_val_ind_handler <= USED 0
 ;FILE arch_main.o
 ;FILE arch_patch.o
 ;FILE arch_sleep.o
+arch_ble_ext_wakeup_off <= USED 0
+arch_ble_ext_wakeup_on <= USED 0
+arch_force_active_mode <= USED 0
+arch_get_sleep_mode <= USED 0
 arch_last_rwble_evt_get <= USED 0
+arch_restore_sleep_mode <= USED 0
 ;FILE arch_system.o
 arch_adv_time_calculate <= USED 0
 arch_set_pxact_gpio <= USED 0
@@ -111,6 +118,7 @@ epb_set_sint32 <= USED 0
 GPIO_ConfigurePinPower <= USED 0
 GPIO_EnableIRQ <= USED 0
 GPIO_GetIRQInputLevel <= USED 0
+GPIO_GetPinStatus <= USED 0
 GPIO_RegisterCallback <= USED 0
 GPIO_SetIRQInputLevel <= USED 0
 ;FILE hardfault_handler.o
@@ -159,8 +167,19 @@ mpbledemo2_sendData <= USED 0
 prf_pack_date_time <= USED 0
 prf_unpack_date_time <= USED 0
 ;FILE pwm.o
+set_tmr_div <= USED 0
+set_tmr_enable <= USED 0
 timer0_disable_irq <= USED 0
+timer0_enable_irq <= USED 0
+timer0_init <= USED 0
+timer0_register_callback <= USED 0
 timer0_release <= USED 0
+timer0_set <= USED 0
+timer0_set_pwm_high_counter <= USED 0
+timer0_set_pwm_low_counter <= USED 0
+timer0_set_pwm_on_counter <= USED 0
+timer0_start <= USED 0
+timer0_stop <= USED 0
 timer2_enable <= USED 0
 timer2_init <= USED 0
 timer2_set_hw_pause <= USED 0
@@ -218,8 +237,7 @@ uart2_init <= USED 0
 uart2_read <= USED 0
 uart2_write <= USED 0
 ;FILE user_periph_setup.o
-;FILE user_sleepmode.o
-;FILE user_sleepmode_task.o
+;FILE user_profile.o
 ;FILE user_wechat.o
 app_advertise_complete <= USED 0
 user_on_connection <= USED 0
@@ -251,3 +269,5 @@ quad_decoder_get_z_counter <= USED 0
 quad_decoder_init <= USED 0
 quad_decoder_register_callback <= USED 0
 quad_decoder_release <= USED 0
+wkupct_disable_irq <= USED 0
+wkupct_quad_disable_IRQ <= USED 0

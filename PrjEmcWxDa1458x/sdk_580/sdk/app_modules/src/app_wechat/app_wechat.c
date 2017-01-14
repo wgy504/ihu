@@ -39,6 +39,7 @@
 #include "wechat_task.h"                // Wechat Functions
 #include "app_prf_perm_types.h"
 #include "mpbledemo2.h"
+#include "user_profile.h"
 
 /*
  * LOCAL VARIABLES DECLARATIONS
@@ -51,6 +52,7 @@ data_info g_send_data  ;
 static data_info g_rcv_data   ;
 
 data_handler* pDataHandler ;
+
 
 /*
  * FUNCTION DEFINITIONS
@@ -65,12 +67,10 @@ static void register_all_products(void)
 
 void app_wechat_init(void)
 {
-//    app_param_update_request_timer_used = EASY_TIMER_INVALID_TIMER;
-
-		register_all_products();
+    register_all_products();
     
     data_handler_init(&m_mpbledemo2_handler, PRODUCT_TYPE_MPBLEDEMO2);
-	m_mpbledemo2_handler->m_data_init_func();
+		m_mpbledemo2_handler->m_data_init_func();
     m_mpbledemo2_handler->m_data_init_peripheral_func();
     
     app_wechat_SetDatahandler(m_mpbledemo2_handler);  
@@ -78,7 +78,11 @@ void app_wechat_init(void)
     // Initialise service access write permitions for all the included profiles
     prf_init_srv_perm();
     
-    arch_set_sleep_mode(app_default_sleep_mode);
+    //arch_set_sleep_mode(app_default_sleep_mode);
+
+		user_app_init();
+
+		default_app_on_init();
 }
 
 /**
