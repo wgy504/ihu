@@ -220,24 +220,24 @@ typedef struct msg_struct_adc_material_drop
 //UART消息定义
 typedef struct msg_struct_spsvirgo_l2frame_send
 {
-	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-1];
+	UINT8 data[IHU_MSG_BODY_L2FRAME_MAX_LEN];
 	UINT16 length;
 }msg_struct_spsvirgo_l2frame_send_t;
 typedef struct msg_struct_spsvirgo_l2frame_rcv
 {
-	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-1];
+	UINT8 data[IHU_MSG_BODY_L2FRAME_MAX_LEN];
 	UINT16 length;
 }msg_struct_spsvirgo_l2frame_rcv_t;
 
 //SPI消息定义
 typedef struct msg_struct_spileo_l2frame_send
 {
-	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-1];
+	UINT8 data[IHU_MSG_BODY_L2FRAME_MAX_LEN];
 	UINT16 length;
 }msg_struct_spileo_l2frame_send_t;
 typedef struct msg_struct_spileo_l2frame_rcv
 {
-	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-1];
+	UINT8 data[IHU_MSG_BODY_L2FRAME_MAX_LEN];
 	UINT16 length;
 }msg_struct_spileo_l2frame_rcv_t;
 
@@ -245,13 +245,13 @@ typedef struct msg_struct_spileo_l2frame_rcv
 //MSG_ID_I2C_L2FRAME_SEND
 typedef struct msg_struct_i2caries_l2frame_send
 {
-	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-1];	
+	UINT8 data[IHU_MSG_BODY_L2FRAME_MAX_LEN];	
 	UINT16 length;
 }msg_struct_i2caries_l2frame_send_t;
 //MSG_ID_I2C_L2FRAME_RCV
 typedef struct msg_struct_i2caries_l2frame_rcv
 {
-	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-1];
+	UINT8 data[IHU_MSG_BODY_L2FRAME_MAX_LEN];
 	UINT16 length;
 }msg_struct_i2caries_l2frame_rcv_t;
 
@@ -271,14 +271,14 @@ typedef struct msg_struct_i2caries_l3bfsc_cmd_resp
 //MSG_ID_CAN_L2FRAME_SEND
 typedef struct msg_struct_canvela_l2frame_send
 {
-	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-1];
+	UINT8 data[IHU_MSG_BODY_L2FRAME_MAX_LEN];
 	UINT16 length;
 }msg_struct_canvela_l2frame_send_t;
 
 //MSG_ID_CAN_L2FRAME_RCV
 typedef struct msg_struct_canvela_l2frame_rcv
 {
-	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-1];
+	UINT8 data[IHU_MSG_BODY_L2FRAME_MAX_LEN];
 	UINT16 length;
 }msg_struct_canvela_l2frame_rcv_t;
 

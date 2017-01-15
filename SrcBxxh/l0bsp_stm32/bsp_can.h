@@ -22,8 +22,8 @@ extern "C" {
 
 	
 //MAX_IHU_MSG_BODY_LENGTH-1是因为发送到上层SPSVIRGO的数据缓冲区受到消息结构msg_struct_spsvirgo_l2frame_rcv_t的影响
-#define IHU_BSP_STM32_CAN_IAU_REC_MAX_LEN 				MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
-#define IHU_BSP_STM32_CAN_SPARE1_REC_MAX_LEN 			MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
+#define IHU_BSP_STM32_CAN_IAU_REC_MAX_LEN 				IHU_MSG_BODY_L2FRAME_MAX_LEN	//最大接收数据长度
+#define IHU_BSP_STM32_CAN_SPARE1_REC_MAX_LEN 			IHU_MSG_BODY_L2FRAME_MAX_LEN  //最大接收数据长度
 
 //发送和接受数据的延迟时间长度
 #define IHU_BSP_STM32_CAN_TX_MAX_DELAY 				100

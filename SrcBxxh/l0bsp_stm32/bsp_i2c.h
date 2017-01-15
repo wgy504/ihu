@@ -23,9 +23,9 @@ extern "C" {
 #define IHU_BSP_STM32_I2C_TIMEOUT_TX_MAX                   3000
 
 	
-//MAX_IHU_MSG_BODY_LENGTH-1是因为发送到上层SPSVIRGO的数据缓冲区受到消息结构msg_struct_spsvirgo_l2frame_rcv_t的影响
-#define IHU_BSP_STM32_I2C1_REC_MAX_LEN 					MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
-#define IHU_BSP_STM32_I2C2_REC_MAX_LEN 					MAX_IHU_MSG_BODY_LENGTH-1	//最大接收数据长度
+//MAX_IHU_MSG_BODY_LENGTH-2是因为发送到上层SPSVIRGO的数据缓冲区受到消息结构msg_struct_spsvirgo_l2frame_rcv_t的影响
+#define IHU_BSP_STM32_I2C1_REC_MAX_LEN 					IHU_MSG_BODY_L2FRAME_MAX_LEN	//最大接收数据长度
+#define IHU_BSP_STM32_I2C2_REC_MAX_LEN 					IHU_MSG_BODY_L2FRAME_MAX_LEN	//最大接收数据长度
 
 //发送和接受数据的延迟时间长度
 #define IHU_BSP_STM32_I2C_TX_MAX_DELAY_DURATION 100

@@ -3,6 +3,14 @@
 =================================================
 //近期需要完成的任务
 
+//= ZJL, 2017 Jan.15, CURRENT_SW_DELIVERY R03.94 =>CCL项目
+= 由于所有的L2FRAME消息必须装载到正式的消息结构中进行传送，其数据域长度不得超过MAX_IHU_MSG_BODY_LENGTH-2，全部更新，包括CCL和BFSC
+= 由于这个因素，所有的BSP(UART/I2C/SPI/CAN)涉及到接收发送数据缓冲区的，都必须遵循最长长度-2
+= 由于编译器对于奇数地址对其的问题，统一使用常量对L2FRAME的消息长度进行控制：IHU_MSG_BODY_L2FRAME_MAX_LEN = MAX_IHU_MSG_BODY_LENGTH-3
+= 修改了BSP以及所有的消息定义(BFSC+CCL)
+= 完善HTTP的控制方式
+
+
 //= ZJL, 2017 Jan.14, CURRENT_SW_DELIVERY R03.93 =>CCL项目
 = 继续研究AT CMD的HTTP工作模式
 = 将消息长度改为455了，不然xml_pack不够长，必须大于400以上，但之前设置为505长度以后，message queue会出现莫名其妙的问题，将队列改为4个以后，内存又分紧张了。
@@ -13,7 +21,6 @@
 = 多次连续操作，会对GPRS/HTTP的状态产生影响。改进的方式时，先来一轮HTTP/GPRS连接的断链操作。
 = 网上经验号称，必须先操作AT+CSTT/设置APN，AT+CIICR/激活移动场景，AT+CIFSR/获得本地IP，有了这三部分的增加，才能避免HTTP初始化中SAPBR1,1设置错误的问题
   但实际上，暂时没有试验成功。
-
 
 //= ZJL, 2017 Jan.13, CURRENT_SW_DELIVERY R03.92 =>CCL项目
 = 调测LED闪灯任务：PC2上的207VC调测LED输出管脚，之前并没有在STM32CubeMX中拉出，导致没有初始化。拉出后，采用GALOWAG工作机制，非常正常。
