@@ -1,7 +1,13 @@
 =================================================
 == 将修改方式放在最前面，以提高效率
 =================================================
-//近期需要完成的任务
+
+//= ZJL/MYC, 2017 Jan.16, CURRENT_SW_DELIVERY R03.95 =>CCL项目/BFSC
+= 修改BFSC的头文件，包含了CAN的消息结构
+= 
+
+
+
 
 //= ZJL, 2017 Jan.15, CURRENT_SW_DELIVERY R03.94 =>CCL项目
 = 由于所有的L2FRAME消息必须装载到正式的消息结构中进行传送，其数据域长度不得超过MAX_IHU_MSG_BODY_LENGTH-2，全部更新，包括CCL和BFSC
@@ -9,7 +15,6 @@
 = 由于编译器对于奇数地址对其的问题，统一使用常量对L2FRAME的消息长度进行控制：IHU_MSG_BODY_L2FRAME_MAX_LEN = MAX_IHU_MSG_BODY_LENGTH-3
 = 修改了BSP以及所有的消息定义(BFSC+CCL)
 = 完善HTTP的控制方式
-
 
 //= ZJL, 2017 Jan.14, CURRENT_SW_DELIVERY R03.93 =>CCL项目
 = 继续研究AT CMD的HTTP工作模式
