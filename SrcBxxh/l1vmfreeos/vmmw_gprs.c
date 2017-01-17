@@ -271,7 +271,7 @@ OPSTAT ihu_vmmw_gprsmod_sms_transmit_with_confirm(char *calledNumber, char *inpu
 * 注意   :  为了保持连接，每空闲隔10秒发送一次心跳
 *******************************************************************************/
 //往后台发送的POST功能
-OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input)
+OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input, int16_t length)
 {	
 	uint8_t temp[IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN+1];	
 	uint8_t *p1,*p2;
@@ -317,8 +317,9 @@ OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input)
 		return IHU_FAILURE;
 	}
 	
-	//设置GPRS移动台类别为B,支持包交换和数据交换 
-	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CGCLASS=\"B\"", (uint8_t*)"OK", 4) == IHU_FAILURE){
+	//设置GPRS移动台类别为B,支持包交换和数据交换
+	//之前采用CLASS B，改为CG模式，就是Class C in GPRS only mode
+	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CGCLASS=\"CG\"", (uint8_t*)"OK", 4) == IHU_FAILURE){
 		IHU_ERROR_PRINT_GPRSMOD("VMFO: GPRS setting failure 1!\n");
 		return IHU_FAILURE;
 	}
@@ -419,8 +420,8 @@ OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input)
 	
 	//组装并发送内容, 发送POST内容：尝试HTTP方式
 //	memset(temp, 0, sizeof(temp));
-//	memcpy((char*)temp, "AT+HTTPPARA=\"USERDATA\",\"", sizeof("AT+HTTPPARA=\"CONTENT\",\""));
-//	strcat((char*)temp, input);
+//	memcpy((char*)temp, "AT+HTTPPARA=\"CONTENT\",\"", sizeof("AT+HTTPPARA=\"CONTENT\",\""));
+//	strcat((char*)temp, "application/x-www-form-urlencoded");
 //	strcat((char*)temp, "\"");
 //	//POST数据数据，同样设置延时4秒
 //	if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"OK", 2) == IHU_FAILURE){
@@ -429,22 +430,27 @@ OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input)
 //	}
 	//设置GPRS/HTTP工作模式，
 	memset(temp, 0, sizeof(temp));
-	sprintf((char*)temp, "AT+HTTPDATA=%d, 4000", sizeof(input));  //延时4秒
-	if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"OK", 4) == IHU_FAILURE){
+	sprintf((char*)temp, "AT+HTTPDATA=%d, 4000", length*2);  //延时4秒
+	IhuDebugPrint("VMFO: HTTPDATA buffer = %s\n", temp);
+	if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"DOWNLOAD", 4) == IHU_FAILURE){
+	//if(func_gprsmod_send_AT_command((uint8_t*)"AT+HTTPDATA=224, 10000", (uint8_t*)"DOWNLOAD", 4) == IHU_FAILURE){
 		IHU_ERROR_PRINT_GPRSMOD("VMFO: HTTPDATA command data failure!\n");
 		return IHU_FAILURE;
 	}
-	func_gprsmod_send_string(input);
+	ihu_sleep(1);
+	func_gprsmod_send_string(input);	
+	func_gprsmod_send_LR();
 	//POST动作实施
 	ihu_sleep(4);
-	func_gprsmod_send_AT_command((uint8_t*)"AT+HTTPACTION=1", (uint8_t*)"OK", 2);
 	//200表示POST成功
-	if (strstr((char*)zIhuBspStm32SpsGprsRxBuff, "200") == NULL)
-	IhuErrorPrint("VMFO: Post data to back server failure, not get positve feedback!\n");
+	func_gprsmod_send_AT_command((uint8_t*)"AT+HTTPACTION=1", (uint8_t*)"+HTTPACTION: 1,200", 4);
+	//ihu_sleep(4);
+	//if (strstr((char*)zIhuBspStm32SpsGprsRxBuff, "200") == NULL) IhuErrorPrint("VMFO: Post data to back server failure, not get positve feedback!\n");
 	
 	//读取服务器后台的反馈数据
 	func_gprsmod_send_AT_command((uint8_t*)"AT+HTTPACTION=0", (uint8_t*)"OK", 2);
-	if(func_gprsmod_send_AT_command((uint8_t*)"AT+HTTPREAD", (uint8_t*)"OK", 2) == IHU_FAILURE){
+	//收到200表示反馈成功
+	if(func_gprsmod_send_AT_command((uint8_t*)"AT+HTTPREAD", (uint8_t*)"+HTTPACTION: 0,200", 4) == IHU_FAILURE){
 		IHU_ERROR_PRINT_GPRSMOD("VMFO: HTTP/Read back data failure!\n");
 		return IHU_FAILURE;
 	}
@@ -1392,7 +1398,7 @@ OPSTAT func_gprsmod_module_info_retrieve()
 	func_gprsmod_clear_receive_buffer();
 	
 	//查询制造商名称
-	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CGMI",(uint8_t*)"OK", 2) == IHU_SUCCESS)
+	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CGMI",(uint8_t*)"OK", 4) == IHU_SUCCESS)
 	{ 
 		p1=(int8_t*)strstr((const char*)(zIhuBspStm32SpsGprsRxBuff+2),"\n");
 		strncpy(temp, (char*)zIhuBspStm32SpsGprsRxBuff+2, (p1-zIhuBspStm32SpsGprsRxBuff>=sizeof(temp))?sizeof(temp):(p1-zIhuBspStm32SpsGprsRxBuff));
@@ -1408,7 +1414,7 @@ OPSTAT func_gprsmod_module_info_retrieve()
 	}
 	
 	//查询模块名字
-	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CGMM", (uint8_t*)"OK", 2)== IHU_SUCCESS)
+	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CGMM", (uint8_t*)"OK", 4)== IHU_SUCCESS)
 	{ 
 		p1=(int8_t*)strstr((const char*)(zIhuBspStm32SpsGprsRxBuff+2),"\n"); 
 		strncpy(temp, (char*)zIhuBspStm32SpsGprsRxBuff+2, (p1-zIhuBspStm32SpsGprsRxBuff>=sizeof(temp))?sizeof(temp):(p1-zIhuBspStm32SpsGprsRxBuff));
@@ -1424,7 +1430,7 @@ OPSTAT func_gprsmod_module_info_retrieve()
 	}
 	
 	//查询产品序列号
-	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CGSN", (uint8_t*)"OK", 2)== IHU_SUCCESS)
+	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CGSN", (uint8_t*)"OK", 4)== IHU_SUCCESS)
 	{ 
 		p1=(int8_t*)strstr((const char*)(zIhuBspStm32SpsGprsRxBuff+2),"\n"); 
 		strncpy(temp, (char*)zIhuBspStm32SpsGprsRxBuff+2, (p1-zIhuBspStm32SpsGprsRxBuff>=sizeof(temp))?sizeof(temp):(p1-zIhuBspStm32SpsGprsRxBuff));
@@ -1439,7 +1445,7 @@ OPSTAT func_gprsmod_module_info_retrieve()
 	}
 	
 	//查询本机号码
-	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CNUM", (uint8_t*)"OK", 2)== IHU_SUCCESS)
+	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CNUM", (uint8_t*)"OK", 4)== IHU_SUCCESS)
 	{ 
 		int8_t *p2;
 		p1=(int8_t*)strstr((const char*)(zIhuBspStm32SpsGprsRxBuff),"\""); 
@@ -1477,10 +1483,10 @@ OPSTAT func_gprsmod_gsm_info_retrieve(void)
 	func_gprsmod_clear_receive_buffer();
 	
 	//设置显示详细错误信息
-	func_gprsmod_send_AT_command((uint8_t*)"AT+CMEE=2", (uint8_t*)"OK", 2);
+	func_gprsmod_send_AT_command((uint8_t*)"AT+CMEE=2", (uint8_t*)"OK", 4);
 	
 	//查询SIM卡是否在位
-	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CPIN?", (uint8_t*)"OK", 2) == IHU_SUCCESS)
+	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CPIN?", (uint8_t*)"OK", 4) == IHU_SUCCESS)
 	{
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
 			IhuDebugPrint("VMFO: SIM card inserted!\n");			
@@ -1493,7 +1499,7 @@ OPSTAT func_gprsmod_gsm_info_retrieve(void)
 	}
 
 	//查询运营商名字
-	if(func_gprsmod_send_AT_command((uint8_t*)"AT+COPS?", (uint8_t*)"OK", 2)== IHU_SUCCESS)		
+	if(func_gprsmod_send_AT_command((uint8_t*)"AT+COPS?", (uint8_t*)"OK", 4)== IHU_SUCCESS)		
 	{ 
 		p1=(uint8_t*)strstr((const char*)(zIhuBspStm32SpsGprsRxBuff),"\""); 
 		if(p1)//有有效数据
@@ -1513,7 +1519,7 @@ OPSTAT func_gprsmod_gsm_info_retrieve(void)
 	}
  
 	//查询信号质量
-	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CSQ", (uint8_t*)"OK", 2) == IHU_SUCCESS)		
+	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CSQ", (uint8_t*)"OK", 4) == IHU_SUCCESS)		
 	{ 
 		p1=(uint8_t*)strstr((const char*)(zIhuBspStm32SpsGprsRxBuff),":");
 		if(p1)
@@ -1534,7 +1540,7 @@ OPSTAT func_gprsmod_gsm_info_retrieve(void)
 	//General information inquery
 	//下面的查询结果不影响该模块投入应用
 	//DTMF支持与否
-  if(func_gprsmod_send_AT_command((uint8_t*)"AT+DDET=1", (uint8_t*)"OK", 2) == IHU_SUCCESS)
+  if(func_gprsmod_send_AT_command((uint8_t*)"AT+DDET=1", (uint8_t*)"OK", 4) == IHU_SUCCESS)
 	{
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Module support DTMF audio-decode, support key-down during peer conversation.\n");
 	}
@@ -1542,7 +1548,7 @@ OPSTAT func_gprsmod_gsm_info_retrieve(void)
     if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Module not support DTMF audio-decode, Not support key-down during peer conversation.\n");
 	}
 	//TTS支持与否
-	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CTTS=?", (uint8_t*)"OK", 2) == IHU_SUCCESS)
+	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CTTS=?", (uint8_t*)"OK", 4) == IHU_SUCCESS)
 	{
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Support TTS local voice, Support to convert TEXT into voice.\n");
 	}
@@ -1551,7 +1557,7 @@ OPSTAT func_gprsmod_gsm_info_retrieve(void)
 	}
 	//基站定位支持与否：该AT命令跟SIM800A紧密结合，换做其他硬件模块，命令可能会发生变化 
 	//之前使用CIPSIM800ALOC，，目前改为CIPGSMLOC
-	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CIPGSMLOC=?", (uint8_t*)"OK", 2) == IHU_SUCCESS)
+	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CIPGSMLOC=?", (uint8_t*)"OK", 4) == IHU_SUCCESS)
 	{
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Module support base station positioning, able to fetch position information.\n");
 	}
@@ -1580,7 +1586,7 @@ OPSTAT func_gprsmod_module_session_init(void)
 	//func_gprsmod_send_AT_command((uint8_t*)"AT+CFUN=1,1", (uint8_t*)"OK", 4);
 	
 	//最大循环次数
-	while((repeatCnt > 0) &&(func_gprsmod_send_AT_command((uint8_t*)"AT", (uint8_t*)"OK", 2) != IHU_SUCCESS))//查询是否应到AT指令
+	while((repeatCnt > 0) &&(func_gprsmod_send_AT_command((uint8_t*)"AT", (uint8_t*)"OK", 4) != IHU_SUCCESS))//查询是否应到AT指令
 	{
 		repeatCnt--;		
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
@@ -1594,7 +1600,7 @@ OPSTAT func_gprsmod_module_session_init(void)
 	}
 	
 	//不回显
-	if (func_gprsmod_send_AT_command((uint8_t*)"ATE0", (uint8_t*)"OK", 2) != IHU_SUCCESS) {
+	if (func_gprsmod_send_AT_command((uint8_t*)"ATE1", (uint8_t*)"OK", 4) != IHU_SUCCESS) {
 		IHU_ERROR_PRINT_GPRSMOD("VMFO: Can not set display status!\n");
 		return IHU_FAILURE;
 	}
@@ -1612,7 +1618,7 @@ OPSTAT func_gprsmod_module_session_init(void)
 	}
 	
 	//确定是否注册
-	if (func_gprsmod_send_AT_command((uint8_t*)"At+CREG?", (uint8_t*)"OK", 2) != IHU_SUCCESS) {
+	if (func_gprsmod_send_AT_command((uint8_t*)"At+CREG?", (uint8_t*)"OK", 4) != IHU_SUCCESS) {
 		IHU_ERROR_PRINT_GPRSMOD("VMFO: Not yet registered into live network!\n");
 		return IHU_FAILURE;
 	}

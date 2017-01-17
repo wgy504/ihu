@@ -343,7 +343,7 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	
 	//将组装好的消息发送到GPRSMOD模组中去，送往后台
 	//ihu_sleep(2);
-	ret = ihu_vmmw_gprsmod_http_data_transmit_with_receive((char *)(pMsgOutput.buf));	
+	ret = ihu_vmmw_gprsmod_http_data_transmit_with_receive((char *)(pMsgOutput.buf), pMsgOutput.bufferLen);	
 	//IhuDebugPrint("SPSVIRGO: transmit data out, ret = %d\n", ret);
 	//ret = -1;
 	
