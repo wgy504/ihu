@@ -3,7 +3,7 @@
 <title>Static Call Graph - [PrjCclFo@207VC\PrjCclFo@207VC.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image PrjCclFo@207VC\PrjCclFo@207VC.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Mon Jan 16 11:37:59 2017
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Mon Jan 16 21:35:11 2017
 <BR><P>
 <H3>Maximum Stack Usage =       2792 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -3878,7 +3878,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[1f4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_gprsmod_module_session_init
 </UL>
 
-<P><STRONG><a name="[1f4]"></a>func_gprsmod_module_session_init</STRONG> (Thumb, 210 bytes, Stack size 24 bytes, vmmw_gprs.o(i.func_gprsmod_module_session_init))
+<P><STRONG><a name="[1f4]"></a>func_gprsmod_module_session_init</STRONG> (Thumb, 248 bytes, Stack size 24 bytes, vmmw_gprs.o(i.func_gprsmod_module_session_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 520<LI>Call Chain = func_gprsmod_module_session_init &rArr; func_gprsmod_module_info_retrieve &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[172]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_usleep
@@ -3915,7 +3915,8 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1f5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_sps_gprs_send_data
 </UL>
-<BR>[Called By]<UL><LI><a href="#[1f2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_gprsmod_send_AT_command
+<BR>[Called By]<UL><LI><a href="#[19d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_vmmw_gprsmod_http_data_transmit_with_receive
+<LI><a href="#[1f2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_gprsmod_send_AT_command
 </UL>
 
 <P><STRONG><a name="[188]"></a>func_i2caries_hw_init</STRONG> (Thumb, 10 bytes, Stack size 8 bytes, l2i2caries.o(i.func_i2caries_hw_init))
@@ -4653,7 +4654,8 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[212]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
 </UL>
-<BR>[Called By]<UL><LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FsmProcessingLaunch
+<BR>[Called By]<UL><LI><a href="#[19d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_vmmw_gprsmod_http_data_transmit_with_receive
+<LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FsmProcessingLaunch
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_spsvirgo_ccl_fault_report_send
 <LI><a href="#[36]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_spsvirgo_ccl_event_report_send
 <LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_spsvirgo_ccl_close_door_report_send
@@ -4820,13 +4822,15 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[199]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rssi_value
 </UL>
 
-<P><STRONG><a name="[19d]"></a>ihu_vmmw_gprsmod_http_data_transmit_with_receive</STRONG> (Thumb, 2236 bytes, Stack size 952 bytes, vmmw_gprs.o(i.ihu_vmmw_gprsmod_http_data_transmit_with_receive))
+<P><STRONG><a name="[19d]"></a>ihu_vmmw_gprsmod_http_data_transmit_with_receive</STRONG> (Thumb, 2268 bytes, Stack size 952 bytes, vmmw_gprs.o(i.ihu_vmmw_gprsmod_http_data_transmit_with_receive))
 <BR><BR>[Stack]<UL><LI>Max Depth = 2120<LI>Call Chain = ihu_vmmw_gprsmod_http_data_transmit_with_receive &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[141]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_message_send
+<LI><a href="#[1f6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_gprsmod_send_string
 <LI><a href="#[1f2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_gprsmod_send_AT_command
 <LI><a href="#[1f4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_gprsmod_module_session_init
 <LI><a href="#[1f1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_gprsmod_clear_receive_buffer
+<LI><a href="#[e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_sleep
 <LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
 <LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
 <LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintFo

@@ -4,10 +4,15 @@
 
 //= ZJL/MYC, 2017 Jan.16, CURRENT_SW_DELIVERY R03.95 =>CCL项目/BFSC
 = 修改BFSC的头文件，包含了CAN的消息结构
-= 
-
-
-
+= 将Msg_Que改为4个，最大编译之后的内存占用115KB，虽然不太美妙，但至少消灭了CLOSE_REPORT_CFM收到以后的VMFO接收差错问题
+= AT命令集的正常时间改为4S钟非常必要，很多情况下，可以立即反馈的，但有些命令比较慢，改为4S以后，对于大多数命令比较有效。当然还有些命令，比这个更长的。
+= 努力验证POST的缓冲区机制，按照官方介绍，应该是在DOWNLOAD与OK之间的缝隙直接发送，但采用AT COMMMAND TESTER V28官方工具的脚本Script Command方式，一直出现
+400 Bad Request错误（如果将发送数据放在USERDATA时），或者出现200（OK）但数据长度只有42BYTE（将数据单独发送），而且发送框log见不到发送记录，不清楚是否真的发送
+成功。另外，HTTPREAD也是成功的。
+= 如果采用程序控制，也总是出现HardFault崩溃，说明连续如此发送必有硬伤。
+= 还采用了Multi-part/Content-Type的格式方式，采用boundary进行控制，也没成功。缓冲区依然没找到。
+= 使用官方工具的POST方式，则非常成功，唯一的差异是官方工具自带缓冲区。
+= 后面再试试，如果实在搞不定，则需要尝试TCP方式了。
 
 //= ZJL, 2017 Jan.15, CURRENT_SW_DELIVERY R03.94 =>CCL项目
 = 由于所有的L2FRAME消息必须装载到正式的消息结构中进行传送，其数据域长度不得超过MAX_IHU_MSG_BODY_LENGTH-2，全部更新，包括CCL和BFSC
