@@ -29,6 +29,7 @@ OPSTAT func_cloud_standard_xml_pack(UINT8 msgType, char *funcFlag, UINT16 msgId,
 	if ((inputLen <4) || (inputPar == NULL) || (inputLen > (MAX_IHU_MSG_BUF_LENGTH_CLOUD - HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN)/2) || \
 		(inputLen > (sizeof(StrMsg_HUITP_MSGID_uni_general_message_t) - HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN)))
 	{
+		IhuDebugPrint("SPSVIRGO: InputLen=%d, InputPar=%d, MaxLen=%d, size2=%d\n", inputLen, inputPar, (MAX_IHU_MSG_BUF_LENGTH_CLOUD - HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN)/2, sizeof(StrMsg_HUITP_MSGID_uni_general_message_t));
 		IhuErrorPrint("SPSVIRGO: Error input pointer or message length!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
@@ -175,7 +176,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 	UINT32 index=0, msgId=0, msgLen=0;
 	char tmp[5] = "";
 	UINT8 tt[HUITP_MSG_BUF_BODY_ONLY_MAX_LEN];
-	//int ret = 0;
+	int ret = 0;
 	int i = 0, dif = 0;
 	char *pIndexT1, *pIndexT2;  //临时位置
 	UINT8 msgType;
@@ -461,11 +462,12 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			break;
 	}
 	
+	//假设一切正常
+	ret = IHU_SUCCESS;
+	
 	//再来进行消息的统一处理
 	switch(msgId)
 	{
-
-
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 		//心跳请求
 		case HUITP_MSGID_uni_heart_beat_req:
@@ -478,7 +480,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd1 = (StrMsg_HUITP_MSGID_uni_heart_beat_req_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_heart_beat_req_received_handle(snd1);
+			ret = func_cloud_spsvirgo_ccl_msg_heart_beat_req_received_handle(snd1);
 		}
 			break;
 
@@ -493,7 +495,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd2 = (StrMsg_HUITP_MSGID_uni_heart_beat_confirm_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_heart_beat_confirm_received_handle(snd2);			
+			ret = func_cloud_spsvirgo_ccl_msg_heart_beat_confirm_received_handle(snd2);			
 		}
 			break;
 		
@@ -507,7 +509,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd3 = (StrMsg_HUITP_MSGID_uni_ccl_lock_req_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_ccl_lock_req_received_handle(snd3);	
+			ret = func_cloud_spsvirgo_ccl_msg_ccl_lock_req_received_handle(snd3);	
 		}
 			break;
 			
@@ -521,7 +523,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd4 = (StrMsg_HUITP_MSGID_uni_ccl_lock_confirm_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_ccl_lock_confirm_received_handle(snd4);
+			ret = func_cloud_spsvirgo_ccl_msg_ccl_lock_confirm_received_handle(snd4);
 		}
 			break;
 			
@@ -535,7 +537,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd5 = (StrMsg_HUITP_MSGID_uni_ccl_lock_auth_resp_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_ccl_lock_auth_resp_received_handle(snd5);			
+			ret = func_cloud_spsvirgo_ccl_msg_ccl_lock_auth_resp_received_handle(snd5);			
 		}
 			break;
 			
@@ -549,7 +551,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd6 = (StrMsg_HUITP_MSGID_uni_ccl_door_req_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_ccl_door_req_received_handle(snd6);			
+			ret = func_cloud_spsvirgo_ccl_msg_ccl_door_req_received_handle(snd6);			
 		}
 			break;
 		
@@ -563,7 +565,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd7 = (StrMsg_HUITP_MSGID_uni_ccl_door_confirm_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_ccl_door_confirm_received_handle(snd7);						
+			ret = func_cloud_spsvirgo_ccl_msg_ccl_door_confirm_received_handle(snd7);						
 		}
 			break;
 				
@@ -577,7 +579,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd8 = (StrMsg_HUITP_MSGID_uni_ccl_rfid_req_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_ccl_rfid_req_received_handle(snd8);						
+			ret = func_cloud_spsvirgo_ccl_msg_ccl_rfid_req_received_handle(snd8);						
 		}
 			break;
 
@@ -591,7 +593,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd9 = (StrMsg_HUITP_MSGID_uni_ccl_rfid_confirm_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_ccl_rfid_confirm_received_handle(snd9);						
+			ret = func_cloud_spsvirgo_ccl_msg_ccl_rfid_confirm_received_handle(snd9);						
 		}
 			break;
 
@@ -605,7 +607,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd10 = (StrMsg_HUITP_MSGID_uni_ccl_ble_req_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_ccl_ble_req_received_handle(snd10);					
+			ret = func_cloud_spsvirgo_ccl_msg_ccl_ble_req_received_handle(snd10);					
 		}
 			break;
 
@@ -619,7 +621,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd11 = (StrMsg_HUITP_MSGID_uni_ccl_ble_confirm_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_ccl_ble_confirm_received_handle(snd11);						
+			ret = func_cloud_spsvirgo_ccl_msg_ccl_ble_confirm_received_handle(snd11);						
 		}
 			break;
 
@@ -633,7 +635,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd12 = (StrMsg_HUITP_MSGID_uni_ccl_gprs_req_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_ccl_gprs_req_received_handle(snd12);						
+			ret = func_cloud_spsvirgo_ccl_msg_ccl_gprs_req_received_handle(snd12);						
 		}
 			break;
 
@@ -647,7 +649,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd13 = (StrMsg_HUITP_MSGID_uni_ccl_gprs_confirm_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_ccl_gprs_confirm_received_handle(snd13);						
+			ret = func_cloud_spsvirgo_ccl_msg_ccl_gprs_confirm_received_handle(snd13);						
 		}
 			break;
 
@@ -661,7 +663,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd14 = (StrMsg_HUITP_MSGID_uni_ccl_battery_req_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_ccl_battery_req_received_handle(snd14);							
+			ret = func_cloud_spsvirgo_ccl_msg_ccl_battery_req_received_handle(snd14);							
 		}
 			break;
 
@@ -675,7 +677,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd15 = (StrMsg_HUITP_MSGID_uni_ccl_battery_confirm_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_ccl_battery_confirm_received_handle(snd15);								
+			ret = func_cloud_spsvirgo_ccl_msg_ccl_battery_confirm_received_handle(snd15);								
 		}
 			break;
 
@@ -689,7 +691,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd16 = (StrMsg_HUITP_MSGID_uni_ccl_shake_req_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_ccl_shake_req_received_handle(snd16);					
+			ret = func_cloud_spsvirgo_ccl_msg_ccl_shake_req_received_handle(snd16);					
 		}
 			break;
 
@@ -703,7 +705,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd17 = (StrMsg_HUITP_MSGID_uni_ccl_shake_confirm_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_ccl_shake_confirm_received_handle(snd17);							
+			ret = func_cloud_spsvirgo_ccl_msg_ccl_shake_confirm_received_handle(snd17);							
 		}
 			break;
 
@@ -717,7 +719,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd18 = (StrMsg_HUITP_MSGID_uni_ccl_smoke_req_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_ccl_smoke_req_received_handle(snd18);								
+			ret = func_cloud_spsvirgo_ccl_msg_ccl_smoke_req_received_handle(snd18);								
 		}
 			break;
 
@@ -731,7 +733,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd19 = (StrMsg_HUITP_MSGID_uni_ccl_smoke_confirm_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_ccl_smoke_confirm_received_handle(snd19);						
+			ret = func_cloud_spsvirgo_ccl_msg_ccl_smoke_confirm_received_handle(snd19);						
 		}
 			break;
 
@@ -745,7 +747,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd20 = (StrMsg_HUITP_MSGID_uni_ccl_water_req_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_ccl_water_req_received_handle(snd20);				
+			ret = func_cloud_spsvirgo_ccl_msg_ccl_water_req_received_handle(snd20);				
 		}
 			break;
 
@@ -759,7 +761,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd21 = (StrMsg_HUITP_MSGID_uni_ccl_water_confirm_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_ccl_water_confirm_received_handle(snd21);							
+			ret = func_cloud_spsvirgo_ccl_msg_ccl_water_confirm_received_handle(snd21);							
 		}
 			break;
 
@@ -773,7 +775,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd22 = (StrMsg_HUITP_MSGID_uni_ccl_temp_req_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_ccl_temp_req_received_handle(snd22);				
+			ret = func_cloud_spsvirgo_ccl_msg_ccl_temp_req_received_handle(snd22);				
 		}
 			break;
 
@@ -787,7 +789,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd23 = (StrMsg_HUITP_MSGID_uni_ccl_temp_confirm_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_ccl_temp_confirm_received_handle(snd23);							
+			ret = func_cloud_spsvirgo_ccl_msg_ccl_temp_confirm_received_handle(snd23);							
 		}
 			break;
 
@@ -801,7 +803,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd24 = (StrMsg_HUITP_MSGID_uni_ccl_humid_req_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_ccl_humid_req_received_handle(snd24);						
+			ret = func_cloud_spsvirgo_ccl_msg_ccl_humid_req_received_handle(snd24);						
 		}
 			break;
 
@@ -815,7 +817,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd25 = (StrMsg_HUITP_MSGID_uni_ccl_humid_confirm_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_ccl_humid_confirm_received_handle(snd25);								
+			ret = func_cloud_spsvirgo_ccl_msg_ccl_humid_confirm_received_handle(snd25);								
 		}
 			break;
 
@@ -829,7 +831,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd26 = (StrMsg_HUITP_MSGID_uni_ccl_fall_req_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_ccl_fall_req_received_handle(snd26);						
+			ret = func_cloud_spsvirgo_ccl_msg_ccl_fall_req_received_handle(snd26);						
 		}
 			break;
 
@@ -843,7 +845,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd27 = (StrMsg_HUITP_MSGID_uni_ccl_fall_confirm_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_ccl_fall_confirm_received_handle(snd27);
+			ret = func_cloud_spsvirgo_ccl_msg_ccl_fall_confirm_received_handle(snd27);
 		}
 			break;
 
@@ -857,7 +859,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd28 = (StrMsg_HUITP_MSGID_uni_ccl_state_req_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_ccl_state_req_received_handle(snd28);			
+			ret = func_cloud_spsvirgo_ccl_msg_ccl_state_req_received_handle(snd28);			
 		}
 			break;
 
@@ -871,7 +873,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd29 = (StrMsg_HUITP_MSGID_uni_ccl_state_confirm_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle(snd29);						
+			ret = func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle(snd29);						
 		}
 			break;
 
@@ -885,7 +887,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd30 = (StrMsg_HUITP_MSGID_uni_inventory_req_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_inventory_req_received_handle(snd30);			
+			ret = func_cloud_spsvirgo_ccl_msg_inventory_req_received_handle(snd30);			
 		}
 			break;
 
@@ -899,7 +901,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd31 = (StrMsg_HUITP_MSGID_uni_inventory_confirm_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_inventory_confirm_received_handle(snd31);					
+			ret = func_cloud_spsvirgo_ccl_msg_inventory_confirm_received_handle(snd31);					
 		}
 			break;		
 
@@ -913,7 +915,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd32 = (StrMsg_HUITP_MSGID_uni_sw_package_req_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_sw_package_req_received_handle(snd32);							
+			ret = func_cloud_spsvirgo_ccl_msg_sw_package_req_received_handle(snd32);							
 		}
 			break;		
 
@@ -927,7 +929,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				return IHU_FAILURE;				
 			}
 			snd33 = (StrMsg_HUITP_MSGID_uni_sw_package_confirm_t *)(pMsgBuf);
-			func_cloud_spsvirgo_ccl_msg_sw_package_confirm_received_handle(snd33);						
+			ret = func_cloud_spsvirgo_ccl_msg_sw_package_confirm_received_handle(snd33);						
 		}
 			break;
 		
@@ -940,10 +942,10 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			return IHU_FAILURE;			
 		}
 			//break;
-	}	
-
+	}
+	
 	//返回
-	return IHU_SUCCESS;
+	return ret;
 }
 
 /*
