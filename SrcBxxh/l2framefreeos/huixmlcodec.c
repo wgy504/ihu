@@ -191,7 +191,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 		return IHU_FAILURE;
 	}
 	//控制命令不带XML格式头，接收的内容以裸控制命令，所以必须是偶数字节
-	if ((rcv->length > MAX_IHU_MSG_BUF_LENGTH_CLOUD) || (rcv->length < 8) || (rcv->length > (HUITP_MSG_BUF_BODY_ONLY_MAX_LEN*2))){
+	if ((rcv->length > MAX_IHU_MSG_BUF_LENGTH_CLOUD) || (rcv->length < 8)){
 		IhuErrorPrint("SPSVIRGO: Received message error, invalid data length by XML content format!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;

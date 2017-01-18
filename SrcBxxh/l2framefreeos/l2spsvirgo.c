@@ -279,7 +279,13 @@ OPSTAT fsm_spsvirgo_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		IhuErrorPrint("SPSVIRGO: Unpack and processing receiving message error!\n");
-		return IHU_FAILURE;	
+		
+		//不能直接返回差错，因为上层还巴巴的等着回复这个消息，不然状态机会出错
+		msg_struct_spsvirgo_ccl_cloud_fb_t snd;
+		memset(&snd, 0, sizeof(msg_struct_spsvirgo_ccl_cloud_fb_t));
+		snd.authResult = IHU_CCL_LOCK_AUTH_RESULT_NOK;
+		snd.length = sizeof(msg_struct_spsvirgo_ccl_cloud_fb_t);
+		ihu_message_send(MSG_ID_SPS_CCL_CLOUD_FB, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 	}
 	//后面对于收到的每一个消息的基础处理，都由CCL的消息处理函数具体完成
 
@@ -342,10 +348,7 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	}
 	
 	//将组装好的消息发送到GPRSMOD模组中去，送往后台
-	//ihu_sleep(2);
 	ret = ihu_vmmw_gprsmod_http_data_transmit_with_receive((char *)(pMsgOutput.buf), pMsgOutput.bufferLen);	
-	//IhuDebugPrint("SPSVIRGO: transmit data out, ret = %d\n", ret);
-	//ret = -1;
 	
 	//这里有个挺有意思的现象：这里的命令还未执行完成，实际上后台的数据已经通过UART回来了，并通过ISR服务程序发送到SPSVIRGO的QUEUE中，但只有这里执行结束后，
 	//才会去接那个消息并执行结果。当然也存在着不正确或者没有结果的情况，那就靠CCL的状态机进行恢复了。

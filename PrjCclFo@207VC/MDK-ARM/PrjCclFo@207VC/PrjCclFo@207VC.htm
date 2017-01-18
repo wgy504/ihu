@@ -3,7 +3,7 @@
 <title>Static Call Graph - [PrjCclFo@207VC\PrjCclFo@207VC.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image PrjCclFo@207VC\PrjCclFo@207VC.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Wed Jan 18 14:55:03 2017
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Wed Jan 18 15:52:17 2017
 <BR><P>
 <H3>Maximum Stack Usage =       2792 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -3027,10 +3027,11 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> l2spsvirgo.o(.data)
 </UL>
-<P><STRONG><a name="[33]"></a>fsm_spsvirgo_l2frame_rcv</STRONG> (Thumb, 120 bytes, Stack size 480 bytes, l2spsvirgo.o(i.fsm_spsvirgo_l2frame_rcv))
+<P><STRONG><a name="[33]"></a>fsm_spsvirgo_l2frame_rcv</STRONG> (Thumb, 144 bytes, Stack size 480 bytes, l2spsvirgo.o(i.fsm_spsvirgo_l2frame_rcv))
 <BR><BR>[Stack]<UL><LI>Max Depth = 2072<LI>Call Chain = fsm_spsvirgo_l2frame_rcv &rArr; func_cloud_standard_xml_unpack &rArr; func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
-<BR>[Calls]<UL><LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
+<BR>[Calls]<UL><LI><a href="#[141]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_message_send
+<LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
 <LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
 <LI><a href="#[19f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_cloud_standard_xml_unpack
 <LI><a href="#[e9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
@@ -3627,7 +3628,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[34]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_spsvirgo_ccl_open_auth_inq
 </UL>
 
-<P><STRONG><a name="[19f]"></a>func_cloud_standard_xml_unpack</STRONG> (Thumb, 4048 bytes, Stack size 400 bytes, huixmlcodec.o(i.func_cloud_standard_xml_unpack))
+<P><STRONG><a name="[19f]"></a>func_cloud_standard_xml_unpack</STRONG> (Thumb, 4042 bytes, Stack size 400 bytes, huixmlcodec.o(i.func_cloud_standard_xml_unpack))
 <BR><BR>[Stack]<UL><LI>Max Depth = 1592<LI>Call Chain = func_cloud_standard_xml_unpack &rArr; func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
@@ -4628,6 +4629,7 @@ Global Symbols
 <LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_dcmiaris_ccl_sensor_status_req
 <LI><a href="#[1a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_spsvirgo_time_out_period_scan
 <LI><a href="#[32]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_spsvirgo_time_out
+<LI><a href="#[33]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_spsvirgo_l2frame_rcv
 <LI><a href="#[2f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_spsvirgo_init
 <LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_spsvirgo_ccl_sensor_status_req
 <LI><a href="#[34]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_spsvirgo_ccl_open_auth_inq
@@ -4822,7 +4824,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[199]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rssi_value
 </UL>
 
-<P><STRONG><a name="[19d]"></a>ihu_vmmw_gprsmod_http_data_transmit_with_receive</STRONG> (Thumb, 3232 bytes, Stack size 952 bytes, vmmw_gprs.o(i.ihu_vmmw_gprsmod_http_data_transmit_with_receive))
+<P><STRONG><a name="[19d]"></a>ihu_vmmw_gprsmod_http_data_transmit_with_receive</STRONG> (Thumb, 3274 bytes, Stack size 952 bytes, vmmw_gprs.o(i.ihu_vmmw_gprsmod_http_data_transmit_with_receive))
 <BR><BR>[Stack]<UL><LI>Max Depth = 2120<LI>Call Chain = ihu_vmmw_gprsmod_http_data_transmit_with_receive &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[141]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_message_send
@@ -6093,8 +6095,8 @@ Local Symbols
 </UL>
 
 <P><STRONG><a name="[b3]"></a>_snputc</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, printfa.o(i._snputc))
-<BR>[Address Reference Count : 2]<UL><LI> printfa.o(i.__0snprintf)
-<LI> printfa.o(i.__0vsnprintf)
+<BR>[Address Reference Count : 2]<UL><LI> printfa.o(i.__0vsnprintf)
+<LI> printfa.o(i.__0snprintf)
 </UL>
 <P><STRONG><a name="[b4]"></a>_sputc</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, printfa.o(i._sputc))
 <BR><BR>[Called By]<UL><LI><a href="#[16b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__0sprintf

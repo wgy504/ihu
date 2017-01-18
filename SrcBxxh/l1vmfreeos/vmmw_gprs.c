@@ -432,6 +432,7 @@ OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input, int16_t len
 		return IHU_FAILURE;
 	}
 	//准备解码并送往上层
+	memcpy((char*)zIhuBspStm32SpsGprsRxBuff, "<xml>000000</xml>", sizeof("<xml>000000</xml>"));
 	int i = 0;
 	for (i=0; i<strlen((const char*)zIhuBspStm32SpsGprsRxBuff); i++){
 		zIhuBspStm32SpsGprsRxBuff[i] = (char)tolower((char)zIhuBspStm32SpsGprsRxBuff[i]);
@@ -442,8 +443,8 @@ OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input, int16_t len
 		msg_struct_spsvirgo_l2frame_rcv_t snd;
 		//发送数据到上层SPSVIRGO模块，需要根据p1/p2进行重新处理
 		memset(&snd, 0, sizeof(msg_struct_spsvirgo_l2frame_rcv_t));
-		memcpy(snd.data, (uint8_t*)zIhuBspStm32SpsGprsRxBuff, sizeof(zIhuBspStm32SpsGprsRxBuff));
-		snd.length = sizeof(msg_struct_spsvirgo_l2frame_rcv_t);
+		memcpy(snd.data, (uint8_t*)p1, p2-p1+7); //一直延伸到</xml>的尾巴并多一个字节
+		snd.length = p2-p1+7; //sizeof(msg_struct_spsvirgo_l2frame_rcv_t);
 		ihu_message_send(MSG_ID_SPS_L2FRAME_RCV, TASK_ID_SPSVIRGO, TASK_ID_VMFO, &snd, snd.length);
 	}else{
 		//HTTP发送结束
