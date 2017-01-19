@@ -86,6 +86,10 @@ enum GLOBAL_LED_LIGHT_CTRL_TABLE_STATE
 	GALOWAG_CTRL_STATE_MAX,
 };
 
+#define IHU_LEDPISCES_GALOWAG_FUNC_ACTIVE 1
+#define IHU_LEDPISCES_GALOWAG_FUNC_DEACTIVE 2
+#define IHU_LEDPISCES_GALOWAG_FUNC_SET IHU_LEDPISCES_GALOWAG_FUNC_DEACTIVE
+
 //API
 extern OPSTAT fsm_ledpisces_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_ledpisces_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);

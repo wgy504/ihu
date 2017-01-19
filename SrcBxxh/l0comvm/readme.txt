@@ -3,7 +3,10 @@
 =================================================
 
 //= ZJL, 2017 Jan.19, CURRENT_SW_DELIVERY R03.97 =>CCL项目
-
+= 先将LEDGALOWAG机制关闭
+= 在SPSVIRGO中将xml_pack/unpack关闭
+= 去掉摄像头BSP
+= MessageQueue修改2个：立马出现Hardfault问题，可能是Que不够
 
 
 //= ZJL, 2017 Jan.17, CURRENT_SW_DELIVERY R03.96 =>CCL项目

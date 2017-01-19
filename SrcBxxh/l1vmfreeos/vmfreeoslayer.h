@@ -39,7 +39,7 @@
 	#include "bsp_rtc.h"
 	#include "bsp_calendar.h"
 	#include "bsp_cpuid.h"
-	#include "bsp_camera.h"
+//	#include "bsp_camera.h"
 	
 	
 	

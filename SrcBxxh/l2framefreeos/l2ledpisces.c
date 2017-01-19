@@ -129,7 +129,8 @@ OPSTAT fsm_ledpisces_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 
 		IhuErrorPrint("LEDPISCES: Error start timer!\n");
 		return IHU_FAILURE;
 	}	
-	
+
+#if (IHU_LEDPISCES_GALOWAG_FUNC_SET == IHU_LEDPISCES_GALOWAG_FUNC_ACTIVE)
 	//TIMER_ID_1S_LEDPISCES_GALOWAG_SCAN，是为扫描方波信号的生成
 	ret = ihu_timer_start(TASK_ID_LEDPISCES, TIMER_ID_1S_LEDPISCES_GALOWAG_SCAN, zIhuSysEngPar.timer.ledpiscesGalowagScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 	if (ret == IHU_FAILURE){
@@ -137,6 +138,7 @@ OPSTAT fsm_ledpisces_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 
 		IhuErrorPrint("LEDPISCES: Error start timer!\n");
 		return IHU_FAILURE;
 	}	
+#endif
 	
 	//打印报告进入常规状态
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
