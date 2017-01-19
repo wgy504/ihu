@@ -2,6 +2,11 @@
 == 将修改方式放在最前面，以提高效率
 =================================================
 
+//= ZJL, 2017 Jan.19, CURRENT_SW_DELIVERY R03.98 =>CCL项目
+
+
+
+
 //= ZJL, 2017 Jan.19, CURRENT_SW_DELIVERY R03.97 =>CCL项目
 = 先将LEDGALOWAG机制关闭
 = 在SPSVIRGO中将xml_pack/unpack关闭
@@ -26,7 +31,6 @@
 = 最终，TASK_STACK/MSG_BODY/QueNbr = 500/560/2, 消息总长+24（消息头按照4字节对其），打印缓冲区从10个改为1个。
 = 继续为CCL系统减负，将L2FRAME任务中的"例行定时器"停止，不再启动，因为不用HEART-BEAT，所以也没啥必要启动他们。这样可以降低多条消息同时到达一个任务模块的概率。
   同时也降低整机功耗。
-
 
 //= ZJL, 2017 Jan.17, CURRENT_SW_DELIVERY R03.96 =>CCL项目
 = 继续试验AT CMD的POST方式，暂时没彻底解决。
