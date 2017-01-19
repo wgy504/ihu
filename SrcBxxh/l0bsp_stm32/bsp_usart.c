@@ -429,8 +429,9 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 				//发送数据到上层SPSVIRGO模块
 				memset(&snd, 0, sizeof(msg_struct_spsvirgo_l2frame_rcv_t));
 				memcpy(snd.data, &zIhuBspStm32SpsSpare1RxBuff[4], ((zIhuBspStm32SpsSpare1RxBuff[2]<<8)+zIhuBspStm32SpsSpare1RxBuff[3]));
-				snd.length = sizeof(msg_struct_spsvirgo_l2frame_rcv_t);				
-				ihu_message_send(MSG_ID_SPS_L2FRAME_RCV, TASK_ID_SPSVIRGO, TASK_ID_VMFO, &snd, snd.length);				
+				snd.length = sizeof(msg_struct_spsvirgo_l2frame_rcv_t);
+				ihu_message_send(MSG_ID_SPS_L2FRAME_RCV, TASK_ID_SPSVIRGO, TASK_ID_VMFO, &snd, snd.length);
+				//IhuDebugPrint("BSPUART: I just send a test message to SPSVIRGO by SPARE1 number!");
 			}
 #endif	
 			//差错情况

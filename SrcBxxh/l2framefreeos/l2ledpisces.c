@@ -121,7 +121,8 @@ OPSTAT fsm_ledpisces_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 
 		IhuErrorPrint("LEDPISCES: Error Set FSM State!\n");
 		return IHU_FAILURE;
 	}
-	
+
+#if (IHU_LEDPISCES_PERIOD_TIMER_SET == IHU_LEDPISCES_PERIOD_TIMER_ACTIVE)		
 	//启动本地定时器，如果有必要
 	ret = ihu_timer_start(TASK_ID_LEDPISCES, TIMER_ID_1S_LEDPISCES_PERIOD_SCAN, zIhuSysEngPar.timer.ledpiscesPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 	if (ret == IHU_FAILURE){
@@ -129,7 +130,9 @@ OPSTAT fsm_ledpisces_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 
 		IhuErrorPrint("LEDPISCES: Error start timer!\n");
 		return IHU_FAILURE;
 	}	
-
+#endif
+	
+//由于内存限制的原因，暂时去激活了方波信号的生成
 #if (IHU_LEDPISCES_GALOWAG_FUNC_SET == IHU_LEDPISCES_GALOWAG_FUNC_ACTIVE)
 	//TIMER_ID_1S_LEDPISCES_GALOWAG_SCAN，是为扫描方波信号的生成
 	ret = ihu_timer_start(TASK_ID_LEDPISCES, TIMER_ID_1S_LEDPISCES_GALOWAG_SCAN, zIhuSysEngPar.timer.ledpiscesGalowagScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
@@ -226,7 +229,9 @@ OPSTAT fsm_ledpisces_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UIN
 				return IHU_FAILURE;
 			}//FsmSetState
 		}
-		func_ledpisces_time_out_period_scan();
+		
+		//暂时抑制了HEART-BEAT消息的生产
+		//func_ledpisces_time_out_period_scan();
 	}
 
 	//Galowag的具体处理

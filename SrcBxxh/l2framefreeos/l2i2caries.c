@@ -1,4 +1,4 @@
-﻿/**
+/**
  ****************************************************************************************
  *
  * @file l2i2caries.c
@@ -116,8 +116,8 @@ OPSTAT fsm_i2caries_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 		IhuErrorPrint("I2CARIES: Error Set FSM State!\n");
 		return IHU_FAILURE;
 	}
-	
-	//启动本地定时器，如果有必要
+
+#if (IHU_I2CARIES_PERIOD_TIMER_SET == IHU_I2CARIES_PERIOD_TIMER_ACTIVE)		
 	//测试性启动周期性定时器
 	ret = ihu_timer_start(TASK_ID_I2CARIES, TIMER_ID_1S_I2CARIES_PERIOD_SCAN, zIhuSysEngPar.timer.i2cariesPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 	if (ret == IHU_FAILURE){
@@ -125,6 +125,7 @@ OPSTAT fsm_i2caries_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 		IhuErrorPrint("I2CARIES: Error start timer!\n");
 		return IHU_FAILURE;
 	}	
+#endif
 	
 	//打印报告进入常规状态
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
@@ -211,7 +212,9 @@ OPSTAT fsm_i2caries_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 				return IHU_FAILURE;
 			}//FsmSetState
 		}
-		func_i2caries_time_out_period_scan();
+		
+		//暂时抑制了HEART-BEAT消息的生产
+		//func_i2caries_time_out_period_scan();
 	}
 
 	return IHU_SUCCESS;

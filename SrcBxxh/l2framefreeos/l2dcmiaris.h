@@ -1,4 +1,4 @@
-﻿/**
+/**
  ****************************************************************************************
  *
  * @file l2dcmiaris.h
@@ -60,6 +60,12 @@ typedef struct strIhuCclDcmiPar
 #define IHU_CCL_DCMI_WORKING_MODE_ACTIVE 2
 #define IHU_CCL_DCMI_WORKING_MODE_FAULT 3
 #define IHU_CCL_DCMI_WORKING_MODE_INVALID 0xFF
+
+//控制定时器定时扫描是否启动
+#define IHU_DCMIARIS_PERIOD_TIMER_ACTIVE 1
+#define IHU_DCMIARIS_PERIOD_TIMER_DEACTIVE 2
+#define IHU_DCMIARIS_PERIOD_TIMER_SET IHU_DCMIARIS_PERIOD_TIMER_DEACTIVE
+
 
 //API
 extern OPSTAT fsm_dcmiaris_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);

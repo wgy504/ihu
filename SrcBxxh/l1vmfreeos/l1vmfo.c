@@ -476,18 +476,29 @@ BOOL func_vmfo_init_caculate_all_fb(void)
 }
 
 //计算所有的HEART_BEAT的反馈情况
+//有两种选择：一种是选择所有的任务进行反馈，这种方式将会导致MessageQue过载。一种方式是只留下L3任务反馈，目前选择了这种机制
 BOOL func_vmfo_heart_caculate_all_received(void)
 {
+#if (IHU_VMFO_TASK_HEART_BEAT_CHOICE == IHU_VMFO_TASK_HEART_BEAT_ALL)	
 	int i=0;
 	for(i=0;i<MAX_TASK_NUM_IN_ONE_IHU;i++){
 		if ((i != TASK_ID_VMFO) && (i != TASK_ID_TIMER)){
-			if ((zIhuTaskInfo[i].pnpState == IHU_TASK_PNP_ON) && (zIhuVmfoTaskInitCtrlInfo[i].active == IHU_VMFO_TASK_ACTIVE) && (zIhuVmfoTaskInitCtrlInfo[i].heart == IHU_VMFO_TASK_HEART_RECEIVED)){
+			if ((zIhuTaskInfo[i].pnpState == IHU_TASK_PNP_ON) && (zIhuVmfoTaskInitCtrlInfo[i].active == IHU_VMFO_TASK_ACTIVE) && (zIhuVmfoTaskInitCtrlInfo[i].heart != IHU_VMFO_TASK_HEART_RECEIVED)){
 				return FALSE;
 			}
 		}		
 	}
-
 	return TRUE;
+	
+#elif (IHU_VMFO_TASK_HEART_BEAT_CHOICE == IHU_VMFO_TASK_HEART_BEAT_L3_ONLY)	
+	#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+		if (zIhuVmfoTaskInitCtrlInfo[TASK_ID_CCL].heart != IHU_VMFO_TASK_HEART_RECEIVED) return FALSE;
+		else return TRUE;
+	#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+		if (zIhuVmfoTaskInitCtrlInfo[TASK_ID_BFSC].heart != IHU_VMFO_TASK_HEART_RECEIVED) return FALSE;
+		else return TRUE;
+	#endif
+#endif
 }
 
 

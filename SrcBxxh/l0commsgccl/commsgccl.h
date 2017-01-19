@@ -303,7 +303,8 @@ typedef struct msg_struct_sps_ccl_fault_report_cfm
 typedef struct msg_struct_sps_ccl_close_report_cfm
 {
 	UINT8 actionFlag;
-	//UINT32 test;
+	UINT32 test1;  //为了调查无效消息产生的根源
+	UINT32 test2;
 	UINT16 length;
 }msg_struct_sps_ccl_close_report_cfm_t;
 #define IHU_CCL_EVENT_CLOSE_SEND_SUCCESS 1

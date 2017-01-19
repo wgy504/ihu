@@ -70,6 +70,10 @@ extern FsmStateItem_t FsmSpsvirgo[];
 #define IHU_CCL_SPS_WORKING_MODE_FAULT 3
 #define IHU_CCL_SPS_WORKING_MODE_INVALID 0xFF
 
+//控制定时器定时扫描是否启动
+#define IHU_SPSVIRGO_PERIOD_TIMER_ACTIVE 1
+#define IHU_SPSVIRGO_PERIOD_TIMER_DEACTIVE 2
+#define IHU_SPSVIRGO_PERIOD_TIMER_SET IHU_SPSVIRGO_PERIOD_TIMER_DEACTIVE
 
 //API
 extern OPSTAT fsm_spsvirgo_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);

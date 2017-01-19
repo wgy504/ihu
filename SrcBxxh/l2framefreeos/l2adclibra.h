@@ -91,6 +91,12 @@ typedef struct strIhuBfscAdcWeightPar
 //CCL项目中所需要使用到的电池告警范围	
 #define IHU_CCL_ADC_BATTERY_WARNING_MIN_VALUE			420 //对应4.2v的水平
 #define IHU_CCL_ADC_BATTERY_WARNING_MAX_VALUE			800 //对应8v的水平	
+
+//控制定时器定时扫描是否启动
+#define IHU_ADCLIBRA_PERIOD_TIMER_ACTIVE 1
+#define IHU_ADCLIBRA_PERIOD_TIMER_DEACTIVE 2
+#define IHU_ADCLIBRA_PERIOD_TIMER_SET IHU_ADCLIBRA_PERIOD_TIMER_DEACTIVE
+
 	
 //API
 extern OPSTAT fsm_adclibra_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);

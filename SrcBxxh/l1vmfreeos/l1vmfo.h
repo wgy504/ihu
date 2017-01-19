@@ -67,6 +67,11 @@ typedef struct IhuVmfoTaskInitCtrlInfo
 #define IHU_VMFO_TASK_HEART_RECEIVED 1
 #define IHU_VMFO_TASK_HEART_NOREC 2
 
+#define IHU_VMFO_TASK_HEART_BEAT_ALL 1
+#define IHU_VMFO_TASK_HEART_BEAT_L3_ONLY 2
+#define IHU_VMFO_TASK_HEART_BEAT_CHOICE IHU_VMFO_TASK_HEART_BEAT_L3_ONLY
+
+
 //API
 extern OPSTAT fsm_vmfo_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_vmfo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);

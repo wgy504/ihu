@@ -54,16 +54,6 @@ FsmStateItem_t FsmSpsvirgo[] =
   {MSG_ID_COM_STOP,												FSM_STATE_SPSVIRGO_COMMU,         						fsm_spsvirgo_stop_rcv},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_SPSVIRGO_COMMU,         				  	fsm_spsvirgo_time_out},
 		
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-	{MSG_ID_CCL_SPS_OPEN_AUTH_INQ,					FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_open_auth_inq},
-	{MSG_ID_CCL_COM_SENSOR_STATUS_REQ,			FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_sensor_status_req},
-	{MSG_ID_CCL_SPS_EVENT_REPORT_SEND,			FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_event_report_send},
-	{MSG_ID_CCL_COM_CTRL_CMD,								FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_ctrl_cmd},	
-	{MSG_ID_CCL_SPS_FAULT_REPORT_SEND,			FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_fault_report_send},
-	{MSG_ID_CCL_SPS_CLOSE_REPORT_SEND,			FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_close_door_report_send},
-#endif
-
-	
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             									NULL},  //Ending
 };
@@ -135,7 +125,8 @@ OPSTAT fsm_spsvirgo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 		IhuErrorPrint("SPSVIRGO: Error Set FSM State!\n");
 		return IHU_FAILURE;
 	}
-	
+
+#if (IHU_SPSVIRGO_PERIOD_TIMER_SET == IHU_SPSVIRGO_PERIOD_TIMER_ACTIVE)	
 	//测试性启动周期性定时器：正式工作后可以删掉这个工作逻辑机制
 	ret = ihu_timer_start(TASK_ID_SPSVIRGO, TIMER_ID_1S_SPSVIRGO_PERIOD_SCAN, zIhuSysEngPar.timer.spsvirgoPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 	if (ret == IHU_FAILURE){
@@ -143,6 +134,7 @@ OPSTAT fsm_spsvirgo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 		IhuErrorPrint("SPSVIRGO: Error start timer!\n");
 		return IHU_FAILURE;
 	}	
+#endif
 	
 	//打印报告进入常规状态
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
@@ -229,7 +221,9 @@ OPSTAT fsm_spsvirgo_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 				return IHU_FAILURE;
 			}//FsmSetState
 		}
-		func_spsvirgo_time_out_period_scan();
+		
+		//暂时抑制了HEART-BEAT消息的生产
+		//func_spsvirgo_time_out_period_scan();
 	}
 
 	return IHU_SUCCESS;
@@ -341,8 +335,8 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	memcpy(&pMsgInput, &pMsgProc, msgProcLen);
 	CloudDataSendBuf_t pMsgOutput;
 	memset(&pMsgOutput, 0, sizeof(CloudDataSendBuf_t));	
-	//ret = func_cloud_standard_xml_pack(HUITP_MSG_HUIXML_MSGTYPE_DEVICE_REPORT_ID, NULL, HUITP_MSGID_uni_ccl_lock_auth_inq, &pMsgInput, msgProcLen, &pMsgOutput);
-	ret = IHU_SUCCESS;
+	ret = func_cloud_standard_xml_pack(HUITP_MSG_HUIXML_MSGTYPE_DEVICE_REPORT_ID, NULL, HUITP_MSGID_uni_ccl_lock_auth_inq, &pMsgInput, msgProcLen, &pMsgOutput);
+	//ret = IHU_SUCCESS;
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		IhuErrorPrint("SPSVIRGO: Package message error!\n");

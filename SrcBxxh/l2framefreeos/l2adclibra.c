@@ -112,7 +112,8 @@ OPSTAT fsm_adclibra_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 		IhuErrorPrint("ADCLIBRA: Error Set FSM State!\n");
 		return IHU_FAILURE;
 	}
-	
+
+#if (IHU_ADCLIBRA_PERIOD_TIMER_SET == IHU_ADCLIBRA_PERIOD_TIMER_ACTIVE)	
 	//启动周期性定时器，进行定时扫描
 	ret = ihu_timer_start(TASK_ID_ADCLIBRA, TIMER_ID_1S_ADCLIBRA_PERIOD_SCAN, zIhuSysEngPar.timer.adclibraPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 	if (ret == IHU_FAILURE){
@@ -120,6 +121,7 @@ OPSTAT fsm_adclibra_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 		IhuErrorPrint("ADCLIBRA: Error start timer!\n");
 		return IHU_FAILURE;
 	}
+#endif
 	
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
 	ret = ihu_timer_start(TASK_ID_ADCLIBRA, TIMER_ID_10MS_BFSC_ADCLIBRA_SCAN_TIMER, zIhuSysEngPar.timer.bfscAdclibraScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_10MS);
@@ -214,7 +216,9 @@ OPSTAT fsm_adclibra_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 				return IHU_FAILURE;
 			}//FsmSetState
 		}
-		func_adclibra_time_out_period_scan();
+		
+		//暂时抑制了HEART-BEAT消息的生产
+		//func_adclibra_time_out_period_scan();
 	}
 
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	

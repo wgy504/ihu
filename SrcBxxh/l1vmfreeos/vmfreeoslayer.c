@@ -1067,6 +1067,7 @@ OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr,
 	/*
 	** Check the task_id, message_id and par_length
 	*/
+	
 	if ((dest_id <= TASK_ID_MIN) || (dest_id >= TASK_ID_MAX)){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Error on task_id, src_id=[0x%x], dest_id=[0x%x], msgid=[0x%x][%s]!!!\n", src_id, dest_id, msg_id, zIhuMsgNameList[msg_id]);
@@ -1198,6 +1199,15 @@ OPSTAT FsmProcessingLaunch(void *task)
 	while (1){
 		memset(&rcv, 0, sizeof(IhuMsgSruct_t));
 		ret = ihu_message_rcv(task_id, &rcv);
+		//以下方式是为了调查出现无效接收消息时的方式，就是扎到出现问题消息的特征，进而帮助分析产生无效消息的来源
+//		if (task_id == TASK_ID_SPSVIRGO) IhuDebugPrint("VMFO: Received message at task_id=%d [%s], &rcv=[0x%x]\n", task_id, zIhuTaskNameList[task_id], &rcv);
+//		if ((rcv.src_id <=TASK_ID_MIN) || (rcv.src_id >= TASK_ID_MAX) || (rcv.dest_id <=TASK_ID_MIN) || (rcv.dest_id >= TASK_ID_MAX)){
+//			IhuErrorPrint("VMFO: TEST msg_id=[0x%x], &msg_id=[0x%x]\n", rcv.msgType, &(rcv.msgType));
+//			IhuErrorPrint("VMFO: TEST dest_id=[0x%x], &dest_id=[0x%x]\n", rcv.dest_id, &(rcv.dest_id));
+//			IhuErrorPrint("VMFO: TEST src_id=[0x%x], &src_id=[0x%x]\n", rcv.src_id, &(rcv.src_id));
+//			IhuErrorPrint("VMFO: TEST msg_len=[0x%x], &msg_len=[0x%x]\n", rcv.msgLen, &(rcv.msgLen));
+//		}
+		
 		//纯粹是为了消除最后返回RETURN的WARNING告警问题
 		if (ret == -3){
 			break;

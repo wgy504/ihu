@@ -1,4 +1,4 @@
-﻿/**
+/**
  ****************************************************************************************
  *
  * @file l2i2caries.h
@@ -77,6 +77,11 @@ typedef struct strIhuBfscI2cMotoPar
 	}strIhuCclI2cPar_t;
 #endif
 
+//控制定时器定时扫描是否启动
+#define IHU_I2CARIES_PERIOD_TIMER_ACTIVE 1
+#define IHU_I2CARIES_PERIOD_TIMER_DEACTIVE 2
+#define IHU_I2CARIES_PERIOD_TIMER_SET IHU_I2CARIES_PERIOD_TIMER_DEACTIVE	
+	
 //API
 extern OPSTAT fsm_i2caries_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_i2caries_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);

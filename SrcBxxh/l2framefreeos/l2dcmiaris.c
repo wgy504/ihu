@@ -1,4 +1,4 @@
-﻿/**
+/**
  ****************************************************************************************
  *
  * @file l2dcmiaris.c
@@ -111,7 +111,8 @@ OPSTAT fsm_dcmiaris_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 		IhuErrorPrint("DCMIARIS: Error Set FSM State!\n");
 		return IHU_FAILURE;
 	}
-	
+
+#if (IHU_DCMIARIS_PERIOD_TIMER_SET == IHU_DCMIARIS_PERIOD_TIMER_ACTIVE)		
 	//启动本地定时器，如果有必要
 	ret = ihu_timer_start(TASK_ID_DCMIARIS, TIMER_ID_1S_DCMIARIS_PERIOD_SCAN, zIhuSysEngPar.timer.dcmiarisPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 	if (ret == IHU_FAILURE){
@@ -119,6 +120,7 @@ OPSTAT fsm_dcmiaris_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 		IhuErrorPrint("DCMIARIS: Error start timer!\n");
 		return IHU_FAILURE;
 	}	
+#endif	
 	
 	//打印报告进入常规状态
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
@@ -204,7 +206,9 @@ OPSTAT fsm_dcmiaris_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 				return IHU_FAILURE;
 			}//FsmSetState
 		}
-		func_dcmiaris_time_out_period_scan();
+		
+		//暂时抑制了HEART-BEAT消息的生产
+		//func_dcmiaris_time_out_period_scan();
 	}
 
 	return IHU_SUCCESS;

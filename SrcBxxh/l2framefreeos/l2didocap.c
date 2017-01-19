@@ -111,7 +111,8 @@ OPSTAT fsm_didocap_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 		IhuErrorPrint("DIDOCAP: Error Set FSM State!\n");
 		return IHU_FAILURE;
 	}
-	
+
+#if (IHU_DIDOCAP_PERIOD_TIMER_SET == IHU_DIDOCAP_PERIOD_TIMER_ACTIVE)	
 	//启动喂狗定时器
 	ret = ihu_timer_start(TASK_ID_DIDOCAP, TIMER_ID_1S_DIDOCAP_PERIOD_SCAN, zIhuSysEngPar.timer.didocapPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 	if (ret == IHU_FAILURE){
@@ -119,7 +120,8 @@ OPSTAT fsm_didocap_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 		IhuErrorPrint("DIDOCAP: Error start timer!\n");
 		return IHU_FAILURE;
 	}	
-
+#endif
+	
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)	
 	//启动永恒的外部触发扫描
 	ret = ihu_timer_start(TASK_ID_DIDOCAP, TIMER_ID_1S_CCL_DIDO_TRIGGER_PERIOD_SCAN, zIhuSysEngPar.timer.cclDidoTriggerPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
@@ -214,7 +216,9 @@ OPSTAT fsm_didocap_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 				return IHU_FAILURE;
 			}//FsmSetState
 		}
-		func_didocap_time_out_period_scan();
+		
+		//暂时抑制了HEART-BEAT消息的生产
+		//func_didocap_time_out_period_scan();
 	}	
 
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)	
