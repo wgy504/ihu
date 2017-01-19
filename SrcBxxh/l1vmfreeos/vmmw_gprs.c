@@ -408,8 +408,16 @@ OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input, int16_t len
 	}	
 	//HTTP参数配置：设置发送数据的长度
 	memset(temp, 0, sizeof(temp));
-	sprintf((char*)temp, "AT+HTTPDATA=%d, 4000", length*2);  //延时4秒
-	//IhuDebugPrint("VMFO: HTTPDATA buffer = %s\n", temp);
+	sprintf((char*)temp, "AT+HTTPDATA=%d, 4000", length);  //延时4秒
+	char *p;
+	int ii = 0;
+	p = input;	
+	while(*p != '\0')//检测字符串结束符
+	{
+		ii++;
+		p++;
+	}	
+	IhuDebugPrint("VMFO: HTTPDATA buffer input length = %d, actual length = %d\n", length, ii);
 	if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"DOWNLOAD", 4) == IHU_FAILURE){
 		IHU_ERROR_PRINT_GPRSMOD("VMFO: HTTP POST data failure on download starting!\n");
 		return IHU_FAILURE;

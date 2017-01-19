@@ -270,6 +270,16 @@ void IhuDebugPrintFo(UINT8 index, char *format, ...)
 	vsnprintf(strDebug, IHU_PRINT_CHAR_SIZE-1, format, marker);
 	va_end(marker);	
 
+	//试图将实时时间打印出来，可惜没成功
+////在CCL项目中，已经打开了RTC，所以可以调用RTC函数输出真实的时间，其它项目可以类似干，如果没有打开，则依然可以继续使用编译时间
+//#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+//	char ss[20];
+//	sprintf(zIhuPrintBufferChar[index].PrintBuffer, "%s, [DBG: ", zIhuPrintBufferChar[index].PrintHeader);
+//	memset(ss, 0, sizeof(ss));
+//	ihu_l1hd_rtc_get_current_ymdhms_time(ss);
+//	strcat(zIhuPrintBufferChar[index].PrintBuffer, ss);
+//	strcat(zIhuPrintBufferChar[index].PrintBuffer, "] ");
+//#endif
 	sprintf(zIhuPrintBufferChar[index].PrintBuffer, "%s, [DBG: %s, %s] ", zIhuPrintBufferChar[index].PrintHeader, __DATE__, __TIME__);
 	strncat(zIhuPrintBufferChar[index].PrintBuffer, strDebug, IHU_PRINT_CHAR_SIZE - strlen(zIhuPrintBufferChar[index].PrintBuffer) - 1);
 
@@ -309,7 +319,7 @@ void IhuErrorPrintFo(UINT8 index, char *format, ...)
 	va_list marker;
 	char strDebug[IHU_PRINT_CHAR_SIZE];
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
-        char *ptrPrintBuffer;
+  char *ptrPrintBuffer;
 #endif
 	//UINT8 index=0;
 
@@ -320,6 +330,15 @@ void IhuErrorPrintFo(UINT8 index, char *format, ...)
 	//index = globalPrintIndex;
 	memset(zIhuPrintBufferChar[index].PrintBuffer, 0, IHU_PRINT_CHAR_SIZE);
 
+	//试图将实时时间打印出来，可惜没成功
+//#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+//	char ss[20];
+//	sprintf(zIhuPrintBufferChar[index].PrintBuffer, "%s, [ERR: ", zIhuPrintBufferChar[index].PrintHeader);
+//	memset(ss, 0, sizeof(ss));
+//	ihu_l1hd_rtc_get_current_ymdhms_time(ss);
+//	strcat(zIhuPrintBufferChar[index].PrintBuffer, ss);
+//	strcat(zIhuPrintBufferChar[index].PrintBuffer, "] ");
+//#endif		
 	sprintf(zIhuPrintBufferChar[index].PrintBuffer, "%s, [ERR: %s, %s] ", zIhuPrintBufferChar[index].PrintHeader, __DATE__, __TIME__);
 	strncat(zIhuPrintBufferChar[index].PrintBuffer, strDebug, IHU_PRINT_CHAR_SIZE - strlen(zIhuPrintBufferChar[index].PrintBuffer) - 1);
 

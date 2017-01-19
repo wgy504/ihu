@@ -162,8 +162,8 @@ OPSTAT func_cloud_standard_xml_pack(UINT8 msgType, char *funcFlag, UINT16 msgId,
 	strcat(output->buf, HUITP_MSG_HUIXML_CONSTANT_FUNC_FLAG_R);
 	strcat(output->buf, HUITP_MSG_HUIXML_CONSTANT_XML_HEAD_R);
 
-	//存入返回参量中：这个长度域其实也没有太大的用处
-	output->bufferLen = strlen(s);
+	//存入返回参量中：这个长度用于控制输出的字符串
+	output->bufferLen = strlen(output->buf);
 
 	//返回
 	return IHU_SUCCESS;

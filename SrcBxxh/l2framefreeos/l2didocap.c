@@ -271,7 +271,6 @@ void func_didocap_time_out_period_scan(void)
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 
 //定时扫描震动以及触发按键消息
-//待改进这个扫描的事件，以便形成有价值的结果事件
 void func_didocap_time_out_sleep_mode_external_trigger_period_scan(void)
 {
 	int ret = 0, i = 0;
@@ -648,7 +647,7 @@ bool func_didocap_ccl_work_mode_ul_scan_any_door_open(void)
 	
 	//return flag;
 	
-	if (rand()%2 == 1)
+	if (rand()%5 == 1)
 		return TRUE;
 	else
 		return FALSE;
@@ -685,7 +684,7 @@ bool func_didocap_ccl_work_mode_ul_scan_all_door_and_lock_close(void)
 
 	//return flag;
 	
-	if (rand()%2 == 1)
+	if (rand()%5 == 1)
 		return TRUE;
 	else
 		return FALSE;
@@ -709,7 +708,7 @@ bool func_didocap_ccl_work_mode_ul_scan_enable_lock_trigger(void)
 	
 	//return flag;
 	
-	if (rand()%2 == 1)
+	if (rand()%5 == 1)
 		return TRUE;
 	else
 		return FALSE;
@@ -745,7 +744,7 @@ bool func_didocap_ccl_work_mode_ul_scan_door_and_lock_status_change(void)
 	
 	//return flag;
 	
-	if (rand()%2 == 1)
+	if (rand()%5 == 1)
 		return TRUE;
 	else
 		return FALSE;
@@ -769,7 +768,7 @@ bool func_didocap_ccl_sleep_mode_ul_scan_lock_trigger(void)
 	
 	//return flag;
 	
-	if (rand()%2 == 1)
+	if (rand()%5 == 1)
 		return TRUE;
 	else
 		return FALSE;
@@ -780,7 +779,7 @@ bool func_didocap_ccl_sleep_mode_ul_scan_shake_trigger(void)
 {
 	//return ihu_l1hd_dido_f2board_shake_read();
 
-	if (rand()%2 == 1)
+	if (rand()%5 == 1)
 		return TRUE;
 	else
 		return FALSE;
