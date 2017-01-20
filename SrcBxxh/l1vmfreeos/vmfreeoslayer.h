@@ -35,12 +35,12 @@
 	#include "bsp_usart.h"
 	#include "bsp_led.h"
 	#include "bsp_i2c.h"
-	//#include "bsp_wdog.h"
 	#include "bsp_rtc.h"
 	#include "bsp_calendar.h"
-	//#include "bsp_cpuid.h"
-	//#include "bsp_stmram.h"
-	//#include "bsp_camera.h"
+	//#include "bsp_wdog.h"
+	#include "bsp_cpuid.h"
+	#include "bsp_stmflash.h"
+	#include "bsp_camera.h"
 	
 	
 	

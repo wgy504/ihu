@@ -653,6 +653,46 @@
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_rtc.h</FilePath>
             </File>
+            <File>
+              <FileName>bsp_cpuid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_cpuid.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_cpuid.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_cpuid.h</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_stmflash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_stmflash.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_stmflash.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_stmflash.h</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_camera.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_camera.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_camera.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_camera.h</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_ov2640.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_ov2640.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_ov2640.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_ov2640.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
