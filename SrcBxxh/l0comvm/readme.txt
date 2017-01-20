@@ -2,6 +2,11 @@
 == 将修改方式放在最前面，以提高效率
 =================================================
 
+//= ZJL, 2017 Jan.20, CURRENT_SW_DELIVERY R03.100 =>CCL项目
+= 改进本设备的编号，不做成固定定义方式，而是为IAP升级后的程序从固定FLASH区域读取打好基础
+= 测试xml_unpack()函数，自己生成测试数据
+
+
 //= ZJL, 2017 Jan.20, CURRENT_SW_DELIVERY R03.99 =>CCL项目
 = 回归STMFLASH, CPUID, Camera BSP
 = 定义#define IHU_MSG_BODY_L2FRAME_MAX_LEN MAX_IHU_MSG_BODY_LENGTH - 4也需要跟4对其，不然消息缓冲区可能会长度不够导致出错
