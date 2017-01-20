@@ -213,8 +213,7 @@ OPSTAT fsm_i2caries_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 			}//FsmSetState
 		}
 		
-		//暂时抑制了HEART-BEAT消息的生产
-		//func_i2caries_time_out_period_scan();
+		func_i2caries_time_out_period_scan();
 	}
 
 	return IHU_SUCCESS;

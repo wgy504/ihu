@@ -59,7 +59,7 @@
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 	extern OPSTAT ihu_vmmw_gprsmod_call_perform(char *calledNumber);
 	extern OPSTAT ihu_vmmw_gprsmod_sms_transmit_with_confirm(char *calledNumber, char *input);
-	extern OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input, int16_t length);   //往后台发送的POST功能
+	extern OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input, int16_t inlen, char *output, uint16_t *outlen);   //往后台发送的POST功能
 	extern OPSTAT ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive(char *input);  //往后台发送的POST功能
 	extern OPSTAT ihu_vmmw_gprsmod_tcp_u8_data_transmit_with_receive(int8_t *input);  //往后台发送的POST功能
 	extern OPSTAT ihu_vmmw_gprsmod_udp_test_data_transmit_with_receive(char *input);  //往后台发送的POST功能

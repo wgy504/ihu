@@ -38,7 +38,7 @@ typedef UINT8           		BOOL;
 //Under normal case, 1024Byte shall be enough for internal message communciation purpose.
 //If not enough, need modify here to enlarge
 #define MAX_IHU_MSG_BUF_LENGTH MAX_IHU_MSG_BODY_LENGTH+6
-#define MAX_IHU_MSG_BUF_LENGTH_CLOUD MAX_IHU_MSG_BODY_LENGTH-6
+#define MAX_IHU_MSG_BUF_LENGTH_CLOUD MAX_IHU_MSG_BODY_LENGTH-4  //跟L2FRAME长度保持同步，都是比消息BUFFER小4字节，以便容纳进消息BODY之中
 typedef struct IhuMsgSruct
 {
 	UINT16 msgType;

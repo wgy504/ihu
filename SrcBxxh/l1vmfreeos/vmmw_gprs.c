@@ -268,10 +268,13 @@ OPSTAT ihu_vmmw_gprsmod_sms_transmit_with_confirm(char *calledNumber, char *inpu
 * 输入   : 
 * 输出   : 
 * 返回   : 
-* 注意   :  为了保持连接，每空闲隔10秒发送一次心跳
+* 注意   :  
 *******************************************************************************/
 //往后台发送的POST功能
-OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input, int16_t length)
+//input/inlen是输入参数，output/outlen是输出参数
+//output部分的长度，由上层来保证，确保不越界，这里不保证，而只是保证不超越MAX_IHU_MSG_BODY_LENGTH而已
+//由于GPRSMOD接收缓冲区zIhuBspStm32SpsGprsRxBuff的最长长度=IHU_MSG_BODY_L2FRAME_MAX_LEN=MAX_IHU_MSG_BODY_LENGTH-4，所以从系统角度应该不会出现问题
+OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input, int16_t inlen, char *output, uint16_t *outlen)
 {	
 	uint8_t temp[IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN+1];	
 	uint8_t *p1,*p2;
@@ -408,16 +411,8 @@ OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input, int16_t len
 	}	
 	//HTTP参数配置：设置发送数据的长度
 	memset(temp, 0, sizeof(temp));
-	sprintf((char*)temp, "AT+HTTPDATA=%d, 4000", length);  //延时4秒
-	char *p;
-	int ii = 0;
-	p = input;	
-	while(*p != '\0')//检测字符串结束符
-	{
-		ii++;
-		p++;
-	}	
-	IhuDebugPrint("VMFO: HTTPDATA buffer input length = %d, actual length = %d\n", length, ii);
+	sprintf((char*)temp, "AT+HTTPDATA=%d, 4000", inlen);  //延时4秒
+	IhuDebugPrint("VMFO: Sending cloud data buffer input length = %d\n", inlen);
 	if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"DOWNLOAD", 4) == IHU_FAILURE){
 		IHU_ERROR_PRINT_GPRSMOD("VMFO: HTTP POST data failure on download starting!\n");
 		return IHU_FAILURE;
@@ -440,20 +435,23 @@ OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input, int16_t len
 		return IHU_FAILURE;
 	}
 	//准备解码并送往上层
-	//memcpy((char*)zIhuBspStm32SpsGprsRxBuff, "<xml>000000</xml>", sizeof("<xml>000000</xml>"));
-	int i = 0;
-	for (i=0; i<strlen((const char*)zIhuBspStm32SpsGprsRxBuff); i++){
-		zIhuBspStm32SpsGprsRxBuff[i] = (char)tolower((char)zIhuBspStm32SpsGprsRxBuff[i]);
-	}
+	//暂时返回的都是垃圾，所以自行生成测试数据
+	strcpy((char*)zIhuBspStm32SpsGprsRxBuff, \
+		"<xml><ToUserName><![CDATA[HCU_CL_0499]]></ToUserName><FromUserName><![CDATA[XHZN_HCU]]></FromUserName><CreateTime>1477323943</CreateTime><MsgType><![CDATA[hcu_text]]></MsgType><Content><![CDATA[400183]]></Content><FuncFlag>XXXX</FuncFlag></xml>");
+	//strcpy((char*)zIhuBspStm32SpsGprsRxBuff, "<xml>0000</xml>");
+	//最终决定不转化为小写，因为意义不是很大。同时，大小写本来就是接收消息的一部分
+	//int i = 0;
+	//for (i=0; i<strlen((const char*)zIhuBspStm32SpsGprsRxBuff); i++){
+	//	zIhuBspStm32SpsGprsRxBuff[i] = (char)tolower((char)zIhuBspStm32SpsGprsRxBuff[i]);
+	//}
 	p1 = (uint8_t*)strstr((const char*)zIhuBspStm32SpsGprsRxBuff, "<xml>");
 	p2 = (uint8_t*)strstr((const char*)zIhuBspStm32SpsGprsRxBuff, "</xml>");
 	if((p1 != NULL) && (p2 != NULL) && (p1 < p2)){
-		msg_struct_spsvirgo_l2frame_rcv_t snd;
-		//发送数据到上层SPSVIRGO模块，需要根据p1/p2进行重新处理
-		memset(&snd, 0, sizeof(msg_struct_spsvirgo_l2frame_rcv_t));
-		memcpy(snd.data, (uint8_t*)p1, p2-p1+9); //一直延伸到</xml>的尾巴并多一个字节，外加length本身包含的2B长度
-		snd.length = p2-p1+9; //sizeof(msg_struct_spsvirgo_l2frame_rcv_t);
-		ihu_message_send(MSG_ID_SPS_L2FRAME_RCV, TASK_ID_SPSVIRGO, TASK_ID_VMFO, &snd, snd.length);
+		//直接返回接收到的数据：目前HTTP暂时采用了字符串方式，所以可以使用strcpy，未来可能换成
+		//TCP/UDP必然要使用memcpy模式
+		//有关outlen的长度，肯定不会越界，本函数的头已经解释过了
+		*outlen = p2-p1+9;
+		memcpy((uint8_t*)output, (uint8_t*)p1, *outlen); //一直延伸到</xml>的尾巴并多一个字节，外加length本身包含的2B长度		
 	}else{
 		//HTTP发送结束
 		func_gprsmod_send_AT_command((uint8_t*)"AT+HTTPTERM", (uint8_t*)"OK", 2);	//关闭HTTP连接

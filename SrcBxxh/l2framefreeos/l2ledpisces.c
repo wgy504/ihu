@@ -230,8 +230,7 @@ OPSTAT fsm_ledpisces_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UIN
 			}//FsmSetState
 		}
 		
-		//暂时抑制了HEART-BEAT消息的生产
-		//func_ledpisces_time_out_period_scan();
+		func_ledpisces_time_out_period_scan();
 	}
 
 	//Galowag的具体处理

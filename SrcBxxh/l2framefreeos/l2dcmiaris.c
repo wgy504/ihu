@@ -207,8 +207,7 @@ OPSTAT fsm_dcmiaris_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 			}//FsmSetState
 		}
 		
-		//暂时抑制了HEART-BEAT消息的生产
-		//func_dcmiaris_time_out_period_scan();
+		func_dcmiaris_time_out_period_scan();
 	}
 
 	return IHU_SUCCESS;

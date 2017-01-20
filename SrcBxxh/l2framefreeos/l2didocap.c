@@ -217,8 +217,7 @@ OPSTAT fsm_didocap_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 			}//FsmSetState
 		}
 		
-		//暂时抑制了HEART-BEAT消息的生产
-		//func_didocap_time_out_period_scan();
+		func_didocap_time_out_period_scan();
 	}	
 
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)	

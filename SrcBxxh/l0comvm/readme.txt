@@ -4,8 +4,16 @@
 
 //= ZJL, 2017 Jan.20, CURRENT_SW_DELIVERY R03.99 =>CCL项目
 = 回归STMFLASH, CPUID, Camera BSP
-
-
+= 定义#define IHU_MSG_BODY_L2FRAME_MAX_LEN MAX_IHU_MSG_BODY_LENGTH - 4也需要跟4对其，不然消息缓冲区可能会长度不够导致出错
+= GPRSMOD目前还是采用半双工工作方式
+  >> 突然发现，从GPRSMOD接收到的数据，还是在SPSVIRGO之中，并没有超越这个模块本身，这是一种半双工的工作方式，所以在里面再给自己发送L2FRAME_RCV消息，就是自己
+  给自己发送消息，这样，对于MessageQue的数量，是有更高的要求的，如果MsgQue=2，可能会出现队列不够，要么导致队列覆盖到其它数据区，要么发送失败。
+  >> 经过验证，需要将MessageQue=3, 整个VM缓冲区设置为0xBC00以后，才能自己给自己发送消息成功，这种实现方式得不偿失，不仅占用内存大增，而且互锁也变得更为复杂，
+  将直接采用调用的方式进行工作，由发送消息来完成解码和后续处理。这样L2FRAME消息的来源将保留给全双工工作方式。
+  >> 这种工作方式，也发现一个问题，跑两轮以后就死机。
+= 恢复MessageQue=2/0xAC00缓冲区大小。
+= 调整好SPSVIRGO接收消息的同步处理机制
+= 优化HUITP xml_unpack()中的解码过程，将低效率的循环改为strncpy()
 
 //= ZJL, 2017 Jan.19, CURRENT_SW_DELIVERY R03.98 =>CCL项目
 = 验证xml_pack()函数全部打开后，是否完全正常， 单个验证GPRS发送函数， 接收串口返回必然直接回去，结果很稳定

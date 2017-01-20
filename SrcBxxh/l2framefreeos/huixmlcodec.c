@@ -177,7 +177,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 	char tmp[5] = "";
 	UINT8 tt[HUITP_MSG_BUF_BODY_ONLY_MAX_LEN];
 	int ret = 0;
-	int i = 0, dif = 0;
+	int dif = 0;
 	char *pIndexT1, *pIndexT2;  //临时位置
 	UINT8 msgType;
 	UINT64 msgCreateTime;
@@ -203,7 +203,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 	pIndexT2 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_XML_HEAD_R);
 	dif = pIndexT2 - pIndexT1  - strlen(HUITP_MSG_HUIXML_CONSTANT_XML_HEAD_L);
 	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_XML_HEAD_L))>= pIndexT2) || (dif > MAX_IHU_MSG_BUF_LENGTH_CLOUD)){
-		IhuErrorPrint("SPSVIRGO: Received message error, invalid format!\n");
+		IhuErrorPrint("SPSVIRGO: Received message error, invalid head xml format!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
 	}
@@ -213,16 +213,12 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 	pIndexT2 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_TO_USER_R);
 	dif = pIndexT2 - pIndexT1  - strlen(HUITP_MSG_HUIXML_CONSTANT_TO_USER_L);
 	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_TO_USER_L))>= pIndexT2) || (dif > IHU_FILE_NAME_LENGTH_MAX)){
-		IhuErrorPrint("SPSVIRGO: Received message error, invalid format!\n");
+		IhuErrorPrint("SPSVIRGO: Received message error, invalid head ToUserName format!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
 	}
 	memset(msgToUser, 0, sizeof(msgToUser));
-	i = 0;
-	pIndexT1 += strlen(HUITP_MSG_HUIXML_CONSTANT_TO_USER_L); //去掉头部
-	while(pIndexT1 < pIndexT2){
-		msgToUser[i++] = *pIndexT1++;
-	}	
+	strncpy(msgToUser, pIndexT1+strlen(HUITP_MSG_HUIXML_CONSTANT_TO_USER_L), dif);
 	if (strcmp(msgToUser, zIhuSysEngPar.cloud.cloudBhIhuName) !=0){
 		IhuErrorPrint("SPSVIRGO: Received message error, invalid toUser field!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
@@ -234,16 +230,12 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 	pIndexT2 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_FROM_USER_R);
 	dif = pIndexT2 - pIndexT1  - strlen(HUITP_MSG_HUIXML_CONSTANT_FROM_USER_L);
 	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_FROM_USER_L))>= pIndexT2) || (dif > IHU_FILE_NAME_LENGTH_MAX)){
-		IhuErrorPrint("SPSVIRGO: Received message error, invalid format!\n");
+		IhuErrorPrint("SPSVIRGO: Received message error, invalid head fromUser format!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
 	}
 	memset(msgFromUser, 0, sizeof(msgFromUser));
-	i = 0;
-	pIndexT1 += strlen(HUITP_MSG_HUIXML_CONSTANT_FROM_USER_L); //去掉头部
-	while(pIndexT1 < pIndexT2){
-		msgFromUser[i++] = *pIndexT1++;
-	}	
+	strncpy(msgFromUser, pIndexT1+strlen(HUITP_MSG_HUIXML_CONSTANT_FROM_USER_L), dif);
 	if (strcmp(msgFromUser, zIhuSysEngPar.cloud.cloudBhServerName) !=0){
 		IhuErrorPrint("SPSVIRGO: Received message error, invalid fromUser field!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
@@ -255,16 +247,12 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 	pIndexT2 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_CREATE_TIME_R);
 	dif = pIndexT2 - pIndexT1  - strlen(HUITP_MSG_HUIXML_CONSTANT_CREATE_TIME_L);
 	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_CREATE_TIME_L))>= pIndexT2) || (dif > HUITP_MSG_HUIXML_CONTSANT_CREATE_TIME_MAX_LEN)){
-		IhuErrorPrint("SPSVIRGO: Received message error, invalid format!\n");
+		IhuErrorPrint("SPSVIRGO: Received message error, invalid head CreateTime format!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
 	}
 	memset(msgTmp, 0, sizeof(msgTmp));
-	i = 0;
-	pIndexT1 += strlen(HUITP_MSG_HUIXML_CONSTANT_CREATE_TIME_L); //去掉头部
-	while(pIndexT1 < pIndexT2){
-		msgTmp[i++] = *pIndexT1++;
-	}
+	strncpy(msgTmp, pIndexT1+strlen(HUITP_MSG_HUIXML_CONSTANT_CREATE_TIME_L), dif);
 	msgCreateTime = strtoul(msgTmp, NULL, 10); //10进制，并非16进制
 	//暂时不判定，存下即可，以后再完善
 	if (msgCreateTime == 0) {}
@@ -274,16 +262,12 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 	pIndexT2 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_MSG_TYPE_R);
 	dif = pIndexT2 - pIndexT1  - strlen(HUITP_MSG_HUIXML_CONSTANT_MSG_TYPE_L);
 	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_MSG_TYPE_L))>= pIndexT2) || (dif > IHU_FILE_NAME_LENGTH_MAX)){
-		IhuErrorPrint("SPSVIRGO: Received message error, invalid format!\n");
+		IhuErrorPrint("SPSVIRGO: Received message error, invalid head msgType format!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
 	}
 	memset(msgTmp, 0, sizeof(msgTmp));
-	i = 0;
-	pIndexT1 += strlen(HUITP_MSG_HUIXML_CONSTANT_MSG_TYPE_L); //去掉头部
-	while(pIndexT1 < pIndexT2){
-		msgTmp[i++] = *pIndexT1++;
-	}
+	strncpy(msgTmp, pIndexT1+strlen(HUITP_MSG_HUIXML_CONSTANT_MSG_TYPE_L), dif);
 	if (strcmp(msgTmp, HUITP_MSG_HUIXML_MSGTYPE_DEVICE_REPORT_STRING) ==0) msgType = HUITP_MSG_HUIXML_MSGTYPE_DEVICE_REPORT_ID;
 	else if (strcmp(msgTmp, HUITP_MSG_HUIXML_MSGTYPE_DEVICE_CONTROL_STRING) ==0) msgType = HUITP_MSG_HUIXML_MSGTYPE_DEVICE_CONTROL_ID;
 	else if (strcmp(msgTmp, HUITP_MSG_HUIXML_MSGTYPE_HEAT_BEAT_STRING) ==0) msgType = HUITP_MSG_HUIXML_MSGTYPE_HEAT_BEAT_ID;
@@ -291,7 +275,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 	else if (strcmp(msgTmp, HUITP_MSG_HUIXML_MSGTYPE_ALARM_REPORT_STRING) ==0) msgType = HUITP_MSG_HUIXML_MSGTYPE_ALARM_REPORT_ID;
 	else if (strcmp(msgTmp, HUITP_MSG_HUIXML_MSGTYPE_PM_REPORT_STRING) ==0) msgType = HUITP_MSG_HUIXML_MSGTYPE_PM_REPORT_ID;
 	else{
-		IhuErrorPrint("SPSVIRGO: Received message error, invalid format!\n");
+		IhuErrorPrint("SPSVIRGO: Received message error, invalid head msgType format!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;	
 	}
@@ -303,16 +287,12 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 	pIndexT2 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_FUNC_FLAG_R);
 	dif = pIndexT2 - pIndexT1  - strlen(HUITP_MSG_HUIXML_CONSTANT_FUNC_FLAG_L);
 	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_FUNC_FLAG_L))>= pIndexT2) || (dif > IHU_FILE_NAME_LENGTH_MAX)){
-		IhuErrorPrint("SPSVIRGO: Received message error, invalid format!\n");
+		IhuErrorPrint("SPSVIRGO: Received message error, invalid head funcFlag format!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
 	}
 	memset(msgFuncFlag, 0, sizeof(msgFuncFlag));
-	i = 0;
-	pIndexT1 += strlen(HUITP_MSG_HUIXML_CONSTANT_FUNC_FLAG_L); //去掉头部
-	while(pIndexT1 < pIndexT2){
-		msgFuncFlag[i++] = *pIndexT1++;
-	}
+	strncpy(msgFuncFlag, pIndexT1+strlen(HUITP_MSG_HUIXML_CONSTANT_FUNC_FLAG_L), dif);
 	//msgFuncFlag的用途未来待定
 	if (msgFuncFlag[0] == '0') {}
 	
@@ -322,16 +302,12 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 	dif = pIndexT2 - pIndexT1  - strlen(HUITP_MSG_HUIXML_CONSTANT_CONTENT_L);
 	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_CONTENT_L))>= pIndexT2) ||\
 		(dif > HUITP_MSG_BUF_WITH_HEAD_MAX_LEN) || (dif != ((dif/2)*2))){
-		IhuErrorPrint("SPSVIRGO: Received message error, invalid format!\n");
+		IhuErrorPrint("SPSVIRGO: Received message error, invalid content format!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
 	}
 	memset(msgContent, 0, sizeof(msgContent));
-	i = 0;
-	pIndexT1 += strlen(HUITP_MSG_HUIXML_CONSTANT_CONTENT_L); //去掉头部
-	while(pIndexT1 < pIndexT2){
-		msgContent[i++] = *pIndexT1++;
-	}
+	strncpy(msgContent, pIndexT1+strlen(HUITP_MSG_HUIXML_CONSTANT_CONTENT_L), dif);
 		
 	//msgContent中解出msgId/msgLen
 	index = 0;
@@ -343,12 +319,12 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 	strncpy(tmp, &msgContent[index], 4);
 	msgLen = strtoul(tmp, NULL, 16);
 	if ((msgId < HUITP_MSGID_uni_min) || (msgId > HUITP_MSGID_uni_max)){
-		IhuErrorPrint("SPSVIRGO: Invalid received data msgId info!\n");
+		IhuErrorPrint("SPSVIRGO: Invalid received content data msgId info!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;	
 	}
 	if (msgLen > (MAX_IHU_MSG_BUF_LENGTH_CLOUD - HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN)/2){
-		IhuErrorPrint("SPSVIRGO: Invalid received data msgLen info!\n");
+		IhuErrorPrint("SPSVIRGO: Invalid received content data msgLen info!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
 	}
