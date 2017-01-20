@@ -1,4 +1,4 @@
-Ôªø/**
+/**
  ****************************************************************************************
  *
  * @file huixmlcodec.h
@@ -39,6 +39,8 @@
 //XML message pack/unpack
 extern OPSTAT func_cloud_standard_xml_pack(UINT8 msgType, char *funcFlag, UINT16 msgId, StrMsg_HUITP_MSGID_uni_general_message_t *inputPar, UINT16 inputLen, CloudDataSendBuf_t *output);
 extern OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv);
+extern void   func_cloud_standard_xml_generate_message_test_data(void);
+
 
 //Extern API
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
@@ -76,5 +78,39 @@ extern OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t 
 	extern OPSTAT func_cloud_spsvirgo_ccl_msg_sw_package_req_received_handle(StrMsg_HUITP_MSGID_uni_sw_package_req_t *rcv);
 	extern OPSTAT func_cloud_spsvirgo_ccl_msg_sw_package_confirm_received_handle(StrMsg_HUITP_MSGID_uni_sw_package_confirm_t *rcv);
 #endif
+
+
+//Test Data£∫¥ø¥‚ «Œ™¡À≤‚ ‘œ¬Œªª˙£¨À˘“‘√ª”–Ω´ToUser/FromUser…Ë÷√µƒ∑«≥£πÊ’˚
+#define HUITP_MSG_HUIXML_TEST_DATA_CCL_HEAD_VALID   				"<xml><ToUserName><![CDATA[HCU_CL_0499]]></ToUserName>\
+<FromUserName><![CDATA[XHZN_HCU]]></FromUserName><CreateTime>1477323943</CreateTime><MsgType><![CDATA[hcu_text]]></MsgType><Content><![CDATA[\
+400183]]></Content><FuncFlag>XXXX</FuncFlag></xml>" 
+#define HUITP_MSG_HUIXML_TEST_DATA_CCL_AUTH_IND 						"<xml><ToUserName><![CDATA[HCU_CL_0499]]></ToUserName>\
+<FromUserName><![CDATA[XHZN_HCU]]></FromUserName><CreateTime>1485033641</CreateTime><MsgType><![CDATA[hcu_text]]></MsgType><Content><![CDATA[\
+4090340001000200010001402A0001FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00]]></Content><FuncFlag>0</FuncFlag></xml>"
+#define HUITP_MSG_HUIXML_TEST_DATA_CCL_AUTH_RESP_YES				"<xml><ToUserName><![CDATA[HCU_CL_0499]]></ToUserName>\
+<FromUserName><![CDATA[XHZN_HCU]]></FromUserName><CreateTime>1485033641</CreateTime><MsgType><![CDATA[hcu_text]]></MsgType><Content><![CDATA[\
+40100C00020002000100024002000100]]></Content><FuncFlag>0</FuncFlag></xml>"
+#define HUITP_MSG_HUIXML_TEST_DATA_CCL_AUTH_RESP_NO					"<xml><ToUserName><![CDATA[HCU_CL_0499]]></ToUserName>\
+<FromUserName><![CDATA[XHZN_HCU]]></FromUserName><CreateTime>1485033641</CreateTime><MsgType><![CDATA[hcu_text]]></MsgType><Content><![CDATA[\
+40100C00020002000100024002000200]]></Content><FuncFlag>0</FuncFlag></xml>"
+#define HUITP_MSG_HUIXML_TEST_DATA_CCL_STATE_REPORT_PERIOD	"<xml><ToUserName><![CDATA[HCU_CL_0499]]></ToUserName>\
+<FromUserName><![CDATA[XHZN_HCU]]></FromUserName><CreateTime>1485033641</CreateTime><MsgType><![CDATA[hcu_text]]></MsgType><Content><![CDATA[\
+4C8176000300020001000040060004040101010100400600040401010101004802000200004B02000200004602000200004702000200004502000200004904000300FFFF004A04000300FFFF0145040003002200004C040003008CC9014C0400030038EB004404000300E0E3024C04000300EB10034C02000100]]></Content><FuncFlag>0</FuncFlag></xml>"
+#define HUITP_MSG_HUIXML_TEST_DATA_CCL_STATE_REPORT_CLOSE		"<xml><ToUserName><![CDATA[HCU_CL_0499]]></ToUserName>\
+<FromUserName><![CDATA[XHZN_HCU]]></FromUserName><CreateTime>1485033642</CreateTime><MsgType><![CDATA[hcu_text]]></MsgType><Content><![CDATA[\
+4C8176000300020001000040060004040101010100400600040401010101004802000200004B02000200004602000200004702000200004502000200004904000300FFFF004A04000300FFFF0145040003002000004C040003001607014C04000300B1CB004404000300E0E3024C04000300B90A034C02000200]]></Content><FuncFlag>0</FuncFlag></xml>"
+#define HUITP_MSG_HUIXML_TEST_DATA_CCL_STATE_REPORT_FAULT		"<xml><ToUserName><![CDATA[HCU_CL_0499]]></ToUserName>\
+<FromUserName><![CDATA[XHZN_HCU]]></FromUserName><CreateTime>1485033641</CreateTime><MsgType><![CDATA[hcu_text]]></MsgType><Content><![CDATA[\
+4C8176000300020001000040060004040101010100400600040401010101004802000200004B02000200004602000200004702000200004502000200004904000300FFFF004A04000300FFFF0145040003002B00004C04000300AF83014C040003009640004404000300E0E3024C04000300FACA034C02000300]]></Content><FuncFlag>0</FuncFlag></xml>"
+#define HUITP_MSG_HUIXML_TEST_DATA_CCL_STATE_CONFIRM_PERIOD	"<xml><ToUserName><![CDATA[HCU_CL_0499]]></ToUserName>\
+<FromUserName><![CDATA[XHZN_HCU]]></FromUserName><CreateTime>1485033641</CreateTime><MsgType><![CDATA[hcu_text]]></MsgType><Content><![CDATA[\
+4C010C00040002000100034C02000100]]></Content><FuncFlag>0</FuncFlag></xml>"
+#define HUITP_MSG_HUIXML_TEST_DATA_CCL_STATE_CONFIRM_CLOSE	"<xml><ToUserName><![CDATA[HCU_CL_0499]]></ToUserName>\
+<FromUserName><![CDATA[XHZN_HCU]]></FromUserName><CreateTime>1485033642</CreateTime><MsgType><![CDATA[hcu_text]]></MsgType><Content><![CDATA[\
+4C010C00040002000100034C02000200]]></Content><FuncFlag>0</FuncFlag></xml>"
+#define HUITP_MSG_HUIXML_TEST_DATA_CCL_STATE_CONFIRM_FAULT	"<xml><ToUserName><![CDATA[HCU_CL_0499]]></ToUserName>\
+<FromUserName><![CDATA[XHZN_HCU]]></FromUserName><CreateTime>1485033641</CreateTime><MsgType><![CDATA[hcu_text]]></MsgType><Content><![CDATA[\
+4C010C00040002000100034C02000300]]></Content><FuncFlag>0</FuncFlag></xml>"
+
 
 #endif /* L2FRAME_HUIXMLCODEC_H_ */

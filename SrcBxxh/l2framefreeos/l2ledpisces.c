@@ -122,27 +122,26 @@ OPSTAT fsm_ledpisces_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 
 		return IHU_FAILURE;
 	}
 
-#if (IHU_LEDPISCES_PERIOD_TIMER_SET == IHU_LEDPISCES_PERIOD_TIMER_ACTIVE)		
-	//启动本地定时器，如果有必要
-	ret = ihu_timer_start(TASK_ID_LEDPISCES, TIMER_ID_1S_LEDPISCES_PERIOD_SCAN, zIhuSysEngPar.timer.ledpiscesPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
-	if (ret == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_LEDPISCES]++;
-		IhuErrorPrint("LEDPISCES: Error start timer!\n");
-		return IHU_FAILURE;
+	if (IHU_LEDPISCES_PERIOD_TIMER_SET == IHU_LEDPISCES_PERIOD_TIMER_ACTIVE){
+		//启动本地定时器，如果有必要
+		ret = ihu_timer_start(TASK_ID_LEDPISCES, TIMER_ID_1S_LEDPISCES_PERIOD_SCAN, zIhuSysEngPar.timer.ledpiscesPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+		if (ret == IHU_FAILURE){
+			zIhuRunErrCnt[TASK_ID_LEDPISCES]++;
+			IhuErrorPrint("LEDPISCES: Error start timer!\n");
+			return IHU_FAILURE;
+		}	
 	}	
-#endif
 	
-//由于内存限制的原因，暂时去激活了方波信号的生成
-#if (IHU_LEDPISCES_GALOWAG_FUNC_SET == IHU_LEDPISCES_GALOWAG_FUNC_ACTIVE)
-	//TIMER_ID_1S_LEDPISCES_GALOWAG_SCAN，是为扫描方波信号的生成
-	ret = ihu_timer_start(TASK_ID_LEDPISCES, TIMER_ID_1S_LEDPISCES_GALOWAG_SCAN, zIhuSysEngPar.timer.ledpiscesGalowagScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
-	if (ret == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_LEDPISCES]++;
-		IhuErrorPrint("LEDPISCES: Error start timer!\n");
-		return IHU_FAILURE;
+	//由于内存限制的原因，暂时去激活了方波信号的生成
+	if (IHU_LEDPISCES_GALOWAG_FUNC_SET == IHU_LEDPISCES_GALOWAG_FUNC_ACTIVE){
+		//TIMER_ID_1S_LEDPISCES_GALOWAG_SCAN，是为扫描方波信号的生成
+		ret = ihu_timer_start(TASK_ID_LEDPISCES, TIMER_ID_1S_LEDPISCES_GALOWAG_SCAN, zIhuSysEngPar.timer.ledpiscesGalowagScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+		if (ret == IHU_FAILURE){
+			zIhuRunErrCnt[TASK_ID_LEDPISCES]++;
+			IhuErrorPrint("LEDPISCES: Error start timer!\n");
+			return IHU_FAILURE;
+		}	
 	}	
-#endif
-	
 	//打印报告进入常规状态
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
 		IhuDebugPrint("LEDPISCES: Enter FSM_STATE_LEDPISCES_ACTIVE status, Keeping refresh here!\n");

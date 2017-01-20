@@ -1,4 +1,4 @@
-﻿/**
+/**
  ****************************************************************************************
  *
  * @file l2canvela.c
@@ -115,15 +115,15 @@ OPSTAT fsm_canvela_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 		return IHU_FAILURE;
 	}
 	
-	//启动本地定时器，如果有必要
-	//测试性启动周期性定时器
-	ret = ihu_timer_start(TASK_ID_CANVELA, TIMER_ID_1S_CANVELA_PERIOD_SCAN, zIhuSysEngPar.timer.canvelaPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
-	if (ret == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
-		IhuErrorPrint("CANVELA: Error start timer!\n");
-		return IHU_FAILURE;
+	if (IHU_CANVELA_PERIOD_TIMER_SET == IHU_CANVELA_PERIOD_TIMER_ACTIVE){
+		//测试性启动周期性定时器
+		ret = ihu_timer_start(TASK_ID_CANVELA, TIMER_ID_1S_CANVELA_PERIOD_SCAN, zIhuSysEngPar.timer.canvelaPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+		if (ret == IHU_FAILURE){
+			zIhuRunErrCnt[TASK_ID_CANVELA]++;
+			IhuErrorPrint("CANVELA: Error start timer!\n");
+			return IHU_FAILURE;
+		}	
 	}	
-	
 	//打印报告进入常规状态
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
 		IhuDebugPrint("CANVELA: Enter FSM_STATE_CANVELA_ACTIVE status, Keeping refresh here!\n");

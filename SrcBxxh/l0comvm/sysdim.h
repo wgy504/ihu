@@ -265,9 +265,9 @@
   #define IHU_QUEUE_MAX_SIZE MAX_IHU_MSG_BODY_LENGTH + 24 //由于涉及到4B对其，消息长度必须是头部4B对其，消息体4B对其！！！
 	//SLEEP控制表给任务模块可以给出
 	#define MAX_SLEEP_COUNTER_UP_LIMITATION 50000
-	#define IHU_PRINT_CHAR_SIZE 300// IHU_QUEUE_MAX_SIZE//300
+	#define IHU_PRINT_CHAR_SIZE IHU_QUEUE_MAX_SIZE + 300  //打印的缓冲区最好放大点
 	#define IHU_PRINT_FILE_LINE_SIZE 60
-	#define IHU_PRINT_BUFFER_NUMBER 1  //太长的打印缓冲区，是否会造成覆盖其它区域？
+	#define IHU_PRINT_BUFFER_NUMBER 1  //太长的打印缓冲区，是否会造成覆盖其它区域
 	#define IHU_PRINT_MUTEX_TIME_OUT_DURATION 100
 
 
@@ -298,9 +298,9 @@
   #define IHU_QUEUE_MAX_SIZE MAX_IHU_MSG_BODY_LENGTH + 24 //由于涉及到4B对其，消息长度必须是头部4B对其，消息体4B对其！！！
 	//SLEEP控制表给任务模块可以给出
 	#define MAX_SLEEP_COUNTER_UP_LIMITATION 50000
-	#define IHU_PRINT_CHAR_SIZE 300
+	#define IHU_PRINT_CHAR_SIZE IHU_QUEUE_MAX_SIZE + 300  //打印的缓冲区最好放大点
 	#define IHU_PRINT_FILE_LINE_SIZE 60
-	#define IHU_PRINT_BUFFER_NUMBER 1
+	#define IHU_PRINT_BUFFER_NUMBER 1  //太长的打印缓冲区，是否会造成覆盖其它区域
 	#define IHU_PRINT_MUTEX_TIME_OUT_DURATION 100
 	
 	

@@ -1,4 +1,4 @@
-﻿/**
+/**
  ****************************************************************************************
  *
  * @file l2canvela.h
@@ -43,6 +43,12 @@ enum FSM_STATE_CANVELA
 };
 //#define FSM_STATE_END   0xFE
 //#define FSM_STATE_INVALID 0xFF
+
+//控制定时器定时扫描是否启动
+#define IHU_CANVELA_PERIOD_TIMER_ACTIVE 1
+#define IHU_CANVELA_PERIOD_TIMER_DEACTIVE 2
+#define IHU_CANVELA_PERIOD_TIMER_SET IHU_CANVELA_PERIOD_TIMER_ACTIVE
+
 
 //Global variables
 extern FsmStateItem_t FsmCanvela[];

@@ -112,15 +112,15 @@ OPSTAT fsm_didocap_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 		return IHU_FAILURE;
 	}
 
-#if (IHU_DIDOCAP_PERIOD_TIMER_SET == IHU_DIDOCAP_PERIOD_TIMER_ACTIVE)	
-	//启动喂狗定时器
-	ret = ihu_timer_start(TASK_ID_DIDOCAP, TIMER_ID_1S_DIDOCAP_PERIOD_SCAN, zIhuSysEngPar.timer.didocapPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
-	if (ret == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
-		IhuErrorPrint("DIDOCAP: Error start timer!\n");
-		return IHU_FAILURE;
-	}	
-#endif
+	if (IHU_DIDOCAP_PERIOD_TIMER_SET == IHU_DIDOCAP_PERIOD_TIMER_ACTIVE){
+		//启动喂狗定时器
+		ret = ihu_timer_start(TASK_ID_DIDOCAP, TIMER_ID_1S_DIDOCAP_PERIOD_SCAN, zIhuSysEngPar.timer.didocapPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+		if (ret == IHU_FAILURE){
+			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+			IhuErrorPrint("DIDOCAP: Error start timer!\n");
+			return IHU_FAILURE;
+		}	
+	}
 	
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)	
 	//启动永恒的外部触发扫描

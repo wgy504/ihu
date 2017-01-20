@@ -127,21 +127,28 @@ OPSTAT fsm_spsvirgo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 		return IHU_FAILURE;
 	}
 
-#if (IHU_SPSVIRGO_PERIOD_TIMER_SET == IHU_SPSVIRGO_PERIOD_TIMER_ACTIVE)	
-	//测试性启动周期性定时器：正式工作后可以删掉这个工作逻辑机制
-	ret = ihu_timer_start(TASK_ID_SPSVIRGO, TIMER_ID_1S_SPSVIRGO_PERIOD_SCAN, zIhuSysEngPar.timer.spsvirgoPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
-	if (ret == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Error start timer!\n");
-		return IHU_FAILURE;
-	}	
-#endif
+	if (IHU_SPSVIRGO_PERIOD_TIMER_SET == IHU_SPSVIRGO_PERIOD_TIMER_ACTIVE){
+		//测试性启动周期性定时器：正式工作后可以删掉这个工作逻辑机制
+		ret = ihu_timer_start(TASK_ID_SPSVIRGO, TIMER_ID_1S_SPSVIRGO_PERIOD_SCAN, zIhuSysEngPar.timer.spsvirgoPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+		if (ret == IHU_FAILURE){
+			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+			IhuErrorPrint("SPSVIRGO: Error start timer!\n");
+			return IHU_FAILURE;
+		}	
+	}
 	
 	//打印报告进入常规状态
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
 		IhuDebugPrint("SPSVIRGO: Enter FSM_STATE_SPSVIRGO_ACTIVE status, Keeping refresh here!\n");
 	}
-
+	
+	//生成测试数据
+//	func_cloud_standard_xml_generate_message_test_data();
+//	func_cloud_standard_xml_generate_message_test_data();
+//	func_cloud_standard_xml_generate_message_test_data();
+//	func_cloud_standard_xml_generate_message_test_data();
+//	func_cloud_standard_xml_generate_message_test_data();
+	
 	//返回
 	return IHU_SUCCESS;
 }
@@ -306,9 +313,10 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	StrMsg_HUITP_MSGID_uni_ccl_lock_auth_inq_t pMsgProc;
 	UINT16 msgProcLen = sizeof(StrMsg_HUITP_MSGID_uni_ccl_lock_auth_inq_t);
 	memset(&pMsgProc, 0, msgProcLen);
-	pMsgProc.msgId.cmdId = (HUITP_IEID_uni_ccl_lock_auth_req>>8)&0xFF;
-	pMsgProc.msgId.optId = HUITP_IEID_uni_ccl_lock_auth_req&0xFF;
-	pMsgProc.msgLen = msgProcLen - 4;
+	pMsgProc.msgId.cmdId = (HUITP_MSGID_uni_ccl_lock_auth_inq>>8)&0xFF;
+	pMsgProc.msgId.optId = HUITP_MSGID_uni_ccl_lock_auth_inq&0xFF;
+	pMsgProc.msgLen.hbyte = ((msgProcLen - 4)>>8)&0xFF;
+	pMsgProc.msgLen.lbyte = (msgProcLen - 4)&0xFF;	
 	//StrIe_HUITP_IEID_uni_com_req_t
 	pMsgProc.baseReq.ieId = HUITP_IEID_uni_com_req;
 	pMsgProc.baseReq.ieLen = sizeof(StrIe_HUITP_IEID_uni_com_req_t) - 4;
@@ -465,7 +473,8 @@ OPSTAT fsm_spsvirgo_ccl_event_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 	memset(&pMsgProc, 0, msgProcLen);
 	pMsgProc.msgId.cmdId = (HUITP_MSGID_uni_ccl_state_report>>8)&0xFF;
 	pMsgProc.msgId.optId = HUITP_MSGID_uni_ccl_state_report&0xFF;
-	pMsgProc.msgLen = msgProcLen - 4;
+	pMsgProc.msgLen.hbyte = ((msgProcLen - 4)>>8)&0xFF;
+	pMsgProc.msgLen.lbyte = (msgProcLen - 4)&0xFF;	
 	//StrIe_HUITP_IEID_uni_com_report_t
 	pMsgProc.baseReport.ieId = HUITP_IEID_uni_com_report;
 	pMsgProc.baseReport.ieLen = sizeof(StrIe_HUITP_IEID_uni_com_report_t) - 4;
@@ -664,7 +673,8 @@ OPSTAT fsm_spsvirgo_ccl_fault_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 	memset(&pMsgProc, 0, msgProcLen);
 	pMsgProc.msgId.cmdId = (HUITP_MSGID_uni_ccl_state_report>>8)&0xFF;
 	pMsgProc.msgId.optId = HUITP_MSGID_uni_ccl_state_report&0xFF;
-	pMsgProc.msgLen = msgProcLen - 4;
+	pMsgProc.msgLen.hbyte = ((msgProcLen - 4)>>8)&0xFF;
+	pMsgProc.msgLen.lbyte = (msgProcLen - 4)&0xFF;	
 	//StrIe_HUITP_IEID_uni_com_report_t
 	pMsgProc.baseReport.ieId = HUITP_IEID_uni_com_report;
 	pMsgProc.baseReport.ieLen = sizeof(StrIe_HUITP_IEID_uni_com_report_t) - 4;
@@ -834,7 +844,8 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 	memset(&pMsgProc, 0, msgProcLen);
 	pMsgProc.msgId.cmdId = (HUITP_MSGID_uni_ccl_state_report>>8)&0xFF;
 	pMsgProc.msgId.optId = HUITP_MSGID_uni_ccl_state_report&0xFF;
-	pMsgProc.msgLen = msgProcLen - 4;
+	pMsgProc.msgLen.hbyte = ((msgProcLen - 4)>>8)&0xFF;
+	pMsgProc.msgLen.lbyte = (msgProcLen - 4)&0xFF;	
 	//StrIe_HUITP_IEID_uni_com_report_t
 	pMsgProc.baseReport.ieId = HUITP_IEID_uni_com_report;
 	pMsgProc.baseReport.ieLen = sizeof(StrIe_HUITP_IEID_uni_com_report_t) - 4;
@@ -1305,6 +1316,7 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_sw_package_confirm_received_handle(StrMsg_HUI
 	//返回
 	return IHU_FAILURE;
 }
+
 
 #endif //#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 

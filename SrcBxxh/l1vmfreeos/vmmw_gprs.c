@@ -278,6 +278,7 @@ OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input, int16_t inl
 {	
 	uint8_t temp[IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN+1];	
 	uint8_t *p1,*p2;
+	int i = 0;
 	
 	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: HTTP Session starting...!\n");
 	//参数检查
@@ -434,16 +435,29 @@ OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input, int16_t inl
 		IHU_ERROR_PRINT_GPRSMOD("VMFO: HTTP GET back data failure from cloud!\n");
 		return IHU_FAILURE;
 	}
+	
 	//准备解码并送往上层
 	//暂时返回的都是垃圾，所以自行生成测试数据
-	strcpy((char*)zIhuBspStm32SpsGprsRxBuff, \
-		"<xml><ToUserName><![CDATA[HCU_CL_0499]]></ToUserName><FromUserName><![CDATA[XHZN_HCU]]></FromUserName><CreateTime>1477323943</CreateTime><MsgType><![CDATA[hcu_text]]></MsgType><Content><![CDATA[400183]]></Content><FuncFlag>XXXX</FuncFlag></xml>");
-	//strcpy((char*)zIhuBspStm32SpsGprsRxBuff, "<xml>0000</xml>");
-	//最终决定不转化为小写，因为意义不是很大。同时，大小写本来就是接收消息的一部分
-	//int i = 0;
-	//for (i=0; i<strlen((const char*)zIhuBspStm32SpsGprsRxBuff); i++){
-	//	zIhuBspStm32SpsGprsRxBuff[i] = (char)tolower((char)zIhuBspStm32SpsGprsRxBuff[i]);
-	//}
+	i = rand() % 11;
+	if (i ==1) strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_HEAD_VALID);
+	else if(i==2) strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_AUTH_IND);
+	else if(i==3) strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_AUTH_RESP_YES);		
+	else if(i==4) strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_AUTH_RESP_NO);		
+	else if(i==5) strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_STATE_REPORT_PERIOD);
+	else if(i==6) strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_STATE_REPORT_CLOSE);
+	else if(i==7) strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_STATE_REPORT_FAULT);
+	else if(i==8) strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_STATE_CONFIRM_PERIOD);
+	else if(i==9) strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_STATE_CONFIRM_CLOSE);
+	else strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_STATE_CONFIRM_FAULT);
+	
+	//转化为小写与否。同时，大小写本来就是接收消息的一部分
+	if (IHU_VMWM_GPRSMOD_RECEIVE_DATA_TRANSFER_TO_LOWER_CASE_SET == IHU_VMWM_GPRSMOD_RECEIVE_DATA_TRANSFER_TO_LOWER_CASE_YES){
+		for (i=0; i<strlen((const char*)zIhuBspStm32SpsGprsRxBuff); i++){
+			zIhuBspStm32SpsGprsRxBuff[i] = (char)tolower((char)zIhuBspStm32SpsGprsRxBuff[i]);
+		}
+	}
+	
+	//接收数据处理
 	p1 = (uint8_t*)strstr((const char*)zIhuBspStm32SpsGprsRxBuff, "<xml>");
 	p2 = (uint8_t*)strstr((const char*)zIhuBspStm32SpsGprsRxBuff, "</xml>");
 	if((p1 != NULL) && (p2 != NULL) && (p1 < p2)){

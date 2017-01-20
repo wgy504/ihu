@@ -133,7 +133,8 @@ extern INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rssi_value(voi
 
 //Local API
 OPSTAT func_spsvirgo_hw_init(void);
-void func_spsvirgo_time_out_period_scan(void);
+void func_spsvirgo_time_out_period_scan(void);	
+
 
 //External API
 extern bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_door_open_state(UINT8 doorid);

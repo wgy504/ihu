@@ -4,7 +4,9 @@
 
 //= ZJL, 2017 Jan.20, CURRENT_SW_DELIVERY R03.100 =>CCL项目
 = 改进本设备的编号，不做成固定定义方式，而是为IAP升级后的程序从固定FLASH区域读取打好基础
-= 测试xml_unpack()函数，自己生成测试数据
+= 修正xml_pack()函数中访问输入数据的bug
+= 遇到编码的大小端问题，ARM-Cortex3缺省是小端(Small Endian)，编码只能将其定义为高低字节分开搞了
+//= 测试xml_unpack()函数，完善的生成测试数据
 
 
 //= ZJL, 2017 Jan.20, CURRENT_SW_DELIVERY R03.99 =>CCL项目
