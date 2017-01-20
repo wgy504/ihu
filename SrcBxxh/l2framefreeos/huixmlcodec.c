@@ -337,8 +337,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 	memset(pMsgBuf, 0, sizeof(StrMsg_HUITP_MSGID_uni_general_message_t));
 	pMsgBuf->msgId.cmdId = (msgId>>8)&0xFF;
 	pMsgBuf->msgId.optId = msgId&0xFF;
-	pMsgBuf->msgLen.hbyte = (msgLen>>8)&0xFF;
-	pMsgBuf->msgLen.lbyte = msgLen&0xFF;
+	pMsgBuf->msgLen = msgLen;
 	
 	//转码，从CHAR进制转化为16进制
 	for(index = 4; index < dif/2; index++){
@@ -367,8 +366,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 					IhuErrorPrint("HUITP: Error unpack message on length!\n");
 					return IHU_FAILURE;					
 				}
-				pMsgBuf->msgLen.hbyte = ((sizeof(StrMsg_HUITP_MSGID_uni_ccl_lock_resp_t) - 4)>>8)&0xFF;
-				pMsgBuf->msgLen.lbyte = (sizeof(StrMsg_HUITP_MSGID_uni_ccl_lock_resp_t) - 4)&0xFF;
+				pMsgBuf->msgLen = sizeof(StrMsg_HUITP_MSGID_uni_ccl_lock_resp_t) - 4;
 			}		
 			break;
 			
@@ -388,8 +386,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 					IhuErrorPrint("HUITP: Error unpack message on length!\n");
 					return IHU_FAILURE;					
 				}
-				pMsgBuf->msgLen.hbyte = ((sizeof(StrMsg_HUITP_MSGID_uni_ccl_door_resp_t) - 4)>>8)&0xFF;
-				pMsgBuf->msgLen.lbyte = (sizeof(StrMsg_HUITP_MSGID_uni_ccl_door_resp_t) - 4)&0xFF;				
+				pMsgBuf->msgLen = sizeof(StrMsg_HUITP_MSGID_uni_ccl_door_resp_t) - 4;			
 			}
 			break;
 			
@@ -424,23 +421,20 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 					HUITP_IEID_UNI_CCL_LOCK_MAX_NUMBER - IHU_CCL_SENSOR_LOCK_NUMBER_MAX);
 				memset(pMsgBuf+4+sizeof(StrIe_HUITP_IEID_uni_com_resp_t)+sizeof(StrIe_HUITP_IEID_uni_ccl_lock_state_t)+IHU_CCL_SENSOR_LOCK_NUMBER_MAX, 0, \
 					HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER - IHU_CCL_SENSOR_LOCK_NUMBER_MAX);
-				pMsgBuf->msgLen.hbyte = ((sizeof(StrMsg_HUITP_MSGID_uni_ccl_state_resp_t) - 4)>>8)&0xFF;
-				pMsgBuf->msgLen.lbyte = (sizeof(StrMsg_HUITP_MSGID_uni_ccl_state_resp_t) - 4)&0xFF;						
+				pMsgBuf->msgLen = sizeof(StrMsg_HUITP_MSGID_uni_ccl_state_resp_t) - 4;					
 			}
 			break;
 			
 		case HUITP_MSGID_uni_sw_package_req:
 			//因为只有一个边长IE，且IE正好处于最后一个结构部分，所以不需要干啥
 			//将消息长度恢复到消息结构长度，以便下面统一处理
-			pMsgBuf->msgLen.hbyte = ((sizeof(StrMsg_HUITP_MSGID_uni_sw_package_req_t) - 4)>>8)&0xFF;
-			pMsgBuf->msgLen.lbyte = (sizeof(StrMsg_HUITP_MSGID_uni_sw_package_req_t) - 4)&0xFF;					
+			pMsgBuf->msgLen = sizeof(StrMsg_HUITP_MSGID_uni_sw_package_req_t) - 4;				
 			break;
 		
 		case HUITP_MSGID_uni_sw_package_confirm:
 			//因为只有一个边长IE，且IE正好处于最后一个结构部分，所以不需要干啥
 			//将消息长度恢复到消息结构长度，以便下面统一处理
-			pMsgBuf->msgLen.hbyte = ((sizeof(StrMsg_HUITP_MSGID_uni_sw_package_confirm_t) - 4)>>8)&0xFF;
-			pMsgBuf->msgLen.lbyte = (sizeof(StrMsg_HUITP_MSGID_uni_sw_package_confirm_t) - 4)&0xFF;					
+			pMsgBuf->msgLen = sizeof(StrMsg_HUITP_MSGID_uni_sw_package_confirm_t) - 4;				
 		
 			break;
 		
@@ -947,8 +941,7 @@ void func_cloud_standard_xml_generate_message_test_data(void)
 	memset(&pMsgProc1, 0, msgProcLen);
 	pMsgProc1.msgId.cmdId = (HUITP_MSGID_uni_ccl_lock_auth_inq>>8)&0xFF;
 	pMsgProc1.msgId.optId = HUITP_MSGID_uni_ccl_lock_auth_inq&0xFF;
-	pMsgProc1.msgLen.hbyte = ((msgProcLen - 4)>>8)&0xFF;
-	pMsgProc1.msgLen.lbyte = (msgProcLen - 4)&0xFF;	
+	pMsgProc1.msgLen = msgProcLen - 4;
 	//StrIe_HUITP_IEID_uni_com_req_t
 	pMsgProc1.baseReq.ieId = HUITP_IEID_uni_com_req;
 	pMsgProc1.baseReq.ieLen = sizeof(StrIe_HUITP_IEID_uni_com_req_t) - 4;
@@ -974,8 +967,7 @@ void func_cloud_standard_xml_generate_message_test_data(void)
 	memset(&pMsgProc2, 0, msgProcLen);
 	pMsgProc2.msgId.cmdId = (HUITP_MSGID_uni_ccl_lock_auth_resp>>8)&0xFF;
 	pMsgProc2.msgId.optId = HUITP_MSGID_uni_ccl_lock_auth_resp&0xFF;
-	pMsgProc1.msgLen.hbyte = ((msgProcLen - 4)>>8)&0xFF;
-	pMsgProc1.msgLen.lbyte = (msgProcLen - 4)&0xFF;	
+	pMsgProc1.msgLen = msgProcLen - 4;
 	//StrIe_HUITP_IEID_uni_com_resp_t
 	pMsgProc2.baseResp.ieId = HUITP_IEID_uni_com_resp;
 	pMsgProc2.baseResp.ieLen = sizeof(StrIe_HUITP_IEID_uni_com_resp_t) - 4;
@@ -997,8 +989,7 @@ void func_cloud_standard_xml_generate_message_test_data(void)
 	memset(&pMsgProc3, 0, msgProcLen);
 	pMsgProc3.msgId.cmdId = (HUITP_MSGID_uni_ccl_state_report>>8)&0xFF;
 	pMsgProc3.msgId.optId = HUITP_MSGID_uni_ccl_state_report&0xFF;
-	pMsgProc1.msgLen.hbyte = ((msgProcLen - 4)>>8)&0xFF;
-	pMsgProc1.msgLen.lbyte = (msgProcLen - 4)&0xFF;	
+	pMsgProc1.msgLen = msgProcLen - 4;
 	//StrIe_HUITP_IEID_uni_com_report_t
 	pMsgProc3.baseReport.ieId = HUITP_IEID_uni_com_report;
 	pMsgProc3.baseReport.ieLen = sizeof(StrIe_HUITP_IEID_uni_com_report_t) - 4;
@@ -1095,8 +1086,7 @@ void func_cloud_standard_xml_generate_message_test_data(void)
 	memset(&pMsgProc4, 0, msgProcLen);
 	pMsgProc4.msgId.cmdId = (HUITP_MSGID_uni_ccl_state_confirm>>8)&0xFF;
 	pMsgProc4.msgId.optId = HUITP_MSGID_uni_ccl_state_confirm&0xFF;
-	pMsgProc1.msgLen.hbyte = ((msgProcLen - 4)>>8)&0xFF;
-	pMsgProc1.msgLen.lbyte = (msgProcLen - 4)&0xFF;	
+	pMsgProc1.msgLen = msgProcLen - 4;
 	//StrIe_HUITP_IEID_uni_com_confirm_t
 	pMsgProc4.baseConfirm.ieId = HUITP_IEID_uni_com_confirm;
 	pMsgProc4.baseConfirm.ieLen = sizeof(StrIe_HUITP_IEID_uni_com_confirm_t) - 4;

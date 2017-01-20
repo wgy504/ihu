@@ -315,8 +315,7 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	memset(&pMsgProc, 0, msgProcLen);
 	pMsgProc.msgId.cmdId = (HUITP_MSGID_uni_ccl_lock_auth_inq>>8)&0xFF;
 	pMsgProc.msgId.optId = HUITP_MSGID_uni_ccl_lock_auth_inq&0xFF;
-	pMsgProc.msgLen.hbyte = ((msgProcLen - 4)>>8)&0xFF;
-	pMsgProc.msgLen.lbyte = (msgProcLen - 4)&0xFF;	
+	pMsgProc.msgLen = msgProcLen - 4;
 	//StrIe_HUITP_IEID_uni_com_req_t
 	pMsgProc.baseReq.ieId = HUITP_IEID_uni_com_req;
 	pMsgProc.baseReq.ieLen = sizeof(StrIe_HUITP_IEID_uni_com_req_t) - 4;
@@ -473,8 +472,7 @@ OPSTAT fsm_spsvirgo_ccl_event_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 	memset(&pMsgProc, 0, msgProcLen);
 	pMsgProc.msgId.cmdId = (HUITP_MSGID_uni_ccl_state_report>>8)&0xFF;
 	pMsgProc.msgId.optId = HUITP_MSGID_uni_ccl_state_report&0xFF;
-	pMsgProc.msgLen.hbyte = ((msgProcLen - 4)>>8)&0xFF;
-	pMsgProc.msgLen.lbyte = (msgProcLen - 4)&0xFF;	
+	pMsgProc.msgLen = msgProcLen - 4;
 	//StrIe_HUITP_IEID_uni_com_report_t
 	pMsgProc.baseReport.ieId = HUITP_IEID_uni_com_report;
 	pMsgProc.baseReport.ieLen = sizeof(StrIe_HUITP_IEID_uni_com_report_t) - 4;
@@ -673,8 +671,7 @@ OPSTAT fsm_spsvirgo_ccl_fault_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 	memset(&pMsgProc, 0, msgProcLen);
 	pMsgProc.msgId.cmdId = (HUITP_MSGID_uni_ccl_state_report>>8)&0xFF;
 	pMsgProc.msgId.optId = HUITP_MSGID_uni_ccl_state_report&0xFF;
-	pMsgProc.msgLen.hbyte = ((msgProcLen - 4)>>8)&0xFF;
-	pMsgProc.msgLen.lbyte = (msgProcLen - 4)&0xFF;	
+	pMsgProc.msgLen = msgProcLen - 4;
 	//StrIe_HUITP_IEID_uni_com_report_t
 	pMsgProc.baseReport.ieId = HUITP_IEID_uni_com_report;
 	pMsgProc.baseReport.ieLen = sizeof(StrIe_HUITP_IEID_uni_com_report_t) - 4;
@@ -844,8 +841,7 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 	memset(&pMsgProc, 0, msgProcLen);
 	pMsgProc.msgId.cmdId = (HUITP_MSGID_uni_ccl_state_report>>8)&0xFF;
 	pMsgProc.msgId.optId = HUITP_MSGID_uni_ccl_state_report&0xFF;
-	pMsgProc.msgLen.hbyte = ((msgProcLen - 4)>>8)&0xFF;
-	pMsgProc.msgLen.lbyte = (msgProcLen - 4)&0xFF;	
+	pMsgProc.msgLen = msgProcLen - 4;
 	//StrIe_HUITP_IEID_uni_com_report_t
 	pMsgProc.baseReport.ieId = HUITP_IEID_uni_com_report;
 	pMsgProc.baseReport.ieLen = sizeof(StrIe_HUITP_IEID_uni_com_report_t) - 4;

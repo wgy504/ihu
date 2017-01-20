@@ -3006,26 +3006,11 @@ typedef struct StrMsg_HUITP_MSGID_uni_general_head_msgid
 	UINT8 cmdId;
 	UINT8 optId;
 }StrMsg_HUITP_MSGID_uni_general_head_msgid_t;
-typedef struct StrMsg_HUITP_MSGID_uni_general_head_msglen
-{
-	UINT8 hbyte;
-	UINT8 lbyte;
-}StrMsg_HUITP_MSGID_uni_general_head_msglen_t;
-typedef struct StrMsg_HUITP_MSGID_uni_general_head_ieid
-{
-	UINT8 hbyte;
-	UINT8 lbyte;
-}StrMsg_HUITP_MSGID_uni_general_head_ieid_t;
-typedef struct StrMsg_HUITP_MSGID_uni_general_head_ielen
-{
-	UINT8 hbyte;
-	UINT8 lbyte;
-}StrMsg_HUITP_MSGID_uni_general_head_ielen_t;
 
 typedef struct StrMsg_HUITP_MSGID_uni_general_message
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	UINT8  data[HUITP_MSG_BUF_BODY_ONLY_MAX_LEN];
 }StrMsg_HUITP_MSGID_uni_general_message_t;
 
@@ -3038,7 +3023,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_general_message
 typedef struct StrMsg_HUITP_MSGID_uni_blood_glucose_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_blood_glucose_req_t;
 
@@ -3046,7 +3031,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_blood_glucose_req
 typedef struct StrMsg_HUITP_MSGID_uni_blood_glucose_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_blood_glucose_value_t respValue;	
 }StrMsg_HUITP_MSGID_uni_blood_glucose_resp_t;
@@ -3055,7 +3040,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_blood_glucose_resp
 typedef struct StrMsg_HUITP_MSGID_uni_blood_glucose_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_blood_glucose_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_blood_glucose_report_t;
@@ -3064,7 +3049,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_blood_glucose_report
 typedef struct StrMsg_HUITP_MSGID_uni_blood_glucose_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_blood_glucose_confirm_t;
 
@@ -3076,7 +3061,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_blood_glucose_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_single_sports_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_single_sports_req_t;
 
@@ -3084,7 +3069,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_single_sports_req
 typedef struct StrMsg_HUITP_MSGID_uni_single_sports_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_single_sports_value_t respValue;	
 }StrMsg_HUITP_MSGID_uni_single_sports_resp_t;
@@ -3093,7 +3078,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_single_sports_resp
 typedef struct StrMsg_HUITP_MSGID_uni_single_sports_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_single_sports_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_single_sports_report_t;
@@ -3102,7 +3087,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_single_sports_report
 typedef struct StrMsg_HUITP_MSGID_uni_single_sports_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_single_sports_confirm_t;
 
@@ -3114,7 +3099,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_single_sports_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_single_sleep_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_single_sleep_req_t;
 
@@ -3122,7 +3107,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_single_sleep_req
 typedef struct StrMsg_HUITP_MSGID_uni_single_sleep_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_single_sleep_value_t respValue;	
 }StrMsg_HUITP_MSGID_uni_single_sleep_resp_t;
@@ -3131,7 +3116,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_single_sleep_resp
 typedef struct StrMsg_HUITP_MSGID_uni_single_sleep_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_single_sleep_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_single_sleep_report_t;
@@ -3140,7 +3125,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_single_sleep_report
 typedef struct StrMsg_HUITP_MSGID_uni_single_sleep_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_single_sleep_confirm_t;
  
@@ -3152,7 +3137,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_single_sleep_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_body_fat_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_body_fat_req_t;
 
@@ -3160,7 +3145,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_body_fat_req
 typedef struct StrMsg_HUITP_MSGID_uni_body_fat_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_body_fat_value_t respValue;	
 }StrMsg_HUITP_MSGID_uni_body_fat_resp_t;
@@ -3169,7 +3154,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_body_fat_resp
 typedef struct StrMsg_HUITP_MSGID_uni_body_fat_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_body_fat_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_body_fat_report_t;
@@ -3178,7 +3163,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_body_fat_report
 typedef struct StrMsg_HUITP_MSGID_uni_body_fat_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_body_fat_confirm_t;
 
@@ -3190,7 +3175,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_body_fat_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_blood_pressure_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_blood_pressure_req_t;
 
@@ -3198,7 +3183,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_blood_pressure_req
 typedef struct StrMsg_HUITP_MSGID_uni_blood_pressure_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_blood_pressure_value_t respValue;	
 }StrMsg_HUITP_MSGID_uni_blood_pressure_resp_t;
@@ -3207,7 +3192,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_blood_pressure_resp
 typedef struct StrMsg_HUITP_MSGID_uni_blood_pressure_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_blood_pressure_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_blood_pressure_report_t;
@@ -3216,7 +3201,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_blood_pressure_report
 typedef struct StrMsg_HUITP_MSGID_uni_blood_pressure_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_blood_pressure_confirm_t;
  
@@ -3228,7 +3213,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_blood_pressure_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_runner_machine_rep_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_runner_machine_rep_req_t;
  
@@ -3236,7 +3221,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_runner_machine_rep_req
 typedef struct StrMsg_HUITP_MSGID_uni_runner_machine_rep_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_runner_machine_rep_value_t respValue;	
 }StrMsg_HUITP_MSGID_uni_runner_machine_rep_resp_t;
@@ -3245,7 +3230,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_runner_machine_rep_resp
 typedef struct StrMsg_HUITP_MSGID_uni_runner_machine_rep_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_runner_machine_rep_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_runner_machine_rep_report_t;
@@ -3254,7 +3239,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_runner_machine_rep_report
 typedef struct StrMsg_HUITP_MSGID_uni_runner_machine_rep_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_runner_machine_rep_confirm_t;
  
@@ -3266,7 +3251,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_runner_machine_rep_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_runner_machine_ctrl_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_runner_machine_ctrl_req_t;
 
@@ -3274,7 +3259,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_runner_machine_ctrl_req
 typedef struct StrMsg_HUITP_MSGID_uni_runner_machine_ctrl_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_runner_machine_ctrl_value_t respValue;	
 }StrMsg_HUITP_MSGID_uni_runner_machine_ctrl_resp_t;
@@ -3283,7 +3268,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_runner_machine_ctrl_resp
 typedef struct StrMsg_HUITP_MSGID_uni_runner_machine_ctrl_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_runner_machine_ctrl_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_runner_machine_ctrl_report_t;
@@ -3292,7 +3277,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_runner_machine_ctrl_report
 typedef struct StrMsg_HUITP_MSGID_uni_runner_machine_ctrl_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_runner_machine_ctrl_confirm_t;
  
@@ -3304,7 +3289,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_runner_machine_ctrl_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_gps_specific_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_gps_specific_req_t;
 
@@ -3312,7 +3297,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_gps_specific_req
 typedef struct StrMsg_HUITP_MSGID_uni_gps_specific_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_gps_specific_x_t respGpsxValue;	
 	StrIe_HUITP_IEID_uni_gps_specific_y_t respGpsyValue;	
@@ -3323,7 +3308,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_gps_specific_resp
 typedef struct StrMsg_HUITP_MSGID_uni_gps_specific_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_gps_specific_x_t reportGpsxValue;	
 	StrIe_HUITP_IEID_uni_gps_specific_y_t reportGpsyValue;	
@@ -3334,7 +3319,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_gps_specific_report
 typedef struct StrMsg_HUITP_MSGID_uni_gps_specific_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_gps_specific_confirm_t;
 
@@ -3346,7 +3331,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_gps_specific_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_iau_ctrl_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_iau_ctrl_req_t;
 
@@ -3354,7 +3339,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_iau_ctrl_req
 typedef struct StrMsg_HUITP_MSGID_uni_iau_ctrl_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_iau_ctrl_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_iau_ctrl_resp_t;
@@ -3363,7 +3348,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_iau_ctrl_resp
 typedef struct StrMsg_HUITP_MSGID_uni_iau_ctrl_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_iau_ctrl_value_t reportValue;
 }StrMsg_HUITP_MSGID_uni_iau_ctrl_report_t;
@@ -3372,7 +3357,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_iau_ctrl_report
 typedef struct StrMsg_HUITP_MSGID_uni_iau_ctrl_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_iau_ctrl_confirm_t;
 
@@ -3384,7 +3369,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_iau_ctrl_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_emc_data_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_emc_data_req_t;
 
@@ -3392,7 +3377,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_emc_data_req
 typedef struct StrMsg_HUITP_MSGID_uni_emc_data_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_emc_data_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_emc_data_resp_t;
@@ -3401,7 +3386,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_emc_data_resp
 typedef struct StrMsg_HUITP_MSGID_uni_emc_data_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_emc_data_value_t reportValue;
 }StrMsg_HUITP_MSGID_uni_emc_data_report_t;
@@ -3410,7 +3395,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_emc_data_report
 typedef struct StrMsg_HUITP_MSGID_uni_emc_data_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_emc_data_confirm_t;
 
@@ -3418,7 +3403,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_emc_data_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_emc_set_switch
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_switch_onoff_t setSwitch;
 }StrMsg_HUITP_MSGID_uni_emc_set_switch_t;
@@ -3427,7 +3412,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_emc_set_switch
 typedef struct StrMsg_HUITP_MSGID_uni_emc_set_switch_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_emc_set_switch_ack_t;
 
@@ -3435,7 +3420,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_emc_set_switch_ack
 typedef struct StrMsg_HUITP_MSGID_uni_emc_set_modbus_address
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_modbus_address_t setModbusAddr;
 }StrMsg_HUITP_MSGID_uni_emc_set_modbus_address_t;
@@ -3444,7 +3429,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_emc_set_modbus_address
 typedef struct StrMsg_HUITP_MSGID_uni_emc_set_modbus_address_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_emc_set_modbus_address_ack_t;
 
@@ -3452,7 +3437,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_emc_set_modbus_address_ack
 typedef struct StrMsg_HUITP_MSGID_uni_emc_set_work_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_work_cycle_t setWorkCycle;
 }StrMsg_HUITP_MSGID_uni_emc_set_work_cycle_t;
@@ -3461,7 +3446,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_emc_set_work_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_emc_set_work_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_emc_set_work_cycle_ack_t;
 
@@ -3469,7 +3454,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_emc_set_work_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_emc_set_sample_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_sample_cycle_t setSampleCycle;
 }StrMsg_HUITP_MSGID_uni_emc_set_sample_cycle_t;
@@ -3478,7 +3463,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_emc_set_sample_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_emc_set_sample_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_emc_set_sample_cycle_ack_t;
 
@@ -3486,7 +3471,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_emc_set_sample_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_emc_set_sample_number
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_sample_number_t setSampleNumber;
 }StrMsg_HUITP_MSGID_uni_emc_set_sample_number_t;
@@ -3495,7 +3480,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_emc_set_sample_number
 typedef struct StrMsg_HUITP_MSGID_uni_emc_set_sample_number_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_emc_set_sample_number_ack_t;
 
@@ -3503,7 +3488,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_emc_set_sample_number_ack
 typedef struct StrMsg_HUITP_MSGID_uni_emc_read_switch
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_emc_read_switch_t;
 
@@ -3511,7 +3496,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_emc_read_switch
 typedef struct StrMsg_HUITP_MSGID_uni_emc_read_switch_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_switch_onoff_t readSwitch;
 }StrMsg_HUITP_MSGID_uni_emc_read_switch_ack_t;
@@ -3520,7 +3505,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_emc_read_switch_ack
 typedef struct StrMsg_HUITP_MSGID_uni_emc_read_modbus_address
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_emc_read_modbus_address_t;
 
@@ -3528,7 +3513,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_emc_read_modbus_address
 typedef struct StrMsg_HUITP_MSGID_uni_emc_read_modbus_address_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_modbus_address_t readModbusAddr;
 }StrMsg_HUITP_MSGID_uni_emc_read_modbus_address_ack_t;
@@ -3537,7 +3522,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_emc_read_modbus_address_ack
 typedef struct StrMsg_HUITP_MSGID_uni_emc_read_work_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_emc_read_work_cycle_t;
 
@@ -3545,7 +3530,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_emc_read_work_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_emc_read_work_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_work_cycle_t readWorkCycle;
 }StrMsg_HUITP_MSGID_uni_emc_read_work_cycle_ack_t;
@@ -3554,7 +3539,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_emc_read_work_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_emc_read_sample_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_emc_read_sample_cycle_t;
 
@@ -3562,7 +3547,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_emc_read_sample_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_emc_read_sample_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_sample_cycle_t readSampleCycle;
 }StrMsg_HUITP_MSGID_uni_emc_read_sample_cycle_ack_t;
@@ -3571,7 +3556,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_emc_read_sample_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_emc_read_sample_number
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_emc_read_sample_number_t;
 
@@ -3579,7 +3564,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_emc_read_sample_number
 typedef struct StrMsg_HUITP_MSGID_uni_emc_read_sample_number_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_sample_number_t readSampleNumber;
 }StrMsg_HUITP_MSGID_uni_emc_read_sample_number_ack_t;
@@ -3592,7 +3577,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_emc_read_sample_number_ack
 typedef struct StrMsg_HUITP_MSGID_uni_emc_accu_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_emc_accu_req_t;
 
@@ -3600,7 +3585,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_emc_accu_req
 typedef struct StrMsg_HUITP_MSGID_uni_emc_accu_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_emc_accu_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_emc_accu_resp_t;
@@ -3609,7 +3594,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_emc_accu_resp
 typedef struct StrMsg_HUITP_MSGID_uni_emc_accu_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_emc_accu_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_emc_accu_report_t;
@@ -3618,7 +3603,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_emc_accu_report
 typedef struct StrMsg_HUITP_MSGID_uni_emc_accu_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_emc_accu_confirm_t;
 
@@ -3630,7 +3615,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_emc_accu_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_co_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_co_req_t;
 
@@ -3638,7 +3623,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_co_req
 typedef struct StrMsg_HUITP_MSGID_uni_co_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_co_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_co_resp_t;
@@ -3647,7 +3632,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_co_resp
 typedef struct StrMsg_HUITP_MSGID_uni_co_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_co_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_co_report_t;
@@ -3656,7 +3641,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_co_report
 typedef struct StrMsg_HUITP_MSGID_uni_co_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_co_confirm_t;
 
@@ -3668,7 +3653,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_co_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_formaldehyde_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_formaldehyde_req_t;
 
@@ -3676,7 +3661,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_formaldehyde_req
 typedef struct StrMsg_HUITP_MSGID_uni_formaldehyde_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_formaldehyde_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_formaldehyde_resp_t;
@@ -3685,7 +3670,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_formaldehyde_resp
 typedef struct StrMsg_HUITP_MSGID_uni_formaldehyde_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_formaldehyde_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_formaldehyde_report_t;
@@ -3694,7 +3679,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_formaldehyde_report
 typedef struct StrMsg_HUITP_MSGID_uni_formaldehyde_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_formaldehyde_confirm_t;
 
@@ -3706,7 +3691,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_formaldehyde_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_alcohol_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_alcohol_req_t;
 
@@ -3714,7 +3699,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_alcohol_req
 typedef struct StrMsg_HUITP_MSGID_uni_alcohol_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_alcohol_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_alcohol_resp_t;
@@ -3723,7 +3708,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_alcohol_resp
 typedef struct StrMsg_HUITP_MSGID_uni_alcohol_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_alcohol_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_alcohol_report_t;
@@ -3732,7 +3717,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_alcohol_report
 typedef struct StrMsg_HUITP_MSGID_uni_alcohol_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_alcohol_confirm_t;
 
@@ -3744,7 +3729,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_alcohol_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_pm25_data_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_pm25_data_req_t;
 
@@ -3752,7 +3737,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_pm25_data_req
 typedef struct StrMsg_HUITP_MSGID_uni_pm25_data_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_pm01_value_t respPm01Value;
 	StrIe_HUITP_IEID_uni_pm25_value_t respPm25Value;
@@ -3763,7 +3748,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_pm25_data_resp
 typedef struct StrMsg_HUITP_MSGID_uni_pm25_data_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_pm01_value_t reportPm01Value;
 	StrIe_HUITP_IEID_uni_pm25_value_t reportPm25Value;
@@ -3774,7 +3759,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_pm25_data_report
 typedef struct StrMsg_HUITP_MSGID_uni_pm25_data_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_pm25_data_confirm_t;
 
@@ -3782,7 +3767,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_pm25_data_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_pm25_set_switch
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_switch_onoff_t setSwitch;
 }StrMsg_HUITP_MSGID_uni_pm25_set_switch_t;
@@ -3791,7 +3776,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_pm25_set_switch
 typedef struct StrMsg_HUITP_MSGID_uni_pm25_set_switch_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_pm25_set_switch_ack_t;
 
@@ -3799,7 +3784,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_pm25_set_switch_ack
 typedef struct StrMsg_HUITP_MSGID_uni_pm25_set_modbus_address
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_modbus_address_t setModbusAddr;
 }StrMsg_HUITP_MSGID_uni_pm25_set_modbus_address_t;
@@ -3808,7 +3793,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_pm25_set_modbus_address
 typedef struct StrMsg_HUITP_MSGID_uni_pm25_set_modbus_address_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_pm25_set_modbus_address_ack_t;
 
@@ -3816,7 +3801,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_pm25_set_modbus_address_ack
 typedef struct StrMsg_HUITP_MSGID_uni_pm25_set_work_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_work_cycle_t setWorkCycle;
 }StrMsg_HUITP_MSGID_uni_pm25_set_work_cycle_t;
@@ -3825,7 +3810,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_pm25_set_work_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_pm25_set_work_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_pm25_set_work_cycle_ack_t;
 
@@ -3833,7 +3818,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_pm25_set_work_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_pm25_set_sample_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_sample_cycle_t setSampleCycle;
 }StrMsg_HUITP_MSGID_uni_pm25_set_sample_cycle_t;
@@ -3842,7 +3827,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_pm25_set_sample_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_pm25_set_sample_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_pm25_set_sample_cycle_ack_t;
 
@@ -3850,7 +3835,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_pm25_set_sample_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_pm25_set_sample_number
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_sample_number_t setSampleNumber;
 }StrMsg_HUITP_MSGID_uni_pm25_set_sample_number_t;
@@ -3859,7 +3844,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_pm25_set_sample_number
 typedef struct StrMsg_HUITP_MSGID_uni_pm25_set_sample_number_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_pm25_set_sample_number_ack_t;
 
@@ -3867,7 +3852,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_pm25_set_sample_number_ack
 typedef struct StrMsg_HUITP_MSGID_uni_pm25_read_switch
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_pm25_read_switch_t;
 
@@ -3875,7 +3860,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_pm25_read_switch
 typedef struct StrMsg_HUITP_MSGID_uni_pm25_read_switch_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_switch_onoff_t readSwitch;
 }StrMsg_HUITP_MSGID_uni_pm25_read_switch_ack_t;
@@ -3884,7 +3869,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_pm25_read_switch_ack
 typedef struct StrMsg_HUITP_MSGID_uni_pm25_read_modbus_address
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_pm25_read_modbus_address_t;
 
@@ -3892,7 +3877,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_pm25_read_modbus_address
 typedef struct StrMsg_HUITP_MSGID_uni_pm25_read_modbus_address_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_modbus_address_t readModbusAddr;
 }StrMsg_HUITP_MSGID_uni_pm25_read_modbus_address_ack_t;
@@ -3901,7 +3886,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_pm25_read_modbus_address_ack
 typedef struct StrMsg_HUITP_MSGID_uni_pm25_read_work_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_pm25_read_work_cycle_t;
 
@@ -3909,7 +3894,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_pm25_read_work_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_pm25_read_work_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_work_cycle_t readWorkCycle;
 }StrMsg_HUITP_MSGID_uni_pm25_read_work_cycle_ack_t;
@@ -3918,7 +3903,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_pm25_read_work_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_pm25_read_sample_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_pm25_read_sample_cycle_t;
 
@@ -3926,7 +3911,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_pm25_read_sample_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_pm25_read_sample_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_sample_cycle_t readSampleCycle;
 }StrMsg_HUITP_MSGID_uni_pm25_read_sample_cycle_ack_t;
@@ -3935,7 +3920,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_pm25_read_sample_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_pm25_read_sample_number
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_pm25_read_sample_number_t;
 
@@ -3943,7 +3928,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_pm25_read_sample_number
 typedef struct StrMsg_HUITP_MSGID_uni_pm25_read_sample_number_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_sample_number_t readSampleNumber;
 }StrMsg_HUITP_MSGID_uni_pm25_read_sample_number_ack_t;
@@ -3956,7 +3941,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_pm25_read_sample_number_ack
 typedef struct StrMsg_HUITP_MSGID_uni_windspd_data_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_windspd_data_req_t;
 
@@ -3964,7 +3949,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_windspd_data_req
 typedef struct StrMsg_HUITP_MSGID_uni_windspd_data_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_windspd_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_windspd_data_resp_t;
@@ -3973,7 +3958,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_windspd_data_resp
 typedef struct StrMsg_HUITP_MSGID_uni_windspd_data_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_windspd_value_t reportValue;
 }StrMsg_HUITP_MSGID_uni_windspd_data_report_t;
@@ -3982,7 +3967,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_windspd_data_report
 typedef struct StrMsg_HUITP_MSGID_uni_windspd_data_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_windspd_data_confirm_t;
 
@@ -3990,7 +3975,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_windspd_data_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_windspd_set_switch
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_switch_onoff_t setSwitch;
 }StrMsg_HUITP_MSGID_uni_windspd_set_switch_t;
@@ -3999,7 +3984,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_windspd_set_switch
 typedef struct StrMsg_HUITP_MSGID_uni_windspd_set_switch_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_windspd_set_switch_ack_t;
 
@@ -4007,7 +3992,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_windspd_set_switch_ack
 typedef struct StrMsg_HUITP_MSGID_uni_windspd_set_modbus_address
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_modbus_address_t setModbusAddr;
 }StrMsg_HUITP_MSGID_uni_windspd_set_modbus_address_t;
@@ -4016,7 +4001,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_windspd_set_modbus_address
 typedef struct StrMsg_HUITP_MSGID_uni_windspd_set_modbus_address_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_windspd_set_modbus_address_ack_t;
 
@@ -4024,7 +4009,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_windspd_set_modbus_address_ack
 typedef struct StrMsg_HUITP_MSGID_uni_windspd_set_work_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_work_cycle_t setWorkCycle;
 }StrMsg_HUITP_MSGID_uni_windspd_set_work_cycle_t;
@@ -4033,7 +4018,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_windspd_set_work_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_windspd_set_work_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_windspd_set_work_cycle_ack_t;
 
@@ -4041,7 +4026,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_windspd_set_work_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_windspd_set_sample_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_sample_cycle_t setSampleCycle;
 }StrMsg_HUITP_MSGID_uni_windspd_set_sample_cycle_t;
@@ -4050,7 +4035,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_windspd_set_sample_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_windspd_set_sample_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_windspd_set_sample_cycle_ack_t;
 
@@ -4058,7 +4043,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_windspd_set_sample_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_windspd_set_sample_number
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_sample_number_t setSampleNumber;
 }StrMsg_HUITP_MSGID_uni_windspd_set_sample_number_t;
@@ -4067,7 +4052,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_windspd_set_sample_number
 typedef struct StrMsg_HUITP_MSGID_uni_windspd_set_sample_number_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_windspd_set_sample_number_ack_t;
 
@@ -4075,7 +4060,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_windspd_set_sample_number_ack
 typedef struct StrMsg_HUITP_MSGID_uni_windspd_read_switch
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_windspd_read_switch_t;
 
@@ -4083,7 +4068,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_windspd_read_switch
 typedef struct StrMsg_HUITP_MSGID_uni_windspd_read_switch_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_switch_onoff_t readSwitch;
 }StrMsg_HUITP_MSGID_uni_windspd_read_switch_ack_t;
@@ -4092,7 +4077,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_windspd_read_switch_ack
 typedef struct StrMsg_HUITP_MSGID_uni_windspd_read_modbus_address
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_windspd_read_modbus_address_t;
 
@@ -4100,7 +4085,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_windspd_read_modbus_address
 typedef struct StrMsg_HUITP_MSGID_uni_windspd_read_modbus_address_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_modbus_address_t readModbusAddr;
 }StrMsg_HUITP_MSGID_uni_windspd_read_modbus_address_ack_t;
@@ -4109,7 +4094,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_windspd_read_modbus_address_ack
 typedef struct StrMsg_HUITP_MSGID_uni_windspd_read_work_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_windspd_read_work_cycle_t;
 
@@ -4117,7 +4102,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_windspd_read_work_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_windspd_read_work_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_work_cycle_t readWorkCycle;
 }StrMsg_HUITP_MSGID_uni_windspd_read_work_cycle_ack_t;
@@ -4126,7 +4111,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_windspd_read_work_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_windspd_read_sample_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_windspd_read_sample_cycle_t;
 
@@ -4134,7 +4119,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_windspd_read_sample_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_windspd_read_sample_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_sample_cycle_t readSampleCycle;
 }StrMsg_HUITP_MSGID_uni_windspd_read_sample_cycle_ack_t;
@@ -4143,7 +4128,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_windspd_read_sample_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_windspd_read_sample_number
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_windspd_read_sample_number_t;
 
@@ -4151,7 +4136,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_windspd_read_sample_number
 typedef struct StrMsg_HUITP_MSGID_uni_windspd_read_sample_number_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_sample_number_t readSampleNumber;
 }StrMsg_HUITP_MSGID_uni_windspd_read_sample_number_ack_t;
@@ -4164,7 +4149,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_windspd_read_sample_number_ack
 typedef struct StrMsg_HUITP_MSGID_uni_winddir_data_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_winddir_data_req_t;
 
@@ -4172,7 +4157,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_winddir_data_req
 typedef struct StrMsg_HUITP_MSGID_uni_winddir_data_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_winddir_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_winddir_data_resp_t;
@@ -4181,7 +4166,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_winddir_data_resp
 typedef struct StrMsg_HUITP_MSGID_uni_winddir_data_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_winddir_value_t reportValue;
 }StrMsg_HUITP_MSGID_uni_winddir_data_report_t;
@@ -4190,7 +4175,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_winddir_data_report
 typedef struct StrMsg_HUITP_MSGID_uni_winddir_data_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_winddir_data_confirm_t;
 
@@ -4198,7 +4183,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_winddir_data_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_winddir_set_switch
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_switch_onoff_t setSwitch;
 }StrMsg_HUITP_MSGID_uni_winddir_set_switch_t;
@@ -4207,7 +4192,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_winddir_set_switch
 typedef struct StrMsg_HUITP_MSGID_uni_winddir_set_switch_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_winddir_set_switch_ack_t;
 
@@ -4215,7 +4200,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_winddir_set_switch_ack
 typedef struct StrMsg_HUITP_MSGID_uni_winddir_set_modbus_address
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_modbus_address_t setModbusAddr;
 }StrMsg_HUITP_MSGID_uni_winddir_set_modbus_address_t;
@@ -4224,7 +4209,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_winddir_set_modbus_address
 typedef struct StrMsg_HUITP_MSGID_uni_winddir_set_modbus_address_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_winddir_set_modbus_address_ack_t;
 
@@ -4232,7 +4217,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_winddir_set_modbus_address_ack
 typedef struct StrMsg_HUITP_MSGID_uni_winddir_set_work_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_work_cycle_t setWorkCycle;
 }StrMsg_HUITP_MSGID_uni_winddir_set_work_cycle_t;
@@ -4241,7 +4226,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_winddir_set_work_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_winddir_set_work_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_winddir_set_work_cycle_ack_t;
 
@@ -4249,7 +4234,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_winddir_set_work_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_winddir_set_sample_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_sample_cycle_t setSampleCycle;
 }StrMsg_HUITP_MSGID_uni_winddir_set_sample_cycle_t;
@@ -4258,7 +4243,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_winddir_set_sample_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_winddir_set_sample_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_winddir_set_sample_cycle_ack_t;
 
@@ -4266,7 +4251,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_winddir_set_sample_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_winddir_set_sample_number
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_sample_number_t setSampleNumber;
 }StrMsg_HUITP_MSGID_uni_winddir_set_sample_number_t;
@@ -4275,7 +4260,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_winddir_set_sample_number
 typedef struct StrMsg_HUITP_MSGID_uni_winddir_set_sample_number_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_winddir_set_sample_number_ack_t;
 
@@ -4283,7 +4268,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_winddir_set_sample_number_ack
 typedef struct StrMsg_HUITP_MSGID_uni_winddir_read_switch
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_winddir_read_switch_t;
 
@@ -4291,7 +4276,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_winddir_read_switch
 typedef struct StrMsg_HUITP_MSGID_uni_winddir_read_switch_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_switch_onoff_t readSwitch;
 }StrMsg_HUITP_MSGID_uni_winddir_read_switch_ack_t;
@@ -4300,7 +4285,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_winddir_read_switch_ack
 typedef struct StrMsg_HUITP_MSGID_uni_winddir_read_modbus_address
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_winddir_read_modbus_address_t;
 
@@ -4308,7 +4293,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_winddir_read_modbus_address
 typedef struct StrMsg_HUITP_MSGID_uni_winddir_read_modbus_address_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_modbus_address_t readModbusAddr;
 }StrMsg_HUITP_MSGID_uni_winddir_read_modbus_address_ack_t;
@@ -4317,7 +4302,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_winddir_read_modbus_address_ack
 typedef struct StrMsg_HUITP_MSGID_uni_winddir_read_work_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_winddir_read_work_cycle_t;
 
@@ -4325,7 +4310,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_winddir_read_work_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_winddir_read_work_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_work_cycle_t readWorkCycle;
 }StrMsg_HUITP_MSGID_uni_winddir_read_work_cycle_ack_t;
@@ -4334,7 +4319,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_winddir_read_work_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_winddir_read_sample_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_winddir_read_sample_cycle_t;
 
@@ -4342,7 +4327,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_winddir_read_sample_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_winddir_read_sample_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_sample_cycle_t readSampleCycle;
 }StrMsg_HUITP_MSGID_uni_winddir_read_sample_cycle_ack_t;
@@ -4351,7 +4336,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_winddir_read_sample_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_winddir_read_sample_number
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_winddir_read_sample_number_t;
 
@@ -4359,7 +4344,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_winddir_read_sample_number
 typedef struct StrMsg_HUITP_MSGID_uni_winddir_read_sample_number_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_sample_number_t readSampleNumber;
 }StrMsg_HUITP_MSGID_uni_winddir_read_sample_number_ack_t;
@@ -4372,7 +4357,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_winddir_read_sample_number_ack
 typedef struct StrMsg_HUITP_MSGID_uni_temp_data_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_temp_data_req_t;
 
@@ -4380,7 +4365,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_temp_data_req
 typedef struct StrMsg_HUITP_MSGID_uni_temp_data_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_temp_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_temp_data_resp_t;
@@ -4389,7 +4374,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_temp_data_resp
 typedef struct StrMsg_HUITP_MSGID_uni_temp_data_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_temp_value_t reportValue;
 }StrMsg_HUITP_MSGID_uni_temp_data_report_t;
@@ -4398,7 +4383,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_temp_data_report
 typedef struct StrMsg_HUITP_MSGID_uni_temp_data_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_temp_data_confirm_t;
 
@@ -4406,7 +4391,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_temp_data_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_temp_set_switch
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_switch_onoff_t setSwitch;
 }StrMsg_HUITP_MSGID_uni_temp_set_switch_t;
@@ -4415,7 +4400,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_temp_set_switch
 typedef struct StrMsg_HUITP_MSGID_uni_temp_set_switch_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_temp_set_switch_ack_t;
 
@@ -4423,7 +4408,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_temp_set_switch_ack
 typedef struct StrMsg_HUITP_MSGID_uni_temp_set_modbus_address
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_modbus_address_t setModbusAddr;
 }StrMsg_HUITP_MSGID_uni_temp_set_modbus_address_t;
@@ -4432,7 +4417,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_temp_set_modbus_address
 typedef struct StrMsg_HUITP_MSGID_uni_temp_set_modbus_address_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_temp_set_modbus_address_ack_t;
 
@@ -4440,7 +4425,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_temp_set_modbus_address_ack
 typedef struct StrMsg_HUITP_MSGID_uni_temp_set_work_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_work_cycle_t setWorkCycle;
 }StrMsg_HUITP_MSGID_uni_temp_set_work_cycle_t;
@@ -4449,7 +4434,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_temp_set_work_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_temp_set_work_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_temp_set_work_cycle_ack_t;
 
@@ -4457,7 +4442,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_temp_set_work_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_temp_set_sample_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_sample_cycle_t setSampleCycle;
 }StrMsg_HUITP_MSGID_uni_temp_set_sample_cycle_t;
@@ -4466,7 +4451,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_temp_set_sample_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_temp_set_sample_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_temp_set_sample_cycle_ack_t;
 
@@ -4474,7 +4459,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_temp_set_sample_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_temp_set_sample_number
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_sample_number_t setSampleNumber;
 }StrMsg_HUITP_MSGID_uni_temp_set_sample_number_t;
@@ -4483,7 +4468,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_temp_set_sample_number
 typedef struct StrMsg_HUITP_MSGID_uni_temp_set_sample_number_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_temp_set_sample_number_ack_t;
 
@@ -4491,7 +4476,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_temp_set_sample_number_ack
 typedef struct StrMsg_HUITP_MSGID_uni_temp_read_switch
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_temp_read_switch_t;
 
@@ -4499,7 +4484,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_temp_read_switch
 typedef struct StrMsg_HUITP_MSGID_uni_temp_read_switch_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_switch_onoff_t readSwitch;
 }StrMsg_HUITP_MSGID_uni_temp_read_switch_ack_t;
@@ -4508,7 +4493,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_temp_read_switch_ack
 typedef struct StrMsg_HUITP_MSGID_uni_temp_read_modbus_address
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_temp_read_modbus_address_t;
 
@@ -4516,7 +4501,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_temp_read_modbus_address
 typedef struct StrMsg_HUITP_MSGID_uni_temp_read_modbus_address_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_modbus_address_t readModbusAddr;
 }StrMsg_HUITP_MSGID_uni_temp_read_modbus_address_ack_t;
@@ -4525,7 +4510,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_temp_read_modbus_address_ack
 typedef struct StrMsg_HUITP_MSGID_uni_temp_read_work_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_temp_read_work_cycle_t;
 
@@ -4533,7 +4518,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_temp_read_work_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_temp_read_work_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_work_cycle_t readWorkCycle;
 }StrMsg_HUITP_MSGID_uni_temp_read_work_cycle_ack_t;
@@ -4542,7 +4527,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_temp_read_work_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_temp_read_sample_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_temp_read_sample_cycle_t;
 
@@ -4550,7 +4535,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_temp_read_sample_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_temp_read_sample_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_sample_cycle_t readSampleCycle;
 }StrMsg_HUITP_MSGID_uni_temp_read_sample_cycle_ack_t;
@@ -4559,7 +4544,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_temp_read_sample_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_temp_read_sample_number
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_temp_read_sample_number_t;
 
@@ -4567,7 +4552,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_temp_read_sample_number
 typedef struct StrMsg_HUITP_MSGID_uni_temp_read_sample_number_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_sample_number_t readSampleNumber;
 }StrMsg_HUITP_MSGID_uni_temp_read_sample_number_ack_t;
@@ -4580,7 +4565,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_temp_read_sample_number_ack
 typedef struct StrMsg_HUITP_MSGID_uni_humid_data_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_humid_data_req_t;
 
@@ -4588,7 +4573,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_humid_data_req
 typedef struct StrMsg_HUITP_MSGID_uni_humid_data_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_humid_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_humid_data_resp_t;
@@ -4597,7 +4582,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_humid_data_resp
 typedef struct StrMsg_HUITP_MSGID_uni_humid_data_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_humid_value_t reportValue;
 }StrMsg_HUITP_MSGID_uni_humid_data_report_t;
@@ -4606,7 +4591,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_humid_data_report
 typedef struct StrMsg_HUITP_MSGID_uni_humid_data_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_humid_data_confirm_t;
 
@@ -4614,7 +4599,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_humid_data_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_humid_set_switch
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_switch_onoff_t setSwitch;
 }StrMsg_HUITP_MSGID_uni_humid_set_switch_t;
@@ -4623,7 +4608,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_humid_set_switch
 typedef struct StrMsg_HUITP_MSGID_uni_humid_set_switch_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_humid_set_switch_ack_t;
 
@@ -4631,7 +4616,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_humid_set_switch_ack
 typedef struct StrMsg_HUITP_MSGID_uni_humid_set_modbus_address
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_modbus_address_t setModbusAddr;
 }StrMsg_HUITP_MSGID_uni_humid_set_modbus_address_t;
@@ -4640,7 +4625,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_humid_set_modbus_address
 typedef struct StrMsg_HUITP_MSGID_uni_humid_set_modbus_address_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_humid_set_modbus_address_ack_t;
 
@@ -4648,7 +4633,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_humid_set_modbus_address_ack
 typedef struct StrMsg_HUITP_MSGID_uni_humid_set_work_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_work_cycle_t setWorkCycle;
 }StrMsg_HUITP_MSGID_uni_humid_set_work_cycle_t;
@@ -4657,7 +4642,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_humid_set_work_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_humid_set_work_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_humid_set_work_cycle_ack_t;
 
@@ -4665,7 +4650,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_humid_set_work_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_humid_set_sample_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_sample_cycle_t setSampleCycle;
 }StrMsg_HUITP_MSGID_uni_humid_set_sample_cycle_t;
@@ -4674,7 +4659,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_humid_set_sample_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_humid_set_sample_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_humid_set_sample_cycle_ack_t;
 
@@ -4682,7 +4667,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_humid_set_sample_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_humid_set_sample_number
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_sample_number_t setSampleNumber;
 }StrMsg_HUITP_MSGID_uni_humid_set_sample_number_t;
@@ -4691,7 +4676,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_humid_set_sample_number
 typedef struct StrMsg_HUITP_MSGID_uni_humid_set_sample_number_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_humid_set_sample_number_ack_t;
 
@@ -4699,7 +4684,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_humid_set_sample_number_ack
 typedef struct StrMsg_HUITP_MSGID_uni_humid_read_switch
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_humid_read_switch_t;
 
@@ -4707,7 +4692,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_humid_read_switch
 typedef struct StrMsg_HUITP_MSGID_uni_humid_read_switch_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_switch_onoff_t readSwitch;
 }StrMsg_HUITP_MSGID_uni_humid_read_switch_ack_t;
@@ -4716,7 +4701,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_humid_read_switch_ack
 typedef struct StrMsg_HUITP_MSGID_uni_humid_read_modbus_address
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_humid_read_modbus_address_t;
 
@@ -4724,7 +4709,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_humid_read_modbus_address
 typedef struct StrMsg_HUITP_MSGID_uni_humid_read_modbus_address_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_modbus_address_t readModbusAddr;
 }StrMsg_HUITP_MSGID_uni_humid_read_modbus_address_ack_t;
@@ -4733,7 +4718,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_humid_read_modbus_address_ack
 typedef struct StrMsg_HUITP_MSGID_uni_humid_read_work_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_humid_read_work_cycle_t;
 
@@ -4741,7 +4726,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_humid_read_work_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_humid_read_work_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_work_cycle_t readWorkCycle;
 }StrMsg_HUITP_MSGID_uni_humid_read_work_cycle_ack_t;
@@ -4750,7 +4735,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_humid_read_work_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_humid_read_sample_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_humid_read_sample_cycle_t;
 
@@ -4758,7 +4743,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_humid_read_sample_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_humid_read_sample_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_sample_cycle_t readSampleCycle;
 }StrMsg_HUITP_MSGID_uni_humid_read_sample_cycle_ack_t;
@@ -4767,7 +4752,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_humid_read_sample_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_humid_read_sample_number
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_humid_read_sample_number_t;
 
@@ -4775,7 +4760,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_humid_read_sample_number
 typedef struct StrMsg_HUITP_MSGID_uni_humid_read_sample_number_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_sample_number_t readSampleNumber;
 }StrMsg_HUITP_MSGID_uni_humid_read_sample_number_ack_t;
@@ -4788,7 +4773,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_humid_read_sample_number_ack
 typedef struct StrMsg_HUITP_MSGID_uni_airprs_data_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_airprs_data_req_t;
 
@@ -4796,7 +4781,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_airprs_data_req
 typedef struct StrMsg_HUITP_MSGID_uni_airprs_data_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_airprs_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_airprs_data_resp_t;
@@ -4805,7 +4790,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_airprs_data_resp
 typedef struct StrMsg_HUITP_MSGID_uni_airprs_data_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_airprs_value_t reportValue;
 }StrMsg_HUITP_MSGID_uni_airprs_data_report_t;
@@ -4814,7 +4799,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_airprs_data_report
 typedef struct StrMsg_HUITP_MSGID_uni_airprs_data_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_airprs_data_confirm_t;
 
@@ -4822,7 +4807,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_airprs_data_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_airprs_set_switch
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_switch_onoff_t setSwitch;
 }StrMsg_HUITP_MSGID_uni_airprs_set_switch_t;
@@ -4831,7 +4816,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_airprs_set_switch
 typedef struct StrMsg_HUITP_MSGID_uni_airprs_set_switch_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_airprs_set_switch_ack_t;
 
@@ -4839,7 +4824,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_airprs_set_switch_ack
 typedef struct StrMsg_HUITP_MSGID_uni_airprs_set_modbus_address
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_modbus_address_t setModbusAddr;
 }StrMsg_HUITP_MSGID_uni_airprs_set_modbus_address_t;
@@ -4848,7 +4833,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_airprs_set_modbus_address
 typedef struct StrMsg_HUITP_MSGID_uni_airprs_set_modbus_address_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_airprs_set_modbus_address_ack_t;
 
@@ -4856,7 +4841,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_airprs_set_modbus_address_ack
 typedef struct StrMsg_HUITP_MSGID_uni_airprs_set_work_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_work_cycle_t setWorkCycle;
 }StrMsg_HUITP_MSGID_uni_airprs_set_work_cycle_t;
@@ -4865,7 +4850,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_airprs_set_work_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_airprs_set_work_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_airprs_set_work_cycle_ack_t;
 
@@ -4873,7 +4858,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_airprs_set_work_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_airprs_set_sample_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_sample_cycle_t setSampleCycle;
 }StrMsg_HUITP_MSGID_uni_airprs_set_sample_cycle_t;
@@ -4882,7 +4867,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_airprs_set_sample_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_airprs_set_sample_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_airprs_set_sample_cycle_ack_t;
 
@@ -4890,7 +4875,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_airprs_set_sample_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_airprs_set_sample_number
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_sample_number_t setSampleNumber;
 }StrMsg_HUITP_MSGID_uni_airprs_set_sample_number_t;
@@ -4899,7 +4884,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_airprs_set_sample_number
 typedef struct StrMsg_HUITP_MSGID_uni_airprs_set_sample_number_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_airprs_set_sample_number_ack_t;
 
@@ -4907,7 +4892,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_airprs_set_sample_number_ack
 typedef struct StrMsg_HUITP_MSGID_uni_airprs_read_switch
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_airprs_read_switch_t;
 
@@ -4915,7 +4900,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_airprs_read_switch
 typedef struct StrMsg_HUITP_MSGID_uni_airprs_read_switch_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_switch_onoff_t readSwitch;
 }StrMsg_HUITP_MSGID_uni_airprs_read_switch_ack_t;
@@ -4924,7 +4909,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_airprs_read_switch_ack
 typedef struct StrMsg_HUITP_MSGID_uni_airprs_read_modbus_address
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_airprs_read_modbus_address_t;
 
@@ -4932,7 +4917,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_airprs_read_modbus_address
 typedef struct StrMsg_HUITP_MSGID_uni_airprs_read_modbus_address_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_modbus_address_t readModbusAddr;
 }StrMsg_HUITP_MSGID_uni_airprs_read_modbus_address_ack_t;
@@ -4941,7 +4926,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_airprs_read_modbus_address_ack
 typedef struct StrMsg_HUITP_MSGID_uni_airprs_read_work_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_airprs_read_work_cycle_t;
 
@@ -4949,7 +4934,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_airprs_read_work_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_airprs_read_work_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_work_cycle_t readWorkCycle;
 }StrMsg_HUITP_MSGID_uni_airprs_read_work_cycle_ack_t;
@@ -4958,7 +4943,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_airprs_read_work_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_airprs_read_sample_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_airprs_read_sample_cycle_t;
 
@@ -4966,7 +4951,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_airprs_read_sample_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_airprs_read_sample_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_sample_cycle_t readSampleCycle;
 }StrMsg_HUITP_MSGID_uni_airprs_read_sample_cycle_ack_t;
@@ -4975,7 +4960,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_airprs_read_sample_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_airprs_read_sample_number
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_airprs_read_sample_number_t;
 
@@ -4983,7 +4968,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_airprs_read_sample_number
 typedef struct StrMsg_HUITP_MSGID_uni_airprs_read_sample_number_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_sample_number_t readSampleNumber;
 }StrMsg_HUITP_MSGID_uni_airprs_read_sample_number_ack_t;
@@ -4996,7 +4981,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_airprs_read_sample_number_ack
 typedef struct StrMsg_HUITP_MSGID_uni_noise_data_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_noise_data_req_t;
 
@@ -5004,7 +4989,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_noise_data_req
 typedef struct StrMsg_HUITP_MSGID_uni_noise_data_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_noise_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_noise_data_resp_t;
@@ -5013,7 +4998,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_noise_data_resp
 typedef struct StrMsg_HUITP_MSGID_uni_noise_data_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_noise_value_t reportValue;
 }StrMsg_HUITP_MSGID_uni_noise_data_report_t;
@@ -5022,7 +5007,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_noise_data_report
 typedef struct StrMsg_HUITP_MSGID_uni_noise_data_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_noise_data_confirm_t;
 
@@ -5030,7 +5015,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_noise_data_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_noise_set_switch
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_switch_onoff_t setSwitch;
 }StrMsg_HUITP_MSGID_uni_noise_set_switch_t;
@@ -5039,7 +5024,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_noise_set_switch
 typedef struct StrMsg_HUITP_MSGID_uni_noise_set_switch_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_noise_set_switch_ack_t;
 
@@ -5047,7 +5032,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_noise_set_switch_ack
 typedef struct StrMsg_HUITP_MSGID_uni_noise_set_modbus_address
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_modbus_address_t setModbusAddr;
 }StrMsg_HUITP_MSGID_uni_noise_set_modbus_address_t;
@@ -5056,7 +5041,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_noise_set_modbus_address
 typedef struct StrMsg_HUITP_MSGID_uni_noise_set_modbus_address_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_noise_set_modbus_address_ack_t;
 
@@ -5064,7 +5049,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_noise_set_modbus_address_ack
 typedef struct StrMsg_HUITP_MSGID_uni_noise_set_work_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_work_cycle_t setWorkCycle;
 }StrMsg_HUITP_MSGID_uni_noise_set_work_cycle_t;
@@ -5073,7 +5058,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_noise_set_work_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_noise_set_work_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_noise_set_work_cycle_ack_t;
 
@@ -5081,7 +5066,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_noise_set_work_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_noise_set_sample_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_sample_cycle_t setSampleCycle;
 }StrMsg_HUITP_MSGID_uni_noise_set_sample_cycle_t;
@@ -5090,7 +5075,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_noise_set_sample_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_noise_set_sample_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_noise_set_sample_cycle_ack_t;
 
@@ -5098,7 +5083,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_noise_set_sample_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_noise_set_sample_number
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_sample_number_t setSampleNumber;
 }StrMsg_HUITP_MSGID_uni_noise_set_sample_number_t;
@@ -5107,7 +5092,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_noise_set_sample_number
 typedef struct StrMsg_HUITP_MSGID_uni_noise_set_sample_number_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_noise_set_sample_number_ack_t;
 
@@ -5115,7 +5100,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_noise_set_sample_number_ack
 typedef struct StrMsg_HUITP_MSGID_uni_noise_read_switch
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_noise_read_switch_t;
 
@@ -5123,7 +5108,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_noise_read_switch
 typedef struct StrMsg_HUITP_MSGID_uni_noise_read_switch_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_switch_onoff_t readSwitch;
 }StrMsg_HUITP_MSGID_uni_noise_read_switch_ack_t;
@@ -5132,7 +5117,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_noise_read_switch_ack
 typedef struct StrMsg_HUITP_MSGID_uni_noise_read_modbus_address
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_noise_read_modbus_address_t;
 
@@ -5140,7 +5125,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_noise_read_modbus_address
 typedef struct StrMsg_HUITP_MSGID_uni_noise_read_modbus_address_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_modbus_address_t readModbusAddr;
 }StrMsg_HUITP_MSGID_uni_noise_read_modbus_address_ack_t;
@@ -5149,7 +5134,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_noise_read_modbus_address_ack
 typedef struct StrMsg_HUITP_MSGID_uni_noise_read_work_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_noise_read_work_cycle_t;
 
@@ -5157,7 +5142,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_noise_read_work_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_noise_read_work_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_work_cycle_t readWorkCycle;
 }StrMsg_HUITP_MSGID_uni_noise_read_work_cycle_ack_t;
@@ -5166,7 +5151,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_noise_read_work_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_noise_read_sample_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_noise_read_sample_cycle_t;
 
@@ -5174,7 +5159,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_noise_read_sample_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_noise_read_sample_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_sample_cycle_t readSampleCycle;
 }StrMsg_HUITP_MSGID_uni_noise_read_sample_cycle_ack_t;
@@ -5183,7 +5168,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_noise_read_sample_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_noise_read_sample_number
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_noise_read_sample_number_t;
 
@@ -5191,7 +5176,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_noise_read_sample_number
 typedef struct StrMsg_HUITP_MSGID_uni_noise_read_sample_number_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_sample_number_t readSampleNumber;
 }StrMsg_HUITP_MSGID_uni_noise_read_sample_number_ack_t;
@@ -5204,7 +5189,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_noise_read_sample_number_ack
 typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_data_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_hsmmp_data_req_t;
 
@@ -5212,7 +5197,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_data_req
 typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_data_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_hsmmp_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_hsmmp_data_resp_t;
@@ -5221,7 +5206,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_data_resp
 typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_data_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_hsmmp_value_t reportValue;
 }StrMsg_HUITP_MSGID_uni_hsmmp_data_report_t;
@@ -5230,7 +5215,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_data_report
 typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_data_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_hsmmp_data_confirm_t;
 
@@ -5238,7 +5223,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_data_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_set_switch
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_switch_onoff_t setSwitch;
 }StrMsg_HUITP_MSGID_uni_hsmmp_set_switch_t;
@@ -5247,7 +5232,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_set_switch
 typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_set_switch_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_hsmmp_set_switch_ack_t;
 
@@ -5255,7 +5240,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_set_switch_ack
 typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_set_modbus_address
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_modbus_address_t setModbusAddr;
 }StrMsg_HUITP_MSGID_uni_hsmmp_set_modbus_address_t;
@@ -5264,7 +5249,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_set_modbus_address
 typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_set_modbus_address_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_hsmmp_set_modbus_address_ack_t;
 
@@ -5272,7 +5257,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_set_modbus_address_ack
 typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_set_work_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_work_cycle_t setWorkCycle;
 }StrMsg_HUITP_MSGID_uni_hsmmp_set_work_cycle_t;
@@ -5281,7 +5266,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_set_work_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_set_work_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_hsmmp_set_work_cycle_ack_t;
 
@@ -5289,7 +5274,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_set_work_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_set_sample_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_sample_cycle_t setSampleCycle;
 }StrMsg_HUITP_MSGID_uni_hsmmp_set_sample_cycle_t;
@@ -5298,7 +5283,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_set_sample_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_set_sample_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_hsmmp_set_sample_cycle_ack_t;
 
@@ -5306,7 +5291,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_set_sample_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_set_sample_number
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_sample_number_t setSampleNumber;
 }StrMsg_HUITP_MSGID_uni_hsmmp_set_sample_number_t;
@@ -5315,7 +5300,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_set_sample_number
 typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_set_sample_number_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_hsmmp_set_sample_number_ack_t;
 
@@ -5323,7 +5308,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_set_sample_number_ack
 typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_read_switch
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_hsmmp_read_switch_t;
 
@@ -5331,7 +5316,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_read_switch
 typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_read_switch_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_switch_onoff_t readSwitch;
 }StrMsg_HUITP_MSGID_uni_hsmmp_read_switch_ack_t;
@@ -5340,7 +5325,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_read_switch_ack
 typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_read_modbus_address
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_hsmmp_read_modbus_address_t;
 
@@ -5348,7 +5333,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_read_modbus_address
 typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_read_modbus_address_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_modbus_address_t readModbusAddr;
 }StrMsg_HUITP_MSGID_uni_hsmmp_read_modbus_address_ack_t;
@@ -5357,7 +5342,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_read_modbus_address_ack
 typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_read_work_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_hsmmp_read_work_cycle_t;
 
@@ -5365,7 +5350,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_read_work_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_read_work_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_work_cycle_t readWorkCycle;
 }StrMsg_HUITP_MSGID_uni_hsmmp_read_work_cycle_ack_t;
@@ -5374,7 +5359,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_read_work_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_read_sample_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_hsmmp_read_sample_cycle_t;
 
@@ -5382,7 +5367,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_read_sample_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_read_sample_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_sample_cycle_t readSampleCycle;
 }StrMsg_HUITP_MSGID_uni_hsmmp_read_sample_cycle_ack_t;
@@ -5391,7 +5376,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_read_sample_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_read_sample_number
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_hsmmp_read_sample_number_t;
 
@@ -5399,7 +5384,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_read_sample_number
 typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_read_sample_number_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_sample_number_t readSampleNumber;
 }StrMsg_HUITP_MSGID_uni_hsmmp_read_sample_number_ack_t;
@@ -5412,7 +5397,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_hsmmp_read_sample_number_ack
 typedef struct StrMsg_HUITP_MSGID_uni_audio_data_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_audio_data_req_t;
 
@@ -5420,7 +5405,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_audio_data_req
 typedef struct StrMsg_HUITP_MSGID_uni_audio_data_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_audio_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_audio_data_resp_t;
@@ -5429,7 +5414,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_audio_data_resp
 typedef struct StrMsg_HUITP_MSGID_uni_audio_data_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_audio_value_t reportValue;
 }StrMsg_HUITP_MSGID_uni_audio_data_report_t;
@@ -5438,7 +5423,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_audio_data_report
 typedef struct StrMsg_HUITP_MSGID_uni_audio_data_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_audio_data_confirm_t;
 
@@ -5446,7 +5431,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_audio_data_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_audio_set_switch
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_switch_onoff_t setSwitch;
 }StrMsg_HUITP_MSGID_uni_audio_set_switch_t;
@@ -5455,7 +5440,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_audio_set_switch
 typedef struct StrMsg_HUITP_MSGID_uni_audio_set_switch_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_audio_set_switch_ack_t;
 
@@ -5463,7 +5448,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_audio_set_switch_ack
 typedef struct StrMsg_HUITP_MSGID_uni_audio_set_modbus_address
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_modbus_address_t setModbusAddr;
 }StrMsg_HUITP_MSGID_uni_audio_set_modbus_address_t;
@@ -5472,7 +5457,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_audio_set_modbus_address
 typedef struct StrMsg_HUITP_MSGID_uni_audio_set_modbus_address_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_audio_set_modbus_address_ack_t;
 
@@ -5480,7 +5465,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_audio_set_modbus_address_ack
 typedef struct StrMsg_HUITP_MSGID_uni_audio_set_work_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_work_cycle_t setWorkCycle;
 }StrMsg_HUITP_MSGID_uni_audio_set_work_cycle_t;
@@ -5489,7 +5474,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_audio_set_work_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_audio_set_work_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_audio_set_work_cycle_ack_t;
 
@@ -5497,7 +5482,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_audio_set_work_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_audio_set_sample_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_sample_cycle_t setSampleCycle;
 }StrMsg_HUITP_MSGID_uni_audio_set_sample_cycle_t;
@@ -5506,7 +5491,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_audio_set_sample_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_audio_set_sample_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_audio_set_sample_cycle_ack_t;
 
@@ -5514,7 +5499,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_audio_set_sample_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_audio_set_sample_number
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_sample_number_t setSampleNumber;
 }StrMsg_HUITP_MSGID_uni_audio_set_sample_number_t;
@@ -5523,7 +5508,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_audio_set_sample_number
 typedef struct StrMsg_HUITP_MSGID_uni_audio_set_sample_number_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_audio_set_sample_number_ack_t;
 
@@ -5531,7 +5516,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_audio_set_sample_number_ack
 typedef struct StrMsg_HUITP_MSGID_uni_audio_read_switch
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_audio_read_switch_t;
 
@@ -5539,7 +5524,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_audio_read_switch
 typedef struct StrMsg_HUITP_MSGID_uni_audio_read_switch_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_switch_onoff_t readSwitch;
 }StrMsg_HUITP_MSGID_uni_audio_read_switch_ack_t;
@@ -5548,7 +5533,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_audio_read_switch_ack
 typedef struct StrMsg_HUITP_MSGID_uni_audio_read_modbus_address
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_audio_read_modbus_address_t;
 
@@ -5556,7 +5541,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_audio_read_modbus_address
 typedef struct StrMsg_HUITP_MSGID_uni_audio_read_modbus_address_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_modbus_address_t readModbusAddr;
 }StrMsg_HUITP_MSGID_uni_audio_read_modbus_address_ack_t;
@@ -5565,7 +5550,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_audio_read_modbus_address_ack
 typedef struct StrMsg_HUITP_MSGID_uni_audio_read_work_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_audio_read_work_cycle_t;
 
@@ -5573,7 +5558,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_audio_read_work_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_audio_read_work_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_work_cycle_t readWorkCycle;
 }StrMsg_HUITP_MSGID_uni_audio_read_work_cycle_ack_t;
@@ -5582,7 +5567,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_audio_read_work_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_audio_read_sample_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_audio_read_sample_cycle_t;
 
@@ -5590,7 +5575,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_audio_read_sample_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_audio_read_sample_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_sample_cycle_t readSampleCycle;
 }StrMsg_HUITP_MSGID_uni_audio_read_sample_cycle_ack_t;
@@ -5599,7 +5584,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_audio_read_sample_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_audio_read_sample_number
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_audio_read_sample_number_t;
 
@@ -5607,7 +5592,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_audio_read_sample_number
 typedef struct StrMsg_HUITP_MSGID_uni_audio_read_sample_number_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_sample_number_t readSampleNumber;
 }StrMsg_HUITP_MSGID_uni_audio_read_sample_number_ack_t;
@@ -5620,7 +5605,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_audio_read_sample_number_ack
 typedef struct StrMsg_HUITP_MSGID_uni_video_data_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_video_data_req_t;
 
@@ -5628,7 +5613,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_video_data_req
 typedef struct StrMsg_HUITP_MSGID_uni_video_data_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_video_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_video_data_resp_t;
@@ -5637,7 +5622,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_video_data_resp
 typedef struct StrMsg_HUITP_MSGID_uni_video_data_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_video_value_t reportValue;
 }StrMsg_HUITP_MSGID_uni_video_data_report_t;
@@ -5646,7 +5631,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_video_data_report
 typedef struct StrMsg_HUITP_MSGID_uni_video_data_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_video_data_confirm_t;
 
@@ -5654,7 +5639,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_video_data_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_video_set_switch
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_switch_onoff_t setSwitch;
 }StrMsg_HUITP_MSGID_uni_video_set_switch_t;
@@ -5663,7 +5648,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_video_set_switch
 typedef struct StrMsg_HUITP_MSGID_uni_video_set_switch_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_video_set_switch_ack_t;
 
@@ -5671,7 +5656,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_video_set_switch_ack
 typedef struct StrMsg_HUITP_MSGID_uni_video_set_modbus_address
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_modbus_address_t setModbusAddr;
 }StrMsg_HUITP_MSGID_uni_video_set_modbus_address_t;
@@ -5680,7 +5665,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_video_set_modbus_address
 typedef struct StrMsg_HUITP_MSGID_uni_video_set_modbus_address_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_video_set_modbus_address_ack_t;
 
@@ -5688,7 +5673,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_video_set_modbus_address_ack
 typedef struct StrMsg_HUITP_MSGID_uni_video_set_work_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_work_cycle_t setWorkCycle;
 }StrMsg_HUITP_MSGID_uni_video_set_work_cycle_t;
@@ -5697,7 +5682,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_video_set_work_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_video_set_work_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_video_set_work_cycle_ack_t;
 
@@ -5705,7 +5690,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_video_set_work_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_video_set_sample_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_sample_cycle_t setSampleCycle;
 }StrMsg_HUITP_MSGID_uni_video_set_sample_cycle_t;
@@ -5714,7 +5699,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_video_set_sample_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_video_set_sample_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_video_set_sample_cycle_ack_t;
 
@@ -5722,7 +5707,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_video_set_sample_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_video_set_sample_number
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_sample_number_t setSampleNumber;
 }StrMsg_HUITP_MSGID_uni_video_set_sample_number_t;
@@ -5731,7 +5716,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_video_set_sample_number
 typedef struct StrMsg_HUITP_MSGID_uni_video_set_sample_number_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_video_set_sample_number_ack_t;
 
@@ -5739,7 +5724,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_video_set_sample_number_ack
 typedef struct StrMsg_HUITP_MSGID_uni_video_read_switch
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_video_read_switch_t;
 
@@ -5747,7 +5732,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_video_read_switch
 typedef struct StrMsg_HUITP_MSGID_uni_video_read_switch_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_switch_onoff_t readSwitch;
 }StrMsg_HUITP_MSGID_uni_video_read_switch_ack_t;
@@ -5756,7 +5741,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_video_read_switch_ack
 typedef struct StrMsg_HUITP_MSGID_uni_video_read_modbus_address
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_video_read_modbus_address_t;
 
@@ -5764,7 +5749,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_video_read_modbus_address
 typedef struct StrMsg_HUITP_MSGID_uni_video_read_modbus_address_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_modbus_address_t readModbusAddr;
 }StrMsg_HUITP_MSGID_uni_video_read_modbus_address_ack_t;
@@ -5773,7 +5758,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_video_read_modbus_address_ack
 typedef struct StrMsg_HUITP_MSGID_uni_video_read_work_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_video_read_work_cycle_t;
 
@@ -5781,7 +5766,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_video_read_work_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_video_read_work_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_work_cycle_t readWorkCycle;
 }StrMsg_HUITP_MSGID_uni_video_read_work_cycle_ack_t;
@@ -5790,7 +5775,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_video_read_work_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_video_read_sample_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_video_read_sample_cycle_t;
 
@@ -5798,7 +5783,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_video_read_sample_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_video_read_sample_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_sample_cycle_t readSampleCycle;
 }StrMsg_HUITP_MSGID_uni_video_read_sample_cycle_ack_t;
@@ -5807,7 +5792,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_video_read_sample_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_video_read_sample_number
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_video_read_sample_number_t;
 
@@ -5815,7 +5800,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_video_read_sample_number
 typedef struct StrMsg_HUITP_MSGID_uni_video_read_sample_number_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_sample_number_t readSampleNumber;
 }StrMsg_HUITP_MSGID_uni_video_read_sample_number_ack_t;
@@ -5828,7 +5813,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_video_read_sample_number_ack
 typedef struct StrMsg_HUITP_MSGID_uni_picture_data_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_picture_data_req_t;
 
@@ -5836,7 +5821,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_picture_data_req
 typedef struct StrMsg_HUITP_MSGID_uni_picture_data_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_picture_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_picture_data_resp_t;
@@ -5845,7 +5830,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_picture_data_resp
 typedef struct StrMsg_HUITP_MSGID_uni_picture_data_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_picture_value_t reportValue;
 }StrMsg_HUITP_MSGID_uni_picture_data_report_t;
@@ -5854,7 +5839,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_picture_data_report
 typedef struct StrMsg_HUITP_MSGID_uni_picture_data_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_picture_data_confirm_t;
 
@@ -5862,7 +5847,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_picture_data_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_picture_set_switch
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_switch_onoff_t setSwitch;
 }StrMsg_HUITP_MSGID_uni_picture_set_switch_t;
@@ -5871,7 +5856,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_picture_set_switch
 typedef struct StrMsg_HUITP_MSGID_uni_picture_set_switch_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_picture_set_switch_ack_t;
 
@@ -5879,7 +5864,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_picture_set_switch_ack
 typedef struct StrMsg_HUITP_MSGID_uni_picture_set_modbus_address
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_modbus_address_t setModbusAddr;
 }StrMsg_HUITP_MSGID_uni_picture_set_modbus_address_t;
@@ -5888,7 +5873,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_picture_set_modbus_address
 typedef struct StrMsg_HUITP_MSGID_uni_picture_set_modbus_address_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_picture_set_modbus_address_ack_t;
 
@@ -5896,7 +5881,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_picture_set_modbus_address_ack
 typedef struct StrMsg_HUITP_MSGID_uni_picture_set_work_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_work_cycle_t setWorkCycle;
 }StrMsg_HUITP_MSGID_uni_picture_set_work_cycle_t;
@@ -5905,7 +5890,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_picture_set_work_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_picture_set_work_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_picture_set_work_cycle_ack_t;
 
@@ -5913,7 +5898,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_picture_set_work_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_picture_set_sample_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_sample_cycle_t setSampleCycle;
 }StrMsg_HUITP_MSGID_uni_picture_set_sample_cycle_t;
@@ -5922,7 +5907,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_picture_set_sample_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_picture_set_sample_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_picture_set_sample_cycle_ack_t;
 
@@ -5930,7 +5915,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_picture_set_sample_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_picture_set_sample_number
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_sample_number_t setSampleNumber;
 }StrMsg_HUITP_MSGID_uni_picture_set_sample_number_t;
@@ -5939,7 +5924,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_picture_set_sample_number
 typedef struct StrMsg_HUITP_MSGID_uni_picture_set_sample_number_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_picture_set_sample_number_ack_t;
 
@@ -5947,7 +5932,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_picture_set_sample_number_ack
 typedef struct StrMsg_HUITP_MSGID_uni_picture_read_switch
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_picture_read_switch_t;
 
@@ -5955,7 +5940,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_picture_read_switch
 typedef struct StrMsg_HUITP_MSGID_uni_picture_read_switch_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_switch_onoff_t readSwitch;
 }StrMsg_HUITP_MSGID_uni_picture_read_switch_ack_t;
@@ -5964,7 +5949,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_picture_read_switch_ack
 typedef struct StrMsg_HUITP_MSGID_uni_picture_read_modbus_address
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_picture_read_modbus_address_t;
 
@@ -5972,7 +5957,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_picture_read_modbus_address
 typedef struct StrMsg_HUITP_MSGID_uni_picture_read_modbus_address_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_modbus_address_t readModbusAddr;
 }StrMsg_HUITP_MSGID_uni_picture_read_modbus_address_ack_t;
@@ -5981,7 +5966,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_picture_read_modbus_address_ack
 typedef struct StrMsg_HUITP_MSGID_uni_picture_read_work_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_picture_read_work_cycle_t;
 
@@ -5989,7 +5974,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_picture_read_work_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_picture_read_work_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_work_cycle_t readWorkCycle;
 }StrMsg_HUITP_MSGID_uni_picture_read_work_cycle_ack_t;
@@ -5998,7 +5983,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_picture_read_work_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_picture_read_sample_cycle
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_picture_read_sample_cycle_t;
 
@@ -6006,7 +5991,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_picture_read_sample_cycle
 typedef struct StrMsg_HUITP_MSGID_uni_picture_read_sample_cycle_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_sample_cycle_t readSampleCycle;
 }StrMsg_HUITP_MSGID_uni_picture_read_sample_cycle_ack_t;
@@ -6015,7 +6000,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_picture_read_sample_cycle_ack
 typedef struct StrMsg_HUITP_MSGID_uni_picture_read_sample_number
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_picture_read_sample_number_t;
 
@@ -6023,7 +6008,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_picture_read_sample_number
 typedef struct StrMsg_HUITP_MSGID_uni_picture_read_sample_number_ack
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_sample_number_t readSampleNumber;
 }StrMsg_HUITP_MSGID_uni_picture_read_sample_number_ack_t;
@@ -6036,7 +6021,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_picture_read_sample_number_ack
 typedef struct StrMsg_HUITP_MSGID_uni_ycjk_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_ycjk_req_t;
 
@@ -6044,7 +6029,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ycjk_req
 typedef struct StrMsg_HUITP_MSGID_uni_ycjk_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_ycjk_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_ycjk_resp_t;
@@ -6053,7 +6038,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ycjk_resp
 typedef struct StrMsg_HUITP_MSGID_uni_ycjk_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_ycjk_value_t reportValue;
 }StrMsg_HUITP_MSGID_uni_ycjk_report_t;
@@ -6062,7 +6047,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ycjk_report
 typedef struct StrMsg_HUITP_MSGID_uni_ycjk_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_ycjk_confirm_t;
 
@@ -6074,7 +6059,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ycjk_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_water_meter_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_water_meter_req_t;
  
@@ -6082,7 +6067,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_water_meter_req
 typedef struct StrMsg_HUITP_MSGID_uni_water_meter_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_water_meter_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_water_meter_resp_t;
@@ -6091,7 +6076,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_water_meter_resp
 typedef struct StrMsg_HUITP_MSGID_uni_water_meter_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_water_meter_value_t reportValue;
 }StrMsg_HUITP_MSGID_uni_water_meter_report_t;
@@ -6100,7 +6085,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_water_meter_report
 typedef struct StrMsg_HUITP_MSGID_uni_water_meter_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_water_meter_confirm_t;
 
@@ -6112,7 +6097,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_water_meter_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_heat_meter_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_heat_meter_req_t;
 
@@ -6120,7 +6105,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_heat_meter_req
 typedef struct StrMsg_HUITP_MSGID_uni_heat_meter_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_heat_meter_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_heat_meter_resp_t;
@@ -6129,7 +6114,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_heat_meter_resp
 typedef struct StrMsg_HUITP_MSGID_uni_heat_meter_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_heat_meter_value_t reportValue;
 }StrMsg_HUITP_MSGID_uni_heat_meter_report_t;
@@ -6138,7 +6123,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_heat_meter_report
 typedef struct StrMsg_HUITP_MSGID_uni_heat_meter_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_heat_meter_confirm_t;
 
@@ -6150,7 +6135,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_heat_meter_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_gas_meter_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_gas_meter_req_t;
 
@@ -6158,7 +6143,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_gas_meter_req
 typedef struct StrMsg_HUITP_MSGID_uni_gas_meter_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_gas_meter_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_gas_meter_resp_t;
@@ -6167,7 +6152,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_gas_meter_resp
 typedef struct StrMsg_HUITP_MSGID_uni_gas_meter_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_gas_meter_value_t reportValue;
 }StrMsg_HUITP_MSGID_uni_gas_meter_report_t;
@@ -6176,7 +6161,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_gas_meter_report
 typedef struct StrMsg_HUITP_MSGID_uni_gas_meter_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_gas_meter_confirm_t;
 
@@ -6188,7 +6173,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_gas_meter_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_power_meter_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_power_meter_req_t;
 
@@ -6196,7 +6181,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_power_meter_req
 typedef struct StrMsg_HUITP_MSGID_uni_power_meter_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_power_meter_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_power_meter_resp_t;
@@ -6205,7 +6190,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_power_meter_resp
 typedef struct StrMsg_HUITP_MSGID_uni_power_meter_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_power_meter_value_t reportValue;
 }StrMsg_HUITP_MSGID_uni_power_meter_report_t;
@@ -6214,7 +6199,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_power_meter_report
 typedef struct StrMsg_HUITP_MSGID_uni_power_meter_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_power_meter_confirm_t;
 
@@ -6226,7 +6211,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_power_meter_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_light_strength_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_light_strength_req_t;
 
@@ -6234,7 +6219,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_light_strength_req
 typedef struct StrMsg_HUITP_MSGID_uni_light_strength_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_light_strength_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_light_strength_resp_t;
@@ -6243,7 +6228,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_light_strength_resp
 typedef struct StrMsg_HUITP_MSGID_uni_light_strength_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_light_strength_value_t reportValue;
 }StrMsg_HUITP_MSGID_uni_light_strength_report_t;
@@ -6252,7 +6237,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_light_strength_report
 typedef struct StrMsg_HUITP_MSGID_uni_light_strength_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_HUITP_MSGID_uni_light_strength_confirm_t;
  
@@ -6264,7 +6249,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_light_strength_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_toxicgas_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_toxicgas_req_t;
  
@@ -6272,7 +6257,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_toxicgas_req
 typedef struct StrMsg_HUITP_MSGID_uni_toxicgas_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_toxicgas_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_toxicgas_resp_t;
@@ -6281,7 +6266,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_toxicgas_resp
 typedef struct StrMsg_HUITP_MSGID_uni_toxicgas_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_toxicgas_value_t reportValue;
 }StrMsg_HUITP_HUITP_MSGID_uni_toxicgas_report_t;
@@ -6290,7 +6275,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_toxicgas_report
 typedef struct StrMsg_HUITP_MSGID_uni_toxicgas_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_toxicgas_confirm_t;
  
@@ -6302,7 +6287,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_toxicgas_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_altitude_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_altitude_req_t;
  
@@ -6310,7 +6295,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_altitude_req
 typedef struct StrMsg_HUITP_MSGID_uni_altitude_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_altitude_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_altitude_resp_t;
@@ -6319,7 +6304,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_altitude_resp
 typedef struct StrMsg_HUITP_MSGID_uni_altitude_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_altitude_value_t reportValue;
 }StrMsg_HUITP_HUITP_MSGID_uni_altitude_report_t;
@@ -6328,7 +6313,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_altitude_report
 typedef struct StrMsg_HUITP_MSGID_uni_altitude_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_altitude_confirm_t;
 
@@ -6340,7 +6325,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_altitude_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_moto_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_moto_req_t;
  
@@ -6348,7 +6333,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_moto_req
 typedef struct StrMsg_HUITP_MSGID_uni_moto_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_moto_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_moto_resp_t;
@@ -6357,7 +6342,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_moto_resp
 typedef struct StrMsg_HUITP_MSGID_uni_moto_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_moto_value_t reportValue;
 }StrMsg_HUITP_HUITP_MSGID_uni_moto_report_t;
@@ -6366,7 +6351,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_moto_report
 typedef struct StrMsg_HUITP_MSGID_uni_moto_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_moto_confirm_t;
 
@@ -6378,7 +6363,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_moto_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_switch_resistor_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_switch_resistor_req_t;
  
@@ -6386,7 +6371,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_switch_resistor_req
 typedef struct StrMsg_HUITP_MSGID_uni_switch_resistor_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_switch_resistor_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_switch_resistor_resp_t;
@@ -6395,7 +6380,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_switch_resistor_resp
 typedef struct StrMsg_HUITP_MSGID_uni_switch_resistor_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_switch_resistor_value_t reportValue;
 }StrMsg_HUITP_HUITP_MSGID_uni_switch_resistor_report_t;
@@ -6404,7 +6389,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_switch_resistor_report
 typedef struct StrMsg_HUITP_MSGID_uni_switch_resistor_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_switch_resistor_confirm_t;
 
@@ -6416,7 +6401,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_switch_resistor_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_transporter_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_transporter_req_t;
  
@@ -6424,7 +6409,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_transporter_req
 typedef struct StrMsg_HUITP_MSGID_uni_transporter_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_transporter_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_transporter_resp_t;
@@ -6433,7 +6418,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_transporter_resp
 typedef struct StrMsg_HUITP_MSGID_uni_transporter_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_transporter_value_t reportValue;
 }StrMsg_HUITP_HUITP_MSGID_uni_transporter_report_t;
@@ -6442,7 +6427,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_transporter_report
 typedef struct StrMsg_HUITP_MSGID_uni_transporter_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_transporter_confirm_t;
 
@@ -6454,7 +6439,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_transporter_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_req_t;
  
@@ -6462,7 +6447,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_req
 typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_scale_weight_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_resp_t;
@@ -6471,7 +6456,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_resp
 typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_scale_weight_value_t reportValue;
 }StrMsg_HUITP_HUITP_MSGID_uni_bfsc_comb_scale_report_t;
@@ -6480,7 +6465,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_report
 typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_confirm_t;
 
@@ -6488,7 +6473,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_cmd_start_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_scale_weight_cmd_t cmd;
 }StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_cmd_start_req_t;
@@ -6497,7 +6482,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_cmd_start_req
 typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_cmd_start_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_cmd_start_resp_t;
 
@@ -6505,7 +6490,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_cmd_start_resp
 typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_cmd_stop_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_scale_weight_cmd_t cmd;
 }StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_cmd_stop_req_t;
@@ -6514,7 +6499,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_cmd_stop_req
 typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_cmd_stop_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 }StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_cmd_stop_resp_t;
 
@@ -6526,7 +6511,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_cmd_stop_resp
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_ccl_lock_req_t;
 
@@ -6534,7 +6519,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_req
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_ccl_lock_state_t respState;
 }StrMsg_HUITP_MSGID_uni_ccl_lock_resp_t;
@@ -6543,7 +6528,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_resp
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_ccl_lock_state_t reportState;	
 }StrMsg_HUITP_MSGID_uni_ccl_lock_report_t;
@@ -6552,7 +6537,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_report
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_ccl_lock_confirm_t;
 
@@ -6560,7 +6545,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_auth_inq
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_ccl_lock_auth_req_t authReq;
 }StrMsg_HUITP_MSGID_uni_ccl_lock_auth_inq_t;
@@ -6569,7 +6554,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_auth_inq
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_auth_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_ccl_lock_auth_resp_t respState;
 }StrMsg_HUITP_MSGID_uni_ccl_lock_auth_resp_t;
@@ -6582,7 +6567,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_auth_resp
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_door_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_ccl_door_req_t;
 
@@ -6590,7 +6575,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_door_req
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_door_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_ccl_door_state_t respState;
 }StrMsg_HUITP_MSGID_uni_ccl_door_resp_t;
@@ -6599,7 +6584,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_door_resp
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_door_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_ccl_door_state_t reportState;	
 }StrMsg_HUITP_MSGID_uni_ccl_door_report_t;
@@ -6608,7 +6593,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_door_report
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_door_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_ccl_door_confirm_t;
 
@@ -6620,7 +6605,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_door_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_rfid_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_ccl_rfid_req_t;
 
@@ -6628,7 +6613,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_rfid_req
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_rfid_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_ccl_rfid_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_ccl_rfid_resp_t;
@@ -6637,7 +6622,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_rfid_resp
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_rfid_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_ccl_rfid_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_ccl_rfid_report_t;
@@ -6646,7 +6631,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_rfid_report
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_rfid_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_ccl_rfid_confirm_t;
 
@@ -6658,7 +6643,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_rfid_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_ble_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_ccl_ble_req_t;
  
@@ -6666,7 +6651,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_ble_req
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_ble_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_ccl_ble_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_ccl_ble_resp_t;
@@ -6675,7 +6660,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_ble_resp
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_ble_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_ccl_ble_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_ccl_ble_report_t;
@@ -6684,7 +6669,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_ble_report
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_ble_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_ccl_ble_confirm_t;
 
@@ -6696,7 +6681,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_ble_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_gprs_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_ccl_gprs_req_t;
 
@@ -6704,7 +6689,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_gprs_req
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_gprs_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_ccl_rssi_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_ccl_gprs_resp_t;
@@ -6713,7 +6698,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_gprs_resp
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_gprs_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_ccl_rssi_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_ccl_gprs_report_t;
@@ -6722,7 +6707,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_gprs_report
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_gprs_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_ccl_gprs_confirm_t;
 
@@ -6734,7 +6719,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_gprs_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_battery_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_ccl_battery_req_t;
  
@@ -6742,7 +6727,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_battery_req
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_batter_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_ccl_bat_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_ccl_batter_resp_t;
@@ -6751,7 +6736,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_batter_resp
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_battery_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_ccl_bat_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_ccl_battery_report_t;
@@ -6760,7 +6745,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_battery_report
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_battery_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_ccl_battery_confirm_t;
 
@@ -6772,7 +6757,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_battery_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_shake_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_ccl_shake_req_t;
 
@@ -6780,7 +6765,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_shake_req
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_shake_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_ccl_shake_state_t respState;
 }StrMsg_HUITP_MSGID_uni_ccl_shake_resp_t;
@@ -6789,7 +6774,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_shake_resp
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_shake_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_ccl_shake_state_t reportState;	
 }StrMsg_HUITP_MSGID_uni_ccl_shake_report_t;
@@ -6798,7 +6783,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_shake_report
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_shake_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_ccl_shake_confirm_t;
 
@@ -6810,7 +6795,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_shake_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_smoke_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_ccl_smoke_req_t;
 
@@ -6818,7 +6803,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_smoke_req
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_smoke_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_ccl_smoke_state_t respState;
 }StrMsg_HUITP_MSGID_uni_ccl_smoke_resp_t;
@@ -6827,7 +6812,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_smoke_resp
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_smoke_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_ccl_smoke_state_t reportState;	
 }StrMsg_HUITP_MSGID_uni_ccl_smoke_report_t;
@@ -6836,7 +6821,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_smoke_report
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_smoke_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_ccl_smoke_confirm_t;
 
@@ -6848,7 +6833,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_smoke_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_water_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_ccl_water_req_t;
 
@@ -6856,7 +6841,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_water_req
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_water_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_ccl_water_state_t respState;
 }StrMsg_HUITP_MSGID_uni_ccl_water_resp_t;
@@ -6865,7 +6850,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_water_resp
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_water_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_ccl_water_state_t reportState;	
 }StrMsg_HUITP_MSGID_uni_ccl_water_report_t;
@@ -6874,7 +6859,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_water_report
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_water_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_ccl_water_confirm_t;
 
@@ -6886,7 +6871,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_water_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_temp_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_ccl_temp_req_t;
 
@@ -6894,7 +6879,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_temp_req
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_temp_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_ccl_temp_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_ccl_temp_resp_t;
@@ -6903,7 +6888,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_temp_resp
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_temp_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_ccl_temp_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_ccl_temp_report_t;
@@ -6912,7 +6897,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_temp_report
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_temp_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_ccl_temp_confirm_t;
 
@@ -6924,7 +6909,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_temp_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_humid_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_ccl_humid_req_t;
 
@@ -6932,7 +6917,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_humid_req
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_humid_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_ccl_humid_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_ccl_humid_resp_t;
@@ -6941,7 +6926,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_humid_resp
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_humid_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_ccl_humid_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_ccl_humid_report_t;
@@ -6950,7 +6935,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_humid_report
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_humid_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_ccl_humid_confirm_t;
 
@@ -6962,7 +6947,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_humid_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_fall_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_ccl_fall_req_t;
 
@@ -6970,7 +6955,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_fall_req
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_fall_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_ccl_fall_state_t respState;
 }StrMsg_HUITP_MSGID_uni_ccl_fall_resp_t;
@@ -6979,7 +6964,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_fall_resp
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_fall_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_ccl_fall_state_t reportState;	
 }StrMsg_HUITP_MSGID_uni_ccl_fall_report_t;
@@ -6988,7 +6973,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_fall_report
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_fall_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_ccl_fall_confirm_t;
 
@@ -7000,7 +6985,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_fall_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_ccl_state_req_t;
 
@@ -7008,7 +6993,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_req
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_ccl_lock_state_t lockState;
 	StrIe_HUITP_IEID_uni_ccl_door_state_t doorState;
@@ -7031,7 +7016,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_resp
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_ccl_lock_state_t lockState;
 	StrIe_HUITP_IEID_uni_ccl_door_state_t doorState;
@@ -7054,7 +7039,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_report
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 	StrIe_HUITP_IEID_uni_ccl_report_type_t reportType;
 }StrMsg_HUITP_MSGID_uni_ccl_state_confirm_t;
@@ -7067,7 +7052,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_itf_sps_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_itf_sps_req_t;
 
@@ -7075,7 +7060,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_sps_req
 typedef struct StrMsg_HUITP_MSGID_uni_itf_sps_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_itf_sps_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_itf_sps_resp_t;
@@ -7084,7 +7069,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_sps_resp
 typedef struct StrMsg_HUITP_MSGID_uni_itf_sps_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_itf_sps_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_itf_sps_report_t;
@@ -7093,7 +7078,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_sps_report
 typedef struct StrMsg_HUITP_MSGID_uni_itf_sps_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_itf_sps_confirm_t;
 
@@ -7105,7 +7090,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_sps_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_itf_adc_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_itf_adc_req_t;
 
@@ -7113,7 +7098,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_adc_req
 typedef struct StrMsg_HUITP_MSGID_uni_itf_adc_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_itf_adc_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_itf_adc_resp_t;
@@ -7122,7 +7107,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_adc_resp
 typedef struct StrMsg_HUITP_MSGID_uni_itf_adc_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_itf_adc_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_itf_adc_report_t;
@@ -7131,7 +7116,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_adc_report
 typedef struct StrMsg_HUITP_MSGID_uni_itf_adc_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_itf_adc_confirm_t;
 
@@ -7143,7 +7128,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_adc_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_itf_dac_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_itf_dac_req_t;
 
@@ -7151,7 +7136,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_dac_req
 typedef struct StrMsg_HUITP_MSGID_uni_itf_dac_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_itf_dac_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_itf_dac_resp_t;
@@ -7160,7 +7145,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_dac_resp
 typedef struct StrMsg_HUITP_MSGID_uni_itf_dac_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_itf_dac_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_itf_dac_report_t;
@@ -7169,7 +7154,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_dac_report
 typedef struct StrMsg_HUITP_MSGID_uni_itf_dac_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_itf_dac_confirm_t;
 
@@ -7181,7 +7166,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_dac_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_itf_i2c_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_itf_i2c_req_t;
 
@@ -7189,7 +7174,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_i2c_req
 typedef struct StrMsg_HUITP_MSGID_uni_itf_i2c_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_itf_i2c_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_itf_i2c_resp_t;
@@ -7198,7 +7183,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_i2c_resp
 typedef struct StrMsg_HUITP_MSGID_uni_itf_i2c_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_itf_i2c_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_itf_i2c_report_t;
@@ -7207,7 +7192,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_i2c_report
 typedef struct StrMsg_HUITP_MSGID_uni_itf_i2c_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_itf_i2c_confirm_t;
 
@@ -7219,7 +7204,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_i2c_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_itf_pwm_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_itf_pwm_req_t;
 
@@ -7227,7 +7212,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_pwm_req
 typedef struct StrMsg_HUITP_MSGID_uni_itf_pwm_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_itf_pwm_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_itf_pwm_resp_t;
@@ -7236,7 +7221,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_pwm_resp
 typedef struct StrMsg_HUITP_MSGID_uni_itf_pwm_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_itf_pwm_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_itf_pwm_report_t;
@@ -7245,7 +7230,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_pwm_report
 typedef struct StrMsg_HUITP_MSGID_uni_itf_pwm_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_itf_pwm_confirm_t;
 
@@ -7257,7 +7242,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_pwm_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_itf_di_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_itf_di_req_t;
 
@@ -7265,7 +7250,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_di_req
 typedef struct StrMsg_HUITP_MSGID_uni_itf_di_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_itf_di_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_itf_di_resp_t;
@@ -7274,7 +7259,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_di_resp
 typedef struct StrMsg_HUITP_MSGID_uni_itf_di_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_itf_di_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_itf_di_report_t;
@@ -7283,7 +7268,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_di_report
 typedef struct StrMsg_HUITP_MSGID_uni_itf_di_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_itf_di_confirm_t;
 
@@ -7295,7 +7280,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_di_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_itf_do_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_itf_do_req_t;
 
@@ -7303,7 +7288,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_do_req
 typedef struct StrMsg_HUITP_MSGID_uni_itf_do_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_itf_do_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_itf_do_resp_t;
@@ -7312,7 +7297,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_do_resp
 typedef struct StrMsg_HUITP_MSGID_uni_itf_do_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_itf_do_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_itf_do_report_t;
@@ -7321,7 +7306,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_do_report
 typedef struct StrMsg_HUITP_MSGID_uni_itf_do_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_itf_do_confirm_t;
 
@@ -7333,7 +7318,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_do_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_itf_can_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_itf_can_req_t;
 
@@ -7341,7 +7326,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_can_req
 typedef struct StrMsg_HUITP_MSGID_uni_itf_cam_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_itf_can_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_itf_cam_resp_t;
@@ -7350,7 +7335,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_cam_resp
 typedef struct StrMsg_HUITP_MSGID_uni_itf_can_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_itf_can_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_itf_can_report_t;
@@ -7359,7 +7344,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_can_report
 typedef struct StrMsg_HUITP_MSGID_uni_itf_can_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_itf_can_confirm_t;
 
@@ -7371,7 +7356,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_can_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_itf_spi_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_itf_spi_req_t;
 
@@ -7379,7 +7364,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_spi_req
 typedef struct StrMsg_HUITP_MSGID_uni_itf_spi_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_itf_spi_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_itf_spi_resp_t;
@@ -7388,7 +7373,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_spi_resp
 typedef struct StrMsg_HUITP_MSGID_uni_itf_spi_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_itf_spi_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_itf_spi_report_t;
@@ -7397,7 +7382,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_spi_report
 typedef struct StrMsg_HUITP_MSGID_uni_itf_spi_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_itf_spi_confirm_t;
 
@@ -7409,7 +7394,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_spi_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_itf_usb_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_itf_usb_req_t;
 
@@ -7417,7 +7402,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_usb_req
 typedef struct StrMsg_HUITP_MSGID_uni_itf_usb_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_itf_usb_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_itf_usb_resp_t;
@@ -7426,7 +7411,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_usb_resp
 typedef struct StrMsg_HUITP_MSGID_uni_itf_usb_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_itf_usb_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_itf_usb_report_t;
@@ -7435,7 +7420,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_usb_report
 typedef struct StrMsg_HUITP_MSGID_uni_itf_usb_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_itf_usb_confirm_t;
 
@@ -7447,7 +7432,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_usb_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_itf_eth_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_itf_eth_req_t;
 
@@ -7455,7 +7440,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_eth_req
 typedef struct StrMsg_HUITP_MSGID_uni_itf_eth_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_itf_eth_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_itf_eth_resp_t;
@@ -7464,7 +7449,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_eth_resp
 typedef struct StrMsg_HUITP_MSGID_uni_itf_eth_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_itf_eth_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_itf_eth_report_t;
@@ -7473,7 +7458,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_eth_report
 typedef struct StrMsg_HUITP_MSGID_uni_itf_eth_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_itf_eth_confirm_t;
 
@@ -7485,7 +7470,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_eth_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_itf_485_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_itf_485_req_t;
 
@@ -7493,7 +7478,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_485_req
 typedef struct StrMsg_HUITP_MSGID_uni_itf_485_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_itf_485_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_itf_485_resp_t;
@@ -7502,7 +7487,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_485_resp
 typedef struct StrMsg_HUITP_MSGID_uni_itf_485_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_itf_485_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_itf_485_report_t;
@@ -7511,7 +7496,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_485_report
 typedef struct StrMsg_HUITP_MSGID_uni_itf_485_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_itf_485_confirm_t;
 
@@ -7523,7 +7508,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_itf_485_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_inventory_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_inventory_req_t;
 
@@ -7531,7 +7516,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_inventory_req
 typedef struct StrMsg_HUITP_MSGID_uni_inventory_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_inventory_hw_type_t hwTypeRespValue;
 	StrIe_HUITP_IEID_uni_inventory_hw_id_t hwIdRespValue;
@@ -7543,7 +7528,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_inventory_resp
 typedef struct StrMsg_HUITP_MSGID_uni_inventory_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_inventory_hw_type_t hwTypeReportValue;
 	StrIe_HUITP_IEID_uni_inventory_hw_id_t hwIdReportValue;
@@ -7555,7 +7540,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_inventory_report
 typedef struct StrMsg_HUITP_MSGID_uni_inventory_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_inventory_confirm_t;
 
@@ -7567,7 +7552,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_inventory_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_sw_package_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_com_segment_total_t segTotal;
 	StrIe_HUITP_IEID_uni_com_segment_index_t segIndex;
@@ -7578,7 +7563,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_sw_package_req
 typedef struct StrMsg_HUITP_MSGID_uni_sw_package_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_com_segment_total_t segTotal;
 	StrIe_HUITP_IEID_uni_com_segment_index_t segIndex;
@@ -7588,7 +7573,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_sw_package_resp
 typedef struct StrMsg_HUITP_MSGID_uni_sw_package_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_com_segment_total_t segTotal;
 	StrIe_HUITP_IEID_uni_com_segment_index_t segIndex;
@@ -7598,7 +7583,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_sw_package_report
 typedef struct StrMsg_HUITP_MSGID_uni_sw_package_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 	StrIe_HUITP_IEID_uni_com_segment_total_t segTotal;
 	StrIe_HUITP_IEID_uni_com_segment_index_t segIndex;
@@ -7613,7 +7598,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_sw_package_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_alarm_info_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_alarm_info_req_t;
 
@@ -7621,7 +7606,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_alarm_info_req
 typedef struct StrMsg_HUITP_MSGID_uni_alarm_info_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_alarm_info_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_alarm_info_resp_t;
@@ -7630,7 +7615,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_alarm_info_resp
 typedef struct StrMsg_HUITP_MSGID_uni_alarm_info_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_alarm_info_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_alarm_info_report_t;
@@ -7639,7 +7624,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_alarm_info_report
 typedef struct StrMsg_HUITP_MSGID_uni_alarm_info_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_alarm_info_confirm_t;
 
@@ -7651,7 +7636,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_alarm_info_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_performance_info_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_performance_info_req_t;
 
@@ -7659,7 +7644,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_performance_info_req
 typedef struct StrMsg_HUITP_MSGID_uni_performance_info_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_performance_info_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_performance_info_resp_t;
@@ -7668,7 +7653,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_performance_info_resp
 typedef struct StrMsg_HUITP_MSGID_uni_performance_info_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_performance_info_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_performance_info_report_t;
@@ -7677,7 +7662,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_performance_info_report
 typedef struct StrMsg_HUITP_MSGID_uni_performance_info_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_performance_info_confirm_t;
 
@@ -7689,7 +7674,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_performance_info_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_equipment_info_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_equipment_info_req_t;
 
@@ -7697,7 +7682,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_equipment_info_req
 typedef struct StrMsg_HUITP_MSGID_uni_equipment_info_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_equipment_info_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_equipment_info_resp_t;
@@ -7706,7 +7691,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_equipment_info_resp
 typedef struct StrMsg_HUITP_MSGID_uni_equipment_info_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_equipment_info_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_equipment_info_report_t;
@@ -7715,7 +7700,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_equipment_info_report
 typedef struct StrMsg_HUITP_MSGID_uni_equipment_info_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_equipment_info_confirm_t;
 
@@ -7727,7 +7712,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_equipment_info_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_personal_info_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_personal_info_req_t;
 
@@ -7735,7 +7720,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_personal_info_req
 typedef struct StrMsg_HUITP_MSGID_uni_personal_info_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_personal_info_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_personal_info_resp_t;
@@ -7744,7 +7729,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_personal_info_resp
 typedef struct StrMsg_HUITP_MSGID_uni_personal_info_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_personal_info_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_personal_info_report_t;
@@ -7753,7 +7738,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_personal_info_report
 typedef struct StrMsg_HUITP_MSGID_uni_personal_info_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_personal_info_confirm_t;
 
@@ -7765,7 +7750,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_personal_info_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_time_sync_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_time_sync_req_t;
 
@@ -7773,7 +7758,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_time_sync_req
 typedef struct StrMsg_HUITP_MSGID_uni_time_sync_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_time_sync_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_time_sync_resp_t;
@@ -7782,7 +7767,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_time_sync_resp
 typedef struct StrMsg_HUITP_MSGID_uni_time_sync_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_time_sync_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_time_sync_report_t;
@@ -7791,7 +7776,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_time_sync_report
 typedef struct StrMsg_HUITP_MSGID_uni_time_sync_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_time_sync_confirm_t;
 
@@ -7803,7 +7788,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_time_sync_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_general_read_data_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_general_read_data_req_t;
 
@@ -7811,7 +7796,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_general_read_data_req
 typedef struct StrMsg_HUITP_MSGID_uni_general_read_data_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_general_read_data_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_general_read_data_resp_t;
@@ -7820,7 +7805,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_general_read_data_resp
 typedef struct StrMsg_HUITP_MSGID_uni_general_read_data_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_general_read_data_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_general_read_data_report_t;
@@ -7829,7 +7814,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_general_read_data_report
 typedef struct StrMsg_HUITP_MSGID_uni_general_read_data_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_general_read_data_confirm_t;
 
@@ -7841,7 +7826,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_general_read_data_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_clock_timeout_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_clock_timeout_req_t;
 
@@ -7849,7 +7834,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_clock_timeout_req
 typedef struct StrMsg_HUITP_MSGID_uni_clock_timeout_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_clock_timeout_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_clock_timeout_resp_t;
@@ -7858,7 +7843,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_clock_timeout_resp
 typedef struct StrMsg_HUITP_MSGID_uni_clock_timeout_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_clock_timeout_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_clock_timeout_report_t;
@@ -7867,7 +7852,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_clock_timeout_report
 typedef struct StrMsg_HUITP_MSGID_uni_clock_timeout_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_clock_timeout_confirm_t;
 
@@ -7879,7 +7864,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_clock_timeout_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_sync_charging_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_sync_charging_req_t;
 
@@ -7887,7 +7872,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_sync_charging_req
 typedef struct StrMsg_HUITP_MSGID_uni_sync_charging_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_sync_charging_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_sync_charging_resp_t;
@@ -7896,7 +7881,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_sync_charging_resp
 typedef struct StrMsg_HUITP_MSGID_uni_sync_charging_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_sync_charging_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_sync_charging_report_t;
@@ -7905,7 +7890,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_sync_charging_report
 typedef struct StrMsg_HUITP_MSGID_uni_sync_charging_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_sync_charging_confirm_t;
 
@@ -7917,7 +7902,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_sync_charging_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_sync_trigger_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_sync_trigger_req_t;
 
@@ -7925,7 +7910,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_sync_trigger_req
 typedef struct StrMsg_HUITP_MSGID_uni_sync_trigger_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_sync_trigger_value_t respValue;
 }StrMsg_HUITP_MSGID_uni_sync_trigger_resp_t;
@@ -7934,7 +7919,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_sync_trigger_resp
 typedef struct StrMsg_HUITP_MSGID_uni_sync_trigger_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_sync_trigger_value_t reportValue;	
 }StrMsg_HUITP_MSGID_uni_sync_trigger_report_t;
@@ -7943,7 +7928,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_sync_trigger_report
 typedef struct StrMsg_HUITP_MSGID_uni_sync_trigger_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_sync_trigger_confirm_t;
 
@@ -7955,7 +7940,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_sync_trigger_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_cmd_ctrl_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_cmd_ctrl_send_t cmdSend;
 }StrMsg_HUITP_MSGID_uni_cmd_ctrl_req_t;
@@ -7964,7 +7949,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_cmd_ctrl_req
 typedef struct StrMsg_HUITP_MSGID_uni_cmd_ctrl_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_cmd_ctrl_confirm_t cmdCfm;
 }StrMsg_HUITP_MSGID_uni_cmd_ctrl_resp_t;
@@ -7973,7 +7958,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_cmd_ctrl_resp
 typedef struct StrMsg_HUITP_MSGID_uni_cmd_ctrl_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_cmd_ctrl_send_t cmdSend;
 }StrMsg_HUITP_MSGID_uni_cmd_ctrl_report_t;
@@ -7982,7 +7967,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_cmd_ctrl_report
 typedef struct StrMsg_HUITP_MSGID_uni_cmd_ctrl_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 	StrIe_HUITP_IEID_uni_cmd_ctrl_confirm_t cmdCfm;
 }StrMsg_HUITP_MSGID_uni_cmd_ctrl_confirm_t;
@@ -7995,7 +7980,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_cmd_ctrl_confirm
 typedef struct StrMsg_HUITP_MSGID_uni_heart_beat_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_heart_beat_ping_t ping;
 }StrMsg_HUITP_MSGID_uni_heart_beat_req_t;
@@ -8004,7 +7989,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_heart_beat_req
 typedef struct StrMsg_HUITP_MSGID_uni_heart_beat_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_heart_beat_pong_t pong;
 }StrMsg_HUITP_MSGID_uni_heart_beat_resp_t;
@@ -8013,7 +7998,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_heart_beat_resp
 typedef struct StrMsg_HUITP_MSGID_uni_heart_beat_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_heart_beat_ping_t ping;
 }StrMsg_HUITP_MSGID_uni_heart_beat_report_t;
@@ -8022,7 +8007,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_heart_beat_report
 typedef struct StrMsg_HUITP_MSGID_uni_heart_beat_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
-	StrMsg_HUITP_MSGID_uni_general_head_msglen_t msgLen;
+	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 	StrIe_HUITP_IEID_uni_heart_beat_pong_t pong;
 }StrMsg_HUITP_MSGID_uni_heart_beat_confirm_t;
