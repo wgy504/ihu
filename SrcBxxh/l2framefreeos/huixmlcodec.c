@@ -975,7 +975,7 @@ void func_cloud_standard_xml_generate_message_test_data(void)
 	//StrIe_HUITP_IEID_uni_ccl_lock_auth_resp_t
 	pMsgProc2.respState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_lock_auth_resp);
 	pMsgProc2.respState.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_lock_auth_resp_t) - 4);
-	pMsgProc2.respState.authResp = HUITP_IEID_UNI_CCL_LOCK_AUTH_RESP_NO;
+	pMsgProc2.respState.authResp = HUITP_IEID_UNI_CCL_LOCK_AUTH_RESP_YES;
 	//Pack message
 	memset(&pMsgInput, 0, sizeof(StrMsg_HUITP_MSGID_uni_general_message_t));
 	memcpy(&pMsgInput, &pMsgProc2, msgProcLen);

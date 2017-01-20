@@ -7,8 +7,9 @@
 = 修正xml_pack()函数中访问输入数据的bug
 = 遇到编码的大小端问题，ARM-Cortex3缺省是小端(Small Endian)，编码只能将其定义为高低字节分开搞了
 = 编码和可变函数的解码初始化调整MsgLen部分搞完，解码的主要部分还未搞
+= 大小端的宏定义将成为变换的利器
+= 测试数据重新生成
 //= 测试xml_unpack()函数，完善的生成测试数据
-
 
 //= ZJL, 2017 Jan.20, CURRENT_SW_DELIVERY R03.99 =>CCL项目
 = 回归STMFLASH, CPUID, Camera BSP
