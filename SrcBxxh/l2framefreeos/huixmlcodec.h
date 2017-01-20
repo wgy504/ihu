@@ -41,6 +41,19 @@ extern OPSTAT func_cloud_standard_xml_pack(UINT8 msgType, char *funcFlag, UINT16
 extern OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv);
 extern void   func_cloud_standard_xml_generate_message_test_data(void);
 
+//å¤§å°ç«¯å˜æ¢å®å®šä¹‰
+#define HUITP_CURRENT_PROCESSOR_ENDIAN_SMALL 1
+#define HUITP_CURRENT_PROCESSOR_ENDIAN_BIG 2
+#define HUITP_CURRENT_PROCESSOR_ENDIAN_SET HUITP_CURRENT_PROCESSOR_ENDIAN_SMALL
+#if (HUITP_CURRENT_PROCESSOR_ENDIAN_SET == HUITP_CURRENT_PROCESSOR_ENDIAN_BIG)
+   #define HUITP_ENDIAN_EXG16(x) (x)
+   #define HUITP_ENDIAN_EXG32(x) (x)
+#elif (HUITP_CURRENT_PROCESSOR_ENDIAN_SET == HUITP_CURRENT_PROCESSOR_ENDIAN_SMALL)
+   #define HUITP_ENDIAN_EXG16(x) (((x&0xFF00)>>8) | ((x&0x00FF)<<8))
+   #define HUITP_ENDIAN_EXG32(x) (((x&0xFF000000)>>24) | ((x&0x00FF0000)>>8) | ((x&0x0000FF00)<<8) | ((x&0x000000FF)<<24))
+#else
+   #error Either BIG_ENDIAN or LITTLE_ENDIAN must be #defined, but not both.
+#endif
 
 //Extern API
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
@@ -80,7 +93,7 @@ extern void   func_cloud_standard_xml_generate_message_test_data(void);
 #endif
 
 
-//Test Data£º´¿´âÊÇÎªÁË²âÊÔÏÂÎ»»ú£¬ËùÒÔÃ»ÓÐ½«ToUser/FromUserÉèÖÃµÄ·Ç³£¹æÕû
+//Test Dataï¼šçº¯ç²¹æ˜¯ä¸ºäº†æµ‹è¯•ä¸‹ä½æœºï¼Œæ‰€ä»¥æ²¡æœ‰å°†ToUser/FromUserè®¾ç½®çš„éžå¸¸è§„æ•´
 #define HUITP_MSG_HUIXML_TEST_DATA_CCL_HEAD_VALID   				"<xml><ToUserName><![CDATA[HCU_CL_0499]]></ToUserName>\
 <FromUserName><![CDATA[XHZN_HCU]]></FromUserName><CreateTime>1477323943</CreateTime><MsgType><![CDATA[hcu_text]]></MsgType><Content><![CDATA[\
 400183]]></Content><FuncFlag>XXXX</FuncFlag></xml>" 

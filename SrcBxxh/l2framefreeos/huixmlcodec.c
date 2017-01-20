@@ -29,15 +29,15 @@ OPSTAT func_cloud_standard_xml_pack(UINT8 msgType, char *funcFlag, UINT16 msgId,
 	if ((inputLen <4) || (inputPar == NULL) || (inputLen > (MAX_IHU_MSG_BUF_LENGTH_CLOUD - HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN)/2) || \
 		(inputLen > (sizeof(StrMsg_HUITP_MSGID_uni_general_message_t) - HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN)))
 	{
-		IhuDebugPrint("HUITP: InputLen=%d, InputPar=%d, MaxLen=%d, size2=%d\n", inputLen, inputPar, (MAX_IHU_MSG_BUF_LENGTH_CLOUD - HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN)/2, sizeof(StrMsg_HUITP_MSGID_uni_general_message_t));
-		IhuErrorPrint("HUITP: Error input pointer or message length!\n");
+		IhuDebugPrint("HUITPXML: InputLen=%d, InputPar=%d, MaxLen=%d, size2=%d\n", inputLen, inputPar, (MAX_IHU_MSG_BUF_LENGTH_CLOUD - HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN)/2, sizeof(StrMsg_HUITP_MSGID_uni_general_message_t));
+		IhuErrorPrint("HUITPXML: Error input pointer or message length!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
 	}
 	if (output == NULL)
 	{
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("HUITP: Error CloudDataSendBuf_t pointer!\n");
+		IhuErrorPrint("HUITPXML: Error CloudDataSendBuf_t pointer!\n");
 		return IHU_FAILURE;
 	}
 	
@@ -68,7 +68,7 @@ OPSTAT func_cloud_standard_xml_pack(UINT8 msgType, char *funcFlag, UINT16 msgId,
 	else if (msgType == HUITP_MSG_HUIXML_MSGTYPE_ALARM_REPORT_ID) strcat(output->buf, HUITP_MSG_HUIXML_MSGTYPE_ALARM_REPORT_STRING);
 	else if (msgType == HUITP_MSG_HUIXML_MSGTYPE_PM_REPORT_ID) strcat(output->buf, HUITP_MSG_HUIXML_MSGTYPE_PM_REPORT_STRING);
 	else {
-		IhuErrorPrint("HUITP: Error Message Type input!\n");
+		IhuErrorPrint("HUITPXML: Error Message Type input!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
 	}
@@ -83,7 +83,7 @@ OPSTAT func_cloud_standard_xml_pack(UINT8 msgType, char *funcFlag, UINT16 msgId,
 		case HUITP_MSGID_uni_ccl_lock_report:
 			if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX > HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error defination on max len of MSGID = HUITP_MSGID_uni_ccl_lock_report structure!\n");
+				IhuErrorPrint("HUITPXML: Error defination on max len of MSGID = HUITP_MSGID_uni_ccl_lock_report structure!\n");
 				return IHU_FAILURE;
 			}
 			else if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX < HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER){
@@ -96,7 +96,7 @@ OPSTAT func_cloud_standard_xml_pack(UINT8 msgType, char *funcFlag, UINT16 msgId,
 		case HUITP_MSGID_uni_ccl_door_report:
 			if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX > HUITP_IEID_UNI_CCL_LOCK_MAX_NUMBER){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error defination on max len of MSGID = HUITP_MSGID_uni_ccl_door_report structure!\n");
+				IhuErrorPrint("HUITPXML: Error defination on max len of MSGID = HUITP_MSGID_uni_ccl_door_report structure!\n");
 				return IHU_FAILURE;
 			}
 			else if ((IHU_CCL_SENSOR_LOCK_NUMBER_MAX < HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER) || (IHU_CCL_SENSOR_LOCK_NUMBER_MAX < HUITP_IEID_UNI_CCL_LOCK_MAX_NUMBER)){
@@ -109,7 +109,7 @@ OPSTAT func_cloud_standard_xml_pack(UINT8 msgType, char *funcFlag, UINT16 msgId,
 		case HUITP_MSGID_uni_ccl_state_report:
 			if ((IHU_CCL_SENSOR_LOCK_NUMBER_MAX > HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER) || (IHU_CCL_SENSOR_LOCK_NUMBER_MAX > HUITP_IEID_UNI_CCL_LOCK_MAX_NUMBER)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error defination on max len of MSGID = HUITP_MSGID_uni_ccl_state_report structure!\n");
+				IhuErrorPrint("HUITPXML: Error defination on max len of MSGID = HUITP_MSGID_uni_ccl_state_report structure!\n");
 				return IHU_FAILURE;
 			}
 			else if ((IHU_CCL_SENSOR_LOCK_NUMBER_MAX < HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER) || (IHU_CCL_SENSOR_LOCK_NUMBER_MAX < HUITP_IEID_UNI_CCL_LOCK_MAX_NUMBER)){
@@ -148,7 +148,7 @@ OPSTAT func_cloud_standard_xml_pack(UINT8 msgType, char *funcFlag, UINT16 msgId,
 	}
 	if ((strlen(s) < 4) || (strlen(s) > (MAX_IHU_MSG_BUF_LENGTH_CLOUD - HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN))){
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("HUITP: No data to be pack or too long length of data content %d!\n", strlen(s));
+		IhuErrorPrint("HUITPXML: No data to be pack or too long length of data content %d!\n", strlen(s));
 		return IHU_FAILURE;
 	}
 	//消息BODY的长度已经在msgLen中，不需要再填入，已经由上层在生成消息的时候填好了，所以这里不再需要再行统计
@@ -189,13 +189,13 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 	
 	//检查参数
 	if (rcv == NULL){
-		IhuErrorPrint("HUITP: Received message error, invalid received data buffer!\n");
+		IhuErrorPrint("HUITPXML: Received message error, invalid received data buffer!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
 	}
 	//控制命令不带XML格式头，接收的内容以裸控制命令，所以必须是偶数字节
 	if ((rcv->length > MAX_IHU_MSG_BUF_LENGTH_CLOUD) || (rcv->length < 8)){
-		IhuErrorPrint("HUITP: Received message error, invalid data length by XML content format!\n");
+		IhuErrorPrint("HUITPXML: Received message error, invalid data length by XML content format!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
 	}
@@ -205,7 +205,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 	pIndexT2 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_XML_HEAD_R);
 	dif = pIndexT2 - pIndexT1  - strlen(HUITP_MSG_HUIXML_CONSTANT_XML_HEAD_L);
 	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_XML_HEAD_L))>= pIndexT2) || (dif > MAX_IHU_MSG_BUF_LENGTH_CLOUD)){
-		IhuErrorPrint("HUITP: Received message error, invalid head xml format!\n");
+		IhuErrorPrint("HUITPXML: Received message error, invalid head xml format!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
 	}
@@ -215,14 +215,14 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 	pIndexT2 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_TO_USER_R);
 	dif = pIndexT2 - pIndexT1  - strlen(HUITP_MSG_HUIXML_CONSTANT_TO_USER_L);
 	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_TO_USER_L))>= pIndexT2) || (dif > IHU_FILE_NAME_LENGTH_MAX)){
-		IhuErrorPrint("HUITP: Received message error, invalid head ToUserName format!\n");
+		IhuErrorPrint("HUITPXML: Received message error, invalid head ToUserName format!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
 	}
 	memset(msgToUser, 0, sizeof(msgToUser));
 	strncpy(msgToUser, pIndexT1+strlen(HUITP_MSG_HUIXML_CONSTANT_TO_USER_L), dif);
 	if (strcmp(msgToUser, zIhuSysEngPar.cloud.cloudBhIhuName) !=0){
-		IhuErrorPrint("HUITP: Received message error, invalid toUser field!\n");
+		IhuErrorPrint("HUITPXML: Received message error, invalid toUser field!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;		
 	}
@@ -232,14 +232,14 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 	pIndexT2 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_FROM_USER_R);
 	dif = pIndexT2 - pIndexT1  - strlen(HUITP_MSG_HUIXML_CONSTANT_FROM_USER_L);
 	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_FROM_USER_L))>= pIndexT2) || (dif > IHU_FILE_NAME_LENGTH_MAX)){
-		IhuErrorPrint("HUITP: Received message error, invalid head fromUser format!\n");
+		IhuErrorPrint("HUITPXML: Received message error, invalid head fromUser format!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
 	}
 	memset(msgFromUser, 0, sizeof(msgFromUser));
 	strncpy(msgFromUser, pIndexT1+strlen(HUITP_MSG_HUIXML_CONSTANT_FROM_USER_L), dif);
 	if (strcmp(msgFromUser, zIhuSysEngPar.cloud.cloudBhServerName) !=0){
-		IhuErrorPrint("HUITP: Received message error, invalid fromUser field!\n");
+		IhuErrorPrint("HUITPXML: Received message error, invalid fromUser field!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;		
 	}	
@@ -249,7 +249,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 	pIndexT2 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_CREATE_TIME_R);
 	dif = pIndexT2 - pIndexT1  - strlen(HUITP_MSG_HUIXML_CONSTANT_CREATE_TIME_L);
 	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_CREATE_TIME_L))>= pIndexT2) || (dif > HUITP_MSG_HUIXML_CONTSANT_CREATE_TIME_MAX_LEN)){
-		IhuErrorPrint("HUITP: Received message error, invalid head CreateTime format!\n");
+		IhuErrorPrint("HUITPXML: Received message error, invalid head CreateTime format!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
 	}
@@ -264,7 +264,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 	pIndexT2 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_MSG_TYPE_R);
 	dif = pIndexT2 - pIndexT1  - strlen(HUITP_MSG_HUIXML_CONSTANT_MSG_TYPE_L);
 	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_MSG_TYPE_L))>= pIndexT2) || (dif > IHU_FILE_NAME_LENGTH_MAX)){
-		IhuErrorPrint("HUITP: Received message error, invalid head msgType format!\n");
+		IhuErrorPrint("HUITPXML: Received message error, invalid head msgType format!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
 	}
@@ -277,7 +277,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 	else if (strcmp(msgTmp, HUITP_MSG_HUIXML_MSGTYPE_ALARM_REPORT_STRING) ==0) msgType = HUITP_MSG_HUIXML_MSGTYPE_ALARM_REPORT_ID;
 	else if (strcmp(msgTmp, HUITP_MSG_HUIXML_MSGTYPE_PM_REPORT_STRING) ==0) msgType = HUITP_MSG_HUIXML_MSGTYPE_PM_REPORT_ID;
 	else{
-		IhuErrorPrint("HUITP: Received message error, invalid head msgType format!\n");
+		IhuErrorPrint("HUITPXML: Received message error, invalid head msgType format!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;	
 	}
@@ -289,7 +289,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 	pIndexT2 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_FUNC_FLAG_R);
 	dif = pIndexT2 - pIndexT1  - strlen(HUITP_MSG_HUIXML_CONSTANT_FUNC_FLAG_L);
 	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_FUNC_FLAG_L))>= pIndexT2) || (dif > IHU_FILE_NAME_LENGTH_MAX)){
-		IhuErrorPrint("HUITP: Received message error, invalid head funcFlag format!\n");
+		IhuErrorPrint("HUITPXML: Received message error, invalid head funcFlag format!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
 	}
@@ -304,7 +304,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 	dif = pIndexT2 - pIndexT1  - strlen(HUITP_MSG_HUIXML_CONSTANT_CONTENT_L);
 	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_CONTENT_L))>= pIndexT2) ||\
 		(dif > HUITP_MSG_BUF_WITH_HEAD_MAX_LEN) || (dif != ((dif/2)*2))){
-		IhuErrorPrint("HUITP: Received message error, invalid content format!\n");
+		IhuErrorPrint("HUITPXML: Received message error, invalid content format!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
 	}
@@ -321,12 +321,12 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 	strncpy(tmp, &msgContent[index], 4);
 	msgLen = strtoul(tmp, NULL, 16);
 	if ((msgId < HUITP_MSGID_uni_min) || (msgId > HUITP_MSGID_uni_max)){
-		IhuErrorPrint("HUITP: Invalid received content data msgId info!\n");
+		IhuErrorPrint("HUITPXML: Invalid received content data msgId info!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;	
 	}
 	if (msgLen > (MAX_IHU_MSG_BUF_LENGTH_CLOUD - HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN)/2){
-		IhuErrorPrint("HUITP: Invalid received content data msgLen info!\n");
+		IhuErrorPrint("HUITPXML: Invalid received content data msgLen info!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
 	}
@@ -337,9 +337,9 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 	memset(pMsgBuf, 0, sizeof(StrMsg_HUITP_MSGID_uni_general_message_t));
 	pMsgBuf->msgId.cmdId = (msgId>>8)&0xFF;
 	pMsgBuf->msgId.optId = msgId&0xFF;
-	pMsgBuf->msgLen = msgLen;
+	pMsgBuf->msgLen = HUITP_ENDIAN_EXG16(msgLen);  //回写时必须原封不动的按照原先的大小端顺序
 	
-	//转码，从CHAR进制转化为16进制
+	//转码，从CHAR进制转化为16进制，以1BYTE为单位，所以还未改变大小端的顺序
 	for(index = 4; index < dif/2; index++){
 		memset(tmp, 0, sizeof(tmp));
 		strncpy(tmp, &msgContent[index * 2], 2);
@@ -354,7 +354,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 		case HUITP_MSGID_uni_ccl_lock_resp:
 			if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX > HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error defination on max len of MSGID = HUITP_MSGID_uni_ccl_lock_report structure!\n");
+				IhuErrorPrint("HUITPXML: Error defination on max len of MSGID = HUITP_MSGID_uni_ccl_lock_report structure!\n");
 				return IHU_FAILURE;
 			}
 			else if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX < HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER){
@@ -363,10 +363,10 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				//注意跟着系统配置的IHU_CCL_SENSOR_LOCK_NUMBER_MAX走，而非跟着HUITP_IEID_UNI_CCL_LOCK_MAX_NUMBER走
 				if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_lock_resp_t) - 4 - (HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER - IHU_CCL_SENSOR_LOCK_NUMBER_MAX))){
 					zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-					IhuErrorPrint("HUITP: Error unpack message on length!\n");
+					IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 					return IHU_FAILURE;					
 				}
-				pMsgBuf->msgLen = sizeof(StrMsg_HUITP_MSGID_uni_ccl_lock_resp_t) - 4;
+				pMsgBuf->msgLen = HUITP_ENDIAN_EXG16(sizeof(StrMsg_HUITP_MSGID_uni_ccl_lock_resp_t) - 4);
 			}		
 			break;
 			
@@ -374,7 +374,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 		case HUITP_MSGID_uni_ccl_door_resp:
 			if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX > HUITP_IEID_UNI_CCL_LOCK_MAX_NUMBER){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error defination on max len of MSGID = HUITP_MSGID_uni_ccl_door_report structure!\n");
+				IhuErrorPrint("HUITPXML: Error defination on max len of MSGID = HUITP_MSGID_uni_ccl_door_report structure!\n");
 				return IHU_FAILURE;
 			}
 			else if ((IHU_CCL_SENSOR_LOCK_NUMBER_MAX < HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER) || (IHU_CCL_SENSOR_LOCK_NUMBER_MAX < HUITP_IEID_UNI_CCL_LOCK_MAX_NUMBER)){
@@ -383,10 +383,10 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				//注意跟着系统配置的IHU_CCL_SENSOR_LOCK_NUMBER_MAX走，而非跟着HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER走
 				if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_door_resp_t) - 4 - (HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER - IHU_CCL_SENSOR_LOCK_NUMBER_MAX))){
 					zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-					IhuErrorPrint("HUITP: Error unpack message on length!\n");
+					IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 					return IHU_FAILURE;					
 				}
-				pMsgBuf->msgLen = sizeof(StrMsg_HUITP_MSGID_uni_ccl_door_resp_t) - 4;			
+				pMsgBuf->msgLen = HUITP_ENDIAN_EXG16(sizeof(StrMsg_HUITP_MSGID_uni_ccl_door_resp_t) - 4);			
 			}
 			break;
 			
@@ -394,7 +394,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 		case HUITP_MSGID_uni_ccl_state_resp:
 			if ((IHU_CCL_SENSOR_LOCK_NUMBER_MAX > HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER) || (IHU_CCL_SENSOR_LOCK_NUMBER_MAX > HUITP_IEID_UNI_CCL_LOCK_MAX_NUMBER)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error defination on max len of MSGID = HUITP_MSGID_uni_ccl_state_report structure!\n");
+				IhuErrorPrint("HUITPXML: Error defination on max len of MSGID = HUITP_MSGID_uni_ccl_state_report structure!\n");
 				return IHU_FAILURE;
 			}
 			else if ((IHU_CCL_SENSOR_LOCK_NUMBER_MAX < HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER) || (IHU_CCL_SENSOR_LOCK_NUMBER_MAX < HUITP_IEID_UNI_CCL_LOCK_MAX_NUMBER)){
@@ -402,7 +402,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				//将剩下的移上来
 				if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_state_resp_t) - 4 - (HUITP_IEID_UNI_CCL_LOCK_MAX_NUMBER + HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER - 2 * IHU_CCL_SENSOR_LOCK_NUMBER_MAX))){
 					zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-					IhuErrorPrint("HUITP: Error unpack message on length!\n");
+					IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 					return IHU_FAILURE;					
 				}
 				//通过tt过度，不然有可能拷贝会自己覆盖自己
@@ -421,20 +421,20 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 					HUITP_IEID_UNI_CCL_LOCK_MAX_NUMBER - IHU_CCL_SENSOR_LOCK_NUMBER_MAX);
 				memset(pMsgBuf+4+sizeof(StrIe_HUITP_IEID_uni_com_resp_t)+sizeof(StrIe_HUITP_IEID_uni_ccl_lock_state_t)+IHU_CCL_SENSOR_LOCK_NUMBER_MAX, 0, \
 					HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER - IHU_CCL_SENSOR_LOCK_NUMBER_MAX);
-				pMsgBuf->msgLen = sizeof(StrMsg_HUITP_MSGID_uni_ccl_state_resp_t) - 4;					
+				pMsgBuf->msgLen = HUITP_ENDIAN_EXG16(sizeof(StrMsg_HUITP_MSGID_uni_ccl_state_resp_t) - 4);					
 			}
 			break;
 			
 		case HUITP_MSGID_uni_sw_package_req:
 			//因为只有一个边长IE，且IE正好处于最后一个结构部分，所以不需要干啥
 			//将消息长度恢复到消息结构长度，以便下面统一处理
-			pMsgBuf->msgLen = sizeof(StrMsg_HUITP_MSGID_uni_sw_package_req_t) - 4;				
+			pMsgBuf->msgLen = HUITP_ENDIAN_EXG16(sizeof(StrMsg_HUITP_MSGID_uni_sw_package_req_t) - 4);				
 			break;
 		
 		case HUITP_MSGID_uni_sw_package_confirm:
 			//因为只有一个边长IE，且IE正好处于最后一个结构部分，所以不需要干啥
 			//将消息长度恢复到消息结构长度，以便下面统一处理
-			pMsgBuf->msgLen = sizeof(StrMsg_HUITP_MSGID_uni_sw_package_confirm_t) - 4;				
+			pMsgBuf->msgLen = HUITP_ENDIAN_EXG16(sizeof(StrMsg_HUITP_MSGID_uni_sw_package_confirm_t) - 4);				
 		
 			break;
 		
@@ -456,7 +456,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd1, 0, sizeof(StrMsg_HUITP_MSGID_uni_heart_beat_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_heart_beat_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd1 = (StrMsg_HUITP_MSGID_uni_heart_beat_req_t *)(pMsgBuf);
@@ -471,7 +471,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd2, 0, sizeof(StrMsg_HUITP_MSGID_uni_heart_beat_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_heart_beat_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd2 = (StrMsg_HUITP_MSGID_uni_heart_beat_confirm_t *)(pMsgBuf);
@@ -485,7 +485,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd3, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_lock_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_lock_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd3 = (StrMsg_HUITP_MSGID_uni_ccl_lock_req_t *)(pMsgBuf);
@@ -499,7 +499,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd4, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_lock_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_lock_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd4 = (StrMsg_HUITP_MSGID_uni_ccl_lock_confirm_t *)(pMsgBuf);
@@ -513,7 +513,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd5, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_lock_auth_resp_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_lock_auth_resp_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd5 = (StrMsg_HUITP_MSGID_uni_ccl_lock_auth_resp_t *)(pMsgBuf);
@@ -527,7 +527,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd6, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_door_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_door_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd6 = (StrMsg_HUITP_MSGID_uni_ccl_door_req_t *)(pMsgBuf);
@@ -541,7 +541,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd7, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_door_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_door_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd7 = (StrMsg_HUITP_MSGID_uni_ccl_door_confirm_t *)(pMsgBuf);
@@ -555,7 +555,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd8, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_rfid_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_rfid_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd8 = (StrMsg_HUITP_MSGID_uni_ccl_rfid_req_t *)(pMsgBuf);
@@ -569,7 +569,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd9, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_rfid_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_rfid_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd9 = (StrMsg_HUITP_MSGID_uni_ccl_rfid_confirm_t *)(pMsgBuf);
@@ -583,7 +583,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd10, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_ble_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_ble_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd10 = (StrMsg_HUITP_MSGID_uni_ccl_ble_req_t *)(pMsgBuf);
@@ -597,7 +597,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd11, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_ble_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_ble_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd11 = (StrMsg_HUITP_MSGID_uni_ccl_ble_confirm_t *)(pMsgBuf);
@@ -611,7 +611,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd12, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_gprs_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_gprs_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd12 = (StrMsg_HUITP_MSGID_uni_ccl_gprs_req_t *)(pMsgBuf);
@@ -625,7 +625,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd13, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_gprs_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_gprs_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd13 = (StrMsg_HUITP_MSGID_uni_ccl_gprs_confirm_t *)(pMsgBuf);
@@ -639,7 +639,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd14, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_battery_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_battery_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd14 = (StrMsg_HUITP_MSGID_uni_ccl_battery_req_t *)(pMsgBuf);
@@ -653,7 +653,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd15, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_battery_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_battery_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd15 = (StrMsg_HUITP_MSGID_uni_ccl_battery_confirm_t *)(pMsgBuf);
@@ -667,7 +667,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd16, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_shake_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_shake_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd16 = (StrMsg_HUITP_MSGID_uni_ccl_shake_req_t *)(pMsgBuf);
@@ -681,7 +681,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd17, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_shake_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_shake_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd17 = (StrMsg_HUITP_MSGID_uni_ccl_shake_confirm_t *)(pMsgBuf);
@@ -695,7 +695,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd18, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_smoke_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_smoke_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd18 = (StrMsg_HUITP_MSGID_uni_ccl_smoke_req_t *)(pMsgBuf);
@@ -709,7 +709,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd19, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_smoke_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_smoke_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd19 = (StrMsg_HUITP_MSGID_uni_ccl_smoke_confirm_t *)(pMsgBuf);
@@ -723,7 +723,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd20, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_water_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_water_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd20 = (StrMsg_HUITP_MSGID_uni_ccl_water_req_t *)(pMsgBuf);
@@ -737,7 +737,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd21, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_water_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_water_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd21 = (StrMsg_HUITP_MSGID_uni_ccl_water_confirm_t *)(pMsgBuf);
@@ -751,7 +751,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd22, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_temp_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_temp_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd22 = (StrMsg_HUITP_MSGID_uni_ccl_temp_req_t *)(pMsgBuf);
@@ -765,7 +765,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd23, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_temp_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_temp_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd23 = (StrMsg_HUITP_MSGID_uni_ccl_temp_confirm_t *)(pMsgBuf);
@@ -779,7 +779,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd24, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_humid_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_humid_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd24 = (StrMsg_HUITP_MSGID_uni_ccl_humid_req_t *)(pMsgBuf);
@@ -793,7 +793,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd25, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_humid_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_humid_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd25 = (StrMsg_HUITP_MSGID_uni_ccl_humid_confirm_t *)(pMsgBuf);
@@ -807,7 +807,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd26, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_fall_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_fall_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd26 = (StrMsg_HUITP_MSGID_uni_ccl_fall_req_t *)(pMsgBuf);
@@ -821,7 +821,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd27, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_fall_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_fall_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd27 = (StrMsg_HUITP_MSGID_uni_ccl_fall_confirm_t *)(pMsgBuf);
@@ -835,7 +835,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd28, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_state_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_state_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd28 = (StrMsg_HUITP_MSGID_uni_ccl_state_req_t *)(pMsgBuf);
@@ -849,7 +849,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd29, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_state_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_state_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd29 = (StrMsg_HUITP_MSGID_uni_ccl_state_confirm_t *)(pMsgBuf);
@@ -863,7 +863,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd30, 0, sizeof(StrMsg_HUITP_MSGID_uni_inventory_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_inventory_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd30 = (StrMsg_HUITP_MSGID_uni_inventory_req_t *)(pMsgBuf);
@@ -877,7 +877,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd31, 0, sizeof(StrMsg_HUITP_MSGID_uni_inventory_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_inventory_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd31 = (StrMsg_HUITP_MSGID_uni_inventory_confirm_t *)(pMsgBuf);
@@ -891,7 +891,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd32, 0, sizeof(StrMsg_HUITP_MSGID_uni_sw_package_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_sw_package_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd32 = (StrMsg_HUITP_MSGID_uni_sw_package_req_t *)(pMsgBuf);
@@ -905,7 +905,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 			memset(snd33, 0, sizeof(StrMsg_HUITP_MSGID_uni_sw_package_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_sw_package_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("HUITP: Error unpack message on length!\n");
+				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
 			snd33 = (StrMsg_HUITP_MSGID_uni_sw_package_confirm_t *)(pMsgBuf);
@@ -918,7 +918,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 		default:
 		{
 			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-			IhuErrorPrint("HUITP: Receive unknown message id and not able to process!\n");
+			IhuErrorPrint("HUITPXML: Receive unknown message id and not able to process!\n");
 			return IHU_FAILURE;			
 		}
 			//break;
@@ -941,14 +941,14 @@ void func_cloud_standard_xml_generate_message_test_data(void)
 	memset(&pMsgProc1, 0, msgProcLen);
 	pMsgProc1.msgId.cmdId = (HUITP_MSGID_uni_ccl_lock_auth_inq>>8)&0xFF;
 	pMsgProc1.msgId.optId = HUITP_MSGID_uni_ccl_lock_auth_inq&0xFF;
-	pMsgProc1.msgLen = msgProcLen - 4;
+	pMsgProc1.msgLen = HUITP_ENDIAN_EXG16(msgProcLen - 4);
 	//StrIe_HUITP_IEID_uni_com_req_t
-	pMsgProc1.baseReq.ieId = HUITP_IEID_uni_com_req;
-	pMsgProc1.baseReq.ieLen = sizeof(StrIe_HUITP_IEID_uni_com_req_t) - 4;
+	pMsgProc1.baseReq.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_com_req);
+	pMsgProc1.baseReq.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_com_req_t) - 4);
 	pMsgProc1.baseReq.comReq = HUITP_IEID_UNI_COM_REQUEST_YES;
 	//StrIe_HUITP_IEID_uni_ccl_lock_auth_req_t
-	pMsgProc1.authReq.ieId = HUITP_IEID_uni_ccl_lock_auth_req;
-	pMsgProc1.authReq.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_lock_auth_req_t) - 4;
+	pMsgProc1.authReq.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_lock_auth_req);
+	pMsgProc1.authReq.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_lock_auth_req_t) - 4);
 	pMsgProc1.authReq.authReqType = HUITP_IEID_UNI_CCL_LOCK_AUTH_REQ_TYPE_LOCK;
 	for (i = 0; i < HUITP_IEID_UNI_CCL_LOCK_AUTH_REQ_MAX_LEN; i++){
 		pMsgProc1.authReq.bleMacAddr[i] = 0xFF;
@@ -959,7 +959,7 @@ void func_cloud_standard_xml_generate_message_test_data(void)
 	memcpy(&pMsgInput, &pMsgProc1, msgProcLen);
 	memset(&pMsgOutput, 0, sizeof(CloudDataSendBuf_t));	
 	func_cloud_standard_xml_pack(HUITP_MSG_HUIXML_MSGTYPE_DEVICE_REPORT_ID, NULL, HUITP_MSGID_uni_ccl_lock_auth_inq, &pMsgInput, msgProcLen, &pMsgOutput);
-	IhuDebugPrint("TESTDATA: AuthInq=[%s]\n", pMsgOutput.buf);
+	IhuDebugPrint("HUITPXML: AuthInq=[%s]\n", pMsgOutput.buf);
 
 	//Auth Resp
 	StrMsg_HUITP_MSGID_uni_ccl_lock_auth_resp_t pMsgProc2;
@@ -967,21 +967,21 @@ void func_cloud_standard_xml_generate_message_test_data(void)
 	memset(&pMsgProc2, 0, msgProcLen);
 	pMsgProc2.msgId.cmdId = (HUITP_MSGID_uni_ccl_lock_auth_resp>>8)&0xFF;
 	pMsgProc2.msgId.optId = HUITP_MSGID_uni_ccl_lock_auth_resp&0xFF;
-	pMsgProc1.msgLen = msgProcLen - 4;
+	pMsgProc2.msgLen = HUITP_ENDIAN_EXG16(msgProcLen - 4);
 	//StrIe_HUITP_IEID_uni_com_resp_t
-	pMsgProc2.baseResp.ieId = HUITP_IEID_uni_com_resp;
-	pMsgProc2.baseResp.ieLen = sizeof(StrIe_HUITP_IEID_uni_com_resp_t) - 4;
+	pMsgProc2.baseResp.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_com_resp);
+	pMsgProc2.baseResp.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_com_resp_t) - 4);
 	pMsgProc2.baseResp.comResp = HUITP_IEID_UNI_COM_RESPONSE_YES;
 	//StrIe_HUITP_IEID_uni_ccl_lock_auth_resp_t
-	pMsgProc2.respState.ieId = HUITP_IEID_uni_ccl_lock_auth_resp;
-	pMsgProc2.respState.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_lock_auth_resp_t) - 4;
+	pMsgProc2.respState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_lock_auth_resp);
+	pMsgProc2.respState.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_lock_auth_resp_t) - 4);
 	pMsgProc2.respState.authResp = HUITP_IEID_UNI_CCL_LOCK_AUTH_RESP_NO;
 	//Pack message
 	memset(&pMsgInput, 0, sizeof(StrMsg_HUITP_MSGID_uni_general_message_t));
 	memcpy(&pMsgInput, &pMsgProc2, msgProcLen);
 	memset(&pMsgOutput, 0, sizeof(CloudDataSendBuf_t));	
 	func_cloud_standard_xml_pack(HUITP_MSG_HUIXML_MSGTYPE_DEVICE_REPORT_ID, NULL, HUITP_MSGID_uni_ccl_lock_auth_resp, &pMsgInput, msgProcLen, &pMsgOutput);
-	IhuDebugPrint("TESTDATA: AuthResp=[%s]\n", pMsgOutput.buf);
+	IhuDebugPrint("HUITPXML: AuthResp=[%s]\n", pMsgOutput.buf);
 
 	//State Report
 	StrMsg_HUITP_MSGID_uni_ccl_state_report_t pMsgProc3;
@@ -989,96 +989,96 @@ void func_cloud_standard_xml_generate_message_test_data(void)
 	memset(&pMsgProc3, 0, msgProcLen);
 	pMsgProc3.msgId.cmdId = (HUITP_MSGID_uni_ccl_state_report>>8)&0xFF;
 	pMsgProc3.msgId.optId = HUITP_MSGID_uni_ccl_state_report&0xFF;
-	pMsgProc1.msgLen = msgProcLen - 4;
+	pMsgProc3.msgLen = HUITP_ENDIAN_EXG16(msgProcLen - 4);
 	//StrIe_HUITP_IEID_uni_com_report_t
-	pMsgProc3.baseReport.ieId = HUITP_IEID_uni_com_report;
-	pMsgProc3.baseReport.ieLen = sizeof(StrIe_HUITP_IEID_uni_com_report_t) - 4;
+	pMsgProc3.baseReport.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_com_report);
+	pMsgProc3.baseReport.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_com_report_t) - 4);
 	pMsgProc3.baseReport.comReport = HUITP_IEID_UNI_COM_REPORT_YES;
 	//StrIe_HUITP_IEID_uni_ccl_report_type_t
-	pMsgProc3.reportType.ieId = HUITP_IEID_uni_ccl_report_type;
-	pMsgProc3.reportType.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_report_type_t) - 4;
+	pMsgProc3.reportType.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_report_type);
+	pMsgProc3.reportType.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_report_type_t) - 4);
 	//生成三种不同的报告
 	i = rand()%4;
 	if (i==1) pMsgProc3.reportType.event = HUITP_IEID_UNI_CCL_REPORT_TYPE_PERIOD_EVENT;
 	else if (i==2) pMsgProc3.reportType.event = HUITP_IEID_UNI_CCL_REPORT_TYPE_CLOSE_EVENT;
 	else pMsgProc3.reportType.event = HUITP_IEID_UNI_CCL_REPORT_TYPE_FAULT_EVENT;	
 	//StrIe_HUITP_IEID_uni_ccl_lock_state_t
-	pMsgProc3.lockState.ieId = HUITP_IEID_uni_ccl_lock_state;
-	pMsgProc3.lockState.ieLen = 2 + IHU_CCL_SENSOR_LOCK_NUMBER_MAX; //实际上配置的锁的多少
+	pMsgProc3.lockState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_lock_state);
+	pMsgProc3.lockState.ieLen = HUITP_ENDIAN_EXG16(2 + IHU_CCL_SENSOR_LOCK_NUMBER_MAX); //实际上配置的锁的多少
 	pMsgProc3.lockState.maxLockNo = IHU_CCL_SENSOR_LOCK_NUMBER_MAX;
 	pMsgProc3.lockState.lockId = IHU_CCL_SENSOR_LOCK_NUMBER_MAX; //这个表示全部
 	for (i = 0; i < IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
 		pMsgProc3.lockState.lockState[i] = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open_state(i) == TRUE)?HUITP_IEID_UNI_LOCK_STATE_OPEN:HUITP_IEID_UNI_LOCK_STATE_CLOSE);
 	}
 	//StrIe_HUITP_IEID_uni_ccl_door_state_t
-	pMsgProc3.doorState.ieId = HUITP_IEID_uni_ccl_lock_state;
-	pMsgProc3.doorState.ieLen = 2 + IHU_CCL_SENSOR_LOCK_NUMBER_MAX; //实际上配置的门的多少
+	pMsgProc3.doorState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_lock_state);
+	pMsgProc3.doorState.ieLen = HUITP_ENDIAN_EXG16(2 + IHU_CCL_SENSOR_LOCK_NUMBER_MAX); //实际上配置的门的多少
 	pMsgProc3.doorState.maxDoorNo = IHU_CCL_SENSOR_LOCK_NUMBER_MAX;
 	pMsgProc3.doorState.doorId = IHU_CCL_SENSOR_LOCK_NUMBER_MAX; //这个表示全部
 	for (i = 0; i < IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
 		pMsgProc3.doorState.doorState[i] = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_door_open_state(i) == TRUE)?HUITP_IEID_UNI_DOOR_STATE_OPEN:HUITP_IEID_UNI_DOOR_STATE_CLOSE);
 	}
 	//StrIe_HUITP_IEID_uni_ccl_water_state_t
-	pMsgProc3.waterState.ieId = HUITP_IEID_uni_ccl_water_state;
-	pMsgProc3.waterState.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_water_state_t) - 4;
+	pMsgProc3.waterState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_water_state);
+	pMsgProc3.waterState.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_water_state_t) - 4);
 	pMsgProc3.waterState.waterState = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_water_state() == TRUE)?HUITP_IEID_UNI_WATER_STATE_ACTIVE:HUITP_IEID_UNI_WATER_STATE_DEACTIVE);
 	//StrIe_HUITP_IEID_uni_ccl_fall_state_t
-	pMsgProc3.fallState.ieId = HUITP_IEID_uni_ccl_fall_state;
-	pMsgProc3.fallState.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_fall_state_t) - 4;
+	pMsgProc3.fallState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_fall_state);
+	pMsgProc3.fallState.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_fall_state_t) - 4);
 	pMsgProc3.fallState.fallState = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_fall_state() == TRUE)?HUITP_IEID_UNI_FALL_STATE_ACTIVE:HUITP_IEID_UNI_FALL_STATE_DEACTIVE);
 	//StrIe_HUITP_IEID_uni_ccl_shake_state_t
-	pMsgProc3.shakeState.ieId = HUITP_IEID_uni_ccl_shake_state;
-	pMsgProc3.shakeState.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_shake_state_t) - 4;
+	pMsgProc3.shakeState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_shake_state);
+	pMsgProc3.shakeState.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_shake_state_t) - 4);
 	pMsgProc3.shakeState.shakeState = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_shake_state() == TRUE)?HUITP_IEID_UNI_SHAKE_STATE_ACTIVE:HUITP_IEID_UNI_SHAKE_STATE_DEACTIVE);
 	//StrIe_HUITP_IEID_uni_ccl_smoke_state_t
-	pMsgProc3.smokeState.ieId = HUITP_IEID_uni_ccl_smoke_state;
-	pMsgProc3.smokeState.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_smoke_state_t) - 4;
+	pMsgProc3.smokeState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_smoke_state);
+	pMsgProc3.smokeState.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_smoke_state_t) - 4);
 	pMsgProc3.smokeState.smokeState = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_smoke_state() == TRUE)?HUITP_IEID_UNI_SMOKE_STATE_ACTIVE:HUITP_IEID_UNI_SMOKE_STATE_DEACTIVE);
 	//StrIe_HUITP_IEID_uni_ccl_bat_state_t
-	pMsgProc3.batState.ieId = HUITP_IEID_uni_ccl_bat_state;
-	pMsgProc3.batState.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_bat_state_t) - 4;
+	pMsgProc3.batState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_bat_state);
+	pMsgProc3.batState.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_bat_state_t) - 4);
 	pMsgProc3.batState.batState = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_bat_state() == TRUE)?HUITP_IEID_UNI_BAT_STATE_WARNING:HUITP_IEID_UNI_BAT_STATE_NORMAL);
 	//StrIe_HUITP_IEID_uni_ccl_temp_value_t
-	pMsgProc3.tempValue.ieId = HUITP_IEID_uni_ccl_temp_value;
-	pMsgProc3.tempValue.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_temp_value_t) - 4;
+	pMsgProc3.tempValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_temp_value);
+	pMsgProc3.tempValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_temp_value_t) - 4);
 	pMsgProc3.tempValue.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc3.tempValue.tempValue = ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_temp_value();
+	pMsgProc3.tempValue.tempValue = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_temp_value());
 	//StrIe_HUITP_IEID_uni_ccl_humid_value_t
-	pMsgProc3.humidValue.ieId = HUITP_IEID_uni_ccl_humid_value;
-	pMsgProc3.humidValue.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_humid_value_t) - 4;
+	pMsgProc3.humidValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_humid_value);
+	pMsgProc3.humidValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_humid_value_t) - 4);
 	pMsgProc3.humidValue.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc3.humidValue.humidValue = ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_humid_value();
+	pMsgProc3.humidValue.humidValue = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_humid_value());
 	//StrIe_HUITP_IEID_uni_ccl_bat_value_t
-	pMsgProc3.batValue.ieId = HUITP_IEID_uni_ccl_bat_value;
-	pMsgProc3.batValue.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_bat_value_t) - 4;
+	pMsgProc3.batValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_bat_value);
+	pMsgProc3.batValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_bat_value_t) - 4);
 	pMsgProc3.batValue.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc3.batValue.batValue = ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_bat_value();	
+	pMsgProc3.batValue.batValue = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_bat_value());	
 	//StrIe_HUITP_IEID_uni_ccl_general_value1_t
-	pMsgProc3.general1Value.ieId = HUITP_IEID_uni_ccl_general_value1;
-	pMsgProc3.general1Value.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_general_value1_t) - 4;
+	pMsgProc3.general1Value.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_general_value1);
+	pMsgProc3.general1Value.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_general_value1_t) - 4);
 	pMsgProc3.general1Value.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc3.general1Value.generalValue1 = ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv1_value();	
+	pMsgProc3.general1Value.generalValue1 = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv1_value());	
 	//StrIe_HUITP_IEID_uni_ccl_general_value2_t
-	pMsgProc3.general2Value.ieId = HUITP_IEID_uni_ccl_general_value2;
-	pMsgProc3.general2Value.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_general_value2_t) - 4;
+	pMsgProc3.general2Value.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_general_value2);
+	pMsgProc3.general2Value.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_general_value2_t) - 4);
 	pMsgProc3.general2Value.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc3.general2Value.generalValue2 = ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv2_value();	
+	pMsgProc3.general2Value.generalValue2 = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv2_value());	
 	//StrIe_HUITP_IEID_uni_ccl_rssi_value_t
-	pMsgProc3.rssiValue.ieId = HUITP_IEID_uni_ccl_rssi_value;
-	pMsgProc3.rssiValue.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_rssi_value_t) - 4;
+	pMsgProc3.rssiValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_rssi_value);
+	pMsgProc3.rssiValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_rssi_value_t) - 4);
 	pMsgProc3.rssiValue.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc3.rssiValue.rssiValue = ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rssi_value();	
+	pMsgProc3.rssiValue.rssiValue = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rssi_value());	
 	//StrIe_HUITP_IEID_uni_ccl_dcmi_value_t
-	pMsgProc3.dcmiValue.ieId = HUITP_IEID_uni_ccl_dcmi_value;
-	pMsgProc3.dcmiValue.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_dcmi_value_t) - 4;
+	pMsgProc3.dcmiValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_dcmi_value);
+	pMsgProc3.dcmiValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_dcmi_value_t) - 4);
 	pMsgProc3.dcmiValue.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc3.dcmiValue.dcmiValue = ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value();	
+	pMsgProc3.dcmiValue.dcmiValue = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value());	
 	//Pack message
 	memset(&pMsgInput, 0, sizeof(StrMsg_HUITP_MSGID_uni_general_message_t));
 	memcpy(&pMsgInput, &pMsgProc3, msgProcLen);
 	memset(&pMsgOutput, 0, sizeof(CloudDataSendBuf_t));	
 	func_cloud_standard_xml_pack(HUITP_MSG_HUIXML_MSGTYPE_DEVICE_REPORT_ID, NULL, HUITP_MSGID_uni_ccl_state_report, &pMsgInput, msgProcLen, &pMsgOutput);
-	IhuDebugPrint("TESTDATA: StateType=%d, StateReport=[%s]\n", pMsgProc3.reportType.event, pMsgOutput.buf);
+	IhuDebugPrint("HUITPXML: StateType=%d, StateReport=[%s]\n", pMsgProc3.reportType.event, pMsgOutput.buf);
 
 	//State Confirm
 	StrMsg_HUITP_MSGID_uni_ccl_state_confirm_t pMsgProc4;
@@ -1086,14 +1086,14 @@ void func_cloud_standard_xml_generate_message_test_data(void)
 	memset(&pMsgProc4, 0, msgProcLen);
 	pMsgProc4.msgId.cmdId = (HUITP_MSGID_uni_ccl_state_confirm>>8)&0xFF;
 	pMsgProc4.msgId.optId = HUITP_MSGID_uni_ccl_state_confirm&0xFF;
-	pMsgProc1.msgLen = msgProcLen - 4;
+	pMsgProc4.msgLen = HUITP_ENDIAN_EXG16(msgProcLen - 4);
 	//StrIe_HUITP_IEID_uni_com_confirm_t
-	pMsgProc4.baseConfirm.ieId = HUITP_IEID_uni_com_confirm;
-	pMsgProc4.baseConfirm.ieLen = sizeof(StrIe_HUITP_IEID_uni_com_confirm_t) - 4;
+	pMsgProc4.baseConfirm.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_com_confirm);
+	pMsgProc4.baseConfirm.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_com_confirm_t) - 4);
 	pMsgProc4.baseConfirm.comConfirm = HUITP_IEID_UNI_COM_CONFIRM_POSITIVE;
 	//StrIe_HUITP_IEID_uni_ccl_report_type_t
-	pMsgProc4.reportType.ieId = HUITP_IEID_uni_ccl_report_type;
-	pMsgProc4.reportType.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_report_type_t) - 4;
+	pMsgProc4.reportType.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_report_type);
+	pMsgProc4.reportType.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_report_type_t) - 4);
 	//生成三种不同的报告
 	i = rand()%4;
 	if (i==1) pMsgProc4.reportType.event = HUITP_IEID_UNI_CCL_REPORT_TYPE_PERIOD_EVENT;
@@ -1104,7 +1104,7 @@ void func_cloud_standard_xml_generate_message_test_data(void)
 	memcpy(&pMsgInput, &pMsgProc4, msgProcLen);
 	memset(&pMsgOutput, 0, sizeof(CloudDataSendBuf_t));
 	func_cloud_standard_xml_pack(HUITP_MSG_HUIXML_MSGTYPE_DEVICE_REPORT_ID, NULL, HUITP_MSGID_uni_ccl_state_confirm, &pMsgInput, msgProcLen, &pMsgOutput);
-	IhuDebugPrint("TESTDATA: StateType=%d, StateConfirm=[%s]\n", pMsgProc4.reportType.event, pMsgOutput.buf);	
+	IhuDebugPrint("HUITPXML: StateType=%d, StateConfirm=[%s]\n", pMsgProc4.reportType.event, pMsgOutput.buf);	
 	
 }
 

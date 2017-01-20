@@ -158,26 +158,6 @@ enum IHU_TASK_NAME_ID
 #else
 #endif
 
-//定义TASK对应的MESSAGE_QUEUE的ID
-//enum IHU_TASK_QUEUE_ID
-//{
-//	TASK_QUE_ID_MIN = IHU_TASK_QUEUE_ID_START,
-//	TASK_QUE_ID_VMFO,
-//	TASK_QUE_ID_TIMER,
-//	TASK_QUE_ID_ADCLIBRA,
-//	TASK_QUE_ID_SPILEO,
-//	TASK_QUE_ID_I2CARIES,
-//	TASK_QUE_ID_PWMTAURUS,
-//	TASK_QUE_ID_SPSVIRGO,
-//	TASK_QUE_ID_CANVELA,
-//	TASK_QUE_ID_DIDOCAP,
-//	TASK_QUE_ID_LEDPISCES,
-//	TASK_QUE_ID_ETHORION,
-//	TASK_QUE_ID_EMC68X,
-//	TASK_QUE_ID_MAX,
-//	TASK_QUE_ID_INVALID = 0xFF,
-//}; //end of IHU_TASK_QUEUE_ID
-
 /*
 ** Fsm INFORMATION structure.
 */
@@ -281,16 +261,18 @@ typedef struct IhuPrintBufferChar
 void IhuDebugPrintFo(UINT8 index, char *format, ...);
 void IhuErrorPrintFo(UINT8 index, char *format, ...);
 UINT8 IhuDebugPrintId(char *file, int line);
+
 //Eclipse的编译器有些不一样，晕乎
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
-void IhuDebugPrintFoEmc68x(char *format, ...);
-void IhuErrorPrintFoEmc68x(char *format, ...);
-#define IhuDebugPrint IhuDebugPrintFoEmc68x
-#define IhuErrorPrint IhuErrorPrintFoEmc68x
+	void IhuDebugPrintFoEmc68x(char *format, ...);
+	void IhuErrorPrintFoEmc68x(char *format, ...);
+	#define IhuDebugPrint IhuDebugPrintFoEmc68x
+	#define IhuErrorPrint IhuErrorPrintFoEmc68x
 #else
-#define IhuDebugPrint(...) (((void (*)(UINT8, const char *, ...))IhuDebugPrintFo)(IhuDebugPrintId(__FILE__, __LINE__), __VA_ARGS__))
-#define IhuErrorPrint(...) (((void (*)(UINT8, const char *, ...))IhuErrorPrintFo)(IhuDebugPrintId(__FILE__, __LINE__), __VA_ARGS__))
+	#define IhuDebugPrint(...) (((void (*)(UINT8, const char *, ...))IhuDebugPrintFo)(IhuDebugPrintId(__FILE__, __LINE__), __VA_ARGS__))
+	#define IhuErrorPrint(...) (((void (*)(UINT8, const char *, ...))IhuErrorPrintFo)(IhuDebugPrintId(__FILE__, __LINE__), __VA_ARGS__))
 #endif
+
 extern void ihu_vm_system_init(void);  //系统级别的初始化
 extern void ihu_sleep(UINT32 second);
 extern void ihu_usleep(UINT32 usecond);  //resulution 10^(-6)s = 1 microsecond

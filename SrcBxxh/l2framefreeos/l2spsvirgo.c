@@ -315,14 +315,14 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	memset(&pMsgProc, 0, msgProcLen);
 	pMsgProc.msgId.cmdId = (HUITP_MSGID_uni_ccl_lock_auth_inq>>8)&0xFF;
 	pMsgProc.msgId.optId = HUITP_MSGID_uni_ccl_lock_auth_inq&0xFF;
-	pMsgProc.msgLen = msgProcLen - 4;
+	pMsgProc.msgLen = HUITP_ENDIAN_EXG16(msgProcLen - 4);
 	//StrIe_HUITP_IEID_uni_com_req_t
-	pMsgProc.baseReq.ieId = HUITP_IEID_uni_com_req;
-	pMsgProc.baseReq.ieLen = sizeof(StrIe_HUITP_IEID_uni_com_req_t) - 4;
+	pMsgProc.baseReq.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_com_req);
+	pMsgProc.baseReq.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_com_req_t) - 4);
 	pMsgProc.baseReq.comReq = HUITP_IEID_UNI_COM_REQUEST_YES;
 	//StrIe_HUITP_IEID_uni_ccl_lock_auth_req_t
-	pMsgProc.authReq.ieId = HUITP_IEID_uni_ccl_lock_auth_req;
-	pMsgProc.authReq.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_lock_auth_req_t) - 4;
+	pMsgProc.authReq.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_lock_auth_req);
+	pMsgProc.authReq.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_lock_auth_req_t) - 4);
 	//唯一的锁触发，其它触发模式再考虑
 	pMsgProc.authReq.authReqType = HUITP_IEID_UNI_CCL_LOCK_AUTH_REQ_TYPE_LOCK;
 	for (i = 0; i < HUITP_IEID_UNI_CCL_LOCK_AUTH_REQ_MAX_LEN; i++){
@@ -472,86 +472,86 @@ OPSTAT fsm_spsvirgo_ccl_event_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 	memset(&pMsgProc, 0, msgProcLen);
 	pMsgProc.msgId.cmdId = (HUITP_MSGID_uni_ccl_state_report>>8)&0xFF;
 	pMsgProc.msgId.optId = HUITP_MSGID_uni_ccl_state_report&0xFF;
-	pMsgProc.msgLen = msgProcLen - 4;
+	pMsgProc.msgLen = HUITP_ENDIAN_EXG16(msgProcLen - 4);
 	//StrIe_HUITP_IEID_uni_com_report_t
-	pMsgProc.baseReport.ieId = HUITP_IEID_uni_com_report;
-	pMsgProc.baseReport.ieLen = sizeof(StrIe_HUITP_IEID_uni_com_report_t) - 4;
+	pMsgProc.baseReport.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_com_report);
+	pMsgProc.baseReport.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_com_report_t) - 4);
 	pMsgProc.baseReport.comReport = HUITP_IEID_UNI_COM_REPORT_YES;
 	//StrIe_HUITP_IEID_uni_ccl_report_type_t
-	pMsgProc.reportType.ieId = HUITP_IEID_uni_ccl_report_type;
-	pMsgProc.reportType.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_report_type_t) - 4;
+	pMsgProc.reportType.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_report_type);
+	pMsgProc.reportType.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_report_type_t) - 4);
 	pMsgProc.reportType.event = HUITP_IEID_UNI_CCL_REPORT_TYPE_PERIOD_EVENT;
 	//StrIe_HUITP_IEID_uni_ccl_lock_state_t
-	pMsgProc.lockState.ieId = HUITP_IEID_uni_ccl_lock_state;
-	pMsgProc.lockState.ieLen = 2 + IHU_CCL_SENSOR_LOCK_NUMBER_MAX; //实际上配置的锁的多少
+	pMsgProc.lockState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_lock_state);
+	pMsgProc.lockState.ieLen = HUITP_ENDIAN_EXG16(2 + IHU_CCL_SENSOR_LOCK_NUMBER_MAX); //实际上配置的锁的多少
 	pMsgProc.lockState.maxLockNo = IHU_CCL_SENSOR_LOCK_NUMBER_MAX;
 	pMsgProc.lockState.lockId = IHU_CCL_SENSOR_LOCK_NUMBER_MAX; //这个表示全部
 	for (i = 0; i < IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
 		pMsgProc.lockState.lockState[i] = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open_state(i) == TRUE)?HUITP_IEID_UNI_LOCK_STATE_OPEN:HUITP_IEID_UNI_LOCK_STATE_CLOSE);
 	}
 	//StrIe_HUITP_IEID_uni_ccl_door_state_t
-	pMsgProc.doorState.ieId = HUITP_IEID_uni_ccl_lock_state;
-	pMsgProc.doorState.ieLen = 2 + IHU_CCL_SENSOR_LOCK_NUMBER_MAX; //实际上配置的门的多少
+	pMsgProc.doorState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_lock_state);
+	pMsgProc.doorState.ieLen = HUITP_ENDIAN_EXG16(2 + IHU_CCL_SENSOR_LOCK_NUMBER_MAX); //实际上配置的门的多少
 	pMsgProc.doorState.maxDoorNo = IHU_CCL_SENSOR_LOCK_NUMBER_MAX;
 	pMsgProc.doorState.doorId = IHU_CCL_SENSOR_LOCK_NUMBER_MAX; //这个表示全部
 	for (i = 0; i < IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
 		pMsgProc.doorState.doorState[i] = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_door_open_state(i) == TRUE)?HUITP_IEID_UNI_DOOR_STATE_OPEN:HUITP_IEID_UNI_DOOR_STATE_CLOSE);
 	}
 	//StrIe_HUITP_IEID_uni_ccl_water_state_t
-	pMsgProc.waterState.ieId = HUITP_IEID_uni_ccl_water_state;
-	pMsgProc.waterState.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_water_state_t) - 4;
+	pMsgProc.waterState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_water_state);
+	pMsgProc.waterState.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_water_state_t) - 4);
 	pMsgProc.waterState.waterState = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_water_state() == TRUE)?HUITP_IEID_UNI_WATER_STATE_ACTIVE:HUITP_IEID_UNI_WATER_STATE_DEACTIVE);
 	//StrIe_HUITP_IEID_uni_ccl_fall_state_t
-	pMsgProc.fallState.ieId = HUITP_IEID_uni_ccl_fall_state;
-	pMsgProc.fallState.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_fall_state_t) - 4;
+	pMsgProc.fallState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_fall_state);
+	pMsgProc.fallState.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_fall_state_t) - 4);
 	pMsgProc.fallState.fallState = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_fall_state() == TRUE)?HUITP_IEID_UNI_FALL_STATE_ACTIVE:HUITP_IEID_UNI_FALL_STATE_DEACTIVE);
 	//StrIe_HUITP_IEID_uni_ccl_shake_state_t
-	pMsgProc.shakeState.ieId = HUITP_IEID_uni_ccl_shake_state;
-	pMsgProc.shakeState.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_shake_state_t) - 4;
+	pMsgProc.shakeState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_shake_state);
+	pMsgProc.shakeState.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_shake_state_t) - 4);
 	pMsgProc.shakeState.shakeState = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_shake_state() == TRUE)?HUITP_IEID_UNI_SHAKE_STATE_ACTIVE:HUITP_IEID_UNI_SHAKE_STATE_DEACTIVE);
 	//StrIe_HUITP_IEID_uni_ccl_smoke_state_t
-	pMsgProc.smokeState.ieId = HUITP_IEID_uni_ccl_smoke_state;
-	pMsgProc.smokeState.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_smoke_state_t) - 4;
+	pMsgProc.smokeState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_smoke_state);
+	pMsgProc.smokeState.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_smoke_state_t) - 4);
 	pMsgProc.smokeState.smokeState = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_smoke_state() == TRUE)?HUITP_IEID_UNI_SMOKE_STATE_ACTIVE:HUITP_IEID_UNI_SMOKE_STATE_DEACTIVE);
 	//StrIe_HUITP_IEID_uni_ccl_bat_state_t
-	pMsgProc.batState.ieId = HUITP_IEID_uni_ccl_bat_state;
-	pMsgProc.batState.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_bat_state_t) - 4;
+	pMsgProc.batState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_bat_state);
+	pMsgProc.batState.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_bat_state_t) - 4);
 	pMsgProc.batState.batState = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_bat_state() == TRUE)?HUITP_IEID_UNI_BAT_STATE_WARNING:HUITP_IEID_UNI_BAT_STATE_NORMAL);
 	//StrIe_HUITP_IEID_uni_ccl_temp_value_t
-	pMsgProc.tempValue.ieId = HUITP_IEID_uni_ccl_temp_value;
-	pMsgProc.tempValue.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_temp_value_t) - 4;
+	pMsgProc.tempValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_temp_value);
+	pMsgProc.tempValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_temp_value_t) - 4);
 	pMsgProc.tempValue.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc.tempValue.tempValue = ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_temp_value();
+	pMsgProc.tempValue.tempValue = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_temp_value());
 	//StrIe_HUITP_IEID_uni_ccl_humid_value_t
-	pMsgProc.humidValue.ieId = HUITP_IEID_uni_ccl_humid_value;
-	pMsgProc.humidValue.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_humid_value_t) - 4;
+	pMsgProc.humidValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_humid_value);
+	pMsgProc.humidValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_humid_value_t) - 4);
 	pMsgProc.humidValue.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc.humidValue.humidValue = ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_humid_value();
+	pMsgProc.humidValue.humidValue = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_humid_value());
 	//StrIe_HUITP_IEID_uni_ccl_bat_value_t
-	pMsgProc.batValue.ieId = HUITP_IEID_uni_ccl_bat_value;
-	pMsgProc.batValue.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_bat_value_t) - 4;
+	pMsgProc.batValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_bat_value);
+	pMsgProc.batValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_bat_value_t) - 4);
 	pMsgProc.batValue.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc.batValue.batValue = ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_bat_value();	
+	pMsgProc.batValue.batValue = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_bat_value());	
 	//StrIe_HUITP_IEID_uni_ccl_general_value1_t
-	pMsgProc.general1Value.ieId = HUITP_IEID_uni_ccl_general_value1;
-	pMsgProc.general1Value.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_general_value1_t) - 4;
+	pMsgProc.general1Value.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_general_value1);
+	pMsgProc.general1Value.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_general_value1_t) - 4);
 	pMsgProc.general1Value.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc.general1Value.generalValue1 = ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv1_value();	
+	pMsgProc.general1Value.generalValue1 = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv1_value());	
 	//StrIe_HUITP_IEID_uni_ccl_general_value2_t
-	pMsgProc.general2Value.ieId = HUITP_IEID_uni_ccl_general_value2;
-	pMsgProc.general2Value.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_general_value2_t) - 4;
+	pMsgProc.general2Value.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_general_value2);
+	pMsgProc.general2Value.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_general_value2_t) - 4);
 	pMsgProc.general2Value.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc.general2Value.generalValue2 = ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv2_value();	
+	pMsgProc.general2Value.generalValue2 = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv2_value());	
 	//StrIe_HUITP_IEID_uni_ccl_rssi_value_t
-	pMsgProc.rssiValue.ieId = HUITP_IEID_uni_ccl_rssi_value;
-	pMsgProc.rssiValue.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_rssi_value_t) - 4;
+	pMsgProc.rssiValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_rssi_value);
+	pMsgProc.rssiValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_rssi_value_t) - 4);
 	pMsgProc.rssiValue.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc.rssiValue.rssiValue = ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rssi_value();	
+	pMsgProc.rssiValue.rssiValue = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rssi_value());	
 	//StrIe_HUITP_IEID_uni_ccl_dcmi_value_t
-	pMsgProc.dcmiValue.ieId = HUITP_IEID_uni_ccl_dcmi_value;
-	pMsgProc.dcmiValue.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_dcmi_value_t) - 4;
+	pMsgProc.dcmiValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_dcmi_value);
+	pMsgProc.dcmiValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_dcmi_value_t) - 4);
 	pMsgProc.dcmiValue.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc.dcmiValue.dcmiValue = ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value();	
+	pMsgProc.dcmiValue.dcmiValue = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value());	
 
 	//Pack message
 	StrMsg_HUITP_MSGID_uni_general_message_t pMsgInput;
@@ -671,86 +671,86 @@ OPSTAT fsm_spsvirgo_ccl_fault_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 	memset(&pMsgProc, 0, msgProcLen);
 	pMsgProc.msgId.cmdId = (HUITP_MSGID_uni_ccl_state_report>>8)&0xFF;
 	pMsgProc.msgId.optId = HUITP_MSGID_uni_ccl_state_report&0xFF;
-	pMsgProc.msgLen = msgProcLen - 4;
+	pMsgProc.msgLen = HUITP_ENDIAN_EXG16(msgProcLen - 4);
 	//StrIe_HUITP_IEID_uni_com_report_t
-	pMsgProc.baseReport.ieId = HUITP_IEID_uni_com_report;
-	pMsgProc.baseReport.ieLen = sizeof(StrIe_HUITP_IEID_uni_com_report_t) - 4;
+	pMsgProc.baseReport.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_com_report);
+	pMsgProc.baseReport.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_com_report_t) - 4);
 	pMsgProc.baseReport.comReport = HUITP_IEID_UNI_COM_REPORT_YES;
 	//StrIe_HUITP_IEID_uni_ccl_report_type_t
-	pMsgProc.reportType.ieId = HUITP_IEID_uni_ccl_report_type;
-	pMsgProc.reportType.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_report_type_t) - 4;
+	pMsgProc.reportType.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_report_type);
+	pMsgProc.reportType.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_report_type_t) - 4);
 	pMsgProc.reportType.event = HUITP_IEID_UNI_CCL_REPORT_TYPE_FAULT_EVENT;
 	//StrIe_HUITP_IEID_uni_ccl_lock_state_t
-	pMsgProc.lockState.ieId = HUITP_IEID_uni_ccl_lock_state;
-	pMsgProc.lockState.ieLen = 2 + IHU_CCL_SENSOR_LOCK_NUMBER_MAX; //实际上配置的锁的多少
+	pMsgProc.lockState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_lock_state);
+	pMsgProc.lockState.ieLen = HUITP_ENDIAN_EXG16(2 + IHU_CCL_SENSOR_LOCK_NUMBER_MAX); //实际上配置的锁的多少
 	pMsgProc.lockState.maxLockNo = IHU_CCL_SENSOR_LOCK_NUMBER_MAX;
 	pMsgProc.lockState.lockId = IHU_CCL_SENSOR_LOCK_NUMBER_MAX; //这个表示全部
 	for (i = 0; i < IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
 		pMsgProc.lockState.lockState[i] = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open_state(i) == TRUE)?HUITP_IEID_UNI_LOCK_STATE_OPEN:HUITP_IEID_UNI_LOCK_STATE_CLOSE);
 	}
 	//StrIe_HUITP_IEID_uni_ccl_door_state_t
-	pMsgProc.doorState.ieId = HUITP_IEID_uni_ccl_lock_state;
-	pMsgProc.doorState.ieLen = 2 + IHU_CCL_SENSOR_LOCK_NUMBER_MAX; //实际上配置的门的多少
+	pMsgProc.doorState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_lock_state);
+	pMsgProc.doorState.ieLen = HUITP_ENDIAN_EXG16(2 + IHU_CCL_SENSOR_LOCK_NUMBER_MAX); //实际上配置的门的多少
 	pMsgProc.doorState.maxDoorNo = IHU_CCL_SENSOR_LOCK_NUMBER_MAX;
 	pMsgProc.doorState.doorId = IHU_CCL_SENSOR_LOCK_NUMBER_MAX; //这个表示全部
 	for (i = 0; i < IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
 		pMsgProc.doorState.doorState[i] = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_door_open_state(i) == TRUE)?HUITP_IEID_UNI_DOOR_STATE_OPEN:HUITP_IEID_UNI_DOOR_STATE_CLOSE);
 	}
 	//StrIe_HUITP_IEID_uni_ccl_water_state_t
-	pMsgProc.waterState.ieId = HUITP_IEID_uni_ccl_water_state;
-	pMsgProc.waterState.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_water_state_t) - 4;
+	pMsgProc.waterState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_water_state);
+	pMsgProc.waterState.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_water_state_t) - 4);
 	pMsgProc.waterState.waterState = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_water_state() == TRUE)?HUITP_IEID_UNI_WATER_STATE_ACTIVE:HUITP_IEID_UNI_WATER_STATE_DEACTIVE);
 	//StrIe_HUITP_IEID_uni_ccl_fall_state_t
-	pMsgProc.fallState.ieId = HUITP_IEID_uni_ccl_fall_state;
-	pMsgProc.fallState.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_fall_state_t) - 4;
+	pMsgProc.fallState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_fall_state);
+	pMsgProc.fallState.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_fall_state_t) - 4);
 	pMsgProc.fallState.fallState = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_fall_state() == TRUE)?HUITP_IEID_UNI_FALL_STATE_ACTIVE:HUITP_IEID_UNI_FALL_STATE_DEACTIVE);
 	//StrIe_HUITP_IEID_uni_ccl_shake_state_t
-	pMsgProc.shakeState.ieId = HUITP_IEID_uni_ccl_shake_state;
-	pMsgProc.shakeState.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_shake_state_t) - 4;
+	pMsgProc.shakeState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_shake_state);
+	pMsgProc.shakeState.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_shake_state_t) - 4);
 	pMsgProc.shakeState.shakeState = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_shake_state() == TRUE)?HUITP_IEID_UNI_SHAKE_STATE_ACTIVE:HUITP_IEID_UNI_SHAKE_STATE_DEACTIVE);
 	//StrIe_HUITP_IEID_uni_ccl_smoke_state_t
-	pMsgProc.smokeState.ieId = HUITP_IEID_uni_ccl_smoke_state;
-	pMsgProc.smokeState.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_smoke_state_t) - 4;
+	pMsgProc.smokeState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_smoke_state);
+	pMsgProc.smokeState.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_smoke_state_t) - 4);
 	pMsgProc.smokeState.smokeState = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_smoke_state() == TRUE)?HUITP_IEID_UNI_SMOKE_STATE_ACTIVE:HUITP_IEID_UNI_SMOKE_STATE_DEACTIVE);
 	//StrIe_HUITP_IEID_uni_ccl_bat_state_t
-	pMsgProc.batState.ieId = HUITP_IEID_uni_ccl_bat_state;
-	pMsgProc.batState.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_bat_state_t) - 4;
+	pMsgProc.batState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_bat_state);
+	pMsgProc.batState.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_bat_state_t) - 4);
 	pMsgProc.batState.batState = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_bat_state() == TRUE)?HUITP_IEID_UNI_BAT_STATE_WARNING:HUITP_IEID_UNI_BAT_STATE_NORMAL);
 	//StrIe_HUITP_IEID_uni_ccl_temp_value_t
-	pMsgProc.tempValue.ieId = HUITP_IEID_uni_ccl_temp_value;
-	pMsgProc.tempValue.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_temp_value_t) - 4;
+	pMsgProc.tempValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_temp_value);
+	pMsgProc.tempValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_temp_value_t) - 4);
 	pMsgProc.tempValue.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc.tempValue.tempValue = ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_temp_value();
+	pMsgProc.tempValue.tempValue = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_temp_value());
 	//StrIe_HUITP_IEID_uni_ccl_humid_value_t
-	pMsgProc.humidValue.ieId = HUITP_IEID_uni_ccl_humid_value;
-	pMsgProc.humidValue.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_humid_value_t) - 4;
+	pMsgProc.humidValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_humid_value);
+	pMsgProc.humidValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_humid_value_t) - 4);
 	pMsgProc.humidValue.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc.humidValue.humidValue = ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_humid_value();
+	pMsgProc.humidValue.humidValue = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_humid_value());
 	//StrIe_HUITP_IEID_uni_ccl_bat_value_t
-	pMsgProc.batValue.ieId = HUITP_IEID_uni_ccl_bat_value;
-	pMsgProc.batValue.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_bat_value_t) - 4;
+	pMsgProc.batValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_bat_value);
+	pMsgProc.batValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_bat_value_t) - 4);
 	pMsgProc.batValue.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc.batValue.batValue = ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_bat_value();	
+	pMsgProc.batValue.batValue = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_bat_value());	
 	//StrIe_HUITP_IEID_uni_ccl_general_value1_t
-	pMsgProc.general1Value.ieId = HUITP_IEID_uni_ccl_general_value1;
-	pMsgProc.general1Value.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_general_value1_t) - 4;
+	pMsgProc.general1Value.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_general_value1);
+	pMsgProc.general1Value.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_general_value1_t) - 4);
 	pMsgProc.general1Value.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc.general1Value.generalValue1 = ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv1_value();	
+	pMsgProc.general1Value.generalValue1 = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv1_value());	
 	//StrIe_HUITP_IEID_uni_ccl_general_value2_t
-	pMsgProc.general2Value.ieId = HUITP_IEID_uni_ccl_general_value2;
-	pMsgProc.general2Value.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_general_value2_t) - 4;
+	pMsgProc.general2Value.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_general_value2);
+	pMsgProc.general2Value.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_general_value2_t) - 4);
 	pMsgProc.general2Value.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc.general2Value.generalValue2 = ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv2_value();	
+	pMsgProc.general2Value.generalValue2 = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv2_value());	
 	//StrIe_HUITP_IEID_uni_ccl_rssi_value_t
-	pMsgProc.rssiValue.ieId = HUITP_IEID_uni_ccl_rssi_value;
-	pMsgProc.rssiValue.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_rssi_value_t) - 4;
+	pMsgProc.rssiValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_rssi_value);
+	pMsgProc.rssiValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_rssi_value_t) - 4);
 	pMsgProc.rssiValue.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc.rssiValue.rssiValue = ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rssi_value();	
+	pMsgProc.rssiValue.rssiValue = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rssi_value());	
 	//StrIe_HUITP_IEID_uni_ccl_dcmi_value_t
-	pMsgProc.dcmiValue.ieId = HUITP_IEID_uni_ccl_dcmi_value;
-	pMsgProc.dcmiValue.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_dcmi_value_t) - 4;
+	pMsgProc.dcmiValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_dcmi_value);
+	pMsgProc.dcmiValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_dcmi_value_t) - 4);
 	pMsgProc.dcmiValue.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc.dcmiValue.dcmiValue = ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value();	
+	pMsgProc.dcmiValue.dcmiValue = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value());	
 
 	//Pack message
 	StrMsg_HUITP_MSGID_uni_general_message_t pMsgInput;
@@ -841,86 +841,86 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 	memset(&pMsgProc, 0, msgProcLen);
 	pMsgProc.msgId.cmdId = (HUITP_MSGID_uni_ccl_state_report>>8)&0xFF;
 	pMsgProc.msgId.optId = HUITP_MSGID_uni_ccl_state_report&0xFF;
-	pMsgProc.msgLen = msgProcLen - 4;
+	pMsgProc.msgLen = (msgProcLen - 4);
 	//StrIe_HUITP_IEID_uni_com_report_t
-	pMsgProc.baseReport.ieId = HUITP_IEID_uni_com_report;
-	pMsgProc.baseReport.ieLen = sizeof(StrIe_HUITP_IEID_uni_com_report_t) - 4;
+	pMsgProc.baseReport.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_com_report);
+	pMsgProc.baseReport.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_com_report_t) - 4);
 	pMsgProc.baseReport.comReport = HUITP_IEID_UNI_COM_REPORT_YES;
 	//StrIe_HUITP_IEID_uni_ccl_report_type_t
-	pMsgProc.reportType.ieId = HUITP_IEID_uni_ccl_report_type;
-	pMsgProc.reportType.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_report_type_t) - 4;
+	pMsgProc.reportType.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_report_type);
+	pMsgProc.reportType.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_report_type_t) - 4);
 	pMsgProc.reportType.event = HUITP_IEID_UNI_CCL_REPORT_TYPE_CLOSE_EVENT;
 	//StrIe_HUITP_IEID_uni_ccl_lock_state_t
-	pMsgProc.lockState.ieId = HUITP_IEID_uni_ccl_lock_state;
-	pMsgProc.lockState.ieLen = 2 + IHU_CCL_SENSOR_LOCK_NUMBER_MAX; //实际上配置的锁的多少
+	pMsgProc.lockState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_lock_state);
+	pMsgProc.lockState.ieLen = HUITP_ENDIAN_EXG16(2 + IHU_CCL_SENSOR_LOCK_NUMBER_MAX); //实际上配置的锁的多少
 	pMsgProc.lockState.maxLockNo = IHU_CCL_SENSOR_LOCK_NUMBER_MAX;
 	pMsgProc.lockState.lockId = IHU_CCL_SENSOR_LOCK_NUMBER_MAX; //这个表示全部
 	for (i = 0; i < IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
 		pMsgProc.lockState.lockState[i] = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open_state(i) == TRUE)?HUITP_IEID_UNI_LOCK_STATE_OPEN:HUITP_IEID_UNI_LOCK_STATE_CLOSE);
 	}
 	//StrIe_HUITP_IEID_uni_ccl_door_state_t
-	pMsgProc.doorState.ieId = HUITP_IEID_uni_ccl_lock_state;
-	pMsgProc.doorState.ieLen = 2 + IHU_CCL_SENSOR_LOCK_NUMBER_MAX; //实际上配置的门的多少
+	pMsgProc.doorState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_lock_state);
+	pMsgProc.doorState.ieLen = HUITP_ENDIAN_EXG16(2 + IHU_CCL_SENSOR_LOCK_NUMBER_MAX); //实际上配置的门的多少
 	pMsgProc.doorState.maxDoorNo = IHU_CCL_SENSOR_LOCK_NUMBER_MAX;
 	pMsgProc.doorState.doorId = IHU_CCL_SENSOR_LOCK_NUMBER_MAX; //这个表示全部
 	for (i = 0; i < IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
 		pMsgProc.doorState.doorState[i] = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_door_open_state(i) == TRUE)?HUITP_IEID_UNI_DOOR_STATE_OPEN:HUITP_IEID_UNI_DOOR_STATE_CLOSE);
 	}
 	//StrIe_HUITP_IEID_uni_ccl_water_state_t
-	pMsgProc.waterState.ieId = HUITP_IEID_uni_ccl_water_state;
-	pMsgProc.waterState.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_water_state_t) - 4;
+	pMsgProc.waterState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_water_state);
+	pMsgProc.waterState.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_water_state_t) - 4);
 	pMsgProc.waterState.waterState = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_water_state() == TRUE)?HUITP_IEID_UNI_WATER_STATE_ACTIVE:HUITP_IEID_UNI_WATER_STATE_DEACTIVE);
 	//StrIe_HUITP_IEID_uni_ccl_fall_state_t
-	pMsgProc.fallState.ieId = HUITP_IEID_uni_ccl_fall_state;
-	pMsgProc.fallState.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_fall_state_t) - 4;
+	pMsgProc.fallState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_fall_state);
+	pMsgProc.fallState.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_fall_state_t) - 4);
 	pMsgProc.fallState.fallState = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_fall_state() == TRUE)?HUITP_IEID_UNI_FALL_STATE_ACTIVE:HUITP_IEID_UNI_FALL_STATE_DEACTIVE);
 	//StrIe_HUITP_IEID_uni_ccl_shake_state_t
-	pMsgProc.shakeState.ieId = HUITP_IEID_uni_ccl_shake_state;
-	pMsgProc.shakeState.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_shake_state_t) - 4;
+	pMsgProc.shakeState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_shake_state);
+	pMsgProc.shakeState.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_shake_state_t) - 4);
 	pMsgProc.shakeState.shakeState = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_shake_state() == TRUE)?HUITP_IEID_UNI_SHAKE_STATE_ACTIVE:HUITP_IEID_UNI_SHAKE_STATE_DEACTIVE);
 	//StrIe_HUITP_IEID_uni_ccl_smoke_state_t
-	pMsgProc.smokeState.ieId = HUITP_IEID_uni_ccl_smoke_state;
-	pMsgProc.smokeState.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_smoke_state_t) - 4;
+	pMsgProc.smokeState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_smoke_state);
+	pMsgProc.smokeState.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_smoke_state_t) - 4);
 	pMsgProc.smokeState.smokeState = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_smoke_state() == TRUE)?HUITP_IEID_UNI_SMOKE_STATE_ACTIVE:HUITP_IEID_UNI_SMOKE_STATE_DEACTIVE);
 	//StrIe_HUITP_IEID_uni_ccl_bat_state_t
-	pMsgProc.batState.ieId = HUITP_IEID_uni_ccl_bat_state;
-	pMsgProc.batState.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_bat_state_t) - 4;
+	pMsgProc.batState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_bat_state);
+	pMsgProc.batState.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_bat_state_t) - 4);
 	pMsgProc.batState.batState = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_bat_state() == TRUE)?HUITP_IEID_UNI_BAT_STATE_WARNING:HUITP_IEID_UNI_BAT_STATE_NORMAL);
 	//StrIe_HUITP_IEID_uni_ccl_temp_value_t
-	pMsgProc.tempValue.ieId = HUITP_IEID_uni_ccl_temp_value;
-	pMsgProc.tempValue.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_temp_value_t) - 4;
+	pMsgProc.tempValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_temp_value);
+	pMsgProc.tempValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_temp_value_t) - 4);
 	pMsgProc.tempValue.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc.tempValue.tempValue = ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_temp_value();
+	pMsgProc.tempValue.tempValue = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_temp_value());
 	//StrIe_HUITP_IEID_uni_ccl_humid_value_t
-	pMsgProc.humidValue.ieId = HUITP_IEID_uni_ccl_humid_value;
-	pMsgProc.humidValue.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_humid_value_t) - 4;
+	pMsgProc.humidValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_humid_value);
+	pMsgProc.humidValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_humid_value_t) - 4);
 	pMsgProc.humidValue.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc.humidValue.humidValue = ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_humid_value();
+	pMsgProc.humidValue.humidValue = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_humid_value());
 	//StrIe_HUITP_IEID_uni_ccl_bat_value_t
-	pMsgProc.batValue.ieId = HUITP_IEID_uni_ccl_bat_value;
-	pMsgProc.batValue.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_bat_value_t) - 4;
+	pMsgProc.batValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_bat_value);
+	pMsgProc.batValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_bat_value_t) - 4);
 	pMsgProc.batValue.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc.batValue.batValue = ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_bat_value();	
+	pMsgProc.batValue.batValue = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_bat_value());	
 	//StrIe_HUITP_IEID_uni_ccl_general_value1_t
-	pMsgProc.general1Value.ieId = HUITP_IEID_uni_ccl_general_value1;
-	pMsgProc.general1Value.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_general_value1_t) - 4;
+	pMsgProc.general1Value.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_general_value1);
+	pMsgProc.general1Value.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_general_value1_t) - 4);
 	pMsgProc.general1Value.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc.general1Value.generalValue1 = ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv1_value();	
+	pMsgProc.general1Value.generalValue1 = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv1_value());	
 	//StrIe_HUITP_IEID_uni_ccl_general_value2_t
-	pMsgProc.general2Value.ieId = HUITP_IEID_uni_ccl_general_value2;
-	pMsgProc.general2Value.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_general_value2_t) - 4;
+	pMsgProc.general2Value.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_general_value2);
+	pMsgProc.general2Value.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_general_value2_t) - 4);
 	pMsgProc.general2Value.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc.general2Value.generalValue2 = ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv2_value();	
+	pMsgProc.general2Value.generalValue2 = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv2_value());	
 	//StrIe_HUITP_IEID_uni_ccl_rssi_value_t
-	pMsgProc.rssiValue.ieId = HUITP_IEID_uni_ccl_rssi_value;
-	pMsgProc.rssiValue.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_rssi_value_t) - 4;
+	pMsgProc.rssiValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_rssi_value);
+	pMsgProc.rssiValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_rssi_value_t) - 4);
 	pMsgProc.rssiValue.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc.rssiValue.rssiValue = ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rssi_value();	
+	pMsgProc.rssiValue.rssiValue = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rssi_value());	
 	//StrIe_HUITP_IEID_uni_ccl_dcmi_value_t
-	pMsgProc.dcmiValue.ieId = HUITP_IEID_uni_ccl_dcmi_value;
-	pMsgProc.dcmiValue.ieLen = sizeof(StrIe_HUITP_IEID_uni_ccl_dcmi_value_t) - 4;
+	pMsgProc.dcmiValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_dcmi_value);
+	pMsgProc.dcmiValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_dcmi_value_t) - 4);
 	pMsgProc.dcmiValue.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc.dcmiValue.dcmiValue = ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value();	
+	pMsgProc.dcmiValue.dcmiValue = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value());	
 
 	//Pack message
 	StrMsg_HUITP_MSGID_uni_general_message_t pMsgInput;
