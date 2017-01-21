@@ -7,6 +7,7 @@
 
 #ifndef HUITP_H_
 #define HUITP_H_
+#pragma pack (1) //强制1字节对齐
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -8175,4 +8176,5 @@ typedef struct StrMsg_HUITP_MSGID_uni_heart_beat_confirm
 //无效
 //HUITP_MSGID_uni_null                             = 0xFF,	
 
+#pragma pack () //取消字节对其
 #endif /* HUITP_H_ */

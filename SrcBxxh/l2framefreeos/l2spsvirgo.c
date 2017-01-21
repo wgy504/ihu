@@ -1021,7 +1021,15 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_lock_auth_resp_received_handle(StrMsg_HUI
 {
 	int ret = 0;
 	
+	//先处理大小端问题
+	rcv->msgLen = HUITP_ENDIAN_EXG16(rcv->msgLen);
+	rcv->baseResp.ieId = HUITP_ENDIAN_EXG16(rcv->baseResp.ieId);
+	rcv->baseResp.ieLen = HUITP_ENDIAN_EXG16(rcv->baseResp.ieLen);
+	rcv->respState.ieId = HUITP_ENDIAN_EXG16(rcv->respState.ieId);
+	rcv->respState.ieLen = HUITP_ENDIAN_EXG16(rcv->respState.ieLen);
+	
 	//IE参数检查
+	int t = sizeof(StrIe_HUITP_IEID_uni_com_resp_t) - 4;
 	if ((rcv->baseResp.ieId != HUITP_IEID_uni_com_resp) || (rcv->baseResp.ieLen != (sizeof(StrIe_HUITP_IEID_uni_com_resp_t) - 4))){
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		IhuErrorPrint("SPSVIRGO: Cloud raw message content unpack error!\n");
@@ -1219,6 +1227,13 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_state_req_received_handle(StrMsg_HUITP_MS
 OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle(StrMsg_HUITP_MSGID_uni_ccl_state_confirm_t *rcv)
 {
 	int ret = 0;
+	
+	//先处理大小端问题
+	rcv->msgLen = HUITP_ENDIAN_EXG16(rcv->msgLen);
+	rcv->baseConfirm.ieId = HUITP_ENDIAN_EXG16(rcv->baseConfirm.ieId);
+	rcv->baseConfirm.ieLen = HUITP_ENDIAN_EXG16(rcv->baseConfirm.ieLen);
+	rcv->reportType.ieId = HUITP_ENDIAN_EXG16(rcv->reportType.ieId);
+	rcv->reportType.ieLen = HUITP_ENDIAN_EXG16(rcv->reportType.ieLen);
 	
 	//IE参数检查
 	if ((rcv->baseConfirm.ieId != HUITP_IEID_uni_com_confirm) || (rcv->baseConfirm.ieLen != (sizeof(StrIe_HUITP_IEID_uni_com_confirm_t) - 4))){
