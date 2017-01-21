@@ -2,6 +2,14 @@
 == 将修改方式放在最前面，以提高效率
 =================================================
 
+//= ZJL, 2017 Jan.21, CURRENT_SW_DELIVERY R03.101 =>CCL项目
+= 改善变长到定长，简化消息编码和解码
+= 打印字符串系统定义长度改到IHU_QUEUE_MAX_SIZE + 300的超长长度，方便数据生成函数的执行func_cloud_standard_xml_generate_message_test_data()
+= 去掉编解码中对变长消息的处理部分，处理过程得以保留，以便为未来可能存在的变长消息处理留下案例和抄袭方法
+
+
+
+
 //= ZJL, 2017 Jan.21, CURRENT_SW_DELIVERY R03.100 =>CCL项目
 = 改进本设备的编号，不做成固定定义方式，而是为IAP升级后的程序从固定FLASH区域读取打好基础
 = 修正xml_pack()函数中访问输入数据的bug
@@ -12,7 +20,6 @@
 = 测试xml_unpack()函数，完善的生成测试数据
 = xml_unpack()中存在接收结构申请为指针的情况，结果系统没有为它申请内存，导致覆盖系统区而死机
 = 改进控制命令字40-4C，新增4D/4E用于AUTH/STATE
-
 
 //= ZJL, 2017 Jan.20, CURRENT_SW_DELIVERY R03.99 =>CCL项目
 = 回归STMFLASH, CPUID, Camera BSP

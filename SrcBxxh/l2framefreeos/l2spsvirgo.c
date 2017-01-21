@@ -1024,19 +1024,19 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_lock_auth_resp_received_handle(StrMsg_HUI
 	//IE参数检查
 	if ((rcv->baseResp.ieId != HUITP_IEID_uni_com_resp) || (rcv->baseResp.ieLen != (sizeof(StrIe_HUITP_IEID_uni_com_resp_t) - 4))){
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Unpack message error!\n");
+		IhuErrorPrint("SPSVIRGO: Cloud raw message content unpack error!\n");
 		return IHU_FAILURE;		
 	}
 	if ((rcv->respState.ieId != HUITP_IEID_uni_ccl_lock_auth_resp) || (rcv->respState.ieLen != (sizeof(StrIe_HUITP_IEID_uni_ccl_lock_auth_resp_t) - 4))){
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Unpack message error!\n");
+		IhuErrorPrint("SPSVIRGO: Cloud raw message content unpack error!\n");
 		return IHU_FAILURE;		
 	}	
 	
 	//逻辑处理
 	if ((rcv->respState.authResp != HUITP_IEID_UNI_CCL_LOCK_AUTH_RESP_YES) && (rcv->respState.authResp != HUITP_IEID_UNI_CCL_LOCK_AUTH_RESP_NO)){
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Unpack message error!\n");
+		IhuErrorPrint("SPSVIRGO: Cloud raw message content unpack error!\n");
 		return IHU_FAILURE;			
 	}	
 	msg_struct_spsvirgo_ccl_cloud_fb_t snd;
@@ -1223,12 +1223,12 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle(StrMsg_HUIT
 	//IE参数检查
 	if ((rcv->baseConfirm.ieId != HUITP_IEID_uni_com_confirm) || (rcv->baseConfirm.ieLen != (sizeof(StrIe_HUITP_IEID_uni_com_confirm_t) - 4))){
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Unpack message error!\n");
+		IhuErrorPrint("SPSVIRGO: Cloud raw message content unpack error!\n");
 		return IHU_FAILURE;		
 	}
 	if ((rcv->reportType.ieId != HUITP_IEID_uni_ccl_report_type) || (rcv->reportType.ieLen != (sizeof(StrIe_HUITP_IEID_uni_ccl_report_type_t) - 4))){
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Unpack message error!\n");
+		IhuErrorPrint("SPSVIRGO: Cloud raw message content unpack error!\n");
 		return IHU_FAILURE;		
 	}	
 	
@@ -1236,7 +1236,7 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle(StrMsg_HUIT
 	if ((rcv->reportType.event != HUITP_IEID_UNI_CCL_REPORT_TYPE_PERIOD_EVENT) && (rcv->reportType.event != HUITP_IEID_UNI_CCL_REPORT_TYPE_CLOSE_EVENT)\
 		&& (rcv->reportType.event != HUITP_IEID_UNI_CCL_REPORT_TYPE_FAULT_EVENT)){
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Unpack message error!\n");
+		IhuErrorPrint("SPSVIRGO: Cloud raw message content unpack error!\n");
 		return IHU_FAILURE;			
 	}
 		
