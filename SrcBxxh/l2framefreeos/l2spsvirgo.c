@@ -841,7 +841,7 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 	memset(&pMsgProc, 0, msgProcLen);
 	pMsgProc.msgId.cmdId = (HUITP_MSGID_uni_ccl_state_report>>8)&0xFF;
 	pMsgProc.msgId.optId = HUITP_MSGID_uni_ccl_state_report&0xFF;
-	pMsgProc.msgLen = (msgProcLen - 4);
+	pMsgProc.msgLen = HUITP_ENDIAN_EXG16(msgProcLen - 4);
 	//StrIe_HUITP_IEID_uni_com_report_t
 	pMsgProc.baseReport.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_com_report);
 	pMsgProc.baseReport.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_com_report_t) - 4);

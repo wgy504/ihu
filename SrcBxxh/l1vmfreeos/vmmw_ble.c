@@ -149,12 +149,12 @@ OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_procedure(char *macAddr, uint8_t
 	{
 		repeatCnt--;
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
-			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Not detect BLE module, trying to reconnecting!\n");
+			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWBLE: Not detect BLE module, trying to reconnecting!\n");
 		}
 		ihu_usleep(200);
 		if (repeatCnt == 0){
 			zIhuRunErrCnt[TASK_ID_VMFO]++;
-			IhuErrorPrint("VMFO: BLE detect failure!\n");
+			IhuErrorPrint("VMMWBLE: BLE detect failure!\n");
 			return IHU_FAILURE;
 		}
 	}
@@ -163,11 +163,11 @@ OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_procedure(char *macAddr, uint8_t
 	func_blemod_uart_clear_receive_buffer();
 	if (func_blemod_uart_send_AT_command((uint8_t*)"AT+VERSION?", (uint8_t*)"OK", 2) == IHU_SUCCESS) {
 		if(strstr((const char*)zIhuBspStm32SpsBleRxBuff, "+VERSION:") != NULL){
-			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: BLE Version = [%s]!\n", zIhuBspStm32SpsBleRxBuff);
+			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWBLE: BLE Version = [%s]!\n", zIhuBspStm32SpsBleRxBuff);
 		}
 	}else{
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
-		IhuErrorPrint("VMFO: BLE inquery version failure!\n");
+		IhuErrorPrint("VMMWBLE: BLE inquery version failure!\n");
 		return IHU_FAILURE;
 	}	
 	
@@ -179,11 +179,11 @@ OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_procedure(char *macAddr, uint8_t
 		if ((p1!=NULL) && (p2!=NULL) && (p1<p2)){
 			p1 = p1 + sizeof("+ADDR:");
 			strncpy(macAddr, (char*)p1, ((p2-p1)<len)?(p2-p1):len);
-			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: BLE Address = [%s]!\n", p1);
+			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWBLE: BLE Address = [%s]!\n", p1);
 		}
 	}else{
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
-		IhuErrorPrint("VMFO: BLE fetch address failure!\n");
+		IhuErrorPrint("VMMWBLE: BLE fetch address failure!\n");
 		return IHU_FAILURE;
 	}
 		
@@ -311,7 +311,7 @@ uint8_t func_belmod_uart_hc05_scan_bluetooth_address(BLTDev *bltDev)
 	redata =ihu_bsp_stm32_ble_get_rebuff(&len);
 	if(redata[0] != 0 && strstr(redata, "+INQ:") != 0)
 	{
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: rebuf =%s\n",redata);
+		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWBLE: rebuf =%s\n",redata);
 
 getNewLine:
 		while(getlen < len-2*linenum )
@@ -383,7 +383,7 @@ void func_blemod_uart_hc05_blt_addr_convert_str(BLTDev *bltDev, char delimiter)
 	
 	if(bltDev->num==0)
 	{
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: /*******No other BLT Device********/\n");
+		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWBLE: /*******No other BLT Device********/\n");
 	}
 	else
 	{
@@ -414,7 +414,7 @@ uint8_t func_blemod_uart_hc05_get_remote_device_name(BLTDev *bltDev)
 	
 	func_blemod_uart_hc05_blt_addr_convert_str(bltDev,',');
 
-	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: device num =%d",bltDev->num);
+	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWBLE: device num =%d",bltDev->num);
 	
 	for(i=0;i<bltDev->num;i++)
 	{
@@ -453,17 +453,17 @@ void func_blemod_uart_hc05_print_blt_info(BLTDev *bltDev)
 	uint8_t i;
 	if(bltDev->num==0)
 	{
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: /*******No remote BLT Device or in SLAVE mode********/\n");
+		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWBLE: /*******No remote BLT Device or in SLAVE mode********/\n");
 	}
 	else
 	{
-		//IhuDebugPrint("VMFO: 扫描到 %d 个蓝牙设备\n", bltDev->num);
+		//IhuDebugPrint("VMMWBLE: 扫描到 %d 个蓝牙设备\n", bltDev->num);
 
 		for(i=0;i<bltDev->num;i++)
 		{
-			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: /*******Device[%d]********/\n",i);	
-			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Device Addr: %s\n",bltDev->unpraseAddr[i]);
-			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Device name: %s\n",bltDev->name[i]);
+			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWBLE: /*******Device[%d]********/\n",i);	
+			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWBLE: Device Addr: %s\n",bltDev->unpraseAddr[i]);
+			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWBLE: Device name: %s\n",bltDev->name[i]);
 		}
 	}
 }
@@ -487,7 +487,7 @@ uint8_t func_blemod_uart_hc05_link_remote_device(void)
 	{
 		if(strstr(bltDevList.name[i],"HC05") != NULL) //非NULL表示找到有名称部分为HC05的设备
 		{
-			//IhuDebugPrint("VMFO: 搜索到远程HC05模块，即将进行配对连接...\n");
+			//IhuDebugPrint("VMMWBLE: 搜索到远程HC05模块，即将进行配对连接...\n");
 			func_blemod_uart_hc05_blt_addr_convert_str(&bltDevList,',');		
 			//配对
 			sprintf(cmdbuff,"AT+PAIR=%s,20",bltDevList.unpraseAddr[i]);
@@ -541,7 +541,7 @@ void ihu_vmmw_blemod_hc05_working_process(void)
       {				
         HAL_Delay(100);        
         sprintf(hc05_mode_str,"SLAVE");
-        if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: hc05_mode  = %s\n",hc05_mode_str);	
+        if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWBLE: hc05_mode  = %s\n",hc05_mode_str);	
 
         sprintf(hc05_name,"HC05_%s_%d",hc05_mode_str,(uint8_t)rand());
         sprintf(hc05_nameCMD,"AT+NAME=%s",hc05_name);
@@ -550,7 +550,7 @@ void ihu_vmmw_blemod_hc05_working_process(void)
           if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO：Euqipment has been changed to be [%s]!\n",hc05_name);
         else{
 					zIhuRunErrCnt[TASK_ID_VMFO]++;
-					IhuErrorPrint("VMFO: change name error!\n");
+					IhuErrorPrint("VMMWBLE: change name error!\n");
 					return;					
 				}
       }
@@ -561,14 +561,14 @@ void ihu_vmmw_blemod_hc05_working_process(void)
       {
         HAL_Delay(100);        
         sprintf(hc05_mode_str,"MASTER");
-        IhuDebugPrint("VMFO: HC05 mode  = %s\n",hc05_mode_str);          
+        IhuDebugPrint("VMMWBLE: HC05 mode  = %s\n",hc05_mode_str);          
         sprintf(hc05_name,"HC05_%s_%d",hc05_mode_str,(uint8_t)rand());
         sprintf(hc05_nameCMD,"AT+NAME=%s",hc05_name);	        
         if(func_blemod_uart_send_AT_command((uint8_t*)hc05_nameCMD, (uint8_t*)"OK", 2) == 0){
           if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO：Euqipment has been changed to be [%s]!\n",hc05_name);
         }else{
 					zIhuRunErrCnt[TASK_ID_VMFO]++;
-					IhuErrorPrint("VMFO: change name error!\n");
+					IhuErrorPrint("VMMWBLE: change name error!\n");
 					return;						
 				}
       }
@@ -589,7 +589,7 @@ void ihu_vmmw_blemod_hc05_working_process(void)
       HAL_Delay(100);
 			if(hc05_role == 1)	//主模式
 			{
-				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: Scaning BLE equipment...\n");				
+				if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWBLE: Scaning BLE equipment...\n");				
 				while(func_blemod_uart_hc05_link_remote_device()==1)
         {          
         }
@@ -634,7 +634,7 @@ void ihu_vmmw_blemod_hc05_working_process(void)
         }
         else
         {
-          if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO: receive:[%s]\n",redata);
+          if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWBLE: receive:[%s]\n",redata);
                      switch(redata[len-1]-'0')
            {
              case 0:

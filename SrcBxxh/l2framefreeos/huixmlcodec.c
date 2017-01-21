@@ -333,17 +333,17 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 	index = index + 4;
 	
 	//解码到目标缓冲区
-	StrMsg_HUITP_MSGID_uni_general_message_t *pMsgBuf;
-	memset(pMsgBuf, 0, sizeof(StrMsg_HUITP_MSGID_uni_general_message_t));
-	pMsgBuf->msgId.cmdId = (msgId>>8)&0xFF;
-	pMsgBuf->msgId.optId = msgId&0xFF;
-	pMsgBuf->msgLen = HUITP_ENDIAN_EXG16(msgLen);  //回写时必须原封不动的按照原先的大小端顺序
+	StrMsg_HUITP_MSGID_uni_general_message_t pMsgBuf;
+	memset(&pMsgBuf, 0, sizeof(StrMsg_HUITP_MSGID_uni_general_message_t));
+	pMsgBuf.msgId.cmdId = (msgId>>8)&0xFF;
+	pMsgBuf.msgId.optId = msgId&0xFF;
+	pMsgBuf.msgLen = HUITP_ENDIAN_EXG16(msgLen);  //回写时必须原封不动的按照原先的大小端顺序
 	
 	//转码，从CHAR进制转化为16进制，以1BYTE为单位，所以还未改变大小端的顺序
 	for(index = 4; index < dif/2; index++){
 		memset(tmp, 0, sizeof(tmp));
 		strncpy(tmp, &msgContent[index * 2], 2);
-		pMsgBuf->data[index-4] = strtoul(tmp, NULL, 16) & 0xFF;
+		pMsgBuf.data[index-4] = strtoul(tmp, NULL, 16)&0xFF;
 	}
 	
 	//通过msgId将变长的消息结构进行独立处理
@@ -366,7 +366,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 					IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 					return IHU_FAILURE;					
 				}
-				pMsgBuf->msgLen = HUITP_ENDIAN_EXG16(sizeof(StrMsg_HUITP_MSGID_uni_ccl_lock_resp_t) - 4);
+				pMsgBuf.msgLen = HUITP_ENDIAN_EXG16(sizeof(StrMsg_HUITP_MSGID_uni_ccl_lock_resp_t) - 4);
 			}		
 			break;
 			
@@ -386,7 +386,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 					IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 					return IHU_FAILURE;					
 				}
-				pMsgBuf->msgLen = HUITP_ENDIAN_EXG16(sizeof(StrMsg_HUITP_MSGID_uni_ccl_door_resp_t) - 4);			
+				pMsgBuf.msgLen = HUITP_ENDIAN_EXG16(sizeof(StrMsg_HUITP_MSGID_uni_ccl_door_resp_t) - 4);			
 			}
 			break;
 			
@@ -407,34 +407,34 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				}
 				//通过tt过度，不然有可能拷贝会自己覆盖自己
 				memset(tt, 0, sizeof(tt));
-				memcpy(tt, pMsgBuf+4+sizeof(StrIe_HUITP_IEID_uni_com_resp_t)+ 2*IHU_CCL_SENSOR_LOCK_NUMBER_MAX,\
+				memcpy(tt, &pMsgBuf+4+sizeof(StrIe_HUITP_IEID_uni_com_resp_t)+ 2*IHU_CCL_SENSOR_LOCK_NUMBER_MAX,\
 					sizeof(StrMsg_HUITP_MSGID_uni_ccl_state_resp_t)-4-sizeof(StrIe_HUITP_IEID_uni_com_resp_t)-sizeof(StrIe_HUITP_IEID_uni_ccl_lock_state_t) - sizeof(StrIe_HUITP_IEID_uni_ccl_door_state_t));
-				memcpy(pMsgBuf+4+sizeof(StrIe_HUITP_IEID_uni_com_resp_t)+sizeof(StrIe_HUITP_IEID_uni_ccl_lock_state_t)+sizeof(StrIe_HUITP_IEID_uni_ccl_door_state_t), tt, \
+				memcpy(&pMsgBuf+4+sizeof(StrIe_HUITP_IEID_uni_com_resp_t)+sizeof(StrIe_HUITP_IEID_uni_ccl_lock_state_t)+sizeof(StrIe_HUITP_IEID_uni_ccl_door_state_t), tt, \
 					sizeof(StrMsg_HUITP_MSGID_uni_ccl_state_resp_t)-4-sizeof(StrIe_HUITP_IEID_uni_com_resp_t)-sizeof(StrIe_HUITP_IEID_uni_ccl_lock_state_t) - sizeof(StrIe_HUITP_IEID_uni_ccl_door_state_t));
 			
 				//将StrIe_HUITP_IEID_uni_ccl_door_state_t移下去
 				memset(tt, 0, sizeof(tt));
-				memcpy(tt, pMsgBuf+4+sizeof(StrIe_HUITP_IEID_uni_com_resp_t)+IHU_CCL_SENSOR_LOCK_NUMBER_MAX, IHU_CCL_SENSOR_LOCK_NUMBER_MAX);		
-				memcpy(pMsgBuf+4+sizeof(StrIe_HUITP_IEID_uni_com_resp_t)+sizeof(StrIe_HUITP_IEID_uni_ccl_lock_state_t), tt, IHU_CCL_SENSOR_LOCK_NUMBER_MAX);
+				memcpy(tt, &pMsgBuf+4+sizeof(StrIe_HUITP_IEID_uni_com_resp_t)+IHU_CCL_SENSOR_LOCK_NUMBER_MAX, IHU_CCL_SENSOR_LOCK_NUMBER_MAX);		
+				memcpy(&pMsgBuf+4+sizeof(StrIe_HUITP_IEID_uni_com_resp_t)+sizeof(StrIe_HUITP_IEID_uni_ccl_lock_state_t), tt, IHU_CCL_SENSOR_LOCK_NUMBER_MAX);
 				//将LOCK_IE/DOOR_IE空余部分清0
-				memset(pMsgBuf+4+sizeof(StrIe_HUITP_IEID_uni_com_resp_t)+IHU_CCL_SENSOR_LOCK_NUMBER_MAX, 0, \
+				memset(&pMsgBuf+4+sizeof(StrIe_HUITP_IEID_uni_com_resp_t)+IHU_CCL_SENSOR_LOCK_NUMBER_MAX, 0, \
 					HUITP_IEID_UNI_CCL_LOCK_MAX_NUMBER - IHU_CCL_SENSOR_LOCK_NUMBER_MAX);
-				memset(pMsgBuf+4+sizeof(StrIe_HUITP_IEID_uni_com_resp_t)+sizeof(StrIe_HUITP_IEID_uni_ccl_lock_state_t)+IHU_CCL_SENSOR_LOCK_NUMBER_MAX, 0, \
+				memset(&pMsgBuf+4+sizeof(StrIe_HUITP_IEID_uni_com_resp_t)+sizeof(StrIe_HUITP_IEID_uni_ccl_lock_state_t)+IHU_CCL_SENSOR_LOCK_NUMBER_MAX, 0, \
 					HUITP_IEID_UNI_CCL_DOOR_MAX_NUMBER - IHU_CCL_SENSOR_LOCK_NUMBER_MAX);
-				pMsgBuf->msgLen = HUITP_ENDIAN_EXG16(sizeof(StrMsg_HUITP_MSGID_uni_ccl_state_resp_t) - 4);					
+				pMsgBuf.msgLen = HUITP_ENDIAN_EXG16(sizeof(StrMsg_HUITP_MSGID_uni_ccl_state_resp_t) - 4);					
 			}
 			break;
 			
 		case HUITP_MSGID_uni_sw_package_req:
 			//因为只有一个边长IE，且IE正好处于最后一个结构部分，所以不需要干啥
 			//将消息长度恢复到消息结构长度，以便下面统一处理
-			pMsgBuf->msgLen = HUITP_ENDIAN_EXG16(sizeof(StrMsg_HUITP_MSGID_uni_sw_package_req_t) - 4);				
+			pMsgBuf.msgLen = HUITP_ENDIAN_EXG16(sizeof(StrMsg_HUITP_MSGID_uni_sw_package_req_t) - 4);				
 			break;
 		
 		case HUITP_MSGID_uni_sw_package_confirm:
 			//因为只有一个边长IE，且IE正好处于最后一个结构部分，所以不需要干啥
 			//将消息长度恢复到消息结构长度，以便下面统一处理
-			pMsgBuf->msgLen = HUITP_ENDIAN_EXG16(sizeof(StrMsg_HUITP_MSGID_uni_sw_package_confirm_t) - 4);				
+			pMsgBuf.msgLen = HUITP_ENDIAN_EXG16(sizeof(StrMsg_HUITP_MSGID_uni_sw_package_confirm_t) - 4);				
 		
 			break;
 		
@@ -459,7 +459,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd1 = (StrMsg_HUITP_MSGID_uni_heart_beat_req_t *)(pMsgBuf);
+			snd1 = (StrMsg_HUITP_MSGID_uni_heart_beat_req_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_heart_beat_req_received_handle(snd1);
 		}
 			break;
@@ -474,7 +474,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd2 = (StrMsg_HUITP_MSGID_uni_heart_beat_confirm_t *)(pMsgBuf);
+			snd2 = (StrMsg_HUITP_MSGID_uni_heart_beat_confirm_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_heart_beat_confirm_received_handle(snd2);			
 		}
 			break;
@@ -488,7 +488,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd3 = (StrMsg_HUITP_MSGID_uni_ccl_lock_req_t *)(pMsgBuf);
+			snd3 = (StrMsg_HUITP_MSGID_uni_ccl_lock_req_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_ccl_lock_req_received_handle(snd3);	
 		}
 			break;
@@ -502,7 +502,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd4 = (StrMsg_HUITP_MSGID_uni_ccl_lock_confirm_t *)(pMsgBuf);
+			snd4 = (StrMsg_HUITP_MSGID_uni_ccl_lock_confirm_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_ccl_lock_confirm_received_handle(snd4);
 		}
 			break;
@@ -516,7 +516,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd5 = (StrMsg_HUITP_MSGID_uni_ccl_lock_auth_resp_t *)(pMsgBuf);
+			snd5 = (StrMsg_HUITP_MSGID_uni_ccl_lock_auth_resp_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_ccl_lock_auth_resp_received_handle(snd5);			
 		}
 			break;
@@ -530,7 +530,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd6 = (StrMsg_HUITP_MSGID_uni_ccl_door_req_t *)(pMsgBuf);
+			snd6 = (StrMsg_HUITP_MSGID_uni_ccl_door_req_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_ccl_door_req_received_handle(snd6);			
 		}
 			break;
@@ -544,7 +544,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd7 = (StrMsg_HUITP_MSGID_uni_ccl_door_confirm_t *)(pMsgBuf);
+			snd7 = (StrMsg_HUITP_MSGID_uni_ccl_door_confirm_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_ccl_door_confirm_received_handle(snd7);						
 		}
 			break;
@@ -558,7 +558,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd8 = (StrMsg_HUITP_MSGID_uni_ccl_rfid_req_t *)(pMsgBuf);
+			snd8 = (StrMsg_HUITP_MSGID_uni_ccl_rfid_req_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_ccl_rfid_req_received_handle(snd8);						
 		}
 			break;
@@ -572,7 +572,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd9 = (StrMsg_HUITP_MSGID_uni_ccl_rfid_confirm_t *)(pMsgBuf);
+			snd9 = (StrMsg_HUITP_MSGID_uni_ccl_rfid_confirm_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_ccl_rfid_confirm_received_handle(snd9);						
 		}
 			break;
@@ -586,7 +586,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd10 = (StrMsg_HUITP_MSGID_uni_ccl_ble_req_t *)(pMsgBuf);
+			snd10 = (StrMsg_HUITP_MSGID_uni_ccl_ble_req_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_ccl_ble_req_received_handle(snd10);					
 		}
 			break;
@@ -600,7 +600,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd11 = (StrMsg_HUITP_MSGID_uni_ccl_ble_confirm_t *)(pMsgBuf);
+			snd11 = (StrMsg_HUITP_MSGID_uni_ccl_ble_confirm_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_ccl_ble_confirm_received_handle(snd11);						
 		}
 			break;
@@ -614,7 +614,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd12 = (StrMsg_HUITP_MSGID_uni_ccl_gprs_req_t *)(pMsgBuf);
+			snd12 = (StrMsg_HUITP_MSGID_uni_ccl_gprs_req_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_ccl_gprs_req_received_handle(snd12);						
 		}
 			break;
@@ -628,7 +628,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd13 = (StrMsg_HUITP_MSGID_uni_ccl_gprs_confirm_t *)(pMsgBuf);
+			snd13 = (StrMsg_HUITP_MSGID_uni_ccl_gprs_confirm_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_ccl_gprs_confirm_received_handle(snd13);						
 		}
 			break;
@@ -642,7 +642,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd14 = (StrMsg_HUITP_MSGID_uni_ccl_battery_req_t *)(pMsgBuf);
+			snd14 = (StrMsg_HUITP_MSGID_uni_ccl_battery_req_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_ccl_battery_req_received_handle(snd14);							
 		}
 			break;
@@ -656,7 +656,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd15 = (StrMsg_HUITP_MSGID_uni_ccl_battery_confirm_t *)(pMsgBuf);
+			snd15 = (StrMsg_HUITP_MSGID_uni_ccl_battery_confirm_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_ccl_battery_confirm_received_handle(snd15);								
 		}
 			break;
@@ -670,7 +670,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd16 = (StrMsg_HUITP_MSGID_uni_ccl_shake_req_t *)(pMsgBuf);
+			snd16 = (StrMsg_HUITP_MSGID_uni_ccl_shake_req_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_ccl_shake_req_received_handle(snd16);					
 		}
 			break;
@@ -684,7 +684,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd17 = (StrMsg_HUITP_MSGID_uni_ccl_shake_confirm_t *)(pMsgBuf);
+			snd17 = (StrMsg_HUITP_MSGID_uni_ccl_shake_confirm_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_ccl_shake_confirm_received_handle(snd17);							
 		}
 			break;
@@ -698,7 +698,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd18 = (StrMsg_HUITP_MSGID_uni_ccl_smoke_req_t *)(pMsgBuf);
+			snd18 = (StrMsg_HUITP_MSGID_uni_ccl_smoke_req_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_ccl_smoke_req_received_handle(snd18);								
 		}
 			break;
@@ -712,7 +712,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd19 = (StrMsg_HUITP_MSGID_uni_ccl_smoke_confirm_t *)(pMsgBuf);
+			snd19 = (StrMsg_HUITP_MSGID_uni_ccl_smoke_confirm_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_ccl_smoke_confirm_received_handle(snd19);						
 		}
 			break;
@@ -726,7 +726,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd20 = (StrMsg_HUITP_MSGID_uni_ccl_water_req_t *)(pMsgBuf);
+			snd20 = (StrMsg_HUITP_MSGID_uni_ccl_water_req_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_ccl_water_req_received_handle(snd20);				
 		}
 			break;
@@ -740,7 +740,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd21 = (StrMsg_HUITP_MSGID_uni_ccl_water_confirm_t *)(pMsgBuf);
+			snd21 = (StrMsg_HUITP_MSGID_uni_ccl_water_confirm_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_ccl_water_confirm_received_handle(snd21);							
 		}
 			break;
@@ -754,7 +754,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd22 = (StrMsg_HUITP_MSGID_uni_ccl_temp_req_t *)(pMsgBuf);
+			snd22 = (StrMsg_HUITP_MSGID_uni_ccl_temp_req_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_ccl_temp_req_received_handle(snd22);				
 		}
 			break;
@@ -768,7 +768,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd23 = (StrMsg_HUITP_MSGID_uni_ccl_temp_confirm_t *)(pMsgBuf);
+			snd23 = (StrMsg_HUITP_MSGID_uni_ccl_temp_confirm_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_ccl_temp_confirm_received_handle(snd23);							
 		}
 			break;
@@ -782,7 +782,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd24 = (StrMsg_HUITP_MSGID_uni_ccl_humid_req_t *)(pMsgBuf);
+			snd24 = (StrMsg_HUITP_MSGID_uni_ccl_humid_req_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_ccl_humid_req_received_handle(snd24);						
 		}
 			break;
@@ -796,7 +796,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd25 = (StrMsg_HUITP_MSGID_uni_ccl_humid_confirm_t *)(pMsgBuf);
+			snd25 = (StrMsg_HUITP_MSGID_uni_ccl_humid_confirm_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_ccl_humid_confirm_received_handle(snd25);								
 		}
 			break;
@@ -810,7 +810,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd26 = (StrMsg_HUITP_MSGID_uni_ccl_fall_req_t *)(pMsgBuf);
+			snd26 = (StrMsg_HUITP_MSGID_uni_ccl_fall_req_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_ccl_fall_req_received_handle(snd26);						
 		}
 			break;
@@ -824,7 +824,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd27 = (StrMsg_HUITP_MSGID_uni_ccl_fall_confirm_t *)(pMsgBuf);
+			snd27 = (StrMsg_HUITP_MSGID_uni_ccl_fall_confirm_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_ccl_fall_confirm_received_handle(snd27);
 		}
 			break;
@@ -838,7 +838,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd28 = (StrMsg_HUITP_MSGID_uni_ccl_state_req_t *)(pMsgBuf);
+			snd28 = (StrMsg_HUITP_MSGID_uni_ccl_state_req_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_ccl_state_req_received_handle(snd28);			
 		}
 			break;
@@ -852,7 +852,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd29 = (StrMsg_HUITP_MSGID_uni_ccl_state_confirm_t *)(pMsgBuf);
+			snd29 = (StrMsg_HUITP_MSGID_uni_ccl_state_confirm_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle(snd29);						
 		}
 			break;
@@ -866,7 +866,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd30 = (StrMsg_HUITP_MSGID_uni_inventory_req_t *)(pMsgBuf);
+			snd30 = (StrMsg_HUITP_MSGID_uni_inventory_req_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_inventory_req_received_handle(snd30);			
 		}
 			break;
@@ -880,7 +880,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd31 = (StrMsg_HUITP_MSGID_uni_inventory_confirm_t *)(pMsgBuf);
+			snd31 = (StrMsg_HUITP_MSGID_uni_inventory_confirm_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_inventory_confirm_received_handle(snd31);					
 		}
 			break;		
@@ -894,7 +894,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd32 = (StrMsg_HUITP_MSGID_uni_sw_package_req_t *)(pMsgBuf);
+			snd32 = (StrMsg_HUITP_MSGID_uni_sw_package_req_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_sw_package_req_received_handle(snd32);							
 		}
 			break;		
@@ -908,7 +908,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
 				return IHU_FAILURE;				
 			}
-			snd33 = (StrMsg_HUITP_MSGID_uni_sw_package_confirm_t *)(pMsgBuf);
+			snd33 = (StrMsg_HUITP_MSGID_uni_sw_package_confirm_t*)(&pMsgBuf);
 			ret = func_cloud_spsvirgo_ccl_msg_sw_package_confirm_received_handle(snd33);						
 		}
 			break;

@@ -2,14 +2,17 @@
 == 将修改方式放在最前面，以提高效率
 =================================================
 
-//= ZJL, 2017 Jan.20, CURRENT_SW_DELIVERY R03.100 =>CCL项目
+//= ZJL, 2017 Jan.21, CURRENT_SW_DELIVERY R03.100 =>CCL项目
 = 改进本设备的编号，不做成固定定义方式，而是为IAP升级后的程序从固定FLASH区域读取打好基础
 = 修正xml_pack()函数中访问输入数据的bug
 = 遇到编码的大小端问题，ARM-Cortex3缺省是小端(Small Endian)，编码只能将其定义为高低字节分开搞了
 = 编码和可变函数的解码初始化调整MsgLen部分搞完，解码的主要部分还未搞
 = 大小端的宏定义将成为变换的利器
 = 测试数据重新生成
-//= 测试xml_unpack()函数，完善的生成测试数据
+= 测试xml_unpack()函数，完善的生成测试数据
+= xml_unpack()中存在接收结构申请为指针的情况，结果系统没有为它申请内存，导致覆盖系统区而死机
+= 改进控制命令字40-4C，新增4D/4E用于AUTH/STATE
+
 
 //= ZJL, 2017 Jan.20, CURRENT_SW_DELIVERY R03.99 =>CCL项目
 = 回归STMFLASH, CPUID, Camera BSP
