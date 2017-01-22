@@ -122,6 +122,7 @@
 		//TASK_ID_SPILEO,
 		TASK_ID_I2CARIES,
 		//TASK_ID_PWMTAURUS,
+		//TASK_ID_CANVELA,
 		TASK_ID_SPSVIRGO,
 		//TASK_ID_CANVELA,
 		TASK_ID_DIDOCAP,
@@ -142,8 +143,8 @@
 		TASK_ID_SPILEO,
 		TASK_ID_I2CARIES,
 		//TASK_ID_PWMTAURUS,
-		//TASK_ID_SPSVIRGO,
 		TASK_ID_CANVELA,
+		//TASK_ID_SPSVIRGO,
 		//TASK_ID_DIDOCAP,
 		TASK_ID_LEDPISCES,
 		//TASK_ID_ETHORION,
@@ -152,8 +153,26 @@
 		TASK_ID_MAX,
 		TASK_ID_INVALID = 0xFF,
 	}; //end of IHU_TASK_NAME_ID
-#else
-	#error Un-correct constant definition
+#else  //为了提供完整表达
+	enum IHU_TASK_NAME_ID
+	{
+		TASK_ID_MIN = 0,
+		TASK_ID_VMFO,
+		TASK_ID_TIMER,
+		TASK_ID_ADCLIBRA,
+		TASK_ID_SPILEO,
+		TASK_ID_I2CARIES,
+		TASK_ID_PWMTAURUS,
+		TASK_ID_SPSVIRGO,
+		TASK_ID_CANVELA,
+		TASK_ID_DIDOCAP,
+		TASK_ID_LEDPISCES,
+		TASK_ID_ETHORION,
+		TASK_ID_DCMIARIS,	
+		TASK_ID_BFSC,
+		TASK_ID_MAX,
+		TASK_ID_INVALID = 0xFF,
+	}; //end of IHU_TASK_NAME_ID
 #endif
 
 /*
@@ -229,7 +248,7 @@ typedef struct StrIhuGlobalTaskInputConfig
 {
 	UINT8 taskInputId;
 	char  taskInputName[TASK_NAME_MAX_LENGTH];
-	FsmStateItem_t (*fsmFuncEntry)(void);
+	void* fsmFuncEntry;
 }StrIhuGlobalTaskInputConfig_t;
 
 //任务模块RESTART的一些全局定义
@@ -339,48 +358,22 @@ extern FsmTable_t zIhuFsmTable;                             //状态机总表
 extern char *zIhuTaskNameList[MAX_TASK_NUM_IN_ONE_IHU];     //任务名字符串
 extern char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK];    //消息名字符串
 extern IhuSysEngParTable_t zIhuSysEngPar;                   //工参
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
-extern FsmStateItem_t FsmVmfo[];                           		//状态机
-extern FsmStateItem_t FsmTimer[];                           	//状态机
-//extern FsmStateItem_t FsmAdclibra[];                        //状态机
-//extern FsmStateItem_t FsmSpileo[];                          //状态机
-//extern FsmStateItem_t FsmI2caries[];                        //状态机
-//extern FsmStateItem_t FsmPwmtaurus[];                       //状态机
-//extern FsmStateItem_t FsmSpsvirgo[];                        //状态机
-//extern FsmStateItem_t FsmCanvela[];                      		//状态机
-//extern FsmStateItem_t FsmDidocap[];                         //状态机
-//extern FsmStateItem_t FsmLedpisces[];                       //状态机
-//extern FsmStateItem_t FsmEthorion[];                        //状态机
-extern FsmStateItem_t FsmEmc68x[];                          	//状态机
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+//统一定义，如果不存在不影响编译
 extern FsmStateItem_t FsmVmfo[];                           	//状态机
 extern FsmStateItem_t FsmTimer[];                           //状态机
 extern FsmStateItem_t FsmAdclibra[];                        //状态机
 extern FsmStateItem_t FsmSpileo[];                          //状态机
 extern FsmStateItem_t FsmI2caries[];                        //状态机
-//extern FsmStateItem_t FsmPwmtaurus[];                       //状态机
+extern FsmStateItem_t FsmPwmtaurus[];                       //状态机
 extern FsmStateItem_t FsmSpsvirgo[];                        //状态机
 extern FsmStateItem_t FsmCanvela[];                      		//状态机
 extern FsmStateItem_t FsmDidocap[];                         //状态机
 extern FsmStateItem_t FsmLedpisces[];                       //状态机
-//extern FsmStateItem_t FsmEthorion[];                        //状态机
+extern FsmStateItem_t FsmEthorion[];                        //状态机
 extern FsmStateItem_t FsmDcmiaris[];                        //状态机
+extern FsmStateItem_t FsmEmc68x[];                          //状态机
 extern FsmStateItem_t FsmCcl[];                          	  //状态机
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
-extern FsmStateItem_t FsmVmfo[];                           	//状态机
-extern FsmStateItem_t FsmTimer[];                           //状态机
-extern FsmStateItem_t FsmAdclibra[];                        //状态机
-extern FsmStateItem_t FsmSpileo[];                          //状态机
-extern FsmStateItem_t FsmI2caries[];                        //状态机
-//extern FsmStateItem_t FsmPwmtaurus[];                       //状态机
-//extern FsmStateItem_t FsmSpsvirgo[];                        //状态机
-extern FsmStateItem_t FsmCanvela[];                      		//状态机
-//extern FsmStateItem_t FsmDidocap[];                         //状态机
-extern FsmStateItem_t FsmLedpisces[];                       //状态机
-//extern FsmStateItem_t FsmEthorion[];                        //状态机
 extern FsmStateItem_t FsmBfsc[];                          	//状态机 
-#else
-#endif
 
 //外部引用API，来自于TIMER任务模块。TIMER任务模块的机制是，必须将VM启动起来，然后TIMER上层任务模块才能被激活，并产生自定义的TIME_OUT消息
 extern OPSTAT ihu_timer_start(UINT8 task_id, UINT8 timer_id, UINT32 t_dur, UINT8 t_type, UINT8 t_res);

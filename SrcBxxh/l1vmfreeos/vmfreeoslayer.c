@@ -52,17 +52,43 @@ OS_MUTEX zIhuPrintMutex;
 //具体的闪烁图案，需要通过ON/OFF/CYCLE自行定义，初始化就在这里提前初始化写好
 StrIhuGlobalTaskInputConfig_t zIhuGlobalTaskInputConfig[] =
 {
-	//ID,    状态控制, 
-	{TASK_ID_VMFO, 			"MIN", 				NULL},//Starting
-	{TASK_ID_TIMER, 		"VMFO", 			NULL},
-	{TASK_ID_MIN, 			"TIMER", 			NULL},
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)	
+	//TASK_ID,    				状态控制				状态机入口 					//注释
+	{TASK_ID_VMFO, 				"MIN", 					NULL},							//Starting
+	{TASK_ID_TIMER, 			"VMFO", 				&FsmVmfo},
+	{TASK_ID_MIN, 				"TIMER", 				&FsmTimer},
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
+	{TASK_ID_EMC68X, 			"EMC68X", 			&FsmEmc68x},
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)		
+	{TASK_ID_ADCLIBRA, 		"ADCLIBRA", 		&FsmAdclibra},
+	{TASK_ID_I2CARIES, 		"I2CARIES", 		&FsmI2caries},
+	{TASK_ID_SPSVIRGO, 		"SPSVIRGO", 		&FsmSpsvirgo},
+	{TASK_ID_DIDOCAP, 		"DIDOCAP", 			&FsmDidocap},
+	{TASK_ID_LEDPISCES, 	"LEDPISCES", 		&FsmLedpisces},
+	{TASK_ID_DCMIARIS, 		"DCMIARIS", 		&FsmDcmiaris},
+	{TASK_ID_CCL, 				"CCL", 					&FsmCcl},
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
-#else
-	#error Un-correct constant definition	
+	{TASK_ID_ADCLIBRA, 		"ADCLIBRA", 		&FsmAdclibra},
+	{TASK_ID_SPILEO, 			"SPILEO", 			&FsmSpileo},
+	{TASK_ID_CANVELA, 		"CANVELA", 			&FsmCanvela},
+	{TASK_ID_I2CARIES, 		"I2CARIES", 		&FsmI2caries},
+	{TASK_ID_LEDPISCES, 	"LEDPISCES", 		&FsmLedpisces},
+	{TASK_ID_BFSC, 				"BFSC", 				&FsmBfsc},
+#else //为了提供完成列表，而且需要按照顺序来
+	{TASK_ID_ADCLIBRA, 		"ADCLIBRA", 		&FsmAdclibra},
+	{TASK_ID_SPILEO, 			"SPILEO", 			&FsmSpileo},
+	{TASK_ID_I2CARIES, 		"I2CARIES", 		&FsmI2caries},
+	{TASK_ID_PWMTAURUS, 	"PWMTAURUS", 		&FsmPwmtaurus},
+	{TASK_ID_CANVELA, 		"CANVELA", 			&FsmCanvela},	
+	{TASK_ID_SPSVIRGO, 		"SPSVIRGO", 		&FsmSpsvirgo},
+	{TASK_ID_DIDOCAP, 		"DIDOCAP", 			&FsmDidocap},
+	{TASK_ID_LEDPISCES, 	"LEDPISCES", 		&FsmLedpisces},
+	{TASK_ID_ETHORION, 		"LEDPISCES", 		&FsmEthorion},
+	{TASK_ID_DCMIARIS, 		"DCMIARIS", 		&FsmDcmiaris},
+	{TASK_ID_EMC68X, 			"EMC68X", 			&FsmEmc68x},
+	{TASK_ID_CCL, 				"CCL", 					&FsmCcl},
+	{TASK_ID_BFSC, 				"BFSC", 				&FsmBfsc},
 #endif
-  {TASK_ID_MAX,				"MAX", 				NULL},//Ending
+  {TASK_ID_MAX,				"MAX", 				NULL},									//Ending
 };
 
 

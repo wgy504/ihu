@@ -412,7 +412,7 @@ OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input, int16_t inl
 	}	
 	//HTTP参数配置：设置发送数据的长度
 	memset(temp, 0, sizeof(temp));
-	sprintf((char*)temp, "AT+HTTPDATA=%d, 4000", inlen);  //延时4秒
+	sprintf((char*)temp, "AT+HTTPDATA=%d, 6000", inlen);  //延时6秒
 	IhuDebugPrint("VMMWGPRS: Sending cloud data buffer input length = %d\n", inlen);
 	if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"DOWNLOAD", 4) == IHU_FAILURE){
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: HTTP POST data failure on download starting!\n");
