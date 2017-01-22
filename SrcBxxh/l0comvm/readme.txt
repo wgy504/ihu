@@ -13,12 +13,12 @@
 **************************************************************************
 
 
-//= ZJL, 2017 Jan.22, CURRENT_SW_DELIVERY R03.104 =>CCL项目
+//= ZJL, 2017 Jan.22, CURRENT_SW_DELIVERY R03.104 =>CCL项目/BFSC/EMC68X
 = 对CCL/BFSC的ErrorPrint做进一步的优化改造
 = 将GPRS跟后台发送数据的时间从4秒改为6秒，以增加发送数据成功的概率
 = 优化extern FsmState_t的引用定义，降低对于分项目定义的复杂度和风险
 = 建立全局任务配置输入表单，简化任务创建的过程，特别是在程序部分分项目执行的过程
-
+= TaskName全局改造，包括CCL/BFSC/EMC68X项目在内
 
 
 //= ZJL, 2017 Jan.22, CURRENT_SW_DELIVERY R03.103 =>CCL项目/BFSC

@@ -87,14 +87,13 @@
 
 //定义TASK对应的名字
 //!!!!!!!!!!!!!!!!ATTENTION!!!!!!!!!!!!!!!!
-//Whenever the Task Id is changed, QueID and vmlayer.c/zIhuTaskNameList array should be updated, otherwise error will happen!!!
 //不是任务的任务，比如TRACE/CONFIG/3G/GPIO等等，留待清理，简化任务列表
 /*
  *
  *   【增加任务】，必须同时修改四个地方：
  *   - IHU_TASK_NAME_ID
  *   - IHU_TASK_QUEUE_ID
- *   - zIhuTaskNameList
+ *   - zIhuGlobalTaskInputConfig
  *   - 还要修改可能的本地配置文件，或者sysengpar.h的固定工参配置信息，#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID
  *	 - 继续修改初始化函数void ihu_vm_system_init(void)
  *	
@@ -348,7 +347,6 @@ extern void   ihu_task_execute_all_bare_rtos(void);
 extern IhuTaskTag_t zIhuTaskInfo[MAX_TASK_NUM_IN_ONE_IHU];  //任务控制总表
 extern UINT32 zIhuRunErrCnt[MAX_TASK_NUM_IN_ONE_IHU];       //差错表
 extern FsmTable_t zIhuFsmTable;                             //状态机总表
-extern char *zIhuTaskNameList[MAX_TASK_NUM_IN_ONE_IHU];     //任务名字符串
 extern char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK];    //消息名字符串
 extern IhuSysEngParTable_t zIhuSysEngPar;                   //工参
 //统一定义，如果不存在不影响编译

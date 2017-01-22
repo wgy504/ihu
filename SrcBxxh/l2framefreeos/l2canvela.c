@@ -85,7 +85,7 @@ OPSTAT fsm_canvela_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 		snd.length = sizeof(msg_struct_com_init_fb_t);
 		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_CANVELA, &snd, snd.length);
 		if (ret == IHU_FAILURE){
-			IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CANVELA], zIhuTaskNameList[src_id]);
+			IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_CANVELA].taskName, zIhuTaskInfo[src_id].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -139,7 +139,7 @@ OPSTAT fsm_canvela_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 	snd1.length = sizeof(msg_struct_canvela_l3bfsc_init_req_t);
 	ret = ihu_message_send(MSG_ID_CAN_L3BFSC_INIT_REQ, TASK_ID_BFSC, TASK_ID_CANVELA, &snd1, snd1.length);
 	if (ret == IHU_FAILURE){
-		IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CANVELA], zIhuTaskNameList[TASK_ID_BFSC]);
+		IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_CANVELA].taskName, zIhuTaskInfo[TASK_ID_BFSC].taskName);
 		return IHU_FAILURE;
 	}
 #endif
@@ -207,7 +207,7 @@ OPSTAT fsm_canvela_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 		ret = ihu_message_send(MSG_ID_COM_RESTART, TASK_ID_CANVELA, TASK_ID_CANVELA, &snd0, snd0.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_CANVELA]++;
-			IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CANVELA], zIhuTaskNameList[TASK_ID_CANVELA]);
+			IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_CANVELA].taskName, zIhuTaskInfo[TASK_ID_CANVELA].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -240,7 +240,7 @@ void func_canvela_time_out_period_scan(void)
 	ret = ihu_message_send(MSG_ID_COM_HEART_BEAT, TASK_ID_VMFO, TASK_ID_CANVELA, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_CANVELA]++;
-		IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CANVELA], zIhuTaskNameList[TASK_ID_VMFO]);
+		IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_CANVELA].taskName, zIhuTaskInfo[TASK_ID_VMFO].taskName);
 		return;
 	}
 	
@@ -517,7 +517,7 @@ OPSTAT fsm_canvela_bfsc_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void * param_pt
 		ret = ihu_message_send(MSG_ID_CAN_L3BFSC_CMD_CTRL, TASK_ID_BFSC, TASK_ID_CANVELA, &snd, snd.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_CANVELA]++;
-			IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CANVELA], zIhuTaskNameList[TASK_ID_BFSC]);
+			IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_CANVELA].taskName, zIhuTaskInfo[TASK_ID_BFSC].taskName);
 			return IHU_FAILURE;
 		}	
 	}
@@ -533,7 +533,7 @@ OPSTAT fsm_canvela_bfsc_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void * param_pt
 			ret = ihu_message_send(MSG_ID_CAN_ADC_WS_MAN_SET_ZERO, TASK_ID_ADCLIBRA, TASK_ID_CANVELA, &snd1, snd1.length);
 			if (ret == IHU_FAILURE){
 				zIhuRunErrCnt[TASK_ID_CANVELA]++;
-				IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CANVELA], zIhuTaskNameList[TASK_ID_ADCLIBRA]);
+				IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_CANVELA].taskName, zIhuTaskInfo[TASK_ID_ADCLIBRA].taskName);
 				return IHU_FAILURE;
 			}			
 		}
@@ -551,7 +551,7 @@ OPSTAT fsm_canvela_bfsc_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void * param_pt
 		ret = ihu_message_send(MSG_ID_CAN_L3BFSC_CMD_CTRL, TASK_ID_BFSC, TASK_ID_CANVELA, &snd, snd.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_CANVELA]++;
-			IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CANVELA], zIhuTaskNameList[TASK_ID_BFSC]);
+			IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_CANVELA].taskName, zIhuTaskInfo[TASK_ID_BFSC].taskName);
 			return IHU_FAILURE;
 		}	
 	}
@@ -568,7 +568,7 @@ OPSTAT fsm_canvela_bfsc_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void * param_pt
 		ret = ihu_message_send(MSG_ID_CAN_L3BFSC_CMD_CTRL, TASK_ID_BFSC, TASK_ID_CANVELA, &snd, snd.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_CANVELA]++;
-			IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CANVELA], zIhuTaskNameList[TASK_ID_BFSC]);
+			IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_CANVELA].taskName, zIhuTaskInfo[TASK_ID_BFSC].taskName);
 			return IHU_FAILURE;
 		}	
 	}

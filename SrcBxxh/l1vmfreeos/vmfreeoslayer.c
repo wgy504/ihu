@@ -88,64 +88,6 @@ StrIhuGlobalTaskInputConfig_t zIhuGlobalTaskInputConfig[] =
 #endif
   {TASK_ID_MAX,					"MAX", 					NULL},							//Ending
 };
-
-
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
-  char *zIhuTaskNameList[MAX_TASK_NUM_IN_ONE_IHU] ={
-    "MIN",
-    "VMFO",
-    "TIMER",
-  //	"ADCLIBRA",
-  //	"SPILEO",
-  //	"I2CARIES",
-  //	"PWMTAURUS",
-  //	"SPSVIRGO",
-  //	"CANVELA",
-  //	"DIDOCAP",
-  //	"LEDPISCES",
-  //	"ETHORION",
-    "EMC68X",
-    "MAX"};
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-  char *zIhuTaskNameList[MAX_TASK_NUM_IN_ONE_IHU] ={
-    "MIN",
-    "VMFO",
-    "TIMER",
-		"ADCLIBRA",
-		//"SPILEO",  //该项目中抑制了该任务模块
-		"I2CARIES",
-		//"PWMTAURUS",  //该项目中抑制了该任务模块
-		"SPSVIRGO",
-		//"CANVELA",  //该项目中抑制了该任务模块
-		"DIDOCAP",
-		"LEDPISCES",
-		//"ETHORION", //该项目中抑制了该任务模块
-		"DCMIARIS",
-    "CCL",
-    "MAX"};
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
-  char *zIhuTaskNameList[MAX_TASK_NUM_IN_ONE_IHU] ={
-    "MIN",
-    "VMFO",
-    "TIMER",
-		"ADCLIBRA",
-		"SPILEO",
-		"I2CARIES",
-		//"PWMTAURUS", //该项目中抑制了该任务模块
-		//"SPSVIRGO", //该项目中抑制了该任务模块
-		"CANVELA",
-		//"DIDOCAP", //该项目中抑制了该任务模块
-		"LEDPISCES",
-		//"ETHORION", //该项目中抑制了该任务模块
-    "BFSC",
-    "MAX"};
-#else
-	#error Un-correct constant definition
-#endif
-
-		
-		
-		
 		
 //消息ID的定义全局表，方便TRACE函数使用
 //请服从MSG_NAME_MAX_LENGTH的最长定义，不然出错
@@ -849,8 +791,8 @@ OPSTAT ihu_taskid_to_string(UINT8 id, char *string)
 	}
 
 	strcpy(string, "[");
-	if (strlen(zIhuTaskNameList[id])>0){
-		strncpy(tmp, zIhuTaskNameList[id], TASK_NAME_MAX_LENGTH-3);
+	if (strlen(zIhuTaskInfo[id].taskName)>0){
+		strncpy(tmp, zIhuTaskInfo[id].taskName, TASK_NAME_MAX_LENGTH-3);
 		strcat(string, tmp);
 	}else{
 		strcat(string, "TASK_ID_XXX");
@@ -1023,7 +965,7 @@ OPSTAT FsmAddNew(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_NOR_ON) != FALSE)
 	{
-		IhuDebugPrint("VMFO: FsmAddNew: task_id = 0x%x [%s], src_id= %x, dest_id= %X.\n", task_id, zIhuTaskNameList[task_id], 0, 0);
+		IhuDebugPrint("VMFO: FsmAddNew: task_id = 0x%x [%s], src_id= %x, dest_id= %X.\n", task_id, zIhuTaskInfo[task_id].taskName, 0, 0);
 		IhuDebugPrint("VMFO: After add this one, Total (%d) FSM in the table.\n", zIhuFsmTable.numOfFsmCtrlTable);
 	}
 
@@ -1167,7 +1109,7 @@ OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr,
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE)
 	{
 		//消息ID的顺序跟commsgxxx.h的中的定义可能不完全一样，导致这里直接POP出消息名字会出错，注意！
-		IhuDebugPrint("VMFO: Call state function(0x%x) in state(%d) of dest task(0x%x[%s]) for msg(0x%x[%s]), src=(0x%x[%s]).\n", (UINT32)zIhuFsmTable.pFsmCtrlTable[dest_id].pFsmArray[state][mid].stateFunc, state, dest_id, zIhuTaskNameList[dest_id], mid, zIhuMsgNameList[mid-1], src_id, zIhuTaskNameList[src_id]);
+		IhuDebugPrint("VMFO: Call state function(0x%x) in state(%d) of dest task(0x%x[%s]) for msg(0x%x[%s]), src=(0x%x[%s]).\n", (UINT32)zIhuFsmTable.pFsmCtrlTable[dest_id].pFsmArray[state][mid].stateFunc, state, dest_id, zIhuTaskInfo[dest_id].taskName, mid, zIhuMsgNameList[mid-1], src_id, zIhuTaskInfo[src_id].taskName);
 	}
 
 	/*
@@ -1191,7 +1133,7 @@ OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr,
 		}
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		//消息ID的顺序跟commsgxxx.h的中的定义可能不完全一样，导致这里直接POP出消息名字会出错，注意！		
-		IhuErrorPrint("VMFO: Receive invalid msg(%x)[%s] in state(%d) of task(0x%x)[%s] from task(0x%x)[%s].\n", mid, zIhuMsgNameList[mid-1], state, dest_id, zIhuTaskNameList[dest_id], src_id, zIhuTaskNameList[src_id]);
+		IhuErrorPrint("VMFO: Receive invalid msg(%x)[%s] in state(%d) of task(0x%x)[%s] from task(0x%x)[%s].\n", mid, zIhuMsgNameList[mid-1], state, dest_id, zIhuTaskInfo[dest_id].taskName, src_id, zIhuTaskInfo[src_id].taskName);
 		return IHU_FAILURE;
 	}
 
@@ -1251,7 +1193,7 @@ OPSTAT FsmProcessingLaunch(void *task)
 		memset(&rcv, 0, sizeof(IhuMsgSruct_t));
 		ret = ihu_message_rcv(task_id, &rcv);
 		//以下方式是为了调查出现无效接收消息时的方式，就是扎到出现问题消息的特征，进而帮助分析产生无效消息的来源
-//		if (task_id == TASK_ID_SPSVIRGO) IhuDebugPrint("VMFO: Received message at task_id=%d [%s], &rcv=[0x%x]\n", task_id, zIhuTaskNameList[task_id], &rcv);
+//		if (task_id == TASK_ID_SPSVIRGO) IhuDebugPrint("VMFO: Received message at task_id=%d [%s], &rcv=[0x%x]\n", task_id, zIhuTaskInfo[task_id].taskName, &rcv);
 //		if ((rcv.src_id <=TASK_ID_MIN) || (rcv.src_id >= TASK_ID_MAX) || (rcv.dest_id <=TASK_ID_MIN) || (rcv.dest_id >= TASK_ID_MAX)){
 //			IhuErrorPrint("VMFO: TEST msg_id=[0x%x], &msg_id=[0x%x]\n", rcv.msgType, &(rcv.msgType));
 //			IhuErrorPrint("VMFO: TEST dest_id=[0x%x], &dest_id=[0x%x]\n", rcv.dest_id, &(rcv.dest_id));
@@ -1469,7 +1411,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
   //正式发送QUEUE
   if (OS_QUEUE_PUT(zIhuTaskInfo[dest_id].QueId, &msg, 0) != OS_QUEUE_OK){
     zIhuRunErrCnt[TASK_ID_VMFO]++;
-    IhuErrorPrint("VMFO: msgsnd() write msg failed, errno=%d[%s], dest_id = %d [%s]\n",errno,strerror(errno), dest_id, zIhuTaskNameList[dest_id]);
+    IhuErrorPrint("VMFO: msgsnd() write msg failed, errno=%d[%s], dest_id = %d [%s]\n",errno,strerror(errno), dest_id, zIhuTaskInfo[dest_id].taskName);
     //zIhuTaskInfo[dest_id].QueFullFlag = IHU_TASK_QUEUE_FULL_TRUE;
     return IHU_FAILURE;
   }
@@ -1740,7 +1682,7 @@ OPSTAT ihu_task_create(UINT8 task_id, void *(*task_func)(void *), void *arg, int
 	
 	// creation of the task
   ret = OS_TASK_CREATE(
-        (const char *)zIhuTaskNameList[task_id],  /* The text name assigned to the task, for debug only; not used by the kernel. */
+        (const char *)zIhuTaskInfo[task_id].taskName,  /* The text name assigned to the task, for debug only; not used by the kernel. */
         //(void *(*)(void *))(task_func),         /* The System Initialization task. */
         (TaskFunction_t)(task_func),
         arg,                                      /* The parameter passed to the task. */
@@ -1807,7 +1749,7 @@ OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 		return IHU_FAILURE;
 	}
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_CRT_ON) != FALSE){
-		IhuDebugPrint("VMFO: FsmAddNew Successful, taskId = 0x%x [%s].\n", task_id, zIhuTaskNameList[task_id]);
+		IhuDebugPrint("VMFO: FsmAddNew Successful, taskId = 0x%x [%s].\n", task_id, zIhuTaskInfo[task_id].taskName);
 	}
 
 	//Create Queid
@@ -1819,7 +1761,7 @@ OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 	return IHU_FAILURE;
 	}
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_CRT_ON) != FALSE){
-		IhuDebugPrint("VMFO: Msgque create successful, taskId = 0x%x [%s].\n", task_id, zIhuTaskNameList[task_id]);
+		IhuDebugPrint("VMFO: Msgque create successful, taskId = 0x%x [%s].\n", task_id, zIhuTaskInfo[task_id].taskName);
 	}
 
 	//Create task and make it running for the 1st time
@@ -1833,11 +1775,11 @@ OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 		return IHU_FAILURE;
 	}
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_CRT_ON) != FALSE){
-	  IhuDebugPrint("VMFO: Task create Successful, taskId = 0x%x [%s].\n", task_id, zIhuTaskNameList[task_id]);
+	  IhuDebugPrint("VMFO: Task create Successful, taskId = 0x%x [%s].\n", task_id, zIhuTaskInfo[task_id].taskName);
 	}
 	
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_IPT_ON) != FALSE){
-		IhuDebugPrint("VMFO: Whole task environment setup successful, taskId = 0x%x [%s].\n", task_id, zIhuTaskNameList[task_id]);
+		IhuDebugPrint("VMFO: Whole task environment setup successful, taskId = 0x%x [%s].\n", task_id, zIhuTaskInfo[task_id].taskName);
 	}
 	
 	//给该任务设置一个软的状态：省略了
@@ -1867,24 +1809,24 @@ OPSTAT ihu_system_task_init_call(UINT8 task_id, FsmStateItem_t *p)
 	//任务控制启动标示检查
 	if (zIhuTaskInfo[task_id].pnpState != IHU_TASK_PNP_ON){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
-		IhuErrorPrint("VMFO: no need create this task [%s]!\n", zIhuTaskNameList[task_id]);	
+		IhuErrorPrint("VMFO: no need create this task [%s]!\n", zIhuTaskInfo[task_id].taskName);	
 		return IHU_FAILURE;
 	}
 	
 	//打印信息
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_CRT_ON) != FALSE){
-		IhuDebugPrint("VMFO: Staring to create task [%s] related environments...\n", zIhuTaskNameList[task_id]);
+		IhuDebugPrint("VMFO: Staring to create task [%s] related environments...\n", zIhuTaskInfo[task_id].taskName);
 	}
 
 	//任务创建并初始化所有状态机
 	ret = ihu_task_create_and_run(task_id, p);
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
-		IhuErrorPrint("VMFO: create task env [%s] un-successfully, program exit.\n", zIhuTaskNameList[task_id]);
+		IhuErrorPrint("VMFO: create task env [%s] un-successfully, program exit.\n", zIhuTaskInfo[task_id].taskName);
 		return IHU_FAILURE;
 	}else{
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
-			IhuDebugPrint("VMFO: create task successfully, taskid=%d[%s].\n", task_id, zIhuTaskNameList[task_id]);
+			IhuDebugPrint("VMFO: create task successfully, taskid=%d[%s].\n", task_id, zIhuTaskInfo[task_id].taskName);
 		}
 	}
 	
@@ -2507,7 +2449,7 @@ struct tm ihu_clock_unix_to_ymd(time_t t_unix)
 //  //任务控制启动标示检查
 //  if (zIhuTaskInfo[task_id].pnpState != IHU_TASK_PNP_ON){
 //    zIhuRunErrCnt[TASK_ID_VMFO]++;
-//    sprintf(strDebug, "VMFO: no need execute this task [%s]!\n", zIhuTaskNameList[task_id]);
+//    sprintf(strDebug, "VMFO: no need execute this task [%s]!\n", zIhuTaskInfo[task_id].taskName);
 //    IhuErrorPrint(strDebug);
 //    return IHU_FAILURE;
 //  }
@@ -2618,7 +2560,7 @@ OPSTAT ihu_vm_send_init_msg_to_app_task(UINT8 dest_id)
 	ret = ihu_message_send(MSG_ID_COM_INIT, dest_id, TASK_ID_VMFO, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
-		IhuErrorPrint("VMFO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_VMFO], zIhuTaskNameList[dest_id]);
+		IhuErrorPrint("VMFO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_VMFO].taskName, zIhuTaskInfo[dest_id].taskName);
 	}
 	
 	return ret;

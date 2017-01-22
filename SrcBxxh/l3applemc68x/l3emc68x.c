@@ -62,7 +62,7 @@ OPSTAT fsm_emc68x_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 par
 //		snd.length = sizeof(msg_struct_com_init_fb_t);
 //		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_EMC68X, &snd, snd.length);
 //		if (ret == IHU_FAILURE){
-//			IhuErrorPrint("EMC68X: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_EMC68X], zIhuTaskNameList[src_id]);
+//			IhuErrorPrint("EMC68X: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_EMC68X].taskName, zIhuTaskInfo[src_id].taskName);
 //			return IHU_FAILURE;
 //		}
 	}

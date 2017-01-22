@@ -80,7 +80,7 @@ OPSTAT fsm_didocap_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 		snd.length = sizeof(msg_struct_com_init_fb_t);
 		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_DIDOCAP, &snd, snd.length);
 		if (ret == IHU_FAILURE){
-			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[src_id]);
+			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DIDOCAP].taskName, zIhuTaskInfo[src_id].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -202,7 +202,7 @@ OPSTAT fsm_didocap_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 		ret = ihu_message_send(MSG_ID_COM_RESTART, TASK_ID_DIDOCAP, TASK_ID_DIDOCAP, &snd0, snd0.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
-			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[TASK_ID_DIDOCAP]);
+			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DIDOCAP].taskName, zIhuTaskInfo[TASK_ID_DIDOCAP].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -262,7 +262,7 @@ void func_didocap_time_out_period_scan(void)
 	ret = ihu_message_send(MSG_ID_COM_HEART_BEAT, TASK_ID_VMFO, TASK_ID_DIDOCAP, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
-		IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[TASK_ID_VMFO]);
+		IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DIDOCAP].taskName, zIhuTaskInfo[TASK_ID_VMFO].taskName);
 		return ;
 	}
 	
@@ -290,7 +290,7 @@ void func_didocap_time_out_sleep_mode_external_trigger_period_scan(void)
 		ret = ihu_message_send(MSG_ID_DIDO_CCL_EVENT_LOCK_TRIGGER, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd0, snd0.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
-			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[TASK_ID_CCL]);
+			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DIDOCAP].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 			return ;
 		}
 	}
@@ -308,7 +308,7 @@ void func_didocap_time_out_sleep_mode_external_trigger_period_scan(void)
 		ret = ihu_message_send(MSG_ID_DIDO_CCL_EVENT_LOCK_TRIGGER, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd1, snd1.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
-			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[TASK_ID_CCL]);
+			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DIDOCAP].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 			return ;
 		}		
 	}
@@ -327,7 +327,7 @@ void func_didocap_time_out_sleep_mode_external_trigger_period_scan(void)
 		ret = ihu_message_send(MSG_ID_DIDO_CCL_EVENT_FAULT_TRIGGER, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd2, snd2.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
-			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[TASK_ID_CCL]);
+			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DIDOCAP].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 			return ;
 		}
 	}
@@ -352,7 +352,7 @@ void func_didocap_time_out_sleep_mode_external_trigger_period_scan(void)
 		ret = ihu_message_send(MSG_ID_DIDO_CCL_EVENT_FAULT_TRIGGER, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd3, snd3.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
-			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[TASK_ID_CCL]);
+			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DIDOCAP].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 			return ;
 		}
 	}
@@ -376,7 +376,7 @@ void func_didocap_time_out_work_mode_period_scan(void)
 			ret = ihu_message_send(MSG_ID_DIDO_CCL_DOOR_OPEN_EVENT, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd1, snd1.length);
 			if (ret == IHU_FAILURE){
 				zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
-				IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[TASK_ID_CCL]);
+				IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DIDOCAP].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 				return ;
 			}
 		}		
@@ -395,7 +395,7 @@ void func_didocap_time_out_work_mode_period_scan(void)
 			ret = ihu_message_send(MSG_ID_DIDO_CCL_LOCK_C_DOOR_C_EVENT, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd2, snd2.length);
 			if (ret == IHU_FAILURE){
 				zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
-				IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[TASK_ID_CCL]);
+				IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DIDOCAP].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 				return ;
 			}
 		}
@@ -412,7 +412,7 @@ void func_didocap_time_out_work_mode_period_scan(void)
 		ret = ihu_message_send(MSG_ID_DIDO_CCL_EVENT_STATUS_UPDATE, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd3, snd3.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
-			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[TASK_ID_CCL]);
+			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DIDOCAP].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 			return ;
 		}		
 	}
@@ -429,7 +429,7 @@ void func_didocap_time_out_work_mode_period_scan(void)
 		ret = ihu_message_send(MSG_ID_DIDO_CCL_EVENT_STATUS_UPDATE, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd4, snd4.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
-			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[TASK_ID_CCL]);
+			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DIDOCAP].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 			return ;
 		}
 	}
@@ -483,7 +483,7 @@ OPSTAT fsm_didocap_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * par
 	ret = ihu_message_send(MSG_ID_DIDO_CCL_SENSOR_STATUS_RESP, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
-		IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DIDOCAP], zIhuTaskNameList[TASK_ID_CCL]);
+		IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DIDOCAP].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 		return IHU_FAILURE;
 	}
 			

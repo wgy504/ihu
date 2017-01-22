@@ -71,7 +71,7 @@ OPSTAT fsm_vmfo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 //		snd.length = sizeof(msg_struct_com_init_fb_t);
 //		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_VMFO, &snd, snd.length);
 //		if (ret == IHU_FAILURE){
-//			IhuErrorPrint("VMFO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_VMFO], zIhuTaskNameList[src_id]);
+//			IhuErrorPrint("VMFO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_VMFO].taskName, zIhuTaskInfo[src_id].taskName);
 //			return IHU_FAILURE;
 //		}
 	}
@@ -377,7 +377,7 @@ OPSTAT fsm_vmfo_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 		ret = ihu_message_send(MSG_ID_COM_RESTART, TASK_ID_VMFO, TASK_ID_VMFO, &snd0, snd0.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_VMFO]++;
-			IhuErrorPrint("VMFO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_VMFO], zIhuTaskNameList[TASK_ID_VMFO]);
+			IhuErrorPrint("VMFO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_VMFO].taskName, zIhuTaskInfo[TASK_ID_VMFO].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -414,7 +414,7 @@ OPSTAT fsm_vmfo_init_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 	}
 	memcpy(&rcv, param_ptr, param_len);
 	
-	//IhuDebugPrint("VMFO: Init received, srcId = %d, %s\n", src_id, zIhuTaskNameList[src_id]);
+	//IhuDebugPrint("VMFO: Init received, srcId = %d, %s\n", src_id, zIhuTaskInfo[src_id].taskName);
 
 	//存入到反馈表中
 	zIhuVmfoTaskInitCtrlInfo[src_id].state = IHU_VMFO_TASK_INIT_FEEDBACK;	

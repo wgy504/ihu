@@ -1,4 +1,4 @@
-﻿/**
+/**
  ****************************************************************************************
  *
  * @file l2pwmtaurus.c
@@ -68,7 +68,7 @@ OPSTAT fsm_pwmtaurus_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 
 		snd.length = sizeof(msg_struct_com_init_fb_t);
 		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_PWMTAURUS, &snd, snd.length);
 		if (ret == IHU_FAILURE){
-			IhuErrorPrint("PWMTAURUS: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_PWMTAURUS], zIhuTaskNameList[src_id]);
+			IhuErrorPrint("PWMTAURUS: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_PWMTAURUS].taskName, zIhuTaskInfo[src_id].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -172,7 +172,7 @@ OPSTAT fsm_pwmtaurus_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UIN
 		ret = ihu_message_send(MSG_ID_COM_RESTART, TASK_ID_PWMTAURUS, TASK_ID_PWMTAURUS, &snd0, snd0.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_PWMTAURUS]++;
-			IhuErrorPrint("PWMTAURUS: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_PWMTAURUS], zIhuTaskNameList[TASK_ID_PWMTAURUS]);
+			IhuErrorPrint("PWMTAURUS: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_PWMTAURUS].taskName, zIhuTaskInfo[TASK_ID_PWMTAURUS].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -205,7 +205,7 @@ void func_pwmtaurus_time_out_period_scan(void)
 	ret = ihu_message_send(MSG_ID_COM_HEART_BEAT, TASK_ID_VMFO, TASK_ID_PWMTAURUS, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_PWMTAURUS]++;
-		IhuErrorPrint("PWMTAURUS: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_PWMTAURUS], zIhuTaskNameList[TASK_ID_VMFO]);
+		IhuErrorPrint("PWMTAURUS: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_PWMTAURUS].taskName, zIhuTaskInfo[TASK_ID_VMFO].taskName);
 		return;
 	}
 	
