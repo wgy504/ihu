@@ -17,6 +17,7 @@ extern "C" {
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 	#include "commsgbfsc.h"
 #else
+	#error Un-correct constant definition
 #endif
 
 //不能在这里出现管脚的任何配置和初始化，必须在STM32CubeMX中完成，这里使用STM32CubeMX给出的端口俗名

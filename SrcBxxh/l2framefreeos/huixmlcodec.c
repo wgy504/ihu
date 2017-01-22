@@ -181,7 +181,8 @@ OPSTAT func_cloud_standard_xml_pack(UINT8 msgType, char *funcFlag, UINT16 msgId,
 
 //解码接收到的消息
 //该消息以CHAR为单位，从纯CDATA模式修改为<xml>格式，所以需要加入这个内容
-OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
+//expectMsgId是接收消息解码时带入的目标函数，如果设置为-1则意味着忽略这个判定条件
+OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, int expectMsgId)
 {
 	UINT32 index=0, msgId=0, msgLen=0;
 	char tmp[5] = "";
@@ -327,7 +328,8 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv)
 	memset(tmp, 0, sizeof(tmp));
 	strncpy(tmp, &msgContent[index], 4);
 	msgLen = strtoul(tmp, NULL, 16);
-	if ((msgId < HUITP_MSGID_uni_min) || (msgId > HUITP_MSGID_uni_max)){
+	//如果接收到的消息不是目标消息，一样会放弃解码
+	if ((msgId < HUITP_MSGID_uni_min) || (msgId > HUITP_MSGID_uni_max) || ((expectMsgId != -1) && (msgId != expectMsgId))){
 		IhuErrorPrint("HUITPXML: Invalid received content data msgId info!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;	

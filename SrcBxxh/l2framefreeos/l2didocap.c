@@ -52,6 +52,7 @@ FsmStateItem_t FsmDidocap[] =
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 strIhuCclDidoPar_t zIhuCclDidocapCtrlTable;
 #else
+	#error Un-correct constant definition
 #endif
 
 //Main Entry
@@ -103,6 +104,7 @@ OPSTAT fsm_didocap_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 	memset(&zIhuCclDidocapCtrlTable, 0, sizeof(strIhuCclDidoPar_t));
 	zIhuCclDidocapCtrlTable.cclDidoWorkingMode = IHU_CCL_DIDO_WORKING_MODE_SLEEP;  //初始化就进入SLEEP，然后就看是否有触发
 #else
+	#error Un-correct constant definition
 #endif
 	
 	//设置状态机到目标状态

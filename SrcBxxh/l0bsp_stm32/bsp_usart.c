@@ -29,6 +29,8 @@ extern UART_HandleTypeDef huart3;
 extern UART_HandleTypeDef huart4;
 extern UART_HandleTypeDef huart5;
 UART_HandleTypeDef huart6; //MAIN中未定义，这里重新定义是为了复用
+#else
+	#error Un-correct constant definition
 #endif
 
 extern uint8_t zIhuUartRxBuffer[6];

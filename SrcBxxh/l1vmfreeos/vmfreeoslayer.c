@@ -246,11 +246,14 @@ char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK] ={
 	"MSG_ID_COM_MAX"
 };
 #else
+	#error Un-correct constant definition
 #endif
 
 /*******************************************************************************
 **
 **	全局公用的API函数，不依赖于任何操作系统，只依赖于POSIX支持的标准函数集
+**
+**  已经使用了线程安全的方法，采用的是MUTEX互锁机制，确保不同打印之间调用的不相关性和单入性
 **
 **********************************************************************************/
 //正常打印
@@ -293,7 +296,8 @@ void IhuDebugPrintFo(UINT8 index, char *format, ...)
 	
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
 	printf("%s", ptrPrintBuffer);
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)	
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+	/* 互斥信号量 */
 	if (OS_MUTEX_GET(zIhuPrintMutex, IHU_PRINT_MUTEX_TIME_OUT_DURATION) != OS_MUTEX_TAKEN){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		return;
@@ -308,6 +312,7 @@ void IhuDebugPrintFo(UINT8 index, char *format, ...)
 	ihu_l1hd_sps_print_send_data(zIhuPrintBufferChar[index].PrintBuffer);
 	OS_MUTEX_PUT(zIhuPrintMutex);	
 #else
+	#error Un-correct constant definition
 #endif
 	
 	zIhuPrintBufferChar[index].PrintBuffer[0] = '\0';
@@ -367,6 +372,7 @@ void IhuErrorPrintFo(UINT8 index, char *format, ...)
 	ihu_l1hd_sps_print_send_data(zIhuPrintBufferChar[index].PrintBuffer);
 	OS_MUTEX_PUT(zIhuPrintMutex);		
 #else
+	#error Un-correct constant definition
 #endif
 	
 	zIhuPrintBufferChar[index].PrintBuffer[0] = '\0';
@@ -798,6 +804,7 @@ void ihu_vm_system_init(void)
 	//if (IHU_COMM_FRONT_DCMI == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_DCMIARIS].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_MAIN_CTRL_BFSC == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_BFSC].pnpState = IHU_TASK_PNP_ON;	
 #else
+	#error Un-correct constant definition
 #endif	
 	
 	return;
@@ -2013,7 +2020,8 @@ void ihu_task_create_all(void)
 	ihu_vm_send_init_msg_to_app_task(TASK_ID_BFSC);
 	
 	IhuDebugPrint("VMFO: Create all task successfully!\n");
-#else	
+#else
+	#error Un-correct constant definition
 #endif
 }
 

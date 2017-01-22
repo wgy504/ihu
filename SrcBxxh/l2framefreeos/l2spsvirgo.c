@@ -65,6 +65,7 @@ FsmStateItem_t FsmSpsvirgo[] =
 	strIhuCclSpsPar_t zIhuCclSpsvirgoCtrlTable;
 	msg_struct_ccl_com_cloud_data_rx_t zIhuSpsvirgoMsgRcvBuf;
 #else
+	#error Un-correct constant definition
 #endif
 
 
@@ -118,6 +119,7 @@ OPSTAT fsm_spsvirgo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 	memset(&zIhuSpsvirgoMsgRcvBuf, 0, sizeof(msg_struct_ccl_com_cloud_data_rx_t));
 	zIhuCclSpsvirgoCtrlTable.cclSpsWorkingMode = IHU_CCL_SPS_WORKING_MODE_SLEEP;  //初始化就进入SLEEP，然后就看是否有触发
 #else
+	#error Un-correct constant definition
 #endif
 	
 	//设置状态机到目标状态
@@ -276,7 +278,8 @@ OPSTAT fsm_spsvirgo_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 	memset(pMsgBuf, 0, sizeof(msg_struct_ccl_com_cloud_data_rx_t));
 	pMsgBuf = (msg_struct_ccl_com_cloud_data_rx_t *)(&rcv);
 	pMsgBuf->length = rcv.length;
-	ret = func_cloud_standard_xml_unpack(pMsgBuf);
+	//忽略期望的消息，任何返回消息都是可以的
+	ret = func_cloud_standard_xml_unpack(pMsgBuf, -1);
 	//差错情形，由发送者自己控制，因为已经是双向通信机制，非互锁的通信机制，这里无法保证出错时必须送回信号给发送者
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
@@ -377,7 +380,7 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	else{
 		//对于缓冲区的数据，进行分别处理，将帧变成不同的消息，分门别类发送到L3模块进行处理
 		//注意，这里是CHAR数据，不是L2FRAME的比特数据
-		ret = func_cloud_standard_xml_unpack(&zIhuSpsvirgoMsgRcvBuf);
+		ret = func_cloud_standard_xml_unpack(&zIhuSpsvirgoMsgRcvBuf, HUITP_MSGID_uni_ccl_lock_auth_resp);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 			IhuErrorPrint("SPSVIRGO: Unpack and processing receiving message error!\n");
@@ -592,7 +595,7 @@ OPSTAT fsm_spsvirgo_ccl_event_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 	else{
 		//对于缓冲区的数据，进行分别处理，将帧变成不同的消息，分门别类发送到L3模块进行处理
 		//注意，这里是CHAR数据，不是L2FRAME的比特数据
-		ret = func_cloud_standard_xml_unpack(&zIhuSpsvirgoMsgRcvBuf);
+		ret = func_cloud_standard_xml_unpack(&zIhuSpsvirgoMsgRcvBuf, HUITP_MSGID_uni_ccl_state_confirm);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 			IhuErrorPrint("SPSVIRGO: Unpack and processing receiving message error!\n");
@@ -791,7 +794,7 @@ OPSTAT fsm_spsvirgo_ccl_fault_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 	else{
 		//对于缓冲区的数据，进行分别处理，将帧变成不同的消息，分门别类发送到L3模块进行处理
 		//注意，这里是CHAR数据，不是L2FRAME的比特数据
-		ret = func_cloud_standard_xml_unpack(&zIhuSpsvirgoMsgRcvBuf);
+		ret = func_cloud_standard_xml_unpack(&zIhuSpsvirgoMsgRcvBuf, HUITP_MSGID_uni_ccl_state_confirm);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 			IhuErrorPrint("SPSVIRGO: Unpack and processing receiving message error!\n");
@@ -961,7 +964,7 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 	else{
 		//对于缓冲区的数据，进行分别处理，将帧变成不同的消息，分门别类发送到L3模块进行处理
 		//注意，这里是CHAR数据，不是L2FRAME的比特数据
-		ret = func_cloud_standard_xml_unpack(&zIhuSpsvirgoMsgRcvBuf);
+		ret = func_cloud_standard_xml_unpack(&zIhuSpsvirgoMsgRcvBuf, HUITP_MSGID_uni_ccl_state_confirm);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 			IhuErrorPrint("SPSVIRGO: Unpack and processing receiving message error!\n");

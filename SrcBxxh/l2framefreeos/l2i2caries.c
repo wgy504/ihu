@@ -56,6 +56,7 @@ strIhuBfscI2cMotoPar_t zIhuI2cBfscMoto;
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 strIhuCclI2cPar_t zIhuCclI2cariesCtrlTable;
 #else
+	#error Un-correct constant definition
 #endif
 
 //Main Entry
@@ -108,6 +109,7 @@ OPSTAT fsm_i2caries_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 	memset(&zIhuCclI2cariesCtrlTable, 0, sizeof(strIhuCclI2cPar_t));
 	zIhuCclI2cariesCtrlTable.cclI2cWorkingMode = IHU_CCL_I2C_WORKING_MODE_SLEEP;  //初始化就进入SLEEP，然后就看是否有触发
 #else
+	#error Un-correct constant definition
 #endif
 	
 	//设置状态机到目标状态

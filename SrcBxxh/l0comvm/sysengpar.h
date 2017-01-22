@@ -62,6 +62,7 @@ typedef struct SysEngParElementSensor
 	INT32 bfscL3bfscRolloutTimer;
 	INT32 bfscL3bfscGiveupTimer;
 #else
+	#error Un-correct constant definition
 #endif
 }SysEngParElementSensorTimer_t;
 

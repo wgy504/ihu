@@ -21,6 +21,8 @@
 	extern ADC_HandleTypeDef hadc1;
 	ADC_HandleTypeDef hadc2;  //MAIN中为定义，这里重新定义是为了复用
 	ADC_HandleTypeDef hadc3;	//MAIN中为定义，这里重新定义是为了复用
+#else
+	#error Un-correct constant definition
 #endif
 
 //本地全局变量

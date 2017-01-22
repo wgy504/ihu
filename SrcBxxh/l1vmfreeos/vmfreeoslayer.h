@@ -63,7 +63,8 @@
 	#include "bsp_cpuid.h"
 
 
-#else	
+#else
+	#error Un-correct constant definition
 #endif
 
 #define IHU_WORKING_FREE_RTOS_SELECTION_BARE 1
@@ -74,6 +75,7 @@
 	|| (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID))
   #define IHU_WORKING_FREE_RTOS_SELECTION IHU_WORKING_FREE_RTOS_SELECTION_BARE
 #else
+	#error Un-correct constant definition
 #endif
 
 /*
@@ -156,6 +158,7 @@ enum IHU_TASK_NAME_ID
 	TASK_ID_INVALID = 0xFF,
 }; //end of IHU_TASK_NAME_ID
 #else
+	#error Un-correct constant definition
 #endif
 
 /*
@@ -275,7 +278,7 @@ UINT8 IhuDebugPrintId(char *file, int line);
 
 extern void ihu_vm_system_init(void);  //系统级别的初始化
 extern void ihu_sleep(UINT32 second);
-extern void ihu_usleep(UINT32 usecond);  //resulution 10^(-6)s = 1 microsecond
+extern void ihu_usleep(UINT32 usecond);  //resulution 10^(-3)s = 1 microsecond
 uint16_t b2l_uint16(uint16_t in);
 extern OPSTAT ihu_taskid_to_string(UINT8 id, char *string);
 extern OPSTAT ihu_msgid_to_string(UINT16 id, char *string);

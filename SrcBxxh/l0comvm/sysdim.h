@@ -305,6 +305,7 @@
 	
 	
 #else
+	#error Un-correct constant definition
 #endif
 
 #endif /* L0COMVM_SYSDIM_H_ */

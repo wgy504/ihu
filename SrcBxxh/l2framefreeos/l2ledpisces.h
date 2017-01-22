@@ -32,6 +32,7 @@
 	#include "l1timer_ucos.h"
 	#include "l1hd_led.h"
 #else
+	#error Un-correct constant definition
 #endif
 
 //State definition
