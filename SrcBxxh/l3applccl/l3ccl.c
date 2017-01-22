@@ -279,6 +279,7 @@ OPSTAT fsm_ccl_dido_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_dido_ccl_sensor_status_rep_t))){
 		IhuErrorPrint("CCL: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
@@ -287,6 +288,7 @@ OPSTAT fsm_ccl_dido_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param
 	if (rcv.cmdid != IHU_CCL_DH_CMDID_RESP_STATUS_DIDO){
 		IhuErrorPrint("CCL: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;		
 	}
 		
@@ -309,6 +311,7 @@ OPSTAT fsm_ccl_dido_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_CCL]++;
 		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_SPSVIRGO]);
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	
@@ -329,6 +332,7 @@ OPSTAT fsm_ccl_sps_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param_
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_sps_ccl_sensor_status_rep_t))){
 		IhuErrorPrint("CCL: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
@@ -337,6 +341,7 @@ OPSTAT fsm_ccl_sps_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param_
 	if (rcv.cmdid != IHU_CCL_DH_CMDID_RESP_STATUS_SPS){
 		IhuErrorPrint("CCL: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;		
 	}
 		
@@ -350,6 +355,7 @@ OPSTAT fsm_ccl_sps_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param_
 	ret = ihu_message_send(MSG_ID_CCL_COM_SENSOR_STATUS_REQ, TASK_ID_I2CARIES, TASK_ID_CCL, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_I2CARIES]);
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 
@@ -370,6 +376,7 @@ OPSTAT fsm_ccl_i2c_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param_
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_i2c_ccl_sensor_status_rep_t))){
 		IhuErrorPrint("CCL: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
@@ -378,6 +385,7 @@ OPSTAT fsm_ccl_i2c_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param_
 	if (rcv.cmdid != IHU_CCL_DH_CMDID_RESP_STATUS_I2C){
 		IhuErrorPrint("CCL: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;		
 	}
 		
@@ -392,6 +400,8 @@ OPSTAT fsm_ccl_i2c_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param_
 	ret = ihu_message_send(MSG_ID_CCL_COM_SENSOR_STATUS_REQ, TASK_ID_DCMIARIS, TASK_ID_CCL, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_DCMIARIS]);
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 
@@ -413,6 +423,7 @@ OPSTAT fsm_ccl_dcmi_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_dcmi_ccl_sensor_status_rep_t))){
 		IhuErrorPrint("CCL: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
@@ -421,6 +432,7 @@ OPSTAT fsm_ccl_dcmi_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param
 	if (rcv.cmdid != IHU_CCL_DH_CMDID_RESP_STATUS_DCMI){
 		IhuErrorPrint("CCL: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;		
 	}
 		
@@ -437,6 +449,8 @@ OPSTAT fsm_ccl_dcmi_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param
 	ret = ihu_message_send(MSG_ID_CCL_SPS_EVENT_REPORT_SEND, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_SPSVIRGO]);
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	
@@ -456,6 +470,7 @@ OPSTAT fsm_ccl_sps_event_report_cfm(UINT8 dest_id, UINT8 src_id, void * param_pt
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_sps_ccl_event_report_cfm_t))){
 		IhuErrorPrint("CCL: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
@@ -507,6 +522,7 @@ void func_ccl_time_out_event_report_period_scan(void)
 	if (FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_EVENT_REPORT) == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_CCL]++;
 		IhuErrorPrint("CCL: Error Set FSM State!");
+		func_ccl_stm_main_recovery_from_fault();
 		return;
 	}
 
@@ -524,6 +540,8 @@ void func_ccl_time_out_event_report_period_scan(void)
 	ret = ihu_message_send(MSG_ID_CCL_COM_SENSOR_STATUS_REQ, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_DIDOCAP]);
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return;
 	}
 		
@@ -548,21 +566,29 @@ OPSTAT func_ccl_time_out_lock_work_active(void)
 		ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length);
 		if (ret == IHU_FAILURE){
 			IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_DIDOCAP]);
+			zIhuRunErrCnt[TASK_ID_CCL]++;
+			func_ccl_stm_main_recovery_from_fault();
 			return IHU_FAILURE;
 		}
 		ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length);
 		if (ret == IHU_FAILURE){
 			IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_SPSVIRGO]);
+			zIhuRunErrCnt[TASK_ID_CCL]++;
+			func_ccl_stm_main_recovery_from_fault();
 			return IHU_FAILURE;
 		}
 		ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_I2CARIES, TASK_ID_CCL, &snd, snd.length);		
 		if (ret == IHU_FAILURE){
 			IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_I2CARIES]);
+			zIhuRunErrCnt[TASK_ID_CCL]++;
+			func_ccl_stm_main_recovery_from_fault();
 			return IHU_FAILURE;
 		}
 		ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DCMIARIS, TASK_ID_CCL, &snd, snd.length);
 		if (ret == IHU_FAILURE){
 			IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_DCMIARIS]);
+			zIhuRunErrCnt[TASK_ID_CCL]++;
+			func_ccl_stm_main_recovery_from_fault();
 			return IHU_FAILURE;
 		}
 		
@@ -573,6 +599,8 @@ OPSTAT func_ccl_time_out_lock_work_active(void)
 		if (FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_SLEEP) == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_CCL]++;
 			IhuErrorPrint("CCL: Error Set FSM State!");
+			zIhuRunErrCnt[TASK_ID_CCL]++;
+			func_ccl_stm_main_recovery_from_fault();
 			return IHU_FAILURE;
 		}		
 	}
@@ -584,6 +612,7 @@ OPSTAT func_ccl_time_out_lock_work_active(void)
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_CCL]++;
 			IhuErrorPrint("CCL: Error start timer!\n");
+			func_ccl_stm_main_recovery_from_fault();
 			return IHU_FAILURE;
 		}
 		//发送关门报告给后台
@@ -593,6 +622,8 @@ OPSTAT func_ccl_time_out_lock_work_active(void)
 		ret = ihu_message_send(MSG_ID_CCL_SPS_CLOSE_REPORT_SEND, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd1, snd1.length);
 		if (ret == IHU_FAILURE){
 			IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_SPSVIRGO]);
+			zIhuRunErrCnt[TASK_ID_CCL]++;
+			func_ccl_stm_main_recovery_from_fault();
 			return IHU_FAILURE;
 		}	
 	}
@@ -606,21 +637,29 @@ OPSTAT func_ccl_time_out_lock_work_active(void)
 		ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length);
 		if (ret == IHU_FAILURE){
 			IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_DIDOCAP]);
+			zIhuRunErrCnt[TASK_ID_CCL]++;
+			func_ccl_stm_main_recovery_from_fault();
 			return IHU_FAILURE;
 		}
 		ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length);
 		if (ret == IHU_FAILURE){
 			IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_SPSVIRGO]);
+			zIhuRunErrCnt[TASK_ID_CCL]++;
+			func_ccl_stm_main_recovery_from_fault();
 			return IHU_FAILURE;
 		}
 		ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_I2CARIES, TASK_ID_CCL, &snd, snd.length);		
 		if (ret == IHU_FAILURE){
 			IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_I2CARIES]);
+			zIhuRunErrCnt[TASK_ID_CCL]++;
+			func_ccl_stm_main_recovery_from_fault();
 			return IHU_FAILURE;
 		}
 		ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DCMIARIS, TASK_ID_CCL, &snd, snd.length);
 		if (ret == IHU_FAILURE){
 			IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_DCMIARIS]);
+			zIhuRunErrCnt[TASK_ID_CCL]++;
+			func_ccl_stm_main_recovery_from_fault();
 			return IHU_FAILURE;
 		}
 		//发送差错状态报告给后台
@@ -630,12 +669,15 @@ OPSTAT func_ccl_time_out_lock_work_active(void)
 		ret = ihu_message_send(MSG_ID_CCL_SPS_FAULT_REPORT_SEND, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd2, snd2.length);
 		if (ret == IHU_FAILURE){
 			IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_SPSVIRGO]);
+			zIhuRunErrCnt[TASK_ID_CCL]++;
+			func_ccl_stm_main_recovery_from_fault();
 			return IHU_FAILURE;
 		}
 		//状态转移：直接去FATAL_FAULT状态了
 		if (FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_FATAL_FAULT) == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_CCL]++;
 			IhuErrorPrint("CCL: Error Set FSM State!");
+			func_ccl_stm_main_recovery_from_fault();
 			return IHU_FAILURE;
 		}
 	}
@@ -644,6 +686,7 @@ OPSTAT func_ccl_time_out_lock_work_active(void)
 	else{
 		zIhuRunErrCnt[TASK_ID_CCL]++;
 		IhuErrorPrint("CCL: Error state during TIME OUT processing!");
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	
@@ -664,6 +707,7 @@ OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_spsvirgo_ccl_cloud_fb_t))){
 		IhuErrorPrint("CCL: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);	
@@ -677,21 +721,29 @@ OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 		ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length);
 		if (ret == IHU_FAILURE){
 			IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_DIDOCAP]);
+			zIhuRunErrCnt[TASK_ID_CCL]++;
+			func_ccl_stm_main_recovery_from_fault();
 			return IHU_FAILURE;
 		}
 		ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length);
 		if (ret == IHU_FAILURE){
 			IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_SPSVIRGO]);
+			zIhuRunErrCnt[TASK_ID_CCL]++;
+			func_ccl_stm_main_recovery_from_fault();
 			return IHU_FAILURE;
 		}
 		ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_I2CARIES, TASK_ID_CCL, &snd, snd.length);		
 		if (ret == IHU_FAILURE){
 			IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_I2CARIES]);
+			zIhuRunErrCnt[TASK_ID_CCL]++;
+			func_ccl_stm_main_recovery_from_fault();
 			return IHU_FAILURE;
 		}
 		ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DCMIARIS, TASK_ID_CCL, &snd, snd.length);
 		if (ret == IHU_FAILURE){
 			IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_DCMIARIS]);
+			zIhuRunErrCnt[TASK_ID_CCL]++;
+			func_ccl_stm_main_recovery_from_fault();
 			return IHU_FAILURE;
 		}
 		
@@ -703,6 +755,7 @@ OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_CCL]++;
 			IhuErrorPrint("CCL: Error start timer!\n");
+			func_ccl_stm_main_recovery_from_fault();
 			return IHU_FAILURE;
 		}
 
@@ -710,6 +763,7 @@ OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 		if (FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_SLEEP) == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_CCL]++;
 			IhuErrorPrint("CCL: Error Set FSM State!");
+			func_ccl_stm_main_recovery_from_fault();
 			return IHU_FAILURE;
 		}
 	}
@@ -724,6 +778,8 @@ OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 		ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length);
 		if (ret == IHU_FAILURE){
 			IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_DIDOCAP]);
+			zIhuRunErrCnt[TASK_ID_CCL]++;
+			func_ccl_stm_main_recovery_from_fault();
 			return IHU_FAILURE;
 		}
 		
@@ -732,6 +788,7 @@ OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_CCL]++;
 			IhuErrorPrint("CCL: Error start timer!\n");
+			func_ccl_stm_main_recovery_from_fault();
 			return IHU_FAILURE;
 		}		
 		
@@ -739,6 +796,7 @@ OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 		if (FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_TO_OPEN_DOOR) == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_CCL]++;
 			IhuErrorPrint("CCL: Error Set FSM State!");
+			func_ccl_stm_main_recovery_from_fault();
 			return IHU_FAILURE;
 		}
 	}
@@ -746,6 +804,7 @@ OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 	else{
 		zIhuRunErrCnt[TASK_ID_CCL]++;
 		IhuErrorPrint("CCL: Error received message parameter!");
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 
@@ -765,6 +824,7 @@ OPSTAT fsm_ccl_dido_door_open_event(UINT8 dest_id, UINT8 src_id, void * param_pt
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_dido_ccl_door_open_event_t))){
 		IhuErrorPrint("CCL: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
@@ -774,6 +834,7 @@ OPSTAT fsm_ccl_dido_door_open_event(UINT8 dest_id, UINT8 src_id, void * param_pt
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_CCL]++;
 		IhuErrorPrint("CCL: Error start timer!\n");
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	
@@ -781,6 +842,7 @@ OPSTAT fsm_ccl_dido_door_open_event(UINT8 dest_id, UINT8 src_id, void * param_pt
 	if (FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_DOOR_OPEN) == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_CCL]++;
 		IhuErrorPrint("CCL: Error Set FSM State!");
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 
@@ -803,6 +865,8 @@ OPSTAT func_ccl_time_out_lock_work_wait_door_for_open(void)
 	ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_DIDOCAP]);
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 
@@ -813,6 +877,8 @@ OPSTAT func_ccl_time_out_lock_work_wait_door_for_open(void)
 	ret = ihu_message_send(MSG_ID_CCL_SPS_CLOSE_REPORT_SEND, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd1, snd1.length);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_SPSVIRGO]);
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	
@@ -833,6 +899,7 @@ OPSTAT fsm_ccl_lock_and_door_close_event(UINT8 dest_id, UINT8 src_id, void * par
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_dido_ccl_lock_c_door_c_event_t))){
 		IhuErrorPrint("CCL: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
@@ -844,6 +911,8 @@ OPSTAT fsm_ccl_lock_and_door_close_event(UINT8 dest_id, UINT8 src_id, void * par
 	ret = ihu_message_send(MSG_ID_CCL_SPS_CLOSE_REPORT_SEND, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_SPSVIRGO]);
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}	
 
@@ -864,6 +933,7 @@ OPSTAT fsm_ccl_sps_close_door_report_cfm(UINT8 dest_id, UINT8 src_id, void * par
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_sps_ccl_close_report_cfm_t))){
 		IhuErrorPrint("CCL: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
@@ -875,21 +945,29 @@ OPSTAT fsm_ccl_sps_close_door_report_cfm(UINT8 dest_id, UINT8 src_id, void * par
 	ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_DIDOCAP]);
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_SPSVIRGO]);
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_I2CARIES, TASK_ID_CCL, &snd, snd.length);		
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_I2CARIES]);
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DCMIARIS, TASK_ID_CCL, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_DCMIARIS]);
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	
@@ -903,6 +981,7 @@ OPSTAT fsm_ccl_sps_close_door_report_cfm(UINT8 dest_id, UINT8 src_id, void * par
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_CCL]++;
 		IhuErrorPrint("CCL: Error start timer!\n");
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	
@@ -910,6 +989,7 @@ OPSTAT fsm_ccl_sps_close_door_report_cfm(UINT8 dest_id, UINT8 src_id, void * par
 	if (FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_SLEEP) == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_CCL]++;
 		IhuErrorPrint("CCL: Error Set FSM State!");
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}	
 
@@ -930,6 +1010,7 @@ OPSTAT fsm_ccl_dido_event_status_update(UINT8 dest_id, UINT8 src_id, void * para
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_dido_ccl_status_update_t))){
 		IhuErrorPrint("CCL: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);	
@@ -940,6 +1021,7 @@ OPSTAT fsm_ccl_dido_event_status_update(UINT8 dest_id, UINT8 src_id, void * para
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_CCL]++;
 			IhuErrorPrint("CCL: Error start timer!\n");
+			func_ccl_stm_main_recovery_from_fault();
 			return IHU_FAILURE;
 		}
 	}	
@@ -982,21 +1064,29 @@ OPSTAT fsm_ccl_event_lock_trigger_to_work(UINT8 dest_id, UINT8 src_id, void * pa
 	ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_DIDOCAP]);
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_SPSVIRGO]);
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_I2CARIES, TASK_ID_CCL, &snd, snd.length);		
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_I2CARIES]);
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DCMIARIS, TASK_ID_CCL, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_DCMIARIS]);
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	
@@ -1005,6 +1095,7 @@ OPSTAT fsm_ccl_event_lock_trigger_to_work(UINT8 dest_id, UINT8 src_id, void * pa
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_CCL]++;
 		IhuErrorPrint("CCL: Error start timer!\n");
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	
@@ -1017,6 +1108,8 @@ OPSTAT fsm_ccl_event_lock_trigger_to_work(UINT8 dest_id, UINT8 src_id, void * pa
 	ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_DIDOCAP]);
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 
@@ -1026,6 +1119,8 @@ OPSTAT fsm_ccl_event_lock_trigger_to_work(UINT8 dest_id, UINT8 src_id, void * pa
 	ret = ihu_message_send(MSG_ID_CCL_SPS_OPEN_AUTH_INQ, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd1, snd1.length);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_SPSVIRGO]);
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}	
 		
@@ -1033,6 +1128,7 @@ OPSTAT fsm_ccl_event_lock_trigger_to_work(UINT8 dest_id, UINT8 src_id, void * pa
 	if (FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_CLOUD_INQUERY) == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_CCL]++;
 		IhuErrorPrint("CCL: Error Set FSM State!");
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	
@@ -1069,21 +1165,29 @@ OPSTAT fsm_ccl_event_fault_trigger_to_stop(UINT8 dest_id, UINT8 src_id, void * p
 	ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_DIDOCAP]);
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_SPSVIRGO]);
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_I2CARIES, TASK_ID_CCL, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_I2CARIES]);
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DCMIARIS, TASK_ID_CCL, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_DCMIARIS]);
+		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	
@@ -1091,8 +1195,9 @@ OPSTAT fsm_ccl_event_fault_trigger_to_stop(UINT8 dest_id, UINT8 src_id, void * p
 	if (rcv.cmdid == IHU_CCL_DH_CMDID_EVENT_IND_FAULT_RECOVER){
 		//先确定正常的情形
 		if (FsmGetState(TASK_ID_CCL) != FSM_STATE_CCL_FATAL_FAULT){
-			zIhuRunErrCnt[TASK_ID_CCL]++;
 			IhuErrorPrint("CCL: Wrong state receive message!");
+			zIhuRunErrCnt[TASK_ID_CCL]++;
+			func_ccl_stm_main_recovery_from_fault();
 			return IHU_FAILURE;			
 		}
 		//没有定时器
@@ -1103,6 +1208,8 @@ OPSTAT fsm_ccl_event_fault_trigger_to_stop(UINT8 dest_id, UINT8 src_id, void * p
 		ret = ihu_message_send(MSG_ID_CCL_SPS_CLOSE_REPORT_SEND, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd2, snd2.length);
 		if (ret == IHU_FAILURE){
 			IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_SPSVIRGO]);
+			zIhuRunErrCnt[TASK_ID_CCL]++;
+			func_ccl_stm_main_recovery_from_fault();
 			return IHU_FAILURE;
 		}
 	}
@@ -1120,6 +1227,7 @@ OPSTAT fsm_ccl_event_fault_trigger_to_stop(UINT8 dest_id, UINT8 src_id, void * p
 			if (ret == IHU_FAILURE){
 				zIhuRunErrCnt[TASK_ID_CCL]++;
 				IhuErrorPrint("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_CCL], zIhuTaskNameList[TASK_ID_SPSVIRGO]);
+				func_ccl_stm_main_recovery_from_fault();
 				return IHU_FAILURE;
 			}
 		}
@@ -1129,6 +1237,7 @@ OPSTAT fsm_ccl_event_fault_trigger_to_stop(UINT8 dest_id, UINT8 src_id, void * p
 		if (FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_FATAL_FAULT) == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_CCL]++;
 			IhuErrorPrint("CCL: Error Set FSM State!");
+			func_ccl_stm_main_recovery_from_fault();
 			return IHU_FAILURE;
 		}
 	}
@@ -1136,6 +1245,7 @@ OPSTAT fsm_ccl_event_fault_trigger_to_stop(UINT8 dest_id, UINT8 src_id, void * p
 	else{
 		zIhuRunErrCnt[TASK_ID_CCL]++;
 		IhuErrorPrint("CCL: Wrong parameter received!");
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;		
 	}
 
@@ -1156,6 +1266,7 @@ OPSTAT fsm_ccl_sps_fault_report_cfm(UINT8 dest_id, UINT8 src_id, void * param_pt
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_sps_ccl_fault_report_cfm_t))){
 		IhuErrorPrint("CCL: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_CCL]++;
+		func_ccl_stm_main_recovery_from_fault();
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
@@ -1185,6 +1296,32 @@ void func_ccl_close_all_sensor(void)
 	ihu_l1hd_dido_f2board_sensor_power_ctrl_off();
 }
 
+//由于错误，直接从差错中转入休眠状态
+void func_ccl_stm_main_recovery_from_fault(void)
+{
+	msg_struct_ccl_com_ctrl_cmd_t snd;
+
+	//关闭所有外部器件的电源
+	func_ccl_close_all_sensor();
+
+	//设置三个模块进入SLEEP工作模式，发送控制给所有下位机
+	memset(&snd, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
+	snd.length = sizeof(msg_struct_ccl_com_ctrl_cmd_t);
+	snd.workmode = IHU_CCL_DH_CMDID_WORK_MODE_SLEEP;
+	ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length);
+	ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length);
+	ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_I2CARIES, TASK_ID_CCL, &snd, snd.length);		
+	ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DCMIARIS, TASK_ID_CCL, &snd, snd.length);
+	
+	//状态转移到SLEEP状态
+	FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_SLEEP);
+	
+	//初始化模块的任务资源
+	//初始化定时器：暂时决定不做，除非该模块重新RESTART
+	//初始化模块级全局变量：暂时决定不做，除非该模块重新RESTART
+	
+	return;
+}
 
 
 
