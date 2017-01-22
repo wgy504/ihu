@@ -529,8 +529,7 @@ void ihu_vm_system_init(void)
 	}
 
 	//INIT IHU itself
-	//IhuDebugTest("This is my test, i = %d!\n", i);
-	IhuDebugPrint("VMFO: CURRENT_PRJ=[%s], PRODUCT_CAT=[0x%x], HW_TYPE=[%d], SW_REL=[%d], SW_DELIVER=[%d].\n", IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT, \
+	IhuDebugPrint("VMFO: Compiled HW_ID Info: CURRENT_PRJ=[%s], PRODUCT_CAT=[0x%x], HW_TYPE=[%d], SW_REL=[%d], SW_DELIVER=[%d].\n", IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT, \
 		IHU_HARDWARE_PRODUCT_CAT_TYPE, IHU_CURRENT_HW_TYPE, IHU_CURRENT_SW_RELEASE, IHU_CURRENT_SW_DELIVERY);
 	IhuDebugPrint("VMFO: BXXH(TM) IHU(c) Application Layer start and initialized, build at %s, %s.\n", __DATE__, __TIME__);
 
@@ -690,6 +689,18 @@ void ihu_vm_system_init(void)
 		zIhuSysEngPar.traceList.msg[i].msgId = i;
 		zIhuSysEngPar.traceList.msg[i].msgAllow = TRUE;
 	}
+	
+	//硬件烧录区域，系统唯一标识部分，后面程序中访问到这些系统参数都必须从这个地方读取
+	ihu_l1hd_f2board_equid_get(&(zIhuSysEngPar.hwBurnId));
+	//由于硬件部分并没有真正起作用，所以暂时需要从系统定义区重复写入，一旦批量生产这部分可以去掉
+	if (IHU_HARDWARE_MASSIVE_PRODUTION_SET == IHU_HARDWARE_MASSIVE_PRODUTION_NO){
+		strncpy(zIhuSysEngPar.hwBurnId.equLable, IHU_CLOUDXHUI_HCU_NAME_SELF, (sizeof(IHU_CLOUDXHUI_HCU_NAME_SELF)<sizeof(zIhuSysEngPar.hwBurnId.equLable))?(sizeof(IHU_CLOUDXHUI_HCU_NAME_SELF)):(sizeof(zIhuSysEngPar.hwBurnId.equLable)));
+		zIhuSysEngPar.hwBurnId.hwType = IHU_HARDWARE_PRODUCT_CAT_TYPE;
+		zIhuSysEngPar.hwBurnId.hwPemId = IHU_CURRENT_HW_TYPE; //PEM小型号
+		zIhuSysEngPar.hwBurnId.swRelId = IHU_CURRENT_SW_RELEASE;
+		zIhuSysEngPar.hwBurnId.swVerId = IHU_CURRENT_SW_DELIVERY;
+		zIhuSysEngPar.hwBurnId.swUpgradeFlag = IHU_HARDWARE_BURN_ID_FW_UPGRADE_SET;
+	}
 
 	//处理启动模块
 	for (i=0; i<MAX_TASK_NUM_IN_ONE_IHU; i++){
@@ -709,7 +720,16 @@ void ihu_vm_system_init(void)
 	//if (IHU_COMM_FRONT_ETH == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_ETHORION].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_COMM_FRONT_DCMI == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_DCMIARIS].pnpState = IHU_TASK_PNP_ON;
 	if (IHU_MAIN_CTRL_CCL == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_CCL].pnpState = IHU_TASK_PNP_ON;			
-
+	
+	//初始化之后的系统标识信息
+	IhuDebugPrint("VMFO: Initialized Hardware Burn Physical Id/Address: CURRENT_PRJ=[%s], HW_LABLE=[%s], PRODUCT_CAT=[0x%x], HW_TYPE=[0x%x], SW_RELEASE_VER=[%d.%d], FW_UPGRADE_FLAG=[%d].\n", \
+		IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT, \
+		zIhuSysEngPar.hwBurnId.equLable, \
+		zIhuSysEngPar.hwBurnId.hwType, \
+		zIhuSysEngPar.hwBurnId.hwPemId, \
+		zIhuSysEngPar.hwBurnId.swRelId, \
+		zIhuSysEngPar.hwBurnId.swVerId, \
+		zIhuSysEngPar.hwBurnId.swUpgradeFlag);
 	
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 	//初始化全局变量TASK_ID/QUE_ID/TASK_STAT
@@ -785,6 +805,18 @@ void ihu_vm_system_init(void)
 		zIhuSysEngPar.traceList.msg[i].msgAllow = TRUE;
 	}
 
+	//硬件烧录区域，系统唯一标识部分，后面程序中访问到这些系统参数都必须从这个地方读取
+	ihu_l1hd_f2board_equid_get(&(zIhuSysEngPar.hwBurnId));
+	//由于硬件部分并没有真正起作用，所以暂时需要从系统定义区重复写入，一旦批量生产这部分可以去掉
+	if (IHU_HARDWARE_MASSIVE_PRODUTION_SET == IHU_HARDWARE_MASSIVE_PRODUTION_NO){
+		strncpy(zIhuSysEngPar.hwBurnId.equLable, IHU_CLOUDXHUI_HCU_NAME_SELF, (sizeof(IHU_CLOUDXHUI_HCU_NAME_SELF)<sizeof(zIhuSysEngPar.hwBurnId.equLable))?(sizeof(IHU_CLOUDXHUI_HCU_NAME_SELF)):(sizeof(zIhuSysEngPar.hwBurnId.equLable)));
+		zIhuSysEngPar.hwBurnId.hwType = IHU_HARDWARE_PRODUCT_CAT_TYPE;
+		zIhuSysEngPar.hwBurnId.hwPemId = IHU_CURRENT_HW_TYPE; //PEM小型号
+		zIhuSysEngPar.hwBurnId.swRelId = IHU_CURRENT_SW_RELEASE;
+		zIhuSysEngPar.hwBurnId.swVerId = IHU_CURRENT_SW_DELIVERY;
+		zIhuSysEngPar.hwBurnId.swUpgradeFlag = IHU_HARDWARE_BURN_ID_FW_UPGRADE_SET;
+	}	
+
 	//处理启动模块
 	for (i=0; i<MAX_TASK_NUM_IN_ONE_IHU; i++){
 		zIhuTaskInfo[i].pnpState = IHU_TASK_PNP_INVALID;
@@ -802,7 +834,18 @@ void ihu_vm_system_init(void)
 	if (IHU_COMM_FRONT_LED == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_LEDPISCES].pnpState = IHU_TASK_PNP_ON;
 	//if (IHU_COMM_FRONT_ETH == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_ETHORION].pnpState = IHU_TASK_PNP_ON;
 	//if (IHU_COMM_FRONT_DCMI == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_DCMIARIS].pnpState = IHU_TASK_PNP_ON;
-	if (IHU_MAIN_CTRL_BFSC == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_BFSC].pnpState = IHU_TASK_PNP_ON;	
+	if (IHU_MAIN_CTRL_BFSC == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_BFSC].pnpState = IHU_TASK_PNP_ON;
+
+	//初始化之后的系统标识信息
+	IhuDebugPrint("VMFO: Initialized Hardware Burn Physical Id/Address: CURRENT_PRJ=[%s], HW_LABLE=[%s], PRODUCT_CAT=[0x%x], HW_TYPE=[0x%x], SW_RELEASE_VER=[%d.%d], FW_UPGRADE_FLAG=[%d].\n", \
+		IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT, \
+		zIhuSysEngPar.hwBurnId.equLable, \
+		zIhuSysEngPar.hwBurnId.hwType, \
+		zIhuSysEngPar.hwBurnId.hwPemId, \
+		zIhuSysEngPar.hwBurnId.swRelId, \
+		zIhuSysEngPar.hwBurnId.swVerId, \
+		zIhuSysEngPar.hwBurnId.swUpgradeFlag);
+
 #else
 	#error Un-correct constant definition
 #endif	

@@ -62,6 +62,17 @@
 #define IHU_CLOUDXHUI_BH_INTERFACE_STANDARD_XML 1
 #define IHU_CLOUDXHUI_BH_INTERFACE_STANDARD_SECOND 2
 
+//定义硬件是否进入批量生产阶段，从而决定硬件标签读入的方式
+#define IHU_HARDWARE_MASSIVE_PRODUTION_YES 1
+#define IHU_HARDWARE_MASSIVE_PRODUTION_NO 2
+
+//定义固件是否支持升级
+#define IHU_HARDWARE_BURN_ID_FW_UPGRADE_NONE 0
+#define IHU_HARDWARE_BURN_ID_FW_UPGRADE_NO 1
+#define IHU_HARDWARE_BURN_ID_FW_UPGRADE_YES_STABLE 2
+#define IHU_HARDWARE_BURN_ID_FW_UPGRADE_YES_TRAIL 3
+#define IHU_HARDWARE_BURN_ID_FW_UPGRADE_YES_PATCH 4
+#define IHU_HARDWARE_BURN_ID_FW_UPGRADE_YES_INVALID 0xFF
 
  /***********************************************************************************
  *
@@ -168,6 +179,12 @@
 	//CURRENT HW PRODUCT CATELOG
 	#define IHU_HARDWARE_PRODUCT_CAT_TYPE 0x1111 // HUITP_IEID_UNI_INVENT_HWTYPE_PDTYPE_E1_EMC_68_01 0x1111
 	
+	//定义是否进入批量生产，从而确定硬件标识从哪里读取
+	#define IHU_HARDWARE_MASSIVE_PRODUTION_SET IHU_HARDWARE_MASSIVE_PRODUTION_NO
+	
+	//定义固件是否自动升级
+	#define IHU_HARDWARE_BURN_ID_FW_UPGRADE_SET IHU_HARDWARE_BURN_ID_FW_UPGRADE_NO
+	
  /***********************************************************************************
  *
  * 数采仪CB项目 IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID
@@ -227,7 +244,13 @@
 	//CURRENT HW PRODUCT CATELOG
 	#define IHU_HARDWARE_PRODUCT_CAT_TYPE 0x0301 // HUITP_IEID_UNI_INVENT_HWTYPE_PDTYPE_G3_SCY_WATER_01 0x0301
 
- /***********************************************************************************
+	//定义是否进入批量生产，从而确定硬件标识从哪里读取
+	#define IHU_HARDWARE_MASSIVE_PRODUTION_SET IHU_HARDWARE_MASSIVE_PRODUTION_NO
+
+	//定义固件是否自动升级
+	#define IHU_HARDWARE_BURN_ID_FW_UPGRADE_SET IHU_HARDWARE_BURN_ID_FW_UPGRADE_NO
+
+/***********************************************************************************
  *
  * 流水产线项目主控板 IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCCB_ID
  *
@@ -285,6 +308,12 @@
 	//CURRENT HW PRODUCT CATELOG
 	#define IHU_HARDWARE_PRODUCT_CAT_TYPE 0x0311 // HUITP_IEID_UNI_INVENT_HWTYPE_PDTYPE_G3_PLCCB_CB_01 0x0311
 	
+	//定义是否进入批量生产，从而确定硬件标识从哪里读取
+	#define IHU_HARDWARE_MASSIVE_PRODUTION_SET IHU_HARDWARE_MASSIVE_PRODUTION_NO
+
+	//定义固件是否自动升级
+	#define IHU_HARDWARE_BURN_ID_FW_UPGRADE_SET IHU_HARDWARE_BURN_ID_FW_UPGRADE_NO
+
  /***********************************************************************************
  *
  * 流水产线项目传感器板 IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCSB_ID
@@ -343,7 +372,13 @@
 
 	//CURRENT HW PRODUCT CATELOG
 	#define IHU_HARDWARE_PRODUCT_CAT_TYPE 0x0321 // HUITP_IEID_UNI_INVENT_HWTYPE_PDTYPE_G3_PLCCB_SB_01  0x0321
-	
+
+	//定义是否进入批量生产，从而确定硬件标识从哪里读取
+	#define IHU_HARDWARE_MASSIVE_PRODUTION_SET IHU_HARDWARE_MASSIVE_PRODUTION_NO
+
+	//定义固件是否自动升级
+	#define IHU_HARDWARE_BURN_ID_FW_UPGRADE_SET IHU_HARDWARE_BURN_ID_FW_UPGRADE_NO
+
  /***********************************************************************************
  *
  * IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID
@@ -438,6 +473,11 @@
 	#else
 	#endif
 
+	//定义是否进入批量生产，从而确定硬件标识从哪里读取
+	#define IHU_HARDWARE_MASSIVE_PRODUTION_SET IHU_HARDWARE_MASSIVE_PRODUTION_NO
+
+	//定义固件是否自动升级
+	#define IHU_HARDWARE_BURN_ID_FW_UPGRADE_SET IHU_HARDWARE_BURN_ID_FW_UPGRADE_NO
 
 /***********************************************************************************
  *
@@ -486,6 +526,8 @@
 	#define IHU_SERIESPORT_NUM_FOR_GPS_DEFAULT  1
 	//定义后台CLOUD连接到服务器
 	#define IHU_CLOUDXHUI_HTTP_ADDRESS_LOCAL "http://127.0.0.1/test.php"
+	#define IHU_CLOUDXHUI_HCU_NAME_SELF "IHU_BFSC_0499"
+	
 	//local SW storage address
 	#define  IHU_SW_DOWNLOAD_DIR_DEFAULT "/home/pi/ihu_sw_download/"
 	#define  IHU_SW_ACTIVE_DIR_DEFAULT "/home/pi/ihu_sw_active/"
@@ -504,6 +546,13 @@
 	//CURRENT HW PRODUCT CATELOG
 	#define IHU_HARDWARE_PRODUCT_CAT_TYPE 0x0881 // HUITP_IEID_UNI_INVENT_HWTYPE_PDTYPE_G8_BFSC_IHU_01 0x0881
 
+	//定义是否进入批量生产，从而确定硬件标识从哪里读取
+	#define IHU_HARDWARE_MASSIVE_PRODUTION_SET IHU_HARDWARE_MASSIVE_PRODUTION_NO
+
+	//定义固件是否自动升级
+	#define IHU_HARDWARE_BURN_ID_FW_UPGRADE_SET IHU_HARDWARE_BURN_ID_FW_UPGRADE_NO
+
+//==============================================================================================================================
 #else //IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID
 	#error Un-correct constant definition
 #endif //IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID

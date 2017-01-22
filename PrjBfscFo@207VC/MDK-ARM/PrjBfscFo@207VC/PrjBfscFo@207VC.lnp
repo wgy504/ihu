@@ -52,6 +52,7 @@
 "prjbfscfo@207vc\bsp_calendar.o"
 "prjbfscfo@207vc\bsp_rtc.o"
 "prjbfscfo@207vc\bsp_cpuid.o"
+"prjbfscfo@207vc\bsp_stmflash.o"
 "prjbfscfo@207vc\l1timer_freeos.o"
 "prjbfscfo@207vc\vmfreeoslayer.o"
 "prjbfscfo@207vc\l1vmfo.o"

@@ -161,11 +161,11 @@ void Test_Write( uint32_t WriteAddr, uint16_t WriteData )
 }
 
 //读取设备标签信息
-void ihu_bsp_stm32_f2board_equid_get(StrStm32F2EquidStorage_t *equ)
+void ihu_bsp_stm32_f2board_equid_get(SysEngParElementHwBurnPhyIdAddr_t *equ)
 {
 	strncpy(equ->equLable, (char *)IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_ADD_FIX, 20);
-	equ->equType = (uint16_t)(IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_ADD_FIX+20);
-	equ->hwId = (uint16_t)(IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_ADD_FIX+22);
+	equ->hwType = (uint16_t)(IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_ADD_FIX+20);
+	equ->hwPemId = (uint16_t)(IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_ADD_FIX+22);
 	equ->swRelId = (uint16_t)(IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_ADD_FIX+24);
 	equ->swVerId = (uint16_t)(IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_ADD_FIX+26);
 	equ->swUpgradeFlag = (uint8_t)(IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_ADD_FIX+28);

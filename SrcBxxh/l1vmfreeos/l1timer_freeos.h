@@ -86,6 +86,7 @@ enum IHU_TIMER_ID_1S_ALL
 	TIMER_ID_1S_BFSC_L3BFSC_GIVE_UP_TIMER,
 	
 #else
+	#error Un-correct constant definition
 #endif	
 	TIMER_ID_1S_MAX,
 };
@@ -156,6 +157,7 @@ typedef struct IhuTimerTable
 	#define IHU_TIMER_CONFIG_START_RESOLUTION_10MS TRUE
 	#define IHU_TIMER_CONFIG_START_RESOLUTION_1MS FALSE
 #else
+	#error Un-correct constant definition
 #endif
 
 //Global variables
