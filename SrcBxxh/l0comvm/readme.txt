@@ -2,7 +2,7 @@
 == 将修改方式放在最前面，以提高效率
 =================================================
 //上位机复杂的L3状态机进行受控保护，确保从错误中进行恢复 => 使用优化的高级方法！！！
-//上位机func handler的优化  => 简化VM的初始化过程和配置过程
+//上位机func handler的优化  => 简化VM的初始化过程和配置过程，包括Heart-Beat及任务创建的简化过程
 //上位机HUITPXML、HUITPJASON支持
 //上位机Netdata/Linux性能实时监测工具 => http://www.my-netdata.io
 //上位机Layui模块化前端UI框架 => http://www.layui.com/
@@ -11,12 +11,18 @@
 = 最后再增加tcp/udp等数据连接方式，看门狗打开，BLE/RFID/摄像头研究等内容
 **************************************************************************
 
+//= ZJL, 2017 Jan.22, CURRENT_SW_DELIVERY R03.106 =>CCL项目
+= 继续完善AT CMD的TCP/UDP工作机制
+
+
+
 //= ZJL, 2017 Jan.22, CURRENT_SW_DELIVERY R03.105 =>CCL项目/BFSC
 = 继续全局VM任务创建的统一化，使用FuncHandler，消去分项目初始化创建任务的过程
 = 改善VMFO的创建任务机制，统一称为循环和利用FuncHandler，不再分项目进行，从而大大简化了分项目处理的复杂度
 = 改善VMFO中Heart-beat的接收处理
 = 去掉各个模块的pnp全局配置，统一由VMLAYER.C中初始化进行，初始化不再判定sysconfig.h中的pnp配置
-
+= 将任务数量简化到12个，贴近真实的任务数量（11个），从而大大优化内存的占用情形
+  > CCL内存89KB，BFSC内存65KB，非常完美！
 
 //= ZJL, 2017 Jan.22, CURRENT_SW_DELIVERY R03.104 =>CCL项目/BFSC/EMC68X
 = 对CCL/BFSC的ErrorPrint做进一步的优化改造
