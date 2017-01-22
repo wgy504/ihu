@@ -31,8 +31,7 @@
 //#define FSM_STATE_IDLE  0x01
 enum FSM_STATE_CCL
 {
-	FSM_STATE_CCL_INITED = 0x02,
-	//FSM_STATE_CCL_ACTIVED,  			//IHU被唤醒，开始工作。开的原因可能是触发电源，也可能是定时触发
+	FSM_STATE_CCL_INITED = 0x02,  //IHU被唤醒，开始工作。开的原因可能是触发电源，也可能是定时触发
 	FSM_STATE_CCL_CLOUD_INQUERY,
 	FSM_STATE_CCL_TO_OPEN_DOOR,
 	FSM_STATE_CCL_DOOR_OPEN,

@@ -529,7 +529,7 @@ void ihu_vm_system_init(void)
 	}
 
 	//INIT IHU itself
-	IhuDebugPrint("VMFO: Compiled HW_ID Info: CURRENT_PRJ=[%s], PRODUCT_CAT=[0x%x], HW_TYPE=[%d], SW_REL=[%d], SW_DELIVER=[%d].\n", IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT, \
+	IhuDebugPrint("VMFO: User task starting, compiled load Info: CURRENT_PRJ=[%s], PRODUCT_CAT=[0x%x], HW_TYPE=[%d], SW_REL=[%d], SW_DELIVER=[%d].\n", IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT, \
 		IHU_HARDWARE_PRODUCT_CAT_TYPE, IHU_CURRENT_HW_TYPE, IHU_CURRENT_SW_RELEASE, IHU_CURRENT_SW_DELIVERY);
 	IhuDebugPrint("VMFO: BXXH(TM) IHU(c) Application Layer start and initialized, build at %s, %s.\n", __DATE__, __TIME__);
 
@@ -659,7 +659,6 @@ void ihu_vm_system_init(void)
 	strcpy(zIhuSysEngPar.cloud.cloudBhServerAddr, IHU_CLOUDXHUI_HTTP_ADDRESS_BH_SERVER_ADDR);
 	strcpy(zIhuSysEngPar.cloud.cloudBhServerName, IHU_CLOUDXHUI_HTTP_ADDRESS_BH_SERVER_NAME);
 	strcpy(zIhuSysEngPar.cloud.cloudBhFtpSvrAddr, IHU_CLOUDXHUI_FTP_BH_SERVER_ADDR);	
-	strcpy(zIhuSysEngPar.cloud.cloudBhIhuName, IHU_CLOUDXHUI_HCU_NAME_SELF);
 	
 	//local SW storage address
 	strcpy(zIhuSysEngPar.swDownload.ihuSwDownloadDir, IHU_SW_DOWNLOAD_DIR_DEFAULT);
@@ -692,6 +691,11 @@ void ihu_vm_system_init(void)
 	
 	//硬件烧录区域，系统唯一标识部分，后面程序中访问到这些系统参数都必须从这个地方读取
 	ihu_l1hd_f2board_equid_get(&(zIhuSysEngPar.hwBurnId));
+	//对硬件类型进行相同性检查，如果不一致，必然发生了生产性错误，或者硬件搞错，或者Factory Load用错，应该严重警告
+	if ((IHU_HARDWARE_MASSIVE_PRODUTION_SET == IHU_HARDWARE_MASSIVE_PRODUTION_YES) && (zIhuSysEngPar.hwBurnId.hwType != IHU_HARDWARE_PRODUCT_CAT_TYPE)){
+		IhuDebugPrint("VMFO: Fatal error, using wrong hardware type or factory load!!!\n");
+		return;
+	}
 	//由于硬件部分并没有真正起作用，所以暂时需要从系统定义区重复写入，一旦批量生产这部分可以去掉
 	if (IHU_HARDWARE_MASSIVE_PRODUTION_SET == IHU_HARDWARE_MASSIVE_PRODUTION_NO){
 		strncpy(zIhuSysEngPar.hwBurnId.equLable, IHU_CLOUDXHUI_HCU_NAME_SELF, (sizeof(IHU_CLOUDXHUI_HCU_NAME_SELF)<sizeof(zIhuSysEngPar.hwBurnId.equLable))?(sizeof(IHU_CLOUDXHUI_HCU_NAME_SELF)):(sizeof(zIhuSysEngPar.hwBurnId.equLable)));
@@ -807,6 +811,11 @@ void ihu_vm_system_init(void)
 
 	//硬件烧录区域，系统唯一标识部分，后面程序中访问到这些系统参数都必须从这个地方读取
 	ihu_l1hd_f2board_equid_get(&(zIhuSysEngPar.hwBurnId));
+	//对硬件类型进行相同性检查，如果不一致，必然发生了生产性错误，或者硬件搞错，或者Factory Load用错，应该严重警告
+	if ((IHU_HARDWARE_MASSIVE_PRODUTION_SET == IHU_HARDWARE_MASSIVE_PRODUTION_YES) && (zIhuSysEngPar.hwBurnId.hwType != IHU_HARDWARE_PRODUCT_CAT_TYPE)){
+		IhuDebugPrint("VMFO: Fatal error, using wrong hardware type or factory load!!!\n");
+		return;
+	}	
 	//由于硬件部分并没有真正起作用，所以暂时需要从系统定义区重复写入，一旦批量生产这部分可以去掉
 	if (IHU_HARDWARE_MASSIVE_PRODUTION_SET == IHU_HARDWARE_MASSIVE_PRODUTION_NO){
 		strncpy(zIhuSysEngPar.hwBurnId.equLable, IHU_CLOUDXHUI_HCU_NAME_SELF, (sizeof(IHU_CLOUDXHUI_HCU_NAME_SELF)<sizeof(zIhuSysEngPar.hwBurnId.equLable))?(sizeof(IHU_CLOUDXHUI_HCU_NAME_SELF)):(sizeof(zIhuSysEngPar.hwBurnId.equLable)));

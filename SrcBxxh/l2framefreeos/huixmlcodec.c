@@ -49,7 +49,7 @@ OPSTAT func_cloud_standard_xml_pack(UINT8 msgType, char *funcFlag, UINT16 msgId,
 	strcat(output->buf, zIhuSysEngPar.cloud.cloudBhServerName);
 	strcat(output->buf, HUITP_MSG_HUIXML_CONSTANT_TO_USER_R);
 	strcat(output->buf, HUITP_MSG_HUIXML_CONSTANT_FROM_USER_L);
-	strcat(output->buf, zIhuSysEngPar.cloud.cloudBhIhuName);
+	strcat(output->buf, zIhuSysEngPar.hwBurnId.equLable);
 	strcat(output->buf, HUITP_MSG_HUIXML_CONSTANT_FROM_USER_R);
 	strcat(output->buf, HUITP_MSG_HUIXML_CONSTANT_CREATE_TIME_L);
 	//time(0)：取得RTC时间的方式，通过跟BSP相连，得到解决了
@@ -229,7 +229,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 	}
 	memset(msgToUser, 0, sizeof(msgToUser));
 	strncpy(msgToUser, pIndexT1+strlen(HUITP_MSG_HUIXML_CONSTANT_TO_USER_L), dif);
-	if (strcmp(msgToUser, zIhuSysEngPar.cloud.cloudBhIhuName) !=0){
+	if (strcmp(msgToUser, zIhuSysEngPar.hwBurnId.equLable) !=0){
 		IhuErrorPrint("HUITPXML: Received message error, invalid toUser field!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;		
