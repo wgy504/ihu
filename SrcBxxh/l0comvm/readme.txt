@@ -2,6 +2,7 @@
 == 将修改方式放在最前面，以提高效率
 =================================================
 //上位机复杂的L3状态机进行受控保护，确保从错误中进行恢复
+//上位机func handler的优化
 //上位机HUITPXML、HUITPJASON支持
 //上位机Netdata/Linux性能实时监测工具 => http://www.my-netdata.io
 //上位机Layui模块化前端UI框架 => http://www.layui.com/
@@ -13,8 +14,8 @@
 
 
 //= ZJL, 2017 Jan.22, CURRENT_SW_DELIVERY R03.104 =>CCL项目
-= 
-
+= 对CCL/BFSC的ErrorPrint做进一步的优化改造
+= 试图建立全局任务配置输入表单，简化任务创建的过程，特别是在程序部分分项目执行的过程
 
 
 

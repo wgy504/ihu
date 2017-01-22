@@ -40,14 +40,8 @@ FsmTable_t zIhuFsmTable;
 //全局工程参数表
 IhuSysEngParTable_t zIhuSysEngPar; //全局工程参数控制表
 
-//全局时间
-time_t zIhuSystemTimeUnix = 1444341556;  //2015/8
-struct tm zIhuSystemTimeYmd;
-
 //全局公用打印字符串
 IhuPrintBufferChar_t zIhuPrintBufferChar[IHU_PRINT_BUFFER_NUMBER];
-//static char strGlobalPrintChar[IHU_PRINT_BUFFER_NUMBER][IHU_PRINT_CHAR_SIZE];
-//static char zStrIhuPrintFileLine[IHU_PRINT_BUFFER_NUMBER][IHU_PRINT_FILE_LINE_SIZE];
 unsigned int globalPrintIndex = 0;
 OS_MUTEX zIhuPrintMutex;
 
@@ -55,6 +49,23 @@ OS_MUTEX zIhuPrintMutex;
 //请服从最长长度TASK_NAME_MAX_LENGTH的定义，不然Debug/Trace打印出的信息也会出错
 //全局变量：任务打印命名
 //从极致优化内存的角度，这里浪费了一个TASK对应的内存空间（MIN=0)，但它却极大的改善了程序编写的效率，值得浪费！！！
+//具体的闪烁图案，需要通过ON/OFF/CYCLE自行定义，初始化就在这里提前初始化写好
+StrIhuGlobalTaskInputConfig_t zIhuGlobalTaskInputConfig[] =
+{
+	//ID,    状态控制, 
+	{TASK_ID_VMFO, 			"MIN", 				NULL},//Starting
+	{TASK_ID_TIMER, 		"VMFO", 			NULL},
+	{TASK_ID_MIN, 			"TIMER", 			NULL},
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)	
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)		
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
+#else
+	#error Un-correct constant definition	
+#endif
+  {TASK_ID_MAX,				"MAX", 				NULL},//Ending
+};
+
+
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
   char *zIhuTaskNameList[MAX_TASK_NUM_IN_ONE_IHU] ={
     "MIN",
@@ -105,8 +116,13 @@ OS_MUTEX zIhuPrintMutex;
     "BFSC",
     "MAX"};
 #else
+	#error Un-correct constant definition
 #endif
 
+		
+		
+		
+		
 //消息ID的定义全局表，方便TRACE函数使用
 //请服从MSG_NAME_MAX_LENGTH的最长定义，不然出错
 //全局变量：消息打印命名
@@ -248,6 +264,8 @@ char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK] ={
 #else
 	#error Un-correct constant definition
 #endif
+
+
 
 /*******************************************************************************
 **

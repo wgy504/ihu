@@ -97,67 +97,61 @@
  *   - zIhuTaskNameList
  *   - 还要修改可能的本地配置文件，或者sysengpar.h的固定工参配置信息，#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID
  *	 - 继续修改初始化函数void ihu_vm_system_init(void)
- *
+ *	
+ *	基础模块：TASK_ID_MIN, TASK_ID_VMFO, TASK_ID_TIMER, TASK_ID_ADCLIBRA, TASK_ID_SPILEO, TASK_ID_I2CARIES, TASK_ID_PWMTAURUS
+ *	          TASK_ID_SPSVIRGO, TASK_ID_CANVELA, TASK_ID_DIDOCAP, TASK_ID_LEDPISCES, TASK_ID_ETHORION, TASK_ID_DCMIARIS, 
+ *            TASK_ID_EMC68X, TASK_ID_CCL, TASK_ID_MAX, TASK_ID_INVALID
  */
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
-enum IHU_TASK_NAME_ID
-{
-	TASK_ID_MIN = 0,
-	TASK_ID_VMFO,
-	TASK_ID_TIMER,
-//	TASK_ID_ADCLIBRA,
-//	TASK_ID_SPILEO,
-//	TASK_ID_I2CARIES,
-//	TASK_ID_PWMTAURUS,
-//	TASK_ID_SPSVIRGO,
-//	TASK_ID_CANVELA,
-//	TASK_ID_DIDOCAP,
-//	TASK_ID_LEDPISCES,
-//	TASK_ID_ETHORION,	
-	TASK_ID_EMC68X,
-	TASK_ID_MAX,
-	TASK_ID_INVALID = 0xFF,
-}; //end of IHU_TASK_NAME_ID
+	enum IHU_TASK_NAME_ID
+	{
+		TASK_ID_MIN = 0,
+		TASK_ID_VMFO,
+		TASK_ID_TIMER,
+		TASK_ID_EMC68X,
+		TASK_ID_MAX,
+		TASK_ID_INVALID = 0xFF,
+	}; //end of IHU_TASK_NAME_ID
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-enum IHU_TASK_NAME_ID
-{
-	TASK_ID_MIN = 0,
-	TASK_ID_VMFO,
-	TASK_ID_TIMER,
-	TASK_ID_ADCLIBRA,
-	//TASK_ID_SPILEO,
-	TASK_ID_I2CARIES,
-	//TASK_ID_PWMTAURUS,
-	TASK_ID_SPSVIRGO,
-	//TASK_ID_CANVELA,
-	TASK_ID_DIDOCAP,
-	TASK_ID_LEDPISCES,
-	//TASK_ID_ETHORION,
-	TASK_ID_DCMIARIS,	
-	TASK_ID_CCL,
-	TASK_ID_MAX,
-	TASK_ID_INVALID = 0xFF,
-}; //end of IHU_TASK_NAME_ID
+	enum IHU_TASK_NAME_ID
+	{
+		TASK_ID_MIN = 0,
+		TASK_ID_VMFO,
+		TASK_ID_TIMER,
+		TASK_ID_ADCLIBRA,
+		//TASK_ID_SPILEO,
+		TASK_ID_I2CARIES,
+		//TASK_ID_PWMTAURUS,
+		TASK_ID_SPSVIRGO,
+		//TASK_ID_CANVELA,
+		TASK_ID_DIDOCAP,
+		TASK_ID_LEDPISCES,
+		//TASK_ID_ETHORION,
+		TASK_ID_DCMIARIS,	
+		TASK_ID_CCL,
+		TASK_ID_MAX,
+		TASK_ID_INVALID = 0xFF,
+	}; //end of IHU_TASK_NAME_ID
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
-enum IHU_TASK_NAME_ID
-{
-	TASK_ID_MIN = 0,
-	TASK_ID_VMFO,
-	TASK_ID_TIMER,
-	TASK_ID_ADCLIBRA,
-	TASK_ID_SPILEO,
-	TASK_ID_I2CARIES,
-	//TASK_ID_PWMTAURUS,
-	//TASK_ID_SPSVIRGO,
-	TASK_ID_CANVELA,
-	//TASK_ID_DIDOCAP,
-	TASK_ID_LEDPISCES,
-	//TASK_ID_ETHORION,
-	//TASK_ID_DCMIARIS,	
-	TASK_ID_BFSC,
-	TASK_ID_MAX,
-	TASK_ID_INVALID = 0xFF,
-}; //end of IHU_TASK_NAME_ID
+	enum IHU_TASK_NAME_ID
+	{
+		TASK_ID_MIN = 0,
+		TASK_ID_VMFO,
+		TASK_ID_TIMER,
+		TASK_ID_ADCLIBRA,
+		TASK_ID_SPILEO,
+		TASK_ID_I2CARIES,
+		//TASK_ID_PWMTAURUS,
+		//TASK_ID_SPSVIRGO,
+		TASK_ID_CANVELA,
+		//TASK_ID_DIDOCAP,
+		TASK_ID_LEDPISCES,
+		//TASK_ID_ETHORION,
+		//TASK_ID_DCMIARIS,	
+		TASK_ID_BFSC,
+		TASK_ID_MAX,
+		TASK_ID_INVALID = 0xFF,
+	}; //end of IHU_TASK_NAME_ID
 #else
 	#error Un-correct constant definition
 #endif
@@ -229,6 +223,14 @@ typedef struct FsmTable
 	FsmCtrlTable_t  pFsmCtrlTable[MAX_TASK_NUM_IN_ONE_IHU];  //所有任务的状态机总控表
 	FsmQueueListTable_t taskQue[MAX_TASK_NUM_IN_ONE_IHU];  //所有任务的消息队列总控表
 }FsmTable_t;
+
+//任务配置的基础配置信息
+typedef struct StrIhuGlobalTaskInputConfig
+{
+	UINT8 taskInputId;
+	char  taskInputName[TASK_NAME_MAX_LENGTH];
+	FsmStateItem_t (*fsmFuncEntry)(void);
+}StrIhuGlobalTaskInputConfig_t;
 
 //任务模块RESTART的一些全局定义
 #define IHU_RUN_ERROR_LEVEL_0_WARNING 10
@@ -337,8 +339,6 @@ extern FsmTable_t zIhuFsmTable;                             //状态机总表
 extern char *zIhuTaskNameList[MAX_TASK_NUM_IN_ONE_IHU];     //任务名字符串
 extern char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK];    //消息名字符串
 extern IhuSysEngParTable_t zIhuSysEngPar;                   //工参
-extern time_t zIhuSystemTimeUnix;                           //系统时钟TimeStamp
-extern struct tm zIhuSystemTimeYmd;                        	//系统时钟YMD
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
 extern FsmStateItem_t FsmVmfo[];                           		//状态机
 extern FsmStateItem_t FsmTimer[];                           	//状态机
