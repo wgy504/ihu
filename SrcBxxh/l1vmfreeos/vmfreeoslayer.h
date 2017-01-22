@@ -197,9 +197,10 @@ typedef struct IhuTaskTag
 	UINT8  pnpState;
 	QueueHandle_t  QueId;
 	UINT8  state;
-	char   TaskName[TASK_NAME_MAX_LENGTH];
+	char   taskName[TASK_NAME_MAX_LENGTH];
 	FsmStateItem_t *fsmPtr;
 	xTaskHandle TaskHandle;
+	void*  taskFuncEntry;
 }IhuTaskTag_t;
 
 typedef struct FsmArrayElement

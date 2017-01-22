@@ -552,7 +552,6 @@ void ihu_vm_system_init(void)
 	for (i=TASK_ID_MIN; i<=TASK_ID_MAX; i++){
 		zIhuTaskInfo[i].TaskId = i;
 		zIhuTaskInfo[i].pnpState = IHU_TASK_PNP_OFF;
-		//strcpy(zIhuTaskInfo[i].TaskName, zIhuTaskNameList[i]);
 	}
 	memset(zIhuRunErrCnt, 0, sizeof(UINT32) * MAX_TASK_NUM_IN_ONE_IHU);
 	
@@ -560,8 +559,9 @@ void ihu_vm_system_init(void)
 	//起始必须是TASK_ID_MIN条目
 	if (zIhuGlobalTaskInputConfig[0].taskInputId != TASK_ID_MIN){
 		IhuErrorPrint("VMFO: Initialize VMFO failure, task input configuration error!\n");
-		return;		
+		return;
 	}
+	strcpy(zIhuTaskInfo[TASK_ID_MIN].taskName, zIhuGlobalTaskInputConfig[0].taskInputName);
 	//以TASK_ID_MAX为终止条目
 	for(item=1; item < MAX_TASK_NUM_IN_ONE_IHU; item++)
 	{
@@ -584,28 +584,19 @@ void ihu_vm_system_init(void)
 	while(zIhuGlobalTaskInputConfig[item].taskInputId != TASK_ID_MAX){
 		taskid = zIhuGlobalTaskInputConfig[item].taskInputId;
 		zIhuTaskInfo[taskid].pnpState = IHU_TASK_PNP_ON;
-		strcpy(zIhuTaskInfo[taskid].TaskName, zIhuGlobalTaskInputConfig[item].taskInputName);
+		strcpy(zIhuTaskInfo[taskid].taskName, zIhuGlobalTaskInputConfig[item].taskInputName);
+		zIhuTaskInfo[taskid].taskFuncEntry = zIhuGlobalTaskInputConfig[item].fsmFuncEntry;
 		item++;
 	}
-	//最后一项是TASK_ID_MAX
-	taskid = zIhuGlobalTaskInputConfig[item].taskInputId;
-	strcpy(zIhuTaskInfo[taskid].TaskName, zIhuGlobalTaskInputConfig[item].taskInputName);
+	//最后一项必定是TASK_ID_MAX
+	strcpy(zIhuTaskInfo[TASK_ID_MAX].taskName, zIhuGlobalTaskInputConfig[item].taskInputName);
 	
 	//Init Fsm
 	FsmInit();
-	
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)	
-	//初始化全局变量TASK_ID/QUE_ID/TASK_STAT
-	memset(&(zIhuTaskInfo[0].TaskId), 0, sizeof(zIhuTaskInfo)*(TASK_ID_MAX-TASK_ID_MIN+1));
 
-	for (i=TASK_ID_MIN; i<TASK_ID_MAX; i++){
-		zIhuTaskInfo[i].TaskId = i;
-		strcpy(zIhuTaskInfo[i].TaskName, zIhuTaskNameList[i]);
-	}
-	memset(zIhuRunErrCnt, 0, sizeof(UINT32)*(TASK_ID_MAX-TASK_ID_MIN+1));
 	
-	//Init Fsm
-	FsmInit();
+	//分项目对工程参数进行配置
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)	
 	
 	//初始化全局工参配置信息，这里给出了大部分用到的参数的初始化结构，以便未来可以更加方便的添加完善
 	//后台通信部分
@@ -651,37 +642,8 @@ void ihu_vm_system_init(void)
 		zIhuSysEngPar.traceList.msg[i].msgAllow = TRUE;
 	}
 
-	//处理启动模块
-	for (i=0; i<MAX_TASK_NUM_IN_ONE_IHU; i++){
-		zIhuTaskInfo[i].pnpState = IHU_TASK_PNP_INVALID;
-	}
-	//肯定需要启动的任务模块
-	zIhuTaskInfo[TASK_ID_VMFO].pnpState = IHU_TASK_PNP_ON;
-	zIhuTaskInfo[TASK_ID_TIMER].pnpState = IHU_TASK_PNP_ON;
-//	if (IHU_COMM_FRONT_ADC == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_ADCLIBRA].pnpState = IHU_TASK_PNP_ON;
-//	if (IHU_COMM_FRONT_SPI == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_SPILEO].pnpState = IHU_TASK_PNP_ON;
-//	if (IHU_COMM_FRONT_I2C == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_I2CARIES].pnpState = IHU_TASK_PNP_ON;
-//	if (IHU_COMM_FRONT_PWM == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_PWMTAURUS].pnpState = IHU_TASK_PNP_ON;
-//	if (IHU_COMM_FRONT_SPS == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_SPSVIRGO].pnpState = IHU_TASK_PNP_ON;
-//	if (IHU_COMM_FRONT_GPIO == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_CANVELA].pnpState = IHU_TASK_PNP_ON;
-//	if (IHU_COMM_FRONT_DIDO == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_DIDOCAP].pnpState = IHU_TASK_PNP_ON;
-//	if (IHU_COMM_FRONT_LED == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_LEDPISCES].pnpState = IHU_TASK_PNP_ON;
-//	if (IHU_COMM_FRONT_ETH == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_ETHORION].pnpState = IHU_TASK_PNP_ON;
-	if (IHU_MAIN_CTRL_EMC68X == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_EMC68X].pnpState = IHU_TASK_PNP_ON;
-
 	
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-	//初始化全局变量TASK_ID/QUE_ID/TASK_STAT
-	memset(&(zIhuTaskInfo[0].TaskId), 0, sizeof(zIhuTaskInfo)*(TASK_ID_MAX-TASK_ID_MIN+1));
-
-	for (i=TASK_ID_MIN; i<TASK_ID_MAX; i++){
-		zIhuTaskInfo[i].TaskId = i;
-		strcpy(zIhuTaskInfo[i].TaskName, zIhuTaskNameList[i]);
-	}
-	memset(zIhuRunErrCnt, 0, sizeof(UINT32)*(TASK_ID_MAX-TASK_ID_MIN+1));
-
-	//Init Fsm
-	FsmInit();
 	
 	//初始化全局工参配置信息，这里给出了大部分用到的参数的初始化结构，以便未来可以更加方便的添加完善
 	//后台通信部分
@@ -765,25 +727,6 @@ void ihu_vm_system_init(void)
 		zIhuSysEngPar.hwBurnId.swVerId = IHU_CURRENT_SW_DELIVERY;
 		zIhuSysEngPar.hwBurnId.swUpgradeFlag = IHU_HARDWARE_BURN_ID_FW_UPGRADE_SET;
 	}
-
-	//处理启动模块
-	for (i=0; i<MAX_TASK_NUM_IN_ONE_IHU; i++){
-		zIhuTaskInfo[i].pnpState = IHU_TASK_PNP_INVALID;
-	}
-	//肯定需要启动的任务模块
-	zIhuTaskInfo[TASK_ID_VMFO].pnpState = IHU_TASK_PNP_ON;
-	zIhuTaskInfo[TASK_ID_TIMER].pnpState = IHU_TASK_PNP_ON;
-	if (IHU_COMM_FRONT_ADC == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_ADCLIBRA].pnpState = IHU_TASK_PNP_ON;
-	//if (IHU_COMM_FRONT_SPI == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_SPILEO].pnpState = IHU_TASK_PNP_ON;
-	if (IHU_COMM_FRONT_I2C == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_I2CARIES].pnpState = IHU_TASK_PNP_ON;
-	//if (IHU_COMM_FRONT_PWM == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_PWMTAURUS].pnpState = IHU_TASK_PNP_ON;
-	if (IHU_COMM_FRONT_SPS == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_SPSVIRGO].pnpState = IHU_TASK_PNP_ON;
-	//if (IHU_COMM_FRONT_GPIO == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_CANVELA].pnpState = IHU_TASK_PNP_ON;
-	if (IHU_COMM_FRONT_DIDO == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_DIDOCAP].pnpState = IHU_TASK_PNP_ON;
-	if (IHU_COMM_FRONT_LED == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_LEDPISCES].pnpState = IHU_TASK_PNP_ON;
-	//if (IHU_COMM_FRONT_ETH == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_ETHORION].pnpState = IHU_TASK_PNP_ON;
-	if (IHU_COMM_FRONT_DCMI == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_DCMIARIS].pnpState = IHU_TASK_PNP_ON;
-	if (IHU_MAIN_CTRL_CCL == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_CCL].pnpState = IHU_TASK_PNP_ON;			
 	
 	//初始化之后的系统标识信息
 	IhuDebugPrint("VMFO: Initialized Hardware Burn Physical Id/Address: CURRENT_PRJ=[%s], HW_LABLE=[%s], PRODUCT_CAT=[0x%x], HW_TYPE=[0x%x], SW_RELEASE_VER=[%d.%d], FW_UPGRADE_FLAG=[%d].\n", \
@@ -796,17 +739,6 @@ void ihu_vm_system_init(void)
 		zIhuSysEngPar.hwBurnId.swUpgradeFlag);
 	
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
-	//初始化全局变量TASK_ID/QUE_ID/TASK_STAT
-	memset(&(zIhuTaskInfo[0].TaskId), 0, sizeof(zIhuTaskInfo)*(TASK_ID_MAX-TASK_ID_MIN+1));
-
-	for (i=TASK_ID_MIN; i<TASK_ID_MAX; i++){
-		zIhuTaskInfo[i].TaskId = i;
-		strcpy(zIhuTaskInfo[i].TaskName, zIhuTaskNameList[i]);
-	}
-	memset(zIhuRunErrCnt, 0, sizeof(UINT32)*(TASK_ID_MAX-TASK_ID_MIN+1));
-
-	//Init Fsm
-	FsmInit();
 	
 	//初始化全局工参配置信息，这里给出了大部分用到的参数的初始化结构，以便未来可以更加方便的添加完善
 	//后台通信部分
@@ -885,25 +817,6 @@ void ihu_vm_system_init(void)
 		zIhuSysEngPar.hwBurnId.swVerId = IHU_CURRENT_SW_DELIVERY;
 		zIhuSysEngPar.hwBurnId.swUpgradeFlag = IHU_HARDWARE_BURN_ID_FW_UPGRADE_SET;
 	}	
-
-	//处理启动模块
-	for (i=0; i<MAX_TASK_NUM_IN_ONE_IHU; i++){
-		zIhuTaskInfo[i].pnpState = IHU_TASK_PNP_INVALID;
-	}
-	//肯定需要启动的任务模块
-	zIhuTaskInfo[TASK_ID_VMFO].pnpState = IHU_TASK_PNP_ON;
-	zIhuTaskInfo[TASK_ID_TIMER].pnpState = IHU_TASK_PNP_ON;
-	if (IHU_COMM_FRONT_ADC == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_ADCLIBRA].pnpState = IHU_TASK_PNP_ON;
-	if (IHU_COMM_FRONT_SPI == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_SPILEO].pnpState = IHU_TASK_PNP_ON;
-	if (IHU_COMM_FRONT_I2C == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_I2CARIES].pnpState = IHU_TASK_PNP_ON;
-	//if (IHU_COMM_FRONT_PWM == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_PWMTAURUS].pnpState = IHU_TASK_PNP_ON;
-	//if (IHU_COMM_FRONT_SPS == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_SPSVIRGO].pnpState = IHU_TASK_PNP_ON;
-	if (IHU_COMM_FRONT_GPIO == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_CANVELA].pnpState = IHU_TASK_PNP_ON;
-	//if (IHU_COMM_FRONT_DIDO == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_DIDOCAP].pnpState = IHU_TASK_PNP_ON;
-	if (IHU_COMM_FRONT_LED == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_LEDPISCES].pnpState = IHU_TASK_PNP_ON;
-	//if (IHU_COMM_FRONT_ETH == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_ETHORION].pnpState = IHU_TASK_PNP_ON;
-	//if (IHU_COMM_FRONT_DCMI == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_DCMIARIS].pnpState = IHU_TASK_PNP_ON;
-	if (IHU_MAIN_CTRL_BFSC == IHU_TASK_PNP_ON) zIhuTaskInfo[TASK_ID_BFSC].pnpState = IHU_TASK_PNP_ON;
 
 	//初始化之后的系统标识信息
 	IhuDebugPrint("VMFO: Initialized Hardware Burn Physical Id/Address: CURRENT_PRJ=[%s], HW_LABLE=[%s], PRODUCT_CAT=[0x%x], HW_TYPE=[0x%x], SW_RELEASE_VER=[%d.%d], FW_UPGRADE_FLAG=[%d].\n", \
