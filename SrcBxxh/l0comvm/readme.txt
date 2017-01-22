@@ -2,7 +2,7 @@
 == 将修改方式放在最前面，以提高效率
 =================================================
 //上位机复杂的L3状态机进行受控保护，确保从错误中进行恢复 => 使用优化的高级方法！！！
-//上位机func handler的优化
+//上位机func handler的优化  => 简化VM的初始化过程和配置过程
 //上位机HUITPXML、HUITPJASON支持
 //上位机Netdata/Linux性能实时监测工具 => http://www.my-netdata.io
 //上位机Layui模块化前端UI框架 => http://www.layui.com/

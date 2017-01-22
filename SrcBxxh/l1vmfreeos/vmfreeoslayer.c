@@ -45,11 +45,8 @@ IhuPrintBufferChar_t zIhuPrintBufferChar[IHU_PRINT_BUFFER_NUMBER];
 unsigned int globalPrintIndex = 0;
 OS_MUTEX zIhuPrintMutex;
 
-//请确保，该全局字符串的定义跟Task_Id的顺序保持完全一致，不然后面的显示内容会出现差错
-//请服从最长长度TASK_NAME_MAX_LENGTH的定义，不然Debug/Trace打印出的信息也会出错
-//全局变量：任务打印命名
+//任务初始化配置参数
 //从极致优化内存的角度，这里浪费了一个TASK对应的内存空间（MIN=0)，但它却极大的改善了程序编写的效率，值得浪费！！！
-//具体的闪烁图案，需要通过ON/OFF/CYCLE自行定义，初始化就在这里提前初始化写好
 StrIhuGlobalTaskInputConfig_t zIhuGlobalTaskInputConfig[] =
 {
 	//TASK_ID,    				状态控制				状态机入口 					//注释
@@ -73,7 +70,8 @@ StrIhuGlobalTaskInputConfig_t zIhuGlobalTaskInputConfig[] =
 	{TASK_ID_I2CARIES, 		"I2CARIES", 		&FsmI2caries},
 	{TASK_ID_LEDPISCES, 	"LEDPISCES", 		&FsmLedpisces},
 	{TASK_ID_BFSC, 				"BFSC", 				&FsmBfsc},
-#else //为了提供完成列表，而且需要按照顺序来
+//为了提供完成列表，而且需要按照顺序来
+#else 
 	{TASK_ID_ADCLIBRA, 		"ADCLIBRA", 		&FsmAdclibra},
 	{TASK_ID_SPILEO, 			"SPILEO", 			&FsmSpileo},
 	{TASK_ID_I2CARIES, 		"I2CARIES", 		&FsmI2caries},
@@ -88,7 +86,7 @@ StrIhuGlobalTaskInputConfig_t zIhuGlobalTaskInputConfig[] =
 	{TASK_ID_CCL, 				"CCL", 					&FsmCcl},
 	{TASK_ID_BFSC, 				"BFSC", 				&FsmBfsc},
 #endif
-  {TASK_ID_MAX,				"MAX", 				NULL},									//Ending
+  {TASK_ID_MAX,					"MAX", 					NULL},							//Ending
 };
 
 
