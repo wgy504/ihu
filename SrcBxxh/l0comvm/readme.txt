@@ -8,13 +8,14 @@
 //上位机Layui模块化前端UI框架 => http://www.layui.com/
 //上位机frp内网穿透工具 => https://github.com/fatedier/frp
 **************接下来待完成主要内容**********************************************
-= VMLAYER中func handler的优化
 = 最后再增加tcp/udp等数据连接方式，看门狗打开，BLE/RFID/摄像头研究等内容
 **************************************************************************
 
-//= ZJL, 2017 Jan.22, CURRENT_SW_DELIVERY R03.105 =>CCL项目
+//= ZJL, 2017 Jan.22, CURRENT_SW_DELIVERY R03.105 =>CCL项目/BFSC
 = 继续全局VM任务创建的统一化，使用FuncHandler，消去分项目初始化创建任务的过程
-
+= 改善VMFO的创建任务机制，统一称为循环和利用FuncHandler，不再分项目进行，从而大大简化了分项目处理的复杂度
+= 改善VMFO中Heart-beat的接收处理
+= 去掉各个模块的pnp全局配置，统一由VMLAYER.C中初始化进行，初始化不再判定sysconfig.h中的pnp配置
 
 
 //= ZJL, 2017 Jan.22, CURRENT_SW_DELIVERY R03.104 =>CCL项目/BFSC/EMC68X

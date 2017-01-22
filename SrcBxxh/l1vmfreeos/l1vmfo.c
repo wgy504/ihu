@@ -105,190 +105,6 @@ OPSTAT fsm_vmfo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 		}
 	}
 	
-//#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)	
-//	zIhuVmfoTaskInitCtrlInfo[TASK_ID_VMFO].active = IHU_VMFO_TASK_ACTIVE;
-//	zIhuVmfoTaskInitCtrlInfo[TASK_ID_VMFO].state = IHU_VMFO_TASK_INIT_FEEDBACK;
-
-//	zIhuVmfoTaskInitCtrlInfo[TASK_ID_TIMER].active = IHU_VMFO_TASK_ACTIVE;
-//	zIhuVmfoTaskInitCtrlInfo[TASK_ID_TIMER].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-//	
-////	if (zIhuTaskInfo[TASK_ID_ADCLIBRA].pnpState == IHU_TASK_PNP_ON){
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_ADCLIBRA].active = IHU_VMFO_TASK_ACTIVE;
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_ADCLIBRA].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-////	}
-
-////	if (zIhuTaskInfo[TASK_ID_SPILEO].pnpState == IHU_TASK_PNP_ON){
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_SPILEO].active = IHU_VMFO_TASK_ACTIVE;
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_SPILEO].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-////	}
-
-////	if (zIhuTaskInfo[TASK_ID_I2CARIES].pnpState == IHU_TASK_PNP_ON){
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_I2CARIES].active = IHU_VMFO_TASK_ACTIVE;
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_I2CARIES].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-////	}
-
-////	if (zIhuTaskInfo[TASK_ID_PWMTAURUS].pnpState == IHU_TASK_PNP_ON){
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_PWMTAURUS].active = IHU_VMFO_TASK_ACTIVE;
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_PWMTAURUS].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-////	}
-
-////	if (zIhuTaskInfo[TASK_ID_SPSVIRGO].pnpState == IHU_TASK_PNP_ON){
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_SPSVIRGO].active = IHU_VMFO_TASK_ACTIVE;
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_SPSVIRGO].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-////	}
-////	
-////	if (zIhuTaskInfo[TASK_ID_CANVELA].pnpState == IHU_TASK_PNP_ON){
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_CANVELA].active = IHU_VMFO_TASK_ACTIVE;
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_CANVELA].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-////	}
-////	
-////	if (zIhuTaskInfo[TASK_ID_DIDOCAP].pnpState == IHU_TASK_PNP_ON){
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_DIDOCAP].active = IHU_VMFO_TASK_ACTIVE;
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_DIDOCAP].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-////	}
-
-////	if (zIhuTaskInfo[TASK_ID_LEDPISCES].pnpState == IHU_TASK_PNP_ON){
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_LEDPISCES].active = IHU_VMFO_TASK_ACTIVE;
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_LEDPISCES].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-////	}
-
-////	if (zIhuTaskInfo[TASK_ID_ETHORION].pnpState == IHU_TASK_PNP_ON){
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_ETHORION].active = IHU_VMFO_TASK_ACTIVE;
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_ETHORION].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-////	}
-
-//	if (zIhuTaskInfo[TASK_ID_EMC68X].pnpState == IHU_TASK_PNP_ON){
-//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_EMC68X].active = IHU_VMFO_TASK_ACTIVE;
-//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_EMC68X].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-//	}
-
-//#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-//	zIhuVmfoTaskInitCtrlInfo[TASK_ID_VMFO].active = IHU_VMFO_TASK_ACTIVE;
-//	zIhuVmfoTaskInitCtrlInfo[TASK_ID_VMFO].state = IHU_VMFO_TASK_INIT_FEEDBACK;
-
-//	zIhuVmfoTaskInitCtrlInfo[TASK_ID_TIMER].active = IHU_VMFO_TASK_ACTIVE;
-//	zIhuVmfoTaskInitCtrlInfo[TASK_ID_TIMER].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-//	
-////	if (zIhuTaskInfo[TASK_ID_ADCLIBRA].pnpState == IHU_TASK_PNP_ON){
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_ADCLIBRA].active = IHU_VMFO_TASK_ACTIVE;
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_ADCLIBRA].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-////	}
-
-////	if (zIhuTaskInfo[TASK_ID_SPILEO].pnpState == IHU_TASK_PNP_ON){
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_SPILEO].active = IHU_VMFO_TASK_ACTIVE;
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_SPILEO].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-////	}
-
-//	if (zIhuTaskInfo[TASK_ID_I2CARIES].pnpState == IHU_TASK_PNP_ON){
-//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_I2CARIES].active = IHU_VMFO_TASK_ACTIVE;
-//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_I2CARIES].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-//	}
-
-////	if (zIhuTaskInfo[TASK_ID_PWMTAURUS].pnpState == IHU_TASK_PNP_ON){
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_PWMTAURUS].active = IHU_VMFO_TASK_ACTIVE;
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_PWMTAURUS].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-////	}
-
-//	if (zIhuTaskInfo[TASK_ID_SPSVIRGO].pnpState == IHU_TASK_PNP_ON){
-//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_SPSVIRGO].active = IHU_VMFO_TASK_ACTIVE;
-//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_SPSVIRGO].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-//	}
-//	
-////	if (zIhuTaskInfo[TASK_ID_CANVELA].pnpState == IHU_TASK_PNP_ON){
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_CANVELA].active = IHU_VMFO_TASK_ACTIVE;
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_CANVELA].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-////	}
-//	
-//	if (zIhuTaskInfo[TASK_ID_DIDOCAP].pnpState == IHU_TASK_PNP_ON){
-//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_DIDOCAP].active = IHU_VMFO_TASK_ACTIVE;
-//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_DIDOCAP].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-//	}
-
-//	if (zIhuTaskInfo[TASK_ID_LEDPISCES].pnpState == IHU_TASK_PNP_ON){
-//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_LEDPISCES].active = IHU_VMFO_TASK_ACTIVE;
-//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_LEDPISCES].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-//	}
-
-////	if (zIhuTaskInfo[TASK_ID_ETHORION].pnpState == IHU_TASK_PNP_ON){
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_ETHORION].active = IHU_VMFO_TASK_ACTIVE;
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_ETHORION].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-////	}
-
-//	if (zIhuTaskInfo[TASK_ID_DCMIARIS].pnpState == IHU_TASK_PNP_ON){
-//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_DCMIARIS].active = IHU_VMFO_TASK_ACTIVE;
-//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_DCMIARIS].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-//	}
-
-//	if (zIhuTaskInfo[TASK_ID_CCL].pnpState == IHU_TASK_PNP_ON){
-//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_CCL].active = IHU_VMFO_TASK_ACTIVE;
-//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_CCL].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-//	}	
-//	
-//#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
-//	zIhuVmfoTaskInitCtrlInfo[TASK_ID_VMFO].active = IHU_VMFO_TASK_ACTIVE;
-//	zIhuVmfoTaskInitCtrlInfo[TASK_ID_VMFO].state = IHU_VMFO_TASK_INIT_FEEDBACK;
-
-//	zIhuVmfoTaskInitCtrlInfo[TASK_ID_TIMER].active = IHU_VMFO_TASK_ACTIVE;
-//	zIhuVmfoTaskInitCtrlInfo[TASK_ID_TIMER].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-//	
-//	if (zIhuTaskInfo[TASK_ID_ADCLIBRA].pnpState == IHU_TASK_PNP_ON){
-//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_ADCLIBRA].active = IHU_VMFO_TASK_ACTIVE;
-//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_ADCLIBRA].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-//	}
-
-//	if (zIhuTaskInfo[TASK_ID_SPILEO].pnpState == IHU_TASK_PNP_ON){
-//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_SPILEO].active = IHU_VMFO_TASK_ACTIVE;
-//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_SPILEO].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-//	}
-
-//	if (zIhuTaskInfo[TASK_ID_I2CARIES].pnpState == IHU_TASK_PNP_ON){
-//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_I2CARIES].active = IHU_VMFO_TASK_ACTIVE;
-//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_I2CARIES].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-//	}
-
-////	if (zIhuTaskInfo[TASK_ID_PWMTAURUS].pnpState == IHU_TASK_PNP_ON){
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_PWMTAURUS].active = IHU_VMFO_TASK_ACTIVE;
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_PWMTAURUS].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-////	}
-
-////	if (zIhuTaskInfo[TASK_ID_SPSVIRGO].pnpState == IHU_TASK_PNP_ON){
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_SPSVIRGO].active = IHU_VMFO_TASK_ACTIVE;
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_SPSVIRGO].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-////	}
-//	
-//	if (zIhuTaskInfo[TASK_ID_CANVELA].pnpState == IHU_TASK_PNP_ON){
-//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_CANVELA].active = IHU_VMFO_TASK_ACTIVE;
-//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_CANVELA].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-//	}
-//	
-////	if (zIhuTaskInfo[TASK_ID_DIDOCAP].pnpState == IHU_TASK_PNP_ON){
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_DIDOCAP].active = IHU_VMFO_TASK_ACTIVE;
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_DIDOCAP].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-////	}
-
-//	if (zIhuTaskInfo[TASK_ID_LEDPISCES].pnpState == IHU_TASK_PNP_ON){
-//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_LEDPISCES].active = IHU_VMFO_TASK_ACTIVE;
-//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_LEDPISCES].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-//	}
-
-////	if (zIhuTaskInfo[TASK_ID_ETHORION].pnpState == IHU_TASK_PNP_ON){
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_ETHORION].active = IHU_VMFO_TASK_ACTIVE;
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_ETHORION].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-////	}
-
-////	if (zIhuTaskInfo[TASK_ID_DCMIARIS].pnpState == IHU_TASK_PNP_ON){
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_DCMIARIS].active = IHU_VMFO_TASK_ACTIVE;
-////		zIhuVmfoTaskInitCtrlInfo[TASK_ID_DCMIARIS].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-////	}
-
-//	
-//	if (zIhuTaskInfo[TASK_ID_BFSC].pnpState == IHU_TASK_PNP_ON){
-//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_BFSC].active = IHU_VMFO_TASK_ACTIVE;
-//		zIhuVmfoTaskInitCtrlInfo[TASK_ID_BFSC].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
-//	}	
-//#else
-//#endif	
-	
 	//简化模式，对于初始化的后续追踪，不再考虑设置超时定时器等方式
 	
 	//设置状态机到目标状态
@@ -479,30 +295,32 @@ BOOL func_vmfo_init_caculate_all_fb(void)
 //有两种选择：一种是选择所有的任务进行反馈，这种方式将会导致MessageQue过载。一种方式是只留下L3任务反馈，目前选择了这种机制
 BOOL func_vmfo_heart_caculate_all_received(void)
 {
-#if (IHU_VMFO_TASK_HEART_BEAT_CHOICE == IHU_VMFO_TASK_HEART_BEAT_ALL)	
 	int i=0;
-	for(i=0;i<MAX_TASK_NUM_IN_ONE_IHU;i++){
-		if ((i != TASK_ID_VMFO) && (i != TASK_ID_TIMER)){
-			if ((zIhuTaskInfo[i].pnpState == IHU_TASK_PNP_ON) && (zIhuVmfoTaskInitCtrlInfo[i].active == IHU_VMFO_TASK_ACTIVE) && (zIhuVmfoTaskInitCtrlInfo[i].heart != IHU_VMFO_TASK_HEART_RECEIVED)){
-				return FALSE;
-			}
-		}		
+	if (IHU_VMFO_TASK_HEART_BEAT_CHOICE == IHU_VMFO_TASK_HEART_BEAT_ALL){
+		for(i=0;i<MAX_TASK_NUM_IN_ONE_IHU;i++){
+			if ((i != TASK_ID_VMFO) && (i != TASK_ID_TIMER)){
+				if ((zIhuTaskInfo[i].pnpState == IHU_TASK_PNP_ON) && (zIhuVmfoTaskInitCtrlInfo[i].active == IHU_VMFO_TASK_ACTIVE) && (zIhuVmfoTaskInitCtrlInfo[i].heart != IHU_VMFO_TASK_HEART_RECEIVED)){
+					return FALSE;
+				}
+			}		
+		}
+		return TRUE;
 	}
-	return TRUE;
 	
-#elif (IHU_VMFO_TASK_HEART_BEAT_CHOICE == IHU_VMFO_TASK_HEART_BEAT_L3_ONLY)	
-	#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-		if (zIhuVmfoTaskInitCtrlInfo[TASK_ID_CCL].heart != IHU_VMFO_TASK_HEART_RECEIVED) return FALSE;
-		else return TRUE;
-	#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
-		if (zIhuVmfoTaskInitCtrlInfo[TASK_ID_BFSC].heart != IHU_VMFO_TASK_HEART_RECEIVED) return FALSE;
-		else return TRUE;
-	#else
-		#error Un-correct constant definition
-	#endif
-#else
-	#error Un-correct constant definition
-#endif
+	else if (IHU_VMFO_TASK_HEART_BEAT_CHOICE == IHU_VMFO_TASK_HEART_BEAT_L3_ONLY){
+		#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+			if (zIhuVmfoTaskInitCtrlInfo[TASK_ID_CCL].heart != IHU_VMFO_TASK_HEART_RECEIVED) return FALSE;
+			else return TRUE;
+		#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+			if (zIhuVmfoTaskInitCtrlInfo[TASK_ID_BFSC].heart != IHU_VMFO_TASK_HEART_RECEIVED) return FALSE;
+			else return TRUE;
+		#else
+			#error Un-correct constant definition
+		#endif
+	}
+	
+	//如果依然找不到，则总返回TRUE
+	//return TRUE;
 }
 
 

@@ -1840,156 +1840,16 @@ OPSTAT ihu_system_task_init_call(UINT8 task_id, FsmStateItem_t *p)
 //创建所有任务
 void ihu_task_create_all(void)
 {
-	//Create VMFO environments /1
-	if (zIhuTaskInfo[TASK_ID_VMFO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_VMFO, FsmVmfo);	
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_VMFO);
-
-	//Create task Timer environments /2
-	if (zIhuTaskInfo[TASK_ID_TIMER].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_TIMER, FsmTimer);
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_TIMER);	
-
-	//未来考虑使用handler初始化所有的状态机入口，从而不再需要这个ifdef的方式
+	FsmStateItem_t *p;
+	int task_id = 0;
 	
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
-	//Create task ADCLIBRA environments /3
-//	if (zIhuTaskInfo[TASK_ID_ADCLIBRA].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_ADCLIBRA, FsmAdclibra);
-//	ihu_vm_send_init_msg_to_app_task(TASK_ID_ADCLIBRA);
-//
-//	//Create task SPILEO environments /4
-//	if (zIhuTaskInfo[TASK_ID_SPILEO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_SPILEO, FsmSpileo);
-//	ihu_vm_send_init_msg_to_app_task(TASK_ID_SPILEO);
-//
-//	//Create task I2CARIES environments /5
-//	if (zIhuTaskInfo[TASK_ID_I2CARIES].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_I2CARIES, FsmI2caries);
-//	ihu_vm_send_init_msg_to_app_task(TASK_ID_I2CARIES);
-//
-//	//Create task PWMTAURUS environments /6
-//	if (zIhuTaskInfo[TASK_ID_PWMTAURUS].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_PWMTAURUS, FsmPwmtaurus);
-//	ihu_vm_send_init_msg_to_app_task(TASK_ID_PWMTAURUS);
-//
-//	//Create task SPSVIRGO environments /7
-//	if (zIhuTaskInfo[TASK_ID_SPSVIRGO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_SPSVIRGO, FsmSpsvirgo);
-//	ihu_vm_send_init_msg_to_app_task(TASK_ID_SPSVIRGO);
-//
-//	//Create task CANVELA environments /8
-//	if (zIhuTaskInfo[TASK_ID_CANVELA].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_CANVELA, FsmCanvela);
-//	ihu_vm_send_init_msg_to_app_task(TASK_ID_CANVELA);
-//
-//	//Create task DIDOCAP environments /9
-//	if (zIhuTaskInfo[TASK_ID_DIDOCAP].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_DIDOCAP, FsmDidocap);
-//	ihu_vm_send_init_msg_to_app_task(TASK_ID_DIDOCAP);
-//
-//	//Create task LEDPISCES environments /10
-//	if (zIhuTaskInfo[TASK_ID_LEDPISCES].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_LEDPISCES, FsmLedpisces);
-//	ihu_vm_send_init_msg_to_app_task(TASK_ID_LEDPISCES);
-//
-//	//Create task ETHORION environments /11
-//	if (zIhuTaskInfo[TASK_ID_ETHORION].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_ETHORION, FsmEthorion);
-//	ihu_vm_send_init_msg_to_app_task(TASK_ID_ETHORION);
-	
-	//Create task EMC68X environments /12
-	if (zIhuTaskInfo[TASK_ID_EMC68X].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_EMC68X, FsmEmc68x);
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_EMC68X);
-	
-	IhuDebugPrint("VMFO: Create all task successfully!\n");	
-	
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-	//Create task ADCLIBRA environments /3
-	if (zIhuTaskInfo[TASK_ID_ADCLIBRA].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_ADCLIBRA, FsmAdclibra);
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_ADCLIBRA);
-
-	//Create task SPILEO environments /4
-//	if (zIhuTaskInfo[TASK_ID_SPILEO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_SPILEO, FsmSpileo);
-//	ihu_vm_send_init_msg_to_app_task(TASK_ID_SPILEO);
-
-	//Create task I2CARIES environments /5
-	if (zIhuTaskInfo[TASK_ID_I2CARIES].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_I2CARIES, FsmI2caries);
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_I2CARIES);
-
-	//Create task PWMTAURUS environments /6
-//	if (zIhuTaskInfo[TASK_ID_PWMTAURUS].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_PWMTAURUS, FsmPwmtaurus);
-//	ihu_vm_send_init_msg_to_app_task(TASK_ID_PWMTAURUS);
-
-	//Create task SPSVIRGO environments /7
-	if (zIhuTaskInfo[TASK_ID_SPSVIRGO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_SPSVIRGO, FsmSpsvirgo);
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_SPSVIRGO);
-
-	//Create task CANVELA environments /8
-//	if (zIhuTaskInfo[TASK_ID_CANVELA].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_CANVELA, FsmCanvela);
-//	ihu_vm_send_init_msg_to_app_task(TASK_ID_CANVELA);
-
-	//Create task DIDOCAP environments /9
-	if (zIhuTaskInfo[TASK_ID_DIDOCAP].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_DIDOCAP, FsmDidocap);
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_DIDOCAP);
-
-	//Create task LEDPISCES environments /10
-	if (zIhuTaskInfo[TASK_ID_LEDPISCES].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_LEDPISCES, FsmLedpisces);
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_LEDPISCES);
-
-	//Create task ETHORION environments /11
-//	if (zIhuTaskInfo[TASK_ID_ETHORION].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_ETHORION, FsmEthorion);
-//	ihu_vm_send_init_msg_to_app_task(TASK_ID_ETHORION);
-
-	//Create task DCMIARIS environments /11.5
-	if (zIhuTaskInfo[TASK_ID_DCMIARIS].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_DCMIARIS, FsmDcmiaris);
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_DCMIARIS);
-
-	//Create task EMC68X environments /12
-	if (zIhuTaskInfo[TASK_ID_CCL].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_CCL, FsmCcl);
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_CCL);
-	
-	IhuDebugPrint("VMFO: Create all task successfully!\n");
-
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
-
-	//Create task ADCLIBRA environments /3
-	if (zIhuTaskInfo[TASK_ID_ADCLIBRA].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_ADCLIBRA, FsmAdclibra);
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_ADCLIBRA);
-
-	//Create task SPILEO environments /4
-	if (zIhuTaskInfo[TASK_ID_SPILEO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_SPILEO, FsmSpileo);
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_SPILEO);
-
-	//Create task I2CARIES environments /5
-	if (zIhuTaskInfo[TASK_ID_I2CARIES].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_I2CARIES, FsmI2caries);
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_I2CARIES);
-
-	//Create task PWMTAURUS environments /6
-//	if (zIhuTaskInfo[TASK_ID_PWMTAURUS].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_PWMTAURUS, FsmPwmtaurus);
-//	ihu_vm_send_init_msg_to_app_task(TASK_ID_PWMTAURUS);
-
-	//Create task SPSVIRGO environments /7
-//	if (zIhuTaskInfo[TASK_ID_SPSVIRGO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_SPSVIRGO, FsmSpsvirgo);
-//	ihu_vm_send_init_msg_to_app_task(TASK_ID_SPSVIRGO);
-
-	//Create task CANVELA environments /8
-	if (zIhuTaskInfo[TASK_ID_CANVELA].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_CANVELA, FsmCanvela);
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_CANVELA);
-
-	//Create task DIDOCAP environments /9
-//	if (zIhuTaskInfo[TASK_ID_DIDOCAP].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_DIDOCAP, FsmDidocap);
-//	ihu_vm_send_init_msg_to_app_task(TASK_ID_DIDOCAP);
-
-	//Create task LEDPISCES environments /10
-	if (zIhuTaskInfo[TASK_ID_LEDPISCES].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_LEDPISCES, FsmLedpisces);
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_LEDPISCES);
-
-	//Create task ETHORION environments /11
-//	if (zIhuTaskInfo[TASK_ID_ETHORION].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_ETHORION, FsmEthorion);
-//	ihu_vm_send_init_msg_to_app_task(TASK_ID_ETHORION);
-	
-	//Create task DCMIARIS environments /11.5
-//	if (zIhuTaskInfo[TASK_ID_DCMIARIS].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_DCMIARIS, FsmDcmiaris);
-//	ihu_vm_send_init_msg_to_app_task(TASK_ID_DCMIARIS);
-	
-	//Create task EMC68X environments /12
-	if (zIhuTaskInfo[TASK_ID_BFSC].pnpState == IHU_TASK_PNP_ON) ihu_system_task_init_call(TASK_ID_BFSC, FsmBfsc);
-	ihu_vm_send_init_msg_to_app_task(TASK_ID_BFSC);
-	
-	IhuDebugPrint("VMFO: Create all task successfully!\n");
-#else
-	#error Un-correct constant definition
-#endif
+	for (task_id = TASK_ID_MIN + 1; task_id < TASK_ID_MAX; task_id++){
+		p = (FsmStateItem_t *)zIhuTaskInfo[task_id].taskFuncEntry;
+		if ((p != NULL) && (zIhuTaskInfo[task_id].pnpState == IHU_TASK_PNP_ON)){
+			ihu_system_task_init_call(task_id, p);
+			ihu_vm_send_init_msg_to_app_task(task_id);
+		}
+	}
 }
 
 void ihu_task_delete_all_and_queue(void)
