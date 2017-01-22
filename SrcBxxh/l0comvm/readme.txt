@@ -12,6 +12,10 @@
 = 最后再增加tcp/udp等数据连接方式，看门狗打开，BLE/RFID/摄像头研究等内容
 **************************************************************************
 
+//= ZJL, 2017 Jan.22, CURRENT_SW_DELIVERY R03.105 =>CCL项目
+= 继续全局VM任务创建的统一化，使用FuncHandler，消去分项目初始化创建任务的过程
+
+
 
 //= ZJL, 2017 Jan.22, CURRENT_SW_DELIVERY R03.104 =>CCL项目/BFSC/EMC68X
 = 对CCL/BFSC的ErrorPrint做进一步的优化改造
@@ -19,7 +23,6 @@
 = 优化extern FsmState_t的引用定义，降低对于分项目定义的复杂度和风险
 = 建立全局任务配置输入表单，简化任务创建的过程，特别是在程序部分分项目执行的过程
 = TaskName全局改造，包括CCL/BFSC/EMC68X项目在内
-
 
 //= ZJL, 2017 Jan.22, CURRENT_SW_DELIVERY R03.103 =>CCL项目/BFSC
 = 改进#error定义，确保各个项目在编译时定义的完整性，将#error编译项用到极致！
