@@ -45,6 +45,7 @@ FsmStateItem_t FsmLedpisces[] =
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 #else
+	#error Un-correct constant definition
 #endif
 
 //Galowag总控表：以秒为单位
@@ -91,7 +92,7 @@ OPSTAT fsm_ledpisces_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 
 		snd.length = sizeof(msg_struct_com_init_fb_t);
 		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_LEDPISCES, &snd, snd.length);
 		if (ret == IHU_FAILURE){
-			IhuErrorPrint("LEDPISCES: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_LEDPISCES], zIhuTaskNameList[src_id]);
+			IhuErrorPrint("LEDPISCES: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_LEDPISCES].taskName, zIhuTaskInfo[src_id].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -113,6 +114,7 @@ OPSTAT fsm_ledpisces_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 #else
+	#error Un-correct constant definition
 #endif
 	
 	//设置状态机到目标状态
@@ -212,7 +214,7 @@ OPSTAT fsm_ledpisces_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UIN
 		ret = ihu_message_send(MSG_ID_COM_RESTART, TASK_ID_LEDPISCES, TASK_ID_LEDPISCES, &snd0, snd0.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_LEDPISCES]++;
-			IhuErrorPrint("LEDPISCES: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_LEDPISCES], zIhuTaskNameList[TASK_ID_LEDPISCES]);
+			IhuErrorPrint("LEDPISCES: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_LEDPISCES].taskName, zIhuTaskInfo[TASK_ID_LEDPISCES].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -251,7 +253,7 @@ void func_ledpisces_time_out_period_scan(void)
 	ret = ihu_message_send(MSG_ID_COM_HEART_BEAT, TASK_ID_VMFO, TASK_ID_LEDPISCES, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_LEDPISCES]++;
-		IhuErrorPrint("LEDPISCES: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_LEDPISCES], zIhuTaskNameList[TASK_ID_VMFO]);
+		IhuErrorPrint("LEDPISCES: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_LEDPISCES].taskName, zIhuTaskInfo[TASK_ID_VMFO].taskName);
 		return;
 	}
 	

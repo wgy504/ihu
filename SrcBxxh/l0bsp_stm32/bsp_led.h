@@ -16,6 +16,7 @@ extern "C" {
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 	#include "commsgbfsc.h"
 #else
+	#error Un-correct constant definition
 #endif
 
 //不能在这里出现管脚的任何配置和初始化，必须在STM32CubeMX中完成，这里使用STM32CubeMX给出的端口俗名
@@ -45,6 +46,8 @@ extern "C" {
 	#define BSP_STM32_BEEP_ON                   HAL_GPIO_WritePin(BSP_STM32_BEEP_GPIO, BSP_STM32_BEEP_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
 	#define BSP_STM32_BEEP_OFF                  HAL_GPIO_WritePin(BSP_STM32_BEEP_GPIO, BSP_STM32_BEEP_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
 	#define BSP_STM32_BEEP_TOGGLE               HAL_GPIO_TogglePin(BSP_STM32_BEEP_GPIO, BSP_STM32_BEEP_GPIO_PIN)                	// 输出反转
+#else
+	#error Un-correct constant definition
 #endif
 
 //单个项目独立的LED配置
@@ -101,6 +104,8 @@ extern void ihu_bsp_stm32_led_work_state_f2board_toggle(void);
 extern void ihu_bsp_stm32_beep_f2board_on(void);
 extern void ihu_bsp_stm32_beep_f2board_off(void);
 extern void ihu_bsp_stm32_beep_f2board_toggle(void);
+#else
+	#error Un-correct constant definition
 #endif
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 extern void ihu_bsp_stm32_led_serv1_f2board_on(void);

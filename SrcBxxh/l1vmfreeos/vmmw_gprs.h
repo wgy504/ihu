@@ -76,6 +76,9 @@
 	extern OPSTAT ihu_vmmw_gprsmod_bs_position_perform(StrVmmwGprsmodBasestationPosition_t *output);
 	extern OPSTAT ihu_vmmw_gprsmod_tts_perform(char *input);
 	extern int16_t ihu_vmmw_gprsmod_get_rssi_value(void);
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+#else
+	#error Un-correct constant definition
 #endif
 
 //本地函数：目前以SIM800A为例子。如果不是SIM800A，则需要另换一套程序
@@ -100,6 +103,8 @@ void func_gprsmod_convert_hex_to_str(uint8_t dest[],uint8_t src[],uint8_t len);/
 
 //高级定义，简化程序的可读性
 #define IHU_ERROR_PRINT_GPRSMOD	zIhuRunErrCnt[TASK_ID_VMFO]++; IhuErrorPrint
+//#define IHU_ERROR_PRINT_GPRSMOD(...)	({zIhuRunErrCnt[TASK_ID_VMFO]++;  ((void (*)(const char *, ...))IhuErrorPrint)(__VA_ARGS__);  return IHU_FAILURE;})
+
 
 #endif /* L1FREERTOS_MOD_GPRS_H_ */
 

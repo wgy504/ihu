@@ -246,7 +246,7 @@
  ***********************************************************************************/
 //使用了VMFO-FreeRTOS操作系统
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-	#define MAX_TASK_NUM_IN_ONE_IHU 16
+	#define MAX_TASK_NUM_IN_ONE_IHU 12
 	#define TASK_NAME_MAX_LENGTH 12
   #define IHU_TASK_STACK_SIZE 600 //任务堆栈长度，非常重要，将影响HardFault陷入崩溃的产生
 	//系统消息级
@@ -265,7 +265,7 @@
   #define IHU_QUEUE_MAX_SIZE MAX_IHU_MSG_BODY_LENGTH + 24 //由于涉及到4B对其，消息长度必须是头部4B对其，消息体4B对其！！！
 	//SLEEP控制表给任务模块可以给出
 	#define MAX_SLEEP_COUNTER_UP_LIMITATION 50000
-	#define IHU_PRINT_CHAR_SIZE IHU_QUEUE_MAX_SIZE + 300  //打印的缓冲区最好放大点
+	#define IHU_PRINT_CHAR_SIZE 300 // IHU_QUEUE_MAX_SIZE + 300  //打印的缓冲区最好放大点，这个区域的内容如果太大，超过了系统堆栈可能分配的长度，将会使得它覆盖其它变量，危险！
 	#define IHU_PRINT_FILE_LINE_SIZE 60
 	#define IHU_PRINT_BUFFER_NUMBER 1  //太长的打印缓冲区，是否会造成覆盖其它区域
 	#define IHU_PRINT_MUTEX_TIME_OUT_DURATION 100
@@ -279,9 +279,9 @@
  ***********************************************************************************/
 //使用了VMFO-FreeRTOS操作系统
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
-	#define MAX_TASK_NUM_IN_ONE_IHU 16
+	#define MAX_TASK_NUM_IN_ONE_IHU 11
 	#define TASK_NAME_MAX_LENGTH 12
-  #define IHU_TASK_STACK_SIZE 600 //任务堆栈长度
+  #define IHU_TASK_STACK_SIZE 400 //任务堆栈长度
 	//系统消息级
 	//maxmum state number and msg number in one task, no instance concept
 	//#define IHU_TASK_QUEUE_ID_START 1024
@@ -298,13 +298,14 @@
   #define IHU_QUEUE_MAX_SIZE MAX_IHU_MSG_BODY_LENGTH + 24 //由于涉及到4B对其，消息长度必须是头部4B对其，消息体4B对其！！！
 	//SLEEP控制表给任务模块可以给出
 	#define MAX_SLEEP_COUNTER_UP_LIMITATION 50000
-	#define IHU_PRINT_CHAR_SIZE IHU_QUEUE_MAX_SIZE + 300  //打印的缓冲区最好放大点
+	#define IHU_PRINT_CHAR_SIZE 300 // IHU_QUEUE_MAX_SIZE + 300  //打印的缓冲区最好放大点
 	#define IHU_PRINT_FILE_LINE_SIZE 60
 	#define IHU_PRINT_BUFFER_NUMBER 1  //太长的打印缓冲区，是否会造成覆盖其它区域
 	#define IHU_PRINT_MUTEX_TIME_OUT_DURATION 100
 	
 	
 #else
+	#error Un-correct constant definition
 #endif
 
 #endif /* L0COMVM_SYSDIM_H_ */

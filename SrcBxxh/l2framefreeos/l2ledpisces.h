@@ -32,6 +32,7 @@
 	#include "l1timer_ucos.h"
 	#include "l1hd_led.h"
 #else
+	#error Un-correct constant definition
 #endif
 
 //State definition
@@ -86,10 +87,10 @@ enum GLOBAL_LED_LIGHT_CTRL_TABLE_STATE
 	GALOWAG_CTRL_STATE_MAX,
 };
 
-//控制LED定时器是否启动
+//控制LED输出频率闪烁功能是否启动
 #define IHU_LEDPISCES_GALOWAG_FUNC_ACTIVE 1
 #define IHU_LEDPISCES_GALOWAG_FUNC_DEACTIVE 2
-#define IHU_LEDPISCES_GALOWAG_FUNC_SET IHU_LEDPISCES_GALOWAG_FUNC_DEACTIVE
+#define IHU_LEDPISCES_GALOWAG_FUNC_SET IHU_LEDPISCES_GALOWAG_FUNC_ACTIVE
 
 //控制定时器定时扫描是否启动
 #define IHU_LEDPISCES_PERIOD_TIMER_ACTIVE 1

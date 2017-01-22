@@ -62,6 +62,7 @@ typedef struct SysEngParElementSensor
 	INT32 bfscL3bfscRolloutTimer;
 	INT32 bfscL3bfscGiveupTimer;
 #else
+	#error Un-correct constant definition
 #endif
 }SysEngParElementSensorTimer_t;
 
@@ -91,19 +92,8 @@ typedef struct SysEngParElementCloudXhui
 	char  cloudBhServerAddr[SYS_ENG_PAR_ELEMENT_CLOUDXHUI_LEN];
 	char  cloudBhServerName[SYS_ENG_PAR_ELEMENT_CLOUDXHUI_LEN];
 	char  cloudBhFtpSvrAddr[SYS_ENG_PAR_ELEMENT_CLOUDXHUI_LEN];
-	char  cloudBhIhuName[SYS_ENG_PAR_ELEMENT_CLOUDXHUI_LEN];
 	UINT8 cloudBhItfFrameStd;
 }SysEngParElementCloudXhui_t;
-
-//Debug采用完全的等级方式，并通过按位操作，详细定义在sysconfig.h中，不应该重复定义，放在这里只是为了参考方便
-/*
-#define TRACE_DEBUG_ALL_OFF 0 //全关
-#define TRACE_DEBUG_INF_ON 1  //全开
-#define TRACE_DEBUG_NOR_ON 2  //普通级
-#define TRACE_DEBUG_IPT_ON 4  //重要级
-#define TRACE_DEBUG_CRT_ON 8  //关键级
-#define TRACE_DEBUG_FAT_ON 16 //致命级
-*/
 
 //TRACE采用黑白名单的方式
 //关系表单，采用INDEX索引的方式，引导到相应的配置表中，进行详细定义
@@ -131,6 +121,21 @@ typedef struct SysEngParElementTrace
 	SysEngParElementTraceMsg_t msg[MAX_MSGID_NUM_IN_ONE_TASK];
 }SysEngParElementTrace_t;
 
+//通用硬件固定位置的标签存储内容，由工厂生产过程中烧录器写入
+//该结构必然跟各个物理器件的定义一致，不然会导致读取失败
+typedef struct SysEngParElementHwBurnPhyIdAddr
+{
+	char  	equLable[20];
+	UINT16 	hwType;
+	UINT16 	hwPemId;
+	UINT16 	swRelId;
+	UINT16 	swVerId;
+	UINT8  	swUpgradeFlag;
+	UINT8 	rsv1;
+	UINT8 	rsv2;
+	UINT8 	rsv3;
+}SysEngParElementHwBurnPhyIdAddr_t;
+
 //工程参数总控制表
 #define SYS_ENG_PAR_PRJ_NAME_LEN 20
 //EMCWX的符号空间太小，必须限制
@@ -138,14 +143,8 @@ typedef struct SysEngParElementTrace
 	typedef struct IhuSysEngParTable
 	{
 		char prjname[SYS_ENG_PAR_PRJ_NAME_LEN];
-		//SysEngParElementComm_t comm;
-		//SysEngParElementSensorTimer_t timer;
-		//SysEngParElementSeriesPort_t serialport;
-		//SysEngParElementCloudXhui_t cloud;
-		//SysEngParElementIhuSwDownload_t swDownload;
 		UINT8 debugMode;
 		UINT8 traceMode;
-		//SysEngParElementTrace_t traceList;
 	}IhuSysEngParTable_t;
 #else
 	typedef struct IhuSysEngParTable
@@ -159,6 +158,7 @@ typedef struct SysEngParElementTrace
 		UINT8 debugMode;
 		UINT8 traceMode;
 		SysEngParElementTrace_t traceList;
+		SysEngParElementHwBurnPhyIdAddr_t hwBurnId;
 	}IhuSysEngParTable_t;	
 #endif	
 

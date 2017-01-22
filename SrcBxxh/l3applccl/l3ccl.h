@@ -31,8 +31,7 @@
 //#define FSM_STATE_IDLE  0x01
 enum FSM_STATE_CCL
 {
-	FSM_STATE_CCL_INITED = 0x02,
-	//FSM_STATE_CCL_ACTIVED,  			//IHU被唤醒，开始工作。开的原因可能是触发电源，也可能是定时触发
+	FSM_STATE_CCL_INITED = 0x02,  //IHU被唤醒，开始工作。开的原因可能是触发电源，也可能是定时触发
 	FSM_STATE_CCL_CLOUD_INQUERY,
 	FSM_STATE_CCL_TO_OPEN_DOOR,
 	FSM_STATE_CCL_DOOR_OPEN,
@@ -95,8 +94,10 @@ OPSTAT func_ccl_time_out_lock_work_active(void);
 OPSTAT func_ccl_time_out_lock_work_wait_door_for_open(void);
 void func_ccl_close_all_sensor(void);
 void func_ccl_open_all_sensor(void);
+void func_ccl_stm_main_recovery_from_fault(void);  //提供了一种比RESTART更低层次的状态恢复方式
 
-	
+//高级定义，简化程序的可读性，包括return IHU_FAILURE在内的宏定义，没搞定。。。
+#define IHU_ERROR_PRINT_CCL zIhuRunErrCnt[TASK_ID_CCL]++; func_ccl_stm_main_recovery_from_fault(); IhuErrorPrint
 
 #endif /* L3APPL_L3CCL_H_ */
 

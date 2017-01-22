@@ -17,11 +17,23 @@
  *   这里的配置项，只是作为缺省参数，一旦工程参数出错或者不可用，这里的缺省参数将会被起作用
  *   这里的参数起到出厂参数的作用，随着工厂版本一起到达现场
  *
+ *   强烈注意的要点：
+ *   1. 批量生产制作工厂包(Factory Load)时，需要将IHU_HARDWARE_MASSIVE_PRODUTION_SET开关打开，以便从烧录区域读取设备标签和各种硬件信息
+ *
+ *
+ *
  */
 //任务模块激活的定义
+#define IHU_TASK_PNP_NULL 0
 #define IHU_TASK_PNP_ON 1
-#define IHU_TASK_PNP_OFF 0
+#define IHU_TASK_PNP_OFF 2
 #define IHU_TASK_PNP_INVALID 0xFF
+
+//队列的状态定义
+#define IHU_TASK_QUEUE_FULL_NULL 0
+#define IHU_TASK_QUEUE_FULL_FALSE 1
+#define IHU_TASK_QUEUE_FULL_TRUE 2
+#define IHU_TASK_QUEUE_FULL_INVALID 0xFF
 
 //可选项通信端口的全局定义，未来需要通过ConfigXml进一步优化
 #define IHU_COMM_HW_BOARD_ON 1
@@ -62,6 +74,17 @@
 #define IHU_CLOUDXHUI_BH_INTERFACE_STANDARD_XML 1
 #define IHU_CLOUDXHUI_BH_INTERFACE_STANDARD_SECOND 2
 
+//定义硬件是否进入批量生产阶段，从而决定硬件标签读入的方式
+#define IHU_HARDWARE_MASSIVE_PRODUTION_YES 1
+#define IHU_HARDWARE_MASSIVE_PRODUTION_NO 2
+
+//定义固件是否支持升级
+#define IHU_HARDWARE_BURN_ID_FW_UPGRADE_NONE 0
+#define IHU_HARDWARE_BURN_ID_FW_UPGRADE_NO 1
+#define IHU_HARDWARE_BURN_ID_FW_UPGRADE_YES_STABLE 2
+#define IHU_HARDWARE_BURN_ID_FW_UPGRADE_YES_TRAIL 3
+#define IHU_HARDWARE_BURN_ID_FW_UPGRADE_YES_PATCH 4
+#define IHU_HARDWARE_BURN_ID_FW_UPGRADE_YES_INVALID 0xFF
 
  /***********************************************************************************
  *
@@ -75,7 +98,7 @@
 	#define IHU_TRACE_MSG_ON IHU_TRACE_MSG_MODE_ALL
 	#define IHU_TASK_STATE_VMDA 			IHU_TASK_PNP_ON
 	#define IHU_TASK_STATE_TIMER 			IHU_TASK_PNP_ON
-	#define IHU_TASK_STATE_ASYLIBRA 		IHU_TASK_PNP_ON
+	#define IHU_TASK_STATE_ASYLIBRA 	IHU_TASK_PNP_ON
 	#define IHU_TASK_STATE_AIRKISS 		IHU_TASK_PNP_OFF
 	#define IHU_TASK_STATE_ADCARIES 	IHU_TASK_PNP_ON
 	#define IHU_TASK_STATE_EMC 				IHU_TASK_PNP_ON
@@ -118,17 +141,7 @@
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
 	//可选项通信端口的全局定义，未来需要通过ConfigXml进一步优化
 	#define IHU_COMM_BACK_HAWL_CON 1 //0=NULL, 1=ETHERNET, 2=WIFI, 3=3G4G, 4=USBNET, 5/OTHERS=INVALID
-	#define IHU_COMM_FRONT_ADC 1 //1=ON, 0/OTHERS=OFF
-	#define IHU_COMM_FRONT_I2C 1 //1=ON, 0/OTHERS=OFF
-	#define IHU_COMM_FRONT_PWM 1 //1=ON, 0/OTHERS=OFF
-	#define IHU_COMM_FRONT_SPS 1 //1=ON, 0/OTHERS=OFF
-	#define IHU_COMM_FRONT_SPI 1 //1=ON, 0/OTHERS=OFF
-	#define IHU_COMM_FRONT_GPIO 1 //1=ON, 0/OTHERS=OFF
-	#define IHU_COMM_FRONT_DIDO 1 //1=ON, 0/OTHERS=OFF
-	#define IHU_COMM_FRONT_LED 1 //1=ON, 0/OTHERS=OFF
-	#define IHU_COMM_FRONT_ETH 1 //1=ON, 0/OTHERS=OFF
-	#define IHU_COMM_FRONT_DCMI 0 //1=ON, 0/OTHERS=OFF	
-	#define IHU_MAIN_CTRL_EMC68X 1 //1=ON, 0/OTHERS=OFF		
+	
 	//定义后台连接网络的接口
 	//现在采用这种互斥的方式进行定义，以后需要等待HWINV进行PnP，确保多种接口即插即用，随时切换
 	//多种接口之间的优先级关系，则有程序任务自动决定：ETHERNET > WIFI > USB-OTG2 > 3G4G
@@ -168,6 +181,12 @@
 	//CURRENT HW PRODUCT CATELOG
 	#define IHU_HARDWARE_PRODUCT_CAT_TYPE 0x1111 // HUITP_IEID_UNI_INVENT_HWTYPE_PDTYPE_E1_EMC_68_01 0x1111
 	
+	//定义是否进入批量生产，从而确定硬件标识从哪里读取
+	#define IHU_HARDWARE_MASSIVE_PRODUTION_SET IHU_HARDWARE_MASSIVE_PRODUTION_NO
+	
+	//定义固件是否自动升级
+	#define IHU_HARDWARE_BURN_ID_FW_UPGRADE_SET IHU_HARDWARE_BURN_ID_FW_UPGRADE_NO
+	
  /***********************************************************************************
  *
  * 数采仪CB项目 IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID
@@ -176,6 +195,8 @@
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID)
 	//可选项通信端口的全局定义，未来需要通过ConfigXml进一步优化
 	#define IHU_COMM_BACK_HAWL_CON 1 //0=NULL, 1=ETHERNET, 2=WIFI, 3=3G4G, 4=USBNET, 5/OTHERS=INVALID
+	
+	//ucos下的VMUO还未改进VM FuncHandler机制，待简化这部分
 	#define IHU_COMM_FRONT_ADC 1 //1=ON, 0/OTHERS=OFF
 	#define IHU_COMM_FRONT_I2C 1 //1=ON, 0/OTHERS=OFF
 	#define IHU_COMM_FRONT_PWM 1 //1=ON, 0/OTHERS=OFF
@@ -227,7 +248,13 @@
 	//CURRENT HW PRODUCT CATELOG
 	#define IHU_HARDWARE_PRODUCT_CAT_TYPE 0x0301 // HUITP_IEID_UNI_INVENT_HWTYPE_PDTYPE_G3_SCY_WATER_01 0x0301
 
- /***********************************************************************************
+	//定义是否进入批量生产，从而确定硬件标识从哪里读取
+	#define IHU_HARDWARE_MASSIVE_PRODUTION_SET IHU_HARDWARE_MASSIVE_PRODUTION_NO
+
+	//定义固件是否自动升级
+	#define IHU_HARDWARE_BURN_ID_FW_UPGRADE_SET IHU_HARDWARE_BURN_ID_FW_UPGRADE_NO
+
+/***********************************************************************************
  *
  * 流水产线项目主控板 IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCCB_ID
  *
@@ -235,6 +262,8 @@
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCCB_ID)
 	//可选项通信端口的全局定义，未来需要通过ConfigXml进一步优化
 	#define IHU_COMM_BACK_HAWL_CON 1 //0=NULL, 1=ETHERNET, 2=WIFI, 3=3G4G, 4=USBNET, 5/OTHERS=INVALID
+	
+	//ucos下的VMUO还未改进VM FuncHandler机制，待简化这部分
 	#define IHU_COMM_FRONT_ADC 1 //1=ON, 0/OTHERS=OFF
 	#define IHU_COMM_FRONT_I2C 1 //1=ON, 0/OTHERS=OFF
 	#define IHU_COMM_FRONT_PWM 1 //1=ON, 0/OTHERS=OFF
@@ -285,6 +314,12 @@
 	//CURRENT HW PRODUCT CATELOG
 	#define IHU_HARDWARE_PRODUCT_CAT_TYPE 0x0311 // HUITP_IEID_UNI_INVENT_HWTYPE_PDTYPE_G3_PLCCB_CB_01 0x0311
 	
+	//定义是否进入批量生产，从而确定硬件标识从哪里读取
+	#define IHU_HARDWARE_MASSIVE_PRODUTION_SET IHU_HARDWARE_MASSIVE_PRODUTION_NO
+
+	//定义固件是否自动升级
+	#define IHU_HARDWARE_BURN_ID_FW_UPGRADE_SET IHU_HARDWARE_BURN_ID_FW_UPGRADE_NO
+
  /***********************************************************************************
  *
  * 流水产线项目传感器板 IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCSB_ID
@@ -293,6 +328,8 @@
  #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCSB_ID)
 	//可选项通信端口的全局定义，未来需要通过ConfigXml进一步优化
 	#define IHU_COMM_BACK_HAWL_CON 1 //0=NULL, 1=ETHERNET, 2=WIFI, 3=3G4G, 4=USBNET, 5/OTHERS=INVALID
+	
+	//ucos下的VMUO还未改进VM FuncHandler机制，待简化这部分
 	#define IHU_COMM_FRONT_ADC 1 //1=ON, 0/OTHERS=OFF
 	#define IHU_COMM_FRONT_I2C 1 //1=ON, 0/OTHERS=OFF
 	#define IHU_COMM_FRONT_PWM 1 //1=ON, 0/OTHERS=OFF
@@ -343,7 +380,13 @@
 
 	//CURRENT HW PRODUCT CATELOG
 	#define IHU_HARDWARE_PRODUCT_CAT_TYPE 0x0321 // HUITP_IEID_UNI_INVENT_HWTYPE_PDTYPE_G3_PLCCB_SB_01  0x0321
-	
+
+	//定义是否进入批量生产，从而确定硬件标识从哪里读取
+	#define IHU_HARDWARE_MASSIVE_PRODUTION_SET IHU_HARDWARE_MASSIVE_PRODUTION_NO
+
+	//定义固件是否自动升级
+	#define IHU_HARDWARE_BURN_ID_FW_UPGRADE_SET IHU_HARDWARE_BURN_ID_FW_UPGRADE_NO
+
  /***********************************************************************************
  *
  * IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID
@@ -352,17 +395,6 @@
  #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 	//可选项通信端口的全局定义，未来需要通过ConfigXml进一步优化
 	#define IHU_COMM_BACK_HAWL_CON 1 //0=NULL, 1=ETHERNET, 2=WIFI, 3=3G4G, 4=USBNET, 5/OTHERS=INVALID
-	#define IHU_COMM_FRONT_ADC 1 //1=ON, 0/OTHERS=OFF
-	#define IHU_COMM_FRONT_I2C 1 //1=ON, 0/OTHERS=OFF
-	#define IHU_COMM_FRONT_PWM 0 //1=ON, 0/OTHERS=OFF
-	#define IHU_COMM_FRONT_SPS 1 //1=ON, 0/OTHERS=OFF
-	#define IHU_COMM_FRONT_SPI 0 //1=ON, 0/OTHERS=OFF
-	#define IHU_COMM_FRONT_GPIO 1 //1=ON, 0/OTHERS=OFF
-	#define IHU_COMM_FRONT_DIDO 1 //1=ON, 0/OTHERS=OFF
-	#define IHU_COMM_FRONT_LED 1 //1=ON, 0/OTHERS=OFF
-	#define IHU_COMM_FRONT_ETH 0 //1=ON, 0/OTHERS=OFF
-	#define IHU_COMM_FRONT_DCMI 1 //1=ON, 0/OTHERS=OFF
-	#define IHU_MAIN_CTRL_CCL 1 //1=ON, 0/OTHERS=OFF
 	//定义后台连接网络的接口
 	//现在采用这种互斥的方式进行定义，以后需要等待HWINV进行PnP，确保多种接口即插即用，随时切换
 	//多种接口之间的优先级关系，则有程序任务自动决定：ETHERNET > WIFI > USB-OTG2 > 3G4G
@@ -438,6 +470,11 @@
 	#else
 	#endif
 
+	//定义是否进入批量生产，从而确定硬件标识从哪里读取
+	#define IHU_HARDWARE_MASSIVE_PRODUTION_SET IHU_HARDWARE_MASSIVE_PRODUTION_NO
+
+	//定义固件是否自动升级
+	#define IHU_HARDWARE_BURN_ID_FW_UPGRADE_SET IHU_HARDWARE_BURN_ID_FW_UPGRADE_NO
 
 /***********************************************************************************
  *
@@ -447,17 +484,6 @@
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 	//可选项通信端口的全局定义，未来需要通过ConfigXml进一步优化
 	#define IHU_COMM_BACK_HAWL_CON 1 //0=NULL, 1=ETHERNET, 2=WIFI, 3=3G4G, 4=USBNET, 5/OTHERS=INVALID
-	#define IHU_COMM_FRONT_ADC 1 //1=ON, 0/OTHERS=OFF
-	#define IHU_COMM_FRONT_I2C 1 //1=ON, 0/OTHERS=OFF
-	#define IHU_COMM_FRONT_PWM 0 //1=ON, 0/OTHERS=OFF
-	#define IHU_COMM_FRONT_SPS 0 //1=ON, 0/OTHERS=OFF
-	#define IHU_COMM_FRONT_SPI 1 //1=ON, 0/OTHERS=OFF
-	#define IHU_COMM_FRONT_GPIO 1 //1=ON, 0/OTHERS=OFF
-	#define IHU_COMM_FRONT_DIDO 0 //1=ON, 0/OTHERS=OFF
-	#define IHU_COMM_FRONT_LED 1 //1=ON, 0/OTHERS=OFF
-	#define IHU_COMM_FRONT_ETH 0 //1=ON, 0/OTHERS=OFF
-	#define IHU_COMM_FRONT_DCMI 0 //1=ON, 0/OTHERS=OFF	
-	#define IHU_MAIN_CTRL_BFSC 1 //1=ON, 0/OTHERS=OFF
 		
 	//定义后台连接网络的接口
 	//现在采用这种互斥的方式进行定义，以后需要等待HWINV进行PnP，确保多种接口即插即用，随时切换
@@ -486,6 +512,8 @@
 	#define IHU_SERIESPORT_NUM_FOR_GPS_DEFAULT  1
 	//定义后台CLOUD连接到服务器
 	#define IHU_CLOUDXHUI_HTTP_ADDRESS_LOCAL "http://127.0.0.1/test.php"
+	#define IHU_CLOUDXHUI_HCU_NAME_SELF "IHU_BFSC_0499"
+	
 	//local SW storage address
 	#define  IHU_SW_DOWNLOAD_DIR_DEFAULT "/home/pi/ihu_sw_download/"
 	#define  IHU_SW_ACTIVE_DIR_DEFAULT "/home/pi/ihu_sw_active/"
@@ -504,7 +532,15 @@
 	//CURRENT HW PRODUCT CATELOG
 	#define IHU_HARDWARE_PRODUCT_CAT_TYPE 0x0881 // HUITP_IEID_UNI_INVENT_HWTYPE_PDTYPE_G8_BFSC_IHU_01 0x0881
 
+	//定义是否进入批量生产，从而确定硬件标识从哪里读取
+	#define IHU_HARDWARE_MASSIVE_PRODUTION_SET IHU_HARDWARE_MASSIVE_PRODUTION_NO
+
+	//定义固件是否自动升级
+	#define IHU_HARDWARE_BURN_ID_FW_UPGRADE_SET IHU_HARDWARE_BURN_ID_FW_UPGRADE_NO
+
+//==============================================================================================================================
 #else //IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID
+	#error Un-correct constant definition
 #endif //IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID
 
 #endif /* L0COMVM_SYSCONFIG_H_ */

@@ -33,6 +33,7 @@
 	#include "l1comdef_ucos.h"
 	#include "l1timer_ucos.h"
 #else
+	#error Un-correct constant definition
 #endif
 
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)

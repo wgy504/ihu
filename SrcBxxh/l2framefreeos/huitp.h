@@ -1,4 +1,4 @@
-﻿/*
+/*
  * huitp.h
  *
  *  Created on: 2016年12月25日
@@ -7,6 +7,7 @@
 
 #ifndef HUITP_H_
 #define HUITP_H_
+#pragma pack (1) //强制1字节对齐
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -100,19 +101,21 @@ typedef enum
 	HUITP_CMDID_uni_switch_resistor       = 0x39, //继电器
 	HUITP_CMDID_uni_transporter           = 0x3A, //导轨传送带
 	HUITP_CMDID_uni_bfsc_comb_scale       = 0x3B, //组合秤
-	HUITP_CMDID_uni_ccl_lock              = 0x40,  //智能锁
-	HUITP_CMDID_uni_ccl_door              = 0x41, //光交箱门
-	HUITP_CMDID_uni_ccl_rfid              = 0x42, //光交箱RFID模块
-	HUITP_CMDID_uni_ccl_ble               = 0x43, //光交箱BLE模块
-	HUITP_CMDID_uni_ccl_gprs              = 0x44, //光交箱GPRS模块
-	HUITP_CMDID_uni_ccl_battery           = 0x45, //光交箱电池模块
-	HUITP_CMDID_uni_ccl_shake             = 0x46, //光交箱震动
-	HUITP_CMDID_uni_ccl_smoke             = 0x47, //光交箱烟雾
-	HUITP_CMDID_uni_ccl_water             = 0x48, //光交箱水浸
-	HUITP_CMDID_uni_ccl_temp              = 0x49, //光交箱温度
-	HUITP_CMDID_uni_ccl_humid             = 0x4A, //光交箱湿度
-	HUITP_CMDID_uni_ccl_fall              = 0x4B, //倾倒
-	HUITP_CMDID_uni_ccl_state             = 0x4C, //状态聚合
+	HUITP_CMDID_uni_ccl_lock_old          = 0x40, //智能锁，兼容老系统
+	HUITP_CMDID_uni_ccl_door              = 0x41, //光交箱门，兼容老系统
+	HUITP_CMDID_uni_ccl_rfid              = 0x42, //光交箱RFID模块，兼容老系统
+	HUITP_CMDID_uni_ccl_ble               = 0x43, //光交箱BLE模块，兼容老系统
+	HUITP_CMDID_uni_ccl_gprs              = 0x44, //光交箱GPRS模块，兼容老系统
+	HUITP_CMDID_uni_ccl_battery           = 0x45, //光交箱电池模块，兼容老系统
+	HUITP_CMDID_uni_ccl_shake             = 0x46, //光交箱震动，兼容老系统
+	HUITP_CMDID_uni_ccl_smoke             = 0x47, //光交箱烟雾，兼容老系统
+	HUITP_CMDID_uni_ccl_water             = 0x48, //光交箱水浸，兼容老系统
+	HUITP_CMDID_uni_ccl_temp              = 0x49, //光交箱温度，兼容老系统
+	HUITP_CMDID_uni_ccl_humid             = 0x4A, //光交箱湿度，兼容老系统
+	HUITP_CMDID_uni_ccl_fall              = 0x4B, //倾倒，兼容老系统
+	HUITP_CMDID_uni_ccl_state_old         = 0x4C, //状态聚合，兼容老系统
+	HUITP_CMDID_uni_ccl_lock              = 0x4D, //光交箱智能锁
+	HUITP_CMDID_uni_ccl_state             = 0x4E, //光交箱状态聚合	
 	HUITP_CMDID_uni_itf_sps               = 0x50, //串口读取命令/返回结果
 	HUITP_CMDID_uni_itf_adc               = 0x51, //ADC读取命令/返回结果
 	HUITP_CMDID_uni_itf_dac               = 0x52, //DAC读取命令/返回结果
@@ -720,15 +723,15 @@ typedef enum
 	HUITP_MSGID_uni_bfsc_comb_scale_cmd_stop_resp    = 0x3B83, 
 	HUITP_MSGID_uni_bfsc_comb_scale_max,
 
-  //云控锁-锁
-	HUITP_MSGID_uni_ccl_lock_min                     = 0x4000,  
-	HUITP_MSGID_uni_ccl_lock_req                     = 0x4000,  
-	HUITP_MSGID_uni_ccl_lock_resp                    = 0x4080, 
-	HUITP_MSGID_uni_ccl_lock_report                  = 0x4081, 
-	HUITP_MSGID_uni_ccl_lock_confirm                 = 0x4001, 
-	HUITP_MSGID_uni_ccl_lock_auth_inq                = 0x4090, 
-	HUITP_MSGID_uni_ccl_lock_auth_resp               = 0x4010,
-	HUITP_MSGID_uni_ccl_lock_max,
+  //云控锁-锁-旧系统兼容
+	HUITP_MSGID_uni_ccl_lock_old_min                 = 0x4000,  
+	HUITP_MSGID_uni_ccl_lock_old_req                 = 0x4000,  
+	HUITP_MSGID_uni_ccl_lock_old_resp                = 0x4080, 
+	HUITP_MSGID_uni_ccl_lock_old_report              = 0x4081, 
+	HUITP_MSGID_uni_ccl_lock_old_confirm             = 0x4001, 
+	HUITP_MSGID_uni_ccl_lock_old_auth_inq            = 0x4090, 
+	HUITP_MSGID_uni_ccl_lock_old_auth_resp           = 0x4010,
+	HUITP_MSGID_uni_ccl_lock_old_max,
 
   //云控锁-门
 	HUITP_MSGID_uni_ccl_door_min                     = 0x4100, 
@@ -818,15 +821,33 @@ typedef enum
 	HUITP_MSGID_uni_ccl_fall_confirm                 = 0x4B01,
 	HUITP_MSGID_uni_ccl_fall_max,
 
+  //云控锁-状态聚合-旧系统兼容
+	HUITP_MSGID_uni_ccl_state_old_min                = 0x4C00, 
+	HUITP_MSGID_uni_ccl_state_old_req                = 0x4C00, 
+	HUITP_MSGID_uni_ccl_state_old_resp               = 0x4C80, 
+	HUITP_MSGID_uni_ccl_state_old_report             = 0x4C81, 
+	HUITP_MSGID_uni_ccl_state_old_confirm            = 0x4C01, 
+	HUITP_MSGID_uni_ccl_state_old_max,
+
+  //云控锁-锁
+	HUITP_MSGID_uni_ccl_lock_min                     = 0x4D00,  
+	HUITP_MSGID_uni_ccl_lock_req                     = 0x4D00,  
+	HUITP_MSGID_uni_ccl_lock_resp                    = 0x4D80, 
+	HUITP_MSGID_uni_ccl_lock_report                  = 0x4D81, 
+	HUITP_MSGID_uni_ccl_lock_confirm                 = 0x4D01, 
+	HUITP_MSGID_uni_ccl_lock_auth_inq                = 0x4D90, 
+	HUITP_MSGID_uni_ccl_lock_auth_resp               = 0x4D10,
+	HUITP_MSGID_uni_ccl_lock_max,
+
   //云控锁-状态聚合
-	HUITP_MSGID_uni_ccl_state_min                    = 0x4C00, 
-	HUITP_MSGID_uni_ccl_state_req                    = 0x4C00, 
-	HUITP_MSGID_uni_ccl_state_resp                   = 0x4C80, 
-	HUITP_MSGID_uni_ccl_state_report                 = 0x4C81, 
-	HUITP_MSGID_uni_ccl_state_confirm                = 0x4C01, 
+	HUITP_MSGID_uni_ccl_state_min                    = 0x4E00, 
+	HUITP_MSGID_uni_ccl_state_req                    = 0x4E00, 
+	HUITP_MSGID_uni_ccl_state_resp                   = 0x4E80, 
+	HUITP_MSGID_uni_ccl_state_report                 = 0x4E81, 
+	HUITP_MSGID_uni_ccl_state_confirm                = 0x4E01, 
 	HUITP_MSGID_uni_ccl_state_max,
 
-  //串口读取命令/返回结果
+	//串口读取命令/返回结果
 	HUITP_MSGID_uni_itf_sps_min                      = 0x5000, 
 	HUITP_MSGID_uni_itf_sps_req                      = 0x5000, 
 	HUITP_MSGID_uni_itf_sps_resp                     = 0x5080, 
@@ -1261,12 +1282,12 @@ typedef enum
 	HUITP_IEID_uni_scale_weight_cmd                 = 0x3B01,
 	HUITP_IEID_uni_bfsc_comb_scale_max,
 
-  //云控锁-锁
-	HUITP_IEID_uni_ccl_lock_min                     = 0x4000,  
-	HUITP_IEID_uni_ccl_lock_state                   = 0x4000,
-	HUITP_IEID_uni_ccl_lock_auth_req                = 0x4001,
-	HUITP_IEID_uni_ccl_lock_auth_resp               = 0x4002,
-	HUITP_IEID_uni_ccl_lock_max,
+  //云控锁-锁-旧系统
+	HUITP_IEID_uni_ccl_lock_old_min                 = 0x4000,  
+	HUITP_IEID_uni_ccl_lock_old_state               = 0x4000,
+	HUITP_IEID_uni_ccl_lock_old_auth_req            = 0x4001,
+	HUITP_IEID_uni_ccl_lock_old_auth_resp           = 0x4002,
+	HUITP_IEID_uni_ccl_lock_old_max,
 
   //云控锁-门
 	HUITP_IEID_uni_ccl_door_min                     = 0x4100, 
@@ -1324,13 +1345,27 @@ typedef enum
 	HUITP_IEID_uni_ccl_fall_state                   = 0x4B00, 
 	HUITP_IEID_uni_ccl_fall_max,
 
-  //云控锁-状态聚合
-	HUITP_IEID_uni_ccl_state_min                    = 0x4C00, 
-	HUITP_IEID_uni_ccl_general_value1               = 0x4C00, 
-	HUITP_IEID_uni_ccl_general_value2               = 0x4C01, 
-	HUITP_IEID_uni_ccl_dcmi_value                   = 0x4C02,
-	HUITP_IEID_uni_ccl_report_type                  = 0x4C03,
+  //云控锁-状态聚合-旧系统
+	HUITP_IEID_uni_ccl_state_old_min                = 0x4C00, 
+	HUITP_IEID_uni_ccl_general_old_value1           = 0x4C00, 
+	HUITP_IEID_uni_ccl_general_old_value2           = 0x4C01, 
+	HUITP_IEID_uni_ccl_dcmi_old_value               = 0x4C02,
+	HUITP_IEID_uni_ccl_report_old_type              = 0x4C03,
+	HUITP_IEID_uni_ccl_state_old_max,
 	
+  //云控锁-锁
+	HUITP_IEID_uni_ccl_lock_min                 		= 0x4D00,  
+	HUITP_IEID_uni_ccl_lock_state               		= 0x4D00,
+	HUITP_IEID_uni_ccl_lock_auth_req            		= 0x4D01,
+	HUITP_IEID_uni_ccl_lock_auth_resp           		= 0x4D02,
+	HUITP_IEID_uni_ccl_lock_max,	
+	
+  //云控锁-状态聚合
+	HUITP_IEID_uni_ccl_state_min                    = 0x4E00, 
+	HUITP_IEID_uni_ccl_general_value1               = 0x4E00, 
+	HUITP_IEID_uni_ccl_general_value2               = 0x4E01, 
+	HUITP_IEID_uni_ccl_dcmi_value                   = 0x4E02,
+	HUITP_IEID_uni_ccl_report_type                  = 0x4E03,
 	HUITP_IEID_uni_ccl_state_max,
 
   //串口读取命令/返回结果
@@ -6505,61 +6540,61 @@ typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_cmd_stop_resp
 
 //HUITP_MSGID_uni_bfsc_comb_scale_max,
 
-//云控锁-锁
-//HUITP_MSGID_uni_ccl_lock_min                     = 0x4000,  
-//HUITP_MSGID_uni_ccl_lock_req                     = 0x4000,
-typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_req
+//云控锁-锁-兼容旧系统
+//HUITP_MSGID_uni_ccl_lock_old_min                     = 0x4000,  
+//HUITP_MSGID_uni_ccl_lock_old_req                     = 0x4000,
+typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_req_old
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
 	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
-}StrMsg_HUITP_MSGID_uni_ccl_lock_req_t;
+}StrMsg_HUITP_MSGID_uni_ccl_lock_req_old_t;
 
-//HUITP_MSGID_uni_ccl_lock_resp                    = 0x4080, 
-typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_resp
+//HUITP_MSGID_uni_ccl_lock_resp_old                    = 0x4080, 
+typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_resp_old
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
 	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_ccl_lock_state_t respState;
-}StrMsg_HUITP_MSGID_uni_ccl_lock_resp_t;
+}StrMsg_HUITP_MSGID_uni_ccl_lock_resp_old_t;
 
-//HUITP_MSGID_uni_ccl_lock_report                  = 0x4081, 
-typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_report
+//HUITP_MSGID_uni_ccl_lock_report_old                  = 0x4081, 
+typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_report_old
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
 	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_ccl_lock_state_t reportState;	
-}StrMsg_HUITP_MSGID_uni_ccl_lock_report_t;
+}StrMsg_HUITP_MSGID_uni_ccl_lock_report_old_t;
 
-//HUITP_MSGID_uni_ccl_lock_confirm                     = 0x4001,
-typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_confirm
+//HUITP_MSGID_uni_ccl_lock_confirm _old                    = 0x4001,
+typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_confirm_old
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
 	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
-}StrMsg_HUITP_MSGID_uni_ccl_lock_confirm_t;
+}StrMsg_HUITP_MSGID_uni_ccl_lock_confirm_old_t;
 
-//HUITP_MSGID_uni_ccl_lock_auth_inq                = 0x4090, 
-typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_auth_inq
+//HUITP_MSGID_uni_ccl_lock_auth_inq_old                = 0x4090, 
+typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_auth_inq_old
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
 	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_ccl_lock_auth_req_t authReq;
-}StrMsg_HUITP_MSGID_uni_ccl_lock_auth_inq_t;
+}StrMsg_HUITP_MSGID_uni_ccl_lock_auth_inq_old_t;
 
 //HUITP_MSGID_uni_ccl_lock_auth_resp               = 0x4010,
-typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_auth_resp
+typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_auth_resp_old
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
 	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_ccl_lock_auth_resp_t respState;
-}StrMsg_HUITP_MSGID_uni_ccl_lock_auth_resp_t;
+}StrMsg_HUITP_MSGID_uni_ccl_lock_auth_resp_old_t;
 
-//HUITP_MSGID_uni_ccl_lock_max,
+//HUITP_MSGID_uni_ccl_lock_old_max,
 
 //云控锁-门
 //HUITP_MSGID_uni_ccl_door_min                     = 0x4100, 
@@ -6979,9 +7014,132 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_fall_confirm
 
 //HUITP_MSGID_uni_ccl_fall_max,
 
+//云控锁-状态聚合-兼容旧系统
+//HUITP_MSGID_uni_ccl_state_old_min                    = 0x4C00, 
+//HUITP_MSGID_uni_ccl_state_old_req                    = 0x4C00,
+typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_req_old
+{
+	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_req_t baseReq;
+}StrMsg_HUITP_MSGID_uni_ccl_state_req_old_t;
+
+//HUITP_MSGID_uni_ccl_state_old_respold                   = 0x4C80,
+typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_resp_old
+{
+	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
+	StrIe_HUITP_IEID_uni_ccl_lock_state_t lockState;
+	StrIe_HUITP_IEID_uni_ccl_door_state_t doorState;
+	StrIe_HUITP_IEID_uni_ccl_water_state_t waterState;
+	StrIe_HUITP_IEID_uni_ccl_fall_state_t fallState;
+	StrIe_HUITP_IEID_uni_ccl_shake_state_t shakeState;
+	StrIe_HUITP_IEID_uni_ccl_smoke_state_t smokeState;
+	StrIe_HUITP_IEID_uni_ccl_bat_state_t batState;
+	StrIe_HUITP_IEID_uni_ccl_temp_value_t tempValue;
+	StrIe_HUITP_IEID_uni_ccl_humid_value_t humidValue;
+	StrIe_HUITP_IEID_uni_ccl_bat_value_t batValue;
+	StrIe_HUITP_IEID_uni_ccl_general_value1_t general1Value;
+	StrIe_HUITP_IEID_uni_ccl_general_value2_t general2Value;
+	StrIe_HUITP_IEID_uni_ccl_rssi_value_t rssiValue;
+	StrIe_HUITP_IEID_uni_ccl_dcmi_value_t dcmiValue;
+	StrIe_HUITP_IEID_uni_ccl_report_type_t reportType;
+}StrMsg_HUITP_MSGID_uni_ccl_state_resp_old_t;
+
+//HUITP_MSGID_uni_ccl_state_old_reportold                 = 0x4C81,
+typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_report_old
+{
+	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_report_t baseReport;
+	StrIe_HUITP_IEID_uni_ccl_lock_state_t lockState;
+	StrIe_HUITP_IEID_uni_ccl_door_state_t doorState;
+	StrIe_HUITP_IEID_uni_ccl_water_state_t waterState;
+	StrIe_HUITP_IEID_uni_ccl_fall_state_t fallState;
+	StrIe_HUITP_IEID_uni_ccl_shake_state_t shakeState;
+	StrIe_HUITP_IEID_uni_ccl_smoke_state_t smokeState;
+	StrIe_HUITP_IEID_uni_ccl_bat_state_t batState;
+	StrIe_HUITP_IEID_uni_ccl_temp_value_t tempValue;
+	StrIe_HUITP_IEID_uni_ccl_humid_value_t humidValue;
+	StrIe_HUITP_IEID_uni_ccl_bat_value_t batValue;
+	StrIe_HUITP_IEID_uni_ccl_general_value1_t general1Value;
+	StrIe_HUITP_IEID_uni_ccl_general_value2_t general2Value;
+	StrIe_HUITP_IEID_uni_ccl_rssi_value_t rssiValue;
+	StrIe_HUITP_IEID_uni_ccl_dcmi_value_t dcmiValue;
+	StrIe_HUITP_IEID_uni_ccl_report_type_t reportType;
+}StrMsg_HUITP_MSGID_uni_ccl_state_report_old_t;
+
+//HUITP_MSGID_uni_ccl_state_old_confirmold                    = 0x4C01,
+typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_confirm_old
+{
+	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
+	StrIe_HUITP_IEID_uni_ccl_report_type_t reportType;
+}StrMsg_HUITP_MSGID_uni_ccl_state_confirm_old_t;
+
+//HUITP_MSGID_uni_ccl_state_old_max,
+
+//云控锁-锁
+//HUITP_MSGID_uni_ccl_lock_min                     = 0x4D00,  
+//HUITP_MSGID_uni_ccl_lock_req                     = 0x4D00,
+typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_req
+{
+	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_req_t baseReq;
+}StrMsg_HUITP_MSGID_uni_ccl_lock_req_t;
+
+//HUITP_MSGID_uni_ccl_lock_resp                    = 0x4D80, 
+typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_resp
+{
+	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
+	StrIe_HUITP_IEID_uni_ccl_lock_state_t respState;
+}StrMsg_HUITP_MSGID_uni_ccl_lock_resp_t;
+
+//HUITP_MSGID_uni_ccl_lock_report                  = 0x4D81, 
+typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_report
+{
+	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_report_t baseReport;
+	StrIe_HUITP_IEID_uni_ccl_lock_state_t reportState;	
+}StrMsg_HUITP_MSGID_uni_ccl_lock_report_t;
+
+//HUITP_MSGID_uni_ccl_lock_confirm                     = 0x4D01,
+typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_confirm
+{
+	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
+}StrMsg_HUITP_MSGID_uni_ccl_lock_confirm_t;
+
+//HUITP_MSGID_uni_ccl_lock_auth_inq                = 0x4D90, 
+typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_auth_inq
+{
+	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_req_t baseReq;
+	StrIe_HUITP_IEID_uni_ccl_lock_auth_req_t authReq;
+}StrMsg_HUITP_MSGID_uni_ccl_lock_auth_inq_t;
+
+//HUITP_MSGID_uni_ccl_lock_auth_resp               = 0x4D10,
+typedef struct StrMsg_HUITP_MSGID_uni_ccl_lock_auth_resp
+{
+	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
+	StrIe_HUITP_IEID_uni_ccl_lock_auth_resp_t respState;
+}StrMsg_HUITP_MSGID_uni_ccl_lock_auth_resp_t;
+
+//HUITP_MSGID_uni_ccl_lock_max,
+
 //云控锁-状态聚合
-//HUITP_MSGID_uni_ccl_state_min                    = 0x4C00, 
-//HUITP_MSGID_uni_ccl_state_req                    = 0x4C00,
+//HUITP_MSGID_uni_ccl_state_min                    = 0x4E00, 
+//HUITP_MSGID_uni_ccl_state_req                    = 0x4E00,
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
@@ -6989,7 +7147,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_req
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 }StrMsg_HUITP_MSGID_uni_ccl_state_req_t;
 
-//HUITP_MSGID_uni_ccl_state_resp                   = 0x4C80,
+//HUITP_MSGID_uni_ccl_state_resp                   = 0x4E80,
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
@@ -7012,7 +7170,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_resp
 	StrIe_HUITP_IEID_uni_ccl_report_type_t reportType;
 }StrMsg_HUITP_MSGID_uni_ccl_state_resp_t;
 
-//HUITP_MSGID_uni_ccl_state_report                 = 0x4C81,
+//HUITP_MSGID_uni_ccl_state_report                 = 0x4E81,
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
@@ -7035,7 +7193,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_report
 	StrIe_HUITP_IEID_uni_ccl_report_type_t reportType;
 }StrMsg_HUITP_MSGID_uni_ccl_state_report_t;
 
-//HUITP_MSGID_uni_ccl_state_confirm                    = 0x4C01,
+//HUITP_MSGID_uni_ccl_state_confirm                    = 0x4E01,
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
@@ -7045,6 +7203,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_confirm
 }StrMsg_HUITP_MSGID_uni_ccl_state_confirm_t;
 
 //HUITP_MSGID_uni_ccl_state_max,
+
 
 //串口读取命令/返回结果
 //HUITP_MSGID_uni_itf_sps_min                      = 0x5000, 
@@ -8017,4 +8176,5 @@ typedef struct StrMsg_HUITP_MSGID_uni_heart_beat_confirm
 //无效
 //HUITP_MSGID_uni_null                             = 0xFF,	
 
+#pragma pack () //取消字节对其
 #endif /* HUITP_H_ */

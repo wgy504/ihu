@@ -29,6 +29,7 @@
 	#include "l1comdef_ucos.h"
 	#include "l1timer_ucos.h"
 #else
+	#error Un-correct constant definition
 #endif
 
 

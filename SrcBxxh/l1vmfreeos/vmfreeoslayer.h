@@ -61,9 +61,11 @@
 	#include "bsp_rtc.h"
 	#include "bsp_calendar.h"
 	#include "bsp_cpuid.h"
+	#include "bsp_stmflash.h"
 
 
-#else	
+#else
+	#error Un-correct constant definition
 #endif
 
 #define IHU_WORKING_FREE_RTOS_SELECTION_BARE 1
@@ -74,6 +76,7 @@
 	|| (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID))
   #define IHU_WORKING_FREE_RTOS_SELECTION IHU_WORKING_FREE_RTOS_SELECTION_BARE
 #else
+	#error Un-correct constant definition
 #endif
 
 /*
@@ -84,78 +87,91 @@
 
 //定义TASK对应的名字
 //!!!!!!!!!!!!!!!!ATTENTION!!!!!!!!!!!!!!!!
-//Whenever the Task Id is changed, QueID and vmlayer.c/zIhuTaskNameList array should be updated, otherwise error will happen!!!
 //不是任务的任务，比如TRACE/CONFIG/3G/GPIO等等，留待清理，简化任务列表
 /*
  *
  *   【增加任务】，必须同时修改四个地方：
  *   - IHU_TASK_NAME_ID
  *   - IHU_TASK_QUEUE_ID
- *   - zIhuTaskNameList
+ *   - zIhuGlobalTaskInputConfig
  *   - 还要修改可能的本地配置文件，或者sysengpar.h的固定工参配置信息，#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID
  *	 - 继续修改初始化函数void ihu_vm_system_init(void)
- *
+ *	
+ *	基础模块：TASK_ID_MIN, TASK_ID_VMFO, TASK_ID_TIMER, TASK_ID_ADCLIBRA, TASK_ID_SPILEO, TASK_ID_I2CARIES, TASK_ID_PWMTAURUS
+ *	          TASK_ID_SPSVIRGO, TASK_ID_CANVELA, TASK_ID_DIDOCAP, TASK_ID_LEDPISCES, TASK_ID_ETHORION, TASK_ID_DCMIARIS, 
+ *            TASK_ID_EMC68X, TASK_ID_CCL, TASK_ID_MAX, TASK_ID_INVALID
  */
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
-enum IHU_TASK_NAME_ID
-{
-	TASK_ID_MIN = 0,
-	TASK_ID_VMFO,
-	TASK_ID_TIMER,
-//	TASK_ID_ADCLIBRA,
-//	TASK_ID_SPILEO,
-//	TASK_ID_I2CARIES,
-//	TASK_ID_PWMTAURUS,
-//	TASK_ID_SPSVIRGO,
-//	TASK_ID_CANVELA,
-//	TASK_ID_DIDOCAP,
-//	TASK_ID_LEDPISCES,
-//	TASK_ID_ETHORION,	
-	TASK_ID_EMC68X,
-	TASK_ID_MAX,
-	TASK_ID_INVALID = 0xFF,
-}; //end of IHU_TASK_NAME_ID
+	enum IHU_TASK_NAME_ID
+	{
+		TASK_ID_MIN = 0,
+		TASK_ID_VMFO,
+		TASK_ID_TIMER,
+		TASK_ID_EMC68X,
+		TASK_ID_MAX,
+		TASK_ID_INVALID = 0xFF,
+	}; //end of IHU_TASK_NAME_ID
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-enum IHU_TASK_NAME_ID
-{
-	TASK_ID_MIN = 0,
-	TASK_ID_VMFO,
-	TASK_ID_TIMER,
-	TASK_ID_ADCLIBRA,
-	//TASK_ID_SPILEO,
-	TASK_ID_I2CARIES,
-	//TASK_ID_PWMTAURUS,
-	TASK_ID_SPSVIRGO,
-	//TASK_ID_CANVELA,
-	TASK_ID_DIDOCAP,
-	TASK_ID_LEDPISCES,
-	//TASK_ID_ETHORION,
-	TASK_ID_DCMIARIS,	
-	TASK_ID_CCL,
-	TASK_ID_MAX,
-	TASK_ID_INVALID = 0xFF,
-}; //end of IHU_TASK_NAME_ID
+	enum IHU_TASK_NAME_ID
+	{
+		TASK_ID_MIN = 0,
+		TASK_ID_VMFO,
+		TASK_ID_TIMER,
+		TASK_ID_ADCLIBRA,
+		//TASK_ID_SPILEO,
+		TASK_ID_I2CARIES,
+		//TASK_ID_PWMTAURUS,
+		//TASK_ID_CANVELA,
+		TASK_ID_SPSVIRGO,
+		//TASK_ID_CANVELA,
+		TASK_ID_DIDOCAP,
+		TASK_ID_LEDPISCES,
+		//TASK_ID_ETHORION,
+		TASK_ID_DCMIARIS,	
+		TASK_ID_CCL,
+		TASK_ID_MAX,
+		TASK_ID_INVALID = 0xFF,
+	}; //end of IHU_TASK_NAME_ID
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
-enum IHU_TASK_NAME_ID
-{
-	TASK_ID_MIN = 0,
-	TASK_ID_VMFO,
-	TASK_ID_TIMER,
-	TASK_ID_ADCLIBRA,
-	TASK_ID_SPILEO,
-	TASK_ID_I2CARIES,
-	//TASK_ID_PWMTAURUS,
-	//TASK_ID_SPSVIRGO,
-	TASK_ID_CANVELA,
-	//TASK_ID_DIDOCAP,
-	TASK_ID_LEDPISCES,
-	//TASK_ID_ETHORION,
-	//TASK_ID_DCMIARIS,	
-	TASK_ID_BFSC,
-	TASK_ID_MAX,
-	TASK_ID_INVALID = 0xFF,
-}; //end of IHU_TASK_NAME_ID
-#else
+	enum IHU_TASK_NAME_ID
+	{
+		TASK_ID_MIN = 0,
+		TASK_ID_VMFO,
+		TASK_ID_TIMER,
+		TASK_ID_ADCLIBRA,
+		TASK_ID_SPILEO,
+		TASK_ID_I2CARIES,
+		//TASK_ID_PWMTAURUS,
+		TASK_ID_CANVELA,
+		//TASK_ID_SPSVIRGO,
+		//TASK_ID_DIDOCAP,
+		TASK_ID_LEDPISCES,
+		//TASK_ID_ETHORION,
+		//TASK_ID_DCMIARIS,	
+		TASK_ID_BFSC,
+		TASK_ID_MAX,
+		TASK_ID_INVALID = 0xFF,
+	}; //end of IHU_TASK_NAME_ID
+#else  //为了提供完整表达
+	enum IHU_TASK_NAME_ID
+	{
+		TASK_ID_MIN = 0,
+		TASK_ID_VMFO,
+		TASK_ID_TIMER,
+		TASK_ID_ADCLIBRA,
+		TASK_ID_SPILEO,
+		TASK_ID_I2CARIES,
+		TASK_ID_PWMTAURUS,
+		TASK_ID_SPSVIRGO,
+		TASK_ID_CANVELA,
+		TASK_ID_DIDOCAP,
+		TASK_ID_LEDPISCES,
+		TASK_ID_ETHORION,
+		TASK_ID_DCMIARIS,	
+		TASK_ID_BFSC,
+		TASK_ID_MAX,
+		TASK_ID_INVALID = 0xFF,
+	}; //end of IHU_TASK_NAME_ID
 #endif
 
 /*
@@ -180,17 +196,11 @@ typedef struct IhuTaskTag
 	UINT8  pnpState;
 	QueueHandle_t  QueId;
 	UINT8  state;
-	char   TaskName[TASK_NAME_MAX_LENGTH];
+	char   taskName[TASK_NAME_MAX_LENGTH];
 	FsmStateItem_t *fsmPtr;
 	xTaskHandle TaskHandle;
-	//UINT8 QueFullFlag;
+	void*  taskFuncEntry;
 }IhuTaskTag_t;
-//#define IHU_TASK_PNP_ON 2
-//#define IHU_TASK_PNP_OFF 1
-#define IHU_TASK_PNP_INVALID 0xFF
-#define IHU_TASK_QUEUE_FULL_TRUE 2
-#define IHU_TASK_QUEUE_FULL_FALSE 1
-#define IHU_TASK_QUEUE_FULL_INVALID 0xFF
 
 typedef struct FsmArrayElement
 {
@@ -225,6 +235,14 @@ typedef struct FsmTable
 	FsmCtrlTable_t  pFsmCtrlTable[MAX_TASK_NUM_IN_ONE_IHU];  //所有任务的状态机总控表
 	FsmQueueListTable_t taskQue[MAX_TASK_NUM_IN_ONE_IHU];  //所有任务的消息队列总控表
 }FsmTable_t;
+
+//任务配置的基础配置信息
+typedef struct StrIhuGlobalTaskInputConfig
+{
+	UINT8 taskInputId;
+	char  taskInputName[TASK_NAME_MAX_LENGTH];
+	void* fsmFuncEntry;
+}StrIhuGlobalTaskInputConfig_t;
 
 //任务模块RESTART的一些全局定义
 #define IHU_RUN_ERROR_LEVEL_0_WARNING 10
@@ -275,8 +293,7 @@ UINT8 IhuDebugPrintId(char *file, int line);
 
 extern void ihu_vm_system_init(void);  //系统级别的初始化
 extern void ihu_sleep(UINT32 second);
-extern void ihu_usleep(UINT32 usecond);  //resulution 10^(-6)s = 1 microsecond
-uint16_t b2l_uint16(uint16_t in);
+extern void ihu_usleep(UINT32 usecond);  //resulution 10^(-3)s = 1 microsecond
 extern OPSTAT ihu_taskid_to_string(UINT8 id, char *string);
 extern OPSTAT ihu_msgid_to_string(UINT16 id, char *string);
 extern int  ihu_vm_main(void);
@@ -330,53 +347,24 @@ extern void   ihu_task_execute_all_bare_rtos(void);
 extern IhuTaskTag_t zIhuTaskInfo[MAX_TASK_NUM_IN_ONE_IHU];  //任务控制总表
 extern UINT32 zIhuRunErrCnt[MAX_TASK_NUM_IN_ONE_IHU];       //差错表
 extern FsmTable_t zIhuFsmTable;                             //状态机总表
-extern char *zIhuTaskNameList[MAX_TASK_NUM_IN_ONE_IHU];     //任务名字符串
 extern char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK];    //消息名字符串
 extern IhuSysEngParTable_t zIhuSysEngPar;                   //工参
-extern time_t zIhuSystemTimeUnix;                           //系统时钟TimeStamp
-extern struct tm zIhuSystemTimeYmd;                        	//系统时钟YMD
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
-extern FsmStateItem_t FsmVmfo[];                           		//状态机
-extern FsmStateItem_t FsmTimer[];                           	//状态机
-//extern FsmStateItem_t FsmAdclibra[];                        //状态机
-//extern FsmStateItem_t FsmSpileo[];                          //状态机
-//extern FsmStateItem_t FsmI2caries[];                        //状态机
-//extern FsmStateItem_t FsmPwmtaurus[];                       //状态机
-//extern FsmStateItem_t FsmSpsvirgo[];                        //状态机
-//extern FsmStateItem_t FsmCanvela[];                      		//状态机
-//extern FsmStateItem_t FsmDidocap[];                         //状态机
-//extern FsmStateItem_t FsmLedpisces[];                       //状态机
-//extern FsmStateItem_t FsmEthorion[];                        //状态机
-extern FsmStateItem_t FsmEmc68x[];                          	//状态机
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+//统一定义，如果不存在不影响编译
 extern FsmStateItem_t FsmVmfo[];                           	//状态机
 extern FsmStateItem_t FsmTimer[];                           //状态机
 extern FsmStateItem_t FsmAdclibra[];                        //状态机
 extern FsmStateItem_t FsmSpileo[];                          //状态机
 extern FsmStateItem_t FsmI2caries[];                        //状态机
-//extern FsmStateItem_t FsmPwmtaurus[];                       //状态机
+extern FsmStateItem_t FsmPwmtaurus[];                       //状态机
 extern FsmStateItem_t FsmSpsvirgo[];                        //状态机
 extern FsmStateItem_t FsmCanvela[];                      		//状态机
 extern FsmStateItem_t FsmDidocap[];                         //状态机
 extern FsmStateItem_t FsmLedpisces[];                       //状态机
-//extern FsmStateItem_t FsmEthorion[];                        //状态机
+extern FsmStateItem_t FsmEthorion[];                        //状态机
 extern FsmStateItem_t FsmDcmiaris[];                        //状态机
+extern FsmStateItem_t FsmEmc68x[];                          //状态机
 extern FsmStateItem_t FsmCcl[];                          	  //状态机
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
-extern FsmStateItem_t FsmVmfo[];                           	//状态机
-extern FsmStateItem_t FsmTimer[];                           //状态机
-extern FsmStateItem_t FsmAdclibra[];                        //状态机
-extern FsmStateItem_t FsmSpileo[];                          //状态机
-extern FsmStateItem_t FsmI2caries[];                        //状态机
-//extern FsmStateItem_t FsmPwmtaurus[];                       //状态机
-//extern FsmStateItem_t FsmSpsvirgo[];                        //状态机
-extern FsmStateItem_t FsmCanvela[];                      		//状态机
-//extern FsmStateItem_t FsmDidocap[];                         //状态机
-extern FsmStateItem_t FsmLedpisces[];                       //状态机
-//extern FsmStateItem_t FsmEthorion[];                        //状态机
 extern FsmStateItem_t FsmBfsc[];                          	//状态机 
-#else
-#endif
 
 //外部引用API，来自于TIMER任务模块。TIMER任务模块的机制是，必须将VM启动起来，然后TIMER上层任务模块才能被激活，并产生自定义的TIME_OUT消息
 extern OPSTAT ihu_timer_start(UINT8 task_id, UINT8 timer_id, UINT32 t_dur, UINT8 t_type, UINT8 t_res);

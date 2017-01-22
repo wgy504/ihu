@@ -52,6 +52,7 @@ strIhuBfscAdcWeightPar_t zIhuAdcBfscWs;
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 strIhuCclAdcPar_t zIhuCclAdclibraCtrlTable;
 #else
+	#error Un-correct constant definition
 #endif
 
 //Main Entry
@@ -79,7 +80,7 @@ OPSTAT fsm_adclibra_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 		snd.length = sizeof(msg_struct_com_init_fb_t);
 		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_ADCLIBRA, &snd, snd.length);
 		if (ret == IHU_FAILURE){
-			IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_ADCLIBRA], zIhuTaskNameList[src_id]);
+			IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_ADCLIBRA].taskName, zIhuTaskInfo[src_id].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -104,6 +105,7 @@ OPSTAT fsm_adclibra_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 	memset(&zIhuCclAdclibraCtrlTable, 0, sizeof(strIhuCclAdcPar_t));
 	zIhuCclAdclibraCtrlTable.cclAdcWorkingMode = IHU_CCL_ADC_WORKING_MODE_SLEEP;  //初始化就进入SLEEP，然后就看是否有触发
 #else
+	#error Un-correct constant definition
 #endif
 
 	//设置状态机到目标状态
@@ -200,7 +202,7 @@ OPSTAT fsm_adclibra_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 		ret = ihu_message_send(MSG_ID_COM_RESTART, TASK_ID_ADCLIBRA, TASK_ID_ADCLIBRA, &snd0, snd0.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
-			IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_ADCLIBRA], zIhuTaskNameList[TASK_ID_ADCLIBRA]);
+			IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_ADCLIBRA].taskName, zIhuTaskInfo[TASK_ID_ADCLIBRA].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -247,7 +249,7 @@ void func_adclibra_time_out_period_scan(void)
 	ret = ihu_message_send(MSG_ID_COM_HEART_BEAT, TASK_ID_VMFO, TASK_ID_ADCLIBRA, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
-		IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_ADCLIBRA], zIhuTaskNameList[TASK_ID_VMFO]);
+		IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_ADCLIBRA].taskName, zIhuTaskInfo[TASK_ID_VMFO].taskName);
 		return;
 	}
 	
@@ -282,7 +284,7 @@ OPSTAT func_adclibra_time_out_bfsc_read_weight_scan(void)
 		ret = ihu_message_send(MSG_ID_ADC_MATERIAL_DROP, TASK_ID_BFSC, TASK_ID_ADCLIBRA, &snd1, snd1.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
-			IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_ADCLIBRA], zIhuTaskNameList[TASK_ID_BFSC]);
+			IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_ADCLIBRA].taskName, zIhuTaskInfo[TASK_ID_BFSC].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -301,7 +303,7 @@ OPSTAT func_adclibra_time_out_bfsc_read_weight_scan(void)
 			ret = ihu_message_send(MSG_ID_ADC_NEW_MATERIAL_WS, TASK_ID_BFSC, TASK_ID_ADCLIBRA, &snd2, snd2.length);
 			if (ret == IHU_FAILURE){
 				zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
-				IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_ADCLIBRA], zIhuTaskNameList[TASK_ID_BFSC]);
+				IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_ADCLIBRA].taskName, zIhuTaskInfo[TASK_ID_BFSC].taskName);
 				return IHU_FAILURE;
 			}
 		}//if (tempWeight != zIhuAdcBfscSensorWeightValue)
@@ -436,7 +438,7 @@ OPSTAT fsm_adclibra_l3bfsc_ws_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param
 		ret = ihu_message_send(MSG_ID_ADC_L3BFSC_MEAS_CMD_RESP, TASK_ID_BFSC, TASK_ID_ADCLIBRA, &snd, snd.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
-			IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_ADCLIBRA], zIhuTaskNameList[TASK_ID_BFSC]);
+			IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_ADCLIBRA].taskName, zIhuTaskInfo[TASK_ID_BFSC].taskName);
 			return IHU_FAILURE;
 		}
 	}

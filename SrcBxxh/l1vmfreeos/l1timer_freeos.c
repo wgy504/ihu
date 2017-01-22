@@ -68,7 +68,7 @@ OPSTAT fsm_timer_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 para
 		snd.length = sizeof(msg_struct_com_init_fb_t);
 		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_TIMER, &snd, snd.length);
 		if (ret == IHU_FAILURE){
-			IhuErrorPrint("TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_TIMER], zIhuTaskNameList[src_id]);
+			IhuErrorPrint("TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_TIMER].taskName, zIhuTaskInfo[src_id].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -176,7 +176,7 @@ OPSTAT fsm_timer_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 //	ret = ihu_message_send(MSG_ID_COM_RESTART, TASK_ID_VMUO, TASK_ID_TIMER, &snd, snd.length);
 //	if (ret == IHU_FAILURE){
 //		zIhuRunErrCnt[TASK_ID_TIMER]++;
-//		sprintf(strDebug, "TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_TIMER], zIhuTaskNameList[TASK_ID_VMFO]);
+//		sprintf(strDebug, "TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_TIMER].taskName, zIhuTaskInfo[TASK_ID_VMFO].taskName);
 //		IhuErrorPrint(strDebug);
 //		return IHU_FAILURE;
 //	}
@@ -215,7 +215,7 @@ OPSTAT ihu_timer_start(UINT8 task_id, UINT8 timer_id, UINT32 t_dur, UINT8 t_type
 {	
 	//检查task_id是否合法
 	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
-		IhuErrorPrint("TIMER: Error on timer start src_id =%d [%s]!!!\n", task_id, zIhuTaskNameList[task_id]);
+		IhuErrorPrint("TIMER: Error on timer start src_id =%d [%s]!!!\n", task_id, zIhuTaskInfo[task_id].taskName);
 		zIhuRunErrCnt[TASK_ID_TIMER]++;
 		return IHU_FAILURE;
 	}
@@ -294,7 +294,7 @@ OPSTAT ihu_timer_stop(UINT8 task_id, UINT8 timer_id, UINT8 t_res)
 {
 	//检查task_id是否合法
 	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
-		IhuErrorPrint("TIMER: Error on timer stop src_id =%d [%s]!!!\n", task_id, zIhuTaskNameList[task_id]);
+		IhuErrorPrint("TIMER: Error on timer stop src_id =%d [%s]!!!\n", task_id, zIhuTaskInfo[task_id].taskName);
 		zIhuRunErrCnt[TASK_ID_TIMER]++;
 		return IHU_FAILURE;
 	}
@@ -386,7 +386,7 @@ void func_timer_routine_handler_1s(OS_TIMER timerid)
         ret = ihu_message_send(MSG_ID_COM_TIME_OUT, zIhuTimerTable.timer1s[i].taskId, TASK_ID_TIMER, &snd, snd.length);
         if (ret == IHU_FAILURE){
           zIhuRunErrCnt[TASK_ID_TIMER]++;
-          IhuErrorPrint("TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_TIMER], zIhuTaskNameList[zIhuTimerTable.timer1s[i].taskId]);
+          IhuErrorPrint("TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_TIMER].taskName, zIhuTaskInfo[zIhuTimerTable.timer1s[i].taskId].taskName);
           return;
         }
       }//Elapse <= 0, timeout reach
@@ -439,7 +439,7 @@ void func_timer_routine_handler_10ms(OS_TIMER timerid)
         ret = ihu_message_send(MSG_ID_COM_TIME_OUT, zIhuTimerTable.timer10ms[i].taskId, TASK_ID_TIMER, &snd, snd.length);
         if (ret == IHU_FAILURE){
           zIhuRunErrCnt[TASK_ID_TIMER]++;
-          IhuErrorPrint("TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_TIMER], zIhuTaskNameList[zIhuTimerTable.timer10ms[i].taskId]);
+          IhuErrorPrint("TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_TIMER].taskName, zIhuTaskInfo[zIhuTimerTable.timer10ms[i].taskId].taskName);
           return;
         }
       }//Elapse <= 0, timeout reach
@@ -491,7 +491,7 @@ void func_timer_routine_handler_1ms(OS_TIMER timerid)
         ret = ihu_message_send(MSG_ID_COM_TIME_OUT, zIhuTimerTable.timer1ms[i].taskId, TASK_ID_TIMER, &snd, snd.length);
         if (ret == IHU_FAILURE){
           zIhuRunErrCnt[TASK_ID_TIMER]++;
-          IhuErrorPrint("TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_TIMER], zIhuTaskNameList[zIhuTimerTable.timer1ms[i].taskId]);
+          IhuErrorPrint("TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_TIMER].taskName, zIhuTaskInfo[zIhuTimerTable.timer1ms[i].taskId].taskName);
           return;
         }
       }//Elapse <= 0, timeout reach

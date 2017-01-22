@@ -65,6 +65,7 @@ FsmStateItem_t FsmSpsvirgo[] =
 	strIhuCclSpsPar_t zIhuCclSpsvirgoCtrlTable;
 	msg_struct_ccl_com_cloud_data_rx_t zIhuSpsvirgoMsgRcvBuf;
 #else
+	#error Un-correct constant definition
 #endif
 
 
@@ -93,7 +94,7 @@ OPSTAT fsm_spsvirgo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 		snd.length = sizeof(msg_struct_com_init_fb_t);
 		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_SPSVIRGO, &snd, snd.length);
 		if (ret == IHU_FAILURE){
-			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPSVIRGO], zIhuTaskNameList[src_id]);
+			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[src_id].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -118,6 +119,7 @@ OPSTAT fsm_spsvirgo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 	memset(&zIhuSpsvirgoMsgRcvBuf, 0, sizeof(msg_struct_ccl_com_cloud_data_rx_t));
 	zIhuCclSpsvirgoCtrlTable.cclSpsWorkingMode = IHU_CCL_SPS_WORKING_MODE_SLEEP;  //初始化就进入SLEEP，然后就看是否有触发
 #else
+	#error Un-correct constant definition
 #endif
 	
 	//设置状态机到目标状态
@@ -213,7 +215,7 @@ OPSTAT fsm_spsvirgo_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 		ret = ihu_message_send(MSG_ID_COM_RESTART, TASK_ID_SPSVIRGO, TASK_ID_SPSVIRGO, &snd0, snd0.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPSVIRGO], zIhuTaskNameList[TASK_ID_SPSVIRGO]);
+			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -247,7 +249,7 @@ void func_spsvirgo_time_out_period_scan(void)
 	ret = ihu_message_send(MSG_ID_COM_HEART_BEAT, TASK_ID_VMFO, TASK_ID_SPSVIRGO, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPSVIRGO], zIhuTaskNameList[TASK_ID_VMFO]);
+		IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_VMFO].taskName);
 		return;
 	}
 	
@@ -276,7 +278,8 @@ OPSTAT fsm_spsvirgo_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 	memset(pMsgBuf, 0, sizeof(msg_struct_ccl_com_cloud_data_rx_t));
 	pMsgBuf = (msg_struct_ccl_com_cloud_data_rx_t *)(&rcv);
 	pMsgBuf->length = rcv.length;
-	ret = func_cloud_standard_xml_unpack(pMsgBuf);
+	//忽略期望的消息，任何返回消息都是可以的
+	ret = func_cloud_standard_xml_unpack(pMsgBuf, -1);
 	//差错情形，由发送者自己控制，因为已经是双向通信机制，非互锁的通信机制，这里无法保证出错时必须送回信号给发送者
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
@@ -368,7 +371,7 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 		ret = ihu_message_send(MSG_ID_SPS_CCL_CLOUD_FB, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPSVIRGO], zIhuTaskNameList[TASK_ID_CCL]);
+			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -377,7 +380,7 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	else{
 		//对于缓冲区的数据，进行分别处理，将帧变成不同的消息，分门别类发送到L3模块进行处理
 		//注意，这里是CHAR数据，不是L2FRAME的比特数据
-		ret = func_cloud_standard_xml_unpack(&zIhuSpsvirgoMsgRcvBuf);
+		ret = func_cloud_standard_xml_unpack(&zIhuSpsvirgoMsgRcvBuf, HUITP_MSGID_uni_ccl_lock_auth_resp);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 			IhuErrorPrint("SPSVIRGO: Unpack and processing receiving message error!\n");
@@ -389,7 +392,7 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 			ret = ihu_message_send(MSG_ID_SPS_CCL_CLOUD_FB, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 			if (ret == IHU_FAILURE){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPSVIRGO], zIhuTaskNameList[TASK_ID_CCL]);
+				IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 				return IHU_FAILURE;
 			}
 		}
@@ -432,7 +435,7 @@ OPSTAT fsm_spsvirgo_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * pa
 	ret = ihu_message_send(MSG_ID_SPS_CCL_SENSOR_STATUS_RESP, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPSVIRGO], zIhuTaskNameList[TASK_ID_CCL]);
+		IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 		return IHU_FAILURE;
 	}
 			
@@ -583,7 +586,7 @@ OPSTAT fsm_spsvirgo_ccl_event_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 		ret = ihu_message_send(MSG_ID_SPS_CCL_EVENT_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPSVIRGO], zIhuTaskNameList[TASK_ID_CCL]);
+			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 			return IHU_FAILURE;
 		}
 	}	
@@ -592,7 +595,7 @@ OPSTAT fsm_spsvirgo_ccl_event_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 	else{
 		//对于缓冲区的数据，进行分别处理，将帧变成不同的消息，分门别类发送到L3模块进行处理
 		//注意，这里是CHAR数据，不是L2FRAME的比特数据
-		ret = func_cloud_standard_xml_unpack(&zIhuSpsvirgoMsgRcvBuf);
+		ret = func_cloud_standard_xml_unpack(&zIhuSpsvirgoMsgRcvBuf, HUITP_MSGID_uni_ccl_state_confirm);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 			IhuErrorPrint("SPSVIRGO: Unpack and processing receiving message error!\n");
@@ -603,7 +606,7 @@ OPSTAT fsm_spsvirgo_ccl_event_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 			ret = ihu_message_send(MSG_ID_SPS_CCL_EVENT_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 			if (ret == IHU_FAILURE){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPSVIRGO], zIhuTaskNameList[TASK_ID_CCL]);
+				IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 				return IHU_FAILURE;
 			}
 		}
@@ -782,7 +785,7 @@ OPSTAT fsm_spsvirgo_ccl_fault_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 		ret = ihu_message_send(MSG_ID_SPS_CCL_FAULT_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPSVIRGO], zIhuTaskNameList[TASK_ID_CCL]);
+			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 			return IHU_FAILURE;
 		}	
 	}		
@@ -791,7 +794,7 @@ OPSTAT fsm_spsvirgo_ccl_fault_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 	else{
 		//对于缓冲区的数据，进行分别处理，将帧变成不同的消息，分门别类发送到L3模块进行处理
 		//注意，这里是CHAR数据，不是L2FRAME的比特数据
-		ret = func_cloud_standard_xml_unpack(&zIhuSpsvirgoMsgRcvBuf);
+		ret = func_cloud_standard_xml_unpack(&zIhuSpsvirgoMsgRcvBuf, HUITP_MSGID_uni_ccl_state_confirm);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 			IhuErrorPrint("SPSVIRGO: Unpack and processing receiving message error!\n");
@@ -802,7 +805,7 @@ OPSTAT fsm_spsvirgo_ccl_fault_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 			ret = ihu_message_send(MSG_ID_SPS_CCL_FAULT_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 			if (ret == IHU_FAILURE){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPSVIRGO], zIhuTaskNameList[TASK_ID_CCL]);
+				IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 				return IHU_FAILURE;
 			}
 		}
@@ -841,7 +844,7 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 	memset(&pMsgProc, 0, msgProcLen);
 	pMsgProc.msgId.cmdId = (HUITP_MSGID_uni_ccl_state_report>>8)&0xFF;
 	pMsgProc.msgId.optId = HUITP_MSGID_uni_ccl_state_report&0xFF;
-	pMsgProc.msgLen = (msgProcLen - 4);
+	pMsgProc.msgLen = HUITP_ENDIAN_EXG16(msgProcLen - 4);
 	//StrIe_HUITP_IEID_uni_com_report_t
 	pMsgProc.baseReport.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_com_report);
 	pMsgProc.baseReport.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_com_report_t) - 4);
@@ -952,7 +955,7 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 		ret = ihu_message_send(MSG_ID_SPS_CCL_CLOSE_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPSVIRGO], zIhuTaskNameList[TASK_ID_CCL]);
+			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -961,7 +964,7 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 	else{
 		//对于缓冲区的数据，进行分别处理，将帧变成不同的消息，分门别类发送到L3模块进行处理
 		//注意，这里是CHAR数据，不是L2FRAME的比特数据
-		ret = func_cloud_standard_xml_unpack(&zIhuSpsvirgoMsgRcvBuf);
+		ret = func_cloud_standard_xml_unpack(&zIhuSpsvirgoMsgRcvBuf, HUITP_MSGID_uni_ccl_state_confirm);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 			IhuErrorPrint("SPSVIRGO: Unpack and processing receiving message error!\n");
@@ -972,7 +975,7 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 			ret = ihu_message_send(MSG_ID_SPS_CCL_CLOSE_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 			if (ret == IHU_FAILURE){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPSVIRGO], zIhuTaskNameList[TASK_ID_CCL]);
+				IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 				return IHU_FAILURE;
 			}
 		}
@@ -1021,22 +1024,29 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_lock_auth_resp_received_handle(StrMsg_HUI
 {
 	int ret = 0;
 	
+	//先处理大小端问题
+	rcv->msgLen = HUITP_ENDIAN_EXG16(rcv->msgLen);
+	rcv->baseResp.ieId = HUITP_ENDIAN_EXG16(rcv->baseResp.ieId);
+	rcv->baseResp.ieLen = HUITP_ENDIAN_EXG16(rcv->baseResp.ieLen);
+	rcv->respState.ieId = HUITP_ENDIAN_EXG16(rcv->respState.ieId);
+	rcv->respState.ieLen = HUITP_ENDIAN_EXG16(rcv->respState.ieLen);
+	
 	//IE参数检查
 	if ((rcv->baseResp.ieId != HUITP_IEID_uni_com_resp) || (rcv->baseResp.ieLen != (sizeof(StrIe_HUITP_IEID_uni_com_resp_t) - 4))){
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Unpack message error!\n");
+		IhuErrorPrint("SPSVIRGO: Cloud raw message content unpack error!\n");
 		return IHU_FAILURE;		
 	}
 	if ((rcv->respState.ieId != HUITP_IEID_uni_ccl_lock_auth_resp) || (rcv->respState.ieLen != (sizeof(StrIe_HUITP_IEID_uni_ccl_lock_auth_resp_t) - 4))){
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Unpack message error!\n");
+		IhuErrorPrint("SPSVIRGO: Cloud raw message content unpack error!\n");
 		return IHU_FAILURE;		
 	}	
 	
 	//逻辑处理
 	if ((rcv->respState.authResp != HUITP_IEID_UNI_CCL_LOCK_AUTH_RESP_YES) && (rcv->respState.authResp != HUITP_IEID_UNI_CCL_LOCK_AUTH_RESP_NO)){
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Unpack message error!\n");
+		IhuErrorPrint("SPSVIRGO: Cloud raw message content unpack error!\n");
 		return IHU_FAILURE;			
 	}	
 	msg_struct_spsvirgo_ccl_cloud_fb_t snd;
@@ -1047,7 +1057,7 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_lock_auth_resp_received_handle(StrMsg_HUI
 	ret = ihu_message_send(MSG_ID_SPS_CCL_CLOUD_FB, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPSVIRGO], zIhuTaskNameList[TASK_ID_CCL]);
+		IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 		return IHU_FAILURE;
 	}
 	
@@ -1220,15 +1230,22 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle(StrMsg_HUIT
 {
 	int ret = 0;
 	
+	//先处理大小端问题
+	rcv->msgLen = HUITP_ENDIAN_EXG16(rcv->msgLen);
+	rcv->baseConfirm.ieId = HUITP_ENDIAN_EXG16(rcv->baseConfirm.ieId);
+	rcv->baseConfirm.ieLen = HUITP_ENDIAN_EXG16(rcv->baseConfirm.ieLen);
+	rcv->reportType.ieId = HUITP_ENDIAN_EXG16(rcv->reportType.ieId);
+	rcv->reportType.ieLen = HUITP_ENDIAN_EXG16(rcv->reportType.ieLen);
+	
 	//IE参数检查
 	if ((rcv->baseConfirm.ieId != HUITP_IEID_uni_com_confirm) || (rcv->baseConfirm.ieLen != (sizeof(StrIe_HUITP_IEID_uni_com_confirm_t) - 4))){
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Unpack message error!\n");
+		IhuErrorPrint("SPSVIRGO: Cloud raw message content unpack error!\n");
 		return IHU_FAILURE;		
 	}
 	if ((rcv->reportType.ieId != HUITP_IEID_uni_ccl_report_type) || (rcv->reportType.ieLen != (sizeof(StrIe_HUITP_IEID_uni_ccl_report_type_t) - 4))){
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Unpack message error!\n");
+		IhuErrorPrint("SPSVIRGO: Cloud raw message content unpack error!\n");
 		return IHU_FAILURE;		
 	}	
 	
@@ -1236,7 +1253,7 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle(StrMsg_HUIT
 	if ((rcv->reportType.event != HUITP_IEID_UNI_CCL_REPORT_TYPE_PERIOD_EVENT) && (rcv->reportType.event != HUITP_IEID_UNI_CCL_REPORT_TYPE_CLOSE_EVENT)\
 		&& (rcv->reportType.event != HUITP_IEID_UNI_CCL_REPORT_TYPE_FAULT_EVENT)){
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Unpack message error!\n");
+		IhuErrorPrint("SPSVIRGO: Cloud raw message content unpack error!\n");
 		return IHU_FAILURE;			
 	}
 		
@@ -1248,7 +1265,7 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle(StrMsg_HUIT
 		ret = ihu_message_send(MSG_ID_SPS_CCL_EVENT_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPSVIRGO], zIhuTaskNameList[TASK_ID_CCL]);
+			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -1260,7 +1277,7 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle(StrMsg_HUIT
 		ret = ihu_message_send(MSG_ID_SPS_CCL_CLOSE_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPSVIRGO], zIhuTaskNameList[TASK_ID_CCL]);
+			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -1272,7 +1289,7 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle(StrMsg_HUIT
 		ret = ihu_message_send(MSG_ID_SPS_CCL_FAULT_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPSVIRGO], zIhuTaskNameList[TASK_ID_CCL]);
+			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 			return IHU_FAILURE;
 		}
 	}

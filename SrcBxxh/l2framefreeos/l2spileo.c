@@ -47,6 +47,7 @@ FsmStateItem_t FsmSpileo[] =
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 #else
+	#error Un-correct constant definition
 #endif
 
 //Main Entry
@@ -74,7 +75,7 @@ OPSTAT fsm_spileo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 par
 		snd.length = sizeof(msg_struct_com_init_fb_t);
 		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_SPILEO, &snd, snd.length);
 		if (ret == IHU_FAILURE){
-			IhuErrorPrint("SPILEO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPILEO], zIhuTaskNameList[src_id]);
+			IhuErrorPrint("SPILEO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPILEO].taskName, zIhuTaskInfo[src_id].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -96,6 +97,7 @@ OPSTAT fsm_spileo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 par
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 #else
+	#error Un-correct constant definition
 #endif
 	
 	//设置状态机到目标状态
@@ -184,7 +186,7 @@ OPSTAT fsm_spileo_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16
 		ret = ihu_message_send(MSG_ID_COM_RESTART, TASK_ID_SPILEO, TASK_ID_SPILEO, &snd0, snd0.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_SPILEO]++;
-			IhuErrorPrint("SPILEO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPILEO], zIhuTaskNameList[TASK_ID_SPILEO]);
+			IhuErrorPrint("SPILEO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPILEO].taskName, zIhuTaskInfo[TASK_ID_SPILEO].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -217,7 +219,7 @@ void func_spileo_time_out_period_scan(void)
 	ret = ihu_message_send(MSG_ID_COM_HEART_BEAT, TASK_ID_VMFO, TASK_ID_SPILEO, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_SPILEO]++;
-		IhuErrorPrint("SPILEO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_SPILEO], zIhuTaskNameList[TASK_ID_VMFO]);
+		IhuErrorPrint("SPILEO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPILEO].taskName, zIhuTaskInfo[TASK_ID_VMFO].taskName);
 		return;
 	}
 	

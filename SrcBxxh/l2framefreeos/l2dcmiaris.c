@@ -51,6 +51,7 @@ FsmStateItem_t FsmDcmiaris[] =
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 strIhuCclDcmiPar_t zIhuCclDcmiarisCtrlTable;
 #else
+	#error Un-correct constant definition
 #endif
 
 //Main Entry
@@ -78,7 +79,7 @@ OPSTAT fsm_dcmiaris_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 		snd.length = sizeof(msg_struct_com_init_fb_t);
 		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_DCMIARIS, &snd, snd.length);
 		if (ret == IHU_FAILURE){
-			IhuErrorPrint("DCMIARIS: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DCMIARIS], zIhuTaskNameList[src_id]);
+			IhuErrorPrint("DCMIARIS: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DCMIARIS].taskName, zIhuTaskInfo[src_id].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -102,6 +103,7 @@ OPSTAT fsm_dcmiaris_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 	memset(&zIhuCclDcmiarisCtrlTable, 0, sizeof(strIhuCclDcmiPar_t));
 	zIhuCclDcmiarisCtrlTable.cclDcmiWorkingMode = IHU_CCL_DCMI_WORKING_MODE_SLEEP;  //初始化就进入SLEEP，然后就看是否有触发
 #else
+	#error Un-correct constant definition
 #endif	
 
 
@@ -190,7 +192,7 @@ OPSTAT fsm_dcmiaris_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 		ret = ihu_message_send(MSG_ID_COM_RESTART, TASK_ID_DCMIARIS, TASK_ID_DCMIARIS, &snd0, snd0.length);
 		if (ret == IHU_FAILURE){
 			zIhuRunErrCnt[TASK_ID_DCMIARIS]++;
-			IhuErrorPrint("DCMIARIS: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DCMIARIS], zIhuTaskNameList[TASK_ID_DCMIARIS]);
+			IhuErrorPrint("DCMIARIS: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DCMIARIS].taskName, zIhuTaskInfo[TASK_ID_DCMIARIS].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -224,7 +226,7 @@ void func_dcmiaris_time_out_period_scan(void)
 	ret = ihu_message_send(MSG_ID_COM_HEART_BEAT, TASK_ID_VMFO, TASK_ID_DCMIARIS, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_DCMIARIS]++;
-		IhuErrorPrint("DCMIARIS: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DCMIARIS], zIhuTaskNameList[TASK_ID_VMFO]);
+		IhuErrorPrint("DCMIARIS: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DCMIARIS].taskName, zIhuTaskInfo[TASK_ID_VMFO].taskName);
 		return;
 	}
 	
@@ -266,7 +268,7 @@ OPSTAT fsm_dcmiaris_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * pa
 	ret = ihu_message_send(MSG_ID_DCMI_CCL_SENSOR_STATUS_RESP, TASK_ID_CCL, TASK_ID_DCMIARIS, &snd, snd.length);
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_DCMIARIS]++;
-		IhuErrorPrint("DCMIARIS: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskNameList[TASK_ID_DCMIARIS], zIhuTaskNameList[TASK_ID_CCL]);
+		IhuErrorPrint("DCMIARIS: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DCMIARIS].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 		return IHU_FAILURE;
 	}
 			
