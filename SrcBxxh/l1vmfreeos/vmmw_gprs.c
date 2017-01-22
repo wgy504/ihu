@@ -315,7 +315,7 @@ OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input, int16_t inl
 	//设置GPRS/IP层配置
 	//查阅注册状态
 	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CGREG?", (uint8_t*)"OK", 2) == IHU_FAILURE){
-		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: GPRS inquery register status!\n");
+		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: GPRS inquery register status error!\n");
 		return IHU_FAILURE;
 	}
 	

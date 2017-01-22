@@ -2,13 +2,21 @@
 == 将修改方式放在最前面，以提高效率
 =================================================
 //上位机复杂的L3状态机进行受控保护，确保从错误中进行恢复
-
-
+//上位机HUITPXML、HUITPJASON支持
+//上位机Netdata/Linux性能实时监测工具 => http://www.my-netdata.io
+//上位机Layui模块化前端UI框架 => http://www.layui.com/
+//上位机frp内网穿透工具 => https://github.com/fatedier/frp
 **************接下来待完成主要内容**********************************************
 = VMLAYER中func handler的优化
 = 最后再增加tcp/udp等数据连接方式，看门狗打开，BLE/RFID/摄像头研究等内容
-= BFSC状态机的受控保护，上位机同样如此进行保护！
 **************************************************************************
+
+
+//= ZJL, 2017 Jan.22, CURRENT_SW_DELIVERY R03.104 =>CCL项目
+= 
+
+
+
 
 //= ZJL, 2017 Jan.22, CURRENT_SW_DELIVERY R03.103 =>CCL项目/BFSC
 = 改进#error定义，确保各个项目在编译时定义的完整性，将#error编译项用到极致！
@@ -21,7 +29,6 @@
 = 启动IHU_LEDPISCES_GALOWAG_FUNC_ACTIVE，以便LED提供闪烁功能，并确保功能稳定性
 = CCL状态机出错时的复位保护，确保回复到SLEEP缺省状态，而不是直接返回错误完事
 = 同时改造了BFSC L3状态机，增加了保护机制确保回复到SCAN业务状态
-
 
 //= ZJL, 2017 Jan.22, CURRENT_SW_DELIVERY R03.102 =>CCL项目
 = 在第二次解码成功后，又发现hardfault的错误导致死机，跟之前打印区覆盖MsgQue的情形很类似
