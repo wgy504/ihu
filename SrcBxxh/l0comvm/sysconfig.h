@@ -24,9 +24,16 @@
  *
  */
 //任务模块激活的定义
+#define IHU_TASK_PNP_NULL 0
 #define IHU_TASK_PNP_ON 1
-#define IHU_TASK_PNP_OFF 0
+#define IHU_TASK_PNP_OFF 2
 #define IHU_TASK_PNP_INVALID 0xFF
+
+//队列的状态定义
+#define IHU_TASK_QUEUE_FULL_NULL 0
+#define IHU_TASK_QUEUE_FULL_FALSE 1
+#define IHU_TASK_QUEUE_FULL_TRUE 2
+#define IHU_TASK_QUEUE_FULL_INVALID 0xFF
 
 //可选项通信端口的全局定义，未来需要通过ConfigXml进一步优化
 #define IHU_COMM_HW_BOARD_ON 1

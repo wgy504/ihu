@@ -246,7 +246,7 @@
  ***********************************************************************************/
 //使用了VMFO-FreeRTOS操作系统
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-	#define MAX_TASK_NUM_IN_ONE_IHU 16
+	#define MAX_TASK_NUM_IN_ONE_IHU 12
 	#define TASK_NAME_MAX_LENGTH 12
   #define IHU_TASK_STACK_SIZE 600 //任务堆栈长度，非常重要，将影响HardFault陷入崩溃的产生
 	//系统消息级
@@ -279,7 +279,7 @@
  ***********************************************************************************/
 //使用了VMFO-FreeRTOS操作系统
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
-	#define MAX_TASK_NUM_IN_ONE_IHU 16
+	#define MAX_TASK_NUM_IN_ONE_IHU 11
 	#define TASK_NAME_MAX_LENGTH 12
   #define IHU_TASK_STACK_SIZE 400 //任务堆栈长度
 	//系统消息级

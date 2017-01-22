@@ -50,9 +50,9 @@ OS_MUTEX zIhuPrintMutex;
 StrIhuGlobalTaskInputConfig_t zIhuGlobalTaskInputConfig[] =
 {
 	//TASK_ID,    				状态控制				状态机入口 					//注释
-	{TASK_ID_VMFO, 				"MIN", 					NULL},							//Starting
-	{TASK_ID_TIMER, 			"VMFO", 				&FsmVmfo},
-	{TASK_ID_MIN, 				"TIMER", 				&FsmTimer},
+	{TASK_ID_MIN, 				"MIN", 					NULL},							//Starting
+	{TASK_ID_VMFO, 				"VMFO", 				&FsmVmfo},
+	{TASK_ID_TIMER, 			"TIMER", 				&FsmTimer},
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
 	{TASK_ID_EMC68X, 			"EMC68X", 			&FsmEmc68x},
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)		
@@ -425,38 +425,12 @@ UINT8 IhuDebugPrintId(char *file, int line)
 {
 	char strLine[9];
 	UINT8 index=0;
-//	char *ptrPrintBuffer;
-//	
-//	ptrPrintBuffer = strGlobalPrintChar[globalPrintIndex++];
-//	if (globalPrintIndex >= IHU_PRINT_BUFFER_NUMBER)
-//		globalPrintIndex = 0;
-//	memset(ptrPrintBuffer, 0, IHU_PRINT_CHAR_SIZE);	
-//	snprintf(ptrPrintBuffer, 50, "[%s]", file);
-//	sprintf(strLine, "[%6d]", line);
-//	strcat(ptrPrintBuffer, strLine);
-
-//#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
-//	printf("%s", strGlobalPrintChar);
-//#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)		
-//	if (OS_MUTEX_GET(zIhuPrintMutex, IHU_PRINT_MUTEX_TIME_OUT_DURATION) != OS_MUTEX_TAKEN){
-//		zIhuRunErrCnt[TASK_ID_VMFO]++;
-//		return;
-//	}
-//	BSP_STM32_sps_print_data_send(ptrPrintBuffer);
-//	OS_MUTEX_PUT(zIhuPrintMutex);	
-//#else
-//#endif
+	
 	globalPrintIndex++;
 	if (globalPrintIndex >= IHU_PRINT_BUFFER_NUMBER) globalPrintIndex = 0;
 	index = globalPrintIndex;
 	memset(zIhuPrintBufferChar[index].PrintHeader, 0, IHU_PRINT_FILE_LINE_SIZE);
 	
-//	snprintf(zIhuPrintBufferChar[index].PrintHeader, 49, "[%s", file);
-//	if (strlen(zIhuPrintBufferChar[index].PrintHeader)<49){
-//		for (i=0; i<49-strlen(zIhuPrintBufferChar[index].PrintHeader); i++) strcat(zIhuPrintBufferChar[index].PrintHeader, " ");
-//	}
-//	strcat(zIhuPrintBufferChar[index].PrintHeader, "]");
-
 	snprintf(zIhuPrintBufferChar[index].PrintHeader, 50, "[%s]", file);
 	sprintf(strLine, "[%6d]", line);
 	strcat(zIhuPrintBufferChar[index].PrintHeader, strLine);
@@ -530,13 +504,6 @@ void IhuErrorPrintFoEmc68x(char *format, ...)
 }
 
 
-
-//交换U16的高位低位字节
-uint16_t b2l_uint16(uint16_t in)
-{
-		return ( ((in & 0x00FF) << 8) | (in >> 8) );
-}
-
 //API abstract
 //这里采用系统提供的时钟函数
 void ihu_sleep(UINT32 second)
@@ -557,7 +524,8 @@ void ihu_usleep(UINT32 usecond)
 //INIT the whole system
 void ihu_vm_system_init(void)
 {	
-	int i=0;
+	int i = 0, item = 0;
+	UINT8 taskid = 0;
 	
 	//初始化打印缓冲区
 	globalPrintIndex = 0;
@@ -566,7 +534,7 @@ void ihu_vm_system_init(void)
 	//OS_MUTEX_CREATE(zIhuPrintMutex);
 	zIhuPrintMutex = xSemaphoreCreateRecursiveMutex();
 	if (zIhuPrintMutex == NULL){
-		IhuDebugPrint("VMFO: Initialize VMFO failure, not continue any more...!\n");
+		IhuErrorPrint("VMFO: Initialize VMFO failure, not continue any more...!\n");
 		return;
 	}
 
@@ -575,6 +543,56 @@ void ihu_vm_system_init(void)
 		IHU_HARDWARE_PRODUCT_CAT_TYPE, IHU_CURRENT_HW_TYPE, IHU_CURRENT_SW_RELEASE, IHU_CURRENT_SW_DELIVERY);
 	IhuDebugPrint("VMFO: BXXH(TM) IHU(c) Application Layer start and initialized, build at %s, %s.\n", __DATE__, __TIME__);
 
+	//初始化全局变量TASK_ID/QUE_ID/TASK_STAT
+	if (TASK_ID_MAX > MAX_TASK_NUM_IN_ONE_IHU){
+		IhuErrorPrint("VMFO: Initialize VMFO failure, configuration of MAX_TASK_NUM_IN_ONE_IHU error!\n");
+		return;
+	}
+	memset(&zIhuTaskInfo, 0, sizeof(zIhuTaskInfo)*MAX_TASK_NUM_IN_ONE_IHU);
+	for (i=TASK_ID_MIN; i<=TASK_ID_MAX; i++){
+		zIhuTaskInfo[i].TaskId = i;
+		zIhuTaskInfo[i].pnpState = IHU_TASK_PNP_OFF;
+		//strcpy(zIhuTaskInfo[i].TaskName, zIhuTaskNameList[i]);
+	}
+	memset(zIhuRunErrCnt, 0, sizeof(UINT32) * MAX_TASK_NUM_IN_ONE_IHU);
+	
+	//首先扫描任务输入配置表
+	//起始必须是TASK_ID_MIN条目
+	if (zIhuGlobalTaskInputConfig[0].taskInputId != TASK_ID_MIN){
+		IhuErrorPrint("VMFO: Initialize VMFO failure, task input configuration error!\n");
+		return;		
+	}
+	//以TASK_ID_MAX为终止条目
+	for(item=1; item < MAX_TASK_NUM_IN_ONE_IHU; item++)
+	{
+		if(zIhuGlobalTaskInputConfig[item].taskInputId == TASK_ID_MAX)
+		{
+			break;
+		}
+		if ((zIhuGlobalTaskInputConfig[item].taskInputId <= TASK_ID_MIN) || (zIhuGlobalTaskInputConfig[item].taskInputId > TASK_ID_MAX)){
+			IhuErrorPrint("VMFO: Initialize VMFO failure, task input configuration error!\n");
+			return;			
+		}		
+		if (zIhuGlobalTaskInputConfig[item].fsmFuncEntry == NULL){
+			IhuErrorPrint("VMFO: Initialize VMFO failure, task input configuration error!\n");
+			return;			
+		}
+	}
+
+	//从任务配置输入区域读取参数到系统任务表，一旦遇到TASK_ID_MAX就终止
+	item = 0;
+	while(zIhuGlobalTaskInputConfig[item].taskInputId != TASK_ID_MAX){
+		taskid = zIhuGlobalTaskInputConfig[item].taskInputId;
+		zIhuTaskInfo[taskid].pnpState = IHU_TASK_PNP_ON;
+		strcpy(zIhuTaskInfo[taskid].TaskName, zIhuGlobalTaskInputConfig[item].taskInputName);
+		item++;
+	}
+	//最后一项是TASK_ID_MAX
+	taskid = zIhuGlobalTaskInputConfig[item].taskInputId;
+	strcpy(zIhuTaskInfo[taskid].TaskName, zIhuGlobalTaskInputConfig[item].taskInputName);
+	
+	//Init Fsm
+	FsmInit();
 	
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)	
 	//初始化全局变量TASK_ID/QUE_ID/TASK_STAT

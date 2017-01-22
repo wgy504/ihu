@@ -3,7 +3,7 @@
 <title>Static Call Graph - [PrjCclFo@207VC\PrjCclFo@207VC.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image PrjCclFo@207VC\PrjCclFo@207VC.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Sun Jan 22 17:14:28 2017
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Sun Jan 22 19:53:36 2017
 <BR><P>
 <H3>Maximum Stack Usage =       2784 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1979,6 +1979,7 @@ Global Symbols
 <LI><a href="#[a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_vmfo_init_fb
 <LI><a href="#[6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_vmfo_init
 <LI><a href="#[b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_vmfo_heart_beat
+<LI><a href="#[21c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_vm_system_init
 <LI><a href="#[21a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_vm_send_init_msg_to_app_task
 <LI><a href="#[212]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_taskid_to_string
 <LI><a href="#[216]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_task_create_and_run
@@ -4852,12 +4853,13 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[219]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_task_create_all
 </UL>
 
-<P><STRONG><a name="[21c]"></a>ihu_vm_system_init</STRONG> (Thumb, 546 bytes, Stack size 56 bytes, vmfreeoslayer.o(i.ihu_vm_system_init))
+<P><STRONG><a name="[21c]"></a>ihu_vm_system_init</STRONG> (Thumb, 750 bytes, Stack size 56 bytes, vmfreeoslayer.o(i.ihu_vm_system_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 520<LI>Call Chain = ihu_vm_system_init &rArr; FsmInit &rArr; IhuDebugPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[21d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueCreateMutex
 <LI><a href="#[20b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_f2board_equid_get
 <LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FsmInit
+<LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
 <LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
 <LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintFo
 <LI><a href="#[21e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strcpy
@@ -6156,8 +6158,8 @@ Local Symbols
 </UL>
 
 <P><STRONG><a name="[b3]"></a>_snputc</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, printfa.o(i._snputc))
-<BR>[Address Reference Count : 2]<UL><LI> printfa.o(i.__0snprintf)
-<LI> printfa.o(i.__0vsnprintf)
+<BR>[Address Reference Count : 2]<UL><LI> printfa.o(i.__0vsnprintf)
+<LI> printfa.o(i.__0snprintf)
 </UL>
 <P><STRONG><a name="[b4]"></a>_sputc</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, printfa.o(i._sputc))
 <BR><BR>[Called By]<UL><LI><a href="#[16b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__0sprintf
