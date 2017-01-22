@@ -1029,7 +1029,6 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_lock_auth_resp_received_handle(StrMsg_HUI
 	rcv->respState.ieLen = HUITP_ENDIAN_EXG16(rcv->respState.ieLen);
 	
 	//IE参数检查
-	int t = sizeof(StrIe_HUITP_IEID_uni_com_resp_t) - 4;
 	if ((rcv->baseResp.ieId != HUITP_IEID_uni_com_resp) || (rcv->baseResp.ieLen != (sizeof(StrIe_HUITP_IEID_uni_com_resp_t) - 4))){
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		IhuErrorPrint("SPSVIRGO: Cloud raw message content unpack error!\n");
