@@ -432,43 +432,44 @@ OPSTAT ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive(char *input, int16_t
 		return IHU_FAILURE;				
 	}
 	
-	//TCPIP层面设置
+	//TCP工作模式设置：默认非透明模式
+	//发起TCP连接
 	memset(temp, 0, sizeof(temp));
 	strcpy((char*)temp, (const char*)"AT+CIPSTART=");
 	strcat((char*)temp, "\"TCP\", \""); 
 	strcat((char*)temp, IHU_CLOUDXHUI_TCP_SERVER_IP_ADDR);
 	strcat((char*)temp, "\", \"");
 	strcat((char*)temp, IHU_CLOUDXHUI_TCP_SERVER_PORT);	
-	strcat((char*)temp, "\"");
-	//发起连接
-	if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"OK", 8) == IHU_FAILURE){
+	strcat((char*)temp, "\"");	
+	if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"CONNECT OK", 4) == IHU_FAILURE){
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: Start TCP connection session failure!\n");
 		return IHU_FAILURE;
 	}
 		
-	//启动发送内容
-	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CIPSEND", (uint8_t*)">", 8) == IHU_FAILURE){
-		ihu_l1hd_sps_gprs_send_data((uint8_t *)0X1B, 1);//ESC,取消发送
+	//启动发送内容：完全可以采用固定长度的发送方式，这里尝试只采用Ctrl+Z的灵活方式
+	memset(temp, 0, sizeof(temp));
+	sprintf((char*)temp, "AT+CIPSEND=%d", inlen);
+	//if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)">", 4) == IHU_FAILURE){
+	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CIPSEND", (uint8_t*)">", 4) == IHU_FAILURE){
+		ihu_l1hd_sps_gprs_send_data((uint8_t *)0x1B, 1);//ESC,取消发送
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: Enter TCP send session failure!\n");
-		return IHU_FAILURE;	
+		return IHU_FAILURE;
 	}
 	
 	//真正发送数据体: TCP方式！
-	func_gprsmod_send_string(input);	
-	func_gprsmod_send_LR();
+	func_gprsmod_send_string(input);
+	memset(temp, 0, sizeof(temp));
 	//CTRL+Z,结束数据发送,启动一次传输	
-	ihu_l1hd_sps_gprs_send_data((uint8_t *)0x00, 1);
-	ihu_l1hd_sps_gprs_send_data((uint8_t *)0X1A, 1);		
-//	memset(temp, 0, sizeof(temp));
-//	temp[0] = IHU_VMWM_GPRSMOD_STRING_CHAR_NULL;
-//	temp[1] = IHU_VMWM_GPRSMOD_STRING_CHAR_EOF;
-	if(func_gprsmod_wait_AT_command_fb((uint8_t*)"SEND OK", 4) == IHU_FAILURE){
+	temp[0] = 0x1A;
+	if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"SEND OK", 4) == IHU_FAILURE){		
+		ihu_l1hd_sps_gprs_send_data((uint8_t *)0x1B, 1);//ESC,取消发送
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: TCP data send failure!\n");
 		return IHU_FAILURE;
 	}
 
 	//TCP等待后台反馈
 	if (func_gprsmod_wait_AT_command_fb((uint8_t*)"+IPD", 4) == IHU_FAILURE){
+		ihu_l1hd_sps_gprs_send_data((uint8_t *)0x1B, 1);//ESC,取消发送
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: TCP data transmission fail to get feedback from cloud!\n");
 		return IHU_FAILURE;			
 	}
@@ -491,14 +492,14 @@ OPSTAT ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive(char *input, int16_t
 		memcpy((uint8_t*)output, (uint8_t*)p1, *outlen); //一直延伸到</xml>的尾巴并多一个字节，外加length本身包含的2B长度		
 	}else{
 		//关闭连接
-		ihu_l1hd_sps_gprs_send_data((uint8_t *)0X1B, 1);//ESC,取消发送
+		ihu_l1hd_sps_gprs_send_data((uint8_t *)0x1B, 1);//ESC,取消发送
 		func_gprsmod_close_gprs_session_connection();
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: TCP char mode transmission get feedback failure: can not find right <XML> head!\n");
 		return IHU_FAILURE;
 	}
 	
 	//关闭连接
-	ihu_l1hd_sps_gprs_send_data((uint8_t *)0X1B, 1);//ESC,取消发送
+	ihu_l1hd_sps_gprs_send_data((uint8_t *)0x1B, 1);//ESC,取消发送
 	func_gprsmod_close_gprs_session_connection();
 	return IHU_SUCCESS;
 }
@@ -507,7 +508,6 @@ OPSTAT ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive(char *input, int16_t
 OPSTAT ihu_vmmw_gprsmod_tcp_u8_data_transmit_with_receive(int8_t *input, int16_t inlen, int8_t *output, uint16_t *outlen)
 {	
 	uint8_t temp[IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN+1];	
-	//uint8_t *p1,*p2;
 	
 	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: TCP Session starting...!\n");
 	//参数检查
@@ -528,70 +528,62 @@ OPSTAT ihu_vmmw_gprsmod_tcp_u8_data_transmit_with_receive(int8_t *input, int16_t
 		return IHU_FAILURE;				
 	}
 	
-	//TCPIP层面设置
+	//TCP工作模式设置：默认非透明模式
+	//发起TCP连接
 	memset(temp, 0, sizeof(temp));
-	strcpy((char*)&temp, (const char*)"AT+CIPSTART=");
-	strcat((char*)&temp, "TCP");
-	if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"OK", 2 ) == IHU_SUCCESS)//发起连接
-	{
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: New connecting!\n");
-	}else
-	{
-		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: Set GPRS parameter error!\n");
+	strcpy((char*)temp, (const char*)"AT+CIPSTART=");
+	strcat((char*)temp, "\"TCP\", \""); 
+	strcat((char*)temp, IHU_CLOUDXHUI_TCP_SERVER_IP_ADDR);
+	strcat((char*)temp, "\", \"");
+	strcat((char*)temp, IHU_CLOUDXHUI_TCP_SERVER_PORT);	
+	strcat((char*)temp, "\"");	
+	if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"CONNECT OK", 4) == IHU_FAILURE){
+		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: Start TCP connection session failure!\n");
 		return IHU_FAILURE;
 	}
 		
-	//发送内容	
-	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Begin to send..........!\n");
-	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CIPSEND", (uint8_t*)">", 2) == IHU_SUCCESS)
-	{
-		if(func_gprsmod_send_AT_command((uint8_t*)input, (uint8_t*)"SEND OK", 8) == IHU_SUCCESS)
-		{ 								
-			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Send successful!\n");
-		}else
-		{
-			IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: GPRS Send failure 1!\n");
-			return IHU_FAILURE;
-		}
-
-		//接收数据：因为是U8，所以不需要做转化，而且将接收数据全部送上去，等待L2FRAME进行处理
-		msg_struct_spsvirgo_l2frame_rcv_t snd;
-		//发送数据到上层SPSVIRGO模块
-		memset(&snd, 0, sizeof(msg_struct_spsvirgo_l2frame_rcv_t));
-		memcpy(snd.data, (uint8_t*)zIhuBspStm32SpsGprsRxBuff, sizeof(zIhuBspStm32SpsGprsRxBuff));
-		snd.length = sizeof(msg_struct_spsvirgo_l2frame_rcv_t);
-		ihu_message_send(MSG_ID_SPS_L2FRAME_RCV, TASK_ID_SPSVIRGO, TASK_ID_VMFO, &snd, snd.length);
-	}
-	else
-	{
-		ihu_l1hd_sps_gprs_send_data((uint8_t *)0X1B, 1);//ESC,取消发送
-		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: GPRS Send failure2!\n");
+	//启动发送内容：完全可以采用固定长度的发送方式，这里尝试只采用Ctrl+Z的灵活方式
+	memset(temp, 0, sizeof(temp));
+	sprintf((char*)temp, "AT+CIPSEND=%d", inlen);
+	//if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)">", 4) == IHU_FAILURE){
+	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CIPSEND", (uint8_t*)">", 4) == IHU_FAILURE){
+		ihu_l1hd_sps_gprs_send_data((uint8_t *)0x1B, 1);//ESC,取消发送
+		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: Enter TCP send session failure!\n");
 		return IHU_FAILURE;
 	}
 	
-	//发送结束
-	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CIPSEND", (uint8_t*)">", 2)== IHU_SUCCESS)
-	{
-		ihu_l1hd_sps_gprs_send_data((uint8_t *)0x00, 1);
-		ihu_l1hd_sps_gprs_send_data((uint8_t *)0X1A, 1);//CTRL+Z,结束数据发送,启动一次传输								
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Heart-beat successful!\n");		 
-	}else
-	{
-		ihu_l1hd_sps_gprs_send_data((uint8_t *)0X1B, 1);//ESC,取消发送
-		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: GPRS Send failure3!\n");
+	//真正发送数据体: TCP方式！
+	ihu_l1hd_sps_gprs_send_data((uint8_t*)input, inlen);
+	memset(temp, 0, sizeof(temp));
+	//CTRL+Z,结束数据发送,启动一次传输	
+	temp[0] = 0x1A;
+	if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"SEND OK", 4) == IHU_FAILURE){		
+		ihu_l1hd_sps_gprs_send_data((uint8_t *)0x1B, 1);//ESC,取消发送
+		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: TCP data send failure!\n");
 		return IHU_FAILURE;
 	}
+
+	//TCP等待后台反馈
+	if (func_gprsmod_wait_AT_command_fb((uint8_t*)"+IPD", 4) == IHU_FAILURE){
+		ihu_l1hd_sps_gprs_send_data((uint8_t *)0x1B, 1);//ESC,取消发送
+		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: TCP data transmission fail to get feedback from cloud!\n");
+		return IHU_FAILURE;			
+	}
+	
+	//接收数据处理：将收到的数据全部返回给上层，由上层进行处理
+	*outlen = strlen((char*)zIhuBspStm32SpsGprsRxBuff);
+	memcpy((uint8_t*)output, (uint8_t*)zIhuBspStm32SpsGprsRxBuff, *outlen);
 	
 	//关闭连接
+	ihu_l1hd_sps_gprs_send_data((uint8_t *)0x1B, 1);//ESC,取消发送
 	func_gprsmod_close_gprs_session_connection();
 	return IHU_SUCCESS;
 }
 
 //往后台发送的POST功能
-OPSTAT ihu_vmmw_gprsmod_udp_text_data_transmit_with_receive(char *input, int16_t inlen, char *output, uint16_t *outlen)
+OPSTAT ihu_vmmw_gprsmod_udp_text_data_transmit_with_receive(char *input, int16_t inlen)
 {
 	uint8_t temp[IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN+1];	
-	uint8_t *p1,*p2;
 	
 	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: UDP Session starting...!\n");
 	//参数检查
@@ -612,82 +604,53 @@ OPSTAT ihu_vmmw_gprsmod_udp_text_data_transmit_with_receive(char *input, int16_t
 		return IHU_FAILURE;				
 	}
 	
-	//TCPIP层面设置
+	//UDP工作模式设置：默认非透明模式
+	//发起UDP连接
 	memset(temp, 0, sizeof(temp));
-	strcpy((char*)&temp, (const char*)"AT+CIPSTART=");
-	strcat((char*)&temp, "UDP");
-	if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"OK", 2 ) == IHU_SUCCESS)//发起连接
-	{
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: New connecting!\n");
-	}else
-	{
-		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: Set GPRS parameter error!\n");
+	strcpy((char*)temp, (const char*)"AT+CIPSTART=");
+	strcat((char*)temp, "\"UDP\", \""); 
+	strcat((char*)temp, IHU_CLOUDXHUI_TCP_SERVER_IP_ADDR);
+	strcat((char*)temp, "\", \"");
+	strcat((char*)temp, IHU_CLOUDXHUI_TCP_SERVER_PORT);	
+	strcat((char*)temp, "\"");	
+	if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"CONNECT OK", 4) == IHU_FAILURE){
+		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: Start TCP connection session failure!\n");
 		return IHU_FAILURE;
 	}
 		
-	//发送内容	
-	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Begin to send..........!\n");
-	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CIPSEND", (uint8_t*)">", 2) == IHU_SUCCESS)
-	{
-		if(func_gprsmod_send_AT_command((uint8_t*)input, (uint8_t*)"SEND OK", 8) == IHU_SUCCESS)
-		{ 								
-			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Send successful!\n");
-		}else
-		{
-			IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: GPRS Send failure 1!\n");
-			return IHU_FAILURE;
-		}
-
-		//接收数据：这里假设TCP收到的数据依然是HUIXML的数据CHAR格式
-		int i = 0;
-		for (i=0; i<strlen((const char*)zIhuBspStm32SpsGprsRxBuff); i++){
-			zIhuBspStm32SpsGprsRxBuff[i] = (char)tolower((char)zIhuBspStm32SpsGprsRxBuff[i]);
-		}
-		p1 = (uint8_t*)strstr((const char*)zIhuBspStm32SpsGprsRxBuff, "<xml>");
-		p2 = (uint8_t*)strstr((const char*)zIhuBspStm32SpsGprsRxBuff, "</xml>");
-
-		if((p1 == NULL) || (p2 == NULL) || (p1 >= p2)){
-			msg_struct_spsvirgo_l2frame_rcv_t snd;
-			//发送数据到上层SPSVIRGO模块
-			memset(&snd, 0, sizeof(msg_struct_spsvirgo_l2frame_rcv_t));
-			memcpy(snd.data, (uint8_t*)p1, p2-p1);
-			snd.length = sizeof(msg_struct_spsvirgo_l2frame_rcv_t);
-			ihu_message_send(MSG_ID_SPS_L2FRAME_RCV, TASK_ID_SPSVIRGO, TASK_ID_VMFO, &snd, snd.length);
-		}else{
-			IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: GPRS data receive failure 1!\n");
-			return IHU_FAILURE;
-		}
-	}
-	else
-	{
-		ihu_l1hd_sps_gprs_send_data((uint8_t *)0X1B, 1);//ESC,取消发送
-		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: GPRS Send failure2!\n");
+	//启动发送内容：完全可以采用固定长度的发送方式，这里尝试只采用Ctrl+Z的灵活方式
+	memset(temp, 0, sizeof(temp));
+	sprintf((char*)temp, "AT+CIPSEND=%d", inlen);
+	//if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)">", 4) == IHU_FAILURE){
+	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CIPSEND", (uint8_t*)">", 4) == IHU_FAILURE){
+		ihu_l1hd_sps_gprs_send_data((uint8_t *)0x1B, 1);//ESC,取消发送
+		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: Enter TCP send session failure!\n");
 		return IHU_FAILURE;
 	}
 	
-	//发送结束
-	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CIPSEND", (uint8_t*)">", 2)== IHU_SUCCESS)
-	{
-		ihu_l1hd_sps_gprs_send_data((uint8_t *)0x00, 1);
-		ihu_l1hd_sps_gprs_send_data((uint8_t *)0X1A, 1);//CTRL+Z,结束数据发送,启动一次传输								
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Heart-beat successful!\n");		 
-	}else
-	{
-		ihu_l1hd_sps_gprs_send_data((uint8_t *)0X1B, 1);//ESC,取消发送
-		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: GPRS Send failure3!\n");
+	//真正发送数据体: UDP方式！
+	func_gprsmod_send_string(input);
+	memset(temp, 0, sizeof(temp));
+	//CTRL+Z,结束数据发送,启动一次传输	
+	temp[0] = 0x1A;
+	if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"SEND OK", 4) == IHU_FAILURE){		
+		ihu_l1hd_sps_gprs_send_data((uint8_t *)0x1B, 1);//ESC,取消发送
+		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: TCP data send failure!\n");
 		return IHU_FAILURE;
 	}
+
+	//UDP等待后台反馈：UDP无法获得反馈，只能单独发送。如果想要建立往下的发送通道，貌似只能单独建立UDP服务器，让后台主动连过来
 	
 	//关闭连接
+	ihu_l1hd_sps_gprs_send_data((uint8_t *)0x1B, 1);//ESC,取消发送
 	func_gprsmod_close_gprs_session_connection();
 	return IHU_SUCCESS;
 }
 
 //往后台发送的POST功能
-OPSTAT ihu_vmmw_gprsmod_udp_u8_data_transmit_with_receive(int8_t *input, int16_t inlen, int8_t *output, uint16_t *outlen)
+OPSTAT ihu_vmmw_gprsmod_udp_u8_data_transmit_with_receive(int8_t *input, int16_t inlen)
 {	
 	uint8_t temp[IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN+1];	
-	//uint8_t *p1,*p2;
 	
 	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: UDP Session starting...!\n");
 	//参数检查
@@ -708,61 +671,45 @@ OPSTAT ihu_vmmw_gprsmod_udp_u8_data_transmit_with_receive(int8_t *input, int16_t
 		return IHU_FAILURE;				
 	}
 	
-	//TCPIP层面设置
+	//UDP工作模式设置：默认非透明模式
+	//发起UDP连接
 	memset(temp, 0, sizeof(temp));
-	strcpy((char*)&temp, (const char*)"AT+CIPSTART=");
-	strcat((char*)&temp, "UDP");
-	if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"OK", 2 ) == IHU_SUCCESS)//发起连接
-	{
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: New connecting!\n");
-	}else
-	{
-		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: Set GPRS parameter error!\n");
+	strcpy((char*)temp, (const char*)"AT+CIPSTART=");
+	strcat((char*)temp, "\"UDP\", \""); 
+	strcat((char*)temp, IHU_CLOUDXHUI_TCP_SERVER_IP_ADDR);
+	strcat((char*)temp, "\", \"");
+	strcat((char*)temp, IHU_CLOUDXHUI_TCP_SERVER_PORT);	
+	strcat((char*)temp, "\"");	
+	if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"CONNECT OK", 4) == IHU_FAILURE){
+		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: Start TCP connection session failure!\n");
 		return IHU_FAILURE;
 	}
 		
-	//发送内容	
-	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Begin to send..........!\n");
-	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CIPSEND", (uint8_t*)">", 2) == IHU_SUCCESS)
-	{
-		if(func_gprsmod_send_AT_command((uint8_t*)input, (uint8_t*)"SEND OK", 8) == IHU_SUCCESS)
-		{ 								
-			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Send successful!\n");
-		}else
-		{
-			IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: GPRS Send failure 1!\n");
-			return IHU_FAILURE;
-		}
+	//启动发送内容：完全可以采用固定长度的发送方式，这里尝试只采用Ctrl+Z的灵活方式
+	memset(temp, 0, sizeof(temp));
+	sprintf((char*)temp, "AT+CIPSEND=%d", inlen);
+	//if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)">", 4) == IHU_FAILURE){
+	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CIPSEND", (uint8_t*)">", 4) == IHU_FAILURE){
+		ihu_l1hd_sps_gprs_send_data((uint8_t *)0x1B, 1);//ESC,取消发送
+		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: Enter TCP send session failure!\n");
+		return IHU_FAILURE;
+	}
+	
+	//真正发送数据体:UDP方式！
+	ihu_l1hd_sps_gprs_send_data((uint8_t*)input, inlen);
+	memset(temp, 0, sizeof(temp));
+	//CTRL+Z,结束数据发送,启动一次传输	
+	temp[0] = 0x1A;
+	if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"SEND OK", 4) == IHU_FAILURE){		
+		ihu_l1hd_sps_gprs_send_data((uint8_t *)0x1B, 1);//ESC,取消发送
+		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: TCP data send failure!\n");
+		return IHU_FAILURE;
+	}
 
-		//接收数据：因为是U8，所以不需要做转化，而且将接收数据全部送上去，等待L2FRAME进行处理
-		msg_struct_spsvirgo_l2frame_rcv_t snd;
-		//发送数据到上层SPSVIRGO模块
-		memset(&snd, 0, sizeof(msg_struct_spsvirgo_l2frame_rcv_t));
-		memcpy(snd.data, (uint8_t*)zIhuBspStm32SpsGprsRxBuff, sizeof(zIhuBspStm32SpsGprsRxBuff));
-		snd.length = sizeof(msg_struct_spsvirgo_l2frame_rcv_t);
-		ihu_message_send(MSG_ID_SPS_L2FRAME_RCV, TASK_ID_SPSVIRGO, TASK_ID_VMFO, &snd, snd.length);
-	}
-	else
-	{
-		ihu_l1hd_sps_gprs_send_data((uint8_t *)0X1B, 1);//ESC,取消发送
-		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: GPRS Send failure2!\n");
-		return IHU_FAILURE;
-	}
-	
-	//发送结束
-	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CIPSEND", (uint8_t*)">", 2)== IHU_SUCCESS)
-	{
-		ihu_l1hd_sps_gprs_send_data((uint8_t *)0x00, 1);
-		ihu_l1hd_sps_gprs_send_data((uint8_t *)0X1A, 1);//CTRL+Z,结束数据发送,启动一次传输								
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Heart-beat successful!\n");		 
-	}else
-	{
-		ihu_l1hd_sps_gprs_send_data((uint8_t *)0X1B, 1);//ESC,取消发送
-		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: GPRS Send failure3!\n");
-		return IHU_FAILURE;
-	}
-	
+	//UDP等待后台反馈：UDP无法获得反馈，只能单独发送。如果想要建立往下的发送通道，貌似只能单独建立UDP服务器，让后台主动连过来
+
 	//关闭连接
+	ihu_l1hd_sps_gprs_send_data((uint8_t *)0x1B, 1);//ESC,取消发送
 	func_gprsmod_close_gprs_session_connection();
 	return IHU_SUCCESS;
 }

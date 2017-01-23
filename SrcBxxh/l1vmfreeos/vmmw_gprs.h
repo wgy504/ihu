@@ -52,6 +52,7 @@
 \' 代表一个单引号（撇号）字符 0x27(39)
 \" 代表一个双引号字符 0x22(34)
 \? 代表一个问号 0x3F(63) 
+ESC, Escape键, 0x1B
 \ddd 1～3位八进制数所代表的字符 
 \xhh 1～2位十六进制数所代表的字符
 */
@@ -68,8 +69,8 @@ extern OPSTAT ihu_vmmw_gprsmod_sms_transmit_with_confirm(char *calledNumber, cha
 extern OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input, int16_t inlen, char *output, uint16_t *outlen);   //往后台发送的POST功能
 extern OPSTAT ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive(char *input, int16_t inlen, char *output, uint16_t *outlen);  //往后台发送的POST功能
 extern OPSTAT ihu_vmmw_gprsmod_tcp_u8_data_transmit_with_receive(int8_t *input, int16_t inlen, int8_t *output, uint16_t *outlen);  //往后台发送的POST功能
-extern OPSTAT ihu_vmmw_gprsmod_udp_text_data_transmit_with_receive(char *input, int16_t inlen, char *output, uint16_t *outlen);  //往后台发送的POST功能
-extern OPSTAT ihu_vmmw_gprsmod_udp_u8_data_transmit_with_receive(int8_t *input, int16_t inlen, int8_t *output, uint16_t *outlen);    //往后台发送的POST功能
+extern OPSTAT ihu_vmmw_gprsmod_udp_text_data_transmit_with_receive(char *input, int16_t inlen);  //往后台发送的POST功能
+extern OPSTAT ihu_vmmw_gprsmod_udp_u8_data_transmit_with_receive(int8_t *input, int16_t inlen);    //往后台发送的POST功能
 extern OPSTAT ihu_vmmw_gprsmod_ftp_data_transmit_with_receive(int8_t *output, uint16_t *outlen);   //从后台GET数据的功能
 extern OPSTAT ihu_vmmw_gprsmod_email_data_transmit_with_receive(char *emailTo, char *emailFrom, char *emailTitle, char *emailContent, int16_t inlen); //往后台发送的POST功能
 extern OPSTAT ihu_vmmw_gprsmod_bs_position_perform(StrVmmwGprsmodBasestationPosition_t *output);

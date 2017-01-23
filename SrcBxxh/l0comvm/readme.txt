@@ -8,12 +8,14 @@
 //上位机Layui模块化前端UI框架 => http://www.layui.com/
 //上位机frp内网穿透工具 => https://github.com/fatedier/frp
 **************接下来待完成主要内容**********************************************
-= 最后再增加tcp/udp等数据连接方式，看门狗打开，BLE/RFID/摄像头研究等内容
+= 最后搞看门狗打开，BLE/RFID/摄像头研究等内容
 **************************************************************************
 
 //= ZJL, 2017 Jan.23, CURRENT_SW_DELIVERY R03.106 =>CCL项目
-= 继续完善AT CMD的TCP/UDP工作机制
 = Puhui增加CAN L2FRAME的编解码功能
+= 继续完善AT CMD的TCP/UDP工作机制
+= 完全依靠CTRL+Z解决发送终止的问题，也使用AT+CIPSEND=%d解决了发送成功以后退出来的问题，两种方式均成功验证成功
+= 完善了TCP和UDP的API函数，UDP只能做发送，不能做接收，比较搞，不知道为什么LJL那个所谓高手用UDP实现了程序下载的
 
 //= ZJL, 2017 Jan.22, CURRENT_SW_DELIVERY R03.105 =>CCL项目/BFSC
 = 继续全局VM任务创建的统一化，使用FuncHandler，消去分项目初始化创建任务的过程

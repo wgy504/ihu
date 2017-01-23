@@ -3,7 +3,7 @@
 <title>Static Call Graph - [PrjCclFo@207VC\PrjCclFo@207VC.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image PrjCclFo@207VC\PrjCclFo@207VC.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Mon Jan 23 12:00:31 2017
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Tue Jan 24 00:40:32 2017
 <BR><P>
 <H3>Maximum Stack Usage =       2792 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -2287,6 +2287,7 @@ Global Symbols
 <LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
 <LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintFo
 <LI><a href="#[19d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_cloud_standard_xml_pack
+<LI><a href="#[1a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive
 <LI><a href="#[19e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_vmmw_gprsmod_http_data_transmit_with_receive
 </UL>
 
@@ -4955,8 +4956,8 @@ Global Symbols
 <LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_spsvirgo_ccl_close_door_report_send
 </UL>
 
-<P><STRONG><a name="[1a0]"></a>ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive</STRONG> (Thumb, 516 bytes, Stack size 584 bytes, vmmw_gprs.o(i.ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive))
-<BR><BR>[Stack]<UL><LI>Max Depth = 1104<LI>Call Chain = ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive &rArr; func_gprsmod_module_session_init &rArr; func_gprsmod_module_info_retrieve &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<P><STRONG><a name="[1a0]"></a>ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive</STRONG> (Thumb, 550 bytes, Stack size 592 bytes, vmmw_gprs.o(i.ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive))
+<BR><BR>[Stack]<UL><LI>Max Depth = 1112<LI>Call Chain = ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive &rArr; func_gprsmod_module_session_init &rArr; func_gprsmod_module_info_retrieve &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_sps_gprs_send_data
 <LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
@@ -4973,6 +4974,7 @@ Global Symbols
 <LI><a href="#[156]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strcat
 <LI><a href="#[e9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 <LI><a href="#[140]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
+<LI><a href="#[14f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[34]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_spsvirgo_ccl_open_auth_inq
 </UL>
