@@ -37,7 +37,6 @@ extern int16_t 	zIhuBspStm32SpsGprsRxLen;
 * 返回   : 
 * 注意   : SIM800A测试过，其它模块需要待测试改进，AT CMD可能不太一样
 *******************************************************************************/
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 OPSTAT ihu_vmmw_gprsmod_call_perform(char *calledNumber)
 {	
 	uint8_t temp[50];
@@ -487,7 +486,7 @@ OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input, int16_t inl
 }
 
 //往后台发送的POST功能
-OPSTAT ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive(char *input)
+OPSTAT ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive(char *input, int16_t inlen, char *output, uint16_t *outlen)
 {	
 	uint8_t temp[IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN+1];	
 	uint8_t *p1,*p2;
@@ -627,7 +626,7 @@ OPSTAT ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive(char *input)
 }
 
 //往后台发送的POST功能
-OPSTAT ihu_vmmw_gprsmod_tcp_u8_data_transmit_with_receive(int8_t *input)
+OPSTAT ihu_vmmw_gprsmod_tcp_u8_data_transmit_with_receive(int8_t *input, int16_t inlen, int8_t *output, uint16_t *outlen)
 {	
 	uint8_t temp[IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN+1];	
 	uint8_t *p1,*p2;
@@ -754,7 +753,7 @@ OPSTAT ihu_vmmw_gprsmod_tcp_u8_data_transmit_with_receive(int8_t *input)
 }
 
 //往后台发送的POST功能
-OPSTAT ihu_vmmw_gprsmod_udp_text_data_transmit_with_receive(char *input)
+OPSTAT ihu_vmmw_gprsmod_udp_text_data_transmit_with_receive(char *input, int16_t inlen, char *output, uint16_t *outlen)
 {
 	uint8_t temp[IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN+1];	
 	uint8_t *p1,*p2;
@@ -893,7 +892,7 @@ OPSTAT ihu_vmmw_gprsmod_udp_text_data_transmit_with_receive(char *input)
 }
 
 //往后台发送的POST功能
-OPSTAT ihu_vmmw_gprsmod_udp_u8_data_transmit_with_receive(int8_t *input)
+OPSTAT ihu_vmmw_gprsmod_udp_u8_data_transmit_with_receive(int8_t *input, int16_t inlen, int8_t *output, uint16_t *outlen)
 {	
 	uint8_t temp[IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN+1];	
 	uint8_t *p1,*p2;
@@ -1020,7 +1019,7 @@ OPSTAT ihu_vmmw_gprsmod_udp_u8_data_transmit_with_receive(int8_t *input)
 }
 
 //从后台GET数据的功能
-OPSTAT ihu_vmmw_gprsmod_ftp_data_transmit_with_receive(int8_t *output)
+OPSTAT ihu_vmmw_gprsmod_ftp_data_transmit_with_receive(int8_t *output, uint16_t *outlen)
 {
 	uint8_t temp[IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN+1];	
 	//uint8_t *p1,*p2;
@@ -1133,11 +1132,11 @@ OPSTAT ihu_vmmw_gprsmod_ftp_data_transmit_with_receive(int8_t *output)
 }
 
 //往后台发送的POST功能
-OPSTAT ihu_vmmw_gprsmod_email_data_transmit_with_receive(char *emailAddr)
+OPSTAT ihu_vmmw_gprsmod_email_data_transmit_with_receive(char *emailTo, char *emailFrom, char *emailTitle, char *emailContent, int16_t inlen)
 {
 	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: EMAIL Session starting...!\n");
 	//参数检查
-	if (emailAddr == NULL){
+	if (emailTo == NULL){
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: invalid called number or other parameter received!\n");
 		return IHU_FAILURE;				
 	}
@@ -1262,7 +1261,7 @@ OPSTAT ihu_vmmw_gprsmod_bs_position_perform(StrVmmwGprsmodBasestationPosition_t 
 * 返回   : 
 * 注意   : SIM800A测试过，其它模块需要待测试改进，AT CMD可能不太一样
 *******************************************************************************/
-OPSTAT ihu_vmmw_gprsmod_tts_perform(char *input)
+OPSTAT ihu_vmmw_gprsmod_tts_perform(char *input, int16_t inlen)
 {
   uint16_t len=0;
 	uint8_t temp[IHU_VMMW_GPRSMOD_TTS_MAX_LEN + 15];
@@ -1362,7 +1361,6 @@ int16_t ihu_vmmw_gprsmod_get_rssi_value(void)
 		return -12000;
 	}	
 }
-#endif
 
 /*******************************************************************************
 *

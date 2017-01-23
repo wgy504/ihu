@@ -873,6 +873,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l2framefreeos\l2canvela.h</FilePath>
             </File>
+            <File>
+              <FileName>l2packet.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l2framefreeos\l2packet.c</FilePath>
+            </File>
+            <File>
+              <FileName>l2packet.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l2framefreeos\l2packet.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -154,7 +154,6 @@ extern INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value(voi
 
 //GPRSMOD的模组操作
 extern OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input, int16_t inlen, char *output, uint16_t *outlen);
-extern OPSTAT ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive(char *input); 
 extern int16_t ihu_vmmw_gprsmod_get_rssi_value(void);
 
 

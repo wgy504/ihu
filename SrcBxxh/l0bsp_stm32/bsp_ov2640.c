@@ -1029,6 +1029,28 @@ const char OV2640_QQVGA[][2]=
   {0x00, 0x00},
 };
 
+//为了减少编译错误，而自己生成的无效函数
+void     CAMERA_IO_Write(uint8_t addr, uint8_t reg, uint8_t value)
+{
+return;
+}
+
+uint8_t  CAMERA_IO_Read(uint8_t addr, uint8_t reg)
+{
+return 1;
+}
+
+void     CAMERA_Delay(uint32_t delay)
+{
+int i=0;
+	while (i<100) {i++;}
+}
+
+void     CAMERA_IO_Init(void)
+{
+return;
+}
+
 /**
   * @}
   */
@@ -1048,12 +1070,12 @@ void ov2640_Init(uint16_t DeviceAddr, uint32_t resolution)
   uint32_t index;
   
   /* Initialize I2C */
-  //CAMERA_IO_Init();    
+  CAMERA_IO_Init();    
   
   /* Prepare the camera to be configured */
-  //CAMERA_IO_Write(DeviceAddr, OV2640_DSP_RA_DLMT, 0x01);
-  //CAMERA_IO_Write(DeviceAddr, OV2640_SENSOR_COM7, 0x80);
-  //CAMERA_Delay(200);
+  CAMERA_IO_Write(DeviceAddr, OV2640_DSP_RA_DLMT, 0x01);
+  CAMERA_IO_Write(DeviceAddr, OV2640_SENSOR_COM7, 0x80);
+  CAMERA_Delay(200);
   
   /* Initialize OV2640 */
   switch (resolution)
@@ -1062,8 +1084,8 @@ void ov2640_Init(uint16_t DeviceAddr, uint32_t resolution)
     {
       for(index=0; index<(sizeof(OV2640_QQVGA)/2); index++)
       {
-        //CAMERA_IO_Write(DeviceAddr, OV2640_QQVGA[index][0], OV2640_QQVGA[index][1]);
-        //CAMERA_Delay(1);
+        CAMERA_IO_Write(DeviceAddr, OV2640_QQVGA[index][0], OV2640_QQVGA[index][1]);
+        CAMERA_Delay(1);
       } 
       break;
     }    
@@ -1071,8 +1093,8 @@ void ov2640_Init(uint16_t DeviceAddr, uint32_t resolution)
     {
       for(index=0; index<(sizeof(OV2640_QVGA)/2); index++)
       {
-        //CAMERA_IO_Write(DeviceAddr, OV2640_QVGA[index][0], OV2640_QVGA[index][1]);
-        //CAMERA_Delay(1);
+        CAMERA_IO_Write(DeviceAddr, OV2640_QVGA[index][0], OV2640_QVGA[index][1]);
+        CAMERA_Delay(1);
       } 
       break;
     }
@@ -1080,8 +1102,8 @@ void ov2640_Init(uint16_t DeviceAddr, uint32_t resolution)
     {
       for(index=0; index<(sizeof(OV2640_480x272)/2); index++)
       {
-        //CAMERA_IO_Write(DeviceAddr, OV2640_480x272[index][0], OV2640_480x272[index][1]);
-        //CAMERA_Delay(2);
+        CAMERA_IO_Write(DeviceAddr, OV2640_480x272[index][0], OV2640_480x272[index][1]);
+        CAMERA_Delay(2);
       }
       break;
     }
@@ -1089,8 +1111,8 @@ void ov2640_Init(uint16_t DeviceAddr, uint32_t resolution)
     {
       for(index=0; index<(sizeof(OV2640_VGA)/2); index++)
       {
-        //CAMERA_IO_Write(DeviceAddr, OV2640_VGA[index][0], OV2640_VGA[index][1]);
-        //CAMERA_Delay(2);
+        CAMERA_IO_Write(DeviceAddr, OV2640_VGA[index][0], OV2640_VGA[index][1]);
+        CAMERA_Delay(2);
       }
       break;
     }    
@@ -1123,38 +1145,38 @@ void ov2640_Config(uint16_t DeviceAddr, uint32_t feature, uint32_t value, uint32
   {
   case CAMERA_BLACK_WHITE:
     {  
-      //CAMERA_IO_Write(DeviceAddr, 0xff, 0x00);
-      //CAMERA_IO_Write(DeviceAddr, 0x7c, 0x00);
-      //CAMERA_IO_Write(DeviceAddr, 0x7d, value_tmp);
-      //CAMERA_IO_Write(DeviceAddr, 0x7c, 0x05);
-      //CAMERA_IO_Write(DeviceAddr, 0x7d, 0x80);
-      //CAMERA_IO_Write(DeviceAddr, 0x7d, 0x80);
+      CAMERA_IO_Write(DeviceAddr, 0xff, 0x00);
+      CAMERA_IO_Write(DeviceAddr, 0x7c, 0x00);
+      CAMERA_IO_Write(DeviceAddr, 0x7d, value_tmp);
+      CAMERA_IO_Write(DeviceAddr, 0x7c, 0x05);
+      CAMERA_IO_Write(DeviceAddr, 0x7d, 0x80);
+      CAMERA_IO_Write(DeviceAddr, 0x7d, 0x80);
       break;
     }
   case CAMERA_CONTRAST_BRIGHTNESS:
     {
-      value1 = (uint8_t)(value_tmp);
+      //value1 = (uint8_t)(value_tmp);
       value2 = (uint8_t)(value_tmp >> 8);
-      //CAMERA_IO_Write(DeviceAddr, 0xff, 0x00);     
-      //CAMERA_IO_Write(DeviceAddr, 0x7c, 0x00);
-      //CAMERA_IO_Write(DeviceAddr, 0x7d, 0x04);
-      //CAMERA_IO_Write(DeviceAddr, 0x7c, 0x07);
-      //CAMERA_IO_Write(DeviceAddr, 0x7d, br_value);
-      //CAMERA_IO_Write(DeviceAddr, 0x7d, value1);
-      //CAMERA_IO_Write(DeviceAddr, 0x7d, value2);
-      //CAMERA_IO_Write(DeviceAddr, 0x7d, 0x06);
+      CAMERA_IO_Write(DeviceAddr, 0xff, 0x00);     
+      CAMERA_IO_Write(DeviceAddr, 0x7c, 0x00);
+      CAMERA_IO_Write(DeviceAddr, 0x7d, 0x04);
+      CAMERA_IO_Write(DeviceAddr, 0x7c, 0x07);
+      CAMERA_IO_Write(DeviceAddr, 0x7d, br_value);
+      CAMERA_IO_Write(DeviceAddr, 0x7d, value1);
+      CAMERA_IO_Write(DeviceAddr, 0x7d, value2);
+      CAMERA_IO_Write(DeviceAddr, 0x7d, 0x06);
       break;
     }
   case CAMERA_COLOR_EFFECT:
     {     
-      value1 = (uint8_t)(value_tmp);
+      //value1 = (uint8_t)(value_tmp);
       value2 = (uint8_t)(value_tmp >> 8);
-      //CAMERA_IO_Write(DeviceAddr, 0xff, 0x00);
-      //CAMERA_IO_Write(DeviceAddr, 0x7c, 0x00);
-      //CAMERA_IO_Write(DeviceAddr, 0x7d, 0x18);
-      //CAMERA_IO_Write(DeviceAddr, 0x7c, 0x05);
-      //CAMERA_IO_Write(DeviceAddr, 0x7d, value1);
-      //CAMERA_IO_Write(DeviceAddr, 0x7d, value2);
+      CAMERA_IO_Write(DeviceAddr, 0xff, 0x00);
+      CAMERA_IO_Write(DeviceAddr, 0x7c, 0x00);
+      CAMERA_IO_Write(DeviceAddr, 0x7d, 0x18);
+      CAMERA_IO_Write(DeviceAddr, 0x7c, 0x05);
+      CAMERA_IO_Write(DeviceAddr, 0x7d, value1);
+      CAMERA_IO_Write(DeviceAddr, 0x7d, value2);
       break;
     }     
   default:
@@ -1172,10 +1194,10 @@ void ov2640_Config(uint16_t DeviceAddr, uint32_t feature, uint32_t value, uint32
 uint16_t ov2640_ReadID(uint16_t DeviceAddr)
 {
   /* Initialize I2C */
-  //CAMERA_IO_Init();
+  CAMERA_IO_Init();
   
   /* Prepare the sensor to read the Camera ID */
-  //CAMERA_IO_Write(DeviceAddr, OV2640_DSP_RA_DLMT, 0x01);
+  CAMERA_IO_Write(DeviceAddr, OV2640_DSP_RA_DLMT, 0x01);
   
   /* Get the camera ID */
   //return (CAMERA_IO_Read(DeviceAddr, OV2640_SENSOR_PIDH));

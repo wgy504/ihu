@@ -11,8 +11,10 @@
 = 最后再增加tcp/udp等数据连接方式，看门狗打开，BLE/RFID/摄像头研究等内容
 **************************************************************************
 
-//= ZJL, 2017 Jan.22, CURRENT_SW_DELIVERY R03.106 =>CCL项目
+//= ZJL, 2017 Jan.23, CURRENT_SW_DELIVERY R03.106 =>CCL项目
 = 继续完善AT CMD的TCP/UDP工作机制
+= Puhui增加CAN L2FRAME的编解码功能
+
 
 
 
