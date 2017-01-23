@@ -63,18 +63,18 @@
 
 //向上提供全局统一服务的入口
 //目前主要用了HTTP，其它的等待以后其它机会再测试，但都通过正式文档将其实现了
-	extern OPSTAT ihu_vmmw_gprsmod_call_perform(char *calledNumber);
-	extern OPSTAT ihu_vmmw_gprsmod_sms_transmit_with_confirm(char *calledNumber, char *input);
-	extern OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input, int16_t inlen, char *output, uint16_t *outlen);   //往后台发送的POST功能
-	extern OPSTAT ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive(char *input, int16_t inlen, char *output, uint16_t *outlen);  //往后台发送的POST功能
-	extern OPSTAT ihu_vmmw_gprsmod_tcp_u8_data_transmit_with_receive(int8_t *input, int16_t inlen, int8_t *output, uint16_t *outlen);  //往后台发送的POST功能
-	extern OPSTAT ihu_vmmw_gprsmod_udp_text_data_transmit_with_receive(char *input, int16_t inlen, char *output, uint16_t *outlen);  //往后台发送的POST功能
-	extern OPSTAT ihu_vmmw_gprsmod_udp_u8_data_transmit_with_receive(int8_t *input, int16_t inlen, int8_t *output, uint16_t *outlen);    //往后台发送的POST功能
-	extern OPSTAT ihu_vmmw_gprsmod_ftp_data_transmit_with_receive(int8_t *output, uint16_t *outlen);   //从后台GET数据的功能
-	extern OPSTAT ihu_vmmw_gprsmod_email_data_transmit_with_receive(char *emailTo, char *emailFrom, char *emailTitle, char *emailContent, int16_t inlen); //往后台发送的POST功能
-	extern OPSTAT ihu_vmmw_gprsmod_bs_position_perform(StrVmmwGprsmodBasestationPosition_t *output);
-	extern OPSTAT ihu_vmmw_gprsmod_tts_perform(char *input, int16_t inlen);
-	extern int16_t ihu_vmmw_gprsmod_get_rssi_value(void);
+extern OPSTAT ihu_vmmw_gprsmod_call_perform(char *calledNumber);
+extern OPSTAT ihu_vmmw_gprsmod_sms_transmit_with_confirm(char *calledNumber, char *input, int16_t inlen, char *output, uint16_t *outlen);
+extern OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input, int16_t inlen, char *output, uint16_t *outlen);   //往后台发送的POST功能
+extern OPSTAT ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive(char *input, int16_t inlen, char *output, uint16_t *outlen);  //往后台发送的POST功能
+extern OPSTAT ihu_vmmw_gprsmod_tcp_u8_data_transmit_with_receive(int8_t *input, int16_t inlen, int8_t *output, uint16_t *outlen);  //往后台发送的POST功能
+extern OPSTAT ihu_vmmw_gprsmod_udp_text_data_transmit_with_receive(char *input, int16_t inlen, char *output, uint16_t *outlen);  //往后台发送的POST功能
+extern OPSTAT ihu_vmmw_gprsmod_udp_u8_data_transmit_with_receive(int8_t *input, int16_t inlen, int8_t *output, uint16_t *outlen);    //往后台发送的POST功能
+extern OPSTAT ihu_vmmw_gprsmod_ftp_data_transmit_with_receive(int8_t *output, uint16_t *outlen);   //从后台GET数据的功能
+extern OPSTAT ihu_vmmw_gprsmod_email_data_transmit_with_receive(char *emailTo, char *emailFrom, char *emailTitle, char *emailContent, int16_t inlen); //往后台发送的POST功能
+extern OPSTAT ihu_vmmw_gprsmod_bs_position_perform(StrVmmwGprsmodBasestationPosition_t *output);
+extern OPSTAT ihu_vmmw_gprsmod_tts_perform(char *input, int16_t inlen);
+extern int16_t ihu_vmmw_gprsmod_get_rssi_value(void);
 
 //本地函数：目前以SIM800A为例子。如果不是SIM800A，则需要另换一套程序
 //由于目前只有SIM800A，所有的程序都以这个为基础。如果未来需要支持第二种以上的模组，本程序待改进
@@ -82,7 +82,11 @@
 OPSTAT func_gprsmod_module_session_init(void);
 OPSTAT func_gprsmod_module_info_retrieve(void);//模块信息检测
 OPSTAT func_gprsmod_gsm_info_retrieve(void);//SIM800A信息显示(信号质量,电池电量,日期时间)
+void func_grpsmod_check_receive_buffer_ipd(void);
+OPSTAT func_gprsmod_setup_gprs_session_connection(void);
+void func_gprsmod_close_gprs_session_connection(void);
 OPSTAT func_gprsmod_send_AT_command(uint8_t *cmd, uint8_t *ack, UINT16 wait_time);  //秒级！！！
+OPSTAT func_gprsmod_wait_AT_command_fb(uint8_t *ack, uint16_t wait_time);
 void func_gprsmod_clear_receive_buffer(void);
 void func_gprsmod_send_string(char* s);
 #define func_gprsmod_send_LR() func_gprsmod_send_string("\r\n")

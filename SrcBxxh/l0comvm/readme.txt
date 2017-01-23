@@ -15,9 +15,6 @@
 = 继续完善AT CMD的TCP/UDP工作机制
 = Puhui增加CAN L2FRAME的编解码功能
 
-
-
-
 //= ZJL, 2017 Jan.22, CURRENT_SW_DELIVERY R03.105 =>CCL项目/BFSC
 = 继续全局VM任务创建的统一化，使用FuncHandler，消去分项目初始化创建任务的过程
 = 改善VMFO的创建任务机制，统一称为循环和利用FuncHandler，不再分项目进行，从而大大简化了分项目处理的复杂度
