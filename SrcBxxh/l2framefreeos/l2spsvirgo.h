@@ -157,6 +157,8 @@ extern OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input, int1
 extern OPSTAT ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive(char *input, int16_t inlen, char *output, uint16_t *outlen);
 extern OPSTAT ihu_vmmw_gprsmod_tcp_u8_data_transmit_with_receive(int8_t *input, int16_t inlen, int8_t *output, uint16_t *outlen);
 extern int16_t ihu_vmmw_gprsmod_get_rssi_value(void);
+extern OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_official(uint8_t *macAddr, uint8_t len);
+extern OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_test_mode(uint8_t *macAddr, uint8_t len);
 
 
 #endif /* L2FRAME_L2SPSVIRGO_H_ */

@@ -145,7 +145,7 @@ OPSTAT fsm_spsvirgo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 	}
 	
 	//生成测试数据
-//	func_cloud_standard_xml_generate_message_test_data();
+	func_cloud_standard_xml_generate_message_test_data();
 	
 	//返回
 	return IHU_SUCCESS;
@@ -293,12 +293,12 @@ OPSTAT fsm_spsvirgo_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
 	int ret = 0, i = 0;
-	msg_struct_ccl_sps_open_auth_inq rcv;
+	msg_struct_ccl_sps_open_auth_inq_t rcv;
 	msg_struct_spsvirgo_ccl_cloud_fb_t snd;
 	
 	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_ccl_sps_open_auth_inq));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_sps_open_auth_inq))){
+	memset(&rcv, 0, sizeof(msg_struct_ccl_sps_open_auth_inq_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_sps_open_auth_inq_t))){
 		IhuErrorPrint("SPSVIRGO: Receive message error!\n");
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
@@ -322,8 +322,14 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	//StrIe_HUITP_IEID_uni_ccl_lock_auth_req_t
 	pMsgProc.authReq.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_lock_auth_req);
 	pMsgProc.authReq.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_lock_auth_req_t) - 4);
-	//唯一的锁触发，其它触发模式再考虑
-	pMsgProc.authReq.authReqType = HUITP_IEID_UNI_CCL_LOCK_AUTH_REQ_TYPE_LOCK;
+	//统一考虑三种触发方式：BLE/RFID/LOCK, 后台会再加上PID/电话号码方式，总共5种方式
+	if (ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_test_mode(pMsgProc.authReq.bleMacAddr, 6) == IHU_SUCCESS){
+		pMsgProc.authReq.bleAddrLen = 6;
+		pMsgProc.authReq.authReqType = HUITP_IEID_UNI_CCL_LOCK_AUTH_REQ_TYPE_BLE;
+	}
+	else{
+		pMsgProc.authReq.authReqType = HUITP_IEID_UNI_CCL_LOCK_AUTH_REQ_TYPE_LOCK;	
+	}
 	for (i = 0; i < HUITP_IEID_UNI_CCL_LOCK_AUTH_REQ_MAX_LEN; i++){
 		pMsgProc.authReq.bleMacAddr[i] = 0xFF;
 		pMsgProc.authReq.rfidAddr[i] = 0xFF;

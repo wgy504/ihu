@@ -63,4 +63,4 @@
 --library_type=microlib --strict --scatter "PrjCclFo@207VC\PrjCclFo@207VC.sct"
 --diag_suppress=L6329 --summary_stderr --info summarysizes --map --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
---list "PrjCclFo@207VC.map" -o PrjCclFo@207VC\PrjCclFo@207VC.axf
+--list "./PrjCclFo@207VC/\PrjCclFo@207VC.map" -o PrjCclFo@207VC\PrjCclFo@207VC.axf

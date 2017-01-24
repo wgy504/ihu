@@ -99,7 +99,7 @@ extern void   func_cloud_standard_xml_generate_message_test_data(void);
 400183]]></Content><FuncFlag>XXXX</FuncFlag></xml>" 
 #define HUITP_MSG_HUIXML_TEST_DATA_CCL_AUTH_IND 						"<xml><ToUserName><![CDATA[HCU_CL_0499]]></ToUserName>\
 <FromUserName><![CDATA[XHZN_HCU]]></FromUserName><CreateTime>1485033641</CreateTime><MsgType><![CDATA[hcu_text]]></MsgType><Content><![CDATA[\
-4D90003200010001014D01002901FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF]]></Content><FuncFlag>0</FuncFlag></xml>"
+4D90003400010001014D01002B0100FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF]]></Content><FuncFlag>0</FuncFlag></xml>"
 #define HUITP_MSG_HUIXML_TEST_DATA_CCL_AUTH_RESP_YES				"<xml><ToUserName><![CDATA[HCU_CL_0499]]></ToUserName>\
 <FromUserName><![CDATA[XHZN_HCU]]></FromUserName><CreateTime>1485033641</CreateTime><MsgType><![CDATA[hcu_text]]></MsgType><Content><![CDATA[\
 4D10000A00020001014D02000101]]></Content><FuncFlag>0</FuncFlag></xml>"

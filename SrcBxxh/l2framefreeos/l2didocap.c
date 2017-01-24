@@ -238,7 +238,7 @@ OPSTAT fsm_didocap_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 			func_didocap_time_out_work_mode_period_scan();
 		}
 	}
-#endif
+#endif //(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 	
 	//其实是此时的定时器由于状态推移的原因被推掉了，不是真正出错
 	else{

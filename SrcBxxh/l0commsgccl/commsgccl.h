@@ -374,7 +374,7 @@ typedef struct msg_struct_ccl_sps_open_auth_inq
 	UINT8 cmdid;
 	UINT8 dataBuf[IHU_CCL_BH_CTRL_CMD_BUF_LEN];
 	UINT16 length;
-}msg_struct_ccl_sps_open_auth_inq;
+}msg_struct_ccl_sps_open_auth_inq_t;
 
 //MSG_ID_CCL_COM_SENSOR_STATUS_REQ
 typedef struct msg_struct_ccl_com_sensor_status_req

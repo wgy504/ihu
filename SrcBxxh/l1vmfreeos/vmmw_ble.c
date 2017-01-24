@@ -24,9 +24,8 @@ BLTDev bltDevList;   //蓝牙设备列表，在main文件中定义
 #define DEFAULT_HC05_ROLE           0 // 默认从模式
 //#define DEFAULT_HC05_ROLE           1 // 默认主模式
 BLTDev bltDevList;
-char sendData[1024];
-char linebuff[1024];
-uint8_t aRxBuffer;
+char zIhuBlemodSendData[1024];
+char zIhuBlemodLineBuff[1024];
 static __IO uint32_t TimingDelay=0;
 
 
@@ -64,6 +63,30 @@ OPSTAT func_blemod_uart_send_AT_command(uint8_t *cmd, uint8_t *ack, uint16_t wai
 	}
 	return res;
 }
+
+//in Second
+OPSTAT func_blemod_wait_AT_command_fb(uint8_t *ack, uint16_t wait_time)
+{
+	int ret = 0;
+	
+	//等待的时间长度，到底是以tick为单位的，还是以ms为单位的？经过验证，都是以ms为单位的，所以不用担心！！！
+	uint32_t tickTotal = wait_time * 1000 / IHU_BSP_STM32_SPS_RX_MAX_DELAY;
+
+	//清理接收缓冲区
+	ret = IHU_FAILURE;
+
+	while((tickTotal > 0) && (ret == IHU_FAILURE))
+	{
+		ihu_usleep(IHU_BSP_STM32_SPS_RX_MAX_DELAY); //这里的周期就是以绝对ms为单位的
+		tickTotal--;
+		if(strstr((const char*)zIhuBspStm32SpsBleRxBuff, (char*)ack)==NULL)
+			 ret = IHU_FAILURE;
+		else
+			 ret = IHU_SUCCESS;
+	}
+	return ret;
+}
+
 
 /*******************************************************************************
 * 函数名 : func_blemod_uart_clear_receive_buffer
@@ -135,15 +158,17 @@ char *ihu_bsp_stm32_ble_get_rebuff(uint16_t *len)
 * 返回   : 
 * 注意   : 通过参数传递指针进来，从而获得MAC地址信息，待完善
 *******************************************************************************/
-OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_procedure(char *macAddr, uint8_t len)
+  /* Address should look like "+ADDR:<NAP>:<UAP>:<LAP>",
+   * where actual address will look like "1234:56:abcdef".
+   */
+OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_official(uint8_t *macAddr, uint8_t len)
 {
 	uint8_t repeatCnt = IHU_VMMW_BLEMOD_UART_REPEAT_CNT;
 	uint8_t *p1, *p2;
 	
-	//设置BLE模块拉高的工作状态
-	ihu_l1hd_dido_f2board_ble_power_ctrl_on();
-	
+	//清理缓冲区
 	func_blemod_uart_clear_receive_buffer();
+
 	//最大循环次数
 	while((repeatCnt > 0) && (func_blemod_uart_send_AT_command((uint8_t*)"AT", (uint8_t*)"OK", 2) != IHU_SUCCESS))//查询是否应到AT指令
 	{
@@ -176,22 +201,90 @@ OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_procedure(char *macAddr, uint8_t
 	if (func_blemod_uart_send_AT_command((uint8_t*)"AT+ADDR?", (uint8_t*)"OK", 2) == IHU_SUCCESS) {
 		p1 = (uint8_t*)strstr((const char*)zIhuBspStm32SpsBleRxBuff, "+ADDR:");
 		p2 = (uint8_t*)strstr((const char*)p1, "\r");
-		if ((p1!=NULL) && (p2!=NULL) && (p1<p2)){
-			p1 = p1 + sizeof("+ADDR:");
-			strncpy(macAddr, (char*)p1, ((p2-p1)<len)?(p2-p1):len);
-			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWBLE: BLE Address = [%s]!\n", p1);
+		p1 = p1 + sizeof("+ADDR:");
+		if ((p1!=NULL) && (p2!=NULL) && (p1<p2) && (p2==p1+14) && (len==6)){
+			char s[4];
+			uint8_t res = 0;
+			//memcpy(macAddr, p1, ((p2-p1)<len)?(p2-p1):len);
+			//当数据看待，而非字符串看待
+			//NAP-1
+			memset(s, 0, sizeof(s));
+			strncpy(s, (char*)(p1), 2);
+			res = atoi(s) & 0xFF;
+			memcpy(macAddr, &res, 1);
+			//NAP-2
+			memset(s, 0, sizeof(s));
+			strncpy(s, (char*)(p1+2), 2);
+			res = atoi(s) & 0xFF;
+			memcpy(macAddr+1, &res, 1);
+			//UAP-1
+			memset(s, 0, sizeof(s));
+			strncpy(s, (char*)(p1+5), 2);
+			res = atoi(s) & 0xFF;
+			memcpy(macAddr+2, &res, 1);
+			//LAP-1
+			memset(s, 0, sizeof(s));
+			strncpy(s, (char*)(p1+8), 2);
+			res = atoi(s) & 0xFF;
+			memcpy(macAddr+3, &res, 1);
+			//LAP-2
+			memset(s, 0, sizeof(s));
+			strncpy(s, (char*)(p1+10), 2);
+			res = atoi(s) & 0xFF;
+			memcpy(macAddr+4, &res, 1);
+			//LAP-3
+			memset(s, 0, sizeof(s));
+			strncpy(s, (char*)(p1+12), 2);
+			res = atoi(s) & 0xFF;
+			memcpy(macAddr+5, &res, 1);
 		}
 	}else{
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMMWBLE: BLE fetch address failure!\n");
 		return IHU_FAILURE;
 	}
-		
-	//设置BLE模块拉低的蓝牙正常工作状态
-	ihu_l1hd_dido_f2board_ble_power_ctrl_off();
 
 	return IHU_SUCCESS;
 }
+
+//获取手机等远程外设的MAC地址，目前由于HC05模块本身的能力问题，只能直接进入串口透传模式，所以采用了独特的APP
+//辅助IHU获取远程MAC地址
+OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_test_mode(uint8_t *macAddr, uint8_t len)
+{
+	int i = 0;
+	uint8_t *p1, *p2;
+	
+	//最长5秒，还没搞定，就结束了
+	func_blemod_uart_clear_receive_buffer();
+	for (i = 0; i < 5; i++){
+		func_blemod_uart_send_string("MAC/MIMA=?");
+		func_blemod_uart_send_LR();
+		if (func_blemod_wait_AT_command_fb((uint8_t*)"MAC/MIMA=", 1) == IHU_SUCCESS) break;
+	}
+	p1 = (uint8_t*)strstr((const char*)zIhuBspStm32SpsBleRxBuff, "MAC/MIMA=");
+	p2 = (uint8_t*)strstr((const char*)p1, "\r");
+	p1 = (uint8_t*)strstr((const char*)p1, "="); //实际上从"="算起，包括后面的":"都算作一个3符号组的字符串
+	if ((p1!=NULL) && (p2!=NULL) && (p1<p2) && (p2==(p1+len*3) )){
+		char s[4];
+		uint8_t res = 0;
+		//当数据看待，而非字符串看待
+		for (i = 0; i<len; i++) {
+			s[0] = '\0';
+			strncpy(s, (char*)(p1+1+i*3), 2);
+			res = strtoul(s, NULL, 16) & 0xFF;
+			memcpy(macAddr+i, &res, 1);
+		}
+		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWBLE: Received remote MAC address=[%s]\n", p1);
+	}else{
+		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		IhuErrorPrint("VMMWBLE: BLE fetch address failure!\n");
+		return IHU_FAILURE;		
+	}	
+	
+	return IHU_SUCCESS;
+}
+
+
 
 /**
   * 函数功能: 初始化GPIO及检测HC05模块
@@ -300,7 +393,7 @@ uint8_t func_belmod_uart_hc05_scan_bluetooth_address(BLTDev *bltDev)
    */
 	char* redata;
 	uint16_t len;
-	char linebuff[50];
+	char zIhuBlemodLineBuff[50];
 	uint16_t linelen;
 	uint16_t getlen=0;
 	uint8_t linenum=0;	
@@ -316,7 +409,7 @@ uint8_t func_belmod_uart_hc05_scan_bluetooth_address(BLTDev *bltDev)
 getNewLine:
 		while(getlen < len-2*linenum )
 		{	
-			linelen = func_blemod_uart_hc05_get_line(linebuff,redata+getlen+2*linenum,len);
+			linelen = func_blemod_uart_hc05_get_line(zIhuBlemodLineBuff,redata+getlen+2*linenum,len);
 			if(linelen>50 && linelen != 0)
 			{
 				func_blemod_uart_send_AT_command((uint8_t*)"AT+INQC", (uint8_t*)"OK", 2);//退出前中断查询
@@ -324,7 +417,7 @@ getNewLine:
 			}
 			getlen += linelen;
 			linenum++;			
-			p = skipPrefix(linebuff,linelen,"+INQ:");
+			p = skipPrefix(zIhuBlemodLineBuff,linelen,"+INQ:");
 			if(p!=0)
 			{
 				uint8_t num ;
@@ -332,7 +425,7 @@ getNewLine:
 				func_blemod_uart_hc05_blt_addr_convert_str(bltDev,':');
 				for(i=0;i<=num;i++)
 				{
-					if(strstr(linebuff,bltDev->unpraseAddr[i]) != NULL)	
+					if(strstr(zIhuBlemodLineBuff,bltDev->unpraseAddr[i]) != NULL)	
 					{
 						goto getNewLine;	//!=null时，表示该地址与解码语句的地址相同
 					}
@@ -406,7 +499,7 @@ uint8_t func_blemod_uart_hc05_get_remote_device_name(BLTDev *bltDev)
 	char *redata;
 	uint16_t len;
 	
-	char linebuff[50];
+	char zIhuBlemodLineBuff[50];
 	uint16_t linelen;
 	char *p;
 	
@@ -423,10 +516,10 @@ uint8_t func_blemod_uart_hc05_get_remote_device_name(BLTDev *bltDev)
 		redata =ihu_bsp_stm32_ble_get_rebuff(&len);
 		if(redata[0] != 0 && strstr(redata, "OK") != 0)
 		{
-			linelen = func_blemod_uart_hc05_get_line(linebuff,redata,len);
-			if(linelen>50 && linelen !=0 ) linebuff[linelen]='\0';	//超长截断
+			linelen = func_blemod_uart_hc05_get_line(zIhuBlemodLineBuff,redata,len);
+			if(linelen>50 && linelen !=0 ) zIhuBlemodLineBuff[linelen]='\0';	//超长截断
 					
-			p = skipPrefix(linebuff,linelen,"+RNAME:");
+			p = skipPrefix(zIhuBlemodLineBuff,linelen,"+RNAME:");
 			if(p!=0)
 			{
 				strcpy(bltDev->name[i],p);
@@ -619,7 +712,7 @@ void ihu_vmmw_blemod_hc05_working_process(void)
 
       /*获取数据*/
       redata = ihu_bsp_stm32_ble_get_rebuff(&len); 
-      linelen = func_blemod_uart_hc05_get_line(linebuff,redata,len);    
+      linelen = func_blemod_uart_hc05_get_line(zIhuBlemodLineBuff,redata,len);    
       /*检查数据是否有更新*/
       if(linelen<200 && linelen != 0)
       {				                
@@ -655,8 +748,8 @@ void ihu_vmmw_blemod_hc05_working_process(void)
 		if(hc05_connect==1)
 		{
 			static uint8_t testdata=0;
-			sprintf(sendData,"%s>>testdata=%d\r\n",hc05_name,testdata++);
-			func_blemod_uart_send_string(sendData);			
+			sprintf(zIhuBlemodSendData,"%s>>testdata=%d\r\n",hc05_name,testdata++);
+			func_blemod_uart_send_string(zIhuBlemodSendData);			
 		}		
 	}
 	

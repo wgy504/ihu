@@ -2372,7 +2372,9 @@ typedef struct StrIe_HUITP_IEID_uni_ccl_lock_auth_req
 	UINT16 ieId;
 	UINT16 ieLen;
 	UINT8  authReqType;
+	UINT8  bleAddrLen;
 	UINT8  bleMacAddr[HUITP_IEID_UNI_CCL_LOCK_AUTH_REQ_MAX_LEN];
+	UINT8  rfidAddrLen;
 	UINT8  rfidAddr[HUITP_IEID_UNI_CCL_LOCK_AUTH_REQ_MAX_LEN];
 }StrIe_HUITP_IEID_uni_ccl_lock_auth_req_t;
 #define HUITP_IEID_UNI_CCL_LOCK_AUTH_REQ_TYPE_NULL 0

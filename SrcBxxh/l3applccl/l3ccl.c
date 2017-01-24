@@ -930,7 +930,7 @@ OPSTAT fsm_ccl_event_lock_trigger_to_work(UINT8 dest_id, UINT8 src_id, void * pa
 	int ret = 0;
 	msg_struct_dido_ccl_event_lock_trigger_t rcv;
 	msg_struct_ccl_com_ctrl_cmd_t snd;
-	msg_struct_ccl_sps_open_auth_inq snd1;
+	msg_struct_ccl_sps_open_auth_inq_t snd1;
 	
 	//入参检查
 	//Receive message and copy to local variable
@@ -989,8 +989,8 @@ OPSTAT fsm_ccl_event_lock_trigger_to_work(UINT8 dest_id, UINT8 src_id, void * pa
 	}
 
 	//发送后台查询命令
-	memset(&snd1, 0, sizeof(msg_struct_ccl_sps_open_auth_inq));
-	snd1.length = sizeof(msg_struct_ccl_sps_open_auth_inq);
+	memset(&snd1, 0, sizeof(msg_struct_ccl_sps_open_auth_inq_t));
+	snd1.length = sizeof(msg_struct_ccl_sps_open_auth_inq_t);
 	ret = ihu_message_send(MSG_ID_CCL_SPS_OPEN_AUTH_INQ, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd1, snd1.length);
 	if (ret == IHU_FAILURE){
 		IHU_ERROR_PRINT_CCL("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_CCL].taskName, zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName);

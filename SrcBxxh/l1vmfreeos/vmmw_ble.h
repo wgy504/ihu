@@ -20,14 +20,18 @@
 #include "FreeRTOS.h"
 #include "cmsis_os.h"
 #include "bsp_dido.h"
-//#include "bsp_usart.h"
+#include "bsp_usart.h"
 
 //全局使用的常亮定义
 #define IHU_VMMW_BLEMOD_UART_REPEAT_CNT 3
 
 //向上提供全局统一服务的入口
 //以下范式是正常的提供MAC地址的函数
-extern OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_procedure(char *macAddr, uint8_t len);  //HC05模块
+//HC05模块
+extern OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_official(uint8_t *macAddr, uint8_t len);  
+//HC05模块调试版
+extern OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_test_mode(uint8_t *macAddr, uint8_t len);
+
 //以下函数是为了支持5204型号，对BLE进行详细控制的函数api，还有待完整性测试，并调整控制方式
 extern void 	ihu_vmmw_blemod_hc05_working_process(void);  //HC05模块
 
@@ -35,6 +39,7 @@ extern void 	ihu_vmmw_blemod_hc05_working_process(void);  //HC05模块
 //Local API
 //工作调用流
 OPSTAT func_blemod_uart_send_AT_command(uint8_t *cmd, uint8_t *ack, UINT16 wait_time);  //秒级！！！
+OPSTAT func_blemod_wait_AT_command_fb(uint8_t *ack, uint16_t wait_time);
 void func_blemod_uart_clear_receive_buffer(void);
 OPSTAT func_blemod_find_char(char *a);
 char *ihu_bsp_stm32_ble_get_rebuff(uint16_t *len);
