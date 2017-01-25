@@ -22,7 +22,7 @@ SPI_HandleTypeDef hspi1;  //MAIN中为定义，这里重新定义是为了复用
 extern SPI_HandleTypeDef hspi2;
 #endif
 
-extern uint8_t zIhuSpiRxBuffer[6];
+extern uint8_t zIhuSpiRxBuffer[2];
 
 //本地全局变量
 int8_t 	zIhuBspStm32SpiIauRxBuff[IHU_BSP_STM32_SPI_IAU_REC_MAX_LEN];				//串口SPI数据接收缓冲区 

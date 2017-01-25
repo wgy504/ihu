@@ -698,6 +698,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_ov2640.h</FilePath>
             </File>
+            <File>
+              <FileName>bsp_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_spi.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_spi.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
