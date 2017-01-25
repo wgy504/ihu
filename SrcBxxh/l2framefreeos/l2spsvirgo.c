@@ -145,7 +145,7 @@ OPSTAT fsm_spsvirgo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 	}
 	
 	//生成测试数据
-	func_cloud_standard_xml_generate_message_test_data();
+	//func_cloud_standard_xml_generate_message_test_data();
 	
 	//返回
 	return IHU_SUCCESS;

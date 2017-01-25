@@ -20,6 +20,7 @@
 "prjcclfo@207vc\stm32f2xx_hal_dcmi.o"
 "prjcclfo@207vc\stm32f2xx_hal_adc_ex.o"
 "prjcclfo@207vc\stm32f2xx_hal_adc.o"
+"prjcclfo@207vc\stm32f2xx_hal_spi.o"
 "prjcclfo@207vc\croutine.o"
 "prjcclfo@207vc\list.o"
 "prjcclfo@207vc\timers.o"
