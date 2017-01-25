@@ -25,14 +25,14 @@ extern SPI_HandleTypeDef hspi2;
 extern uint8_t zIhuSpiRxBuffer[2];
 
 //本地全局变量
-int8_t 	zIhuBspStm32SpiIauRxBuff[IHU_BSP_STM32_SPI_IAU_REC_MAX_LEN];				//串口SPI数据接收缓冲区 
-int8_t 	zIhuBspStm32SpiIauRxState=0;																	//串口SPI接收状态
-int16_t zIhuBspStm32SpiIauRxCount=0;																	//当前接收数据的字节数
-int16_t zIhuBspStm32SpiIauRxLen=0;
-int8_t 	zIhuBspStm32SpiSpare1RxBuff[IHU_BSP_STM32_SPI1_PRESENT_REC_MAX_LEN];	//串口SPI数据接收缓冲区 
-int8_t 	zIhuBspStm32SpiSpare1RxState=0;																//串口SPI接收状态
-int16_t zIhuBspStm32SpiSpare1RxCount=0;																//当前接收数据的字节数 	  
-int16_t zIhuBspStm32SpiSpare1RxLen=0;
+int8_t 	zIhuBspStm32SpiGeneral1RxBuff[IHU_BSP_STM32_SPI1_GENERAL_REC_MAX_LEN];				//SPI数据接收缓冲区 
+int8_t 	zIhuBspStm32SpiGeneral1RxState=0;																							//SPI接收状态
+int16_t zIhuBspStm32SpiGeneral1RxCount=0;																							//当前接收数据的字节数 	  
+int16_t zIhuBspStm32SpiGeneral1RxLen=0;
+int8_t 	zIhuBspStm32SpiGeneral2RxBuff[IHU_BSP_STM32_SPI2_GENERAL_REC_MAX_LEN];				//SPI数据接收缓冲区 
+int8_t 	zIhuBspStm32SpiGeneral2RxState=0;																							//SPI接收状态
+int16_t zIhuBspStm32SpiGeneral2RxCount=0;																							//当前接收数据的字节数
+int16_t zIhuBspStm32SpiGeneral2RxLen=0;
 
 #define SPILEO_BUF_SIZE 256
 uint8_t BSP_SPI_rx_buffer[SPILEO_BUF_SIZE];
@@ -382,7 +382,7 @@ int ihu_bsp_stm32_spi_iau_rcv_data(uint8_t* buff, uint16_t len)
 *******************************************************************************/
 int ihu_bsp_stm32_spi_spare1_send_data(uint8_t* buff, uint16_t len)
 {
-	if (HAL_SPI_Transmit(&IHU_BSP_STM32_SPI1_PRESENT_HANDLER, (uint8_t *)buff, len, IHU_BSP_STM32_SPI_TX_MAX_DELAY) == HAL_OK)
+	if (HAL_SPI_Transmit(&IHU_BSP_STM32_SPI_SPARE1_HANDLER, (uint8_t *)buff, len, IHU_BSP_STM32_SPI_TX_MAX_DELAY) == HAL_OK)
 		return BSP_SUCCESS;
 	else
 		return BSP_FAILURE;		
@@ -390,11 +390,37 @@ int ihu_bsp_stm32_spi_spare1_send_data(uint8_t* buff, uint16_t len)
 
 int ihu_bsp_stm32_spi_spare1_rcv_data(uint8_t* buff, uint16_t len)
 {    
-	if (HAL_SPI_Receive(&IHU_BSP_STM32_SPI1_PRESENT_HANDLER, buff, len, IHU_BSP_STM32_SPI_TX_MAX_DELAY) == HAL_OK)
+	if (HAL_SPI_Receive(&IHU_BSP_STM32_SPI_SPARE1_HANDLER, buff, len, IHU_BSP_STM32_SPI_TX_MAX_DELAY) == HAL_OK)
 		return BSP_SUCCESS;
 	else
 		return BSP_FAILURE;
 }
+
+
+/*******************************************************************************
+* 函数名  : SPI_SendData
+* 描述    : SPI_IAU发送数据缓冲区数据
+* 输入    : *buff：数据缓冲区指针，len：发送数据长度
+* 输出    : 无
+* 返回    : 无 
+* 说明    : 无
+*******************************************************************************/
+int ihu_bsp_stm32_spi_rfid522_send_data(uint8_t* buff, uint16_t len)
+{
+	if (HAL_SPI_Transmit(&IHU_BSP_STM32_SPI_RFID522_HANDLER, (uint8_t *)buff, len, IHU_BSP_STM32_SPI_TX_MAX_DELAY) == HAL_OK)
+		return BSP_SUCCESS;
+	else
+		return BSP_FAILURE;		
+}
+
+int ihu_bsp_stm32_spi_rfid522_rcv_data(uint8_t* buff, uint16_t len)
+{    
+	if (HAL_SPI_Receive(&IHU_BSP_STM32_SPI_RFID522_HANDLER, buff, len, IHU_BSP_STM32_SPI_TX_MAX_DELAY) == HAL_OK)
+		return BSP_SUCCESS;
+	else
+		return BSP_FAILURE;
+}
+
 
 /**
   * SPI接口完成回调函数的处理
@@ -408,93 +434,93 @@ int ihu_bsp_stm32_spi_spare1_rcv_data(uint8_t* buff, uint16_t len)
 //  if(SpiHandle==&IHU_BSP_STM32_SPI_IAU_HANDLER)
 //  {
 //		res = zIhuSpiRxBuffer[IHU_BSP_STM32_SPI_IAU_HANDLER_ID-1];
-//		zIhuBspStm32SpiIauRxBuff[zIhuBspStm32SpiIauRxCount++] = res;
-//		if (zIhuBspStm32SpiIauRxCount >= IHU_BSP_STM32_SPI_IAU_REC_MAX_LEN)
-//			zIhuBspStm32SpiIauRxCount = 0;
+//		zIhuBspStm32SpiGeneral2RxBuff[zIhuBspStm32SpiGeneral2RxCount++] = res;
+//		if (zIhuBspStm32SpiGeneral2RxCount >= IHU_BSP_STM32_SPI2_GENERAL_REC_MAX_LEN)
+//			zIhuBspStm32SpiGeneral2RxCount = 0;
 //		
 //		//为了IDLE状态下提高效率，直接分解为IDLE和ELSE
-//		if (zIhuBspStm32SpiIauRxState == IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE)
+//		if (zIhuBspStm32SpiGeneral2RxState == IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE)
 //		{
 //			//只有满足这么苛刻的条件，才算找到了帧头
-//			if ((res == IHU_HUITP_L2FRAME_STD_RX_START_FLAG_CHAR) && (zIhuBspStm32SpiIauRxCount == 1))
-//			zIhuBspStm32SpiIauRxState = IHU_HUITP_L2FRAME_STD_RX_STATE_START;
+//			if ((res == IHU_HUITP_L2FRAME_STD_RX_START_FLAG_CHAR) && (zIhuBspStm32SpiGeneral2RxCount == 1))
+//			zIhuBspStm32SpiGeneral2RxState = IHU_HUITP_L2FRAME_STD_RX_STATE_START;
 //		}
 //		else
 //		{
 //			//收到CHECKSUM
-//			if((zIhuBspStm32SpiIauRxState == IHU_HUITP_L2FRAME_STD_RX_STATE_START) && (zIhuBspStm32SpiIauRxCount == 2))
+//			if((zIhuBspStm32SpiGeneral2RxState == IHU_HUITP_L2FRAME_STD_RX_STATE_START) && (zIhuBspStm32SpiGeneral2RxCount == 2))
 //			{
-//				zIhuBspStm32SpiIauRxState = IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_CKSM;
+//				zIhuBspStm32SpiGeneral2RxState = IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_CKSM;
 //			}
 //			//收到长度高位
-//			else if((zIhuBspStm32SpiIauRxState == IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_CKSM) && (zIhuBspStm32SpiIauRxCount == 3))
+//			else if((zIhuBspStm32SpiGeneral2RxState == IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_CKSM) && (zIhuBspStm32SpiGeneral2RxCount == 3))
 //			{
-//				zIhuBspStm32SpiIauRxState = IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_LEN;
+//				zIhuBspStm32SpiGeneral2RxState = IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_LEN;
 //			}
 //			//收到长度低位
-//			else if((zIhuBspStm32SpiIauRxState == IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_LEN) && (zIhuBspStm32SpiIauRxCount == 4))
+//			else if((zIhuBspStm32SpiGeneral2RxState == IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_LEN) && (zIhuBspStm32SpiGeneral2RxCount == 4))
 //			{
-//				zIhuBspStm32SpiIauRxLen = ((zIhuBspStm32SpiIauRxBuff[2] <<8) + zIhuBspStm32SpiIauRxBuff[3]);
+//				zIhuBspStm32SpiGeneral2RxLen = ((zIhuBspStm32SpiGeneral2RxBuff[2] <<8) + zIhuBspStm32SpiGeneral2RxBuff[3]);
 //				//CHECKSUM及判定
-//				if ((zIhuBspStm32SpiIauRxBuff[1] == (zIhuBspStm32SpiIauRxBuff[0] ^ zIhuBspStm32SpiIauRxBuff[2]^zIhuBspStm32SpiIauRxBuff[3])) &&\
-//					(zIhuBspStm32SpiIauRxLen < IHU_BSP_STM32_SPI_IAU_REC_MAX_LEN-4))
-//				zIhuBspStm32SpiIauRxState = IHU_HUITP_L2FRAME_STD_RX_STATE_BODY;
+//				if ((zIhuBspStm32SpiGeneral2RxBuff[1] == (zIhuBspStm32SpiGeneral2RxBuff[0] ^ zIhuBspStm32SpiGeneral2RxBuff[2]^zIhuBspStm32SpiGeneral2RxBuff[3])) &&\
+//					(zIhuBspStm32SpiGeneral2RxLen < IHU_BSP_STM32_SPI2_GENERAL_REC_MAX_LEN-4))
+//				zIhuBspStm32SpiGeneral2RxState = IHU_HUITP_L2FRAME_STD_RX_STATE_BODY;
 //			}
 //			//收到BODY位
-//			else if((zIhuBspStm32SpiIauRxState == IHU_HUITP_L2FRAME_STD_RX_STATE_BODY) && (zIhuBspStm32SpiIauRxLen > 1))
+//			else if((zIhuBspStm32SpiGeneral2RxState == IHU_HUITP_L2FRAME_STD_RX_STATE_BODY) && (zIhuBspStm32SpiGeneral2RxLen > 1))
 //			{
-//				zIhuBspStm32SpiIauRxLen--;
+//				zIhuBspStm32SpiGeneral2RxLen--;
 //			}
 //			//收到BODY最后一位
-//			else if((zIhuBspStm32SpiIauRxState == IHU_HUITP_L2FRAME_STD_RX_STATE_BODY) && (zIhuBspStm32SpiIauRxLen == 1))
+//			else if((zIhuBspStm32SpiGeneral2RxState == IHU_HUITP_L2FRAME_STD_RX_STATE_BODY) && (zIhuBspStm32SpiGeneral2RxLen == 1))
 //			{
-//				zIhuBspStm32SpiIauRxState = IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE;
-//				zIhuBspStm32SpiIauRxLen = 0;
-//				zIhuBspStm32SpiIauRxCount = 0;
+//				zIhuBspStm32SpiGeneral2RxState = IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE;
+//				zIhuBspStm32SpiGeneral2RxLen = 0;
+//				zIhuBspStm32SpiGeneral2RxCount = 0;
 //				//发送数据到上层SPILEO模块
 //				memset(&snd, 0, sizeof(msg_struct_spileo_l2frame_rcv_t));
-//				memcpy(snd.data, &zIhuBspStm32SpiIauRxBuff[4], ((zIhuBspStm32SpiIauRxBuff[2]<<8)+zIhuBspStm32SpiIauRxBuff[3]));
+//				memcpy(snd.data, &zIhuBspStm32SpiGeneral2RxBuff[4], ((zIhuBspStm32SpiGeneral2RxBuff[2]<<8)+zIhuBspStm32SpiGeneral2RxBuff[3]));
 //				snd.length = sizeof(msg_struct_spileo_l2frame_rcv_t);
 //				ihu_message_send(MSG_ID_SPI_L2FRAME_RCV, TASK_ID_SPILEO, TASK_ID_VMFO, &snd, snd.length);		
 //			}
 //			//差错情况
 //			else{
-//				zIhuBspStm32SpiIauRxState = IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE;
-//				zIhuBspStm32SpiIauRxLen = 0;
-//				zIhuBspStm32SpiIauRxCount = 0;
+//				zIhuBspStm32SpiGeneral2RxState = IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE;
+//				zIhuBspStm32SpiGeneral2RxLen = 0;
+//				zIhuBspStm32SpiGeneral2RxCount = 0;
 //			}
 //		}
 //		//重新设置中断		
 //		HAL_SPI_Receive_IT(&IHU_BSP_STM32_SPI_IAU_HANDLER, &zIhuSpiRxBuffer[IHU_BSP_STM32_SPI_IAU_HANDLER_ID-1], 1);
 //  }
-//  else if(SpiHandle==&IHU_BSP_STM32_SPI1_PRESENT_HANDLER)
+//  else if(SpiHandle==&IHU_BSP_STM32_SPI_SPARE1_HANDLER)
 //  {
-//		zIhuBspStm32SpiSpare1RxBuff[zIhuBspStm32SpiSpare1RxCount] = zIhuSpiRxBuffer[IHU_BSP_STM32_SPI1_PRESENT_HANDLER_ID-1];
-//		zIhuBspStm32SpiSpare1RxCount++;
-//		if (zIhuBspStm32SpiSpare1RxCount >= IHU_BSP_STM32_SPI1_PRESENT_REC_MAX_LEN)
-//			zIhuBspStm32SpiSpare1RxCount = 0;
-//		HAL_SPI_Receive_IT(&IHU_BSP_STM32_SPI1_PRESENT_HANDLER, &zIhuSpiRxBuffer[IHU_BSP_STM32_SPI1_PRESENT_HANDLER_ID-1], 1);
+//		zIhuBspStm32SpiGeneral1RxBuff[zIhuBspStm32SpiGeneral1RxCount] = zIhuSpiRxBuffer[IHU_BSP_STM32_SPI_SPARE1_HANDLER_ID-1];
+//		zIhuBspStm32SpiGeneral1RxCount++;
+//		if (zIhuBspStm32SpiGeneral1RxCount >= IHU_BSP_STM32_SPI1_GENERAL_REC_MAX_LEN)
+//			zIhuBspStm32SpiGeneral1RxCount = 0;
+//		HAL_SPI_Receive_IT(&IHU_BSP_STM32_SPI_SPARE1_HANDLER, &zIhuSpiRxBuffer[IHU_BSP_STM32_SPI_SPARE1_HANDLER_ID-1], 1);
 //  }
 //}
 
 int ihu_bsp_stm32_spi_slave_hw_init(void)
 {
 	uint16_t k;
-	for(k=0;k<IHU_BSP_STM32_SPI_IAU_REC_MAX_LEN;k++)      //将缓存内容清零
+	for(k=0;k<IHU_BSP_STM32_SPI2_GENERAL_REC_MAX_LEN;k++)      //将缓存内容清零
 	{
-		zIhuBspStm32SpiIauRxBuff[k] = 0x00;
+		zIhuBspStm32SpiGeneral2RxBuff[k] = 0x00;
 	}
-  zIhuBspStm32SpiIauRxCount = 0;               //接收字符串的起始存储位置
-	zIhuBspStm32SpiIauRxState = 0;
-	zIhuBspStm32SpiIauRxLen = 0;
+  zIhuBspStm32SpiGeneral2RxCount = 0;               //接收字符串的起始存储位置
+	zIhuBspStm32SpiGeneral2RxState = 0;
+	zIhuBspStm32SpiGeneral2RxLen = 0;
 
-	for(k=0;k<IHU_BSP_STM32_SPI1_PRESENT_REC_MAX_LEN;k++)      //将缓存内容清零
+	for(k=0;k<IHU_BSP_STM32_SPI1_GENERAL_REC_MAX_LEN;k++)      //将缓存内容清零
 	{
-		zIhuBspStm32SpiSpare1RxBuff[k] = 0x00;
+		zIhuBspStm32SpiGeneral1RxBuff[k] = 0x00;
 	}
-  zIhuBspStm32SpiSpare1RxCount = 0;               //接收字符串的起始存储位置
-	zIhuBspStm32SpiSpare1RxState = 0;
-	zIhuBspStm32SpiSpare1RxLen = 0;
+  zIhuBspStm32SpiGeneral1RxCount = 0;               //接收字符串的起始存储位置
+	zIhuBspStm32SpiGeneral1RxState = 0;
+	zIhuBspStm32SpiGeneral1RxLen = 0;
 	
 	return BSP_SUCCESS;
 }

@@ -87,26 +87,30 @@ int func_bsp_spi_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint
 //ZJL DEFINITION
 //常量定义
 //MAX_IHU_MSG_BODY_LENGTH-2是因为发送到上层SPILEO的数据缓冲区受到消息结构msg_struct_spileo_l2frame_rcv_t的影响
-#define IHU_BSP_STM32_SPI_IAU_REC_MAX_LEN 					IHU_MSG_BODY_L2FRAME_MAX_LEN	//最大接收数据长度
-#define IHU_BSP_STM32_SPI1_PRESENT_REC_MAX_LEN 			IHU_MSG_BODY_L2FRAME_MAX_LEN	//最大接收数据长度
+#define IHU_BSP_STM32_SPI2_GENERAL_REC_MAX_LEN 					IHU_MSG_BODY_L2FRAME_MAX_LEN	//最大接收数据长度
+#define IHU_BSP_STM32_SPI1_GENERAL_REC_MAX_LEN 			IHU_MSG_BODY_L2FRAME_MAX_LEN	//最大接收数据长度
 
 //发送和接受数据的延迟时间长度
 #define IHU_BSP_STM32_SPI_TX_MAX_DELAY 						100
 #define IHU_BSP_STM32_SPI_RX_MAX_DELAY 						100
 
 //交换矩阵
-#define IHU_BSP_STM32_SPI1_PRESENT_HANDLER					hspi1
-#define IHU_BSP_STM32_SPI1_PRESENT_HANDLER_ID  			1
+#define IHU_BSP_STM32_SPI_SPARE1_HANDLER						hspi1
+#define IHU_BSP_STM32_SPI_SPARE1_HANDLER_ID  				1
 #define IHU_BSP_STM32_SPI_IAU_HANDLER								hspi2
 #define IHU_BSP_STM32_SPI_IAU_HANDLER_ID  					2
+//RFID NC522使用了SPI2接口
+#define IHU_BSP_STM32_SPI_RFID522_HANDLER						hspi2
+#define IHU_BSP_STM32_SPI_RFID522_HANDLER_ID  			2
 
 //全局函数
 extern int ihu_bsp_stm32_spi_slave_hw_init(void);
-
 extern int ihu_bsp_stm32_spi_spare1_send_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_spi_spare1_rcv_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_spi_iau_send_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_spi_iau_rcv_data(uint8_t* buff, uint16_t len);
+extern int ihu_bsp_stm32_spi_rfid522_send_data(uint8_t* buff, uint16_t len);
+extern int ihu_bsp_stm32_spi_rfid522_rcv_data(uint8_t* buff, uint16_t len);
 
 //重载接收函数，以便通过IT中断方式搞定接收通信，否则需要通过轮询或者单独线程搞定，更加麻烦
 void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *SpiHandle);

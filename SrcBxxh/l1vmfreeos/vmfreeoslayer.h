@@ -460,6 +460,9 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_spi_iau_receive_data 					ihu_bsp_stm32_spi_iau_rcv_data
 #define ihu_l1hd_spi_spare1_send_data 					ihu_bsp_stm32_spi_spare1_send_data
 #define ihu_l1hd_spi_spare1_receive_data 				ihu_bsp_stm32_spi_spare1_rcv_data
+#define ihu_l1hd_spi_rfid522_send_data 					ihu_bsp_stm32_spi_rfid522_send_data
+#define ihu_l1hd_spi_rfid522_receive_data 			ihu_bsp_stm32_spi_rfid522_rcv_data
+
 
 //L0BSP=>L1HD: I2C
 #define ihu_l1hd_i2c_slave_hw_init							ihu_bsp_stm32_i2c_slave_hw_init
