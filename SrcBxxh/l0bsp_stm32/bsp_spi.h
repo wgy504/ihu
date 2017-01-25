@@ -17,6 +17,7 @@ extern "C" {
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 	#include "commsgbfsc.h"
 #else
+	#error Un-correct constant definition
 #endif
 
 //不能在这里出现管脚的任何配置和初始化，必须在STM32CubeMX中完成，这里使用STM32CubeMX给出的端口俗名
@@ -95,20 +96,30 @@ int func_bsp_spi_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint
 #define IHU_BSP_STM32_SPI_RX_MAX_DELAY 						100
 
 //交换矩阵
+//SCYCB=>IAU功能接口
 #define IHU_BSP_STM32_SPI_SPARE1_HANDLER						hspi1
 #define IHU_BSP_STM32_SPI_SPARE1_HANDLER_ID  				1
 #define IHU_BSP_STM32_SPI_IAU_HANDLER								hspi2
 #define IHU_BSP_STM32_SPI_IAU_HANDLER_ID  					2
-//RFID NC522使用了SPI2接口
+//CCL=>RFID NC522使用了SPI2接口
 #define IHU_BSP_STM32_SPI_RFID522_HANDLER						hspi2
 #define IHU_BSP_STM32_SPI_RFID522_HANDLER_ID  			2
+//BFSC=>ADC秤驱动接口
+#define IHU_BSP_STM32_SPI_AD_SCALE_HANDLER					hspi2
+#define IHU_BSP_STM32_SPI_AD_SCALE_HANDLER_ID  			2
+
 
 //全局函数
 extern int ihu_bsp_stm32_spi_slave_hw_init(void);
+//SCYCB=>IAU功能接口
 extern int ihu_bsp_stm32_spi_spare1_send_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_spi_spare1_rcv_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_spi_iau_send_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_spi_iau_rcv_data(uint8_t* buff, uint16_t len);
+//BFSC=>ADC秤驱动接口
+extern int ihu_bsp_stm32_spi_ad_scale_send_data(uint8_t* buff, uint16_t len);
+extern int ihu_bsp_stm32_spi_ad_scale_rcv_data(uint8_t* buff, uint16_t len);
+//CCL=>RFID NC522使用了SPI2接口
 extern int ihu_bsp_stm32_spi_rfid522_send_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_spi_rfid522_rcv_data(uint8_t* buff, uint16_t len);
 

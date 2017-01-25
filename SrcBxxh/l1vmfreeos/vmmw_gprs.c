@@ -15,9 +15,7 @@
 
 //全局变量，引用外部
 extern int8_t 	zIhuBspStm32SpsGprsRxBuff[IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN];				//串口GPRS数据接收缓冲区 
-extern int8_t 	zIhuBspStm32SpsGprsRxState;																						//串口GPRS接收状态
 extern int16_t 	zIhuBspStm32SpsGprsRxCount;																						//当前接收数据的字节数 	  
-extern int16_t 	zIhuBspStm32SpsGprsRxLen;
 
 /*******************************************************************************
 *

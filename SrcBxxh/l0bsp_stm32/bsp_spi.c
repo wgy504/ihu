@@ -34,6 +34,7 @@ int8_t 	zIhuBspStm32SpiGeneral2RxState=0;																							//SPI接收状�
 int16_t zIhuBspStm32SpiGeneral2RxCount=0;																							//当前接收数据的字节数
 int16_t zIhuBspStm32SpiGeneral2RxLen=0;
 
+//Puhui定义的函数和全局变量区域
 #define SPILEO_BUF_SIZE 256
 uint8_t BSP_SPI_rx_buffer[SPILEO_BUF_SIZE];
 uint8_t BSP_SPI_tx_buffer[SPILEO_BUF_SIZE];
@@ -241,87 +242,6 @@ int func_bsp_spi_start_transmit(SPI_HandleTypeDef *hspi, uint8_t *tx_buffer, uin
   return 0;
 }
 
-/**
-  * @brief SPI MSP Initialization
-  *        This function configures the hardware resources used in this example:
-  *           - Peripheral's clock enable
-  *           - Peripheral's GPIO Configuration
-  *           - NVIC configuration for SPI interrupt request enable
-  * @param hspi: SPI handle pointer
-  * @retval None
-  */
-//void HAL_SPI_MspInit(SPI_HandleTypeDef *hspi)
-//{
-//  GPIO_InitTypeDef  GPIO_InitStruct;
-
-//  if (hspi->Instance == SPIx)
-//	{
-//    /*##-1- Enable peripherals and GPIO Clocks #################################*/
-//    /* Enable GPIO TX/RX clock */
-//    SPIx_SCK_GPIO_CLK_ENABLE();
-//    SPIx_MISO_GPIO_CLK_ENABLE();
-//    SPIx_MOSI_GPIO_CLK_ENABLE();
-//    /* Enable SPI clock */
-//    SPIx_CLK_ENABLE();
-
-//    /*##-2- Configure peripheral GPIO ##########################################*/
-//    /* SPI SCK GPIO pin configuration  */
-//    GPIO_InitStruct.Pin       = SPIx_SCK_PIN;
-//    GPIO_InitStruct.Mode      = GPIO_MODE_AF_PP;
-//    GPIO_InitStruct.Pull      = GPIO_PULLUP;
-//    GPIO_InitStruct.Speed     = GPIO_SPEED_FAST;
-//    GPIO_InitStruct.Alternate = SPIx_SCK_AF;
-
-//    HAL_GPIO_Init(SPIx_SCK_GPIO_PORT, &GPIO_InitStruct);
-
-//    /* SPI MISO GPIO pin configuration  */
-//    GPIO_InitStruct.Pin = SPIx_MISO_PIN;
-//    GPIO_InitStruct.Alternate = SPIx_MISO_AF;
-
-//    HAL_GPIO_Init(SPIx_MISO_GPIO_PORT, &GPIO_InitStruct);
-
-//    /* SPI MOSI GPIO pin configuration  */
-//    GPIO_InitStruct.Pin = SPIx_MOSI_PIN;
-//    GPIO_InitStruct.Alternate = SPIx_MOSI_AF;
-
-//    HAL_GPIO_Init(SPIx_MOSI_GPIO_PORT, &GPIO_InitStruct);
-
-//    /*##-3- Configure the NVIC for SPI #########################################*/
-//    /* NVIC for SPI */
-//    // HAL_NVIC_SetPriority(SPIx_IRQn, 0, 1);
-//    HAL_NVIC_EnableIRQ(SPIx_IRQn);
-//  }
-//}
-
-/**
-  * @brief SPI MSP De-Initialization
-  *        This function frees the hardware resources used in this example:
-  *          - Disable the Peripheral's clock
-  *          - Revert GPIO and NVIC configuration to their default state
-  * @param hspi: SPI handle pointer
-  * @retval None
-  */
-//void HAL_SPI_MspDeInit(SPI_HandleTypeDef *hspi)
-//{
-//  if (hspi->Instance == SPIx)
-//  {
-//    /*##-1- Reset peripherals ##################################################*/
-//    SPIx_FORCE_RESET();
-//    SPIx_RELEASE_RESET();
-
-//    /*##-2- Disable peripherals and GPIO Clocks ################################*/
-//    /* Configure SPI SCK as alternate function  */
-//    HAL_GPIO_DeInit(SPIx_SCK_GPIO_PORT, SPIx_SCK_PIN);
-//    /* Configure SPI MISO as alternate function  */
-//    HAL_GPIO_DeInit(SPIx_MISO_GPIO_PORT, SPIx_MISO_PIN);
-//    /* Configure SPI MOSI as alternate function  */
-//    HAL_GPIO_DeInit(SPIx_MOSI_GPIO_PORT, SPIx_MOSI_PIN);
-
-//    /*##-3- Disable the NVIC for SPI ###########################################*/
-//    HAL_NVIC_DisableIRQ(SPIx_IRQn);
-//  }
-//}
-
 
 int func_bsp_spi_slave_hw_init(int is_clock_phase_1edge, int is_clock_polarity_high)
 {
@@ -347,6 +267,29 @@ int func_bsp_spi_slave_hw_init(int is_clock_phase_1edge, int is_clock_polarity_h
 
 //ZJL DEFINITION
 //利用串口一致的特性，完成SPI接口的接收
+int ihu_bsp_stm32_spi_slave_hw_init(void)
+{
+	uint16_t k;
+	for(k=0;k<IHU_BSP_STM32_SPI2_GENERAL_REC_MAX_LEN;k++)      //将缓存内容清零
+	{
+		zIhuBspStm32SpiGeneral2RxBuff[k] = 0x00;
+	}
+  zIhuBspStm32SpiGeneral2RxCount = 0;               //接收字符串的起始存储位置
+	zIhuBspStm32SpiGeneral2RxState = 0;
+	zIhuBspStm32SpiGeneral2RxLen = 0;
+
+	for(k=0;k<IHU_BSP_STM32_SPI1_GENERAL_REC_MAX_LEN;k++)      //将缓存内容清零
+	{
+		zIhuBspStm32SpiGeneral1RxBuff[k] = 0x00;
+	}
+  zIhuBspStm32SpiGeneral1RxCount = 0;               //接收字符串的起始存储位置
+	zIhuBspStm32SpiGeneral1RxState = 0;
+	zIhuBspStm32SpiGeneral1RxLen = 0;
+	
+	return BSP_SUCCESS;
+}
+
+
 //这里还没有成帧。完整的设计设计需要成帧，然后通过message_send将消息发送到L2SPILEO模块中
 /*******************************************************************************
 * 函数名  : SPI_SendData
@@ -422,106 +365,131 @@ int ihu_bsp_stm32_spi_rfid522_rcv_data(uint8_t* buff, uint16_t len)
 }
 
 
+/*******************************************************************************
+* 函数名  : SPI_SendData
+* 描述    : SPI_IAU发送数据缓冲区数据
+* 输入    : *buff：数据缓冲区指针，len：发送数据长度
+* 输出    : 无
+* 返回    : 无 
+* 说明    : 无
+*******************************************************************************/
+int ihu_bsp_stm32_spi_ad_scale_send_data(uint8_t* buff, uint16_t len)
+{
+	if (HAL_SPI_Transmit(&IHU_BSP_STM32_SPI_AD_SCALE_HANDLER, (uint8_t *)buff, len, IHU_BSP_STM32_SPI_TX_MAX_DELAY) == HAL_OK)
+		return BSP_SUCCESS;
+	else
+		return BSP_FAILURE;		
+}
+
+int ihu_bsp_stm32_spi_ad_scale_rcv_data(uint8_t* buff, uint16_t len)
+{    
+	if (HAL_SPI_Receive(&IHU_BSP_STM32_SPI_AD_SCALE_HANDLER, buff, len, IHU_BSP_STM32_SPI_TX_MAX_DELAY) == HAL_OK)
+		return BSP_SUCCESS;
+	else
+		return BSP_FAILURE;
+}
+
+
 /**
   * SPI接口完成回调函数的处理
   * 为什么需要重新执行HAL_SPI_Receive_IT，待确定
   */
-//void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *SpiHandle)
-//{
-//	uint8_t res = 0;
-//	msg_struct_spileo_l2frame_rcv_t snd;
-//	
-//  if(SpiHandle==&IHU_BSP_STM32_SPI_IAU_HANDLER)
-//  {
-//		res = zIhuSpiRxBuffer[IHU_BSP_STM32_SPI_IAU_HANDLER_ID-1];
-//		zIhuBspStm32SpiGeneral2RxBuff[zIhuBspStm32SpiGeneral2RxCount++] = res;
-//		if (zIhuBspStm32SpiGeneral2RxCount >= IHU_BSP_STM32_SPI2_GENERAL_REC_MAX_LEN)
-//			zIhuBspStm32SpiGeneral2RxCount = 0;
-//		
-//		//为了IDLE状态下提高效率，直接分解为IDLE和ELSE
-//		if (zIhuBspStm32SpiGeneral2RxState == IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE)
-//		{
-//			//只有满足这么苛刻的条件，才算找到了帧头
-//			if ((res == IHU_HUITP_L2FRAME_STD_RX_START_FLAG_CHAR) && (zIhuBspStm32SpiGeneral2RxCount == 1))
-//			zIhuBspStm32SpiGeneral2RxState = IHU_HUITP_L2FRAME_STD_RX_STATE_START;
-//		}
-//		else
-//		{
-//			//收到CHECKSUM
-//			if((zIhuBspStm32SpiGeneral2RxState == IHU_HUITP_L2FRAME_STD_RX_STATE_START) && (zIhuBspStm32SpiGeneral2RxCount == 2))
-//			{
-//				zIhuBspStm32SpiGeneral2RxState = IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_CKSM;
-//			}
-//			//收到长度高位
-//			else if((zIhuBspStm32SpiGeneral2RxState == IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_CKSM) && (zIhuBspStm32SpiGeneral2RxCount == 3))
-//			{
-//				zIhuBspStm32SpiGeneral2RxState = IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_LEN;
-//			}
-//			//收到长度低位
-//			else if((zIhuBspStm32SpiGeneral2RxState == IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_LEN) && (zIhuBspStm32SpiGeneral2RxCount == 4))
-//			{
-//				zIhuBspStm32SpiGeneral2RxLen = ((zIhuBspStm32SpiGeneral2RxBuff[2] <<8) + zIhuBspStm32SpiGeneral2RxBuff[3]);
-//				//CHECKSUM及判定
-//				if ((zIhuBspStm32SpiGeneral2RxBuff[1] == (zIhuBspStm32SpiGeneral2RxBuff[0] ^ zIhuBspStm32SpiGeneral2RxBuff[2]^zIhuBspStm32SpiGeneral2RxBuff[3])) &&\
-//					(zIhuBspStm32SpiGeneral2RxLen < IHU_BSP_STM32_SPI2_GENERAL_REC_MAX_LEN-4))
-//				zIhuBspStm32SpiGeneral2RxState = IHU_HUITP_L2FRAME_STD_RX_STATE_BODY;
-//			}
-//			//收到BODY位
-//			else if((zIhuBspStm32SpiGeneral2RxState == IHU_HUITP_L2FRAME_STD_RX_STATE_BODY) && (zIhuBspStm32SpiGeneral2RxLen > 1))
-//			{
-//				zIhuBspStm32SpiGeneral2RxLen--;
-//			}
-//			//收到BODY最后一位
-//			else if((zIhuBspStm32SpiGeneral2RxState == IHU_HUITP_L2FRAME_STD_RX_STATE_BODY) && (zIhuBspStm32SpiGeneral2RxLen == 1))
-//			{
-//				zIhuBspStm32SpiGeneral2RxState = IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE;
-//				zIhuBspStm32SpiGeneral2RxLen = 0;
-//				zIhuBspStm32SpiGeneral2RxCount = 0;
-//				//发送数据到上层SPILEO模块
-//				memset(&snd, 0, sizeof(msg_struct_spileo_l2frame_rcv_t));
-//				memcpy(snd.data, &zIhuBspStm32SpiGeneral2RxBuff[4], ((zIhuBspStm32SpiGeneral2RxBuff[2]<<8)+zIhuBspStm32SpiGeneral2RxBuff[3]));
-//				snd.length = sizeof(msg_struct_spileo_l2frame_rcv_t);
-//				ihu_message_send(MSG_ID_SPI_L2FRAME_RCV, TASK_ID_SPILEO, TASK_ID_VMFO, &snd, snd.length);		
-//			}
-//			//差错情况
-//			else{
-//				zIhuBspStm32SpiGeneral2RxState = IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE;
-//				zIhuBspStm32SpiGeneral2RxLen = 0;
-//				zIhuBspStm32SpiGeneral2RxCount = 0;
-//			}
-//		}
-//		//重新设置中断		
-//		HAL_SPI_Receive_IT(&IHU_BSP_STM32_SPI_IAU_HANDLER, &zIhuSpiRxBuffer[IHU_BSP_STM32_SPI_IAU_HANDLER_ID-1], 1);
-//  }
-//  else if(SpiHandle==&IHU_BSP_STM32_SPI_SPARE1_HANDLER)
-//  {
-//		zIhuBspStm32SpiGeneral1RxBuff[zIhuBspStm32SpiGeneral1RxCount] = zIhuSpiRxBuffer[IHU_BSP_STM32_SPI_SPARE1_HANDLER_ID-1];
-//		zIhuBspStm32SpiGeneral1RxCount++;
-//		if (zIhuBspStm32SpiGeneral1RxCount >= IHU_BSP_STM32_SPI1_GENERAL_REC_MAX_LEN)
-//			zIhuBspStm32SpiGeneral1RxCount = 0;
-//		HAL_SPI_Receive_IT(&IHU_BSP_STM32_SPI_SPARE1_HANDLER, &zIhuSpiRxBuffer[IHU_BSP_STM32_SPI_SPARE1_HANDLER_ID-1], 1);
-//  }
-//}
-
-int ihu_bsp_stm32_spi_slave_hw_init(void)
+void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *SpiHandle)
 {
-	uint16_t k;
-	for(k=0;k<IHU_BSP_STM32_SPI2_GENERAL_REC_MAX_LEN;k++)      //将缓存内容清零
-	{
-		zIhuBspStm32SpiGeneral2RxBuff[k] = 0x00;
-	}
-  zIhuBspStm32SpiGeneral2RxCount = 0;               //接收字符串的起始存储位置
-	zIhuBspStm32SpiGeneral2RxState = 0;
-	zIhuBspStm32SpiGeneral2RxLen = 0;
-
-	for(k=0;k<IHU_BSP_STM32_SPI1_GENERAL_REC_MAX_LEN;k++)      //将缓存内容清零
-	{
-		zIhuBspStm32SpiGeneral1RxBuff[k] = 0x00;
-	}
-  zIhuBspStm32SpiGeneral1RxCount = 0;               //接收字符串的起始存储位置
-	zIhuBspStm32SpiGeneral1RxState = 0;
-	zIhuBspStm32SpiGeneral1RxLen = 0;
-	
-	return BSP_SUCCESS;
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID)	
+	uint8_t res = 0;
+	msg_struct_spileo_l2frame_rcv_t snd;
+  if(SpiHandle==&IHU_BSP_STM32_SPI_SPARE1_HANDLER)
+  {
+		zIhuBspStm32SpiGeneral1RxBuff[zIhuBspStm32SpiGeneral1RxCount] = zIhuSpiRxBuffer[IHU_BSP_STM32_SPI_SPARE1_HANDLER_ID-1];
+		zIhuBspStm32SpiGeneral1RxCount++;
+		if (zIhuBspStm32SpiGeneral1RxCount >= IHU_BSP_STM32_SPI1_GENERAL_REC_MAX_LEN)
+			zIhuBspStm32SpiGeneral1RxCount = 0;
+		HAL_SPI_Receive_IT(&IHU_BSP_STM32_SPI_SPARE1_HANDLER, &zIhuSpiRxBuffer[IHU_BSP_STM32_SPI_SPARE1_HANDLER_ID-1], 1);
+  }	
+  else if(SpiHandle==&IHU_BSP_STM32_SPI_IAU_HANDLER)
+  {
+		res = zIhuSpiRxBuffer[IHU_BSP_STM32_SPI_IAU_HANDLER_ID-1];
+		zIhuBspStm32SpiGeneral2RxBuff[zIhuBspStm32SpiGeneral2RxCount++] = res;
+		if (zIhuBspStm32SpiGeneral2RxCount >= IHU_BSP_STM32_SPI2_GENERAL_REC_MAX_LEN)
+			zIhuBspStm32SpiGeneral2RxCount = 0;
+		
+		//为了IDLE状态下提高效率，直接分解为IDLE和ELSE
+		if (zIhuBspStm32SpiGeneral2RxState == IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE)
+		{
+			//只有满足这么苛刻的条件，才算找到了帧头
+			if ((res == IHU_HUITP_L2FRAME_STD_RX_START_FLAG_CHAR) && (zIhuBspStm32SpiGeneral2RxCount == 1))
+			zIhuBspStm32SpiGeneral2RxState = IHU_HUITP_L2FRAME_STD_RX_STATE_START;
+		}
+		else
+		{
+			//收到CHECKSUM
+			if((zIhuBspStm32SpiGeneral2RxState == IHU_HUITP_L2FRAME_STD_RX_STATE_START) && (zIhuBspStm32SpiGeneral2RxCount == 2))
+			{
+				zIhuBspStm32SpiGeneral2RxState = IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_CKSM;
+			}
+			//收到长度高位
+			else if((zIhuBspStm32SpiGeneral2RxState == IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_CKSM) && (zIhuBspStm32SpiGeneral2RxCount == 3))
+			{
+				zIhuBspStm32SpiGeneral2RxState = IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_LEN;
+			}
+			//收到长度低位
+			else if((zIhuBspStm32SpiGeneral2RxState == IHU_HUITP_L2FRAME_STD_RX_STATE_HEADER_LEN) && (zIhuBspStm32SpiGeneral2RxCount == 4))
+			{
+				zIhuBspStm32SpiGeneral2RxLen = ((zIhuBspStm32SpiGeneral2RxBuff[2] <<8) + zIhuBspStm32SpiGeneral2RxBuff[3]);
+				//CHECKSUM及判定
+				if ((zIhuBspStm32SpiGeneral2RxBuff[1] == (zIhuBspStm32SpiGeneral2RxBuff[0] ^ zIhuBspStm32SpiGeneral2RxBuff[2]^zIhuBspStm32SpiGeneral2RxBuff[3])) &&\
+					(zIhuBspStm32SpiGeneral2RxLen < IHU_BSP_STM32_SPI2_GENERAL_REC_MAX_LEN-4))
+				zIhuBspStm32SpiGeneral2RxState = IHU_HUITP_L2FRAME_STD_RX_STATE_BODY;
+			}
+			//收到BODY位
+			else if((zIhuBspStm32SpiGeneral2RxState == IHU_HUITP_L2FRAME_STD_RX_STATE_BODY) && (zIhuBspStm32SpiGeneral2RxLen > 1))
+			{
+				zIhuBspStm32SpiGeneral2RxLen--;
+			}
+			//收到BODY最后一位
+			else if((zIhuBspStm32SpiGeneral2RxState == IHU_HUITP_L2FRAME_STD_RX_STATE_BODY) && (zIhuBspStm32SpiGeneral2RxLen == 1))
+			{
+				zIhuBspStm32SpiGeneral2RxState = IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE;
+				zIhuBspStm32SpiGeneral2RxLen = 0;
+				zIhuBspStm32SpiGeneral2RxCount = 0;
+				//发送数据到上层SPILEO模块
+				memset(&snd, 0, sizeof(msg_struct_spileo_l2frame_rcv_t));
+				memcpy(snd.data, &zIhuBspStm32SpiGeneral2RxBuff[4], ((zIhuBspStm32SpiGeneral2RxBuff[2]<<8)+zIhuBspStm32SpiGeneral2RxBuff[3]));
+				snd.length = sizeof(msg_struct_spileo_l2frame_rcv_t);
+				ihu_message_send(MSG_ID_SPI_L2FRAME_RCV, TASK_ID_SPILEO, TASK_ID_VMFO, &snd, snd.length);		
+			}
+			//差错情况
+			else{
+				zIhuBspStm32SpiGeneral2RxState = IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE;
+				zIhuBspStm32SpiGeneral2RxLen = 0;
+				zIhuBspStm32SpiGeneral2RxCount = 0;
+			}
+		}
+		//重新设置中断		
+		HAL_SPI_Receive_IT(&IHU_BSP_STM32_SPI_IAU_HANDLER, &zIhuSpiRxBuffer[IHU_BSP_STM32_SPI_IAU_HANDLER_ID-1], 1);
+  }
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)	
+  if(SpiHandle==&IHU_BSP_STM32_SPI_RFID522_HANDLER)
+  {
+		zIhuBspStm32SpiGeneral2RxBuff[zIhuBspStm32SpiGeneral2RxCount] = zIhuSpiRxBuffer[IHU_BSP_STM32_SPI_RFID522_HANDLER_ID-1];
+		zIhuBspStm32SpiGeneral2RxCount++;
+		if (zIhuBspStm32SpiGeneral2RxCount >= IHU_BSP_STM32_SPI2_GENERAL_REC_MAX_LEN)
+			zIhuBspStm32SpiGeneral2RxCount = 0;
+		HAL_SPI_Receive_IT(&IHU_BSP_STM32_SPI_RFID522_HANDLER, &zIhuSpiRxBuffer[IHU_BSP_STM32_SPI_RFID522_HANDLER_ID-1], 1);
+  }
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+  if(SpiHandle==&IHU_BSP_STM32_SPI_AD_SCALE_HANDLER)
+  {
+		zIhuBspStm32SpiGeneral2RxBuff[zIhuBspStm32SpiGeneral2RxCount] = zIhuSpiRxBuffer[IHU_BSP_STM32_SPI_AD_SCALE_HANDLER_ID-1];
+		zIhuBspStm32SpiGeneral2RxCount++;
+		if (zIhuBspStm32SpiGeneral2RxCount >= IHU_BSP_STM32_SPI2_GENERAL_REC_MAX_LEN)
+			zIhuBspStm32SpiGeneral2RxCount = 0;
+		HAL_SPI_Receive_IT(&IHU_BSP_STM32_SPI_AD_SCALE_HANDLER, &zIhuSpiRxBuffer[IHU_BSP_STM32_SPI_AD_SCALE_HANDLER_ID-1], 1);
+  }
+#else
+	#error Un-correct constant definition
+#endif
 }
+
 
