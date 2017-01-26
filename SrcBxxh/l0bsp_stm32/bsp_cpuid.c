@@ -20,9 +20,19 @@
 
 /* 函数体 --------------------------------------------------------------------*/
 
-void ihu_bsp_stm32_get_cpuid_f2board(uint32_t *cpuid)
+//传入需要3个32B的数组
+void ihu_bsp_stm32_get_cpuid_f1board(uint32_t *cpuid)
 {
 	*cpuid = *(__IO uint32_t *)(0X1FFFF7F0); // 高字节
 	*(cpuid+1) = *(__IO uint32_t *)(0X1FFFF7EC); // 
 	*(cpuid+2) = *(__IO uint32_t *)(0X1FFFF7E8); // 低字节
 }
+
+//传入需要3个32B的数组
+void ihu_bsp_stm32_get_cpuid_f2board(uint32_t *cpuid)
+{
+	*cpuid = *(__IO uint32_t *)(0x1fff7a10); // 高字节
+	*(cpuid+1) = *(__IO uint32_t *)(0x1fff7a14); // 
+	*(cpuid+2) = *(__IO uint32_t *)(0x1fff7a18); // 低字节
+}
+

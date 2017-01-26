@@ -26,6 +26,7 @@ extern "C" {
 
 
 //全局函数
+extern void ihu_bsp_stm32_get_cpuid_f1board(uint32_t *cpuid);
 extern void ihu_bsp_stm32_get_cpuid_f2board(uint32_t *cpuid);
 
 

@@ -14,7 +14,7 @@
 
 //= ZJL, 2017 Jan.26, CURRENT_SW_DELIVERY R03.109 =>CCL项目
 = 改善错误打印高级技巧IHU_ERROR_PRINT_TASK(taskid, arg...)
-
+= 改善了CPUID的读出地址
 
 
 //= ZJL, 2017 Jan.25, CURRENT_SW_DELIVERY R03.108 =>CCL项目

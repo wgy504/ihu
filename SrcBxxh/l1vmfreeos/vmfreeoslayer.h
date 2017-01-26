@@ -554,6 +554,7 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_rtc_get_jieqi			      			ihu_bsp_stm32_rtc_get_jieqi
 
 //L0BSP=>L1HD: CPUID
+#define ihu_l1hd_get_cpuid_f1board				      ihu_bsp_stm32_get_cpuid_f1board
 #define ihu_l1hd_get_cpuid_f2board				      ihu_bsp_stm32_get_cpuid_f2board
 
 //L0BSP=>L1HD: STMFLASH/IAP
