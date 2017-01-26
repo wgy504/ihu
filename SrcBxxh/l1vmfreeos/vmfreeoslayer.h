@@ -291,6 +291,9 @@ UINT8 IhuDebugPrintId(char *file, int line);
 	#define IhuErrorPrint(...) (((void (*)(UINT8, const char *, ...))IhuErrorPrintFo)(IhuDebugPrintId(__FILE__, __LINE__), __VA_ARGS__))
 #endif
 
+//错误打印宏定义高级定义技巧
+#define IHU_ERROR_PRINT_TASK(taskid, arg...)	do{zIhuRunErrCnt[taskid]++;  IhuErrorPrint(##arg);  return IHU_FAILURE;}while(0)	
+	
 extern void ihu_vm_system_init(void);  //系统级别的初始化
 extern void ihu_sleep(UINT32 second);
 extern void ihu_usleep(UINT32 usecond);  //resulution 10^(-3)s = 1 microsecond

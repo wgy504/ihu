@@ -292,7 +292,7 @@ OPSTAT fsm_spsvirgo_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	int ret = 0, i = 0;
+	int ret = 0;
 	msg_struct_ccl_sps_open_auth_inq_t rcv;
 	msg_struct_spsvirgo_ccl_cloud_fb_t snd;
 	
@@ -327,12 +327,12 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 		pMsgProc.authReq.bleAddrLen = 6;
 		pMsgProc.authReq.authReqType = HUITP_IEID_UNI_CCL_LOCK_AUTH_REQ_TYPE_BLE;
 	}
+	else if (ihu_vmmw_rfidmod_rc522_spi_read_id(pMsgProc.authReq.rfidAddr, 4) == IHU_SUCCESS){
+		pMsgProc.authReq.rfidAddrLen = 4;
+		pMsgProc.authReq.authReqType = HUITP_IEID_UNI_CCL_LOCK_AUTH_REQ_TYPE_RFID;
+	}
 	else{
 		pMsgProc.authReq.authReqType = HUITP_IEID_UNI_CCL_LOCK_AUTH_REQ_TYPE_LOCK;	
-	}
-	for (i = 0; i < HUITP_IEID_UNI_CCL_LOCK_AUTH_REQ_MAX_LEN; i++){
-		pMsgProc.authReq.bleMacAddr[i] = 0xFF;
-		pMsgProc.authReq.rfidAddr[i] = 0xFF;
 	}
 	//Pack message
 	StrMsg_HUITP_MSGID_uni_general_message_t pMsgInput;

@@ -72,5 +72,9 @@ uint8_t func_blemod_uart_hc05_link_remote_device(void);
 //                                         printf("<<-HC05-FUNC->> Func:%s@Line:%d\n",__func__,__LINE__);\
 //                                       }while(0)
 
+//高级定义，简化程序的可读性
+#define IHU_ERROR_PRINT_BLEMOD	zIhuRunErrCnt[TASK_ID_VMFO]++; IhuErrorPrint
+
+
 #endif /* L1FREERTOS_MOD_BLE_H_ */
 

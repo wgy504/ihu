@@ -163,6 +163,12 @@ OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_official(uint8_t *macAddr, uint8
 {
 	uint8_t repeatCnt = IHU_VMMW_BLEMOD_UART_REPEAT_CNT;
 	uint8_t *p1, *p2;
+
+	//参数检查
+	if (macAddr == NULL){
+		IHU_ERROR_PRINT_BLEMOD("VMMWBLE: invalid input paramter received!\n");
+		return IHU_FAILURE;				
+	}	
 	
 	//清理缓冲区
 	func_blemod_uart_clear_receive_buffer();
@@ -251,6 +257,12 @@ OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_test_mode(uint8_t *macAddr, uint
 {
 	int i = 0;
 	uint8_t *p1, *p2;
+
+	//参数检查
+	if (macAddr == NULL){
+		IHU_ERROR_PRINT_BLEMOD("VMMWBLE: invalid input paramter received!\n");
+		return IHU_FAILURE;				
+	}	
 	
 	//最长5秒，还没搞定，就结束了
 	func_blemod_uart_clear_receive_buffer();

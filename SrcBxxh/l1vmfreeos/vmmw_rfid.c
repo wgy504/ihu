@@ -154,14 +154,44 @@ void func_rfidmod_send_string(char* s)
 
 
 //发送命令
-OPSTAT ihu_vmmw_rfidmod_spi_send_command(uint8_t *command)
+OPSTAT ihu_vmmw_rfidmod_rc522_spi_send_command(uint8_t *command)
 {
 	return IHU_SUCCESS;
 }
 
 //读取RFID卡的数据，或者说扫描ID
-OPSTAT ihu_vmmw_rfidmod_spi_read_id(uint8_t *output)
+OPSTAT ihu_vmmw_rfidmod_rc522_spi_read_id(uint8_t *rfidAddr, uint8_t len)
 {
+	uint8_t *p1;
+	char s[3];
+	int i = 0;
+	uint8_t res = 0;
+	
+	//参数检查
+	if (rfidAddr == NULL) IHU_ERROR_PRINT_TASK(TASK_ID_VMFO, "VMMWRFID: invalid input paramter received!\n");
+	
+	//清空缓冲区
+	func_rfidmod_clear_receive_buffer();
+	
+	//接收看看
+	if (func_rfidmod_wait_command_fb("Card Id is:", 4) == IHU_FAILURE) IHU_ERROR_PRINT_TASK(TASK_ID_VMFO, "VMMWRFID: RFID fetch lable failure!\n");
+
+#if (IHU_VMWM_RFIDMOD_USING_ITF_SET == IHU_VMWM_RFIDMOD_USING_ITF_SPI1)
+	p1 = (uint8_t*)strstr((const char*)zIhuBspStm32SpiGeneral1RxBuff, "Card Id is:");
+#elif (IHU_VMWM_RFIDMOD_USING_ITF_SET == IHU_VMWM_RFIDMOD_USING_ITF_SPI2)
+	p1 = (uint8_t*)strstr((const char*)zIhuBspStm32SpiGeneral2RxBuff, "Card Id is:");
+#else
+	#error Un-correct constant definition
+#endif
+	p1 = p1 + sizeof("Card Id is:")-1;
+	for (i = 0; i < len; i++){
+		memset(s, 0, sizeof(s));
+		memcpy((uint8_t*)s, p1+i*2, 2);
+		res = strtoul(s, NULL, 16) & 0xFF;
+		memcpy(rfidAddr+i, &res, 1);
+	}
+	IhuDebugPrint("VMMWRFID: Received RFID value = [%s]\n", p1);
+	
 	return IHU_SUCCESS;
 }
 

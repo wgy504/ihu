@@ -103,7 +103,8 @@ void func_gprsmod_convert_hex_to_str(uint8_t dest[],uint8_t src[],uint8_t len);/
 
 //高级定义，简化程序的可读性
 #define IHU_ERROR_PRINT_GPRSMOD	zIhuRunErrCnt[TASK_ID_VMFO]++; IhuErrorPrint
-//#define IHU_ERROR_PRINT_GPRSMOD(...)	({zIhuRunErrCnt[TASK_ID_VMFO]++;  ((void (*)(const char *, ...))IhuErrorPrint)(__VA_ARGS__);  return IHU_FAILURE;})
+//验证新技巧，还未用上
+#define IHU_ERROR_PRINT_GPRSMOD1(arg...)	do{zIhuRunErrCnt[TASK_ID_VMFO]++;  IhuErrorPrint(##arg);  return IHU_FAILURE; }while(0)
 
 
 #endif /* L1FREERTOS_MOD_GPRS_H_ */

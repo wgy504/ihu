@@ -28,8 +28,8 @@
 #define IHU_VMWM_RFIDMOD_USING_ITF_SET  IHU_VMWM_RFIDMOD_USING_ITF_SPI2  //CCL项目使用的接口为SPI2，BSP中有映射
 
 //向上提供全局统一服务的入口
-extern OPSTAT ihu_vmmw_rfidmod_spi_send_command(uint8_t *command);
-extern OPSTAT ihu_vmmw_rfidmod_spi_read_id(uint8_t *output);
+extern OPSTAT ihu_vmmw_rfidmod_rc522_spi_send_command(uint8_t *command);
+extern OPSTAT ihu_vmmw_rfidmod_rc522_spi_read_id(uint8_t *rfidAddr, uint8_t len);
 
 //工作调用流
 OPSTAT func_rfidmod_uart_send_AT_command(uint8_t *cmd, uint8_t *ack, UINT16 wait_time);  //秒级！！！
@@ -37,6 +37,10 @@ OPSTAT func_rfidmod_wait_command_fb(uint8_t *ack, uint16_t wait_time);
 void func_rfidmod_clear_receive_buffer(void);
 void func_rfidmod_send_string(char* s);
 #define func_rfidmod_send_LR() func_rfidmod_send_string("\r\n");
+
+//高级定义，简化程序的可读性
+#define IHU_ERROR_PRINT_RFIDMOD	zIhuRunErrCnt[TASK_ID_VMFO]++; IhuErrorPrint
+
 
 #endif /* L1FREERTOS_MOD_RFID_H_ */
 

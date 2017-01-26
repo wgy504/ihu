@@ -11,14 +11,17 @@
 = 最后搞RFID/摄像头研究，看门狗
 **************************************************************************
 
+
+//= ZJL, 2017 Jan.26, CURRENT_SW_DELIVERY R03.109 =>CCL项目
+= 改善错误打印高级技巧IHU_ERROR_PRINT_TASK(taskid, arg...)
+
+
+
 //= ZJL, 2017 Jan.25, CURRENT_SW_DELIVERY R03.108 =>CCL项目
 = 由于RFID是SPI接口，集成了SPI2 BSP和STM32CubeMX之SPI2接口
 = 使用电流计，发现tickless开关打开关闭，电流并没有太大差异
 = FreeRTOS中，PreSleepProcessing(), PostSleepProcessing(),暂时都是空的，原则上需要用户自行处理休眠前后。是不是这是休眠的核心？
 = 目前去掉调试器的电流在20-30mA水平，距离理想的休眠电流1mA还相差很远，当然在实际板子上两个LED灯、频繁的触发机制和扫描机制，可能会降低功耗需求的
-
-
-
 
 //= ZJL, 2017 Jan.24, CURRENT_SW_DELIVERY R03.107 =>CCL项目
 = 完善并调测BLE，集成BLE功能到SPSVIRGO的AUTH消息生成函数中
