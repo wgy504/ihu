@@ -19,6 +19,7 @@
 = RC522的管脚，还未复用STM32CubeMX定义的管脚，待完善
 = 有关CS置位的时序，是否该服从参考例子，待查
 = 有关SPI的初始化，STM32CubeMX的生成代码是否足够完善，待查
+= BFSC不能打开SPI Callback函数，不然会导致SPI重入死机
 
 //= ZJL, 2017 Jan.25, CURRENT_SW_DELIVERY R03.108 =>CCL项目
 = 由于RFID是SPI接口，集成了SPI2 BSP和STM32CubeMX之SPI2接口
