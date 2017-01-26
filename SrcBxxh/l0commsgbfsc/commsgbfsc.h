@@ -439,12 +439,9 @@ typedef struct msg_struct_l3bfsc_wmc_resp
 /*
 **	MSG_ID_L3BFSC_WMC_STARTUP_IND
 */
-typedef struct msg_struct_l3bfsc_wmc_startup_ind
+typedef struct WmcInventory
 {
-	UINT32 msgid;
-	UINT16 length;
-	UINT16 spare;
-	UINT32 wmc_state;
+
 	UINT32 hw_inventory_id;
 	UINT32 sw_inventory_id;
 	UINT32 stm32_cpu_id;
@@ -453,6 +450,15 @@ typedef struct msg_struct_l3bfsc_wmc_startup_ind
 	UINT8  wmc_id;               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */
 	UINT8  spare1;
 	UINT16 spare2;
+}WmcInventory_t;
+
+typedef struct msg_struct_l3bfsc_wmc_startup_ind
+{
+	UINT32 msgid;
+	UINT16 length;
+	UINT16 spare;
+	UINT32 wmc_state;
+	WmcInventory_t wmc_inventory;
 }msg_struct_l3bfsc_wmc_startup_ind_t;
 
 /*

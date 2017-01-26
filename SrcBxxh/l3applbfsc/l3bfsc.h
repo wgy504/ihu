@@ -69,7 +69,7 @@ extern OPSTAT fsm_bfsc_canvela_give_up_req(UINT8 dest_id, UINT8 src_id, void * p
 
 	
 //Local API
-OPSTAT func_bfsc_hw_init(void);
+OPSTAT func_bfsc_hw_init(WmcInventory_t *pwi);
 OPSTAT func_bfsc_time_out_period_scan(void);
 OPSTAT func_bfsc_time_out_wait_weight_command_process(void);
 OPSTAT func_bfsc_time_out_roll_out_process(void);
