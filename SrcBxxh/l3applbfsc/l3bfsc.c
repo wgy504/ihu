@@ -82,6 +82,12 @@ FsmStateItem_t FsmBfsc[] =
 INT32 zIhuL3bfscLatestMeasureWeightValue = 0;
 UINT32 zIhuL3bfscMotoRecoverTimes = 0;
 
+//MYC Global Varible for WMC
+WmcInventory_t										zWmcInvenory;
+CombinationAlgorithmParamaters_t 	zCombAlgoParam;
+WeightSensorParamaters_t					zWeightSensorParam;
+MotorControlParamaters_t 					zMotorControlParam;
+
 //Main Entry
 //Input parameter would be useless, but just for similar structure purpose
 OPSTAT fsm_bfsc_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
@@ -117,9 +123,19 @@ OPSTAT fsm_bfsc_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 		IhuErrorPrint("L3BFSC: Error Set FSM State!");	
 		return IHU_FAILURE;
 	}
+	
+	//MYC Initialize globale variables:
+	memset(&zWmcInvenory, 0, sizeof(WmcInventory_t));
+	IhuDebugPrint("L3BFSC: fsm_bfsc_init: zWmcInvenory set 0, size = %d bytes\n", sizeof(WmcInventory_t));	
+	memset(&zCombAlgoParam, 0, sizeof(CombinationAlgorithmParamaters_t));
+	IhuDebugPrint("L3BFSC: fsm_bfsc_init: zCombAlgoParam set 0, size = %d bytes\n", sizeof(CombinationAlgorithmParamaters_t));	
+	memset(&zWeightSensorParam, 0, sizeof(WeightSensorParamaters_t));
+	IhuDebugPrint("L3BFSC: fsm_bfsc_init: zWeightSensorParam set 0, size = %d bytes\n", sizeof(WeightSensorParamaters_t));	
+	memset(&zMotorControlParam, 0, sizeof(MotorControlParamaters_t));
+	IhuDebugPrint("L3BFSC: fsm_bfsc_init: zMotorControlParam set 0, size = %d bytes\n", sizeof(MotorControlParamaters_t));
 
 	//初始化硬件接口
-	if (func_bfsc_hw_init() == IHU_FAILURE){	
+	if (func_bfsc_hw_init(&zWmcInvenory) == IHU_FAILURE){	
 		IhuErrorPrint("L3BFSC: Error initialize interface!");
 		return IHU_FAILURE;
 	}
@@ -149,6 +165,23 @@ OPSTAT fsm_bfsc_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 		IhuDebugPrint("L3BFSC: Enter FSM_STATE_BFSC_ACTIVE status, Keeping refresh here!\n");
 	}
 
+	//MYC add the first message to AWS
+	if ((src_id > TASK_ID_MIN) &&(src_id < TASK_ID_MAX)){
+		//Send back MSG_ID_COM_INIT_FB to VMFO
+		msg_struct_l3bfsc_wmc_startup_ind_t snd;
+		memset(&snd, 0, sizeof(msg_struct_l3bfsc_wmc_startup_ind_t));
+		snd.length = sizeof(msg_struct_l3bfsc_wmc_startup_ind_t);
+		snd.msgid = MSG_ID_L3BFSC_WMC_STARTUP_IND;
+		snd.wmc_state = FSM_STATE_BFSC_ACTIVED;
+		memcpy(&snd.wmc_inventory, &zWmcInvenory, sizeof(WmcInventory_t));
+		
+		ret = ihu_message_send(MSG_ID_L3BFSC_WMC_STARTUP_IND, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length);
+		if (ret == IHU_FAILURE){
+			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC], zIhuTaskInfo[TASK_ID_CANVELA]);
+			return IHU_FAILURE;
+		}
+	}
+	
 	//返回
 	return IHU_SUCCESS;
 }
@@ -182,8 +215,84 @@ OPSTAT fsm_bfsc_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 }
 
 //Local APIs
-OPSTAT func_bfsc_hw_init(void)
+//MYC
+UINT32 GetWmcId()
 {
+	/* PA5,PA6,PA7,PA8 => SW0,1,2,3 */
+	GPIO_PinState ps;
+	UINT32 wmc_id = 0;
+	
+	/* SW0 <= PA5 */
+	ps = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_5);
+	if (GPIO_PIN_RESET == ps)
+	{
+		wmc_id = wmc_id & 0xFFFFFFFE;  //1110
+	}
+	else
+	{
+		wmc_id = wmc_id | 0x00000001;  //0001
+	}
+	
+	/* SW1 <= PA6 */
+	ps = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_6);
+	if (GPIO_PIN_RESET == ps)
+	{
+		wmc_id = wmc_id & 0xFFFFFFFD;  //1101
+	}
+	else
+	{
+		wmc_id = wmc_id | 0x00000002;  //0010
+	}
+	
+	/* SW2 <= PA7 */
+	ps = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_7);
+	if (GPIO_PIN_RESET == ps)
+	{
+		wmc_id = wmc_id & 0xFFFFFFFB;  //1011
+	}
+	else
+	{
+		wmc_id = wmc_id | 0x00000004;  //0100
+	}
+	
+	/* SW3 <= PA8 */
+	ps = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8);
+	if (GPIO_PIN_RESET == ps)
+	{
+		wmc_id = wmc_id & 0xFFFFFFF7;  //0111
+	}
+	else
+	{
+		wmc_id = wmc_id | 0x00000008;  //1000
+	}
+	
+	/* make sure only the last 4 digit values */
+	wmc_id = wmc_id & 0xF;
+	return wmc_id;
+}
+//MYC
+OPSTAT func_bfsc_hw_init(WmcInventory_t *pwi)
+{
+	if(NULL == pwi)
+	{
+		IhuErrorPrint("L3BFSC: func_bfsc_hw_init: input parameter pwi == BULL");
+		return IHU_FAILURE;
+	}
+	
+	//MYC TODO
+	pwi->hw_inventory_id = 0x0;
+	pwi->sw_inventory_id = 0x1;
+	
+	//MYC Get CPU ID for STM32
+	ihu_bsp_stm32_get_cpuid_f2board(&pwi->stm32_cpu_id);
+	IhuDebugPrint("L3BFSC: func_bfsc_hw_init: stm32_cpu_id = [0x%08X]\n", pwi->stm32_cpu_id);
+	
+	//MYC TODO
+	pwi->weight_sensor_type = 0x2;
+	pwi->motor_type = 0x03;
+	pwi->wmc_id = GetWmcId();               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */
+	IhuDebugPrint("L3BFSC: func_bfsc_hw_init: wmc_id = [0x%01X]\n", pwi->wmc_id);
+	
 	return IHU_SUCCESS;
 }
 

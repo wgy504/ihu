@@ -170,7 +170,7 @@ int main(void)
   HAL_UART_Receive_IT(&huart5,&zIhuUartRxBuffer[4],1);
   //HAL_UART_Receive_IT(&huart6,&zIhuUartRxBuffer[5],1);
   //HAL_SPI_Receive_IT(&hspi1,&zIhuSpiRxBuffer[0],1);
-  HAL_SPI_Receive_IT(&hspi2,&zIhuSpiRxBuffer[1],1);
+  //HAL_SPI_Receive_IT(&hspi2,&zIhuSpiRxBuffer[1],1);
   HAL_I2C_Slave_Receive_IT(&hi2c1,&zIhuI2cRxBuffer[0],1);
   HAL_CAN_Receive_IT(&hcan1, 0);
   //HAL_CAN_Receive_IT(&hcan2, 1);
@@ -733,6 +733,12 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
+
+  /*Configure GPIO pins : PA5 PA6 PA7 */
+  GPIO_InitStruct.Pin = GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pin : CUBEMX_PIN_F2_BOOT1_Pin */
   GPIO_InitStruct.Pin = CUBEMX_PIN_F2_BOOT1_Pin;
