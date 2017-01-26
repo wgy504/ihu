@@ -43,28 +43,74 @@ extern "C" {
 */
 
 
-#define SPIx                             SPI2
-#define SPIx_CLK_ENABLE()                __HAL_RCC_SPI2_CLK_ENABLE()
-#define SPIx_SCK_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOB_CLK_ENABLE()
-#define SPIx_MISO_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOB_CLK_ENABLE()
-#define SPIx_MOSI_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOB_CLK_ENABLE()
+//#define SPIx                             SPI2
+//#define SPIx_CLK_ENABLE()                __HAL_RCC_SPI2_CLK_ENABLE()
+//#define SPIx_SCK_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOB_CLK_ENABLE()
+//#define SPIx_MISO_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOB_CLK_ENABLE()
+//#define SPIx_MOSI_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOB_CLK_ENABLE()
 
-#define SPIx_FORCE_RESET()               __HAL_RCC_SPI2_FORCE_RESET()
-#define SPIx_RELEASE_RESET()             __HAL_RCC_SPI2_RELEASE_RESET()
+//#define SPIx_FORCE_RESET()               __HAL_RCC_SPI2_FORCE_RESET()
+//#define SPIx_RELEASE_RESET()             __HAL_RCC_SPI2_RELEASE_RESET()
 
-/* Definition for SPIx Pins */
-#define SPIx_SCK_PIN                     GPIO_PIN_13
-#define SPIx_SCK_GPIO_PORT               GPIOB
-#define SPIx_SCK_AF                      GPIO_AF5_SPI2
-#define SPIx_MISO_PIN                    GPIO_PIN_14
-#define SPIx_MISO_GPIO_PORT              GPIOB
-#define SPIx_MISO_AF                     GPIO_AF5_SPI2
-#define SPIx_MOSI_PIN                    GPIO_PIN_15
-#define SPIx_MOSI_GPIO_PORT              GPIOB
-#define SPIx_MOSI_AF                     GPIO_AF5_SPI2
+///* Definition for SPIx Pins */
+//#define SPIx_SCK_PIN                     GPIO_PIN_13
+//#define SPIx_SCK_GPIO_PORT               GPIOB
+//#define SPIx_SCK_AF                      GPIO_AF5_SPI2
+//#define SPIx_MISO_PIN                    GPIO_PIN_14
+//#define SPIx_MISO_GPIO_PORT              GPIOB
+//#define SPIx_MISO_AF                     GPIO_AF5_SPI2
+//#define SPIx_MOSI_PIN                    GPIO_PIN_15
+//#define SPIx_MOSI_GPIO_PORT              GPIOB
+//#define SPIx_MOSI_AF                     GPIO_AF5_SPI2
 
-/* Definition for SPIx's NVIC */
-#define SPIx_IRQn                        SPI2_IRQn
+///* Definition for SPIx's NVIC */
+//#define SPIx_IRQn                        SPI2_IRQn
+
+
+/*********************************** RC522 引脚定义 *********************************************/
+#define        macRC522_SPIx                            SPI2
+#define        macRC522_SPIx_RCC_CLK_ENABLE()           __HAL_RCC_SPI2_CLK_ENABLE()
+#define        macRC522_SPIx_RCC_CLK_DISABLE()          __HAL_RCC_SPI2_CLK_DISABLE()
+
+#define        macRC522_SPI_RCC_CLK_ENABLE()            __HAL_RCC_GPIOB_CLK_ENABLE()	              	   
+#define        macRC522_GPIO_CS_PORT    	              GPIOB	
+#define        macRC522_GPIO_CS_PIN		                  GPIO_PIN_12
+#define        macRC522_GPIO_CS_Mode		                GPIO_MODE_OUTPUT_PP
+
+#define        macRC522_GPIO_SCK_PORT    	              GPIOB			   
+#define        macRC522_GPIO_SCK_PIN		                GPIO_PIN_10
+#define        macRC522_GPIO_SCK_Mode		                GPIO_MODE_AF_PP
+
+#define        macRC522_GPIO_MOSI_PORT    	            GPIOC		   
+#define        macRC522_GPIO_MOSI_PIN		                GPIO_PIN_3
+#define        macRC522_GPIO_MOSI_Mode		              GPIO_MODE_AF_PP
+
+#define        macRC522_GPIO_MISO_PORT    	            GPIOB			   
+#define        macRC522_GPIO_MISO_PIN		                GPIO_PIN_14
+#define        macRC522_GPIO_MISO_Mode		              GPIO_MODE_AF_PP
+
+#define        macRC522_RST_RCC_CLK_ENABLE()            __HAL_RCC_GPIOC_CLK_ENABLE()
+#define        macRC522_GPIO_RST_PORT    	              GPIOA	   
+#define        macRC522_GPIO_RST_PIN		                GPIO_PIN_11
+#define        macRC522_GPIO_RST_Mode		                GPIO_MODE_OUTPUT_PP
+
+/*********************************** RC522 函数宏定义*********************************************/
+#define          macRC522_CS_Enable()         HAL_GPIO_WritePin ( macRC522_GPIO_CS_PORT, macRC522_GPIO_CS_PIN ,GPIO_PIN_RESET)
+#define          macRC522_CS_Disable()        HAL_GPIO_WritePin ( macRC522_GPIO_CS_PORT, macRC522_GPIO_CS_PIN ,GPIO_PIN_SET)
+
+#define          macRC522_Reset_Enable()      HAL_GPIO_WritePin( macRC522_GPIO_RST_PORT, macRC522_GPIO_RST_PIN,GPIO_PIN_RESET )
+#define          macRC522_Reset_Disable()     HAL_GPIO_WritePin ( macRC522_GPIO_RST_PORT, macRC522_GPIO_RST_PIN,GPIO_PIN_SET)
+
+#define          macRC522_SCK_0()             HAL_GPIO_WritePin( macRC522_GPIO_SCK_PORT, macRC522_GPIO_SCK_PIN,GPIO_PIN_RESET )
+#define          macRC522_SCK_1()             HAL_GPIO_WritePin ( macRC522_GPIO_SCK_PORT, macRC522_GPIO_SCK_PIN,GPIO_PIN_SET )
+
+#define          macRC522_MOSI_0()            HAL_GPIO_WritePin( macRC522_GPIO_MOSI_PORT, macRC522_GPIO_MOSI_PIN,GPIO_PIN_RESET )
+#define          macRC522_MOSI_1()            HAL_GPIO_WritePin ( macRC522_GPIO_MOSI_PORT, macRC522_GPIO_MOSI_PIN,GPIO_PIN_SET )
+
+#define          macRC522_MISO_GET()          HAL_GPIO_ReadPin ( macRC522_GPIO_MISO_PORT, macRC522_GPIO_MISO_PIN )
+
+#define          macRC522_DELAY()             HAL_Delay(20)
+
 
 //GENERAL FRAME帧结构
 typedef struct IHU_HUITP_L2FRAME_STD_SPI_frame_header
@@ -95,6 +141,9 @@ int func_bsp_spi_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint
 #define IHU_BSP_STM32_SPI_TX_MAX_DELAY 						100
 #define IHU_BSP_STM32_SPI_RX_MAX_DELAY 						100
 
+#define Dummy_Byte                      0xFF
+
+
 //交换矩阵
 //SCYCB=>IAU功能接口
 #define IHU_BSP_STM32_SPI_SPARE1_HANDLER						hspi1
@@ -119,6 +168,8 @@ extern int ihu_bsp_stm32_spi_iau_rcv_data(uint8_t* buff, uint16_t len);
 //BFSC=>ADC秤驱动接口
 extern int ihu_bsp_stm32_spi_ad_scale_send_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_spi_ad_scale_rcv_data(uint8_t* buff, uint16_t len);
+uint8_t SPI_FLASH_ReadByte(void);
+uint8_t SPI_FLASH_SendByte(uint8_t byte);
 //CCL=>RFID NC522使用了SPI2接口
 extern int ihu_bsp_stm32_spi_rfid522_send_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_spi_rfid522_rcv_data(uint8_t* buff, uint16_t len);

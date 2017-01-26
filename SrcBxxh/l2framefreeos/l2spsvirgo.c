@@ -183,6 +183,10 @@ OPSTAT fsm_spsvirgo_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 OPSTAT func_spsvirgo_hw_init(void)
 {
 	ihu_l1hd_sps_slave_hw_init();
+	//在CCL项目中，没有SPI模块，SPI接口用来完成RFID外设的读取，所以初始化需要挂载这里
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+	ihu_l1hd_spi_slave_hw_init();
+#endif
 	return IHU_SUCCESS;
 }
 
@@ -327,7 +331,7 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 		pMsgProc.authReq.bleAddrLen = 6;
 		pMsgProc.authReq.authReqType = HUITP_IEID_UNI_CCL_LOCK_AUTH_REQ_TYPE_BLE;
 	}
-	else if (ihu_vmmw_rfidmod_rc522_spi_read_id(pMsgProc.authReq.rfidAddr, 4) == IHU_SUCCESS){
+	else if (ihu_vmmw_rfidmod_rc522_spi_read_id(pMsgProc.authReq.rfidAddr, 3) == IHU_SUCCESS){
 		pMsgProc.authReq.rfidAddrLen = 4;
 		pMsgProc.authReq.authReqType = HUITP_IEID_UNI_CCL_LOCK_AUTH_REQ_TYPE_RFID;
 	}

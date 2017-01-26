@@ -266,7 +266,7 @@ OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_test_mode(uint8_t *macAddr, uint
 	
 	//最长5秒，还没搞定，就结束了
 	func_blemod_uart_clear_receive_buffer();
-	for (i = 0; i < 5; i++){
+	for (i = 0; i < IHU_VMWM_BLEMOD_SCAN_HC05_MAX_TIME; i++){
 		func_blemod_uart_send_string("MAC/MIMA=?");
 		func_blemod_uart_send_LR();
 		if (func_blemod_wait_AT_command_fb((uint8_t*)"MAC/MIMA=", 1) == IHU_SUCCESS) break;
