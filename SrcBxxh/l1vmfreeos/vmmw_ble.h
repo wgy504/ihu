@@ -24,6 +24,8 @@
 
 //全局使用的常亮定义
 #define IHU_VMMW_BLEMOD_UART_REPEAT_CNT 3
+#define IHU_VMWM_BLEMOD_SCAN_HC05_MAX_TIME 5  //in second
+
 
 //向上提供全局统一服务的入口
 //以下范式是正常的提供MAC地址的函数

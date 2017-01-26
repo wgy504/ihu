@@ -41,6 +41,7 @@ uint8_t BSP_SPI_tx_buffer[SPILEO_BUF_SIZE];
 uint32_t BSP_SPI_RxState;
 
 
+
 /* 函数体 --------------------------------------------------------------------*/
 uint8_t BSP_SPI_gen_chksum(IHU_HUITP_L2FRAME_STD_SPI_frame_header_t *pMsgHeader)
 {
@@ -286,6 +287,9 @@ int ihu_bsp_stm32_spi_slave_hw_init(void)
 	zIhuBspStm32SpiGeneral1RxState = 0;
 	zIhuBspStm32SpiGeneral1RxLen = 0;
 	
+  macRC522_Reset_Disable();
+	macRC522_CS_Disable();	
+	
 	return BSP_SUCCESS;
 }
 
@@ -364,6 +368,36 @@ int ihu_bsp_stm32_spi_rfid522_rcv_data(uint8_t* buff, uint16_t len)
 		return BSP_FAILURE;
 }
 
+/**
+  * 函数功能: 从串行Flash读取一个字节数据
+  * 输入参数: 无
+  * 返 回 值: uint8_t：读取到的数据
+  * 说    明：This function must be used only if the Start_Read_Sequence
+  *           function has been previously called.
+  */
+uint8_t SPI_FLASH_ReadByte(void)
+{
+  uint8_t d_read,d_send=Dummy_Byte;
+  if(HAL_SPI_TransmitReceive(&IHU_BSP_STM32_SPI_RFID522_HANDLER,&d_send,&d_read,1,0xFFFFFF)!=HAL_OK)
+    d_read=Dummy_Byte;
+  
+  return d_read;    
+}
+
+/**
+  * 函数功能: 往串行Flash读取写入一个字节数据并接收一个字节数据
+  * 输入参数: byte：待发送数据
+  * 返 回 值: uint8_t：接收到的数据
+  * 说    明：无
+  */
+uint8_t SPI_FLASH_SendByte(uint8_t byte)
+{
+  uint8_t d_read,d_send=byte;
+  if(HAL_SPI_TransmitReceive(&IHU_BSP_STM32_SPI_RFID522_HANDLER,&d_send,&d_read,1,0xFFFFFF)!=HAL_OK)
+    d_read=Dummy_Byte;
+  
+  return d_read; 
+}
 
 /*******************************************************************************
 * 函数名  : SPI_SendData
@@ -394,6 +428,7 @@ int ihu_bsp_stm32_spi_ad_scale_rcv_data(uint8_t* buff, uint16_t len)
   * SPI接口完成回调函数的处理
   * 为什么需要重新执行HAL_SPI_Receive_IT，待确定
   */
+//重载系统函数
 void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *SpiHandle)
 {
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID)	
@@ -479,17 +514,19 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *SpiHandle)
 		HAL_SPI_Receive_IT(&IHU_BSP_STM32_SPI_RFID522_HANDLER, &zIhuSpiRxBuffer[IHU_BSP_STM32_SPI_RFID522_HANDLER_ID-1], 1);
   }
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
-  if(SpiHandle==&IHU_BSP_STM32_SPI_AD_SCALE_HANDLER)
-  {
-		zIhuBspStm32SpiGeneral2RxBuff[zIhuBspStm32SpiGeneral2RxCount] = zIhuSpiRxBuffer[IHU_BSP_STM32_SPI_AD_SCALE_HANDLER_ID-1];
-		zIhuBspStm32SpiGeneral2RxCount++;
-		if (zIhuBspStm32SpiGeneral2RxCount >= IHU_BSP_STM32_SPI2_GENERAL_REC_MAX_LEN)
-			zIhuBspStm32SpiGeneral2RxCount = 0;
-		HAL_SPI_Receive_IT(&IHU_BSP_STM32_SPI_AD_SCALE_HANDLER, &zIhuSpiRxBuffer[IHU_BSP_STM32_SPI_AD_SCALE_HANDLER_ID-1], 1);
-  }
+//  if(SpiHandle==&IHU_BSP_STM32_SPI_AD_SCALE_HANDLER)
+//  {
+//		zIhuBspStm32SpiGeneral2RxBuff[zIhuBspStm32SpiGeneral2RxCount] = zIhuSpiRxBuffer[IHU_BSP_STM32_SPI_AD_SCALE_HANDLER_ID-1];
+//		zIhuBspStm32SpiGeneral2RxCount++;
+//		if (zIhuBspStm32SpiGeneral2RxCount >= IHU_BSP_STM32_SPI2_GENERAL_REC_MAX_LEN)
+//			zIhuBspStm32SpiGeneral2RxCount = 0;
+//		HAL_SPI_Receive_IT(&IHU_BSP_STM32_SPI_AD_SCALE_HANDLER, &zIhuSpiRxBuffer[IHU_BSP_STM32_SPI_AD_SCALE_HANDLER_ID-1], 1);
+//  }
 #else
 	#error Un-correct constant definition
 #endif
 }
+
+
 
 

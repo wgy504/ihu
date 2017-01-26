@@ -292,8 +292,12 @@ UINT8 IhuDebugPrintId(char *file, int line);
 #endif
 
 //错误打印宏定义高级定义技巧
-#define IHU_ERROR_PRINT_TASK(taskid, arg...)	do{zIhuRunErrCnt[taskid]++;  IhuErrorPrint(##arg);  return IHU_FAILURE;}while(0)	
-	
+//第一种方式，具备编译通过的能力，但显示错误
+//#define IHU_ERROR_PRINT_TASK(taskid, arg...)	do{zIhuRunErrCnt[taskid]++;  IhuErrorPrint(##arg);  return IHU_FAILURE;}while(0)	
+//第二种方式，貌似好看些
+#define IHU_ERROR_PRINT_TASK(taskid, ...)	do{zIhuRunErrCnt[taskid]++;  IhuErrorPrint(__VA_ARGS__);  return IHU_FAILURE;}while(0)	
+//都保留着，都是极为有参考意义的宏编写方式
+
 extern void ihu_vm_system_init(void);  //系统级别的初始化
 extern void ihu_sleep(UINT32 second);
 extern void ihu_usleep(UINT32 usecond);  //resulution 10^(-3)s = 1 microsecond
