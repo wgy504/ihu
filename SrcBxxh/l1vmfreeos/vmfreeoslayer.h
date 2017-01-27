@@ -42,8 +42,6 @@
 	#include "bsp_stmflash.h"
 	#include "bsp_camera.h"
 	
-	
-	
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
   #include "commsgbfsc.h"
   #include "FreeRTOS.h"
@@ -62,7 +60,6 @@
 	#include "bsp_calendar.h"
 	#include "bsp_cpuid.h"
 	#include "bsp_stmflash.h"
-
 
 #else
 	#error Un-correct constant definition
@@ -656,7 +653,7 @@ extern void ihu_timer_routine_handler_10ms(void);
 #endif  //#if (IHU_WORKING_FREE_RTOS_SELECTION == IHU_WORKING_FREE_RTOS_SELECTION_BARE)
 	
 
-//来自于DA1468x - osal.h
+//来自于DA1468x - osal.h，在移植核心函数的过程中，大量使用了<osal>函数，以简化api调用过程
 #if (IHU_WORKING_FREE_RTOS_SELECTION == IHU_WORKING_FREE_RTOS_SELECTION_BARE)	
 
 	#define OS_FREERTOS   				/* Define this to use FreeRTOS */
