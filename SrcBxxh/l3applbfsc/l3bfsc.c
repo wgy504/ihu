@@ -87,6 +87,9 @@ WmcInventory_t										zWmcInvenory;
 CombinationAlgorithmParamaters_t 	zCombAlgoParam;
 WeightSensorParamaters_t					zWeightSensorParam;
 MotorControlParamaters_t 					zMotorControlParam;
+UINT16														zAwsCanIdPrefix;
+UINT16														zWmcCanIdPrefix;
+
 
 //Main Entry
 //Input parameter would be useless, but just for similar structure purpose
@@ -302,6 +305,8 @@ OPSTAT fsm_bfsc_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 	int ret;
 	msg_struct_com_restart_t snd0;
 	msg_struct_com_time_out_t rcv;
+	
+	//IhuErrorPrint("L3BFSC: fsm_bfsc_time_out\n");
 	
 	//Receive message and copy to local variable
 	memset(&rcv, 0, sizeof(msg_struct_com_time_out_t));
@@ -731,6 +736,23 @@ OPSTAT fsm_bfsc_canvela_init_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 		IHU_ERROR_PRINT_BFSC("L3BFSC: Error Set FSM State!");	
 		return IHU_FAILURE;
 	}
+	
+	//MYC add the first message to AWS
+//	if ((src_id > TASK_ID_MIN) &&(src_id < TASK_ID_MAX)){
+//		//Send back MSG_ID_COM_INIT_FB to VMFO
+//		msg_struct_l3bfsc_wmc_startup_ind_t snd;
+//		memset(&snd, 0, sizeof(msg_struct_l3bfsc_wmc_startup_ind_t));
+//		snd.length = sizeof(msg_struct_l3bfsc_wmc_startup_ind_t);
+//		snd.msgid = MSG_ID_L3BFSC_WMC_STARTUP_IND;
+//		snd.wmc_state = FSM_STATE_BFSC_SCAN;
+//		memcpy(&snd.wmc_inventory, &zWmcInvenory, sizeof(WmcInventory_t));
+//		
+//		ret = ihu_message_send(MSG_ID_L3BFSC_WMC_STARTUP_IND, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length);
+//		if (ret == IHU_FAILURE){
+//			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC], zIhuTaskInfo[TASK_ID_CANVELA]);
+//			return IHU_FAILURE;
+//		}
+//	}
 	
 	//返回
 	return IHU_SUCCESS;

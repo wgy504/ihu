@@ -69,11 +69,67 @@ int ihu_bsp_stm32_can_slave_hw_init(void)
 *******************************************************************************/
 int ihu_bsp_stm32_can_send_data(uint8_t* buff, uint16_t len)
 { 
-	//这里是帧处理的过程，未来待完善数据的发送接收处理过程	
-	if (HAL_CAN_Transmit(&IHU_BSP_STM32_CAN_IAU_HANDLER, IHU_BSP_STM32_CAN_TX_MAX_DELAY) == HAL_OK)
-		return BSP_SUCCESS;
-	else
-		return BSP_FAILURE;		
+	//这里是帧处理的过程，未来待完善数据的发送接收处理过程
+	uint16_t CanFrameNumber = 0;
+	uint16_t CanTotalFrameLen = 0;
+	uint16_t CanCurrentFrameLen = 0;
+	uint16_t CanLastFrameLen = (len % 8);
+	uint16_t i = 0;
+	
+	static CanTxMsgTypeDef        TxMessage;
+	static CanRxMsgTypeDef        RxMessage;
+	hcan1.pTxMsg = &TxMessage;
+	hcan1.pRxMsg = &RxMessage;
+	
+	IHU_BSP_STM32_CAN_IAU_HANDLER.pTxMsg->StdId = AWS_CAN_ID;  //CAN ID for AWS
+	IHU_BSP_STM32_CAN_IAU_HANDLER.pTxMsg->ExtId = 0x01;
+  IHU_BSP_STM32_CAN_IAU_HANDLER.pTxMsg->RTR = CAN_RTR_DATA;
+  IHU_BSP_STM32_CAN_IAU_HANDLER.pTxMsg->IDE = CAN_ID_STD;
+	
+	IhuDebugPrint("CANVELA: ihu_bsp_stm32_can_send_data: To send %d bytes [%02X %02X %02X %02X %02X %02X %02X %02X]\n", \
+				len, buff[0], buff[1], buff[2], buff[3], buff[4], buff[5], buff[6], buff[7]);
+	
+	for(;;) // 8 byte is the max frame lenth for CAN
+	{
+		if((len - CanTotalFrameLen) >= 8)
+		{
+			CanCurrentFrameLen = 8;
+		}
+		else
+		{
+			CanCurrentFrameLen = CanLastFrameLen;
+		}
+		/* Fill msg length */
+		hcan1.pTxMsg->DLC = CanCurrentFrameLen;
+		/* Fill msg body */
+		memcpy( hcan1.pTxMsg->Data, &buff[CanTotalFrameLen], CanCurrentFrameLen);
+	
+		if (HAL_CAN_Transmit(&hcan1, IHU_BSP_STM32_CAN_TX_MAX_DELAY) == HAL_OK)
+		{
+			CanTotalFrameLen = CanTotalFrameLen + CanCurrentFrameLen;  //Counter how many has been sent
+			IhuDebugPrint("CANVELA: ihu_bsp_stm32_can_send_data: send %d bytes [%02X %02X %02X %02X %02X %02X %02X %02X]\n", \
+			hcan1.pTxMsg->DLC, \
+			hcan1.pTxMsg->Data[0], hcan1.pTxMsg->Data[1], \
+			hcan1.pTxMsg->Data[2], hcan1.pTxMsg->Data[3], \
+			hcan1.pTxMsg->Data[4], hcan1.pTxMsg->Data[5], \
+			hcan1.pTxMsg->Data[6], hcan1.pTxMsg->Data[7]);
+			
+			if(CanTotalFrameLen == len) 
+			{
+				IhuDebugPrint("CANVELA: ihu_bsp_stm32_can_send_data: CanTotalFrameLen(%d)== len(%d)\n", CanTotalFrameLen, len);
+				break; //if all has been sent, break the loop, and exit with normal exit.
+			}
+			
+			//osDelay(1); //make sure we do not break ther OS.
+			IhuDebugPrint("CANVELA: ihu_bsp_stm32_can_send_data: Sent CanTotalFrameLen(%d)\n", CanTotalFrameLen);
+		}
+		else
+		{
+			IhuDebugPrint("CANVELA: ihu_bsp_stm32_can_send_data: HAL_CAN_Transmit NOK\n");
+			return BSP_FAILURE;
+		}		
+	}
+	return BSP_SUCCESS;
 }
 
 int ihu_bsp_stm32_can_rcv_data(uint8_t* buff, uint16_t len)

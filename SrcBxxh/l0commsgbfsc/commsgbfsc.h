@@ -431,6 +431,7 @@ typedef struct msg_struct_l3bfsc_canvela_cmd_resp
 */
 typedef struct msg_struct_l3bfsc_wmc_resp
 {
+	UINT32	msgid;
 	UINT16	result;
 	UINT16	error_code;
 	UINT32	wmc_state;
@@ -441,7 +442,6 @@ typedef struct msg_struct_l3bfsc_wmc_resp
 */
 typedef struct WmcInventory
 {
-
 	UINT32 hw_inventory_id;
 	UINT32 sw_inventory_id;
 	UINT32 stm32_cpu_id;
@@ -639,6 +639,7 @@ typedef struct msg_struct_l3bfsc_wmc_combin_req
 */
 typedef struct msg_struct_l3bfsc_fault_ind
 {
+	UINT32	msgid;
 	UINT16	result;
 	UINT16	error_code;
 	UINT32	wmc_state;
@@ -671,6 +672,7 @@ typedef struct msg_struct_l3bfsc_wmc_command_req
 */
 typedef struct msg_struct_l3bfsc_wmc_command_resp
 {
+	UINT32	msgid;
 	UINT16	result;
 	UINT16	error_code;
 	UINT32	wmc_state;
@@ -694,6 +696,19 @@ typedef struct msg_struct_l3bfsc_wmc_command_resp
 #define 	MSG_SIZE_L3BFSC_WMC_FAULT_IND						(sizeof(msg_struct_l3bfsc_wmc_fault_ind_t))
 #define 	MSG_SIZE_L3BFSC_WMC_COMMNAD_REQ					(sizeof(msg_struct_l3bfsc_wmc_command_req_t))
 #define 	MSG_SIZE_L3BFSC_WMC_COMMNAD_RESP				(sizeof(msg_struct_l3bfsc_wmc_command_resp_t))
+	
+/* Can ID for communication between AWS and WMC */
+#define		AWS_CAN_ID_PREFIX												(0x600U)
+#define		WMC_CAN_ID_PREFIX												(0x400U)
+#define		AWS_CAN_ID_SUFFIX												(0x001U)
+#define		WMC_CAN_ID_SUFFIX												(0x001U)
+#define		AWS_CAN_ID															((AWS_CAN_ID_PREFIX)|(AWS_CAN_ID_SUFFIX))
+#define		WMC_CAN_ID															((AWS_CAN_ID_PREFIX)|(AWS_CAN_ID_SUFFIX))
+
+/* CAN Msg Lenth */
+#define		MAX_WMC_CONTROL_MSG_LEN									(256U)
+#define		MAX_WMC_CONTROL_MSG_HEADER_LEN					(sizeof(IHU_HUITP_L2FRAME_STD_frame_header_t))
+#define		MAX_WMC_CONTROL_MSG_BODY_LEN						(MAX_WMC_CONTROL_MSG_LEN - MAX_WMC_CONTROL_MSG_HEADER_LEN)
 
 /* 
 ** ====================================================================
