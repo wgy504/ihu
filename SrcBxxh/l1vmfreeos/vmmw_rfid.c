@@ -194,15 +194,16 @@ OPSTAT ihu_vmmw_rfidmod_rc522_spi_read_id(uint8_t *rfidAddr, uint8_t len)
 		if ( ucStatusReturn == MI_OK  )
 		{
       /*防冲撞（当有多张卡进入读写器操作范围时，防冲突机制会从其中选择一张进行操作）*/
-			if ( PcdAnticoll ( ucArray_ID ) == MI_OK )  
+			if ( PcdAnticoll(ucArray_ID) == MI_OK )  
 			{
 				memcpy(rfidAddr, ucArray_ID, 4);
-				sprintf ( cStr, "The Card ID is: %02X%02X%02X%02X", ucArray_ID [ 0 ], ucArray_ID [ 1 ], ucArray_ID [ 2 ], ucArray_ID [ 3 ] );							
+				sprintf(cStr, "The Card ID is: %02X%02X%02X%02X", ucArray_ID[0], ucArray_ID[1], ucArray_ID[2], ucArray_ID[3] );							
 				IhuDebugPrint("VMMWRFID: [%s]\n", cStr);
 				res = IHU_SUCCESS;
       }
 		}
 	}
+	if (res == IHU_FAILURE) IhuDebugPrint("VMMWRFID: Fail to read RFID value!\n");
 	return res;	
 	
 //	//接收看看
