@@ -266,6 +266,7 @@ OPSTAT func_adclibra_time_out_bfsc_read_weight_scan(void)
 	//也足以应付各种情况了，所以设置为100MS应该是理论上最好的效果了，足够了
 	UINT32 tempWeight = 0;
 	tempWeight = func_adclibra_bfsc_read_weight();
+	//IhuErrorPrint("ADCLIBRA: func_adclibra_time_out_bfsc_read_weight_scan: tempWeight = %d\n", tempWeight);
 	
 	//传感器一直是0重量
 	if ((tempWeight == 0) && (zIhuAdcBfscWs.WeightExistCnt == 0))
@@ -276,6 +277,7 @@ OPSTAT func_adclibra_time_out_bfsc_read_weight_scan(void)
 	//传感器突然变成了0重量
 	else if ((tempWeight == 0) && (zIhuAdcBfscWs.WeightExistCnt > 0))
 	{
+		//IhuErrorPrint("ADCLIBRA: func_adclibra_time_out_bfsc_read_weight_scan: tempWeight = %d, WeightExistCnt = %d\n", tempWeight, zIhuAdcBfscWs.WeightExistCnt);
 		zIhuAdcBfscWs.WeightExistCnt = 0;
 		//发送MSG_ID_ADC_MATERIAL_DROP到L3BFSC
 		msg_struct_adc_material_drop_t snd1;
@@ -292,6 +294,7 @@ OPSTAT func_adclibra_time_out_bfsc_read_weight_scan(void)
 	//传感器有新重量：这里的误差，得有算法来控制结果，只要是重量不一样，这里的程序就得上报，不管是不是真的有变化，以确保系统反应的敏感性
 	else if (tempWeight > 0)
 	{
+		//IhuErrorPrint("ADCLIBRA: func_adclibra_time_out_bfsc_read_weight_scan: tempWeight = %d, WeightExistCnt = %d\n", tempWeight, zIhuAdcBfscWs.WeightExistCnt);
 		zIhuAdcBfscWs.WeightExistCnt++;
 		if (tempWeight != zIhuAdcBfscWs.Weightvalue)
 		{
