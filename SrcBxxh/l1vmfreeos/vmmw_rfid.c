@@ -181,22 +181,37 @@ OPSTAT ihu_vmmw_rfidmod_rc522_spi_read_id(uint8_t *rfidAddr, uint8_t len)
 	//设置工作方式	
 	M500PcdConfigISOType('A');
 
-	uint8_t * UID;
-	uint8_t * KEY;
-	uint8_t * Dat;
-	*UID = 1;
-	*KEY = 0;
-	*Dat = 0x01;
-	*(Dat+1) = 0x02;
-	*(Dat+2) = 0x03;
-	*(Dat+3) = 0x04;
+//	uint8_t * UID;
+//	uint8_t * KEY;
+//	uint8_t * Dat;
+//	*UID = 1;
+//	*KEY = 0;
+//	*Dat = 0x01;
+//	*(Dat+1) = 0x02;
+//	*(Dat+2) = 0x03;
+//	*(Dat+3) = 0x04;
 	//测试写入
-	PcdRequest ( 0x52, ucArray_ID );//寻卡
-  PcdAnticoll ( ucArray_ID );//防冲撞
-  PcdSelect ( UID );//选定卡
-  PcdAuthState ( 0x60, 0x10, KEY, UID );//校验
-  PcdWrite ( 0x10, Dat );
-  PcdRead ( 0x10, Dat );
+//	PcdRequest ( 0x52, ucArray_ID );//寻卡
+//  PcdAnticoll ( ucArray_ID );//防冲撞
+//  PcdSelect ( UID );//选定卡
+//  PcdAuthState ( 0x60, 0x10, KEY, UID );//校验
+//  PcdWrite ( 0x10, Dat );
+//  PcdRead ( 0x10, Dat );
+
+
+	uint8_t CT[2] = {1,1};//卡片类型
+	uint8_t SN1[4] = {0,0,0,0};//卡片号码
+	uint8_t assWd[6]={0xff,0xff,0xff,0xff,0xff,0xff};
+	uint8_t data[16];//缓冲区
+	PcdReset();
+	PcdRequest(PICC_REQIDL, CT);//寻卡
+	PcdAnticoll(SN1); //防冲撞,至此，SN1中保存了卡号
+	IhuDebugPrint("VMMWRFID: Card type = [0x%x, 0x%x], Card number = [0x%x, 0x%x, 0x%x, 0x%x].\n", CT[0], CT[1], SN1[0], SN1[1], SN1[2], SN1[3]);
+	PcdSelect(SN1);//选卡
+	PcdAuthState(0x60/*PICC_AUTHENT1A*/,0/*块*/,assWd,SN1);//验证A密匙
+	PcdRead(1,data);//读0区1块
+	IhuDebugPrint("VMMWRFID: Data Area = 0x[%x/%x/%x/%x/%x/%x/%x/%x/%x/%x/%x/%x/%x/%x/%x/%x/].\n", data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],data[14],data[15]);
+	PcdHalt();//命令卡片进入休眠状态
 
 	//循环读取
 	res = IHU_FAILURE;
