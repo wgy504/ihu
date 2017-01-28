@@ -332,7 +332,7 @@
               <MiscControls>--C99</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F207xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;           ../Drivers/STM32F2xx_HAL_Driver/Inc;           ../Drivers/STM32F2xx_HAL_Driver/Inc/Legacy;           ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;           ../Drivers/CMSIS/Device/ST/STM32F2xx/Include;           ../Middlewares/Third_Party/FreeRTOS/Source/include;           ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;           ../Drivers/CMSIS/Include;           ..\..\SrcBxxh\l0bsp_stm32;           ..\..\SrcBxxh\l0commsgbfsc;           ..\..\SrcBxxh\l0comvm;           ..\..\SrcBxxh\l1vmfreeos;           ..\..\SrcBxxh\l2framefreeos;           ..\..\SrcBxxh\l3applbfsc</IncludePath>
+              <IncludePath>../Inc;            ../Drivers/STM32F2xx_HAL_Driver/Inc;            ../Drivers/STM32F2xx_HAL_Driver/Inc/Legacy;            ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;            ../Drivers/CMSIS/Device/ST/STM32F2xx/Include;            ../Middlewares/Third_Party/FreeRTOS/Source/include;            ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;            ../Drivers/CMSIS/Include;            ..\..\SrcBxxh\l0bsp_stm32;            ..\..\SrcBxxh\l0commsgbfsc;            ..\..\SrcBxxh\l0comvm;            ..\..\SrcBxxh\l1vmfreeos;            ..\..\SrcBxxh\l2framefreeos;            ..\..\SrcBxxh\l3applbfsc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -551,11 +551,6 @@
               <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_dac_ex.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f2xx_hal_iwdg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_iwdg.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32f2xx_hal_crc.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_crc.c</FilePath>
@@ -687,16 +682,6 @@
               <FileName>bsp_crc.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_crc.h</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_wdog.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_wdog.c</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_wdog.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_wdog.h</FilePath>
             </File>
             <File>
               <FileName>bsp_calendar.c</FileName>
@@ -897,6 +882,93 @@
               <FileName>l3bfsc.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l3applbfsc\l3bfsc.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Application</GroupName>
+          <Files>
+            <File>
+              <FileName></FileName>
+              <FileType>0</FileType>
+              <FilePath></FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>1</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>0</ComprImg>
+                </CommonProperty>
+                <FileArmAds/>
+              </FileOption>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Middlewares</GroupName>
+          <Files>
+            <File>
+              <FileName></FileName>
+              <FileType>0</FileType>
+              <FilePath></FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>1</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>0</ComprImg>
+                </CommonProperty>
+                <FileArmAds/>
+              </FileOption>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Drivers</GroupName>
+          <Files>
+            <File>
+              <FileName></FileName>
+              <FileType>0</FileType>
+              <FilePath></FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>1</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>0</ComprImg>
+                </CommonProperty>
+                <FileArmAds/>
+              </FileOption>
             </File>
           </Files>
         </Group>

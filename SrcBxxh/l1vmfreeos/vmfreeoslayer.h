@@ -54,7 +54,7 @@
 	#include "bsp_led.h"
 	#include "bsp_i2c.h"
 	#include "bsp_can.h"
-	#include "bsp_wdog.h"
+	//#include "bsp_wdog.h"
 	#include "bsp_crc.h"
 	#include "bsp_rtc.h"
 	#include "bsp_calendar.h"
