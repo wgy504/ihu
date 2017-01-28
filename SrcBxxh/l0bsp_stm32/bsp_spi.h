@@ -90,8 +90,8 @@ extern "C" {
 #define        macRC522_GPIO_MISO_Mode		              GPIO_MODE_AF_PP
 
 #define        macRC522_RST_RCC_CLK_ENABLE()            __HAL_RCC_GPIOC_CLK_ENABLE()
-#define        macRC522_GPIO_RST_PORT    	              GPIOA	   
-#define        macRC522_GPIO_RST_PIN		                GPIO_PIN_11
+#define        macRC522_GPIO_RST_PORT    	              GPIOD
+#define        macRC522_GPIO_RST_PIN		                GPIO_PIN_9
 #define        macRC522_GPIO_RST_Mode		                GPIO_MODE_OUTPUT_PP
 
 /*********************************** RC522 函数宏定义*********************************************/

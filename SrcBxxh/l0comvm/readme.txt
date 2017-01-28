@@ -11,8 +11,13 @@
 = 最后搞RFID/摄像头研究，看门狗
 **************************************************************************
 
+//= ZJL, 2017 Jan.27, CURRENT_SW_DELIVERY R03.110 =>CCL项目
+= 将CCL任务数量缩减到极致11个，BFSC缩减到10个，正好相等于当前的任务数，从而将内存的占用优化到极致
 
-//= ZJL, 2017 Jan.26, CURRENT_SW_DELIVERY R03.109 =>CCL项目
+
+
+
+//= ZJL/MYC, 2017 Jan.26, CURRENT_SW_DELIVERY R03.109 =>CCL项目/BFSC
 = 改善错误打印高级技巧IHU_ERROR_PRINT_TASK(taskid, arg...)
 = 改善了CPUID的读出地址
 = 将RFID的功能集成进来了，但每次reset外部管脚（复位NC522）会导致死机。RST管脚根本就没有连，而是随便连到一个空的管脚上了
@@ -20,6 +25,7 @@
 = 有关CS置位的时序，是否该服从参考例子，待查
 = 有关SPI的初始化，STM32CubeMX的生成代码是否足够完善，待查
 = BFSC不能打开SPI Callback函数，不然会导致SPI重入死机
+= 完善BFSC的初始化过程
 
 //= ZJL, 2017 Jan.25, CURRENT_SW_DELIVERY R03.108 =>CCL项目
 = 由于RFID是SPI接口，集成了SPI2 BSP和STM32CubeMX之SPI2接口
