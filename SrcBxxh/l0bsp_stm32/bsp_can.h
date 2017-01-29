@@ -43,10 +43,12 @@ extern int ihu_bsp_stm32_can_spare1_send_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_can_spare1_rcv_data(uint8_t* buff, uint16_t len);
 
 //重载接收函数，以便通过IT中断方式搞定接收通信，否则需要通过轮询或者单独线程搞定，更加麻烦
-void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef *CanHandle);
+//void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef *CanHandle);
 
 //Local APIs
-
+int bsp_can_start_rx(CAN_HandleTypeDef* CanHandle, void (*app_rx_callback)(), uint8_t *pRxBuffPtr, uint16_t rxBufferSize, void *user_data);
+uint32_t bsp_can_transmit(CAN_HandleTypeDef* CanHandle, uint8_t *buffer, uint32_t length, uint32_t timeout);
+void bsp_can_init(CAN_HandleTypeDef* CanHandle, uint32_t std_id);
 
 
 #ifdef __cplusplus

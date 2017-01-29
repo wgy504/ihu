@@ -76,10 +76,10 @@ int ihu_bsp_stm32_can_send_data(uint8_t* buff, uint16_t len)
 	uint16_t CanLastFrameLen = (len % 8);
 	uint16_t i = 0;
 	
-	static CanTxMsgTypeDef        TxMessage;
-	static CanRxMsgTypeDef        RxMessage;
-	hcan1.pTxMsg = &TxMessage;
-	hcan1.pRxMsg = &RxMessage;
+//	static CanTxMsgTypeDef        TxMessage;
+//	static CanRxMsgTypeDef        RxMessage;
+//	hcan1.pTxMsg = &TxMessage;
+//	hcan1.pRxMsg = &RxMessage;
 	
 	IHU_BSP_STM32_CAN_IAU_HANDLER.pTxMsg->StdId = AWS_CAN_ID;  //CAN ID for AWS
 	IHU_BSP_STM32_CAN_IAU_HANDLER.pTxMsg->ExtId = 0x01;
@@ -257,70 +257,10 @@ void HAL_CAN_RxCpltCallback1111(CAN_HandleTypeDef *CanHandle)   // Puhuix: renam
 #include "l2packet.h"
 
 #define BFSC_CAN_MAX_RX_BUF_SIZE 256
-IHU_HUITP_L2FRAME_Desc_t g_can_packet_desc;
+IHU_HUITP_L2FRAME_Desc_t g_can_packet_desc[2];
 uint8_t g_can_rx_buffer[BFSC_CAN_MAX_RX_BUF_SIZE];
 
-/**
-  * @brief  Configures the CAN.
-  * @param  CanHandle
-  * @retval None
-  */
-static void CAN_Config(CAN_HandleTypeDef *CanHandle)
-{
-  CAN_FilterConfTypeDef  sFilterConfig;
-  static CanTxMsgTypeDef        TxMessage;
-  static CanRxMsgTypeDef        RxMessage;
-  
-  /*##-1- Configure the CAN peripheral #######################################*/
-  CanHandle->Instance = CAN1;
-  CanHandle->pTxMsg = &TxMessage;
-  CanHandle->pRxMsg = &RxMessage;
-    
-  CanHandle->Init.TTCM = DISABLE;
-  CanHandle->Init.ABOM = DISABLE;
-  CanHandle->Init.AWUM = DISABLE;
-  CanHandle->Init.NART = DISABLE;
-  CanHandle->Init.RFLM = DISABLE;
-  CanHandle->Init.TXFP = DISABLE;
-  CanHandle->Init.Mode = CAN_MODE_NORMAL;
-  CanHandle->Init.SJW = CAN_SJW_1TQ;       // set baudrate as 500kbps
-  CanHandle->Init.BS1 = CAN_BS1_12TQ;
-  CanHandle->Init.BS2 = CAN_BS2_2TQ;
-  CanHandle->Init.Prescaler = 4;
-  
-  if(HAL_CAN_Init(CanHandle) != HAL_OK)
-  {
-    /* Initialization Error */
-    IhuDebugPrint("HAL_CAN_Init() error.\n");
-	return;
-  }
-
-  /*##-2- Configure the CAN Filter ###########################################*/
-  sFilterConfig.FilterNumber = 0;
-  sFilterConfig.FilterMode = CAN_FILTERMODE_IDMASK;
-  sFilterConfig.FilterScale = CAN_FILTERSCALE_32BIT;
-  sFilterConfig.FilterIdHigh = 0x0000;
-  sFilterConfig.FilterIdLow = 0x0000;
-  sFilterConfig.FilterMaskIdHigh = 0x0000;
-  sFilterConfig.FilterMaskIdLow = 0x0000;
-  sFilterConfig.FilterFIFOAssignment = 0;
-  sFilterConfig.FilterActivation = ENABLE;
-  sFilterConfig.BankNumber = 14;
-  
-  if(HAL_CAN_ConfigFilter(CanHandle, &sFilterConfig) != HAL_OK)
-  {
-    /* Filter configuration Error */
-    IhuDebugPrint("HAL_CAN_ConfigFilter() error.\n");
-	return;
-  }
-      
-  /*##-3- Configure Transmission process #####################################*/
-  CanHandle->pTxMsg->StdId = 0x321;
-  CanHandle->pTxMsg->ExtId = 0x01;
-  CanHandle->pTxMsg->RTR = CAN_RTR_DATA;
-  CanHandle->pTxMsg->IDE = CAN_ID_STD;
-  CanHandle->pTxMsg->DLC = 2;
-}
+//#define IhuDebugPrint(fmt, ...) 
 
 /**
   * @brief  Transmission  complete callback in non blocking mode 
@@ -330,31 +270,64 @@ static void CAN_Config(CAN_HandleTypeDef *CanHandle)
   */
 void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef* CanHandle)
 {
-	IhuDebugPrint("stdId 0x%x length %d, data: 0x%08x 0x%08x\n", 
+	IHU_HUITP_L2FRAME_Desc_t *frame_desc;
+	if(CanHandle->Instance == CAN1)
+		frame_desc = &g_can_packet_desc[0];
+	else
+		frame_desc = &g_can_packet_desc[1];
+	
+	printf("stdId 0x%x length %d, data: 0x%08x 0x%08x\n", 
 		CanHandle->pRxMsg->StdId,
 		CanHandle->pRxMsg->DLC,
 		*(uint32_t *)(&CanHandle->pRxMsg->Data[0]),
 		*(uint32_t *)(&CanHandle->pRxMsg->Data[4])
 		);
 	
-	l2packet_rx_bytes(&g_can_packet_desc, CanHandle->pRxMsg->Data, CanHandle->pRxMsg->DLC);
+	l2packet_rx_bytes(frame_desc, CanHandle->pRxMsg->Data, CanHandle->pRxMsg->DLC);
 	
 	/* Receive again */
 	if(HAL_CAN_Receive_IT(CanHandle, CAN_FIFO0) != HAL_OK)
 	{
 		/* Reception Error */
-		IhuDebugPrint("HAL_CAN_Receive_IT() error.\n");
+		IhuErrorPrint("HAL_CAN_Receive_IT() error.\n");
 	}
 }
 
-int bsp_can_start_rx(CAN_HandleTypeDef* CanHandle, void (*rx_complete_callback)(), void *user_data)
+void app_can_loopback_callback(IHU_HUITP_L2FRAME_Desc_t *pdesc)
 {
-	g_can_packet_desc.RxState = IHU_L2PACKET_RX_STATE_START;
-	g_can_packet_desc.pRxBuffPtr = g_can_rx_buffer;
-	g_can_packet_desc.RxBuffSize = BFSC_CAN_MAX_RX_BUF_SIZE;
-	g_can_packet_desc.RxXferCount = 0;
-	g_can_packet_desc.rx_complete_callback = rx_complete_callback;
-	g_can_packet_desc.UserData = user_data;
+	CAN_HandleTypeDef* CanHandle;
+
+	//assert(pdesc);
+	//assert(CanHandle);
+
+	CanHandle = (CAN_HandleTypeDef* )pdesc->UserData;
+
+	printf("L2Packet %d bytes, first: 0x%02x %02x last: 0x%02x %02x\n", 
+		pdesc->RxXferCount,
+		CanHandle->pRxMsg->Data[0], CanHandle->pRxMsg->Data[1],
+		CanHandle->pRxMsg->Data[6], CanHandle->pRxMsg->Data[7]);
+
+	bsp_can_transmit(CanHandle, pdesc->pRxBuffPtr, pdesc->RxXferCount, 10);
+}
+
+int bsp_can_start_rx(CAN_HandleTypeDef* CanHandle, void (*app_rx_callback)(), uint8_t *pRxBuffPtr, uint16_t rxBufferSize, void *user_data)
+{
+	IHU_HUITP_L2FRAME_Desc_t *frame_desc;
+	
+	if(CanHandle->Instance == CAN1)
+		frame_desc = &g_can_packet_desc[0];
+	else
+		frame_desc = &g_can_packet_desc[1];
+	
+	memset(frame_desc, 0, sizeof(IHU_HUITP_L2FRAME_Desc_t));
+	memset(pRxBuffPtr, 0, rxBufferSize);
+	
+	frame_desc->RxState = IHU_L2PACKET_RX_STATE_START;
+	frame_desc->pRxBuffPtr = pRxBuffPtr;
+	frame_desc->RxBuffSize = rxBufferSize;
+	frame_desc->RxXferCount = 0;
+	frame_desc->app_rx_callback = app_rx_callback;
+	frame_desc->UserData = user_data;
 	
 	if(HAL_CAN_Receive_IT(CanHandle, CAN_FIFO0) != HAL_OK)
 	{
@@ -384,7 +357,7 @@ uint32_t bsp_can_transmit(CAN_HandleTypeDef* CanHandle, uint8_t *buffer, uint32_
 		}
 		else
 		{
-			IhuDebugPrint("bsp_can_transmit() status=%d\n", status);
+			IhuErrorPrint("bsp_can_transmit() status=%d\n", status);
 			break;
 		}
 	}
@@ -392,7 +365,39 @@ uint32_t bsp_can_transmit(CAN_HandleTypeDef* CanHandle, uint8_t *buffer, uint32_
 	return length;
 }
 
-void bsp_can_init(CAN_HandleTypeDef* CanHandle)
+void bsp_can_init(CAN_HandleTypeDef* CanHandle, uint32_t std_id)
 {
-	CAN_Config(CanHandle);
+	CAN_FilterConfTypeDef  sFilterConfig;
+	static CanTxMsgTypeDef        TxMessage;
+  static CanRxMsgTypeDef        RxMessage;
+	
+	CanHandle->pTxMsg = &TxMessage;
+	CanHandle->pRxMsg = &RxMessage;
+	
+	/*##-2- Configure the CAN Filter ###########################################*/
+  sFilterConfig.FilterNumber = 0;
+  sFilterConfig.FilterMode = CAN_FILTERMODE_IDMASK;
+  sFilterConfig.FilterScale = CAN_FILTERSCALE_32BIT;
+  sFilterConfig.FilterIdHigh = 0x0000;
+  sFilterConfig.FilterIdLow = 0x0000;
+  sFilterConfig.FilterMaskIdHigh = 0x0000;
+  sFilterConfig.FilterMaskIdLow = 0x0000;
+  sFilterConfig.FilterFIFOAssignment = 0;
+  sFilterConfig.FilterActivation = ENABLE;
+  sFilterConfig.BankNumber = 14;
+	
+	if(HAL_CAN_ConfigFilter(CanHandle, &sFilterConfig) != HAL_OK)
+  {
+    /* Filter configuration Error */
+    return;
+  }
+	
+	/*##-3- Configure Transmission process #####################################*/
+	CanHandle->pTxMsg->StdId = std_id;
+  CanHandle->pTxMsg->ExtId = 0x01;
+  CanHandle->pTxMsg->RTR = CAN_RTR_DATA;
+  CanHandle->pTxMsg->IDE = CAN_ID_STD;
+  CanHandle->pTxMsg->DLC = 0;
+	
+	bsp_can_start_rx(CanHandle, app_can_loopback_callback, g_can_rx_buffer, BFSC_CAN_MAX_RX_BUF_SIZE, CanHandle);
 }

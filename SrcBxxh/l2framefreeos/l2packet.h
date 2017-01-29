@@ -1,6 +1,8 @@
 #ifndef  __L2_PACKET_H__
 #define  __L2_PACKET_H__
 
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -10,7 +12,7 @@ typedef struct IHU_HUITP_L2FRAME_STD_frame_header
 {
   uint8_t start;
   uint8_t chksum;
-  uint16_t len;
+  uint16_t len;     // the length including the size of header
 }IHU_HUITP_L2FRAME_STD_frame_header_t;
 
 typedef struct IHU_HUITP_L2FRAME_Desc_s
@@ -19,7 +21,7 @@ typedef struct IHU_HUITP_L2FRAME_Desc_s
 	uint8_t *pRxBuffPtr;
 	uint16_t RxBuffSize;
 	uint16_t RxXferCount;
-	void (*rx_complete_callback)();
+	void (*app_rx_callback)();
 	void *UserData;
 }IHU_HUITP_L2FRAME_Desc_t;
 

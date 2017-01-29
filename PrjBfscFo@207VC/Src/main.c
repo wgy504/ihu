@@ -117,7 +117,13 @@ static void MX_NVIC_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
-
+#ifdef __GNUC__
+  /* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
+     set to 'Yes') calls __io_putchar() */
+  #define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#else
+  #define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#endif /* __GNUC__ */
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
@@ -155,7 +161,7 @@ int main(void)
   MX_RTC_Init();
   MX_CRC_Init();
   MX_DAC_Init();
-//  MX_IWDG_Init();
+  //MX_IWDG_Init();
   MX_I2C1_Init();
 
   /* Initialize interrupts */
@@ -172,8 +178,9 @@ int main(void)
   //HAL_SPI_Receive_IT(&hspi1,&zIhuSpiRxBuffer[0],1);
   //HAL_SPI_Receive_IT(&hspi2,&zIhuSpiRxBuffer[1],1);
   HAL_I2C_Slave_Receive_IT(&hi2c1,&zIhuI2cRxBuffer[0],1);
-  HAL_CAN_Receive_IT(&hcan1, 0);
   //HAL_CAN_Receive_IT(&hcan2, 1);
+	bsp_can_init(&hcan1, 0x10);
+	HAL_CAN_Receive_IT(&hcan1, 0);
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -788,7 +795,14 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+PUTCHAR_PROTOTYPE
+{
+  /* Place your implementation of fputc here */
+  /* e.g. write a character to the EVAL_COM1 and Loop until the end of transmission */
+  HAL_UART_Transmit(&huart3, (uint8_t *)&ch, 1, 0xFFFF); 
 
+  return ch;
+}
 /* USER CODE END 4 */
 
 /* StartDefaultTask function */

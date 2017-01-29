@@ -175,7 +175,7 @@
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\SrcBxxh\l0bsp_stm32\bsp_can.c</Filename>
+          <Filename>&lt;6&gt;..\..\SrcBxxh\l0bsp_stm32\bsp_can.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\PrjBfscFo_207VC\../../SrcBxxh/l0bsp_stm32/bsp_can.c\98</Expression>
         </Bp>
@@ -191,7 +191,7 @@
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\SrcBxxh\l2framefreeos\l2canvela.c</Filename>
+          <Filename>&lt;6&gt;..\..\SrcBxxh\l2framefreeos\l2canvela.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\PrjBfscFo_207VC\../../SrcBxxh/l2framefreeos/l2canvela.c\915</Expression>
         </Bp>
@@ -207,7 +207,7 @@
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\..\SrcBxxh\l2framefreeos\l2canvela.c</Filename>
+          <Filename>&lt;6&gt;..\..\SrcBxxh\l2framefreeos\l2canvela.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression></Expression>
         </Bp>
@@ -260,7 +260,7 @@
 
   <Group>
     <GroupName>Application/MDK-ARM</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -800,7 +800,7 @@
 
   <Group>
     <GroupName>L0bsp_stm32</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1304,7 +1304,7 @@
 
   <Group>
     <GroupName>L2frame</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1456,7 +1456,7 @@
 
   <Group>
     <GroupName>L3appl</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

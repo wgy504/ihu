@@ -14,17 +14,19 @@ uint8_t l2packet_gen_chksum(IHU_HUITP_L2FRAME_STD_frame_header_t *pMsgHeader)
 /* return: the size of consumed data */
 uint16_t l2packet_rx_bytes(IHU_HUITP_L2FRAME_Desc_t *pdesc, uint8_t *data, uint16_t data_size)
 {
-	uint16_t size;
+	uint32_t i = 0;
+	IHU_HUITP_L2FRAME_STD_frame_header_t *pMsgHeader;
 
-	size = data_size <= (pdesc->RxBuffSize - pdesc->RxXferCount) ? data_size : (pdesc->RxBuffSize - pdesc->RxXferCount);
-
-	if(size > 0 && pdesc->pRxBuffPtr)
+	if(pdesc == NULL || pdesc->pRxBuffPtr == NULL)
+		return 0;
+	
+	pMsgHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)pdesc->pRxBuffPtr;
+	
+	for(i=0; i<data_size; i++)
 	{
-		IHU_HUITP_L2FRAME_STD_frame_header_t *pMsgHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)pdesc->pRxBuffPtr;
-
-		/* save the data */
-		memcpy(&pdesc->pRxBuffPtr[pdesc->RxXferCount], data, size);
-		pdesc->RxXferCount += size;
+		/* save one byte one time */
+		pdesc->pRxBuffPtr[pdesc->RxXferCount] = data[i];
+		pdesc->RxXferCount ++;
 
 		switch(pdesc->RxState)
 		{
@@ -57,8 +59,8 @@ uint16_t l2packet_rx_bytes(IHU_HUITP_L2FRAME_Desc_t *pdesc, uint8_t *data, uint1
 			if(pdesc->RxXferCount >= pMsgHeader->len)
 			{
 				// call user's callback after the receive is complete
-				if(pdesc->rx_complete_callback)
-					pdesc->rx_complete_callback(pdesc);
+				if(pdesc->app_rx_callback)
+					pdesc->app_rx_callback(pdesc);
 				
 				pdesc->RxState = IHU_L2PACKET_RX_STATE_START;
 				pdesc->RxXferCount = 0;
@@ -70,9 +72,13 @@ uint16_t l2packet_rx_bytes(IHU_HUITP_L2FRAME_Desc_t *pdesc, uint8_t *data, uint1
 				pdesc->RxState = IHU_L2PACKET_RX_STATE_START;
 			}
 			break;
+			
+			default:
+			pdesc->RxXferCount = 0;
+			pdesc->RxState = IHU_L2PACKET_RX_STATE_START;
+			break;
 		}
 	}
 	
-	return size;
+	return i;
 }
-
