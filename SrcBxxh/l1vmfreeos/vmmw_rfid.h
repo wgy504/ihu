@@ -27,7 +27,7 @@
 #define IHU_VMWM_RFIDMOD_USING_ITF_SPI2 3
 #define IHU_VMWM_RFIDMOD_USING_ITF_SET  IHU_VMWM_RFIDMOD_USING_ITF_SPI2  //CCL项目使用的接口为SPI2，BSP中有映射
 
-#define IHU_VMWM_RFIDMOD_SCAN_RC522_MAX_TIME 4
+#define IHU_VMWM_RFIDMOD_SCAN_RC522_MAX_TIME 40
 
 //向上提供全局统一服务的入口
 extern OPSTAT ihu_vmmw_rfidmod_rc522_spi_send_command(uint8_t *command);
@@ -176,7 +176,10 @@ char   PcdRequest           ( uint8_t req_code, uint8_t * pTagType ); //寻卡
 char   PcdAnticoll          ( uint8_t * pSnr);                   //读卡号
 char   PcdAuthState         ( uint8_t ucAuth_mode, uint8_t ucAddr, uint8_t * pKey, uint8_t * pSnr );//验证卡片密码
 char   PcdRead              ( uint8_t ucAddr, uint8_t * pData );      //读卡
+char 	 PcdWrite 						( uint8_t ucAddr, uint8_t * pData );			//写卡
 char   PcdSelect            ( uint8_t * pSnr );                  //选卡
+char 	 PcdHalt							( void );			//进入休眠状态
+
 
 
 #endif /* L1FREERTOS_MOD_RFID_H_ */

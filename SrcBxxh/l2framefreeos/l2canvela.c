@@ -886,7 +886,7 @@ UINT8	ctrlMsgBuf[MAX_WMC_CONTROL_MSG_LEN];
 
 OPSTAT fsm_canvela_bfsc_l2frame_snd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	int ret = 0;
+	//int ret = 0;
 	IHU_HUITP_L2FRAME_STD_frame_header_t *pFrameHeader = NULL;
 	
 	if(NULL == param_ptr)

@@ -11,11 +11,11 @@
 = 最后搞RFID/摄像头研究，看门狗
 **************************************************************************
 
-//= ZJL, 2017 Jan.27, CURRENT_SW_DELIVERY R03.110 =>CCL项目
+//= ZJL/MYC, 2017 Jan.27, CURRENT_SW_DELIVERY R03.110 =>CCL项目/BFSC
 = 将CCL任务数量缩减到极致11个，BFSC缩减到10个，正好相等于当前的任务数，从而将内存的占用优化到极致
-
-
-
+= 将CCL的SPI速率改为256分频，速率83kbs，据说这个是影响寻卡不成功的因素之一，没反应
+= 将IHU_VMWM_RFIDMOD_SCAN_RC522_MAX_TIME=40s，方便调测。
+= 将BFSC的watchdog去掉，方便BFSC的调测
 
 //= ZJL/MYC, 2017 Jan.26, CURRENT_SW_DELIVERY R03.109 =>CCL项目/BFSC
 = 改善错误打印高级技巧IHU_ERROR_PRINT_TASK(taskid, arg...)
