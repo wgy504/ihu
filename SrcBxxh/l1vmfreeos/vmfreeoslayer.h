@@ -321,6 +321,7 @@ extern QueueHandle_t ihu_message_queue_inquery(UINT8 task_id);
 extern OPSTAT ihu_message_queue_resync(void);
 extern OPSTAT ihu_message_queue_clean(UINT8 dest_id);
 extern OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len); //message send
+extern OPSTAT ihu_message_send_isr(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len); //message send //MYC
 extern OPSTAT ihu_message_rcv(UINT8 dest_id, IhuMsgSruct_t *msg);
 extern OPSTAT ihu_task_create(UINT8 task_id, void *(*task_func)(void *), void *arg, int prio);
 extern OPSTAT ihu_task_delete(UINT8 task_id);

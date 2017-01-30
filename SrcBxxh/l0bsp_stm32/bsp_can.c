@@ -299,18 +299,28 @@ void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef* CanHandle)
 void app_can_loopback_callback(IHU_HUITP_L2FRAME_Desc_t *pdesc)
 {
 	CAN_HandleTypeDef* CanHandle;
+	int ret = 0;
 
 	//assert(pdesc);
 	//assert(CanHandle);
 
 	CanHandle = (CAN_HandleTypeDef* )pdesc->UserData;
 
-	printf("L2Packet %d bytes, first: 0x%02x %02x last: 0x%02x %02x\n", 
+	printf("CAN ISR: L2Packet %d bytes, first: 0x%02x %02x last: 0x%02x %02x\n", 
 		pdesc->RxXferCount,
 		CanHandle->pRxMsg->Data[0], CanHandle->pRxMsg->Data[1],
 		CanHandle->pRxMsg->Data[6], CanHandle->pRxMsg->Data[7]);
-
-	bsp_can_transmit(CanHandle, pdesc->pRxBuffPtr, pdesc->RxXferCount, 10);
+	
+	//Forward to TASK_ID_CANVELA
+	ret = ihu_message_send_isr(MSG_ID_CAN_L2FRAME_RCV, TASK_ID_CANVELA, TASK_ID_CANVELA, g_can_rx_buffer, pdesc->RxXferCount);
+	if (ret == IHU_FAILURE){
+		//zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		printf("CAN ISR: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_CANVELA].taskName, zIhuTaskInfo[TASK_ID_CANVELA].taskName);
+		return;
+	}
+	//printf("CAN ISR: Send message OK, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_CANVELA].taskName, zIhuTaskInfo[TASK_ID_BFSC].taskName);
+	
+	//bsp_can_transmit(CanHandle, pdesc->pRxBuffPtr, pdesc->RxXferCount, 10);
 }
 
 int bsp_can_start_rx(CAN_HandleTypeDef* CanHandle, void (*app_rx_callback)(), uint8_t *pRxBuffPtr, uint16_t rxBufferSize, void *user_data)
@@ -396,7 +406,7 @@ void bsp_can_init(CAN_HandleTypeDef* CanHandle, uint32_t std_id)
   }
 	
 	/*##-3- Configure Transmission process #####################################*/
-	CanHandle->pTxMsg->StdId = std_id;
+	CanHandle->pTxMsg->StdId = AWS_CAN_ID;
   CanHandle->pTxMsg->ExtId = 0x01;
   CanHandle->pTxMsg->RTR = CAN_RTR_DATA;
   CanHandle->pTxMsg->IDE = CAN_ID_STD;
@@ -404,3 +414,21 @@ void bsp_can_init(CAN_HandleTypeDef* CanHandle, uint32_t std_id)
 	
 	bsp_can_start_rx(CanHandle, app_can_loopback_callback, g_can_rx_buffer, BFSC_CAN_MAX_RX_BUF_SIZE, CanHandle);
 }
+
+////MYC Forward the complete/valid CAN Frame from CAN Interrupt to CAN Task
+////MSG_ID_CAN_L2FRAME_RCV
+//OPSTAT complete_wmc_control_frame_forward_canvela(void *p_msg, UINT16 msg_len)
+//{
+//	int ret = 0;
+//	msg_struct_canvela_l2frame_rcv_t rcv;
+
+//	ret = ihu_message_send(MSG_ID_CAN_L3BFSC_CMD_CTRL, TASK_ID_BFSC, TASK_ID_CANVELA, p_msg, msg_len);
+//	if (ret == IHU_FAILURE){
+//		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+//		IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_CANVELA].taskName, zIhuTaskInfo[TASK_ID_BFSC].taskName);
+//		return IHU_FAILURE;
+//	}	
+//	//返回
+//	return IHU_SUCCESS;
+//}
+
