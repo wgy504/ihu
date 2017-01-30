@@ -126,6 +126,9 @@ int ihu_bsp_stm32_can_send_data(uint8_t* buff, uint16_t len)
 		else
 		{
 			IhuDebugPrint("CANVELA: ihu_bsp_stm32_can_send_data: HAL_CAN_Transmit NOK\n");
+			//TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			//TODO: !!!!!!!!!!! CAN Link Faifure NEED TO BE CONSIDERRED !!!!!!!!!!
+			//TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			return BSP_FAILURE;
 		}		
 	}

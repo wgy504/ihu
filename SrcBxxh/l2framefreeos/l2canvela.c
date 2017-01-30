@@ -904,7 +904,7 @@ OPSTAT fsm_canvela_bfsc_l2frame_snd(UINT8 dest_id, UINT8 src_id, void * param_pt
 	
 	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
 	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
-	pFrameHeader->len = param_len;
+	pFrameHeader->len = param_len + MAX_WMC_CONTROL_MSG_HEADER_LEN;
 	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
 	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], param_ptr, param_len);
 	IhuDebugPrint("CANVELA: fsm_canvela_bfsc_l2frame_snd: start = [0x%02X], chksum = [0x%02X], len = [%d]\n", pFrameHeader->start, pFrameHeader->chksum, pFrameHeader->len);
