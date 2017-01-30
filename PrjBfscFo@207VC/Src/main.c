@@ -158,10 +158,6 @@ int main(void)
   MX_RTC_Init();
   MX_CRC_Init();
   MX_DAC_Init();
-<<<<<<< HEAD
-  //MX_IWDG_Init();
-=======
->>>>>>> a02caf0032dd7260c540b7c3f25988c7132e6a6f
   MX_I2C1_Init();
 
   /* Initialize interrupts */
