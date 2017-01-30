@@ -1173,7 +1173,7 @@ OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr,
 OPSTAT FsmProcessingLaunch(void *task)
 {
 	OPSTAT ret;
-	IhuMsgSruct_t rcv;
+	IhuMsgSruct_t rcv; //MYC
 	UINT8 task_id = 0; //Get current working task_id
 	
 	/*
@@ -1418,14 +1418,17 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 
 	//Init to clean this memory area
   //初始化消息内容，是为了稳定可靠安全
+	//IhuDebugPrint("VMFO: Calling memset(&msg, 0, sizeof(IhuMsgSruct_t));\r\n");
   memset(&msg, 0, sizeof(IhuMsgSruct_t));
   msg.msgType = msg_id;
   msg.dest_id = dest_id;
   msg.src_id = src_id;
   msg.msgLen = param_len;
+	//IhuDebugPrint("VMFO: Calling memcpy(&(msg.msgBody[0]), param_ptr, param_len);\r\n");
   memcpy(&(msg.msgBody[0]), param_ptr, param_len);
 
   //正式发送QUEUE
+	//IhuDebugPrint("VMFO: Calling OS_QUEUE_PUT()\r\n");
   if (OS_QUEUE_PUT(zIhuTaskInfo[dest_id].QueId, &msg, 0) != OS_QUEUE_OK){
     zIhuRunErrCnt[TASK_ID_VMFO]++;
     IhuErrorPrint("VMFO: msgsnd() write msg failed, errno=%d[%s], dest_id = %d [%s]\n",errno,strerror(errno), dest_id, zIhuTaskInfo[dest_id].taskName);
@@ -1627,6 +1630,265 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_NOR_ON) != FALSE){
 				zIhuRunErrCnt[TASK_ID_VMFO]++;
 				IhuErrorPrint("VMFO: System Engineering Parameter Trace Mode setting error! DebugMode=%d\n", zIhuSysEngPar.debugMode);
+			}
+			break;
+	}
+
+	return IHU_SUCCESS;
+}
+
+//MYC
+OPSTAT ihu_message_send_isr(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)
+{
+	//int ret = 0;
+	char s1[TASK_NAME_MAX_LENGTH+2]="", s2[TASK_NAME_MAX_LENGTH+2]="", s3[MSG_NAME_MAX_LENGTH]="";
+	IhuMsgSruct_t msg;
+	
+	//Checking task_id range
+	if ((dest_id <= TASK_ID_MIN) || (dest_id >= TASK_ID_MAX)){
+		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		printf("VMFO: Error on task_id, dest_id=%d!!!\n", dest_id);
+		return IHU_FAILURE;
+	}
+	if ((src_id <= TASK_ID_MIN) || (src_id >= TASK_ID_MAX)){
+		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		printf("VMFO: Error on task_id, src_id=%d!!!\n", src_id);
+		return IHU_FAILURE;
+	}
+	if (param_len > MAX_IHU_MSG_BODY_LENGTH){
+		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		printf("VMFO: Too large message length than IHU set capability, param_len=%d!!!\n", param_len);
+		return IHU_FAILURE;
+	}
+
+	//Init to clean this memory area
+  //初始化消息内容，是为了稳定可靠安全
+	//printf("VMFO: Calling memset(&msg, 0, sizeof(IhuMsgSruct_t));\r\n");
+  memset(&msg, 0, sizeof(IhuMsgSruct_t));
+  msg.msgType = msg_id;
+  msg.dest_id = dest_id;
+  msg.src_id = src_id;
+  msg.msgLen = param_len;
+	//printf("VMFO: Calling memcpy(&(msg.msgBody[0]), param_ptr, param_len);\r\n");
+  memcpy(&(msg.msgBody[0]), param_ptr, param_len);
+
+  //正式发送QUEUE
+	//printf("VMFO: Calling OS_QUEUE_PUT_FROM_ISR() start ...\r\n");
+	
+	{ 
+			BaseType_t need_switch;
+		  int ret; 
+			ret = xQueueSendToBackFromISR(zIhuTaskInfo[dest_id].QueId, &msg, &need_switch); 
+			portEND_SWITCHING_ISR(need_switch); 
+			if (OS_QUEUE_OK != ret)
+			{
+					zIhuRunErrCnt[TASK_ID_VMFO]++;
+					printf("VMFO: msgsnd() write msg failed, errno=%d[%s], dest_id = %d [%s]\n",errno,strerror(errno), dest_id, zIhuTaskInfo[dest_id].taskName);
+					return IHU_FAILURE;
+			}
+	}
+//  if ( OS_QUEUE_PUT_FROM_ISR(zIhuTaskInfo[dest_id].QueId, &msg) != OS_QUEUE_OK)
+//	{
+//    zIhuRunErrCnt[TASK_ID_VMFO]++;
+//    printf("VMFO: msgsnd() write msg failed, errno=%d[%s], dest_id = %d [%s]\n",errno,strerror(errno), dest_id, zIhuTaskInfo[dest_id].taskName);
+//    //zIhuTaskInfo[dest_id].QueFullFlag = IHU_TASK_QUEUE_FULL_TRUE;
+//    return IHU_FAILURE;
+//  }
+	printf("VMFO: Calling OS_QUEUE_PUT_FROM_ISR() end.\r\n");
+	/*
+	 *  Message Trace processing
+	 *  注意字符串长度，太小会出现内存飞掉的情形，MessageTrace的数据配置来源于数据库，层次比这个还要高，虽然有点怪怪的，但不影响总体架构
+	 *  最开始采用IFDEF的形式，后期完善后改为更为直接的代码方式
+	 *  软件开发中，DEBUG和TRACE是两种最常用/最有用的调试模式，比单步还有用，这不仅是因为熟手不需要单步执行，而且也是因为多线程多进程单步执行环境制造的复杂性
+	 *
+	 *  有关MESSAGE TRACE的效率，是一个要注意的问题，当系统负载不高时，打开所有的TRACE是合适的，但一旦部署实际系统，TRACE需要减少到最低程度，这是原则，实际需要
+	 *  维护人员根据情况灵活把我
+	 *
+	 *  本TRACE功能，提供了多种工作模式
+	 *
+	 */
+	switch (zIhuSysEngPar.traceMode)
+	{
+		case IHU_TRACE_MSG_MODE_OFF:
+			break;
+
+		case IHU_TRACE_MSG_MODE_INVALID:
+			break;
+
+		case IHU_TRACE_MSG_MODE_ALL:
+			ihu_taskid_to_string(dest_id, s1);
+			ihu_taskid_to_string(src_id, s2);
+			ihu_msgid_to_string(msg_id, s3);
+			printf("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
+			break;
+
+		case IHU_TRACE_MSG_MODE_ALL_BUT_TIME_OUT:
+			ihu_taskid_to_string(dest_id, s1);
+			ihu_taskid_to_string(src_id, s2);
+			ihu_msgid_to_string(msg_id, s3);
+			if (msg_id != MSG_ID_COM_TIME_OUT){
+				printf("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
+			}
+			break;
+
+		case IHU_TRACE_MSG_MODE_ALL_BUT_HEART_BEAT:
+			ihu_taskid_to_string(dest_id, s1);
+			ihu_taskid_to_string(src_id, s2);
+			ihu_msgid_to_string(msg_id, s3);
+			if ((msg_id != MSG_ID_COM_HEART_BEAT) && (msg_id != MSG_ID_COM_HEART_BEAT_FB)){
+				printf("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
+			}
+			break;
+
+		case IHU_TRACE_MSG_MODE_ALL_BUT_TIME_OUT_AND_HEART_BEAT:
+			ihu_taskid_to_string(dest_id, s1);
+			ihu_taskid_to_string(src_id, s2);
+			ihu_msgid_to_string(msg_id, s3);
+			if ((msg_id != MSG_ID_COM_TIME_OUT) && (msg_id != MSG_ID_COM_HEART_BEAT) && (msg_id != MSG_ID_COM_HEART_BEAT_FB)){
+				printf("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
+			}
+			break;
+
+		case IHU_TRACE_MSG_MODE_MOUDLE_TO_ALLOW:
+			ihu_taskid_to_string(dest_id, s1);
+			ihu_taskid_to_string(src_id, s2);
+			ihu_msgid_to_string(msg_id, s3);
+			if ((zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToAllow == TRUE)){
+				printf("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
+			}
+			break;
+
+		case IHU_TRACE_MSG_MODE_MOUDLE_TO_RESTRICT:
+			ihu_taskid_to_string(dest_id, s1);
+			ihu_taskid_to_string(src_id, s2);
+			ihu_msgid_to_string(msg_id, s3);
+			if ((zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToRestrict!= TRUE)){
+				printf("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
+			}
+			break;
+
+		case IHU_TRACE_MSG_MODE_MOUDLE_FROM_ALLOW:
+			ihu_taskid_to_string(dest_id, s1);
+			ihu_taskid_to_string(src_id, s2);
+			ihu_msgid_to_string(msg_id, s3);
+			if ((zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleToAllow == TRUE)){
+				printf("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
+			}
+			break;
+
+		case IHU_TRACE_MSG_MODE_MOUDLE_FROM_RESTRICT:
+			ihu_taskid_to_string(dest_id, s1);
+			ihu_taskid_to_string(src_id, s2);
+			ihu_msgid_to_string(msg_id, s3);
+			if ((zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleToRestrict!= TRUE)){
+				printf("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
+			}
+			break;
+
+		case IHU_TRACE_MSG_MODE_MOUDLE_DOUBLE_ALLOW:
+			ihu_taskid_to_string(dest_id, s1);
+			ihu_taskid_to_string(src_id, s2);
+			ihu_msgid_to_string(msg_id, s3);
+			if ((zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleToAllow == TRUE)
+					&& (zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToAllow == TRUE)){
+				printf("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
+			}
+			break;
+
+		case IHU_TRACE_MSG_MODE_MOUDLE_DOUBLE_RESTRICT:
+			ihu_taskid_to_string(dest_id, s1);
+			ihu_taskid_to_string(src_id, s2);
+			ihu_msgid_to_string(msg_id, s3);
+			if ((zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleToRestrict != TRUE)
+					&& (zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToRestrict != TRUE)){
+				printf("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
+			}
+			break;
+
+		case IHU_TRACE_MSG_MODE_MSGID_ALLOW:
+			ihu_taskid_to_string(dest_id, s1);
+			ihu_taskid_to_string(src_id, s2);
+			ihu_msgid_to_string(msg_id, s3);
+			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgAllow == TRUE)){
+				printf("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
+			}
+			break;
+
+		case IHU_TRACE_MSG_MODE_MSGID_RESTRICT:
+			ihu_taskid_to_string(dest_id, s1);
+			ihu_taskid_to_string(src_id, s2);
+			ihu_msgid_to_string(msg_id, s3);
+			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgRestrict != TRUE)){
+				printf("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
+			}
+			break;
+
+		case IHU_TRACE_MSG_MODE_COMBINE_TO_ALLOW:
+			ihu_taskid_to_string(dest_id, s1);
+			ihu_taskid_to_string(src_id, s2);
+			ihu_msgid_to_string(msg_id, s3);
+			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgAllow == TRUE)
+					&& (zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToAllow == TRUE)){
+				printf("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
+			}
+			break;
+
+		case IHU_TRACE_MSG_MODE_COMBINE_TO_RESTRICT:
+			ihu_taskid_to_string(dest_id, s1);
+			ihu_taskid_to_string(src_id, s2);
+			ihu_msgid_to_string(msg_id, s3);
+			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgAllow == TRUE)
+					&& (zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToRestrict != TRUE)){
+				printf("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
+			}
+			break;
+
+		case IHU_TRACE_MSG_MODE_COMBINE_FROM_ALLOW:
+			ihu_taskid_to_string(dest_id, s1);
+			ihu_taskid_to_string(src_id, s2);
+			ihu_msgid_to_string(msg_id, s3);
+			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgAllow == TRUE)
+					&& (zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleFromAllow == TRUE)){
+				printf("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
+			}
+			break;
+
+		case IHU_TRACE_MSG_MODE_COMBINE_FROM_RESTRICT:
+			ihu_taskid_to_string(dest_id, s1);
+			ihu_taskid_to_string(src_id, s2);
+			ihu_msgid_to_string(msg_id, s3);
+			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgRestrict != TRUE)
+					&& (zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleFromRestrict != TRUE)){
+				printf("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
+			}
+			break;
+
+		case IHU_TRACE_MSG_MODE_COMBINE_DOUBLE_ALLOW:
+			ihu_taskid_to_string(dest_id, s1);
+			ihu_taskid_to_string(src_id, s2);
+			ihu_msgid_to_string(msg_id, s3);
+			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgAllow == TRUE)
+					&& (zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToAllow == TRUE)
+					&& (zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleFromAllow == TRUE)){
+				printf("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
+			}
+			break;
+
+		case IHU_TRACE_MSG_MODE_COMBINE_DOUBLE_RESTRICT:
+			ihu_taskid_to_string(dest_id, s1);
+			ihu_taskid_to_string(src_id, s2);
+			ihu_msgid_to_string(msg_id, s3);
+			if ((zIhuSysEngPar.traceList.msg[msg_id].msgId == msg_id) && (zIhuSysEngPar.traceList.msg[msg_id].msgRestrict != TRUE)
+					&& (zIhuSysEngPar.traceList.mod[dest_id].moduleId == dest_id) && (zIhuSysEngPar.traceList.mod[dest_id].moduleToRestrict != TRUE)
+					&& (zIhuSysEngPar.traceList.mod[src_id].moduleId == src_id) && (zIhuSysEngPar.traceList.mod[src_id].moduleFromRestrict != TRUE)){
+				printf("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
+			}
+			break;
+
+		default:
+			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_NOR_ON) != FALSE){
+				zIhuRunErrCnt[TASK_ID_VMFO]++;
+				printf("VMFO: System Engineering Parameter Trace Mode setting error! DebugMode=%d\n", zIhuSysEngPar.debugMode);
 			}
 			break;
 	}
@@ -1928,6 +2190,7 @@ OPSTAT FsmProcessingLaunchEntryBareRtos(UINT8 task_id)
   return IHU_SUCCESS;
 }
 
+//IhuMsgSruct_t rcv;
 OPSTAT FsmProcessingLaunchExecuteBareRtos(UINT8 task_id)
 {
   OPSTAT ret;
@@ -2037,9 +2300,10 @@ OPSTAT ihu_message_rcv_bare_rtos(UINT8 dest_id, IhuMsgSruct_t *msg)
 
 //message send basic processing
 //All in parameters
+IhuMsgSruct_t msg;
 OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)
 {
-  IhuMsgSruct_t msg;
+  //IhuMsgSruct_t msg;
   int i=0, j=0;
   bool Flag = FALSE;
   char s1[TASK_NAME_MAX_LENGTH+2]="", s2[TASK_NAME_MAX_LENGTH+2]="", s3[MSG_NAME_MAX_LENGTH]="";

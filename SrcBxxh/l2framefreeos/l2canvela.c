@@ -50,19 +50,13 @@ FsmStateItem_t FsmCanvela[] =
 
 	//MYC update for state machine
 	{MSG_ID_L3BFSC_WMC_STARTUP_IND,					FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
-	{MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ,			FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_bfsc_l2frame_rcv},
 	{MSG_ID_L3BFSC_WMC_SET_CONFIG_RESP,			FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
-	{MSG_ID_L3BFSC_WMC_GET_CONFIG_REQ,			FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_bfsc_l2frame_rcv},
 	{MSG_ID_L3BFSC_WMC_GET_CONFIG_RESP,			FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
-	{MSG_ID_L3BFSC_WMC_START_REQ,						FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_bfsc_l2frame_rcv},
 	{MSG_ID_L3BFSC_WMC_START_RESP,					FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
-	{MSG_ID_L3BFSC_WMC_STOP_REQ,						FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_bfsc_l2frame_rcv},
 	{MSG_ID_L3BFSC_WMC_STOP_RESP,						FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
 	{MSG_ID_L3BFSC_WMC_WEIGHT_IND,					FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
-	{MSG_ID_L3BFSC_WMC_COMBIN_REQ,					FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_bfsc_l2frame_rcv},
 	{MSG_ID_L3BFSC_WMC_COMBIN_RESP,					FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
 	{MSG_ID_L3BFSC_WMC_FAULT_IND,						FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
-	{MSG_ID_L3BFSC_WMC_COMMAND_REQ,					FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_bfsc_l2frame_rcv},
 	{MSG_ID_L3BFSC_WMC_COMMAND_RESP,				FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
 	
 #endif
@@ -479,133 +473,56 @@ OPSTAT fsm_canvela_l3bfsc_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr
 }
 
 //MSG_ID_CAN_L2FRAME_RCV
-OPSTAT fsm_canvela_bfsc_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+OPSTAT fsm_canvela_bfsc_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)
 {
-	int ret = 0;
-	msg_struct_canvela_l2frame_rcv_t rcv;
-	msg_struct_canvela_l3bfsc_cmd_ctrl_t snd;
-	msg_struct_canvela_adc_ws_man_set_zero_t snd1;
+	int ret = 0, i = 0;
+	UINT32 msg_id = 0;
+	msg_struct_l3bfsc_wmc_msg_header_t *pMsgInnerHeader;
+	IHU_HUITP_L2FRAME_STD_frame_header_t *pMsgOutHeader;
+	UINT16 msg_len = 0;
 	
-	//收到消息并做参数检查
-	memset(&rcv, 0, sizeof(msg_struct_canvela_l2frame_rcv_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_canvela_l2frame_rcv_t))){
-		IhuErrorPrint("CANVELA: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
-		return IHU_FAILURE;
-	}
-	memcpy(&rcv, param_ptr, param_len);
-
-	//再使用strIhuCanvelaCmdFrame_t数据结果对其进行格式化
-	strIhuCanvelaCmdFrame_t *pd;
-	pd = (strIhuCanvelaCmdFrame_t *)rcv.data;
+	pMsgOutHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)param_ptr;
+	pMsgInnerHeader = (msg_struct_l3bfsc_wmc_msg_header_t *)((UINT8 *)param_ptr + 4);
+	msg_len = pMsgInnerHeader->length;
+	msg_id = pMsgInnerHeader->msgid;
 	
-	//入参检查
-	if ((pd->bfscCmdPrefixL != IHU_CANVELA_CMD_PREFIXL) || (pd->bfscCmdId != IHU_CANVELA_CMD_BFSC_ID))
+	/* Check message length */
+	if( msg_len != (param_len - MAX_WMC_CONTROL_MSG_HEADER_LEN))
 	{
-		IhuErrorPrint("CANVELA: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
-		return IHU_FAILURE;
-	}
-	
-	//以下是具体的处理
-	UINT8 prefixcmdid = 0;
-	UINT8 optid = 0;
-	UINT8 optpar = 0;
-	UINT32 modbusval = 0;
-	ret = func_canvela_frame_decode(pd, prefixcmdid, optid, optpar, modbusval);
-	if (ret == IHU_FAILURE){
-		IhuErrorPrint("CANVELA: Encode CAN L2FRAME error!\n");
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
-		return IHU_FAILURE;		
-	}	
-
-	//心跳函数
-	if (prefixcmdid == IHU_CANVELA_PREFIXH_heart_beat)
-	{
-		ret = func_canvela_frame_encode(IHU_CANVELA_PREFIXH_heart_beat, 0, 0, 0, pd);
-		if (ret == IHU_FAILURE){
-			IhuErrorPrint("CANVELA: Encode CAN L2FRAME error!\n");
+			IhuErrorPrint("CANVELA: fsm_canvela_bfsc_l2frame_rcv: msg_len(%d) != param_len (%d)\n", msg_len, (param_len - MAX_WMC_CONTROL_MSG_HEADER_LEN));
 			zIhuRunErrCnt[TASK_ID_CANVELA]++;
-			return IHU_FAILURE;		
-		}
-		//func_canvela_frame_send(pd);
-	}
-	
-	//整个节点的控制消息
-	else if (prefixcmdid == IHU_CANVELA_PREFIXH_node_ctrl)
-	{
-		memset(&snd, 0, sizeof(msg_struct_canvela_l3bfsc_cmd_ctrl_t));
-		snd.cmd.prefixcmdid = IHU_CANVELA_PREFIXH_node_ctrl;
-		snd.cmd.optid = optid;
-		snd.cmd.optpar = optpar;
-		snd.cmd.modbusVal = modbusval;
-		snd.length = sizeof(msg_struct_canvela_l3bfsc_cmd_ctrl_t);
-		ret = ihu_message_send(MSG_ID_CAN_L3BFSC_CMD_CTRL, TASK_ID_BFSC, TASK_ID_CANVELA, &snd, snd.length);
-		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_CANVELA]++;
-			IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_CANVELA].taskName, zIhuTaskInfo[TASK_ID_BFSC].taskName);
 			return IHU_FAILURE;
-		}	
+	}
+	
+	/* Check message ID and message length mapping */
+	if(IHU_FAILURE == WmcAwsMsgCheck(pMsgInnerHeader, msg_len))
+	{
+			IhuErrorPrint("CANVELA: fsm_canvela_bfsc_l2frame_rcv, msg check failure, return!\n");
+			zIhuRunErrCnt[TASK_ID_CANVELA]++;
+			return IHU_FAILURE;
 	}
 
-	//WS控制中的SET ZERO手动清零命令
-	else if ((prefixcmdid == IHU_CANVELA_PREFIXH_ws_ctrl) && (optid == IHU_CANVELA_OPTID_manual_set_zero))
+	IhuDebugPrint("CANVELA: Header (msg_id = 0x%08X, msg_len = %d bytes)\r\n", msg_id, msg_len);
+	IhuDebugPrint("CANVELA: Header + Payload(%d bytes):", msg_len);
+	for(i = 0; i < msg_len; i++)
 	{
-		//只有在BFSC主控模块不在ACTIVE状态下，就使用直接穿透方式去设置ADC-WS的手动清零指令
-		if (FsmGetState(TASK_ID_BFSC) != FSM_STATE_CANVELA_ACTIVED)
-		{
-			memset(&snd1, 0, sizeof(msg_struct_canvela_adc_ws_man_set_zero_t));
-			snd1.length = sizeof(msg_struct_canvela_adc_ws_man_set_zero_t);
-			ret = ihu_message_send(MSG_ID_CAN_ADC_WS_MAN_SET_ZERO, TASK_ID_ADCLIBRA, TASK_ID_CANVELA, &snd1, snd1.length);
-			if (ret == IHU_FAILURE){
-				zIhuRunErrCnt[TASK_ID_CANVELA]++;
-				IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_CANVELA].taskName, zIhuTaskInfo[TASK_ID_ADCLIBRA].taskName);
-				return IHU_FAILURE;
-			}			
-		}
+			if(0 == (i % 32))  printf("\r\n");
+			printf("%02X ", *(((UINT8 *)pMsgInnerHeader)+i));
+			//OSTimeDlyHMSM(0, 0, 0, 1);  //schedule other task, so that not block
 	}
+	printf("\r\n");
 	
-	//WS控制
-	else if (prefixcmdid == IHU_CANVELA_PREFIXH_ws_ctrl)
-	{
-		memset(&snd, 0, sizeof(msg_struct_canvela_l3bfsc_cmd_ctrl_t));
-		snd.cmd.prefixcmdid = IHU_CANVELA_PREFIXH_ws_ctrl;
-		snd.cmd.optid = optid;
-		snd.cmd.optpar = optpar;
-		snd.cmd.modbusVal = modbusval;
-		snd.length = sizeof(msg_struct_canvela_l3bfsc_cmd_ctrl_t);
-		ret = ihu_message_send(MSG_ID_CAN_L3BFSC_CMD_CTRL, TASK_ID_BFSC, TASK_ID_CANVELA, &snd, snd.length);
-		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_CANVELA]++;
-			IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_CANVELA].taskName, zIhuTaskInfo[TASK_ID_BFSC].taskName);
-			return IHU_FAILURE;
-		}	
-	}
-	
-	//MOTO控制
-	else if (prefixcmdid == IHU_CANVELA_PREFIXH_motor_ctrl)
-	{
-		memset(&snd, 0, sizeof(msg_struct_canvela_l3bfsc_cmd_ctrl_t));
-		snd.cmd.prefixcmdid = IHU_CANVELA_PREFIXH_motor_ctrl;
-		snd.cmd.optid = optid;
-		snd.cmd.optpar = optpar;
-		snd.cmd.modbusVal = modbusval;
-		snd.length = sizeof(msg_struct_canvela_l3bfsc_cmd_ctrl_t);
-		ret = ihu_message_send(MSG_ID_CAN_L3BFSC_CMD_CTRL, TASK_ID_BFSC, TASK_ID_CANVELA, &snd, snd.length);
-		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_CANVELA]++;
-			IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_CANVELA].taskName, zIhuTaskInfo[TASK_ID_BFSC].taskName);
-			return IHU_FAILURE;
-		}	
-	}
-	
-	//不正常的参数
-	else
-	{
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
-		IhuErrorPrint("CANVELA: Input parameters error!\n");
-		return IHU_FAILURE;	
-	}
+//	ret = ihu_message_send(MSG_ID_CAN_L3BFSC_CMD_CTRL, TASK_ID_BFSC, TASK_ID_CANVELA, &snd, snd.length);
+//	if (ret == IHU_FAILURE){
+//		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+//		IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_CANVELA].taskName, zIhuTaskInfo[TASK_ID_BFSC].taskName);
+//		return IHU_FAILURE;
+//	}	
+	/* ==================== TODO ==================*/
+	/* START TO PROCESS THE RECIEVED VALID MESSAGE */
+	/* STEP 1: Check Parameters, if PARAMETER IS NOK, RETURN HERE OR RETURN IN BFSC TASK */
+	/* STEP 2: FORWARD TO FBSC TASK */
+	/* ============================================*/
 	
 	//返回
 	return IHU_SUCCESS;
@@ -791,9 +708,10 @@ OPSTAT func_canvela_frame_decode(strIhuCanvelaCmdFrame_t *pframe, UINT8 prefixcm
 
 //MYC START
 //处理所有从WMC到AWS的消息。
-OPSTAT WmcAwsMsgCheck(void * param_ptr, UINT16 param_len)
+OPSTAT WmcAwsMsgCheck(void * param_ptr, UINT16 msg_len)
 {
 	UINT32	msgid = 0xFFFFFFFF;
+	char s3[MSG_NAME_MAX_LENGTH] = "";
 	
 	if(NULL == param_ptr)
 	{
@@ -801,79 +719,80 @@ OPSTAT WmcAwsMsgCheck(void * param_ptr, UINT16 param_len)
 		return IHU_FAILURE;
 	}
 	
-	if(param_len > MAX_WMC_CONTROL_MSG_BODY_LEN)
+	if(msg_len > MAX_WMC_CONTROL_MSG_BODY_LEN)
 	{
-		IhuErrorPrint("CANVELA: WmcAwsMsgCheck, param_len(%d) > MAX_WMC_CONTROL_MSG_BODY_LEN(%d), return!\n", param_len, MAX_WMC_CONTROL_MSG_BODY_LEN);
+		IhuErrorPrint("CANVELA: WmcAwsMsgCheck, msg_len(%d) > MAX_WMC_CONTROL_MSG_BODY_LEN(%d), return!\n", msg_len, MAX_WMC_CONTROL_MSG_BODY_LEN);
 		return IHU_FAILURE;		
 	}
 	
 	/* Get MsgId */
 	msgid = *((UINT32 *)param_ptr);
-	IhuDebugPrint("CANVELA: WmcAwsMsgCheck: received msgid = [%d], param_len = [%d]\n", msgid, param_len);
+	ihu_msgid_to_string(msgid, s3);
+	IhuDebugPrint("CANVELA: WmcAwsMsgCheck: received msgid = [0x%08X]%s, msg_len = [%d]\n", msgid, s3, msg_len);
 	switch (msgid)
 	{
 		case MSG_ID_L3BFSC_WMC_STARTUP_IND:
-			if(MSG_SIZE_L3BFSC_WMC_STARTUP_IND == param_len) return IHU_SUCCESS;
+			if(MSG_SIZE_L3BFSC_WMC_STARTUP_IND == msg_len) return IHU_SUCCESS;
 			break;
 		
 		case MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ:
-			if(MSG_SIZE_L3BFSC_WMC_SET_CONFIG_REQ == param_len) return IHU_SUCCESS;
+			if(MSG_SIZE_L3BFSC_WMC_SET_CONFIG_REQ == msg_len) return IHU_SUCCESS;
 			break;		
 		
 		case MSG_ID_L3BFSC_WMC_SET_CONFIG_RESP:
-			if(MSG_SIZE_L3BFSC_WMC_SET_CONFIG_RESP == param_len) return IHU_SUCCESS;
+			if(MSG_SIZE_L3BFSC_WMC_SET_CONFIG_RESP == msg_len) return IHU_SUCCESS;
 			break;
 		
 		case MSG_ID_L3BFSC_WMC_GET_CONFIG_REQ:
-			if(MSG_SIZE_L3BFSC_WMC_GET_CONFIG_REQ == param_len) return IHU_SUCCESS;
+			if(MSG_SIZE_L3BFSC_WMC_GET_CONFIG_REQ == msg_len) return IHU_SUCCESS;
 			break;
 		
 		case MSG_ID_L3BFSC_WMC_GET_CONFIG_RESP:
-			if(MSG_SIZE_L3BFSC_WMC_GET_CONFIG_RESP == param_len) return IHU_SUCCESS;
+			if(MSG_SIZE_L3BFSC_WMC_GET_CONFIG_RESP == msg_len) return IHU_SUCCESS;
 			break;
 		
 		case MSG_ID_L3BFSC_WMC_START_REQ:
-			if(MSG_SIZE_L3BFSC_WMC_START_REQ == param_len) return IHU_SUCCESS;
+			if(MSG_SIZE_L3BFSC_WMC_START_REQ == msg_len) return IHU_SUCCESS;
 			break;
 		
 		case MSG_ID_L3BFSC_WMC_START_RESP:
-			if(MSG_SIZE_L3BFSC_WMC_START_RESP == param_len) return IHU_SUCCESS;
+			if(MSG_SIZE_L3BFSC_WMC_START_RESP == msg_len) return IHU_SUCCESS;
 			break;
 		
 		case MSG_ID_L3BFSC_WMC_STOP_REQ:
-			if(MSG_SIZE_L3BFSC_WMC_STOP_REQ == param_len) return IHU_SUCCESS;
+			if(MSG_SIZE_L3BFSC_WMC_STOP_REQ == msg_len) return IHU_SUCCESS;
 			break;
 		
 		case MSG_ID_L3BFSC_WMC_STOP_RESP:
-			if(MSG_SIZE_L3BFSC_WMC_STOP_RESP == param_len) return IHU_SUCCESS;
+			if(MSG_SIZE_L3BFSC_WMC_STOP_RESP == msg_len) return IHU_SUCCESS;
 			break;
 		
 		case MSG_ID_L3BFSC_WMC_WEIGHT_IND:
-			if(MSG_SIZE_L3BFSC_WMC_WEIGHT_IND == param_len) return IHU_SUCCESS;
+			if(MSG_SIZE_L3BFSC_WMC_WEIGHT_IND == msg_len) return IHU_SUCCESS;
 			break;
 		
 		case MSG_ID_L3BFSC_WMC_COMBIN_REQ:
-			if(MSG_SIZE_L3BFSC_WMC_COMBIN_REQ == param_len) return IHU_SUCCESS;
+			if(MSG_SIZE_L3BFSC_WMC_COMBIN_REQ == msg_len) return IHU_SUCCESS;
 			break;
 		
 		case MSG_ID_L3BFSC_WMC_COMBIN_RESP:
-			if(MSG_SIZE_L3BFSC_WMC_COMBIN_RESP == param_len) return IHU_SUCCESS;
+			if(MSG_SIZE_L3BFSC_WMC_COMBIN_RESP == msg_len) return IHU_SUCCESS;
 			break;
 		
 		case MSG_ID_L3BFSC_WMC_FAULT_IND:
-			if(MSG_SIZE_L3BFSC_WMC_FAULT_IND == param_len) return IHU_SUCCESS;
+			if(MSG_SIZE_L3BFSC_WMC_FAULT_IND == msg_len) return IHU_SUCCESS;
 			break;
 		
 		case MSG_ID_L3BFSC_WMC_COMMAND_REQ:
-			if(MSG_SIZE_L3BFSC_WMC_COMMNAD_REQ == param_len) return IHU_SUCCESS;
+			if(MSG_SIZE_L3BFSC_WMC_COMMNAD_REQ == msg_len) return IHU_SUCCESS;
 			break;
 		
 		case MSG_ID_L3BFSC_WMC_COMMAND_RESP:
-			if(MSG_SIZE_L3BFSC_WMC_COMMNAD_RESP == param_len) return IHU_SUCCESS;
+			if(MSG_SIZE_L3BFSC_WMC_COMMNAD_RESP == msg_len) return IHU_SUCCESS;
 			break;
 		
 		default:
-			IhuErrorPrint("CANVELA: WmcAwsMsgCheck, Invalid msgid = [0x%08X], return\n");
+			IhuErrorPrint("CANVELA: WmcAwsMsgCheck, Invalid msgid = [0x%08X], return\n", msgid);
 			return IHU_FAILURE;
 	}
 	
@@ -931,7 +850,7 @@ OPSTAT fsm_canvela_bfsc_l2frame_snd(UINT8 dest_id, UINT8 src_id, void * param_pt
 void func_canvela_frame_send(IHU_HUITP_L2FRAME_STD_frame_header_t *pframe)
 {
 	//直接调用BSP_STM32的函数发送出去
-	ihu_l1hd_can_bfsc_send_data((UINT8 *)pframe, pframe->len + MAX_WMC_CONTROL_MSG_HEADER_LEN);
+	ihu_l1hd_can_bfsc_send_data((UINT8 *)pframe, pframe->len);
 }
 
 #endif //#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	

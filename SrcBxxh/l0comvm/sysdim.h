@@ -281,7 +281,7 @@
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 	#define MAX_TASK_NUM_IN_ONE_IHU 10
 	#define TASK_NAME_MAX_LENGTH 12
-  #define IHU_TASK_STACK_SIZE 400 //任务堆栈长度
+  #define IHU_TASK_STACK_SIZE 600 //任务堆栈长度
 	//系统消息级
 	//maxmum state number and msg number in one task, no instance concept
 	//#define IHU_TASK_QUEUE_ID_START 1024
@@ -291,7 +291,7 @@
 	#define MAX_FSM_STATE_ENTRY_NUM_IN_ONE_TASK 38   //一个任务之中，STATE-MSGID成对处理函数最多数量
 	//消息参数
 	#define MSG_NAME_MAX_LENGTH 70
-	#define MAX_IHU_MSG_BODY_LENGTH 205  //消息最长长度，这里比较短节省内存，按道理，没有图像和视频的情况下，是足够的
+	#define MAX_IHU_MSG_BODY_LENGTH 252  //消息最长长度，这里比较短节省内存，按道理，没有图像和视频的情况下，是足够的 //MYC from 205 to 252
 	#define IHU_MSG_BODY_L2FRAME_MAX_LEN MAX_IHU_MSG_BODY_LENGTH - 3
 	#define IHU_FILE_NAME_LENGTH_MAX 100
 	#define MAX_QUEUE_NUM_IN_ONE_TASK 2

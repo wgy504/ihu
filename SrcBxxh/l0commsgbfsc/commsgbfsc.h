@@ -680,6 +680,17 @@ typedef struct msg_struct_l3bfsc_wmc_command_resp
 	UINT32 	sensor_weight;
 }msg_struct_l3bfsc_wmc_command_resp_t;
 
+/*
+**	MSG_ID_L3BFSC_WMC_MSH_HEADER
+*/
+typedef struct msg_struct_l3bfsc_wmc_msg_header
+{
+	UINT32 msgid;
+	UINT16 length;
+	UINT16 spare;
+	UINT32 wmc_state;
+}msg_struct_l3bfsc_wmc_msg_header_t;
+
 /* Message Length definition */
 #define 	MSG_SIZE_L3BFSC_WMC_STARTUP_IND					(sizeof(msg_struct_l3bfsc_wmc_startup_ind_t))
 #define 	MSG_SIZE_L3BFSC_WMC_SET_CONFIG_REQ			(sizeof(msg_struct_l3bfsc_wmc_set_config_req_t))
