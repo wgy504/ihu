@@ -721,6 +721,35 @@ typedef struct msg_struct_l3bfsc_wmc_msg_header
 #define		MAX_WMC_CONTROL_MSG_HEADER_LEN					(sizeof(IHU_HUITP_L2FRAME_STD_frame_header_t))
 #define		MAX_WMC_CONTROL_MSG_BODY_LEN						(MAX_WMC_CONTROL_MSG_LEN - MAX_WMC_CONTROL_MSG_HEADER_LEN)
 
+/* ERROR CODE */
+typedef enum IHU_ERROR_CODE
+{
+	//ERROR CODE ID
+	ERROR_CODE_NO_ERROR = 0, //Starting point
+	
+	//COMMON ERROR CODE
+	ERROR_CODE_CALLING_ERROR,
+	ERROR_CODE_INPUT_PARAMETER_KO,
+	ERROR_CODE_WRONG_WMC_STATE,
+	ERROR_CODE_UNKNOWN,
+	
+	/* TO BE ADDED FOR EACH OF THE MESSAGE */
+	//**	MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ,
+	
+	//**	MSG_ID_L3BFSC_WMC_GET_CONFIG_REQ,
+	
+	//**	MSG_ID_L3BFSC_WMC_START_REQ,
+	
+	//**	MSG_ID_L3BFSC_WMC_STOP_REQ,
+	
+	//**	MSG_ID_L3BFSC_WMC_COMBIN_REQ,
+	
+	//**	MSG_ID_L3BFSC_WMC_COMMAND_REQ,
+	
+	ERROR_CODE_MAX, //Ending point
+
+}error_code_t; //end of IHU_INTER_TASK_MSG_ID
+
 /* 
 ** ====================================================================
 ** ============================= MYC END ==============================
