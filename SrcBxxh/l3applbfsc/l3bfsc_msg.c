@@ -48,7 +48,7 @@ void msg_wmc_set_config_req_process(void *param_ptr, error_code_t *ec_ptr)
 		if(NULL == param_ptr)
 		{
 				IhuErrorPrint("L3BFSC: msg_wmc_set_config_req_process: NULL == param_ptr, return\r\n");
-				*ec_ptr = ERROR_CODE_CALLING_ERROR;
+				if(NULL != ec_ptr) *ec_ptr = ERROR_CODE_CALLING_ERROR;
 				return;
 		}
 		
@@ -56,7 +56,6 @@ void msg_wmc_set_config_req_process(void *param_ptr, error_code_t *ec_ptr)
 		if(NULL == ec_ptr)
 		{
 				IhuErrorPrint("L3BFSC: msg_wmc_set_config_req_process: NULL == ec_ptr, return\r\n");
-				*ec_ptr = ERROR_CODE_CALLING_ERROR;
 				return;
 		}
 		
@@ -121,7 +120,7 @@ void msg_wmc_get_config_req_process(void *param_ptr, error_code_t *ec_ptr)
 		if(NULL == param_ptr)
 		{
 				IhuErrorPrint("L3BFSC: msg_wmc_get_config_req_process: NULL == param_ptr, return\r\n");
-				*ec_ptr = ERROR_CODE_CALLING_ERROR;
+				if(NULL != ec_ptr) *ec_ptr = ERROR_CODE_CALLING_ERROR;
 				return;
 		}
 		
@@ -129,7 +128,6 @@ void msg_wmc_get_config_req_process(void *param_ptr, error_code_t *ec_ptr)
 		if(NULL == ec_ptr)
 		{
 				IhuErrorPrint("L3BFSC: msg_wmc_get_config_req_process: NULL == ec_ptr, return\r\n");
-				*ec_ptr = ERROR_CODE_CALLING_ERROR;
 				return;
 		}
 		
@@ -194,6 +192,7 @@ void msg_wmc_start_req_process(void *param_ptr, error_code_t *ec_ptr)
 		if(NULL == param_ptr)
 		{
 				IhuErrorPrint("L3BFSC: msg_wmc_start_req_process: NULL == param_ptr, return\r\n");
+				if(NULL != ec_ptr) *ec_ptr = ERROR_CODE_CALLING_ERROR;
 				return;
 		}
 		
@@ -264,6 +263,7 @@ void msg_wmc_stop_req_process(void *param_ptr, error_code_t *ec_ptr)
 		if(NULL == param_ptr)
 		{
 				IhuErrorPrint("L3BFSC: msg_wmc_stop_req_process: NULL == param_ptr, return\r\n");
+				if(NULL != ec_ptr) *ec_ptr = ERROR_CODE_CALLING_ERROR;
 				return;
 		}
 		
@@ -336,6 +336,7 @@ void msg_wmc_command_req_process(void *param_ptr, error_code_t *ec_ptr)
 		if(NULL == param_ptr)
 		{
 				IhuErrorPrint("L3BFSC: msg_wmc_command_req_process: NULL == param_ptr, return\r\n");
+				if(NULL != ec_ptr) *ec_ptr = ERROR_CODE_CALLING_ERROR;
 				return;
 		}
 		
@@ -406,6 +407,7 @@ void msg_wmc_combin_req_process(void *param_ptr, error_code_t *ec_ptr)
 		if(NULL == param_ptr)
 		{
 				IhuErrorPrint("L3BFSC: msg_wmc_combin_req_process: NULL == param_ptr, return\r\n");
+				if(NULL != ec_ptr) *ec_ptr = ERROR_CODE_CALLING_ERROR;
 				return;
 		}
 		
