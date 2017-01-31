@@ -3,11 +3,11 @@
 <title>Static Call Graph - [PrjBfscFo@207VC\PrjBfscFo@207VC.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image PrjBfscFo@207VC\PrjBfscFo@207VC.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Tue Jan 31 23:44:09 2017
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Wed Feb 01 00:43:41 2017
 <BR><P>
-<H3>Maximum Stack Usage =       1232 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =       1296 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
-fsm_bfsc_wmc_set_config_req &rArr; func_bfsc_stm_main_recovery_from_fault &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+fsm_bfsc_wmc_get_config_req &rArr; msg_wmc_get_config_resp &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 <P>
 <H3>
 Mutually Recursive functions
@@ -545,6 +545,12 @@ Global Symbols
 
 <P><STRONG><a name="[164]"></a>__aeabi_memcpy4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memcpya.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<LI><a href="#[174]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msg_wmc_stop_resp
+<LI><a href="#[172]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msg_wmc_start_resp
+<LI><a href="#[170]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msg_wmc_set_config_resp
+<LI><a href="#[16e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msg_wmc_get_config_resp
+<LI><a href="#[16c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msg_wmc_command_resp
+<LI><a href="#[16a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msg_wmc_combin_resp
 <LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_bfsc_init
 </UL>
 
@@ -825,11 +831,17 @@ Global Symbols
 <LI><a href="#[10]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_adclibra_time_out
 <LI><a href="#[9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_vmfo_time_out
 <LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FsmRunEngine
+<LI><a href="#[174]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msg_wmc_stop_resp
 <LI><a href="#[173]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msg_wmc_stop_req_process
+<LI><a href="#[172]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msg_wmc_start_resp
 <LI><a href="#[171]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msg_wmc_start_req_process
+<LI><a href="#[170]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msg_wmc_set_config_resp
 <LI><a href="#[16f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msg_wmc_set_config_req_process
+<LI><a href="#[16e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msg_wmc_get_config_resp
 <LI><a href="#[16d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msg_wmc_get_config_req_process
+<LI><a href="#[16c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msg_wmc_command_resp
 <LI><a href="#[16b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msg_wmc_command_req_process
+<LI><a href="#[16a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msg_wmc_combin_resp
 <LI><a href="#[169]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msg_wmc_combin_req_process
 </UL>
 
@@ -2310,7 +2322,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> l3bfsc.o(.data)
 </UL>
 <P><STRONG><a name="[42]"></a>fsm_bfsc_wmc_combin_req</STRONG> (Thumb, 126 bytes, Stack size 56 bytes, l3bfsc.o(i.fsm_bfsc_wmc_combin_req))
-<BR><BR>[Stack]<UL><LI>Max Depth = 1048<LI>Call Chain = fsm_bfsc_wmc_combin_req &rArr; func_bfsc_stm_main_recovery_from_fault &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<BR><BR>[Stack]<UL><LI>Max Depth = 1104<LI>Call Chain = fsm_bfsc_wmc_combin_req &rArr; msg_wmc_combin_resp &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
 <LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
@@ -2324,7 +2336,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> l3bfsc.o(.data)
 </UL>
 <P><STRONG><a name="[40]"></a>fsm_bfsc_wmc_command_req</STRONG> (Thumb, 126 bytes, Stack size 56 bytes, l3bfsc.o(i.fsm_bfsc_wmc_command_req))
-<BR><BR>[Stack]<UL><LI>Max Depth = 1048<LI>Call Chain = fsm_bfsc_wmc_command_req &rArr; func_bfsc_stm_main_recovery_from_fault &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<BR><BR>[Stack]<UL><LI>Max Depth = 1112<LI>Call Chain = fsm_bfsc_wmc_command_req &rArr; msg_wmc_command_resp &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
 <LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
@@ -2338,7 +2350,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> l3bfsc.o(.data)
 </UL>
 <P><STRONG><a name="[3e]"></a>fsm_bfsc_wmc_get_config_req</STRONG> (Thumb, 124 bytes, Stack size 48 bytes, l3bfsc.o(i.fsm_bfsc_wmc_get_config_req))
-<BR><BR>[Stack]<UL><LI>Max Depth = 1040<LI>Call Chain = fsm_bfsc_wmc_get_config_req &rArr; func_bfsc_stm_main_recovery_from_fault &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<BR><BR>[Stack]<UL><LI>Max Depth = 1296<LI>Call Chain = fsm_bfsc_wmc_get_config_req &rArr; msg_wmc_get_config_resp &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
 <LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
@@ -2351,7 +2363,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> l3bfsc.o(.data)
 </UL>
 <P><STRONG><a name="[3d]"></a>fsm_bfsc_wmc_set_config_req</STRONG> (Thumb, 158 bytes, Stack size 240 bytes, l3bfsc.o(i.fsm_bfsc_wmc_set_config_req))
-<BR><BR>[Stack]<UL><LI>Max Depth = 1232<LI>Call Chain = fsm_bfsc_wmc_set_config_req &rArr; func_bfsc_stm_main_recovery_from_fault &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<BR><BR>[Stack]<UL><LI>Max Depth = 1288<LI>Call Chain = fsm_bfsc_wmc_set_config_req &rArr; msg_wmc_set_config_resp &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
 <LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
@@ -2366,7 +2378,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> l3bfsc.o(.data)
 </UL>
 <P><STRONG><a name="[3f]"></a>fsm_bfsc_wmc_start_req</STRONG> (Thumb, 156 bytes, Stack size 48 bytes, l3bfsc.o(i.fsm_bfsc_wmc_start_req))
-<BR><BR>[Stack]<UL><LI>Max Depth = 1040<LI>Call Chain = fsm_bfsc_wmc_start_req &rArr; func_bfsc_stm_main_recovery_from_fault &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<BR><BR>[Stack]<UL><LI>Max Depth = 1096<LI>Call Chain = fsm_bfsc_wmc_start_req &rArr; msg_wmc_start_resp &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
 <LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
@@ -2380,7 +2392,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> l3bfsc.o(.data)
 </UL>
 <P><STRONG><a name="[41]"></a>fsm_bfsc_wmc_stop_req</STRONG> (Thumb, 156 bytes, Stack size 48 bytes, l3bfsc.o(i.fsm_bfsc_wmc_stop_req))
-<BR><BR>[Stack]<UL><LI>Max Depth = 1040<LI>Call Chain = fsm_bfsc_wmc_stop_req &rArr; func_bfsc_stm_main_recovery_from_fault &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<BR><BR>[Stack]<UL><LI>Max Depth = 1096<LI>Call Chain = fsm_bfsc_wmc_stop_req &rArr; msg_wmc_stop_resp &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
 <LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
@@ -3290,6 +3302,12 @@ Global Symbols
 <LI><a href="#[d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_adclibra_init
 <LI><a href="#[9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_vmfo_time_out
 <LI><a href="#[1a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_vm_send_init_msg_to_app_task
+<LI><a href="#[174]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msg_wmc_stop_resp
+<LI><a href="#[172]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msg_wmc_start_resp
+<LI><a href="#[170]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msg_wmc_set_config_resp
+<LI><a href="#[16e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msg_wmc_get_config_resp
+<LI><a href="#[16c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msg_wmc_command_resp
+<LI><a href="#[16a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msg_wmc_combin_resp
 <LI><a href="#[166]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_bfsc_time_out_wait_weight_command_process
 <LI><a href="#[167]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_bfsc_time_out_roll_out_process
 <LI><a href="#[165]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_bfsc_time_out_period_scan
@@ -3537,12 +3555,15 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_bfsc_wmc_combin_req
 </UL>
 
-<P><STRONG><a name="[16a]"></a>msg_wmc_combin_resp</STRONG> (Thumb, 50 bytes, Stack size 16 bytes, l3bfsc_msg.o(i.msg_wmc_combin_resp))
-<BR><BR>[Stack]<UL><LI>Max Depth = 472<LI>Call Chain = msg_wmc_combin_resp &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<P><STRONG><a name="[16a]"></a>msg_wmc_combin_resp</STRONG> (Thumb, 202 bytes, Stack size 96 bytes, l3bfsc_msg.o(i.msg_wmc_combin_resp))
+<BR><BR>[Stack]<UL><LI>Max Depth = 1048<LI>Call Chain = msg_wmc_combin_resp &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
 <LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
 <LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintFo
+<LI><a href="#[15c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_message_send
+<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FsmGetState
+<LI><a href="#[164]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_bfsc_wmc_combin_req
 </UL>
@@ -3569,12 +3590,15 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_bfsc_wmc_command_req
 </UL>
 
-<P><STRONG><a name="[16c]"></a>msg_wmc_command_resp</STRONG> (Thumb, 50 bytes, Stack size 16 bytes, l3bfsc_msg.o(i.msg_wmc_command_resp))
-<BR><BR>[Stack]<UL><LI>Max Depth = 472<LI>Call Chain = msg_wmc_command_resp &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<P><STRONG><a name="[16c]"></a>msg_wmc_command_resp</STRONG> (Thumb, 202 bytes, Stack size 104 bytes, l3bfsc_msg.o(i.msg_wmc_command_resp))
+<BR><BR>[Stack]<UL><LI>Max Depth = 1056<LI>Call Chain = msg_wmc_command_resp &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
 <LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
 <LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintFo
+<LI><a href="#[15c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_message_send
+<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FsmGetState
+<LI><a href="#[164]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_bfsc_wmc_command_req
 </UL>
@@ -3601,12 +3625,15 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_bfsc_wmc_get_config_req
 </UL>
 
-<P><STRONG><a name="[16e]"></a>msg_wmc_get_config_resp</STRONG> (Thumb, 46 bytes, Stack size 16 bytes, l3bfsc_msg.o(i.msg_wmc_get_config_resp))
-<BR><BR>[Stack]<UL><LI>Max Depth = 472<LI>Call Chain = msg_wmc_get_config_resp &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<P><STRONG><a name="[16e]"></a>msg_wmc_get_config_resp</STRONG> (Thumb, 194 bytes, Stack size 296 bytes, l3bfsc_msg.o(i.msg_wmc_get_config_resp))
+<BR><BR>[Stack]<UL><LI>Max Depth = 1248<LI>Call Chain = msg_wmc_get_config_resp &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
 <LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
 <LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintFo
+<LI><a href="#[15c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_message_send
+<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FsmGetState
+<LI><a href="#[164]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_bfsc_wmc_get_config_req
 </UL>
@@ -3633,17 +3660,20 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_bfsc_wmc_set_config_req
 </UL>
 
-<P><STRONG><a name="[170]"></a>msg_wmc_set_config_resp</STRONG> (Thumb, 46 bytes, Stack size 16 bytes, l3bfsc_msg.o(i.msg_wmc_set_config_resp))
-<BR><BR>[Stack]<UL><LI>Max Depth = 472<LI>Call Chain = msg_wmc_set_config_resp &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<P><STRONG><a name="[170]"></a>msg_wmc_set_config_resp</STRONG> (Thumb, 194 bytes, Stack size 96 bytes, l3bfsc_msg.o(i.msg_wmc_set_config_resp))
+<BR><BR>[Stack]<UL><LI>Max Depth = 1048<LI>Call Chain = msg_wmc_set_config_resp &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
 <LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
 <LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintFo
+<LI><a href="#[15c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_message_send
+<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FsmGetState
+<LI><a href="#[164]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_bfsc_wmc_set_config_req
 </UL>
 
-<P><STRONG><a name="[1b2]"></a>msg_wmc_start_req_check</STRONG> (Thumb, 46 bytes, Stack size 16 bytes, l3bfsc_msg.o(i.msg_wmc_start_req_check))
+<P><STRONG><a name="[1b2]"></a>msg_wmc_start_req_check</STRONG> (Thumb, 50 bytes, Stack size 16 bytes, l3bfsc_msg.o(i.msg_wmc_start_req_check))
 <BR><BR>[Stack]<UL><LI>Max Depth = 472<LI>Call Chain = msg_wmc_start_req_check &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
@@ -3653,7 +3683,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[171]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msg_wmc_start_req_process
 </UL>
 
-<P><STRONG><a name="[171]"></a>msg_wmc_start_req_process</STRONG> (Thumb, 138 bytes, Stack size 16 bytes, l3bfsc_msg.o(i.msg_wmc_start_req_process))
+<P><STRONG><a name="[171]"></a>msg_wmc_start_req_process</STRONG> (Thumb, 144 bytes, Stack size 16 bytes, l3bfsc_msg.o(i.msg_wmc_start_req_process))
 <BR><BR>[Stack]<UL><LI>Max Depth = 488<LI>Call Chain = msg_wmc_start_req_process &rArr; FsmGetState &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
@@ -3665,12 +3695,15 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_bfsc_wmc_start_req
 </UL>
 
-<P><STRONG><a name="[172]"></a>msg_wmc_start_resp</STRONG> (Thumb, 46 bytes, Stack size 16 bytes, l3bfsc_msg.o(i.msg_wmc_start_resp))
-<BR><BR>[Stack]<UL><LI>Max Depth = 472<LI>Call Chain = msg_wmc_start_resp &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<P><STRONG><a name="[172]"></a>msg_wmc_start_resp</STRONG> (Thumb, 202 bytes, Stack size 96 bytes, l3bfsc_msg.o(i.msg_wmc_start_resp))
+<BR><BR>[Stack]<UL><LI>Max Depth = 1048<LI>Call Chain = msg_wmc_start_resp &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
 <LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
 <LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintFo
+<LI><a href="#[15c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_message_send
+<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FsmGetState
+<LI><a href="#[164]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_bfsc_wmc_start_req
 </UL>
@@ -3697,12 +3730,15 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_bfsc_wmc_stop_req
 </UL>
 
-<P><STRONG><a name="[174]"></a>msg_wmc_stop_resp</STRONG> (Thumb, 50 bytes, Stack size 16 bytes, l3bfsc_msg.o(i.msg_wmc_stop_resp))
-<BR><BR>[Stack]<UL><LI>Max Depth = 472<LI>Call Chain = msg_wmc_stop_resp &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<P><STRONG><a name="[174]"></a>msg_wmc_stop_resp</STRONG> (Thumb, 202 bytes, Stack size 96 bytes, l3bfsc_msg.o(i.msg_wmc_stop_resp))
+<BR><BR>[Stack]<UL><LI>Max Depth = 1048<LI>Call Chain = msg_wmc_stop_resp &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
 <LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
 <LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintFo
+<LI><a href="#[15c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_message_send
+<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FsmGetState
+<LI><a href="#[164]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_bfsc_wmc_stop_req
 </UL>

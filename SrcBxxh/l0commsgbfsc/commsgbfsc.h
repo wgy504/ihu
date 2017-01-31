@@ -705,8 +705,8 @@ typedef struct msg_struct_l3bfsc_wmc_msg_header
 #define 	MSG_SIZE_L3BFSC_WMC_COMBIN_REQ					(sizeof(msg_struct_l3bfsc_wmc_combin_req_t))
 #define 	MSG_SIZE_L3BFSC_WMC_COMBIN_RESP					(sizeof(msg_struct_l3bfsc_wmc_resp_t))
 #define 	MSG_SIZE_L3BFSC_WMC_FAULT_IND						(sizeof(msg_struct_l3bfsc_wmc_fault_ind_t))
-#define 	MSG_SIZE_L3BFSC_WMC_COMMNAD_REQ					(sizeof(msg_struct_l3bfsc_wmc_command_req_t))
-#define 	MSG_SIZE_L3BFSC_WMC_COMMNAD_RESP				(sizeof(msg_struct_l3bfsc_wmc_command_resp_t))
+#define 	MSG_SIZE_L3BFSC_WMC_COMMAND_REQ					(sizeof(msg_struct_l3bfsc_wmc_command_req_t))
+#define 	MSG_SIZE_L3BFSC_WMC_COMMAND_RESP				(sizeof(msg_struct_l3bfsc_wmc_command_resp_t))
 	
 /* Can ID for communication between AWS and WMC */
 #define		AWS_CAN_ID_PREFIX												(0x600U)

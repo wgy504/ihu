@@ -793,11 +793,11 @@ OPSTAT WmcAwsMsgCheck(void * param_ptr, UINT16 msg_len)
 			break;
 		
 		case MSG_ID_L3BFSC_WMC_COMMAND_REQ:
-			if(MSG_SIZE_L3BFSC_WMC_COMMNAD_REQ == msg_len) return IHU_SUCCESS;
+			if(MSG_SIZE_L3BFSC_WMC_COMMAND_REQ == msg_len) return IHU_SUCCESS;
 			break;
 		
 		case MSG_ID_L3BFSC_WMC_COMMAND_RESP:
-			if(MSG_SIZE_L3BFSC_WMC_COMMNAD_RESP == msg_len) return IHU_SUCCESS;
+			if(MSG_SIZE_L3BFSC_WMC_COMMAND_RESP == msg_len) return IHU_SUCCESS;
 			break;
 		
 		default:
