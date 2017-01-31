@@ -73,6 +73,14 @@ FsmStateItem_t FsmBfsc[] =
   {MSG_ID_COM_RESTART,        						FSM_STATE_BFSC_ERROR_TRAP,         				fsm_bfsc_restart},
   {MSG_ID_COM_STOP,												FSM_STATE_BFSC_ERROR_TRAP,         				fsm_bfsc_stop_rcv},
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_BFSC_ERROR_TRAP,         				fsm_bfsc_time_out},
+	
+	//MYC ADDED 20170131
+	{MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ,			FSM_STATE_BFSC_ACTIVED,										fsm_bfsc_wmc_set_config_req},	//MYC
+	{MSG_ID_L3BFSC_WMC_GET_CONFIG_REQ,			FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_get_config_req},	//MYC		// 20170128: ALTOGETHER FOUR STATES, OTHERS RESERVED
+	{MSG_ID_L3BFSC_WMC_START_REQ,						FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_start_req},			//MYC
+	{MSG_ID_L3BFSC_WMC_COMMAND_REQ,					FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_command_req},		//MYC
+	{MSG_ID_L3BFSC_WMC_STOP_REQ,						FSM_STATE_BFSC_COMBINATION,								fsm_bfsc_wmc_stop_req},				//MYC		// 20170128: ALTOGETHER FOUR STATES, OTHERS RESERVED
+	{MSG_ID_L3BFSC_WMC_COMBIN_REQ,					FSM_STATE_BFSC_COMBINATION,								fsm_bfsc_wmc_combin_req},			//MYC		// 20170128: ALTOGETHER FOUR STATES, OTHERS RESERVED
 
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             								NULL},  //Ending
@@ -1014,8 +1022,172 @@ void func_bfsc_stm_main_recovery_from_fault(void)
 	return;
 }
 
+//MYC
+///* Message Length definition */
+//#define 	MSG_SIZE_L3BFSC_WMC_STARTUP_IND					(sizeof(msg_struct_l3bfsc_wmc_startup_ind_t))
+//#define 	MSG_SIZE_L3BFSC_WMC_SET_CONFIG_REQ			(sizeof(msg_struct_l3bfsc_wmc_set_config_req_t))
+//#define 	MSG_SIZE_L3BFSC_WMC_SET_CONFIG_RESP			(sizeof(msg_struct_l3bfsc_wmc_resp_t))
+//#define 	MSG_SIZE_L3BFSC_WMC_GET_CONFIG_REQ			(sizeof(msg_struct_l3bfsc_wmc_get_config_req_t))
+//#define 	MSG_SIZE_L3BFSC_WMC_GET_CONFIG_RESP			(sizeof(msg_struct_l3bfsc_wmc_get_config_resp_t))
+//#define 	MSG_SIZE_L3BFSC_WMC_START_REQ						(sizeof(msg_struct_l3bfsc_wmc_start_req_t))
+//#define 	MSG_SIZE_L3BFSC_WMC_START_RESP					(sizeof(msg_struct_l3bfsc_wmc_resp_t))
+//#define 	MSG_SIZE_L3BFSC_WMC_STOP_REQ						(sizeof(msg_struct_l3bfsc_wmc_stop_req_t))
+//#define 	MSG_SIZE_L3BFSC_WMC_STOP_RESP						(sizeof(msg_struct_l3bfsc_wmc_resp_t))
+//#define 	MSG_SIZE_L3BFSC_WMC_WEIGHT_IND					(sizeof(msg_struct_l3bfsc_wmc_weight_ind_t))
+//#define 	MSG_SIZE_L3BFSC_WMC_COMBIN_REQ					(sizeof(msg_struct_l3bfsc_wmc_combin_req_t))
+//#define 	MSG_SIZE_L3BFSC_WMC_COMBIN_RESP					(sizeof(msg_struct_l3bfsc_wmc_resp_t))
+//#define 	MSG_SIZE_L3BFSC_WMC_FAULT_IND						(sizeof(msg_struct_l3bfsc_wmc_fault_ind_t))
+//#define 	MSG_SIZE_L3BFSC_WMC_COMMNAD_REQ					(sizeof(msg_struct_l3bfsc_wmc_command_req_t))
+//#define 	MSG_SIZE_L3BFSC_WMC_COMMNAD_RESP				(sizeof(msg_struct_l3bfsc_wmc_command_resp_t))
+
+//OPSTAT fsm_bfsc_wmc_set_config_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)	//MYC
+//OPSTAT fsm_bfsc_wmc_get_config_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)	//MYC
+//OPSTAT fsm_bfsc_wmc_start_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)				//MYC
+//OPSTAT fsm_bfsc_wmc_command_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)			//MYC
+//OPSTAT fsm_bfsc_wmc_stop_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)				//MYC
+//OPSTAT fsm_bfsc_wmc_combin_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)			//MYC
+
+OPSTAT fsm_bfsc_wmc_set_config_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)	//MYC
+{
+	int ret;
+	msg_struct_l3bfsc_wmc_set_config_req_t rcv;
+	
+	//收到消息并做参数检查
+	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_wmc_set_config_req_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_wmc_set_config_req_t))){
+		IHU_ERROR_PRINT_BFSC("L3BFSC: Receive message error!\n");
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+	
+	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_set_config_req_t: rcv.msgid = 0x%08X, rcv.length = %d\n", rcv.msgid, rcv.length);
+	
+	/* PROCESS TO BE ADDED */
+	/* !!!!!!!!!!!!!!!!!!!!*/
+	
+	FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_CONFIGURATION);
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT fsm_bfsc_wmc_get_config_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)	//MYC
+{
+	int ret;
+	msg_struct_l3bfsc_wmc_get_config_req_t rcv;
+	
+	//收到消息并做参数检查
+	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_wmc_get_config_req_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_wmc_get_config_req_t))){
+		IHU_ERROR_PRINT_BFSC("L3BFSC: Receive message error!\n");
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+	
+	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_get_config_req_t: rcv.msgid = 0x%08X, rcv.length = %d\n", rcv.msgid, rcv.length);
+
+	/* PROCESS TO BE ADDED */
+	/* !!!!!!!!!!!!!!!!!!!!*/
+	
+	//FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_CONFIGURATION);
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT fsm_bfsc_wmc_start_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)	//MYC
+{
+	int ret;
+	msg_struct_l3bfsc_wmc_start_req_t rcv;
+	
+	//收到消息并做参数检查
+	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_wmc_start_req_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_wmc_start_req_t))){
+		IHU_ERROR_PRINT_BFSC("L3BFSC: Receive message error!\n");
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+	
+	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_start_req_t: rcv.msgid = 0x%08X, rcv.length = %d\n", rcv.msgid, rcv.length);
+
+	/* PROCESS TO BE ADDED */
+	/* !!!!!!!!!!!!!!!!!!!!*/
+	
+	FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_COMBINATION);
+
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT fsm_bfsc_wmc_command_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)	//MYC
+{
+	int ret;
+	msg_struct_l3bfsc_wmc_command_req_t rcv;
+	
+	//收到消息并做参数检查
+	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_wmc_command_req_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_wmc_command_req_t))){
+		IHU_ERROR_PRINT_BFSC("L3BFSC: Receive message error!\n");
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+	
+	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_command_req_t: rcv.msgid = 0x%08X, rcv.length = %d\n", rcv.msgid, rcv.length);
+
+	/* PROCESS TO BE ADDED */
+	/* !!!!!!!!!!!!!!!!!!!!*/
+	
+	//FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_CONFIGURATION);
+
+	//返回
+	return IHU_SUCCESS;
+}
 
 
+OPSTAT fsm_bfsc_wmc_stop_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)	//MYC
+{
+	int ret;
+	msg_struct_l3bfsc_wmc_stop_req_t rcv;
+	
+	//收到消息并做参数检查
+	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_wmc_stop_req_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_wmc_stop_req_t))){
+		IHU_ERROR_PRINT_BFSC("L3BFSC: Receive message error!\n");
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+	
+	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_stop_req_t: rcv.msgid = 0x%08X, rcv.length = %d\n", rcv.msgid, rcv.length);
 
+	/* PROCESS TO BE ADDED */
+	/* !!!!!!!!!!!!!!!!!!!!*/
+	
+	FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_CONFIGURATION);
 
+	//返回
+	return IHU_SUCCESS;
+}
 
+OPSTAT fsm_bfsc_wmc_combin_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)	//MYC
+{
+	int ret;
+	msg_struct_l3bfsc_wmc_combin_req_t rcv;
+	
+	//收到消息并做参数检查
+	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_wmc_combin_req_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_wmc_combin_req_t))){
+		IHU_ERROR_PRINT_BFSC("L3BFSC: Receive message error!\n");
+		return IHU_FAILURE;
+	}
+	memcpy(&rcv, param_ptr, param_len);
+	
+	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_combin_req_t: rcv.msgid = 0x%08X, rcv.length = %d\n", rcv.msgid, rcv.length);
+
+	/* PROCESS TO BE ADDED */
+	/* !!!!!!!!!!!!!!!!!!!!*/
+	
+	//FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_COMBINATION);
+
+	//返回
+	return IHU_SUCCESS;
+}

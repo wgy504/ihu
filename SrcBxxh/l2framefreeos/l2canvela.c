@@ -524,6 +524,15 @@ OPSTAT fsm_canvela_bfsc_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void *param_ptr
 	/* STEP 2: FORWARD TO FBSC TASK */
 	/* ============================================*/
 	
+	/* REMOVE THE CAN HEADER */
+	ret = ihu_message_send(msg_id, TASK_ID_BFSC, TASK_ID_CANVELA, (void *)pMsgInnerHeader, msg_len);
+	if (ret == IHU_FAILURE){
+		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_CANVELA].taskName, zIhuTaskInfo[TASK_ID_BFSC].taskName);
+		return IHU_FAILURE;
+	}
+	
+	
 	//返回
 	return IHU_SUCCESS;
 }
@@ -799,6 +808,7 @@ OPSTAT WmcAwsMsgCheck(void * param_ptr, UINT16 msg_len)
 	IhuErrorPrint("CANVELA: WmcAwsMsgCheck, should not enter here, return\n");
 	return IHU_FAILURE;
 }
+
 //MYC TODO: to see whether we have other global variables to use
 //MYC TODO: to think about how we use when we need to do SW update
 UINT8	ctrlMsgBuf[MAX_WMC_CONTROL_MSG_LEN];

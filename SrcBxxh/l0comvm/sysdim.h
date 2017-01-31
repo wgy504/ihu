@@ -287,8 +287,8 @@
 	//#define IHU_TASK_QUEUE_ID_START 1024
 	#define MAX_MSGID_NUM_IN_ONE_TASK 52 //一个任务中最多定义的消息数量，之前放254个，优化后更省内存，暂时用不了这么多
 	#define MASK_MSGID_NUM_IN_ONE_TASK 255 //消息号段在同一个任务中必须连续到这个范围内
-	#define MAX_STATE_NUM_IN_ONE_TASK 9  //一个任务之中最多定义的状态数量
-	#define MAX_FSM_STATE_ENTRY_NUM_IN_ONE_TASK 38   //一个任务之中，STATE-MSGID成对处理函数最多数量
+	#define MAX_STATE_NUM_IN_ONE_TASK 16  //一个任务之中最多定义的状态数量
+	#define MAX_FSM_STATE_ENTRY_NUM_IN_ONE_TASK 50   //一个任务之中，STATE-MSGID成对处理函数最多数量
 	//消息参数
 	#define MSG_NAME_MAX_LENGTH 70
 	#define MAX_IHU_MSG_BODY_LENGTH 252  //消息最长长度，这里比较短节省内存，按道理，没有图像和视频的情况下，是足够的 //MYC from 205 to 252
