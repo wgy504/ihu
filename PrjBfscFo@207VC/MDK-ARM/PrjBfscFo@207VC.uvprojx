@@ -133,14 +133,14 @@
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
             <Capability>1</Capability>
-            <DriverSelection>4107</DriverSelection>
+            <DriverSelection>4096</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\UL2CM3.DLL</Flash2>
-          <Flash3></Flash3>
+          <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
-          <pFcarmGrp></pFcarmGrp>
+          <pFcarmGrp>Application/MDK-ARM</pFcarmGrp>
           <pFcArmRoot></pFcArmRoot>
           <FcArmLst>0</FcArmLst>
         </Utilities>
@@ -882,6 +882,16 @@
               <FileName>l3bfsc.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l3applbfsc\l3bfsc.h</FilePath>
+            </File>
+            <File>
+              <FileName>l3bfsc_msg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l3applbfsc\l3bfsc_msg.c</FilePath>
+            </File>
+            <File>
+              <FileName>l3bfsc_msg.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l3applbfsc\l3bfsc_msg.h</FilePath>
             </File>
           </Files>
         </Group>

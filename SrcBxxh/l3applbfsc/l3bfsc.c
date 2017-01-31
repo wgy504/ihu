@@ -11,7 +11,8 @@
  ****************************************************************************************
  */
  
- #include "l3bfsc.h"
+#include "l3bfsc.h"
+#include "l3bfsc_msg.h"
  
 /*
 ** FSM of the BFSC
@@ -41,47 +42,64 @@ FsmStateItem_t FsmBfsc[] =
 	{MSG_ID_I2C_L3BFSC_MOTO_CMD_RESP,				FSM_STATE_BFSC_ACTIVED,         					fsm_bfsc_i2c_moto_cmd_resp}, //参数配置反馈
 	{MSG_ID_CAN_L3BFSC_INIT_REQ,						FSM_STATE_BFSC_ACTIVED,         					fsm_bfsc_canvela_init_req},  //初始化完成
 	
-	//扫描模式工作状态：等待ADC上报合法的称重结果
-  {MSG_ID_COM_RESTART,        						FSM_STATE_BFSC_SCAN,         							fsm_bfsc_restart},
-  {MSG_ID_COM_STOP,												FSM_STATE_BFSC_SCAN,         							fsm_bfsc_stop_rcv},
-	{MSG_ID_COM_TIME_OUT,										FSM_STATE_BFSC_SCAN,         				  		fsm_bfsc_time_out},
-	{MSG_ID_ADC_NEW_MATERIAL_WS,						FSM_STATE_BFSC_SCAN,         				  		fsm_bfsc_adc_new_material_ws}, //新的称重结果
-	{MSG_ID_ADC_MATERIAL_DROP,							FSM_STATE_BFSC_SCAN,         				  		fsm_bfsc_adc_material_drop},   //物料失重被拿走
-	
-	//称重上报工作状态：等待上层指令，收到后进入出料状态
-  {MSG_ID_COM_RESTART,        						FSM_STATE_BFSC_WEIGHT_REPORT,         		fsm_bfsc_restart},
-  {MSG_ID_COM_STOP,												FSM_STATE_BFSC_WEIGHT_REPORT,         		fsm_bfsc_stop_rcv},
-	{MSG_ID_COM_TIME_OUT,										FSM_STATE_BFSC_WEIGHT_REPORT,         		fsm_bfsc_time_out},
-	{MSG_ID_ADC_NEW_MATERIAL_WS,						FSM_STATE_BFSC_WEIGHT_REPORT,         		fsm_bfsc_adc_new_material_ws}, //新的称重结果，此时也是允许上报的
-	{MSG_ID_CAN_L3BFSC_ROLL_OUT_REQ,				FSM_STATE_BFSC_WEIGHT_REPORT,         		fsm_bfsc_canvela_roll_out_req},//正常出料
-	{MSG_ID_CAN_L3BFSC_GIVE_UP_REQ,					FSM_STATE_BFSC_WEIGHT_REPORT,         		fsm_bfsc_canvela_give_up_req}, //抛弃物料
-	{MSG_ID_ADC_MATERIAL_DROP,							FSM_STATE_BFSC_WEIGHT_REPORT,         		fsm_bfsc_adc_material_drop},   //物料失重被拿走
-	
-	//出料输出等待状态：完成后进入SCAN状态。如果连续N次都未能成功，停止马达和称重传感器，并进入ERROR_TRAP状态。
-  {MSG_ID_COM_RESTART,        						FSM_STATE_BFSC_ROLL_OUT,         					fsm_bfsc_restart},
-  {MSG_ID_COM_STOP,												FSM_STATE_BFSC_ROLL_OUT,         					fsm_bfsc_stop_rcv},
-	{MSG_ID_COM_TIME_OUT,										FSM_STATE_BFSC_ROLL_OUT,         					fsm_bfsc_time_out},
-	{MSG_ID_ADC_MATERIAL_DROP,							FSM_STATE_BFSC_ROLL_OUT,         				  fsm_bfsc_adc_material_drop},   //出料完成
+//	//扫描模式工作状态：等待ADC上报合法的称重结果
+//  {MSG_ID_COM_RESTART,        						FSM_STATE_BFSC_SCAN,         							fsm_bfsc_restart},
+//  {MSG_ID_COM_STOP,												FSM_STATE_BFSC_SCAN,         							fsm_bfsc_stop_rcv},
+//	{MSG_ID_COM_TIME_OUT,										FSM_STATE_BFSC_SCAN,         				  		fsm_bfsc_time_out},
+//	{MSG_ID_ADC_NEW_MATERIAL_WS,						FSM_STATE_BFSC_SCAN,         				  		fsm_bfsc_adc_new_material_ws}, //新的称重结果
+//	{MSG_ID_ADC_MATERIAL_DROP,							FSM_STATE_BFSC_SCAN,         				  		fsm_bfsc_adc_material_drop},   //物料失重被拿走
+//	
+//	//称重上报工作状态：等待上层指令，收到后进入出料状态
+//  {MSG_ID_COM_RESTART,        						FSM_STATE_BFSC_WEIGHT_REPORT,         		fsm_bfsc_restart},
+//  {MSG_ID_COM_STOP,												FSM_STATE_BFSC_WEIGHT_REPORT,         		fsm_bfsc_stop_rcv},
+//	{MSG_ID_COM_TIME_OUT,										FSM_STATE_BFSC_WEIGHT_REPORT,         		fsm_bfsc_time_out},
+//	{MSG_ID_ADC_NEW_MATERIAL_WS,						FSM_STATE_BFSC_WEIGHT_REPORT,         		fsm_bfsc_adc_new_material_ws}, //新的称重结果，此时也是允许上报的
+//	{MSG_ID_CAN_L3BFSC_ROLL_OUT_REQ,				FSM_STATE_BFSC_WEIGHT_REPORT,         		fsm_bfsc_canvela_roll_out_req},//正常出料
+//	{MSG_ID_CAN_L3BFSC_GIVE_UP_REQ,					FSM_STATE_BFSC_WEIGHT_REPORT,         		fsm_bfsc_canvela_give_up_req}, //抛弃物料
+//	{MSG_ID_ADC_MATERIAL_DROP,							FSM_STATE_BFSC_WEIGHT_REPORT,         		fsm_bfsc_adc_material_drop},   //物料失重被拿走
+//	
+//	//出料输出等待状态：完成后进入SCAN状态。如果连续N次都未能成功，停止马达和称重传感器，并进入ERROR_TRAP状态。
+//  {MSG_ID_COM_RESTART,        						FSM_STATE_BFSC_ROLL_OUT,         					fsm_bfsc_restart},
+//  {MSG_ID_COM_STOP,												FSM_STATE_BFSC_ROLL_OUT,         					fsm_bfsc_stop_rcv},
+//	{MSG_ID_COM_TIME_OUT,										FSM_STATE_BFSC_ROLL_OUT,         					fsm_bfsc_time_out},
+//	{MSG_ID_ADC_MATERIAL_DROP,							FSM_STATE_BFSC_ROLL_OUT,         				  fsm_bfsc_adc_material_drop},   //出料完成
 
-	//放弃物料输出等待状态：完成后进入SCAN状态。如果连续N次都未能成功，停止马达和称重传感器，并进入ERROR_TRAP状态。
-  {MSG_ID_COM_RESTART,        						FSM_STATE_BFSC_GIVE_UP,         					fsm_bfsc_restart},
-  {MSG_ID_COM_STOP,												FSM_STATE_BFSC_GIVE_UP,         					fsm_bfsc_stop_rcv},
-	{MSG_ID_COM_TIME_OUT,										FSM_STATE_BFSC_GIVE_UP,         					fsm_bfsc_time_out},
-	{MSG_ID_ADC_MATERIAL_DROP,							FSM_STATE_BFSC_GIVE_UP,         				  fsm_bfsc_adc_material_drop},   //放弃物料完成
+//	//放弃物料输出等待状态：完成后进入SCAN状态。如果连续N次都未能成功，停止马达和称重传感器，并进入ERROR_TRAP状态。
+//  {MSG_ID_COM_RESTART,        						FSM_STATE_BFSC_GIVE_UP,         					fsm_bfsc_restart},
+//  {MSG_ID_COM_STOP,												FSM_STATE_BFSC_GIVE_UP,         					fsm_bfsc_stop_rcv},
+//	{MSG_ID_COM_TIME_OUT,										FSM_STATE_BFSC_GIVE_UP,         					fsm_bfsc_time_out},
+//	{MSG_ID_ADC_MATERIAL_DROP,							FSM_STATE_BFSC_GIVE_UP,         				  fsm_bfsc_adc_material_drop},   //放弃物料完成
 
-	//硬件出错，该传感器进入错误陷阱状态，不再工作，等待人工干预
-  {MSG_ID_COM_RESTART,        						FSM_STATE_BFSC_ERROR_TRAP,         				fsm_bfsc_restart},
-  {MSG_ID_COM_STOP,												FSM_STATE_BFSC_ERROR_TRAP,         				fsm_bfsc_stop_rcv},
-	{MSG_ID_COM_TIME_OUT,										FSM_STATE_BFSC_ERROR_TRAP,         				fsm_bfsc_time_out},
+//	//硬件出错，该传感器进入错误陷阱状态，不再工作，等待人工干预
+//  {MSG_ID_COM_RESTART,        						FSM_STATE_BFSC_ERROR_TRAP,         				fsm_bfsc_restart},
+//  {MSG_ID_COM_STOP,												FSM_STATE_BFSC_ERROR_TRAP,         				fsm_bfsc_stop_rcv},
+//	{MSG_ID_COM_TIME_OUT,										FSM_STATE_BFSC_ERROR_TRAP,         				fsm_bfsc_time_out},
 	
 	//MYC ADDED 20170131
 	{MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ,			FSM_STATE_BFSC_ACTIVED,										fsm_bfsc_wmc_set_config_req},	//MYC
-	{MSG_ID_L3BFSC_WMC_GET_CONFIG_REQ,			FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_get_config_req},	//MYC		// 20170128: ALTOGETHER FOUR STATES, OTHERS RESERVED
-	{MSG_ID_L3BFSC_WMC_START_REQ,						FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_start_req},			//MYC
-	{MSG_ID_L3BFSC_WMC_COMMAND_REQ,					FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_command_req},		//MYC
-	{MSG_ID_L3BFSC_WMC_STOP_REQ,						FSM_STATE_BFSC_COMBINATION,								fsm_bfsc_wmc_stop_req},				//MYC		// 20170128: ALTOGETHER FOUR STATES, OTHERS RESERVED
-	{MSG_ID_L3BFSC_WMC_COMBIN_REQ,					FSM_STATE_BFSC_COMBINATION,								fsm_bfsc_wmc_combin_req},			//MYC		// 20170128: ALTOGETHER FOUR STATES, OTHERS RESERVED
+	{MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ,			FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_set_config_req},	//MYC
+	{MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ,			FSM_STATE_BFSC_COMBINATION,								fsm_bfsc_wmc_set_config_req},	//MYC
 
+	{MSG_ID_L3BFSC_WMC_GET_CONFIG_REQ,			FSM_STATE_BFSC_ACTIVED,										fsm_bfsc_wmc_get_config_req},	//MYC
+	{MSG_ID_L3BFSC_WMC_GET_CONFIG_REQ,			FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_get_config_req},	//MYC
+	{MSG_ID_L3BFSC_WMC_GET_CONFIG_REQ,			FSM_STATE_BFSC_COMBINATION,								fsm_bfsc_wmc_get_config_req},	//MYC
+	
+	{MSG_ID_L3BFSC_WMC_START_REQ,						FSM_STATE_BFSC_ACTIVED,										fsm_bfsc_wmc_start_req},	//MYC
+	{MSG_ID_L3BFSC_WMC_START_REQ,						FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_start_req},	//MYC
+	{MSG_ID_L3BFSC_WMC_START_REQ,						FSM_STATE_BFSC_COMBINATION,								fsm_bfsc_wmc_start_req},	//MYC
+
+	{MSG_ID_L3BFSC_WMC_COMMAND_REQ,					FSM_STATE_BFSC_ACTIVED,										fsm_bfsc_wmc_command_req},	//MYC
+	{MSG_ID_L3BFSC_WMC_COMMAND_REQ,					FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_command_req},	//MYC
+	{MSG_ID_L3BFSC_WMC_COMMAND_REQ,					FSM_STATE_BFSC_COMBINATION,								fsm_bfsc_wmc_command_req},	//MYC	
+
+	{MSG_ID_L3BFSC_WMC_STOP_REQ,						FSM_STATE_BFSC_ACTIVED,										fsm_bfsc_wmc_stop_req},	//MYC
+	{MSG_ID_L3BFSC_WMC_STOP_REQ,						FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_stop_req},	//MYC
+	{MSG_ID_L3BFSC_WMC_STOP_REQ,						FSM_STATE_BFSC_COMBINATION,								fsm_bfsc_wmc_stop_req},	//MYC	
+
+	{MSG_ID_L3BFSC_WMC_COMBIN_REQ,					FSM_STATE_BFSC_ACTIVED,										fsm_bfsc_wmc_combin_req},	//MYC
+	{MSG_ID_L3BFSC_WMC_COMBIN_REQ,					FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_combin_req},	//MYC
+	{MSG_ID_L3BFSC_WMC_COMBIN_REQ,					FSM_STATE_BFSC_COMBINATION,								fsm_bfsc_wmc_combin_req},	//MYC	
+	
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             								NULL},  //Ending
 };
@@ -1049,7 +1067,8 @@ void func_bfsc_stm_main_recovery_from_fault(void)
 
 OPSTAT fsm_bfsc_wmc_set_config_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)	//MYC
 {
-	int ret;
+	OPSTAT ret = IHU_SUCCESS;
+	error_code_t error_code;
 	msg_struct_l3bfsc_wmc_set_config_req_t rcv;
 	
 	//收到消息并做参数检查
@@ -1060,20 +1079,31 @@ OPSTAT fsm_bfsc_wmc_set_config_req(UINT8 dest_id, UINT8 src_id, void *param_ptr,
 	}
 	memcpy(&rcv, param_ptr, param_len);
 	
-	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_set_config_req_t: rcv.msgid = 0x%08X, rcv.length = %d\n", rcv.msgid, rcv.length);
+	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_set_config_req_t: rcv.msgid = 0x%08X, rcv.length = %d\r\n", rcv.msgid, rcv.length);
 	
 	/* PROCESS TO BE ADDED */
 	/* !!!!!!!!!!!!!!!!!!!!*/
+	/* Process Message */
+	msg_wmc_set_config_req_process(param_ptr, &error_code);
 	
-	FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_CONFIGURATION);
-
+	/* STATE CHANGE IF OK */
+	if (ERROR_CODE_NO_ERROR == error_code)
+	{
+			FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_CONFIGURATION);
+			IhuDebugPrint("L3BFSC: fsm_bfsc_wmc_set_config_req: Set to FSM_STATE_BFSC_CONFIGURATION\r\n");
+	}
+	
+	/* Send back the response */
+	msg_wmc_set_config_resp(error_code);
+	
 	//返回
-	return IHU_SUCCESS;
+	return ret;
 }
 
 OPSTAT fsm_bfsc_wmc_get_config_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)	//MYC
 {
-	int ret;
+	OPSTAT ret = IHU_SUCCESS;
+	error_code_t error_code;
 	msg_struct_l3bfsc_wmc_get_config_req_t rcv;
 	
 	//收到消息并做参数检查
@@ -1084,20 +1114,26 @@ OPSTAT fsm_bfsc_wmc_get_config_req(UINT8 dest_id, UINT8 src_id, void *param_ptr,
 	}
 	memcpy(&rcv, param_ptr, param_len);
 	
-	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_get_config_req_t: rcv.msgid = 0x%08X, rcv.length = %d\n", rcv.msgid, rcv.length);
+	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_get_config_req_t: rcv.msgid = 0x%08X, rcv.length = %d\r\n", rcv.msgid, rcv.length);
 
 	/* PROCESS TO BE ADDED */
 	/* !!!!!!!!!!!!!!!!!!!!*/
+	/* Process Message */
+	msg_wmc_get_config_req_process(param_ptr, &error_code);
+	
+	/* Send back the response */
+	msg_wmc_get_config_resp(error_code);
 	
 	//FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_CONFIGURATION);
 
 	//返回
-	return IHU_SUCCESS;
+	return ret;
 }
 
 OPSTAT fsm_bfsc_wmc_start_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)	//MYC
 {
-	int ret;
+	OPSTAT ret = IHU_SUCCESS;
+	error_code_t error_code;
 	msg_struct_l3bfsc_wmc_start_req_t rcv;
 	
 	//收到消息并做参数检查
@@ -1108,20 +1144,31 @@ OPSTAT fsm_bfsc_wmc_start_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT
 	}
 	memcpy(&rcv, param_ptr, param_len);
 	
-	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_start_req_t: rcv.msgid = 0x%08X, rcv.length = %d\n", rcv.msgid, rcv.length);
+	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_start_req_t: rcv.msgid = 0x%08X, rcv.length = %d\r\n", rcv.msgid, rcv.length);
 
 	/* PROCESS TO BE ADDED */
 	/* !!!!!!!!!!!!!!!!!!!!*/
+	/* Process Message */
+	msg_wmc_start_req_process(param_ptr, &error_code);
 	
-	FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_COMBINATION);
+	/* STATE CHANGE IF OK */
+	if (ERROR_CODE_NO_ERROR == error_code)
+	{
+			FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_COMBINATION);
+			IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_start_req_t: Set to FSM_STATE_BFSC_COMBINATION\r\n");
+	}
+	
+	/* Send back the response */
+	msg_wmc_start_resp(error_code);
 
 	//返回
-	return IHU_SUCCESS;
+	return ret;
 }
 
 OPSTAT fsm_bfsc_wmc_command_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)	//MYC
 {
-	int ret;
+	OPSTAT ret = IHU_SUCCESS;
+	error_code_t error_code;
 	msg_struct_l3bfsc_wmc_command_req_t rcv;
 	
 	//收到消息并做参数检查
@@ -1132,21 +1179,27 @@ OPSTAT fsm_bfsc_wmc_command_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UI
 	}
 	memcpy(&rcv, param_ptr, param_len);
 	
-	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_command_req_t: rcv.msgid = 0x%08X, rcv.length = %d\n", rcv.msgid, rcv.length);
+	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_command_req_t: rcv.msgid = 0x%08X, rcv.length = %d\r\n", rcv.msgid, rcv.length);
 
 	/* PROCESS TO BE ADDED */
 	/* !!!!!!!!!!!!!!!!!!!!*/
+	/* Process Message */
+	msg_wmc_command_req_process(param_ptr, &error_code);
+	
+	/* Send back the response */
+	msg_wmc_command_resp(error_code);
 	
 	//FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_CONFIGURATION);
 
 	//返回
-	return IHU_SUCCESS;
+	return ret;
 }
 
 
 OPSTAT fsm_bfsc_wmc_stop_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)	//MYC
 {
-	int ret;
+	OPSTAT ret = IHU_SUCCESS;
+	error_code_t error_code;
 	msg_struct_l3bfsc_wmc_stop_req_t rcv;
 	
 	//收到消息并做参数检查
@@ -1157,20 +1210,31 @@ OPSTAT fsm_bfsc_wmc_stop_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT1
 	}
 	memcpy(&rcv, param_ptr, param_len);
 	
-	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_stop_req_t: rcv.msgid = 0x%08X, rcv.length = %d\n", rcv.msgid, rcv.length);
+	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_stop_req_t: rcv.msgid = 0x%08X, rcv.length = %d\r\n", rcv.msgid, rcv.length);
 
 	/* PROCESS TO BE ADDED */
 	/* !!!!!!!!!!!!!!!!!!!!*/
+	/* Process Message */
+	msg_wmc_stop_req_process(param_ptr, &error_code);
 	
-	FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_CONFIGURATION);
+	/* STATE CHANGE IF OK */
+	if (ERROR_CODE_NO_ERROR == error_code)
+	{
+			FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_CONFIGURATION);
+			IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_stop_req_t: Set to FSM_STATE_BFSC_CONFIGURATION\r\n");
+	}
+	
+	/* Send back the response */
+	msg_wmc_stop_resp(error_code);
 
 	//返回
-	return IHU_SUCCESS;
+	return ret;
 }
 
 OPSTAT fsm_bfsc_wmc_combin_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)	//MYC
 {
-	int ret;
+	OPSTAT ret = IHU_SUCCESS;
+	error_code_t error_code;
 	msg_struct_l3bfsc_wmc_combin_req_t rcv;
 	
 	//收到消息并做参数检查
@@ -1181,13 +1245,18 @@ OPSTAT fsm_bfsc_wmc_combin_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UIN
 	}
 	memcpy(&rcv, param_ptr, param_len);
 	
-	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_combin_req_t: rcv.msgid = 0x%08X, rcv.length = %d\n", rcv.msgid, rcv.length);
+	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_combin_req_t: rcv.msgid = 0x%08X, rcv.length = %d\r\n", rcv.msgid, rcv.length);
 
 	/* PROCESS TO BE ADDED */
 	/* !!!!!!!!!!!!!!!!!!!!*/
+	/* Process Message */
+	msg_wmc_combin_req_process(param_ptr, &error_code);
+	
+	/* Send back the response */
+	msg_wmc_combin_resp(error_code);
 	
 	//FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_COMBINATION);
 
 	//返回
-	return IHU_SUCCESS;
+	return ret;
 }
