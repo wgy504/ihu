@@ -72,7 +72,14 @@ extern OPSTAT fsm_bfsc_adc_material_drop(UINT8 dest_id, UINT8 src_id, void * par
 extern OPSTAT fsm_bfsc_canvela_roll_out_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_bfsc_canvela_give_up_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 
-	
+//MYC ADDED 20170131
+extern OPSTAT fsm_bfsc_wmc_set_config_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len);	//MYC
+extern OPSTAT fsm_bfsc_wmc_get_config_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len);	//MYC
+extern OPSTAT fsm_bfsc_wmc_start_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len);				//MYC
+extern OPSTAT fsm_bfsc_wmc_command_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len);			//MYC
+extern OPSTAT fsm_bfsc_wmc_stop_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len);				//MYC
+extern OPSTAT fsm_bfsc_wmc_combin_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len);			//MYC
+
 //Local API
 OPSTAT func_bfsc_hw_init(WmcInventory_t *pwi);
 OPSTAT func_bfsc_time_out_period_scan(void);
