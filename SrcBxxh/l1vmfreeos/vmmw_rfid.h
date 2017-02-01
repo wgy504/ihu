@@ -27,7 +27,8 @@
 #define IHU_VMWM_RFIDMOD_USING_ITF_SPI2 3
 #define IHU_VMWM_RFIDMOD_USING_ITF_SET  IHU_VMWM_RFIDMOD_USING_ITF_SPI2  //CCL项目使用的接口为SPI2，BSP中有映射
 
-#define IHU_VMWM_RFIDMOD_SCAN_RC522_MAX_TIME 40
+//定义RFID模块扫描的时间长度，暂时放到4秒，未来将根据实际表现进行合适的调整
+#define IHU_VMWM_RFIDMOD_SCAN_RC522_MAX_TIME 4
 
 //向上提供全局统一服务的入口
 extern OPSTAT ihu_vmmw_rfidmod_rc522_spi_send_command(uint8_t *command);

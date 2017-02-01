@@ -199,12 +199,12 @@ OPSTAT ihu_vmmw_rfidmod_rc522_spi_read_id(uint8_t *rfidAddr, uint8_t len)
 //  PcdRead ( 0x10, Dat );
 
 
-	uint8_t CT[2] = {1,1};//卡片类型
+	uint8_t CT[2] = {0,0};//卡片类型
 	uint8_t SN1[4] = {0,0,0,0};//卡片号码
 	uint8_t assWd[6]={0xff,0xff,0xff,0xff,0xff,0xff};
 	uint8_t data[16];//缓冲区
 	PcdReset();
-	PcdRequest(PICC_REQIDL, CT);//寻卡
+	PcdRequest(PICC_REQALL, CT);//寻卡
 	PcdAnticoll(SN1); //防冲撞,至此，SN1中保存了卡号
 	IhuDebugPrint("VMMWRFID: Card type = [0x%x, 0x%x], Card number = [0x%x, 0x%x, 0x%x, 0x%x].\n", CT[0], CT[1], SN1[0], SN1[1], SN1[2], SN1[3]);
 	PcdSelect(SN1);//选卡
@@ -377,14 +377,14 @@ void PcdAntennaOff ( void )
 void PcdReset ( void )
 {
 	macRC522_Reset_Disable();
-	HAL_Delay ( 1 );
+	HAL_Delay ( 100 );
 	macRC522_Reset_Enable();
-	HAL_Delay ( 1 );
+	HAL_Delay ( 100 );
 	macRC522_Reset_Disable();
-	HAL_Delay ( 1 );
-	WriteRawRC ( CommandReg, 0x0f );
+	HAL_Delay ( 100 );
+	WriteRawRC ( CommandReg, PCD_RESETPHASE );
 	while ( ReadRawRC ( CommandReg ) & 0x10 );
-	HAL_Delay ( 1 );
+	HAL_Delay ( 100 );
   WriteRawRC ( ModeReg, 0x3D );            //定义发送和接收常用模式 和Mifare卡通讯，CRC初始值0x6363
   WriteRawRC ( TReloadRegL, 30 );          //16位定时器低位    
 	WriteRawRC ( TReloadRegH, 0 );			     //16位定时器高位
@@ -392,7 +392,7 @@ void PcdReset ( void )
   WriteRawRC ( TPrescalerReg, 0x3E );			 //设置定时器分频系数
 	WriteRawRC ( TxAutoReg, 0x40 );				   //调制发送信号为100%ASK
 	PcdAntennaOff();
-  HAL_Delay ( 1 );
+  HAL_Delay ( 100 );
   PcdAntennaOn();
 }
 
