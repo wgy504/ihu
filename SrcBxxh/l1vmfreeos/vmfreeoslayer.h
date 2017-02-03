@@ -355,21 +355,21 @@ extern FsmTable_t zIhuFsmTable;                             //状态机总表
 extern char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK];    //消息名字符串
 extern IhuSysEngParTable_t zIhuSysEngPar;                   //工参
 //统一定义，如果不存在不影响编译
-extern FsmStateItem_t FsmVmfo[];                           	//状态机
-extern FsmStateItem_t FsmTimer[];                           //状态机
-extern FsmStateItem_t FsmAdclibra[];                        //状态机
-extern FsmStateItem_t FsmSpileo[];                          //状态机
-extern FsmStateItem_t FsmI2caries[];                        //状态机
-extern FsmStateItem_t FsmPwmtaurus[];                       //状态机
-extern FsmStateItem_t FsmSpsvirgo[];                        //状态机
-extern FsmStateItem_t FsmCanvela[];                      		//状态机
-extern FsmStateItem_t FsmDidocap[];                         //状态机
-extern FsmStateItem_t FsmLedpisces[];                       //状态机
-extern FsmStateItem_t FsmEthorion[];                        //状态机
-extern FsmStateItem_t FsmDcmiaris[];                        //状态机
-extern FsmStateItem_t FsmEmc68x[];                          //状态机
-extern FsmStateItem_t FsmCcl[];                          	  //状态机
-extern FsmStateItem_t FsmBfsc[];                          	//状态机 
+extern FsmStateItem_t IhuFsmVmfo[];                           	//状态机
+extern FsmStateItem_t IhuFsmTimer[];                           //状态机
+extern FsmStateItem_t IhuFsmAdclibra[];                        //状态机
+extern FsmStateItem_t IhuFsmSpileo[];                          //状态机
+extern FsmStateItem_t IhuFsmI2caries[];                        //状态机
+extern FsmStateItem_t IhuFsmPwmtaurus[];                       //状态机
+extern FsmStateItem_t IhuFsmSpsvirgo[];                        //状态机
+extern FsmStateItem_t IhuFsmCanvela[];                      	 //状态机
+extern FsmStateItem_t IhuFsmDidocap[];                         //状态机
+extern FsmStateItem_t IhuFsmLedpisces[];                       //状态机
+extern FsmStateItem_t IhuFsmEthorion[];                        //状态机
+extern FsmStateItem_t IhuFsmDcmiaris[];                        //状态机
+extern FsmStateItem_t IhuFsmEmc68x[];                          //状态机
+extern FsmStateItem_t IhuFsmCcl[];                          	 //状态机
+extern FsmStateItem_t IhuFsmBfsc[];                          	 //状态机 
 
 //外部引用API，来自于TIMER任务模块。TIMER任务模块的机制是，必须将VM启动起来，然后TIMER上层任务模块才能被激活，并产生自定义的TIME_OUT消息
 extern OPSTAT ihu_timer_start(UINT8 task_id, UINT8 timer_id, UINT32 t_dur, UINT8 t_type, UINT8 t_res);

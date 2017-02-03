@@ -53,7 +53,7 @@ enum FSM_STATE_SPSVIRGO
 //#define FSM_STATE_INVALID 0xFF
 
 //Global variables
-extern FsmStateItem_t FsmSpsvirgo[];
+extern FsmStateItem_t IhuFsmSpsvirgo[];
 
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 	//本地需要用到的核心参数

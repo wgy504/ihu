@@ -44,7 +44,7 @@ enum FSM_STATE_CCL
 //#define FSM_STATE_INVALID 0xFF
 
 //Global variables
-extern FsmStateItem_t FsmCcl[];
+extern FsmStateItem_t IhuFsmCcl[];
 
 //Local Variables
 //传感器在CCL上，由于涉及到消息数据结构，必须固定住，不然数据结构没法弄

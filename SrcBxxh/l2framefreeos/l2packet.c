@@ -82,3 +82,4 @@ uint16_t l2packet_rx_bytes(IHU_HUITP_L2FRAME_Desc_t *pdesc, uint8_t *data, uint1
 	
 	return i;
 }
+

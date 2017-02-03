@@ -41,7 +41,7 @@ enum FSM_STATE_EMC68X
 //#define FSM_STATE_INVALID 0xFF
 
 //Global variables
-extern FsmStateItem_t FsmEmc68x[];
+extern FsmStateItem_t IhuFsmEmc68x[];
 
 //API
 extern OPSTAT fsm_emc68x_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);

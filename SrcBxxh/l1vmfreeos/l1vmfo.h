@@ -46,7 +46,7 @@ enum FSM_STATE_VMFO
 //#define FSM_STATE_INVALID 0xFF
 
 //Global variables
-extern FsmStateItem_t FsmVmfo[];
+extern FsmStateItem_t IhuFsmVmfo[];
 
 //Local variables
 //structure

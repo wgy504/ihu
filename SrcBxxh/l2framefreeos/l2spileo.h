@@ -49,7 +49,7 @@ enum FSM_STATE_SPILEO
 #define IHU_SPILEO_PERIOD_TIMER_SET IHU_SPILEO_PERIOD_TIMER_ACTIVE
 
 //Global variables
-extern FsmStateItem_t FsmSpileo[];
+extern FsmStateItem_t IhuFsmSpileo[];
 
 //API
 extern OPSTAT fsm_spileo_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);

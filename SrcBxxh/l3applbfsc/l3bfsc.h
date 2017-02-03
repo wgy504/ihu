@@ -52,7 +52,7 @@ enum FSM_STATE_BFSC
 //#define FSM_STATE_INVALID 0xFF
 
 //Global variables
-extern FsmStateItem_t FsmBfsc[];
+extern FsmStateItem_t IhuFsmBfsc[];
 
 //本地定义的常亮
 #define IHU_L3BFSC_MOTO_HW_ERROR_RECOVER_TIMES_MAX 10

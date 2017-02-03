@@ -45,7 +45,7 @@ enum FSM_STATE_I2CARIES
 //#define FSM_STATE_INVALID 0xFF
 
 //Global variables
-extern FsmStateItem_t FsmI2caries[];
+extern FsmStateItem_t IhuFsmI2caries[];
 
 //本地需要用到的核心参数
 typedef struct strIhuBfscI2cMotoPar
