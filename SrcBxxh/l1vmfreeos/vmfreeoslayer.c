@@ -671,7 +671,7 @@ void ihu_vm_system_init(void)
 	}
 	
 	//硬件烧录区域，系统唯一标识部分，后面程序中访问到这些系统参数都必须从这个地方读取
-	ihu_l1hd_f2board_equid_get(&(zIhuSysEngPar.hwBurnId));
+	ihu_l1hd_f2board_equid_get((UINT8*)&(zIhuSysEngPar.hwBurnId));
 	//对硬件类型进行相同性检查，如果不一致，必然发生了生产性错误，或者硬件搞错，或者Factory Load用错，应该严重警告
 	if ((IHU_HARDWARE_MASSIVE_PRODUTION_SET == IHU_HARDWARE_MASSIVE_PRODUTION_YES) && (zIhuSysEngPar.hwBurnId.hwType != IHU_HARDWARE_PRODUCT_CAT_TYPE)){
 		IhuDebugPrint("VMFO: Fatal error, using wrong hardware type or factory load!!!\n");
@@ -684,7 +684,10 @@ void ihu_vm_system_init(void)
 		zIhuSysEngPar.hwBurnId.hwPemId = IHU_CURRENT_HW_TYPE; //PEM小型号
 		zIhuSysEngPar.hwBurnId.swRelId = IHU_CURRENT_SW_RELEASE;
 		zIhuSysEngPar.hwBurnId.swVerId = IHU_CURRENT_SW_DELIVERY;
+		zIhuSysEngPar.hwBurnId.swAppCheckSum = 0;
 		zIhuSysEngPar.hwBurnId.swUpgradeFlag = IHU_HARDWARE_BURN_ID_FW_UPGRADE_SET;
+		zIhuSysEngPar.hwBurnId.swUpgPollId = IHU_HARDWARE_BURN_ID_FW_UPGRADE_METHOD_UART_GPRS;
+		//cipherKey[16];
 	}
 	
 	//初始化之后的系统标识信息

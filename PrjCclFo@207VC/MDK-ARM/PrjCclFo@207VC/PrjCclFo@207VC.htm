@@ -3,7 +3,7 @@
 <title>Static Call Graph - [PrjCclFo@207VC\PrjCclFo@207VC.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image PrjCclFo@207VC\PrjCclFo@207VC.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Fri Feb 03 09:14:00 2017
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Sat Feb 04 14:22:41 2017
 <BR><P>
 <H3>Maximum Stack Usage =       2792 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -555,6 +555,7 @@ Global Symbols
 <LI><a href="#[26c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;prvCopyDataFromQueue
 <LI><a href="#[157]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_message_send
 <LI><a href="#[154]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_RxCpltCallback
+<LI><a href="#[23d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_f2board_equid_get
 <LI><a href="#[1ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive
 <LI><a href="#[1c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_vmmw_gprsmod_http_data_transmit_with_receive
 <LI><a href="#[9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_vmfo_time_out
@@ -704,8 +705,7 @@ Global Symbols
 <P><STRONG><a name="[209]"></a>strncpy</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, strncpy.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = strncpy
 </UL>
-<BR>[Called By]<UL><LI><a href="#[23d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_f2board_equid_get
-<LI><a href="#[1c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_cloud_standard_xml_unpack
+<BR>[Called By]<UL><LI><a href="#[1c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_cloud_standard_xml_unpack
 <LI><a href="#[23e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_vmmw_gprsmod_get_rssi_value
 <LI><a href="#[223]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_gprsmod_module_info_retrieve
 <LI><a href="#[221]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_gprsmod_gsm_info_retrieve
@@ -4792,10 +4792,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[1b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_water_state
 </UL>
 
-<P><STRONG><a name="[23d]"></a>ihu_bsp_stm32_f2board_equid_get</STRONG> (Thumb, 38 bytes, Stack size 8 bytes, bsp_stmflash.o(i.ihu_bsp_stm32_f2board_equid_get))
-<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = ihu_bsp_stm32_f2board_equid_get &rArr; strncpy
-</UL>
-<BR>[Calls]<UL><LI><a href="#[209]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strncpy
+<P><STRONG><a name="[23d]"></a>ihu_bsp_stm32_f2board_equid_get</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, bsp_stmflash.o(i.ihu_bsp_stm32_f2board_equid_get))
+<BR><BR>[Calls]<UL><LI><a href="#[156]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
 </UL>
 <BR>[Called By]<UL><LI><a href="#[24e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_vm_system_init
 </UL>
@@ -5271,7 +5269,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[24b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_task_create_all
 </UL>
 
-<P><STRONG><a name="[24e]"></a>ihu_vm_system_init</STRONG> (Thumb, 674 bytes, Stack size 56 bytes, vmfreeoslayer.o(i.ihu_vm_system_init))
+<P><STRONG><a name="[24e]"></a>ihu_vm_system_init</STRONG> (Thumb, 686 bytes, Stack size 56 bytes, vmfreeoslayer.o(i.ihu_vm_system_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 520<LI>Call Chain = ihu_vm_system_init &rArr; FsmInit &rArr; IhuDebugPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[24f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueCreateMutex

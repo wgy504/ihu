@@ -161,14 +161,20 @@ void Test_Write( uint32_t WriteAddr, uint16_t WriteData )
 }
 
 //读取设备标签信息
-void ihu_bsp_stm32_f2board_equid_get(SysEngParElementHwBurnPhyIdAddr_t *equ)
+void ihu_bsp_stm32_f2board_equid_get(uint8_t *equ)
 {
-	strncpy(equ->equLable, (char *)IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_ADD_FIX, 20);
-	equ->hwType = (uint16_t)(IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_ADD_FIX+20);
-	equ->hwPemId = (uint16_t)(IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_ADD_FIX+22);
-	equ->swRelId = (uint16_t)(IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_ADD_FIX+24);
-	equ->swVerId = (uint16_t)(IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_ADD_FIX+26);
-	equ->swUpgradeFlag = (uint8_t)(IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_ADD_FIX+28);
+	memcpy(equ, (uint8_t*)IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_ADD_FIX, IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_SIZE);
+	//去掉以下过程，直接采用内存拷贝的方式，简单高效，关键是不跟具体的结构演进发生关系，方便多了
+//	strncpy(equ->equLable, (char *)IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_ADD_FIX, 20);
+//	equ->hwType = (uint16_t)(IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_ADD_FIX+20);
+//	equ->hwPemId = (uint16_t)(IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_ADD_FIX+22);
+//	equ->swRelId = (uint16_t)(IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_ADD_FIX+24);
+//	equ->swVerId = (uint16_t)(IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_ADD_FIX+26);
+//	equ->swAppCheckSum = (uint16_t)(IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_ADD_FIX+28);
+//	equ->swUpgradeFlag = (uint8_t)(IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_ADD_FIX+30);
+//	equ->swUpgPollId = (uint8_t)(IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_ADD_FIX+31);
+//	memcpy(equ->cipherKey, (uint8_t*)(IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_ADD_FIX+32), 16);
+//	memcpy(equ->rsv, (uint8_t*)(IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_ADD_FIX+48), 16);
 }
 
 

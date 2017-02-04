@@ -42,15 +42,15 @@ extern "C" {
 //	uint8_t 	rsv3;	
 //}StrStm32F2EquidStorage_t;
 
-#define IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_ADD_FIX 0x80001FDE //根据具体的芯片型号，由uboot确定后再确定
-#define IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_SIZE 0x20      //32BYTE
+#define IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_ADD_FIX 	0x80001FC0 //根据具体的芯片型号，由uboot确定后再确定
+#define IHU_BSP_STM32_F2_FLASH_EQU_STORAGE_SIZE 		IHU_HW_BURN_PHY_ID_BLOCK_LEN      //64BYTE
 
 //本地定义的交换矩阵
 
 
 //全局函数
 //StrStm32F2EquidStorage_t的定义权限被拿到VMLAYER/SYSENGPAR中去了，以简化整个程序的处理过程
-extern void ihu_bsp_stm32_f2board_equid_get(SysEngParElementHwBurnPhyIdAddr_t *equ);
+extern void ihu_bsp_stm32_f2board_equid_get(uint8_t *equ);
 
 //Local APIs
 uint16_t STMFLASH_ReadHalfWord(uint32_t faddr);		  //读出半字
