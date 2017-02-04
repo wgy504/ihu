@@ -5,8 +5,8 @@
  *      Author: test
  */
 
-#ifndef HUITP_H_
-#define HUITP_H_
+#ifndef _HUITP_H_
+#define _HUITP_H_
 #pragma pack (1) //强制1字节对齐
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -826,7 +826,9 @@ typedef enum
 	HUITP_MSGID_uni_ccl_state_old_req                = 0x4C00, 
 	HUITP_MSGID_uni_ccl_state_old_resp               = 0x4C80, 
 	HUITP_MSGID_uni_ccl_state_old_report             = 0x4C81, 
-	HUITP_MSGID_uni_ccl_state_old_confirm            = 0x4C01, 
+	HUITP_MSGID_uni_ccl_state_old_confirm            = 0x4C01,
+	HUITP_MSGID_uni_ccl_state_old_pic_report         = 0x4C82, 
+	HUITP_MSGID_uni_ccl_state_old_pic_confirm        = 0x4C02,
 	HUITP_MSGID_uni_ccl_state_old_max,
 
   //云控锁-锁
@@ -844,7 +846,9 @@ typedef enum
 	HUITP_MSGID_uni_ccl_state_req                    = 0x4E00, 
 	HUITP_MSGID_uni_ccl_state_resp                   = 0x4E80, 
 	HUITP_MSGID_uni_ccl_state_report                 = 0x4E81, 
-	HUITP_MSGID_uni_ccl_state_confirm                = 0x4E01, 
+	HUITP_MSGID_uni_ccl_state_confirm                = 0x4E01,
+	HUITP_MSGID_uni_ccl_state_pic_report         		 = 0x4E82, 
+	HUITP_MSGID_uni_ccl_state_pic_confirm        		 = 0x4E02,	
 	HUITP_MSGID_uni_ccl_state_max,
 
 	//串口读取命令/返回结果
@@ -1218,7 +1222,10 @@ typedef enum
 
   //图片
 	HUITP_IEID_uni_picture_min                      = 0x2F00, 
-	HUITP_IEID_uni_picture_value                    = 0x2F00, 
+	HUITP_IEID_uni_picture_value                    = 0x2F00,
+	HUITP_IEID_uni_picture_segment                  = 0x2F01,
+	HUITP_IEID_uni_picture_format                  	= 0x2F02,	
+	HUITP_IEID_uni_picture_body                  		= 0x2F03,	
 	HUITP_IEID_uni_picture_max,
 
   //扬尘监控系统
@@ -2175,6 +2182,52 @@ typedef struct StrIe_HUITP_IEID_uni_picture_value
 	UINT8  dataFormat;
 	UINT16 pictureValue;
 }StrIe_HUITP_IEID_uni_picture_value_t;
+
+//HUITP_IEID_uni_picture_segment                  = 0x2F01,
+typedef struct StrIe_HUITP_IEID_uni_picture_segment
+{
+	UINT16 ieId;
+	UINT16 ieLen;
+	UINT16 segIndex;
+	UINT16 segTotal;
+}StrIe_HUITP_IEID_uni_picture_segment_t;
+
+//HUITP_IEID_uni_picture_format                  	= 0x2F02,	
+typedef struct StrIe_HUITP_IEID_uni_picture_format
+{
+	UINT16 ieId;
+	UINT16 ieLen;
+	UINT8 picFormat;
+}StrIe_HUITP_IEID_uni_picture_format_t;
+#define HUITP_IEID_UNI_PICTURE_FORMAT_NULL 0
+#define HUITP_IEID_UNI_PICTURE_FORMAT_BITMAP 1
+#define HUITP_IEID_UNI_PICTURE_FORMAT_JPG 2
+#define HUITP_IEID_UNI_PICTURE_FORMAT_JPEG 3
+#define HUITP_IEID_UNI_PICTURE_FORMAT_GIF 4
+#define HUITP_IEID_UNI_PICTURE_FORMAT_TIFF 5
+#define HUITP_IEID_UNI_PICTURE_FORMAT_RAW 6
+#define HUITP_IEID_UNI_PICTURE_FORMAT_PCX 7
+#define HUITP_IEID_UNI_PICTURE_FORMAT_TGA 8
+#define HUITP_IEID_UNI_PICTURE_FORMAT_EXIF 9
+#define HUITP_IEID_UNI_PICTURE_FORMAT_FPX 10
+#define HUITP_IEID_UNI_PICTURE_FORMAT_SVG 11
+#define HUITP_IEID_UNI_PICTURE_FORMAT_PSD 12
+#define HUITP_IEID_UNI_PICTURE_FORMAT_CDR 13
+#define HUITP_IEID_UNI_PICTURE_FORMAT_PCD 14
+#define HUITP_IEID_UNI_PICTURE_FORMAT_DXF 15
+#define HUITP_IEID_UNI_PICTURE_FORMAT_UFO 16
+#define HUITP_IEID_UNI_PICTURE_FORMAT_EPS 17
+#define HUITP_IEID_UNI_PICTURE_FORMAT_RNG 18
+#define HUITP_IEID_UNI_PICTURE_FORMAT_INVALID 0xFF
+
+//HUITP_IEID_uni_picture_body                  		= 0x2F03,
+#define HUITP_IEID_UNI_PICTURE_BODY_DATA_LEN 400
+typedef struct StrIe_HUITP_IEID_uni_picture_body
+{
+	UINT16 ieId;
+	UINT16 ieLen;
+	UINT8  picData[HUITP_IEID_UNI_PICTURE_BODY_DATA_LEN];
+}StrIe_HUITP_IEID_uni_picture_body_t;
 
 //HUITP_IEID_uni_picture_max,
 
@@ -7076,7 +7129,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_report_old
 	StrIe_HUITP_IEID_uni_ccl_report_type_t reportType;
 }StrMsg_HUITP_MSGID_uni_ccl_state_report_old_t;
 
-//HUITP_MSGID_uni_ccl_state_old_confirmold                    = 0x4C01,
+//HUITP_MSGID_uni_ccl_state_old_confirm                    = 0x4C01,
 typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_confirm_old
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
@@ -7084,6 +7137,26 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_confirm_old
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 	StrIe_HUITP_IEID_uni_ccl_report_type_t reportType;
 }StrMsg_HUITP_MSGID_uni_ccl_state_confirm_old_t;
+
+//HUITP_MSGID_uni_ccl_state_old_pic_report                 = 0x4C82,
+typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_pic_report_old
+{
+	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_report_t baseReport;
+	StrIe_HUITP_IEID_uni_picture_segment_t picSeg;
+	StrIe_HUITP_IEID_uni_picture_format_t picForamt;
+	StrIe_HUITP_IEID_uni_picture_body_t picBody;
+}StrMsg_HUITP_MSGID_uni_ccl_state_pic_report_old_t;
+
+//HUITP_MSGID_uni_ccl_state_old_pic_confirm                   = 0x4C02,
+typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_pic_confirm_old
+{
+	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
+	StrIe_HUITP_IEID_uni_picture_segment_t picSeg;
+}StrMsg_HUITP_MSGID_uni_ccl_state_pic_confirm_old_t;
 
 //HUITP_MSGID_uni_ccl_state_old_max,
 
@@ -7207,6 +7280,26 @@ typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_confirm
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 	StrIe_HUITP_IEID_uni_ccl_report_type_t reportType;
 }StrMsg_HUITP_MSGID_uni_ccl_state_confirm_t;
+
+//HUITP_MSGID_uni_ccl_state_pic_report                 = 0x4E82,
+typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_pic_report
+{
+	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_report_t baseReport;
+	StrIe_HUITP_IEID_uni_picture_segment_t picSeg;
+	StrIe_HUITP_IEID_uni_picture_format_t picForamt;
+	StrIe_HUITP_IEID_uni_picture_body_t picBody;
+}StrMsg_HUITP_MSGID_uni_ccl_state_pic_report_t;
+
+//HUITP_MSGID_uni_ccl_state_pic_confirm                   = 0x4E02,
+typedef struct StrMsg_HUITP_MSGID_uni_ccl_state_pic_confirm
+{
+	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
+	StrIe_HUITP_IEID_uni_picture_segment_t picSeg;
+}StrMsg_HUITP_MSGID_uni_ccl_state_pic_confirm_t;
 
 //HUITP_MSGID_uni_ccl_state_max,
 
@@ -8183,4 +8276,4 @@ typedef struct StrMsg_HUITP_MSGID_uni_heart_beat_confirm
 //HUITP_MSGID_uni_null                             = 0xFF,	
 
 #pragma pack () //取消字节对其
-#endif /* HUITP_H_ */
+#endif /* _HUITP_H_ */
