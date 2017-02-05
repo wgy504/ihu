@@ -468,8 +468,9 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		//心跳请求
 		case HUITP_MSGID_uni_heart_beat_req:
 		{
+			//以下申请的都是结构指针，绝对不能使用memset对一个指针结构做初始化，危险！
 			StrMsg_HUITP_MSGID_uni_heart_beat_req_t *snd1;
-			memset(snd1, 0, sizeof(StrMsg_HUITP_MSGID_uni_heart_beat_req_t));
+			//memset(snd1, 0, sizeof(StrMsg_HUITP_MSGID_uni_heart_beat_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_heart_beat_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -484,7 +485,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_heart_beat_confirm:
 		{
 			StrMsg_HUITP_MSGID_uni_heart_beat_confirm_t *snd2;
-			memset(snd2, 0, sizeof(StrMsg_HUITP_MSGID_uni_heart_beat_confirm_t));
+			//memset(snd2, 0, sizeof(StrMsg_HUITP_MSGID_uni_heart_beat_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_heart_beat_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -498,7 +499,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_ccl_lock_req:	
 		{
 			StrMsg_HUITP_MSGID_uni_ccl_lock_req_t *snd3;
-			memset(snd3, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_lock_req_t));
+			//memset(snd3, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_lock_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_lock_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -512,7 +513,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_ccl_lock_confirm:
 		{
 			StrMsg_HUITP_MSGID_uni_ccl_lock_confirm_t *snd4;
-			memset(snd4, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_lock_confirm_t));
+			//memset(snd4, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_lock_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_lock_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -526,7 +527,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_ccl_lock_auth_resp:
 		{
 			StrMsg_HUITP_MSGID_uni_ccl_lock_auth_resp_t *snd5;
-			memset(snd5, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_lock_auth_resp_t));
+			//memset(snd5, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_lock_auth_resp_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_lock_auth_resp_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -540,7 +541,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_ccl_door_req:
 		{
 			StrMsg_HUITP_MSGID_uni_ccl_door_req_t *snd6;
-			memset(snd6, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_door_req_t));
+			//memset(snd6, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_door_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_door_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -554,7 +555,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_ccl_door_confirm:
 		{
 			StrMsg_HUITP_MSGID_uni_ccl_door_confirm_t *snd7;
-			memset(snd7, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_door_confirm_t));
+			//memset(snd7, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_door_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_door_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -568,7 +569,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_ccl_rfid_req:
 		{
 			StrMsg_HUITP_MSGID_uni_ccl_rfid_req_t *snd8;
-			memset(snd8, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_rfid_req_t));
+			//memset(snd8, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_rfid_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_rfid_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -582,7 +583,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_ccl_rfid_confirm:
 		{
 			StrMsg_HUITP_MSGID_uni_ccl_rfid_confirm_t *snd9;
-			memset(snd9, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_rfid_confirm_t));
+			//memset(snd9, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_rfid_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_rfid_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -596,7 +597,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_ccl_ble_req:
 		{
 			StrMsg_HUITP_MSGID_uni_ccl_ble_req_t *snd10;
-			memset(snd10, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_ble_req_t));
+			//memset(snd10, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_ble_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_ble_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -610,7 +611,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_ccl_ble_confirm:
 		{
 			StrMsg_HUITP_MSGID_uni_ccl_ble_confirm_t *snd11;
-			memset(snd11, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_ble_confirm_t));
+			//memset(snd11, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_ble_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_ble_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -624,7 +625,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_ccl_gprs_req:
 		{
 			StrMsg_HUITP_MSGID_uni_ccl_gprs_req_t *snd12;
-			memset(snd12, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_gprs_req_t));
+			//memset(snd12, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_gprs_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_gprs_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -638,7 +639,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_ccl_gprs_confirm:
 		{
 			StrMsg_HUITP_MSGID_uni_ccl_gprs_confirm_t *snd13;
-			memset(snd13, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_gprs_confirm_t));
+			//memset(snd13, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_gprs_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_gprs_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -652,7 +653,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_ccl_battery_req:
 		{
 			StrMsg_HUITP_MSGID_uni_ccl_battery_req_t *snd14;
-			memset(snd14, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_battery_req_t));
+			//memset(snd14, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_battery_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_battery_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -666,7 +667,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_ccl_battery_confirm:
 		{
 			StrMsg_HUITP_MSGID_uni_ccl_battery_confirm_t *snd15;
-			memset(snd15, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_battery_confirm_t));
+			//memset(snd15, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_battery_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_battery_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -680,7 +681,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_ccl_shake_req:
 		{
 			StrMsg_HUITP_MSGID_uni_ccl_shake_req_t *snd16;
-			memset(snd16, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_shake_req_t));
+			//memset(snd16, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_shake_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_shake_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -694,7 +695,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_ccl_shake_confirm:
 		{
 			StrMsg_HUITP_MSGID_uni_ccl_shake_confirm_t *snd17;
-			memset(snd17, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_shake_confirm_t));
+			//memset(snd17, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_shake_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_shake_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -708,7 +709,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_ccl_smoke_req:
 		{
 			StrMsg_HUITP_MSGID_uni_ccl_smoke_req_t *snd18;
-			memset(snd18, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_smoke_req_t));
+			//memset(snd18, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_smoke_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_smoke_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -722,7 +723,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_ccl_smoke_confirm:
 		{
 			StrMsg_HUITP_MSGID_uni_ccl_smoke_confirm_t *snd19;
-			memset(snd19, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_smoke_confirm_t));
+			//memset(snd19, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_smoke_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_smoke_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -736,7 +737,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_ccl_water_req:
 		{
 			StrMsg_HUITP_MSGID_uni_ccl_water_req_t *snd20;
-			memset(snd20, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_water_req_t));
+			//memset(snd20, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_water_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_water_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -750,7 +751,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_ccl_water_confirm:
 		{
 			StrMsg_HUITP_MSGID_uni_ccl_water_confirm_t *snd21;
-			memset(snd21, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_water_confirm_t));
+			//memset(snd21, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_water_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_water_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -764,7 +765,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_ccl_temp_req:
 		{
 			StrMsg_HUITP_MSGID_uni_ccl_temp_req_t *snd22;
-			memset(snd22, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_temp_req_t));
+			//memset(snd22, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_temp_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_temp_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -778,7 +779,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_ccl_temp_confirm:
 		{
 			StrMsg_HUITP_MSGID_uni_ccl_temp_confirm_t *snd23;
-			memset(snd23, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_temp_confirm_t));
+			//memset(snd23, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_temp_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_temp_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -792,7 +793,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_ccl_humid_req:
 		{
 			StrMsg_HUITP_MSGID_uni_ccl_humid_req_t *snd24;
-			memset(snd24, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_humid_req_t));
+			//memset(snd24, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_humid_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_humid_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -806,7 +807,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_ccl_humid_confirm:
 		{
 			StrMsg_HUITP_MSGID_uni_ccl_humid_confirm_t *snd25;
-			memset(snd25, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_humid_confirm_t));
+			//memset(snd25, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_humid_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_humid_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -820,7 +821,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_ccl_fall_req:
 		{
 			StrMsg_HUITP_MSGID_uni_ccl_fall_req_t *snd26;
-			memset(snd26, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_fall_req_t));
+			//memset(snd26, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_fall_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_fall_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -834,7 +835,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_ccl_fall_confirm:
 		{
 			StrMsg_HUITP_MSGID_uni_ccl_fall_confirm_t *snd27;
-			memset(snd27, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_fall_confirm_t));
+			//memset(snd27, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_fall_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_fall_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -848,7 +849,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_ccl_state_req:
 		{
 			StrMsg_HUITP_MSGID_uni_ccl_state_req_t *snd28;
-			memset(snd28, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_state_req_t));
+			//memset(snd28, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_state_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_state_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -862,7 +863,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_ccl_state_confirm:
 		{
 			StrMsg_HUITP_MSGID_uni_ccl_state_confirm_t *snd29;
-			memset(snd29, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_state_confirm_t));
+			//memset(snd29, 0, sizeof(StrMsg_HUITP_MSGID_uni_ccl_state_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_ccl_state_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -876,7 +877,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_inventory_req:			
 		{
 			StrMsg_HUITP_MSGID_uni_inventory_req_t *snd30;
-			memset(snd30, 0, sizeof(StrMsg_HUITP_MSGID_uni_inventory_req_t));
+			//memset(snd30, 0, sizeof(StrMsg_HUITP_MSGID_uni_inventory_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_inventory_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -890,7 +891,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_inventory_confirm:
 		{
 			StrMsg_HUITP_MSGID_uni_inventory_confirm_t *snd31;
-			memset(snd31, 0, sizeof(StrMsg_HUITP_MSGID_uni_inventory_confirm_t));
+			//memset(snd31, 0, sizeof(StrMsg_HUITP_MSGID_uni_inventory_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_inventory_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -904,7 +905,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_sw_package_req:
 		{
 			StrMsg_HUITP_MSGID_uni_sw_package_req_t *snd32;
-			memset(snd32, 0, sizeof(StrMsg_HUITP_MSGID_uni_sw_package_req_t));
+			//memset(snd32, 0, sizeof(StrMsg_HUITP_MSGID_uni_sw_package_req_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_sw_package_req_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");
@@ -918,7 +919,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		case HUITP_MSGID_uni_sw_package_confirm:
 		{
 			StrMsg_HUITP_MSGID_uni_sw_package_confirm_t *snd33;
-			memset(snd33, 0, sizeof(StrMsg_HUITP_MSGID_uni_sw_package_confirm_t));
+			//memset(snd33, 0, sizeof(StrMsg_HUITP_MSGID_uni_sw_package_confirm_t));
 			if (msgLen != (sizeof(StrMsg_HUITP_MSGID_uni_sw_package_confirm_t) - 4)){
 				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
 				IhuErrorPrint("HUITPXML: Error unpack message on length!\n");

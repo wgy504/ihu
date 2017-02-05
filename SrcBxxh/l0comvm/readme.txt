@@ -11,6 +11,7 @@ CCL=> 最后剩下的任务是摄像头+IAP+节电，然后打开门狗就完美
 = 增加软件升级方式的定义
 = 将uboot物理区域增加到128BYTE
 = 增加多启动区的配置
+= 在移植HUITP到HCU的过程中，发现func_cloud_standard_xml_unpack处理函数中对结构指针进行初始化，应该停止！
 
 //= ZJL, 2017 Feb.3, CURRENT_SW_DELIVERY R03.113 =>CCL项目
 = 改造各个状态机入口函数，统一命名，降低重复概率
