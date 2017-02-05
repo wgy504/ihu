@@ -553,6 +553,19 @@ void ihu_vm_system_init(void)
 	//Init Fsm
 	FsmInit();
 
+	//基本的工程参数表
+	memset(&(zIhuSysEngPar), 0, sizeof(IhuSysEngParTable_t));	
+
+	//打开所有模块和消息的TRACE属性
+	for (i=TASK_ID_MIN; i<TASK_ID_MAX; i++){
+		zIhuSysEngPar.traceList.mod[i].moduleId = i;
+		zIhuSysEngPar.traceList.mod[i].moduleFromAllow = TRUE;
+		zIhuSysEngPar.traceList.mod[i].moduleToAllow = TRUE;		
+	}
+	for (i=MSG_ID_COM_MIN; i<MSG_ID_COM_MAX; i++){
+		zIhuSysEngPar.traceList.msg[i].msgId = i;
+		zIhuSysEngPar.traceList.msg[i].msgAllow = TRUE;
+	}	
 	
 	//分项目对工程参数进行配置
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)	
@@ -582,25 +595,13 @@ void ihu_vm_system_init(void)
 	
 	//TRACE部分
 	zIhuSysEngPar.traceMode = IHU_TRACE_MSG_ON;
-	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_NOR_ON) != FALSE){
-		IhuDebugPrint("VMFO: Set basic engineering data correctly from SYSTEM DEFAULT parameters!\n");
-	}
+	IHU_DEBUG_PRINT_NOR("VMFO: Set basic engineering data correctly from SYSTEM DEFAULT parameters!\n");
 	
 	//后台协议接口
 	zIhuSysEngPar.cloud.cloudBhItfFrameStd = IHU_CLOUDXHUI_BH_INTERFACE_STANDARD;
-	
-	//打开所有模块和消息的TRACE属性
-	memset(&(zIhuSysEngPar.traceList), 0, sizeof(SysEngParElementTrace_t));
-	for (i=TASK_ID_MIN; i<TASK_ID_MAX; i++){
-		zIhuSysEngPar.traceList.mod[i].moduleId = i;
-		zIhuSysEngPar.traceList.mod[i].moduleFromAllow = TRUE;
-		zIhuSysEngPar.traceList.mod[i].moduleToAllow = TRUE;		
-	}
-	for (i=MSG_ID_COM_MIN; i<MSG_ID_COM_MAX; i++){
-		zIhuSysEngPar.traceList.msg[i].msgId = i;
-		zIhuSysEngPar.traceList.msg[i].msgAllow = TRUE;
-	}
 
+	//烧录的过程，EMC68x是不需要的
+	return;
 	
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 	
@@ -651,54 +652,11 @@ void ihu_vm_system_init(void)
 	
 	//TRACE部分
 	zIhuSysEngPar.traceMode = IHU_TRACE_MSG_ON;
-	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_NOR_ON) != FALSE){
-		IhuDebugPrint("VMFO: Set basic engineering data correctly from SYSTEM DEFAULT parameters!\n");
-	}
+	IHU_DEBUG_PRINT_NOR("VMFO: Set basic engineering data correctly from SYSTEM DEFAULT parameters!\n");
 	
 	//后台协议接口
 	zIhuSysEngPar.cloud.cloudBhItfFrameStd = IHU_CLOUDXHUI_BH_INTERFACE_STANDARD;
-	
-	//打开所有模块和消息的TRACE属性
-	memset(&(zIhuSysEngPar.traceList), 0, sizeof(SysEngParElementTrace_t));
-	for (i=TASK_ID_MIN; i<TASK_ID_MAX; i++){
-		zIhuSysEngPar.traceList.mod[i].moduleId = i;
-		zIhuSysEngPar.traceList.mod[i].moduleFromAllow = TRUE;
-		zIhuSysEngPar.traceList.mod[i].moduleToAllow = TRUE;		
-	}
-	for (i=MSG_ID_COM_MIN; i<MSG_ID_COM_MAX; i++){
-		zIhuSysEngPar.traceList.msg[i].msgId = i;
-		zIhuSysEngPar.traceList.msg[i].msgAllow = TRUE;
-	}
-	
-	//硬件烧录区域，系统唯一标识部分，后面程序中访问到这些系统参数都必须从这个地方读取
-	ihu_l1hd_f2board_equid_get((UINT8*)&(zIhuSysEngPar.hwBurnId));
-	//对硬件类型进行相同性检查，如果不一致，必然发生了生产性错误，或者硬件搞错，或者Factory Load用错，应该严重警告
-	if ((IHU_HARDWARE_MASSIVE_PRODUTION_SET == IHU_HARDWARE_MASSIVE_PRODUTION_YES) && (zIhuSysEngPar.hwBurnId.hwType != IHU_HARDWARE_PRODUCT_CAT_TYPE)){
-		IhuDebugPrint("VMFO: Fatal error, using wrong hardware type or factory load!!!\n");
-		return;
-	}
-	//由于硬件部分并没有真正起作用，所以暂时需要从系统定义区重复写入，一旦批量生产这部分可以去掉
-	if (IHU_HARDWARE_MASSIVE_PRODUTION_SET == IHU_HARDWARE_MASSIVE_PRODUTION_NO){
-		strncpy(zIhuSysEngPar.hwBurnId.equLable, IHU_CLOUDXHUI_HCU_NAME_SELF, (sizeof(IHU_CLOUDXHUI_HCU_NAME_SELF)<sizeof(zIhuSysEngPar.hwBurnId.equLable))?(sizeof(IHU_CLOUDXHUI_HCU_NAME_SELF)):(sizeof(zIhuSysEngPar.hwBurnId.equLable)));
-		zIhuSysEngPar.hwBurnId.hwType = IHU_HARDWARE_PRODUCT_CAT_TYPE;
-		zIhuSysEngPar.hwBurnId.hwPemId = IHU_CURRENT_HW_TYPE; //PEM小型号
-		zIhuSysEngPar.hwBurnId.swRelId = IHU_CURRENT_SW_RELEASE;
-		zIhuSysEngPar.hwBurnId.swVerId = IHU_CURRENT_SW_DELIVERY;
-		zIhuSysEngPar.hwBurnId.swAppCheckSum = 0;
-		zIhuSysEngPar.hwBurnId.swUpgradeFlag = IHU_HARDWARE_BURN_ID_FW_UPGRADE_SET;
-		zIhuSysEngPar.hwBurnId.swUpgPollId = IHU_HARDWARE_BURN_ID_FW_UPGRADE_METHOD_UART_GPRS;
-		//cipherKey[16];
-	}
-	
-	//初始化之后的系统标识信息
-	IhuDebugPrint("VMFO: Initialized Hardware Burn Physical Id/Address: CURRENT_PRJ=[%s], HW_LABLE=[%s], PRODUCT_CAT=[0x%x], HW_TYPE=[0x%x], SW_RELEASE_VER=[%d.%d], FW_UPGRADE_FLAG=[%d].\n", \
-		IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT, \
-		zIhuSysEngPar.hwBurnId.equLable, \
-		zIhuSysEngPar.hwBurnId.hwType, \
-		zIhuSysEngPar.hwBurnId.hwPemId, \
-		zIhuSysEngPar.hwBurnId.swRelId, \
-		zIhuSysEngPar.hwBurnId.swVerId, \
-		zIhuSysEngPar.hwBurnId.swUpgradeFlag);
+		
 	
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 	
@@ -744,42 +702,43 @@ void ihu_vm_system_init(void)
 	
 	//TRACE部分
 	zIhuSysEngPar.traceMode = IHU_TRACE_MSG_ON;
-	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_NOR_ON) != FALSE){
-		IhuDebugPrint("VMFO: Set basic engineering data correctly from SYSTEM DEFAULT parameters!\n");
-	}
+	IHU_DEBUG_PRINT_NOR("VMFO: Set basic engineering data correctly from SYSTEM DEFAULT parameters!\n");
 	
 	//后台协议接口
 	zIhuSysEngPar.cloud.cloudBhItfFrameStd = IHU_CLOUDXHUI_BH_INTERFACE_STANDARD;
 	
-	//打开所有模块和消息的TRACE属性
-	memset(&(zIhuSysEngPar.traceList), 0, sizeof(SysEngParElementTrace_t));
-	for (i=TASK_ID_MIN; i<TASK_ID_MAX; i++){
-		zIhuSysEngPar.traceList.mod[i].moduleId = i;
-		zIhuSysEngPar.traceList.mod[i].moduleFromAllow = TRUE;
-		zIhuSysEngPar.traceList.mod[i].moduleToAllow = TRUE;		
-	}
-	for (i=MSG_ID_COM_MIN; i<MSG_ID_COM_MAX; i++){
-		zIhuSysEngPar.traceList.msg[i].msgId = i;
-		zIhuSysEngPar.traceList.msg[i].msgAllow = TRUE;
-	}
-
+#else
+	#error Un-correct constant definition
+#endif	
+	
 	//硬件烧录区域，系统唯一标识部分，后面程序中访问到这些系统参数都必须从这个地方读取
-	ihu_l1hd_f2board_equid_get(&(zIhuSysEngPar.hwBurnId));
+	ihu_l1hd_f2board_equid_get((UINT8*)&(zIhuSysEngPar.hwBurnId));
 	//对硬件类型进行相同性检查，如果不一致，必然发生了生产性错误，或者硬件搞错，或者Factory Load用错，应该严重警告
 	if ((IHU_HARDWARE_MASSIVE_PRODUTION_SET == IHU_HARDWARE_MASSIVE_PRODUTION_YES) && (zIhuSysEngPar.hwBurnId.hwType != IHU_HARDWARE_PRODUCT_CAT_TYPE)){
 		IhuDebugPrint("VMFO: Fatal error, using wrong hardware type or factory load!!!\n");
 		return;
-	}	
+	}
 	//由于硬件部分并没有真正起作用，所以暂时需要从系统定义区重复写入，一旦批量生产这部分可以去掉
 	if (IHU_HARDWARE_MASSIVE_PRODUTION_SET == IHU_HARDWARE_MASSIVE_PRODUTION_NO){
 		strncpy(zIhuSysEngPar.hwBurnId.equLable, IHU_CLOUDXHUI_HCU_NAME_SELF, (sizeof(IHU_CLOUDXHUI_HCU_NAME_SELF)<sizeof(zIhuSysEngPar.hwBurnId.equLable))?(sizeof(IHU_CLOUDXHUI_HCU_NAME_SELF)):(sizeof(zIhuSysEngPar.hwBurnId.equLable)));
 		zIhuSysEngPar.hwBurnId.hwType = IHU_HARDWARE_PRODUCT_CAT_TYPE;
 		zIhuSysEngPar.hwBurnId.hwPemId = IHU_CURRENT_HW_TYPE; //PEM小型号
-		zIhuSysEngPar.hwBurnId.swRelId = IHU_CURRENT_SW_RELEASE;
-		zIhuSysEngPar.hwBurnId.swVerId = IHU_CURRENT_SW_DELIVERY;
 		zIhuSysEngPar.hwBurnId.swUpgradeFlag = IHU_HARDWARE_BURN_ID_FW_UPGRADE_SET;
-	}	
-
+		zIhuSysEngPar.hwBurnId.swUpgPollId = IHU_HARDWARE_BURN_ID_FW_UPGRADE_METHOD_UART_GPRS;
+		zIhuSysEngPar.hwBurnId.bootIndex = 0; //研发永远从FACTORY LOAD启动
+		zIhuSysEngPar.hwBurnId.bootAreaMax = 1; //研发状态下只有1个启动区
+		zIhuSysEngPar.hwBurnId.facLoadAddr = IHU_BOOT_FAC_LOAD_START_ADDRESS;
+		zIhuSysEngPar.hwBurnId.facLoadSwRel = IHU_CURRENT_SW_RELEASE;
+		zIhuSysEngPar.hwBurnId.facLoadSwVer = IHU_CURRENT_SW_DELIVERY;
+		zIhuSysEngPar.hwBurnId.facLoadCheckSum = 0;
+		zIhuSysEngPar.hwBurnId.facLoadValid = true;
+		zIhuSysEngPar.hwBurnId.bootLoad1Addr = IHU_BOOT_BLOCK1_LOAD_START_ADDRESS;
+		zIhuSysEngPar.hwBurnId.bootLoad1Valid = false;
+		zIhuSysEngPar.hwBurnId.bootLoad2Addr = IHU_BOOT_BLOCK2_LOAD_START_ADDRESS;
+		zIhuSysEngPar.hwBurnId.bootLoad2Valid = false;
+		//cipherKey[16];
+	}
+	
 	//初始化之后的系统标识信息
 	IhuDebugPrint("VMFO: Initialized Hardware Burn Physical Id/Address: CURRENT_PRJ=[%s], HW_LABLE=[%s], PRODUCT_CAT=[0x%x], HW_TYPE=[0x%x], SW_RELEASE_VER=[%d.%d], FW_UPGRADE_FLAG=[%d].\n", \
 		IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT, \
@@ -788,11 +747,7 @@ void ihu_vm_system_init(void)
 		zIhuSysEngPar.hwBurnId.hwPemId, \
 		zIhuSysEngPar.hwBurnId.swRelId, \
 		zIhuSysEngPar.hwBurnId.swVerId, \
-		zIhuSysEngPar.hwBurnId.swUpgradeFlag);
-
-#else
-	#error Un-correct constant definition
-#endif	
+		zIhuSysEngPar.hwBurnId.swUpgradeFlag);	
 	
 	return;
 }

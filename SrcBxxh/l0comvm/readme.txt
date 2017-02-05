@@ -6,7 +6,11 @@ CCL=> 最后剩下的任务是摄像头+IAP+节电，然后打开门狗就完美
 **************************************************************************
 
 //= ZJL, 2017 Feb.5, CURRENT_SW_DELIVERY R03.114 =>CCL项目
-
+= 新定义#define HUITP_IEID_UNI_INVENT_HWTYPE_PDTYPE_G7_OTDR_01 0x0711
+= 按照HCU NAME命名规则改进
+= 增加软件升级方式的定义
+= 将uboot物理区域增加到128BYTE
+= 增加多启动区的配置
 
 //= ZJL, 2017 Feb.3, CURRENT_SW_DELIVERY R03.113 =>CCL项目
 = 改造各个状态机入口函数，统一命名，降低重复概率

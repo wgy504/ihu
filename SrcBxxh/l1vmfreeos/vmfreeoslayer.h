@@ -295,7 +295,15 @@ UINT8 IhuDebugPrintId(char *file, int line);
 #define IHU_ERROR_PRINT_TASK(taskid, ...)	do{zIhuRunErrCnt[taskid]++;  IhuErrorPrint(__VA_ARGS__);  return IHU_FAILURE;}while(0)	
 //都保留着，都是极为有参考意义的宏编写方式
 
-extern void ihu_vm_system_init(void);  //系统级别的初始化
+//高级定义，简化程序的可读性
+#define IHU_DEBUG_PRINT_INF		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint
+#define IHU_DEBUG_PRINT_NOR		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_NOR_ON) != FALSE) IhuDebugPrint
+#define IHU_DEBUG_PRINT_IPT		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_IPT_ON) != FALSE) IhuDebugPrint
+#define IHU_DEBUG_PRINT_CRT		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_CRT_ON) != FALSE) IhuDebugPrint
+#define IHU_DEBUG_PRINT_FAT		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE) IhuDebugPrint
+
+//系统级别的初始化
+extern void ihu_vm_system_init(void);  
 extern void ihu_sleep(UINT32 second);
 extern void ihu_usleep(UINT32 usecond);  //resulution 10^(-3)s = 1 microsecond
 extern OPSTAT ihu_taskid_to_string(UINT8 id, char *string);
