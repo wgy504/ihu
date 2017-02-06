@@ -43,17 +43,17 @@
 #define HUITP_MSG_HUIXML_CONTSANT_CREATE_TIME_MAX_LEN		16 //以10进制存储的时间戳，最长长度
 //HUIXML MsgType定义
 #define HUITP_MSG_HUIXML_MSGTYPE_DEVICE_REPORT_ID 			1 
-#define HUITP_MSG_HUIXML_MSGTYPE_DEVICE_REPORT_STRING  	"hcu_text"  //"hcu_text"
+#define HUITP_MSG_HUIXML_MSGTYPE_DEVICE_REPORT_STRING  	"huitp_text" 
 #define HUITP_MSG_HUIXML_MSGTYPE_DEVICE_CONTROL_ID 			2
-#define HUITP_MSG_HUIXML_MSGTYPE_DEVICE_CONTROL_STRING  "hcu_command" //"hcu_command"
+#define HUITP_MSG_HUIXML_MSGTYPE_DEVICE_CONTROL_STRING  "huitp_command"
 #define HUITP_MSG_HUIXML_MSGTYPE_HEAT_BEAT_ID 					3
-#define HUITP_MSG_HUIXML_MSGTYPE_HEAT_BEAT_STRING 			"hcu_heart_beat"   //"hcu_heart_beat"  //心跳协议，里面的数据内容是空的
+#define HUITP_MSG_HUIXML_MSGTYPE_HEAT_BEAT_STRING 			"huitp_heart_beat" //心跳协议，里面的数据内容是空的
 #define HUITP_MSG_HUIXML_MSGTYPE_BIZ_ITG_ID 						4
-#define HUITP_MSG_HUIXML_MSGTYPE_BIZ_ITG_STRING 				"hcu_biz_itg"  //业务智能 hcu_biz_inteligence
+#define HUITP_MSG_HUIXML_MSGTYPE_BIZ_ITG_STRING 				"huitp_biz_itg"  //业务智能
 #define HUITP_MSG_HUIXML_MSGTYPE_ALARM_REPORT_ID 				5
-#define HUITP_MSG_HUIXML_MSGTYPE_ALARM_REPORT_STRING 		"hcu_alarm"  //for alarm report
+#define HUITP_MSG_HUIXML_MSGTYPE_ALARM_REPORT_STRING 		"huitp_alarm"  //for alarm report
 #define HUITP_MSG_HUIXML_MSGTYPE_PM_REPORT_ID 					6
-#define HUITP_MSG_HUIXML_MSGTYPE_PM_REPORT_STRING 			"hcu_pm"  //for pm report
+#define HUITP_MSG_HUIXML_MSGTYPE_PM_REPORT_STRING 			"huitp_pm"  //for pm report
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //

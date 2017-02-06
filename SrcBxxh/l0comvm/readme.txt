@@ -9,6 +9,7 @@ CCL=> 最后剩下的任务是摄像头+IAP+节电，然后打开门狗就完美
 = 对SPSVIRGO/CCL中错误控制的处理改进
 = 改进对CCL的错误控制处理过程
 = 优化BFSC的错误控制处理过程
+= 改进HUITP中有关MSG_TYPE的定义，完全将其跟老旧xml/zhb区分开来
 
 //= ZJL, 2017 Feb.5, CURRENT_SW_DELIVERY R03.114 =>CCL项目
 = 新定义#define HUITP_IEID_UNI_INVENT_HWTYPE_PDTYPE_G7_OTDR_01 0x0711
