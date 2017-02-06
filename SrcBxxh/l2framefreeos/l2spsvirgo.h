@@ -162,5 +162,8 @@ extern OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_test_mode(uint8_t *macAdd
 extern int ihu_bsp_stm32_spi_slave_hw_init(void);
 extern OPSTAT ihu_vmmw_rfidmod_rc522_spi_read_id(uint8_t *rfidAddr, uint8_t len);
 
+//高级定义，简化程序的可读性，包括return IHU_FAILURE在内的宏定义，没搞定。。。
+#define IHU_ERROR_PRINT_SPSVIRGO(...)	do{zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;  IhuErrorPrint(__VA_ARGS__);  return IHU_FAILURE;}while(0)	
+
 #endif /* L2FRAME_L2SPSVIRGO_H_ */
 

@@ -88,8 +88,9 @@ OPSTAT func_bfsc_time_out_roll_out_process(void);
 OPSTAT func_bfsc_time_out_give_up_process(void);
 void 	 func_bfsc_stm_main_recovery_from_fault(void);  //提供了一种比RESTART更低层次的状态恢复方式
 
-//高级定义，简化程序的可读性，包括return IHU_FAILURE在内的宏定义，没搞定。。。
-#define IHU_ERROR_PRINT_BFSC zIhuRunErrCnt[TASK_ID_BFSC]++; func_bfsc_stm_main_recovery_from_fault(); IhuErrorPrint
+//高级定义，简化程序的可读性
+#define IHU_ERROR_PRINT_BFSC_WO_RETURN zIhuRunErrCnt[TASK_ID_BFSC]++; func_bfsc_stm_main_recovery_from_fault(); IhuErrorPrint
+#define IHU_ERROR_PRINT_BFSC_RECOVERY(...)	do{zIhuRunErrCnt[TASK_ID_BFSC]++;  func_bfsc_stm_main_recovery_from_fault(); IhuErrorPrint(__VA_ARGS__);  return IHU_FAILURE;}while(0)	
 
 
 #endif /* L3APPL_L3BFSC_H_ */

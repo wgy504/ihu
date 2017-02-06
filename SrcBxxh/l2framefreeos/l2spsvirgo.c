@@ -123,20 +123,14 @@ OPSTAT fsm_spsvirgo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 #endif
 	
 	//设置状态机到目标状态
-	if (FsmSetState(TASK_ID_SPSVIRGO, FSM_STATE_SPSVIRGO_ACTIVED) == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Error Set FSM State!\n");
-		return IHU_FAILURE;
-	}
+	if (FsmSetState(TASK_ID_SPSVIRGO, FSM_STATE_SPSVIRGO_ACTIVED) == IHU_FAILURE)
+		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Error Set FSM State!\n");
 
 	if (IHU_SPSVIRGO_PERIOD_TIMER_SET == IHU_SPSVIRGO_PERIOD_TIMER_ACTIVE){
 		//测试性启动周期性定时器：正式工作后可以删掉这个工作逻辑机制
 		ret = ihu_timer_start(TASK_ID_SPSVIRGO, TIMER_ID_1S_SPSVIRGO_PERIOD_SCAN, zIhuSysEngPar.timer.spsvirgoPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
-		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-			IhuErrorPrint("SPSVIRGO: Error start timer!\n");
-			return IHU_FAILURE;
-		}	
+		if (ret == IHU_FAILURE)
+			IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Error start timer!\n");
 	}
 	
 	//打印报告进入常规状态
@@ -162,18 +156,12 @@ OPSTAT fsm_spsvirgo_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 OPSTAT fsm_spsvirgo_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {	
 	//入参检查
-	if ((param_ptr == NULL) || (dest_id != TASK_ID_SPSVIRGO)){
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Wrong input paramters!\n");
-		return IHU_FAILURE;
-	}
+	if ((param_ptr == NULL) || (dest_id != TASK_ID_SPSVIRGO))
+		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Wrong input paramters!\n");
 	
 	//设置状态机到目标状态
-	if (FsmSetState(TASK_ID_SPSVIRGO, FSM_STATE_IDLE) == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Error Set FSM State!\n");
-		return IHU_FAILURE;
-	}
+	if (FsmSetState(TASK_ID_SPSVIRGO, FSM_STATE_IDLE) == IHU_FAILURE)
+		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Error Set FSM State!\n");
 	
 	//返回
 	return IHU_SUCCESS;
@@ -193,17 +181,14 @@ OPSTAT func_spsvirgo_hw_init(void)
 //TIMER_OUT Processing
 OPSTAT fsm_spsvirgo_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
-	int ret;
+	//int ret;
 	msg_struct_com_restart_t snd0;
 	msg_struct_com_time_out_t rcv;
 	
 	//Receive message and copy to local variable
 	memset(&rcv, 0, sizeof(msg_struct_com_time_out_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_com_time_out_t))){
-		IhuErrorPrint("SPSVIRGO: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		return IHU_FAILURE;
-	}
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_com_time_out_t)))
+		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);
 
 	//钩子在此处，检查zIhuRunErrCnt[TASK_ID_SPSVIRGO]是否超限
@@ -212,24 +197,16 @@ OPSTAT fsm_spsvirgo_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 		zIhuRunErrCnt[TASK_ID_SPSVIRGO] = zIhuRunErrCnt[TASK_ID_SPSVIRGO] - IHU_RUN_ERROR_LEVEL_2_MAJOR;
 		memset(&snd0, 0, sizeof(msg_struct_com_restart_t));
 		snd0.length = sizeof(msg_struct_com_restart_t);
-		ret = ihu_message_send(MSG_ID_COM_RESTART, TASK_ID_SPSVIRGO, TASK_ID_SPSVIRGO, &snd0, snd0.length);
-		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName);
-			return IHU_FAILURE;
-		}
+		if (ihu_message_send(MSG_ID_COM_RESTART, TASK_ID_SPSVIRGO, TASK_ID_SPSVIRGO, &snd0, snd0.length) == IHU_FAILURE)
+			IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName);
 	}
 
 	//Period time out received
 	if ((rcv.timeId == TIMER_ID_1S_SPSVIRGO_PERIOD_SCAN) &&(rcv.timeRes == TIMER_RESOLUTION_1S)){
 		//保护周期读数的优先级，强制抢占状态，并简化问题
 		if (FsmGetState(TASK_ID_SPSVIRGO) != FSM_STATE_SPSVIRGO_ACTIVED){
-			ret = FsmSetState(TASK_ID_SPSVIRGO, FSM_STATE_SPSVIRGO_ACTIVED);
-			if (ret == IHU_FAILURE){
-				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("SPSVIRGO: Error Set FSM State!\n");
-				return IHU_FAILURE;
-			}//FsmSetState
+			if (FsmSetState(TASK_ID_SPSVIRGO, FSM_STATE_SPSVIRGO_ACTIVED) == IHU_FAILURE)
+				IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Error Set FSM State!\n");
 		}
 		
 		func_spsvirgo_time_out_period_scan();
@@ -264,11 +241,8 @@ OPSTAT fsm_spsvirgo_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 	
 	//Receive message and copy to local variable
 	memset(&rcv, 0, sizeof(msg_struct_spsvirgo_l2frame_rcv_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_spsvirgo_l2frame_rcv_t))){
-		IhuErrorPrint("SPSVIRGO: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		return IHU_FAILURE;
-	}
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_spsvirgo_l2frame_rcv_t)))
+		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);
 
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)	
@@ -281,11 +255,8 @@ OPSTAT fsm_spsvirgo_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 	//忽略期望的消息，任何返回消息都是可以的
 	ret = func_cloud_standard_xml_unpack(pMsgBuf, -1);
 	//差错情形，由发送者自己控制，因为已经是双向通信机制，非互锁的通信机制，这里无法保证出错时必须送回信号给发送者
-	if (ret == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Unpack and processing receiving message error!\n");
-		return IHU_FAILURE;
-	}
+	if (ret == IHU_FAILURE)
+		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Unpack and processing receiving message error!\n");
 	//后面对于收到的每一个消息的基础处理，都由CCL的消息处理函数具体完成
 #endif
 	
@@ -346,10 +317,8 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	memset(&pMsgOutput, 0, sizeof(CloudDataSendBuf_t));	
 	ret = func_cloud_standard_xml_pack(HUITP_MSG_HUIXML_MSGTYPE_DEVICE_REPORT_ID, NULL, HUITP_MSGID_uni_ccl_lock_auth_inq, &pMsgInput, msgProcLen, &pMsgOutput);
 	if (ret == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Package message error!\n");
 		FsmSetState(TASK_ID_SPSVIRGO, FSM_STATE_SPSVIRGO_ACTIVED);
-		return IHU_FAILURE;
+		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Package message error!\n");
 	}
 	
 	//将组装好的消息发送到GPRSMOD模组中去，送往后台
@@ -377,11 +346,8 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 		snd.authResult = IHU_CCL_LOCK_AUTH_RESULT_NOK;
 		snd.length = sizeof(msg_struct_spsvirgo_ccl_cloud_fb_t);
 		ret = ihu_message_send(MSG_ID_SPS_CCL_CLOUD_FB, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
-		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
-			return IHU_FAILURE;
-		}
+		if (ret == IHU_FAILURE)
+			IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 	}
 	
 	//如果从后台收到有价值的反馈
@@ -398,11 +364,8 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 			snd.authResult = IHU_CCL_LOCK_AUTH_RESULT_NOK;
 			snd.length = sizeof(msg_struct_spsvirgo_ccl_cloud_fb_t);
 			ret = ihu_message_send(MSG_ID_SPS_CCL_CLOUD_FB, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
-			if (ret == IHU_FAILURE){
-				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
-				return IHU_FAILURE;
-			}
+			if (ret == IHU_FAILURE)
+				IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 		}
 	}
 
@@ -418,19 +381,13 @@ OPSTAT fsm_spsvirgo_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * pa
 	
 	//Receive message and copy to local variable
 	memset(&rcv, 0, sizeof(msg_struct_ccl_com_sensor_status_req_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_com_sensor_status_req_t))){
-		IhuErrorPrint("SPSVIRGO: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		return IHU_FAILURE;
-	}
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_com_sensor_status_req_t)))
+		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);
 
 	//入参检查
-	if (rcv.cmdid != IHU_CCL_DH_CMDID_REQ_STATUS_SPS){
-		IhuErrorPrint("SPSVIRGO: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		return IHU_FAILURE;
-	}
+	if (rcv.cmdid != IHU_CCL_DH_CMDID_REQ_STATUS_SPS)
+		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Receive message error!\n");
 	
 	//具体扫描处理
 	ihu_usleep(300);
@@ -441,11 +398,8 @@ OPSTAT fsm_spsvirgo_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * pa
 	snd.sensor.rssiValue = rand()%100;
 	snd.length = sizeof(msg_struct_sps_ccl_sensor_status_rep_t);
 	ret = ihu_message_send(MSG_ID_SPS_CCL_SENSOR_STATUS_RESP, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
-	if (ret == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
-		return IHU_FAILURE;
-	}
+	if (ret == IHU_FAILURE)
+		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 			
 	//返回
 	return IHU_SUCCESS;
@@ -460,19 +414,13 @@ OPSTAT fsm_spsvirgo_ccl_event_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 		
 	//Receive message and copy to local variable
 	memset(&rcv, 0, sizeof(msg_struct_ccl_sps_event_report_send_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_sps_event_report_send_t))){
-		IhuErrorPrint("SPSVIRGO: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		return IHU_FAILURE;
-	}
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_sps_event_report_send_t)))
+		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);
 
 	//入参检查
-	if (rcv.cmdid != IHU_CCL_DH_CMDID_EVENT_REPORT){
-		IhuErrorPrint("SPSVIRGO: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		return IHU_FAILURE;
-	}
+	if (rcv.cmdid != IHU_CCL_DH_CMDID_EVENT_REPORT)
+		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Receive message error!\n");
 	
 	//先进入通信状态
 	FsmSetState(TASK_ID_SPSVIRGO, FSM_STATE_SPSVIRGO_COMMU);
@@ -572,10 +520,8 @@ OPSTAT fsm_spsvirgo_ccl_event_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 	memset(&pMsgOutput, 0, sizeof(CloudDataSendBuf_t));	
 	ret = func_cloud_standard_xml_pack(HUITP_MSG_HUIXML_MSGTYPE_DEVICE_REPORT_ID, NULL, HUITP_MSGID_uni_ccl_state_report, &pMsgInput, msgProcLen, &pMsgOutput);
 	if (ret == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Package message error!\n");
 		FsmSetState(TASK_ID_SPSVIRGO, FSM_STATE_SPSVIRGO_ACTIVED);
-		return IHU_FAILURE;
+		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Package message error!\n");
 	}
 
 	//具体的发送命令
@@ -591,11 +537,8 @@ OPSTAT fsm_spsvirgo_ccl_event_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 		snd.actionFlag = IHU_CCL_EVENT_REPORT_SEND_FAILURE;
 		snd.length = sizeof(msg_struct_sps_ccl_event_report_cfm_t);
 		ret = ihu_message_send(MSG_ID_SPS_CCL_EVENT_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
-		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
-			return IHU_FAILURE;
-		}
+		if (ret == IHU_FAILURE)
+			IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 	}	
 
 	//如果从后台收到有价值的反馈
@@ -611,11 +554,8 @@ OPSTAT fsm_spsvirgo_ccl_event_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 			snd.actionFlag = IHU_CCL_EVENT_REPORT_SEND_FAILURE;
 			snd.length = sizeof(msg_struct_sps_ccl_event_report_cfm_t);
 			ret = ihu_message_send(MSG_ID_SPS_CCL_EVENT_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
-			if (ret == IHU_FAILURE){
-				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
-				return IHU_FAILURE;
-			}
+			if (ret == IHU_FAILURE)
+				IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 		}
 	}
 	
@@ -632,22 +572,15 @@ OPSTAT fsm_spsvirgo_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 	
 	//Receive message and copy to local variable
 	memset(&rcv, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_com_ctrl_cmd_t))){
-		IhuErrorPrint("SPSVIRGO: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		return IHU_FAILURE;
-	}
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_com_ctrl_cmd_t)))
+		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);
 
 	//操作状态
 	if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_ACTIVE) zIhuCclSpsvirgoCtrlTable.cclSpsWorkingMode = IHU_CCL_SPS_WORKING_MODE_ACTIVE;
 	else if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_SLEEP) zIhuCclSpsvirgoCtrlTable.cclSpsWorkingMode = IHU_CCL_SPS_WORKING_MODE_SLEEP;
 	else if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_FAULT) zIhuCclSpsvirgoCtrlTable.cclSpsWorkingMode = IHU_CCL_SPS_WORKING_MODE_FAULT;
-	else{
-		IhuErrorPrint("SPSVIRGO: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		return IHU_FAILURE;		
-	}
+	else IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Receive message error!\n");
 	
 	//返回
 	return IHU_SUCCESS;
@@ -662,11 +595,8 @@ OPSTAT fsm_spsvirgo_ccl_fault_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 
 	//Receive message and copy to local variable
 	memset(&rcv, 0, sizeof(msg_struct_ccl_sps_fault_report_send_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_sps_fault_report_send_t))){
-		IhuErrorPrint("SPSVIRGO: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		return IHU_FAILURE;
-	}
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_sps_fault_report_send_t)))
+		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);
 	
 	//先进入通信状态
@@ -770,10 +700,8 @@ OPSTAT fsm_spsvirgo_ccl_fault_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 	memset(&pMsgOutput, 0, sizeof(CloudDataSendBuf_t));	
 	ret = func_cloud_standard_xml_pack(HUITP_MSG_HUIXML_MSGTYPE_DEVICE_REPORT_ID, NULL, HUITP_MSGID_uni_ccl_state_report, &pMsgInput, msgProcLen, &pMsgOutput);
 	if (ret == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Package message error!\n");
 		FsmSetState(TASK_ID_SPSVIRGO, FSM_STATE_SPSVIRGO_ACTIVED);
-		return IHU_FAILURE;
+		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Package message error!\n");
 	}
 
 	//具体的发送命令
@@ -789,11 +717,8 @@ OPSTAT fsm_spsvirgo_ccl_fault_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 		snd.actionFlag = IHU_CCL_EVENT_FAULT_SEND_FAILURE;
 		snd.length = sizeof(msg_struct_sps_ccl_fault_report_cfm_t);
 		ret = ihu_message_send(MSG_ID_SPS_CCL_FAULT_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
-		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
-			return IHU_FAILURE;
-		}	
+		if (ret == IHU_FAILURE)
+			IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 	}		
 
 	//如果从后台收到有价值的反馈
@@ -809,11 +734,8 @@ OPSTAT fsm_spsvirgo_ccl_fault_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 			snd.actionFlag = IHU_CCL_EVENT_FAULT_SEND_FAILURE;
 			snd.length = sizeof(msg_struct_sps_ccl_fault_report_cfm_t);
 			ret = ihu_message_send(MSG_ID_SPS_CCL_FAULT_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
-			if (ret == IHU_FAILURE){
-				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
-				return IHU_FAILURE;
-			}
+			if (ret == IHU_FAILURE)
+				IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 		}
 	}
 	
@@ -831,11 +753,8 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 	
 	//Receive message and copy to local variable
 	memset(&rcv, 0, sizeof(msg_struct_ccl_sps_close_report_send_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_sps_close_report_send_t))){
-		IhuErrorPrint("SPSVIRGO: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		return IHU_FAILURE;
-	}
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_sps_close_report_send_t)))
+		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);
 	
 	//先进入通信状态
@@ -939,10 +858,8 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 	memset(&pMsgOutput, 0, sizeof(CloudDataSendBuf_t));	
 	ret = func_cloud_standard_xml_pack(HUITP_MSG_HUIXML_MSGTYPE_DEVICE_REPORT_ID, NULL, HUITP_MSGID_uni_ccl_state_report, &pMsgInput, msgProcLen, &pMsgOutput);
 	if (ret == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Package message error!\n");
 		FsmSetState(TASK_ID_SPSVIRGO, FSM_STATE_SPSVIRGO_ACTIVED);
-		return IHU_FAILURE;
+		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Package message error!\n");
 	}
 	
 	//具体的发送命令
@@ -958,11 +875,8 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 		snd.actionFlag = IHU_CCL_EVENT_CLOSE_SEND_FAILURE;
 		snd.length = sizeof(msg_struct_sps_ccl_close_report_cfm_t);
 		ret = ihu_message_send(MSG_ID_SPS_CCL_CLOSE_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
-		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
-			return IHU_FAILURE;
-		}
+		if (ret == IHU_FAILURE)
+			IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 	}
 
 	//如果从后台收到有价值的反馈
@@ -978,11 +892,8 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 			snd.actionFlag = IHU_CCL_EVENT_CLOSE_SEND_FAILURE;
 			snd.length = sizeof(msg_struct_sps_ccl_close_report_cfm_t);
 			ret = ihu_message_send(MSG_ID_SPS_CCL_CLOSE_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
-			if (ret == IHU_FAILURE){
-				zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-				IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
-				return IHU_FAILURE;
-			}
+			if (ret == IHU_FAILURE)
+				IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 		}
 	}
 	
@@ -999,30 +910,22 @@ INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rssi_value(void)
 //解码接收到的消息部分，其它模块没有这个，因为SPS用来管理GPRSMOD的L2FRAME通道
 OPSTAT func_cloud_spsvirgo_ccl_msg_heart_beat_req_received_handle(StrMsg_HUITP_MSGID_uni_heart_beat_req_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_heart_beat_req_t received!\n");
-	//返回
-	return IHU_SUCCESS;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_heart_beat_req_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_heart_beat_confirm_received_handle(StrMsg_HUITP_MSGID_uni_heart_beat_confirm_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_heart_beat_confirm_t received!\n");
-	//返回
-	return IHU_SUCCESS;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_heart_beat_confirm_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_lock_req_received_handle(StrMsg_HUITP_MSGID_uni_ccl_lock_req_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_lock_req_t received!\n");
-	//返回
-	return IHU_SUCCESS;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_lock_req_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_lock_confirm_received_handle(StrMsg_HUITP_MSGID_uni_ccl_lock_confirm_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_lock_confirm_t received!\n");
-	//返回
-	return IHU_SUCCESS;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_lock_confirm_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_lock_auth_resp_received_handle(StrMsg_HUITP_MSGID_uni_ccl_lock_auth_resp_t *rcv)
@@ -1037,34 +940,22 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_lock_auth_resp_received_handle(StrMsg_HUI
 	rcv->respState.ieLen = HUITP_ENDIAN_EXG16(rcv->respState.ieLen);
 	
 	//IE参数检查
-	if ((rcv->baseResp.ieId != HUITP_IEID_uni_com_resp) || (rcv->baseResp.ieLen != (sizeof(StrIe_HUITP_IEID_uni_com_resp_t) - 4))){
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Cloud raw message content unpack error!\n");
-		return IHU_FAILURE;		
-	}
-	if ((rcv->respState.ieId != HUITP_IEID_uni_ccl_lock_auth_resp) || (rcv->respState.ieLen != (sizeof(StrIe_HUITP_IEID_uni_ccl_lock_auth_resp_t) - 4))){
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Cloud raw message content unpack error!\n");
-		return IHU_FAILURE;		
-	}	
+	if ((rcv->baseResp.ieId != HUITP_IEID_uni_com_resp) || (rcv->baseResp.ieLen != (sizeof(StrIe_HUITP_IEID_uni_com_resp_t) - 4)))
+		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Cloud raw message content unpack error!\n");
+	if ((rcv->respState.ieId != HUITP_IEID_uni_ccl_lock_auth_resp) || (rcv->respState.ieLen != (sizeof(StrIe_HUITP_IEID_uni_ccl_lock_auth_resp_t) - 4)))
+		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Cloud raw message content unpack error!\n");
 	
 	//逻辑处理
-	if ((rcv->respState.authResp != HUITP_IEID_UNI_CCL_LOCK_AUTH_RESP_YES) && (rcv->respState.authResp != HUITP_IEID_UNI_CCL_LOCK_AUTH_RESP_NO)){
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Cloud raw message content unpack error!\n");
-		return IHU_FAILURE;			
-	}	
+	if ((rcv->respState.authResp != HUITP_IEID_UNI_CCL_LOCK_AUTH_RESP_YES) && (rcv->respState.authResp != HUITP_IEID_UNI_CCL_LOCK_AUTH_RESP_NO)) 
+		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Cloud raw message content unpack error!\n");
 	msg_struct_spsvirgo_ccl_cloud_fb_t snd;
 	memset(&snd, 0, sizeof(msg_struct_spsvirgo_ccl_cloud_fb_t));
 	if (rcv->respState.authResp == HUITP_IEID_UNI_CCL_LOCK_AUTH_RESP_YES) snd.authResult = IHU_CCL_LOCK_AUTH_RESULT_OK;
 	else snd.authResult = IHU_CCL_LOCK_AUTH_RESULT_NOK;
 	snd.length = sizeof(msg_struct_spsvirgo_ccl_cloud_fb_t);
 	ret = ihu_message_send(MSG_ID_SPS_CCL_CLOUD_FB, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
-	if (ret == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
-		return IHU_FAILURE;
-	}
+	if (ret == IHU_FAILURE)
+		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 	
 	//返回
 	return IHU_SUCCESS;
@@ -1072,163 +963,117 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_lock_auth_resp_received_handle(StrMsg_HUI
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_door_req_received_handle(StrMsg_HUITP_MSGID_uni_ccl_door_req_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_door_req_t received!\n");
-	//返回
-	return IHU_FAILURE;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_door_req_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_door_confirm_received_handle(StrMsg_HUITP_MSGID_uni_ccl_door_confirm_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_door_confirm_t received!\n");
-	//返回
-	return IHU_FAILURE;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_door_confirm_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_rfid_req_received_handle(StrMsg_HUITP_MSGID_uni_ccl_rfid_req_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_rfid_req_t received!\n");
-	//返回
-	return IHU_FAILURE;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_rfid_req_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_rfid_confirm_received_handle(StrMsg_HUITP_MSGID_uni_ccl_rfid_confirm_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_rfid_confirm_t received!\n");
-	//返回
-	return IHU_FAILURE;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_rfid_confirm_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_ble_req_received_handle(StrMsg_HUITP_MSGID_uni_ccl_ble_req_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_ble_req_t received!\n");
-	//返回
-	return IHU_FAILURE;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_ble_req_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_ble_confirm_received_handle(StrMsg_HUITP_MSGID_uni_ccl_ble_confirm_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_ble_confirm_t received!\n");
-	//返回
-	return IHU_FAILURE;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_ble_confirm_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_gprs_req_received_handle(StrMsg_HUITP_MSGID_uni_ccl_gprs_req_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_gprs_req_t received!\n");
-	//返回
-	return IHU_FAILURE;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_gprs_req_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_gprs_confirm_received_handle(StrMsg_HUITP_MSGID_uni_ccl_gprs_confirm_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_gprs_confirm_t received!\n");
-	//返回
-	return IHU_FAILURE;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_gprs_confirm_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_battery_req_received_handle(StrMsg_HUITP_MSGID_uni_ccl_battery_req_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_battery_req_t received!\n");
-	//返回
-	return IHU_FAILURE;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_battery_req_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_battery_confirm_received_handle(StrMsg_HUITP_MSGID_uni_ccl_battery_confirm_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_battery_confirm_t received!\n");
-	//返回
-	return IHU_FAILURE;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_battery_confirm_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_shake_req_received_handle(StrMsg_HUITP_MSGID_uni_ccl_shake_req_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_shake_req_t received!\n");
-	//返回
-	return IHU_FAILURE;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_shake_req_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_shake_confirm_received_handle(StrMsg_HUITP_MSGID_uni_ccl_shake_confirm_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_shake_confirm_t received!\n");
-	//返回
-	return IHU_FAILURE;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_shake_confirm_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_smoke_req_received_handle(StrMsg_HUITP_MSGID_uni_ccl_smoke_req_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_smoke_req_t received!\n");
-	//返回
-	return IHU_FAILURE;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_smoke_req_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_smoke_confirm_received_handle(StrMsg_HUITP_MSGID_uni_ccl_smoke_confirm_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_smoke_confirm_t received!\n");
-	//返回
-	return IHU_FAILURE;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_smoke_confirm_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_water_req_received_handle(StrMsg_HUITP_MSGID_uni_ccl_water_req_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_water_req_t received!\n");
-//返回
-	return IHU_FAILURE;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_water_req_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_water_confirm_received_handle(StrMsg_HUITP_MSGID_uni_ccl_water_confirm_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_water_confirm_t received!\n");
-	//返回
-	return IHU_FAILURE;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_water_confirm_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_temp_req_received_handle(StrMsg_HUITP_MSGID_uni_ccl_temp_req_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_temp_req_t received!\n");
-	//返回
-	return IHU_FAILURE;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_temp_req_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_temp_confirm_received_handle(StrMsg_HUITP_MSGID_uni_ccl_temp_confirm_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_temp_confirm_t received!\n");
-	//返回
-	return IHU_FAILURE;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_temp_confirm_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_humid_req_received_handle(StrMsg_HUITP_MSGID_uni_ccl_humid_req_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_humid_req_t received!\n");
-	//返回
-	return IHU_FAILURE;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_humid_req_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_humid_confirm_received_handle(StrMsg_HUITP_MSGID_uni_ccl_humid_confirm_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_humid_confirm_t received!\n");
-	//返回
-	return IHU_FAILURE;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_humid_confirm_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_fall_req_received_handle(StrMsg_HUITP_MSGID_uni_ccl_fall_req_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_fall_req_t received!\n");
-	//返回
-	return IHU_FAILURE;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_fall_req_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_fall_confirm_received_handle(StrMsg_HUITP_MSGID_uni_ccl_fall_confirm_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_fall_confirm_t received!\n");
-	//返回
-	return IHU_FAILURE;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_fall_confirm_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_state_req_received_handle(StrMsg_HUITP_MSGID_uni_ccl_state_req_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_state_req_t received!\n");
-	//返回
-	return IHU_FAILURE;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_ccl_state_req_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle(StrMsg_HUITP_MSGID_uni_ccl_state_confirm_t *rcv)
@@ -1243,24 +1088,15 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle(StrMsg_HUIT
 	rcv->reportType.ieLen = HUITP_ENDIAN_EXG16(rcv->reportType.ieLen);
 	
 	//IE参数检查
-	if ((rcv->baseConfirm.ieId != HUITP_IEID_uni_com_confirm) || (rcv->baseConfirm.ieLen != (sizeof(StrIe_HUITP_IEID_uni_com_confirm_t) - 4))){
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Cloud raw message content unpack error!\n");
-		return IHU_FAILURE;		
-	}
-	if ((rcv->reportType.ieId != HUITP_IEID_uni_ccl_report_type) || (rcv->reportType.ieLen != (sizeof(StrIe_HUITP_IEID_uni_ccl_report_type_t) - 4))){
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Cloud raw message content unpack error!\n");
-		return IHU_FAILURE;		
-	}	
+	if ((rcv->baseConfirm.ieId != HUITP_IEID_uni_com_confirm) || (rcv->baseConfirm.ieLen != (sizeof(StrIe_HUITP_IEID_uni_com_confirm_t) - 4)))
+		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Cloud raw message content unpack error!\n");
+	if ((rcv->reportType.ieId != HUITP_IEID_uni_ccl_report_type) || (rcv->reportType.ieLen != (sizeof(StrIe_HUITP_IEID_uni_ccl_report_type_t) - 4)))
+		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Cloud raw message content unpack error!\n");
 	
 	//逻辑处理
 	if ((rcv->reportType.event != HUITP_IEID_UNI_CCL_REPORT_TYPE_PERIOD_EVENT) && (rcv->reportType.event != HUITP_IEID_UNI_CCL_REPORT_TYPE_CLOSE_EVENT)\
-		&& (rcv->reportType.event != HUITP_IEID_UNI_CCL_REPORT_TYPE_FAULT_EVENT)){
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Cloud raw message content unpack error!\n");
-		return IHU_FAILURE;			
-	}
+		&& (rcv->reportType.event != HUITP_IEID_UNI_CCL_REPORT_TYPE_FAULT_EVENT))
+		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Cloud raw message content unpack error!\n");
 		
 	if (rcv->reportType.event == HUITP_IEID_UNI_CCL_REPORT_TYPE_PERIOD_EVENT){
 		msg_struct_sps_ccl_event_report_cfm_t snd;
@@ -1268,11 +1104,8 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle(StrMsg_HUIT
 		snd.actionFlag = IHU_CCL_EVENT_REPORT_SEND_SUCCESS;
 		snd.length = sizeof(msg_struct_sps_ccl_event_report_cfm_t);
 		ret = ihu_message_send(MSG_ID_SPS_CCL_EVENT_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
-		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
-			return IHU_FAILURE;
-		}
+		if (ret == IHU_FAILURE)
+			IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 	}
 	else if (rcv->reportType.event == HUITP_IEID_UNI_CCL_REPORT_TYPE_CLOSE_EVENT){
 		msg_struct_sps_ccl_close_report_cfm_t snd;
@@ -1280,11 +1113,8 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle(StrMsg_HUIT
 		snd.actionFlag = IHU_CCL_EVENT_CLOSE_SEND_SUCCESS;
 		snd.length = sizeof(msg_struct_sps_ccl_close_report_cfm_t);
 		ret = ihu_message_send(MSG_ID_SPS_CCL_CLOSE_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
-		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
-			return IHU_FAILURE;
-		}
+		if (ret == IHU_FAILURE)
+			IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 	}
 	else if (rcv->reportType.event == HUITP_IEID_UNI_CCL_REPORT_TYPE_FAULT_EVENT){
 		msg_struct_sps_ccl_fault_report_cfm_t snd;
@@ -1292,11 +1122,8 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle(StrMsg_HUIT
 		snd.actionFlag = IHU_CCL_EVENT_FAULT_SEND_SUCCESS;
 		snd.length = sizeof(msg_struct_sps_ccl_fault_report_cfm_t);
 		ret = ihu_message_send(MSG_ID_SPS_CCL_FAULT_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
-		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
-			return IHU_FAILURE;
-		}
+		if (ret == IHU_FAILURE)
+			IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
 	}
 	else  //不可能到这儿
 	{
@@ -1309,30 +1136,22 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle(StrMsg_HUIT
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_inventory_req_received_handle(StrMsg_HUITP_MSGID_uni_inventory_req_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_inventory_req_t received!\n");
-	//返回
-	return IHU_FAILURE;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_inventory_req_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_inventory_confirm_received_handle(StrMsg_HUITP_MSGID_uni_inventory_confirm_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_inventory_confirm_t received!\n");
-	//返回
-	return IHU_FAILURE;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_inventory_confirm_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_sw_package_req_received_handle(StrMsg_HUITP_MSGID_uni_sw_package_req_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_sw_package_req_t received!\n");
-	//返回
-	return IHU_FAILURE;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_sw_package_req_t received!\n");
 }
 
 OPSTAT func_cloud_spsvirgo_ccl_msg_sw_package_confirm_received_handle(StrMsg_HUITP_MSGID_uni_sw_package_confirm_t *rcv)
 {
-	IhuErrorPrint("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_sw_package_confirm_t received!\n");
-	//返回
-	return IHU_FAILURE;
+	IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Un-supported message but known message StrMsg_HUITP_MSGID_uni_sw_package_confirm_t received!\n");
 }
 
 
