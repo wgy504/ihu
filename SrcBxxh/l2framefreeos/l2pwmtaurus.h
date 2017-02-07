@@ -1,4 +1,4 @@
-﻿/**
+/**
  ****************************************************************************************
  *
  * @file l2pwmtaurus.h
@@ -44,7 +44,7 @@ enum FSM_STATE_PWMTAURUS
 //#define FSM_STATE_INVALID 0xFF
 
 //Global variables
-extern FsmStateItem_t IhuFsmPwmtaurus[];
+extern IhuFsmStateItem_t IhuFsmPwmtaurus[];
 
 //API
 extern OPSTAT fsm_pwmtaurus_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);

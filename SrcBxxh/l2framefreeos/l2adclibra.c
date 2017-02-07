@@ -80,7 +80,7 @@ OPSTAT fsm_adclibra_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 		snd.length = sizeof(msg_struct_com_init_fb_t);
 		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_ADCLIBRA, &snd, snd.length);
 		if (ret == IHU_FAILURE){
-			IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_ADCLIBRA].taskName, zIhuTaskInfo[src_id].taskName);
+			IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_ADCLIBRA].taskName, zIhuVmCtrTab.task[src_id].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -98,7 +98,7 @@ OPSTAT fsm_adclibra_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 	}
 
 	//Global Variables
-	zIhuRunErrCnt[TASK_ID_ADCLIBRA] = 0;
+	zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA] = 0;
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 	memset(&zIhuAdcBfscWs, 0, sizeof(strIhuBfscAdcWeightPar_t));
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
@@ -110,7 +110,7 @@ OPSTAT fsm_adclibra_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_ADCLIBRA, FSM_STATE_ADCLIBRA_ACTIVED) == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA]++;
 		IhuErrorPrint("ADCLIBRA: Error Set FSM State!\n");
 		return IHU_FAILURE;
 	}
@@ -119,7 +119,7 @@ OPSTAT fsm_adclibra_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 		//启动周期性定时器，进行定时扫描
 		ret = ihu_timer_start(TASK_ID_ADCLIBRA, TIMER_ID_1S_ADCLIBRA_PERIOD_SCAN, zIhuSysEngPar.timer.adclibraPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA]++;
 			IhuErrorPrint("ADCLIBRA: Error start timer!\n");
 			return IHU_FAILURE;
 		}
@@ -128,7 +128,7 @@ OPSTAT fsm_adclibra_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
 	ret = ihu_timer_start(TASK_ID_ADCLIBRA, TIMER_ID_10MS_BFSC_ADCLIBRA_SCAN_TIMER, zIhuSysEngPar.timer.bfscAdclibraScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_10MS);
 	if (ret == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA]++;
 		IhuErrorPrint("ADCLIBRA: Error start timer!\n");
 		return IHU_FAILURE;
 	}	
@@ -155,14 +155,14 @@ OPSTAT fsm_adclibra_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 {	
 	//入参检查
 	if ((param_ptr == NULL) || (dest_id != TASK_ID_ADCLIBRA)){
-		zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA]++;
 		IhuErrorPrint("ADCLIBRA: Wrong input paramters!\n");
 		return IHU_FAILURE;
 	}
 	
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_ADCLIBRA, FSM_STATE_IDLE) == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA]++;
 		IhuErrorPrint("ADCLIBRA: Error Set FSM State!\n");
 		return IHU_FAILURE;
 	}
@@ -188,21 +188,21 @@ OPSTAT fsm_adclibra_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 	memset(&rcv, 0, sizeof(msg_struct_com_time_out_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_com_time_out_t))){
 		IhuErrorPrint("ADCLIBRA: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
 
-	//钩子在此处，检查zIhuRunErrCnt[TASK_ID_ADCLIBRA]是否超限
-	if (zIhuRunErrCnt[TASK_ID_ADCLIBRA] > IHU_RUN_ERROR_LEVEL_2_MAJOR){
+	//钩子在此处，检查zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA]是否超限
+	if (zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA] > IHU_RUN_ERROR_LEVEL_2_MAJOR){
 		//减少重复RESTART的概率
-		zIhuRunErrCnt[TASK_ID_ADCLIBRA] = zIhuRunErrCnt[TASK_ID_ADCLIBRA] - IHU_RUN_ERROR_LEVEL_2_MAJOR;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA] = zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA] - IHU_RUN_ERROR_LEVEL_2_MAJOR;
 		memset(&snd0, 0, sizeof(msg_struct_com_restart_t));
 		snd0.length = sizeof(msg_struct_com_restart_t);
 		ret = ihu_message_send(MSG_ID_COM_RESTART, TASK_ID_ADCLIBRA, TASK_ID_ADCLIBRA, &snd0, snd0.length);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
-			IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_ADCLIBRA].taskName, zIhuTaskInfo[TASK_ID_ADCLIBRA].taskName);
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA]++;
+			IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_ADCLIBRA].taskName, zIhuVmCtrTab.task[TASK_ID_ADCLIBRA].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -213,7 +213,7 @@ OPSTAT fsm_adclibra_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 		if (FsmGetState(TASK_ID_ADCLIBRA) != FSM_STATE_ADCLIBRA_ACTIVED){
 			ret = FsmSetState(TASK_ID_ADCLIBRA, FSM_STATE_ADCLIBRA_ACTIVED);
 			if (ret == IHU_FAILURE){
-				zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
+				zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA]++;
 				IhuErrorPrint("ADCLIBRA: Error Set FSM State!\n");
 				return IHU_FAILURE;
 			}//FsmSetState
@@ -229,7 +229,7 @@ OPSTAT fsm_adclibra_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 #endif
 	
 	else{
-		zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA]++;
 		IhuErrorPrint("ADCLIBRA: Receive error timer ID!\n");
 		return IHU_FAILURE;
 	}
@@ -248,8 +248,8 @@ void func_adclibra_time_out_period_scan(void)
 	snd.length = sizeof(msg_struct_com_heart_beat_t);
 	ret = ihu_message_send(MSG_ID_COM_HEART_BEAT, TASK_ID_VMFO, TASK_ID_ADCLIBRA, &snd, snd.length);
 	if (ret == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
-		IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_ADCLIBRA].taskName, zIhuTaskInfo[TASK_ID_VMFO].taskName);
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA]++;
+		IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_ADCLIBRA].taskName, zIhuVmCtrTab.task[TASK_ID_VMFO].taskName);
 		return;
 	}
 	
@@ -285,8 +285,8 @@ OPSTAT func_adclibra_time_out_bfsc_read_weight_scan(void)
 		snd1.length = sizeof(msg_struct_adc_material_drop_t);
 		ret = ihu_message_send(MSG_ID_ADC_MATERIAL_DROP, TASK_ID_BFSC, TASK_ID_ADCLIBRA, &snd1, snd1.length);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
-			IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_ADCLIBRA].taskName, zIhuTaskInfo[TASK_ID_BFSC].taskName);
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA]++;
+			IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_ADCLIBRA].taskName, zIhuVmCtrTab.task[TASK_ID_BFSC].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -305,8 +305,8 @@ OPSTAT func_adclibra_time_out_bfsc_read_weight_scan(void)
 			snd2.length = sizeof(msg_struct_adc_new_material_ws_t);
 			ret = ihu_message_send(MSG_ID_ADC_NEW_MATERIAL_WS, TASK_ID_BFSC, TASK_ID_ADCLIBRA, &snd2, snd2.length);
 			if (ret == IHU_FAILURE){
-				zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
-				IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_ADCLIBRA].taskName, zIhuTaskInfo[TASK_ID_BFSC].taskName);
+				zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA]++;
+				IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_ADCLIBRA].taskName, zIhuVmCtrTab.task[TASK_ID_BFSC].taskName);
 				return IHU_FAILURE;
 			}
 		}//if (tempWeight != zIhuAdcBfscSensorWeightValue)
@@ -315,7 +315,7 @@ OPSTAT func_adclibra_time_out_bfsc_read_weight_scan(void)
 	//垃圾CASE，应该不能到达
 	else
 	{
-		zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA]++;
 		IhuErrorPrint("ADCLIBRA: Wrong scan result!\n");
 		return IHU_FAILURE;	
 	}
@@ -334,7 +334,7 @@ OPSTAT fsm_adclibra_l3bfsc_ws_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param
 	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t))){
 		IhuErrorPrint("ADCLIBRA: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
@@ -354,7 +354,7 @@ OPSTAT fsm_adclibra_l3bfsc_ws_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param
 		if (rcv.cmd.prefixcmdid != IHU_CANVELA_PREFIXH_ws_ctrl)
 		{
 			IhuErrorPrint("ADCLIBRA: Receive message error!\n");
-			zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA]++;
 			return IHU_FAILURE;
 		}
 		
@@ -413,7 +413,7 @@ OPSTAT fsm_adclibra_l3bfsc_ws_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param
 					else
 					{
 						IhuErrorPrint("ADCLIBRA: Receive message error!\n");
-						zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
+						zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA]++;
 						return IHU_FAILURE;
 					}					
 					break;
@@ -425,7 +425,7 @@ OPSTAT fsm_adclibra_l3bfsc_ws_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param
 					break;
 
 				default:
-					zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
+					zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA]++;
 					IhuErrorPrint("ADCLIBRA: Input parameters error!\n");
 					return IHU_FAILURE;
 					//break;
@@ -440,15 +440,15 @@ OPSTAT fsm_adclibra_l3bfsc_ws_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param
 		snd.length = sizeof(msg_struct_adclibra_l3bfsc_meas_cmd_resp_t);
 		ret = ihu_message_send(MSG_ID_ADC_L3BFSC_MEAS_CMD_RESP, TASK_ID_BFSC, TASK_ID_ADCLIBRA, &snd, snd.length);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
-			IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_ADCLIBRA].taskName, zIhuTaskInfo[TASK_ID_BFSC].taskName);
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA]++;
+			IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_ADCLIBRA].taskName, zIhuVmCtrTab.task[TASK_ID_BFSC].taskName);
 			return IHU_FAILURE;
 		}
 	}
 	
 	else{
 		IhuErrorPrint("ADCLIBRA: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA]++;
 		return IHU_FAILURE;
 	}
 	
@@ -465,7 +465,7 @@ OPSTAT fsm_adclibra_canvela_ws_man_set_zero(UINT8 dest_id, UINT8 src_id, void * 
 	memset(&rcv, 0, sizeof(msg_struct_canvela_adc_ws_man_set_zero_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_canvela_adc_ws_man_set_zero_t))){
 		IhuErrorPrint("ADCLIBRA: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_ADCLIBRA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);

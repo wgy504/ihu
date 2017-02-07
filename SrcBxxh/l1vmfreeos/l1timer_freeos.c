@@ -68,18 +68,18 @@ OPSTAT fsm_timer_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 para
 		snd.length = sizeof(msg_struct_com_init_fb_t);
 		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_TIMER, &snd, snd.length);
 		if (ret == IHU_FAILURE){
-			IhuErrorPrint("TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_TIMER].taskName, zIhuTaskInfo[src_id].taskName);
+			IhuErrorPrint("TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_TIMER].taskName, zIhuVmCtrTab.task[src_id].taskName);
 			return IHU_FAILURE;
 		}
 	}
 
 	//INIT this task global variables zIhuTimerTable
 	memset(&zIhuTimerTable, 0, sizeof(IhuTimerTable_t));
-	zIhuRunErrCnt[TASK_ID_TIMER] = 0;
+	zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER] = 0;
 	
 	//收到初始化消息后，进入初始化状态
 	if (FsmSetState(TASK_ID_TIMER, FSM_STATE_TIMER_INITED) == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_TIMER]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
 		IhuErrorPrint("TIMER: Error Set FSM State!\n");	
 		return IHU_FAILURE;
 	}
@@ -99,12 +99,12 @@ OPSTAT fsm_timer_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 para
 	if (IHU_TIMER_CONFIG_START_RESOLUTION_1S == TRUE){
 	  zIhuL1timer1s = OS_TIMER_CREATE("IHU_TIMER_1S", OS_MS_2_TICKS(IHU_TIMER_TICK_1_SEC), pdTRUE, (void *)NULL, (TimerCallbackFunction_t)func_timer_routine_handler_1s);
 	  if (zIhuL1timer1s == NULL){
-	    zIhuRunErrCnt[TASK_ID_TIMER]++;
+	    zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
 	    IhuErrorPrint("TIMER: Error create 1S timer!\n");
 	    return IHU_FAILURE;
 	  }
     if (OS_TIMER_START(zIhuL1timer1s, OS_MS_2_TICKS(rand()%1000)) != OS_TIMER_SUCCESS){
-      zIhuRunErrCnt[TASK_ID_TIMER]++;
+      zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
       IhuErrorPrint("TIMER: Error start 1S timer!\n");
       return IHU_FAILURE;
     }
@@ -114,12 +114,12 @@ OPSTAT fsm_timer_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 para
 	if (IHU_TIMER_CONFIG_START_RESOLUTION_10MS == TRUE){
 	  zIhuL1timer10ms = OS_TIMER_CREATE("IHU_TIMER_10MS", OS_MS_2_TICKS(IHU_TIMER_TICK_10_MS), pdTRUE, (void *)NULL, (TimerCallbackFunction_t)func_timer_routine_handler_10ms);
     if (zIhuL1timer10ms == NULL){
-      zIhuRunErrCnt[TASK_ID_TIMER]++;
+      zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
       IhuErrorPrint("TIMER: Error create 10MS timer!\n");
       return IHU_FAILURE;
     }
     if (OS_TIMER_START(zIhuL1timer10ms, OS_MS_2_TICKS(rand()%10)) != OS_TIMER_SUCCESS){
-      zIhuRunErrCnt[TASK_ID_TIMER]++;
+      zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
       IhuErrorPrint("TIMER: Error start 10MS timer!\n");
       return IHU_FAILURE;
     }
@@ -129,12 +129,12 @@ OPSTAT fsm_timer_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 para
 	if (IHU_TIMER_CONFIG_START_RESOLUTION_1MS == TRUE){
 	  zIhuL1timer1ms = OS_TIMER_CREATE("IHU_TIMER_1MS", OS_MS_2_TICKS(IHU_TIMER_TICK_1_MS), pdTRUE, (void *)NULL, (TimerCallbackFunction_t)func_timer_routine_handler_1ms);
     if (zIhuL1timer1ms == NULL){
-      zIhuRunErrCnt[TASK_ID_TIMER]++;
+      zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
       IhuErrorPrint("TIMER: Error create 1MS timer!\n");
       return IHU_FAILURE;
     }
     if (OS_TIMER_START(zIhuL1timer1ms, OS_MS_2_TICKS(rand()%10)) != OS_TIMER_SUCCESS){
-      zIhuRunErrCnt[TASK_ID_TIMER]++;
+      zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
       IhuErrorPrint("TIMER: Error start 1MS timer!\n");
       return IHU_FAILURE;
     }
@@ -142,7 +142,7 @@ OPSTAT fsm_timer_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 para
 	
 	//进入等待反馈状态
 	if (FsmSetState(TASK_ID_TIMER, FSM_STATE_TIMER_AVTIVE) == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_TIMER]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
 		IhuErrorPrint("TIMER: Error Set FSM State!\n");
 		return IHU_FAILURE;
 	}
@@ -175,8 +175,8 @@ OPSTAT fsm_timer_restart(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 //	snd.length = sizeof(msg_struct_com_restart_t);
 //	ret = ihu_message_send(MSG_ID_COM_RESTART, TASK_ID_VMUO, TASK_ID_TIMER, &snd, snd.length);
 //	if (ret == IHU_FAILURE){
-//		zIhuRunErrCnt[TASK_ID_TIMER]++;
-//		sprintf(strDebug, "TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_TIMER].taskName, zIhuTaskInfo[TASK_ID_VMFO].taskName);
+//		zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
+//		sprintf(strDebug, "TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_TIMER].taskName, zIhuVmCtrTab.task[TASK_ID_VMFO].taskName);
 //		IhuErrorPrint(strDebug);
 //		return IHU_FAILURE;
 //	}
@@ -188,14 +188,14 @@ OPSTAT fsm_timer_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 
 {	
 	//入参检查
 	if ((param_ptr == NULL) || (dest_id != TASK_ID_TIMER)){
-		zIhuRunErrCnt[TASK_ID_TIMER]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
 		IhuErrorPrint("TIMER: Wrong input paramters!\n");
 		return IHU_FAILURE;
 	}
 	
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_TIMER, FSM_STATE_IDLE) == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_TIMER]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
 		IhuErrorPrint("TIMER: Error Set FSM State!\n");
 		return IHU_FAILURE;
 	}
@@ -215,22 +215,22 @@ OPSTAT ihu_timer_start(UINT8 task_id, UINT8 timer_id, UINT32 t_dur, UINT8 t_type
 {	
 	//检查task_id是否合法
 	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
-		IhuErrorPrint("TIMER: Error on timer start src_id =%d [%s]!!!\n", task_id, zIhuTaskInfo[task_id].taskName);
-		zIhuRunErrCnt[TASK_ID_TIMER]++;
+		IhuErrorPrint("TIMER: Error on timer start src_id =%d [%s]!!!\n", task_id, zIhuVmCtrTab.task[task_id].taskName);
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
 		return IHU_FAILURE;
 	}
 
 	//检查timer_duartion是否合法
 	if ((t_dur > MAX_TIMER_SET_DURATION) || (t_dur <= 0)){
 		IhuErrorPrint("TIMER: Error on timer start timer duration!!!\n");		
-		zIhuRunErrCnt[TASK_ID_TIMER]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
 		return IHU_FAILURE;
 	}
 
 	//检查t_type是否合法
 	if ((t_type != TIMER_TYPE_ONE_TIME) && (t_type != TIMER_TYPE_PERIOD)){
 		IhuErrorPrint("TIMER: Error on timer start type!!!\n");
-		zIhuRunErrCnt[TASK_ID_TIMER]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
 		return IHU_FAILURE;
 	}
 
@@ -238,25 +238,25 @@ OPSTAT ihu_timer_start(UINT8 task_id, UINT8 timer_id, UINT32 t_dur, UINT8 t_type
 	if (t_res == TIMER_RESOLUTION_1S){
 		if ((timer_id >= MAX_TIMER_NUM_IN_ONE_IHU_1S) || (timer_id <= TIMER_ID_1S_MIN)){
 			IhuErrorPrint("TIMER: Error on timer start 1S timerId!!!\n");
-			zIhuRunErrCnt[TASK_ID_TIMER]++;
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
 			return IHU_FAILURE;
 		}
 	}else if (t_res == TIMER_RESOLUTION_10MS){
 		if ((timer_id >= MAX_TIMER_NUM_IN_ONE_IHU_10MS) || (timer_id <= TIMER_ID_10MS_MIN)){
 			IhuErrorPrint("TIMER: Error on timer start 10MS timerId!!!\n");
-			zIhuRunErrCnt[TASK_ID_TIMER]++;
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
 			return IHU_FAILURE;
 		}
 	}
 	else if (t_res == TIMER_RESOLUTION_1MS){
 		if ((timer_id >= MAX_TIMER_NUM_IN_ONE_IHU_1MS) || (timer_id <= TIMER_ID_1MS_MIN)){
 			IhuErrorPrint("TIMER: Error on timer start 1MS timerId!!!\n");
-			zIhuRunErrCnt[TASK_ID_TIMER]++;
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
 			return IHU_FAILURE;
 		}
 	}
 	else{
-		zIhuRunErrCnt[TASK_ID_TIMER]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
 		IhuErrorPrint("TIMER: Error on timer start timer resolution!!!\n");
 		return IHU_FAILURE;
 	}
@@ -294,8 +294,8 @@ OPSTAT ihu_timer_stop(UINT8 task_id, UINT8 timer_id, UINT8 t_res)
 {
 	//检查task_id是否合法
 	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
-		IhuErrorPrint("TIMER: Error on timer stop src_id =%d [%s]!!!\n", task_id, zIhuTaskInfo[task_id].taskName);
-		zIhuRunErrCnt[TASK_ID_TIMER]++;
+		IhuErrorPrint("TIMER: Error on timer stop src_id =%d [%s]!!!\n", task_id, zIhuVmCtrTab.task[task_id].taskName);
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
 		return IHU_FAILURE;
 	}
 
@@ -303,24 +303,24 @@ OPSTAT ihu_timer_stop(UINT8 task_id, UINT8 timer_id, UINT8 t_res)
 	if (t_res == TIMER_RESOLUTION_1S){
 		if ((timer_id >= MAX_TIMER_NUM_IN_ONE_IHU_1S) || (timer_id <= TIMER_ID_1S_MIN)){
 			IhuErrorPrint("TIMER: Error on timer stop 1S timerId!!!\n");
-			zIhuRunErrCnt[TASK_ID_TIMER]++;
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
 			return IHU_FAILURE;
 		}
 	}else if (t_res == TIMER_RESOLUTION_10MS){
 		if ((timer_id >= MAX_TIMER_NUM_IN_ONE_IHU_10MS) || (timer_id <= TIMER_ID_10MS_MIN)){
 			IhuErrorPrint("TIMER: Error on timer stop 10MS timerId!!!\n");
-			zIhuRunErrCnt[TASK_ID_TIMER]++;
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
 			return IHU_FAILURE;
 		}
 	}else if (t_res == TIMER_RESOLUTION_1MS){
 		if ((timer_id >= MAX_TIMER_NUM_IN_ONE_IHU_1MS) || (timer_id <= TIMER_ID_1MS_MIN)){
 			IhuErrorPrint("TIMER: Error on timer stop 1MS timerId!!!\n");
-			zIhuRunErrCnt[TASK_ID_TIMER]++;
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
 			return IHU_FAILURE;
 		}
 	}else{
 		IhuErrorPrint("TIMER: Error on timer stop timer resolution!!!\n");
-		zIhuRunErrCnt[TASK_ID_TIMER]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
 		return IHU_FAILURE;
 	}
 
@@ -385,8 +385,8 @@ void func_timer_routine_handler_1s(OS_TIMER timerid)
         snd.timeRes = zIhuTimerTable.timer1s[i].timerRes;
         ret = ihu_message_send(MSG_ID_COM_TIME_OUT, zIhuTimerTable.timer1s[i].taskId, TASK_ID_TIMER, &snd, snd.length);
         if (ret == IHU_FAILURE){
-          zIhuRunErrCnt[TASK_ID_TIMER]++;
-          IhuErrorPrint("TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_TIMER].taskName, zIhuTaskInfo[zIhuTimerTable.timer1s[i].taskId].taskName);
+          zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
+          IhuErrorPrint("TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_TIMER].taskName, zIhuVmCtrTab.task[zIhuTimerTable.timer1s[i].taskId].taskName);
           return;
         }
       }//Elapse <= 0, timeout reach
@@ -438,8 +438,8 @@ void func_timer_routine_handler_10ms(OS_TIMER timerid)
         snd.timeRes = zIhuTimerTable.timer10ms[i].timerRes;
         ret = ihu_message_send(MSG_ID_COM_TIME_OUT, zIhuTimerTable.timer10ms[i].taskId, TASK_ID_TIMER, &snd, snd.length);
         if (ret == IHU_FAILURE){
-          zIhuRunErrCnt[TASK_ID_TIMER]++;
-          IhuErrorPrint("TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_TIMER].taskName, zIhuTaskInfo[zIhuTimerTable.timer10ms[i].taskId].taskName);
+          zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
+          IhuErrorPrint("TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_TIMER].taskName, zIhuVmCtrTab.task[zIhuTimerTable.timer10ms[i].taskId].taskName);
           return;
         }
       }//Elapse <= 0, timeout reach
@@ -490,8 +490,8 @@ void func_timer_routine_handler_1ms(OS_TIMER timerid)
         snd.timeRes = zIhuTimerTable.timer1ms[i].timerRes;
         ret = ihu_message_send(MSG_ID_COM_TIME_OUT, zIhuTimerTable.timer1ms[i].taskId, TASK_ID_TIMER, &snd, snd.length);
         if (ret == IHU_FAILURE){
-          zIhuRunErrCnt[TASK_ID_TIMER]++;
-          IhuErrorPrint("TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_TIMER].taskName, zIhuTaskInfo[zIhuTimerTable.timer1ms[i].taskId].taskName);
+          zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
+          IhuErrorPrint("TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_TIMER].taskName, zIhuVmCtrTab.task[zIhuTimerTable.timer1ms[i].taskId].taskName);
           return;
         }
       }//Elapse <= 0, timeout reach

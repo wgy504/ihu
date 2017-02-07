@@ -102,9 +102,9 @@ void func_gprsmod_two_char_swap(char *ch1, char *ch2);
 void func_gprsmod_convert_hex_to_str(uint8_t dest[],uint8_t src[],uint8_t len);//十六进制转字符串
 
 //高级定义，简化程序的可读性
-#define IHU_ERROR_PRINT_GPRSMOD	zIhuRunErrCnt[TASK_ID_VMFO]++; IhuErrorPrint
+#define IHU_ERROR_PRINT_GPRSMOD	zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++; IhuErrorPrint
 //验证新技巧，还未用上
-#define IHU_ERROR_PRINT_GPRSMOD1(arg...)	do{zIhuRunErrCnt[TASK_ID_VMFO]++;  IhuErrorPrint(##arg);  return IHU_FAILURE; }while(0)
+#define IHU_ERROR_PRINT_GPRSMOD1(arg...)	do{zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;  IhuErrorPrint(##arg);  return IHU_FAILURE; }while(0)
 
 
 #endif /* L1FREERTOS_MOD_GPRS_H_ */

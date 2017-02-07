@@ -76,6 +76,10 @@
 	#error Un-correct constant definition
 #endif
 
+#if (IHU_WORKING_FREE_RTOS_SELECTION == IHU_WORKING_FREE_RTOS_SELECTION_BARE)	
+	#define OS_MUTEX                SemaphoreHandle_t
+#endif
+
 /*
  *	
  *  定义结构体
@@ -87,12 +91,14 @@
 //不是任务的任务，比如TRACE/CONFIG/3G/GPIO等等，留待清理，简化任务列表
 /*
  *
+ *   系统全局常量定义区
+ *
  *   【增加任务】，必须同时修改四个地方：
  *   - IHU_TASK_NAME_ID
  *   - IHU_TASK_QUEUE_ID
- *   - zIhuGlobalTaskInputConfig
+ *   - zIhuVmCtrTaskStaticCfg
  *   - 还要修改可能的本地配置文件，或者sysengpar.h的固定工参配置信息，#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID
- *	 - 继续修改初始化函数void ihu_vm_system_init(void)
+ *	 - 继续修改初始化函数void ihu_vm_system_ctr_table_init(void)
  *	
  *	基础模块：TASK_ID_MIN, TASK_ID_VMFO, TASK_ID_TIMER, TASK_ID_ADCLIBRA, TASK_ID_SPILEO, TASK_ID_I2CARIES, TASK_ID_PWMTAURUS
  *	          TASK_ID_SPSVIRGO, TASK_ID_CANVELA, TASK_ID_DIDOCAP, TASK_ID_LEDPISCES, TASK_ID_ETHORION, TASK_ID_DCMIARIS, 
@@ -171,6 +177,14 @@
 	}; //end of IHU_TASK_NAME_ID
 #endif
 
+
+/*
+ *
+ *   三大表单之一： 系统总控表IhuVmCtrTab_t定义区
+ *
+ *
+*/
+	
 /*
 ** Fsm INFORMATION structure.
 */
@@ -186,7 +200,7 @@ typedef struct IhuFsmStateItem
 	UINT8 state;
 	OPSTAT (*stateFunc)(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len);
 }IhuFsmStateItem_t;
-
+//任务表
 typedef struct IhuTaskTag
 {
 	UINT8  TaskId;
@@ -198,33 +212,31 @@ typedef struct IhuTaskTag
 	xTaskHandle TaskHandle;
 	void*  taskFuncEntry;
 }IhuTaskTag_t;
-
+//状态机列表
 typedef struct IhuFsmArrayElement
 {
 	OPSTAT (*stateFunc)(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len);
 }IhuFsmArrayElement_t;
-
+//状态机控制表
 typedef struct IhuFsmCtrlTable
 {
 	UINT8 numOfIhuFsmArrayElement;  //每一个具体任务TASK中，定义了多少个STATE-MSGID映射表单
 	UINT8 taskId;
 	IhuFsmArrayElement_t pFsmArray[MAX_STATE_NUM_IN_ONE_TASK][MAX_MSGID_NUM_IN_ONE_TASK];
 }IhuFsmCtrlTable_t;
-
 //MsgQueue的基础结构定义
 typedef struct IhuFsmQueueElement
 {
 	UINT8 msgQue[MAX_IHU_MSG_BODY_LENGTH];
 	bool useFlag;
 }IhuFsmQueueElement_t;
-
+//队列列表
 typedef struct IhuFsmQueueListTable
 {
 	IhuFsmQueueElement_t queList[MAX_QUEUE_NUM_IN_ONE_TASK];
 	UINT8 queIndex;
 }IhuFsmQueueListTable_t;
-
-//FSM的总结构定义
+//状态机总表
 typedef struct IhuFsmTable
 {
 	UINT8 numOfIhuFsmCtrlTable;  //Number of running (Task + Instance)
@@ -232,14 +244,80 @@ typedef struct IhuFsmTable
 	IhuFsmCtrlTable_t  pIhuFsmCtrlTable[MAX_TASK_NUM_IN_ONE_IHU];  //所有任务的状态机总控表
 	IhuFsmQueueListTable_t taskQue[MAX_TASK_NUM_IN_ONE_IHU];  //所有任务的消息队列总控表
 }IhuFsmTable_t;
+//打印缓冲区
+typedef struct IhuPrintBufferChar
+{
+	UINT8 localIndex;
+	char  PrintHeader[IHU_PRINT_FILE_LINE_SIZE];
+	char  PrintBuffer[IHU_PRINT_CHAR_SIZE];
+}IhuPrintBufferChar_t;
+//打印控制表
+typedef struct IhuPrintBufCtrlTab
+{
+	IhuPrintBufferChar_t 	prtBuf[IHU_PRINT_BUFFER_NUMBER];
+	unsigned int 					prtIndex;
+#if (IHU_WORKING_FREE_RTOS_SELECTION == IHU_WORKING_FREE_RTOS_SELECTION_BARE)		
+	OS_MUTEX 							prtMutex;	
+#endif	
+}IhuPrintBufCtrlTab_t;
+
+//三表之一的系统总控表
+typedef struct IhuVmCtrTab
+{
+	IhuFsmTable_t					fsm;
+	IhuTaskTag_t					task[MAX_TASK_NUM_IN_ONE_IHU];
+	IhuPrintBufCtrlTab_t	print;
+}IhuVmCtrTab_t;
+//系统总控表
+extern IhuVmCtrTab_t zIhuVmCtrTab;
+
+//统一定义，如果不存在不影响编译
+extern IhuFsmStateItem_t IhuFsmVmfo[];                           	//状态机
+extern IhuFsmStateItem_t IhuFsmTimer[];                           //状态机
+extern IhuFsmStateItem_t IhuFsmAdclibra[];                        //状态机
+extern IhuFsmStateItem_t IhuFsmSpileo[];                          //状态机
+extern IhuFsmStateItem_t IhuFsmI2caries[];                        //状态机
+extern IhuFsmStateItem_t IhuFsmPwmtaurus[];                       //状态机
+extern IhuFsmStateItem_t IhuFsmSpsvirgo[];                        //状态机
+extern IhuFsmStateItem_t IhuFsmCanvela[];                      	 //状态机
+extern IhuFsmStateItem_t IhuFsmDidocap[];                         //状态机
+extern IhuFsmStateItem_t IhuFsmLedpisces[];                       //状态机
+extern IhuFsmStateItem_t IhuFsmEthorion[];                        //状态机
+extern IhuFsmStateItem_t IhuFsmDcmiaris[];                        //状态机
+extern IhuFsmStateItem_t IhuFsmEmc68x[];                          //状态机
+extern IhuFsmStateItem_t IhuFsmCcl[];                          	 //状态机
+extern IhuFsmStateItem_t IhuFsmBfsc[];                          	 //状态机 
+
+//Global variables
+extern char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK];    //消息名字符串
 
 //任务配置的基础配置信息
-typedef struct StrIhuGlobalTaskInputConfig
+typedef struct IhuVmCtrTaskStaticCfg
 {
 	const UINT8 taskInputId;
 	const char  taskInputName[TASK_NAME_MAX_LENGTH];
-	const void* fsmFuncEntry;
-}StrIhuGlobalTaskInputConfig_t;
+	void* fsmFuncEntry;
+}IhuVmCtrTaskStaticCfg_t;
+
+/*
+ *
+ *   三大表单之二： 系统工参表IhuSysEngPar_t定义区
+ *
+ *
+*/
+
+extern IhuSysEngParTab_t zIhuSysEngPar;                   //工参
+
+
+/*
+ *
+ *   三大表单之三： 系统运行统计性能表IhuSysStaPm_t定义区
+ *
+ *
+*/
+
+//三大表之三：系统统计性能表
+
 
 //任务模块RESTART的一些全局定义
 #define IHU_RUN_ERROR_LEVEL_0_WARNING 10
@@ -254,29 +332,28 @@ typedef struct IhuGlobalCounter
 	UINT32 errCnt[MAX_TASK_NUM_IN_ONE_IHU];  //以每个任务为单位
 	UINT32 restartCnt;
 }IhuGlobalCounter_t;
-extern IhuGlobalCounter_t zIhuGlobalCounter;
 
 
-//打印缓冲区
-typedef struct IhuPrintBufferChar
+typedef struct IhuSysStaPm
 {
-	UINT8 localIndex;
-	char  PrintHeader[IHU_PRINT_FILE_LINE_SIZE];
-	char  PrintBuffer[IHU_PRINT_CHAR_SIZE];
-}IhuPrintBufferChar_t;
+	IhuGlobalCounter_t 	statisCnt;
+	UINT32 							taskRunErrCnt[MAX_TASK_NUM_IN_ONE_IHU];
+}IhuSysStaPm_t;
+extern IhuSysStaPm_t	zIhuSysStaPm;
+
 
 
 /*
- *	
- *  全局API
- *  UINT16 param_len: 考虑到单片机下的实时操作系统，U16长度是最为合适的，如果没有意外，以后不得修改
  *
- */
+ *   通信机制核心API，对外提供的基础服务
+ *
+ *
+*/
+
 //全局API，不依赖具体操作系统
 void IhuDebugPrintFo(UINT8 index, char *format, ...);
 void IhuErrorPrintFo(UINT8 index, char *format, ...);
 UINT8 IhuDebugPrintId(char *file, int line);
-
 //Eclipse的编译器有些不一样，晕乎
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
 	void IhuDebugPrintFoEmc68x(char *format, ...);
@@ -287,31 +364,6 @@ UINT8 IhuDebugPrintId(char *file, int line);
 	#define IhuDebugPrint(...) (((void (*)(UINT8, const char *, ...))IhuDebugPrintFo)(IhuDebugPrintId(__FILE__, __LINE__), __VA_ARGS__))
 	#define IhuErrorPrint(...) (((void (*)(UINT8, const char *, ...))IhuErrorPrintFo)(IhuDebugPrintId(__FILE__, __LINE__), __VA_ARGS__))
 #endif
-
-//错误打印宏定义高级定义技巧
-//第一种方式，具备编译通过的能力，但显示错误
-//#define IHU_ERROR_PRINT_TASK(taskid, arg...)	do{zIhuRunErrCnt[taskid]++;  IhuErrorPrint(##arg);  return IHU_FAILURE;}while(0)	
-//第二种方式，貌似好看些
-#define IHU_ERROR_PRINT_TASK(taskid, ...)	do{zIhuRunErrCnt[taskid]++;  IhuErrorPrint(__VA_ARGS__);  return IHU_FAILURE;}while(0)	
-//都保留着，都是极为有参考意义的宏编写方式
-
-//高级定义，简化程序的可读性
-#define IHU_DEBUG_PRINT_INF		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint
-#define IHU_DEBUG_PRINT_NOR		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_NOR_ON) != FALSE) IhuDebugPrint
-#define IHU_DEBUG_PRINT_IPT		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_IPT_ON) != FALSE) IhuDebugPrint
-#define IHU_DEBUG_PRINT_CRT		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_CRT_ON) != FALSE) IhuDebugPrint
-#define IHU_DEBUG_PRINT_FAT		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE) IhuDebugPrint
-
-//系统级别的初始化
-extern void ihu_vm_system_init(void);  
-extern void ihu_sleep(UINT32 second);
-extern void ihu_usleep(UINT32 usecond);  //resulution 10^(-3)s = 1 microsecond
-extern OPSTAT ihu_taskid_to_string(UINT8 id, char *string);
-extern OPSTAT ihu_msgid_to_string(UINT16 id, char *string);
-extern int  ihu_vm_main(void);
-extern void ihu_vm_check_task_que_status_and_action(void);
-extern OPSTAT ihu_vm_send_init_msg_to_app_task(UINT8 dest_id);
-
 //VM FSM related APIs，状态机核心部分，不依赖具体操作系统
 extern OPSTAT FsmInit(void);
 extern OPSTAT FsmAddNew(UINT8 task_id, IhuFsmStateItem_t* pIhuFsmStateItem);
@@ -321,6 +373,12 @@ extern OPSTAT FsmProcessingLaunch(void *task);
 extern OPSTAT FsmSetState(UINT8 task_id, UINT8 newState);
 extern UINT8  FsmGetState(UINT8 task_id);
 
+/*
+ *
+ *   通信机制核心API，对外提供的基础服务
+ *
+ *
+*/
 
 //Global VM layer basic API and functions，跟具体操作系统相关的API部分
 extern OPSTAT ihu_message_queue_create(UINT8 task_id);
@@ -340,8 +398,6 @@ extern OPSTAT fsm_com_do_nothing(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 extern void ihu_sw_restart(void);
 extern struct tm ihu_clock_unix_to_ymd(time_t t_unix);
 extern OPSTAT ihu_isr_install(UINT8 priority, void *my_routine);
-
-
 //对于没有RTOS的情形，为了兼容VMDA，暂时没用到
 extern OPSTAT FsmProcessingLaunchEntryBareRtos(UINT8 task_id);   //当创建和启动分离时使用
 extern OPSTAT FsmProcessingLaunchExecuteBareRtos(UINT8 task_id); //当创建和启动分离时使用
@@ -351,33 +407,27 @@ extern OPSTAT ihu_system_task_execute_bare_rtos(UINT8 task_id, IhuFsmStateItem_t
 extern void   ihu_task_execute_all_bare_rtos(void);
 
 /*
- *	
- *  外部引用的全局变量
  *
- */
+ *   HCU初始化核心API，本地私有使用
+ *
+ *
+*/
+//系统级别的初始化
+extern void ihu_vm_system_ctr_table_init(void);  
+extern void ihu_sleep(UINT32 second);
+extern void ihu_usleep(UINT32 usecond);  //resulution 10^(-3)s = 1 microsecond
+extern OPSTAT ihu_taskid_to_string(UINT8 id, char *string);
+extern OPSTAT ihu_msgid_to_string(UINT16 id, char *string);
+extern int  ihu_vm_main(void);
+extern void ihu_vm_check_task_que_status_and_action(void);
+extern OPSTAT ihu_vm_send_init_msg_to_app_task(UINT8 dest_id);
 
-//Global variables
-extern IhuTaskTag_t zIhuTaskInfo[MAX_TASK_NUM_IN_ONE_IHU];  //任务控制总表
-extern UINT32 zIhuRunErrCnt[MAX_TASK_NUM_IN_ONE_IHU];       //差错表
-extern IhuFsmTable_t zIhuIhuFsmTable;                             //状态机总表
-extern char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK];    //消息名字符串
-extern IhuSysEngParTab_t zIhuSysEngPar;                   //工参
-//统一定义，如果不存在不影响编译
-extern IhuFsmStateItem_t IhuFsmVmfo[];                           	//状态机
-extern IhuFsmStateItem_t IhuFsmTimer[];                           //状态机
-extern IhuFsmStateItem_t IhuFsmAdclibra[];                        //状态机
-extern IhuFsmStateItem_t IhuFsmSpileo[];                          //状态机
-extern IhuFsmStateItem_t IhuFsmI2caries[];                        //状态机
-extern IhuFsmStateItem_t IhuFsmPwmtaurus[];                       //状态机
-extern IhuFsmStateItem_t IhuFsmSpsvirgo[];                        //状态机
-extern IhuFsmStateItem_t IhuFsmCanvela[];                      	 //状态机
-extern IhuFsmStateItem_t IhuFsmDidocap[];                         //状态机
-extern IhuFsmStateItem_t IhuFsmLedpisces[];                       //状态机
-extern IhuFsmStateItem_t IhuFsmEthorion[];                        //状态机
-extern IhuFsmStateItem_t IhuFsmDcmiaris[];                        //状态机
-extern IhuFsmStateItem_t IhuFsmEmc68x[];                          //状态机
-extern IhuFsmStateItem_t IhuFsmCcl[];                          	 //状态机
-extern IhuFsmStateItem_t IhuFsmBfsc[];                          	 //状态机 
+/*
+ *
+ *  外部参考API
+ *
+ *
+*/
 
 //外部引用API，来自于TIMER任务模块。TIMER任务模块的机制是，必须将VM启动起来，然后TIMER上层任务模块才能被激活，并产生自定义的TIME_OUT消息
 extern OPSTAT ihu_timer_start(UINT8 task_id, UINT8 timer_id, UINT32 t_dur, UINT8 t_type, UINT8 t_res);
@@ -385,13 +435,46 @@ extern OPSTAT ihu_timer_stop(UINT8 task_id, UINT8 timer_id, UINT8 t_res);
 extern void ihu_timer_routine_handler_1s(void);
 extern void ihu_timer_routine_handler_10ms(void);
 
-//extern int sprintf(char * __restrict /*s*/, const char * __restrict /*format*/, ...) __attribute__((__nonnull__(1,2)));
-//extern int arch_printf(const char *fmt, ...);
+
+/*
+ *
+ *  提高效率的宏定义API部分
+ *
+ *
+*/
+
+//错误打印宏定义高级定义技巧
+//第一种方式，具备编译通过的能力，但显示错误
+//#define IHU_ERROR_PRINT_TASK(taskid, arg...)	do{zIhuSysStaPm.taskRunErrCnt[taskid]++;  IhuErrorPrint(##arg);  return IHU_FAILURE;}while(0)	
+//第二种方式，貌似好看些
+#define IHU_ERROR_PRINT_TASK(taskid, ...)	do{zIhuSysStaPm.taskRunErrCnt[taskid]++;  IhuErrorPrint(__VA_ARGS__);  return IHU_FAILURE;}while(0)	
+//都保留着，都是极为有参考意义的宏编写方式
+
+//高级定义，简化程序的可读性
+#define IHU_DEBUG_PRINT_INF		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint
+#define IHU_DEBUG_PRINT_NOR		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_NOR_ON) != FALSE) IhuDebugPrint
+#define IHU_DEBUG_PRINT_IPT		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_IPT_ON) != FALSE) IhuDebugPrint
+#define IHU_DEBUG_PRINT_CRT		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_CRT_ON) != FALSE) IhuDebugPrint
+#define IHU_DEBUG_PRINT_FAT		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE) IhuDebugPrint
+
+
+
+
+
+
+
+
+
+
 
 /*
  *	
+ *	
+ *	
  *  底层L0BSP的函数映射，以便上层在未来更改BSP的时候，可以保持上层应用的不变性
  *  映射到的目标函数命名为L1HD，意味着L1_Hardware_Driver抽象函数
+ *	
+ *	
  *
  */
 
@@ -581,9 +664,20 @@ extern void ihu_timer_routine_handler_10ms(void);
 
 
 
+
+
+
+
 /*
  *	
+ *	
+ *	
+ *	
  *  移植FREERTOS所必须需要的环境
+ *	
+ *	
+ *	
+ *	
  *
  */
 
@@ -682,7 +776,7 @@ extern void ihu_timer_routine_handler_10ms(void);
 	#define OS_TASK_PRIORITY_NORMAL    tskIDLE_PRIORITY + 1
 	#define OS_TASK_PRIORITY_HIGHEST   configMAX_PRIORITIES - 1
 
-	#define OS_MUTEX                SemaphoreHandle_t
+	//#define OS_MUTEX                SemaphoreHandle_t
 	#define OS_MUTEX_TAKEN          pdTRUE
 	#define OS_MUTEX_CREATE_SUCCESS 1
 	#define OS_MUTEX_CREATE_FAILED  0

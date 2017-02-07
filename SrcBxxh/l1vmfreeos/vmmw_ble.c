@@ -182,7 +182,7 @@ OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_official(uint8_t *macAddr, uint8
 		}
 		ihu_usleep(200);
 		if (repeatCnt == 0){
-			zIhuRunErrCnt[TASK_ID_VMFO]++;
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 			IhuErrorPrint("VMMWBLE: BLE detect failure!\n");
 			return IHU_FAILURE;
 		}
@@ -195,7 +195,7 @@ OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_official(uint8_t *macAddr, uint8
 			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWBLE: BLE Version = [%s]!\n", zIhuBspStm32SpsBleRxBuff);
 		}
 	}else{
-		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMMWBLE: BLE inquery version failure!\n");
 		return IHU_FAILURE;
 	}	
@@ -243,7 +243,7 @@ OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_official(uint8_t *macAddr, uint8
 			memcpy(macAddr+5, &res, 1);
 		}
 	}else{
-		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMMWBLE: BLE fetch address failure!\n");
 		return IHU_FAILURE;
 	}
@@ -286,7 +286,7 @@ OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_test_mode(uint8_t *macAddr, uint
 		}
 		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWBLE: Received remote MAC address=[%s]\n", p1);
 	}else{
-		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMMWBLE: BLE fetch address failure!\n");
 		return IHU_FAILURE;		
 	}	
@@ -652,7 +652,7 @@ void ihu_vmmw_blemod_hc05_working_process(void)
         if(func_blemod_uart_send_AT_command((uint8_t*)hc05_nameCMD, (uint8_t*)"OK", 2) == 0)
           if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO：Euqipment has been changed to be [%s]!\n",hc05_name);
         else{
-					zIhuRunErrCnt[TASK_ID_VMFO]++;
+					zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 					IhuErrorPrint("VMMWBLE: change name error!\n");
 					return;					
 				}
@@ -670,7 +670,7 @@ void ihu_vmmw_blemod_hc05_working_process(void)
         if(func_blemod_uart_send_AT_command((uint8_t*)hc05_nameCMD, (uint8_t*)"OK", 2) == 0){
           if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMFO：Euqipment has been changed to be [%s]!\n",hc05_name);
         }else{
-					zIhuRunErrCnt[TASK_ID_VMFO]++;
+					zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 					IhuErrorPrint("VMMWBLE: change name error!\n");
 					return;						
 				}

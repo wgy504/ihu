@@ -92,7 +92,7 @@ OPSTAT fsm_ledpisces_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 
 		snd.length = sizeof(msg_struct_com_init_fb_t);
 		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_LEDPISCES, &snd, snd.length);
 		if (ret == IHU_FAILURE){
-			IhuErrorPrint("LEDPISCES: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_LEDPISCES].taskName, zIhuTaskInfo[src_id].taskName);
+			IhuErrorPrint("LEDPISCES: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_LEDPISCES].taskName, zIhuVmCtrTab.task[src_id].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -110,7 +110,7 @@ OPSTAT fsm_ledpisces_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 
 	}
 
 	//Global Variables
-	zIhuRunErrCnt[TASK_ID_LEDPISCES] = 0;
+	zIhuSysStaPm.taskRunErrCnt[TASK_ID_LEDPISCES] = 0;
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 #else
@@ -119,7 +119,7 @@ OPSTAT fsm_ledpisces_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 
 	
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_LEDPISCES, FSM_STATE_LEDPISCES_ACTIVED) == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_LEDPISCES]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_LEDPISCES]++;
 		IhuErrorPrint("LEDPISCES: Error Set FSM State!\n");
 		return IHU_FAILURE;
 	}
@@ -128,7 +128,7 @@ OPSTAT fsm_ledpisces_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 
 		//启动本地定时器，如果有必要
 		ret = ihu_timer_start(TASK_ID_LEDPISCES, TIMER_ID_1S_LEDPISCES_PERIOD_SCAN, zIhuSysEngPar.timer.ledpiscesPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_LEDPISCES]++;
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_LEDPISCES]++;
 			IhuErrorPrint("LEDPISCES: Error start timer!\n");
 			return IHU_FAILURE;
 		}	
@@ -139,7 +139,7 @@ OPSTAT fsm_ledpisces_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 
 		//TIMER_ID_1S_LEDPISCES_GALOWAG_SCAN，是为扫描方波信号的生成
 		ret = ihu_timer_start(TASK_ID_LEDPISCES, TIMER_ID_1S_LEDPISCES_GALOWAG_SCAN, zIhuSysEngPar.timer.ledpiscesGalowagScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_LEDPISCES]++;
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_LEDPISCES]++;
 			IhuErrorPrint("LEDPISCES: Error start timer!\n");
 			return IHU_FAILURE;
 		}	
@@ -165,14 +165,14 @@ OPSTAT fsm_ledpisces_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UIN
 {	
 	//入参检查
 	if ((param_ptr == NULL) || (dest_id != TASK_ID_LEDPISCES)){
-		zIhuRunErrCnt[TASK_ID_LEDPISCES]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_LEDPISCES]++;
 		IhuErrorPrint("LEDPISCES: Wrong input paramters!\n");
 		return IHU_FAILURE;
 	}
 	
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_LEDPISCES, FSM_STATE_IDLE) == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_LEDPISCES]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_LEDPISCES]++;
 		IhuErrorPrint("LEDPISCES: Error Set FSM State!\n");
 		return IHU_FAILURE;
 	}
@@ -200,21 +200,21 @@ OPSTAT fsm_ledpisces_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UIN
 	memset(&rcv, 0, sizeof(msg_struct_com_time_out_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_com_time_out_t))){
 		IhuErrorPrint("LEDPISCES: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_LEDPISCES]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_LEDPISCES]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
 
-	//钩子在此处，检查zIhuRunErrCnt[TASK_ID_LEDPISCES]是否超限
-	if (zIhuRunErrCnt[TASK_ID_LEDPISCES] > IHU_RUN_ERROR_LEVEL_2_MAJOR){
+	//钩子在此处，检查zIhuSysStaPm.taskRunErrCnt[TASK_ID_LEDPISCES]是否超限
+	if (zIhuSysStaPm.taskRunErrCnt[TASK_ID_LEDPISCES] > IHU_RUN_ERROR_LEVEL_2_MAJOR){
 		//减少重复RESTART的概率
-		zIhuRunErrCnt[TASK_ID_LEDPISCES] = zIhuRunErrCnt[TASK_ID_LEDPISCES] - IHU_RUN_ERROR_LEVEL_2_MAJOR;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_LEDPISCES] = zIhuSysStaPm.taskRunErrCnt[TASK_ID_LEDPISCES] - IHU_RUN_ERROR_LEVEL_2_MAJOR;
 		memset(&snd0, 0, sizeof(msg_struct_com_restart_t));
 		snd0.length = sizeof(msg_struct_com_restart_t);
 		ret = ihu_message_send(MSG_ID_COM_RESTART, TASK_ID_LEDPISCES, TASK_ID_LEDPISCES, &snd0, snd0.length);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_LEDPISCES]++;
-			IhuErrorPrint("LEDPISCES: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_LEDPISCES].taskName, zIhuTaskInfo[TASK_ID_LEDPISCES].taskName);
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_LEDPISCES]++;
+			IhuErrorPrint("LEDPISCES: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_LEDPISCES].taskName, zIhuVmCtrTab.task[TASK_ID_LEDPISCES].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -225,7 +225,7 @@ OPSTAT fsm_ledpisces_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UIN
 		if (FsmGetState(TASK_ID_LEDPISCES) != FSM_STATE_LEDPISCES_ACTIVED){
 			ret = FsmSetState(TASK_ID_LEDPISCES, FSM_STATE_LEDPISCES_ACTIVED);
 			if (ret == IHU_FAILURE){
-				zIhuRunErrCnt[TASK_ID_LEDPISCES]++;
+				zIhuSysStaPm.taskRunErrCnt[TASK_ID_LEDPISCES]++;
 				IhuErrorPrint("LEDPISCES: Error Set FSM State!\n");
 				return IHU_FAILURE;
 			}//FsmSetState
@@ -252,8 +252,8 @@ void func_ledpisces_time_out_period_scan(void)
 	snd.length = sizeof(msg_struct_com_heart_beat_t);
 	ret = ihu_message_send(MSG_ID_COM_HEART_BEAT, TASK_ID_VMFO, TASK_ID_LEDPISCES, &snd, snd.length);
 	if (ret == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_LEDPISCES]++;
-		IhuErrorPrint("LEDPISCES: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_LEDPISCES].taskName, zIhuTaskInfo[TASK_ID_VMFO].taskName);
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_LEDPISCES]++;
+		IhuErrorPrint("LEDPISCES: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_LEDPISCES].taskName, zIhuVmCtrTab.task[TASK_ID_VMFO].taskName);
 		return;
 	}
 	
@@ -293,7 +293,7 @@ OPSTAT ihu_ledpisces_galowag_start(UINT8 galId, UINT32 galDur)
 	//检查参数
 	if ((galId <= GALOWAG_CTRL_ID_MIN || galId >= GALOWAG_CTRL_ID_MAX)){
 		IhuErrorPrint("LEDPISCES: Receive parameter error!\n");
-		zIhuRunErrCnt[TASK_ID_LEDPISCES]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_LEDPISCES]++;
 		return IHU_FAILURE;
 	}	
 	
@@ -309,7 +309,7 @@ OPSTAT ihu_ledpisces_galowag_stop(UINT8 galId)
 	//检查参数
 	if ((galId <= GALOWAG_CTRL_ID_MIN || galId >= GALOWAG_CTRL_ID_MAX)){
 		IhuErrorPrint("LEDPISCES: Receive parameter error!\n");
-		zIhuRunErrCnt[TASK_ID_LEDPISCES]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_LEDPISCES]++;
 		return IHU_FAILURE;
 	}	
 	

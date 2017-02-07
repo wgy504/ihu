@@ -80,7 +80,7 @@ OPSTAT fsm_didocap_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 		snd.length = sizeof(msg_struct_com_init_fb_t);
 		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_DIDOCAP, &snd, snd.length);
 		if (ret == IHU_FAILURE){
-			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DIDOCAP].taskName, zIhuTaskInfo[src_id].taskName);
+			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName, zIhuVmCtrTab.task[src_id].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -98,7 +98,7 @@ OPSTAT fsm_didocap_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 	}
 
 	//Global Variables
-	zIhuRunErrCnt[TASK_ID_DIDOCAP] = 0;
+	zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP] = 0;
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 	memset(&zIhuCclDidocapCtrlTable, 0, sizeof(strIhuCclDidoPar_t));
@@ -109,7 +109,7 @@ OPSTAT fsm_didocap_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 	
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_DIDOCAP, FSM_STATE_DIDOCAP_ACTIVED) == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
 		IhuErrorPrint("DIDOCAP: Error Set FSM State!\n");
 		return IHU_FAILURE;
 	}
@@ -118,7 +118,7 @@ OPSTAT fsm_didocap_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 		//启动喂狗定时器
 		ret = ihu_timer_start(TASK_ID_DIDOCAP, TIMER_ID_1S_DIDOCAP_PERIOD_SCAN, zIhuSysEngPar.timer.didocapPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
 			IhuErrorPrint("DIDOCAP: Error start timer!\n");
 			return IHU_FAILURE;
 		}	
@@ -128,7 +128,7 @@ OPSTAT fsm_didocap_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 	//启动永恒的外部触发扫描
 	ret = ihu_timer_start(TASK_ID_DIDOCAP, TIMER_ID_1S_CCL_DIDO_TRIGGER_PERIOD_SCAN, zIhuSysEngPar.timer.cclDidoTriggerPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 	if (ret == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
 		IhuErrorPrint("DIDOCAP: Error start timer!\n");
 		return IHU_FAILURE;
 	}
@@ -155,14 +155,14 @@ OPSTAT fsm_didocap_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 {	
 	//入参检查
 	if ((param_ptr == NULL) || (dest_id != TASK_ID_DIDOCAP)){
-		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
 		IhuErrorPrint("DIDOCAP: Wrong input paramters!\n");
 		return IHU_FAILURE;
 	}
 	
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_DIDOCAP, FSM_STATE_IDLE) == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
 		IhuErrorPrint("DIDOCAP: Error Set FSM State!\n");
 		return IHU_FAILURE;
 	}
@@ -188,21 +188,21 @@ OPSTAT fsm_didocap_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 	memset(&rcv, 0, sizeof(msg_struct_com_time_out_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_com_time_out_t))){
 		IhuErrorPrint("DIDOCAP: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
 
-	//钩子在此处，检查zIhuRunErrCnt[TASK_ID_DIDOCAP]是否超限
-	if (zIhuRunErrCnt[TASK_ID_DIDOCAP] > IHU_RUN_ERROR_LEVEL_2_MAJOR){
+	//钩子在此处，检查zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]是否超限
+	if (zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP] > IHU_RUN_ERROR_LEVEL_2_MAJOR){
 		//减少重复RESTART的概率
-		zIhuRunErrCnt[TASK_ID_DIDOCAP] = zIhuRunErrCnt[TASK_ID_DIDOCAP] - IHU_RUN_ERROR_LEVEL_2_MAJOR;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP] = zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP] - IHU_RUN_ERROR_LEVEL_2_MAJOR;
 		memset(&snd0, 0, sizeof(msg_struct_com_restart_t));
 		snd0.length = sizeof(msg_struct_com_restart_t);
 		ret = ihu_message_send(MSG_ID_COM_RESTART, TASK_ID_DIDOCAP, TASK_ID_DIDOCAP, &snd0, snd0.length);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
-			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DIDOCAP].taskName, zIhuTaskInfo[TASK_ID_DIDOCAP].taskName);
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
+			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName, zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -213,7 +213,7 @@ OPSTAT fsm_didocap_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 		if (FsmGetState(TASK_ID_DIDOCAP) != FSM_STATE_DIDOCAP_ACTIVED){
 			ret = FsmSetState(TASK_ID_DIDOCAP, FSM_STATE_DIDOCAP_ACTIVED);
 			if (ret == IHU_FAILURE){
-				zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+				zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
 				IhuErrorPrint("DIDOCAP: Error Set FSM State!\n");
 				return IHU_FAILURE;
 			}//FsmSetState
@@ -242,7 +242,7 @@ OPSTAT fsm_didocap_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 	
 	//其实是此时的定时器由于状态推移的原因被推掉了，不是真正出错
 	else{
-//		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+//		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
 //		IhuErrorPrint("DIDOCAP: Received wrong Timer ID!\n");
 //		return IHU_FAILURE;		
 	}	
@@ -261,8 +261,8 @@ void func_didocap_time_out_period_scan(void)
 	snd.length = sizeof(msg_struct_com_heart_beat_t);
 	ret = ihu_message_send(MSG_ID_COM_HEART_BEAT, TASK_ID_VMFO, TASK_ID_DIDOCAP, &snd, snd.length);
 	if (ret == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
-		IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DIDOCAP].taskName, zIhuTaskInfo[TASK_ID_VMFO].taskName);
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
+		IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName, zIhuVmCtrTab.task[TASK_ID_VMFO].taskName);
 		return ;
 	}
 	
@@ -289,8 +289,8 @@ void func_didocap_time_out_sleep_mode_external_trigger_period_scan(void)
 		zIhuCclDidocapCtrlTable.sensor.lockiTriggerState[snd0.lockid] = IHU_CCL_SENSOR_STATE_ACTIVE;
 		ret = ihu_message_send(MSG_ID_DIDO_CCL_EVENT_LOCK_TRIGGER, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd0, snd0.length);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
-			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DIDOCAP].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
+			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName, zIhuVmCtrTab.task[TASK_ID_CCL].taskName);
 			return ;
 		}
 	}
@@ -307,8 +307,8 @@ void func_didocap_time_out_sleep_mode_external_trigger_period_scan(void)
 		zIhuCclDidocapCtrlTable.sensor.shakeState = IHU_CCL_SENSOR_STATE_ACTIVE;
 		ret = ihu_message_send(MSG_ID_DIDO_CCL_EVENT_LOCK_TRIGGER, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd1, snd1.length);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
-			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DIDOCAP].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
+			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName, zIhuVmCtrTab.task[TASK_ID_CCL].taskName);
 			return ;
 		}		
 	}
@@ -326,8 +326,8 @@ void func_didocap_time_out_sleep_mode_external_trigger_period_scan(void)
 		snd2.length = sizeof(msg_struct_dido_ccl_event_fault_trigger_t);
 		ret = ihu_message_send(MSG_ID_DIDO_CCL_EVENT_FAULT_TRIGGER, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd2, snd2.length);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
-			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DIDOCAP].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
+			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName, zIhuVmCtrTab.task[TASK_ID_CCL].taskName);
 			return ;
 		}
 	}
@@ -351,8 +351,8 @@ void func_didocap_time_out_sleep_mode_external_trigger_period_scan(void)
 		snd3.length = sizeof(msg_struct_dido_ccl_event_fault_trigger_t);
 		ret = ihu_message_send(MSG_ID_DIDO_CCL_EVENT_FAULT_TRIGGER, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd3, snd3.length);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
-			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DIDOCAP].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
+			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName, zIhuVmCtrTab.task[TASK_ID_CCL].taskName);
 			return ;
 		}
 	}
@@ -375,8 +375,8 @@ void func_didocap_time_out_work_mode_period_scan(void)
 			snd1.length = sizeof(msg_struct_dido_ccl_door_open_event_t);
 			ret = ihu_message_send(MSG_ID_DIDO_CCL_DOOR_OPEN_EVENT, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd1, snd1.length);
 			if (ret == IHU_FAILURE){
-				zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
-				IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DIDOCAP].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
+				zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
+				IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName, zIhuVmCtrTab.task[TASK_ID_CCL].taskName);
 				return ;
 			}
 		}		
@@ -394,8 +394,8 @@ void func_didocap_time_out_work_mode_period_scan(void)
 			snd2.length = sizeof(msg_struct_dido_ccl_lock_c_door_c_event_t);
 			ret = ihu_message_send(MSG_ID_DIDO_CCL_LOCK_C_DOOR_C_EVENT, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd2, snd2.length);
 			if (ret == IHU_FAILURE){
-				zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
-				IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DIDOCAP].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
+				zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
+				IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName, zIhuVmCtrTab.task[TASK_ID_CCL].taskName);
 				return ;
 			}
 		}
@@ -411,8 +411,8 @@ void func_didocap_time_out_work_mode_period_scan(void)
 		snd3.cmdid = IHU_CCL_DH_CMDID_EVENT_IND_LOCK_TRIGGER;
 		ret = ihu_message_send(MSG_ID_DIDO_CCL_EVENT_STATUS_UPDATE, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd3, snd3.length);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
-			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DIDOCAP].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
+			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName, zIhuVmCtrTab.task[TASK_ID_CCL].taskName);
 			return ;
 		}		
 	}
@@ -428,8 +428,8 @@ void func_didocap_time_out_work_mode_period_scan(void)
 		snd4.cmdid = IHU_CCL_DH_CMDID_EVENT_IND_LOCK_O_TO_C;
 		ret = ihu_message_send(MSG_ID_DIDO_CCL_EVENT_STATUS_UPDATE, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd4, snd4.length);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
-			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DIDOCAP].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
+			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName, zIhuVmCtrTab.task[TASK_ID_CCL].taskName);
 			return ;
 		}
 	}
@@ -450,7 +450,7 @@ OPSTAT fsm_didocap_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * par
 	memset(&rcv, 0, sizeof(msg_struct_ccl_com_sensor_status_req_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_com_sensor_status_req_t))){
 		IhuErrorPrint("DIDOCAP: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
@@ -458,7 +458,7 @@ OPSTAT fsm_didocap_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * par
 	//入参检查
 	if (rcv.cmdid != IHU_CCL_DH_CMDID_REQ_STATUS_DIDO){
 		IhuErrorPrint("DIDOCAP: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
 		return IHU_FAILURE;
 	}
 	
@@ -482,8 +482,8 @@ OPSTAT fsm_didocap_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * par
 	snd.length = sizeof(msg_struct_dido_ccl_sensor_status_rep_t);
 	ret = ihu_message_send(MSG_ID_DIDO_CCL_SENSOR_STATUS_RESP, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd, snd.length);
 	if (ret == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
-		IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DIDOCAP].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
+		IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName, zIhuVmCtrTab.task[TASK_ID_CCL].taskName);
 		return IHU_FAILURE;
 	}
 			
@@ -502,7 +502,7 @@ OPSTAT fsm_didocap_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 	memset(&rcv, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_com_ctrl_cmd_t))){
 		IhuErrorPrint("DIDOCAP: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
@@ -513,7 +513,7 @@ OPSTAT fsm_didocap_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 		//启动工作扫描定时器
 		ret = ihu_timer_start(TASK_ID_DIDOCAP, TIMER_ID_1S_CCL_DIDO_WORKING_PERIOD_SCAN, zIhuSysEngPar.timer.cclDidoWorkingPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
 			IhuErrorPrint("DIDOCAP: Error start timer!\n");
 			return IHU_FAILURE;
 		}
@@ -525,7 +525,7 @@ OPSTAT fsm_didocap_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 		//停止工作定时器
 		ret = ihu_timer_stop(TASK_ID_DIDOCAP, TIMER_ID_1S_CCL_DIDO_WORKING_PERIOD_SCAN, TIMER_RESOLUTION_1S);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
 			IhuErrorPrint("DIDOCAP: Error start timer!\n");
 			return IHU_FAILURE;
 		}
@@ -538,7 +538,7 @@ OPSTAT fsm_didocap_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 		//启动工作扫描定时器
 		ret = ihu_timer_start(TASK_ID_DIDOCAP, TIMER_ID_1S_CCL_DIDO_WORKING_PERIOD_SCAN, zIhuSysEngPar.timer.cclDidoWorkingPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
 			IhuErrorPrint("DIDOCAP: Error start timer!\n");
 			return IHU_FAILURE;
 		}	
@@ -566,13 +566,13 @@ OPSTAT fsm_didocap_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 		}
 		else{
 		IhuErrorPrint("DIDOCAP: Receive message error on cmdid!\n");
-		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
 		return IHU_FAILURE;				
 		}
 	}
 	else{
 		IhuErrorPrint("DIDOCAP: Receive message error on workmode!\n");
-		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
 		return IHU_FAILURE;		
 	}
 	

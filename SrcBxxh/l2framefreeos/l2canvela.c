@@ -17,7 +17,7 @@
 /*
 ** FSM of the CANVELA
 */
-FsmStateItem_t IhuFsmCanvela[] =
+IhuFsmStateItem_t IhuFsmCanvela[] =
 {
   //MessageId                 						//State                   		 							//Function
 	//启始点，固定定义，不要改动, 使用ENTRY/END，意味者MSGID肯定不可能在某个高位区段中；考虑到所有任务共享MsgId，即使分段，也无法实现
@@ -97,7 +97,7 @@ OPSTAT fsm_canvela_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 		snd.length = sizeof(msg_struct_com_init_fb_t);
 		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_CANVELA, &snd, snd.length);
 		if (ret == IHU_FAILURE){
-			IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_CANVELA].taskName, zIhuTaskInfo[src_id].taskName);
+			IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName, zIhuVmCtrTab.task[src_id].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -115,7 +115,7 @@ OPSTAT fsm_canvela_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 	}
 
 	//Global Variables
-	zIhuRunErrCnt[TASK_ID_CANVELA] = 0;
+	zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA] = 0;
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 #else
@@ -124,7 +124,7 @@ OPSTAT fsm_canvela_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 	
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_CANVELA, FSM_STATE_CANVELA_ACTIVED) == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 		IhuErrorPrint("CANVELA: Error Set FSM State!\n");
 		return IHU_FAILURE;
 	}
@@ -133,7 +133,7 @@ OPSTAT fsm_canvela_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 		//测试性启动周期性定时器
 		ret = ihu_timer_start(TASK_ID_CANVELA, TIMER_ID_1S_CANVELA_PERIOD_SCAN, zIhuSysEngPar.timer.canvelaPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_CANVELA]++;
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 			IhuErrorPrint("CANVELA: Error start timer!\n");
 			return IHU_FAILURE;
 		}	
@@ -151,7 +151,7 @@ OPSTAT fsm_canvela_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 //	snd1.length = sizeof(msg_struct_canvela_l3bfsc_init_req_t);
 //	ret = ihu_message_send(MSG_ID_CAN_L3BFSC_INIT_REQ, TASK_ID_BFSC, TASK_ID_CANVELA, &snd1, snd1.length);
 //	if (ret == IHU_FAILURE){
-//		IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_CANVELA].taskName, zIhuTaskInfo[TASK_ID_BFSC].taskName);
+//		IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName, zIhuVmCtrTab.task[TASK_ID_BFSC].taskName);
 //		return IHU_FAILURE;
 //	}
 #endif
@@ -172,14 +172,14 @@ OPSTAT fsm_canvela_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 {	
 	//入参检查
 	if ((param_ptr == NULL) || (dest_id != TASK_ID_CANVELA)){
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 		IhuErrorPrint("CANVELA: Wrong input paramters!\n");
 		return IHU_FAILURE;
 	}
 	
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_CANVELA, FSM_STATE_IDLE) == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 		IhuErrorPrint("CANVELA: Error Set FSM State!\n");
 		return IHU_FAILURE;
 	}
@@ -206,21 +206,21 @@ OPSTAT fsm_canvela_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 	memset(&rcv, 0, sizeof(msg_struct_com_time_out_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_com_time_out_t))){
 		IhuErrorPrint("CANVELA: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
 
-	//钩子在此处，检查zIhuRunErrCnt[TASK_ID_CANVELA]是否超限
-	if (zIhuRunErrCnt[TASK_ID_CANVELA] > IHU_RUN_ERROR_LEVEL_2_MAJOR){
+	//钩子在此处，检查zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]是否超限
+	if (zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA] > IHU_RUN_ERROR_LEVEL_2_MAJOR){
 		//减少重复RESTART的概率
-		zIhuRunErrCnt[TASK_ID_CANVELA] = zIhuRunErrCnt[TASK_ID_CANVELA] - IHU_RUN_ERROR_LEVEL_2_MAJOR;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA] = zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA] - IHU_RUN_ERROR_LEVEL_2_MAJOR;
 		memset(&snd0, 0, sizeof(msg_struct_com_restart_t));
 		snd0.length = sizeof(msg_struct_com_restart_t);
 		ret = ihu_message_send(MSG_ID_COM_RESTART, TASK_ID_CANVELA, TASK_ID_CANVELA, &snd0, snd0.length);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_CANVELA]++;
-			IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_CANVELA].taskName, zIhuTaskInfo[TASK_ID_CANVELA].taskName);
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
+			IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName, zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -231,7 +231,7 @@ OPSTAT fsm_canvela_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 		if (FsmGetState(TASK_ID_CANVELA) != FSM_STATE_CANVELA_ACTIVED){
 			ret = FsmSetState(TASK_ID_CANVELA, FSM_STATE_CANVELA_ACTIVED);
 			if (ret == IHU_FAILURE){
-				zIhuRunErrCnt[TASK_ID_CANVELA]++;
+				zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 				IhuErrorPrint("CANVELA: Error Set FSM State!\n");
 				return IHU_FAILURE;
 			}//FsmSetState
@@ -252,8 +252,8 @@ void func_canvela_time_out_period_scan(void)
 	snd.length = sizeof(msg_struct_com_heart_beat_t);
 	ret = ihu_message_send(MSG_ID_COM_HEART_BEAT, TASK_ID_VMFO, TASK_ID_CANVELA, &snd, snd.length);
 	if (ret == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
-		IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_CANVELA].taskName, zIhuTaskInfo[TASK_ID_VMFO].taskName);
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
+		IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName, zIhuVmCtrTab.task[TASK_ID_VMFO].taskName);
 		return;
 	}
 	
@@ -272,7 +272,7 @@ OPSTAT fsm_canvela_l3bfsc_init_resp(UINT8 dest_id, UINT8 src_id, void * param_pt
 	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_canvela_init_resp_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_canvela_init_resp_t))){
 		IhuErrorPrint("CANVELA: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
@@ -283,7 +283,7 @@ OPSTAT fsm_canvela_l3bfsc_init_resp(UINT8 dest_id, UINT8 src_id, void * param_pt
 	ret = func_canvela_frame_encode(IHU_CANVELA_PREFIXH_node_resp, IHU_CANVELA_OPTID_node_set, 0, 0, &snd);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CANVELA: Encode CAN L2FRAME error!\n");
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 		return IHU_FAILURE;		
 	}
 	
@@ -308,7 +308,7 @@ OPSTAT fsm_canvela_l3bfsc_new_ws_event(UINT8 dest_id, UINT8 src_id, void * param
 	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_canvela_new_ws_event_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_canvela_new_ws_event_t))){
 		IhuErrorPrint("CANVELA: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
@@ -319,7 +319,7 @@ OPSTAT fsm_canvela_l3bfsc_new_ws_event(UINT8 dest_id, UINT8 src_id, void * param
 	ret = func_canvela_frame_encode(IHU_CANVELA_PREFIXH_ws_resp, IHU_CANVELA_OPTID_wegith_read, 0, rcv.wsValue, &snd);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CANVELA: Encode CAN L2FRAME error!\n");
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 		return IHU_FAILURE;		
 	}
 	
@@ -343,7 +343,7 @@ OPSTAT fsm_canvela_l3bfsc_roll_out_resp(UINT8 dest_id, UINT8 src_id, void * para
 	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_canvela_roll_out_resp_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_canvela_roll_out_resp_t))){
 		IhuErrorPrint("CANVELA: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
@@ -354,7 +354,7 @@ OPSTAT fsm_canvela_l3bfsc_roll_out_resp(UINT8 dest_id, UINT8 src_id, void * para
 	ret = func_canvela_frame_encode(IHU_CANVELA_PREFIXH_node_resp, IHU_CANVELA_OPTID_material_out_normal, 0, 0, &snd);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CANVELA: Encode CAN L2FRAME error!\n");
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 		return IHU_FAILURE;
 	}
 	
@@ -375,7 +375,7 @@ OPSTAT fsm_canvela_l3bfsc_give_up_resp(UINT8 dest_id, UINT8 src_id, void * param
 	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_canvela_give_up_resp_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_canvela_give_up_resp_t))){
 		IhuErrorPrint("CANVELA: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
@@ -386,7 +386,7 @@ OPSTAT fsm_canvela_l3bfsc_give_up_resp(UINT8 dest_id, UINT8 src_id, void * param
 	ret = func_canvela_frame_encode(IHU_CANVELA_PREFIXH_node_resp, IHU_CANVELA_OPTID_material_give_up, 0, 0, &snd);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CANVELA: Encode CAN L2FRAME error!\n");
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 		return IHU_FAILURE;
 	}
 	
@@ -407,7 +407,7 @@ OPSTAT fsm_canvela_l3bfsc_error_status_report(UINT8 dest_id, UINT8 src_id, void 
 	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_canvela_error_status_report_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_canvela_error_status_report_t))){
 		IhuErrorPrint("CANVELA: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
@@ -419,7 +419,7 @@ OPSTAT fsm_canvela_l3bfsc_error_status_report(UINT8 dest_id, UINT8 src_id, void 
 	ret = func_canvela_frame_encode(IHU_CANVELA_PREFIXH_node_resp, IHU_CANVELA_OPTID_error_status, 0, rcv.errId, &snd);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CANVELA: Encode CAN L2FRAME error!\n");
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 		return IHU_FAILURE;
 	}
 	
@@ -440,7 +440,7 @@ OPSTAT fsm_canvela_l3bfsc_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr
 	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_canvela_cmd_resp_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_canvela_cmd_resp_t))){
 		IhuErrorPrint("CANVELA: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
@@ -450,7 +450,7 @@ OPSTAT fsm_canvela_l3bfsc_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr
 		(rcv.cmd.prefixcmdid != IHU_CANVELA_PREFIXH_motor_resp) && (rcv.cmd.prefixcmdid != IHU_CANVELA_PREFIXH_node_resp)))
 	{
 		IhuErrorPrint("CANVELA: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 		return IHU_FAILURE;
 	}		
 	
@@ -461,7 +461,7 @@ OPSTAT fsm_canvela_l3bfsc_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr
 	ret = func_canvela_frame_encode(rcv.cmd.prefixcmdid, rcv.cmd.optid, rcv.cmd.optpar, rcv.cmd.modbusVal, &snd);
 	if (ret == IHU_FAILURE){
 		IhuErrorPrint("CANVELA: Encode CAN L2FRAME error!\n");
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 		return IHU_FAILURE;
 	}
 	
@@ -490,7 +490,7 @@ OPSTAT fsm_canvela_bfsc_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void *param_ptr
 	if( msg_len != (param_len - MAX_WMC_CONTROL_MSG_HEADER_LEN))
 	{
 			IhuErrorPrint("CANVELA: fsm_canvela_bfsc_l2frame_rcv: msg_len(%d) != param_len (%d)\n", msg_len, (param_len - MAX_WMC_CONTROL_MSG_HEADER_LEN));
-			zIhuRunErrCnt[TASK_ID_CANVELA]++;
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 			return IHU_FAILURE;
 	}
 	
@@ -498,7 +498,7 @@ OPSTAT fsm_canvela_bfsc_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void *param_ptr
 	if(IHU_FAILURE == WmcAwsMsgCheck(pMsgInnerHeader, msg_len))
 	{
 			IhuErrorPrint("CANVELA: fsm_canvela_bfsc_l2frame_rcv, msg check failure, return!\n");
-			zIhuRunErrCnt[TASK_ID_CANVELA]++;
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 			return IHU_FAILURE;
 	}
 
@@ -514,8 +514,8 @@ OPSTAT fsm_canvela_bfsc_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void *param_ptr
 	
 //	ret = ihu_message_send(MSG_ID_CAN_L3BFSC_CMD_CTRL, TASK_ID_BFSC, TASK_ID_CANVELA, &snd, snd.length);
 //	if (ret == IHU_FAILURE){
-//		zIhuRunErrCnt[TASK_ID_CANVELA]++;
-//		IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_CANVELA].taskName, zIhuTaskInfo[TASK_ID_BFSC].taskName);
+//		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
+//		IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName, zIhuVmCtrTab.task[TASK_ID_BFSC].taskName);
 //		return IHU_FAILURE;
 //	}	
 	/* ==================== TODO ==================*/
@@ -527,8 +527,8 @@ OPSTAT fsm_canvela_bfsc_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void *param_ptr
 	/* REMOVE THE CAN HEADER */
 	ret = ihu_message_send(msg_id, TASK_ID_BFSC, TASK_ID_CANVELA, (void *)pMsgInnerHeader, msg_len);
 	if (ret == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
-		IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_CANVELA].taskName, zIhuTaskInfo[TASK_ID_BFSC].taskName);
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
+		IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName, zIhuVmCtrTab.task[TASK_ID_BFSC].taskName);
 		return IHU_FAILURE;
 	}
 	
@@ -542,7 +542,7 @@ OPSTAT func_canvela_frame_encode(UINT8 prefixcmdid, UINT8 optid, UINT8 optpar, U
 {
 	//先检查输入参数
 	if ((optid <= IHU_CANVELA_OPTID_min) || (optid >= IHU_CANVELA_OPTID_max) || (pframe == NULL)){
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 		IhuErrorPrint("CANVELA: Input parameters error!\n");
 		return IHU_FAILURE;
 	}
@@ -620,7 +620,7 @@ OPSTAT func_canvela_frame_encode(UINT8 prefixcmdid, UINT8 optid, UINT8 optpar, U
 	break;
 	
 	default:
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 		IhuErrorPrint("CANVELA: Input parameters error!\n");
 		return IHU_FAILURE;
 		//break;
@@ -635,21 +635,21 @@ OPSTAT func_canvela_frame_decode(strIhuCanvelaCmdFrame_t *pframe, UINT8 prefixcm
 {
 	//入参检查
 	if (pframe == NULL){
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 		IhuErrorPrint("CANVELA: Input parameters error!\n");
 		return IHU_FAILURE;
 	}
 
 	//检查最重要的参数
 	if ((pframe->bfscCmdPrefixH <= IHU_CANVELA_PREFIXH_min) || (pframe->bfscCmdPrefixH >= IHU_CANVELA_PREFIXH_max) || (pframe->bfscCmdPrefixL != IHU_CANVELA_CMD_PREFIXL) || (pframe->bfscCmdId != IHU_CANVELA_CMD_BFSC_ID)){
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 		IhuErrorPrint("CANVELA: Frame header error!\n");
 		return IHU_FAILURE;
 	}
 	prefixcmdid = pframe->bfscCmdId;
 	optid = pframe->bfscOptId;
 	if ((optid <=IHU_CANVELA_OPTID_min) || (optid >=IHU_CANVELA_OPTID_max)){
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 		IhuErrorPrint("CANVELA: Encoding Canitf frame OptId error!\n");
 		return IHU_FAILURE;
 	}
@@ -705,7 +705,7 @@ OPSTAT func_canvela_frame_decode(strIhuCanvelaCmdFrame_t *pframe, UINT8 prefixcm
 		//do nothing
 		break;
 	default:
-		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 		IhuErrorPrint("CANVELA: Input parameters error!\n");
 		return IHU_FAILURE;
 		//break;
@@ -844,7 +844,7 @@ OPSTAT fsm_canvela_bfsc_l2frame_snd(UINT8 dest_id, UINT8 src_id, void * param_pt
 //	ret = func_canvela_frame_encode(IHU_CANVELA_PREFIXH_node_resp, IHU_CANVELA_OPTID_node_set, 0, 0, &snd);
 //	if (ret == IHU_FAILURE){
 //		IhuErrorPrint("CANVELA: Encode CAN L2FRAME error!\n");
-//		zIhuRunErrCnt[TASK_ID_CANVELA]++;
+//		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 //		return IHU_FAILURE;		
 //	}
 	

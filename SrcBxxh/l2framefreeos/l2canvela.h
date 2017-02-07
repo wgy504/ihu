@@ -53,7 +53,7 @@ enum FSM_STATE_CANVELA
 
 
 //Global variables
-extern FsmStateItem_t IhuFsmCanvela[];
+extern IhuFsmStateItem_t IhuFsmCanvela[];
 
 //API
 extern OPSTAT fsm_canvela_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);

@@ -42,7 +42,7 @@ void func_rfidmod_send_string(char* s);
 #define func_rfidmod_send_LR() func_rfidmod_send_string("\r\n");
 
 //高级定义，简化程序的可读性
-#define IHU_ERROR_PRINT_RFIDMOD	zIhuRunErrCnt[TASK_ID_VMFO]++; IhuErrorPrint
+#define IHU_ERROR_PRINT_RFIDMOD	zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++; IhuErrorPrint
 
 
 

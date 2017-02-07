@@ -75,7 +75,7 @@ uint8_t func_blemod_uart_hc05_link_remote_device(void);
 //                                       }while(0)
 
 //高级定义，简化程序的可读性
-#define IHU_ERROR_PRINT_BLEMOD	zIhuRunErrCnt[TASK_ID_VMFO]++; IhuErrorPrint
+#define IHU_ERROR_PRINT_BLEMOD	zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++; IhuErrorPrint
 
 
 #endif /* L1FREERTOS_MOD_BLE_H_ */

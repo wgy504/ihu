@@ -71,7 +71,7 @@ OPSTAT fsm_vmfo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 //		snd.length = sizeof(msg_struct_com_init_fb_t);
 //		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_VMFO, &snd, snd.length);
 //		if (ret == IHU_FAILURE){
-//			IhuErrorPrint("VMFO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_VMFO].taskName, zIhuTaskInfo[src_id].taskName);
+//			IhuErrorPrint("VMFO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_VMFO].taskName, zIhuVmCtrTab.task[src_id].taskName);
 //			return IHU_FAILURE;
 //		}
 	}
@@ -89,7 +89,7 @@ OPSTAT fsm_vmfo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 	}
 
 	//Global Variables
-	zIhuRunErrCnt[TASK_ID_VMFO] = 0;
+	zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO] = 0;
 	memset(zIhuVmfoTaskInitCtrlInfo, 0, (sizeof(IhuVmfoTaskInitCtrlInfo_t) * MAX_TASK_NUM_IN_ONE_IHU));
 
 	//固定任务
@@ -99,7 +99,7 @@ OPSTAT fsm_vmfo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 	zIhuVmfoTaskInitCtrlInfo[TASK_ID_TIMER].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
 	//变动任务
 	for (i=TASK_ID_TIMER+1; i < TASK_ID_MAX; i++){
-		if (zIhuTaskInfo[i].pnpState == IHU_TASK_PNP_ON){			
+		if (zIhuVmCtrTab.task[i].pnpState == IHU_TASK_PNP_ON){			
 			zIhuVmfoTaskInitCtrlInfo[i].active = IHU_VMFO_TASK_ACTIVE;
 			zIhuVmfoTaskInitCtrlInfo[i].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
 		}
@@ -109,7 +109,7 @@ OPSTAT fsm_vmfo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 	
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_VMFO, FSM_STATE_VMFO_ACTIVED) == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Error Set FSM State!\n");
 		return IHU_FAILURE;
 	}
@@ -118,7 +118,7 @@ OPSTAT fsm_vmfo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 	//测试性启动周期性定时器
 	ret = ihu_timer_start(TASK_ID_VMFO, TIMER_ID_1S_VMFO_PERIOD_SCAN, zIhuSysEngPar.timer.vmfoPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 	if (ret == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Error start timer!\n");
 		return IHU_FAILURE;
 	}	
@@ -146,14 +146,14 @@ OPSTAT fsm_vmfo_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 {	
 	//入参检查
 	if ((param_ptr == NULL) || (dest_id != TASK_ID_VMFO)){
-		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Wrong input paramters!\n");
 		return IHU_FAILURE;
 	}
 	
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_VMFO, FSM_STATE_IDLE) == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Error Set FSM State!\n");
 		return IHU_FAILURE;
 	}
@@ -179,21 +179,21 @@ OPSTAT fsm_vmfo_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 	memset(&rcv, 0, sizeof(msg_struct_com_time_out_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_com_time_out_t))){
 		IhuErrorPrint("VMFO: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
 
-	//钩子在此处，检查zIhuRunErrCnt[TASK_ID_VMFO]是否超限
-	if (zIhuRunErrCnt[TASK_ID_VMFO] > IHU_RUN_ERROR_LEVEL_2_MAJOR){
+	//钩子在此处，检查zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]是否超限
+	if (zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO] > IHU_RUN_ERROR_LEVEL_2_MAJOR){
 		//减少重复RESTART的概率
-		zIhuRunErrCnt[TASK_ID_VMFO] = zIhuRunErrCnt[TASK_ID_VMFO] - IHU_RUN_ERROR_LEVEL_2_MAJOR;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO] = zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO] - IHU_RUN_ERROR_LEVEL_2_MAJOR;
 		memset(&snd0, 0, sizeof(msg_struct_com_restart_t));
 		snd0.length = sizeof(msg_struct_com_restart_t);
 		ret = ihu_message_send(MSG_ID_COM_RESTART, TASK_ID_VMFO, TASK_ID_VMFO, &snd0, snd0.length);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_VMFO]++;
-			IhuErrorPrint("VMFO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_VMFO].taskName, zIhuTaskInfo[TASK_ID_VMFO].taskName);
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
+			IhuErrorPrint("VMFO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_VMFO].taskName, zIhuVmCtrTab.task[TASK_ID_VMFO].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -204,7 +204,7 @@ OPSTAT fsm_vmfo_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 		if (FsmGetState(TASK_ID_VMFO) != FSM_STATE_VMFO_ACTIVED){
 			ret = FsmSetState(TASK_ID_VMFO, FSM_STATE_VMFO_ACTIVED);
 			if (ret == IHU_FAILURE){
-				zIhuRunErrCnt[TASK_ID_VMFO]++;
+				zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 				IhuErrorPrint("VMFO: Error Set FSM State!\n");
 				return IHU_FAILURE;
 			}//FsmSetState
@@ -225,12 +225,12 @@ OPSTAT fsm_vmfo_init_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 	memset(&rcv, 0, sizeof(msg_struct_com_init_fb_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_com_init_fb_t))){
 		IhuErrorPrint("VMFO: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
 	
-	//IhuDebugPrint("VMFO: Init received, srcId = %d, %s\n", src_id, zIhuTaskInfo[src_id].taskName);
+	//IhuDebugPrint("VMFO: Init received, srcId = %d, %s\n", src_id, zIhuVmCtrTab.task[src_id].taskName);
 
 	//存入到反馈表中
 	zIhuVmfoTaskInitCtrlInfo[src_id].state = IHU_VMFO_TASK_INIT_FEEDBACK;	
@@ -266,7 +266,7 @@ OPSTAT fsm_vmfo_heart_beat(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16
 	memset(&rcv, 0, sizeof(msg_struct_com_heart_beat_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_com_heart_beat_t))){
 		IhuErrorPrint("VMFO: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_VMFO]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
@@ -283,7 +283,7 @@ BOOL func_vmfo_init_caculate_all_fb(void)
 {
 	int i=0;
 	for(i=0;i<MAX_TASK_NUM_IN_ONE_IHU;i++){
-		if ((zIhuTaskInfo[i].pnpState == IHU_TASK_PNP_ON) && (zIhuVmfoTaskInitCtrlInfo[i].active == IHU_VMFO_TASK_ACTIVE) && (zIhuVmfoTaskInitCtrlInfo[i].state == IHU_VMFO_TASK_INIT_WAIT_FOR_BACK)){
+		if ((zIhuVmCtrTab.task[i].pnpState == IHU_TASK_PNP_ON) && (zIhuVmfoTaskInitCtrlInfo[i].active == IHU_VMFO_TASK_ACTIVE) && (zIhuVmfoTaskInitCtrlInfo[i].state == IHU_VMFO_TASK_INIT_WAIT_FOR_BACK)){
 			return FALSE;
 		}
 	}
@@ -299,7 +299,7 @@ BOOL func_vmfo_heart_caculate_all_received(void)
 	if (IHU_VMFO_TASK_HEART_BEAT_CHOICE == IHU_VMFO_TASK_HEART_BEAT_ALL){
 		for(i=0;i<MAX_TASK_NUM_IN_ONE_IHU;i++){
 			if ((i != TASK_ID_VMFO) && (i != TASK_ID_TIMER)){
-				if ((zIhuTaskInfo[i].pnpState == IHU_TASK_PNP_ON) && (zIhuVmfoTaskInitCtrlInfo[i].active == IHU_VMFO_TASK_ACTIVE) && (zIhuVmfoTaskInitCtrlInfo[i].heart != IHU_VMFO_TASK_HEART_RECEIVED)){
+				if ((zIhuVmCtrTab.task[i].pnpState == IHU_TASK_PNP_ON) && (zIhuVmfoTaskInitCtrlInfo[i].active == IHU_VMFO_TASK_ACTIVE) && (zIhuVmfoTaskInitCtrlInfo[i].heart != IHU_VMFO_TASK_HEART_RECEIVED)){
 					return FALSE;
 				}
 			}		

@@ -79,7 +79,7 @@ OPSTAT fsm_dcmiaris_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 		snd.length = sizeof(msg_struct_com_init_fb_t);
 		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_DCMIARIS, &snd, snd.length);
 		if (ret == IHU_FAILURE){
-			IhuErrorPrint("DCMIARIS: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DCMIARIS].taskName, zIhuTaskInfo[src_id].taskName);
+			IhuErrorPrint("DCMIARIS: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_DCMIARIS].taskName, zIhuVmCtrTab.task[src_id].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -97,7 +97,7 @@ OPSTAT fsm_dcmiaris_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 	}
 
 	//Global Variables
-	zIhuRunErrCnt[TASK_ID_DCMIARIS] = 0;
+	zIhuSysStaPm.taskRunErrCnt[TASK_ID_DCMIARIS] = 0;
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 	memset(&zIhuCclDcmiarisCtrlTable, 0, sizeof(strIhuCclDcmiPar_t));
@@ -109,7 +109,7 @@ OPSTAT fsm_dcmiaris_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_DCMIARIS, FSM_STATE_DCMIARIS_ACTIVED) == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_DCMIARIS]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DCMIARIS]++;
 		IhuErrorPrint("DCMIARIS: Error Set FSM State!\n");
 		return IHU_FAILURE;
 	}
@@ -118,7 +118,7 @@ OPSTAT fsm_dcmiaris_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 		//启动本地定时器，如果有必要
 		ret = ihu_timer_start(TASK_ID_DCMIARIS, TIMER_ID_1S_DCMIARIS_PERIOD_SCAN, zIhuSysEngPar.timer.dcmiarisPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_DCMIARIS]++;
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_DCMIARIS]++;
 			IhuErrorPrint("DCMIARIS: Error start timer!\n");
 			return IHU_FAILURE;
 		}	
@@ -145,14 +145,14 @@ OPSTAT fsm_dcmiaris_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 {	
 	//入参检查
 	if ((param_ptr == NULL) || (dest_id != TASK_ID_DCMIARIS)){
-		zIhuRunErrCnt[TASK_ID_DCMIARIS]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DCMIARIS]++;
 		IhuErrorPrint("DCMIARIS: Wrong input paramters!\n");
 		return IHU_FAILURE;
 	}
 	
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_DCMIARIS, FSM_STATE_IDLE) == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_DCMIARIS]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DCMIARIS]++;
 		IhuErrorPrint("DCMIARIS: Error Set FSM State!\n");
 		return IHU_FAILURE;
 	}
@@ -178,21 +178,21 @@ OPSTAT fsm_dcmiaris_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 	memset(&rcv, 0, sizeof(msg_struct_com_time_out_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_com_time_out_t))){
 		IhuErrorPrint("DCMIARIS: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_DCMIARIS]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DCMIARIS]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
 
-	//钩子在此处，检查zIhuRunErrCnt[TASK_ID_DCMIARIS]是否超限
-	if (zIhuRunErrCnt[TASK_ID_DCMIARIS] > IHU_RUN_ERROR_LEVEL_2_MAJOR){
+	//钩子在此处，检查zIhuSysStaPm.taskRunErrCnt[TASK_ID_DCMIARIS]是否超限
+	if (zIhuSysStaPm.taskRunErrCnt[TASK_ID_DCMIARIS] > IHU_RUN_ERROR_LEVEL_2_MAJOR){
 		//减少重复RESTART的概率
-		zIhuRunErrCnt[TASK_ID_DCMIARIS] = zIhuRunErrCnt[TASK_ID_DCMIARIS] - IHU_RUN_ERROR_LEVEL_2_MAJOR;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DCMIARIS] = zIhuSysStaPm.taskRunErrCnt[TASK_ID_DCMIARIS] - IHU_RUN_ERROR_LEVEL_2_MAJOR;
 		memset(&snd0, 0, sizeof(msg_struct_com_restart_t));
 		snd0.length = sizeof(msg_struct_com_restart_t);
 		ret = ihu_message_send(MSG_ID_COM_RESTART, TASK_ID_DCMIARIS, TASK_ID_DCMIARIS, &snd0, snd0.length);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_DCMIARIS]++;
-			IhuErrorPrint("DCMIARIS: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DCMIARIS].taskName, zIhuTaskInfo[TASK_ID_DCMIARIS].taskName);
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_DCMIARIS]++;
+			IhuErrorPrint("DCMIARIS: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_DCMIARIS].taskName, zIhuVmCtrTab.task[TASK_ID_DCMIARIS].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -203,7 +203,7 @@ OPSTAT fsm_dcmiaris_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 		if (FsmGetState(TASK_ID_DCMIARIS) != FSM_STATE_DCMIARIS_ACTIVED){
 			ret = FsmSetState(TASK_ID_DCMIARIS, FSM_STATE_DCMIARIS_ACTIVED);
 			if (ret == IHU_FAILURE){
-				zIhuRunErrCnt[TASK_ID_DCMIARIS]++;
+				zIhuSysStaPm.taskRunErrCnt[TASK_ID_DCMIARIS]++;
 				IhuErrorPrint("DCMIARIS: Error Set FSM State!\n");
 				return IHU_FAILURE;
 			}//FsmSetState
@@ -225,8 +225,8 @@ void func_dcmiaris_time_out_period_scan(void)
 	snd.length = sizeof(msg_struct_com_heart_beat_t);
 	ret = ihu_message_send(MSG_ID_COM_HEART_BEAT, TASK_ID_VMFO, TASK_ID_DCMIARIS, &snd, snd.length);
 	if (ret == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_DCMIARIS]++;
-		IhuErrorPrint("DCMIARIS: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DCMIARIS].taskName, zIhuTaskInfo[TASK_ID_VMFO].taskName);
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DCMIARIS]++;
+		IhuErrorPrint("DCMIARIS: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_DCMIARIS].taskName, zIhuVmCtrTab.task[TASK_ID_VMFO].taskName);
 		return;
 	}
 	
@@ -244,7 +244,7 @@ OPSTAT fsm_dcmiaris_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * pa
 	memset(&rcv, 0, sizeof(msg_struct_ccl_com_sensor_status_req_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_com_sensor_status_req_t))){
 		IhuErrorPrint("DCMIARIS: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_DCMIARIS]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DCMIARIS]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
@@ -252,7 +252,7 @@ OPSTAT fsm_dcmiaris_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * pa
 	//入参检查
 	if (rcv.cmdid != IHU_CCL_DH_CMDID_REQ_STATUS_DCMI){
 		IhuErrorPrint("DCMIARIS: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_DCMIARIS]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DCMIARIS]++;
 		return IHU_FAILURE;
 	}
 	
@@ -267,8 +267,8 @@ OPSTAT fsm_dcmiaris_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * pa
 	snd.length = sizeof(msg_struct_dcmi_ccl_sensor_status_rep_t);
 	ret = ihu_message_send(MSG_ID_DCMI_CCL_SENSOR_STATUS_RESP, TASK_ID_CCL, TASK_ID_DCMIARIS, &snd, snd.length);
 	if (ret == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_DCMIARIS]++;
-		IhuErrorPrint("DCMIARIS: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_DCMIARIS].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DCMIARIS]++;
+		IhuErrorPrint("DCMIARIS: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_DCMIARIS].taskName, zIhuVmCtrTab.task[TASK_ID_CCL].taskName);
 		return IHU_FAILURE;
 	}
 			
@@ -286,7 +286,7 @@ OPSTAT fsm_dcmiaris_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 	memset(&rcv, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_com_ctrl_cmd_t))){
 		IhuErrorPrint("DCMIARIS: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_DCMIARIS]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DCMIARIS]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
@@ -297,7 +297,7 @@ OPSTAT fsm_dcmiaris_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 	else if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_FAULT) zIhuCclDcmiarisCtrlTable.cclDcmiWorkingMode = IHU_CCL_DCMI_WORKING_MODE_FAULT;
 	else{
 		IhuErrorPrint("DIDOCAP: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
 		return IHU_FAILURE;		
 	}
 	

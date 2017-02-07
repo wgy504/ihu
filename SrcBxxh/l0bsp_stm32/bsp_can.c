@@ -314,11 +314,11 @@ void app_can_loopback_callback(IHU_HUITP_L2FRAME_Desc_t *pdesc)
 	//Forward to TASK_ID_CANVELA
 	ret = ihu_message_send_isr(MSG_ID_CAN_L2FRAME_RCV, TASK_ID_CANVELA, TASK_ID_CANVELA, g_can_rx_buffer, pdesc->RxXferCount);
 	if (ret == IHU_FAILURE){
-		//zIhuRunErrCnt[TASK_ID_CANVELA]++;
-		printf("CAN ISR: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_CANVELA].taskName, zIhuTaskInfo[TASK_ID_CANVELA].taskName);
+		//zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
+		printf("CAN ISR: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName, zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName);
 		return;
 	}
-	//printf("CAN ISR: Send message OK, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_CANVELA].taskName, zIhuTaskInfo[TASK_ID_BFSC].taskName);
+	//printf("CAN ISR: Send message OK, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName, zIhuVmCtrTab.task[TASK_ID_BFSC].taskName);
 	
 	//bsp_can_transmit(CanHandle, pdesc->pRxBuffPtr, pdesc->RxXferCount, 10);
 }
@@ -424,8 +424,8 @@ void bsp_can_init(CAN_HandleTypeDef* CanHandle, uint32_t std_id)
 
 //	ret = ihu_message_send(MSG_ID_CAN_L3BFSC_CMD_CTRL, TASK_ID_BFSC, TASK_ID_CANVELA, p_msg, msg_len);
 //	if (ret == IHU_FAILURE){
-//		zIhuRunErrCnt[TASK_ID_CANVELA]++;
-//		IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_CANVELA].taskName, zIhuTaskInfo[TASK_ID_BFSC].taskName);
+//		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
+//		IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName, zIhuVmCtrTab.task[TASK_ID_BFSC].taskName);
 //		return IHU_FAILURE;
 //	}	
 //	//返回

@@ -84,7 +84,7 @@ OPSTAT fsm_i2caries_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 		snd.length = sizeof(msg_struct_com_init_fb_t);
 		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_I2CARIES, &snd, snd.length);
 		if (ret == IHU_FAILURE){
-			IhuErrorPrint("I2CARIES: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_I2CARIES].taskName, zIhuTaskInfo[src_id].taskName);
+			IhuErrorPrint("I2CARIES: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName, zIhuVmCtrTab.task[src_id].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -102,7 +102,7 @@ OPSTAT fsm_i2caries_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 	}
 
 	//Global Variables
-	zIhuRunErrCnt[TASK_ID_I2CARIES] = 0;
+	zIhuSysStaPm.taskRunErrCnt[TASK_ID_I2CARIES] = 0;
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 	memset(&zIhuI2cBfscMoto, 0, sizeof(strIhuBfscI2cMotoPar_t));
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
@@ -114,7 +114,7 @@ OPSTAT fsm_i2caries_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 	
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_I2CARIES, FSM_STATE_I2CARIES_ACTIVED) == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_I2CARIES]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_I2CARIES]++;
 		IhuErrorPrint("I2CARIES: Error Set FSM State!\n");
 		return IHU_FAILURE;
 	}
@@ -123,7 +123,7 @@ OPSTAT fsm_i2caries_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 		//测试性启动周期性定时器
 		ret = ihu_timer_start(TASK_ID_I2CARIES, TIMER_ID_1S_I2CARIES_PERIOD_SCAN, zIhuSysEngPar.timer.i2cariesPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_I2CARIES]++;
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_I2CARIES]++;
 			IhuErrorPrint("I2CARIES: Error start timer!\n");
 			return IHU_FAILURE;
 		}
@@ -150,14 +150,14 @@ OPSTAT fsm_i2caries_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 {	
 	//入参检查
 	if ((param_ptr == NULL) || (dest_id != TASK_ID_I2CARIES)){
-		zIhuRunErrCnt[TASK_ID_I2CARIES]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_I2CARIES]++;
 		IhuErrorPrint("I2CARIES: Wrong input paramters!\n");
 		return IHU_FAILURE;
 	}
 	
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_I2CARIES, FSM_STATE_IDLE) == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_I2CARIES]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_I2CARIES]++;
 		IhuErrorPrint("I2CARIES: Error Set FSM State!\n");
 		return IHU_FAILURE;
 	}
@@ -184,21 +184,21 @@ OPSTAT fsm_i2caries_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 	memset(&rcv, 0, sizeof(msg_struct_com_time_out_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_com_time_out_t))){
 		IhuErrorPrint("I2CARIES: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_I2CARIES]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_I2CARIES]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
 
-	//钩子在此处，检查zIhuRunErrCnt[TASK_ID_I2CARIES]是否超限
-	if (zIhuRunErrCnt[TASK_ID_I2CARIES] > IHU_RUN_ERROR_LEVEL_2_MAJOR){
+	//钩子在此处，检查zIhuSysStaPm.taskRunErrCnt[TASK_ID_I2CARIES]是否超限
+	if (zIhuSysStaPm.taskRunErrCnt[TASK_ID_I2CARIES] > IHU_RUN_ERROR_LEVEL_2_MAJOR){
 		//减少重复RESTART的概率
-		zIhuRunErrCnt[TASK_ID_I2CARIES] = zIhuRunErrCnt[TASK_ID_I2CARIES] - IHU_RUN_ERROR_LEVEL_2_MAJOR;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_I2CARIES] = zIhuSysStaPm.taskRunErrCnt[TASK_ID_I2CARIES] - IHU_RUN_ERROR_LEVEL_2_MAJOR;
 		memset(&snd0, 0, sizeof(msg_struct_com_restart_t));
 		snd0.length = sizeof(msg_struct_com_restart_t);
 		ret = ihu_message_send(MSG_ID_COM_RESTART, TASK_ID_I2CARIES, TASK_ID_I2CARIES, &snd0, snd0.length);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_I2CARIES]++;
-			IhuErrorPrint("I2CARIES: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_I2CARIES].taskName, zIhuTaskInfo[TASK_ID_I2CARIES].taskName);
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_I2CARIES]++;
+			IhuErrorPrint("I2CARIES: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName, zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -209,7 +209,7 @@ OPSTAT fsm_i2caries_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 		if (FsmGetState(TASK_ID_I2CARIES) != FSM_STATE_I2CARIES_ACTIVED){
 			ret = FsmSetState(TASK_ID_I2CARIES, FSM_STATE_I2CARIES_ACTIVED);
 			if (ret == IHU_FAILURE){
-				zIhuRunErrCnt[TASK_ID_I2CARIES]++;
+				zIhuSysStaPm.taskRunErrCnt[TASK_ID_I2CARIES]++;
 				IhuErrorPrint("I2CARIES: Error Set FSM State!\n");
 				return IHU_FAILURE;
 			}//FsmSetState
@@ -231,8 +231,8 @@ void func_i2caries_time_out_period_scan(void)
 	snd.length = sizeof(msg_struct_com_heart_beat_t);
 	ret = ihu_message_send(MSG_ID_COM_HEART_BEAT, TASK_ID_VMFO, TASK_ID_I2CARIES, &snd, snd.length);
 	if (ret == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_I2CARIES]++;
-		IhuErrorPrint("I2CARIES: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_I2CARIES].taskName, zIhuTaskInfo[TASK_ID_VMFO].taskName);
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_I2CARIES]++;
+		IhuErrorPrint("I2CARIES: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName, zIhuVmCtrTab.task[TASK_ID_VMFO].taskName);
 		return;
 	}
 	
@@ -251,7 +251,7 @@ OPSTAT fsm_i2caries_bfsc_moto_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param
 	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t))){
 		IhuErrorPrint("I2CARIES: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_I2CARIES]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_I2CARIES]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
@@ -275,7 +275,7 @@ OPSTAT fsm_i2caries_bfsc_moto_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param
 		if (rcv.cmd.prefixcmdid != IHU_CANVELA_PREFIXH_motor_ctrl)
 		{
 			IhuErrorPrint("I2CARIES: Receive message error!\n");
-			zIhuRunErrCnt[TASK_ID_I2CARIES]++;
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_I2CARIES]++;
 			return IHU_FAILURE;
 		}		
 		//依赖不同的控制命令，分门别类的处理
@@ -303,7 +303,7 @@ OPSTAT fsm_i2caries_bfsc_moto_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param
 					}
 					else{
 						IhuErrorPrint("I2CARIES: Receive message error!\n");
-						zIhuRunErrCnt[TASK_ID_I2CARIES]++;
+						zIhuSysStaPm.taskRunErrCnt[TASK_ID_I2CARIES]++;
 						return IHU_FAILURE;
 					}
 					break;		
@@ -315,7 +315,7 @@ OPSTAT fsm_i2caries_bfsc_moto_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param
 					break;
 				
 				default:
-					zIhuRunErrCnt[TASK_ID_I2CARIES]++;
+					zIhuSysStaPm.taskRunErrCnt[TASK_ID_I2CARIES]++;
 					IhuErrorPrint("I2CARIES: Input parameters error!\n");
 					return IHU_FAILURE;
 					//break;
@@ -330,8 +330,8 @@ OPSTAT fsm_i2caries_bfsc_moto_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param
 		snd.length = sizeof(msg_struct_i2caries_l3bfsc_cmd_resp_t);
 		ret = ihu_message_send(MSG_ID_I2C_L3BFSC_MOTO_CMD_RESP, TASK_ID_BFSC, TASK_ID_I2CARIES, &snd, snd.length);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_I2CARIES]++;
-			IhuErrorPrint("I2CARIES: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_I2CARIES].taskName, zIhuTaskInfo[TASK_ID_BFSC].taskName);
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_I2CARIES]++;
+			IhuErrorPrint("I2CARIES: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName, zIhuVmCtrTab.task[TASK_ID_BFSC].taskName);
 			return IHU_FAILURE;
 		}		
 		
@@ -339,7 +339,7 @@ OPSTAT fsm_i2caries_bfsc_moto_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param
 	//无效
 	else{
 		IhuErrorPrint("I2CARIES: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_I2CARIES]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_I2CARIES]++;
 		return IHU_FAILURE;		
 	}
 
@@ -356,7 +356,7 @@ OPSTAT fsm_i2caries_bfsc_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void * param_p
 	memset(&rcv, 0, sizeof(msg_struct_i2caries_l2frame_rcv_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_i2caries_l2frame_rcv_t))){
 		IhuErrorPrint("I2CARIES: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_I2CARIES]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_I2CARIES]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
@@ -419,7 +419,7 @@ OPSTAT fsm_i2caries_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * pa
 	memset(&rcv, 0, sizeof(msg_struct_ccl_com_sensor_status_req_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_com_sensor_status_req_t))){
 		IhuErrorPrint("I2CARIES: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_I2CARIES]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_I2CARIES]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
@@ -427,7 +427,7 @@ OPSTAT fsm_i2caries_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * pa
 	//入参检查
 	if (rcv.cmdid != IHU_CCL_DH_CMDID_REQ_STATUS_I2C){
 		IhuErrorPrint("I2CARIES: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_I2CARIES]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_I2CARIES]++;
 		return IHU_FAILURE;
 	}
 	
@@ -441,8 +441,8 @@ OPSTAT fsm_i2caries_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * pa
 	snd.length = sizeof(msg_struct_i2c_ccl_sensor_status_rep_t);
 	ret = ihu_message_send(MSG_ID_I2C_CCL_SENSOR_STATUS_RESP, TASK_ID_CCL, TASK_ID_I2CARIES, &snd, snd.length);
 	if (ret == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_I2CARIES]++;
-		IhuErrorPrint("I2CARIES: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_I2CARIES].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_I2CARIES]++;
+		IhuErrorPrint("I2CARIES: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName, zIhuVmCtrTab.task[TASK_ID_CCL].taskName);
 		return IHU_FAILURE;
 	}
 			
@@ -460,7 +460,7 @@ OPSTAT fsm_i2caries_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 	memset(&rcv, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_com_ctrl_cmd_t))){
 		IhuErrorPrint("I2CARIES: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_I2CARIES]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_I2CARIES]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
@@ -471,7 +471,7 @@ OPSTAT fsm_i2caries_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 	else if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_FAULT) zIhuCclI2cariesCtrlTable.cclI2cWorkingMode = IHU_CCL_I2C_WORKING_MODE_FAULT;
 	else{
 		IhuErrorPrint("DIDOCAP: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_DIDOCAP]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
 		return IHU_FAILURE;		
 	}
 	

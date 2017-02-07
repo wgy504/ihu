@@ -129,7 +129,7 @@ void msg_wmc_set_config_resp(error_code_t ec)
 		ret = ihu_message_send(MSG_ID_L3BFSC_WMC_SET_CONFIG_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, \
 														&msg_wmc_set_config_resp, MSG_SIZE_L3BFSC_WMC_SET_CONFIG_RESP);
 		if (ret == IHU_FAILURE){
-			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC], zIhuTaskInfo[TASK_ID_CANVELA]);
+			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC], zIhuVmCtrTab.task[TASK_ID_CANVELA]);
 			return;
 		}
 		
@@ -232,7 +232,7 @@ void msg_wmc_get_config_resp(error_code_t ec)
 		ret = ihu_message_send(MSG_ID_L3BFSC_WMC_GET_CONFIG_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, \
 														&msg_wmc_get_config_resp, MSG_SIZE_L3BFSC_WMC_GET_CONFIG_RESP);
 		if (ret == IHU_FAILURE){
-			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC], zIhuTaskInfo[TASK_ID_CANVELA]);
+			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC], zIhuVmCtrTab.task[TASK_ID_CANVELA]);
 			return;
 		}
 
@@ -332,7 +332,7 @@ void msg_wmc_start_resp(error_code_t ec)
 		ret = ihu_message_send(MSG_ID_L3BFSC_WMC_START_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, \
 														&msg_wmc_start_resp, MSG_SIZE_L3BFSC_WMC_START_RESP);
 		if (ret == IHU_FAILURE){
-			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC], zIhuTaskInfo[TASK_ID_CANVELA]);
+			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC], zIhuVmCtrTab.task[TASK_ID_CANVELA]);
 			return;
 		}
 		
@@ -431,7 +431,7 @@ void msg_wmc_stop_resp(error_code_t ec)
 		ret = ihu_message_send(MSG_ID_L3BFSC_WMC_STOP_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, \
 														&msg_wmc_stop_resp, MSG_SIZE_L3BFSC_WMC_STOP_RESP);
 		if (ret == IHU_FAILURE){
-			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC], zIhuTaskInfo[TASK_ID_CANVELA]);
+			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC], zIhuVmCtrTab.task[TASK_ID_CANVELA]);
 			return;
 		}
 		
@@ -534,7 +534,7 @@ void msg_wmc_command_resp(error_code_t ec)
 		ret = ihu_message_send(MSG_ID_L3BFSC_WMC_COMMAND_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, \
 														&msg_wmc_command_resp, MSG_SIZE_L3BFSC_WMC_COMMAND_RESP);
 		if (ret == IHU_FAILURE){
-			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC], zIhuTaskInfo[TASK_ID_CANVELA]);
+			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC], zIhuVmCtrTab.task[TASK_ID_CANVELA]);
 			return;
 		}
 		
@@ -633,7 +633,7 @@ void msg_wmc_combin_resp(error_code_t ec)
 		ret = ihu_message_send(MSG_ID_L3BFSC_WMC_COMBIN_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, \
 														&msg_wmc_combin_resp, MSG_SIZE_L3BFSC_WMC_COMBIN_RESP);
 		if (ret == IHU_FAILURE){
-			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC], zIhuTaskInfo[TASK_ID_CANVELA]);
+			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC], zIhuVmCtrTab.task[TASK_ID_CANVELA]);
 			return;
 		}
 

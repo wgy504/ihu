@@ -1,4 +1,4 @@
-﻿/**
+/**
  ****************************************************************************************
  *
  * @file l2ethorion.h
@@ -44,7 +44,7 @@ enum FSM_STATE_ETHORION
 //#define FSM_STATE_INVALID 0xFF
 
 //Global variables
-extern FsmStateItem_t IhuFsmEthorion[];
+extern IhuFsmStateItem_t IhuFsmEthorion[];
 
 //API
 extern OPSTAT fsm_ethorion_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);

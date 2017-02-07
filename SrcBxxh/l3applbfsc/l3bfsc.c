@@ -17,7 +17,7 @@
 /*
 ** FSM of the BFSC
 */
-FsmStateItem_t IhuFsmBfsc[] =
+IhuFsmStateItem_t IhuFsmBfsc[] =
 {
   //MessageId                 						//State                   		 							//Function
 	//启始点，固定定义，不要改动, 使用ENTRY/END，意味者MSGID肯定不可能在某个高位区段中；考虑到所有任务共享MsgId，即使分段，也无法实现
@@ -142,7 +142,7 @@ OPSTAT fsm_bfsc_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 		snd.length = sizeof(msg_struct_com_init_fb_t);
 		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_BFSC, &snd, snd.length);
 		if (ret == IHU_FAILURE){
-			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC].taskName, zIhuTaskInfo[src_id].taskName);
+			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[src_id].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -170,13 +170,13 @@ OPSTAT fsm_bfsc_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 	}
 
 	//Global Variables
-	zIhuRunErrCnt[TASK_ID_BFSC] = 0;
+	zIhuSysStaPm.taskRunErrCnt[TASK_ID_BFSC] = 0;
 	zIhuL3bfscLatestMeasureWeightValue = 0;
 	zIhuL3bfscMotoRecoverTimes = 0;
 
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_ACTIVED) == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_BFSC]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_BFSC]++;
 		IhuErrorPrint("L3BFSC: Error Set FSM State!");
 		return IHU_FAILURE;
 	}
@@ -184,7 +184,7 @@ OPSTAT fsm_bfsc_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 	//启动本地定时器，如果有必要	
 	ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_1S_BFSC_PERIOD_SCAN, zIhuSysEngPar.timer.bfscPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 	if (ret == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_BFSC]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_BFSC]++;
 		IhuErrorPrint("L3BFSC: Error start timer!\n");
 		return IHU_FAILURE;
 	}
@@ -206,7 +206,7 @@ OPSTAT fsm_bfsc_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 		
 		ret = ihu_message_send(MSG_ID_L3BFSC_WMC_STARTUP_IND, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length);
 		if (ret == IHU_FAILURE){
-			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC], zIhuTaskInfo[TASK_ID_CANVELA]);
+			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC], zIhuVmCtrTab.task[TASK_ID_CANVELA]);
 			return IHU_FAILURE;
 		}
 	}
@@ -227,14 +227,14 @@ OPSTAT fsm_bfsc_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 {	
 	//入参检查
 	if ((param_ptr == NULL) || (dest_id != TASK_ID_BFSC)){
-		zIhuRunErrCnt[TASK_ID_BFSC]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_BFSC]++;
 		IhuErrorPrint("L3BFSC: Wrong input paramters!");
 		return IHU_FAILURE;
 	}
 	
 	//设置状态机到目标状态
 	if (FsmSetState(TASK_ID_BFSC, FSM_STATE_IDLE) == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_BFSC]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_BFSC]++;
 		IhuErrorPrint("L3BFSC: Error Set FSM State!");
 		return IHU_FAILURE;
 	}
@@ -338,21 +338,21 @@ OPSTAT fsm_bfsc_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 	memset(&rcv, 0, sizeof(msg_struct_com_time_out_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_com_time_out_t))){
 		IhuErrorPrint("L3BFSC: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_BFSC]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_BFSC]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
 
-	//钩子在此处，检查zIhuRunErrCnt[TASK_ID_BFSC]是否超限
-	if (zIhuRunErrCnt[TASK_ID_BFSC] > IHU_RUN_ERROR_LEVEL_2_MAJOR){
+	//钩子在此处，检查zIhuSysStaPm.taskRunErrCnt[TASK_ID_BFSC]是否超限
+	if (zIhuSysStaPm.taskRunErrCnt[TASK_ID_BFSC] > IHU_RUN_ERROR_LEVEL_2_MAJOR){
 		//减少重复RESTART的概率
-		zIhuRunErrCnt[TASK_ID_BFSC] = zIhuRunErrCnt[TASK_ID_BFSC] - IHU_RUN_ERROR_LEVEL_2_MAJOR;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_BFSC] = zIhuSysStaPm.taskRunErrCnt[TASK_ID_BFSC] - IHU_RUN_ERROR_LEVEL_2_MAJOR;
 		memset(&snd0, 0, sizeof(msg_struct_com_restart_t));
 		snd0.length = sizeof(msg_struct_com_restart_t);
 		ret = ihu_message_send(MSG_ID_COM_RESTART, TASK_ID_BFSC, TASK_ID_BFSC, &snd0, snd0.length);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_BFSC]++;
-			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC].taskName, zIhuTaskInfo[TASK_ID_BFSC].taskName);
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_BFSC]++;
+			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_BFSC].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -375,7 +375,7 @@ OPSTAT fsm_bfsc_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 	}
 			
 	else{
-		zIhuRunErrCnt[TASK_ID_BFSC]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_BFSC]++;
 		IhuErrorPrint("L3BFSC: Receive error timer ID!\n");
 		return IHU_FAILURE;
 	}
@@ -394,8 +394,8 @@ OPSTAT func_bfsc_time_out_period_scan(void)
 	snd.length = sizeof(msg_struct_com_heart_beat_t);
 	ret = ihu_message_send(MSG_ID_COM_HEART_BEAT, TASK_ID_VMFO, TASK_ID_BFSC, &snd, snd.length);
 	if (ret == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_BFSC]++;
-		IhuErrorPrint("BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC].taskName, zIhuTaskInfo[TASK_ID_VMFO].taskName);
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_BFSC]++;
+		IhuErrorPrint("BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_VMFO].taskName);
 		return IHU_FAILURE;
 	}
 
@@ -412,7 +412,7 @@ OPSTAT func_bfsc_time_out_wait_weight_command_process(void)
 	snd.wsValue = zIhuL3bfscLatestMeasureWeightValue;
 	snd.length = sizeof(msg_struct_l3bfsc_canvela_new_ws_event_t);
 	if (ihu_message_send(MSG_ID_L3BFSC_CAN_NEW_WS_EVENT, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length) == IHU_FAILURE)
-		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC].taskName, zIhuTaskInfo[TASK_ID_CANVELA].taskName);
+		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName);
 	
 	//启动定时器
 	ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_1S_BFSC_L3BFSC_WAIT_WEIGHT_TIMER, zIhuSysEngPar.timer.bfscL3bfscWaitWeightTimer, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
@@ -434,7 +434,7 @@ OPSTAT func_bfsc_time_out_roll_out_process(void)
 	memset(&snd, 0, sizeof(msg_struct_l3bfsc_canvela_error_status_report_t));
 	snd.length = sizeof(msg_struct_l3bfsc_canvela_error_status_report_t);
 	if (ihu_message_send(MSG_ID_L3BFSC_CAN_ERROR_STATUS_REPORT, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length) == IHU_FAILURE)
-		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC].taskName, zIhuTaskInfo[TASK_ID_CANVELA].taskName);
+		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName);
 
 	//出错次数统计
 	zIhuL3bfscMotoRecoverTimes++;
@@ -458,13 +458,13 @@ OPSTAT func_bfsc_time_out_roll_out_process(void)
 		snd1.cmdid = IHU_BFSC_ADC_WS_CMD_TYPE_STOP;
 		snd1.length = sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t);
 		if (ihu_message_send(MSG_ID_L3BFSC_ADC_WS_CMD_CTRL, TASK_ID_ADCLIBRA, TASK_ID_BFSC, &snd1, snd1.length) == IHU_FAILURE)
-			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC].taskName, zIhuTaskInfo[TASK_ID_ADCLIBRA].taskName);
+			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_ADCLIBRA].taskName);
 		//发送命令给I2C-MOTO，停止测量工作
 		memset(&snd2, 0, sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t));
 		snd2.cmdid = IHU_BFSC_I2C_MOTO_CMD_TYPE_STOP;
 		snd2.length = sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t);
 		if (ihu_message_send(MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL, TASK_ID_I2CARIES, TASK_ID_BFSC, &snd2, snd2.length) == IHU_FAILURE)
-			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC].taskName, zIhuTaskInfo[TASK_ID_I2CARIES].taskName);
+			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName);
 	}
 	
 	//返回
@@ -483,7 +483,7 @@ OPSTAT func_bfsc_time_out_give_up_process(void)
 	memset(&snd, 0, sizeof(msg_struct_l3bfsc_canvela_error_status_report_t));
 	snd.length = sizeof(msg_struct_l3bfsc_canvela_error_status_report_t);
 	if (ihu_message_send(MSG_ID_L3BFSC_CAN_ERROR_STATUS_REPORT, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length) == IHU_FAILURE)
-		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC].taskName, zIhuTaskInfo[TASK_ID_CANVELA].taskName);
+		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName);
 	
 	//出错次数统计
 	zIhuL3bfscMotoRecoverTimes++;
@@ -508,14 +508,14 @@ OPSTAT func_bfsc_time_out_give_up_process(void)
 		snd1.length = sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t);
 		snd1.cmdid = IHU_BFSC_ADC_WS_CMD_TYPE_STOP;
 		if (ihu_message_send(MSG_ID_L3BFSC_ADC_WS_CMD_CTRL, TASK_ID_ADCLIBRA, TASK_ID_BFSC, &snd1, snd1.length) == IHU_FAILURE)
-			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC].taskName, zIhuTaskInfo[TASK_ID_ADCLIBRA].taskName);
+			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_ADCLIBRA].taskName);
 
 		//发送命令给I2C-MOTO，停止测量工作
 		memset(&snd2, 0, sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t));
 		snd2.cmdid = IHU_BFSC_I2C_MOTO_CMD_TYPE_STOP;
 		snd2.length = sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t);
 		if (ihu_message_send(MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL, TASK_ID_I2CARIES, TASK_ID_BFSC, &snd2, snd2.length) == IHU_FAILURE)
-			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC].taskName, zIhuTaskInfo[TASK_ID_I2CARIES].taskName);
+			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName);
 	}
 	
 	//返回
@@ -555,7 +555,7 @@ OPSTAT fsm_bfsc_canvela_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 		snd.cmd.modbusVal = rcv.cmd.modbusVal;
 		snd.length = sizeof(msg_struct_l3bfsc_canvela_cmd_resp_t);
 		if (ihu_message_send(MSG_ID_L3BFSC_CAN_CMD_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length) == IHU_FAILURE)
-			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC].taskName, zIhuTaskInfo[TASK_ID_CANVELA].taskName);
+			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName);
 	}
 	
 	//发送命令给ADC
@@ -568,7 +568,7 @@ OPSTAT fsm_bfsc_canvela_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 		snd1.cmd.modbusVal = rcv.cmd.modbusVal;
 		snd1.length = sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t);
 		if (ihu_message_send(MSG_ID_L3BFSC_ADC_WS_CMD_CTRL, TASK_ID_ADCLIBRA, TASK_ID_BFSC, &snd1, snd1.length) == IHU_FAILURE)
-			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC].taskName, zIhuTaskInfo[TASK_ID_ADCLIBRA].taskName);
+			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_ADCLIBRA].taskName);
 	}
 	
 	//发送命令给I2C-MOTO
@@ -581,7 +581,7 @@ OPSTAT fsm_bfsc_canvela_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 		snd2.cmd.modbusVal = rcv.cmd.modbusVal;
 		snd2.length = sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t);
 		if (ihu_message_send(MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL, TASK_ID_I2CARIES, TASK_ID_BFSC, &snd2, snd2.length) == IHU_FAILURE)
-			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC].taskName, zIhuTaskInfo[TASK_ID_I2CARIES].taskName);
+			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName);
 	}
 	
 	//返回
@@ -614,7 +614,7 @@ OPSTAT fsm_bfsc_adc_meas_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr,
 	snd.cmd.modbusVal = rcv.cmd.modbusVal;
 	snd.length = sizeof(msg_struct_l3bfsc_canvela_cmd_resp_t);
 	if (ihu_message_send(MSG_ID_L3BFSC_CAN_CMD_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length) == IHU_FAILURE)
-		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC].taskName, zIhuTaskInfo[TASK_ID_CANVELA].taskName);
+		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName);
 	
 	//返回
 	return IHU_SUCCESS;
@@ -646,7 +646,7 @@ OPSTAT fsm_bfsc_i2c_moto_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr,
 	snd.cmd.modbusVal = rcv.cmd.modbusVal;
 	snd.length = sizeof(msg_struct_l3bfsc_canvela_cmd_resp_t);
 	if (ihu_message_send(MSG_ID_L3BFSC_CAN_CMD_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length) == IHU_FAILURE)
-		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC].taskName, zIhuTaskInfo[TASK_ID_CANVELA].taskName);
+		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName);
 	
 	//返回
 	return IHU_SUCCESS;
@@ -674,20 +674,20 @@ OPSTAT fsm_bfsc_canvela_init_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 	snd1.length = sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t);
 	snd1.cmdid = IHU_BFSC_ADC_WS_CMD_TYPE_START;
 	if (ihu_message_send(MSG_ID_L3BFSC_ADC_WS_CMD_CTRL, TASK_ID_ADCLIBRA, TASK_ID_BFSC, &snd1, snd1.length) == IHU_FAILURE)
-		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC].taskName, zIhuTaskInfo[TASK_ID_ADCLIBRA].taskName);
+		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_ADCLIBRA].taskName);
 
 	//发送命令给I2C-MOTO，开始测量工作
 	memset(&snd2, 0, sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t));
 	snd2.cmdid = IHU_BFSC_I2C_MOTO_CMD_TYPE_START;
 	snd2.length = sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t);
 	if (ihu_message_send(MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL, TASK_ID_I2CARIES, TASK_ID_BFSC, &snd2, snd2.length) == IHU_FAILURE)
-		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC].taskName, zIhuTaskInfo[TASK_ID_I2CARIES].taskName);
+		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName);
 	
 	//发送反馈消息出去
 	memset(&snd, 0, sizeof(msg_struct_l3bfsc_canvela_init_resp_t));
 	snd.length = sizeof(msg_struct_l3bfsc_canvela_init_resp_t);
 	if (ihu_message_send(MSG_ID_L3BFSC_CAN_INIT_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length) == IHU_FAILURE)
-		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC].taskName, zIhuTaskInfo[TASK_ID_CANVELA].taskName);
+		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName);
 
 	//状态转移
 	if (FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_SCAN) == IHU_FAILURE)
@@ -705,7 +705,7 @@ OPSTAT fsm_bfsc_canvela_init_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 //		
 //		ret = ihu_message_send(MSG_ID_L3BFSC_WMC_STARTUP_IND, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length);
 //		if (ret == IHU_FAILURE){
-//			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC], zIhuTaskInfo[TASK_ID_CANVELA]);
+//			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC], zIhuVmCtrTab.task[TASK_ID_CANVELA]);
 //			return IHU_FAILURE;
 //		}
 //	}
@@ -738,7 +738,7 @@ OPSTAT fsm_bfsc_adc_new_material_ws(UINT8 dest_id, UINT8 src_id, void * param_pt
 	snd.wsValue = rcv.wsValue;
 	snd.length = sizeof(msg_struct_l3bfsc_canvela_new_ws_event_t);
 	if (ihu_message_send(MSG_ID_L3BFSC_CAN_NEW_WS_EVENT, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length) == IHU_FAILURE)
-		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC].taskName, zIhuTaskInfo[TASK_ID_CANVELA].taskName);
+		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName);
 	
 	//启动定时器
 	ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_1S_BFSC_L3BFSC_WAIT_WEIGHT_TIMER, zIhuSysEngPar.timer.bfscL3bfscWaitWeightTimer, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
@@ -776,7 +776,7 @@ OPSTAT fsm_bfsc_adc_material_drop(UINT8 dest_id, UINT8 src_id, void * param_ptr,
 		memset(&snd, 0, sizeof(msg_struct_l3bfsc_canvela_new_ws_event_t));
 		snd.length = sizeof(msg_struct_l3bfsc_canvela_new_ws_event_t);
 		if (ihu_message_send(MSG_ID_L3BFSC_CAN_NEW_WS_EVENT, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length) == IHU_FAILURE)
-			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC].taskName, zIhuTaskInfo[TASK_ID_CANVELA].taskName);
+			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName);
 	
 		//状态转移
 		if (FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_SCAN) == IHU_FAILURE)
@@ -794,7 +794,7 @@ OPSTAT fsm_bfsc_adc_material_drop(UINT8 dest_id, UINT8 src_id, void * param_ptr,
 		memset(&snd1, 0, sizeof(msg_struct_l3bfsc_canvela_roll_out_resp_t));
 		snd1.length = sizeof(msg_struct_l3bfsc_canvela_roll_out_resp_t);
 		if (ihu_message_send(MSG_ID_L3BFSC_CAN_ROLL_OUT_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, &snd1, snd1.length) == IHU_FAILURE)
-			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC].taskName, zIhuTaskInfo[TASK_ID_CANVELA].taskName);
+			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName);
 		
 		//状态转移
 		if (FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_SCAN) == IHU_FAILURE)
@@ -812,7 +812,7 @@ OPSTAT fsm_bfsc_adc_material_drop(UINT8 dest_id, UINT8 src_id, void * param_ptr,
 		memset(&snd2, 0, sizeof(msg_struct_l3bfsc_canvela_give_up_resp_t));
 		snd2.length = sizeof(msg_struct_l3bfsc_canvela_give_up_resp_t);
 		if (ihu_message_send(MSG_ID_L3BFSC_CAN_GIVE_UP_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, &snd2, snd2.length) == IHU_FAILURE)
-			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_BFSC].taskName, zIhuTaskInfo[TASK_ID_CANVELA].taskName);
+			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName);
 		
 		//状态转移
 		if (FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_SCAN) == IHU_FAILURE)

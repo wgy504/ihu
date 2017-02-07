@@ -94,7 +94,7 @@ OPSTAT fsm_spsvirgo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 		snd.length = sizeof(msg_struct_com_init_fb_t);
 		ret = ihu_message_send(MSG_ID_COM_INIT_FB, src_id, TASK_ID_SPSVIRGO, &snd, snd.length);
 		if (ret == IHU_FAILURE){
-			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[src_id].taskName);
+			IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName, zIhuVmCtrTab.task[src_id].taskName);
 			return IHU_FAILURE;
 		}
 	}
@@ -112,7 +112,7 @@ OPSTAT fsm_spsvirgo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 	}
 
 	//Global Variables
-	zIhuRunErrCnt[TASK_ID_SPSVIRGO] = 0;
+	zIhuSysStaPm.taskRunErrCnt[TASK_ID_SPSVIRGO] = 0;
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 	memset(&zIhuCclSpsvirgoCtrlTable, 0, sizeof(strIhuCclSpsPar_t));
@@ -191,14 +191,14 @@ OPSTAT fsm_spsvirgo_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);
 
-	//钩子在此处，检查zIhuRunErrCnt[TASK_ID_SPSVIRGO]是否超限
-	if (zIhuRunErrCnt[TASK_ID_SPSVIRGO] > IHU_RUN_ERROR_LEVEL_2_MAJOR){
+	//钩子在此处，检查zIhuSysStaPm.taskRunErrCnt[TASK_ID_SPSVIRGO]是否超限
+	if (zIhuSysStaPm.taskRunErrCnt[TASK_ID_SPSVIRGO] > IHU_RUN_ERROR_LEVEL_2_MAJOR){
 		//减少重复RESTART的概率
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO] = zIhuRunErrCnt[TASK_ID_SPSVIRGO] - IHU_RUN_ERROR_LEVEL_2_MAJOR;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_SPSVIRGO] = zIhuSysStaPm.taskRunErrCnt[TASK_ID_SPSVIRGO] - IHU_RUN_ERROR_LEVEL_2_MAJOR;
 		memset(&snd0, 0, sizeof(msg_struct_com_restart_t));
 		snd0.length = sizeof(msg_struct_com_restart_t);
 		if (ihu_message_send(MSG_ID_COM_RESTART, TASK_ID_SPSVIRGO, TASK_ID_SPSVIRGO, &snd0, snd0.length) == IHU_FAILURE)
-			IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName);
+			IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName, zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName);
 	}
 
 	//Period time out received
@@ -225,8 +225,8 @@ void func_spsvirgo_time_out_period_scan(void)
 	snd.length = sizeof(msg_struct_com_heart_beat_t);
 	ret = ihu_message_send(MSG_ID_COM_HEART_BEAT, TASK_ID_VMFO, TASK_ID_SPSVIRGO, &snd, snd.length);
 	if (ret == IHU_FAILURE){
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
-		IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_VMFO].taskName);
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_SPSVIRGO]++;
+		IhuErrorPrint("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName, zIhuVmCtrTab.task[TASK_ID_VMFO].taskName);
 		return;
 	}
 	
@@ -275,7 +275,7 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	memset(&rcv, 0, sizeof(msg_struct_ccl_sps_open_auth_inq_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_sps_open_auth_inq_t))){
 		IhuErrorPrint("SPSVIRGO: Receive message error!\n");
-		zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
 	}
 	memcpy(&rcv, param_ptr, param_len);
@@ -347,7 +347,7 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 		snd.length = sizeof(msg_struct_spsvirgo_ccl_cloud_fb_t);
 		ret = ihu_message_send(MSG_ID_SPS_CCL_CLOUD_FB, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 		if (ret == IHU_FAILURE)
-			IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
+			IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName, zIhuVmCtrTab.task[TASK_ID_CCL].taskName);
 	}
 	
 	//如果从后台收到有价值的反馈
@@ -356,7 +356,7 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 		//注意，这里是CHAR数据，不是L2FRAME的比特数据
 		ret = func_cloud_standard_xml_unpack(&zIhuSpsvirgoMsgRcvBuf, HUITP_MSGID_uni_ccl_lock_auth_resp);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_SPSVIRGO]++;
 			IhuErrorPrint("SPSVIRGO: Unpack and processing receiving message error!\n");
 			
 			//不能直接返回差错，因为上层还巴巴的等着回复这个消息，不然状态机会出错
@@ -365,7 +365,7 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 			snd.length = sizeof(msg_struct_spsvirgo_ccl_cloud_fb_t);
 			ret = ihu_message_send(MSG_ID_SPS_CCL_CLOUD_FB, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 			if (ret == IHU_FAILURE)
-				IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
+				IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName, zIhuVmCtrTab.task[TASK_ID_CCL].taskName);
 		}
 	}
 
@@ -399,7 +399,7 @@ OPSTAT fsm_spsvirgo_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * pa
 	snd.length = sizeof(msg_struct_sps_ccl_sensor_status_rep_t);
 	ret = ihu_message_send(MSG_ID_SPS_CCL_SENSOR_STATUS_RESP, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 	if (ret == IHU_FAILURE)
-		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
+		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName, zIhuVmCtrTab.task[TASK_ID_CCL].taskName);
 			
 	//返回
 	return IHU_SUCCESS;
@@ -538,7 +538,7 @@ OPSTAT fsm_spsvirgo_ccl_event_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 		snd.length = sizeof(msg_struct_sps_ccl_event_report_cfm_t);
 		ret = ihu_message_send(MSG_ID_SPS_CCL_EVENT_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 		if (ret == IHU_FAILURE)
-			IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
+			IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName, zIhuVmCtrTab.task[TASK_ID_CCL].taskName);
 	}	
 
 	//如果从后台收到有价值的反馈
@@ -547,7 +547,7 @@ OPSTAT fsm_spsvirgo_ccl_event_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 		//注意，这里是CHAR数据，不是L2FRAME的比特数据
 		ret = func_cloud_standard_xml_unpack(&zIhuSpsvirgoMsgRcvBuf, HUITP_MSGID_uni_ccl_state_confirm);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_SPSVIRGO]++;
 			IhuErrorPrint("SPSVIRGO: Unpack and processing receiving message error!\n");
 			//不能直接返回差错，因为上层还巴巴的等着回复这个消息，不然状态机会出错
 			memset(&snd, 0, sizeof(msg_struct_sps_ccl_event_report_cfm_t));
@@ -555,7 +555,7 @@ OPSTAT fsm_spsvirgo_ccl_event_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 			snd.length = sizeof(msg_struct_sps_ccl_event_report_cfm_t);
 			ret = ihu_message_send(MSG_ID_SPS_CCL_EVENT_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 			if (ret == IHU_FAILURE)
-				IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
+				IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName, zIhuVmCtrTab.task[TASK_ID_CCL].taskName);
 		}
 	}
 	
@@ -718,7 +718,7 @@ OPSTAT fsm_spsvirgo_ccl_fault_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 		snd.length = sizeof(msg_struct_sps_ccl_fault_report_cfm_t);
 		ret = ihu_message_send(MSG_ID_SPS_CCL_FAULT_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 		if (ret == IHU_FAILURE)
-			IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
+			IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName, zIhuVmCtrTab.task[TASK_ID_CCL].taskName);
 	}		
 
 	//如果从后台收到有价值的反馈
@@ -727,7 +727,7 @@ OPSTAT fsm_spsvirgo_ccl_fault_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 		//注意，这里是CHAR数据，不是L2FRAME的比特数据
 		ret = func_cloud_standard_xml_unpack(&zIhuSpsvirgoMsgRcvBuf, HUITP_MSGID_uni_ccl_state_confirm);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_SPSVIRGO]++;
 			IhuErrorPrint("SPSVIRGO: Unpack and processing receiving message error!\n");
 			//不能直接返回差错，因为上层还巴巴的等着回复这个消息，不然状态机会出错
 			memset(&snd, 0, sizeof(msg_struct_sps_ccl_fault_report_cfm_t));
@@ -735,7 +735,7 @@ OPSTAT fsm_spsvirgo_ccl_fault_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 			snd.length = sizeof(msg_struct_sps_ccl_fault_report_cfm_t);
 			ret = ihu_message_send(MSG_ID_SPS_CCL_FAULT_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 			if (ret == IHU_FAILURE)
-				IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
+				IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName, zIhuVmCtrTab.task[TASK_ID_CCL].taskName);
 		}
 	}
 	
@@ -876,7 +876,7 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 		snd.length = sizeof(msg_struct_sps_ccl_close_report_cfm_t);
 		ret = ihu_message_send(MSG_ID_SPS_CCL_CLOSE_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 		if (ret == IHU_FAILURE)
-			IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
+			IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName, zIhuVmCtrTab.task[TASK_ID_CCL].taskName);
 	}
 
 	//如果从后台收到有价值的反馈
@@ -885,7 +885,7 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 		//注意，这里是CHAR数据，不是L2FRAME的比特数据
 		ret = func_cloud_standard_xml_unpack(&zIhuSpsvirgoMsgRcvBuf, HUITP_MSGID_uni_ccl_state_confirm);
 		if (ret == IHU_FAILURE){
-			zIhuRunErrCnt[TASK_ID_SPSVIRGO]++;
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_SPSVIRGO]++;
 			IhuErrorPrint("SPSVIRGO: Unpack and processing receiving message error!\n");
 			//不能直接返回差错，因为上层还巴巴的等着回复这个消息，不然状态机会出错
 			memset(&snd, 0, sizeof(msg_struct_sps_ccl_close_report_cfm_t));
@@ -893,7 +893,7 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 			snd.length = sizeof(msg_struct_sps_ccl_close_report_cfm_t);
 			ret = ihu_message_send(MSG_ID_SPS_CCL_CLOSE_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 			if (ret == IHU_FAILURE)
-				IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
+				IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName, zIhuVmCtrTab.task[TASK_ID_CCL].taskName);
 		}
 	}
 	
@@ -955,7 +955,7 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_lock_auth_resp_received_handle(StrMsg_HUI
 	snd.length = sizeof(msg_struct_spsvirgo_ccl_cloud_fb_t);
 	ret = ihu_message_send(MSG_ID_SPS_CCL_CLOUD_FB, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 	if (ret == IHU_FAILURE)
-		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
+		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName, zIhuVmCtrTab.task[TASK_ID_CCL].taskName);
 	
 	//返回
 	return IHU_SUCCESS;
@@ -1105,7 +1105,7 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle(StrMsg_HUIT
 		snd.length = sizeof(msg_struct_sps_ccl_event_report_cfm_t);
 		ret = ihu_message_send(MSG_ID_SPS_CCL_EVENT_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 		if (ret == IHU_FAILURE)
-			IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
+			IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName, zIhuVmCtrTab.task[TASK_ID_CCL].taskName);
 	}
 	else if (rcv->reportType.event == HUITP_IEID_UNI_CCL_REPORT_TYPE_CLOSE_EVENT){
 		msg_struct_sps_ccl_close_report_cfm_t snd;
@@ -1114,7 +1114,7 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle(StrMsg_HUIT
 		snd.length = sizeof(msg_struct_sps_ccl_close_report_cfm_t);
 		ret = ihu_message_send(MSG_ID_SPS_CCL_CLOSE_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 		if (ret == IHU_FAILURE)
-			IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
+			IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName, zIhuVmCtrTab.task[TASK_ID_CCL].taskName);
 	}
 	else if (rcv->reportType.event == HUITP_IEID_UNI_CCL_REPORT_TYPE_FAULT_EVENT){
 		msg_struct_sps_ccl_fault_report_cfm_t snd;
@@ -1123,7 +1123,7 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle(StrMsg_HUIT
 		snd.length = sizeof(msg_struct_sps_ccl_fault_report_cfm_t);
 		ret = ihu_message_send(MSG_ID_SPS_CCL_FAULT_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 		if (ret == IHU_FAILURE)
-			IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuTaskInfo[TASK_ID_SPSVIRGO].taskName, zIhuTaskInfo[TASK_ID_CCL].taskName);
+			IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName, zIhuVmCtrTab.task[TASK_ID_CCL].taskName);
 	}
 	else  //不可能到这儿
 	{
