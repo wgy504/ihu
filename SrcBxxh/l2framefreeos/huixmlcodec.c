@@ -14,7 +14,7 @@
 #include "huixmlcodec.h"
 
 //Task Global variables
-extern IhuSysEngParTable_t zIhuSysEngPar; //全局工程参数控制表
+
 
 //XML自定义标准的编码函数方式
 //inputLen：这是包括MsgHead在内的所有缓冲区长度，正常情况下=sizeof(StrMsg_HUITP_MSGID_uni_general_message_t)，或者IE_BODY+4

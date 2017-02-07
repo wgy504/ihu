@@ -180,12 +180,12 @@
 #define FSM_STATE_INVALID 0xFF
 
 //FSM的基础结构定义
-typedef struct FsmStateItem
+typedef struct IhuFsmStateItem
 {
 	UINT16 msg_id;
 	UINT8 state;
 	OPSTAT (*stateFunc)(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len);
-}FsmStateItem_t;
+}IhuFsmStateItem_t;
 
 typedef struct IhuTaskTag
 {
@@ -194,51 +194,51 @@ typedef struct IhuTaskTag
 	QueueHandle_t  QueId;
 	UINT8  state;
 	char   taskName[TASK_NAME_MAX_LENGTH];
-	FsmStateItem_t *fsmPtr;
+	IhuFsmStateItem_t *fsmPtr;
 	xTaskHandle TaskHandle;
 	void*  taskFuncEntry;
 }IhuTaskTag_t;
 
-typedef struct FsmArrayElement
+typedef struct IhuFsmArrayElement
 {
 	OPSTAT (*stateFunc)(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len);
-}FsmArrayElement_t;
+}IhuFsmArrayElement_t;
 
-typedef struct FsmCtrlTable
+typedef struct IhuFsmCtrlTable
 {
-	UINT8 numOfFsmArrayElement;  //每一个具体任务TASK中，定义了多少个STATE-MSGID映射表单
+	UINT8 numOfIhuFsmArrayElement;  //每一个具体任务TASK中，定义了多少个STATE-MSGID映射表单
 	UINT8 taskId;
-	FsmArrayElement_t pFsmArray[MAX_STATE_NUM_IN_ONE_TASK][MAX_MSGID_NUM_IN_ONE_TASK];
-}FsmCtrlTable_t;
+	IhuFsmArrayElement_t pFsmArray[MAX_STATE_NUM_IN_ONE_TASK][MAX_MSGID_NUM_IN_ONE_TASK];
+}IhuFsmCtrlTable_t;
 
 //MsgQueue的基础结构定义
-typedef struct FsmQueueElement
+typedef struct IhuFsmQueueElement
 {
 	UINT8 msgQue[MAX_IHU_MSG_BODY_LENGTH];
 	bool useFlag;
-}FsmQueueElement_t;
+}IhuFsmQueueElement_t;
 
-typedef struct FsmQueueListTable
+typedef struct IhuFsmQueueListTable
 {
-	FsmQueueElement_t queList[MAX_QUEUE_NUM_IN_ONE_TASK];
+	IhuFsmQueueElement_t queList[MAX_QUEUE_NUM_IN_ONE_TASK];
 	UINT8 queIndex;
-}FsmQueueListTable_t;
+}IhuFsmQueueListTable_t;
 
 //FSM的总结构定义
-typedef struct FsmTable
+typedef struct IhuFsmTable
 {
-	UINT8 numOfFsmCtrlTable;  //Number of running (Task + Instance)
+	UINT8 numOfIhuFsmCtrlTable;  //Number of running (Task + Instance)
 	UINT8 currentTaskId;  //transfer task_id to launched FSM machine, then useless
-	FsmCtrlTable_t  pFsmCtrlTable[MAX_TASK_NUM_IN_ONE_IHU];  //所有任务的状态机总控表
-	FsmQueueListTable_t taskQue[MAX_TASK_NUM_IN_ONE_IHU];  //所有任务的消息队列总控表
-}FsmTable_t;
+	IhuFsmCtrlTable_t  pIhuFsmCtrlTable[MAX_TASK_NUM_IN_ONE_IHU];  //所有任务的状态机总控表
+	IhuFsmQueueListTable_t taskQue[MAX_TASK_NUM_IN_ONE_IHU];  //所有任务的消息队列总控表
+}IhuFsmTable_t;
 
 //任务配置的基础配置信息
 typedef struct StrIhuGlobalTaskInputConfig
 {
-	UINT8 taskInputId;
-	char  taskInputName[TASK_NAME_MAX_LENGTH];
-	void* fsmFuncEntry;
+	const UINT8 taskInputId;
+	const char  taskInputName[TASK_NAME_MAX_LENGTH];
+	const void* fsmFuncEntry;
 }StrIhuGlobalTaskInputConfig_t;
 
 //任务模块RESTART的一些全局定义
@@ -314,7 +314,7 @@ extern OPSTAT ihu_vm_send_init_msg_to_app_task(UINT8 dest_id);
 
 //VM FSM related APIs，状态机核心部分，不依赖具体操作系统
 extern OPSTAT FsmInit(void);
-extern OPSTAT FsmAddNew(UINT8 task_id, FsmStateItem_t* pFsmStateItem);
+extern OPSTAT FsmAddNew(UINT8 task_id, IhuFsmStateItem_t* pIhuFsmStateItem);
 extern OPSTAT FsmRemove(UINT8 task_id);
 extern OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len);
 extern OPSTAT FsmProcessingLaunch(void *task);
@@ -333,8 +333,8 @@ extern OPSTAT ihu_message_send_isr(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, v
 extern OPSTAT ihu_message_rcv(UINT8 dest_id, IhuMsgSruct_t *msg);
 extern OPSTAT ihu_task_create(UINT8 task_id, void *(*task_func)(void *), void *arg, int prio);
 extern OPSTAT ihu_task_delete(UINT8 task_id);
-extern OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateItem);
-extern OPSTAT ihu_system_task_init_call(UINT8 task_id, FsmStateItem_t *p);
+extern OPSTAT ihu_task_create_and_run(UINT8 task_id, IhuFsmStateItem_t* pIhuFsmStateItem);
+extern OPSTAT ihu_system_task_init_call(UINT8 task_id, IhuFsmStateItem_t *p);
 extern void   ihu_task_create_all(void);
 extern OPSTAT fsm_com_do_nothing(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern void ihu_sw_restart(void);
@@ -347,7 +347,7 @@ extern OPSTAT FsmProcessingLaunchEntryBareRtos(UINT8 task_id);   //当创建和�
 extern OPSTAT FsmProcessingLaunchExecuteBareRtos(UINT8 task_id); //当创建和启动分离时使用
 extern OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len); //message send
 extern OPSTAT ihu_message_rcv_bare_rtos(UINT8 dest_id, IhuMsgSruct_t *msg);
-extern OPSTAT ihu_system_task_execute_bare_rtos(UINT8 task_id, FsmStateItem_t *p);
+extern OPSTAT ihu_system_task_execute_bare_rtos(UINT8 task_id, IhuFsmStateItem_t *p);
 extern void   ihu_task_execute_all_bare_rtos(void);
 
 /*
@@ -359,25 +359,25 @@ extern void   ihu_task_execute_all_bare_rtos(void);
 //Global variables
 extern IhuTaskTag_t zIhuTaskInfo[MAX_TASK_NUM_IN_ONE_IHU];  //任务控制总表
 extern UINT32 zIhuRunErrCnt[MAX_TASK_NUM_IN_ONE_IHU];       //差错表
-extern FsmTable_t zIhuFsmTable;                             //状态机总表
+extern IhuFsmTable_t zIhuIhuFsmTable;                             //状态机总表
 extern char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK];    //消息名字符串
-extern IhuSysEngParTable_t zIhuSysEngPar;                   //工参
+extern IhuSysEngParTab_t zIhuSysEngPar;                   //工参
 //统一定义，如果不存在不影响编译
-extern FsmStateItem_t IhuFsmVmfo[];                           	//状态机
-extern FsmStateItem_t IhuFsmTimer[];                           //状态机
-extern FsmStateItem_t IhuFsmAdclibra[];                        //状态机
-extern FsmStateItem_t IhuFsmSpileo[];                          //状态机
-extern FsmStateItem_t IhuFsmI2caries[];                        //状态机
-extern FsmStateItem_t IhuFsmPwmtaurus[];                       //状态机
-extern FsmStateItem_t IhuFsmSpsvirgo[];                        //状态机
-extern FsmStateItem_t IhuFsmCanvela[];                      	 //状态机
-extern FsmStateItem_t IhuFsmDidocap[];                         //状态机
-extern FsmStateItem_t IhuFsmLedpisces[];                       //状态机
-extern FsmStateItem_t IhuFsmEthorion[];                        //状态机
-extern FsmStateItem_t IhuFsmDcmiaris[];                        //状态机
-extern FsmStateItem_t IhuFsmEmc68x[];                          //状态机
-extern FsmStateItem_t IhuFsmCcl[];                          	 //状态机
-extern FsmStateItem_t IhuFsmBfsc[];                          	 //状态机 
+extern IhuFsmStateItem_t IhuFsmVmfo[];                           	//状态机
+extern IhuFsmStateItem_t IhuFsmTimer[];                           //状态机
+extern IhuFsmStateItem_t IhuFsmAdclibra[];                        //状态机
+extern IhuFsmStateItem_t IhuFsmSpileo[];                          //状态机
+extern IhuFsmStateItem_t IhuFsmI2caries[];                        //状态机
+extern IhuFsmStateItem_t IhuFsmPwmtaurus[];                       //状态机
+extern IhuFsmStateItem_t IhuFsmSpsvirgo[];                        //状态机
+extern IhuFsmStateItem_t IhuFsmCanvela[];                      	 //状态机
+extern IhuFsmStateItem_t IhuFsmDidocap[];                         //状态机
+extern IhuFsmStateItem_t IhuFsmLedpisces[];                       //状态机
+extern IhuFsmStateItem_t IhuFsmEthorion[];                        //状态机
+extern IhuFsmStateItem_t IhuFsmDcmiaris[];                        //状态机
+extern IhuFsmStateItem_t IhuFsmEmc68x[];                          //状态机
+extern IhuFsmStateItem_t IhuFsmCcl[];                          	 //状态机
+extern IhuFsmStateItem_t IhuFsmBfsc[];                          	 //状态机 
 
 //外部引用API，来自于TIMER任务模块。TIMER任务模块的机制是，必须将VM启动起来，然后TIMER上层任务模块才能被激活，并产生自定义的TIME_OUT消息
 extern OPSTAT ihu_timer_start(UINT8 task_id, UINT8 timer_id, UINT32 t_dur, UINT8 t_type, UINT8 t_res);

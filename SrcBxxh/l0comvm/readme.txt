@@ -10,6 +10,7 @@ CCL=> 最后剩下的任务是摄像头+IAP+节电，然后打开门狗就完美
 = 改进对CCL的错误控制处理过程
 = 优化BFSC的错误控制处理过程
 = 改进HUITP中有关MSG_TYPE的定义，完全将其跟老旧xml/zhb区分开来
+= 清理VM的全局变量定义并归一化
 
 //= ZJL, 2017 Feb.5, CURRENT_SW_DELIVERY R03.114 =>CCL项目
 = 新定义#define HUITP_IEID_UNI_INVENT_HWTYPE_PDTYPE_G7_OTDR_01 0x0711
@@ -1058,7 +1059,7 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 	extern OPSTAT ihu_task_create(UINT8 task_id, void *(*task_func)(void *), void *arg, int prio);
 	extern OPSTAT ihu_task_delete(UINT8 task_id);
 	=> CALLBACK不支持，导致以下函数可能不正常
-	extern OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateItem);
+	extern OPSTAT ihu_task_create_and_run(UINT8 task_id, IhuFsmStateItem_t* pIhuFsmStateItem);
 => VM以及各个任务的自启动RESTART机制，待定
 => 打印时候需要\n做为结束符，先修改完善
 => 基本上完成FreeRTOS VM的框架环境，但还未跟操作系统直接相连接
@@ -1104,7 +1105,7 @@ Update log 2016.Feb.27, SW Version: XQ.WEMC.SW.R03.07
 	extern OPSTAT ihu_task_create(UINT8 task_id, void *(*task_func)(void *), void *arg, int prio);
 	extern OPSTAT ihu_task_delete(UINT8 task_id);
     => CALLBACK不能支持修饰带来的风险
-	OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateItem);
+	OPSTAT ihu_task_create_and_run(UINT8 task_id, IhuFsmStateItem_t* pIhuFsmStateItem);
 = 为了支持删除任务，全局变量开关被打开 #define OS_CFG_TASK_DEL_EN              1u   /* Include code for OSTaskDel()     
 = 为了支持删除队列，全局变量开关被打开 #define OS_CFG_Q_DEL_EN                 1u   /*     Include code for OSQDel()  
 = 为了支持清理队列，全局变量开关被打开#define OS_CFG_Q_FLUSH_EN               1u   /*     Include code for OSQFlush() 

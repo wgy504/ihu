@@ -27,6 +27,8 @@
  *
  **********************************************************************************/
 
+
+
 //全局变量：任务和队列
 IhuTaskTag_t zIhuTaskInfo[MAX_TASK_NUM_IN_ONE_IHU];
 
@@ -35,10 +37,10 @@ UINT32 zIhuRunErrCnt[MAX_TASK_NUM_IN_ONE_IHU];
 IhuGlobalCounter_t zIhuGlobalCounter;  //定义全局计数器COUNTER
 
 //任务状态机FSM全局控制表，占用内存的大户！！！
-FsmTable_t zIhuFsmTable;
+IhuFsmTable_t zIhuIhuFsmTable;
 
 //全局工程参数表
-IhuSysEngParTable_t zIhuSysEngPar; //全局工程参数控制表
+IhuSysEngParTab_t zIhuSysEngPar; //全局工程参数控制表
 
 //全局公用打印字符串
 IhuPrintBufferChar_t zIhuPrintBufferChar[IHU_PRINT_BUFFER_NUMBER];
@@ -554,7 +556,7 @@ void ihu_vm_system_init(void)
 	FsmInit();
 
 	//基本的工程参数表
-	memset(&(zIhuSysEngPar), 0, sizeof(IhuSysEngParTable_t));	
+	memset(&(zIhuSysEngPar), 0, sizeof(IhuSysEngParTab_t));	
 
 	//打开所有模块和消息的TRACE属性
 	for (i=TASK_ID_MIN; i<TASK_ID_MAX; i++){
@@ -826,13 +828,13 @@ OPSTAT FsmInit(void)
 {
 	UINT32 i;
 	IhuDebugPrint("VMFO: >>Start init FSM.\n");
-	zIhuFsmTable.numOfFsmCtrlTable = 0;
+	zIhuIhuFsmTable.numOfIhuFsmCtrlTable = 0;
 	for(i=0; i<MAX_TASK_NUM_IN_ONE_IHU; i++)
 	{
-		zIhuFsmTable.pFsmCtrlTable[i].taskId = TASK_ID_INVALID;
-		zIhuFsmTable.pFsmCtrlTable[i].numOfFsmArrayElement = 0;
+		zIhuIhuFsmTable.pIhuFsmCtrlTable[i].taskId = TASK_ID_INVALID;
+		zIhuIhuFsmTable.pIhuFsmCtrlTable[i].numOfIhuFsmArrayElement = 0;
 	}
-	zIhuFsmTable.currentTaskId = TASK_ID_INVALID;
+	zIhuIhuFsmTable.currentTaskId = TASK_ID_INVALID;
 
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
 		IhuDebugPrint("VMFO: Maxium (%d) tasks/modules supported.\n", MAX_TASK_NUM_IN_ONE_IHU);
@@ -848,13 +850,13 @@ OPSTAT FsmInit(void)
 **------------------------------------------------------------------------------
 ** Arguments :
 **    IN:	 Taskid : entity identification
-**			 pFsmStateItem: pointer to message table of entity
+**			 pIhuFsmStateItem: pointer to message table of entity
 **    OUT:   none
 **    INOUT: none
 **------------------------------------------------------------------------------
 ** Return value : IHU_SUCCESS OR IHU_FAILURE
 *******************************************************************************/
-OPSTAT FsmAddNew(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
+OPSTAT FsmAddNew(UINT8 task_id, IhuFsmStateItem_t* pIhuFsmStateItem)
 {
 	OPSTAT ret;
 	UINT32 state;
@@ -862,12 +864,12 @@ OPSTAT FsmAddNew(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 	UINT32 item, itemNo, i, j;
 
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_NOR_ON) != FALSE){
-		IhuDebugPrint("VMFO: >>Register new FSM. TaskId:(%d), pFsm(0x%x).\n", task_id, (UINT32)pFsmStateItem);
+		IhuDebugPrint("VMFO: >>Register new FSM. TaskId:(%d), pFsm(0x%x).\n", task_id, (UINT32)pIhuFsmStateItem);
 	}
 	/*
 	** Check the array of the state machine.
 	*/
-	if( pFsmStateItem == NULL)
+	if( pIhuFsmStateItem == NULL)
 	{
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Can not init FSM machine.\n");
@@ -879,7 +881,7 @@ OPSTAT FsmAddNew(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 		IhuErrorPrint("VMFO: The task_ID is invalid.\n");
 		return IHU_FAILURE;
 	}
-	if( zIhuFsmTable.pFsmCtrlTable[task_id].taskId != TASK_ID_INVALID )
+	if( zIhuIhuFsmTable.pIhuFsmCtrlTable[task_id].taskId != TASK_ID_INVALID )
 	{
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: This task_id has been already inited.\n");
@@ -889,7 +891,7 @@ OPSTAT FsmAddNew(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 	/*
 	** Check the first entry. 最初一个FSM表单必须以FSM_STATE_ENTRY开始
 	*/
-	if( pFsmStateItem[FSM_STATE_ENTRY].state != FSM_STATE_ENTRY )
+	if( pIhuFsmStateItem[FSM_STATE_ENTRY].state != FSM_STATE_ENTRY )
 	{
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: The format of the FSM table is invalid.\n");
@@ -901,17 +903,17 @@ OPSTAT FsmAddNew(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
     */
 	for(item=1; item < MAX_FSM_STATE_ENTRY_NUM_IN_ONE_TASK; item++)
 	{
-		if( FSM_STATE_END == pFsmStateItem[item].state )
+		if( FSM_STATE_END == pIhuFsmStateItem[item].state )
 		{
 			break;
 		}
-		if( FSM_STATE_ENTRY == pFsmStateItem[item].state )
+		if( FSM_STATE_ENTRY == pIhuFsmStateItem[item].state )
 		{
 			zIhuRunErrCnt[TASK_ID_VMFO]++;
 			IhuErrorPrint("VMFO: Invalid FSM machine.\n");
 			return IHU_FAILURE;
 		}
-		if( NULL == pFsmStateItem[item].stateFunc)
+		if( NULL == pIhuFsmStateItem[item].stateFunc)
 		{
 			zIhuRunErrCnt[TASK_ID_VMFO]++;
 			IhuErrorPrint("VMFO: Invalid state function pointer.\n");
@@ -930,29 +932,29 @@ OPSTAT FsmAddNew(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 		IhuErrorPrint("VMFO: Invalid FSM machine -- Can not find the end of the FSM.\n");
 		return IHU_FAILURE;
 	}
-	zIhuFsmTable.pFsmCtrlTable[task_id].numOfFsmArrayElement = item-1; //有效STATE-MSG条目数，不包括START/END两条
+	zIhuIhuFsmTable.pIhuFsmCtrlTable[task_id].numOfIhuFsmArrayElement = item-1; //有效STATE-MSG条目数，不包括START/END两条
 
 	/*
 	**  Insert this new fsm item into fsm table.
 	**  The position in the fsm table is based on the task_id.
 	*/
-	zIhuFsmTable.numOfFsmCtrlTable++;
+	zIhuIhuFsmTable.numOfIhuFsmCtrlTable++;
 
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_NOR_ON) != FALSE)
 	{
 		IhuDebugPrint("VMFO: FsmAddNew: task_id = 0x%x [%s], src_id= %x, dest_id= %X.\n", task_id, zIhuTaskInfo[task_id].taskName, 0, 0);
-		IhuDebugPrint("VMFO: After add this one, Total (%d) FSM in the table.\n", zIhuFsmTable.numOfFsmCtrlTable);
+		IhuDebugPrint("VMFO: After add this one, Total (%d) FSM in the table.\n", zIhuIhuFsmTable.numOfIhuFsmCtrlTable);
 	}
 
 	/*
 	** Save the state machine info.
 	*/
-	zIhuFsmTable.pFsmCtrlTable[task_id].taskId = task_id;
+	zIhuIhuFsmTable.pIhuFsmCtrlTable[task_id].taskId = task_id;
 	for(i=0; i<MAX_STATE_NUM_IN_ONE_TASK; i++)
 	{
 		for(j=0; j<MAX_MSGID_NUM_IN_ONE_TASK; j++)
 		{
-			zIhuFsmTable.pFsmCtrlTable[task_id].pFsmArray[i][j].stateFunc = NULL;
+			zIhuIhuFsmTable.pIhuFsmCtrlTable[task_id].pFsmArray[i][j].stateFunc = NULL;
 		}
 	}
 
@@ -960,15 +962,15 @@ OPSTAT FsmAddNew(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 	//内部消息也不能使用任意定义的数值，因为这里将采用MsgId进行索引，以提高效率
 	for(itemNo=0; itemNo < item; itemNo++)
 	{
-		state = pFsmStateItem[itemNo].state;
+		state = pIhuFsmStateItem[itemNo].state;
 		if(state >= MAX_STATE_NUM_IN_ONE_TASK)
 		{
 			zIhuRunErrCnt[TASK_ID_VMFO]++;
 			IhuErrorPrint("VMFO: The State number > %d.\n", MAX_STATE_NUM_IN_ONE_TASK);
 			return IHU_FAILURE;
 		}
-		msgid = pFsmStateItem[itemNo].msg_id & MASK_MSGID_NUM_IN_ONE_TASK;
-		zIhuFsmTable.pFsmCtrlTable[task_id].pFsmArray[state][msgid].stateFunc = pFsmStateItem[itemNo].stateFunc;
+		msgid = pIhuFsmStateItem[itemNo].msg_id & MASK_MSGID_NUM_IN_ONE_TASK;
+		zIhuIhuFsmTable.pIhuFsmCtrlTable[task_id].pFsmArray[state][msgid].stateFunc = pIhuFsmStateItem[itemNo].stateFunc;
 	}
 
 	/*
@@ -980,7 +982,7 @@ OPSTAT FsmAddNew(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
     ** 这一块代码不能复用，因为这个任务和被执行任务并不再同一个空间之内，它只能被目标任务的入口函数进行执行
     ** 该函数API必须在每个任务中进行表达，否则一定会出错， 该代码需要移动到任务创建成功后的入口函数中进行调用
     */
-	//(zIhuFsmTable.pFsmCtrlTable[task_id].pFsmArray[FSM_STATE_ENTRY][MSG_ID_COM_MIN].stateFunc)(task_id, 0, NULL, 0);
+	//(zIhuIhuFsmTable.pIhuFsmCtrlTable[task_id].pFsmArray[FSM_STATE_ENTRY][MSG_ID_COM_MIN].stateFunc)(task_id, 0, NULL, 0);
 
 	/*
 	** Set the state to init state(FSM_STATE_IDLE).
@@ -1005,7 +1007,7 @@ OPSTAT FsmRemove(UINT8 task_id)
 	}
 
 	//设置无效
-	zIhuFsmTable.pFsmCtrlTable[task_id].taskId = TASK_ID_INVALID;
+	zIhuIhuFsmTable.pIhuFsmCtrlTable[task_id].taskId = TASK_ID_INVALID;
 
     return IHU_SUCCESS;
 }
@@ -1061,7 +1063,7 @@ OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr,
 	** Search for the dest_id task state
 	*/
 
-	if( zIhuFsmTable.pFsmCtrlTable[dest_id].taskId != dest_id )
+	if( zIhuIhuFsmTable.pIhuFsmCtrlTable[dest_id].taskId != dest_id )
 	{
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: The destination process does not exist.\n");
@@ -1084,15 +1086,15 @@ OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr,
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE)
 	{
 		//消息ID的顺序跟commsgxxx.h的中的定义可能不完全一样，导致这里直接POP出消息名字会出错，注意！
-		IhuDebugPrint("VMFO: Call state function(0x%x) in state(%d) of dest task(0x%x[%s]) for msg(0x%x[%s]), src=(0x%x[%s]).\n", (UINT32)zIhuFsmTable.pFsmCtrlTable[dest_id].pFsmArray[state][mid].stateFunc, state, dest_id, zIhuTaskInfo[dest_id].taskName, mid, zIhuMsgNameList[mid-1], src_id, zIhuTaskInfo[src_id].taskName);
+		IhuDebugPrint("VMFO: Call state function(0x%x) in state(%d) of dest task(0x%x[%s]) for msg(0x%x[%s]), src=(0x%x[%s]).\n", (UINT32)zIhuIhuFsmTable.pIhuFsmCtrlTable[dest_id].pFsmArray[state][mid].stateFunc, state, dest_id, zIhuTaskInfo[dest_id].taskName, mid, zIhuMsgNameList[mid-1], src_id, zIhuTaskInfo[src_id].taskName);
 	}
 
 	/*
 	** Call the state function.
 	*/
-	if(zIhuFsmTable.pFsmCtrlTable[dest_id].pFsmArray[state][mid].stateFunc != NULL)
+	if(zIhuIhuFsmTable.pIhuFsmCtrlTable[dest_id].pFsmArray[state][mid].stateFunc != NULL)
 	{
-		ret = (zIhuFsmTable.pFsmCtrlTable[dest_id].pFsmArray[state][mid].stateFunc)(dest_id, src_id, param_ptr, param_len);
+		ret = (zIhuIhuFsmTable.pIhuFsmCtrlTable[dest_id].pFsmArray[state][mid].stateFunc)(dest_id, src_id, param_ptr, param_len);
 		if( IHU_FAILURE == ret)
 		{
 			zIhuRunErrCnt[TASK_ID_VMFO]++;			
@@ -1138,8 +1140,8 @@ OPSTAT FsmProcessingLaunch(void *task)
 	** Check the task_id
 	*/
 	//这里的currentTaskId通过currentTaskId是传不过来的，必须采用arg参数传递
-	//task_id = zIhuFsmTable.currentTaskId;
-	//zIhuFsmTable.currentTaskId = TASK_ID_INVALID;
+	//task_id = zIhuIhuFsmTable.currentTaskId;
+	//zIhuIhuFsmTable.currentTaskId = TASK_ID_INVALID;
 	task_id = (UINT8)*(char *)task;
 
 	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
@@ -1151,8 +1153,8 @@ OPSTAT FsmProcessingLaunch(void *task)
 	/*
 	** Run each task entry API, give each task a chance to init any specific information
 	*/
-	if (zIhuFsmTable.pFsmCtrlTable[task_id].pFsmArray[FSM_STATE_ENTRY][MSG_ID_ENTRY].stateFunc != NULL){
-		(zIhuFsmTable.pFsmCtrlTable[task_id].pFsmArray[FSM_STATE_ENTRY][MSG_ID_ENTRY].stateFunc)(task_id, 0, NULL, 0);
+	if (zIhuIhuFsmTable.pIhuFsmCtrlTable[task_id].pFsmArray[FSM_STATE_ENTRY][MSG_ID_ENTRY].stateFunc != NULL){
+		(zIhuIhuFsmTable.pIhuFsmCtrlTable[task_id].pFsmArray[FSM_STATE_ENTRY][MSG_ID_ENTRY].stateFunc)(task_id, 0, NULL, 0);
 	}else{
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Task (ID=%d) get no init entry fetched!\n", task_id);
@@ -1902,19 +1904,19 @@ OPSTAT ihu_task_create(UINT8 task_id, void *(*task_func)(void *), void *arg, int
 		return IHU_FAILURE;
 	}
 
-	//As FsmProcessLaunch has to transfer task_id in, we will use global variance of zIhuFsmTable.currentTaskId
+	//As FsmProcessLaunch has to transfer task_id in, we will use global variance of zIhuIhuFsmTable.currentTaskId
 	//So task_id has to store into there
 	//Wonderful mechanism!!!
 	//在FreeRTOS下，任务创建好了之后，并没有立即启动，而是要等待osKernelStart()执行之后才能启动调度，所以这个机制对FreeRTOS并不适合
-//	if (zIhuFsmTable.currentTaskId != TASK_ID_INVALID){
+//	if (zIhuIhuFsmTable.currentTaskId != TASK_ID_INVALID){
 //		ihu_sleep(1);
 //	}
-//	if (zIhuFsmTable.currentTaskId != TASK_ID_INVALID){
+//	if (zIhuIhuFsmTable.currentTaskId != TASK_ID_INVALID){
 //		zIhuRunErrCnt[TASK_ID_VMFO]++;
 //		IhuErrorPrint("VMFO: Task_id not yet ready by running process, new task create failure!\n");
 //		return IHU_FAILURE;
 //	}
-//	zIhuFsmTable.currentTaskId = task_id;
+//	zIhuIhuFsmTable.currentTaskId = task_id;
 //void (*TaskFunction_t)( void * )
 	
 	// creation of the task
@@ -1967,7 +1969,7 @@ OPSTAT ihu_task_delete(UINT8 task_id)
 }
 
 //聚合创建任务，消息队列，并直接让其开始运行
-OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
+OPSTAT ihu_task_create_and_run(UINT8 task_id, IhuFsmStateItem_t* pIhuFsmStateItem)
 {
 	OPSTAT ret = 0;
 	
@@ -1979,7 +1981,7 @@ OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 	}
 
 	//Init Fsm table
-	ret = FsmAddNew(task_id, pFsmStateItem);
+	ret = FsmAddNew(task_id, pIhuFsmStateItem);
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Init state machine FsmAddNew error, taskid = %d.\n", task_id);
@@ -2025,7 +2027,7 @@ OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 }
 
 //初始化任务并启动
-OPSTAT ihu_system_task_init_call(UINT8 task_id, FsmStateItem_t *p)
+OPSTAT ihu_system_task_init_call(UINT8 task_id, IhuFsmStateItem_t *p)
 {
 	int ret = 0;
 	
@@ -2039,7 +2041,7 @@ OPSTAT ihu_system_task_init_call(UINT8 task_id, FsmStateItem_t *p)
 	//入参检查
 	if (p == NULL){
 		zIhuRunErrCnt[TASK_ID_VMFO]++;
-		IhuErrorPrint("VMFO: Input wrong FsmStateItem pointer!\n");
+		IhuErrorPrint("VMFO: Input wrong IhuFsmStateItem pointer!\n");
 		return IHU_FAILURE;
 	}
 	
@@ -2077,11 +2079,11 @@ OPSTAT ihu_system_task_init_call(UINT8 task_id, FsmStateItem_t *p)
 //创建所有任务，采用了InputConfiguration FuncHandler之后，这里的处理已经大大简化了
 void ihu_task_create_all(void)
 {
-	FsmStateItem_t *p;
+	IhuFsmStateItem_t *p;
 	int task_id = 0;
 	
 	for (task_id = TASK_ID_MIN + 1; task_id < TASK_ID_MAX; task_id++){
-		p = (FsmStateItem_t *)zIhuTaskInfo[task_id].taskFuncEntry;
+		p = (IhuFsmStateItem_t *)zIhuTaskInfo[task_id].taskFuncEntry;
 		if ((p != NULL) && (zIhuTaskInfo[task_id].pnpState == IHU_TASK_PNP_ON)){
 			ihu_system_task_init_call(task_id, p);
 			ihu_vm_send_init_msg_to_app_task(task_id);
@@ -2138,8 +2140,8 @@ OPSTAT FsmProcessingLaunchEntryBareRtos(UINT8 task_id)
   /*
   ** Run each task entry API, give each task a chance to init any specific information
   */
-  if (zIhuFsmTable.pFsmCtrlTable[task_id].pFsmArray[FSM_STATE_ENTRY][MSG_ID_ENTRY].stateFunc != NULL){
-    (zIhuFsmTable.pFsmCtrlTable[task_id].pFsmArray[FSM_STATE_ENTRY][MSG_ID_ENTRY].stateFunc)(task_id, 0, NULL, 0);
+  if (zIhuIhuFsmTable.pIhuFsmCtrlTable[task_id].pFsmArray[FSM_STATE_ENTRY][MSG_ID_ENTRY].stateFunc != NULL){
+    (zIhuIhuFsmTable.pIhuFsmCtrlTable[task_id].pFsmArray[FSM_STATE_ENTRY][MSG_ID_ENTRY].stateFunc)(task_id, 0, NULL, 0);
   }else{
     zIhuRunErrCnt[TASK_ID_VMFO]++;
     IhuErrorPrint("VMFO: Task (ID=%d) get no init entry fetched!\n", task_id);
@@ -2211,16 +2213,16 @@ OPSTAT ihu_message_rcv_bare_rtos(UINT8 dest_id, IhuMsgSruct_t *msg)
   //循环查找一个任务的消息队列，看看有无有效消息
   for (i=0; i<MAX_QUEUE_NUM_IN_ONE_TASK; i++)
   {
-    j = zIhuFsmTable.taskQue[dest_id].queIndex + i;
+    j = zIhuIhuFsmTable.taskQue[dest_id].queIndex + i;
     j = j%MAX_QUEUE_NUM_IN_ONE_TASK;
-    if (zIhuFsmTable.taskQue[dest_id].queList[j].useFlag == TRUE)
+    if (zIhuIhuFsmTable.taskQue[dest_id].queList[j].useFlag == TRUE)
     {
       //找到了未消耗的消息
-      memcpy(msg, zIhuFsmTable.taskQue[dest_id].queList[j].msgQue, MAX_IHU_MSG_BODY_LENGTH);
-      zIhuFsmTable.taskQue[dest_id].queList[j].useFlag = FALSE;
+      memcpy(msg, zIhuIhuFsmTable.taskQue[dest_id].queList[j].msgQue, MAX_IHU_MSG_BODY_LENGTH);
+      zIhuIhuFsmTable.taskQue[dest_id].queList[j].useFlag = FALSE;
       //将INDEX指向下一个
       j = (j+1) % MAX_QUEUE_NUM_IN_ONE_TASK;
-      zIhuFsmTable.taskQue[dest_id].queIndex = j;
+      zIhuIhuFsmTable.taskQue[dest_id].queIndex = j;
       //判断消息的合法性
       if ((msg->dest_id <= TASK_ID_MIN) || (msg->dest_id >= TASK_ID_MAX)){
         zIhuRunErrCnt[TASK_ID_VMFO]++;
@@ -2300,16 +2302,16 @@ OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, vo
   //然后送到目的地，循环查找一个任务的消息队列，看看有无空闲位置
   for (i=0; i<MAX_QUEUE_NUM_IN_ONE_TASK; i++)
   {
-    j = zIhuFsmTable.taskQue[dest_id].queIndex + i;
+    j = zIhuIhuFsmTable.taskQue[dest_id].queIndex + i;
     j = j%MAX_QUEUE_NUM_IN_ONE_TASK;
-    if (zIhuFsmTable.taskQue[dest_id].queList[j].useFlag == FALSE)
+    if (zIhuIhuFsmTable.taskQue[dest_id].queList[j].useFlag == FALSE)
     {
       //找到了空闲的消息位置
-      memcpy(zIhuFsmTable.taskQue[dest_id].queList[j].msgQue, &msg, MAX_IHU_MSG_BODY_LENGTH);
-      zIhuFsmTable.taskQue[dest_id].queList[j].useFlag = TRUE;
+      memcpy(zIhuIhuFsmTable.taskQue[dest_id].queList[j].msgQue, &msg, MAX_IHU_MSG_BODY_LENGTH);
+      zIhuIhuFsmTable.taskQue[dest_id].queList[j].useFlag = TRUE;
       //将INDEX指向下一个
       j = (j+1) % MAX_QUEUE_NUM_IN_ONE_TASK;
-      zIhuFsmTable.taskQue[dest_id].queIndex = j;
+      zIhuIhuFsmTable.taskQue[dest_id].queIndex = j;
       //退出循环
       Flag = TRUE;
       break;
@@ -2525,7 +2527,7 @@ OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, vo
 
 
 //为了对付不存在OS的情形
-OPSTAT ihu_system_task_execute_bare_rtos(UINT8 task_id, FsmStateItem_t *p)
+OPSTAT ihu_system_task_execute_bare_rtos(UINT8 task_id, IhuFsmStateItem_t *p)
 {
   int ret = 0;
   char strDebug[IHU_PRINT_CHAR_SIZE];
@@ -2541,7 +2543,7 @@ OPSTAT ihu_system_task_execute_bare_rtos(UINT8 task_id, FsmStateItem_t *p)
   //入参检查
   if (p == NULL){
     zIhuRunErrCnt[TASK_ID_VMFO]++;
-    IhuErrorPrint("VMFO: Input wrong FsmStateItem pointer!\n");
+    IhuErrorPrint("VMFO: Input wrong IhuFsmStateItem pointer!\n");
     return IHU_FAILURE;
   }
 

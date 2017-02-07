@@ -46,7 +46,7 @@ enum FSM_STATE_ADCLIBRA
 //#define FSM_STATE_INVALID 0xFF
 
 //Global variables
-extern FsmStateItem_t IhuFsmAdclibra[];
+extern IhuFsmStateItem_t IhuFsmAdclibra[];
 
 //本地需要用到的核心参数
 typedef struct strIhuBfscAdcWeightPar

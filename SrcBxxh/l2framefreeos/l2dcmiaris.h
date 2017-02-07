@@ -45,7 +45,7 @@ enum FSM_STATE_DCMIARIS
 //#define FSM_STATE_INVALID 0xFF
 
 //Global variables
-extern FsmStateItem_t IhuFsmDcmiaris[];
+extern IhuFsmStateItem_t IhuFsmDcmiaris[];
 
 //本地需要用到的核心参数
 typedef struct strIhuCclDcmiPar

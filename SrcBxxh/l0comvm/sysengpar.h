@@ -169,14 +169,14 @@ typedef struct SysEngParElementHwBurnPhyIdAddr
 #define SYS_ENG_PAR_PRJ_NAME_LEN 20
 //EMCWX的符号空间太小，必须限制
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCWX_ID)
-	typedef struct IhuSysEngParTable
+	typedef struct IhuSysEngParTab
 	{
 		char prjname[SYS_ENG_PAR_PRJ_NAME_LEN];
 		UINT8 debugMode;
 		UINT8 traceMode;
-	}IhuSysEngParTable_t;
+	}IhuSysEngParTab_t;
 #else
-	typedef struct IhuSysEngParTable
+	typedef struct IhuSysEngParTab
 	{
 		char prjname[SYS_ENG_PAR_PRJ_NAME_LEN];
 		SysEngParElementComm_t comm;
@@ -188,7 +188,7 @@ typedef struct SysEngParElementHwBurnPhyIdAddr
 		UINT8 traceMode;
 		SysEngParElementTrace_t traceList;
 		SysEngParElementHwBurnPhyIdAddr_t hwBurnId;
-	}IhuSysEngParTable_t;	
+	}IhuSysEngParTab_t;	
 #endif	
 
 #endif /* L0COMVM_SYSENGPAREMCWX_H_ */

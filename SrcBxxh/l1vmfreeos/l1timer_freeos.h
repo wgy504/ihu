@@ -161,7 +161,7 @@ typedef struct IhuTimerTable
 #endif
 
 //Global variables
-extern FsmStateItem_t IhuFsmTimer[];
+extern IhuFsmStateItem_t IhuFsmTimer[];
 extern IhuTimerTable_t zIhuTimerTable;
 
 //API

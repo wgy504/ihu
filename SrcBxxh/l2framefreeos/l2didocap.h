@@ -54,7 +54,7 @@ enum FSM_STATE_DIDOCAP
 //#define FSM_STATE_INVALID 0xFF
 
 //Global variables
-extern FsmStateItem_t IhuFsmDidocap[];
+extern IhuFsmStateItem_t IhuFsmDidocap[];
 
 //本地需要用到的核心参数
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)

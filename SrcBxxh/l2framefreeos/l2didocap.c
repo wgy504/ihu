@@ -16,7 +16,7 @@
 /*
 ** FSM of the DIDOCAP
 */
-FsmStateItem_t IhuFsmDidocap[] =
+IhuFsmStateItem_t IhuFsmDidocap[] =
 {
   //MessageId                 						//State                   		 							//Function
 	//启始点，固定定义，不要改动, 使用ENTRY/END，意味者MSGID肯定不可能在某个高位区段中；考虑到所有任务共享MsgId，即使分段，也无法实现
