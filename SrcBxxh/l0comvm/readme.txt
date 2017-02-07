@@ -9,6 +9,7 @@ CCL=> 最后剩下的任务是摄像头+IAP+节电，然后打开门狗就完美
 = MsgNameList的清理：完善变量命名，增加TRACE控制逻辑，完整的存入到zIhuSysEngPar中去
 = TaskCtrl的TRACE逻辑控制也加入到zIhuSysEngPar
 = 使能Trace时对CTRL FLAG的效应
+= 两个项目实测，均回归正常
 
 //= ZJL, 2017 Feb.6, CURRENT_SW_DELIVERY R03.115 =>CCL项目/BFSC
 = 对SPSVIRGO/CCL中错误控制的处理改进
