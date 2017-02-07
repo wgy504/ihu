@@ -5,13 +5,16 @@
 CCL=> 最后剩下的任务是摄像头+IAP+节电，然后打开门狗就完美了
 **************************************************************************
 
+//= ZJL, 2017 Feb.7, CURRENT_SW_DELIVERY R03.116 =>CCL项目/BFSC
+= MsgNameList的清理？？？
+
 //= ZJL, 2017 Feb.6, CURRENT_SW_DELIVERY R03.115 =>CCL项目/BFSC
 = 对SPSVIRGO/CCL中错误控制的处理改进
 = 改进对CCL的错误控制处理过程
 = 优化BFSC的错误控制处理过程
 = 改进HUITP中有关MSG_TYPE的定义，完全将其跟老旧xml/zhb区分开来
 = 清理VM的全局变量定义并归一化
-= MsgNameList的清理？？？
+= 两个项目回归，均没有问题，而且连带PWM/ETH两个任务模块均改好了
 
 //= ZJL, 2017 Feb.5, CURRENT_SW_DELIVERY R03.114 =>CCL项目
 = 新定义#define HUITP_IEID_UNI_INVENT_HWTYPE_PDTYPE_G7_OTDR_01 0x0711

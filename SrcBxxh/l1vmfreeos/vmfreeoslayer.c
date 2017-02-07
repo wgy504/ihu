@@ -472,9 +472,12 @@ void ihu_vm_system_ctr_table_init(void)
 	int i = 0, item = 0;
 	UINT8 taskid = 0;
 	
-	//初始化打印缓冲区
-	zIhuVmCtrTab.print.prtIndex = 0;
-	memset(&(zIhuVmCtrTab.print.prtBuf[0].localIndex), 0, sizeof(IhuPrintBufferChar_t));
+	//初始化三表
+	memset(&zIhuVmCtrTab, 0, sizeof(IhuVmCtrTab_t));
+	memset(&zIhuSysEngPar, 0, sizeof(IhuSysEngParTab_t));
+	memset(&zIhuSysStaPm, 0, sizeof(IhuSysStaPm_t));
+	 	
+	//初始化打印缓冲区 
 	//采用OS_MUTEX_CREATE居然不成功，怪哉。。。
 	//OS_MUTEX_CREATE(zIhuVmCtrTab.print.prtMutex);
 	zIhuVmCtrTab.print.prtMutex = xSemaphoreCreateRecursiveMutex();
@@ -493,12 +496,10 @@ void ihu_vm_system_ctr_table_init(void)
 		IhuErrorPrint("VMFO: Initialize VMFO failure, configuration of MAX_TASK_NUM_IN_ONE_IHU error!\n");
 		return;
 	}
-	memset(&zIhuVmCtrTab.task, 0, sizeof(zIhuVmCtrTab.task)*MAX_TASK_NUM_IN_ONE_IHU);
 	for (i=TASK_ID_MIN; i<=TASK_ID_MAX; i++){
 		zIhuVmCtrTab.task[i].TaskId = i;
 		zIhuVmCtrTab.task[i].pnpState = IHU_TASK_PNP_OFF;
 	}
-	memset(zIhuSysStaPm.taskRunErrCnt, 0, sizeof(UINT32) * MAX_TASK_NUM_IN_ONE_IHU);
 	
 	//首先扫描任务输入配置表
 	//起始必须是TASK_ID_MIN条目
@@ -538,9 +539,6 @@ void ihu_vm_system_ctr_table_init(void)
 	
 	//Init Fsm
 	FsmInit();
-
-	//基本的工程参数表
-	memset(&(zIhuSysEngPar), 0, sizeof(IhuSysEngParTab_t));	
 
 	//打开所有模块和消息的TRACE属性
 	for (i=TASK_ID_MIN; i<TASK_ID_MAX; i++){
