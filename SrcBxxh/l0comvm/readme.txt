@@ -5,8 +5,10 @@
 CCL=> 最后剩下的任务是摄像头+IAP+节电，然后打开门狗就完美了
 **************************************************************************
 
-//= ZJL, 2017 Feb.7, CURRENT_SW_DELIVERY R03.116 =>CCL项目
-= MsgNameList的清理？？？
+//= ZJL, 2017 Feb.7, CURRENT_SW_DELIVERY R03.116 =>CCL项目/BFSC
+= MsgNameList的清理：完善变量命名，增加TRACE控制逻辑，完整的存入到zIhuSysEngPar中去
+= TaskCtrl的TRACE逻辑控制也加入到zIhuSysEngPar
+= 使能Trace时对CTRL FLAG的效应
 
 //= ZJL, 2017 Feb.6, CURRENT_SW_DELIVERY R03.115 =>CCL项目/BFSC
 = 对SPSVIRGO/CCL中错误控制的处理改进

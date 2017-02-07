@@ -3,7 +3,7 @@
 <title>Static Call Graph - [PrjBfscFo@207VC\PrjBfscFo@207VC.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image PrjBfscFo@207VC\PrjBfscFo@207VC.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Tue Feb 07 18:55:25 2017
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Tue Feb 07 20:53:08 2017
 <BR><P>
 <H3>Maximum Stack Usage =       1296 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -747,9 +747,9 @@ Global Symbols
 
 <P><STRONG><a name="[20d]"></a>__scatterload_rt2</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, init.o(.text), UNUSED)
 
-<P><STRONG><a name="[20e]"></a>__decompress</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __dczerorl2.o(.text), UNUSED)
+<P><STRONG><a name="[20e]"></a>__decompress</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __dclz77c.o(.text), UNUSED)
 
-<P><STRONG><a name="[20f]"></a>__decompress1</STRONG> (Thumb, 86 bytes, Stack size unknown bytes, __dczerorl2.o(.text), UNUSED)
+<P><STRONG><a name="[20f]"></a>__decompress2</STRONG> (Thumb, 94 bytes, Stack size unknown bytes, __dclz77c.o(.text), UNUSED)
 
 <P><STRONG><a name="[47]"></a>BusFault_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f2xx_it.o(i.BusFault_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f207xx.o(RESET)
@@ -867,7 +867,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> vmfreeoslayer.o(i.ihu_task_create_and_run)
 </UL>
-<P><STRONG><a name="[d2]"></a>FsmRunEngine</STRONG> (Thumb, 646 bytes, Stack size 64 bytes, vmfreeoslayer.o(i.FsmRunEngine))
+<P><STRONG><a name="[d2]"></a>FsmRunEngine</STRONG> (Thumb, 686 bytes, Stack size 64 bytes, vmfreeoslayer.o(i.FsmRunEngine))
 <BR><BR>[Stack]<UL><LI>Max Depth = 536<LI>Call Chain = FsmRunEngine &rArr; FsmGetState &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
@@ -3264,7 +3264,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FsmProcessingLaunch
 </UL>
 
-<P><STRONG><a name="[15c]"></a>ihu_message_send</STRONG> (Thumb, 3040 bytes, Stack size 408 bytes, vmfreeoslayer.o(i.ihu_message_send))
+<P><STRONG><a name="[15c]"></a>ihu_message_send</STRONG> (Thumb, 3546 bytes, Stack size 408 bytes, vmfreeoslayer.o(i.ihu_message_send))
 <BR><BR>[Stack]<UL><LI>Max Depth = 952<LI>Call Chain = ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[19a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericSend
@@ -3336,7 +3336,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_can_loopback_callback
 </UL>
 
-<P><STRONG><a name="[14a]"></a>ihu_msgid_to_string</STRONG> (Thumb, 126 bytes, Stack size 88 bytes, vmfreeoslayer.o(i.ihu_msgid_to_string))
+<P><STRONG><a name="[14a]"></a>ihu_msgid_to_string</STRONG> (Thumb, 146 bytes, Stack size 88 bytes, vmfreeoslayer.o(i.ihu_msgid_to_string))
 <BR><BR>[Stack]<UL><LI>Max Depth = 544<LI>Call Chain = ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
@@ -3469,8 +3469,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[1a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_task_create_all
 </UL>
 
-<P><STRONG><a name="[1a6]"></a>ihu_vm_system_ctr_table_init</STRONG> (Thumb, 842 bytes, Stack size 40 bytes, vmfreeoslayer.o(i.ihu_vm_system_ctr_table_init))
-<BR><BR>[Stack]<UL><LI>Max Depth = 512<LI>Call Chain = ihu_vm_system_ctr_table_init &rArr; FsmInit &rArr; IhuDebugPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<P><STRONG><a name="[1a6]"></a>ihu_vm_system_ctr_table_init</STRONG> (Thumb, 1820 bytes, Stack size 48 bytes, vmfreeoslayer.o(i.ihu_vm_system_ctr_table_init))
+<BR><BR>[Stack]<UL><LI>Max Depth = 520<LI>Call Chain = ihu_vm_system_ctr_table_init &rArr; FsmInit &rArr; IhuDebugPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueCreateMutex
 <LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo

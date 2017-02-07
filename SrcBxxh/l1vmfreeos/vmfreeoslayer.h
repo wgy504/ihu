@@ -294,6 +294,11 @@ typedef struct IhuVmCtrTaskStaticCfg
 	const UINT8 taskInputId;
 	const char  taskInputName[TASK_NAME_MAX_LENGTH];
 	void* fsmFuncEntry;
+	const UINT8 traceCtrFlag;
+	const UINT8 traceModToAllowFlag;
+	const UINT8 traceModToRestrictFlag;
+	const UINT8 traceModFromAllowFlag;
+	const UINT8 traceModFromRestrictFlag;	
 }IhuVmCtrTaskStaticCfg_t;
 
 //消息MSG初始化配置静态表
