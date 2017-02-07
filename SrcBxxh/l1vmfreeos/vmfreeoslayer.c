@@ -23,13 +23,20 @@
 
 /**********************************************************************************
  *
- *   VMLAYER全局变量
+ *   VMLAYER全局三张变量控制表
  *
  **********************************************************************************/
 
 IhuVmCtrTab_t 			zIhuVmCtrTab;  		//全局系统总控表
 IhuSysEngParTab_t 	zIhuSysEngPar; 		//全局工程参数控制表
 IhuSysStaPm_t				zIhuSysStaPm;			//全局性能统计表
+
+/*
+ *
+ *   任务初始化配置参数
+ *
+ */
+
 
 //任务初始化配置参数
 //从极致优化内存的角度，这里浪费了2个TASK对应的内存空间（MIN=0/MAX=n+1)，但它却极大的改善了程序编写的效率，值得浪费！！！
@@ -78,161 +85,115 @@ IhuVmCtrTaskStaticCfg_t zIhuVmCtrTaskStaticCfg[] =
 //消息ID的定义全局表，方便TRACE函数使用
 //请服从MSG_NAME_MAX_LENGTH的最长定义，不然出错
 //全局变量：消息打印命名
+IhuVmCtrMsgStaticCfg_t zIhuVmCtrMsgStaticCfg[] = {
+	//MSG_ID,    				                            消息名字				                         TRACE_CTRL   //注释
+	//START FLAG
+  {MSG_ID_COM_MIN,                                "MSG_ID_COM_MIN",                        1, 1, 1},    //STARTING
+  {MSG_ID_COM_INIT,                               "MSG_ID_COM_INIT",                       1, 1, 1},
+  {MSG_ID_COM_INIT_FB,                            "MSG_ID_COM_INIT_FB",                    1, 1, 1},
+  {MSG_ID_COM_RESTART,                            "MSG_ID_COM_RESTART",                    1, 1, 1},
+  {MSG_ID_COM_TIME_OUT,                           "MSG_ID_COM_TIME_OUT",                   1, 1, 1},
+  {MSG_ID_COM_STOP,                               "MSG_ID_COM_STOP",                       1, 1, 1},
+  {MSG_ID_COM_HEART_BEAT,                         "MSG_ID_COM_HEART_BEAT",                 1, 1, 1},
+  {MSG_ID_COM_HEART_BEAT_FB,                      "MSG_ID_COM_HEART_BEAT_FB",              1, 1, 1},
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
-char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK] ={
-	"MSG_ID_COM_MIN",
-	"MSG_ID_COM_INIT",
-	"MSG_ID_COM_INIT_FB",
-	"MSG_ID_COM_RESTART",
-	"MSG_ID_COM_TIME_OUT",
-	"MSG_ID_COM_HEART_BEAT",
-	"MSG_ID_COM_HEART_BEAT_FB",
-	"MSG_ID_XXX_NULL"
-};
+  {MSG_ID_XXX_NULL,                               "MSG_ID_XXX_NULL",                       1, 1, 1},
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK] ={
-	//START FLAG
-	"MSG_ID_COM_MIN", //Starting point
-	
-	//正常的消息ID
-	"MSG_ID_COM_INIT",
-	"MSG_ID_COM_INIT_FB",
-	"MSG_ID_COM_RESTART",  //L1->重新初始化上下文数据
-	"MSG_ID_COM_TIME_OUT",
-	"MSG_ID_COM_STOP",
-	"MSG_ID_COM_HEART_BEAT",
-	"MSG_ID_COM_HEART_BEAT_FB",
-	
-	//VMFO
-	"MSG_ID_VMFO_TIMER_1S_PERIOD",
-	
-	//ADC
-	
-	//LED
-
-	//DIDO
-	"MSG_ID_DIDO_CCL_SENSOR_STATUS_RESP",
-	"MSG_ID_DIDO_CCL_EVENT_LOCK_TRIGGER",
-	"MSG_ID_DIDO_CCL_EVENT_FAULT_TRIGGER",
-	"MSG_ID_DIDO_CCL_EVENT_STATUS_UPDATE",
-	"MSG_ID_DIDO_CCL_DOOR_OPEN_EVENT",
-	"MSG_ID_DIDO_CCL_LOCK_C_DOOR_C_EVENT",
-
-	//SPS
-	"MSG_ID_SPS_L2FRAME_SEND",
-	"MSG_ID_SPS_L2FRAME_RCV",
-	"MSG_ID_SPS_CCL_CLOUD_FB",
-	"MSG_ID_SPS_CCL_SENSOR_STATUS_RESP",
-	"MSG_ID_SPS_CCL_EVENT_REPORT_CFM",
-	"MSG_ID_SPS_CCL_FAULT_REPORT_CFM",
-	"MSG_ID_SPS_CCL_CLOSE_REPORT_CFM",	
-	
-	//SPI
-	"MSG_ID_SPI_L2FRAME_SEND",
-	"MSG_ID_SPI_L2FRAME_RCV",
-		
-	//I2C
-	"MSG_ID_I2C_L2FRAME_SEND",
-	"MSG_ID_I2C_L2FRAME_RCV",
-	"MSG_ID_I2C_CCL_SENSOR_STATUS_RESP",
-	
-	//CAN
-	"MSG_ID_CAN_L2FRAME_SEND",
-	"MSG_ID_CAN_L2FRAME_RCV",
-
-	//DCMI
-	"MSG_ID_DCMI_CCL_SENSOR_STATUS_RESP",
-	
-	//CCL
-	"MSG_ID_CCL_SPS_OPEN_AUTH_INQ",  	   //后台查询
-	"MSG_ID_CCL_COM_SENSOR_STATUS_REQ",
-	"MSG_ID_CCL_COM_CTRL_CMD",
-	"MSG_ID_CCL_SPS_EVENT_REPORT_SEND",  //周期汇报
-	"MSG_ID_CCL_SPS_FAULT_REPORT_SEND",  //故障汇报
-	"MSG_ID_CCL_SPS_CLOSE_REPORT_SEND",  //正常一次开关报告
-
-	//END FLAG
-	"MSG_ID_COM_MAX" //Ending point
-};
+  //VMFO                                                                                    
+   {MSG_ID_VMFO_TIMER_1S_PERIOD,                  "MSG_ID_VMFO_TIMER_1S_PERIOD",            1, 1, 1},
+  //ADC
+  //LED
+  //DIDO
+  {MSG_ID_DIDO_CCL_SENSOR_STATUS_RESP,            "MSG_ID_DIDO_CCL_SENSOR_STATUS_RESP",     1, 1, 1},
+  {MSG_ID_DIDO_CCL_EVENT_LOCK_TRIGGER,            "MSG_ID_DIDO_CCL_EVENT_LOCK_TRIGGER",     1, 1, 1},
+  {MSG_ID_DIDO_CCL_EVENT_FAULT_TRIGGER,           "MSG_ID_DIDO_CCL_EVENT_FAULT_TRIGGER",    1, 1, 1},
+  {MSG_ID_DIDO_CCL_EVENT_STATUS_UPDATE,           "MSG_ID_DIDO_CCL_EVENT_STATUS_UPDATE",    1, 1, 1},
+  {MSG_ID_DIDO_CCL_DOOR_OPEN_EVENT,               "MSG_ID_DIDO_CCL_DOOR_OPEN_EVENT",        1, 1, 1},
+  {MSG_ID_DIDO_CCL_LOCK_C_DOOR_C_EVENT,           "MSG_ID_DIDO_CCL_LOCK_C_DOOR_C_EVENT",    1, 1, 1},
+  //SPS                                                                                    
+  {MSG_ID_SPS_L2FRAME_SEND,                       "MSG_ID_SPS_L2FRAME_SEND",                1, 1, 1},
+  {MSG_ID_SPS_L2FRAME_RCV,                        "MSG_ID_SPS_L2FRAME_RCV",                 1, 1, 1},
+  {MSG_ID_SPS_CCL_CLOUD_FB,                       "MSG_ID_SPS_CCL_CLOUD_FB",                1, 1, 1},
+  {MSG_ID_SPS_CCL_SENSOR_STATUS_RESP,             "MSG_ID_SPS_CCL_SENSOR_STATUS_RESP",      1, 1, 1},
+  {MSG_ID_SPS_CCL_EVENT_REPORT_CFM,               "MSG_ID_SPS_CCL_EVENT_REPORT_CFM",        1, 1, 1},
+  {MSG_ID_SPS_CCL_FAULT_REPORT_CFM,               "MSG_ID_SPS_CCL_FAULT_REPORT_CFM",        1, 1, 1},
+  {MSG_ID_SPS_CCL_CLOSE_REPORT_CFM,               "MSG_ID_SPS_CCL_CLOSE_REPORT_CFM",        1, 1, 1},
+  //SPI
+  {MSG_ID_SPI_L2FRAME_SEND,                       "MSG_ID_SPI_L2FRAME_SEND",                1, 1, 1},
+  {MSG_ID_SPI_L2FRAME_RCV,                        "MSG_ID_SPI_L2FRAME_RCV",                 1, 1, 1},
+  //I2C
+  {MSG_ID_I2C_L2FRAME_SEND,                       "MSG_ID_I2C_L2FRAME_SEND",                1, 1, 1},
+  {MSG_ID_I2C_L2FRAME_RCV,                        "MSG_ID_I2C_L2FRAME_RCV",                 1, 1, 1},
+  {MSG_ID_I2C_CCL_SENSOR_STATUS_RESP,             "MSG_ID_I2C_CCL_SENSOR_STATUS_RESP",      1, 1, 1},
+  //CAN
+  {MSG_ID_CAN_L2FRAME_SEND,                       "MSG_ID_CAN_L2FRAME_SEND",                1, 1, 1},
+  {MSG_ID_CAN_L2FRAME_RCV,                        "MSG_ID_CAN_L2FRAME_RCV",                 1, 1, 1},
+  //DCMI
+  {MSG_ID_DCMI_CCL_SENSOR_STATUS_RESP,            "MSG_ID_DCMI_CCL_SENSOR_STATUS_RESP",     1, 1, 1},
+  //CCL
+  {MSG_ID_CCL_SPS_OPEN_AUTH_INQ,                  "MSG_ID_CCL_SPS_OPEN_AUTH_INQ",           1, 1, 1},
+  {MSG_ID_CCL_COM_SENSOR_STATUS_REQ,              "MSG_ID_CCL_COM_SENSOR_STATUS_REQ",       1, 1, 1},
+  {MSG_ID_CCL_COM_CTRL_CMD,                       "MSG_ID_CCL_COM_CTRL_CMD",                1, 1, 1},
+  {MSG_ID_CCL_SPS_EVENT_REPORT_SEND,              "MSG_ID_CCL_SPS_EVENT_REPORT_SEND",       1, 1, 1},
+  {MSG_ID_CCL_SPS_FAULT_REPORT_SEND,              "MSG_ID_CCL_SPS_FAULT_REPORT_SEND",       1, 1, 1},
+  {MSG_ID_CCL_SPS_CLOSE_REPORT_SEND,              "MSG_ID_CCL_SPS_CLOSE_REPORT_SEND",       1, 1, 1},
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
-char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK] ={
-	//START FLAG
-	"MSG_ID_COM_MIN", //Starting point
-	
-	//正常的消息ID
-	"MSG_ID_COM_INIT",
-	"MSG_ID_COM_INIT_FB",
-	"MSG_ID_COM_RESTART",  //L1->重新初始化上下文数据
-	"MSG_ID_COM_TIME_OUT",
-	"MSG_ID_COM_STOP",
-	"MSG_ID_COM_HEART_BEAT",
-	"MSG_ID_COM_HEART_BEAT_FB",	
-
-	//VMFO
-	"MSG_ID_VMFO_TIMER_1S_PERIOD",
-	
-	//ADC
-	"MSG_ID_ADC_NEW_MATERIAL_WS",
-	"MSG_ID_ADC_MATERIAL_DROP",
-	"MSG_ID_ADC_L3BFSC_MEAS_CMD_RESP",
-	
-	//LED
-	
-	//UART
-	"MSG_ID_SPS_L2FRAME_SEND",
-	"MSG_ID_SPS_L2FRAME_RCV",
-	
-	//SPI
-	"MSG_ID_SPI_L2FRAME_SEND",
-	"MSG_ID_SPI_L2FRAME_RCV",
-		
-	//I2C
-	"MSG_ID_I2C_L2FRAME_SEND",
-	"MSG_ID_I2C_L2FRAME_RCV",
-	"MSG_ID_I2C_L3BFSC_MOTO_CMD_RESP",
-	
-	//CAN
-	"MSG_ID_CAN_L2FRAME_SEND",
-	"MSG_ID_CAN_L2FRAME_RCV",
-	"MSG_ID_CAN_L3BFSC_CMD_CTRL",
-	"MSG_ID_CAN_L3BFSC_INIT_REQ",
-	"MSG_ID_CAN_L3BFSC_ROLL_OUT_REQ",
-	"MSG_ID_CAN_L3BFSC_GIVE_UP_REQ",
-	"MSG_ID_CAN_ADC_WS_MAN_SET_ZERO",
-
-	//L3BFSC
-	"MSG_ID_L3BFSC_CAN_INIT_RESP",
-	"MSG_ID_L3BFSC_CAN_NEW_WS_EVENT",
-	"MSG_ID_L3BFSC_CAN_ROLL_OUT_RESP",
-	"MSG_ID_L3BFSC_CAN_GIVE_UP_RESP",
-	"MSG_ID_L3BFSC_CAN_ERROR_STATUS_REPORT",
-	"MSG_ID_L3BFSC_ADC_WS_CMD_CTRL",
-	"MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL",
-	"MSG_ID_L3BFSC_CAN_CMD_RESP",
-	
-	//WMC <-> AWS //MYC
-	"MSG_ID_L3BFSC_WMC_STARTUP_IND",
-	"MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ",
-	"MSG_ID_L3BFSC_WMC_SET_CONFIG_RESP",
-	"MSG_ID_L3BFSC_WMC_GET_CONFIG_REQ",
-	"MSG_ID_L3BFSC_WMC_GET_CONFIG_RESP",
-	"MSG_ID_L3BFSC_WMC_START_REQ",
-	"MSG_ID_L3BFSC_WMC_START_RESP",
-	"MSG_ID_L3BFSC_WMC_STOP_REQ",
-	"MSG_ID_L3BFSC_WMC_STOP_RESP",
-	"MSG_ID_L3BFSC_WMC_WEIGHT_IND",
-	"MSG_ID_L3BFSC_WMC_COMBIN_REQ",
-	"MSG_ID_L3BFSC_WMC_COMBIN_RESP",
-	"MSG_ID_L3BFSC_WMC_FAULT_IND",
-	"MSG_ID_L3BFSC_WMC_COMMAND_REQ",
-	"MSG_ID_L3BFSC_WMC_COMMAND_RESP",
-	
-	//END FLAG
-	"MSG_ID_COM_MAX"
-};
+  //VMFO                                                                                 
+  {MSG_ID_VMFO_TIMER_1S_PERIOD,                   "MSG_ID_VMFO_TIMER_1S_PERIOD",            1, 1, 1},
+  //ADC                                                                                    
+  {MSG_ID_ADC_NEW_MATERIAL_WS,                    "MSG_ID_ADC_NEW_MATERIAL_WS",             1, 1, 1},
+  {MSG_ID_ADC_MATERIAL_DROP,                      "MSG_ID_ADC_MATERIAL_DROP",               1, 1, 1},
+  {MSG_ID_ADC_L3BFSC_MEAS_CMD_RESP,               "MSG_ID_ADC_L3BFSC_MEAS_CMD_RESP",        1, 1, 1},
+  //LED                                                                                    
+  //UART                                                                                  
+  {MSG_ID_SPS_L2FRAME_SEND,                       "MSG_ID_SPS_L2FRAME_SEND",                1, 1, 1},
+  {MSG_ID_SPS_L2FRAME_RCV,                        "MSG_ID_SPS_L2FRAME_RCV",                 1, 1, 1},
+  //SPI                                                                                    
+  {MSG_ID_SPI_L2FRAME_SEND,                       "MSG_ID_SPI_L2FRAME_SEND",                1, 1, 1},
+  {MSG_ID_SPI_L2FRAME_RCV,                        "MSG_ID_SPI_L2FRAME_RCV",                 1, 1, 1},
+  //I2C                                                                                    
+  {MSG_ID_I2C_L2FRAME_SEND,                       "MSG_ID_I2C_L2FRAME_SEND",                1, 1, 1},
+  {MSG_ID_I2C_L2FRAME_RCV,                        "MSG_ID_I2C_L2FRAME_RCV",                 1, 1, 1},
+  {MSG_ID_I2C_L3BFSC_MOTO_CMD_RESP,               "MSG_ID_I2C_L3BFSC_MOTO_CMD_RESP",        1, 1, 1},
+  //CAN                                                                                    
+  {MSG_ID_CAN_L2FRAME_SEND,                       "MSG_ID_CAN_L2FRAME_SEND",                1, 1, 1},
+  {MSG_ID_CAN_L2FRAME_RCV,                        "MSG_ID_CAN_L2FRAME_RCV",                 1, 1, 1},
+  {MSG_ID_CAN_L3BFSC_CMD_CTRL,                    "MSG_ID_CAN_L3BFSC_CMD_CTRL",             1, 1, 1},
+  {MSG_ID_CAN_L3BFSC_INIT_REQ,                    "MSG_ID_CAN_L3BFSC_INIT_REQ",             1, 1, 1},
+  {MSG_ID_CAN_L3BFSC_ROLL_OUT_REQ,                "MSG_ID_CAN_L3BFSC_ROLL_OUT_REQ",         1, 1, 1},
+  {MSG_ID_CAN_L3BFSC_GIVE_UP_REQ,                 "MSG_ID_CAN_L3BFSC_GIVE_UP_REQ",          1, 1, 1},
+  {MSG_ID_CAN_ADC_WS_MAN_SET_ZERO,                "MSG_ID_CAN_ADC_WS_MAN_SET_ZERO",         1, 1, 1},
+  //L3BFSC                                                                                 
+  {MSG_ID_L3BFSC_CAN_INIT_RESP,                   "MSG_ID_L3BFSC_CAN_INIT_RESP",            1, 1, 1},
+  {MSG_ID_L3BFSC_CAN_NEW_WS_EVENT,                "MSG_ID_L3BFSC_CAN_NEW_WS_EVENT",         1, 1, 1},
+  {MSG_ID_L3BFSC_CAN_ROLL_OUT_RESP,               "MSG_ID_L3BFSC_CAN_ROLL_OUT_RESP",        1, 1, 1},
+  {MSG_ID_L3BFSC_CAN_GIVE_UP_RESP,                "MSG_ID_L3BFSC_CAN_GIVE_UP_RESP",         1, 1, 1},
+  {MSG_ID_L3BFSC_CAN_ERROR_STATUS_REPORT,         "MSG_ID_L3BFSC_CAN_ERROR_STATUS_REPORT",  1, 1, 1},
+  {MSG_ID_L3BFSC_ADC_WS_CMD_CTRL,                 "MSG_ID_L3BFSC_ADC_WS_CMD_CTRL",          1, 1, 1},
+  {MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL,               "MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL",        1, 1, 1},
+  {MSG_ID_L3BFSC_CAN_CMD_RESP,                    "MSG_ID_L3BFSC_CAN_CMD_RESP",             1, 1, 1},
+  //WMC <-> AWS //MYC                                                                      
+  {MSG_ID_L3BFSC_WMC_STARTUP_IND,                 "MSG_ID_L3BFSC_WMC_STARTUP_IND",          1, 1, 1},
+  {MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ,              "MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ",       1, 1, 1},
+  {MSG_ID_L3BFSC_WMC_SET_CONFIG_RESP,             "MSG_ID_L3BFSC_WMC_SET_CONFIG_RESP",      1, 1, 1},
+  {MSG_ID_L3BFSC_WMC_GET_CONFIG_REQ,              "MSG_ID_L3BFSC_WMC_GET_CONFIG_REQ",       1, 1, 1},
+  {MSG_ID_L3BFSC_WMC_GET_CONFIG_RESP,             "MSG_ID_L3BFSC_WMC_GET_CONFIG_RESP",      1, 1, 1},
+  {MSG_ID_L3BFSC_WMC_START_REQ,                   "MSG_ID_L3BFSC_WMC_START_REQ",            1, 1, 1},
+  {MSG_ID_L3BFSC_WMC_START_RESP,                  "MSG_ID_L3BFSC_WMC_START_RESP",           1, 1, 1},
+  {MSG_ID_L3BFSC_WMC_STOP_REQ,                    "MSG_ID_L3BFSC_WMC_STOP_REQ",             1, 1, 1},
+  {MSG_ID_L3BFSC_WMC_STOP_RESP,                   "MSG_ID_L3BFSC_WMC_STOP_RESP",            1, 1, 1},
+  {MSG_ID_L3BFSC_WMC_WEIGHT_IND,                  "MSG_ID_L3BFSC_WMC_WEIGHT_IND",           1, 1, 1},
+  {MSG_ID_L3BFSC_WMC_COMBIN_REQ,                  "MSG_ID_L3BFSC_WMC_COMBIN_REQ",           1, 1, 1},
+  {MSG_ID_L3BFSC_WMC_COMBIN_RESP,                 "MSG_ID_L3BFSC_WMC_COMBIN_RESP",          1, 1, 1},
+  {MSG_ID_L3BFSC_WMC_FAULT_IND,                   "MSG_ID_L3BFSC_WMC_FAULT_IND",            1, 1, 1},
+  {MSG_ID_L3BFSC_WMC_COMMAND_REQ,                 "MSG_ID_L3BFSC_WMC_COMMAND_REQ",          1, 1, 1},
+  {MSG_ID_L3BFSC_WMC_COMMAND_RESP,                "MSG_ID_L3BFSC_WMC_COMMAND_RESP",         1, 1, 1},
 #else
-	#error Un-correct constant definition
+  #error Un-correct constant definition
 #endif
+	//END
+  {MSG_ID_COM_MAX,                                "MSG_ID_COM_MAX",                         1, 1, 1}, 	   //END     
+};                                                                                         
 
 
 
@@ -470,7 +431,7 @@ void ihu_usleep(UINT32 usecond)
 void ihu_vm_system_ctr_table_init(void)
 {	
 	int i = 0, item = 0;
-	UINT8 taskid = 0;
+	UINT8 taskid = 0, msgid = 0;
 	
 	//初始化三表
 	memset(&zIhuVmCtrTab, 0, sizeof(IhuVmCtrTab_t));
@@ -501,7 +462,7 @@ void ihu_vm_system_ctr_table_init(void)
 		zIhuVmCtrTab.task[i].pnpState = IHU_TASK_PNP_OFF;
 	}
 	
-	//首先扫描任务输入配置表
+	//扫描TASK的静态配置
 	//起始必须是TASK_ID_MIN条目
 	if (zIhuVmCtrTaskStaticCfg[0].taskInputId != TASK_ID_MIN){
 		IhuErrorPrint("VMFO: Initialize VMFO failure, task input configuration error!\n");
@@ -516,15 +477,14 @@ void ihu_vm_system_ctr_table_init(void)
 			break;
 		}
 		if ((zIhuVmCtrTaskStaticCfg[item].taskInputId <= TASK_ID_MIN) || (zIhuVmCtrTaskStaticCfg[item].taskInputId > TASK_ID_MAX)){
-			IhuErrorPrint("VMFO: Initialize VMFO failure, task input configuration error!\n");
+			IhuErrorPrint("VMFO: Initialize VMFO failure, task static input configuration error!\n");
 			return;			
 		}		
 		if (zIhuVmCtrTaskStaticCfg[item].fsmFuncEntry == NULL){
-			IhuErrorPrint("VMFO: Initialize VMFO failure, task input configuration error!\n");
+			IhuErrorPrint("VMFO: Initialize VMFO failure, task static input configuration error!\n");
 			return;			
 		}
 	}
-
 	//从任务配置输入区域读取参数到系统任务表，一旦遇到TASK_ID_MAX就终止
 	item = 0;
 	while(zIhuVmCtrTaskStaticCfg[item].taskInputId != TASK_ID_MAX){
@@ -536,20 +496,51 @@ void ihu_vm_system_ctr_table_init(void)
 	}
 	//最后一项必定是TASK_ID_MAX
 	strcpy(zIhuVmCtrTab.task[TASK_ID_MAX].taskName, zIhuVmCtrTaskStaticCfg[item].taskInputName);
+
 	
+	//扫描MSGID的静态配置
+	if (MSG_ID_COM_MAX > MAX_MSGID_NUM_IN_ONE_TASK){
+		IhuErrorPrint("VMFO: Initialize VMFO failure, configuration of MAX_MSG_NUM_IN_ONE_IHU error!\n");
+		return;
+	}	
+	//起始必须是MSG_ID_COM_MIN条目
+	if (zIhuVmCtrMsgStaticCfg[0].msgId != MSG_ID_COM_MIN){
+		IhuErrorPrint("VMFO: Initialize VMFO failure, task input configuration error!\n");
+		return;
+	}
+	//以MSG_ID_COM_MAX为终止条目
+	for(item=1; item < MAX_MSGID_NUM_IN_ONE_TASK; item++)
+	{
+		if(zIhuVmCtrMsgStaticCfg[item].msgId == MSG_ID_COM_MAX)
+		{
+			break;
+		}
+		if ((zIhuVmCtrMsgStaticCfg[item].msgId <= MSG_ID_COM_MIN) || (zIhuVmCtrMsgStaticCfg[item].msgId > MSG_ID_COM_MAX)){
+			IhuErrorPrint("VMFO: Initialize VMFO failure, msg static input configuration error!\n");
+			return;			
+		}
+	}
+	//从消息配置输入区域读取参数到系统任务表，一旦遇到MSG_ID_COM_MAX就终止
+	item = 0;
+	while(zIhuVmCtrMsgStaticCfg[item].msgId != MSG_ID_COM_MAX){
+		msgid = zIhuVmCtrMsgStaticCfg[item].msgId;
+		zIhuSysEngPar.traceList.msg[msgid].msgId = msgid;
+		strcpy(zIhuSysEngPar.traceList.msg[msgid].msgName, zIhuVmCtrMsgStaticCfg[item].msgName);
+		zIhuSysEngPar.traceList.msg[msgid].msgCtrFlag = zIhuVmCtrMsgStaticCfg[item].traceCtrFlag;
+		zIhuSysEngPar.traceList.msg[msgid].msgAllow = zIhuVmCtrMsgStaticCfg[item].traceMsgAllowFlag;
+		zIhuSysEngPar.traceList.msg[msgid].msgRestrict = zIhuVmCtrMsgStaticCfg[item].traceMsgRestrictFlag;
+		item++;
+	}
+	//最后一项必定是MSG_ID_COM_MAX
+	msgid = zIhuVmCtrMsgStaticCfg[item].msgId;
+	zIhuSysEngPar.traceList.msg[msgid].msgId = msgid;
+	strcpy(zIhuSysEngPar.traceList.msg[msgid].msgName, zIhuVmCtrMsgStaticCfg[item].msgName);
+	zIhuSysEngPar.traceList.msg[msgid].msgCtrFlag = zIhuVmCtrMsgStaticCfg[item].traceCtrFlag;
+	zIhuSysEngPar.traceList.msg[msgid].msgAllow = zIhuVmCtrMsgStaticCfg[item].traceMsgAllowFlag;
+	zIhuSysEngPar.traceList.msg[msgid].msgRestrict = zIhuVmCtrMsgStaticCfg[item].traceMsgRestrictFlag;
+
 	//Init Fsm
 	FsmInit();
-
-	//打开所有模块和消息的TRACE属性
-	for (i=TASK_ID_MIN; i<TASK_ID_MAX; i++){
-		zIhuSysEngPar.traceList.mod[i].moduleId = i;
-		zIhuSysEngPar.traceList.mod[i].moduleFromAllow = TRUE;
-		zIhuSysEngPar.traceList.mod[i].moduleToAllow = TRUE;		
-	}
-	for (i=MSG_ID_COM_MIN; i<MSG_ID_COM_MAX; i++){
-		zIhuSysEngPar.traceList.msg[i].msgId = i;
-		zIhuSysEngPar.traceList.msg[i].msgAllow = TRUE;
-	}	
 	
 	//分项目对工程参数进行配置
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)	
@@ -773,8 +764,8 @@ OPSTAT ihu_msgid_to_string(UINT16 id, char *string)
 	}
 
 	strcpy(string, "[");
-	if (strlen(zIhuMsgNameList[id-MSG_ID_COM_MIN])>0){
-		strncpy(tmp, zIhuMsgNameList[id-MSG_ID_COM_MIN], MSG_NAME_MAX_LENGTH-3);
+	if (strlen(zIhuVmCtrMsgStaticCfg[id-MSG_ID_COM_MIN].msgName)>0){
+		strncpy(tmp, zIhuVmCtrMsgStaticCfg[id-MSG_ID_COM_MIN].msgName, MSG_NAME_MAX_LENGTH-3);
 		strcat(string, tmp);
 	}else{
 		strcat(string, "MSG_ID_XXX");
@@ -1022,12 +1013,12 @@ OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr,
 	
 	if ((dest_id <= TASK_ID_MIN) || (dest_id >= TASK_ID_MAX)){
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
-		IhuErrorPrint("VMFO: Error on task_id, src_id=[0x%x], dest_id=[0x%x], msgid=[0x%x][%s]!!!\n", src_id, dest_id, msg_id, zIhuMsgNameList[msg_id]);
+		IhuErrorPrint("VMFO: Error on task_id, src_id=[0x%x], dest_id=[0x%x], msgid=[0x%x][%s]!!!\n", src_id, dest_id, msg_id, zIhuVmCtrMsgStaticCfg[msg_id].msgName);
 		return IHU_FAILURE;
 	}
 	if ((src_id <= TASK_ID_MIN) || (src_id >= TASK_ID_MAX)){
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
-		IhuErrorPrint("VMFO: Error on task_id, src_id=[0x%x], dest_id=[0x%x], msgid=[0x%x][%s]!!!\n", src_id, dest_id, msg_id, zIhuMsgNameList[msg_id]);
+		IhuErrorPrint("VMFO: Error on task_id, src_id=[0x%x], dest_id=[0x%x], msgid=[0x%x][%s]!!!\n", src_id, dest_id, msg_id, zIhuVmCtrMsgStaticCfg[msg_id].msgName);
 		return IHU_FAILURE;
 	}
 	if (param_len>MAX_IHU_MSG_BODY_LENGTH){
@@ -1068,7 +1059,9 @@ OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr,
 	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE)
 	{
 		//消息ID的顺序跟commsgxxx.h的中的定义可能不完全一样，导致这里直接POP出消息名字会出错，注意！
-		IhuDebugPrint("VMFO: Call state function(0x%x) in state(%d) of dest task(0x%x[%s]) for msg(0x%x[%s]), src=(0x%x[%s]).\n", (UINT32)zIhuVmCtrTab.fsm.pIhuFsmCtrlTable[dest_id].pFsmArray[state][mid].stateFunc, state, dest_id, zIhuVmCtrTab.task[dest_id].taskName, mid, zIhuMsgNameList[mid-1], src_id, zIhuVmCtrTab.task[src_id].taskName);
+		IhuDebugPrint("VMFO: Call state function(0x%x) in state(%d) of dest task(0x%x[%s]) for msg(0x%x[%s]), src=(0x%x[%s]).\n", \
+		(UINT32)zIhuVmCtrTab.fsm.pIhuFsmCtrlTable[dest_id].pFsmArray[state][mid].stateFunc, state, dest_id, zIhuVmCtrTab.task[dest_id].taskName,\
+		mid, zIhuVmCtrMsgStaticCfg[mid-1].msgName, src_id, zIhuVmCtrTab.task[src_id].taskName);
 	}
 
 	/*
@@ -1092,7 +1085,7 @@ OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr,
 		}
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 		//消息ID的顺序跟commsgxxx.h的中的定义可能不完全一样，导致这里直接POP出消息名字会出错，注意！		
-		IhuErrorPrint("VMFO: Receive invalid msg(%x)[%s] in state(%d) of task(0x%x)[%s] from task(0x%x)[%s].\n", mid, zIhuMsgNameList[mid-1], state, dest_id, zIhuVmCtrTab.task[dest_id].taskName, src_id, zIhuVmCtrTab.task[src_id].taskName);
+		IhuErrorPrint("VMFO: Receive invalid msg(%x)[%s] in state(%d) of task(0x%x)[%s] from task(0x%x)[%s].\n", mid, zIhuVmCtrMsgStaticCfg[mid-1].msgName, state, dest_id, zIhuVmCtrTab.task[dest_id].taskName, src_id, zIhuVmCtrTab.task[src_id].taskName);
 		return IHU_FAILURE;
 	}
 

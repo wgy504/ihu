@@ -285,13 +285,10 @@ extern IhuFsmStateItem_t IhuFsmLedpisces[];                       //状态机
 extern IhuFsmStateItem_t IhuFsmEthorion[];                        //状态机
 extern IhuFsmStateItem_t IhuFsmDcmiaris[];                        //状态机
 extern IhuFsmStateItem_t IhuFsmEmc68x[];                          //状态机
-extern IhuFsmStateItem_t IhuFsmCcl[];                          	 //状态机
-extern IhuFsmStateItem_t IhuFsmBfsc[];                          	 //状态机 
+extern IhuFsmStateItem_t IhuFsmCcl[];                          	  //状态机
+extern IhuFsmStateItem_t IhuFsmBfsc[];                          	//状态机 
 
-//Global variables
-extern char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK];    //消息名字符串
-
-//任务配置的基础配置信息
+//任务TASK初始化配置静态表
 typedef struct IhuVmCtrTaskStaticCfg
 {
 	const UINT8 taskInputId;
@@ -299,6 +296,17 @@ typedef struct IhuVmCtrTaskStaticCfg
 	void* fsmFuncEntry;
 }IhuVmCtrTaskStaticCfg_t;
 
+//消息MSG初始化配置静态表
+typedef struct IhuVmCtrMsgStaticCfg
+{
+	const UINT16 msgId;
+	const char  msgName[MSG_NAME_MAX_LENGTH];
+	const UINT8 traceCtrFlag;
+	const UINT8 traceMsgAllowFlag;
+	const UINT8 traceMsgRestrictFlag;
+}IhuVmCtrMsgStaticCfg_t;
+
+//extern char *zIhuVmCtrMsgStaticCfg.name[MAX_MSGID_NUM_IN_ONE_TASK];    //消息名字符串
 /*
  *
  *   三大表单之二： 系统工参表IhuSysEngPar_t定义区

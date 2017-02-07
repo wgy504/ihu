@@ -52,7 +52,7 @@ typedef struct IhuMsgSruct
 
 /*
  *
- * 每定义一个新消息，请去修改vmlayer.c中的变量zIhuMsgNameList[]，不然TRACE会出现消息内容解析的错误
+ * 每定义一个新消息，请去修改vmlayer.c中的变量zIhuVmCtrMsgStaticCfg.name[]，不然TRACE会出现消息内容解析的错误
  *
  */
 
