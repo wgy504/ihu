@@ -8,6 +8,8 @@ CCL=> 最后剩下的任务是摄像头+IAP+节电，然后打开门狗就完美
 //= ZJL, 2017 Feb.8, CURRENT_SW_DELIVERY R03.117 =>CCL项目/BFSC
 = 继续完善任务初始化以及TIMER初始化，降低代码和配置研发工作量，提高智能化程度
 = 完成TASK启动中有关pnpFlag的设置
+= 三种TIMERID统一编址改进
+
 
 //= ZJL, 2017 Feb.7, CURRENT_SW_DELIVERY R03.116 =>CCL项目/BFSC
 = MsgNameList的清理：完善变量命名，增加TRACE控制逻辑，完整的存入到zIhuSysEngPar中去

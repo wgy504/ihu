@@ -105,11 +105,13 @@
 	//MYC add debug print preparation buffer
 	#define IHU_PRINT_CHAR_SIZE 200
 	//TIMER DIMENSION
+	//最大的定时器数量
+	#define MAX_TIMER_NUM_IN_ONE_IHU 40
+	#define TIMER_NAME_MAX_LENGTH 40
 	#define MAX_TIMER_NUM_IN_ONE_IHU_1S 8  //Normal situation
 	#define MAX_TIMER_NUM_IN_ONE_IHU_10MS 3 //Frame usage
 	#define MAX_TIMER_NUM_IN_ONE_IHU_1MS 3  //Real-time usage
 	#define MAX_TIMER_SET_DURATION 100000
-
 
 
 /***********************************************************************************
@@ -142,6 +144,9 @@
         #define IHU_PRINT_FILE_LINE_SIZE 60
 	#define IHU_PRINT_BUFFER_NUMBER 10
 	//#define IHU_PRINT_MUTEX_TIME_OUT_DURATION 100	
+	//最大的定时器数量
+	#define MAX_TIMER_NUM_IN_ONE_IHU 40
+	#define TIMER_NAME_MAX_LENGTH 40
 
 
 
@@ -174,6 +179,9 @@
 //	#define MAX_SLEEP_NUM_IN_ONE_TASK 2
 //	#define MAX_SLEEP_COUNTER_UP_LIMITATION 50000
 	#define IHU_PRINT_CHAR_SIZE 128
+	//最大的定时器数量
+	#define MAX_TIMER_NUM_IN_ONE_IHU 40
+	#define TIMER_NAME_MAX_LENGTH 40
 
 
 
@@ -204,6 +212,9 @@
 //	#define MAX_SLEEP_NUM_IN_ONE_TASK 2
 //	#define MAX_SLEEP_COUNTER_UP_LIMITATION 50000
 	#define IHU_PRINT_CHAR_SIZE 1000
+	//最大的定时器数量
+	#define MAX_TIMER_NUM_IN_ONE_IHU 40
+	#define TIMER_NAME_MAX_LENGTH 40
 
 
 
@@ -235,6 +246,9 @@
 //	#define MAX_SLEEP_NUM_IN_ONE_TASK 2
 //	#define MAX_SLEEP_COUNTER_UP_LIMITATION 50000
 	#define IHU_PRINT_CHAR_SIZE 1000
+	//最大的定时器数量
+	#define MAX_TIMER_NUM_IN_ONE_IHU 40
+	#define TIMER_NAME_MAX_LENGTH 40
 
 
 
@@ -269,6 +283,9 @@
 	#define IHU_PRINT_FILE_LINE_SIZE 60
 	#define IHU_PRINT_BUFFER_NUMBER 1  //太长的打印缓冲区，会造成覆盖其它区域
 	#define IHU_PRINT_MUTEX_TIME_OUT_DURATION 100
+	//最大的定时器数量
+	#define MAX_TIMER_NUM_IN_ONE_IHU 40
+	#define TIMER_NAME_MAX_LENGTH 40
 
 
 
@@ -302,7 +319,10 @@
 	#define IHU_PRINT_FILE_LINE_SIZE 60
 	#define IHU_PRINT_BUFFER_NUMBER 1  //太长的打印缓冲区，是否会造成覆盖其它区域
 	#define IHU_PRINT_MUTEX_TIME_OUT_DURATION 100
-	
+	//最大的定时器数量
+	#define MAX_TIMER_NUM_IN_ONE_IHU 40
+	#define TIMER_NAME_MAX_LENGTH 40
+
 	
 #else
 	#error Un-correct constant definition

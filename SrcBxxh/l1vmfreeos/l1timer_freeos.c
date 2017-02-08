@@ -236,20 +236,20 @@ OPSTAT ihu_timer_start(UINT8 task_id, UINT8 timer_id, UINT32 t_dur, UINT8 t_type
 
 	//检查t_resolution & timer_id 是否合法
 	if (t_res == TIMER_RESOLUTION_1S){
-		if ((timer_id >= MAX_TIMER_NUM_IN_ONE_IHU_1S) || (timer_id <= TIMER_ID_1S_MIN)){
+		if ((timer_id >= TIMER_ID_1S_MAX) || (timer_id <= TIMER_ID_1S_MIN)){
 			IhuErrorPrint("TIMER: Error on timer start 1S timerId!!!\n");
 			zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
 			return IHU_FAILURE;
 		}
 	}else if (t_res == TIMER_RESOLUTION_10MS){
-		if ((timer_id >= MAX_TIMER_NUM_IN_ONE_IHU_10MS) || (timer_id <= TIMER_ID_10MS_MIN)){
+		if ((timer_id >= TIMER_ID_10MS_MAX) || (timer_id <= TIMER_ID_10MS_MIN)){
 			IhuErrorPrint("TIMER: Error on timer start 10MS timerId!!!\n");
 			zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
 			return IHU_FAILURE;
 		}
 	}
 	else if (t_res == TIMER_RESOLUTION_1MS){
-		if ((timer_id >= MAX_TIMER_NUM_IN_ONE_IHU_1MS) || (timer_id <= TIMER_ID_1MS_MIN)){
+		if ((timer_id >= TIMER_ID_1MS_MAX) || (timer_id <= TIMER_ID_1MS_MIN)){
 			IhuErrorPrint("TIMER: Error on timer start 1MS timerId!!!\n");
 			zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
 			return IHU_FAILURE;
@@ -263,27 +263,27 @@ OPSTAT ihu_timer_start(UINT8 task_id, UINT8 timer_id, UINT32 t_dur, UINT8 t_type
 
 	//设置进全局数据表单
 	if (t_res == TIMER_RESOLUTION_1S){
-		zIhuTimerTable.timer1s[timer_id].taskId = task_id;
-		zIhuTimerTable.timer1s[timer_id].timerId = timer_id;
-		zIhuTimerTable.timer1s[timer_id].tDuration = t_dur;
-		zIhuTimerTable.timer1s[timer_id].timerType = t_type;
-		zIhuTimerTable.timer1s[timer_id].timerRes = TIMER_RESOLUTION_1S;
-		zIhuTimerTable.timer1s[timer_id].status = TIMER_STATUS_START;
+		zIhuTimerTable.timer1s[timer_id-TIMER_ID_1S_MIN].taskId = task_id;
+		zIhuTimerTable.timer1s[timer_id-TIMER_ID_1S_MIN].timerId = timer_id;
+		zIhuTimerTable.timer1s[timer_id-TIMER_ID_1S_MIN].tDuration = t_dur;
+		zIhuTimerTable.timer1s[timer_id-TIMER_ID_1S_MIN].timerType = t_type;
+		zIhuTimerTable.timer1s[timer_id-TIMER_ID_1S_MIN].timerRes = TIMER_RESOLUTION_1S;
+		zIhuTimerTable.timer1s[timer_id-TIMER_ID_1S_MIN].status = TIMER_STATUS_START;
 	}
 	else if (t_res == TIMER_RESOLUTION_10MS){
-		zIhuTimerTable.timer10ms[timer_id].taskId = task_id;
-		zIhuTimerTable.timer10ms[timer_id].timerId = timer_id;
-		zIhuTimerTable.timer10ms[timer_id].tDuration = t_dur;
-		zIhuTimerTable.timer10ms[timer_id].timerType = t_type;
-		zIhuTimerTable.timer10ms[timer_id].timerRes = TIMER_RESOLUTION_10MS;
-		zIhuTimerTable.timer10ms[timer_id].status = TIMER_STATUS_START;
+		zIhuTimerTable.timer10ms[timer_id-TIMER_ID_10MS_MIN].taskId = task_id;
+		zIhuTimerTable.timer10ms[timer_id-TIMER_ID_10MS_MIN].timerId = timer_id;
+		zIhuTimerTable.timer10ms[timer_id-TIMER_ID_10MS_MIN].tDuration = t_dur;
+		zIhuTimerTable.timer10ms[timer_id-TIMER_ID_10MS_MIN].timerType = t_type;
+		zIhuTimerTable.timer10ms[timer_id-TIMER_ID_10MS_MIN].timerRes = TIMER_RESOLUTION_10MS;
+		zIhuTimerTable.timer10ms[timer_id-TIMER_ID_10MS_MIN].status = TIMER_STATUS_START;
 	}else if (t_res == TIMER_RESOLUTION_1MS){
-		zIhuTimerTable.timer1ms[timer_id].taskId = task_id;
-		zIhuTimerTable.timer1ms[timer_id].timerId = timer_id;
-		zIhuTimerTable.timer1ms[timer_id].tDuration = t_dur;
-		zIhuTimerTable.timer1ms[timer_id].timerType = t_type;
-		zIhuTimerTable.timer1ms[timer_id].timerRes = TIMER_RESOLUTION_1MS;
-		zIhuTimerTable.timer1ms[timer_id].status = TIMER_STATUS_START;
+		zIhuTimerTable.timer1ms[timer_id-TIMER_ID_1MS_MIN].taskId = task_id;
+		zIhuTimerTable.timer1ms[timer_id-TIMER_ID_1MS_MIN].timerId = timer_id;
+		zIhuTimerTable.timer1ms[timer_id-TIMER_ID_1MS_MIN].tDuration = t_dur;
+		zIhuTimerTable.timer1ms[timer_id-TIMER_ID_1MS_MIN].timerType = t_type;
+		zIhuTimerTable.timer1ms[timer_id-TIMER_ID_1MS_MIN].timerRes = TIMER_RESOLUTION_1MS;
+		zIhuTimerTable.timer1ms[timer_id-TIMER_ID_1MS_MIN].status = TIMER_STATUS_START;
 	}
 
 	return IHU_SUCCESS;
@@ -301,19 +301,19 @@ OPSTAT ihu_timer_stop(UINT8 task_id, UINT8 timer_id, UINT8 t_res)
 
 	//检查t_resolution & timer_id 是否合法
 	if (t_res == TIMER_RESOLUTION_1S){
-		if ((timer_id >= MAX_TIMER_NUM_IN_ONE_IHU_1S) || (timer_id <= TIMER_ID_1S_MIN)){
+		if ((timer_id >= TIMER_ID_1S_MAX) || (timer_id <= TIMER_ID_1S_MIN)){
 			IhuErrorPrint("TIMER: Error on timer stop 1S timerId!!!\n");
 			zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
 			return IHU_FAILURE;
 		}
 	}else if (t_res == TIMER_RESOLUTION_10MS){
-		if ((timer_id >= MAX_TIMER_NUM_IN_ONE_IHU_10MS) || (timer_id <= TIMER_ID_10MS_MIN)){
+		if ((timer_id >= TIMER_ID_10MS_MAX) || (timer_id <= TIMER_ID_10MS_MIN)){
 			IhuErrorPrint("TIMER: Error on timer stop 10MS timerId!!!\n");
 			zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
 			return IHU_FAILURE;
 		}
 	}else if (t_res == TIMER_RESOLUTION_1MS){
-		if ((timer_id >= MAX_TIMER_NUM_IN_ONE_IHU_1MS) || (timer_id <= TIMER_ID_1MS_MIN)){
+		if ((timer_id >= TIMER_ID_1MS_MAX) || (timer_id <= TIMER_ID_1MS_MIN)){
 			IhuErrorPrint("TIMER: Error on timer stop 1MS timerId!!!\n");
 			zIhuSysStaPm.taskRunErrCnt[TASK_ID_TIMER]++;
 			return IHU_FAILURE;
@@ -326,22 +326,22 @@ OPSTAT ihu_timer_stop(UINT8 task_id, UINT8 timer_id, UINT8 t_res)
 
 	//设置进全局数据表单
 	if (t_res == TIMER_RESOLUTION_1S){
-		if ((zIhuTimerTable.timer1s[timer_id].taskId == task_id) && (zIhuTimerTable.timer1s[timer_id].timerId == timer_id)){
-			zIhuTimerTable.timer1s[timer_id].status = TIMER_STATUS_STOP;
+		if ((zIhuTimerTable.timer1s[timer_id-TIMER_ID_1S_MIN].taskId == task_id) && (zIhuTimerTable.timer1s[timer_id-TIMER_ID_1S_MIN].timerId == timer_id)){
+			zIhuTimerTable.timer1s[timer_id-TIMER_ID_1S_MIN].status = TIMER_STATUS_STOP;
 		}else{
-			zIhuTimerTable.timer1s[timer_id].status = TIMER_STATUS_DEACTIVE;
+			zIhuTimerTable.timer1s[timer_id-TIMER_ID_1S_MIN].status = TIMER_STATUS_DEACTIVE;
 		}
 	}else if (t_res == TIMER_RESOLUTION_10MS){
-		if ((zIhuTimerTable.timer10ms[timer_id].taskId == task_id) && (zIhuTimerTable.timer10ms[timer_id].timerId == timer_id)){
-			zIhuTimerTable.timer10ms[timer_id].status = TIMER_STATUS_STOP;
+		if ((zIhuTimerTable.timer10ms[timer_id-TIMER_ID_10MS_MIN].taskId == task_id) && (zIhuTimerTable.timer10ms[timer_id-TIMER_ID_10MS_MIN].timerId == timer_id)){
+			zIhuTimerTable.timer10ms[timer_id-TIMER_ID_10MS_MIN].status = TIMER_STATUS_STOP;
 		}else{
 			zIhuTimerTable.timer10ms[timer_id].status = TIMER_STATUS_DEACTIVE;
 		}
 	}else if (t_res == TIMER_RESOLUTION_1MS){
-		if ((zIhuTimerTable.timer1ms[timer_id].taskId == task_id) && (zIhuTimerTable.timer1ms[timer_id].timerId == timer_id)){
-			zIhuTimerTable.timer1ms[timer_id].status = TIMER_STATUS_STOP;
+		if ((zIhuTimerTable.timer1ms[timer_id-TIMER_ID_1MS_MIN].taskId == task_id) && (zIhuTimerTable.timer1ms[timer_id-TIMER_ID_1MS_MIN].timerId == timer_id)){
+			zIhuTimerTable.timer1ms[timer_id-TIMER_ID_1MS_MIN].status = TIMER_STATUS_STOP;
 		}else{
-			zIhuTimerTable.timer1ms[timer_id].status = TIMER_STATUS_DEACTIVE;
+			zIhuTimerTable.timer1ms[timer_id-TIMER_ID_1MS_MIN].status = TIMER_STATUS_DEACTIVE;
 		}
 	}
 	return IHU_SUCCESS;

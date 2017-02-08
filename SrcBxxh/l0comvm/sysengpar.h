@@ -23,8 +23,16 @@ typedef struct SysEngParElementComm
 }SysEngParElementComm_t;
 
 //Timer setting for sensor
+typedef struct SysEngParElementTimUnit
+{
+	INT32 id;
+	UINT8 gradunarity;
+	char name[TIMER_NAME_MAX_LENGTH];
+}SysEngParElementTimUnit_t;
 typedef struct SysEngParElementSensor
 {
+	SysEngParElementTimUnit_t array[MAX_TIMER_NUM_IN_ONE_IHU];
+	INT32 timerDur[MAX_TIMER_NUM_IN_ONE_IHU];
 	INT32 vmfoPeriodScanTimer;	
 	INT32 adclibraPeriodScanTimer;
 	INT32 didocapPeriodScanTimer;

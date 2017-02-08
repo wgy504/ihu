@@ -195,6 +195,62 @@ IhuVmCtrMsgStaticCfg_t zIhuVmCtrMsgStaticCfg[] = {
   {MSG_ID_COM_MAX,                                "MSG_ID_COM_MAX",                         1, 1, 1}, 	   //END     
 };                                                                                         
 
+//消息ID的定义全局表，方便TRACE函数使用
+//请服从TIMER_NAME_MAX_LENGTH的最长长度，否则出错
+//设置的技巧是：基础部分不要动，配置不一样的，请单独在分项目中，再设置一遍
+IhuSysEngTimerStaticCfg_t zIhuSysEngTimerStaticCfg[] ={
+  //TIMER_ID                                       定时器名字                                定时长度     精度                      注释
+	//STARING公共基础部分，不要删除！！！各个项目重复的定时器且不同数值部分，可以再分项目中第二次进行设置，后一次设置的数据将覆盖前一次的数值
+  {TIMER_ID_MIN,                                   "TID_MIN",                                0,           TIMER_RESOLUTION_1S},    //STARTING
+  {TIMER_ID_1S_MIN,                                "TID_1S_MIN",                             0,           TIMER_RESOLUTION_1S},
+  {TIMER_ID_1S_VMFO_INIT_FB,                       "TID_1S_VMFO_INIT_FB",                    0,           TIMER_RESOLUTION_1S},
+  {TIMER_ID_1S_VMFO_PERIOD_SCAN,                   "TID_1S_VMFO_PERIOD_SCAN",                0,           TIMER_RESOLUTION_1S},
+  {TIMER_ID_1S_ADCLIBRA_PERIOD_SCAN,               "TID_1S_ADCLIBRA_PERIOD_SCAN",            0,           TIMER_RESOLUTION_1S},
+  {TIMER_ID_1S_DIDOCAP_PERIOD_SCAN,                "TID_1S_DIDOCAP_PERIOD_SCAN",             0,           TIMER_RESOLUTION_1S},
+  {TIMER_ID_1S_ETHORION_PERIOD_SCAN,               "TID_1S_ETHORION_PERIOD_SCAN",            0,           TIMER_RESOLUTION_1S},
+  {TIMER_ID_1S_CANVELA_PERIOD_SCAN,                "TID_1S_CANVELA_PERIOD_SCAN",             0,           TIMER_RESOLUTION_1S},
+  {TIMER_ID_1S_I2CARIES_PERIOD_SCAN,               "TID_1S_I2CARIES_PERIOD_SCAN",            0,           TIMER_RESOLUTION_1S},
+  {TIMER_ID_1S_LEDPISCES_PERIOD_SCAN,              "TID_1S_LEDPISCES_PERIOD_SCAN",           0,           TIMER_RESOLUTION_1S},
+  {TIMER_ID_1S_LEDPISCES_GALOWAG_SCAN,             "TID_1S_LEDPISCES_GALOWAG_SCAN",          0,           TIMER_RESOLUTION_1S},
+  {TIMER_ID_1S_PWMTAURUS_PERIOD_SCAN,              "TID_1S_PWMTAURUS_PERIOD_SCAN",           0,           TIMER_RESOLUTION_1S},
+  {TIMER_ID_1S_SPILEO_PERIOD_SCAN,                 "TID_1S_SPILEO_PERIOD_SCAN",              0,           TIMER_RESOLUTION_1S},
+  {TIMER_ID_1S_SPSVIRGO_PERIOD_SCAN,               "TID_1S_SPSVIRGO_PERIOD_SCAN",            0,           TIMER_RESOLUTION_1S},
+  {TIMER_ID_1S_DCMIARIS_PERIOD_SCAN,               "TID_1S_DCMIARIS_PERIOD_SCAN",            0,           TIMER_RESOLUTION_1S},
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
+  {TIMER_ID_1S_EMC68X_PERIOD_SCAN,                 "TID_1S_EMC68X_PERIOD_SCAN",              0,           TIMER_RESOLUTION_1S},
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+  {TIMER_ID_1S_CCL_PERIOD_SCAN,                    "TID_1S_CCL_PERIOD_SCAN",                 0,           TIMER_RESOLUTION_1S},     
+  {TIMER_ID_1S_CCL_EVENT_REPORT_PEROID_SCAN,       "TID_1S_CCL_EVENT_REPORT_PEROID_SCAN",    0,           TIMER_RESOLUTION_1S},  
+  {TIMER_ID_1S_CCL_LOCK_WORK_ACTIVE,               "TID_1S_CCL_LOCK_WORK_ACTIVE",            0,           TIMER_RESOLUTION_1S},  
+  {TIMER_ID_1S_CCL_LOCK_WORK_WAIT_TO_OPEN,         "TID_1S_CCL_LOCK_WORK_WAIT_TO_OPEN",      0,           TIMER_RESOLUTION_1S},  
+  {TIMER_ID_1S_CCL_DIDO_TRIGGER_PERIOD_SCAN,       "TID_1S_CCL_DIDO_TRIGGER_PERIOD_SCAN",    0,           TIMER_RESOLUTION_1S},  
+  {TIMER_ID_1S_CCL_DIDO_WORKING_PERIOD_SCAN,       "TID_1S_CCL_DIDO_WORKING_PERIOD_SCAN",    0,           TIMER_RESOLUTION_1S},  
+  {TIMER_ID_1S_CCL_SPS_WORKING_PERIOD_SCAN,        "TID_1S_CCL_SPS_WORKING_PERIOD_SCAN",     0,           TIMER_RESOLUTION_1S},  
+  {TIMER_ID_1S_CCL_I2C_WORKING_PERIOD_SCAN,        "TID_1S_CCL_I2C_WORKING_PERIOD_SCAN",     0,           TIMER_RESOLUTION_1S},  
+  {TIMER_ID_1S_CCL_DCMI_WORKING_PERIOD_SCAN,       "TID_1S_CCL_DCMI_WORKING_PERIOD_SCAN",    0,           TIMER_RESOLUTION_1S},  
+  {TIMER_ID_1S_CCL_ADC_WORKING_PERIOD_SCAN,        "TID_1S_CCL_ADC_WORKING_PERIOD_SCAN",     0,           TIMER_RESOLUTION_1S},  
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID) 
+  {TIMER_ID_1S_BFSC_PERIOD_SCAN,                   "TID_1S_BFSC_PERIOD_SCAN",                0,           TIMER_RESOLUTION_1S},
+  {TIMER_ID_1S_BFSC_L3BFSC_WAIT_WEIGHT_TIMER,      "TID_1S_BFSC_L3BFSC_WAIT_WEIGHT_TIMER",   0,           TIMER_RESOLUTION_1S},
+  {TIMER_ID_1S_BFSC_L3BFSC_ROLL_OUT_TIMER,         "TID_1S_BFSC_L3BFSC_ROLL_OUT_TIMER",      0,           TIMER_RESOLUTION_1S},
+  {TIMER_ID_1S_BFSC_L3BFSC_GIVE_UP_TIMER,          "TID_1S_BFSC_L3BFSC_GIVE_UP_TIMER",       0,           TIMER_RESOLUTION_1S},
+#else
+#endif  
+  {TIMER_ID_1S_MAX,                                "TID_1S_MAX",                             0,           TIMER_RESOLUTION_1S}, 
+  {TIMER_ID_10MS_MIN,                              "TID_10MS_MIN",                           0,           TIMER_RESOLUTION_10MS},
+  {TIMER_ID_10MS_VMFO_TEST,                        "TID_10MS_VMFO_TEST",                     0,           TIMER_RESOLUTION_10MS},
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID) 
+  {TIMER_ID_10MS_BFSC_ADCLIBRA_SCAN_TIMER,         "TID_10MS_BFSC_ADCLIBRA_SCAN_TIMER",      0,           TIMER_RESOLUTION_10MS}, 
+#else
+#endif    
+  {TIMER_ID_10MS_MAX,                              "TID_10MS_MAX",                           0,           TIMER_RESOLUTION_10MS},
+  {TIMER_ID_1MS_MIN,                               "TID_1MS_MIN",                            0,           TIMER_RESOLUTION_1MS},
+  {TIMER_ID_1MS_VMFO_TEST,                         "TID_1MS_VMFO_TEST",                      0,           TIMER_RESOLUTION_1MS},
+  {TIMER_ID_1MS_MAX,                               "TID_1MS_MAX",                            0,           TIMER_RESOLUTION_1MS},
+	//END
+  {TIMER_ID_MAX,                                   "TID_MAX",                                0,           TIMER_RESOLUTION_1S},   //END
+};
+
 
 
 /*******************************************************************************
@@ -433,6 +489,12 @@ void ihu_vm_system_ctr_table_init(void)
 	int i = 0, item = 0;
 	UINT8 taskid = 0, msgid = 0;
 	
+	//SYSTEM DIMENSION检查
+	if ((TASK_ID_MAX > MAX_TASK_NUM_IN_ONE_IHU) || (MSG_ID_COM_MAX > MAX_MSGID_NUM_IN_ONE_TASK) || (TIMER_ID_MAX > MAX_TIMER_NUM_IN_ONE_IHU)){
+		IhuErrorPrint("VMFO: Initialize failure, configuration of system dimension error!\n");
+		return;
+	}	
+	
 	//初始化三表
 	memset(&zIhuVmCtrTab, 0, sizeof(IhuVmCtrTab_t));
 	memset(&zIhuSysEngPar, 0, sizeof(IhuSysEngParTab_t));
@@ -453,10 +515,6 @@ void ihu_vm_system_ctr_table_init(void)
 	IhuDebugPrint("VMFO: BXXH(TM) IHU(c) Application Layer start and initialized, build at %s, %s.\n", __DATE__, __TIME__);
 
 	//初始化全局变量TASK_ID/QUE_ID/TASK_STAT
-	if (TASK_ID_MAX > MAX_TASK_NUM_IN_ONE_IHU){
-		IhuErrorPrint("VMFO: Initialize VMFO failure, configuration of MAX_TASK_NUM_IN_ONE_IHU error!\n");
-		return;
-	}
 	for (i=TASK_ID_MIN; i<=TASK_ID_MAX; i++){
 		zIhuVmCtrTab.task[i].TaskId = i;
 		zIhuVmCtrTab.task[i].pnpState = IHU_TASK_PNP_OFF;
@@ -517,17 +575,13 @@ void ihu_vm_system_ctr_table_init(void)
 
 	
 	//扫描MSGID的静态配置
-	if (MSG_ID_COM_MAX > MAX_MSGID_NUM_IN_ONE_TASK){
-		IhuErrorPrint("VMFO: Initialize VMFO failure, configuration of MAX_MSG_NUM_IN_ONE_IHU error!\n");
-		return;
-	}	
 	//起始必须是MSG_ID_COM_MIN条目
 	if (zIhuVmCtrMsgStaticCfg[0].msgId != MSG_ID_COM_MIN){
 		IhuErrorPrint("VMFO: Initialize VMFO failure, task input configuration error!\n");
 		return;
 	}
-	//以MSG_ID_COM_MAX为终止条目
-	for(item=1; item < MAX_MSGID_NUM_IN_ONE_TASK; item++)
+	//以MSG_ID_COM_MAX为终止条目：2倍最大配置数量
+	for(item=1; item < (2*MAX_MSGID_NUM_IN_ONE_TASK); item++)
 	{
 		if(zIhuVmCtrMsgStaticCfg[item].msgId == MSG_ID_COM_MAX)
 		{
