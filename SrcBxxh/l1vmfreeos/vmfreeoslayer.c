@@ -42,44 +42,44 @@ IhuSysStaPm_t				zIhuSysStaPm;			//全局性能统计表
 //从极致优化内存的角度，这里浪费了2个TASK对应的内存空间（MIN=0/MAX=n+1)，但它却极大的改善了程序编写的效率，值得浪费！！！
 IhuVmCtrTaskStaticCfg_t zIhuVmCtrTaskStaticCfg[] =
 {
-	//TASK_ID,    				状态控制				状态机入口 					   TRACE_CTRL        //注释
-	{TASK_ID_MIN, 				"TASKMIN", 			NULL,                  1, 1, 1, 1, 1},	 //Starting
-	{TASK_ID_VMFO, 				"VMFO", 				&IhuFsmVmfo,           1, 1, 1, 1, 1},
-	{TASK_ID_TIMER, 			"TIMER", 				&IhuFsmTimer,          1, 1, 1, 1, 1},
+	//TASK_ID,    				状态控制				状态机入口 					   控制启动             TRACE_CTRL        //注释
+	{TASK_ID_MIN, 				"TASKMIN", 			NULL,                  IHU_TASK_PNP_OFF,    1, 1, 1, 1, 1},	 //Starting
+	{TASK_ID_VMFO, 				"VMFO", 				&IhuFsmVmfo,           IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_TIMER, 			"TIMER", 				&IhuFsmTimer,          IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
-	{TASK_ID_EMC68X, 			"EMC68X", 			&IhuFsmEmc68x,         1, 1, 1, 1, 1},
+	{TASK_ID_EMC68X, 			"EMC68X", 			&IhuFsmEmc68x,         IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)		
-	{TASK_ID_ADCLIBRA, 		"ADCLIBRA", 		&IhuFsmAdclibra,       1, 1, 1, 1, 1},
-	{TASK_ID_I2CARIES, 		"I2CARIES", 		&IhuFsmI2caries,       1, 1, 1, 1, 1},
-	{TASK_ID_SPSVIRGO, 		"SPSVIRGO", 		&IhuFsmSpsvirgo,       1, 1, 1, 1, 1},
-	{TASK_ID_DIDOCAP, 		"DIDOCAP", 			&IhuFsmDidocap,        1, 1, 1, 1, 1},
-	{TASK_ID_LEDPISCES, 	"LEDPISCES", 		&IhuFsmLedpisces,      1, 1, 1, 1, 1},
-	{TASK_ID_DCMIARIS, 		"DCMIARIS", 		&IhuFsmDcmiaris,       1, 1, 1, 1, 1},
-	{TASK_ID_CCL, 				"CCL", 					&IhuFsmCcl,            1, 1, 1, 1, 1},
+	{TASK_ID_ADCLIBRA, 		"ADCLIBRA", 		&IhuFsmAdclibra,       IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_I2CARIES, 		"I2CARIES", 		&IhuFsmI2caries,       IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_SPSVIRGO, 		"SPSVIRGO", 		&IhuFsmSpsvirgo,       IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_DIDOCAP, 		"DIDOCAP", 			&IhuFsmDidocap,        IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_LEDPISCES, 	"LEDPISCES", 		&IhuFsmLedpisces,      IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_DCMIARIS, 		"DCMIARIS", 		&IhuFsmDcmiaris,       IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_CCL, 				"CCL", 					&IhuFsmCcl,            IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
-	{TASK_ID_ADCLIBRA, 		"ADCLIBRA", 		&IhuFsmAdclibra,       1, 1, 1, 1, 1},
-	{TASK_ID_SPILEO, 			"SPILEO", 			&IhuFsmSpileo,         1, 1, 1, 1, 1},
-	{TASK_ID_CANVELA, 		"CANVELA", 			&IhuFsmCanvela,        1, 1, 1, 1, 1},
-	{TASK_ID_I2CARIES, 		"I2CARIES", 		&IhuFsmI2caries,       1, 1, 1, 1, 1},
-	{TASK_ID_LEDPISCES, 	"LEDPISCES", 		&IhuFsmLedpisces,      1, 1, 1, 1, 1},
-	{TASK_ID_BFSC, 				"BFSC", 				&IhuFsmBfsc,           1, 1, 1, 1, 1},
+	{TASK_ID_ADCLIBRA, 		"ADCLIBRA", 		&IhuFsmAdclibra,       IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_SPILEO, 			"SPILEO", 			&IhuFsmSpileo,         IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_CANVELA, 		"CANVELA", 			&IhuFsmCanvela,        IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_I2CARIES, 		"I2CARIES", 		&IhuFsmI2caries,       IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_LEDPISCES, 	"LEDPISCES", 		&IhuFsmLedpisces,      IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_BFSC, 				"BFSC", 				&IhuFsmBfsc,           IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
 //为了提供完成列表，而且需要按照顺序来                        
 #else 
-	{TASK_ID_ADCLIBRA, 		"ADCLIBRA", 		&IhuFsmAdclibra,       1, 1, 1, 1, 1},
-	{TASK_ID_SPILEO, 			"SPILEO", 			&IhuFsmSpileo,         1, 1, 1, 1, 1},
-	{TASK_ID_I2CARIES, 		"I2CARIES", 		&IhuFsmI2caries,       1, 1, 1, 1, 1},
-	{TASK_ID_PWMTAURUS, 	"PWMTAURUS", 		&IhuFsmPwmtaurus,      1, 1, 1, 1, 1},
-	{TASK_ID_CANVELA, 		"CANVELA", 			&IhuFsmCanvela,        1, 1, 1, 1, 1},	
-	{TASK_ID_SPSVIRGO, 		"SPSVIRGO", 		&IhuFsmSpsvirgo,       1, 1, 1, 1, 1},
-	{TASK_ID_DIDOCAP, 		"DIDOCAP", 			&IhuFsmDidocap,        1, 1, 1, 1, 1},
-	{TASK_ID_LEDPISCES, 	"LEDPISCES", 		&IhuFsmLedpisces,      1, 1, 1, 1, 1},
-	{TASK_ID_ETHORION, 		"LEDPISCES", 		&IhuFsmEthorion,       1, 1, 1, 1, 1},
-	{TASK_ID_DCMIARIS, 		"DCMIARIS", 		&IhuFsmDcmiaris,       1, 1, 1, 1, 1},
-	{TASK_ID_EMC68X, 			"EMC68X", 			&IhuFsmEmc68x,         1, 1, 1, 1, 1},
-	{TASK_ID_CCL, 				"CCL", 					&IhuFsmCcl,            1, 1, 1, 1, 1},
-	{TASK_ID_BFSC, 				"BFSC", 				&IhuFsmBfsc,           1, 1, 1, 1, 1},
+	{TASK_ID_ADCLIBRA, 		"ADCLIBRA", 		&IhuFsmAdclibra,       IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_SPILEO, 			"SPILEO", 			&IhuFsmSpileo,         IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_I2CARIES, 		"I2CARIES", 		&IhuFsmI2caries,       IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_PWMTAURUS, 	"PWMTAURUS", 		&IhuFsmPwmtaurus,      IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_CANVELA, 		"CANVELA", 			&IhuFsmCanvela,        IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},	
+	{TASK_ID_SPSVIRGO, 		"SPSVIRGO", 		&IhuFsmSpsvirgo,       IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_DIDOCAP, 		"DIDOCAP", 			&IhuFsmDidocap,        IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_LEDPISCES, 	"LEDPISCES", 		&IhuFsmLedpisces,      IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_ETHORION, 		"LEDPISCES", 		&IhuFsmEthorion,       IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_DCMIARIS, 		"DCMIARIS", 		&IhuFsmDcmiaris,       IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_EMC68X, 			"EMC68X", 			&IhuFsmEmc68x,         IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_CCL, 				"CCL", 					&IhuFsmCcl,            IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_BFSC, 				"BFSC", 				&IhuFsmBfsc,           IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
 #endif
-  {TASK_ID_MAX,					"TASKMAX", 		  NULL,                  1, 1, 1, 1, 1},	 //Ending
+  {TASK_ID_MAX,					"TASKMAX", 		  NULL,                  IHU_TASK_PNP_OFF,    1, 1, 1, 1, 1},	 //Ending
 };
 		
 //消息ID的定义全局表，方便TRACE函数使用
@@ -469,8 +469,8 @@ void ihu_vm_system_ctr_table_init(void)
 		return;
 	}
 	strcpy(zIhuVmCtrTab.task[TASK_ID_MIN].taskName, zIhuVmCtrTaskStaticCfg[0].taskInputName);
-	//以TASK_ID_MAX为终止条目
-	for(item=1; item < MAX_TASK_NUM_IN_ONE_IHU; item++)
+	//以TASK_ID_MAX为终止条目：最大为2倍，因为初始化表单中出现了两次，一次赋基础，一次控制激活与否
+	for(item=1; item <= (2*MAX_TASK_NUM_IN_ONE_IHU); item++)
 	{
 		if(zIhuVmCtrTaskStaticCfg[item].taskInputId == TASK_ID_MAX)
 		{
@@ -484,12 +484,16 @@ void ihu_vm_system_ctr_table_init(void)
 			IhuErrorPrint("VMFO: Initialize VMFO failure, task static input configuration error!\n");
 			return;			
 		}
+		if ((zIhuVmCtrTaskStaticCfg[item].pnpFlag != IHU_TASK_PNP_ON) && (zIhuVmCtrTaskStaticCfg[item].pnpFlag != IHU_TASK_PNP_OFF)){
+			IhuErrorPrint("VMFO: Initialize VMFO failure, task static input configuration error!\n");
+			return;
+		}
 	}
 	//从任务配置输入区域读取参数到系统任务表，一旦遇到TASK_ID_MAX就终止
 	item = 0;
 	while(zIhuVmCtrTaskStaticCfg[item].taskInputId != TASK_ID_MAX){
 		taskid = zIhuVmCtrTaskStaticCfg[item].taskInputId;
-		zIhuVmCtrTab.task[taskid].pnpState = IHU_TASK_PNP_ON;
+		zIhuVmCtrTab.task[taskid].pnpState = zIhuVmCtrTaskStaticCfg[item].pnpFlag;
 		strcpy(zIhuVmCtrTab.task[taskid].taskName, zIhuVmCtrTaskStaticCfg[item].taskInputName);
 		zIhuVmCtrTab.task[taskid].taskFuncEntry = zIhuVmCtrTaskStaticCfg[item].fsmFuncEntry;
 		zIhuSysEngPar.traceList.mod[taskid].moduleId = taskid;
