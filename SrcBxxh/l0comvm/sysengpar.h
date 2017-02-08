@@ -25,9 +25,10 @@ typedef struct SysEngParElementComm
 //Timer setting for sensor
 typedef struct SysEngParElementTimUnit
 {
-	INT32 id;
-	UINT8 gradunarity;
+	UINT8 id;
 	char name[TIMER_NAME_MAX_LENGTH];
+	UINT8 gradunarity;
+	UINT32 dur;
 }SysEngParElementTimUnit_t;
 typedef struct SysEngParElementSensor
 {
