@@ -511,10 +511,10 @@ void ihu_vm_system_ctr_table_init(void)
 	UINT8 taskid = 0, msgid = 0, tid = 0;
 	
 	/*
-	 *  SYSTEM DIMENSION检查
+	 *  SYSTEM DIMENSION检查：边界在MAX_TASK_NUM_IN_ONE_IHU-1，注意！
 	 */
 
-	if ((TASK_ID_MAX > MAX_TASK_NUM_IN_ONE_IHU) || (MSG_ID_COM_MAX > MAX_MSGID_NUM_IN_ONE_TASK) || (TIMER_ID_MAX > MAX_TIMER_NUM_IN_ONE_IHU)){
+	if ((TASK_ID_MAX >= MAX_TASK_NUM_IN_ONE_IHU) || (MSG_ID_COM_MAX >= MAX_MSGID_NUM_IN_ONE_TASK) || (TIMER_ID_MAX >= MAX_TIMER_NUM_IN_ONE_IHU)){
 		IhuErrorPrint("VMFO: Initialize failure, configuration of system dimension error!\n");
 		return;
 	}	
