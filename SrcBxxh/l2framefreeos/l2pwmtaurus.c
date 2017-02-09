@@ -26,16 +26,23 @@ IhuFsmStateItem_t IhuFsmPwmtaurus[] =
 
 	//System level initialization, only controlled by VMDA
   {MSG_ID_COM_INIT,       								FSM_STATE_IDLE,            									fsm_pwmtaurus_init},
-  {MSG_ID_COM_RESTART,										FSM_STATE_IDLE,            									fsm_pwmtaurus_restart},
+  {MSG_ID_COM_INIT_FB,       							FSM_STATE_IDLE,            							    fsm_com_do_nothing},
 
   //Task level initialization
-  {MSG_ID_COM_RESTART,        						FSM_STATE_PWMTAURUS_INITED,         					fsm_pwmtaurus_restart},
-  {MSG_ID_COM_STOP,												FSM_STATE_PWMTAURUS_INITED,         					fsm_pwmtaurus_stop_rcv},
+  {MSG_ID_COM_INIT,       								FSM_STATE_PWMTAURUS_INITED,            			fsm_pwmtaurus_init},
+  {MSG_ID_COM_INIT_FB,       							FSM_STATE_PWMTAURUS_INITED,            			fsm_com_do_nothing},
+
+	//ANY state entry
+  {MSG_ID_COM_INIT_FB,                    FSM_STATE_COMMON,                           fsm_com_do_nothing},
+	{MSG_ID_COM_HEART_BEAT,                 FSM_STATE_COMMON,                           fsm_com_heart_beat_rcv},
+	{MSG_ID_COM_HEART_BEAT_FB,              FSM_STATE_COMMON,                           fsm_com_do_nothing},
+	{MSG_ID_COM_STOP,                       FSM_STATE_COMMON,                           fsm_pwmtaurus_stop_rcv},
+  {MSG_ID_COM_RESTART,                    FSM_STATE_COMMON,                           fsm_pwmtaurus_restart},
+	{MSG_ID_COM_TIME_OUT,                   FSM_STATE_COMMON,                           fsm_pwmtaurus_time_out},
 
 	//Task level actived status
   {MSG_ID_COM_RESTART,        						FSM_STATE_PWMTAURUS_ACTIVED,         					fsm_pwmtaurus_restart},
   {MSG_ID_COM_STOP,												FSM_STATE_PWMTAURUS_ACTIVED,         					fsm_pwmtaurus_stop_rcv},
-	{MSG_ID_COM_TIME_OUT,										FSM_STATE_PWMTAURUS_ACTIVED,         				  fsm_pwmtaurus_time_out},
 	
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             									NULL},  //Ending

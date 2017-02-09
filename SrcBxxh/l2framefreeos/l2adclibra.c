@@ -26,17 +26,21 @@ IhuFsmStateItem_t IhuFsmAdclibra[] =
 
 	//System level initialization, only controlled by VM
   {MSG_ID_COM_INIT,       								FSM_STATE_IDLE,            									fsm_adclibra_init},
-  {MSG_ID_COM_RESTART,										FSM_STATE_IDLE,            									fsm_adclibra_restart},
+  {MSG_ID_COM_INIT_FB,       							FSM_STATE_IDLE,            							    fsm_com_do_nothing},
 
- //Task level initialization
-  {MSG_ID_COM_RESTART,        						FSM_STATE_ADCLIBRA_INITED,         					fsm_adclibra_restart},
-  {MSG_ID_COM_STOP,												FSM_STATE_ADCLIBRA_INITED,         					fsm_adclibra_stop_rcv},
+  //Task level initialization
+  {MSG_ID_COM_INIT,       								FSM_STATE_ADCLIBRA_INITED,            			fsm_adclibra_init},
+  {MSG_ID_COM_INIT_FB,       							FSM_STATE_ADCLIBRA_INITED,            			fsm_com_do_nothing},
+
+	//ANY state entry
+  {MSG_ID_COM_INIT_FB,                    FSM_STATE_COMMON,                           fsm_com_do_nothing},
+	{MSG_ID_COM_HEART_BEAT,                 FSM_STATE_COMMON,                           fsm_com_heart_beat_rcv},
+	{MSG_ID_COM_HEART_BEAT_FB,              FSM_STATE_COMMON,                           fsm_com_do_nothing},
+	{MSG_ID_COM_STOP,                       FSM_STATE_COMMON,                           fsm_adclibra_stop_rcv},
+  {MSG_ID_COM_RESTART,                    FSM_STATE_COMMON,                           fsm_adclibra_restart},
+	{MSG_ID_COM_TIME_OUT,                   FSM_STATE_COMMON,                           fsm_adclibra_time_out},
 
 	//Task level actived status
-  {MSG_ID_COM_RESTART,        						FSM_STATE_ADCLIBRA_ACTIVED,         				fsm_adclibra_restart},
-  {MSG_ID_COM_STOP,												FSM_STATE_ADCLIBRA_ACTIVED,         				fsm_adclibra_stop_rcv},
-  {MSG_ID_COM_TIME_OUT,										FSM_STATE_ADCLIBRA_ACTIVED,         				fsm_adclibra_time_out},
-
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
   {MSG_ID_L3BFSC_ADC_WS_CMD_CTRL,					FSM_STATE_ADCLIBRA_ACTIVED,         				fsm_adclibra_l3bfsc_ws_cmd_ctrl},
 	{MSG_ID_CAN_ADC_WS_MAN_SET_ZERO,				FSM_STATE_ADCLIBRA_ACTIVED,         				fsm_adclibra_canvela_ws_man_set_zero},	

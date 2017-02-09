@@ -191,6 +191,7 @@
 */
 #define FSM_STATE_ENTRY  0x00
 #define FSM_STATE_IDLE  0x01
+#define FSM_STATE_COMMON  0x02
 #define FSM_STATE_END   0xFE
 #define FSM_STATE_INVALID 0xFF
 
@@ -493,6 +494,7 @@ extern OPSTAT ihu_task_create_and_run(UINT8 task_id, IhuFsmStateItem_t* pIhuFsmS
 extern OPSTAT ihu_system_task_init_call(UINT8 task_id, IhuFsmStateItem_t *p);
 extern void   ihu_task_create_all(void);
 extern OPSTAT fsm_com_do_nothing(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT fsm_com_heart_beat_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern void ihu_sw_restart(void);
 extern struct tm ihu_clock_unix_to_ymd(time_t t_unix);
 extern OPSTAT ihu_isr_install(UINT8 priority, void *my_routine);

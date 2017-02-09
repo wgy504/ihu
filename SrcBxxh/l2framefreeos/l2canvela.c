@@ -27,18 +27,21 @@ IhuFsmStateItem_t IhuFsmCanvela[] =
 
 	//System level initialization, only controlled by VMDA
   {MSG_ID_COM_INIT,       								FSM_STATE_IDLE,            									fsm_canvela_init},
-  {MSG_ID_COM_RESTART,										FSM_STATE_IDLE,            									fsm_canvela_restart},
+  {MSG_ID_COM_INIT_FB,       							FSM_STATE_IDLE,            							    fsm_com_do_nothing},
 
  //Task level initialization
-  {MSG_ID_COM_RESTART,        						FSM_STATE_CANVELA_INITED,         					fsm_canvela_restart},
-  {MSG_ID_COM_STOP,												FSM_STATE_CANVELA_INITED,         					fsm_canvela_stop_rcv},
+  {MSG_ID_COM_INIT,       								FSM_STATE_CANVELA_INITED,            				fsm_canvela_init},
+  {MSG_ID_COM_INIT_FB,       							FSM_STATE_CANVELA_INITED,            				fsm_com_do_nothing},
+
+	//ANY state entry
+  {MSG_ID_COM_INIT_FB,                    FSM_STATE_COMMON,                           fsm_com_do_nothing},
+	{MSG_ID_COM_HEART_BEAT,                 FSM_STATE_COMMON,                           fsm_com_heart_beat_rcv},
+	{MSG_ID_COM_HEART_BEAT_FB,              FSM_STATE_COMMON,                           fsm_com_do_nothing},
+	{MSG_ID_COM_STOP,                       FSM_STATE_COMMON,                           fsm_canvela_stop_rcv},
+  {MSG_ID_COM_RESTART,                    FSM_STATE_COMMON,                           fsm_canvela_restart},
+	{MSG_ID_COM_TIME_OUT,                   FSM_STATE_COMMON,                           fsm_canvela_time_out},
 
 	//Task level actived status
-  {MSG_ID_COM_RESTART,        						FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_restart},
-  {MSG_ID_COM_STOP,												FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_stop_rcv},
-	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CANVELA_ACTIVED,         				  fsm_canvela_time_out},
-	{MSG_ID_COM_TIME_OUT,										FSM_STATE_CANVELA_ACTIVED,         				  fsm_canvela_time_out},
-	
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
 	{MSG_ID_L3BFSC_CAN_INIT_RESP,						FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_init_resp},	//初始化过程
 	{MSG_ID_L3BFSC_CAN_NEW_WS_EVENT,				FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_new_ws_event},	//收到新的物料

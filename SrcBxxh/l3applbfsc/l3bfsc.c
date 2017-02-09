@@ -27,47 +27,41 @@ IhuFsmStateItem_t IhuFsmBfsc[] =
 
 	//System level initialization, only controlled by VMDA
   {MSG_ID_COM_INIT,       								FSM_STATE_IDLE,            								fsm_bfsc_init},
-  {MSG_ID_COM_RESTART,										FSM_STATE_IDLE,            								fsm_bfsc_restart},
+  {MSG_ID_COM_INIT_FB,       							FSM_STATE_IDLE,            							  fsm_com_do_nothing},
 
   //Task level initialization
-  {MSG_ID_COM_RESTART,        						FSM_STATE_BFSC_INITED,         						fsm_bfsc_restart},
-  {MSG_ID_COM_STOP,												FSM_STATE_BFSC_INITED,         						fsm_bfsc_stop_rcv},
+  {MSG_ID_COM_INIT,       								FSM_STATE_BFSC_INITED,            				fsm_bfsc_init},
+  {MSG_ID_COM_INIT_FB,       							FSM_STATE_BFSC_INITED,            				fsm_com_do_nothing},
+
+
+	//ANY state entry
+  {MSG_ID_COM_INIT_FB,                    FSM_STATE_COMMON,                         fsm_com_do_nothing},
+	{MSG_ID_COM_HEART_BEAT,                 FSM_STATE_COMMON,                         fsm_com_heart_beat_rcv},
+	{MSG_ID_COM_HEART_BEAT_FB,              FSM_STATE_COMMON,                         fsm_com_do_nothing},
+	{MSG_ID_COM_STOP,                       FSM_STATE_COMMON,                         fsm_bfsc_stop_rcv},
+  {MSG_ID_COM_RESTART,                    FSM_STATE_COMMON,                         fsm_bfsc_restart},
+	{MSG_ID_COM_TIME_OUT,                   FSM_STATE_COMMON,                         fsm_bfsc_time_out},
 
 	//Task level actived status：等待初始化指令的到来，然后进行初始化，完成后进入SCAN工作状态
-  {MSG_ID_COM_RESTART,        						FSM_STATE_BFSC_ACTIVED,         					fsm_bfsc_restart},
-  {MSG_ID_COM_STOP,												FSM_STATE_BFSC_ACTIVED,         					fsm_bfsc_stop_rcv},
-	{MSG_ID_COM_TIME_OUT,										FSM_STATE_BFSC_ACTIVED,         				  fsm_bfsc_time_out},
 	{MSG_ID_CAN_L3BFSC_CMD_CTRL,						FSM_STATE_BFSC_ACTIVED,         					fsm_bfsc_canvela_cmd_ctrl},  //参数配置设置
 	{MSG_ID_ADC_L3BFSC_MEAS_CMD_RESP,				FSM_STATE_BFSC_ACTIVED,         					fsm_bfsc_adc_meas_cmd_resp}, //参数配置反馈
 	{MSG_ID_I2C_L3BFSC_MOTO_CMD_RESP,				FSM_STATE_BFSC_ACTIVED,         					fsm_bfsc_i2c_moto_cmd_resp}, //参数配置反馈
 	{MSG_ID_CAN_L3BFSC_INIT_REQ,						FSM_STATE_BFSC_ACTIVED,         					fsm_bfsc_canvela_init_req},  //初始化完成
 	
 //	//扫描模式工作状态：等待ADC上报合法的称重结果
-//  {MSG_ID_COM_RESTART,        						FSM_STATE_BFSC_SCAN,         							fsm_bfsc_restart},
-//  {MSG_ID_COM_STOP,												FSM_STATE_BFSC_SCAN,         							fsm_bfsc_stop_rcv},
-//	{MSG_ID_COM_TIME_OUT,										FSM_STATE_BFSC_SCAN,         				  		fsm_bfsc_time_out},
 //	{MSG_ID_ADC_NEW_MATERIAL_WS,						FSM_STATE_BFSC_SCAN,         				  		fsm_bfsc_adc_new_material_ws}, //新的称重结果
 //	{MSG_ID_ADC_MATERIAL_DROP,							FSM_STATE_BFSC_SCAN,         				  		fsm_bfsc_adc_material_drop},   //物料失重被拿走
 //	
 //	//称重上报工作状态：等待上层指令，收到后进入出料状态
-//  {MSG_ID_COM_RESTART,        						FSM_STATE_BFSC_WEIGHT_REPORT,         		fsm_bfsc_restart},
-//  {MSG_ID_COM_STOP,												FSM_STATE_BFSC_WEIGHT_REPORT,         		fsm_bfsc_stop_rcv},
-//	{MSG_ID_COM_TIME_OUT,										FSM_STATE_BFSC_WEIGHT_REPORT,         		fsm_bfsc_time_out},
 //	{MSG_ID_ADC_NEW_MATERIAL_WS,						FSM_STATE_BFSC_WEIGHT_REPORT,         		fsm_bfsc_adc_new_material_ws}, //新的称重结果，此时也是允许上报的
 //	{MSG_ID_CAN_L3BFSC_ROLL_OUT_REQ,				FSM_STATE_BFSC_WEIGHT_REPORT,         		fsm_bfsc_canvela_roll_out_req},//正常出料
 //	{MSG_ID_CAN_L3BFSC_GIVE_UP_REQ,					FSM_STATE_BFSC_WEIGHT_REPORT,         		fsm_bfsc_canvela_give_up_req}, //抛弃物料
 //	{MSG_ID_ADC_MATERIAL_DROP,							FSM_STATE_BFSC_WEIGHT_REPORT,         		fsm_bfsc_adc_material_drop},   //物料失重被拿走
 //	
 //	//出料输出等待状态：完成后进入SCAN状态。如果连续N次都未能成功，停止马达和称重传感器，并进入ERROR_TRAP状态。
-//  {MSG_ID_COM_RESTART,        						FSM_STATE_BFSC_ROLL_OUT,         					fsm_bfsc_restart},
-//  {MSG_ID_COM_STOP,												FSM_STATE_BFSC_ROLL_OUT,         					fsm_bfsc_stop_rcv},
-//	{MSG_ID_COM_TIME_OUT,										FSM_STATE_BFSC_ROLL_OUT,         					fsm_bfsc_time_out},
 //	{MSG_ID_ADC_MATERIAL_DROP,							FSM_STATE_BFSC_ROLL_OUT,         				  fsm_bfsc_adc_material_drop},   //出料完成
 
 //	//放弃物料输出等待状态：完成后进入SCAN状态。如果连续N次都未能成功，停止马达和称重传感器，并进入ERROR_TRAP状态。
-//  {MSG_ID_COM_RESTART,        						FSM_STATE_BFSC_GIVE_UP,         					fsm_bfsc_restart},
-//  {MSG_ID_COM_STOP,												FSM_STATE_BFSC_GIVE_UP,         					fsm_bfsc_stop_rcv},
-//	{MSG_ID_COM_TIME_OUT,										FSM_STATE_BFSC_GIVE_UP,         					fsm_bfsc_time_out},
 //	{MSG_ID_ADC_MATERIAL_DROP,							FSM_STATE_BFSC_GIVE_UP,         				  fsm_bfsc_adc_material_drop},   //放弃物料完成
 
 //	//硬件出错，该传感器进入错误陷阱状态，不再工作，等待人工干预

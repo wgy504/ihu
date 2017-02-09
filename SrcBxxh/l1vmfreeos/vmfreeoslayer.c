@@ -1133,7 +1133,18 @@ OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr,
 	/*
 	** Call the state function.
 	*/
-	if(zIhuVmCtrTab.fsm.pIhuFsmCtrlTable[dest_id].pFsmArray[state][mid].stateFunc != NULL)
+	//Following FSM_STATE_COMMON state could contain any MSGID, as to avoid the restriction of message incoming
+	if(zIhuVmCtrTab.fsm.pIhuFsmCtrlTable[dest_id].pFsmArray[FSM_STATE_COMMON][mid].stateFunc != NULL)
+	{
+		ret = (zIhuVmCtrTab.fsm.pIhuFsmCtrlTable[dest_id].pFsmArray[FSM_STATE_COMMON][mid].stateFunc)(dest_id, src_id, param_ptr, param_len);
+		if( IHU_FAILURE == ret)
+		{
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;			
+			IhuErrorPrint("VMFO: Internal error is found in the FSM_STATE_COMMON state function.\n");
+			return IHU_FAILURE;
+		}
+	}
+	else if(zIhuVmCtrTab.fsm.pIhuFsmCtrlTable[dest_id].pFsmArray[state][mid].stateFunc != NULL)
 	{
 		ret = (zIhuVmCtrTab.fsm.pIhuFsmCtrlTable[dest_id].pFsmArray[state][mid].stateFunc)(dest_id, src_id, param_ptr, param_len);
 		if( IHU_FAILURE == ret)
@@ -2196,6 +2207,48 @@ OPSTAT fsm_com_do_nothing(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 
 {
 	return IHU_SUCCESS;
 }
+
+OPSTAT fsm_com_heart_beat_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{
+	int ret=0;
+
+	//接收参数检查
+	msg_struct_com_heart_beat_t rcv;
+	memset(&rcv, 0, sizeof(msg_struct_com_heart_beat_t));
+	if ((param_ptr == NULL) || (param_len > sizeof(msg_struct_com_heart_beat_t))){
+		IhuErrorPrint("%s: Receive heart beat message error!\n", zIhuVmCtrTab.task[dest_id].taskName);
+		return IHU_FAILURE;
+	}
+	//优化的结果，可以不用拷贝，暂时没有意义
+	//memcpy(&rcv, param_ptr, param_len);
+
+	//钩子在此处，检查zIhuRunErrCnt[dest_id]是否超限
+	if (zIhuSysStaPm.taskRunErrCnt[dest_id] > IHU_RUN_ERROR_LEVEL_4_DEAD){
+		//减少重复RESTART的概率
+		zIhuSysStaPm.taskRunErrCnt[dest_id] = zIhuSysStaPm.taskRunErrCnt[dest_id] - IHU_RUN_ERROR_LEVEL_4_DEAD;
+		msg_struct_com_restart_t snd0;
+		memset(&snd0, 0, sizeof(msg_struct_com_restart_t));
+		snd0.length = sizeof(msg_struct_com_restart_t);
+		ret = ihu_message_send(MSG_ID_COM_RESTART, dest_id, dest_id, &snd0, snd0.length);
+		if (ret == IHU_FAILURE)
+			IHU_ERROR_PRINT_TASK(dest_id, "%s: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[dest_id].taskName, zIhuVmCtrTab.task[dest_id].taskName, zIhuVmCtrTab.task[dest_id].taskName);
+	}
+
+	//发送消息
+	if ((src_id > TASK_ID_MIN) && (src_id < TASK_ID_MAX) && (dest_id > TASK_ID_MIN) && (dest_id < TASK_ID_MAX) ){
+		//发送心跳回复消息给src_id
+		msg_struct_com_heart_beat_fb_t snd;
+		memset(&snd, 0, sizeof(msg_struct_com_heart_beat_fb_t));
+		snd.length = sizeof(msg_struct_com_heart_beat_fb_t);
+		ret = ihu_message_send(MSG_ID_COM_HEART_BEAT_FB, src_id, dest_id, &snd, snd.length);
+		if (ret == IHU_FAILURE)
+			IHU_ERROR_PRINT_TASK(dest_id, "%s: Send message error, TASK[%s] to TASK[%s]!\n", zIhuVmCtrTab.task[dest_id].taskName, zIhuVmCtrTab.task[dest_id].taskName, zIhuVmCtrTab.task[src_id].taskName);
+	}
+	//也可能是调用关系，故而直接采用SRC_ID=0的方式，这种情况原则上也允许
+
+	return IHU_SUCCESS;
+}
+
 
 //Unix Time transfer to YMD time
 struct tm ihu_clock_unix_to_ymd(time_t t_unix)

@@ -27,16 +27,21 @@ IhuFsmStateItem_t IhuFsmSpileo[] =
 
 	//System level initialization, only controlled by VMDA
   {MSG_ID_COM_INIT,       								FSM_STATE_IDLE,            									fsm_spileo_init},
-  {MSG_ID_COM_RESTART,										FSM_STATE_IDLE,            									fsm_spileo_restart},
+  {MSG_ID_COM_INIT_FB,       							FSM_STATE_IDLE,            									fsm_com_do_nothing},
 
   //Task level initialization
-  {MSG_ID_COM_RESTART,        						FSM_STATE_SPILEO_INITED,         						fsm_spileo_restart},
-  {MSG_ID_COM_STOP,												FSM_STATE_SPILEO_INITED,         						fsm_spileo_stop_rcv},
+  {MSG_ID_COM_INIT,       								FSM_STATE_SPILEO_INITED,            				fsm_spileo_init},
+  {MSG_ID_COM_INIT_FB,       							FSM_STATE_SPILEO_INITED,            				fsm_com_do_nothing},
+
+	//ANY state entry
+  {MSG_ID_COM_INIT_FB,                    FSM_STATE_COMMON,                           fsm_com_do_nothing},
+	{MSG_ID_COM_HEART_BEAT,                 FSM_STATE_COMMON,                           fsm_com_heart_beat_rcv},
+	{MSG_ID_COM_HEART_BEAT_FB,              FSM_STATE_COMMON,                           fsm_com_do_nothing},
+	{MSG_ID_COM_STOP,                       FSM_STATE_COMMON,                           fsm_spileo_stop_rcv},
+  {MSG_ID_COM_RESTART,                    FSM_STATE_COMMON,                           fsm_spileo_restart},
+	{MSG_ID_COM_TIME_OUT,                   FSM_STATE_COMMON,                           fsm_spileo_time_out},
 
 	//Task level actived status
-  {MSG_ID_COM_RESTART,        						FSM_STATE_SPILEO_ACTIVED,         					fsm_spileo_restart},
-  {MSG_ID_COM_STOP,												FSM_STATE_SPILEO_ACTIVED,         					fsm_spileo_stop_rcv},
-	{MSG_ID_COM_TIME_OUT,										FSM_STATE_SPILEO_ACTIVED,         				  fsm_spileo_time_out},
   {MSG_ID_SPI_L2FRAME_RCV,								FSM_STATE_SPILEO_ACTIVED,         					fsm_spileo_l2frame_rcv},
 	
   //结束点，固定定义，不要改动
