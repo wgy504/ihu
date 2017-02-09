@@ -10,6 +10,7 @@ CCL=> 最后剩下的任务是摄像头+IAP+节电，然后打开门狗就完美
 = 完成TASK启动中有关pnpFlag的设置
 = 三种TIMERID统一编址改进，重新生成了TIMERID的存储区域
 = 清理老旧TIMERID的启动及终止方式，已经SYSCONFIG中的无用信息，完成!
+= 改进TIME_OUT消息的TRACE，现在可以支持打印TIMER_ID的模式以及信息
 
 //= ZJL, 2017 Feb.7, CURRENT_SW_DELIVERY R03.116 =>CCL项目/BFSC
 = MsgNameList的清理：完善变量命名，增加TRACE控制逻辑，完整的存入到zIhuSysEngPar中去

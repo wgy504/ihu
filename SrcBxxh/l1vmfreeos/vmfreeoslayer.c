@@ -1397,7 +1397,8 @@ OPSTAT ihu_message_queue_clean(UINT8 dest_id)
 OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)
 {
 	//int ret = 0;
-	char s1[TASK_NAME_MAX_LENGTH+2]="", s2[TASK_NAME_MAX_LENGTH+2]="", s3[MSG_NAME_MAX_LENGTH]="";
+	char s1[TASK_NAME_MAX_LENGTH+2]="", s2[TASK_NAME_MAX_LENGTH+2]="", s3[MSG_NAME_MAX_LENGTH]="", s4[TIMER_NAME_MAX_LENGTH]="";
+	UINT32 tid = 0;
 	IhuMsgSruct_t msg;
 	
 	//Checking task_id range
@@ -1488,6 +1489,33 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 			ihu_msgid_to_string(msg_id, s3);
 			if ((msg_id != MSG_ID_COM_TIME_OUT) && (msg_id != MSG_ID_COM_HEART_BEAT) && (msg_id != MSG_ID_COM_HEART_BEAT_FB)){
 				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
+			}
+			break;
+			
+		case IHU_TRACE_MSG_MODE_ALL_WITH_TIMERID:
+			ihu_taskid_to_string(dest_id, s1);
+			ihu_taskid_to_string(src_id, s2);
+			ihu_msgid_to_string(msg_id, s3);
+			if ((msg_id != MSG_ID_COM_TIME_OUT)){
+				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
+			}
+			else{
+				//正好将TIMERID定义为4B，就跟编译器和处理器大小端无关了
+				memcpy(&tid, param_ptr, 4);
+				ihu_timerid_to_string(tid, s4);
+			  IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d, TID=%02X%s\n", msg_id, s3, dest_id, s1, src_id, s2, param_len, tid, s4);
+			}
+			break;
+
+		case IHU_TRACE_MSG_MODE_TIMERID_ONLY:
+			if (msg_id == MSG_ID_COM_TIME_OUT){
+				ihu_taskid_to_string(dest_id, s1);
+				ihu_taskid_to_string(src_id, s2);
+				ihu_msgid_to_string(msg_id, s3);
+				//正好将TIMERID定义为4B，就跟编译器和处理器大小端无关了
+				memcpy(&tid, param_ptr, 4);
+				ihu_timerid_to_string(tid, s4);
+				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d, TID=%02X%s\n", msg_id, s3, dest_id, s1, src_id, s2, param_len, tid, s4);
 			}
 			break;
 
