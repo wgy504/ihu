@@ -128,7 +128,8 @@ OPSTAT fsm_spsvirgo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 
 	if (IHU_SPSVIRGO_PERIOD_TIMER_SET == IHU_SPSVIRGO_PERIOD_TIMER_ACTIVE){
 		//测试性启动周期性定时器：正式工作后可以删掉这个工作逻辑机制
-		ret = ihu_timer_start(TASK_ID_SPSVIRGO, TIMER_ID_1S_SPSVIRGO_PERIOD_SCAN, zIhuSysEngPar.timer.spsvirgoPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+		ret = ihu_timer_start(TASK_ID_SPSVIRGO, TIMER_ID_1S_SPSVIRGO_PERIOD_SCAN, \
+			zIhuSysEngPar.timer.array[TIMER_ID_1S_SPSVIRGO_PERIOD_SCAN].dur, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 		if (ret == IHU_FAILURE)
 			IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Error start timer!\n");
 	}

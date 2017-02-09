@@ -96,7 +96,8 @@ OPSTAT fsm_gpiocancer_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16
 	
 	//启动本地定时器，如果有必要
 	//测试性启动周期性定时器
-	ret = ihu_timer_start(TASK_ID_GPIOCANCER, TIMER_ID_1S_GPIOCANCER_PERIOD_SCAN, zIhuSysEngPar.timer.gpiocancerPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+	ret = ihu_timer_start(TASK_ID_GPIOCANCER, TIMER_ID_1S_GPIOCANCER_PERIOD_SCAN, \
+		zIhuSysEngPar.timer.array[TIMER_ID_1S_GPIOCANCER_PERIOD_SCAN].dur, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_GPIOCANCER]++;
 		IhuErrorPrint("GPIOCANCER: Error start timer!\n");

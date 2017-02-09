@@ -99,7 +99,8 @@ OPSTAT fsm_spileo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 par
 	
 	//启动本地定时器，如果有必要
 	//测试性启动周期性定时器
-	ret = ihu_timer_start(TASK_ID_SPILEO, TIMER_ID_1S_SPILEO_PERIOD_SCAN, zIhuSysEngPar.timer.spileoPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+	ret = ihu_timer_start(TASK_ID_SPILEO, TIMER_ID_1S_SPILEO_PERIOD_SCAN, \
+		zIhuSysEngPar.timer.array[TIMER_ID_1S_SPILEO_PERIOD_SCAN].dur, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_SPILEO]++;
 		IhuErrorPrint("SPILEO: Error start timer!\n");

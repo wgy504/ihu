@@ -515,7 +515,8 @@ extern void ihu_vm_system_ctr_table_init(void);
 extern void ihu_sleep(UINT32 second);
 extern void ihu_usleep(UINT32 usecond);  //resulution 10^(-3)s = 1 microsecond
 extern OPSTAT ihu_taskid_to_string(UINT8 id, char *string);
-extern OPSTAT ihu_msgid_to_string(UINT16 id, char *string);
+extern OPSTAT ihu_msgid_to_string(UINT8 id, char *string);
+extern OPSTAT ihu_timerid_to_string(UINT8 id, char *string);
 extern int  ihu_vm_main(void);
 extern void ihu_vm_check_task_que_status_and_action(void);
 extern OPSTAT ihu_vm_send_init_msg_to_app_task(UINT8 dest_id);

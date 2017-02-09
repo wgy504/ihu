@@ -141,7 +141,8 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 //	}
 	
 	//启动心跳定时器，确保喂狗的基本功能
-	ret = ihu_timer_start(TASK_ID_CCL, TIMER_ID_1S_CCL_PERIOD_SCAN, zIhuSysEngPar.timer.cclPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+	ret = ihu_timer_start(TASK_ID_CCL, TIMER_ID_1S_CCL_PERIOD_SCAN, \
+		zIhuSysEngPar.timer.array[TIMER_ID_1S_CCL_PERIOD_SCAN].dur, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 	if (ret == IHU_FAILURE){
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CCL]++;
 		IhuErrorPrint("CCL: Error start timer!\n");
@@ -149,7 +150,8 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 	}
 
 	//启动超长周期定时汇报定时器
-	ret = ihu_timer_start(TASK_ID_CCL, TIMER_ID_1S_CCL_EVENT_REPORT_PEROID_SCAN, zIhuSysEngPar.timer.cclEventReportPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+	ret = ihu_timer_start(TASK_ID_CCL, TIMER_ID_1S_CCL_EVENT_REPORT_PEROID_SCAN, \
+		zIhuSysEngPar.timer.array[TIMER_ID_1S_CCL_EVENT_REPORT_PEROID_SCAN].dur, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 	if (ret == IHU_FAILURE){
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CCL]++;
 		IhuErrorPrint("CCL: Error start timer!\n");
@@ -633,7 +635,8 @@ OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName);
 		
 		//启动定时器
-		ret = ihu_timer_start(TASK_ID_CCL, TIMER_ID_1S_CCL_LOCK_WORK_WAIT_TO_OPEN, zIhuSysEngPar.timer.cclLockWorkWaitForOpenScanTimer, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
+		ret = ihu_timer_start(TASK_ID_CCL, TIMER_ID_1S_CCL_LOCK_WORK_WAIT_TO_OPEN, \
+			zIhuSysEngPar.timer.array[TIMER_ID_1S_CCL_LOCK_WORK_WAIT_TO_OPEN].dur, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
 		if (ret == IHU_FAILURE)
 			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Error start timer!\n");
 		
@@ -787,7 +790,8 @@ OPSTAT fsm_ccl_dido_event_status_update(UINT8 dest_id, UINT8 src_id, void * para
 	
 	//如果重复收到锁被激活，则持续延长工作定时器长度
 	if (rcv.cmdid == IHU_CCL_DH_CMDID_EVENT_IND_LOCK_TRIGGER){
-		ret = ihu_timer_start(TASK_ID_CCL, TIMER_ID_1S_CCL_LOCK_WORK_ACTIVE, zIhuSysEngPar.timer.cclLockWorkActiveScanTimer, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
+		ret = ihu_timer_start(TASK_ID_CCL, TIMER_ID_1S_CCL_LOCK_WORK_ACTIVE, \
+			zIhuSysEngPar.timer.array[TIMER_ID_1S_CCL_LOCK_WORK_ACTIVE].dur, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
 		if (ret == IHU_FAILURE)
 			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Error start timer!\n");
 	}	
@@ -834,7 +838,8 @@ OPSTAT fsm_ccl_event_lock_trigger_to_work(UINT8 dest_id, UINT8 src_id, void * pa
 		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DCMIARIS].taskName);
 	
 	//启动定时器：如果是在工作模式下，允许被重复触发
-	ret = ihu_timer_start(TASK_ID_CCL, TIMER_ID_1S_CCL_LOCK_WORK_ACTIVE, zIhuSysEngPar.timer.cclLockWorkActiveScanTimer, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
+	ret = ihu_timer_start(TASK_ID_CCL, TIMER_ID_1S_CCL_LOCK_WORK_ACTIVE, \
+		zIhuSysEngPar.timer.array[TIMER_ID_1S_CCL_LOCK_WORK_ACTIVE].dur, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
 	if (ret == IHU_FAILURE)
 		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Error start timer!\n");
 	

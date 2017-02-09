@@ -116,7 +116,8 @@ OPSTAT fsm_didocap_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 
 	if (IHU_DIDOCAP_PERIOD_TIMER_SET == IHU_DIDOCAP_PERIOD_TIMER_ACTIVE){
 		//启动喂狗定时器
-		ret = ihu_timer_start(TASK_ID_DIDOCAP, TIMER_ID_1S_DIDOCAP_PERIOD_SCAN, zIhuSysEngPar.timer.didocapPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+		ret = ihu_timer_start(TASK_ID_DIDOCAP, TIMER_ID_1S_DIDOCAP_PERIOD_SCAN, \
+			zIhuSysEngPar.timer.array[TIMER_ID_1S_DIDOCAP_PERIOD_SCAN].dur, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 		if (ret == IHU_FAILURE){
 			zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
 			IhuErrorPrint("DIDOCAP: Error start timer!\n");
@@ -126,7 +127,8 @@ OPSTAT fsm_didocap_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 	
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)	
 	//启动永恒的外部触发扫描
-	ret = ihu_timer_start(TASK_ID_DIDOCAP, TIMER_ID_1S_CCL_DIDO_TRIGGER_PERIOD_SCAN, zIhuSysEngPar.timer.cclDidoTriggerPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+	ret = ihu_timer_start(TASK_ID_DIDOCAP, TIMER_ID_1S_CCL_DIDO_TRIGGER_PERIOD_SCAN, \
+		zIhuSysEngPar.timer.array[TIMER_ID_1S_CCL_DIDO_TRIGGER_PERIOD_SCAN].dur, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 	if (ret == IHU_FAILURE){
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
 		IhuErrorPrint("DIDOCAP: Error start timer!\n");
@@ -511,7 +513,8 @@ OPSTAT fsm_didocap_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 	if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_ACTIVE){		
 		zIhuCclDidocapCtrlTable.cclDidoWorkingMode = IHU_CCL_DIDO_WORKING_MODE_ACTIVE;
 		//启动工作扫描定时器
-		ret = ihu_timer_start(TASK_ID_DIDOCAP, TIMER_ID_1S_CCL_DIDO_WORKING_PERIOD_SCAN, zIhuSysEngPar.timer.cclDidoWorkingPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+		ret = ihu_timer_start(TASK_ID_DIDOCAP, TIMER_ID_1S_CCL_DIDO_WORKING_PERIOD_SCAN, \
+			zIhuSysEngPar.timer.array[TIMER_ID_1S_CCL_DIDO_WORKING_PERIOD_SCAN].dur, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 		if (ret == IHU_FAILURE){
 			zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
 			IhuErrorPrint("DIDOCAP: Error start timer!\n");
@@ -536,7 +539,8 @@ OPSTAT fsm_didocap_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 	else if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_FAULT){
 		zIhuCclDidocapCtrlTable.cclDidoWorkingMode = IHU_CCL_DIDO_WORKING_MODE_FAULT;
 		//启动工作扫描定时器
-		ret = ihu_timer_start(TASK_ID_DIDOCAP, TIMER_ID_1S_CCL_DIDO_WORKING_PERIOD_SCAN, zIhuSysEngPar.timer.cclDidoWorkingPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+		ret = ihu_timer_start(TASK_ID_DIDOCAP, TIMER_ID_1S_CCL_DIDO_WORKING_PERIOD_SCAN, \
+			zIhuSysEngPar.timer.array[TIMER_ID_1S_CCL_DIDO_WORKING_PERIOD_SCAN].dur, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 		if (ret == IHU_FAILURE){
 			zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
 			IhuErrorPrint("DIDOCAP: Error start timer!\n");

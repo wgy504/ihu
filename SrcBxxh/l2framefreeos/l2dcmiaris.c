@@ -116,7 +116,8 @@ OPSTAT fsm_dcmiaris_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 
 	if (IHU_DCMIARIS_PERIOD_TIMER_SET == IHU_DCMIARIS_PERIOD_TIMER_ACTIVE){	
 		//启动本地定时器，如果有必要
-		ret = ihu_timer_start(TASK_ID_DCMIARIS, TIMER_ID_1S_DCMIARIS_PERIOD_SCAN, zIhuSysEngPar.timer.dcmiarisPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+		ret = ihu_timer_start(TASK_ID_DCMIARIS, TIMER_ID_1S_DCMIARIS_PERIOD_SCAN, \
+			zIhuSysEngPar.timer.array[TIMER_ID_1S_DCMIARIS_PERIOD_SCAN].dur, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 		if (ret == IHU_FAILURE){
 			zIhuSysStaPm.taskRunErrCnt[TASK_ID_DCMIARIS]++;
 			IhuErrorPrint("DCMIARIS: Error start timer!\n");

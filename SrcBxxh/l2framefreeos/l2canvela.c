@@ -131,7 +131,8 @@ OPSTAT fsm_canvela_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 	
 	if (IHU_CANVELA_PERIOD_TIMER_SET == IHU_CANVELA_PERIOD_TIMER_ACTIVE){
 		//测试性启动周期性定时器
-		ret = ihu_timer_start(TASK_ID_CANVELA, TIMER_ID_1S_CANVELA_PERIOD_SCAN, zIhuSysEngPar.timer.canvelaPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+		ret = ihu_timer_start(TASK_ID_CANVELA, TIMER_ID_1S_CANVELA_PERIOD_SCAN, \
+			zIhuSysEngPar.timer.array[TIMER_ID_1S_CANVELA_PERIOD_SCAN].dur, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 		if (ret == IHU_FAILURE){
 			zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 			IhuErrorPrint("CANVELA: Error start timer!\n");

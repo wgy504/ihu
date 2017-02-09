@@ -96,7 +96,8 @@ OPSTAT fsm_ethorion_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 	
 	//启动本地定时器，如果有必要
 	//测试性启动周期性定时器
-	ret = ihu_timer_start(TASK_ID_ETHORION, TIMER_ID_1S_ETHORION_PERIOD_SCAN, zIhuSysEngPar.timer.ethorionPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+	ret = ihu_timer_start(TASK_ID_ETHORION, TIMER_ID_1S_ETHORION_PERIOD_SCAN, \
+		zIhuSysEngPar.timer.array[TIMER_ID_1S_ETHORION_PERIOD_SCAN].dur, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 	if (ret == IHU_FAILURE){
 		zIhuRunErrCnt[TASK_ID_ETHORION]++;
 		IhuErrorPrint("ETHORION: Error start timer!\n");

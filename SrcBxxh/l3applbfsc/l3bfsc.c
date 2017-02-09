@@ -182,7 +182,8 @@ OPSTAT fsm_bfsc_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 	}
 	
 	//启动本地定时器，如果有必要	
-	ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_1S_BFSC_PERIOD_SCAN, zIhuSysEngPar.timer.bfscPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+	ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_1S_BFSC_PERIOD_SCAN, \
+		zIhuSysEngPar.timer.array[TIMER_ID_1S_BFSC_PERIOD_SCAN].dur, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 	if (ret == IHU_FAILURE){
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_BFSC]++;
 		IhuErrorPrint("L3BFSC: Error start timer!\n");
@@ -415,7 +416,8 @@ OPSTAT func_bfsc_time_out_wait_weight_command_process(void)
 		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName);
 	
 	//启动定时器
-	ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_1S_BFSC_L3BFSC_WAIT_WEIGHT_TIMER, zIhuSysEngPar.timer.bfscL3bfscWaitWeightTimer, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
+	ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_1S_BFSC_L3BFSC_WAIT_WEIGHT_TIMER, \
+		zIhuSysEngPar.timer.array[TIMER_ID_1S_BFSC_L3BFSC_WAIT_WEIGHT_TIMER].dur, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
 	if (ret == IHU_FAILURE)
 		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Error start timer!\n");
 	
@@ -444,7 +446,8 @@ OPSTAT func_bfsc_time_out_roll_out_process(void)
 		//继续启动定时器，并打开MOTO命令
 		
 		//重启定时器
-		ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_1S_BFSC_L3BFSC_ROLL_OUT_TIMER, zIhuSysEngPar.timer.bfscL3bfscRolloutTimer, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
+		ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_1S_BFSC_L3BFSC_ROLL_OUT_TIMER, \
+			zIhuSysEngPar.timer.array[TIMER_ID_1S_BFSC_L3BFSC_ROLL_OUT_TIMER].dur, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
 		if (ret == IHU_FAILURE)
 			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Error start timer!\n");
 	}
@@ -493,7 +496,8 @@ OPSTAT func_bfsc_time_out_give_up_process(void)
 		//继续启动定时器，并打开MOTO命令
 		
 		//重启定时器
-		ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_1S_BFSC_L3BFSC_GIVE_UP_TIMER, zIhuSysEngPar.timer.bfscL3bfscGiveupTimer, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
+		ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_1S_BFSC_L3BFSC_GIVE_UP_TIMER, \
+			zIhuSysEngPar.timer.array[TIMER_ID_1S_BFSC_L3BFSC_GIVE_UP_TIMER].dur, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
 		if (ret == IHU_FAILURE)
 			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Error start timer!\n");
 	}
@@ -741,7 +745,8 @@ OPSTAT fsm_bfsc_adc_new_material_ws(UINT8 dest_id, UINT8 src_id, void * param_pt
 		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName);
 	
 	//启动定时器
-	ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_1S_BFSC_L3BFSC_WAIT_WEIGHT_TIMER, zIhuSysEngPar.timer.bfscL3bfscWaitWeightTimer, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
+	ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_1S_BFSC_L3BFSC_WAIT_WEIGHT_TIMER, \
+		zIhuSysEngPar.timer.array[TIMER_ID_1S_BFSC_L3BFSC_WAIT_WEIGHT_TIMER].dur, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
 	if (ret == IHU_FAILURE){
 		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Error start timer!\n");
 	}	
@@ -850,7 +855,8 @@ OPSTAT fsm_bfsc_canvela_roll_out_req(UINT8 dest_id, UINT8 src_id, void * param_p
 	//处理消息：发送质量给马达，进行出料处理
 	
 	//启动定时器
-	ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_1S_BFSC_L3BFSC_ROLL_OUT_TIMER, zIhuSysEngPar.timer.bfscL3bfscRolloutTimer, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
+	ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_1S_BFSC_L3BFSC_ROLL_OUT_TIMER, \
+		zIhuSysEngPar.timer.array[TIMER_ID_1S_BFSC_L3BFSC_ROLL_OUT_TIMER].dur, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
 	if (ret == IHU_FAILURE)
 		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Error start timer!\n");
 	
@@ -885,7 +891,8 @@ OPSTAT fsm_bfsc_canvela_give_up_req(UINT8 dest_id, UINT8 src_id, void * param_pt
 	//处理消息：发送质量给马达，进行出料处理
 	
 	//启动定时器
-	ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_1S_BFSC_L3BFSC_GIVE_UP_TIMER, zIhuSysEngPar.timer.bfscL3bfscGiveupTimer, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
+	ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_1S_BFSC_L3BFSC_GIVE_UP_TIMER, \
+		zIhuSysEngPar.timer.array[TIMER_ID_1S_BFSC_L3BFSC_GIVE_UP_TIMER].dur, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
 	if (ret == IHU_FAILURE)
 		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Error start timer!\n");
 	

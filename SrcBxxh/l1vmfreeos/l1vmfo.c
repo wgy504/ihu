@@ -116,7 +116,8 @@ OPSTAT fsm_vmfo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 	
 	//启动本地定时器，如果有必要
 	//测试性启动周期性定时器
-	ret = ihu_timer_start(TASK_ID_VMFO, TIMER_ID_1S_VMFO_PERIOD_SCAN, zIhuSysEngPar.timer.vmfoPeriodScanTimer, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
+	ret = ihu_timer_start(TASK_ID_VMFO, TIMER_ID_1S_VMFO_PERIOD_SCAN, \
+		zIhuSysEngPar.timer.array[TIMER_ID_1S_VMFO_PERIOD_SCAN].dur, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
 	if (ret == IHU_FAILURE){
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Error start timer!\n");

@@ -33,46 +33,6 @@ typedef struct SysEngParElementTimUnit
 typedef struct SysEngParElementSensor
 {
 	SysEngParElementTimUnit_t array[MAX_TIMER_NUM_IN_ONE_IHU];
-	INT32 timerDur[MAX_TIMER_NUM_IN_ONE_IHU];
-	INT32 vmfoPeriodScanTimer;	
-	INT32 adclibraPeriodScanTimer;
-	INT32 didocapPeriodScanTimer;
-	INT32 ethorionPeriodScanTimer;
-	INT32 gpiocancerPeriodScanTimer;
-	INT32 canvelaPeriodScanTimer;
-	INT32 i2cariesPeriodScanTimer;
-	INT32 ledpiscesPeriodScanTimer;
-	INT32 ledpiscesGalowagScanTimer;
-	INT32 pwmtaurusPeriodScanTimer;
-	INT32 spileoPeriodScanTimer;
-	INT32 spsvirgoPeriodScanTimer;
-	INT32 dcmiarisPeriodScanTimer;	
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCWX_ID)
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCSPS_ID)
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID)
-	INT32 scycbPeriodScanTimer;
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCCB_ID)
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCSB_ID)
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-	INT32 cclPeriodScanTimer;	
-	INT32 cclEventReportPeriodScanTimer;		
-	INT32 cclLockWorkActiveScanTimer;
-	INT32 cclLockWorkWaitForOpenScanTimer;
-	INT32 cclDidoTriggerPeriodScanTimer;
-	INT32 cclDidoWorkingPeriodScanTimer;
-	INT32 cclSpsWorkingPeriodScanTimer;
-	INT32 cclI2cWorkingPeriodScanTimer;
-	INT32 cclDcmiWorkingPeriodScanTimer;
-	INT32 cclAdcWorkingPeriodScanTimer;
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
-	INT32 bfscPeriodScanTimer;
-	INT32 bfscAdclibraScanTimer;
-	INT32 bfscL3bfscWaitWeightTimer;
-	INT32 bfscL3bfscRolloutTimer;
-	INT32 bfscL3bfscGiveupTimer;
-#else
-	#error Un-correct constant definition
-#endif
 }SysEngParElementSensorTimer_t;
 
 //Series port config
@@ -176,28 +136,28 @@ typedef struct SysEngParElementHwBurnPhyIdAddr
 
 //工程参数总控制表
 #define SYS_ENG_PAR_PRJ_NAME_LEN 20
-//EMCWX的符号空间太小，必须限制
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCWX_ID)
-	typedef struct IhuSysEngParTab
-	{
-		char prjname[SYS_ENG_PAR_PRJ_NAME_LEN];
-		UINT8 debugMode;
-		UINT8 traceMode;
-	}IhuSysEngParTab_t;
-#else
-	typedef struct IhuSysEngParTab
-	{
-		char prjname[SYS_ENG_PAR_PRJ_NAME_LEN];
-		SysEngParElementComm_t comm;
-		SysEngParElementSensorTimer_t timer;
-		SysEngParElementSeriesPort_t serialport;
-		SysEngParElementCloudXhui_t cloud;
-		SysEngParElementIhuSwDownload_t swDownload;
-		UINT8 debugMode;
-		UINT8 traceMode;
-		SysEngParElementTrace_t traceList;
-		SysEngParElementHwBurnPhyIdAddr_t hwBurnId;
-	}IhuSysEngParTab_t;	
-#endif	
+//EMCWX的符号空间太小，必须限制，为了编程方便，暂时不区分，未来再说
+//#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCWX_ID)
+//	typedef struct IhuSysEngParTab
+//	{
+//		char prjname[SYS_ENG_PAR_PRJ_NAME_LEN];
+//		UINT8 debugMode;
+//		UINT8 traceMode;
+//	}IhuSysEngParTab_t;
+//#else
+//#endif	
+typedef struct IhuSysEngParTab
+{
+	char prjname[SYS_ENG_PAR_PRJ_NAME_LEN];
+	SysEngParElementComm_t comm;
+	SysEngParElementSensorTimer_t timer;
+	SysEngParElementSeriesPort_t serialport;
+	SysEngParElementCloudXhui_t cloud;
+	SysEngParElementIhuSwDownload_t swDownload;
+	UINT8 debugMode;
+	UINT8 traceMode;
+	SysEngParElementTrace_t traceList;
+	SysEngParElementHwBurnPhyIdAddr_t hwBurnId;
+}IhuSysEngParTab_t;	
 
 #endif /* L0COMVM_SYSENGPAREMCWX_H_ */

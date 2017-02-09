@@ -33,10 +33,11 @@ IhuSysStaPm_t				zIhuSysStaPm;			//全局性能统计表
 
 /*
  *
+ *
  *   任务初始化配置参数
  *
+ *
  */
-
 
 //任务初始化配置参数
 //从极致优化内存的角度，这里浪费了2个TASK对应的内存空间（MIN=0/MAX=n+1)，但它却极大的改善了程序编写的效率，值得浪费！！！
@@ -253,6 +254,14 @@ IhuSysEngTimerStaticCfg_t zIhuSysEngTimerStaticCfg[] ={
 };
 
 
+
+/*
+ *
+ *
+ *   VM核心函数，提供全局服务
+ *
+ *
+ */
 
 /*******************************************************************************
 **
@@ -484,24 +493,45 @@ void ihu_usleep(UINT32 usecond)
 	OS_DELAY_MS(usecond);
 }
 
+
+
+/*
+ *
+ *
+ *   VM系统初始化函数
+ *
+ *
+ */
+
+
 //INIT the whole system
 void ihu_vm_system_ctr_table_init(void)
 {	
 	int i = 0, item = 0;
 	UINT8 taskid = 0, msgid = 0, tid = 0;
 	
-	//SYSTEM DIMENSION检查
+	/*
+	 *  SYSTEM DIMENSION检查
+	 */
+
 	if ((TASK_ID_MAX > MAX_TASK_NUM_IN_ONE_IHU) || (MSG_ID_COM_MAX > MAX_MSGID_NUM_IN_ONE_TASK) || (TIMER_ID_MAX > MAX_TIMER_NUM_IN_ONE_IHU)){
 		IhuErrorPrint("VMFO: Initialize failure, configuration of system dimension error!\n");
 		return;
 	}	
 	
-	//初始化三表
+	/*
+	 *  初始化三表
+	 */
+
 	memset(&zIhuVmCtrTab, 0, sizeof(IhuVmCtrTab_t));
 	memset(&zIhuSysEngPar, 0, sizeof(IhuSysEngParTab_t));
 	memset(&zIhuSysStaPm, 0, sizeof(IhuSysStaPm_t));
 	 	
-	//初始化打印缓冲区 
+
+	/*
+	 *  初始化打印缓冲区 
+	 */
+
 	//采用OS_MUTEX_CREATE居然不成功，怪哉。。。
 	//OS_MUTEX_CREATE(zIhuVmCtrTab.print.prtMutex);
 	zIhuVmCtrTab.print.prtMutex = xSemaphoreCreateRecursiveMutex();
@@ -510,18 +540,23 @@ void ihu_vm_system_ctr_table_init(void)
 		return;
 	}
 
-	//INIT IHU itself
+	/*
+	 *  INIT IHU itself
+	 */
+
 	IhuDebugPrint("VMFO: User task starting, compiled load Info: CURRENT_PRJ=[%s], PRODUCT_CAT=[0x%x], HW_TYPE=[%d], SW_REL=[%d], SW_DELIVER=[%d].\n", IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT, \
 		IHU_HARDWARE_PRODUCT_CAT_TYPE, IHU_CURRENT_HW_TYPE, IHU_CURRENT_SW_RELEASE, IHU_CURRENT_SW_DELIVERY);
 	IhuDebugPrint("VMFO: BXXH(TM) IHU(c) Application Layer start and initialized, build at %s, %s.\n", __DATE__, __TIME__);
-
 	//初始化全局变量TASK_ID/QUE_ID/TASK_STAT
 	for (i=TASK_ID_MIN; i<=TASK_ID_MAX; i++){
 		zIhuVmCtrTab.task[i].TaskId = i;
 		zIhuVmCtrTab.task[i].pnpState = IHU_TASK_PNP_OFF;
 	}
-	
-	//扫描TASK的静态配置
+
+	/*
+	 *  扫描TASKID的静态配置
+	 */
+
 	//起始必须是TASK_ID_MIN条目
 	if (zIhuVmCtrTaskStaticCfg[0].taskInputId != TASK_ID_MIN){
 		IhuErrorPrint("VMFO: Initialize VMFO failure, task input configuration error!\n");
@@ -575,7 +610,10 @@ void ihu_vm_system_ctr_table_init(void)
 		zIhuSysEngPar.traceList.mod[taskid].moduleFromRestrict = zIhuVmCtrTaskStaticCfg[item].traceModFromRestrictFlag;
 
 	
-	//扫描MSGID的静态配置
+	/*
+	 *  扫描MSGID的静态配置
+	 */
+
 	//起始必须是MSG_ID_COM_MIN条目
 	if (zIhuVmCtrMsgStaticCfg[0].msgId != MSG_ID_COM_MIN){
 		IhuErrorPrint("VMFO: Initialize VMFO failure, task input configuration error!\n");
@@ -612,7 +650,11 @@ void ihu_vm_system_ctr_table_init(void)
 	zIhuSysEngPar.traceList.msg[msgid].msgAllow = zIhuVmCtrMsgStaticCfg[item].traceMsgAllowFlag;
 	zIhuSysEngPar.traceList.msg[msgid].msgRestrict = zIhuVmCtrMsgStaticCfg[item].traceMsgRestrictFlag;
 
-	//扫描TIMERID的静态配置
+
+	/*
+	 *  扫描TIMERID的静态配置
+	 */
+
 	//起始必须是TIMER_ID_MIN条目
 	if (zIhuSysEngTimerStaticCfg[0].timerId != TIMER_ID_MIN){
 		IhuErrorPrint("VMFO: Initialize VMFO failure, task input configuration error!\n");
@@ -647,152 +689,51 @@ void ihu_vm_system_ctr_table_init(void)
 		zIhuSysEngPar.timer.array[tid].gradunarity = zIhuSysEngTimerStaticCfg[item].timerGranularity;
 		zIhuSysEngPar.timer.array[tid].dur = zIhuSysEngTimerStaticCfg[item].timerDur;
 	
-	//Init Fsm
+	/*
+	 *  Init Fsm
+	 */
+
 	FsmInit();
-	
-	//分项目对工程参数进行配置
+
+	/*
+	 *  分项目对工程参数进行配置
+	 */
+
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)	
-	
-	//初始化全局工参配置信息，这里给出了大部分用到的参数的初始化结构，以便未来可以更加方便的添加完善
-	//后台通信部分
-	zIhuSysEngPar.comm.commBackHawlCon = IHU_COMM_BACK_HAWL_CON;
-
-	//Sensor timer
-	//zIhuSysEngPar.timer.emcReqTimer = IHU_EMC_TIMER_DURATION_PERIOD_READ;
-
-	//Series Port config
-	zIhuSysEngPar.serialport.SeriesPortForGPS = IHU_SERIESPORT_NUM_FOR_GPS_DEFAULT;
-
-	//后台部分
-	strcpy(zIhuSysEngPar.cloud.cloudHttpAddLocal, IHU_CLOUDXHUI_HTTP_ADDRESS_LOCAL);
-
-	//for IHU SW FTP
-
-	//local SW storage address
-	strcpy(zIhuSysEngPar.swDownload.ihuSwDownloadDir, IHU_SW_DOWNLOAD_DIR_DEFAULT);
-	strcpy(zIhuSysEngPar.swDownload.ihuSwActiveDir, IHU_SW_ACTIVE_DIR_DEFAULT);
-	strcpy(zIhuSysEngPar.swDownload.ihuSwBackupDir, IHU_SW_BACKUP_DIR_DEFAULT);
-
-	//DEBUG部分
-	zIhuSysEngPar.debugMode = IHU_TRACE_DEBUG_ON;
-	
-	//TRACE部分
-	zIhuSysEngPar.traceMode = IHU_TRACE_MSG_ON;
-	IHU_DEBUG_PRINT_NOR("VMFO: Set basic engineering data correctly from SYSTEM DEFAULT parameters!\n");
-	
-	//后台协议接口
-	zIhuSysEngPar.cloud.cloudBhItfFrameStd = IHU_CLOUDXHUI_BH_INTERFACE_STANDARD;
-
 	//烧录的过程，EMC68x是不需要的
 	return;
-	
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-	
+#endif
+
+	/*
+	 *  工程参数初始化
+	 */
+
 	//初始化全局工参配置信息，这里给出了大部分用到的参数的初始化结构，以便未来可以更加方便的添加完善
 	//后台通信部分
 	zIhuSysEngPar.comm.commBackHawlCon = IHU_COMM_BACK_HAWL_CON;
-
-	//Sensor timer
-	zIhuSysEngPar.timer.vmfoPeriodScanTimer = IHU_VMFO_TIMER_DURATION_PERIOD_SCAN;
-	zIhuSysEngPar.timer.adclibraPeriodScanTimer = IHU_ADCLIBRA_TIMER_DURATION_PERIOD_SCAN;
-	zIhuSysEngPar.timer.didocapPeriodScanTimer = IHU_DIDOCAP_TIMER_DURATION_PERIOD_SCAN;
-	zIhuSysEngPar.timer.ethorionPeriodScanTimer = IHU_ETHORION_TIMER_DURATION_PERIOD_SCAN;
-	zIhuSysEngPar.timer.canvelaPeriodScanTimer = IHU_CANVELA_TIMER_DURATION_PERIOD_SCAN;
-	zIhuSysEngPar.timer.i2cariesPeriodScanTimer = IHU_I2CARIERS_TIMER_DURATION_PERIOD_SCAN;
-	zIhuSysEngPar.timer.ledpiscesPeriodScanTimer = IHU_LEDPISCES_TIMER_DURATION_PERIOD_SCAN;
-	zIhuSysEngPar.timer.ledpiscesGalowagScanTimer = IHU_LEDPISCES_TIMER_GALOWAG_DURATION_PERIOD_SCAN;
-	zIhuSysEngPar.timer.pwmtaurusPeriodScanTimer = IHU_PWMTAURUS_TIMER_DURATION_PERIOD_SCAN;
-	zIhuSysEngPar.timer.spileoPeriodScanTimer = IHU_SPILEO_TIMER_DURATION_PERIOD_SCAN;
-	zIhuSysEngPar.timer.spsvirgoPeriodScanTimer = IHU_SPSVIRGO_TIMER_DURATION_PERIOD_SCAN;
-	zIhuSysEngPar.timer.dcmiarisPeriodScanTimer = IHU_DCMIARIS_TIMER_DURATION_PERIOD_SCAN;	
-	zIhuSysEngPar.timer.cclPeriodScanTimer = IHU_CCL_TIMER_DURATION_PERIOD_SCAN;
-	zIhuSysEngPar.timer.cclEventReportPeriodScanTimer = IHU_CCL_TIMER_DURATION_EVENT_REPORT_PEROID_SCAN;
-	zIhuSysEngPar.timer.cclLockWorkActiveScanTimer = IHU_CCL_TIMER_DURATION_LOCK_ACTIVE;
-	zIhuSysEngPar.timer.cclLockWorkWaitForOpenScanTimer = IHU_CCL_TIMER_DURATION_LOCK_WORK_WAIT_TO_OPEN;	
-	zIhuSysEngPar.timer.cclDidoTriggerPeriodScanTimer = IHU_CCL_TIMER_DURATION_DIDO_TRIGGER_PERIOD_SCAN;
-	zIhuSysEngPar.timer.cclDidoWorkingPeriodScanTimer = IHU_CCL_TIMER_DURATION_DIDO_WORKING_PERIOD_SCAN;
-	zIhuSysEngPar.timer.cclSpsWorkingPeriodScanTimer = IHU_CCL_TIMER_DURATION_SPS_WORKING_PERIOD_SCAN;
-	zIhuSysEngPar.timer.cclI2cWorkingPeriodScanTimer = IHU_CCL_TIMER_DURATION_I2C_WORKING_PERIOD_SCAN;
-	zIhuSysEngPar.timer.cclDcmiWorkingPeriodScanTimer = IHU_CCL_TIMER_DURATION_DCMI_WORKING_PERIOD_SCAN;
-	zIhuSysEngPar.timer.cclAdcWorkingPeriodScanTimer = IHU_CCL_TIMER_DURATION_ADC_WORKING_PERIOD_SCAN;
-
 	//Series Port config
 	zIhuSysEngPar.serialport.SeriesPortForGPS = IHU_SERIESPORT_NUM_FOR_GPS_DEFAULT;
-
 	//后台部分
 	strcpy(zIhuSysEngPar.cloud.cloudHttpAddLocal, IHU_CLOUDXHUI_HTTP_ADDRESS_LOCAL);
 	strcpy(zIhuSysEngPar.cloud.cloudBhServerAddr, IHU_CLOUDXHUI_HTTP_ADDRESS_BH_SERVER_ADDR);
 	strcpy(zIhuSysEngPar.cloud.cloudBhServerName, IHU_CLOUDXHUI_HTTP_ADDRESS_BH_SERVER_NAME);
 	strcpy(zIhuSysEngPar.cloud.cloudBhFtpSvrAddr, IHU_CLOUDXHUI_FTP_BH_SERVER_ADDR);	
-	
 	//local SW storage address
 	strcpy(zIhuSysEngPar.swDownload.ihuSwDownloadDir, IHU_SW_DOWNLOAD_DIR_DEFAULT);
 	strcpy(zIhuSysEngPar.swDownload.ihuSwActiveDir, IHU_SW_ACTIVE_DIR_DEFAULT);
 	strcpy(zIhuSysEngPar.swDownload.ihuSwBackupDir, IHU_SW_BACKUP_DIR_DEFAULT);
-
 	//DEBUG部分
 	zIhuSysEngPar.debugMode = IHU_TRACE_DEBUG_ON;
-	
 	//TRACE部分
 	zIhuSysEngPar.traceMode = IHU_TRACE_MSG_ON;
 	IHU_DEBUG_PRINT_NOR("VMFO: Set basic engineering data correctly from SYSTEM DEFAULT parameters!\n");
-	
-	//后台协议接口
-	zIhuSysEngPar.cloud.cloudBhItfFrameStd = IHU_CLOUDXHUI_BH_INTERFACE_STANDARD;
-		
-	
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
-	
-	//初始化全局工参配置信息，这里给出了大部分用到的参数的初始化结构，以便未来可以更加方便的添加完善
-	//后台通信部分
-	zIhuSysEngPar.comm.commBackHawlCon = IHU_COMM_BACK_HAWL_CON;
-
-	//Sensor timer
-	zIhuSysEngPar.timer.vmfoPeriodScanTimer = IHU_VMFO_TIMER_DURATION_PERIOD_SCAN;
-	zIhuSysEngPar.timer.adclibraPeriodScanTimer = IHU_ADCLIBRA_TIMER_DURATION_PERIOD_SCAN;
-	zIhuSysEngPar.timer.didocapPeriodScanTimer = IHU_DIDOCAP_TIMER_DURATION_PERIOD_SCAN;
-	zIhuSysEngPar.timer.ethorionPeriodScanTimer = IHU_ETHORION_TIMER_DURATION_PERIOD_SCAN;
-	zIhuSysEngPar.timer.canvelaPeriodScanTimer = IHU_CANVELA_TIMER_DURATION_PERIOD_SCAN;
-	zIhuSysEngPar.timer.i2cariesPeriodScanTimer = IHU_I2CARIERS_TIMER_DURATION_PERIOD_SCAN;
-	zIhuSysEngPar.timer.ledpiscesPeriodScanTimer = IHU_LEDPISCES_TIMER_DURATION_PERIOD_SCAN;
-	zIhuSysEngPar.timer.ledpiscesGalowagScanTimer = IHU_LEDPISCES_TIMER_GALOWAG_DURATION_PERIOD_SCAN;
-	zIhuSysEngPar.timer.pwmtaurusPeriodScanTimer = IHU_PWMTAURUS_TIMER_DURATION_PERIOD_SCAN;
-	zIhuSysEngPar.timer.spileoPeriodScanTimer = IHU_SPILEO_TIMER_DURATION_PERIOD_SCAN;
-	zIhuSysEngPar.timer.spsvirgoPeriodScanTimer = IHU_SPSVIRGO_TIMER_DURATION_PERIOD_SCAN;
-	zIhuSysEngPar.timer.dcmiarisPeriodScanTimer = IHU_DCMIARIS_TIMER_DURATION_PERIOD_SCAN;	
-	zIhuSysEngPar.timer.bfscPeriodScanTimer = IHU_BFSC_TIMER_DURATION_PERIOD_SCAN;
-	//这里才是真正有意义的定时器定义
-	zIhuSysEngPar.timer.bfscAdclibraScanTimer = IHU_BFSC_ADCLIBRA_SCAN_DURATION;
-	zIhuSysEngPar.timer.bfscL3bfscWaitWeightTimer = IHU_BFSC_L3BFSC_WAIT_WEIGHT_DURATION;
-	zIhuSysEngPar.timer.bfscL3bfscRolloutTimer = IHU_BFSC_L3BFSC_ROLL_OUT_DURATION;
-	zIhuSysEngPar.timer.bfscL3bfscGiveupTimer = IHU_BFSC_L3BFSC_GIVE_UP_DURATION;	
-	
-	//Series Port config
-	zIhuSysEngPar.serialport.SeriesPortForGPS = IHU_SERIESPORT_NUM_FOR_GPS_DEFAULT;
-
-	//后台部分
-	strcpy(zIhuSysEngPar.cloud.cloudHttpAddLocal, IHU_CLOUDXHUI_HTTP_ADDRESS_LOCAL);
-
-	//for IHU SW FTP
-
-	//local SW storage address
-	strcpy(zIhuSysEngPar.swDownload.ihuSwDownloadDir, IHU_SW_DOWNLOAD_DIR_DEFAULT);
-	strcpy(zIhuSysEngPar.swDownload.ihuSwActiveDir, IHU_SW_ACTIVE_DIR_DEFAULT);
-	strcpy(zIhuSysEngPar.swDownload.ihuSwBackupDir, IHU_SW_BACKUP_DIR_DEFAULT);
-
-	//DEBUG部分
-	zIhuSysEngPar.debugMode = IHU_TRACE_DEBUG_ON;
-	
-	//TRACE部分
-	zIhuSysEngPar.traceMode = IHU_TRACE_MSG_ON;
-	IHU_DEBUG_PRINT_NOR("VMFO: Set basic engineering data correctly from SYSTEM DEFAULT parameters!\n");
-	
 	//后台协议接口
 	zIhuSysEngPar.cloud.cloudBhItfFrameStd = IHU_CLOUDXHUI_BH_INTERFACE_STANDARD;
 	
-#else
-	#error Un-correct constant definition
-#endif	
+
+	/*
+   *  烧录区信息读取
+	 */
 	
 	//硬件烧录区域，系统唯一标识部分，后面程序中访问到这些系统参数都必须从这个地方读取
 	ihu_l1hd_f2board_equid_get((UINT8*)&(zIhuSysEngPar.hwBurnId));
@@ -821,9 +762,13 @@ void ihu_vm_system_ctr_table_init(void)
 		zIhuSysEngPar.hwBurnId.bootLoad2Valid = false;
 		//cipherKey[16];
 	}
+
+	/*
+   *  初始化结束
+	 */
 	
 	//初始化之后的系统标识信息
-	IhuDebugPrint("VMFO: Initialized Hardware Burn Physical Id/Address: CURRENT_PRJ=[%s], HW_LABLE=[%s], PRODUCT_CAT=[0x%x], HW_TYPE=[0x%x], SW_RELEASE_VER=[%d.%d], FW_UPGRADE_FLAG=[%d].\n", \
+	IhuDebugPrint("VMFO: Initialized Accomplish! Hardware Burn Physical Id/Address: CURRENT_PRJ=[%s], HW_LABLE=[%s], PRODUCT_CAT=[0x%x], HW_TYPE=[0x%x], SW_RELEASE_VER=[%d.%d], FW_UPGRADE_FLAG=[%d].\n", \
 		IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT, \
 		zIhuSysEngPar.hwBurnId.equLable, \
 		zIhuSysEngPar.hwBurnId.hwType, \
@@ -831,26 +776,21 @@ void ihu_vm_system_ctr_table_init(void)
 		zIhuSysEngPar.hwBurnId.swRelId, \
 		zIhuSysEngPar.hwBurnId.swVerId, \
 		zIhuSysEngPar.hwBurnId.swUpgradeFlag);	
-	
 	return;
 }
 
 //TaskId transfer to string
-//待调试的函数，是否需要使用动态内存
 //正确的做法也许应该使用zIhuVmCtrTab.task[id].TaskName这个信息来表达
 OPSTAT ihu_taskid_to_string(UINT8 id, char *string)
 {
 	char tmp[TASK_NAME_MAX_LENGTH-2]="";
 	
-	if ((id<=TASK_ID_MIN) || (id>=TASK_ID_MAX)){
-		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;	
-		IhuErrorPrint("VMFO: Error task Id input!\n");
-		return IHU_FAILURE;
-	}
+	if (id>=TASK_ID_MAX) //id<TASK_ID_MIN || 
+		IHU_ERROR_PRINT_TASK(TASK_ID_VMFO, "VMFO: Error task Id input!\n");
 
 	strcpy(string, "[");
-	if (strlen(zIhuVmCtrTab.task[id].taskName)>0){
-		strncpy(tmp, zIhuVmCtrTab.task[id].taskName, TASK_NAME_MAX_LENGTH-3);
+	if (strlen(zIhuSysEngPar.traceList.mod[id].moduleName)>0){
+		strncpy(tmp, zIhuSysEngPar.traceList.mod[id].moduleName, TASK_NAME_MAX_LENGTH-3);
 		strcat(string, tmp);
 	}else{
 		strcat(string, "TASK_ID_XXX");
@@ -861,22 +801,40 @@ OPSTAT ihu_taskid_to_string(UINT8 id, char *string)
 
 //MsgId transfer to string
 //输入的string参数，其内存地址空间和长度预留，是否足够
-OPSTAT ihu_msgid_to_string(UINT16 id, char *string)
+OPSTAT ihu_msgid_to_string(UINT8 id, char *string)
 {
 	char tmp[MSG_NAME_MAX_LENGTH-2]="";
 	
-	if (id <= MSG_ID_COM_MIN || id >= MSG_ID_COM_MAX){
-		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;	
-		IhuErrorPrint("VMFO: Error Message Id input!\n");
-		return IHU_FAILURE;
-	}
+	if (id < MSG_ID_COM_MIN || id >= MSG_ID_COM_MAX)
+		IHU_ERROR_PRINT_TASK(TASK_ID_VMFO, "VMFO: Error Message Id input!\n");
 
 	strcpy(string, "[");
-	if (strlen(zIhuVmCtrMsgStaticCfg[id-MSG_ID_COM_MIN].msgName)>0){
-		strncpy(tmp, zIhuVmCtrMsgStaticCfg[id-MSG_ID_COM_MIN].msgName, MSG_NAME_MAX_LENGTH-3);
+	if (strlen(zIhuSysEngPar.traceList.msg[id].msgName)>0){
+		strncpy(tmp, zIhuSysEngPar.traceList.msg[id].msgName, MSG_NAME_MAX_LENGTH-3);
 		strcat(string, tmp);
 	}else{
 		strcat(string, "MSG_ID_XXX");
+	}
+	strcat(string, "]");
+
+	return IHU_SUCCESS;
+}
+
+//TimerId transfer to string
+//输入的string参数，其内存地址空间和长度预留，是否足够
+OPSTAT ihu_timerid_to_string(UINT8 id, char *string)
+{
+	char tmp[TIMER_NAME_MAX_LENGTH-2]="";
+	
+	if (id <= TIMER_ID_MIN || id >= TIMER_ID_MAX)
+		IHU_ERROR_PRINT_TASK(TASK_ID_VMFO, "VMFO: Error Timer Id input!\n");
+
+	strcpy(string, "[");
+	if (strlen(zIhuSysEngPar.timer.array[id].name)>0){
+		strncpy(tmp, zIhuSysEngPar.timer.array[id].name, TIMER_NAME_MAX_LENGTH-3);
+		strcat(string, tmp);
+	}else{
+		strcat(string, "TID_XXX");
 	}
 	strcat(string, "]");
 
