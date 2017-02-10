@@ -128,7 +128,7 @@ OPSTAT fsm_bfsc_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 	int ret=0;
 
 	//串行回送INIT_FB给VMFO
-	ihu_usleep(dest_id * IHU_MODULE_START_DISTRIBUTION_DELAY_DURATION);
+	ihu_usleep(dest_id * IHU_SYSCFG_MODULE_START_DISTRIBUTION_DELAY_DURATION);
 	if ((src_id > TASK_ID_MIN) &&(src_id < TASK_ID_MAX)){
 		//Send back MSG_ID_COM_INIT_FB to VMFO
 		msg_struct_com_init_fb_t snd;
@@ -185,7 +185,7 @@ OPSTAT fsm_bfsc_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 	}
 	
 	//打印报告进入常规状态
-	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
+	if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_FAT_ON) != FALSE){
 		IhuDebugPrint("L3BFSC: Enter FSM_STATE_BFSC_ACTIVE status, Keeping refresh here!\n");
 	}
 
@@ -452,13 +452,13 @@ OPSTAT func_bfsc_time_out_roll_out_process(void)
 			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Error Set FSM State!");	
 		//发送命令给ADC，停止测量工作
 		memset(&snd1, 0, sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t));
-		snd1.cmdid = IHU_BFSC_ADC_WS_CMD_TYPE_STOP;
+		snd1.cmdid = IHU_SYSMSG_BFSC_ADC_WS_CMD_TYPE_STOP;
 		snd1.length = sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t);
 		if (ihu_message_send(MSG_ID_L3BFSC_ADC_WS_CMD_CTRL, TASK_ID_ADCLIBRA, TASK_ID_BFSC, &snd1, snd1.length) == IHU_FAILURE)
 			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_ADCLIBRA].taskName);
 		//发送命令给I2C-MOTO，停止测量工作
 		memset(&snd2, 0, sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t));
-		snd2.cmdid = IHU_BFSC_I2C_MOTO_CMD_TYPE_STOP;
+		snd2.cmdid = IHU_SYSMSG_BFSC_I2C_MOTO_CMD_TYPE_STOP;
 		snd2.length = sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t);
 		if (ihu_message_send(MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL, TASK_ID_I2CARIES, TASK_ID_BFSC, &snd2, snd2.length) == IHU_FAILURE)
 			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName);
@@ -504,13 +504,13 @@ OPSTAT func_bfsc_time_out_give_up_process(void)
 		//发送命令给ADC，停止测量工作
 		memset(&snd1, 0, sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t));
 		snd1.length = sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t);
-		snd1.cmdid = IHU_BFSC_ADC_WS_CMD_TYPE_STOP;
+		snd1.cmdid = IHU_SYSMSG_BFSC_ADC_WS_CMD_TYPE_STOP;
 		if (ihu_message_send(MSG_ID_L3BFSC_ADC_WS_CMD_CTRL, TASK_ID_ADCLIBRA, TASK_ID_BFSC, &snd1, snd1.length) == IHU_FAILURE)
 			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_ADCLIBRA].taskName);
 
 		//发送命令给I2C-MOTO，停止测量工作
 		memset(&snd2, 0, sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t));
-		snd2.cmdid = IHU_BFSC_I2C_MOTO_CMD_TYPE_STOP;
+		snd2.cmdid = IHU_SYSMSG_BFSC_I2C_MOTO_CMD_TYPE_STOP;
 		snd2.length = sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t);
 		if (ihu_message_send(MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL, TASK_ID_I2CARIES, TASK_ID_BFSC, &snd2, snd2.length) == IHU_FAILURE)
 			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName);
@@ -547,7 +547,7 @@ OPSTAT fsm_bfsc_canvela_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 		
 		//然后反馈给CAN模块
 		memset(&snd, 0, sizeof(msg_struct_l3bfsc_canvela_cmd_resp_t));
-		snd.cmdid = IHU_BFSC_ADC_WS_CMD_TYPE_CTRL;
+		snd.cmdid = IHU_SYSMSG_BFSC_ADC_WS_CMD_TYPE_CTRL;
 		snd.cmd.optid = rcv.cmd.optid;
 		snd.cmd.optpar = rcv.cmd.optpar;
 		snd.cmd.modbusVal = rcv.cmd.modbusVal;
@@ -560,7 +560,7 @@ OPSTAT fsm_bfsc_canvela_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 	if (rcv.cmd.prefixcmdid == IHU_CANVELA_PREFIXH_ws_ctrl)
 	{		
 		memset(&snd1, 0, sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t));
-		snd1.cmdid = IHU_BFSC_ADC_WS_CMD_TYPE_CTRL;
+		snd1.cmdid = IHU_SYSMSG_BFSC_ADC_WS_CMD_TYPE_CTRL;
 		snd1.cmd.optid = rcv.cmd.optid;
 		snd1.cmd.optpar = rcv.cmd.optpar;
 		snd1.cmd.modbusVal = rcv.cmd.modbusVal;
@@ -573,7 +573,7 @@ OPSTAT fsm_bfsc_canvela_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 	if (rcv.cmd.prefixcmdid == IHU_CANVELA_PREFIXH_motor_ctrl)
 	{		
 		memset(&snd2, 0, sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t));		
-		snd2.cmdid = IHU_BFSC_I2C_MOTO_CMD_TYPE_CTRL;
+		snd2.cmdid = IHU_SYSMSG_BFSC_I2C_MOTO_CMD_TYPE_CTRL;
 		snd2.cmd.optid = rcv.cmd.optid;
 		snd2.cmd.optpar = rcv.cmd.optpar;
 		snd2.cmd.modbusVal = rcv.cmd.modbusVal;
@@ -599,13 +599,13 @@ OPSTAT fsm_bfsc_adc_meas_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr,
 		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);
 	
-	//入参检查：暂时不处理IHU_ADC_BFSC_WS_CMD_TYPE_RESP之外其它的类型，未来待完善
-	if ((rcv.cmdid != IHU_ADC_BFSC_WS_CMD_TYPE_RESP) || (rcv.cmd.prefixcmdid != IHU_CANVELA_PREFIXH_ws_resp))
+	//入参检查：暂时不处理IHU_SYSMSG_ADC_BFSC_WS_CMD_TYPE_RESP之外其它的类型，未来待完善
+	if ((rcv.cmdid != IHU_SYSMSG_ADC_BFSC_WS_CMD_TYPE_RESP) || (rcv.cmd.prefixcmdid != IHU_CANVELA_PREFIXH_ws_resp))
 		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Receive message error!\n");
 	
 	//发送消息给CANVELA
 	memset(&snd, 0, sizeof(msg_struct_l3bfsc_canvela_cmd_resp_t));
-	snd.cmdid = IHU_BFSC_CAN_CMD_TYPE_RESP;
+	snd.cmdid = IHU_SYSMSG_BFSC_CAN_CMD_TYPE_RESP;
 	snd.cmd.prefixcmdid = IHU_CANVELA_PREFIXH_ws_resp;
 	snd.cmd.optid = rcv.cmd.optid;
 	snd.cmd.optpar = rcv.cmd.optpar;
@@ -631,13 +631,13 @@ OPSTAT fsm_bfsc_i2c_moto_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr,
 		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);
 	
-	//入参检查：暂时不处理IHU_I2C_BFSC_WS_CMD_TYPE_RESP之外其它的类型，未来待完善
-	if ((rcv.cmdid != IHU_I2C_BFSC_WS_CMD_TYPE_RESP) || (rcv.cmd.prefixcmdid != IHU_CANVELA_PREFIXH_motor_resp))
+	//入参检查：暂时不处理IHU_SYSMSG_I2C_BFSC_WS_CMD_TYPE_RESP之外其它的类型，未来待完善
+	if ((rcv.cmdid != IHU_SYSMSG_I2C_BFSC_WS_CMD_TYPE_RESP) || (rcv.cmd.prefixcmdid != IHU_CANVELA_PREFIXH_motor_resp))
 		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Receive message error!\n");
 	
 	//发送消息给CANVELA
 	memset(&snd, 0, sizeof(msg_struct_l3bfsc_canvela_cmd_resp_t));
-	snd.cmdid = IHU_BFSC_CAN_CMD_TYPE_RESP;
+	snd.cmdid = IHU_SYSMSG_BFSC_CAN_CMD_TYPE_RESP;
 	snd.cmd.prefixcmdid = IHU_CANVELA_PREFIXH_motor_resp;
 	snd.cmd.optid = rcv.cmd.optid;
 	snd.cmd.optpar = rcv.cmd.optpar;
@@ -670,13 +670,13 @@ OPSTAT fsm_bfsc_canvela_init_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 	//发送命令给ADC，开始测量工作
 	memset(&snd1, 0, sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t));
 	snd1.length = sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t);
-	snd1.cmdid = IHU_BFSC_ADC_WS_CMD_TYPE_START;
+	snd1.cmdid = IHU_SYSMSG_BFSC_ADC_WS_CMD_TYPE_START;
 	if (ihu_message_send(MSG_ID_L3BFSC_ADC_WS_CMD_CTRL, TASK_ID_ADCLIBRA, TASK_ID_BFSC, &snd1, snd1.length) == IHU_FAILURE)
 		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_ADCLIBRA].taskName);
 
 	//发送命令给I2C-MOTO，开始测量工作
 	memset(&snd2, 0, sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t));
-	snd2.cmdid = IHU_BFSC_I2C_MOTO_CMD_TYPE_START;
+	snd2.cmdid = IHU_SYSMSG_BFSC_I2C_MOTO_CMD_TYPE_START;
 	snd2.length = sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t);
 	if (ihu_message_send(MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL, TASK_ID_I2CARIES, TASK_ID_BFSC, &snd2, snd2.length) == IHU_FAILURE)
 		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName);
@@ -908,11 +908,11 @@ void func_bfsc_stm_main_recovery_from_fault(void)
 	//发送命令给ADC，开始测量工作
 	memset(&snd1, 0, sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t));
 	snd1.length = sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t);
-	snd1.cmdid = IHU_BFSC_ADC_WS_CMD_TYPE_START;
+	snd1.cmdid = IHU_SYSMSG_BFSC_ADC_WS_CMD_TYPE_START;
 	ihu_message_send(MSG_ID_L3BFSC_ADC_WS_CMD_CTRL, TASK_ID_ADCLIBRA, TASK_ID_BFSC, &snd1, snd1.length);
 	//发送命令给I2C-MOTO，开始测量工作
 	memset(&snd2, 0, sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t));
-	snd2.cmdid = IHU_BFSC_I2C_MOTO_CMD_TYPE_START;
+	snd2.cmdid = IHU_SYSMSG_BFSC_I2C_MOTO_CMD_TYPE_START;
 	snd2.length = sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t);
 	ihu_message_send(MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL, TASK_ID_I2CARIES, TASK_ID_BFSC, &snd2, snd2.length);
 	

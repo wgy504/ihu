@@ -37,18 +37,18 @@ typedef UINT8           		BOOL;
 //2. 公共消息结构体定义
 //Under normal case, 1024Byte shall be enough for internal message communciation purpose.
 //If not enough, need modify here to enlarge
-#define MAX_IHU_MSG_BUF_LENGTH MAX_IHU_MSG_BODY_LENGTH+6
-#define MAX_IHU_MSG_BUF_LENGTH_CLOUD MAX_IHU_MSG_BODY_LENGTH-4  //跟L2FRAME长度保持同步，都是比消息BUFFER小4字节，以便容纳进消息BODY之中
+#define IHU_SYSMSG_COM_BODY_LEN_MAX 			IHU_SYSDIM_MSG_BODY_LEN_MAX+6
+#define IHU_SYSMSG_BH_BUF_BODY_LEN_MAX 		IHU_SYSDIM_MSG_BODY_LEN_MAX-4  //跟L2FRAME长度保持同步，都是比消息BUFFER小4字节，以便容纳进消息BODY之中
 typedef struct IhuMsgSruct
 {
 	UINT16 msgType;
 	UINT8 dest_id;
 	UINT8 src_id;
 	UINT16 msgLen;
-	INT8 msgBody[MAX_IHU_MSG_BODY_LENGTH];
+	INT8 msgBody[IHU_SYSDIM_MSG_BODY_LEN_MAX];
 }IhuMsgSruct_t;
 
-#define  IHU_THREAD_PRIO  10          //priority of the main loop de 1 a 99 max
+#define IHU_SYSMSG_TASK_THREAD_PRIO  10          //priority of the main loop de 1 a 99 max
 
 /*
  *
@@ -125,7 +125,7 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_COM_MAX, //Ending point
 
 }; //end of IHU_INTER_TASK_MSG_ID
-#define MSG_ID_END 0xFF  //跟MASK_MSGID_NUM_IN_ONE_TASK设置息息相关，不能随便改动
+#define MSG_ID_END 0xFF  //跟IHU_SYSDIM_MSGID_MASK_SET设置息息相关，不能随便改动
 #define MSG_ID_INVALID 0xFFFFFFFF
 
 //公共结构定义
@@ -256,13 +256,13 @@ typedef struct msg_struct_dido_ccl_lock_c_door_c_event
 //SPS消息定义
 typedef struct msg_struct_spsvirgo_l2frame_send
 {
-	UINT8 data[IHU_MSG_BODY_L2FRAME_MAX_LEN];
+	UINT8 data[IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX];
 	UINT16 length;
 }msg_struct_spsvirgo_l2frame_send_t;
 typedef struct msg_struct_spsvirgo_l2frame_rcv
 {
 	UINT16 length;
-	UINT8 data[IHU_MSG_BODY_L2FRAME_MAX_LEN];
+	UINT8 data[IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX];
 }msg_struct_spsvirgo_l2frame_rcv_t;
 
 //MSG_ID_SPS_CCL_CLOUD_FB
@@ -287,8 +287,8 @@ typedef struct msg_struct_sps_ccl_event_report_cfm
 	UINT8 actionFlag;
 	UINT16 length;
 }msg_struct_sps_ccl_event_report_cfm_t;
-#define IHU_CCL_EVENT_REPORT_SEND_SUCCESS 1
-#define IHU_CCL_EVENT_REPORT_SEND_FAILURE 2
+#define IHU_SYSMSG_CCL_EVENT_REPORT_SEND_SUCCESS 1
+#define IHU_SYSMSG_CCL_EVENT_REPORT_SEND_FAILURE 2
 
 //MSG_ID_SPS_CCL_FAULT_REPORT_CFM
 typedef struct msg_struct_sps_ccl_fault_report_cfm
@@ -296,8 +296,8 @@ typedef struct msg_struct_sps_ccl_fault_report_cfm
 	UINT8 actionFlag;
 	UINT16 length;
 }msg_struct_sps_ccl_fault_report_cfm_t;
-#define IHU_CCL_EVENT_FAULT_SEND_SUCCESS 1
-#define IHU_CCL_EVENT_FAULT_SEND_FAILURE 2
+#define IHU_SYSMSG_CCL_EVENT_FAULT_SEND_SUCCESS 1
+#define IHU_SYSMSG_CCL_EVENT_FAULT_SEND_FAILUR 2
 
 //MSG_ID_SPS_CCL_CLOSE_REPORT_CFM
 typedef struct msg_struct_sps_ccl_close_report_cfm
@@ -307,33 +307,33 @@ typedef struct msg_struct_sps_ccl_close_report_cfm
 	UINT32 test2;
 	UINT16 length;
 }msg_struct_sps_ccl_close_report_cfm_t;
-#define IHU_CCL_EVENT_CLOSE_SEND_SUCCESS 1
-#define IHU_CCL_EVENT_CLOSE_SEND_FAILURE 2
+#define IHU_SYSMSG_CCL_EVENT_CLOSE_SEND_SUCCESS 1
+#define IHU_SYSMSG_CCL_EVENT_CLOSE_SEND_FAILURE 2
 
 //SPI消息定义
 //MSG_ID_SPI_L2FRAME_SEND
 typedef struct msg_struct_spileo_l2frame_send
 {
-	UINT8 data[MAX_IHU_MSG_BODY_LENGTH-2];
+	UINT8 data[IHU_SYSDIM_MSG_BODY_LEN_MAX-2];
 	UINT16 length;
 }msg_struct_spileo_l2frame_send_t;
 
 //MSG_ID_SPI_L2FRAME_RCV
 typedef struct msg_struct_spileo_l2frame_rcv
 {
-	UINT8 data[IHU_MSG_BODY_L2FRAME_MAX_LEN];
+	UINT8 data[IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX];
 	UINT16 length;
 }msg_struct_spileo_l2frame_rcv_t;
 
 //I2C消息定义
 typedef struct msg_struct_i2caries_l2frame_send
 {
-	UINT8 data[IHU_MSG_BODY_L2FRAME_MAX_LEN];
+	UINT8 data[IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX];
 	UINT16 length;
 }msg_struct_i2caries_l2frame_send_t;
 typedef struct msg_struct_i2caries_l2frame_rcv
 {
-	UINT8 data[IHU_MSG_BODY_L2FRAME_MAX_LEN];
+	UINT8 data[IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX];
 	UINT16 length;
 }msg_struct_i2caries_l2frame_rcv_t;
 
@@ -348,12 +348,12 @@ typedef struct msg_struct_i2c_ccl_sensor_status_rep
 //CAN消息定义
 typedef struct msg_struct_canvela_l2frame_send
 {
-	UINT8 data[IHU_MSG_BODY_L2FRAME_MAX_LEN];
+	UINT8 data[IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX];
 	UINT16 length;
 }msg_struct_canvela_l2frame_send_t;
 typedef struct msg_struct_canvela_l2frame_rcv
 {
-	UINT8 data[IHU_MSG_BODY_L2FRAME_MAX_LEN];
+	UINT8 data[IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX];
 	UINT16 length;
 }msg_struct_canvela_l2frame_rcv_t;
 
@@ -368,11 +368,11 @@ typedef struct msg_struct_dcmi_ccl_sensor_status_rep
 
 //CCL
 //MSG_ID_CCL_SPS_OPEN_AUTH_INQ
-#define IHU_CCL_BH_CTRL_CMD_BUF_LEN 20
+#define IHU_SYSMSG_CCL_BH_CTRL_CMD_BUF_LEN 20
 typedef struct msg_struct_ccl_sps_open_auth_inq
 {
 	UINT8 cmdid;
-	UINT8 dataBuf[IHU_CCL_BH_CTRL_CMD_BUF_LEN];
+	UINT8 dataBuf[IHU_SYSMSG_CCL_BH_CTRL_CMD_BUF_LEN];
 	UINT16 length;
 }msg_struct_ccl_sps_open_auth_inq_t;
 
@@ -407,8 +407,8 @@ typedef struct msg_struct_ccl_sps_fault_report_send
 	com_sensor_status_t sensor;
 	UINT16 length;
 }msg_struct_ccl_sps_fault_report_send_t;
-#define IHU_CCL_FAULT_CAUSE_SENSOR_WARNING 1
-#define IHU_CCL_FAULT_CAUSE_CLOSE_DOOR_TIME_OUT 2
+#define IHU_SYSMSG_CCL_FAULT_CAUSE_SENSOR_WARNING 1
+#define IHU_SYSMSG_CCL_FAULT_CAUSE_CLOSE_DOOR_TIME_OUT 2
 
 //MSG_ID_CCL_SPS_CLOSE_REPORT_SEND
 typedef struct msg_struct_ccl_sps_close_report_send
@@ -416,16 +416,16 @@ typedef struct msg_struct_ccl_sps_close_report_send
 	UINT8 cause;
 	UINT16 length;
 }msg_struct_ccl_sps_close_report_send_t;
-#define IHU_CCL_CLOSE_DOOR_NORMAL 1
-#define IHU_CCL_CLOSE_DOOR_NOT_YET_OPEN 2
-#define IHU_CCL_CLOSE_DOOR_BY_FAULT 3
+#define IHU_SYSMSG_CCL_CLOSE_DOOR_NORMAL 1
+#define IHU_SYSMSG_CCL_CLOSE_DOOR_NOT_YET_OPEN 2
+#define IHU_SYSMSG_CCL_CLOSE_DOOR_BY_FAULT 3
 
 //来自底层的SPS数据结构部分
 //Used to common all different received data buffer
 typedef struct  msg_struct_ccl_com_cloud_data_rx //
 {
 	UINT16 length;
-	char buf[MAX_IHU_MSG_BUF_LENGTH_CLOUD];
+	char buf[IHU_SYSMSG_BH_BUF_BODY_LEN_MAX];
 }msg_struct_ccl_com_cloud_data_rx_t;
 
 

@@ -223,7 +223,7 @@ typedef struct CloudDataSendBuf
 {
 	UINT16 bufferLen;
 	//char的意义是，底层均为字符串，而不是十六进制数据
-	char buf[MAX_IHU_MSG_BUF_LENGTH_CLOUD];  //内部还包括格式化的参数部分，这里需要再仔细考虑一下
+	char buf[IHU_SYSMSG_BH_BUF_BODY_LEN_MAX];  //内部还包括格式化的参数部分，这里需要再仔细考虑一下
 }CloudDataSendBuf_t;
 
 //VMMW_GPRSMOD基站定位输出数据结构

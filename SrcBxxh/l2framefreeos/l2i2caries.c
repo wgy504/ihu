@@ -80,7 +80,7 @@ OPSTAT fsm_i2caries_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 	int ret=0;
 
 	//串行回送INIT_FB给VMFO
-	ihu_usleep(dest_id * IHU_MODULE_START_DISTRIBUTION_DELAY_DURATION);
+	ihu_usleep(dest_id * IHU_SYSCFG_MODULE_START_DISTRIBUTION_DELAY_DURATION);
 	if ((src_id > TASK_ID_MIN) &&(src_id < TASK_ID_MAX)){
 		//Send back MSG_ID_COM_INIT_FB to VM
 		msg_struct_com_init_fb_t snd;
@@ -135,7 +135,7 @@ OPSTAT fsm_i2caries_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 	}
 	
 	//打印报告进入常规状态
-	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
+	if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_FAT_ON) != FALSE){
 		IhuDebugPrint("I2CARIES: Enter FSM_STATE_I2CARIES_ACTIVE status, Keeping refresh here!\n");
 	}
 
@@ -262,19 +262,19 @@ OPSTAT fsm_i2caries_bfsc_moto_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param
 	memcpy(&rcv, param_ptr, param_len);
 
 	//简单控制
-	if (rcv.cmdid == IHU_BFSC_I2C_MOTO_CMD_TYPE_START)
+	if (rcv.cmdid == IHU_SYSMSG_BFSC_I2C_MOTO_CMD_TYPE_START)
 	{
 		zIhuI2cBfscMoto.turnMode = IHU_BFSC_I2C_MOTO_TURN_MODE_START;
 		func_i2caries_bfsc_moto_control(IHU_BFSC_I2C_MOTO_TURN_MODE_START, NULL);
 	}
 	//简单控制
-	else if (rcv.cmdid == IHU_BFSC_I2C_MOTO_CMD_TYPE_STOP)
+	else if (rcv.cmdid == IHU_SYSMSG_BFSC_I2C_MOTO_CMD_TYPE_STOP)
 	{
-		zIhuI2cBfscMoto.turnMode = IHU_BFSC_I2C_MOTO_CMD_TYPE_STOP;
-		func_i2caries_bfsc_moto_control(IHU_BFSC_I2C_MOTO_CMD_TYPE_STOP, NULL);
+		zIhuI2cBfscMoto.turnMode = IHU_SYSMSG_BFSC_I2C_MOTO_CMD_TYPE_STOP;
+		func_i2caries_bfsc_moto_control(IHU_SYSMSG_BFSC_I2C_MOTO_CMD_TYPE_STOP, NULL);
 	}
 	//复杂控制
-	else if (rcv.cmdid == IHU_BFSC_I2C_MOTO_CMD_TYPE_CTRL)
+	else if (rcv.cmdid == IHU_SYSMSG_BFSC_I2C_MOTO_CMD_TYPE_CTRL)
 	{
 		//入参检查
 		if (rcv.cmd.prefixcmdid != IHU_CANVELA_PREFIXH_motor_ctrl)
@@ -328,7 +328,7 @@ OPSTAT fsm_i2caries_bfsc_moto_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param
 		
 		//发送回去消息
 		memset(&snd, 0, sizeof(msg_struct_i2caries_l3bfsc_cmd_resp_t));
-		snd.cmdid = IHU_I2C_BFSC_WS_CMD_TYPE_RESP;
+		snd.cmdid = IHU_SYSMSG_I2C_BFSC_WS_CMD_TYPE_RESP;
 		snd.cmd.optid = rcv.cmd.optid;
 		snd.cmd.optpar = rcv.cmd.optpar;
 		snd.cmd.prefixcmdid = IHU_CANVELA_PREFIXH_motor_resp;

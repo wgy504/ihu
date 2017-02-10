@@ -31,25 +31,24 @@
 
 
 //遗留特殊的定义
-//typedef UINT8           		bool;
 typedef UINT8           		BOOL;  
 
 //2. 公共消息结构体定义
 //Under normal case, 1024Byte shall be enough for internal message communciation purpose.
 //If not enough, need modify here to enlarge
-#define MAX_IHU_MSG_BUF_LENGTH MAX_IHU_MSG_BODY_LENGTH+6
-#define MAX_IHU_MSG_BUF_LENGTH_CLOUD MAX_IHU_MSG_BODY_LENGTH-6
+#define IHU_SYSMSG_COM_BODY_LEN_MAX 		IHU_SYSDIM_MSG_BODY_LEN_MAX+6
+#define IHU_SYSMSG_BH_BUF_BODY_LEN_MAX 	IHU_SYSDIM_MSG_BODY_LEN_MAX-6
 typedef struct IhuMsgSruct
 {
 	UINT16 msgType;
 	UINT8 dest_id;
 	UINT8 src_id;
 	UINT16 msgLen;
-	INT8 msgBody[MAX_IHU_MSG_BODY_LENGTH];
+	INT8 msgBody[IHU_SYSDIM_MSG_BODY_LEN_MAX];
 }IhuMsgSruct_t;
 
 //所有任务模块的优先级是一样的
-#define  IHU_THREAD_PRIO  10          //priority of the main loop de 1 a 99 max
+#define  IHU_SYSMSG_TASK_THREAD_PRIO  10          //priority of the main loop de 1 a 99 max
 
 /*
  *
@@ -215,10 +214,10 @@ typedef struct msg_struct_adclibra_l3bfsc_meas_cmd_resp
 	com_ws_and_moto_cmd_t cmd;
 	UINT16 length;
 }msg_struct_adclibra_l3bfsc_meas_cmd_resp_t;
-#define IHU_ADC_BFSC_WS_CMD_TYPE_NONE 0
-#define IHU_ADC_BFSC_WS_CMD_TYPE_START_CFM 1
-#define IHU_ADC_BFSC_WS_CMD_TYPE_STOP_CFM 2
-#define IHU_ADC_BFSC_WS_CMD_TYPE_RESP 3
+#define IHU_SYSMSG_ADC_BFSC_WS_CMD_TYPE_NONE 0
+#define IHU_SYSMSG_ADC_BFSC_WS_CMD_TYPE_START_CFM 1
+#define IHU_SYSMSG_ADC_BFSC_WS_CMD_TYPE_STOP_CFM 2
+#define IHU_SYSMSG_ADC_BFSC_WS_CMD_TYPE_RESP 3
 
 //MSG_ID_ADC_NEW_MATERIAL_WS,
 typedef struct msg_struct_adc_new_material_ws
@@ -237,24 +236,24 @@ typedef struct msg_struct_adc_material_drop
 //UART消息定义
 typedef struct msg_struct_spsvirgo_l2frame_send
 {
-	UINT8 data[IHU_MSG_BODY_L2FRAME_MAX_LEN];
+	UINT8 data[IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX];
 	UINT16 length;
 }msg_struct_spsvirgo_l2frame_send_t;
 typedef struct msg_struct_spsvirgo_l2frame_rcv
 {
-	UINT8 data[IHU_MSG_BODY_L2FRAME_MAX_LEN];
+	UINT8 data[IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX];
 	UINT16 length;
 }msg_struct_spsvirgo_l2frame_rcv_t;
 
 //SPI消息定义
 typedef struct msg_struct_spileo_l2frame_send
 {
-	UINT8 data[IHU_MSG_BODY_L2FRAME_MAX_LEN];
+	UINT8 data[IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX];
 	UINT16 length;
 }msg_struct_spileo_l2frame_send_t;
 typedef struct msg_struct_spileo_l2frame_rcv
 {
-	UINT8 data[IHU_MSG_BODY_L2FRAME_MAX_LEN];
+	UINT8 data[IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX];
 	UINT16 length;
 }msg_struct_spileo_l2frame_rcv_t;
 
@@ -262,13 +261,13 @@ typedef struct msg_struct_spileo_l2frame_rcv
 //MSG_ID_I2C_L2FRAME_SEND
 typedef struct msg_struct_i2caries_l2frame_send
 {
-	UINT8 data[IHU_MSG_BODY_L2FRAME_MAX_LEN];	
+	UINT8 data[IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX];	
 	UINT16 length;
 }msg_struct_i2caries_l2frame_send_t;
 //MSG_ID_I2C_L2FRAME_RCV
 typedef struct msg_struct_i2caries_l2frame_rcv
 {
-	UINT8 data[IHU_MSG_BODY_L2FRAME_MAX_LEN];
+	UINT8 data[IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX];
 	UINT16 length;
 }msg_struct_i2caries_l2frame_rcv_t;
 
@@ -279,23 +278,23 @@ typedef struct msg_struct_i2caries_l3bfsc_cmd_resp
 	com_ws_and_moto_cmd_t cmd;	
 	UINT16 length;
 }msg_struct_i2caries_l3bfsc_cmd_resp_t;
-#define IHU_I2C_BFSC_WS_CMD_TYPE_NONE 0
-#define IHU_I2C_BFSC_WS_CMD_TYPE_START_CFM 1
-#define IHU_I2C_BFSC_WS_CMD_TYPE_STOP_CFM 2
-#define IHU_I2C_BFSC_WS_CMD_TYPE_RESP 3
+#define IHU_SYSMSG_I2C_BFSC_WS_CMD_TYPE_NONE 0
+#define IHU_SYSMSG_I2C_BFSC_WS_CMD_TYPE_START_CFM 1
+#define IHU_SYSMSG_I2C_BFSC_WS_CMD_TYPE_STOP_CFM 2
+#define IHU_SYSMSG_I2C_BFSC_WS_CMD_TYPE_RESP 3
 
 //CAN消息定义
 //MSG_ID_CAN_L2FRAME_SEND
 typedef struct msg_struct_canvela_l2frame_send
 {
-	UINT8 data[IHU_MSG_BODY_L2FRAME_MAX_LEN];
+	UINT8 data[IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX];
 	UINT16 length;
 }msg_struct_canvela_l2frame_send_t;
 
 //MSG_ID_CAN_L2FRAME_RCV
 typedef struct msg_struct_canvela_l2frame_rcv
 {
-	UINT8 data[IHU_MSG_BODY_L2FRAME_MAX_LEN];
+	UINT8 data[IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX];
 	UINT16 length;
 }msg_struct_canvela_l2frame_rcv_t;
 
@@ -372,10 +371,10 @@ typedef struct msg_struct_l3bfsc_adc_ws_cmd_ctrl
 	com_ws_and_moto_cmd_t cmd;
 	UINT16 length;
 }msg_struct_l3bfsc_adc_ws_cmd_ctrl_t;
-#define IHU_BFSC_ADC_WS_CMD_TYPE_NONE 0
-#define IHU_BFSC_ADC_WS_CMD_TYPE_START 1
-#define IHU_BFSC_ADC_WS_CMD_TYPE_STOP 2
-#define IHU_BFSC_ADC_WS_CMD_TYPE_CTRL 3
+#define IHU_SYSMSG_BFSC_ADC_WS_CMD_TYPE_NONE 0
+#define IHU_SYSMSG_BFSC_ADC_WS_CMD_TYPE_START 1
+#define IHU_SYSMSG_BFSC_ADC_WS_CMD_TYPE_STOP 2
+#define IHU_SYSMSG_BFSC_ADC_WS_CMD_TYPE_CTRL 3
 
 //MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL
 typedef struct msg_struct_l3bfsc_i2c_moto_cmd_ctrl
@@ -384,10 +383,10 @@ typedef struct msg_struct_l3bfsc_i2c_moto_cmd_ctrl
 	com_ws_and_moto_cmd_t cmd;	
 	UINT16 length;
 }msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t;
-#define IHU_BFSC_I2C_MOTO_CMD_TYPE_NONE 0
-#define IHU_BFSC_I2C_MOTO_CMD_TYPE_START 1
-#define IHU_BFSC_I2C_MOTO_CMD_TYPE_STOP 2
-#define IHU_BFSC_I2C_MOTO_CMD_TYPE_CTRL 3
+#define IHU_SYSMSG_BFSC_I2C_MOTO_CMD_TYPE_NONE 0
+#define IHU_SYSMSG_BFSC_I2C_MOTO_CMD_TYPE_START 1
+#define IHU_SYSMSG_BFSC_I2C_MOTO_CMD_TYPE_STOP 2
+#define IHU_SYSMSG_BFSC_I2C_MOTO_CMD_TYPE_CTRL 3
 
 //MSG_ID_L3BFSC_CAN_CMD_RESP
 typedef struct msg_struct_l3bfsc_canvela_cmd_resp
@@ -396,10 +395,10 @@ typedef struct msg_struct_l3bfsc_canvela_cmd_resp
 	com_ws_and_moto_cmd_t cmd;	
 	UINT16 length;
 }msg_struct_l3bfsc_canvela_cmd_resp_t;
-#define IHU_BFSC_CAN_CMD_TYPE_NONE 0
-#define IHU_BFSC_CAN_CMD_TYPE_START_CFM 1
-#define IHU_BFSC_CAN_CMD_TYPE_STOP_CFM 2
-#define IHU_BFSC_CAN_CMD_TYPE_RESP 3
+#define IHU_SYSMSG_BFSC_CAN_CMD_TYPE_NONE 0
+#define IHU_SYSMSG_BFSC_CAN_CMD_TYPE_START_CFM 1
+#define IHU_SYSMSG_BFSC_CAN_CMD_TYPE_STOP_CFM 2
+#define IHU_SYSMSG_BFSC_CAN_CMD_TYPE_RESP 3
 
 /* 
 ** ====================================================================

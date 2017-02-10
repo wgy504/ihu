@@ -21,14 +21,14 @@
 OPSTAT func_cloud_standard_xml_pack(UINT8 msgType, char *funcFlag, UINT16 msgId, StrMsg_HUITP_MSGID_uni_general_message_t *inputPar, UINT16 inputLen, CloudDataSendBuf_t *output)
 {
 	//声明一个缓冲区长度，不能超越消息体内容的最长长度
-	char s[MAX_IHU_MSG_BUF_LENGTH_CLOUD - HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN];
+	char s[IHU_SYSMSG_BH_BUF_BODY_LEN_MAX - HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN];
 	
 	//参数检查：特别要检查输入的数据长度，正常不能超过100，因为HUIXML的数据区= (500(最长消息长度)-300(XML头))/2=100，这在大多数情况下都够用的，但在
 	//文件传输的条件下有可能不够。幸好，文件下载使用FFP模式，不用再担心这个了。
-	if ((inputLen <4) || (inputPar == NULL) || (inputLen > (MAX_IHU_MSG_BUF_LENGTH_CLOUD - HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN)/2) || \
+	if ((inputLen <4) || (inputPar == NULL) || (inputLen > (IHU_SYSMSG_BH_BUF_BODY_LEN_MAX - HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN)/2) || \
 		(inputLen > (sizeof(StrMsg_HUITP_MSGID_uni_general_message_t) - HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN)))
 	{
-		IhuDebugPrint("HUITPXML: InputLen=%d, InputPar=%d, MaxLen=%d, size2=%d\n", inputLen, inputPar, (MAX_IHU_MSG_BUF_LENGTH_CLOUD - HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN)/2, sizeof(StrMsg_HUITP_MSGID_uni_general_message_t));
+		IhuDebugPrint("HUITPXML: InputLen=%d, InputPar=%d, MaxLen=%d, size2=%d\n", inputLen, inputPar, (IHU_SYSMSG_BH_BUF_BODY_LEN_MAX - HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN)/2, sizeof(StrMsg_HUITP_MSGID_uni_general_message_t));
 		IhuErrorPrint("HUITPXML: Error input pointer or message length!\n");
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
@@ -154,7 +154,7 @@ OPSTAT func_cloud_standard_xml_pack(UINT8 msgType, char *funcFlag, UINT16 msgId,
 		sprintf(tmp, "%02X", tmpU8);
 		strcat(s, tmp);
 	}
-	if ((strlen(s) < 4) || (strlen(s) > (MAX_IHU_MSG_BUF_LENGTH_CLOUD - HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN))){
+	if ((strlen(s) < 4) || (strlen(s) > (IHU_SYSMSG_BH_BUF_BODY_LEN_MAX - HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN))){
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_SPSVIRGO]++;
 		IhuErrorPrint("HUITPXML: No data to be pack or too long length of data content %d!\n", strlen(s));
 		return IHU_FAILURE;
@@ -191,8 +191,8 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 	char *pIndexT1, *pIndexT2;  //临时位置
 	UINT8 msgType;
 	UINT64 msgCreateTime;
-	char msgToUser[IHU_FILE_NAME_LENGTH_MAX], msgFromUser[IHU_FILE_NAME_LENGTH_MAX], msgFuncFlag[IHU_FILE_NAME_LENGTH_MAX];
-	char msgTmp[IHU_FILE_NAME_LENGTH_MAX];
+	char msgToUser[IHU_SYSDIM_FILE_NAME_LEN_MAX], msgFromUser[IHU_SYSDIM_FILE_NAME_LEN_MAX], msgFuncFlag[IHU_SYSDIM_FILE_NAME_LEN_MAX];
+	char msgTmp[IHU_SYSDIM_FILE_NAME_LEN_MAX];
 	char msgContent[HUITP_MSG_BUF_WITH_HEAD_MAX_LEN];
 	
 	//检查参数
@@ -202,7 +202,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		return IHU_FAILURE;
 	}
 	//控制命令不带XML格式头，接收的内容以裸控制命令，所以必须是偶数字节
-	if ((rcv->length > MAX_IHU_MSG_BUF_LENGTH_CLOUD) || (rcv->length < 8)){
+	if ((rcv->length > IHU_SYSMSG_BH_BUF_BODY_LEN_MAX) || (rcv->length < 8)){
 		IhuErrorPrint("HUITPXML: Received message error, invalid data length by XML content format!\n");
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
@@ -212,7 +212,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 	pIndexT1 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_XML_HEAD_L);
 	pIndexT2 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_XML_HEAD_R);
 	dif = pIndexT2 - pIndexT1  - strlen(HUITP_MSG_HUIXML_CONSTANT_XML_HEAD_L);
-	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_XML_HEAD_L))>= pIndexT2) || (dif > MAX_IHU_MSG_BUF_LENGTH_CLOUD)){
+	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_XML_HEAD_L))>= pIndexT2) || (dif > IHU_SYSMSG_BH_BUF_BODY_LEN_MAX)){
 		IhuErrorPrint("HUITPXML: Received message error, invalid head xml format!\n");
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
@@ -222,7 +222,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 	pIndexT1 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_TO_USER_L);
 	pIndexT2 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_TO_USER_R);
 	dif = pIndexT2 - pIndexT1  - strlen(HUITP_MSG_HUIXML_CONSTANT_TO_USER_L);
-	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_TO_USER_L))>= pIndexT2) || (dif > IHU_FILE_NAME_LENGTH_MAX)){
+	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_TO_USER_L))>= pIndexT2) || (dif > IHU_SYSDIM_FILE_NAME_LEN_MAX)){
 		IhuErrorPrint("HUITPXML: Received message error, invalid head ToUserName format!\n");
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
@@ -239,7 +239,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 	pIndexT1 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_FROM_USER_L);
 	pIndexT2 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_FROM_USER_R);
 	dif = pIndexT2 - pIndexT1  - strlen(HUITP_MSG_HUIXML_CONSTANT_FROM_USER_L);
-	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_FROM_USER_L))>= pIndexT2) || (dif > IHU_FILE_NAME_LENGTH_MAX)){
+	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_FROM_USER_L))>= pIndexT2) || (dif > IHU_SYSDIM_FILE_NAME_LEN_MAX)){
 		IhuErrorPrint("HUITPXML: Received message error, invalid head fromUser format!\n");
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
@@ -271,7 +271,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 	pIndexT1 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_MSG_TYPE_L);
 	pIndexT2 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_MSG_TYPE_R);
 	dif = pIndexT2 - pIndexT1  - strlen(HUITP_MSG_HUIXML_CONSTANT_MSG_TYPE_L);
-	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_MSG_TYPE_L))>= pIndexT2) || (dif > IHU_FILE_NAME_LENGTH_MAX)){
+	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_MSG_TYPE_L))>= pIndexT2) || (dif > IHU_SYSDIM_FILE_NAME_LEN_MAX)){
 		IhuErrorPrint("HUITPXML: Received message error, invalid head msgType format!\n");
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
@@ -296,7 +296,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 	pIndexT1 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_FUNC_FLAG_L);
 	pIndexT2 = strstr(rcv->buf, HUITP_MSG_HUIXML_CONSTANT_FUNC_FLAG_R);
 	dif = pIndexT2 - pIndexT1  - strlen(HUITP_MSG_HUIXML_CONSTANT_FUNC_FLAG_L);
-	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_FUNC_FLAG_L))>= pIndexT2) || (dif > IHU_FILE_NAME_LENGTH_MAX)){
+	if ((pIndexT1 == NULL) || (pIndexT2 == NULL) || ((pIndexT1 +strlen(HUITP_MSG_HUIXML_CONSTANT_FUNC_FLAG_L))>= pIndexT2) || (dif > IHU_SYSDIM_FILE_NAME_LEN_MAX)){
 		IhuErrorPrint("HUITPXML: Received message error, invalid head funcFlag format!\n");
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;
@@ -334,7 +334,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;	
 	}
-	if (msgLen > (MAX_IHU_MSG_BUF_LENGTH_CLOUD - HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN)/2){
+	if (msgLen > (IHU_SYSMSG_BH_BUF_BODY_LEN_MAX - HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN)/2){
 		IhuErrorPrint("HUITPXML: Invalid received content data msgLen info!\n");
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_SPSVIRGO]++;
 		return IHU_FAILURE;

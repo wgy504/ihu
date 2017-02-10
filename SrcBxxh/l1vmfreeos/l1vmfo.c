@@ -44,7 +44,7 @@ IhuFsmStateItem_t IhuFsmVmfo[] =
 };
 
 //Global variables defination
-IhuVmfoTaskInitCtrlInfo_t zIhuVmfoTaskInitCtrlInfo[MAX_TASK_NUM_IN_ONE_IHU]; //存储所有初始化任务的状态信息
+IhuVmfoTaskInitCtrlInfo_t zIhuVmfoTaskInitCtrlInfo[IHU_SYSDIM_TASK_NBR_MAX]; //存储所有初始化任务的状态信息
 
 //Main Entry
 //Input parameter would be useless, but just for similar structure purpose
@@ -90,7 +90,7 @@ OPSTAT fsm_vmfo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 
 	//Global Variables
 	zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO] = 0;
-	memset(zIhuVmfoTaskInitCtrlInfo, 0, (sizeof(IhuVmfoTaskInitCtrlInfo_t) * MAX_TASK_NUM_IN_ONE_IHU));
+	memset(zIhuVmfoTaskInitCtrlInfo, 0, (sizeof(IhuVmfoTaskInitCtrlInfo_t) * IHU_SYSDIM_TASK_NBR_MAX));
 
 	//固定任务
 	zIhuVmfoTaskInitCtrlInfo[TASK_ID_VMFO].active = IHU_VMFO_TASK_ACTIVE;
@@ -99,7 +99,7 @@ OPSTAT fsm_vmfo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 	zIhuVmfoTaskInitCtrlInfo[TASK_ID_TIMER].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
 	//变动任务
 	for (i=TASK_ID_TIMER+1; i < TASK_ID_MAX; i++){
-		if (zIhuVmCtrTab.task[i].pnpState == IHU_TASK_PNP_ON){			
+		if (zIhuVmCtrTab.task[i].pnpState == IHU_SYSCFG_TASK_PNP_ON){			
 			zIhuVmfoTaskInitCtrlInfo[i].active = IHU_VMFO_TASK_ACTIVE;
 			zIhuVmfoTaskInitCtrlInfo[i].state = IHU_VMFO_TASK_INIT_WAIT_FOR_BACK;
 		}
@@ -125,7 +125,7 @@ OPSTAT fsm_vmfo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 	}	
 	
 	//打印报告进入常规状态
-	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
+	if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_FAT_ON) != FALSE){
 		IhuDebugPrint("VMFO: Enter FSM_STATE_VMFO_ACTIVE status, Keeping refresh here!\n");
 	}
 
@@ -238,7 +238,7 @@ OPSTAT fsm_vmfo_init_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 	
 	//检查所有的反馈是否都收到，不然维持状态不变
 	if (func_vmfo_init_caculate_all_fb() == TRUE){
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
+		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_FAT_ON) != FALSE){
 			IhuDebugPrint("VMFO: All task init feedback received, init of all tasks are successful!\n");
 		}
 	}
@@ -283,8 +283,8 @@ OPSTAT fsm_vmfo_heart_beat(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16
 BOOL func_vmfo_init_caculate_all_fb(void)
 {
 	int i=0;
-	for(i=0;i<MAX_TASK_NUM_IN_ONE_IHU;i++){
-		if ((zIhuVmCtrTab.task[i].pnpState == IHU_TASK_PNP_ON) && (zIhuVmfoTaskInitCtrlInfo[i].active == IHU_VMFO_TASK_ACTIVE) && (zIhuVmfoTaskInitCtrlInfo[i].state == IHU_VMFO_TASK_INIT_WAIT_FOR_BACK)){
+	for(i=0;i<IHU_SYSDIM_TASK_NBR_MAX;i++){
+		if ((zIhuVmCtrTab.task[i].pnpState == IHU_SYSCFG_TASK_PNP_ON) && (zIhuVmfoTaskInitCtrlInfo[i].active == IHU_VMFO_TASK_ACTIVE) && (zIhuVmfoTaskInitCtrlInfo[i].state == IHU_VMFO_TASK_INIT_WAIT_FOR_BACK)){
 			return FALSE;
 		}
 	}
@@ -298,9 +298,9 @@ BOOL func_vmfo_heart_caculate_all_received(void)
 {
 	int i=0;
 	if (IHU_VMFO_TASK_HEART_BEAT_CHOICE == IHU_VMFO_TASK_HEART_BEAT_ALL){
-		for(i=0;i<MAX_TASK_NUM_IN_ONE_IHU;i++){
+		for(i=0;i<IHU_SYSDIM_TASK_NBR_MAX;i++){
 			if ((i != TASK_ID_VMFO) && (i != TASK_ID_TIMER)){
-				if ((zIhuVmCtrTab.task[i].pnpState == IHU_TASK_PNP_ON) && (zIhuVmfoTaskInitCtrlInfo[i].active == IHU_VMFO_TASK_ACTIVE) && (zIhuVmfoTaskInitCtrlInfo[i].heart != IHU_VMFO_TASK_HEART_RECEIVED)){
+				if ((zIhuVmCtrTab.task[i].pnpState == IHU_SYSCFG_TASK_PNP_ON) && (zIhuVmfoTaskInitCtrlInfo[i].active == IHU_VMFO_TASK_ACTIVE) && (zIhuVmfoTaskInitCtrlInfo[i].heart != IHU_VMFO_TASK_HEART_RECEIVED)){
 					return FALSE;
 				}
 			}		

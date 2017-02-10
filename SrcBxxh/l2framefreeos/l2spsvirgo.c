@@ -91,7 +91,7 @@ OPSTAT fsm_spsvirgo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 	int ret=0;
 
 	//串行回送INIT_FB给VMFO
-	ihu_usleep(dest_id * IHU_MODULE_START_DISTRIBUTION_DELAY_DURATION);
+	ihu_usleep(dest_id * IHU_SYSCFG_MODULE_START_DISTRIBUTION_DELAY_DURATION);
 	if ((src_id > TASK_ID_MIN) &&(src_id < TASK_ID_MAX)){
 		//Send back MSG_ID_COM_INIT_FB to VMFO
 		msg_struct_com_init_fb_t snd;
@@ -140,7 +140,7 @@ OPSTAT fsm_spsvirgo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 	}
 	
 	//打印报告进入常规状态
-	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
+	if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_FAT_ON) != FALSE){
 		IhuDebugPrint("SPSVIRGO: Enter FSM_STATE_SPSVIRGO_ACTIVE status, Keeping refresh here!\n");
 	}
 	
@@ -540,7 +540,7 @@ OPSTAT fsm_spsvirgo_ccl_event_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 	//如果干活失败，则发送差错消息回L3
 	if (ret == IHU_FAILURE){
 		memset(&snd, 0, sizeof(msg_struct_sps_ccl_event_report_cfm_t));
-		snd.actionFlag = IHU_CCL_EVENT_REPORT_SEND_FAILURE;
+		snd.actionFlag = IHU_SYSMSG_CCL_EVENT_REPORT_SEND_FAILURE;
 		snd.length = sizeof(msg_struct_sps_ccl_event_report_cfm_t);
 		ret = ihu_message_send(MSG_ID_SPS_CCL_EVENT_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 		if (ret == IHU_FAILURE)
@@ -557,7 +557,7 @@ OPSTAT fsm_spsvirgo_ccl_event_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 			IhuErrorPrint("SPSVIRGO: Unpack and processing receiving message error!\n");
 			//不能直接返回差错，因为上层还巴巴的等着回复这个消息，不然状态机会出错
 			memset(&snd, 0, sizeof(msg_struct_sps_ccl_event_report_cfm_t));
-			snd.actionFlag = IHU_CCL_EVENT_REPORT_SEND_FAILURE;
+			snd.actionFlag = IHU_SYSMSG_CCL_EVENT_REPORT_SEND_FAILURE;
 			snd.length = sizeof(msg_struct_sps_ccl_event_report_cfm_t);
 			ret = ihu_message_send(MSG_ID_SPS_CCL_EVENT_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 			if (ret == IHU_FAILURE)
@@ -720,7 +720,7 @@ OPSTAT fsm_spsvirgo_ccl_fault_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 	//如果干活失败，则发送差错消息回L3
 	if (ret == IHU_FAILURE){
 		memset(&snd, 0, sizeof(msg_struct_sps_ccl_fault_report_cfm_t));
-		snd.actionFlag = IHU_CCL_EVENT_FAULT_SEND_FAILURE;
+		snd.actionFlag = IHU_SYSMSG_CCL_EVENT_FAULT_SEND_FAILUR;
 		snd.length = sizeof(msg_struct_sps_ccl_fault_report_cfm_t);
 		ret = ihu_message_send(MSG_ID_SPS_CCL_FAULT_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 		if (ret == IHU_FAILURE)
@@ -737,7 +737,7 @@ OPSTAT fsm_spsvirgo_ccl_fault_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 			IhuErrorPrint("SPSVIRGO: Unpack and processing receiving message error!\n");
 			//不能直接返回差错，因为上层还巴巴的等着回复这个消息，不然状态机会出错
 			memset(&snd, 0, sizeof(msg_struct_sps_ccl_fault_report_cfm_t));
-			snd.actionFlag = IHU_CCL_EVENT_FAULT_SEND_FAILURE;
+			snd.actionFlag = IHU_SYSMSG_CCL_EVENT_FAULT_SEND_FAILUR;
 			snd.length = sizeof(msg_struct_sps_ccl_fault_report_cfm_t);
 			ret = ihu_message_send(MSG_ID_SPS_CCL_FAULT_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 			if (ret == IHU_FAILURE)
@@ -878,7 +878,7 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 	//如果干活失败，则发送差错消息回L3
 	if (ret == IHU_FAILURE){
 		memset(&snd, 0, sizeof(msg_struct_sps_ccl_close_report_cfm_t));
-		snd.actionFlag = IHU_CCL_EVENT_CLOSE_SEND_FAILURE;
+		snd.actionFlag = IHU_SYSMSG_CCL_EVENT_CLOSE_SEND_FAILURE;
 		snd.length = sizeof(msg_struct_sps_ccl_close_report_cfm_t);
 		ret = ihu_message_send(MSG_ID_SPS_CCL_CLOSE_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 		if (ret == IHU_FAILURE)
@@ -895,7 +895,7 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 			IhuErrorPrint("SPSVIRGO: Unpack and processing receiving message error!\n");
 			//不能直接返回差错，因为上层还巴巴的等着回复这个消息，不然状态机会出错
 			memset(&snd, 0, sizeof(msg_struct_sps_ccl_close_report_cfm_t));
-			snd.actionFlag = IHU_CCL_EVENT_CLOSE_SEND_FAILURE;
+			snd.actionFlag = IHU_SYSMSG_CCL_EVENT_CLOSE_SEND_FAILURE;
 			snd.length = sizeof(msg_struct_sps_ccl_close_report_cfm_t);
 			ret = ihu_message_send(MSG_ID_SPS_CCL_CLOSE_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 			if (ret == IHU_FAILURE)
@@ -1107,7 +1107,7 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle(StrMsg_HUIT
 	if (rcv->reportType.event == HUITP_IEID_UNI_CCL_REPORT_TYPE_PERIOD_EVENT){
 		msg_struct_sps_ccl_event_report_cfm_t snd;
 		memset(&snd, 0, sizeof(msg_struct_sps_ccl_event_report_cfm_t));
-		snd.actionFlag = IHU_CCL_EVENT_REPORT_SEND_SUCCESS;
+		snd.actionFlag = IHU_SYSMSG_CCL_EVENT_REPORT_SEND_SUCCESS;
 		snd.length = sizeof(msg_struct_sps_ccl_event_report_cfm_t);
 		ret = ihu_message_send(MSG_ID_SPS_CCL_EVENT_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 		if (ret == IHU_FAILURE)
@@ -1116,7 +1116,7 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle(StrMsg_HUIT
 	else if (rcv->reportType.event == HUITP_IEID_UNI_CCL_REPORT_TYPE_CLOSE_EVENT){
 		msg_struct_sps_ccl_close_report_cfm_t snd;
 		memset(&snd, 0, sizeof(msg_struct_sps_ccl_close_report_cfm_t));
-		snd.actionFlag = IHU_CCL_EVENT_CLOSE_SEND_SUCCESS;
+		snd.actionFlag = IHU_SYSMSG_CCL_EVENT_CLOSE_SEND_SUCCESS;
 		snd.length = sizeof(msg_struct_sps_ccl_close_report_cfm_t);
 		ret = ihu_message_send(MSG_ID_SPS_CCL_CLOSE_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 		if (ret == IHU_FAILURE)
@@ -1125,7 +1125,7 @@ OPSTAT func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle(StrMsg_HUIT
 	else if (rcv->reportType.event == HUITP_IEID_UNI_CCL_REPORT_TYPE_FAULT_EVENT){
 		msg_struct_sps_ccl_fault_report_cfm_t snd;
 		memset(&snd, 0, sizeof(msg_struct_sps_ccl_fault_report_cfm_t));
-		snd.actionFlag = IHU_CCL_EVENT_FAULT_SEND_SUCCESS;
+		snd.actionFlag = IHU_SYSMSG_CCL_EVENT_FAULT_SEND_SUCCESS;
 		snd.length = sizeof(msg_struct_sps_ccl_fault_report_cfm_t);
 		ret = ihu_message_send(MSG_ID_SPS_CCL_FAULT_REPORT_CFM, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 		if (ret == IHU_FAILURE)

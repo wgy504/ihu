@@ -60,7 +60,7 @@ OPSTAT fsm_timer_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 para
   //xTimerHandle timerStart;
 
 	//串行回送INIT_FB给VMFO
-	ihu_usleep(dest_id * IHU_MODULE_START_DISTRIBUTION_DELAY_DURATION);
+	ihu_usleep(dest_id * IHU_SYSCFG_MODULE_START_DISTRIBUTION_DELAY_DURATION);
 	if ((src_id > TASK_ID_MIN) && (src_id < TASK_ID_MAX)){
 		//Send back MSG_ID_COM_INIT_FB to VM
 		msg_struct_com_init_fb_t snd;
@@ -148,7 +148,7 @@ OPSTAT fsm_timer_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 para
 	}
 	
 	//打印报告进入常规状态
-	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
+	if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_FAT_ON) != FALSE){
 		IhuDebugPrint("TIMER: Enter FSM_STATE_TIMER_ACTIVE status, Keeping refresh here!\n");
 	}
 
@@ -356,7 +356,7 @@ void func_timer_routine_handler_1s(OS_TIMER timerid)
   //入参检查
 
   //扫描
-  for (i=0;i<MAX_TIMER_NUM_IN_ONE_IHU_1S;i++)
+  for (i=0;i<IHU_SYSDIM_TIMERID_NBR_MAX_1S;i++)
   {
     //Active status
     if (zIhuTimerTable.timer1s[i].status == TIMER_STATUS_ACTIVE){
@@ -396,7 +396,7 @@ void func_timer_routine_handler_1s(OS_TIMER timerid)
       zIhuTimerTable.timer1s[i].elapse = zIhuTimerTable.timer1s[i].tDuration;
       zIhuTimerTable.timer1s[i].status = TIMER_STATUS_ACTIVE;
     }//Not meet ACTIVE or START timer
-  }//for-MAX_TIMER_NUM_IN_ONE_IHU_1S
+  }//for-IHU_SYSDIM_TIMERID_NBR_MAX_1S
 }
 
 
@@ -409,7 +409,7 @@ void func_timer_routine_handler_10ms(OS_TIMER timerid)
   //入参检查
 
   //扫描
-  for (i=0;i<MAX_TIMER_NUM_IN_ONE_IHU_10MS;i++)
+  for (i=0;i<IHU_SYSDIM_TIMERID_NBR_MAX_10MS;i++)
   {
     //Active status
     if (zIhuTimerTable.timer10ms[i].status == TIMER_STATUS_ACTIVE){
@@ -449,7 +449,7 @@ void func_timer_routine_handler_10ms(OS_TIMER timerid)
       zIhuTimerTable.timer10ms[i].elapse = zIhuTimerTable.timer10ms[i].tDuration;
       zIhuTimerTable.timer10ms[i].status = TIMER_STATUS_ACTIVE;
     }//Not meet ACTIVE or START timer
-  }//for-MAX_TIMER_NUM_IN_ONE_IHU_10MS
+  }//for-IHU_SYSDIM_TIMERID_NBR_MAX_10MS
 }
 
 //函数机制，搞定时器
@@ -461,7 +461,7 @@ void func_timer_routine_handler_1ms(OS_TIMER timerid)
   //入参检查
 
   //扫描
-  for (i=0;i<MAX_TIMER_NUM_IN_ONE_IHU_1MS;i++)
+  for (i=0;i<IHU_SYSDIM_TIMERID_NBR_MAX_1MS;i++)
   {
     //Active status
     if (zIhuTimerTable.timer1ms[i].status == TIMER_STATUS_ACTIVE){
@@ -501,6 +501,6 @@ void func_timer_routine_handler_1ms(OS_TIMER timerid)
       zIhuTimerTable.timer1ms[i].elapse = zIhuTimerTable.timer1ms[i].tDuration;
       zIhuTimerTable.timer1ms[i].status = TIMER_STATUS_ACTIVE;
     }//Not meet ACTIVE or START timer
-  }//for-MAX_TIMER_NUM_IN_ONE_IHU_1MS
+  }//for-IHU_SYSDIM_TIMERID_NBR_MAX_1MS
 }
 

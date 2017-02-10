@@ -9,6 +9,7 @@ CCL=> 最后剩下的任务是摄像头+IAP+节电，然后打开门狗就完美
 //= ZJL, 2017 Feb.9, CURRENT_SW_DELIVERY R03.118 =>CCL项目
 = 边界检查
 = 增加VM-COMMON机制，简化状态机的编制
+= 归一化IHU_SYSDIM/IHU_SYSCFG/IHU_SYSENG/IHU_SYSMSG的全局常量命名，模块命名应用使用IHU_MODULE_XXX的形式，方便追踪常量的来龙去脉
 
 //= ZJL, 2017 Feb.8, CURRENT_SW_DELIVERY R03.117 =>CCL项目
 = 继续完善任务初始化以及TIMER初始化，降低代码和配置研发工作量，提高智能化程度
@@ -139,7 +140,7 @@ CCL=> 最后剩下的任务是摄像头+IAP+节电，然后打开门狗就完美
 = 未来这将成为一种标准调试方法：一旦HardFault死机，先要检查打印区是否覆盖了其它变量导致的情形！！！
 = 进而推导：是否是任务堆栈区太小导致的覆盖问题。
 = 最后，看VM-TASK启动是否正常，不然就是TOTAL_HEAP_SIZE和MINIMAL_STACK_SIZE设置的太小。这些参数之间都是有关联的，调整其中的一个可能会影响其它参数。
-= 再实验：将任务堆栈IHU_TASK_STACK_SIZE从600放大到1000*sizeof(WORD)，打印区从300放大到Max_Que_Size+300 = 984，看实验结果：
+= 再实验：将任务堆栈IHU_SYSDIM_TASK_STACK_SIZE_MAX从600放大到1000*sizeof(WORD)，打印区从300放大到Max_Que_Size+300 = 984，看实验结果：
   > 造成的第一个问题是，系统无法启动，因为整个VM_TASK的RAM区域不够，先调整FreeRTOS TOTAL_HEAP_SIZE系统堆栈，放大到0x10000可启动
   > TOTAL_HEAP_SIZE调整到0x10000以后，系统编译出的RAM=120532，非常接近于128KB，已经没法继续放大了
   > 终于可以启动所有任务成功，不然只能消减不重要的任务，从而达到减少内存占用的目的。
@@ -153,18 +154,18 @@ CCL=> 最后剩下的任务是摄像头+IAP+节电，然后打开门狗就完美
   > 最终经过试验，确定了这种方式是可以工作的，不死机，是稳定可靠的，问题的根源得到解决！！！
   > 重新将打印区调整到300最大，将任务堆栈调回到400*sizeof(WORD)，TOTAL_HEAP_SIZE=0xAC00
 = 再试验任务堆栈大小与打印区的关系：将VM系统总堆栈TOTAL_HEAP_SIZE = 0xAC00
-  > IHU_TASK_STACK_SIZE/IHU_PRINT_FILE_LINE_SIZE = 1000/984可以工作（TOTAL_HEAP_SIZE = 0x10000 ==> 编译之后的RAM=120KB，非常接近于128KB的内存上限） 
-  > IHU_TASK_STACK_SIZE/IHU_PRINT_FILE_LINE_SIZE = 600/300可以工作
-  > IHU_TASK_STACK_SIZE/IHU_PRINT_FILE_LINE_SIZE = 600/984死机
-  > IHU_TASK_STACK_SIZE/IHU_PRINT_FILE_LINE_SIZE = 400/300死机
-  > IHU_TASK_STACK_SIZE/IHU_PRINT_FILE_LINE_SIZE = 500/300死机
-  > IHU_TASK_STACK_SIZE/IHU_PRINT_FILE_LINE_SIZE = 600/300可以工作，且恢复正常状态，可以见得，这是最优组合了，打印区太小，适应性也不够的。
+  > IHU_SYSDIM_TASK_STACK_SIZE_MAX/IHU_SYSDIM_PRINT_FILE_LINE_NBR_MAX = 1000/984可以工作（TOTAL_HEAP_SIZE = 0x10000 ==> 编译之后的RAM=120KB，非常接近于128KB的内存上限） 
+  > IHU_SYSDIM_TASK_STACK_SIZE_MAX/IHU_SYSDIM_PRINT_FILE_LINE_NBR_MAX = 600/300可以工作
+  > IHU_SYSDIM_TASK_STACK_SIZE_MAX/IHU_SYSDIM_PRINT_FILE_LINE_NBR_MAX = 600/984死机
+  > IHU_SYSDIM_TASK_STACK_SIZE_MAX/IHU_SYSDIM_PRINT_FILE_LINE_NBR_MAX = 400/300死机
+  > IHU_SYSDIM_TASK_STACK_SIZE_MAX/IHU_SYSDIM_PRINT_FILE_LINE_NBR_MAX = 500/300死机
+  > IHU_SYSDIM_TASK_STACK_SIZE_MAX/IHU_SYSDIM_PRINT_FILE_LINE_NBR_MAX = 600/300可以工作，且恢复正常状态，可以见得，这是最优组合了，打印区太小，适应性也不够的。
   > 在最优组合条件下，编译(O0/O1/O3)出的RAM SIZE = 98KB/98KB/98KB，RAM基本上没啥区别，FLASH占用的代码空间有较大的差异95KB/82KB/76KB
   > 缺省使用O1即可
 
 //= ZJL, 2017 Jan.21, CURRENT_SW_DELIVERY R03.101 =>CCL项目
 = 改善变长到定长，简化消息编码和解码
-= 打印字符串系统定义长度改到IHU_QUEUE_MAX_SIZE + 300的超长长度，方便数据生成函数的执行func_cloud_standard_xml_generate_message_test_data()
+= 打印字符串系统定义长度改到IHU_SYSDIM_MSG_QUEUE_SIZE_MAX + 300的超长长度，方便数据生成函数的执行func_cloud_standard_xml_generate_message_test_data()
 = 去掉编解码中对变长消息的处理部分，处理过程得以保留，以便为未来可能存在的变长消息处理留下案例和抄袭方法
 = 完善好接收消息的大小端处理
 = 结构体的sizeof()取长度，并不是实际长度，而是内存占用的长度，在编码并发送出去时是不对的。。。
@@ -183,7 +184,7 @@ CCL=> 最后剩下的任务是摄像头+IAP+节电，然后打开门狗就完美
 
 //= ZJL, 2017 Jan.20, CURRENT_SW_DELIVERY R03.99 =>CCL项目
 = 回归STMFLASH, CPUID, Camera BSP
-= 定义#define IHU_MSG_BODY_L2FRAME_MAX_LEN MAX_IHU_MSG_BODY_LENGTH - 4也需要跟4对其，不然消息缓冲区可能会长度不够导致出错
+= 定义#define IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX IHU_SYSDIM_MSG_BODY_LEN_MAX - 4也需要跟4对其，不然消息缓冲区可能会长度不够导致出错
 = GPRSMOD目前还是采用半双工工作方式
   >> 突然发现，从GPRSMOD接收到的数据，还是在SPSVIRGO之中，并没有超越这个模块本身，这是一种半双工的工作方式，所以在里面再给自己发送L2FRAME_RCV消息，就是自己
   给自己发送消息，这样，对于MessageQue的数量，是有更高的要求的，如果MsgQue=2，可能会出现队列不够，要么导致队列覆盖到其它数据区，要么发送失败。
@@ -255,9 +256,9 @@ CCL=> 最后剩下的任务是摄像头+IAP+节电，然后打开门狗就完美
   的触发点很多，有些敏感的点在连接态下出错是正常现象，只要关键的发送是满足RETURN即可，也算是一种正常的处理方式。
 
 //= ZJL, 2017 Jan.15, CURRENT_SW_DELIVERY R03.94 =>CCL项目
-= 由于所有的L2FRAME消息必须装载到正式的消息结构中进行传送，其数据域长度不得超过MAX_IHU_MSG_BODY_LENGTH-2，全部更新，包括CCL和BFSC
+= 由于所有的L2FRAME消息必须装载到正式的消息结构中进行传送，其数据域长度不得超过IHU_SYSDIM_MSG_BODY_LEN_MAX-2，全部更新，包括CCL和BFSC
 = 由于这个因素，所有的BSP(UART/I2C/SPI/CAN)涉及到接收发送数据缓冲区的，都必须遵循最长长度-2
-= 由于编译器对于奇数地址对其的问题，统一使用常量对L2FRAME的消息长度进行控制：IHU_MSG_BODY_L2FRAME_MAX_LEN = MAX_IHU_MSG_BODY_LENGTH-3
+= 由于编译器对于奇数地址对其的问题，统一使用常量对L2FRAME的消息长度进行控制：IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX = IHU_SYSDIM_MSG_BODY_LEN_MAX-3
 = 修改了BSP以及所有的消息定义(BFSC+CCL)
 = 完善HTTP的控制方式
 
@@ -282,7 +283,7 @@ CCL=> 最后剩下的任务是摄像头+IAP+节电，然后打开门狗就完美
 = 将系统堆栈改为0x9C00，不然空间不够，所有的任务不能一起创建出来
 = 将消息队列改为3个，解决HAL_TIM_IRQHandler问题。原因不太明确，但应该跟系统堆栈不够相关
 = 新出现了MSG_ID_SPS_CCL_CLOSE_REPORT_CFM发送之后必然出现无效消息的问题
-= 将#define MAX_QUEUE_NUM_IN_ONE_TASK 4，解决了上面消息发送总出现错位比特的问题。带来的问题是，系统区改为了0xAC00，总内存占用115KB了
+= 将#define IHU_SYSDIM_MSG_QUEUE_NBR_MAX 4，解决了上面消息发送总出现错位比特的问题。带来的问题是，系统区改为了0xAC00，总内存占用115KB了
 = 又将HUITP中有关总消息的长度由505改为405，队列数量由4改为3，貌似情况还算稳定，跑一晚上试试。
 
 //= ZJL, 2017 Jan.11, CURRENT_SW_DELIVERY R03.90 =>CCL项目

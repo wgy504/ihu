@@ -45,14 +45,14 @@ enum FSM_STATE_TIMER
 #define IHU_TIMER_TICK_100_MS_IN_NS 100000000  //in n second
 
 //Timer Id definition：后面统一使用节省内存的方式进行定义
-//#define MAX_TIMER_NUM_IN_ONE_IHU_1S 40  //Normal situation
-//#define MAX_TIMER_NUM_IN_ONE_IHU_10MS 4 //Frame usage
-//#define MAX_TIMER_NUM_IN_ONE_IHU_1MS 4  //Real-time usage
+//#define IHU_SYSDIM_TIMERID_NBR_MAX_1S 40  //Normal situation
+//#define IHU_SYSDIM_TIMERID_NBR_MAX_10MS 4 //Frame usage
+//#define IHU_SYSDIM_TIMERID_NBR_MAX_1MS 4  //Real-time usage
 #define MAX_TIMER_SET_DURATION 100000
 
-#define MAX_TIMER_NUM_IN_ONE_IHU_1S TIMER_ID_1S_MAX - TIMER_ID_1S_MIN + 1  //Normal situation
-#define MAX_TIMER_NUM_IN_ONE_IHU_10MS TIMER_ID_10MS_MAX - TIMER_ID_10MS_MIN + 1  //Frame usage
-#define MAX_TIMER_NUM_IN_ONE_IHU_1MS TIMER_ID_1MS_MAX - TIMER_ID_1MS_MIN + 1  //Real-time usage
+#define IHU_SYSDIM_TIMERID_NBR_MAX_1S TIMER_ID_1S_MAX - TIMER_ID_1S_MIN + 1  //Normal situation
+#define IHU_SYSDIM_TIMERID_NBR_MAX_10MS TIMER_ID_10MS_MAX - TIMER_ID_10MS_MIN + 1  //Frame usage
+#define IHU_SYSDIM_TIMERID_NBR_MAX_1MS TIMER_ID_1MS_MAX - TIMER_ID_1MS_MIN + 1  //Real-time usage
 
 //System level timer global variables
 typedef struct IhuTimerElement
@@ -67,9 +67,9 @@ typedef struct IhuTimerElement
 }IhuTimerElement_t;
 typedef struct IhuTimerTable
 {
-	IhuTimerElement_t timer1s[MAX_TIMER_NUM_IN_ONE_IHU_1S];
-	IhuTimerElement_t timer10ms[MAX_TIMER_NUM_IN_ONE_IHU_10MS];
-	IhuTimerElement_t timer1ms[MAX_TIMER_NUM_IN_ONE_IHU_1MS];
+	IhuTimerElement_t timer1s[IHU_SYSDIM_TIMERID_NBR_MAX_1S];
+	IhuTimerElement_t timer10ms[IHU_SYSDIM_TIMERID_NBR_MAX_10MS];
+	IhuTimerElement_t timer1ms[IHU_SYSDIM_TIMERID_NBR_MAX_1MS];
 }IhuTimerTable_t;
 
 #define TIMER_STATUS_DEACTIVE 1

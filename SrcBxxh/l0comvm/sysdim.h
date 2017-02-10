@@ -82,35 +82,35 @@
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMCWX_ID)
 	//为不同的项目配置的系统性能
 	//系统任务级
-	//MAX_TASK_NUM_IN_ONE_IHU之前放成64个，为了极致优化内存空间，放这么几个足够，这是最小值，基本上没有优化空间了
+	//IHU_SYSDIM_TASK_NBR_MAX之前放成64个，为了极致优化内存空间，放这么几个足够，这是最小值，基本上没有优化空间了
 	//如果不怕麻烦，还可以优化掉MIN=0以及ADCARIES任务模块，但这回造成程序编写的效率以及体系架构非常难看，所以暂时不做
-	//理想的情况下，MAX_TASK_NUM_IN_ONE_IHU=8，增加MAX以及AIRKISS模块，可惜内存严重不够
-	#define MAX_TASK_NUM_IN_ONE_IHU 6 
-	#define TASK_NAME_MAX_LENGTH 12
+	//理想的情况下，IHU_SYSDIM_TASK_NBR_MAX=8，增加MAX以及AIRKISS模块，可惜内存严重不够
+	#define IHU_SYSDIM_TASK_NBR_MAX 6 
+	#define IHU_SYSDIM_TASK_NAME_LEN_MAX 12
 	//系统消息级
 	//maxmum state number and msg number in one task, no instance concept
 	#define IHU_TASK_QUEUE_ID_START 1024
-	#define MAX_MSGID_NUM_IN_ONE_TASK 20 //一个任务中最多定义的消息数量，之前放254个，优化后更省内存，暂时用不了这么多
-	#define MASK_MSGID_NUM_IN_ONE_TASK 255 //消息号段在同一个任务中必须连续到这个范围内
-	#define MAX_STATE_NUM_IN_ONE_TASK 7  //一个任务之中最多定义的状态数量
-	#define MAX_FSM_STATE_ENTRY_NUM_IN_ONE_TASK 30   //一个任务之中，STATE-MSGID成对处理函数最多数量
+	#define IHU_SYSDIM_MSGID_NBR_MAX 20 //一个任务中最多定义的消息数量，之前放254个，优化后更省内存，暂时用不了这么多
+	#define IHU_SYSDIM_MSGID_MASK_SET 255 //消息号段在同一个任务中必须连续到这个范围内
+	#define IHU_SYSDIM_TASK_STATE_NBR_MAX 7  //一个任务之中最多定义的状态数量
+	#define IHU_SYSDIM_FSM_ENTRY_NBR_MAX 30   //一个任务之中，STATE-MSGID成对处理函数最多数量
 	//消息长度
-	#define MSG_NAME_MAX_LENGTH 70
-	#define MAX_IHU_MSG_BODY_LENGTH 80
-	#define IHU_FILE_NAME_LENGTH_MAX 100
-	#define MAX_QUEUE_NUM_IN_ONE_TASK 2
+	#define IHU_SYSDIM_MSGID_NAME_LEN_MAX 70
+	#define IHU_SYSDIM_MSG_BODY_LEN_MAX 80
+	#define IHU_SYSDIM_FILE_NAME_LEN_MAX 100
+	#define IHU_SYSDIM_MSG_QUEUE_NBR_MAX 2
 	//SLEEP控制表给任务模块可以给出
 	#define MAX_SLEEP_NUM_IN_ONE_TASK 2
-	#define MAX_SLEEP_COUNTER_UP_LIMITATION 50000
+	#define IHU_SYSDIM_SLEEP_UP_LIMIT_CNT_MAX 50000
 	//MYC add debug print preparation buffer
-	#define IHU_PRINT_CHAR_SIZE 200
+	#define IHU_SYSDIM_PRINT_CHAR_SIZE_MAX 200
 	//TIMER DIMENSION
 	//最大的定时器数量
-	#define MAX_TIMER_NUM_IN_ONE_IHU 40
-	#define TIMER_NAME_MAX_LENGTH 40
-	#define MAX_TIMER_NUM_IN_ONE_IHU_1S 8  //Normal situation
-	#define MAX_TIMER_NUM_IN_ONE_IHU_10MS 3 //Frame usage
-	#define MAX_TIMER_NUM_IN_ONE_IHU_1MS 3  //Real-time usage
+	#define IHU_SYSDIM_TIMERID_NBR_MAX 40
+	#define IHU_SYSDIM_TIMERID_NAME_LEN_MAX 40
+	#define IHU_SYSDIM_TIMERID_NBR_MAX_1S 8  //Normal situation
+	#define IHU_SYSDIM_TIMERID_NBR_MAX_10MS 3 //Frame usage
+	#define IHU_SYSDIM_TIMERID_NBR_MAX_1MS 3  //Real-time usage
 	#define MAX_TIMER_SET_DURATION 100000
 
 
@@ -121,32 +121,32 @@
  ***********************************************************************************/
 //使用了VMFO-FreeRTOS操作系统
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
-	#define MAX_TASK_NUM_IN_ONE_IHU 14
-	#define TASK_NAME_MAX_LENGTH 12
-  #define IHU_TASK_STACK_SIZE 200 //任务堆栈长度
+	#define IHU_SYSDIM_TASK_NBR_MAX 14
+	#define IHU_SYSDIM_TASK_NAME_LEN_MAX 12
+  #define IHU_SYSDIM_TASK_STACK_SIZE_MAX 200 //任务堆栈长度
 	//系统消息级
 	//maxmum state number and msg number in one task, no instance concept
 	//#define IHU_TASK_QUEUE_ID_START 1024
-	#define MAX_MSGID_NUM_IN_ONE_TASK 20 //一个任务中最多定义的消息数量，之前放254个，优化后更省内存，暂时用不了这么多
-	#define MASK_MSGID_NUM_IN_ONE_TASK 255 //消息号段在同一个任务中必须连续到这个范围内
-	#define MAX_STATE_NUM_IN_ONE_TASK 7  //一个任务之中最多定义的状态数量
-	#define MAX_FSM_STATE_ENTRY_NUM_IN_ONE_TASK 16   //一个任务之中，STATE-MSGID成对处理函数最多数量
+	#define IHU_SYSDIM_MSGID_NBR_MAX 20 //一个任务中最多定义的消息数量，之前放254个，优化后更省内存，暂时用不了这么多
+	#define IHU_SYSDIM_MSGID_MASK_SET 255 //消息号段在同一个任务中必须连续到这个范围内
+	#define IHU_SYSDIM_TASK_STATE_NBR_MAX 7  //一个任务之中最多定义的状态数量
+	#define IHU_SYSDIM_FSM_ENTRY_NBR_MAX 16   //一个任务之中，STATE-MSGID成对处理函数最多数量
 	//消息参数
-	#define MSG_NAME_MAX_LENGTH 70
-	#define MAX_IHU_MSG_BODY_LENGTH 64  //消息最长长度，这里比较短节省内存，按道理，没有图像和视频的情况下，是足够的
-	#define IHU_MSG_BODY_L2FRAME_MAX_LEN MAX_IHU_MSG_BODY_LENGTH - 3
-	#define IHU_FILE_NAME_LENGTH_MAX 100
-	#define MAX_QUEUE_NUM_IN_ONE_TASK 2
-  #define IHU_QUEUE_MAX_SIZE MAX_IHU_MSG_BODY_LENGTH + 6 //should be = MAX_IHU_MSG_BUF_LENGTH
+	#define IHU_SYSDIM_MSGID_NAME_LEN_MAX 70
+	#define IHU_SYSDIM_MSG_BODY_LEN_MAX 64  //消息最长长度，这里比较短节省内存，按道理，没有图像和视频的情况下，是足够的
+	#define IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX IHU_SYSDIM_MSG_BODY_LEN_MAX - 3
+	#define IHU_SYSDIM_FILE_NAME_LEN_MAX 100
+	#define IHU_SYSDIM_MSG_QUEUE_NBR_MAX 2
+  #define IHU_SYSDIM_MSG_QUEUE_SIZE_MAX IHU_SYSDIM_MSG_BODY_LEN_MAX + 6 //should be = IHU_SYSMSG_COM_BODY_LEN_MAX
 	//SLEEP控制表给任务模块可以给出
-	#define MAX_SLEEP_COUNTER_UP_LIMITATION 50000
-	#define IHU_PRINT_CHAR_SIZE 128
-        #define IHU_PRINT_FILE_LINE_SIZE 60
-	#define IHU_PRINT_BUFFER_NUMBER 10
-	//#define IHU_PRINT_MUTEX_TIME_OUT_DURATION 100	
+	#define IHU_SYSDIM_SLEEP_UP_LIMIT_CNT_MAX 50000
+	#define IHU_SYSDIM_PRINT_CHAR_SIZE_MAX 128
+        #define IHU_SYSDIM_PRINT_FILE_LINE_NBR_MAX 60
+	#define IHU_SYSDIM_PRINT_BUF_NBR_MAX 10
+	//#define IHU_SYSDIM_PRINT_MUTEX_TIME_OUT_DUR 100	
 	//最大的定时器数量
-	#define MAX_TIMER_NUM_IN_ONE_IHU 40
-	#define TIMER_NAME_MAX_LENGTH 40
+	#define IHU_SYSDIM_TIMERID_NBR_MAX 40
+	#define IHU_SYSDIM_TIMERID_NAME_LEN_MAX 40
 
 
 
@@ -158,30 +158,30 @@
  ***********************************************************************************/
 //使用了VMUO-ucos操作系统
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID)
-	#define MAX_TASK_NUM_IN_ONE_IHU 16
-	#define TASK_NAME_MAX_LENGTH 12
+	#define IHU_SYSDIM_TASK_NBR_MAX 16
+	#define IHU_SYSDIM_TASK_NAME_LEN_MAX 12
 	//系统消息级
 	//maxmum state number and msg number in one task, no instance concept
 	#define IHU_TASK_QUEUE_ID_START 1024
-	#define MAX_MSGID_NUM_IN_ONE_TASK 32 //一个任务中最多定义的消息数量，之前放254个，优化后更省内存，暂时用不了这么多
-	#define MASK_MSGID_NUM_IN_ONE_TASK 255 //消息号段在同一个任务中必须连续到这个范围内
-	#define MAX_STATE_NUM_IN_ONE_TASK 9  //一个任务之中最多定义的状态数量
-	#define MAX_FSM_STATE_ENTRY_NUM_IN_ONE_TASK 32   //一个任务之中，STATE-MSGID成对处理函数最多数量
+	#define IHU_SYSDIM_MSGID_NBR_MAX 32 //一个任务中最多定义的消息数量，之前放254个，优化后更省内存，暂时用不了这么多
+	#define IHU_SYSDIM_MSGID_MASK_SET 255 //消息号段在同一个任务中必须连续到这个范围内
+	#define IHU_SYSDIM_TASK_STATE_NBR_MAX 9  //一个任务之中最多定义的状态数量
+	#define IHU_SYSDIM_FSM_ENTRY_NBR_MAX 32   //一个任务之中，STATE-MSGID成对处理函数最多数量
 	//消息长度
-	#define MSG_NAME_MAX_LENGTH 70
+	#define IHU_SYSDIM_MSGID_NAME_LEN_MAX 70
 	//ucosiii下的PARTITION必须跟256/128/64/32对其，不然会导致出错
-	#define MAX_IHU_MSG_BODY_LENGTH 58  //ARM Cortex-M3的能力没有想象的那么强大，所以需要将MessageLength大大降低
-	#define IHU_MSG_BODY_L2FRAME_MAX_LEN MAX_IHU_MSG_BODY_LENGTH - 3
-	#define IHU_FILE_NAME_LENGTH_MAX 100
-	#define MAX_QUEUE_NUM_IN_ONE_TASK 2
-	#define IHU_MAX_PARTITION_TOTAL 5
+	#define IHU_SYSDIM_MSG_BODY_LEN_MAX 58  //ARM Cortex-M3的能力没有想象的那么强大，所以需要将MessageLength大大降低
+	#define IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX IHU_SYSDIM_MSG_BODY_LEN_MAX - 3
+	#define IHU_SYSDIM_FILE_NAME_LEN_MAX 100
+	#define IHU_SYSDIM_MSG_QUEUE_NBR_MAX 2
+	#define IHU_SYSDIM_PARTITION_MAX 5
 	//SLEEP控制表给任务模块可以给出
 //	#define MAX_SLEEP_NUM_IN_ONE_TASK 2
-//	#define MAX_SLEEP_COUNTER_UP_LIMITATION 50000
-	#define IHU_PRINT_CHAR_SIZE 128
+//	#define IHU_SYSDIM_SLEEP_UP_LIMIT_CNT_MAX 50000
+	#define IHU_SYSDIM_PRINT_CHAR_SIZE_MAX 128
 	//最大的定时器数量
-	#define MAX_TIMER_NUM_IN_ONE_IHU 40
-	#define TIMER_NAME_MAX_LENGTH 40
+	#define IHU_SYSDIM_TIMERID_NBR_MAX 40
+	#define IHU_SYSDIM_TIMERID_NAME_LEN_MAX 40
 
 
 
@@ -192,29 +192,29 @@
  ***********************************************************************************/
 //使用了VMUO-ucos操作系统
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCCB_ID)
-	#define MAX_TASK_NUM_IN_ONE_IHU 16
-	#define TASK_NAME_MAX_LENGTH 12
+	#define IHU_SYSDIM_TASK_NBR_MAX 16
+	#define IHU_SYSDIM_TASK_NAME_LEN_MAX 12
 	//系统消息级
 	//maxmum state number and msg number in one task, no instance concept
 	#define IHU_TASK_QUEUE_ID_START 1024
-	#define MAX_MSGID_NUM_IN_ONE_TASK 32 //一个任务中最多定义的消息数量，之前放254个，优化后更省内存，暂时用不了这么多
-	#define MASK_MSGID_NUM_IN_ONE_TASK 255 //消息号段在同一个任务中必须连续到这个范围内
-	#define MAX_STATE_NUM_IN_ONE_TASK 9  //一个任务之中最多定义的状态数量
-	#define MAX_FSM_STATE_ENTRY_NUM_IN_ONE_TASK 32   //一个任务之中，STATE-MSGID成对处理函数最多数量
+	#define IHU_SYSDIM_MSGID_NBR_MAX 32 //一个任务中最多定义的消息数量，之前放254个，优化后更省内存，暂时用不了这么多
+	#define IHU_SYSDIM_MSGID_MASK_SET 255 //消息号段在同一个任务中必须连续到这个范围内
+	#define IHU_SYSDIM_TASK_STATE_NBR_MAX 9  //一个任务之中最多定义的状态数量
+	#define IHU_SYSDIM_FSM_ENTRY_NBR_MAX 32   //一个任务之中，STATE-MSGID成对处理函数最多数量
 	//消息长度
-	#define MSG_NAME_MAX_LENGTH 70
-	#define MAX_IHU_MSG_BODY_LENGTH 58
-	#define IHU_MSG_BODY_L2FRAME_MAX_LEN MAX_IHU_MSG_BODY_LENGTH - 3
-	#define IHU_FILE_NAME_LENGTH_MAX 100
-	#define MAX_QUEUE_NUM_IN_ONE_TASK 2
-	#define IHU_MAX_PARTITION_TOTAL 5
+	#define IHU_SYSDIM_MSGID_NAME_LEN_MAX 70
+	#define IHU_SYSDIM_MSG_BODY_LEN_MAX 58
+	#define IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX IHU_SYSDIM_MSG_BODY_LEN_MAX - 3
+	#define IHU_SYSDIM_FILE_NAME_LEN_MAX 100
+	#define IHU_SYSDIM_MSG_QUEUE_NBR_MAX 2
+	#define IHU_SYSDIM_PARTITION_MAX 5
 	//SLEEP控制表给任务模块可以给出
 //	#define MAX_SLEEP_NUM_IN_ONE_TASK 2
-//	#define MAX_SLEEP_COUNTER_UP_LIMITATION 50000
-	#define IHU_PRINT_CHAR_SIZE 1000
+//	#define IHU_SYSDIM_SLEEP_UP_LIMIT_CNT_MAX 50000
+	#define IHU_SYSDIM_PRINT_CHAR_SIZE_MAX 1000
 	//最大的定时器数量
-	#define MAX_TIMER_NUM_IN_ONE_IHU 40
-	#define TIMER_NAME_MAX_LENGTH 40
+	#define IHU_SYSDIM_TIMERID_NBR_MAX 40
+	#define IHU_SYSDIM_TIMERID_NAME_LEN_MAX 40
 
 
 
@@ -226,29 +226,29 @@
  ***********************************************************************************/
 //使用了VMUO-ucos操作系统
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCSB_ID)
-	#define MAX_TASK_NUM_IN_ONE_IHU 16
-	#define TASK_NAME_MAX_LENGTH 12
+	#define IHU_SYSDIM_TASK_NBR_MAX 16
+	#define IHU_SYSDIM_TASK_NAME_LEN_MAX 12
 	//系统消息级
 	//maxmum state number and msg number in one task, no instance concept
 	#define IHU_TASK_QUEUE_ID_START 1024
-	#define MAX_MSGID_NUM_IN_ONE_TASK 32 //一个任务中最多定义的消息数量，之前放254个，优化后更省内存，暂时用不了这么多
-	#define MASK_MSGID_NUM_IN_ONE_TASK 255 //消息号段在同一个任务中必须连续到这个范围内
-	#define MAX_STATE_NUM_IN_ONE_TASK 9  //一个任务之中最多定义的状态数量
-	#define MAX_FSM_STATE_ENTRY_NUM_IN_ONE_TASK 32   //一个任务之中，STATE-MSGID成对处理函数最多数量
+	#define IHU_SYSDIM_MSGID_NBR_MAX 32 //一个任务中最多定义的消息数量，之前放254个，优化后更省内存，暂时用不了这么多
+	#define IHU_SYSDIM_MSGID_MASK_SET 255 //消息号段在同一个任务中必须连续到这个范围内
+	#define IHU_SYSDIM_TASK_STATE_NBR_MAX 9  //一个任务之中最多定义的状态数量
+	#define IHU_SYSDIM_FSM_ENTRY_NBR_MAX 32   //一个任务之中，STATE-MSGID成对处理函数最多数量
 	//消息长度
-	#define MSG_NAME_MAX_LENGTH 70
-	#define MAX_IHU_MSG_BODY_LENGTH 58
-	#define IHU_MSG_BODY_L2FRAME_MAX_LEN MAX_IHU_MSG_BODY_LENGTH - 3
-	#define IHU_FILE_NAME_LENGTH_MAX 100
-	#define MAX_QUEUE_NUM_IN_ONE_TASK 2
-	#define IHU_MAX_PARTITION_TOTAL 5
+	#define IHU_SYSDIM_MSGID_NAME_LEN_MAX 70
+	#define IHU_SYSDIM_MSG_BODY_LEN_MAX 58
+	#define IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX IHU_SYSDIM_MSG_BODY_LEN_MAX - 3
+	#define IHU_SYSDIM_FILE_NAME_LEN_MAX 100
+	#define IHU_SYSDIM_MSG_QUEUE_NBR_MAX 2
+	#define IHU_SYSDIM_PARTITION_MAX 5
 	//SLEEP控制表给任务模块可以给出
 //	#define MAX_SLEEP_NUM_IN_ONE_TASK 2
-//	#define MAX_SLEEP_COUNTER_UP_LIMITATION 50000
-	#define IHU_PRINT_CHAR_SIZE 1000
+//	#define IHU_SYSDIM_SLEEP_UP_LIMIT_CNT_MAX 50000
+	#define IHU_SYSDIM_PRINT_CHAR_SIZE_MAX 1000
 	//最大的定时器数量
-	#define MAX_TIMER_NUM_IN_ONE_IHU 40
-	#define TIMER_NAME_MAX_LENGTH 40
+	#define IHU_SYSDIM_TIMERID_NBR_MAX 40
+	#define IHU_SYSDIM_TIMERID_NAME_LEN_MAX 40
 
 
 
@@ -260,32 +260,32 @@
  ***********************************************************************************/
 //使用了VMFO-FreeRTOS操作系统
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-	#define MAX_TASK_NUM_IN_ONE_IHU 11
-	#define TASK_NAME_MAX_LENGTH 12
-  #define IHU_TASK_STACK_SIZE 600 //任务堆栈长度，非常重要，将影响HardFault陷入崩溃的产生
+	#define IHU_SYSDIM_TASK_NBR_MAX 11
+	#define IHU_SYSDIM_TASK_NAME_LEN_MAX 12
+  #define IHU_SYSDIM_TASK_STACK_SIZE_MAX 600 //任务堆栈长度，非常重要，将影响HardFault陷入崩溃的产生
 	//系统消息级
 	//maxmum state number and msg number in one task, no instance concept
 	//#define IHU_TASK_QUEUE_ID_START 1024
-	#define MAX_MSGID_NUM_IN_ONE_TASK 40 //一个任务中最多定义的消息数量，之前放254个，优化后更省内存，暂时用不了这么多
-	#define MASK_MSGID_NUM_IN_ONE_TASK 255 //消息号段在同一个任务中必须连续到这个范围内
-	#define MAX_STATE_NUM_IN_ONE_TASK 10  //一个任务之中最多定义的状态数量
-	#define MAX_FSM_STATE_ENTRY_NUM_IN_ONE_TASK 42   //一个任务之中，STATE-MSGID成对处理函数最多数量
+	#define IHU_SYSDIM_MSGID_NBR_MAX 40 //一个任务中最多定义的消息数量，之前放254个，优化后更省内存，暂时用不了这么多
+	#define IHU_SYSDIM_MSGID_MASK_SET 255 //消息号段在同一个任务中必须连续到这个范围内
+	#define IHU_SYSDIM_TASK_STATE_NBR_MAX 10  //一个任务之中最多定义的状态数量
+	#define IHU_SYSDIM_FSM_ENTRY_NBR_MAX 42   //一个任务之中，STATE-MSGID成对处理函数最多数量
 	//消息参数
-	#define MSG_NAME_MAX_LENGTH 70
-	#define MAX_IHU_MSG_BODY_LENGTH 560  //消息最长长度，这里比较短节省内存，按道理，没有图像和视频的情况下，是足够的。加上6B的头以后最好4字节对其。
-	#define IHU_MSG_BODY_L2FRAME_MAX_LEN MAX_IHU_MSG_BODY_LENGTH - 4
-	#define IHU_FILE_NAME_LENGTH_MAX 64
-	#define MAX_QUEUE_NUM_IN_ONE_TASK 2
-  #define IHU_QUEUE_MAX_SIZE MAX_IHU_MSG_BODY_LENGTH + 24 //由于涉及到4B对其，消息长度必须是头部4B对其，消息体4B对其！！！
+	#define IHU_SYSDIM_MSGID_NAME_LEN_MAX 70
+	#define IHU_SYSDIM_MSG_BODY_LEN_MAX 560  //消息最长长度，这里比较短节省内存，按道理，没有图像和视频的情况下，是足够的。加上6B的头以后最好4字节对其。
+	#define IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX IHU_SYSDIM_MSG_BODY_LEN_MAX - 4
+	#define IHU_SYSDIM_FILE_NAME_LEN_MAX 64
+	#define IHU_SYSDIM_MSG_QUEUE_NBR_MAX 2
+  #define IHU_SYSDIM_MSG_QUEUE_SIZE_MAX IHU_SYSDIM_MSG_BODY_LEN_MAX + 24 //由于涉及到4B对其，消息长度必须是头部4B对其，消息体4B对其！！！
 	//SLEEP控制表给任务模块可以给出
-	#define MAX_SLEEP_COUNTER_UP_LIMITATION 50000
-	#define IHU_PRINT_CHAR_SIZE 300 // IHU_QUEUE_MAX_SIZE + 300  //打印的缓冲区最好放大点，这个区域的内容如果太大，超过了系统堆栈可能分配的长度，将会使得它覆盖其它变量，危险！
-	#define IHU_PRINT_FILE_LINE_SIZE 60
-	#define IHU_PRINT_BUFFER_NUMBER 1  //太长的打印缓冲区，会造成覆盖其它区域
-	#define IHU_PRINT_MUTEX_TIME_OUT_DURATION 100
+	#define IHU_SYSDIM_SLEEP_UP_LIMIT_CNT_MAX 50000
+	#define IHU_SYSDIM_PRINT_CHAR_SIZE_MAX 300 // IHU_SYSDIM_MSG_QUEUE_SIZE_MAX + 300  //打印的缓冲区最好放大点，这个区域的内容如果太大，超过了系统堆栈可能分配的长度，将会使得它覆盖其它变量，危险！
+	#define IHU_SYSDIM_PRINT_FILE_LINE_NBR_MAX 60
+	#define IHU_SYSDIM_PRINT_BUF_NBR_MAX 1  //太长的打印缓冲区，会造成覆盖其它区域
+	#define IHU_SYSDIM_PRINT_MUTEX_TIME_OUT_DUR 100
 	//最大的定时器数量
-	#define MAX_TIMER_NUM_IN_ONE_IHU 40
-	#define TIMER_NAME_MAX_LENGTH 40
+	#define IHU_SYSDIM_TIMERID_NBR_MAX 40
+	#define IHU_SYSDIM_TIMERID_NAME_LEN_MAX 40
 
 
 
@@ -296,32 +296,32 @@
  ***********************************************************************************/
 //使用了VMFO-FreeRTOS操作系统
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
-	#define MAX_TASK_NUM_IN_ONE_IHU 10
-	#define TASK_NAME_MAX_LENGTH 12
-  #define IHU_TASK_STACK_SIZE 600 //任务堆栈长度
+	#define IHU_SYSDIM_TASK_NBR_MAX 10
+	#define IHU_SYSDIM_TASK_NAME_LEN_MAX 12
+  #define IHU_SYSDIM_TASK_STACK_SIZE_MAX 600 //任务堆栈长度
 	//系统消息级
 	//maxmum state number and msg number in one task, no instance concept
 	//#define IHU_TASK_QUEUE_ID_START 1024
-	#define MAX_MSGID_NUM_IN_ONE_TASK 52 //一个任务中最多定义的消息数量，之前放254个，优化后更省内存，暂时用不了这么多
-	#define MASK_MSGID_NUM_IN_ONE_TASK 255 //消息号段在同一个任务中必须连续到这个范围内
-	#define MAX_STATE_NUM_IN_ONE_TASK 16  //一个任务之中最多定义的状态数量
-	#define MAX_FSM_STATE_ENTRY_NUM_IN_ONE_TASK 50   //一个任务之中，STATE-MSGID成对处理函数最多数量
+	#define IHU_SYSDIM_MSGID_NBR_MAX 52 //一个任务中最多定义的消息数量，之前放254个，优化后更省内存，暂时用不了这么多
+	#define IHU_SYSDIM_MSGID_MASK_SET 255 //消息号段在同一个任务中必须连续到这个范围内
+	#define IHU_SYSDIM_TASK_STATE_NBR_MAX 16  //一个任务之中最多定义的状态数量
+	#define IHU_SYSDIM_FSM_ENTRY_NBR_MAX 50   //一个任务之中，STATE-MSGID成对处理函数最多数量
 	//消息参数
-	#define MSG_NAME_MAX_LENGTH 70
-	#define MAX_IHU_MSG_BODY_LENGTH 252  //消息最长长度，这里比较短节省内存，按道理，没有图像和视频的情况下，是足够的 //MYC from 205 to 252
-	#define IHU_MSG_BODY_L2FRAME_MAX_LEN MAX_IHU_MSG_BODY_LENGTH - 3
-	#define IHU_FILE_NAME_LENGTH_MAX 100
-	#define MAX_QUEUE_NUM_IN_ONE_TASK 2
-  #define IHU_QUEUE_MAX_SIZE MAX_IHU_MSG_BODY_LENGTH + 24 //由于涉及到4B对其，消息长度必须是头部4B对其，消息体4B对其！！！
+	#define IHU_SYSDIM_MSGID_NAME_LEN_MAX 70
+	#define IHU_SYSDIM_MSG_BODY_LEN_MAX 252  //消息最长长度，这里比较短节省内存，按道理，没有图像和视频的情况下，是足够的 //MYC from 205 to 252
+	#define IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX IHU_SYSDIM_MSG_BODY_LEN_MAX - 3
+	#define IHU_SYSDIM_FILE_NAME_LEN_MAX 100
+	#define IHU_SYSDIM_MSG_QUEUE_NBR_MAX 2
+  #define IHU_SYSDIM_MSG_QUEUE_SIZE_MAX 	IHU_SYSDIM_MSG_BODY_LEN_MAX + 24 //由于涉及到4B对其，消息长度必须是头部4B对其，消息体4B对其！！！
 	//SLEEP控制表给任务模块可以给出
-	#define MAX_SLEEP_COUNTER_UP_LIMITATION 50000
-	#define IHU_PRINT_CHAR_SIZE 300 // IHU_QUEUE_MAX_SIZE + 300  //打印的缓冲区最好放大点
-	#define IHU_PRINT_FILE_LINE_SIZE 60
-	#define IHU_PRINT_BUFFER_NUMBER 1  //太长的打印缓冲区，是否会造成覆盖其它区域
-	#define IHU_PRINT_MUTEX_TIME_OUT_DURATION 100
+	#define IHU_SYSDIM_SLEEP_UP_LIMIT_CNT_MAX 50000
+	#define IHU_SYSDIM_PRINT_CHAR_SIZE_MAX 300 // IHU_SYSDIM_MSG_QUEUE_SIZE_MAX + 300  //打印的缓冲区最好放大点
+	#define IHU_SYSDIM_PRINT_FILE_LINE_NBR_MAX 60
+	#define IHU_SYSDIM_PRINT_BUF_NBR_MAX 1  //太长的打印缓冲区，是否会造成覆盖其它区域
+	#define IHU_SYSDIM_PRINT_MUTEX_TIME_OUT_DUR 100
 	//最大的定时器数量
-	#define MAX_TIMER_NUM_IN_ONE_IHU 40
-	#define TIMER_NAME_MAX_LENGTH 40
+	#define IHU_SYSDIM_TIMERID_NBR_MAX 40
+	#define IHU_SYSDIM_TIMERID_NAME_LEN_MAX 40
 
 	
 #else

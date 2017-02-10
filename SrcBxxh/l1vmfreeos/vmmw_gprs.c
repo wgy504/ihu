@@ -39,7 +39,7 @@ OPSTAT ihu_vmmw_gprsmod_call_perform(char *calledNumber)
 {	
 	uint8_t temp[50];
 	
-	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: CALL Session starting...!\n");	
+	if((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: CALL Session starting...!\n");	
 	//参数检查
 	if ((strlen(calledNumber) < 8) || (strlen(calledNumber) > 16)){
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: invalid called number or other parameter received!\n");
@@ -59,7 +59,7 @@ OPSTAT ihu_vmmw_gprsmod_call_perform(char *calledNumber)
 	strcat((char*)temp, ";");
 	if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t *)"OK", 8) == IHU_SUCCESS)
 	{
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Called number = %s, Call successful!\n", calledNumber);
+		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Called number = %s, Call successful!\n", calledNumber);
 	}
 	else
 	{
@@ -78,14 +78,14 @@ OPSTAT ihu_vmmw_gprsmod_call_perform(char *calledNumber)
 	}
 	if(strstr((const char*)zIhuBspStm32SpsGprsRxBuff,"DTMF:"))
 	{
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Peer press key-down: X\n");
+		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Peer press key-down: X\n");
 		func_gprsmod_clear_receive_buffer();
 	}
 				
 	//挂断
 	if(func_gprsmod_send_AT_command((uint8_t*)"ATH", (uint8_t *)"OK", 2) == IHU_SUCCESS)
 	{
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Hand-off successful\n");
+		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Hand-off successful\n");
 	}else{
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: SIM800A Call hand-on failure!\n");
 		return IHU_FAILURE;				
@@ -98,13 +98,13 @@ OPSTAT ihu_vmmw_gprsmod_call_perform(char *calledNumber)
 	if(strstr((const char*)zIhuBspStm32SpsGprsRxBuff, "RING"))
 	{
 		func_gprsmod_clear_receive_buffer();
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: CALL Coming\n");
+		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: CALL Coming\n");
 	}
 
 	//接听
 	if(func_gprsmod_send_AT_command((uint8_t*)"ATA", (uint8_t *)"OK", 2) == IHU_SUCCESS)
 	{
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Hand-on successful\n");
+		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Hand-on successful\n");
 	}
 	else{
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: SIM800A Call hand-off failure!\n");
@@ -122,14 +122,14 @@ OPSTAT ihu_vmmw_gprsmod_call_perform(char *calledNumber)
 	}
 	if(strstr((const char*)zIhuBspStm32SpsGprsRxBuff,"DTMF:"))
 	{
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Peer press key-down: X\n");
+		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Peer press key-down: X\n");
 		func_gprsmod_clear_receive_buffer();
 	}	
 	
 	//挂断
 	if(func_gprsmod_send_AT_command((uint8_t*)"ATH", (uint8_t *)"OK", 2) == IHU_SUCCESS)
 	{
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Hand-off successful\n");
+		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Hand-off successful\n");
 	}else{
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: SIM800A Call hand-on failure!\n");
 		return IHU_FAILURE;				
@@ -157,7 +157,7 @@ OPSTAT ihu_vmmw_gprsmod_sms_transmit_with_confirm(char *calledNumber, char *inpu
 	uint8_t loc=0;
 	uint8_t *p,*p1;
 
-	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: SMS Session starting...!\n");
+	if((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: SMS Session starting...!\n");
 	//参数检查
 	if ((strlen(calledNumber) < 8) || (strlen(calledNumber) > 16) || (input == NULL)){
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: invalid called number or other parameter received!\n");
@@ -172,7 +172,7 @@ OPSTAT ihu_vmmw_gprsmod_sms_transmit_with_confirm(char *calledNumber, char *inpu
 	
 	//设置短信发送模式	
 	if (func_gprsmod_send_AT_command((uint8_t*)"AT+CMGF=1", (uint8_t *)"OK", 4) == IHU_SUCCESS){
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Set SMS Send mode correctly!\n");
+		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Set SMS Send mode correctly!\n");
 	}
 	else{
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: Set SMS Send mode wrong!\n");
@@ -181,7 +181,7 @@ OPSTAT ihu_vmmw_gprsmod_sms_transmit_with_confirm(char *calledNumber, char *inpu
 	
 	//设置短信上报模式，上报位置
   if (func_gprsmod_send_AT_command((uint8_t*)"AT+CNMI=3,1,0,0,0", (uint8_t *)"OK", 4) == IHU_SUCCESS){
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Set SMS report mode!\n");
+		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Set SMS report mode!\n");
 	}
 	else{
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: Set SMS report mode wrong!\n");
@@ -190,7 +190,7 @@ OPSTAT ihu_vmmw_gprsmod_sms_transmit_with_confirm(char *calledNumber, char *inpu
 
   //所有操作在SIM卡中进行
 	if (func_gprsmod_send_AT_command((uint8_t*)"AT+CPMS=\"SM\",\"SM\",\"SM\"", (uint8_t *)"OK", 2) == IHU_SUCCESS){
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Set SMS SIM card operation!\n");
+		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Set SMS SIM card operation!\n");
 	}
 	else{
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: Set SMS Sim card operation wrong!\n");
@@ -203,7 +203,7 @@ OPSTAT ihu_vmmw_gprsmod_sms_transmit_with_confirm(char *calledNumber, char *inpu
 	strcat((char*)temp, IHU_VMMW_GPRSMOD_SMS_CENTER_NUMBER);
 	strcat((char*)temp, "\"");
 	if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t *)"OK", 4) == IHU_SUCCESS){
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Set SMS center successful!\n");
+		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Set SMS center successful!\n");
 	}
 	else{
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: Set SMS center failure, CMD = [%s].\n", temp);
@@ -213,7 +213,7 @@ OPSTAT ihu_vmmw_gprsmod_sms_transmit_with_confirm(char *calledNumber, char *inpu
 	//检查是否已经收到短信
 	if(strstr((const char*)zIhuBspStm32SpsGprsRxBuff, "+CMTI:"))
 	{
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS:  New SMS! SMS Position: [%s]\n", zIhuBspStm32SpsGprsRxBuff);
+		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS:  New SMS! SMS Position: [%s]\n", zIhuBspStm32SpsGprsRxBuff);
 		func_gprsmod_clear_receive_buffer();
 	}
 
@@ -232,7 +232,7 @@ OPSTAT ihu_vmmw_gprsmod_sms_transmit_with_confirm(char *calledNumber, char *inpu
 	temp[loc+2]='\0';
 	//发送短信内容
 	if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t *)"OK", 5) == IHU_SUCCESS){
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Send SMS successful!\n");
+		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Send SMS successful!\n");
 	}
 	else{
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: Send SMS failure!\n");
@@ -240,7 +240,7 @@ OPSTAT ihu_vmmw_gprsmod_sms_transmit_with_confirm(char *calledNumber, char *inpu
 	}
 
 	//查看短信
-	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Inquery SMS.\n");
+	if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Inquery SMS.\n");
 	memset(temp, 0, sizeof(temp));
 	strcpy((char*)temp,(const char*)"AT+CMGR=1");  //固定读取第一条SMS
 	if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"OK", 5)==0)
@@ -252,7 +252,7 @@ OPSTAT ihu_vmmw_gprsmod_sms_transmit_with_confirm(char *calledNumber, char *inpu
 			*outlen = 0;
 			return IHU_SUCCESS;
 		}
-		//由上层来确保不会溢出，总长度总归不会超过接收缓冲区zIhuBspStm32SpsGprsRxBuff的最长长度IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN = IHU_MSG_BODY_L2FRAME_MAX_LEN
+		//由上层来确保不会溢出，总长度总归不会超过接收缓冲区zIhuBspStm32SpsGprsRxBuff的最长长度IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN = IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX
 		*outlen = (uint16_t) (p1-p);
 		memcpy((char*)output, (char*)p+2, *outlen);
 	}else{
@@ -274,15 +274,15 @@ OPSTAT ihu_vmmw_gprsmod_sms_transmit_with_confirm(char *calledNumber, char *inpu
 *******************************************************************************/
 //往后台发送的POST功能
 //input/inlen是输入参数，output/outlen是输出参数
-//output部分的长度，由上层来保证，确保不越界，这里不保证，而只是保证不超越MAX_IHU_MSG_BODY_LENGTH而已
-//由于GPRSMOD接收缓冲区zIhuBspStm32SpsGprsRxBuff的最长长度=IHU_MSG_BODY_L2FRAME_MAX_LEN=MAX_IHU_MSG_BODY_LENGTH-4，所以从系统角度应该不会出现问题
+//output部分的长度，由上层来保证，确保不越界，这里不保证，而只是保证不超越IHU_SYSDIM_MSG_BODY_LEN_MAX而已
+//由于GPRSMOD接收缓冲区zIhuBspStm32SpsGprsRxBuff的最长长度=IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX=IHU_SYSDIM_MSG_BODY_LEN_MAX-4，所以从系统角度应该不会出现问题
 OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input, int16_t inlen, char *output, uint16_t *outlen)
 {	
 	uint8_t temp[IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN+1];	
 	uint8_t *p1,*p2;
 	int i = 0;
 	
-	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: HTTP Session starting...!\n");
+	if((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: HTTP Session starting...!\n");
 	//参数检查
 	if (input == NULL){
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: invalid called number or other parameter received!\n");
@@ -411,7 +411,7 @@ OPSTAT ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive(char *input, int16_t
 	uint8_t temp[IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN+1];	
 	uint8_t *p1,*p2;
 	
-	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: TCP Session starting...!\n");
+	if((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: TCP Session starting...!\n");
 	//参数检查
 	if (input == NULL){
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: invalid called number or other parameter received!\n");
@@ -435,9 +435,9 @@ OPSTAT ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive(char *input, int16_t
 	memset(temp, 0, sizeof(temp));
 	strcpy((char*)temp, (const char*)"AT+CIPSTART=");
 	strcat((char*)temp, "\"TCP\", \""); 
-	strcat((char*)temp, IHU_CLOUDXHUI_TCP_SERVER_IP_ADDR);
+	strcat((char*)temp, IHU_SYSCFG_BH_TCP_SVR_IP_ADDR);
 	strcat((char*)temp, "\", \"");
-	strcat((char*)temp, IHU_CLOUDXHUI_TCP_SERVER_PORT);	
+	strcat((char*)temp, IHU_SYSCFG_BH_TCP_SVR_PORT);	
 	strcat((char*)temp, "\"");	
 	if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"CONNECT OK", 4) == IHU_FAILURE){
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: Start TCP connection session failure!\n");
@@ -507,7 +507,7 @@ OPSTAT ihu_vmmw_gprsmod_tcp_u8_data_transmit_with_receive(int8_t *input, int16_t
 {	
 	uint8_t temp[IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN+1];	
 	
-	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: TCP Session starting...!\n");
+	if((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: TCP Session starting...!\n");
 	//参数检查
 	if (input == NULL){
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: invalid called number or other parameter received!\n");
@@ -531,9 +531,9 @@ OPSTAT ihu_vmmw_gprsmod_tcp_u8_data_transmit_with_receive(int8_t *input, int16_t
 	memset(temp, 0, sizeof(temp));
 	strcpy((char*)temp, (const char*)"AT+CIPSTART=");
 	strcat((char*)temp, "\"TCP\", \""); 
-	strcat((char*)temp, IHU_CLOUDXHUI_TCP_SERVER_IP_ADDR);
+	strcat((char*)temp, IHU_SYSCFG_BH_TCP_SVR_IP_ADDR);
 	strcat((char*)temp, "\", \"");
-	strcat((char*)temp, IHU_CLOUDXHUI_TCP_SERVER_PORT);	
+	strcat((char*)temp, IHU_SYSCFG_BH_TCP_SVR_PORT);	
 	strcat((char*)temp, "\"");	
 	if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"CONNECT OK", 4) == IHU_FAILURE){
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: Start TCP connection session failure!\n");
@@ -583,7 +583,7 @@ OPSTAT ihu_vmmw_gprsmod_udp_text_data_transmit_with_receive(char *input, int16_t
 {
 	uint8_t temp[IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN+1];	
 	
-	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: UDP Session starting...!\n");
+	if((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: UDP Session starting...!\n");
 	//参数检查
 	if (input == NULL){
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: invalid called number or other parameter received!\n");
@@ -607,9 +607,9 @@ OPSTAT ihu_vmmw_gprsmod_udp_text_data_transmit_with_receive(char *input, int16_t
 	memset(temp, 0, sizeof(temp));
 	strcpy((char*)temp, (const char*)"AT+CIPSTART=");
 	strcat((char*)temp, "\"UDP\", \""); 
-	strcat((char*)temp, IHU_CLOUDXHUI_TCP_SERVER_IP_ADDR);
+	strcat((char*)temp, IHU_SYSCFG_BH_TCP_SVR_IP_ADDR);
 	strcat((char*)temp, "\", \"");
-	strcat((char*)temp, IHU_CLOUDXHUI_TCP_SERVER_PORT);	
+	strcat((char*)temp, IHU_SYSCFG_BH_TCP_SVR_PORT);	
 	strcat((char*)temp, "\"");	
 	if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"CONNECT OK", 4) == IHU_FAILURE){
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: Start TCP connection session failure!\n");
@@ -650,7 +650,7 @@ OPSTAT ihu_vmmw_gprsmod_udp_u8_data_transmit_with_receive(int8_t *input, int16_t
 {	
 	uint8_t temp[IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN+1];	
 	
-	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: UDP Session starting...!\n");
+	if((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: UDP Session starting...!\n");
 	//参数检查
 	if (input == NULL){
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: invalid called number or other parameter received!\n");
@@ -674,9 +674,9 @@ OPSTAT ihu_vmmw_gprsmod_udp_u8_data_transmit_with_receive(int8_t *input, int16_t
 	memset(temp, 0, sizeof(temp));
 	strcpy((char*)temp, (const char*)"AT+CIPSTART=");
 	strcat((char*)temp, "\"UDP\", \""); 
-	strcat((char*)temp, IHU_CLOUDXHUI_TCP_SERVER_IP_ADDR);
+	strcat((char*)temp, IHU_SYSCFG_BH_TCP_SVR_IP_ADDR);
 	strcat((char*)temp, "\", \"");
-	strcat((char*)temp, IHU_CLOUDXHUI_TCP_SERVER_PORT);	
+	strcat((char*)temp, IHU_SYSCFG_BH_TCP_SVR_PORT);	
 	strcat((char*)temp, "\"");	
 	if(func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"CONNECT OK", 4) == IHU_FAILURE){
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: Start TCP connection session failure!\n");
@@ -718,7 +718,7 @@ OPSTAT ihu_vmmw_gprsmod_ftp_data_transmit_with_receive(int8_t *output, uint16_t 
 	uint8_t temp[IHU_BSP_STM32_SPS_GPRS_REC_MAX_LEN+1];	
 	//uint8_t *p1,*p2;
 	
-	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: FTP Session starting...!\n");
+	if((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: FTP Session starting...!\n");
 	//参数检查
 	if (output == NULL){
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: invalid called number or other parameter received!\n");
@@ -759,25 +759,25 @@ OPSTAT ihu_vmmw_gprsmod_ftp_data_transmit_with_receive(int8_t *output, uint16_t 
 	//设置FTP用户名 
 	memset(temp, 0, sizeof(temp));
 	memcpy((char*)temp, "AT+FTPUN=\"", sizeof("AT+FTPUN=\""));
-	strcat((char*)temp, IHU_CLOUDXHUI_FTP_BH_SERVER_USER_NAME);
+	strcat((char*)temp, IHU_SYSCFG_BH_FTP_USR_NAME);
 	strcat((char*)temp, "\"");
 	func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"OK", 2);
 	//设置FTP密码
 	memset(temp, 0, sizeof(temp));
 	memcpy((char*)temp, "AT+FTPPW=\"", sizeof("AT+FTPPW=\""));
-	strcat((char*)temp, IHU_CLOUDXHUI_FTP_BH_SERVER_USER_PSWD);
+	strcat((char*)temp, IHU_SYSCFG_BH_FTP_PSWD);
 	strcat((char*)temp, "\"");
 	func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"OK", 2);
 	//设置FTP下载的文件名
 	memset(temp, 0, sizeof(temp));
 	memcpy((char*)temp, "AT+FTPGETNAME=\"", sizeof("AT+FTPGETNAME=\""));
-	strcat((char*)temp, IHU_CLOUDXHUI_FTP_BH_SERVER_FILE_NAME);
+	strcat((char*)temp, IHU_SYSCFG_BH_FTP_FILE_NAME);
 	strcat((char*)temp, "\"");
 	func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"OK", 2);
 	//设置FTP下载的目录
 	memset(temp, 0, sizeof(temp));
 	memcpy((char*)temp, "AT+FTPGETPATH=\"", sizeof("AT+FTPGETPATH=\""));
-	strcat((char*)temp, IHU_CLOUDXHUI_FTP_BH_SERVER_FILE_PATH);
+	strcat((char*)temp, IHU_SYSCFG_BH_FTP_FILE_PATH);
 	strcat((char*)temp, "\"");
 	func_gprsmod_send_AT_command((uint8_t*)temp, (uint8_t*)"OK", 2);
 	//执行该指令后，请一直处于等待状态，不要做其它操作，以OK免返回error。
@@ -800,7 +800,7 @@ OPSTAT ihu_vmmw_gprsmod_ftp_data_transmit_with_receive(int8_t *output, uint16_t 
 //往后台发送的POST功能
 OPSTAT ihu_vmmw_gprsmod_email_data_transmit_with_receive(char *emailTo, char *emailFrom, char *emailTitle, char *emailContent, int16_t inlen)
 {
-	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: EMAIL Session starting...!\n");
+	if((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: EMAIL Session starting...!\n");
 	//参数检查
 	if (emailTo == NULL){
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: invalid called number or other parameter received!\n");
@@ -830,7 +830,7 @@ OPSTAT ihu_vmmw_gprsmod_bs_position_perform(StrVmmwGprsmodBasestationPosition_t 
 	
 	//入参检查
 	
-	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Base Station positioning Session starting...!\n");
+	if((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Base Station positioning Session starting...!\n");
 	//会话前的初始化
 	if(func_gprsmod_module_session_init() == IHU_FAILURE){
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: Init GPRSMOD hardware/software before sessioin failure!\n");
@@ -916,7 +916,7 @@ OPSTAT ihu_vmmw_gprsmod_tts_perform(char *input, int16_t inlen)
 		return IHU_FAILURE;				
 	}
 	
-	if((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Base Station positioning Session starting...!\n");
+	if((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Base Station positioning Session starting...!\n");
 	//会话前的初始化
 	if(func_gprsmod_module_session_init() == IHU_FAILURE){
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: Init GPRSMOD hardware/software before sessioin failure!\n");
@@ -1025,7 +1025,7 @@ OPSTAT func_gprsmod_module_info_retrieve()
 	{ 
 		p1=(int8_t*)strstr((const char*)(zIhuBspStm32SpsGprsRxBuff+2),"\n");
 		strncpy(temp, (char*)zIhuBspStm32SpsGprsRxBuff+2, (p1-zIhuBspStm32SpsGprsRxBuff>=sizeof(temp))?sizeof(temp):(p1-zIhuBspStm32SpsGprsRxBuff));
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
+		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE){
 			IhuDebugPrint("VMMWGPRS: Maunfacture %s", temp);
 		}
 		func_gprsmod_clear_receive_buffer();
@@ -1041,7 +1041,7 @@ OPSTAT func_gprsmod_module_info_retrieve()
 	{ 
 		p1=(int8_t*)strstr((const char*)(zIhuBspStm32SpsGprsRxBuff+2),"\n"); 
 		strncpy(temp, (char*)zIhuBspStm32SpsGprsRxBuff+2, (p1-zIhuBspStm32SpsGprsRxBuff>=sizeof(temp))?sizeof(temp):(p1-zIhuBspStm32SpsGprsRxBuff));
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
+		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE){
 			IhuDebugPrint("VMMWGPRS: Module Type %s", temp);
 		}
 		func_gprsmod_clear_receive_buffer();
@@ -1057,7 +1057,7 @@ OPSTAT func_gprsmod_module_info_retrieve()
 	{ 
 		p1=(int8_t*)strstr((const char*)(zIhuBspStm32SpsGprsRxBuff+2),"\n"); 
 		strncpy(temp, (char*)zIhuBspStm32SpsGprsRxBuff+2, (p1-zIhuBspStm32SpsGprsRxBuff>=sizeof(temp))?sizeof(temp):(p1-zIhuBspStm32SpsGprsRxBuff));
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
+		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE){
 			IhuDebugPrint("VMMWGPRS: Product Serial ID %s", temp);
 		}
 		func_gprsmod_clear_receive_buffer();		
@@ -1075,7 +1075,7 @@ OPSTAT func_gprsmod_module_info_retrieve()
 		p2=(int8_t*)strstr((const char*)(p1+1),"\"");
     p1=(int8_t*)strstr((const char*)(p2+1),"\"");
 		strncpy(temp, (char*)p1+1, 11);
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
+		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE){
 			IhuDebugPrint("VMMWGPRS: Local Number %s", temp);		
 		}
 		func_gprsmod_clear_receive_buffer();		
@@ -1111,7 +1111,7 @@ OPSTAT func_gprsmod_gsm_info_retrieve(void)
 	//查询SIM卡是否在位
 	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CPIN?", (uint8_t*)"OK", 4) == IHU_SUCCESS)
 	{
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
+		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE){
 			IhuDebugPrint("VMMWGPRS: SIM card inserted!\n");			
 		}
 		func_gprsmod_clear_receive_buffer(); 
@@ -1129,7 +1129,7 @@ OPSTAT func_gprsmod_gsm_info_retrieve(void)
 		{
 			p2=(uint8_t*)strstr((const char*)(p1+1),"\"");
 			strncpy(temp, (char*)p1+1, (p2-p1-1>=sizeof(temp))?sizeof(temp):(p2-p1-1));
-			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
+			if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE){
 				IhuDebugPrint("VMMWGPRS: Operator: %s\n", temp);				
 			}
 		}
@@ -1149,7 +1149,7 @@ OPSTAT func_gprsmod_gsm_info_retrieve(void)
 		{
 			p2=(uint8_t*)strstr((const char*)(p1+1),",");
 			strncpy(temp, (char*)p1+2, (p2-p1-2>=sizeof(temp))?sizeof(temp):(p2-p1-2));
-			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
+			if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE){
 				IhuDebugPrint("VMMWGPRS: Singal quality: %s\n", temp);	
 			}			
 		}
@@ -1165,27 +1165,27 @@ OPSTAT func_gprsmod_gsm_info_retrieve(void)
 	//DTMF支持与否
   if(func_gprsmod_send_AT_command((uint8_t*)"AT+DDET=1", (uint8_t*)"OK", 4) == IHU_SUCCESS)
 	{
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Module support DTMF audio-decode, support key-down during peer conversation.\n");
+		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Module support DTMF audio-decode, support key-down during peer conversation.\n");
 	}
 	else{
-    if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Module not support DTMF audio-decode, Not support key-down during peer conversation.\n");
+    if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Module not support DTMF audio-decode, Not support key-down during peer conversation.\n");
 	}
 	//TTS支持与否
 	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CTTS=?", (uint8_t*)"OK", 4) == IHU_SUCCESS)
 	{
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Support TTS local voice, Support to convert TEXT into voice.\n");
+		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Support TTS local voice, Support to convert TEXT into voice.\n");
 	}
 	else{
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Module not support TTS local voice.\n");
+		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Module not support TTS local voice.\n");
 	}
 	//基站定位支持与否：该AT命令跟SIM800A紧密结合，换做其他硬件模块，命令可能会发生变化 
 	//之前使用CIPSIM800ALOC，，目前改为CIPGSMLOC
 	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CIPGSMLOC=?", (uint8_t*)"OK", 4) == IHU_SUCCESS)
 	{
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Module support base station positioning, able to fetch position information.\n");
+		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Module support base station positioning, able to fetch position information.\n");
 	}
 	else{
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Module not support base station positioning.\n");
+		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: Module not support base station positioning.\n");
 	}
 	func_gprsmod_clear_receive_buffer();
 	
@@ -1212,7 +1212,7 @@ OPSTAT func_gprsmod_module_session_init(void)
 	while((repeatCnt > 0) &&(func_gprsmod_send_AT_command((uint8_t*)"AT", (uint8_t*)"OK", 4) != IHU_SUCCESS))//查询是否应到AT指令
 	{
 		repeatCnt--;		
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
+		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE){
 			IhuDebugPrint("VMMWGPRS: Not detect GPRS module, trying to reconnecting!\n");
 		}
 		ihu_usleep(200);
@@ -1262,7 +1262,7 @@ void func_grpsmod_check_receive_buffer_ipd(void)
 	//检查是否有下发的数据：由于前面有初始化结果，一般不可能出现
 	if(strstr((const char*)zIhuBspStm32SpsGprsRxBuff, "+IPD"))//判断上位机是否有数据下发
 	{
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: New content received!\n");
+		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWGPRS: New content received!\n");
 		p1=(uint8_t*)strstr((const char*)zIhuBspStm32SpsGprsRxBuff,",");
 		p2=(uint8_t*)strstr((const char*)zIhuBspStm32SpsGprsRxBuff,":");
 		if ((p1!=NULL) && (p2!=NULL) && (p1<p2)){

@@ -103,7 +103,7 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 	int ret=0;
 
 	//串行回送INIT_FB给VMFO
-	ihu_usleep(dest_id * IHU_MODULE_START_DISTRIBUTION_DELAY_DURATION);
+	ihu_usleep(dest_id * IHU_SYSCFG_MODULE_START_DISTRIBUTION_DELAY_DURATION);
 	if ((src_id > TASK_ID_MIN) &&(src_id < TASK_ID_MAX)){
 		//Send back MSG_ID_COM_INIT_FB to VMFO
 		msg_struct_com_init_fb_t snd;
@@ -158,7 +158,7 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 	}
 	
 	//打印报告进入常规状态
-	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
+	if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_FAT_ON) != FALSE){
 		IhuDebugPrint("CCL: Enter FSM_STATE_CCL_ACTIVE status, Keeping refresh here!\n");
 	}
 
@@ -539,7 +539,7 @@ OPSTAT func_ccl_time_out_lock_work_active(void)
 		
 		//发送关门报告给后台
 		memset(&snd1, 0, sizeof(msg_struct_ccl_sps_close_report_send_t));
-		snd1.cause = IHU_CCL_CLOSE_DOOR_NOT_YET_OPEN;
+		snd1.cause = IHU_SYSMSG_CCL_CLOSE_DOOR_NOT_YET_OPEN;
 		snd1.length = sizeof(msg_struct_ccl_sps_close_report_send_t);
 		ret = ihu_message_send(MSG_ID_CCL_SPS_CLOSE_REPORT_SEND, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd1, snd1.length);
 		if (ret == IHU_FAILURE)
@@ -563,7 +563,7 @@ OPSTAT func_ccl_time_out_lock_work_active(void)
 		
 		//发送差错状态报告给后台
 		memset(&snd2, 0, sizeof(msg_struct_ccl_sps_fault_report_send_t));
-		snd2.cause = IHU_CCL_FAULT_CAUSE_CLOSE_DOOR_TIME_OUT;
+		snd2.cause = IHU_SYSMSG_CCL_FAULT_CAUSE_CLOSE_DOOR_TIME_OUT;
 		snd2.length = sizeof(msg_struct_ccl_sps_fault_report_send_t);
 		if (ihu_message_send(MSG_ID_CCL_SPS_FAULT_REPORT_SEND, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd2, snd2.length) == IHU_FAILURE)
 			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName);
@@ -694,7 +694,7 @@ OPSTAT func_ccl_time_out_lock_work_wait_door_for_open(void)
 
 	//发送关门报告给后台
 	memset(&snd1, 0, sizeof(msg_struct_ccl_sps_close_report_send_t));
-	snd1.cause = IHU_CCL_CLOSE_DOOR_NOT_YET_OPEN;
+	snd1.cause = IHU_SYSMSG_CCL_CLOSE_DOOR_NOT_YET_OPEN;
 	snd1.length = sizeof(msg_struct_ccl_sps_close_report_send_t);
 	if (ihu_message_send(MSG_ID_CCL_SPS_CLOSE_REPORT_SEND, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd1, snd1.length) == IHU_FAILURE)
 		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName);
@@ -719,7 +719,7 @@ OPSTAT fsm_ccl_lock_and_door_close_event(UINT8 dest_id, UINT8 src_id, void * par
 		
 	//发送关门报告给后台
 	memset(&snd, 0, sizeof(msg_struct_ccl_sps_close_report_send_t));
-	snd.cause = IHU_CCL_CLOSE_DOOR_NORMAL;
+	snd.cause = IHU_SYSMSG_CCL_CLOSE_DOOR_NORMAL;
 	snd.length = sizeof(msg_struct_ccl_sps_close_report_send_t);
 	if (ihu_message_send(MSG_ID_CCL_SPS_CLOSE_REPORT_SEND, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
 		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName);
@@ -905,7 +905,7 @@ OPSTAT fsm_ccl_event_fault_trigger_to_stop(UINT8 dest_id, UINT8 src_id, void * p
 		//没有定时器
 		//直接发送恢复关门报告给后台，等待证实以后，执行所有关闭操作
 		memset(&snd2, 0, sizeof(msg_struct_ccl_sps_close_report_send_t));
-		snd2.cause = IHU_CCL_CLOSE_DOOR_BY_FAULT;
+		snd2.cause = IHU_SYSMSG_CCL_CLOSE_DOOR_BY_FAULT;
 		snd2.length = sizeof(msg_struct_ccl_sps_close_report_send_t);
 		if (ihu_message_send(MSG_ID_CCL_SPS_CLOSE_REPORT_SEND, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd2, snd2.length) == IHU_FAILURE)
 			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName);
@@ -917,7 +917,7 @@ OPSTAT fsm_ccl_event_fault_trigger_to_stop(UINT8 dest_id, UINT8 src_id, void * p
 		if (zIhuCclSensorStatus.faultReportCnt == 0){
 			//发送差错状态报告给后台：真正的原因，待填入
 			memset(&snd1, 0, sizeof(msg_struct_ccl_sps_fault_report_send_t));
-			snd1.cause = IHU_CCL_FAULT_CAUSE_SENSOR_WARNING;
+			snd1.cause = IHU_SYSMSG_CCL_FAULT_CAUSE_SENSOR_WARNING;
 			//待填入具体传感器告警内容
 			snd1.length = sizeof(msg_struct_ccl_sps_fault_report_send_t);
 			if (ihu_message_send(MSG_ID_CCL_SPS_FAULT_REPORT_SEND, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd1, snd1.length) == IHU_FAILURE)

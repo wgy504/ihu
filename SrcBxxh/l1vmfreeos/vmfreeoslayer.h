@@ -209,7 +209,7 @@ typedef struct IhuTaskTag
 	UINT8  pnpState;
 	QueueHandle_t  QueId;
 	UINT8  state;
-	char   taskName[TASK_NAME_MAX_LENGTH];
+	char   taskName[IHU_SYSDIM_TASK_NAME_LEN_MAX];
 	IhuFsmStateItem_t *fsmPtr;
 	xTaskHandle TaskHandle;
 	void*  taskFuncEntry;
@@ -224,18 +224,18 @@ typedef struct IhuFsmCtrlTable
 {
 	UINT8 numOfIhuFsmArrayElement;  //每一个具体任务TASK中，定义了多少个STATE-MSGID映射表单
 	UINT8 taskId;
-	IhuFsmArrayElement_t pFsmArray[MAX_STATE_NUM_IN_ONE_TASK][MAX_MSGID_NUM_IN_ONE_TASK];
+	IhuFsmArrayElement_t pFsmArray[IHU_SYSDIM_TASK_STATE_NBR_MAX][IHU_SYSDIM_MSGID_NBR_MAX];
 }IhuFsmCtrlTable_t;
 //MsgQueue的基础结构定义
 typedef struct IhuFsmQueueElement
 {
-	UINT8 msgQue[MAX_IHU_MSG_BODY_LENGTH];
+	UINT8 msgQue[IHU_SYSDIM_MSG_BODY_LEN_MAX];
 	bool useFlag;
 }IhuFsmQueueElement_t;
 //队列列表
 typedef struct IhuFsmQueueListTable
 {
-	IhuFsmQueueElement_t queList[MAX_QUEUE_NUM_IN_ONE_TASK];
+	IhuFsmQueueElement_t queList[IHU_SYSDIM_MSG_QUEUE_NBR_MAX];
 	UINT8 queIndex;
 }IhuFsmQueueListTable_t;
 //状态机总表
@@ -243,20 +243,20 @@ typedef struct IhuFsmTable
 {
 	UINT8 numOfIhuFsmCtrlTable;  //Number of running (Task + Instance)
 	UINT8 currentTaskId;  //transfer task_id to launched FSM machine, then useless
-	IhuFsmCtrlTable_t  pIhuFsmCtrlTable[MAX_TASK_NUM_IN_ONE_IHU];  //所有任务的状态机总控表
-	IhuFsmQueueListTable_t taskQue[MAX_TASK_NUM_IN_ONE_IHU];  //所有任务的消息队列总控表
+	IhuFsmCtrlTable_t  pIhuFsmCtrlTable[IHU_SYSDIM_TASK_NBR_MAX];  //所有任务的状态机总控表
+	IhuFsmQueueListTable_t taskQue[IHU_SYSDIM_TASK_NBR_MAX];  //所有任务的消息队列总控表
 }IhuFsmTable_t;
 //打印缓冲区
 typedef struct IhuPrintBufferChar
 {
 	UINT8 localIndex;
-	char  PrintHeader[IHU_PRINT_FILE_LINE_SIZE];
-	char  PrintBuffer[IHU_PRINT_CHAR_SIZE];
+	char  PrintHeader[IHU_SYSDIM_PRINT_FILE_LINE_NBR_MAX];
+	char  PrintBuffer[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX];
 }IhuPrintBufferChar_t;
 //打印控制表
 typedef struct IhuPrintBufCtrlTab
 {
-	IhuPrintBufferChar_t 	prtBuf[IHU_PRINT_BUFFER_NUMBER];
+	IhuPrintBufferChar_t 	prtBuf[IHU_SYSDIM_PRINT_BUF_NBR_MAX];
 	unsigned int 					prtIndex;
 #if (IHU_WORKING_FREE_RTOS_SELECTION == IHU_WORKING_FREE_RTOS_SELECTION_BARE)		
 	OS_MUTEX 							prtMutex;	
@@ -267,7 +267,7 @@ typedef struct IhuPrintBufCtrlTab
 typedef struct IhuVmCtrTab
 {
 	IhuFsmTable_t					fsm;
-	IhuTaskTag_t					task[MAX_TASK_NUM_IN_ONE_IHU];
+	IhuTaskTag_t					task[IHU_SYSDIM_TASK_NBR_MAX];
 	IhuPrintBufCtrlTab_t	print;
 }IhuVmCtrTab_t;
 //系统总控表
@@ -294,7 +294,7 @@ extern IhuFsmStateItem_t IhuFsmBfsc[];                          	//状态机
 typedef struct IhuVmCtrTaskStaticCfg
 {
 	const UINT8 taskInputId;
-	const char  taskInputName[TASK_NAME_MAX_LENGTH];
+	const char  taskInputName[IHU_SYSDIM_TASK_NAME_LEN_MAX];
 	void* fsmFuncEntry;
 	const UINT8 pnpFlag;
 	const UINT8 traceCtrFlag;
@@ -308,7 +308,7 @@ typedef struct IhuVmCtrTaskStaticCfg
 typedef struct IhuVmCtrMsgStaticCfg
 {
 	const UINT16 msgId;
-	const char  msgName[MSG_NAME_MAX_LENGTH];
+	const char  msgName[IHU_SYSDIM_MSGID_NAME_LEN_MAX];
 	const UINT8 traceCtrFlag;
 	const UINT8 traceMsgAllowFlag;
 	const UINT8 traceMsgRestrictFlag;
@@ -403,7 +403,7 @@ extern IhuSysEngParTab_t zIhuSysEngPar;
 typedef struct IhuSysEngTimerStaticCfg
 {
 	const UINT32 timerId;
-	const char   timerName[TIMER_NAME_MAX_LENGTH];
+	const char   timerName[IHU_SYSDIM_TIMERID_NAME_LEN_MAX];
 	const INT32  timerDur;
 	const UINT8  timerGranularity;
 }IhuSysEngTimerStaticCfg_t;
@@ -428,7 +428,7 @@ typedef struct IhuSysEngTimerStaticCfg
 //全局Counter，用于性能指标统计之用
 typedef struct IhuGlobalCounter
 {
-	UINT32 errCnt[MAX_TASK_NUM_IN_ONE_IHU];  //以每个任务为单位
+	UINT32 errCnt[IHU_SYSDIM_TASK_NBR_MAX];  //以每个任务为单位
 	UINT32 restartCnt;
 }IhuGlobalCounter_t;
 
@@ -436,7 +436,7 @@ typedef struct IhuGlobalCounter
 typedef struct IhuSysStaPm
 {
 	IhuGlobalCounter_t 	statisCnt;
-	UINT32 							taskRunErrCnt[MAX_TASK_NUM_IN_ONE_IHU];
+	UINT32 							taskRunErrCnt[IHU_SYSDIM_TASK_NBR_MAX];
 }IhuSysStaPm_t;
 extern IhuSysStaPm_t	zIhuSysStaPm;
 
@@ -552,11 +552,11 @@ extern void ihu_timer_routine_handler_10ms(void);
 //都保留着，都是极为有参考意义的宏编写方式
 
 //高级定义，简化程序的可读性
-#define IHU_DEBUG_PRINT_INF		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint
-#define IHU_DEBUG_PRINT_NOR		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_NOR_ON) != FALSE) IhuDebugPrint
-#define IHU_DEBUG_PRINT_IPT		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_IPT_ON) != FALSE) IhuDebugPrint
-#define IHU_DEBUG_PRINT_CRT		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_CRT_ON) != FALSE) IhuDebugPrint
-#define IHU_DEBUG_PRINT_FAT		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE) IhuDebugPrint
+#define IHU_DEBUG_PRINT_INF		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint
+#define IHU_DEBUG_PRINT_NOR		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_NOR_ON) != FALSE) IhuDebugPrint
+#define IHU_DEBUG_PRINT_IPT		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_IPT_ON) != FALSE) IhuDebugPrint
+#define IHU_DEBUG_PRINT_CRT		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_CRT_ON) != FALSE) IhuDebugPrint
+#define IHU_DEBUG_PRINT_FAT		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_FAT_ON) != FALSE) IhuDebugPrint
 
 
 

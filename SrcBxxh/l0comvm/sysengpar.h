@@ -26,41 +26,41 @@ typedef struct SysEngParElementComm
 typedef struct SysEngParElementTimUnit
 {
 	UINT8 id;
-	char name[TIMER_NAME_MAX_LENGTH];
+	char name[IHU_SYSDIM_TIMERID_NAME_LEN_MAX];
 	UINT8 gradunarity;
 	UINT32 dur;
 }SysEngParElementTimUnit_t;
 typedef struct SysEngParElementSensor
 {
-	SysEngParElementTimUnit_t array[MAX_TIMER_NUM_IN_ONE_IHU];
+	SysEngParElementTimUnit_t array[IHU_SYSDIM_TIMERID_NBR_MAX];
 }SysEngParElementSensorTimer_t;
 
 //Series port config
-#define SYS_ENG_PAR_ELEMENT_SERIESPORT_LEN 20
+#define IHU_SYSENG_PAR_ELEMENT_SERIESPORT_LEN 20
 typedef struct SysEngParElementSeriesPort
 {
 	UINT32 SeriesPortForGPS;
 }SysEngParElementSeriesPort_t;
 
 //local SW storage address
-#define SYS_ENG_PAR_ELEMENT_SWDOWNLOAD_LEN 64
+#define IHU_SYSENG_PAR_ELEMENT_SWDOWNLOAD_LEN 64
 typedef struct SysEngParElementIhuSwDownload
 {
-	char  ihuSwDownloadDir[SYS_ENG_PAR_ELEMENT_SWDOWNLOAD_LEN];
-	char  ihuSwActiveDir[SYS_ENG_PAR_ELEMENT_SWDOWNLOAD_LEN];
-	char  ihuSwBackupDir[SYS_ENG_PAR_ELEMENT_SWDOWNLOAD_LEN];
+	char  ihuSwDownloadDir[IHU_SYSENG_PAR_ELEMENT_SWDOWNLOAD_LEN];
+	char  ihuSwActiveDir[IHU_SYSENG_PAR_ELEMENT_SWDOWNLOAD_LEN];
+	char  ihuSwBackupDir[IHU_SYSENG_PAR_ELEMENT_SWDOWNLOAD_LEN];
 
 }SysEngParElementIhuSwDownload_t;
 
 //后台服务器地址部分
-#define SYS_ENG_PAR_ELEMENT_CLOUDXHUI_LEN 64
-#define SYS_ENG_PAR_ELEMENT_CLOUDXHUI_NAME 12
+#define IHU_SYSENG_PAR_ELEMENT_CLOUDXHUI_LEN 64
+#define IHU_SYSENG_PAR_ELEMENT_CLOUDXHUI_NAME 12
 typedef struct SysEngParElementCloudXhui
 {
-	char  cloudHttpAddLocal[SYS_ENG_PAR_ELEMENT_CLOUDXHUI_LEN];
-	char  cloudBhServerAddr[SYS_ENG_PAR_ELEMENT_CLOUDXHUI_LEN];
-	char  cloudBhServerName[SYS_ENG_PAR_ELEMENT_CLOUDXHUI_LEN];
-	char  cloudBhFtpSvrAddr[SYS_ENG_PAR_ELEMENT_CLOUDXHUI_LEN];
+	char  cloudHttpAddLocal[IHU_SYSENG_PAR_ELEMENT_CLOUDXHUI_LEN];
+	char  cloudBhServerAddr[IHU_SYSENG_PAR_ELEMENT_CLOUDXHUI_LEN];
+	char  cloudBhServerName[IHU_SYSENG_PAR_ELEMENT_CLOUDXHUI_LEN];
+	char  cloudBhFtpSvrAddr[IHU_SYSENG_PAR_ELEMENT_CLOUDXHUI_LEN];
 	UINT8 cloudBhItfFrameStd;
 }SysEngParElementCloudXhui_t;
 
@@ -69,7 +69,7 @@ typedef struct SysEngParElementCloudXhui
 typedef struct SysEngParElementTraceModule
 {
 	UINT8 moduleId;
-	char   moduleName[TASK_NAME_MAX_LENGTH];
+	char   moduleName[IHU_SYSDIM_TASK_NAME_LEN_MAX];
 	UINT8  moduleCtrFlag;
 	UINT8  moduleToAllow;
 	UINT8  moduleToRestrict;
@@ -79,15 +79,15 @@ typedef struct SysEngParElementTraceModule
 typedef struct SysEngParElementTraceMsg
 {
 	UINT16 msgId;
-	char   msgName[MSG_NAME_MAX_LENGTH];
+	char   msgName[IHU_SYSDIM_MSGID_NAME_LEN_MAX];
 	UINT8  msgCtrFlag;
 	UINT8  msgAllow;
 	UINT8  msgRestrict;
 }SysEngParElementTraceMsg_t;
 typedef struct SysEngParElementTrace
 {
-	SysEngParElementTraceModule_t mod[MAX_TASK_NUM_IN_ONE_IHU];
-	SysEngParElementTraceMsg_t msg[MAX_MSGID_NUM_IN_ONE_TASK];
+	SysEngParElementTraceModule_t mod[IHU_SYSDIM_TASK_NBR_MAX];
+	SysEngParElementTraceMsg_t msg[IHU_SYSDIM_MSGID_NBR_MAX];
 }SysEngParElementTrace_t;
 
 //通用硬件固定位置的标签存储内容，由工厂生产过程中烧录器写入
@@ -132,7 +132,7 @@ typedef struct SysEngParElementHwBurnPhyIdAddr
 	UINT8 	rsv[16];   //32
 }SysEngParElementHwBurnPhyIdAddr_t;
 #pragma pack () //取消字节对其
-#define IHU_HW_BURN_PHY_ID_BLOCK_LEN sizeof(SysEngParElementHwBurnPhyIdAddr_t)
+#define IHU_SYSENG_HBB_BLOCK_LEN sizeof(SysEngParElementHwBurnPhyIdAddr_t)
 
 //工程参数总控制表
 #define SYS_ENG_PAR_PRJ_NAME_LEN 20

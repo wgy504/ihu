@@ -44,47 +44,47 @@ IhuSysStaPm_t				zIhuSysStaPm;			//全局性能统计表
 IhuVmCtrTaskStaticCfg_t zIhuVmCtrTaskStaticCfg[] =
 {
 	//TASK_ID,    				状态控制				状态机入口 					   控制启动             TRACE_CTRL        //注释
-	{TASK_ID_MIN, 				"TASKMIN", 			NULL,                  IHU_TASK_PNP_OFF,    1, 1, 1, 1, 1},	 //Starting
-	{TASK_ID_VMFO, 				"VMFO", 				&IhuFsmVmfo,           IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
-	{TASK_ID_TIMER, 			"TIMER", 				&IhuFsmTimer,          IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_MIN, 				"TASKMIN", 			NULL,                  IHU_SYSCFG_TASK_PNP_OFF,    1, 1, 1, 1, 1},	 //Starting
+	{TASK_ID_VMFO, 				"VMFO", 				&IhuFsmVmfo,           IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_TIMER, 			"TIMER", 				&IhuFsmTimer,          IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
-	{TASK_ID_EMC68X, 			"EMC68X", 			&IhuFsmEmc68x,         IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_EMC68X, 			"EMC68X", 			&IhuFsmEmc68x,         IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)		
-	{TASK_ID_ADCLIBRA, 		"ADCLIBRA", 		&IhuFsmAdclibra,       IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
-	{TASK_ID_I2CARIES, 		"I2CARIES", 		&IhuFsmI2caries,       IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
-	{TASK_ID_SPSVIRGO, 		"SPSVIRGO", 		&IhuFsmSpsvirgo,       IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
-	{TASK_ID_DIDOCAP, 		"DIDOCAP", 			&IhuFsmDidocap,        IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
-	{TASK_ID_LEDPISCES, 	"LEDPISCES", 		&IhuFsmLedpisces,      IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
-	{TASK_ID_DCMIARIS, 		"DCMIARIS", 		&IhuFsmDcmiaris,       IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
-	{TASK_ID_CCL, 				"CCL", 					&IhuFsmCcl,            IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_ADCLIBRA, 		"ADCLIBRA", 		&IhuFsmAdclibra,       IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_I2CARIES, 		"I2CARIES", 		&IhuFsmI2caries,       IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_SPSVIRGO, 		"SPSVIRGO", 		&IhuFsmSpsvirgo,       IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_DIDOCAP, 		"DIDOCAP", 			&IhuFsmDidocap,        IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_LEDPISCES, 	"LEDPISCES", 		&IhuFsmLedpisces,      IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_DCMIARIS, 		"DCMIARIS", 		&IhuFsmDcmiaris,       IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_CCL, 				"CCL", 					&IhuFsmCcl,            IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
-	{TASK_ID_ADCLIBRA, 		"ADCLIBRA", 		&IhuFsmAdclibra,       IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
-	{TASK_ID_SPILEO, 			"SPILEO", 			&IhuFsmSpileo,         IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
-	{TASK_ID_CANVELA, 		"CANVELA", 			&IhuFsmCanvela,        IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
-	{TASK_ID_I2CARIES, 		"I2CARIES", 		&IhuFsmI2caries,       IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
-	{TASK_ID_LEDPISCES, 	"LEDPISCES", 		&IhuFsmLedpisces,      IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
-	{TASK_ID_BFSC, 				"BFSC", 				&IhuFsmBfsc,           IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_ADCLIBRA, 		"ADCLIBRA", 		&IhuFsmAdclibra,       IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_SPILEO, 			"SPILEO", 			&IhuFsmSpileo,         IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_CANVELA, 		"CANVELA", 			&IhuFsmCanvela,        IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_I2CARIES, 		"I2CARIES", 		&IhuFsmI2caries,       IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_LEDPISCES, 	"LEDPISCES", 		&IhuFsmLedpisces,      IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_BFSC, 				"BFSC", 				&IhuFsmBfsc,           IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
 //为了提供完成列表，而且需要按照顺序来                        
 #else 
-	{TASK_ID_ADCLIBRA, 		"ADCLIBRA", 		&IhuFsmAdclibra,       IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
-	{TASK_ID_SPILEO, 			"SPILEO", 			&IhuFsmSpileo,         IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
-	{TASK_ID_I2CARIES, 		"I2CARIES", 		&IhuFsmI2caries,       IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
-	{TASK_ID_PWMTAURUS, 	"PWMTAURUS", 		&IhuFsmPwmtaurus,      IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
-	{TASK_ID_CANVELA, 		"CANVELA", 			&IhuFsmCanvela,        IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},	
-	{TASK_ID_SPSVIRGO, 		"SPSVIRGO", 		&IhuFsmSpsvirgo,       IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
-	{TASK_ID_DIDOCAP, 		"DIDOCAP", 			&IhuFsmDidocap,        IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
-	{TASK_ID_LEDPISCES, 	"LEDPISCES", 		&IhuFsmLedpisces,      IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
-	{TASK_ID_ETHORION, 		"LEDPISCES", 		&IhuFsmEthorion,       IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
-	{TASK_ID_DCMIARIS, 		"DCMIARIS", 		&IhuFsmDcmiaris,       IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
-	{TASK_ID_EMC68X, 			"EMC68X", 			&IhuFsmEmc68x,         IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
-	{TASK_ID_CCL, 				"CCL", 					&IhuFsmCcl,            IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
-	{TASK_ID_BFSC, 				"BFSC", 				&IhuFsmBfsc,           IHU_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_ADCLIBRA, 		"ADCLIBRA", 		&IhuFsmAdclibra,       IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_SPILEO, 			"SPILEO", 			&IhuFsmSpileo,         IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_I2CARIES, 		"I2CARIES", 		&IhuFsmI2caries,       IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_PWMTAURUS, 	"PWMTAURUS", 		&IhuFsmPwmtaurus,      IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_CANVELA, 		"CANVELA", 			&IhuFsmCanvela,        IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},	
+	{TASK_ID_SPSVIRGO, 		"SPSVIRGO", 		&IhuFsmSpsvirgo,       IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_DIDOCAP, 		"DIDOCAP", 			&IhuFsmDidocap,        IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_LEDPISCES, 	"LEDPISCES", 		&IhuFsmLedpisces,      IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_ETHORION, 		"LEDPISCES", 		&IhuFsmEthorion,       IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_DCMIARIS, 		"DCMIARIS", 		&IhuFsmDcmiaris,       IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_EMC68X, 			"EMC68X", 			&IhuFsmEmc68x,         IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_CCL, 				"CCL", 					&IhuFsmCcl,            IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_BFSC, 				"BFSC", 				&IhuFsmBfsc,           IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
 #endif
-  {TASK_ID_MAX,					"TASKMAX", 		  NULL,                  IHU_TASK_PNP_OFF,    1, 1, 1, 1, 1},	 //Ending
+  {TASK_ID_MAX,					"TASKMAX", 		  NULL,                  IHU_SYSCFG_TASK_PNP_OFF,    1, 1, 1, 1, 1},	 //Ending
 };
 		
 //消息ID的定义全局表，方便TRACE函数使用
-//请服从MSG_NAME_MAX_LENGTH的最长定义，不然出错
+//请服从IHU_SYSDIM_MSGID_NAME_LEN_MAX的最长定义，不然出错
 //全局变量：消息打印命名
 IhuVmCtrMsgStaticCfg_t zIhuVmCtrMsgStaticCfg[] = {
 	//MSG_ID,    				                            消息名字				                         TRACE_CTRL   //注释
@@ -197,7 +197,7 @@ IhuVmCtrMsgStaticCfg_t zIhuVmCtrMsgStaticCfg[] = {
 };                                                                                         
 
 //消息ID的定义全局表，方便TRACE函数使用
-//请服从TIMER_NAME_MAX_LENGTH的最长长度，否则出错
+//请服从IHU_SYSDIM_TIMERID_NAME_LEN_MAX的最长长度，否则出错
 //设置的技巧是：基础部分不要动，配置不一样的，请单独在分项目中，再设置一遍
 IhuSysEngTimerStaticCfg_t zIhuSysEngTimerStaticCfg[] ={
   //TIMER_ID                                       定时器名字                                定时长度 精度                      注释
@@ -274,17 +274,17 @@ IhuSysEngTimerStaticCfg_t zIhuSysEngTimerStaticCfg[] ={
 void IhuDebugPrintFo(UINT8 index, char *format, ...)
 {
 	va_list marker;
-	char strDebug[IHU_PRINT_CHAR_SIZE];
+	char strDebug[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX];
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
 	char *ptrPrintBuffer;
 #endif
 	//UINT8 index=0;
 
 	//index = zIhuVmCtrTab.print.prtIndex;
-	memset(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer, 0, IHU_PRINT_CHAR_SIZE);
+	memset(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer, 0, IHU_SYSDIM_PRINT_CHAR_SIZE_MAX);
 	
 	va_start(marker, format );
-	vsnprintf(strDebug, IHU_PRINT_CHAR_SIZE-1, format, marker);
+	vsnprintf(strDebug, IHU_SYSDIM_PRINT_CHAR_SIZE_MAX-1, format, marker);
 	va_end(marker);	
 
 	//试图将实时时间打印出来，可惜没成功
@@ -298,28 +298,28 @@ void IhuDebugPrintFo(UINT8 index, char *format, ...)
 //	strcat(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer, "] ");
 //#endif
 	sprintf(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer, "%s, [DBG: %s, %s] ", zIhuVmCtrTab.print.prtBuf[index].PrintHeader, __DATE__, __TIME__);
-	strncat(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer, strDebug, IHU_PRINT_CHAR_SIZE - strlen(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer) - 1);
+	strncat(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer, strDebug, IHU_SYSDIM_PRINT_CHAR_SIZE_MAX - strlen(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer) - 1);
 
 	// The trace is limited to 128 characters as defined at SYSDIM.H
-	if( (zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-2] != 0) && (zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-1] != 0) )
+	if( (zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX-2] != 0) && (zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX-1] != 0) )
 	{
-		zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-3] = '!';
-		zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-2] = '\n';
-		zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-1] = '\0';
+		zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX-3] = '!';
+		zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX-2] = '\n';
+		zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX-1] = '\0';
 	}
 	
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
 	printf("%s", ptrPrintBuffer);
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 	/* 互斥信号量 */
-	if (OS_MUTEX_GET(zIhuVmCtrTab.print.prtMutex, IHU_PRINT_MUTEX_TIME_OUT_DURATION) != OS_MUTEX_TAKEN){
+	if (OS_MUTEX_GET(zIhuVmCtrTab.print.prtMutex, IHU_SYSDIM_PRINT_MUTEX_TIME_OUT_DUR) != OS_MUTEX_TAKEN){
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 		return;
 	}
 	ihu_l1hd_sps_print_send_data(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer);
 	OS_MUTEX_PUT(zIhuVmCtrTab.print.prtMutex);
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
-	if (OS_MUTEX_GET(zIhuVmCtrTab.print.prtMutex, IHU_PRINT_MUTEX_TIME_OUT_DURATION) != OS_MUTEX_TAKEN){
+	if (OS_MUTEX_GET(zIhuVmCtrTab.print.prtMutex, IHU_SYSDIM_PRINT_MUTEX_TIME_OUT_DUR) != OS_MUTEX_TAKEN){
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 		return;
 	}
@@ -336,18 +336,18 @@ void IhuDebugPrintFo(UINT8 index, char *format, ...)
 void IhuErrorPrintFo(UINT8 index, char *format, ...)
 {
 	va_list marker;
-	char strDebug[IHU_PRINT_CHAR_SIZE];
+	char strDebug[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX];
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
   char *ptrPrintBuffer;
 #endif
 	//UINT8 index=0;
 
 	va_start(marker, format );
-	vsnprintf(strDebug, IHU_PRINT_CHAR_SIZE-1, format, marker);
+	vsnprintf(strDebug, IHU_SYSDIM_PRINT_CHAR_SIZE_MAX-1, format, marker);
 	va_end(marker);	
 	
 	//index = zIhuVmCtrTab.print.prtIndex;
-	memset(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer, 0, IHU_PRINT_CHAR_SIZE);
+	memset(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer, 0, IHU_SYSDIM_PRINT_CHAR_SIZE_MAX);
 
 	//试图将实时时间打印出来，可惜没成功
 //#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
@@ -359,27 +359,27 @@ void IhuErrorPrintFo(UINT8 index, char *format, ...)
 //	strcat(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer, "] ");
 //#endif		
 	sprintf(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer, "%s, [ERR: %s, %s] ", zIhuVmCtrTab.print.prtBuf[index].PrintHeader, __DATE__, __TIME__);
-	strncat(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer, strDebug, IHU_PRINT_CHAR_SIZE - strlen(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer) - 1);
+	strncat(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer, strDebug, IHU_SYSDIM_PRINT_CHAR_SIZE_MAX - strlen(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer) - 1);
 
 	// The trace is limited to 128 characters as defined at SYSDIM.H
-	if( (zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-2] != 0) && (zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-1] != 0) )
+	if( (zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX-2] != 0) && (zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX-1] != 0) )
 	{
-		zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-3] = '!';
-		zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-2] = '\n';
-		zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-1] = '\0';
+		zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX-3] = '!';
+		zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX-2] = '\n';
+		zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX-1] = '\0';
 	}
 	
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
 	printf("%s", ptrPrintBuffer);
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)	
-	if (OS_MUTEX_GET(zIhuVmCtrTab.print.prtMutex, IHU_PRINT_MUTEX_TIME_OUT_DURATION) != OS_MUTEX_TAKEN){
+	if (OS_MUTEX_GET(zIhuVmCtrTab.print.prtMutex, IHU_SYSDIM_PRINT_MUTEX_TIME_OUT_DUR) != OS_MUTEX_TAKEN){
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 		return;
 	}
 	ihu_l1hd_sps_print_send_data(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer);
 	OS_MUTEX_PUT(zIhuVmCtrTab.print.prtMutex);
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
-	if (OS_MUTEX_GET(zIhuVmCtrTab.print.prtMutex, IHU_PRINT_MUTEX_TIME_OUT_DURATION) != OS_MUTEX_TAKEN){
+	if (OS_MUTEX_GET(zIhuVmCtrTab.print.prtMutex, IHU_SYSDIM_PRINT_MUTEX_TIME_OUT_DUR) != OS_MUTEX_TAKEN){
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 		return;
 	}
@@ -399,9 +399,9 @@ UINT8 IhuDebugPrintId(char *file, int line)
 	UINT8 index=0;
 	
 	zIhuVmCtrTab.print.prtIndex++;
-	if (zIhuVmCtrTab.print.prtIndex >= IHU_PRINT_BUFFER_NUMBER) zIhuVmCtrTab.print.prtIndex = 0;
+	if (zIhuVmCtrTab.print.prtIndex >= IHU_SYSDIM_PRINT_BUF_NBR_MAX) zIhuVmCtrTab.print.prtIndex = 0;
 	index = zIhuVmCtrTab.print.prtIndex;
-	memset(zIhuVmCtrTab.print.prtBuf[index].PrintHeader, 0, IHU_PRINT_FILE_LINE_SIZE);
+	memset(zIhuVmCtrTab.print.prtBuf[index].PrintHeader, 0, IHU_SYSDIM_PRINT_FILE_LINE_NBR_MAX);
 	
 	snprintf(zIhuVmCtrTab.print.prtBuf[index].PrintHeader, 50, "[%s]", file);
 	sprintf(strLine, "[%6d]", line);
@@ -413,27 +413,27 @@ void IhuDebugPrintFoEmc68x(char *format, ...)
 {
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
         va_list marker;
-        char strDebug[IHU_PRINT_CHAR_SIZE];
+        char strDebug[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX];
 
         char *ptrPrintBuffer;
         UINT8 index=0;
 
         //index = zIhuVmCtrTab.print.prtIndex;
-        memset(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer, 0, IHU_PRINT_CHAR_SIZE);
+        memset(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer, 0, IHU_SYSDIM_PRINT_CHAR_SIZE_MAX);
 
         va_start(marker, format );
-        vsnprintf(strDebug, IHU_PRINT_CHAR_SIZE-1, format, marker);
+        vsnprintf(strDebug, IHU_SYSDIM_PRINT_CHAR_SIZE_MAX-1, format, marker);
         va_end(marker);
 
         sprintf(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer, "%s, [DBG: %s, %s] ", zIhuVmCtrTab.print.prtBuf[index].PrintHeader, __DATE__, __TIME__);
-        strncat(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer, strDebug, IHU_PRINT_CHAR_SIZE - strlen(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer) - 1);
+        strncat(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer, strDebug, IHU_SYSDIM_PRINT_CHAR_SIZE_MAX - strlen(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer) - 1);
 
         // The trace is limited to 128 characters as defined at SYSDIM.H
-        if( (zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-2] != 0) && (zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-1] != 0) )
+        if( (zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX-2] != 0) && (zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX-1] != 0) )
         {
-                zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-3] = '!';
-                zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-2] = '\n';
-                zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-1] = '\0';
+                zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX-3] = '!';
+                zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX-2] = '\n';
+                zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX-1] = '\0';
         }
 
         printf("%s", ptrPrintBuffer);
@@ -447,26 +447,26 @@ void IhuErrorPrintFoEmc68x(char *format, ...)
 {
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_DA_EMC68X_ID)
         va_list marker;
-        char strDebug[IHU_PRINT_CHAR_SIZE];
+        char strDebug[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX];
         char *ptrPrintBuffer;
         UINT8 index=0;
 
         va_start(marker, format );
-        vsnprintf(strDebug, IHU_PRINT_CHAR_SIZE-1, format, marker);
+        vsnprintf(strDebug, IHU_SYSDIM_PRINT_CHAR_SIZE_MAX-1, format, marker);
         va_end(marker);
 
         //index = zIhuVmCtrTab.print.prtIndex;
-        memset(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer, 0, IHU_PRINT_CHAR_SIZE);
+        memset(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer, 0, IHU_SYSDIM_PRINT_CHAR_SIZE_MAX);
 
         sprintf(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer, "%s, [ERR: %s, %s] ", zIhuVmCtrTab.print.prtBuf[index].PrintHeader, __DATE__, __TIME__);
-        strncat(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer, strDebug, IHU_PRINT_CHAR_SIZE - strlen(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer) - 1);
+        strncat(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer, strDebug, IHU_SYSDIM_PRINT_CHAR_SIZE_MAX - strlen(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer) - 1);
 
         // The trace is limited to 128 characters as defined at SYSDIM.H
-        if( (zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-2] != 0) && (zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-1] != 0) )
+        if( (zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX-2] != 0) && (zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX-1] != 0) )
         {
-                zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-3] = '!';
-                zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-2] = '\n';
-                zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_PRINT_CHAR_SIZE-1] = '\0';
+                zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX-3] = '!';
+                zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX-2] = '\n';
+                zIhuVmCtrTab.print.prtBuf[index].PrintBuffer[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX-1] = '\0';
         }
 
         printf("%s", ptrPrintBuffer);
@@ -481,7 +481,7 @@ void IhuErrorPrintFoEmc68x(char *format, ...)
 void ihu_sleep(UINT32 second)
 {
 	if (second <= (UINT32)0) second =0;
-	if (second >= MAX_SLEEP_COUNTER_UP_LIMITATION) second = MAX_SLEEP_COUNTER_UP_LIMITATION;
+	if (second >= IHU_SYSDIM_SLEEP_UP_LIMIT_CNT_MAX) second = IHU_SYSDIM_SLEEP_UP_LIMIT_CNT_MAX;
 	second = second*1000;
 	OS_DELAY_MS(second);
 }
@@ -489,7 +489,7 @@ void ihu_sleep(UINT32 second)
 void ihu_usleep(UINT32 usecond)
 {
 	if (usecond <= 0) usecond =0;
-	if (usecond >= MAX_SLEEP_COUNTER_UP_LIMITATION) usecond = MAX_SLEEP_COUNTER_UP_LIMITATION;
+	if (usecond >= IHU_SYSDIM_SLEEP_UP_LIMIT_CNT_MAX) usecond = IHU_SYSDIM_SLEEP_UP_LIMIT_CNT_MAX;
 	OS_DELAY_MS(usecond);
 }
 
@@ -511,10 +511,10 @@ void ihu_vm_system_ctr_table_init(void)
 	UINT8 taskid = 0, msgid = 0, tid = 0;
 	
 	/*
-	 *  SYSTEM DIMENSION检查：边界在MAX_TASK_NUM_IN_ONE_IHU-1，注意！
+	 *  SYSTEM DIMENSION检查：边界在IHU_SYSDIM_TASK_NBR_MAX-1，注意！
 	 */
 
-	if ((TASK_ID_MAX >= MAX_TASK_NUM_IN_ONE_IHU) || (MSG_ID_COM_MAX >= MAX_MSGID_NUM_IN_ONE_TASK) || (TIMER_ID_MAX >= MAX_TIMER_NUM_IN_ONE_IHU)){
+	if ((TASK_ID_MAX >= IHU_SYSDIM_TASK_NBR_MAX) || (MSG_ID_COM_MAX >= IHU_SYSDIM_MSGID_NBR_MAX) || (TIMER_ID_MAX >= IHU_SYSDIM_TIMERID_NBR_MAX)){
 		IhuErrorPrint("VMFO: Initialize failure, configuration of system dimension error!\n");
 		return;
 	}	
@@ -545,12 +545,12 @@ void ihu_vm_system_ctr_table_init(void)
 	 */
 
 	IhuDebugPrint("VMFO: User task starting, compiled load Info: CURRENT_PRJ=[%s], PRODUCT_CAT=[0x%x], HW_TYPE=[%d], SW_REL=[%d], SW_DELIVER=[%d].\n", IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT, \
-		IHU_HARDWARE_PRODUCT_CAT_TYPE, IHU_CURRENT_HW_TYPE, IHU_CURRENT_SW_RELEASE, IHU_CURRENT_SW_DELIVERY);
+		IHU_SYSCFG_HW_PRODUCT_CAT_TYPE, IHU_CURRENT_HW_TYPE, IHU_CURRENT_SW_RELEASE, IHU_CURRENT_SW_DELIVERY);
 	IhuDebugPrint("VMFO: BXXH(TM) IHU(c) Application Layer start and initialized, build at %s, %s.\n", __DATE__, __TIME__);
 	//初始化全局变量TASK_ID/QUE_ID/TASK_STAT
 	for (i=TASK_ID_MIN; i<=TASK_ID_MAX; i++){
 		zIhuVmCtrTab.task[i].TaskId = i;
-		zIhuVmCtrTab.task[i].pnpState = IHU_TASK_PNP_OFF;
+		zIhuVmCtrTab.task[i].pnpState = IHU_SYSCFG_TASK_PNP_OFF;
 	}
 
 	/*
@@ -564,7 +564,7 @@ void ihu_vm_system_ctr_table_init(void)
 	}
 	strcpy(zIhuVmCtrTab.task[TASK_ID_MIN].taskName, zIhuVmCtrTaskStaticCfg[0].taskInputName);
 	//以TASK_ID_MAX为终止条目：最大为2倍，因为初始化表单中出现了两次，一次赋基础，一次控制激活与否
-	for(item=1; item <= (2*MAX_TASK_NUM_IN_ONE_IHU); item++)
+	for(item=1; item <= (2*IHU_SYSDIM_TASK_NBR_MAX); item++)
 	{
 		if(zIhuVmCtrTaskStaticCfg[item].taskInputId == TASK_ID_MAX)
 		{
@@ -578,7 +578,7 @@ void ihu_vm_system_ctr_table_init(void)
 			IhuErrorPrint("VMFO: Initialize VMFO failure, task static input configuration error!\n");
 			return;			
 		}
-		if ((zIhuVmCtrTaskStaticCfg[item].pnpFlag != IHU_TASK_PNP_ON) && (zIhuVmCtrTaskStaticCfg[item].pnpFlag != IHU_TASK_PNP_OFF)){
+		if ((zIhuVmCtrTaskStaticCfg[item].pnpFlag != IHU_SYSCFG_TASK_PNP_ON) && (zIhuVmCtrTaskStaticCfg[item].pnpFlag != IHU_SYSCFG_TASK_PNP_OFF)){
 			IhuErrorPrint("VMFO: Initialize VMFO failure, task static input configuration error!\n");
 			return;
 		}
@@ -620,7 +620,7 @@ void ihu_vm_system_ctr_table_init(void)
 		return;
 	}
 	//以MSG_ID_COM_MAX为终止条目：2倍最大配置数量
-	for(item=1; item < (2*MAX_MSGID_NUM_IN_ONE_TASK); item++)
+	for(item=1; item < (2*IHU_SYSDIM_MSGID_NBR_MAX); item++)
 	{
 		if(zIhuVmCtrMsgStaticCfg[item].msgId == MSG_ID_COM_MAX)
 		{
@@ -661,7 +661,7 @@ void ihu_vm_system_ctr_table_init(void)
 		return;
 	}
 	//以TIMER_ID_MAX为终止条目：2倍最大配置数量
-	for(item=1; item < (2*MAX_TIMER_NUM_IN_ONE_IHU); item++)
+	for(item=1; item < (2*IHU_SYSDIM_TIMERID_NBR_MAX); item++)
 	{
 		if(zIhuSysEngTimerStaticCfg[item].timerId == TIMER_ID_MAX)
 		{
@@ -710,25 +710,25 @@ void ihu_vm_system_ctr_table_init(void)
 
 	//初始化全局工参配置信息，这里给出了大部分用到的参数的初始化结构，以便未来可以更加方便的添加完善
 	//后台通信部分
-	zIhuSysEngPar.comm.commBackHawlCon = IHU_COMM_BACK_HAWL_CON;
+	zIhuSysEngPar.comm.commBackHawlCon = IHU_SYSCFG_COMM_BACK_HAWL_CON;
 	//Series Port config
-	zIhuSysEngPar.serialport.SeriesPortForGPS = IHU_SERIESPORT_NUM_FOR_GPS_DEFAULT;
+	zIhuSysEngPar.serialport.SeriesPortForGPS = IHU_SYSCFG_GPS_SERIES_PORT_DEFAULT;
 	//后台部分
-	strcpy(zIhuSysEngPar.cloud.cloudHttpAddLocal, IHU_CLOUDXHUI_HTTP_ADDRESS_LOCAL);
-	strcpy(zIhuSysEngPar.cloud.cloudBhServerAddr, IHU_CLOUDXHUI_HTTP_ADDRESS_BH_SERVER_ADDR);
-	strcpy(zIhuSysEngPar.cloud.cloudBhServerName, IHU_CLOUDXHUI_HTTP_ADDRESS_BH_SERVER_NAME);
-	strcpy(zIhuSysEngPar.cloud.cloudBhFtpSvrAddr, IHU_CLOUDXHUI_FTP_BH_SERVER_ADDR);	
+	strcpy(zIhuSysEngPar.cloud.cloudHttpAddLocal, IHU_SYSCFG_BH_HTTP_LOCAL_ADDR);
+	strcpy(zIhuSysEngPar.cloud.cloudBhServerAddr, IHU_SYSCFG_BH_HTTP_SVR_ENTRY_ADDR);
+	strcpy(zIhuSysEngPar.cloud.cloudBhServerName, IHU_SYSCFG_BH_HTTP_SVR_NAME);
+	strcpy(zIhuSysEngPar.cloud.cloudBhFtpSvrAddr, IHU_SYSCFG_BH_FTP_SVR_ADDR);	
 	//local SW storage address
-	strcpy(zIhuSysEngPar.swDownload.ihuSwDownloadDir, IHU_SW_DOWNLOAD_DIR_DEFAULT);
-	strcpy(zIhuSysEngPar.swDownload.ihuSwActiveDir, IHU_SW_ACTIVE_DIR_DEFAULT);
-	strcpy(zIhuSysEngPar.swDownload.ihuSwBackupDir, IHU_SW_BACKUP_DIR_DEFAULT);
+	strcpy(zIhuSysEngPar.swDownload.ihuSwDownloadDir, IHU_SYSCFG_SW_DOWNLOAD_DIR_DEFAULT);
+	strcpy(zIhuSysEngPar.swDownload.ihuSwActiveDir, IHU_SYSCFG_SW_ACTIVE_DIR_DEFAULT);
+	strcpy(zIhuSysEngPar.swDownload.ihuSwBackupDir, IHU_SYSCFG_SW_BACKUP_DIR_DEFAULT);
 	//DEBUG部分
-	zIhuSysEngPar.debugMode = IHU_TRACE_DEBUG_ON;
+	zIhuSysEngPar.debugMode = IHU_SYSCFG_TRACE_DEBUG_SET;
 	//TRACE部分
-	zIhuSysEngPar.traceMode = IHU_TRACE_MSG_ON;
+	zIhuSysEngPar.traceMode = IHU_SYSCFG_TRACE_MSG_SET;
 	IHU_DEBUG_PRINT_NOR("VMFO: Set basic engineering data correctly from SYSTEM DEFAULT parameters!\n");
 	//后台协议接口
-	zIhuSysEngPar.cloud.cloudBhItfFrameStd = IHU_CLOUDXHUI_BH_INTERFACE_STANDARD;
+	zIhuSysEngPar.cloud.cloudBhItfFrameStd = IHU_SYSCFG_CLOUD_BH_ITF_STD_SET;
 	
 
 	/*
@@ -738,27 +738,27 @@ void ihu_vm_system_ctr_table_init(void)
 	//硬件烧录区域，系统唯一标识部分，后面程序中访问到这些系统参数都必须从这个地方读取
 	ihu_l1hd_f2board_equid_get((UINT8*)&(zIhuSysEngPar.hwBurnId));
 	//对硬件类型进行相同性检查，如果不一致，必然发生了生产性错误，或者硬件搞错，或者Factory Load用错，应该严重警告
-	if ((IHU_HARDWARE_MASSIVE_PRODUTION_SET == IHU_HARDWARE_MASSIVE_PRODUTION_YES) && (zIhuSysEngPar.hwBurnId.hwType != IHU_HARDWARE_PRODUCT_CAT_TYPE)){
+	if ((IHU_SYSCFG_HW_MASSIVE_PRODUCTION_SET == IHU_SYSCFG_HW_MASSIVE_PRODUCTION_YES) && (zIhuSysEngPar.hwBurnId.hwType != IHU_SYSCFG_HW_PRODUCT_CAT_TYPE)){
 		IhuDebugPrint("VMFO: Fatal error, using wrong hardware type or factory load!!!\n");
 		return;
 	}
 	//由于硬件部分并没有真正起作用，所以暂时需要从系统定义区重复写入，一旦批量生产这部分可以去掉
-	if (IHU_HARDWARE_MASSIVE_PRODUTION_SET == IHU_HARDWARE_MASSIVE_PRODUTION_NO){
-		strncpy(zIhuSysEngPar.hwBurnId.equLable, IHU_CLOUDXHUI_HCU_NAME_SELF, (sizeof(IHU_CLOUDXHUI_HCU_NAME_SELF)<sizeof(zIhuSysEngPar.hwBurnId.equLable))?(sizeof(IHU_CLOUDXHUI_HCU_NAME_SELF)):(sizeof(zIhuSysEngPar.hwBurnId.equLable)));
-		zIhuSysEngPar.hwBurnId.hwType = IHU_HARDWARE_PRODUCT_CAT_TYPE;
+	if (IHU_SYSCFG_HW_MASSIVE_PRODUCTION_SET == IHU_SYSCFG_HW_MASSIVE_PRODUCTION_NO){
+		strncpy(zIhuSysEngPar.hwBurnId.equLable, IHU_SYSCFG_BH_HCU_NAME_SELF, (sizeof(IHU_SYSCFG_BH_HCU_NAME_SELF)<sizeof(zIhuSysEngPar.hwBurnId.equLable))?(sizeof(IHU_SYSCFG_BH_HCU_NAME_SELF)):(sizeof(zIhuSysEngPar.hwBurnId.equLable)));
+		zIhuSysEngPar.hwBurnId.hwType = IHU_SYSCFG_HW_PRODUCT_CAT_TYPE;
 		zIhuSysEngPar.hwBurnId.hwPemId = IHU_CURRENT_HW_TYPE; //PEM小型号
-		zIhuSysEngPar.hwBurnId.swUpgradeFlag = IHU_HARDWARE_BURN_ID_FW_UPGRADE_SET;
-		zIhuSysEngPar.hwBurnId.swUpgPollId = IHU_HARDWARE_BURN_ID_FW_UPGRADE_METHOD_UART_GPRS;
+		zIhuSysEngPar.hwBurnId.swUpgradeFlag = IHU_SYSCFG_HDD_FW_UPGRADE_SET;
+		zIhuSysEngPar.hwBurnId.swUpgPollId = IHU_SYSCFG_HBB_FW_UPGRADE_METHOD_UART_GPRS;
 		zIhuSysEngPar.hwBurnId.bootIndex = 0; //研发永远从FACTORY LOAD启动
 		zIhuSysEngPar.hwBurnId.bootAreaMax = 1; //研发状态下只有1个启动区
-		zIhuSysEngPar.hwBurnId.facLoadAddr = IHU_BOOT_FAC_LOAD_START_ADDRESS;
+		zIhuSysEngPar.hwBurnId.facLoadAddr = IHU_SYSCFG_BOOT_FAC_LOAD_START_ADDRESS;
 		zIhuSysEngPar.hwBurnId.facLoadSwRel = IHU_CURRENT_SW_RELEASE;
 		zIhuSysEngPar.hwBurnId.facLoadSwVer = IHU_CURRENT_SW_DELIVERY;
 		zIhuSysEngPar.hwBurnId.facLoadCheckSum = 0;
 		zIhuSysEngPar.hwBurnId.facLoadValid = true;
-		zIhuSysEngPar.hwBurnId.bootLoad1Addr = IHU_BOOT_BLOCK1_LOAD_START_ADDRESS;
+		zIhuSysEngPar.hwBurnId.bootLoad1Addr = IHU_SYSCFG_BOOT_BLOCK1_LOAD_START_ADDRESS;
 		zIhuSysEngPar.hwBurnId.bootLoad1Valid = false;
-		zIhuSysEngPar.hwBurnId.bootLoad2Addr = IHU_BOOT_BLOCK2_LOAD_START_ADDRESS;
+		zIhuSysEngPar.hwBurnId.bootLoad2Addr = IHU_SYSCFG_BOOT_BLOCK2_LOAD_START_ADDRESS;
 		zIhuSysEngPar.hwBurnId.bootLoad2Valid = false;
 		//cipherKey[16];
 	}
@@ -783,14 +783,14 @@ void ihu_vm_system_ctr_table_init(void)
 //正确的做法也许应该使用zIhuVmCtrTab.task[id].TaskName这个信息来表达
 OPSTAT ihu_taskid_to_string(UINT8 id, char *string)
 {
-	char tmp[TASK_NAME_MAX_LENGTH-2]="";
+	char tmp[IHU_SYSDIM_TASK_NAME_LEN_MAX-2]="";
 	
 	if (id>=TASK_ID_MAX) //id<TASK_ID_MIN || 
 		IHU_ERROR_PRINT_TASK(TASK_ID_VMFO, "VMFO: Error task Id input!\n");
 
 	strcpy(string, "[");
 	if (strlen(zIhuSysEngPar.traceList.mod[id].moduleName)>0){
-		strncpy(tmp, zIhuSysEngPar.traceList.mod[id].moduleName, TASK_NAME_MAX_LENGTH-3);
+		strncpy(tmp, zIhuSysEngPar.traceList.mod[id].moduleName, IHU_SYSDIM_TASK_NAME_LEN_MAX-3);
 		strcat(string, tmp);
 	}else{
 		strcat(string, "TASK_ID_XXX");
@@ -803,14 +803,14 @@ OPSTAT ihu_taskid_to_string(UINT8 id, char *string)
 //输入的string参数，其内存地址空间和长度预留，是否足够
 OPSTAT ihu_msgid_to_string(UINT8 id, char *string)
 {
-	char tmp[MSG_NAME_MAX_LENGTH-2]="";
+	char tmp[IHU_SYSDIM_MSGID_NAME_LEN_MAX-2]="";
 	
 	if (id < MSG_ID_COM_MIN || id >= MSG_ID_COM_MAX)
 		IHU_ERROR_PRINT_TASK(TASK_ID_VMFO, "VMFO: Error Message Id input!\n");
 
 	strcpy(string, "[");
 	if (strlen(zIhuSysEngPar.traceList.msg[id].msgName)>0){
-		strncpy(tmp, zIhuSysEngPar.traceList.msg[id].msgName, MSG_NAME_MAX_LENGTH-3);
+		strncpy(tmp, zIhuSysEngPar.traceList.msg[id].msgName, IHU_SYSDIM_MSGID_NAME_LEN_MAX-3);
 		strcat(string, tmp);
 	}else{
 		strcat(string, "MSG_ID_XXX");
@@ -824,14 +824,14 @@ OPSTAT ihu_msgid_to_string(UINT8 id, char *string)
 //输入的string参数，其内存地址空间和长度预留，是否足够
 OPSTAT ihu_timerid_to_string(UINT8 id, char *string)
 {
-	char tmp[TIMER_NAME_MAX_LENGTH-2]="";
+	char tmp[IHU_SYSDIM_TIMERID_NAME_LEN_MAX-2]="";
 	
 	if (id <= TIMER_ID_MIN || id >= TIMER_ID_MAX)
 		IHU_ERROR_PRINT_TASK(TASK_ID_VMFO, "VMFO: Error Timer Id input!\n");
 
 	strcpy(string, "[");
 	if (strlen(zIhuSysEngPar.timer.array[id].name)>0){
-		strncpy(tmp, zIhuSysEngPar.timer.array[id].name, TIMER_NAME_MAX_LENGTH-3);
+		strncpy(tmp, zIhuSysEngPar.timer.array[id].name, IHU_SYSDIM_TIMERID_NAME_LEN_MAX-3);
 		strcat(string, tmp);
 	}else{
 		strcat(string, "TID_XXX");
@@ -868,15 +868,15 @@ OPSTAT FsmInit(void)
 	UINT32 i;
 	IhuDebugPrint("VMFO: >>Start init FSM.\n");
 	zIhuVmCtrTab.fsm.numOfIhuFsmCtrlTable = 0;
-	for(i=0; i<MAX_TASK_NUM_IN_ONE_IHU; i++)
+	for(i=0; i<IHU_SYSDIM_TASK_NBR_MAX; i++)
 	{
 		zIhuVmCtrTab.fsm.pIhuFsmCtrlTable[i].taskId = TASK_ID_INVALID;
 		zIhuVmCtrTab.fsm.pIhuFsmCtrlTable[i].numOfIhuFsmArrayElement = 0;
 	}
 	zIhuVmCtrTab.fsm.currentTaskId = TASK_ID_INVALID;
 
-	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
-		IhuDebugPrint("VMFO: Maxium (%d) tasks/modules supported.\n", MAX_TASK_NUM_IN_ONE_IHU);
+	if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_FAT_ON) != FALSE){
+		IhuDebugPrint("VMFO: Maxium (%d) tasks/modules supported.\n", IHU_SYSDIM_TASK_NBR_MAX);
 	}
     return IHU_SUCCESS;
 }
@@ -902,7 +902,7 @@ OPSTAT FsmAddNew(UINT8 task_id, IhuFsmStateItem_t* pIhuFsmStateItem)
 	UINT32 msgid;
 	UINT32 item, itemNo, i, j;
 
-	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_NOR_ON) != FALSE){
+	if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_NOR_ON) != FALSE){
 		IhuDebugPrint("VMFO: >>Register new FSM. TaskId:(%d), pFsm(0x%x).\n", task_id, (UINT32)pIhuFsmStateItem);
 	}
 	/*
@@ -940,7 +940,7 @@ OPSTAT FsmAddNew(UINT8 task_id, IhuFsmStateItem_t* pIhuFsmStateItem)
     /*
     ** Check each item of the state entry. 最后一个FSM表单使用FSM_STATE_END结束
     */
-	for(item=1; item < MAX_FSM_STATE_ENTRY_NUM_IN_ONE_TASK; item++)
+	for(item=1; item < IHU_SYSDIM_FSM_ENTRY_NBR_MAX; item++)
 	{
 		if( FSM_STATE_END == pIhuFsmStateItem[item].state )
 		{
@@ -963,9 +963,9 @@ OPSTAT FsmAddNew(UINT8 task_id, IhuFsmStateItem_t* pIhuFsmStateItem)
 	/*
 	** Check the number of the item.
 	** If we can not find the ENDING flag of the state machine after more than
-	** MAX_FSM_STATE_ENTRY_NUM_IN_ONE_TASK entry, raise fatal alarm.
+	** IHU_SYSDIM_FSM_ENTRY_NBR_MAX entry, raise fatal alarm.
 	*/
-	if( MAX_FSM_STATE_ENTRY_NUM_IN_ONE_TASK == item)
+	if( IHU_SYSDIM_FSM_ENTRY_NBR_MAX == item)
 	{
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Invalid FSM machine -- Can not find the end of the FSM.\n");
@@ -979,7 +979,7 @@ OPSTAT FsmAddNew(UINT8 task_id, IhuFsmStateItem_t* pIhuFsmStateItem)
 	*/
 	zIhuVmCtrTab.fsm.numOfIhuFsmCtrlTable++;
 
-	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_NOR_ON) != FALSE)
+	if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_NOR_ON) != FALSE)
 	{
 		IhuDebugPrint("VMFO: FsmAddNew: task_id = 0x%x [%s], src_id= %x, dest_id= %X.\n", task_id, zIhuVmCtrTab.task[task_id].taskName, 0, 0);
 		IhuDebugPrint("VMFO: After add this one, Total (%d) FSM in the table.\n", zIhuVmCtrTab.fsm.numOfIhuFsmCtrlTable);
@@ -989,9 +989,9 @@ OPSTAT FsmAddNew(UINT8 task_id, IhuFsmStateItem_t* pIhuFsmStateItem)
 	** Save the state machine info.
 	*/
 	zIhuVmCtrTab.fsm.pIhuFsmCtrlTable[task_id].taskId = task_id;
-	for(i=0; i<MAX_STATE_NUM_IN_ONE_TASK; i++)
+	for(i=0; i<IHU_SYSDIM_TASK_STATE_NBR_MAX; i++)
 	{
-		for(j=0; j<MAX_MSGID_NUM_IN_ONE_TASK; j++)
+		for(j=0; j<IHU_SYSDIM_MSGID_NBR_MAX; j++)
 		{
 			zIhuVmCtrTab.fsm.pIhuFsmCtrlTable[task_id].pFsmArray[i][j].stateFunc = NULL;
 		}
@@ -1002,13 +1002,13 @@ OPSTAT FsmAddNew(UINT8 task_id, IhuFsmStateItem_t* pIhuFsmStateItem)
 	for(itemNo=0; itemNo < item; itemNo++)
 	{
 		state = pIhuFsmStateItem[itemNo].state;
-		if(state >= MAX_STATE_NUM_IN_ONE_TASK)
+		if(state >= IHU_SYSDIM_TASK_STATE_NBR_MAX)
 		{
 			zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
-			IhuErrorPrint("VMFO: The State number > %d.\n", MAX_STATE_NUM_IN_ONE_TASK);
+			IhuErrorPrint("VMFO: The State number > %d.\n", IHU_SYSDIM_TASK_STATE_NBR_MAX);
 			return IHU_FAILURE;
 		}
-		msgid = pIhuFsmStateItem[itemNo].msg_id & MASK_MSGID_NUM_IN_ONE_TASK;
+		msgid = pIhuFsmStateItem[itemNo].msg_id & IHU_SYSDIM_MSGID_MASK_SET;
 		zIhuVmCtrTab.fsm.pIhuFsmCtrlTable[task_id].pFsmArray[state][msgid].stateFunc = pIhuFsmStateItem[itemNo].stateFunc;
 	}
 
@@ -1087,7 +1087,7 @@ OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr,
 		IhuErrorPrint("VMFO: Error on task_id, src_id=[0x%x], dest_id=[0x%x], msgid=[0x%x][%s]!!!\n", src_id, dest_id, msg_id, zIhuVmCtrMsgStaticCfg[msg_id].msgName);
 		return IHU_FAILURE;
 	}
-	if (param_len>MAX_IHU_MSG_BODY_LENGTH){
+	if (param_len>IHU_SYSDIM_MSG_BODY_LEN_MAX){
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Too large message length than IHU set capability, param_len=%d!!!\n", param_len);
 		return IHU_FAILURE;
@@ -1113,16 +1113,16 @@ OPSTAT FsmRunEngine(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr,
 	** Get current FSM state
 	*/
 	state = FsmGetState(dest_id);
-	mid = msg_id & MASK_MSGID_NUM_IN_ONE_TASK;
+	mid = msg_id & IHU_SYSDIM_MSGID_MASK_SET;
 
 	//check the state and messageId of task
-	if((state >= MAX_STATE_NUM_IN_ONE_TASK)||(mid >= MAX_MSGID_NUM_IN_ONE_TASK))
+	if((state >= IHU_SYSDIM_TASK_STATE_NBR_MAX)||(mid >= IHU_SYSDIM_MSGID_NBR_MAX))
 	{
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: The state(%d) or msgId(0x%x) of task(0x%x) is error.\n", state, mid, dest_id);
 		return IHU_FAILURE;
 	}
-	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE)
+	if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE)
 	{
 		//消息ID的顺序跟commsgxxx.h的中的定义可能不完全一样，导致这里直接POP出消息名字会出错，注意！
 		IhuDebugPrint("VMFO: Call state function(0x%x) in state(%d) of dest task(0x%x[%s]) for msg(0x%x[%s]), src=(0x%x[%s]).\n", \
@@ -1266,7 +1266,7 @@ OPSTAT FsmSetState(UINT8 task_id, UINT8 newState)
 	}
 
 	//Checking newState range
-	if (newState > MAX_STATE_NUM_IN_ONE_TASK){
+	if (newState > IHU_SYSDIM_TASK_STATE_NBR_MAX){
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: FsmSetState error on state, State=%d!!!\n", newState);
 		return IHU_FAILURE;
@@ -1291,7 +1291,7 @@ UINT8 FsmGetState(UINT8 task_id)
 	/*
 	** Check the state info
 	*/
-	if (zIhuVmCtrTab.task[task_id].state <= MAX_STATE_NUM_IN_ONE_TASK){
+	if (zIhuVmCtrTab.task[task_id].state <= IHU_SYSDIM_TASK_STATE_NBR_MAX){
 		return zIhuVmCtrTab.task[task_id].state;
 	}else{
 		return FSM_STATE_INVALID;
@@ -1318,7 +1318,7 @@ OPSTAT ihu_message_queue_create(UINT8 task_id)
 	}
 
 	//OS_QUEUE_CREATE(queue, item_size, max_items)
-	OS_QUEUE_CREATE(zIhuVmCtrTab.task[task_id].QueId, IHU_QUEUE_MAX_SIZE, MAX_QUEUE_NUM_IN_ONE_TASK);
+	OS_QUEUE_CREATE(zIhuVmCtrTab.task[task_id].QueId, IHU_SYSDIM_MSG_QUEUE_SIZE_MAX, IHU_SYSDIM_MSG_QUEUE_NBR_MAX);
 	if(zIhuVmCtrTab.task[task_id].QueId == NULL){
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Failed to create msg-queue | errno=%d [%s]\n", errno, strerror(errno));
@@ -1393,7 +1393,7 @@ OPSTAT ihu_message_queue_clean(UINT8 dest_id)
 	OS_QUEUE_DELETE(zIhuVmCtrTab.task[dest_id].QueId);
 
 	//再建立消息队列
-	OS_QUEUE_CREATE(zIhuVmCtrTab.task[dest_id].QueId, IHU_QUEUE_MAX_SIZE, MAX_QUEUE_NUM_IN_ONE_TASK);
+	OS_QUEUE_CREATE(zIhuVmCtrTab.task[dest_id].QueId, IHU_SYSDIM_MSG_QUEUE_SIZE_MAX, IHU_SYSDIM_MSG_QUEUE_NBR_MAX);
   if (zIhuVmCtrTab.task[dest_id].QueId == NULL) {
     zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
     IhuErrorPrint("VMFO: Not successfully re-build the msg queue | errno=%d [%s]\n", errno, strerror(errno));
@@ -1408,7 +1408,7 @@ OPSTAT ihu_message_queue_clean(UINT8 dest_id)
 OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)
 {
 	//int ret = 0;
-	char s1[TASK_NAME_MAX_LENGTH+2]="", s2[TASK_NAME_MAX_LENGTH+2]="", s3[MSG_NAME_MAX_LENGTH]="", s4[TIMER_NAME_MAX_LENGTH]="";
+	char s1[IHU_SYSDIM_TASK_NAME_LEN_MAX+2]="", s2[IHU_SYSDIM_TASK_NAME_LEN_MAX+2]="", s3[IHU_SYSDIM_MSGID_NAME_LEN_MAX]="", s4[IHU_SYSDIM_TIMERID_NAME_LEN_MAX]="";
 	UINT32 tid = 0;
 	IhuMsgSruct_t msg;
 	
@@ -1423,7 +1423,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 		IhuErrorPrint("VMFO: Error on task_id, src_id=%d!!!\n", src_id);
 		return IHU_FAILURE;
 	}
-	if (param_len > MAX_IHU_MSG_BODY_LENGTH){
+	if (param_len > IHU_SYSDIM_MSG_BODY_LEN_MAX){
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Too large message length than IHU set capability, param_len=%d!!!\n", param_len);
 		return IHU_FAILURE;
@@ -1445,7 +1445,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
   if (OS_QUEUE_PUT(zIhuVmCtrTab.task[dest_id].QueId, &msg, 0) != OS_QUEUE_OK){
     zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
     IhuErrorPrint("VMFO: msgsnd() write msg failed, errno=%d[%s], dest_id = %d [%s]\n",errno,strerror(errno), dest_id, zIhuVmCtrTab.task[dest_id].taskName);
-    //zIhuVmCtrTab.task[dest_id].QueFullFlag = IHU_TASK_QUEUE_FULL_TRUE;
+    //zIhuVmCtrTab.task[dest_id].QueFullFlag = IHU_SYSCFG_TASK_QUEUE_FULL_TRUE;
     return IHU_FAILURE;
   }
 
@@ -1463,20 +1463,20 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 	 */
 	switch (zIhuSysEngPar.traceMode)
 	{
-		case IHU_TRACE_MSG_MODE_OFF:
+		case IHU_SYSCFG_TRACE_MSG_MODE_OFF:
 			break;
 
-		case IHU_TRACE_MSG_MODE_INVALID:
+		case IHU_SYSCFG_TRACE_MSG_MODE_INVALID:
 			break;
 
-		case IHU_TRACE_MSG_MODE_ALL:
+		case IHU_SYSCFG_TRACE_MSG_MODE_ALL:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
 			IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
 			break;
 
-		case IHU_TRACE_MSG_MODE_ALL_BUT_TIME_OUT:
+		case IHU_SYSCFG_TRACE_MSG_MODE_ALL_BUT_TIME_OUT:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1485,7 +1485,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_ALL_BUT_HEART_BEAT:
+		case IHU_SYSCFG_TRACE_MSG_MODE_ALL_BUT_HEART_BEAT:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1494,7 +1494,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_ALL_BUT_TIME_OUT_AND_HEART_BEAT:
+		case IHU_SYSCFG_TRACE_MSG_MODE_ALL_BUT_TIME_OUT_AND_HEART_BEAT:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1503,7 +1503,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 			}
 			break;
 			
-		case IHU_TRACE_MSG_MODE_ALL_WITH_TIMERID:
+		case IHU_SYSCFG_TRACE_MSG_MODE_ALL_WITH_TIMERID:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1518,7 +1518,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_TIMERID_ONLY:
+		case IHU_SYSCFG_TRACE_MSG_MODE_TIMERID_ONLY:
 			if (msg_id == MSG_ID_COM_TIME_OUT){
 				ihu_taskid_to_string(dest_id, s1);
 				ihu_taskid_to_string(src_id, s2);
@@ -1530,7 +1530,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_MOUDLE_TO_ALLOW:
+		case IHU_SYSCFG_TRACE_MSG_MODE_MOUDLE_TO_ALLOW:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1540,7 +1540,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_MOUDLE_TO_RESTRICT:
+		case IHU_SYSCFG_TRACE_MSG_MODE_MOUDLE_TO_RESTRICT:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1550,7 +1550,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_MOUDLE_FROM_ALLOW:
+		case IHU_SYSCFG_TRACE_MSG_MODE_MOUDLE_FROM_ALLOW:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1560,7 +1560,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_MOUDLE_FROM_RESTRICT:
+		case IHU_SYSCFG_TRACE_MSG_MODE_MOUDLE_FROM_RESTRICT:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1570,7 +1570,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_MOUDLE_DOUBLE_ALLOW:
+		case IHU_SYSCFG_TRACE_MSG_MODE_MOUDLE_DOUBLE_ALLOW:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1581,7 +1581,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_MOUDLE_DOUBLE_RESTRICT:
+		case IHU_SYSCFG_TRACE_MSG_MODE_MOUDLE_DOUBLE_RESTRICT:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1592,7 +1592,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_MSGID_ALLOW:
+		case IHU_SYSCFG_TRACE_MSG_MODE_MSGID_ALLOW:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1602,7 +1602,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_MSGID_RESTRICT:
+		case IHU_SYSCFG_TRACE_MSG_MODE_MSGID_RESTRICT:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1612,7 +1612,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_COMBINE_TO_ALLOW:
+		case IHU_SYSCFG_TRACE_MSG_MODE_COMBINE_TO_ALLOW:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1623,7 +1623,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_COMBINE_TO_RESTRICT:
+		case IHU_SYSCFG_TRACE_MSG_MODE_COMBINE_TO_RESTRIC:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1634,7 +1634,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_COMBINE_FROM_ALLOW:
+		case IHU_SYSCFG_TRACE_MSG_MODE_COMBINE_FROM_ALLOWC:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1645,7 +1645,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_COMBINE_FROM_RESTRICT:
+		case IHU_SYSCFG_TRACE_MSG_MODE_COMBINE_FROM_RESTRICT:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1656,7 +1656,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_COMBINE_DOUBLE_ALLOW:
+		case IHU_SYSCFG_TRACE_MSG_MODE_COMBINE_DOUBLE_ALLOW:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1669,7 +1669,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_COMBINE_DOUBLE_RESTRICT:
+		case IHU_SYSCFG_TRACE_MSG_MODE_COMBINE_DOUBLE_RESTRICT:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1683,7 +1683,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 			break;
 
 		default:
-			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_NOR_ON) != FALSE){
+			if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_NOR_ON) != FALSE){
 				zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 				IhuErrorPrint("VMFO: System Engineering Parameter Trace Mode setting error! DebugMode=%d\n", zIhuSysEngPar.debugMode);
 			}
@@ -1697,7 +1697,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 OPSTAT ihu_message_send_isr(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)
 {
 	//int ret = 0;
-	char s1[TASK_NAME_MAX_LENGTH+2]="", s2[TASK_NAME_MAX_LENGTH+2]="", s3[MSG_NAME_MAX_LENGTH]="";
+	char s1[IHU_SYSDIM_TASK_NAME_LEN_MAX+2]="", s2[IHU_SYSDIM_TASK_NAME_LEN_MAX+2]="", s3[IHU_SYSDIM_MSGID_NAME_LEN_MAX]="";
 	IhuMsgSruct_t msg;
 	
 	//Checking task_id range
@@ -1711,7 +1711,7 @@ OPSTAT ihu_message_send_isr(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *pa
 		printf("VMFO: Error on task_id, src_id=%d!!!\n", src_id);
 		return IHU_FAILURE;
 	}
-	if (param_len > MAX_IHU_MSG_BODY_LENGTH){
+	if (param_len > IHU_SYSDIM_MSG_BODY_LEN_MAX){
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 		printf("VMFO: Too large message length than IHU set capability, param_len=%d!!!\n", param_len);
 		return IHU_FAILURE;
@@ -1747,7 +1747,7 @@ OPSTAT ihu_message_send_isr(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *pa
 //	{
 //    zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 //    printf("VMFO: msgsnd() write msg failed, errno=%d[%s], dest_id = %d [%s]\n",errno,strerror(errno), dest_id, zIhuVmCtrTab.task[dest_id].taskName);
-//    //zIhuVmCtrTab.task[dest_id].QueFullFlag = IHU_TASK_QUEUE_FULL_TRUE;
+//    //zIhuVmCtrTab.task[dest_id].QueFullFlag = IHU_SYSCFG_TASK_QUEUE_FULL_TRUE;
 //    return IHU_FAILURE;
 //  }
 	printf("VMFO: Calling OS_QUEUE_PUT_FROM_ISR() end.\r\n");
@@ -1765,20 +1765,20 @@ OPSTAT ihu_message_send_isr(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *pa
 	 */
 	switch (zIhuSysEngPar.traceMode)
 	{
-		case IHU_TRACE_MSG_MODE_OFF:
+		case IHU_SYSCFG_TRACE_MSG_MODE_OFF:
 			break;
 
-		case IHU_TRACE_MSG_MODE_INVALID:
+		case IHU_SYSCFG_TRACE_MSG_MODE_INVALID:
 			break;
 
-		case IHU_TRACE_MSG_MODE_ALL:
+		case IHU_SYSCFG_TRACE_MSG_MODE_ALL:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
 			printf("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
 			break;
 
-		case IHU_TRACE_MSG_MODE_ALL_BUT_TIME_OUT:
+		case IHU_SYSCFG_TRACE_MSG_MODE_ALL_BUT_TIME_OUT:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1787,7 +1787,7 @@ OPSTAT ihu_message_send_isr(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *pa
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_ALL_BUT_HEART_BEAT:
+		case IHU_SYSCFG_TRACE_MSG_MODE_ALL_BUT_HEART_BEAT:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1796,7 +1796,7 @@ OPSTAT ihu_message_send_isr(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *pa
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_ALL_BUT_TIME_OUT_AND_HEART_BEAT:
+		case IHU_SYSCFG_TRACE_MSG_MODE_ALL_BUT_TIME_OUT_AND_HEART_BEAT:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1805,7 +1805,7 @@ OPSTAT ihu_message_send_isr(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *pa
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_MOUDLE_TO_ALLOW:
+		case IHU_SYSCFG_TRACE_MSG_MODE_MOUDLE_TO_ALLOW:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1814,7 +1814,7 @@ OPSTAT ihu_message_send_isr(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *pa
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_MOUDLE_TO_RESTRICT:
+		case IHU_SYSCFG_TRACE_MSG_MODE_MOUDLE_TO_RESTRICT:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1823,7 +1823,7 @@ OPSTAT ihu_message_send_isr(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *pa
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_MOUDLE_FROM_ALLOW:
+		case IHU_SYSCFG_TRACE_MSG_MODE_MOUDLE_FROM_ALLOW:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1832,7 +1832,7 @@ OPSTAT ihu_message_send_isr(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *pa
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_MOUDLE_FROM_RESTRICT:
+		case IHU_SYSCFG_TRACE_MSG_MODE_MOUDLE_FROM_RESTRICT:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1841,7 +1841,7 @@ OPSTAT ihu_message_send_isr(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *pa
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_MOUDLE_DOUBLE_ALLOW:
+		case IHU_SYSCFG_TRACE_MSG_MODE_MOUDLE_DOUBLE_ALLOW:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1851,7 +1851,7 @@ OPSTAT ihu_message_send_isr(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *pa
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_MOUDLE_DOUBLE_RESTRICT:
+		case IHU_SYSCFG_TRACE_MSG_MODE_MOUDLE_DOUBLE_RESTRICT:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1861,7 +1861,7 @@ OPSTAT ihu_message_send_isr(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *pa
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_MSGID_ALLOW:
+		case IHU_SYSCFG_TRACE_MSG_MODE_MSGID_ALLOW:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1870,7 +1870,7 @@ OPSTAT ihu_message_send_isr(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *pa
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_MSGID_RESTRICT:
+		case IHU_SYSCFG_TRACE_MSG_MODE_MSGID_RESTRICT:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1879,7 +1879,7 @@ OPSTAT ihu_message_send_isr(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *pa
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_COMBINE_TO_ALLOW:
+		case IHU_SYSCFG_TRACE_MSG_MODE_COMBINE_TO_ALLOW:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1889,7 +1889,7 @@ OPSTAT ihu_message_send_isr(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *pa
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_COMBINE_TO_RESTRICT:
+		case IHU_SYSCFG_TRACE_MSG_MODE_COMBINE_TO_RESTRIC:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1899,7 +1899,7 @@ OPSTAT ihu_message_send_isr(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *pa
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_COMBINE_FROM_ALLOW:
+		case IHU_SYSCFG_TRACE_MSG_MODE_COMBINE_FROM_ALLOWC:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1909,7 +1909,7 @@ OPSTAT ihu_message_send_isr(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *pa
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_COMBINE_FROM_RESTRICT:
+		case IHU_SYSCFG_TRACE_MSG_MODE_COMBINE_FROM_RESTRICT:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1919,7 +1919,7 @@ OPSTAT ihu_message_send_isr(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *pa
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_COMBINE_DOUBLE_ALLOW:
+		case IHU_SYSCFG_TRACE_MSG_MODE_COMBINE_DOUBLE_ALLOW:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1930,7 +1930,7 @@ OPSTAT ihu_message_send_isr(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *pa
 			}
 			break;
 
-		case IHU_TRACE_MSG_MODE_COMBINE_DOUBLE_RESTRICT:
+		case IHU_SYSCFG_TRACE_MSG_MODE_COMBINE_DOUBLE_RESTRICT:
 			ihu_taskid_to_string(dest_id, s1);
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
@@ -1942,7 +1942,7 @@ OPSTAT ihu_message_send_isr(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *pa
 			break;
 
 		default:
-			if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_NOR_ON) != FALSE){
+			if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_NOR_ON) != FALSE){
 				zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 				printf("VMFO: System Engineering Parameter Trace Mode setting error! DebugMode=%d\n", zIhuSysEngPar.debugMode);
 			}
@@ -2021,7 +2021,7 @@ OPSTAT ihu_task_create(UINT8 task_id, void *(*task_func)(void *), void *arg, int
         //(void *(*)(void *))(task_func),         /* The System Initialization task. */
         (TaskFunction_t)(task_func),
         arg,                                      /* The parameter passed to the task. */
-        IHU_TASK_STACK_SIZE * OS_STACK_WORD_SIZE, /* The number of bytes to allocate to the stack of the task. */
+        IHU_SYSDIM_TASK_STACK_SIZE_MAX * OS_STACK_WORD_SIZE, /* The number of bytes to allocate to the stack of the task. */
         prio,                                     /* The priority assigned to the task. */
         zIhuVmCtrTab.task[task_id].TaskHandle);        /* The task handle */
 	if(ret != OS_TASK_CREATE_SUCCESS)
@@ -2083,7 +2083,7 @@ OPSTAT ihu_task_create_and_run(UINT8 task_id, IhuFsmStateItem_t* pIhuFsmStateIte
 		IhuErrorPrint("VMFO: Init state machine FsmAddNew error, taskid = %d.\n", task_id);
 		return IHU_FAILURE;
 	}
-	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_CRT_ON) != FALSE){
+	if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_CRT_ON) != FALSE){
 		IhuDebugPrint("VMFO: FsmAddNew Successful, taskId = 0x%x [%s].\n", task_id, zIhuVmCtrTab.task[task_id].taskName);
 	}
 
@@ -2095,25 +2095,25 @@ OPSTAT ihu_task_create_and_run(UINT8 task_id, IhuFsmStateItem_t* pIhuFsmStateIte
 	IhuErrorPrint("VMFO: Create queue unsuccessfully, taskId = %d.\n", task_id);
 	return IHU_FAILURE;
 	}
-	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_CRT_ON) != FALSE){
+	if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_CRT_ON) != FALSE){
 		IhuDebugPrint("VMFO: Msgque create successful, taskId = 0x%x [%s].\n", task_id, zIhuVmCtrTab.task[task_id].taskName);
 	}
 
 	//Create task and make it running for the 1st time
 	//让VMFO保持更高一级的优先级，以便VMFO及时处理守护程序的职责
-	if (task_id == TASK_ID_VMFO) ret = ihu_task_create(task_id, /*CALLBACK*/(void *(*)(void *))FsmProcessingLaunch, (void *)&(zIhuVmCtrTab.task[task_id].TaskId), IHU_THREAD_PRIO+1);
-	else ret = ihu_task_create(task_id, /*CALLBACK*/(void *(*)(void *))FsmProcessingLaunch, (void *)&(zIhuVmCtrTab.task[task_id].TaskId), IHU_THREAD_PRIO);
+	if (task_id == TASK_ID_VMFO) ret = ihu_task_create(task_id, /*CALLBACK*/(void *(*)(void *))FsmProcessingLaunch, (void *)&(zIhuVmCtrTab.task[task_id].TaskId), IHU_SYSMSG_TASK_THREAD_PRIO+1);
+	else ret = ihu_task_create(task_id, /*CALLBACK*/(void *(*)(void *))FsmProcessingLaunch, (void *)&(zIhuVmCtrTab.task[task_id].TaskId), IHU_SYSMSG_TASK_THREAD_PRIO);
 	if (ret == IHU_FAILURE)
 	{
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: Create task un-successfully, taskid = %d.\n", task_id);		
 		return IHU_FAILURE;
 	}
-	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_CRT_ON) != FALSE){
+	if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_CRT_ON) != FALSE){
 	  IhuDebugPrint("VMFO: Task create Successful, taskId = 0x%x [%s].\n", task_id, zIhuVmCtrTab.task[task_id].taskName);
 	}
 	
-	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_IPT_ON) != FALSE){
+	if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_IPT_ON) != FALSE){
 		IhuDebugPrint("VMFO: Whole task environment setup successful, taskId = 0x%x [%s].\n", task_id, zIhuVmCtrTab.task[task_id].taskName);
 	}
 	
@@ -2142,14 +2142,14 @@ OPSTAT ihu_system_task_init_call(UINT8 task_id, IhuFsmStateItem_t *p)
 	}
 	
 	//任务控制启动标示检查
-	if (zIhuVmCtrTab.task[task_id].pnpState != IHU_TASK_PNP_ON){
+	if (zIhuVmCtrTab.task[task_id].pnpState != IHU_SYSCFG_TASK_PNP_ON){
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 		IhuErrorPrint("VMFO: no need create this task [%s]!\n", zIhuVmCtrTab.task[task_id].taskName);	
 		return IHU_FAILURE;
 	}
 	
 	//打印信息
-	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_CRT_ON) != FALSE){
+	if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_CRT_ON) != FALSE){
 		IhuDebugPrint("VMFO: Staring to create task [%s] related environments...\n", zIhuVmCtrTab.task[task_id].taskName);
 	}
 
@@ -2160,7 +2160,7 @@ OPSTAT ihu_system_task_init_call(UINT8 task_id, IhuFsmStateItem_t *p)
 		IhuErrorPrint("VMFO: create task env [%s] un-successfully, program exit.\n", zIhuVmCtrTab.task[task_id].taskName);
 		return IHU_FAILURE;
 	}else{
-		if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_INF_ON) != FALSE){
+		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE){
 			IhuDebugPrint("VMFO: create task successfully, taskid=%d[%s].\n", task_id, zIhuVmCtrTab.task[task_id].taskName);
 		}
 	}
@@ -2180,7 +2180,7 @@ void ihu_task_create_all(void)
 	
 	for (task_id = TASK_ID_MIN + 1; task_id < TASK_ID_MAX; task_id++){
 		p = (IhuFsmStateItem_t *)zIhuVmCtrTab.task[task_id].taskFuncEntry;
-		if ((p != NULL) && (zIhuVmCtrTab.task[task_id].pnpState == IHU_TASK_PNP_ON)){
+		if ((p != NULL) && (zIhuVmCtrTab.task[task_id].pnpState == IHU_SYSCFG_TASK_PNP_ON)){
 			ihu_system_task_init_call(task_id, p);
 			ihu_vm_send_init_msg_to_app_task(task_id);
 		}
@@ -2349,17 +2349,17 @@ OPSTAT ihu_message_rcv_bare_rtos(UINT8 dest_id, IhuMsgSruct_t *msg)
   }
 
   //循环查找一个任务的消息队列，看看有无有效消息
-  for (i=0; i<MAX_QUEUE_NUM_IN_ONE_TASK; i++)
+  for (i=0; i<IHU_SYSDIM_MSG_QUEUE_NBR_MAX; i++)
   {
     j = zIhuVmCtrTab.fsm.taskQue[dest_id].queIndex + i;
-    j = j%MAX_QUEUE_NUM_IN_ONE_TASK;
+    j = j%IHU_SYSDIM_MSG_QUEUE_NBR_MAX;
     if (zIhuVmCtrTab.fsm.taskQue[dest_id].queList[j].useFlag == TRUE)
     {
       //找到了未消耗的消息
-      memcpy(msg, zIhuVmCtrTab.fsm.taskQue[dest_id].queList[j].msgQue, MAX_IHU_MSG_BODY_LENGTH);
+      memcpy(msg, zIhuVmCtrTab.fsm.taskQue[dest_id].queList[j].msgQue, IHU_SYSDIM_MSG_BODY_LEN_MAX);
       zIhuVmCtrTab.fsm.taskQue[dest_id].queList[j].useFlag = FALSE;
       //将INDEX指向下一个
-      j = (j+1) % MAX_QUEUE_NUM_IN_ONE_TASK;
+      j = (j+1) % IHU_SYSDIM_MSG_QUEUE_NBR_MAX;
       zIhuVmCtrTab.fsm.taskQue[dest_id].queIndex = j;
       //判断消息的合法性
       if ((msg->dest_id <= TASK_ID_MIN) || (msg->dest_id >= TASK_ID_MAX)){
@@ -2373,7 +2373,7 @@ OPSTAT ihu_message_rcv_bare_rtos(UINT8 dest_id, IhuMsgSruct_t *msg)
         return IHU_FAILURE;
       }
       //不允许定义消息结构中长度为0的消息体，至少需要一个长度域
-      if ((msg->msgLen <= 0) || (msg->msgLen > MAX_IHU_MSG_BUF_LENGTH)){
+      if ((msg->msgLen <= 0) || (msg->msgLen > IHU_SYSMSG_COM_BODY_LEN_MAX)){
         zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
         IhuErrorPrint("VMFO: Receive message error on length, msgLen=%d!!!\n", msg->msgLen);
         return IHU_FAILURE;
@@ -2404,7 +2404,7 @@ OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, vo
   //IhuMsgSruct_t msg;
   int i=0, j=0;
   bool Flag = FALSE;
-  char s1[TASK_NAME_MAX_LENGTH+2]="", s2[TASK_NAME_MAX_LENGTH+2]="", s3[MSG_NAME_MAX_LENGTH]="";
+  char s1[IHU_SYSDIM_TASK_NAME_LEN_MAX+2]="", s2[IHU_SYSDIM_TASK_NAME_LEN_MAX+2]="", s3[IHU_SYSDIM_MSGID_NAME_LEN_MAX]="";
 
   //入参检查Checking task_id range
   if ((dest_id <= TASK_ID_MIN) || (dest_id >= TASK_ID_MAX)){
@@ -2417,7 +2417,7 @@ OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, vo
     IhuErrorPrint("VMFO: Error on task_id, src_id=%d!!!\n", src_id);
     return IHU_FAILURE;
   }
-  if (param_len>MAX_IHU_MSG_BODY_LENGTH){
+  if (param_len>IHU_SYSDIM_MSG_BODY_LEN_MAX){
     zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
     IhuErrorPrint("VMFO: Too large message length than IHU set capability, param_len=%d!!!\n", param_len);
     return IHU_FAILURE;
@@ -2438,17 +2438,17 @@ OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, vo
 
 
   //然后送到目的地，循环查找一个任务的消息队列，看看有无空闲位置
-  for (i=0; i<MAX_QUEUE_NUM_IN_ONE_TASK; i++)
+  for (i=0; i<IHU_SYSDIM_MSG_QUEUE_NBR_MAX; i++)
   {
     j = zIhuVmCtrTab.fsm.taskQue[dest_id].queIndex + i;
-    j = j%MAX_QUEUE_NUM_IN_ONE_TASK;
+    j = j%IHU_SYSDIM_MSG_QUEUE_NBR_MAX;
     if (zIhuVmCtrTab.fsm.taskQue[dest_id].queList[j].useFlag == FALSE)
     {
       //找到了空闲的消息位置
-      memcpy(zIhuVmCtrTab.fsm.taskQue[dest_id].queList[j].msgQue, &msg, MAX_IHU_MSG_BODY_LENGTH);
+      memcpy(zIhuVmCtrTab.fsm.taskQue[dest_id].queList[j].msgQue, &msg, IHU_SYSDIM_MSG_BODY_LEN_MAX);
       zIhuVmCtrTab.fsm.taskQue[dest_id].queList[j].useFlag = TRUE;
       //将INDEX指向下一个
-      j = (j+1) % MAX_QUEUE_NUM_IN_ONE_TASK;
+      j = (j+1) % IHU_SYSDIM_MSG_QUEUE_NBR_MAX;
       zIhuVmCtrTab.fsm.taskQue[dest_id].queIndex = j;
       //退出循环
       Flag = TRUE;
@@ -2476,20 +2476,20 @@ OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, vo
    */
   switch (zIhuSysEngPar.traceMode)
   {
-    case IHU_TRACE_MSG_MODE_OFF:
+    case IHU_SYSCFG_TRACE_MSG_MODE_OFF:
       break;
 
-    case IHU_TRACE_MSG_MODE_INVALID:
+    case IHU_SYSCFG_TRACE_MSG_MODE_INVALID:
       break;
 
-    case IHU_TRACE_MSG_MODE_ALL:
+    case IHU_SYSCFG_TRACE_MSG_MODE_ALL:
       ihu_taskid_to_string(dest_id, s1);
       ihu_taskid_to_string(src_id, s2);
       ihu_msgid_to_string(msg_id, s3);
       IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
       break;
 
-    case IHU_TRACE_MSG_MODE_ALL_BUT_TIME_OUT:
+    case IHU_SYSCFG_TRACE_MSG_MODE_ALL_BUT_TIME_OUT:
       ihu_taskid_to_string(dest_id, s1);
       ihu_taskid_to_string(src_id, s2);
       ihu_msgid_to_string(msg_id, s3);
@@ -2498,7 +2498,7 @@ OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, vo
       }
       break;
 
-    case IHU_TRACE_MSG_MODE_ALL_BUT_HEART_BEAT:
+    case IHU_SYSCFG_TRACE_MSG_MODE_ALL_BUT_HEART_BEAT:
       ihu_taskid_to_string(dest_id, s1);
       ihu_taskid_to_string(src_id, s2);
       ihu_msgid_to_string(msg_id, s3);
@@ -2507,7 +2507,7 @@ OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, vo
       }
       break;
 
-    case IHU_TRACE_MSG_MODE_ALL_BUT_TIME_OUT_AND_HEART_BEAT:
+    case IHU_SYSCFG_TRACE_MSG_MODE_ALL_BUT_TIME_OUT_AND_HEART_BEAT:
       ihu_taskid_to_string(dest_id, s1);
       ihu_taskid_to_string(src_id, s2);
       ihu_msgid_to_string(msg_id, s3);
@@ -2516,7 +2516,7 @@ OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, vo
       }
       break;
 
-    case IHU_TRACE_MSG_MODE_MOUDLE_TO_ALLOW:
+    case IHU_SYSCFG_TRACE_MSG_MODE_MOUDLE_TO_ALLOW:
       ihu_taskid_to_string(dest_id, s1);
       ihu_taskid_to_string(src_id, s2);
       ihu_msgid_to_string(msg_id, s3);
@@ -2525,7 +2525,7 @@ OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, vo
       }
       break;
 
-    case IHU_TRACE_MSG_MODE_MOUDLE_TO_RESTRICT:
+    case IHU_SYSCFG_TRACE_MSG_MODE_MOUDLE_TO_RESTRICT:
       ihu_taskid_to_string(dest_id, s1);
       ihu_taskid_to_string(src_id, s2);
       ihu_msgid_to_string(msg_id, s3);
@@ -2534,7 +2534,7 @@ OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, vo
       }
       break;
 
-    case IHU_TRACE_MSG_MODE_MOUDLE_FROM_ALLOW:
+    case IHU_SYSCFG_TRACE_MSG_MODE_MOUDLE_FROM_ALLOW:
       ihu_taskid_to_string(dest_id, s1);
       ihu_taskid_to_string(src_id, s2);
       ihu_msgid_to_string(msg_id, s3);
@@ -2543,7 +2543,7 @@ OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, vo
       }
       break;
 
-    case IHU_TRACE_MSG_MODE_MOUDLE_FROM_RESTRICT:
+    case IHU_SYSCFG_TRACE_MSG_MODE_MOUDLE_FROM_RESTRICT:
       ihu_taskid_to_string(dest_id, s1);
       ihu_taskid_to_string(src_id, s2);
       ihu_msgid_to_string(msg_id, s3);
@@ -2552,7 +2552,7 @@ OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, vo
       }
       break;
 
-    case IHU_TRACE_MSG_MODE_MOUDLE_DOUBLE_ALLOW:
+    case IHU_SYSCFG_TRACE_MSG_MODE_MOUDLE_DOUBLE_ALLOW:
       ihu_taskid_to_string(dest_id, s1);
       ihu_taskid_to_string(src_id, s2);
       ihu_msgid_to_string(msg_id, s3);
@@ -2562,7 +2562,7 @@ OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, vo
       }
       break;
 
-    case IHU_TRACE_MSG_MODE_MOUDLE_DOUBLE_RESTRICT:
+    case IHU_SYSCFG_TRACE_MSG_MODE_MOUDLE_DOUBLE_RESTRICT:
       ihu_taskid_to_string(dest_id, s1);
       ihu_taskid_to_string(src_id, s2);
       ihu_msgid_to_string(msg_id, s3);
@@ -2572,7 +2572,7 @@ OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, vo
       }
       break;
 
-    case IHU_TRACE_MSG_MODE_MSGID_ALLOW:
+    case IHU_SYSCFG_TRACE_MSG_MODE_MSGID_ALLOW:
       ihu_taskid_to_string(dest_id, s1);
       ihu_taskid_to_string(src_id, s2);
       ihu_msgid_to_string(msg_id, s3);
@@ -2581,7 +2581,7 @@ OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, vo
       }
       break;
 
-    case IHU_TRACE_MSG_MODE_MSGID_RESTRICT:
+    case IHU_SYSCFG_TRACE_MSG_MODE_MSGID_RESTRICT:
       ihu_taskid_to_string(dest_id, s1);
       ihu_taskid_to_string(src_id, s2);
       ihu_msgid_to_string(msg_id, s3);
@@ -2590,7 +2590,7 @@ OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, vo
       }
       break;
 
-    case IHU_TRACE_MSG_MODE_COMBINE_TO_ALLOW:
+    case IHU_SYSCFG_TRACE_MSG_MODE_COMBINE_TO_ALLOW:
       ihu_taskid_to_string(dest_id, s1);
       ihu_taskid_to_string(src_id, s2);
       ihu_msgid_to_string(msg_id, s3);
@@ -2600,7 +2600,7 @@ OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, vo
       }
       break;
 
-    case IHU_TRACE_MSG_MODE_COMBINE_TO_RESTRICT:
+    case IHU_SYSCFG_TRACE_MSG_MODE_COMBINE_TO_RESTRIC:
       ihu_taskid_to_string(dest_id, s1);
       ihu_taskid_to_string(src_id, s2);
       ihu_msgid_to_string(msg_id, s3);
@@ -2610,7 +2610,7 @@ OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, vo
       }
       break;
 
-    case IHU_TRACE_MSG_MODE_COMBINE_FROM_ALLOW:
+    case IHU_SYSCFG_TRACE_MSG_MODE_COMBINE_FROM_ALLOWC:
       ihu_taskid_to_string(dest_id, s1);
       ihu_taskid_to_string(src_id, s2);
       ihu_msgid_to_string(msg_id, s3);
@@ -2620,7 +2620,7 @@ OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, vo
       }
       break;
 
-    case IHU_TRACE_MSG_MODE_COMBINE_FROM_RESTRICT:
+    case IHU_SYSCFG_TRACE_MSG_MODE_COMBINE_FROM_RESTRICT:
       ihu_taskid_to_string(dest_id, s1);
       ihu_taskid_to_string(src_id, s2);
       ihu_msgid_to_string(msg_id, s3);
@@ -2630,7 +2630,7 @@ OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, vo
       }
       break;
 
-    case IHU_TRACE_MSG_MODE_COMBINE_DOUBLE_ALLOW:
+    case IHU_SYSCFG_TRACE_MSG_MODE_COMBINE_DOUBLE_ALLOW:
       ihu_taskid_to_string(dest_id, s1);
       ihu_taskid_to_string(src_id, s2);
       ihu_msgid_to_string(msg_id, s3);
@@ -2641,7 +2641,7 @@ OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, vo
       }
       break;
 
-    case IHU_TRACE_MSG_MODE_COMBINE_DOUBLE_RESTRICT:
+    case IHU_SYSCFG_TRACE_MSG_MODE_COMBINE_DOUBLE_RESTRICT:
       ihu_taskid_to_string(dest_id, s1);
       ihu_taskid_to_string(src_id, s2);
       ihu_msgid_to_string(msg_id, s3);
@@ -2653,7 +2653,7 @@ OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, vo
       break;
 
     default:
-      if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_NOR_ON) != FALSE){
+      if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_NOR_ON) != FALSE){
         zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
         IhuErrorPrint("VMFO: System Engineering Parameter Trace Mode setting error! DebugMode=%d.\n", zIhuSysEngPar.debugMode);
       }
@@ -2668,7 +2668,7 @@ OPSTAT ihu_message_send_bare_rtos(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, vo
 OPSTAT ihu_system_task_execute_bare_rtos(UINT8 task_id, IhuFsmStateItem_t *p)
 {
   int ret = 0;
-  char strDebug[IHU_PRINT_CHAR_SIZE];
+  char strDebug[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX];
 
   //Checking task_id range
   if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
@@ -2686,7 +2686,7 @@ OPSTAT ihu_system_task_execute_bare_rtos(UINT8 task_id, IhuFsmStateItem_t *p)
   }
 
   //任务控制启动标示检查
-  if (zIhuVmCtrTab.task[task_id].pnpState != IHU_TASK_PNP_ON){
+  if (zIhuVmCtrTab.task[task_id].pnpState != IHU_SYSCFG_TASK_PNP_ON){
     zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
     sprintf(strDebug, "VMFO: no need execute this task [%s]!\n", zIhuVmCtrTab.task[task_id].taskName);
     IhuErrorPrint(strDebug);
@@ -2712,27 +2712,27 @@ void ihu_task_execute_all_bare_rtos(void)
 {
   #ifdef IHU_COMPILE_TASK_VMFO
     //Execute task VMFO FSM /1
-    if (zIhuVmCtrTab.task[TASK_ID_VMFO].pnpState == IHU_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_VMFO, FsmVMFO);
+    if (zIhuVmCtrTab.task[TASK_ID_VMFO].pnpState == IHU_SYSCFG_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_VMFO, FsmVMFO);
   #endif //IHU_COMPILE_TASK_VMFO
 
   #ifdef IHU_COMPILE_TASK_TIMER
     //Execute task Timer FSM /2
-    if (zIhuVmCtrTab.task[TASK_ID_TIMER].pnpState == IHU_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_TIMER, FsmTimer);
+    if (zIhuVmCtrTab.task[TASK_ID_TIMER].pnpState == IHU_SYSCFG_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_TIMER, FsmTimer);
   #endif //IHU_COMPILE_TASK_TIMER
 
   #ifdef IHU_COMPILE_TASK_ASYLIBRA
     //Execute task ASYLIBRA FSM /3
-    if (zIhuVmCtrTab.task[TASK_ID_ASYLIBRA].pnpState == IHU_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_ASYLIBRA, FsmAsylibra);
+    if (zIhuVmCtrTab.task[TASK_ID_ASYLIBRA].pnpState == IHU_SYSCFG_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_ASYLIBRA, FsmAsylibra);
   #endif //IHU_COMPILE_TASK_ASYLIBRA
 
   #ifdef IHU_COMPILE_TASK_ADCARIES
     //Execute task ADCARIES FSM /4
-    if (zIhuVmCtrTab.task[TASK_ID_ADCARIES].pnpState == IHU_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_ADCARIES, FsmAdcaries);
+    if (zIhuVmCtrTab.task[TASK_ID_ADCARIES].pnpState == IHU_SYSCFG_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_ADCARIES, FsmAdcaries);
   #endif //IHU_COMPILE_TASK_ADCARIES
 
   #ifdef IHU_COMPILE_TASK_EMC
     //Execute task EMC FSM /5
-    if (zIhuVmCtrTab.task[TASK_ID_EMC].pnpState == IHU_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_EMC, FsmEmc);
+    if (zIhuVmCtrTab.task[TASK_ID_EMC].pnpState == IHU_SYSCFG_TASK_PNP_ON) ihu_system_task_execute(TASK_ID_EMC, FsmEmc);
   #endif //IHU_COMPILE_TASK_EMC
 
   IhuDebugPrint("VMFO: Execute task once, for test!\n");
