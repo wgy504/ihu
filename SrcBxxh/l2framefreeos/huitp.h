@@ -9,51 +9,57 @@
 #define _HUITP_H_
 #pragma pack (1) //强制1字节对齐
 
+/*
+ *
+ *  顺从并更新到技术规范《慧HUITP接口规范v1.4, LAST UPDATE@2007/2》
+ *
+ */
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
 //  HUITP公共定义常量
 //
 //////////////////////////////////////////////////////////////////////////////////////////////////
 //考虑到TCPIP中底层最长1500B的情形，这里先如此定义，不要超过这个限制，所以16进制的缓冲区最好不要超过500字节
-#define HUITP_MSG_BUF_WITH_HEAD_MAX_LEN 134
-#define HUITP_MSG_BUF_BODY_ONLY_MAX_LEN HUITP_MSG_BUF_WITH_HEAD_MAX_LEN - 4 //MSG头+长度域共4BYTE
-#define HUITP_IE_BUF_MAX_LEN HUITP_MSG_BUF_WITH_HEAD_MAX_LEN - 30 //MSG头4B，BASE_REQ 5B，IE头4B，为了安全，先减去30。在具体的消息定义中，如果独立IE较多，这个需要再检查
-#define HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN 300  //人为定义，目前不包括具体内容在内的纯格式部分，已经达到210BYTE长度
-#define HUITP_MSG_HUIXML_HEAD_IN_CHAR_FIX_LEN 200
-#define HUITP_MSG_HUIXML_HEAD_IN_CHAR_VARIABLE_LEN HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN - HUITP_MSG_HUIXML_HEAD_IN_CHAR_FIX_LEN
+#define HUITP_MSG_BUF_WITH_HEAD_MAX_LEN 				134
+#define HUITP_MSG_BUF_BODY_ONLY_MAX_LEN 				HUITP_MSG_BUF_WITH_HEAD_MAX_LEN - 4 //MSG头+长度域共4BYTE
+#define HUITP_IE_BUF_MAX_LEN 							HUITP_MSG_BUF_WITH_HEAD_MAX_LEN - 30 //MSG头4B，BASE_REQ 5B，IE头4B，为了安全，先减去30。在具体的消息定义中，如果独立IE较多，这个需要再检查
+#define HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN 			300  //人为定义，目前不包括具体内容在内的纯格式部分，已经达到210BYTE长度
+#define HUITP_MSG_HUIXML_HEAD_IN_CHAR_FIX_LEN 			200
+#define HUITP_MSG_HUIXML_HEAD_IN_CHAR_VARIABLE_LEN 		HUITP_MSG_HUIXML_HEAD_IN_CHAR_MAX_LEN - HUITP_MSG_HUIXML_HEAD_IN_CHAR_FIX_LEN
 //<xml><ToUserName><![CDATA[%s]]></ToUserName><FromUserName><![CDATA[%s]]></FromUserName><CreateTime>%s</CreateTime><MsgType><![CDATA[%s]]></MsgType><Content><![CDATA[%s]]></Content><FuncFlag>0</FuncFlag></xml>
-#define HUITP_MSG_HUIXML_TOTAL_BUF_IN_CHAR_MAX_LEN HUITP_MSG_XML_HEAD_IN_CHAR_MAX_LEN + 2 * HUITP_MSG_BUF_WITH_HEAD_MAX_LEN + 1 //CHAR方式，用于INTERNET传输，留下一个做为尾部缓冲
+#define HUITP_MSG_HUIXML_TOTAL_BUF_IN_CHAR_MAX_LEN 		HUITP_MSG_XML_HEAD_IN_CHAR_MAX_LEN + 2 * HUITP_MSG_BUF_WITH_HEAD_MAX_LEN + 1 //CHAR方式，用于INTERNET传输，留下一个做为尾部缓冲
 #define HUITP_MSG_HUIFRAME_HEAD_MAX_LEN 4 //固定长度，采用SUM(CONTENT)的方式进行校验
-#define HUITP_MSG_HUIFRAME_TOTAL_BUF_MAX_LEN HUITP_MSG_HUIFRAME_HEAD_MAX_LEN + HUITP_MSG_BUF_WITH_HEAD_MAX_LEN //这个是16进制BYTE方式
+#define HUITP_MSG_HUIFRAME_TOTAL_BUF_MAX_LEN 			HUITP_MSG_HUIFRAME_HEAD_MAX_LEN + HUITP_MSG_BUF_WITH_HEAD_MAX_LEN //这个是16进制BYTE方式
 //HUIXML固定头部常量定义
-#define HUITP_MSG_HUIXML_CONSTANT_XML_HEAD_L  					"<xml>"
-#define HUITP_MSG_HUIXML_CONSTANT_XML_HEAD_R  					"</xml>"
-#define HUITP_MSG_HUIXML_CONSTANT_TO_USER_L  						"<ToUserName><![CDATA["
-#define HUITP_MSG_HUIXML_CONSTANT_TO_USER_R  						"]]></ToUserName>"
-#define HUITP_MSG_HUIXML_CONSTANT_FROM_USER_L  					"<FromUserName><![CDATA["
-#define HUITP_MSG_HUIXML_CONSTANT_FROM_USER_R  					"]]></FromUserName>"
-#define HUITP_MSG_HUIXML_CONSTANT_CREATE_TIME_L  				"<CreateTime>"
-#define HUITP_MSG_HUIXML_CONSTANT_CREATE_TIME_R  				"</CreateTime>"
-#define HUITP_MSG_HUIXML_CONSTANT_MSG_TYPE_L  					"<MsgType><![CDATA["
-#define HUITP_MSG_HUIXML_CONSTANT_MSG_TYPE_R  					"]]></MsgType>"
-#define HUITP_MSG_HUIXML_CONSTANT_CONTENT_L  						"<Content><![CDATA["
-#define HUITP_MSG_HUIXML_CONSTANT_CONTENT_R  						"]]></Content>"
-#define HUITP_MSG_HUIXML_CONSTANT_FUNC_FLAG_L  					"<FuncFlag>"
-#define HUITP_MSG_HUIXML_CONSTANT_FUNC_FLAG_R  					"</FuncFlag>"
-#define HUITP_MSG_HUIXML_CONTSANT_CREATE_TIME_MAX_LEN		16 //以10进制存储的时间戳，最长长度
+#define HUITP_MSG_HUIXML_CONSTANT_XML_HEAD_L  			"<xml>"
+#define HUITP_MSG_HUIXML_CONSTANT_XML_HEAD_R  			"</xml>"
+#define HUITP_MSG_HUIXML_CONSTANT_TO_USER_L  			"<ToUserName><![CDATA["
+#define HUITP_MSG_HUIXML_CONSTANT_TO_USER_R  			"]]></ToUserName>"
+#define HUITP_MSG_HUIXML_CONSTANT_FROM_USER_L  			"<FromUserName><![CDATA["
+#define HUITP_MSG_HUIXML_CONSTANT_FROM_USER_R  			"]]></FromUserName>"
+#define HUITP_MSG_HUIXML_CONSTANT_CREATE_TIME_L 		"<CreateTime>"
+#define HUITP_MSG_HUIXML_CONSTANT_CREATE_TIME_R 		"</CreateTime>"
+#define HUITP_MSG_HUIXML_CONSTANT_MSG_TYPE_L  			"<MsgType><![CDATA["
+#define HUITP_MSG_HUIXML_CONSTANT_MSG_TYPE_R  			"]]></MsgType>"
+#define HUITP_MSG_HUIXML_CONSTANT_CONTENT_L  			"<Content><![CDATA["
+#define HUITP_MSG_HUIXML_CONSTANT_CONTENT_R  			"]]></Content>"
+#define HUITP_MSG_HUIXML_CONSTANT_FUNC_FLAG_L  			"<FuncFlag>"
+#define HUITP_MSG_HUIXML_CONSTANT_FUNC_FLAG_R  			"</FuncFlag>"
+#define HUITP_MSG_HUIXML_CONTSANT_CREATE_TIME_MAX_LEN	16 //以10进制存储的时间戳，最长长度
 //HUIXML MsgType定义
-#define HUITP_MSG_HUIXML_MSGTYPE_DEVICE_REPORT_ID 			1 
-#define HUITP_MSG_HUIXML_MSGTYPE_DEVICE_REPORT_STRING  	"huitp_text" 
-#define HUITP_MSG_HUIXML_MSGTYPE_DEVICE_CONTROL_ID 			2
+#define HUITP_MSG_HUIXML_MSGTYPE_DEVICE_REPORT_ID 		1
+#define HUITP_MSG_HUIXML_MSGTYPE_DEVICE_REPORT_STRING  	"huitp_text"
+#define HUITP_MSG_HUIXML_MSGTYPE_DEVICE_CONTROL_ID 		2
 #define HUITP_MSG_HUIXML_MSGTYPE_DEVICE_CONTROL_STRING  "huitp_command"
-#define HUITP_MSG_HUIXML_MSGTYPE_HEAT_BEAT_ID 					3
-#define HUITP_MSG_HUIXML_MSGTYPE_HEAT_BEAT_STRING 			"huitp_heart_beat" //心跳协议，里面的数据内容是空的
-#define HUITP_MSG_HUIXML_MSGTYPE_BIZ_ITG_ID 						4
-#define HUITP_MSG_HUIXML_MSGTYPE_BIZ_ITG_STRING 				"huitp_biz_itg"  //业务智能
-#define HUITP_MSG_HUIXML_MSGTYPE_ALARM_REPORT_ID 				5
-#define HUITP_MSG_HUIXML_MSGTYPE_ALARM_REPORT_STRING 		"huitp_alarm"  //for alarm report
-#define HUITP_MSG_HUIXML_MSGTYPE_PM_REPORT_ID 					6
-#define HUITP_MSG_HUIXML_MSGTYPE_PM_REPORT_STRING 			"huitp_pm"  //for pm report
+#define HUITP_MSG_HUIXML_MSGTYPE_HEAT_BEAT_ID 			3
+#define HUITP_MSG_HUIXML_MSGTYPE_HEAT_BEAT_STRING 		"huitp_heart_beat" //心跳协议，里面的数据内容是空的
+#define HUITP_MSG_HUIXML_MSGTYPE_BIZ_ITG_ID 			4
+#define HUITP_MSG_HUIXML_MSGTYPE_BIZ_ITG_STRING 		"huitp_biz_itg"  //业务智能 hcu_biz_inteligence
+#define HUITP_MSG_HUIXML_MSGTYPE_ALARM_REPORT_ID 		5
+#define HUITP_MSG_HUIXML_MSGTYPE_ALARM_REPORT_STRING 	"huitp_alarm"  //for alarm report
+#define HUITP_MSG_HUIXML_MSGTYPE_PM_REPORT_ID 			6
+#define HUITP_MSG_HUIXML_MSGTYPE_PM_REPORT_STRING 		"huitp_pm"  //for pm report
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -713,14 +719,16 @@ typedef enum
 
   //组合秤BFSC
 	HUITP_MSGID_uni_bfsc_comb_scale_min              = 0x3B00, 
-	HUITP_MSGID_uni_bfsc_comb_scale_req              = 0x3B00, 
-	HUITP_MSGID_uni_bfsc_comb_scale_resp             = 0x3B80, 
-	HUITP_MSGID_uni_bfsc_comb_scale_report           = 0x3B81, 
-	HUITP_MSGID_uni_bfsc_comb_scale_confirm          = 0x3B01, 
-	HUITP_MSGID_uni_bfsc_comb_scale_cmd_start_req    = 0x3B02, 
-	HUITP_MSGID_uni_bfsc_comb_scale_cmd_start_resp   = 0x3B82, 
-	HUITP_MSGID_uni_bfsc_comb_scale_cmd_stop_req     = 0x3B03, 
-	HUITP_MSGID_uni_bfsc_comb_scale_cmd_stop_resp    = 0x3B83, 
+	HUITP_MSGID_uni_bfsc_comb_scale_data_req         = 0x3B00,
+	HUITP_MSGID_uni_bfsc_comb_scale_data_resp        = 0x3B80,
+	HUITP_MSGID_uni_bfsc_comb_scale_data_report      = 0x3B81,
+	HUITP_MSGID_uni_bfsc_comb_scale_data_confirm     = 0x3B01,
+	HUITP_MSGID_uni_bfsc_comb_scale_event_report     = 0x3B82,
+	HUITP_MSGID_uni_bfsc_comb_scale_event_confirm    = 0x3B02,
+	HUITP_MSGID_uni_bfsc_comb_scale_cmd_req          = 0x3B03,
+	HUITP_MSGID_uni_bfsc_comb_scale_cmd_resp         = 0x3B83,
+	HUITP_MSGID_uni_bfsc_statistic_report            = 0x3B84,
+	HUITP_MSGID_uni_bfsc_statistic_confirm           = 0x3B04,
 	HUITP_MSGID_uni_bfsc_comb_scale_max,
 
   //云控锁-锁-旧系统兼容
@@ -1225,7 +1233,7 @@ typedef enum
 	HUITP_IEID_uni_picture_value                    = 0x2F00,
 	HUITP_IEID_uni_picture_segment                  = 0x2F01,
 	HUITP_IEID_uni_picture_format                  	= 0x2F02,	
-	HUITP_IEID_uni_picture_body                  		= 0x2F03,	
+	HUITP_IEID_uni_picture_body                     = 0x2F03,
 	HUITP_IEID_uni_picture_max,
 
   //扬尘监控系统
@@ -1285,8 +1293,12 @@ typedef enum
 
   //组合秤BFSC
 	HUITP_IEID_uni_bfsc_comb_scale_min              = 0x3B00, 
-	HUITP_IEID_uni_scale_weight_value               = 0x3B00,
-	HUITP_IEID_uni_scale_weight_cmd                 = 0x3B01,
+	HUITP_IEID_uni_scale_weight_req		           	= 0x3B00,
+	HUITP_IEID_uni_scale_weight_value               = 0x3B01,
+	HUITP_IEID_uni_scale_weight_cmd                 = 0x3B02,
+	HUITP_IEID_uni_scale_weight_cfg_par             = 0x3B03,
+	HUITP_IEID_uni_scale_weight_event               = 0x3B04,
+	HUITP_IEID_uni_scale_weight_statistic           = 0x3B05,
 	HUITP_IEID_uni_bfsc_comb_scale_max,
 
   //云控锁-锁-旧系统
@@ -2376,30 +2388,181 @@ typedef struct StrIe_HUITP_IEID_uni_transporter_value
 
 //组合秤BFSC
 //HUITP_IEID_uni_bfsc_comb_scale_min              = 0x3B00, 
-//HUITP_IEID_uni_scale_weight_value               = 0x3B00,
+//HUITP_IEID_uni_scale_weight_req		           	= 0x3B00,
+typedef struct StrIe_HUITP_IEID_uni_scale_weight_req
+{
+	UINT16 ieId;
+	UINT16 ieLen;
+	UINT8  type;
+}StrIe_HUITP_IEID_uni_scale_weight_req_t;
+#define HUITP_IEID_UNI_SCALE_WEIGHT_REQ_TYPE_NULL 0
+#define HUITP_IEID_UNI_SCALE_WEIGHT_REQ_TYPE_CURRENT 1
+#define HUITP_IEID_UNI_SCALE_WEIGHT_REQ_TYPE_STA_REP_INSTANT 2
+#define HUITP_IEID_UNI_SCALE_WEIGHT_REQ_TYPE_STA_REP_1M 3
+#define HUITP_IEID_UNI_SCALE_WEIGHT_REQ_TYPE_STA_REP_15M 4
+#define HUITP_IEID_UNI_SCALE_WEIGHT_REQ_TYPE_STA_REP_60M 5
+#define HUITP_IEID_UNI_SCALE_WEIGHT_REQ_TYPE_STA_REP_2H 6
+#define HUITP_IEID_UNI_SCALE_WEIGHT_REQ_TYPE_STA_REP_8H 7
+#define HUITP_IEID_UNI_SCALE_WEIGHT_REQ_TYPE_STA_REP_24H 8
+#define HUITP_IEID_UNI_SCALE_WEIGHT_REQ_TYPE_INVALID 0xFF
+
+//HUITP_IEID_uni_scale_weight_value               = 0x3B01,
+#define HUITP_SCALE_WEIGHT_SENSOR_NBR_MAX 20
+typedef struct StrIe_HUITP_IEID_uni_scale_weight_sta_element
+{
+	UINT32 combTimes;		//组合总次数
+	UINT32 tttTimes;		//组合出料次数
+	UINT32 tgvTimes;		//组合放弃次数
+	UINT32 combMatNbr;  	//组合的物料数量
+	UINT32 tttMatNbr;		//组合出料的物料数量
+	UINT32 tgvMatNbr;		//组合放弃的物料数量
+	UINT32 combAvgSpeed;	//组合平均速度
+	UINT32 totalWeight;		//总共处理的物料总重量
+	UINT32 totalMatNbr;  	//总共处理的物料总数量
+	UINT32 totalWorkMin;	//连续工作的总分钟数
+	UINT32 timeInUnix;  	//报告生成的unix时间，网络可能报告滞留
+	UINT32 errNbr;			//出错次数
+}StrIe_HUITP_IEID_uni_scale_weight_sta_element_t;
 typedef struct StrIe_HUITP_IEID_uni_scale_weight_value
 {
 	UINT16 ieId;
 	UINT16 ieLen;
+	UINT8  type;			//数据汇报的类型
 	UINT8  dataFormat;
-	UINT16 scaleWeightValue;
+	UINT8  snrCfgNbrMax;  	//系统配置的称重传感器最大数
+	UINT32 snrUsedBitmap;  	//汇报哪些称重传感器对应的数据
+	UINT32 snrValue[HUITP_SCALE_WEIGHT_SENSOR_NBR_MAX];
+	StrIe_HUITP_IEID_uni_scale_weight_sta_element_t sta;
 }StrIe_HUITP_IEID_uni_scale_weight_value_t;
 
-//HUITP_IEID_uni_scale_weight_cmd                 = 0x3B01,
+//HUITP_IEID_uni_scale_weight_cmd                 = 0x3B02,
 typedef struct StrIe_HUITP_IEID_uni_scale_weight_cmd
 {
 	UINT16 ieId;
 	UINT16 ieLen;
 	UINT16 scaleWeightCmd;
 }StrIe_HUITP_IEID_uni_scale_weight_cmd_t;
-#define HUITP_IEID_UNI_BFSC_SCALE_WEIGHT_NULL 0
-#define HUITP_IEID_UNI_BFSC_SCALE_WEIGHT_START 1
-#define HUITP_IEID_UNI_BFSC_SCALE_WEIGHT_STOP 2
-#define HUITP_IEID_UNI_BFSC_SCALE_WEIGHT_REVERSE 3
-#define HUITP_IEID_UNI_BFSC_SCALE_WEIGHT_CONTINUE 4
-#define HUITP_IEID_UNI_BFSC_SCALE_WEIGHT_INVALID 0xFF
+#define HUITP_IEID_UNI_SCALE_WEIGHT_CMD_NULL 0
+#define HUITP_IEID_UNI_SCALE_WEIGHT_CMD_START 1
+#define HUITP_IEID_UNI_SCALE_WEIGHT_CMD_STOP 2
+#define HUITP_IEID_UNI_SCALE_WEIGHT_CMD_REVERSE 3
+#define HUITP_IEID_UNI_SCALE_WEIGHT_CMD_SUSPEND 4
+#define HUITP_IEID_UNI_SCALE_WEIGHT_CMD_RESUME 5
+#define HUITP_IEID_UNI_SCALE_WEIGHT_CMD_CONTINUE 6
+#define HUITP_IEID_UNI_SCALE_WEIGHT_CMD_FORBIDEN 7
+#define HUITP_IEID_UNI_SCALE_WEIGHT_CMD_LOCK 8
+#define HUITP_IEID_UNI_SCALE_WEIGHT_CMD_UNLOCK 9
+#define HUITP_IEID_UNI_SCALE_WEIGHT_CMD_AUTH 10
+#define HUITP_IEID_UNI_SCALE_WEIGHT_CMD_UNAUTH 11
+#define HUITP_IEID_UNI_SCALE_WEIGHT_CMD_NORMAL_MODE 12
+#define HUITP_IEID_UNI_SCALE_WEIGHT_CMD_SLEEP_MODE 13
+#define HUITP_IEID_UNI_SCALE_WEIGHT_CMD_MAINT_MODE 14
+#define HUITP_IEID_UNI_SCALE_WEIGHT_CMD_RESTART 15
+#define HUITP_IEID_UNI_SCALE_WEIGHT_CMD_REBOOT 16
+#define HUITP_IEID_UNI_SCALE_WEIGHT_CMD_SHUT_DOWN 17
+#define HUITP_IEID_UNI_SCALE_WEIGHT_CMD_CFG_TO_EQU 18
+#define HUITP_IEID_UNI_SCALE_WEIGHT_CMD_CFG_REPORT 19
+#define HUITP_IEID_UNI_SCALE_WEIGHT_CMD_INVALID 0xFF
+
+//HUITP_IEID_uni_scale_weight_cfg_par             = 0x3B03,
+typedef struct StrIe_HUITP_IEID_uni_scale_weight_cfg_par
+{
+	UINT16 ieId;
+	UINT16 ieLen;
+	UINT8  workMode;
+	UINT8  scaleWeightNbr;  		//配置数量
+	UINT32 staStartTime;  			//24小时之内，哪个时间作为统计的起点
+	UINT32 staReportDuration;     	//统计报告周期
+}StrIe_HUITP_IEID_uni_scale_weight_cfg_par_t;
+#define HUITP_IEID_UNI_SCALE_WEIGHT_CFG_PAR_WORK_MODE_NULL 0
+#define HUITP_IEID_UNI_SCALE_WEIGHT_CFG_PAR_WORK_MODE_NORMAL 1
+#define HUITP_IEID_UNI_SCALE_WEIGHT_CFG_PAR_WORK_MODE_TIMING 2
+#define HUITP_IEID_UNI_SCALE_WEIGHT_CFG_PAR_WORK_MODE_INVALID 0xFF
+
+//HUITP_IEID_uni_scale_weight_event               = 0x3B04,
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_USER_NAME_MAX_LEN 20
+typedef struct StrIe_HUITP_IEID_uni_scale_weight_event
+{
+	UINT16 ieId;
+	UINT16 ieLen;
+	UINT8  eventType;
+	UINT8  sensorId;
+	UINT16 eventValue;
+	char   userName[HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_USER_NAME_MAX_LEN];
+	UINT16 cause;
+}StrIe_HUITP_IEID_uni_scale_weight_event_t;
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_NULL 				(0)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_SENSOR_ERROR 		(1)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_SYSTEM_ERROR 		(2)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_COMB_ONE_TIME 		(3)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_TTT_ONE_TIME 		(4)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_TGV_ONE_TIME 		(5)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_COMB_TIMES_IN_15M	(10)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_TTT_TIMES_IN_15M 	(11)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_TGV_TIMES_IN_15M 	(12)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_COMB_TIMES_IN_60M	(13)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_TTT_TIMES_IN_60M 	(14)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_TGV_TIMES_IN_60M 	(15)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_COMB_TIMES_IN_2H		(16)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_TTT_TIMES_IN_2H 		(17)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_TGV_TIMES_IN_2H 		(18)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_COMB_TIMES_IN_8H		(19)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_TTT_TIMES_IN_8H 		(20)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_TGV_TIMES_IN_8H 		(21)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_COMB_TIMES_IN_24H	(22)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_TTT_TIMES_IN_24H 	(23)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_TGV_TIMES_IN_24H 	(24)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_MATERIALS_NBR_IN_15M (30)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_MATERIALS_NBR_IN_60M (31)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_MATERIALS_NBR_IN_2H 	(32)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_MATERIALS_NBR_IN_8H 	(33)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_MATERIALS_NBR_IN_24M (34)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_TOTAL_WEIGHT_IN_15M 	(35)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_TOTAL_WEIGHT_IN_60M 	(36)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_TOTAL_WEIGHT_IN_2H 	(37)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_TOTAL_WEIGHT_IN_8H 	(38)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_TOTAL_WEIGHT_IN_24H 	(39)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_COMB_AVG_SPD_IN_1M 	(40)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_COMB_AVG_SPD_IN_15M 	(41)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_COMB_AVG_SPD_IN_60M 	(42)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_COMB_AVG_SPD_IN_2H 	(43)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_COMB_AVG_SPD_IN_8H 	(44)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_COMB_AVG_SPD_IN_24H 	(45)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_SYSTEM_POWER_ON		(50)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_USER_LOGIN			(51)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_USER_LOGOUT			(52)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_SYSTEM_IDLE			(53)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_SYSTEM_IN_OPR		(54)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_SYSTEM_STAR		 	(55)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_SYSTEM_STOP		 	(56)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_SYSTEM_RESTART		(57)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_SYSTEM_SUSPEND		(58)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_SYSTEM_RESUME		(59)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_EVENT_TYPE_INVALID 				(0xFF)
+//新的错误类型定义
+#define HUITP_VALID_ERR_CODE_SCALE_WEIGHT_SENSOR_OUT_OF_SERVICE		(0x3B00)
+#define HUITP_VALID_ERR_CODE_SCALE_WEIGHT_SENSOR_RESTART			(0x3B01)
+#define HUITP_VALID_ERR_CODE_SCALE_WEIGHT_SENSOR_RCV_ILLEGAL_DATA	(0x3B02)
+
+//HUITP_IEID_uni_scale_weight_statistic           = 0x3B05,
+typedef struct StrIe_HUITP_IEID_uni_scale_weight_statistic
+{
+	UINT16 ieId;
+	UINT16 ieLen;
+	UINT8  staRepType;
+	UINT8  dataFormat;
+	StrIe_HUITP_IEID_uni_scale_weight_sta_element_t sta;
+}StrIe_HUITP_IEID_uni_scale_weight_statistic_t;
+#define HUITP_IEID_UNI_SCALE_WEIGHT_STATISTIC_REPORT_NULL				(0)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_STATISTIC_REPORT_15M				(1)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_STATISTIC_REPORT_60M				(2)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_STATISTIC_REPORT_2H					(3)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_STATISTIC_REPORT_8H					(4)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_STATISTIC_REPORT_24H				(5)
+#define HUITP_IEID_UNI_SCALE_WEIGHT_STATISTIC_REPORT_INVALID			(0xFF)
 
 //HUITP_IEID_uni_bfsc_comb_scale_max,
+
 
 //云控锁-锁
 //HUITP_IEID_uni_ccl_lock_min                     = 0x4000,  
@@ -2874,7 +3037,6 @@ typedef struct StrIe_HUITP_IEID_uni_inventory_hw_type
 #define HUITP_IEID_UNI_INVENT_HWTYPE_PDTYPE_E3_DZGP_01 0x1301  //电子工牌
 #define HUITP_IEID_UNI_INVENT_HWTYPE_PDTYPE_E4_ZNSH_01 0x1401  //智能手环
 
-
 //HUITP_IEID_uni_inventory_hw_id                  = 0xA001, 
 typedef struct StrIe_HUITP_IEID_uni_inventory_hw_id
 {
@@ -3087,6 +3249,25 @@ typedef struct StrIe_HUITP_IEID_uni_heart_beat_pong
 }StrIe_HUITP_IEID_uni_heart_beat_pong_t;
 
 //HUITP_IEID_uni_heart_beat_max,
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//  HUITP ERR_CODE定义
+//
+//  #使用２BYTE
+//  #第一个BYTE与对应的CMDID匹配，用于定义特定CMDID下出现的错误原因
+//  #第二个BYTE定义与具体的错误
+//  #第一个BYTE=0时，表示通用的错误类型
+//  #0x0000, 0xFFFF都保留不用
+//
+//////////////////////////////////////////////////////////////////////////////////////////////////
+#define HUITP_VALID_ERR_CODE_NULL 						(0x0000)
+#define HUITP_VALID_ERR_CODE_UNKNOW 	 				(0x0001)
+#define HUITP_VALID_ERR_CODE_GENERAL_REASON 			(0x0002)
+#define HUITP_VALID_ERR_CODE_GENERAL_HARDWARE_FAULT 	(0x0003)
+#define HUITP_VALID_ERR_CODE_GENERAL_SOFTWARE_FAULT 	(0x0003)
+#define HUITP_VALID_ERR_CODE_INVALID 					(0xFFFF)
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -6516,7 +6697,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_transporter_report
 	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_transporter_value_t reportValue;
-}StrMsg_HUITP_HUITP_MSGID_uni_transporter_report_t;
+}StrMsg_HUITP_MSGID_uni_transporter_report_t;
 
 //HUITP_MSGID_uni_transporter_confirm                     = 0x3A01,
 typedef struct StrMsg_HUITP_MSGID_uni_transporter_confirm
@@ -6530,75 +6711,97 @@ typedef struct StrMsg_HUITP_MSGID_uni_transporter_confirm
 
 //组合秤BFSC
 //HUITP_MSGID_uni_bfsc_comb_scale_min              = 0x3B00, 
-//HUITP_MSGID_uni_bfsc_comb_scale_req                     = 0x3B00,
-typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_req
+//HUITP_MSGID_uni_bfsc_comb_scale_data_req         = 0x3B00,
+typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_data_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
 	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
-}StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_req_t;
+	StrIe_HUITP_IEID_uni_scale_weight_req_t dataReq;
+}StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_data_req_t;
  
-//HUITP_MSGID_uni_bfsc_comb_scale_resp                    = 0x3B80,
-typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_resp
+//HUITP_MSGID_uni_bfsc_comb_scale_data_resp        = 0x3B80,
+typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_data_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
 	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_scale_weight_value_t respValue;
-}StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_resp_t;
- 
-//HUITP_MSGID_uni_bfsc_comb_scale_report                  = 0x3B81,
-typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_report
+}StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_data_resp_t;
+
+//HUITP_MSGID_uni_bfsc_comb_scale_data_report      = 0x3B81,
+typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_data_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
 	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_scale_weight_value_t reportValue;
-}StrMsg_HUITP_HUITP_MSGID_uni_bfsc_comb_scale_report_t;
+}StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_data_report_t;
 
-//HUITP_MSGID_uni_bfsc_comb_scale_confirm                     = 0x3B01,
-typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_confirm
+//HUITP_MSGID_uni_bfsc_comb_scale_data_confirm     = 0x3B01,
+typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_data_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
 	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
-}StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_confirm_t;
+}StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_data_confirm_t;
 
-//HUITP_MSGID_uni_bfsc_comb_scale_cmd_start_req    = 0x3B02,
-typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_cmd_start_req
+//HUITP_MSGID_uni_bfsc_comb_scale_event_report     = 0x3B82,
+typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_event_report
+{
+	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_report_t baseReport;
+	StrIe_HUITP_IEID_uni_scale_weight_event_t reportEvent;
+}StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_event_report_t;
+
+//HUITP_MSGID_uni_bfsc_comb_scale_event_confirm    = 0x3B02,
+typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_event_confirm
+{
+	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
+}StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_event_confirm_t;
+
+//HUITP_MSGID_uni_bfsc_comb_scale_cmd_req          = 0x3B03,
+typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_cmd_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
 	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
-	StrIe_HUITP_IEID_uni_scale_weight_cmd_t cmd;
-}StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_cmd_start_req_t;
- 
-//HUITP_MSGID_uni_bfsc_comb_scale_cmd_start_resp   = 0x3B82, 
-typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_cmd_start_resp
+	StrIe_HUITP_IEID_uni_scale_weight_cmd_t cmdReq;
+	StrIe_HUITP_IEID_uni_scale_weight_cfg_par_t cfgReq;
+}StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_cmd_req_t;
+
+//HUITP_MSGID_uni_bfsc_comb_scale_cmd_resp         = 0x3B83,
+typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_cmd_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
 	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
-}StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_cmd_start_resp_t;
+	StrIe_HUITP_IEID_uni_scale_weight_cmd_t cmdResp;
+	StrIe_HUITP_IEID_uni_scale_weight_cfg_par_t cfgResp;
+}StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_cmd_resp_t;
 
-//HUITP_MSGID_uni_bfsc_comb_scale_cmd_stop_req     = 0x3B03, 
-typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_cmd_stop_req
+//HUITP_MSGID_uni_bfsc_statistic_report            = 0x3B84,
+typedef struct StrMsg_HUITP_MSGID_uni_bfsc_statistic_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
 	UINT16 msgLen;
-	StrIe_HUITP_IEID_uni_com_req_t baseReq;
-	StrIe_HUITP_IEID_uni_scale_weight_cmd_t cmd;
-}StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_cmd_stop_req_t;
+	StrIe_HUITP_IEID_uni_com_report_t baseReport;
+	StrIe_HUITP_IEID_uni_scale_weight_statistic_t staRep;
+}StrMsg_HUITP_MSGID_uni_bfsc_statistic_report_t;
 
-//HUITP_MSGID_uni_bfsc_comb_scale_cmd_stop_resp    = 0x3B83,
-typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_cmd_stop_resp
+//HUITP_MSGID_uni_bfsc_statistic_confirm           = 0x3B04,
+typedef struct StrMsg_HUITP_MSGID_uni_bfsc_statistic_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
 	UINT16 msgLen;
-	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
-}StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_cmd_stop_resp_t;
+	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
+}StrMsg_HUITP_MSGID_uni_bfsc_statistic_confirm_t;
 
 //HUITP_MSGID_uni_bfsc_comb_scale_max,
+
 
 //云控锁-锁-兼容旧系统
 //HUITP_MSGID_uni_ccl_lock_old_min                     = 0x4000,  
@@ -8276,5 +8479,5 @@ typedef struct StrMsg_HUITP_MSGID_uni_heart_beat_confirm
 //无效
 //HUITP_MSGID_uni_null                             = 0xFF,	
 
-#pragma pack () //取消字节对其
+//#pragma pack () //取消字节对齐
 #endif /* _HUITP_H_ */
