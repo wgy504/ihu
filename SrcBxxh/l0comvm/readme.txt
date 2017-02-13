@@ -11,6 +11,7 @@ CCL=> 最后剩下的任务是摄像头+IAP+节电，然后打开门狗就完美
 = 增加VM-COMMON机制，简化状态机的编制
 = 归一化IHU_SYSDIM/IHU_SYSCFG/IHU_SYSENG/IHU_SYSMSG的全局常量命名，模块命名应用使用IHU_MODULE_XXX的形式，方便追踪常量的来龙去脉
 = 增加HUITP的消息参数设置检查
+= 修正和完善HUITP的解码函数
 
 //= ZJL, 2017 Feb.8, CURRENT_SW_DELIVERY R03.117 =>CCL项目
 = 继续完善任务初始化以及TIMER初始化，降低代码和配置研发工作量，提高智能化程度
