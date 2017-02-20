@@ -9,10 +9,9 @@
 #define _HUITP_H_
 #pragma pack (1) //强制1字节对齐
 
-
 /*
  *
- *  顺从并更新到技术规范《慧HUITP接口规范v2.0, LAST UPDATE@2007/2》
+ *  顺从并更新到技术规范《慧HUITP接口规范v2.1, LAST UPDATE@2007/2》
  *
  */
 
@@ -413,10 +412,12 @@ typedef enum
 
   //扬尘监控系统
 	HUITP_MSGID_uni_ycjk_min                         = 0x3000, 
-	HUITP_MSGID_uni_ycjk_req                         = 0x3000, 
-	HUITP_MSGID_uni_ycjk_resp                        = 0x3080, 
-	HUITP_MSGID_uni_ycjk_report                      = 0x3081, 
-	HUITP_MSGID_uni_ycjk_confirm                     = 0x3001,
+	HUITP_MSGID_uni_ycjk_data_req                    = 0x3000,
+	HUITP_MSGID_uni_ycjk_data_resp                   = 0x3080,
+	HUITP_MSGID_uni_ycjk_data_report                 = 0x3081,
+	HUITP_MSGID_uni_ycjk_data_confirm                = 0x3001,
+	HUITP_MSGID_uni_ycjk_ctrl_req                    = 0x3002,
+	HUITP_MSGID_uni_ycjk_ctrl_resp                   = 0x3082,
 	HUITP_MSGID_uni_ycjk_max,
 
   //水表
@@ -507,8 +508,8 @@ typedef enum
 	HUITP_MSGID_uni_bfsc_comb_scale_data_confirm     = 0x3B01,
 	HUITP_MSGID_uni_bfsc_comb_scale_event_report     = 0x3B82,
 	HUITP_MSGID_uni_bfsc_comb_scale_event_confirm    = 0x3B02,
-	HUITP_MSGID_uni_bfsc_comb_scale_cmd_req          = 0x3B03,
-	HUITP_MSGID_uni_bfsc_comb_scale_cmd_resp         = 0x3B83,
+	HUITP_MSGID_uni_bfsc_comb_scale_ctrl_req          = 0x3B03,
+	HUITP_MSGID_uni_bfsc_comb_scale_ctrl_resp         = 0x3B83,
 	HUITP_MSGID_uni_bfsc_statistic_report            = 0x3B84,
 	HUITP_MSGID_uni_bfsc_statistic_confirm           = 0x3B04,
 	HUITP_MSGID_uni_bfsc_comb_scale_max,
@@ -1021,6 +1022,7 @@ typedef enum
   //扬尘监控系统
 	HUITP_IEID_uni_ycjk_min                         = 0x3000, 
 	HUITP_IEID_uni_ycjk_value                       = 0x3000, 
+	HUITP_IEID_uni_ycjk_sensor_selection            = 0x3001,
 	HUITP_IEID_uni_ycjk_max,
 
   //水表
@@ -2036,8 +2038,27 @@ typedef struct StrIe_HUITP_IEID_uni_ycjk_value
 	UINT16 ieId;
 	UINT16 ieLen;
 	UINT8  dataFormat;
-	UINT32 ycjkTestValue;
+	UINT32 emcValue;
+	UINT32 tempValue;
+	UINT32 humidValue;
+	UINT32 winddirValue;
+	UINT32 windspdValue;
+	UINT32 noiseValue;
+	UINT32 pm1d0Value;
+	UINT32 pm2d5Value;
+	UINT32 pm10Value;
+	UINT32 airprsValue;
 }StrIe_HUITP_IEID_uni_ycjk_value_t;
+
+//HUITP_IEID_uni_ycjk_sensor_selection            = 0x3001,
+typedef struct StrIe_HUITP_IEID_uni_ycjk_sensor_selection
+{
+	UINT16 ieId;
+	UINT16 ieLen;
+	UINT8  sensorType;
+	UINT8  sensorId;
+	UINT32 sensorBitmap;
+}StrIe_HUITP_IEID_uni_ycjk_sensor_selection_t;
 
 //HUITP_IEID_uni_ycjk_max,
 
@@ -4367,39 +4388,70 @@ typedef struct StrMsg_HUITP_MSGID_uni_picture_ctrl_resp
 
 //扬尘监控系统
 //HUITP_MSGID_uni_ycjk_min                         = 0x3000, 
-//HUITP_MSGID_uni_ycjk_req                         = 0x3000,
-typedef struct StrMsg_HUITP_MSGID_uni_ycjk_req
+//HUITP_MSGID_uni_ycjk_data_req                    = 0x3000,
+typedef struct StrMsg_HUITP_MSGID_uni_ycjk_data_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
 	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
-}StrMsg_HUITP_MSGID_uni_ycjk_req_t;
+}StrMsg_HUITP_MSGID_uni_ycjk_data_req_t;
 
 //HUITP_MSGID_uni_ycjk_resp                        = 0x3080,
-typedef struct StrMsg_HUITP_MSGID_uni_ycjk_resp
+typedef struct StrMsg_HUITP_MSGID_uni_ycjk_data_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
 	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_ycjk_value_t respValue;
-}StrMsg_HUITP_MSGID_uni_ycjk_resp_t;
+}StrMsg_HUITP_MSGID_uni_ycjk_data_resp_t;
 
-//HUITP_MSGID_uni_ycjk_report                      = 0x3081,
-typedef struct StrMsg_HUITP_MSGID_uni_ycjk_report
+//HUITP_MSGID_uni_ycjk_data_report                      = 0x3081,
+typedef struct StrMsg_HUITP_MSGID_uni_ycjk_data_report
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
 	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_report_t baseReport;
 	StrIe_HUITP_IEID_uni_ycjk_value_t reportValue;
-}StrMsg_HUITP_MSGID_uni_ycjk_report_t;
+}StrMsg_HUITP_MSGID_uni_ycjk_data_report_t;
 
-//HUITP_MSGID_uni_ycjk_confirm                         = 0x3001,
-typedef struct StrMsg_HUITP_MSGID_uni_ycjk_confirm
+//HUITP_MSGID_uni_ycjk_data_confirm                         = 0x3001,
+typedef struct StrMsg_HUITP_MSGID_uni_ycjk_data_confirm
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
 	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
-}StrMsg_HUITP_MSGID_uni_ycjk_confirm_t;
+}StrMsg_HUITP_MSGID_uni_ycjk_data_confirm_t;
+
+
+//HUITP_MSGID_uni_ycjk_ctrl_req                    = 0x3002,
+typedef struct StrMsg_HUITP_MSGID_uni_ycjk_ctrl_req
+{
+	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_req_t baseReq;
+	StrIe_HUITP_IEID_uni_ycjk_sensor_selection_t sensor;
+	StrIe_HUITP_IEID_uni_com_snr_cmd_tag_t cmdReq;
+	StrIe_HUITP_IEID_uni_com_switch_onoff_t switchState;
+	StrIe_HUITP_IEID_uni_com_work_cycle_t workCycle;
+	StrIe_HUITP_IEID_uni_com_sample_cycle_t sampleCycle;
+	StrIe_HUITP_IEID_uni_com_sample_number_t sampleNbr;
+	StrIe_HUITP_IEID_uni_com_modbus_address_t modbusAddr;
+}StrMsg_HUITP_MSGID_uni_ycjk_ctrl_req_t;
+
+//HUITP_MSGID_uni_ycjk_ctrl_resp                   = 0x3082,
+typedef struct StrMsg_HUITP_MSGID_uni_ycjk_ctrl_resp
+{
+	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
+	UINT16 msgLen;
+	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
+	StrIe_HUITP_IEID_uni_ycjk_sensor_selection_t sensor;
+	StrIe_HUITP_IEID_uni_com_snr_cmd_tag_t cmdResp;
+	StrIe_HUITP_IEID_uni_com_switch_onoff_t switchState;
+	StrIe_HUITP_IEID_uni_com_work_cycle_t workCycle;
+	StrIe_HUITP_IEID_uni_com_sample_cycle_t sampleCycle;
+	StrIe_HUITP_IEID_uni_com_sample_number_t sampleNbr;
+	StrIe_HUITP_IEID_uni_com_modbus_address_t modbusAddr;
+}StrMsg_HUITP_MSGID_uni_ycjk_ctrl_resp_t;
 
 //HUITP_MSGID_uni_ycjk_max,
 
@@ -4837,25 +4889,25 @@ typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_event_confirm
 	StrIe_HUITP_IEID_uni_com_confirm_t baseConfirm;
 }StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_event_confirm_t;
 
-//HUITP_MSGID_uni_bfsc_comb_scale_cmd_req          = 0x3B03,
-typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_cmd_req
+//HUITP_MSGID_uni_bfsc_comb_scale_ctrl_req          = 0x3B03,
+typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_ctrl_req
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
 	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_req_t baseReq;
 	StrIe_HUITP_IEID_uni_scale_weight_cmd_t cmdReq;
 	StrIe_HUITP_IEID_uni_scale_weight_cfg_par_t cfgReq;
-}StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_cmd_req_t;
+}StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_ctrl_req_t;
 
-//HUITP_MSGID_uni_bfsc_comb_scale_cmd_resp         = 0x3B83,
-typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_cmd_resp
+//HUITP_MSGID_uni_bfsc_comb_scale_ctrl_resp         = 0x3B83,
+typedef struct StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_ctrl_resp
 {
 	StrMsg_HUITP_MSGID_uni_general_head_msgid_t msgId;
 	UINT16 msgLen;
 	StrIe_HUITP_IEID_uni_com_resp_t baseResp;
 	StrIe_HUITP_IEID_uni_scale_weight_cmd_t cmdResp;
 	StrIe_HUITP_IEID_uni_scale_weight_cfg_par_t cfgResp;
-}StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_cmd_resp_t;
+}StrMsg_HUITP_MSGID_uni_bfsc_comb_scale_ctrl_resp_t;
 
 //HUITP_MSGID_uni_bfsc_statistic_report            = 0x3B84,
 typedef struct StrMsg_HUITP_MSGID_uni_bfsc_statistic_report
@@ -6545,5 +6597,5 @@ typedef struct StrMsg_HUITP_MSGID_uni_heart_beat_confirm
 //无效
 //HUITP_MSGID_uni_null                             = 0xFF,	
 
-//#pragma pack () //取消字节对齐
+#pragma pack () //取消字节对齐
 #endif /* _HUITP_H_ */
