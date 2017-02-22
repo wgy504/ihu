@@ -76,7 +76,7 @@ typedef struct IhuTaskTag
 	UINT32 TaskId;
 	UINT8  pnpState;
 	UINT8  state;
-	char   TaskName[TASK_NAME_MAX_LENGTH];
+	char   TaskName[IHU_SYSDIM_TASK_NAME_LEN_MAX];
 }IhuTaskTag_t;
 
 
@@ -109,18 +109,18 @@ typedef struct FsmCtrlTable
 {
 	UINT8 numOfFsmArrayElement;  //每一个具体任务TASK中，定义了多少个STATE-MSGID映射表单
 	UINT8 taskId;
-	FsmArrayElement_t pFsmArray[MAX_STATE_NUM_IN_ONE_TASK][MAX_MSGID_NUM_IN_ONE_TASK];
+	FsmArrayElement_t pFsmArray[IHU_SYSDIM_TASK_STATE_NBR_MAX][IHU_SYSDIM_MSGID_NBR_MAX];
 }FsmCtrlTable_t;
 
 //MsgQueue的基础结构定义
 typedef struct FsmQueueElement
 {
-	UINT8 msgQue[MAX_IHU_MSG_BODY_LENGTH];
+	UINT8 msgQue[IHU_SYSDIM_MSG_BODY_LEN_MAX];
 	bool useFlag;
 }FsmQueueElement_t;
 typedef struct FsmQueueListTable
 {
-	FsmQueueElement_t queList[MAX_QUEUE_NUM_IN_ONE_TASK];
+	FsmQueueElement_t queList[IHU_SYSDIM_MSG_QUEUE_NBR_MAX];
 	UINT8 queIndex;
 }FsmQueueListTable_t;
 
@@ -129,8 +129,8 @@ typedef struct FsmTable
 {
 	UINT8 numOfFsmCtrlTable;  //Number of running (Task + Instance)
 	UINT8 currentTaskId;  //transfer task_id to launched FSM machine, then useless
-	FsmCtrlTable_t  pFsmCtrlTable[MAX_TASK_NUM_IN_ONE_IHU];  //所有任务的状态机总控表
-	FsmQueueListTable_t taskQue[MAX_TASK_NUM_IN_ONE_IHU];  //所有任务的消息队列总控表
+	FsmCtrlTable_t  pFsmCtrlTable[IHU_SYSDIM_TASK_NBR_MAX];  //所有任务的状态机总控表
+	FsmQueueListTable_t taskQue[IHU_SYSDIM_TASK_NBR_MAX];  //所有任务的消息队列总控表
 }FsmTable_t;
 
 //任务模块RESTART的一些全局定义
@@ -282,17 +282,17 @@ typedef struct IhuTimerElement
  */
 
 //Global variables
-extern IhuTaskTag_t zIhuTaskInfo[MAX_TASK_NUM_IN_ONE_IHU];  //任务控制总表
+extern IhuTaskTag_t zIhuTaskInfo[IHU_SYSDIM_TASK_NBR_MAX];  //任务控制总表
 extern IhuHwInvInfoTag_t zIhuHwInvInfo;                     //硬件清单
-extern UINT32 zIhuRunErrCnt[MAX_TASK_NUM_IN_ONE_IHU];       //差错表
+extern UINT32 zIhuRunErrCnt[IHU_SYSDIM_TASK_NBR_MAX];       //差错表
 extern FsmTable_t zIhuFsmTable;                             //状态机总表
-extern char *zIhuTaskNameList[MAX_TASK_NUM_IN_ONE_IHU];     //任务名字符串
-extern char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK];    //消息名字符串
-extern IhuSysEngParTable_t zIhuSysEngPar;                   //工参
+extern char *zIhuTaskNameList[IHU_SYSDIM_TASK_NBR_MAX];     //任务名字符串
+extern char *zIhuMsgNameList[IHU_SYSDIM_MSGID_NBR_MAX];    //消息名字符串
+extern IhuSysEngParTab_t    zIhuSysEngPar;                   //工参
 //extern IhuTimerTable_t zIhuTimerTable;                      //定时器
 extern time_t zIhuSystemTimeUnix;                           //系统时钟TimeStamp
 extern struct tm zIhuSystemTimeYmd;                        	//系统时钟YMD
-//extern UINT32 zIhuSleepCnt[MAX_TASK_NUM_IN_ONE_IHU][MAX_SLEEP_NUM_IN_ONE_TASK];  //睡眠控制表
+//extern UINT32 zIhuSleepCnt[IHU_SYSDIM_TASK_NBR_MAX][MAX_SLEEP_NUM_IN_ONE_TASK];  //睡眠控制表
 //extern FsmStateItem_t FsmVmdashell[];                            //状态机
 //extern FsmStateItem_t FsmTimer[];                           //状态机
 //extern FsmStateItem_t FsmAsylibra[];                        //状态机

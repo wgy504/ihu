@@ -28,14 +28,14 @@
 //2. 公共消息结构体定义
 //Under normal case, 1024Byte shall be enough for internal message communciation purpose.
 //If not enough, need modify here to enlarge
-#define MAX_IHU_MSG_BUF_LENGTH MAX_IHU_MSG_BODY_LENGTH-5
+#define MAX_IHU_MSG_BUF_LENGTH IHU_SYSDIM_MSG_BODY_LEN_MAX-5
 typedef struct IhuMsgSruct
 {
 	UINT16 msgType;
 	UINT8 dest_id;
 	UINT8 src_id;
 	UINT8 msgLen;
-	INT8 msgBody[MAX_IHU_MSG_BODY_LENGTH];
+	INT8 msgBody[IHU_SYSDIM_MSG_BODY_LEN_MAX];
 }IhuMsgSruct_t;
 
 
@@ -266,7 +266,7 @@ typedef struct  msg_struct_vmdashell_asylibra_ble_disc //
 	UINT8 length;
 }msg_struct_vmdashell_asylibra_ble_disc_t;
 
-#define MSG_BUF_MAX_LENGTH_ASY_DATA_GENERAL MAX_IHU_MSG_BODY_LENGTH-4
+#define MSG_BUF_MAX_LENGTH_ASY_DATA_GENERAL IHU_SYSDIM_MSG_BODY_LEN_MAX-4
 typedef struct  msg_struct_vmdashell_asylibra_data_dl //
 {
 	UINT8 length;

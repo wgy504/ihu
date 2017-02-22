@@ -14,10 +14,10 @@
  **********************************************************************************/
 
 //全局变量：任务和队列
-IhuTaskTag_t zIhuTaskInfo[MAX_TASK_NUM_IN_ONE_IHU];
+IhuTaskTag_t zIhuTaskInfo[IHU_SYSDIM_TASK_NBR_MAX];
 
 //全局变量：记录所有任务模块工作差错的次数，以便适当处理
-UINT32 zIhuRunErrCnt[MAX_TASK_NUM_IN_ONE_IHU];
+UINT32 zIhuRunErrCnt[IHU_SYSDIM_TASK_NBR_MAX];
 
 //全局变量：
 IhuHwInvInfoTag_t zIhuHwInvInfo;
@@ -26,10 +26,10 @@ IhuHwInvInfoTag_t zIhuHwInvInfo;
 FsmTable_t zIhuFsmTable;
 
 //全局工程参数表
-IhuSysEngParTable_t zIhuSysEngPar; //全局工程参数控制表
+IhuSysEngParTab_t zIhuSysEngPar; //全局工程参数控制表
 
 //全局SLEEP时长控制表
-//UINT32 zIhuSleepCnt[MAX_TASK_NUM_IN_ONE_IHU][MAX_SLEEP_NUM_IN_ONE_TASK];
+//UINT32 zIhuSleepCnt[IHU_SYSDIM_TASK_NBR_MAX][MAX_SLEEP_NUM_IN_ONE_TASK];
 
 //全局时间
 time_t zIhuSystemTimeUnix = 1444341556;  //2015/8
@@ -39,7 +39,7 @@ struct tm zIhuSystemTimeYmd;
 //请服从最长长度TASK_NAME_MAX_LENGTH的定义，不然Debug/Trace打印出的信息也会出错
 //全局变量：任务打印命名
 //从极致优化内存的角度，这里浪费了一个TASK对应的内存空间（MIN=0)，但它却极大的改善了程序编写的效率，值得浪费！！！
-char *zIhuTaskNameList[MAX_TASK_NUM_IN_ONE_IHU] ={
+char *zIhuTaskNameList[IHU_SYSDIM_TASK_NBR_MAX] ={
 	"MIN",
 	"VMDASHELL",
 	"TIMER",
@@ -52,7 +52,7 @@ char *zIhuTaskNameList[MAX_TASK_NUM_IN_ONE_IHU] ={
 //消息ID的定义全局表，方便TRACE函数使用
 //请服从MSG_NAME_MAX_LENGTH的最长定义，不然出错
 //全局变量：消息打印命名
-char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK] ={
+char *zIhuMsgNameList[IHU_SYSDIM_MSGID_NBR_MAX] ={
 		"MSG_ID_COM_MIN",
 		"MSG_ID_COM_INIT",
 		"MSG_ID_COM_INIT_FB",
@@ -62,7 +62,7 @@ char *zIhuMsgNameList[MAX_MSGID_NUM_IN_ONE_TASK] ={
 };
 
 
-//char strDebug1[IHU_PRINT_CHAR_SIZE];
+//char strDebug1[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX];
 bool flagInitMsgSend = FALSE;
 
 /*******************************************************************************
@@ -74,7 +74,7 @@ bool flagInitMsgSend = FALSE;
 //VM系统初始化过程API
 //void bxxh_vm_init_hook(void)
 //{
-//	char strDebug[IHU_PRINT_CHAR_SIZE];
+//	char strDebug[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX];
 //	
 //	//纯粹启动信息的展示
 //	IhuDebugPrint("IHU-VM: VM Shell start and initialization!");
@@ -115,7 +115,7 @@ bool flagInitMsgSend = FALSE;
 //	memset(&zIhuHwInvInfo, 0, sizeof(IhuHwInvInfoTag_t));
 //	
 //	//初始化SLEEP控制表
-//	memset(zIhuSleepCnt, 0, sizeof(UINT32)*MAX_TASK_NUM_IN_ONE_IHU*MAX_SLEEP_NUM_IN_ONE_TASK);
+//	memset(zIhuSleepCnt, 0, sizeof(UINT32)*IHU_SYSDIM_TASK_NBR_MAX*MAX_SLEEP_NUM_IN_ONE_TASK);
 //	
 //	//初始化全局时间
 //	zIhuSystemTimeUnix = 1444341556; //2015.Aug, where we starting from!!!
@@ -165,14 +165,14 @@ bool flagInitMsgSend = FALSE;
 //正常打印，print string to console port (UART2)
 void IhuDebugPrint(char *p)
 {
-	char strDebugPrintBuf[IHU_PRINT_CHAR_SIZE]; //用于打印
-	if (strlen(p) < IHU_PRINT_CHAR_SIZE-50){
+	char strDebugPrintBuf[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX]; //用于打印
+	if (strlen(p) < IHU_SYSDIM_PRINT_CHAR_SIZE_MAX-50){
 		//sprintf(strDebugPrintBuf, "DBG: %s, %s, %d, %s\r\n", __DATE__, __TIME__, __LINE__, p);
 		sprintf(strDebugPrintBuf, "DBG: %s, %s, %s\r\n", __DATE__, __TIME__, p);
 //		arch_printf(strDebugPrintBuf);		
 	}
 	else{
-		strncpy(strDebugPrintBuf, p, IHU_PRINT_CHAR_SIZE-1);
+		strncpy(strDebugPrintBuf, p, IHU_SYSDIM_PRINT_CHAR_SIZE_MAX-1);
 //		arch_printf(strDebugPrintBuf);
 //		arch_printf("\r\n");
 	}
@@ -181,14 +181,14 @@ void IhuDebugPrint(char *p)
 //错误打印，print string to console port (UART2)
 void IhuErrorPrint(char *p)
 {
-	char strDebugPrintBuf[IHU_PRINT_CHAR_SIZE]; //用于打印
-	if (strlen(p) < IHU_PRINT_CHAR_SIZE-50){
+	char strDebugPrintBuf[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX]; //用于打印
+	if (strlen(p) < IHU_SYSDIM_PRINT_CHAR_SIZE_MAX-50){
 		//sprintf(strDebugPrintBuf, "ERR: %s, %s, %d, %s\r\n", __DATE__, __TIME__, __LINE__, p);
 		sprintf(strDebugPrintBuf, "ERR: %s, %s, %s\r\n", __DATE__, __TIME__, p);
 //		arch_printf(strDebugPrintBuf);		
 	}
 	else{
-		strncpy(strDebugPrintBuf, p, IHU_PRINT_CHAR_SIZE-1);
+		strncpy(strDebugPrintBuf, p, IHU_SYSDIM_PRINT_CHAR_SIZE_MAX-1);
 //		arch_printf(strDebugPrintBuf);
 //		arch_printf("\r\n");		
 	}
@@ -271,7 +271,7 @@ UINT16 vmda1458x_emc_sample(void)
 //param_len indicate the message total length = structure + value length
 //void vmda1458x_message_send(ke_msg_id_t const msg_id, ke_task_id_t const dest_id, ke_task_id_t const src_id, void const *param_ptr, uint16_t const param_len)
 //{
-//	char strDebug[IHU_PRINT_CHAR_SIZE];
+//	char strDebug[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX];
 //	struct param_str *msg = ke_msg_alloc(msg_id, dest_id, src_id, param_len);
 //	
 //	if(NULL == msg)
@@ -295,7 +295,7 @@ UINT16 vmda1458x_emc_sample(void)
 //void vmda1458x_init_msg_to_vmdashell(void)
 //{
 //	int ret = 0;
-//	char strDebug[IHU_PRINT_CHAR_SIZE];
+//	char strDebug[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX];
 //	
 //	if (zIhuTaskInfo[TASK_ID_VMDASHELL].pnpState != IHU_TASK_PNP_ON){
 //		return;
@@ -350,7 +350,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 **********************************************************************************/
 //OPSTAT FsmSetState(UINT8 task_id, UINT8 newState)
 //{
-//	char strDebug[IHU_PRINT_CHAR_SIZE];	
+//	char strDebug[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX];	
 //	//Checking task_id range
 //	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
@@ -373,7 +373,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 
 //UINT8  FsmGetState(UINT8 task_id)
 //{
-//	char strDebug[IHU_PRINT_CHAR_SIZE];	
+//	char strDebug[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX];	
 //	/*
 //	** Check the task_id
 //	*/
@@ -413,10 +413,10 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //OPSTAT FsmInit(void)
 //{
 //	UINT32 i;
-//	char strDebug[IHU_PRINT_CHAR_SIZE];
+//	char strDebug[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX];
 //	IhuDebugPrint("IHU-VM: >>Start init FSM.");
 //	zIhuFsmTable.numOfFsmCtrlTable = 0;
-//	for(i=0; i<MAX_TASK_NUM_IN_ONE_IHU; i++)
+//	for(i=0; i<IHU_SYSDIM_TASK_NBR_MAX; i++)
 //	{
 //		zIhuFsmTable.pFsmCtrlTable[i].taskId = TASK_ID_INVALID;
 //		zIhuFsmTable.pFsmCtrlTable[i].numOfFsmArrayElement = 0;
@@ -424,7 +424,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //	zIhuFsmTable.currentTaskId = TASK_ID_INVALID;
 
 //	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_FAT_ON) != FALSE){
-//		sprintf(strDebug, "IHU-VM: Maxium (%d) tasks/modules supported.", MAX_TASK_NUM_IN_ONE_IHU);
+//		sprintf(strDebug, "IHU-VM: Maxium (%d) tasks/modules supported.", IHU_SYSDIM_TASK_NBR_MAX);
 //		IhuDebugPrint(strDebug);
 //	}
 //    return IHU_SUCCESS;
@@ -450,7 +450,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //	UINT32 state;
 //	UINT32 msgid;
 //	UINT32 item, itemNo, i, j;
-//	char strDebug[IHU_PRINT_CHAR_SIZE];
+//	char strDebug[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX];
 
 //	if ((zIhuSysEngPar.debugMode & IHU_TRACE_DEBUG_NOR_ON) != FALSE){
 //		sprintf(strDebug, "IHU-VM: >>Register new FSM. TaskId:(%d), pFsm(0x%x).", task_id, (UINT32)pFsmStateItem);
@@ -544,7 +544,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //	zIhuFsmTable.pFsmCtrlTable[task_id].taskId = task_id;
 //	for(i=0; i<MAX_STATE_NUM_IN_ONE_TASK; i++)
 //	{
-//		for(j=0; j<MAX_MSGID_NUM_IN_ONE_TASK; j++)
+//		for(j=0; j<IHU_SYSDIM_MSGID_NBR_MAX; j++)
 //		{
 //			zIhuFsmTable.pFsmCtrlTable[task_id].pFsmArray[i][j].stateFunc = NULL;
 //		}
@@ -612,7 +612,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //	UINT8  state;
 //	OPSTAT ret;
 //	UINT32 mid;
-//	char strDebug[IHU_PRINT_CHAR_SIZE];
+//	char strDebug[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX];
 //	/*
 //	** Check the task_id, message_id and par_length
 //	*/
@@ -659,7 +659,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //	mid = msg_id & MASK_MSGID_NUM_IN_ONE_TASK;
 
 //	//check the state and messageId of task
-//	if((state >= MAX_STATE_NUM_IN_ONE_TASK)||(mid >= MAX_MSGID_NUM_IN_ONE_TASK))
+//	if((state >= MAX_STATE_NUM_IN_ONE_TASK)||(mid >= IHU_SYSDIM_MSGID_NBR_MAX))
 //	{
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
 //		sprintf(strDebug, "IHU-VM: The state(%d) or msgId(0x%x) of task(0x%x) is error.", 	state, mid, dest_id);
@@ -715,7 +715,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //*******************************************************************************/
 //OPSTAT FsmProcessingLaunchEntry(UINT8 task_id)
 //{
-//	char strDebug[IHU_PRINT_CHAR_SIZE];
+//	char strDebug[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX];
 
 //	/*
 //	** Check the task_id
@@ -745,7 +745,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //{
 //	OPSTAT ret;
 //	IhuMsgSruct_t rcv;
-//	char strDebug[IHU_PRINT_CHAR_SIZE];
+//	char strDebug[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX];
 
 //	/*
 //	** Check the task_id
@@ -800,7 +800,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //*msg: out
 //OPSTAT ihu_message_rcv(UINT8 dest_id, IhuMsgSruct_t *msg)
 //{
-//	char strDebug[IHU_PRINT_CHAR_SIZE];	
+//	char strDebug[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX];	
 //	//Checking task_id range
 //	if ((dest_id <= TASK_ID_MIN) || (dest_id >= TASK_ID_MAX)){
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
@@ -867,7 +867,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT8 param_len)
 //{
 //	IhuMsgSruct_t msg;
-//	char strDebug[IHU_PRINT_CHAR_SIZE];	
+//	char strDebug[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX];	
 //	
 //	//入参检查Checking task_id range
 //	if ((dest_id <= TASK_ID_MIN) || (dest_id >= TASK_ID_MAX)){
@@ -1201,7 +1201,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //清理某一个任务的消息队列
 //OPSTAT ihu_message_queue_clean(UINT8 dest_id)
 //{
-//	char strDebug[IHU_PRINT_CHAR_SIZE];
+//	char strDebug[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX];
 //	//入参检查
 //	if ((dest_id <= TASK_ID_MIN) || (dest_id >= TASK_ID_MAX)){
 //		zIhuRunErrCnt[TASK_ID_VMDASHELL]++;
@@ -1219,7 +1219,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //OPSTAT ihu_task_create_and_run(UINT8 task_id, FsmStateItem_t* pFsmStateItem)
 //{
 //	OPSTAT ret = 0;
-//	char strDebug[IHU_PRINT_CHAR_SIZE];
+//	char strDebug[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX];
 //	
 //	//Checking task_id range
 //	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
@@ -1275,7 +1275,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //OPSTAT ihu_system_task_init_call(UINT8 task_id, FsmStateItem_t *p)
 //{
 //	int ret = 0;
-//	char strDebug[IHU_PRINT_CHAR_SIZE];
+//	char strDebug[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX];
 //	
 //	//Checking task_id range
 //	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
@@ -1327,7 +1327,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //OPSTAT ihu_system_task_execute(UINT8 task_id, FsmStateItem_t *p)
 //{
 //	int ret = 0;
-//	char strDebug[IHU_PRINT_CHAR_SIZE];
+//	char strDebug[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX];
 //	
 //	//Checking task_id range
 //	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
@@ -1433,7 +1433,7 @@ OPSTAT vmda1458x_mac_addr_get(UINT8 *mac, UINT8 len)
 //它更容易当做周期性定时器来使用，而不是真正意义上的SLEEP从而挂起程序
 //OPSTAT ihu_sleep(UINT32 cntDuration, UINT8 task_id, UINT8 seed)
 //{
-//	char strDebug[IHU_PRINT_CHAR_SIZE];
+//	char strDebug[IHU_SYSDIM_PRINT_CHAR_SIZE_MAX];
 //	
 //	//入参检查
 //	if ((task_id <= TASK_ID_MIN) || (task_id >= TASK_ID_MAX)){
