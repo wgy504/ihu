@@ -308,10 +308,10 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 		pMsgProc.authReq.bleAddrLen = 6;
 		pMsgProc.authReq.authReqType = HUITP_IEID_UNI_CCL_LOCK_AUTH_REQ_TYPE_BLE;
 	}
-	else if (ihu_vmmw_rfidmod_rc522_spi_read_id(pMsgProc.authReq.rfidAddr, 4) == IHU_SUCCESS){
-		pMsgProc.authReq.rfidAddrLen = 4;
-		pMsgProc.authReq.authReqType = HUITP_IEID_UNI_CCL_LOCK_AUTH_REQ_TYPE_RFID;
-	}
+//	else if (ihu_vmmw_rfidmod_rc522_spi_read_id(pMsgProc.authReq.rfidAddr, 4) == IHU_SUCCESS){
+//		pMsgProc.authReq.rfidAddrLen = 4;
+//		pMsgProc.authReq.authReqType = HUITP_IEID_UNI_CCL_LOCK_AUTH_REQ_TYPE_RFID;
+//	}
 	else{
 		pMsgProc.authReq.authReqType = HUITP_IEID_UNI_CCL_LOCK_AUTH_REQ_TYPE_LOCK;	
 	}
