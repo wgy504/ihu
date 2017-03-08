@@ -159,21 +159,33 @@ char *ihu_bsp_stm32_ble_get_rebuff(uint16_t *len)
   /* Address should look like "+ADDR:<NAP>:<UAP>:<LAP>",
    * where actual address will look like "1234:56:abcdef".
    */
-OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_official(uint8_t *macAddr, uint8_t len)
+OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_official(uint8_t *macAddr, uint8_t length)
 {
 	uint8_t repeatCnt = IHU_VMMW_BLEMOD_UART_REPEAT_CNT;
 	uint8_t *p1, *p2;
 
+	//固定在AT模式+从模式，让外部的手机可以连接到该模块
+  //uint8_t hc05_mode=0;  // 0：SPP规范      1：AT模式
+  //uint8_t hc05_role=DEFAULT_HC05_ROLE;  // 0：从模式       1：主模式
+  //uint8_t hc05_connect=0; // 0:未连接       1：连接成功，可以进行数据传输
+  //char hc05_mode_str[10]="SLAVE";
+	//char hc05_name[30]="HC05_SLAVE";
+  char hc05_nameCMD[40];
+		
 	//参数检查
-	if (macAddr == NULL){
-		IHU_ERROR_PRINT_BLEMOD("VMMWBLE: invalid input paramter received!\n");
-		return IHU_FAILURE;				
-	}	
+	if (macAddr == NULL) IHU_ERROR_PRINT_BLEMOD("VMMWBLE: invalid input paramter received!\n");
 	
-	//清理缓冲区
+	//初始化BLE模块
+  ihu_l1hd_dido_f2board_ble_atcmd_mode_ctrl_off();
+	func_blemod_uart_hc05_init();
 	func_blemod_uart_clear_receive_buffer();
-
-	//最大循环次数
+	ihu_usleep(500);
+	
+	//先进入AT命令模式
+	ihu_l1hd_dido_f2board_ble_atcmd_mode_ctrl_on();
+	
+	//最大循环次数等待AT命令反馈
+	repeatCnt = IHU_VMMW_BLEMOD_UART_REPEAT_CNT;
 	while((repeatCnt > 0) && (func_blemod_uart_send_AT_command((uint8_t*)"AT", (uint8_t*)"OK", 2) != IHU_SUCCESS))//查询是否应到AT指令
 	{
 		repeatCnt--;
@@ -181,72 +193,138 @@ OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_official(uint8_t *macAddr, uint8
 			if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWBLE: Not detect BLE module, trying to reconnecting!\n");
 		}
 		ihu_usleep(200);
-		if (repeatCnt == 0){
-			zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
-			IhuErrorPrint("VMMWBLE: BLE detect failure!\n");
-			return IHU_FAILURE;
-		}
+		if (repeatCnt == 0) IHU_ERROR_PRINT_BLEMOD("VMMWBLE: BLE detect failure!\n");
 	}
+
 	
 	//查阅版本
 	func_blemod_uart_clear_receive_buffer();
-	if (func_blemod_uart_send_AT_command((uint8_t*)"AT+VERSION?", (uint8_t*)"OK", 2) == IHU_SUCCESS) {
+	if (func_blemod_uart_send_AT_command((uint8_t*)"AT+VERSION?", (uint8_t*)"OK", 2) == IHU_SUCCESS){
 		if(strstr((const char*)zIhuBspStm32SpsBleRxBuff, "+VERSION:") != NULL){
-			if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWBLE: BLE Version = [%s]!\n", zIhuBspStm32SpsBleRxBuff);
+			IHU_DEBUG_PRINT_INF("VMMWBLE: BLE Version = [%s]!\n", zIhuBspStm32SpsBleRxBuff);
 		}
 	}else{
-		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
-		IhuErrorPrint("VMMWBLE: BLE inquery version failure!\n");
-		return IHU_FAILURE;
-	}	
-	
-	//获取地址
-	func_blemod_uart_clear_receive_buffer();
-	if (func_blemod_uart_send_AT_command((uint8_t*)"AT+ADDR?", (uint8_t*)"OK", 2) == IHU_SUCCESS) {
-		p1 = (uint8_t*)strstr((const char*)zIhuBspStm32SpsBleRxBuff, "+ADDR:");
-		p2 = (uint8_t*)strstr((const char*)p1, "\r");
-		p1 = p1 + sizeof("+ADDR:");
-		if ((p1!=NULL) && (p2!=NULL) && (p1<p2) && (p2==p1+14) && (len==6)){
-			char s[4];
-			uint8_t res = 0;
-			//memcpy(macAddr, p1, ((p2-p1)<len)?(p2-p1):len);
-			//当数据看待，而非字符串看待
-			//NAP-1
-			memset(s, 0, sizeof(s));
-			strncpy(s, (char*)(p1), 2);
-			res = atoi(s) & 0xFF;
-			memcpy(macAddr, &res, 1);
-			//NAP-2
-			memset(s, 0, sizeof(s));
-			strncpy(s, (char*)(p1+2), 2);
-			res = atoi(s) & 0xFF;
-			memcpy(macAddr+1, &res, 1);
-			//UAP-1
-			memset(s, 0, sizeof(s));
-			strncpy(s, (char*)(p1+5), 2);
-			res = atoi(s) & 0xFF;
-			memcpy(macAddr+2, &res, 1);
-			//LAP-1
-			memset(s, 0, sizeof(s));
-			strncpy(s, (char*)(p1+8), 2);
-			res = atoi(s) & 0xFF;
-			memcpy(macAddr+3, &res, 1);
-			//LAP-2
-			memset(s, 0, sizeof(s));
-			strncpy(s, (char*)(p1+10), 2);
-			res = atoi(s) & 0xFF;
-			memcpy(macAddr+4, &res, 1);
-			//LAP-3
-			memset(s, 0, sizeof(s));
-			strncpy(s, (char*)(p1+12), 2);
-			res = atoi(s) & 0xFF;
-			memcpy(macAddr+5, &res, 1);
-		}
-	}else{
-		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
-		IhuErrorPrint("VMMWBLE: BLE fetch address failure!\n");
-		return IHU_FAILURE;
+		IHU_ERROR_PRINT_BLEMOD("VMMWBLE: BLE inquery version failure!\n");
 	}
+	
+	//复位、恢复默认状态
+	if (func_blemod_uart_send_AT_command((uint8_t*)"AT+ORGL", (uint8_t*)"OK", 2) == IHU_FAILURE)
+		IHU_ERROR_PRINT_BLEMOD("VMMWBLE: BLE ORGL failure!\n");
+	if (func_blemod_uart_send_AT_command((uint8_t*)"AT+RESET", (uint8_t*)"OK", 2) == IHU_FAILURE)
+		IHU_ERROR_PRINT_BLEMOD("VMMWBLE: BLE RESET failure!\n");
+
+	//再次进入
+	repeatCnt = IHU_VMMW_BLEMOD_UART_REPEAT_CNT;
+	while((repeatCnt > 0) && (func_blemod_uart_send_AT_command((uint8_t*)"AT", (uint8_t*)"OK", 2) != IHU_SUCCESS))//查询是否应到AT指令
+	{
+		repeatCnt--;
+		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE){
+			if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWBLE: Not detect BLE module, trying to reconnecting!\n");
+		}
+		ihu_usleep(200);
+		if (repeatCnt == 0) IHU_ERROR_PRINT_BLEMOD("VMMWBLE: BLE detect failure!\n");
+	}
+	
+	//AT命令模式+从模式：发送广播，等待着手机主动连接
+	if(func_blemod_uart_send_AT_command((uint8_t*)"AT+ROLE=0", (uint8_t*)"OK", 2) == IHU_SUCCESS)	
+	{
+		ihu_usleep(100);
+		memset(hc05_nameCMD, 0, sizeof(hc05_nameCMD));
+		srand(ihu_l1hd_rtc_get_current_unix_time());
+		sprintf(hc05_nameCMD, "AT+NAME=YCBLE_SLAVE_%d", (uint8_t)(rand()%256));
+		
+		if(func_blemod_uart_send_AT_command((uint8_t*)hc05_nameCMD, (uint8_t*)"OK", 2) == IHU_SUCCESS){
+			IHU_DEBUG_PRINT_INF("VMFO：Euqipment has been changed to be [%s]!\n", hc05_nameCMD);
+		}
+		else{
+			IHU_ERROR_PRINT_BLEMOD("VMMWBLE: Change name error!\n");
+		}
+	}else{
+		IHU_ERROR_PRINT_BLEMOD("VMMWBLE: Set role error!\n");
+	}
+	
+	//先初始化设备SFP
+	if (func_blemod_uart_send_AT_command((uint8_t*)"AT+INIT", (uint8_t*)"OK", 2) != IHU_SUCCESS) IHU_ERROR_PRINT_BLEMOD("VMMWBLE: Init error!\n");
+	if (func_blemod_uart_send_AT_command((uint8_t*)"AT+CLASS=0", (uint8_t*)"OK", 2) != IHU_SUCCESS) IHU_ERROR_PRINT_BLEMOD("VMMWBLE: Set Class error!\n");
+	if (func_blemod_uart_send_AT_command((uint8_t*)"AT+INQM=1,9,48", (uint8_t*)"OK", 2) != IHU_SUCCESS) IHU_ERROR_PRINT_BLEMOD("VMMWBLE: Set INQM error!\n");
+	if (func_blemod_uart_send_AT_command((uint8_t*)"AT+RMAAD", (uint8_t*)"OK", 2) != IHU_SUCCESS) IHU_ERROR_PRINT_BLEMOD("VMMWBLE: Remove RMAAD error!\n");
+	
+	//最大循环次数，等待接入，并判定状态
+	//未来可以在这里打入LED闪灯状态，以及BEEP状态，以便通知外部人员的操作
+	//这里的时间长度，未来也许可以设置的长一点，但用户感受会变肉，所以需要根据实际情况进行调整优化
+	repeatCnt = 3*IHU_VMMW_BLEMOD_UART_REPEAT_CNT;
+	while(repeatCnt > 0)//查询是否应到AT指令
+	{
+		//先退出AT命令模式，给外部模块机会
+		func_blemod_uart_send_AT_command((uint8_t*)"AT+RESET", (uint8_t*)"OK", 2);
+		ihu_l1hd_dido_f2board_ble_atcmd_mode_ctrl_off();
+		ihu_usleep(2000);
+
+		//进AT命令模式
+		ihu_l1hd_dido_f2board_ble_atcmd_mode_ctrl_on();
+		//首先查阅状态
+		func_blemod_uart_send_AT_command((uint8_t*)"AT+STATE?", (uint8_t*)"OK", 2);
+		IHU_DEBUG_PRINT_IPT("VMMWBLE: BLE Matched with mobile phone, status is[%s]\n", (const char*)zIhuBspStm32SpsBleRxBuff);
+		//如果是配对成功
+		if ((strstr((const char*)zIhuBspStm32SpsBleRxBuff, "PAIRED") != NULL) || (strstr((const char*)zIhuBspStm32SpsBleRxBuff, "PAIRABLE") != NULL)){
+			//再查阅是否只有单个客户进来
+			func_blemod_uart_send_AT_command((uint8_t*)"AT+ADCN?", (uint8_t*)"OK", 2);
+			if (strstr((const char*)zIhuBspStm32SpsBleRxBuff, "+ADCN:1") != NULL){
+				//如果是的，再调出该客户的MAC地址
+				func_blemod_uart_send_AT_command((uint8_t*)"AT+MRAD?", (uint8_t*)"OK", 2);
+				//+MRAD:7423:44:261859
+				p1 = (uint8_t*)strstr((const char*)zIhuBspStm32SpsBleRxBuff, "+MRAD:");
+				p2 = (uint8_t*)strstr((const char*)p1, "\r");
+				p1 = p1 + strlen("+MRAD:");
+				if ((p1!=NULL) && (p2!=NULL) && (p1<p2)){
+					char s[4];
+					uint8_t res = 0;
+					//暂时不适用这是方式，因为这个数据有独特的结构
+					//memcpy(macAddr, p1, ((p2-p1)<length)?(p2-p1):length);
+					//当数据看待，而非字符串看待
+					//NAP-1
+					memset(s, 0, sizeof(s));
+					strncpy(s, (char*)(p1), 2);
+					res = strtoul(s, NULL, 16) & 0xFF;
+					memcpy(macAddr, &res, 1);
+					//NAP-2
+					memset(s, 0, sizeof(s));
+					strncpy(s, (char*)(p1+2), 2);
+					res = strtoul(s, NULL, 16) & 0xFF;
+					memcpy(macAddr+1, &res, 1);
+					//UAP-1
+					memset(s, 0, sizeof(s));
+					strncpy(s, (char*)(p1+5), 2);
+					res = strtoul(s, NULL, 16) & 0xFF;
+					memcpy(macAddr+2, &res, 1);
+					//LAP-1
+					memset(s, 0, sizeof(s));
+					strncpy(s, (char*)(p1+8), 2);
+					res = strtoul(s, NULL, 16) & 0xFF;
+					memcpy(macAddr+3, &res, 1);
+					//LAP-2
+					memset(s, 0, sizeof(s));
+					strncpy(s, (char*)(p1+10), 2);
+					res = strtoul(s, NULL, 16) & 0xFF;
+					memcpy(macAddr+4, &res, 1);
+					//LAP-3
+					memset(s, 0, sizeof(s));
+					strncpy(s, (char*)(p1+12), 2);
+					res = strtoul(s, NULL, 16) & 0xFF;
+					memcpy(macAddr+5, &res, 1);
+					
+					//读取成功，退出循环
+					break;
+				}
+			}
+		}
+		repeatCnt--;
+		if (repeatCnt == 0) IHU_ERROR_PRINT_BLEMOD("VMMWBLE: Read Equipment failure!\n");
+	}
+
+	//设置BLE模块进入透传状态
+	func_blemod_uart_send_AT_command((uint8_t*)"AT+RESET", (uint8_t*)"OK", 2);
+	ihu_l1hd_dido_f2board_ble_atcmd_mode_ctrl_off();
 
 	return IHU_SUCCESS;
 }
@@ -259,10 +337,7 @@ OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_test_mode(uint8_t *macAddr, uint
 	uint8_t *p1, *p2;
 
 	//参数检查
-	if (macAddr == NULL){
-		IHU_ERROR_PRINT_BLEMOD("VMMWBLE: invalid input paramter received!\n");
-		return IHU_FAILURE;				
-	}	
+	if (macAddr == NULL) IHU_ERROR_PRINT_BLEMOD("VMMWBLE: invalid input paramter received!\n");	
 	
 	//最长5秒，还没搞定，就结束了
 	func_blemod_uart_clear_receive_buffer();
@@ -620,8 +695,11 @@ void ihu_vmmw_blemod_hc05_working_process(void)
   //HC05_EN_LOW(); 	
 
 	HAL_Delay(500);
+
+	//透传模式，SPP规范
   while(hc05_mode==0)
   {
+		//这个是拉高引脚
     //HC05_EN_HIGHT(); 
     HAL_Delay(500);
     func_blemod_uart_clear_receive_buffer();
@@ -629,7 +707,8 @@ void ihu_vmmw_blemod_hc05_working_process(void)
 		func_blemod_uart_send_AT_command((uint8_t *)"AT", (uint8_t*)"OK", 2);	
   }  	
 	
-	if(hc05_mode==1)  //AT模式
+	//AT模式：这个需要主动拉高引脚
+	if(hc05_mode==1)  
   {    
     /*复位、恢复默认状态*/
     func_blemod_uart_send_AT_command((uint8_t*)"AT+RESET", (uint8_t*)"OK", 2);	
@@ -638,7 +717,8 @@ void ihu_vmmw_blemod_hc05_working_process(void)
     func_blemod_uart_send_AT_command((uint8_t*)"AT+ORGL", (uint8_t*)"OK", 2);
     HAL_Delay(200);
 
-    if(hc05_role==0) //从模式
+		//从模式：发送广播，等待着手机主动连接
+    if(hc05_role==0)
     {
       if(func_blemod_uart_send_AT_command((uint8_t*)"AT+ROLE=0", (uint8_t*)"OK", 2) == IHU_SUCCESS)	
       {				
@@ -658,7 +738,9 @@ void ihu_vmmw_blemod_hc05_working_process(void)
 				}
       }
     }
-    else
+		
+		//主模式：主动扫描手机并连接上
+    else  
     {
       if(func_blemod_uart_send_AT_command((uint8_t*)"AT+ROLE=1", (uint8_t*)"OK", 2) == 0)	
       {

@@ -727,8 +727,13 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_dido_f2board_rfid_power_ctrl_off      ihu_bsp_stm32_dido_f2board_rfid_power_ctrl_off   
 #define ihu_l1hd_dido_f2board_sensor_power_ctrl_on     ihu_bsp_stm32_dido_f2board_sensor_power_ctrl_on  
 #define ihu_l1hd_dido_f2board_sensor_power_ctrl_off    ihu_bsp_stm32_dido_f2board_sensor_power_ctrl_off 
+#define ihu_l1hd_dido_f2board_ble_atcmd_mode_ctrl_on   ihu_bsp_stm32_dido_f2board_ble_atcmd_mode_ctrl_on     
+#define ihu_l1hd_dido_f2board_ble_atcmd_mode_ctrl_off  ihu_bsp_stm32_dido_f2board_ble_atcmd_mode_ctrl_off
 #define ihu_l1hd_dido_f2board_ds18b20_init    					ihu_bsp_stm32_dido_ds18b20_init
 #define ihu_l1hd_dido_f2board_ds18b20_temp_read     		ihu_bsp_stm32_dido_f2board_ds18b20_temp_read 
+
+
+
 
 
 //L0BSP=>L1HD: WDOG

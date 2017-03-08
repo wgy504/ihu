@@ -304,9 +304,12 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	pMsgProc.authReq.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_lock_auth_req);
 	pMsgProc.authReq.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_lock_auth_req_t) - 4);
 	//统一考虑三种触发方式：BLE/RFID/LOCK, 后台会再加上PID/电话号码方式，总共5种方式
-	if (ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_test_mode(pMsgProc.authReq.bleMacAddr, 6) == IHU_SUCCESS){
+	
+	//if (ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_test_mode(pMsgProc.authReq.bleMacAddr, 6) == IHU_SUCCESS){
+	if (ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_official(pMsgProc.authReq.bleMacAddr, 6) == IHU_SUCCESS){
 		pMsgProc.authReq.bleAddrLen = 6;
 		pMsgProc.authReq.authReqType = HUITP_IEID_UNI_CCL_LOCK_AUTH_REQ_TYPE_BLE;
+		IHU_DEBUG_PRINT_IPT("SPSVORGO: MAC Address read = [%x:%x:%x:%x:%x:%x]\n", pMsgProc.authReq.bleMacAddr[0], pMsgProc.authReq.bleMacAddr[1],  pMsgProc.authReq.bleMacAddr[2],  pMsgProc.authReq.bleMacAddr[3],  pMsgProc.authReq.bleMacAddr[4],  pMsgProc.authReq.bleMacAddr[5]); 
 	}
 //	else if (ihu_vmmw_rfidmod_rc522_spi_read_id(pMsgProc.authReq.rfidAddr, 4) == IHU_SUCCESS){
 //		pMsgProc.authReq.rfidAddrLen = 4;

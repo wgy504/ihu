@@ -509,7 +509,6 @@ void ihu_vm_system_ctr_table_init(void)
 {	
 	int i = 0, item = 0;
 	UINT8 taskid = 0, msgid = 0, tid = 0;
-	
 	/*
 	 *  SYSTEM DIMENSION检查：边界在IHU_SYSDIM_TASK_NBR_MAX-1，注意！
 	 */
@@ -601,13 +600,14 @@ void ihu_vm_system_ctr_table_init(void)
 	}
 	//最后一项必定是TASK_ID_MAX
 	strcpy(zIhuVmCtrTab.task[TASK_ID_MAX].taskName, zIhuVmCtrTaskStaticCfg[item].taskInputName);
-		zIhuSysEngPar.traceList.mod[taskid].moduleId = taskid;
-		strcpy(zIhuSysEngPar.traceList.mod[taskid].moduleName, zIhuVmCtrTaskStaticCfg[item].taskInputName);
-		zIhuSysEngPar.traceList.mod[taskid].moduleCtrFlag = zIhuVmCtrTaskStaticCfg[item].traceCtrFlag;
-		zIhuSysEngPar.traceList.mod[taskid].moduleToAllow = zIhuVmCtrTaskStaticCfg[item].traceModToAllowFlag;
-		zIhuSysEngPar.traceList.mod[taskid].moduleToRestrict = zIhuVmCtrTaskStaticCfg[item].traceModToRestrictFlag;
-		zIhuSysEngPar.traceList.mod[taskid].moduleFromAllow = zIhuVmCtrTaskStaticCfg[item].traceModFromAllowFlag;
-		zIhuSysEngPar.traceList.mod[taskid].moduleFromRestrict = zIhuVmCtrTaskStaticCfg[item].traceModFromRestrictFlag;
+	taskid = zIhuVmCtrTaskStaticCfg[item].taskInputId;
+	zIhuSysEngPar.traceList.mod[taskid].moduleId = TASK_ID_MAX;
+	strcpy(zIhuSysEngPar.traceList.mod[taskid].moduleName, zIhuVmCtrTaskStaticCfg[item].taskInputName);
+	zIhuSysEngPar.traceList.mod[taskid].moduleCtrFlag = zIhuVmCtrTaskStaticCfg[item].traceCtrFlag;
+	zIhuSysEngPar.traceList.mod[taskid].moduleToAllow = zIhuVmCtrTaskStaticCfg[item].traceModToAllowFlag;
+	zIhuSysEngPar.traceList.mod[taskid].moduleToRestrict = zIhuVmCtrTaskStaticCfg[item].traceModToRestrictFlag;
+	zIhuSysEngPar.traceList.mod[taskid].moduleFromAllow = zIhuVmCtrTaskStaticCfg[item].traceModFromAllowFlag;
+	zIhuSysEngPar.traceList.mod[taskid].moduleFromRestrict = zIhuVmCtrTaskStaticCfg[item].traceModFromRestrictFlag;
 
 	
 	/*

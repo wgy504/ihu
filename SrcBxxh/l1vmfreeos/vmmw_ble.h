@@ -30,7 +30,7 @@
 //向上提供全局统一服务的入口
 //以下范式是正常的提供MAC地址的函数
 //HC05模块
-extern OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_official(uint8_t *macAddr, uint8_t len);  
+extern OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_official(uint8_t *macAddr, uint8_t length);  
 //HC05模块调试版
 extern OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_test_mode(uint8_t *macAddr, uint8_t len);
 
@@ -75,7 +75,7 @@ uint8_t func_blemod_uart_hc05_link_remote_device(void);
 //                                       }while(0)
 
 //高级定义，简化程序的可读性
-#define IHU_ERROR_PRINT_BLEMOD	zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++; IhuErrorPrint
+#define IHU_ERROR_PRINT_BLEMOD(arg...)	do{zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++; IhuErrorPrint(##arg);  return IHU_FAILURE; }while(0)
 
 
 #endif /* L1FREERTOS_MOD_BLE_H_ */

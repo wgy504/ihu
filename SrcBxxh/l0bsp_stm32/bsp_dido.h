@@ -84,9 +84,13 @@ typedef struct StrDht11DataTypeDef
 	#define BSP_STM32_DIDO_BLE_PWR_CTRL_GPIO_PIN						CUBEMX_PIN_F2_DO_BLE_PWR_Pin                         
 	#define BSP_STM32_DIDO_BLE_PWR_CTRL_GPIO								CUBEMX_PIN_F2_DO_BLE_PWR_GPIO_Port                   
 	#define BSP_STM32_DIDO_RFID_PWR_CTRL_GPIO_PIN						CUBEMX_PIN_F2_DO_RFID_PWR_Pin                        
-	#define BSP_STM32_DIDO_RFID_PWR_CTRL_GPIO								CUBEMX_PIN_F2_DO_RFID_PWR_GPIO_Port                  
+	#define BSP_STM32_DIDO_RFID_PWR_CTRL_GPIO								CUBEMX_PIN_F2_DO_RFID_PWR_GPIO_Port               
 	#define BSP_STM32_DIDO_SENSOR_PWR_CTRL_GPIO_PIN					CUBEMX_PIN_F2_DO_SENSOR_PWR_Pin                      
 	#define BSP_STM32_DIDO_SENSOR_PWR_CTRL_GPIO							CUBEMX_PIN_F2_DO_SENSOR_PWR_GPIO_Port                
+	#define BSP_STM32_DIDO_BLE_ATCMD_CTRL_GPIO_PIN					CUBEMX_PIN_F2_DO_BLE_ATCMD_Pin                         
+	#define BSP_STM32_DIDO_BLE_ATCMD_CTRL_GPIO							CUBEMX_PIN_F2_DO_BLE_ATCMD_GPIO_Port         
+
+
 
 //有效的函数体
 	#define BSP_STM32_DIDO_DHT11_READ								HAL_GPIO_ReadPin(BSP_STM32_DIDO_DHT11_GPIO, BSP_STM32_DIDO_DHT11_GPIO_PIN)
@@ -125,6 +129,9 @@ typedef struct StrDht11DataTypeDef
 	#define BSP_STM32_DIDO_RFID_PWR_CTRL_OFF     		HAL_GPIO_WritePin(BSP_STM32_DIDO_RFID_PWR_CTRL_GPIO, BSP_STM32_DIDO_RFID_PWR_CTRL_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
 	#define BSP_STM32_DIDO_SENSOR_PWR_CTRL_ON      	HAL_GPIO_WritePin(BSP_STM32_DIDO_SENSOR_PWR_CTRL_GPIO, BSP_STM32_DIDO_SENSOR_PWR_CTRL_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
 	#define BSP_STM32_DIDO_SENSOR_PWR_CTRL_OFF     	HAL_GPIO_WritePin(BSP_STM32_DIDO_SENSOR_PWR_CTRL_GPIO, BSP_STM32_DIDO_SENSOR_PWR_CTRL_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
+	#define BSP_STM32_DIDO_BLE_ATCMD_CTRL_ON      	HAL_GPIO_WritePin(BSP_STM32_DIDO_BLE_ATCMD_CTRL_GPIO, BSP_STM32_DIDO_BLE_ATCMD_CTRL_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
+	#define BSP_STM32_DIDO_BLE_ATCMD_CTRL_OFF     	HAL_GPIO_WritePin(BSP_STM32_DIDO_BLE_ATCMD_CTRL_GPIO, BSP_STM32_DIDO_BLE_ATCMD_CTRL_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
+
 
 //External APIs
 	//DHT11必须先初始化以后，才能单独被调用使用
@@ -163,7 +170,9 @@ typedef struct StrDht11DataTypeDef
 	extern void ihu_bsp_stm32_dido_f2board_rfid_power_ctrl_off(void);
 	extern void ihu_bsp_stm32_dido_f2board_sensor_power_ctrl_on(void);
 	extern void ihu_bsp_stm32_dido_f2board_sensor_power_ctrl_off(void);
-
+	extern void ihu_bsp_stm32_dido_f2board_ble_atcmd_mode_ctrl_on(void);
+	extern void ihu_bsp_stm32_dido_f2board_ble_atcmd_mode_ctrl_off(void);
+	
 //Local APIs
 static void func_bsp_stm32_dido_dht11_mode_IPU(void);
 static void func_bsp_stm32_dido_dht11_mode_out_PP(void);
