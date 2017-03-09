@@ -30,9 +30,9 @@
 //向上提供全局统一服务的入口
 //以下范式是正常的提供MAC地址的函数
 //HC05模块
-extern OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_official(uint8_t *macAddr, uint8_t length);  
+extern OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_in_AT_cmd_mode(uint8_t *macAddr, uint8_t length);  
 //HC05模块调试版
-extern OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_test_mode(uint8_t *macAddr, uint8_t len);
+extern OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_in_transparant_mode(uint8_t *macAddr, uint8_t len);
 
 //以下函数是为了支持5204型号，对BLE进行详细控制的函数api，还有待完整性测试，并调整控制方式
 extern void 	ihu_vmmw_blemod_hc05_working_process(void);  //HC05模块

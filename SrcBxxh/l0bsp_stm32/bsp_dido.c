@@ -53,9 +53,22 @@ int16_t ihu_bsp_stm32_dido_f2board_fall_read(void)
 
 //SW420读取函数：因为这是最为普通的GPIO口，没有任何的特别，所以不再为SW420建立独立的读取过程，而是采用非常通用的
 //读取函数
+//为了改善稳定性，读取三次，取两次做判定
 int16_t ihu_bsp_stm32_dido_f2board_shake_read(void)
 {
-	if (BSP_STM32_DIDO_SHAKE_READ == GPIO_PIN_RESET)
+	int8_t res[3];
+	int8_t total = 0;
+	
+	memset(res, 0, sizeof(res));
+	res[0] = ((BSP_STM32_DIDO_SHAKE_READ == GPIO_PIN_RESET)?1:-1);
+	ihu_usleep(100);
+	res[0] = ((BSP_STM32_DIDO_SHAKE_READ == GPIO_PIN_RESET)?1:-1);
+	ihu_usleep(100);
+	res[0] = ((BSP_STM32_DIDO_SHAKE_READ == GPIO_PIN_RESET)?1:-1);
+
+	total = res[0] + res[1] + res[2];
+	
+	if (total > 0)
 		return FALSE;
 	else
 		return TRUE;

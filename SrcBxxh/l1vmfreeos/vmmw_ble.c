@@ -159,7 +159,7 @@ char *ihu_bsp_stm32_ble_get_rebuff(uint16_t *len)
   /* Address should look like "+ADDR:<NAP>:<UAP>:<LAP>",
    * where actual address will look like "1234:56:abcdef".
    */
-OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_official(uint8_t *macAddr, uint8_t length)
+OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_in_AT_cmd_mode(uint8_t *macAddr, uint8_t length)
 {
 	uint8_t repeatCnt = IHU_VMMW_BLEMOD_UART_REPEAT_CNT;
 	uint8_t *p1, *p2;
@@ -331,7 +331,7 @@ OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_official(uint8_t *macAddr, uint8
 
 //获取手机等远程外设的MAC地址，目前由于HC05模块本身的能力问题，只能直接进入串口透传模式，所以采用了独特的APP
 //辅助IHU获取远程MAC地址
-OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_test_mode(uint8_t *macAddr, uint8_t len)
+OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_in_transparant_mode(uint8_t *macAddr, uint8_t len)
 {
 	int i = 0;
 	uint8_t *p1, *p2;
