@@ -13,6 +13,7 @@
 /* 包含头文件 ----------------------------------------------------------------*/
 #include "bsp_i2c.h"
 
+
 //从MAIN.x中继承过来的函数
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 extern I2C_HandleTypeDef hi2c1;
@@ -110,7 +111,7 @@ int ihu_bsp_stm32_i2c_spare1_rcv_data(uint8_t* buff, uint16_t len)
 }
 
 /**
-  * 串口接口完成回调函数的处理
+  * 接口完成回调函数的处理
   * 为什么需要重新执行HAL_I2C_Receive_IT，
 	* 接收只使用IT模式，因为这么模式比较方便
   */
@@ -253,15 +254,16 @@ void HAL_I2C_RxCpltCallback(I2C_HandleTypeDef *I2cHandle)
   * 返 回 值: 无
   * 说    明: 一般在I2C通信超时时调用该函数
   */
-static void I2C_BSP_STM32_MPU6050_Error (void)
-{
-  /* 反初始化I2C通信总线 */
-  HAL_I2C_DeInit(&IHU_BSP_STM32_I2C_MPU6050_HANDLER);
-  
-  /* 重新初始化I2C通信总线*/
-  //MX_I2C1_Init();
-	//考虑到这里需要重新初始化，不再真正执行重新初始化
-}
+//static void I2C_BSP_STM32_MPU6050_Error (void)
+//{
+//  /* 反初始化I2C通信总线 */
+//  HAL_I2C_DeInit(&IHU_BSP_STM32_I2C_MPU6050_HANDLER);
+//  
+//  /* 重新初始化I2C通信总线*/
+//  MX_I2C1_Init();
+//	//考虑到这里需要重新初始化，不再真正执行重新初始化
+//}
+
 
 /**
   * 函数功能: 通过I2C写入一个值到指定寄存器内
@@ -391,7 +393,7 @@ void BSP_STM32_MPU6050_WriteReg(uint8_t reg_add,uint8_t reg_dat)
   */ 
 void BSP_STM32_MPU6050_ReadData(uint8_t reg_add,unsigned char *Read,uint8_t num)
 {
-  func_bsp_stm32_i2c_mpu6050_read_buffer(BSP_STM32_MPU6050_SLAVE_ADDRESS,reg_add,I2C_MEMADD_SIZE_8BIT,Read,num);
+  func_bsp_stm32_i2c_mpu6050_read_buffer(BSP_STM32_MPU6050_SLAVE_ADDRESS, reg_add, I2C_MEMADD_SIZE_8BIT, Read, num);
 }
 
 /**
@@ -402,19 +404,30 @@ void BSP_STM32_MPU6050_ReadData(uint8_t reg_add,unsigned char *Read,uint8_t num)
   */ 
 void ihu_bsp_stm32_i2c_mpu6050_init(void)
 {
-  int i=0,j=0;
-  //在初始化之前要延时一段时间，若没有延时，则断电后再上电数据可能会出错
-  for(i=0;i<1000;i++)
-  {
-    for(j=0;j<1000;j++)
-    {
-      ;
-    }
-  }
+//  int i=0,j=0;
+//  //在初始化之前要延时一段时间，若没有延时，则断电后再上电数据可能会出错
+//  for(i=0;i<1000;i++)
+//  {
+//    for(j=0;j<1000;j++)
+//    {
+//      ;
+//    }
+//  }
+	ihu_usleep(200);
+	
+	//下面是测试代码
+	//i = HAL_I2C_GetState(&IHU_BSP_STM32_I2C_CCL_SENSOR_HANDLER);
+	//IHU_DEBUG_PRINT_FAT("BSP: Current status = %d\n", i);
+	//j = func_bsp_stm32_i2c_mpu6050_return_id();
+	//IHU_DEBUG_PRINT_FAT("BSP: Current id = 0x%x\n", j);
+
+	BSP_STM32_MPU6050_WriteReg(BSP_STM32_MPU6050_RA_PWR_MGMT_1, 0x80);	    //RESET
+	ihu_usleep(100);
+	
 	BSP_STM32_MPU6050_WriteReg(BSP_STM32_MPU6050_RA_PWR_MGMT_1, 0x00);	    //解除休眠状态
 	BSP_STM32_MPU6050_WriteReg(BSP_STM32_MPU6050_RA_SMPLRT_DIV , 0x07);	    //陀螺仪采样率，1KHz
 	BSP_STM32_MPU6050_WriteReg(BSP_STM32_MPU6050_RA_CONFIG , 0x06);	        //低通滤波器的设置，截止频率是1K，带宽是5K
-	BSP_STM32_MPU6050_WriteReg(BSP_STM32_MPU6050_RA_ACCEL_CONFIG , 0x00);	  //配置加速度传感器工作在2G模式，不自检
+	BSP_STM32_MPU6050_WriteReg(BSP_STM32_MPU6050_RA_ACCEL_CONFIG , 0x01);	  //配置加速度传感器工作在2G模式，不自检 0=>1，让其自检
 	BSP_STM32_MPU6050_WriteReg(BSP_STM32_MPU6050_RA_GYRO_CONFIG, 0x18);     //陀螺仪自检及测量范围，典型值：0x18(不自检，2000deg/s)
 }
 
@@ -427,14 +440,16 @@ void ihu_bsp_stm32_i2c_mpu6050_init(void)
 uint8_t func_bsp_stm32_i2c_mpu6050_return_id(void)
 {
 	unsigned char Re = 0;
-    BSP_STM32_MPU6050_ReadData(BSP_STM32_MPU6050_RA_WHO_AM_I,&Re,1);    //读器件地址
+  
+	BSP_STM32_MPU6050_ReadData(BSP_STM32_MPU6050_RA_WHO_AM_I,&Re,1);    //读器件地址
+	//IHU_DEBUG_PRINT_FAT("BSP: Read MPU6050 WHO_AM_I = %d\n", Re);
+	
 	if(Re != 0x68)
 	{
 		return 0;
 	}
 	else
 	{
-		printf("MPU6050 ID = %d\r\n",Re);
 		return 1;
 	}
 		
@@ -552,6 +567,8 @@ int ihu_bsp_stm32_i2c_ccl_sensor_rcv_data(uint8_t* buff, uint16_t len)
 	else
 		return BSP_FAILURE;
 }
+
+
 
 
 

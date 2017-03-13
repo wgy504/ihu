@@ -441,8 +441,23 @@ OPSTAT fsm_i2caries_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * pa
 	//扫描后将结果发给上层
 	memset(&snd, 0, sizeof(msg_struct_i2c_ccl_sensor_status_rep_t));
 	snd.cmdid = IHU_CCL_DH_CMDID_RESP_STATUS_I2C;
-	snd.sensor.rsv1Value = rand()%100;
-	snd.sensor.rsv2Value = rand()%100;
+	
+	//这里先使用这个Rsv1Value的方式
+	ihu_l1hd_i2c_mpu6050_init();
+	int16_t gyroData[3];
+	memset(gyroData, 0, sizeof(gyroData));
+	if (ihu_l1hd_i2c_mpu6050_gyro_read(gyroData) == IHU_SUCCESS){
+		snd.sensor.rsv1Value = gyroData[0];
+		snd.sensor.rsv2Value = gyroData[1];
+		IHU_DEBUG_PRINT_IPT("I2CARIES: Gyrodata XYZ Axis Read Result = [%d, %d, %d]\n", gyroData[0], gyroData[1], gyroData[2]);
+	}
+	
+	//这里先放随机数，真正的情况下这里应该放全0数据
+	else{
+		snd.sensor.rsv1Value = rand()%100;
+		snd.sensor.rsv2Value = rand()%100;
+	}
+	
 	snd.length = sizeof(msg_struct_i2c_ccl_sensor_status_rep_t);
 	ret = ihu_message_send(MSG_ID_I2C_CCL_SENSOR_STATUS_RESP, TASK_ID_CCL, TASK_ID_I2CARIES, &snd, snd.length);
 	if (ret == IHU_FAILURE){

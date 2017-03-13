@@ -17,6 +17,16 @@ CCL=> 最后剩下的任务是摄像头+IAP+节电，然后打开看门狗就完
 
 //= ZJL, 2017 Mar.9, CURRENT_SW_DELIVERY R03.121 =>CCL项目
 = 证实SW02的功能：将GPIO读取做了3次平均，确保读取的稳定性
+= 集成进去MPU6050模块，I2C初选HAL_BUSY的问题
+= 将void I2C_BSP_STM32_MPU6050_Error (void)移动到main.c模块中，不然包含关系太混乱
+= http://bbs.elecfans.com/jishu_1104025_1_1.html
+  http://blog.csdn.net/jcmilktea/article/details/50456130
+  是解决I2C初始化不成功的主要原因，I2C的时钟初始化必须放到stm32f2xx_hal_msp.c中，void HAL_I2C_MspInit(I2C_HandleTypeDef* hi2c) => __HAL_RCC_GPIOB_CLK_ENABLE();
+  然后再禁止static void MX_GPIO_Init(void)对I2C时钟总线的初始化
+= 寻找更好的办法，因为_HAL_RCC_GPIOB_CLK_ENABLE();是放在了用户区，但static void MX_GPIO_Init(void)中包含这部分是在主体区，一旦CubeMX工程初始化，这部分就回来了，每一次
+  都要手工修改，比较麻烦
+=   
+
 
 
 
