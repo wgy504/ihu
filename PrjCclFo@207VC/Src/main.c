@@ -649,6 +649,8 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+//As this function has to call MX_I2C1_Init(), we have to put this function into MAIN module, otherwise the include
+//relationship is too much complex.
 void I2C_BSP_STM32_MPU6050_Error (void)
 {
   HAL_I2C_DeInit(&hi2c1);

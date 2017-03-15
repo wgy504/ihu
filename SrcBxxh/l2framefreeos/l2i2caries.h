@@ -20,7 +20,8 @@
 	(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID))
 	#include "vmfreeoslayer.h"
 	#include "l1comdef_freeos.h"
-	#include "l1timer_freeos.h"		
+	#include "l1timer_freeos.h"
+	
 #elif ((IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_SCYCB_ID) ||\
 	(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCCB_ID) ||\
 	(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_PLCSB_ID))
@@ -106,6 +107,16 @@ void func_i2caries_time_out_period_scan(void);
 void func_i2caries_bfsc_moto_control(INT8 mode, INT8 dir);
 void func_i2caries_bfsc_moto_set_speed(INT32 speed);
 void func_i2caries_bfsc_frame_send(strIhuI2cariesMotoFrame_t *frame);
+
+
+//GPRS/BLE/RFIDMOD/NAVIGMOD的模组操作
+extern void 	 ihu_vmmw_navig_mpu6050_init(void);
+extern float   ihu_wmmw_navig_mpu6050_axis_z_angle_caculate_by_static_method(void);
+
+
+//高级定义，简化程序的可读性
+#define IHU_ERROR_PRINT_I2CARIES(...)	do{zIhuSysStaPm.taskRunErrCnt[TASK_ID_I2CARIES]++;  IhuErrorPrint(__VA_ARGS__);  return IHU_FAILURE;}while(0)	
+
 
 #endif /* L2FRAME_L2I2CARIES_H_ */
 

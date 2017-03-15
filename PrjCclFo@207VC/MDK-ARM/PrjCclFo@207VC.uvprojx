@@ -818,6 +818,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l1vmfreeos\vmmw_rfid.h</FilePath>
             </File>
+            <File>
+              <FileName>vmmw_navig.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\vmmw_navig.c</FilePath>
+            </File>
+            <File>
+              <FileName>vmmw_navig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\vmmw_navig.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

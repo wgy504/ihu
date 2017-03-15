@@ -669,11 +669,10 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_i2c_spare1_send_data 					ihu_bsp_stm32_i2c_spare1_send_data
 #define ihu_l1hd_i2c_spare1_receive_data 				ihu_bsp_stm32_i2c_spare1_rcv_data
 //三轴传感器MPU6050读取必须先初始化，然后再读取
-#define ihu_l1hd_i2c_mpu6050_write_data 				ihu_bsp_stm32_i2c_mpu6050_write_data
-#define ihu_l1hd_i2c_mpu6050_write_buffer 			ihu_bsp_stm32_i2c_mpu6050_write_buffer
-#define ihu_l1hd_i2c_mpu6050_read_data 					ihu_bsp_stm32_i2c_mpu6050_read_data
-#define ihu_l1hd_i2c_mpu6050_read_buffer 				ihu_bsp_stm32_i2c_mpu6050_read_buffer
-#define ihu_l1hd_i2c_mpu6050_is_device_ready 		ihu_bsp_stm32_i2c_mpu6050_is_device_ready
+#define ihu_l1hd_i2c_mpu6050_init 							ihu_bsp_stm32_i2c_mpu6050_init
+#define ihu_l1hd_i2c_mpu6050_acc_read 					ihu_bsp_stm32_i2c_mpu6050_acc_read
+#define ihu_l1hd_i2c_mpu6050_gyro_read 					ihu_bsp_stm32_i2c_mpu6050_gyro_read
+#define ihu_l1hd_i2c_mpu6050_temp_read 					ihu_bsp_stm32_i2c_mpu6050_temp_read
 //CCL SENSOR传感器
 #define ihu_l1hd_i2c_ccl_send_data 							ihu_bsp_stm32_i2c_ccl_send_data
 #define ihu_l1hd_i2c_ccl_sensor_rcv_data 				ihu_bsp_stm32_i2c_ccl_sensor_rcv_data
