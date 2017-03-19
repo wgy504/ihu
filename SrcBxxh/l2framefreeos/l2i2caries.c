@@ -441,8 +441,13 @@ OPSTAT fsm_i2caries_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * pa
 	//扫描后将结果发给上层
 	memset(&snd, 0, sizeof(msg_struct_i2c_ccl_sensor_status_rep_t));
 	snd.cmdid = IHU_CCL_DH_CMDID_RESP_STATUS_I2C;
-	snd.sensor.rsv1Value = rand()%100;
-	snd.sensor.rsv2Value = rand()%100;
+	
+	//这里先使用这个Rsv1Value的方式
+	ihu_vmmw_navig_mpu6050_init();
+	//采用NF2结构
+	snd.sensor.rsv1Value = (UINT16)(ihu_wmmw_navig_mpu6050_axis_z_angle_caculate_by_static_method() * 100);
+	IHU_DEBUG_PRINT_IPT("I2CARIES: Fall Angle Read Result = [%4.2f]\n", (snd.sensor.rsv1Value*1.0)/100.0);
+	
 	snd.length = sizeof(msg_struct_i2c_ccl_sensor_status_rep_t);
 	ret = ihu_message_send(MSG_ID_I2C_CCL_SENSOR_STATUS_RESP, TASK_ID_CCL, TASK_ID_I2CARIES, &snd, snd.length);
 	if (ret == IHU_FAILURE){

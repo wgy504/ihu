@@ -304,9 +304,6 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	pMsgProc.authReq.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_lock_auth_req);
 	pMsgProc.authReq.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_lock_auth_req_t) - 4);
 	
-	//测试一下SW02：结果很准确
-	//IHU_DEBUG_PRINT_IPT("SPSVORGO: SHAKE read result: %d\n", ihu_l1hd_dido_f2board_shake_read());
-
 	//统一考虑三种触发方式：BLE/RFID/LOCK, 后台会再加上PID/电话号码方式，总共5种方式
 	
 	//不用使用透传工作方式，而采用ATCMD方式
