@@ -19,7 +19,7 @@ extern I2C_HandleTypeDef hi2c1;
 I2C_HandleTypeDef hi2c2;  //MAIN中未定义，这里重新定义是为了复用
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 extern I2C_HandleTypeDef hi2c1;
-I2C_HandleTypeDef hi2c2;  //MAIN中未定义，这里重新定义是为了复用
+extern I2C_HandleTypeDef hi2c2;  //MAIN中未定义，这里重新定义是为了复用
 #else
 	#error Un-correct constant definition
 #endif
