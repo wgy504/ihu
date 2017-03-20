@@ -60,6 +60,7 @@
 "prjbfscfo@207vc\l2spileo.o"
 "prjbfscfo@207vc\l2canvela.o"
 "prjbfscfo@207vc\l2packet.o"
+"prjbfscfo@207vc\l2adc_cs5532.o"
 "prjbfscfo@207vc\l3bfsc.o"
 "prjbfscfo@207vc\l3bfsc_msg.o"
 --library_type=microlib --strict --scatter "PrjBfscFo@207VC\PrjBfscFo@207VC.sct"
