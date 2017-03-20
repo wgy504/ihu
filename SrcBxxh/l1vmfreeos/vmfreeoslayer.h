@@ -652,15 +652,34 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_sps_spare2_rcv_data_timeout 		ihu_bsp_stm32_sps_spare2_rcv_data_timeout
 
 //L0BSP=>L1HD: SPI
+//IAU
 #define ihu_l1hd_spi_slave_hw_init		  				ihu_bsp_stm32_spi_slave_hw_init
 #define ihu_l1hd_spi_iau_send_data 							ihu_bsp_stm32_spi_iau_send_data
 #define ihu_l1hd_spi_iau_receive_data 					ihu_bsp_stm32_spi_iau_rcv_data
 #define ihu_l1hd_spi_spare1_send_data 					ihu_bsp_stm32_spi_spare1_send_data
 #define ihu_l1hd_spi_spare1_receive_data 				ihu_bsp_stm32_spi_spare1_rcv_data
-#define ihu_l1hd_spi_rfid522_send_data 					ihu_bsp_stm32_spi_rfid522_send_data
-#define ihu_l1hd_spi_rfid522_receive_data 			ihu_bsp_stm32_spi_rfid522_rcv_data
+//BFSC AD Scale
 #define ihu_l1hd_spi_ad_scale_send_data 				ihu_bsp_stm32_spi_ad_scale_send_data
 #define ihu_l1hd_spi_ad_scale_receive_data 			ihu_bsp_stm32_spi_ad_scale_rcv_data
+//NRC522
+#define ihu_l1hd_spi_rfid522_send_data 					ihu_bsp_stm32_spi_rfid522_send_data
+#define ihu_l1hd_spi_rfid522_receive_data 			ihu_bsp_stm32_spi_rfid522_rcv_data
+#define ihu_l1hd_spi_flash_read_byte           	ihu_bsp_stm32_spi_flash_read_byte
+#define ihu_l1hd_spi_flash_send_byte 	          ihu_bsp_stm32_spi_flash_send_byte
+#define ihu_l1hd_spi_mf522_cs_enable   		    	ihu_bsp_stm32_spi_mf522_cs_enable
+#define ihu_l1hd_spi_mf522_cs_disable   		  	ihu_bsp_stm32_spi_mf522_cs_disable
+#define ihu_l1hd_spi_mf522_reset_enable   		  ihu_bsp_stm32_spi_mf522_reset_enable
+#define ihu_l1hd_spi_mf522_reset_disable   		  ihu_bsp_stm32_spi_mf522_reset_disable
+
+
+//NRF24L01
+#define ihu_l1hd_spi_nrf24l01_cs_enable   			ihu_bsp_stm32_spi_nrf24l01_cs_enable
+#define ihu_l1hd_spi_nrf24l01_cs_disable   			ihu_bsp_stm32_spi_nrf24l01_cs_disable
+#define ihu_l1hd_spi_nrf24l01_ce_low   		    	ihu_bsp_stm32_spi_nrf24l01_ce_low
+#define ihu_l1hd_spi_nrf24l01_ce_high     			ihu_bsp_stm32_spi_nrf24l01_ce_high
+#define ihu_l1hd_spi_nrf24l01_irq_read     			ihu_bsp_stm32_spi_nrf24l01_irq_read
+#define ihu_l1hd_spi_nrf24l01_read_write_byte   ihu_bsp_stm32_spi_nrf24l01_read_write_byte
+
 
 //L0BSP=>L1HD: I2C
 #define ihu_l1hd_i2c_slave_hw_init							ihu_bsp_stm32_i2c_slave_hw_init

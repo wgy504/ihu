@@ -266,6 +266,16 @@ int func_bsp_spi_slave_hw_init(int is_clock_phase_1edge, int is_clock_polarity_h
 	return 0;
 }
 
+
+/*
+ *
+ *
+ *  自定义IAU对应的驱动程序
+ *
+ *
+ *
+*/
+
 //ZJL DEFINITION
 //利用串口一致的特性，完成SPI接口的接收
 int ihu_bsp_stm32_spi_slave_hw_init(void)
@@ -287,8 +297,8 @@ int ihu_bsp_stm32_spi_slave_hw_init(void)
 	zIhuBspStm32SpiGeneral1RxState = 0;
 	zIhuBspStm32SpiGeneral1RxLen = 0;
 	
-  macRC522_Reset_Disable();
-	macRC522_CS_Disable();	
+  ihu_bsp_stm32_spi_mf522_reset_disable();
+	ihu_bsp_stm32_spi_mf522_cs_disable();	
 	
 	return BSP_SUCCESS;
 }
@@ -343,6 +353,34 @@ int ihu_bsp_stm32_spi_spare1_rcv_data(uint8_t* buff, uint16_t len)
 		return BSP_FAILURE;
 }
 
+/*
+ *
+ *
+ *  MF522对应的驱动程序
+ *
+ *
+ *
+*/
+
+void ihu_bsp_stm32_spi_mf522_cs_enable(void)
+{
+	BSP_STM32_SPI_MF522_SPI_CS_ENABLE();
+}
+
+void ihu_bsp_stm32_spi_mf522_cs_disable(void)
+{
+	BSP_STM32_SPI_MF522_SPI_CS_DISABLE();
+}
+
+void ihu_bsp_stm32_spi_mf522_reset_enable(void)
+{
+	BSP_STM32_SPI_MF522_SPI_RESET_ENABLE();
+}
+
+void ihu_bsp_stm32_spi_mf522_reset_disable(void)
+{
+	BSP_STM32_SPI_MF522_SPI_RESET_DISABLE();
+}
 
 /*******************************************************************************
 * 函数名  : SPI_SendData
@@ -375,11 +413,11 @@ int ihu_bsp_stm32_spi_rfid522_rcv_data(uint8_t* buff, uint16_t len)
   * 说    明：This function must be used only if the Start_Read_Sequence
   *           function has been previously called.
   */
-uint8_t SPI_FLASH_ReadByte(void)
+uint8_t ihu_bsp_stm32_spi_flash_read_byte(void)
 {
-  uint8_t d_read,d_send=Dummy_Byte;
+  uint8_t d_read,d_send=IHU_BSP_STM32_SPI_DUMMY_BYTE;
   if(HAL_SPI_TransmitReceive(&IHU_BSP_STM32_SPI_RFID522_HANDLER,&d_send,&d_read,1,0xFFFFFF)!=HAL_OK)
-    d_read=Dummy_Byte;
+    d_read=IHU_BSP_STM32_SPI_DUMMY_BYTE;
   
   return d_read;    
 }
@@ -390,14 +428,26 @@ uint8_t SPI_FLASH_ReadByte(void)
   * 返 回 值: uint8_t：接收到的数据
   * 说    明：无
   */
-uint8_t SPI_FLASH_SendByte(uint8_t byte)
+uint8_t ihu_bsp_stm32_spi_flash_send_byte(uint8_t byte)
 {
   uint8_t d_read,d_send=byte;
   if(HAL_SPI_TransmitReceive(&IHU_BSP_STM32_SPI_RFID522_HANDLER,&d_send,&d_read,1,0xFFFFFF)!=HAL_OK)
-    d_read=Dummy_Byte;
+    d_read=IHU_BSP_STM32_SPI_DUMMY_BYTE;
   
   return d_read; 
 }
+
+
+/*
+ *
+ *
+ *  NFSC AD Scale对应的驱动程序
+ *
+ *
+ *
+*/
+
+
 
 /*******************************************************************************
 * 函数名  : SPI_SendData
@@ -422,6 +472,71 @@ int ihu_bsp_stm32_spi_ad_scale_rcv_data(uint8_t* buff, uint16_t len)
 	else
 		return BSP_FAILURE;
 }
+
+
+/*
+ *
+ *
+ *  NRF24L01对应的驱动程序
+ *
+ *
+ *
+*/
+void ihu_bsp_stm32_spi_nrf24l01_cs_enable(void)
+{
+	BSP_STM32_SPI_NRF24L01_SPI_CS_ENABLE();
+}
+
+void ihu_bsp_stm32_spi_nrf24l01_cs_disable(void)
+{
+	BSP_STM32_SPI_NRF24L01_SPI_CS_DISABLE();
+}
+
+void ihu_bsp_stm32_spi_nrf24l01_ce_low(void)
+{
+	BSP_STM32_SPI_NRF24L01_CE_LOW();
+}
+
+void ihu_bsp_stm32_spi_nrf24l01_ce_high(void)
+{
+	BSP_STM32_SPI_NRF24L01_CE_HIGH();
+}
+
+uint8_t ihu_bsp_stm32_spi_nrf24l01_irq_read(void)
+{
+	return BSP_STM32_SPI_NRF24L01_IRQ_PIN_READ();
+}
+
+
+
+/**
+  * 函数功能: 往串行Flash读取写入一个字节数据并接收一个字节数据
+  * 输入参数: byte：待发送数据
+  * 返 回 值: uint8_t：接收到的数据
+  * 说    明：无
+  */
+uint8_t ihu_bsp_stm32_spi_nrf24l01_read_write_byte(uint8_t byte)
+{
+  uint8_t d_read,d_send=byte;
+  if(HAL_SPI_TransmitReceive(&IHU_BSP_STM32_SPI_RFID_NRF24L01_HANDLER, &d_send,&d_read,1,IHU_BSP_STM32_SPI_DUMMY_BYTE)!=HAL_OK)
+  {
+    d_read=IHU_BSP_STM32_SPI_DUMMY_BYTE;
+  }
+  return d_read; 
+}
+
+
+
+
+/*
+ *
+ *
+ *  回调函数重载
+ *
+ *
+ *
+*/
+
 
 
 /**

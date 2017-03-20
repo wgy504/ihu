@@ -21,42 +21,53 @@ extern "C" {
 #endif
 
 //不能在这里出现管脚的任何配置和初始化，必须在STM32CubeMX中完成，这里使用STM32CubeMX给出的端口俗名
-
+//NC522, MF522模块
+//本地定义的交换矩阵	
+	#define BSP_STM32_SPI_MF522_CS_PORT       			CUBEMX_PIN_F2_SPI2_CS_GPIO_Port
+	#define BSP_STM32_SPI_MF522_CS_PIN        			CUBEMX_PIN_F2_SPI2_CS_Pin
+	#define BSP_STM32_SPI_MF522_CE_PORT      			 	CUBEMX_PIN_F2_SPI2_CE_GPIO_Port
+	#define BSP_STM32_SPI_MF522_CE_PIN        			CUBEMX_PIN_F2_SPI2_CE_Pin
+	#define BSP_STM32_SPI_MF522_CLK_PORT      			CUBEMX_PIN_F2_SPI2_SCK_GPIO_Port
+	#define BSP_STM32_SPI_MF522_CLK_PIN       			CUBEMX_PIN_F2_SPI2_SCK_Pin
+	#define BSP_STM32_SPI_MF522_MISO_PORT     			CUBEMX_PIN_F2_SPI2_MISO_GPIO_Port
+	#define BSP_STM32_SPI_MF522_MISO_PIN      			CUBEMX_PIN_F2_SPI2_MISO_Pin
+	#define BSP_STM32_SPI_MF522_MOSI_PORT     			CUBEMX_PIN_F2_SPI2_MOSI_GPIO_Port
+	#define BSP_STM32_SPI_MF522_MOSI_PIN      			CUBEMX_PIN_F2_SPI2_MOSI_Pin
+	#define BSP_STM32_SPI_MF522_IRQ_PORT      			CUBEMX_PIN_F2_SPI2_GPIO_RST_GPIO_Port
+	#define BSP_STM32_SPI_MF522_IRQ_PIN       			CUBEMX_PIN_F2_SPI2_GPIO_RST_Pin
+	#define BSP_STM32_SPI_MF522_RST_PORT      			CUBEMX_PIN_F2_SPI2_GPIO_RST_GPIO_Port
+	#define BSP_STM32_SPI_MF522_RST_PIN       			CUBEMX_PIN_F2_SPI2_GPIO_RST_Pin
+//有效的函数体
+	#define BSP_STM32_SPI_MF522_SPI_CS_ENABLE()             HAL_GPIO_WritePin(BSP_STM32_SPI_MF522_CS_PORT, BSP_STM32_SPI_MF522_CS_PIN, GPIO_PIN_RESET)
+	#define BSP_STM32_SPI_MF522_SPI_CS_DISABLE()            HAL_GPIO_WritePin(BSP_STM32_SPI_MF522_CS_PORT, BSP_STM32_SPI_MF522_CS_PIN, GPIO_PIN_SET)
+	#define BSP_STM32_SPI_MF522_CE_LOW()                    HAL_GPIO_WritePin(BSP_STM32_SPI_MF522_CE_PORT, BSP_STM32_SPI_MF522_CE_PIN, GPIO_PIN_RESET)
+	#define BSP_STM32_SPI_MF522_CE_HIGH()                   HAL_GPIO_WritePin(BSP_STM32_SPI_MF522_CE_PORT, BSP_STM32_SPI_MF522_CE_PIN, GPIO_PIN_SET)
+  #define BSP_STM32_SPI_MF522_IRQ_PIN_READ()              HAL_GPIO_ReadPin(BSP_STM32_SPI_MF522_IRQ_PORT, BSP_STM32_SPI_MF522_IRQ_PIN)
+	#define BSP_STM32_SPI_MF522_SPI_RESET_ENABLE()          HAL_GPIO_WritePin(BSP_STM32_SPI_MF522_RST_PORT, BSP_STM32_SPI_MF522_RST_PIN, GPIO_PIN_RESET)
+	#define BSP_STM32_SPI_MF522_SPI_RESET_DISABLE()         HAL_GPIO_WritePin(BSP_STM32_SPI_MF522_RST_PORT, BSP_STM32_SPI_MF522_RST_PIN, GPIO_PIN_SET)
 	
-///////////////RC522的独特定义，未来需要合并到SPI的公共定义中去///////////////////////////////////
-/*********************************** RC522 引脚定义 *********************************************/
-#define        macRC522_SPIx                            SPI2
-#define        macRC522_SPIx_RCC_CLK_ENABLE()           __HAL_RCC_SPI2_CLK_ENABLE()
-#define        macRC522_SPIx_RCC_CLK_DISABLE()          __HAL_RCC_SPI2_CLK_DISABLE()
-#define        macRC522_SPI_RCC_CLK_ENABLE()            __HAL_RCC_GPIOB_CLK_ENABLE()	              	   
-#define        macRC522_GPIO_CS_PORT    	              GPIOB	
-#define        macRC522_GPIO_CS_PIN		                  GPIO_PIN_12
-#define        macRC522_GPIO_CS_Mode		                GPIO_MODE_OUTPUT_PP
-#define        macRC522_GPIO_SCK_PORT    	              GPIOB			   
-#define        macRC522_GPIO_SCK_PIN		                GPIO_PIN_10
-#define        macRC522_GPIO_SCK_Mode		                GPIO_MODE_AF_PP
-#define        macRC522_GPIO_MOSI_PORT    	            GPIOC	   
-#define        macRC522_GPIO_MOSI_PIN		                GPIO_PIN_3
-#define        macRC522_GPIO_MOSI_Mode		              GPIO_MODE_AF_PP
-#define        macRC522_GPIO_MISO_PORT    	            GPIOB			   
-#define        macRC522_GPIO_MISO_PIN		                GPIO_PIN_14
-#define        macRC522_GPIO_MISO_Mode		              GPIO_MODE_AF_PP
-#define        macRC522_RST_RCC_CLK_ENABLE()            __HAL_RCC_GPIOC_CLK_ENABLE()
-#define        macRC522_GPIO_RST_PORT    	              GPIOD
-#define        macRC522_GPIO_RST_PIN		                GPIO_PIN_9
-#define        macRC522_GPIO_RST_Mode		                GPIO_MODE_OUTPUT_PP
-/*********************************** RC522 函数宏定义*********************************************/
-#define          macRC522_CS_Enable()         HAL_GPIO_WritePin ( macRC522_GPIO_CS_PORT, macRC522_GPIO_CS_PIN ,GPIO_PIN_RESET)
-#define          macRC522_CS_Disable()        HAL_GPIO_WritePin ( macRC522_GPIO_CS_PORT, macRC522_GPIO_CS_PIN ,GPIO_PIN_SET)
-#define          macRC522_Reset_Enable()      HAL_GPIO_WritePin( macRC522_GPIO_RST_PORT, macRC522_GPIO_RST_PIN,GPIO_PIN_RESET )
-#define          macRC522_Reset_Disable()     HAL_GPIO_WritePin ( macRC522_GPIO_RST_PORT, macRC522_GPIO_RST_PIN,GPIO_PIN_SET)
-#define          macRC522_SCK_0()             HAL_GPIO_WritePin( macRC522_GPIO_SCK_PORT, macRC522_GPIO_SCK_PIN,GPIO_PIN_RESET )
-#define          macRC522_SCK_1()             HAL_GPIO_WritePin ( macRC522_GPIO_SCK_PORT, macRC522_GPIO_SCK_PIN,GPIO_PIN_SET )
-#define          macRC522_MOSI_0()            HAL_GPIO_WritePin( macRC522_GPIO_MOSI_PORT, macRC522_GPIO_MOSI_PIN,GPIO_PIN_RESET )
-#define          macRC522_MOSI_1()            HAL_GPIO_WritePin ( macRC522_GPIO_MOSI_PORT, macRC522_GPIO_MOSI_PIN,GPIO_PIN_SET )
-#define          macRC522_MISO_GET()          HAL_GPIO_ReadPin ( macRC522_GPIO_MISO_PORT, macRC522_GPIO_MISO_PIN )
-#define          macRC522_DELAY()             HAL_Delay(20)
-///////////////RC522的独特定义，未来需要合并到SPI的公共定义中去///////////////////////////////////
+//NRF24L01
+//本地定义的交换矩阵	
+	#define BSP_STM32_SPI_NRF24L01_CS_PORT       CUBEMX_PIN_F2_SPI2_CS_GPIO_Port
+	#define BSP_STM32_SPI_NRF24L01_CS_PIN        CUBEMX_PIN_F2_SPI2_CS_Pin
+	#define BSP_STM32_SPI_NRF24L01_CE_PORT       CUBEMX_PIN_F2_SPI2_CE_GPIO_Port
+	#define BSP_STM32_SPI_NRF24L01_CE_PIN        CUBEMX_PIN_F2_SPI2_CE_Pin
+	#define BSP_STM32_SPI_NRF24L01_CLK_PORT      CUBEMX_PIN_F2_SPI2_SCK_GPIO_Port
+	#define BSP_STM32_SPI_NRF24L01_CLK_PIN       CUBEMX_PIN_F2_SPI2_SCK_Pin
+	#define BSP_STM32_SPI_NRF24L01_MISO_PORT     CUBEMX_PIN_F2_SPI2_MISO_GPIO_Port
+	#define BSP_STM32_SPI_NRF24L01_MISO_PIN      CUBEMX_PIN_F2_SPI2_MISO_Pin
+	#define BSP_STM32_SPI_NRF24L01_MOSI_PORT     CUBEMX_PIN_F2_SPI2_MOSI_GPIO_Port
+	#define BSP_STM32_SPI_NRF24L01_MOSI_PIN      CUBEMX_PIN_F2_SPI2_MOSI_Pin
+	#define BSP_STM32_SPI_NRF24L01_IRQ_PORT      CUBEMX_PIN_F2_SPI2_GPIO_RST_GPIO_Port
+	#define BSP_STM32_SPI_NRF24L01_IRQ_PIN       CUBEMX_PIN_F2_SPI2_GPIO_RST_Pin
+	#define BSP_STM32_SPI_NRF24L01_RST_PORT      CUBEMX_PIN_F2_SPI2_GPIO_RST_GPIO_Port
+	#define BSP_STM32_SPI_NRF24L01_RST_PIN       CUBEMX_PIN_F2_SPI2_GPIO_RST_Pin
+//有效的函数体
+	#define BSP_STM32_SPI_NRF24L01_SPI_CS_ENABLE()             HAL_GPIO_WritePin(BSP_STM32_SPI_NRF24L01_CS_PORT, BSP_STM32_SPI_NRF24L01_CS_PIN, GPIO_PIN_RESET)
+	#define BSP_STM32_SPI_NRF24L01_SPI_CS_DISABLE()            HAL_GPIO_WritePin(BSP_STM32_SPI_NRF24L01_CS_PORT, BSP_STM32_SPI_NRF24L01_CS_PIN, GPIO_PIN_SET)
+	#define BSP_STM32_SPI_NRF24L01_CE_LOW()                    HAL_GPIO_WritePin(BSP_STM32_SPI_NRF24L01_CE_PORT, BSP_STM32_SPI_NRF24L01_CE_PIN, GPIO_PIN_RESET)
+	#define BSP_STM32_SPI_NRF24L01_CE_HIGH()                   HAL_GPIO_WritePin(BSP_STM32_SPI_NRF24L01_CE_PORT, BSP_STM32_SPI_NRF24L01_CE_PIN, GPIO_PIN_SET)
+  #define BSP_STM32_SPI_NRF24L01_IRQ_PIN_READ()              HAL_GPIO_ReadPin(BSP_STM32_SPI_NRF24L01_IRQ_PORT, BSP_STM32_SPI_NRF24L01_IRQ_PIN)
 
 //GENERAL FRAME帧结构
 typedef struct IHU_HUITP_L2FRAME_STD_SPI_frame_header
@@ -81,27 +92,30 @@ int func_bsp_spi_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint
 //常量定义
 //IHU_SYSDIM_MSG_BODY_LEN_MAX-2是因为发送到上层SPILEO的数据缓冲区受到消息结构msg_struct_spileo_l2frame_rcv_t的影响
 #define IHU_BSP_STM32_SPI2_GENERAL_REC_MAX_LEN 					IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX	//最大接收数据长度
-#define IHU_BSP_STM32_SPI1_GENERAL_REC_MAX_LEN 			IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX	//最大接收数据长度
+#define IHU_BSP_STM32_SPI1_GENERAL_REC_MAX_LEN 			    IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX	//最大接收数据长度
 
 //发送和接受数据的延迟时间长度
 #define IHU_BSP_STM32_SPI_TX_MAX_DELAY 						100
 #define IHU_BSP_STM32_SPI_RX_MAX_DELAY 						100
+#define IHU_BSP_STM32_SPI_DUMMY_BYTE              0xFF
 
-#define Dummy_Byte                      0xFF
 
-
-//交换矩阵
+//SPI Handler指针交换矩阵
 //SCYCB=>IAU功能接口
 #define IHU_BSP_STM32_SPI_SPARE1_HANDLER						hspi1
 #define IHU_BSP_STM32_SPI_SPARE1_HANDLER_ID  				1
 #define IHU_BSP_STM32_SPI_IAU_HANDLER								hspi2
 #define IHU_BSP_STM32_SPI_IAU_HANDLER_ID  					2
-//CCL=>RFID NC522使用了SPI2接口
-#define IHU_BSP_STM32_SPI_RFID522_HANDLER						hspi2
-#define IHU_BSP_STM32_SPI_RFID522_HANDLER_ID  			2
 //BFSC=>ADC秤驱动接口
 #define IHU_BSP_STM32_SPI_AD_SCALE_HANDLER					hspi2
 #define IHU_BSP_STM32_SPI_AD_SCALE_HANDLER_ID  			2
+//CCL=>RFID MF522使用了SPI2接口
+#define IHU_BSP_STM32_SPI_RFID522_HANDLER						hspi2
+#define IHU_BSP_STM32_SPI_RFID522_HANDLER_ID  			2
+//CCL=>RFID NRF24L01使用了SPI2接口，且做为接收工作方式
+#define IHU_BSP_STM32_SPI_RFID_NRF24L01_HANDLER			hspi2
+#define IHU_BSP_STM32_SPI_RFID_NRF24L01_HANDLER_ID  2
+
 
 
 //全局函数
@@ -114,17 +128,29 @@ extern int ihu_bsp_stm32_spi_iau_rcv_data(uint8_t* buff, uint16_t len);
 //BFSC=>ADC秤驱动接口
 extern int ihu_bsp_stm32_spi_ad_scale_send_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_spi_ad_scale_rcv_data(uint8_t* buff, uint16_t len);
-uint8_t SPI_FLASH_ReadByte(void);
-uint8_t SPI_FLASH_SendByte(uint8_t byte);
 //CCL=>RFID NC522使用了SPI2接口
+extern void ihu_bsp_stm32_spi_mf522_cs_enable(void);
+extern void ihu_bsp_stm32_spi_mf522_cs_disable(void);
+extern void ihu_bsp_stm32_spi_mf522_reset_enable(void);
+extern void ihu_bsp_stm32_spi_mf522_reset_disable(void);
 extern int ihu_bsp_stm32_spi_rfid522_send_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_spi_rfid522_rcv_data(uint8_t* buff, uint16_t len);
+extern uint8_t ihu_bsp_stm32_spi_flash_read_byte(void);
+extern uint8_t ihu_bsp_stm32_spi_flash_send_byte(uint8_t byte);
+//CCL=>RFID NRF24L01使用了SPI2接口
+extern void ihu_bsp_stm32_spi_nrf24l01_cs_enable(void);
+extern void ihu_bsp_stm32_spi_nrf24l01_cs_disable(void);
+extern void ihu_bsp_stm32_spi_nrf24l01_ce_low(void);
+extern void ihu_bsp_stm32_spi_nrf24l01_ce_high(void);
+extern uint8_t ihu_bsp_stm32_spi_nrf24l01_irq_read(void);
+extern uint8_t ihu_bsp_stm32_spi_nrf24l01_read_write_byte(uint8_t byte);
+
 
 //重载接收函数，以便通过IT中断方式搞定接收通信，否则需要通过轮询或者单独线程搞定，更加麻烦
 void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *SpiHandle);
 
 
-//local API
+//local API => XPH定义的标准操作函数
 static void BSP_SPI_tx_isr(SPI_HandleTypeDef *hspi);
 static void BSP_SPI_rx_isr(SPI_HandleTypeDef *hspi);
 static void BSP_SPI_tx_complete(SPI_HandleTypeDef *hspi);

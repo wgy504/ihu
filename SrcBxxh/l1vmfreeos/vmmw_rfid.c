@@ -154,20 +154,20 @@ void func_rfidmod_send_string(char* s)
 
 
 //发送命令
-OPSTAT ihu_vmmw_rfidmod_rc522_spi_send_command(uint8_t *command)
+OPSTAT ihu_vmmw_rfidmod_mf522_spi_send_command(uint8_t *command)
 {
 	return IHU_SUCCESS;
 }
 
-//读取RFID卡的数据，或者说扫描ID
-OPSTAT ihu_vmmw_rfidmod_rc522_spi_read_id(uint8_t *rfidAddr, uint8_t len)
+//读取MF522 RFID卡的数据，或者说扫描ID
+OPSTAT ihu_vmmw_rfidmod_mf522_spi_read_id(uint8_t *rfidAddr, uint8_t len)
 {
 	int res = 0;
 	char cStr[30];
   unsigned char ucArray_ID[4];  //先后存放IC卡的类型和UID(IC卡序列号)
 	uint8_t ucStatusReturn;          //返回状态
 	//等待的时间长度
-	uint32_t tickTotal = IHU_VMWM_RFIDMOD_SCAN_RC522_MAX_TIME * 1000 / IHU_BSP_STM32_SPI_RX_MAX_DELAY;  //4秒
+	uint32_t tickTotal = IHU_VMWM_RFIDMOD_SCAN_MF522_MAX_TIME * 1000 / IHU_BSP_STM32_SPI_RX_MAX_DELAY;  //4秒
 	
 	//参数检查
 	if ((rfidAddr == NULL) || (len != 4)) IHU_ERROR_PRINT_TASK(TASK_ID_VMFO, "VMMWRFID: invalid input paramter received!\n");
@@ -175,11 +175,11 @@ OPSTAT ihu_vmmw_rfidmod_rc522_spi_read_id(uint8_t *rfidAddr, uint8_t len)
 	//清空缓冲区
 	func_rfidmod_clear_receive_buffer();
 	
-	//复位RC522外设
-	PcdReset();
+	//复位MF522外设
+	func_rfidmod_mf522_PcdReset();
 	
 	//设置工作方式	
-	M500PcdConfigISOType('A');
+	func_rfidmod_mf522_M500PcdConfigISOType('A');
 
 //	uint8_t * UID;
 //	uint8_t * KEY;
@@ -191,27 +191,27 @@ OPSTAT ihu_vmmw_rfidmod_rc522_spi_read_id(uint8_t *rfidAddr, uint8_t len)
 //	*(Dat+2) = 0x03;
 //	*(Dat+3) = 0x04;
 	//测试写入
-//	PcdRequest ( 0x52, ucArray_ID );//寻卡
-//  PcdAnticoll ( ucArray_ID );//防冲撞
-//  PcdSelect ( UID );//选定卡
-//  PcdAuthState ( 0x60, 0x10, KEY, UID );//校验
-//  PcdWrite ( 0x10, Dat );
-//  PcdRead ( 0x10, Dat );
+//	func_rfidmod_mf522_PcdRequest ( 0x52, ucArray_ID );//寻卡
+//  func_rfidmod_mf522_PcdAnticoll ( ucArray_ID );//防冲撞
+//  func_rfidmod_mf522_PcdSelect ( UID );//选定卡
+//  func_rfidmod_mf522_PcdAuthState ( 0x60, 0x10, KEY, UID );//校验
+//  func_rfidmod_mf522_PcdWrite ( 0x10, Dat );
+//  func_rfidmod_mf522_PcdRead ( 0x10, Dat );
 
 
 	uint8_t CT[2] = {0,0};//卡片类型
 	uint8_t SN1[4] = {0,0,0,0};//卡片号码
 	uint8_t assWd[6]={0xff,0xff,0xff,0xff,0xff,0xff};
 	uint8_t data[16];//缓冲区
-	PcdReset();
-	PcdRequest(PICC_REQALL, CT);//寻卡
-	PcdAnticoll(SN1); //防冲撞,至此，SN1中保存了卡号
+	func_rfidmod_mf522_PcdReset();
+	func_rfidmod_mf522_PcdRequest(IHU_VMWM_RFIDMOD_MF522_PICC_REQALL, CT);//寻卡
+	func_rfidmod_mf522_PcdAnticoll(SN1); //防冲撞,至此，SN1中保存了卡号
 	IhuDebugPrint("VMMWRFID: Card type = [0x%x, 0x%x], Card number = [0x%x, 0x%x, 0x%x, 0x%x].\n", CT[0], CT[1], SN1[0], SN1[1], SN1[2], SN1[3]);
-	PcdSelect(SN1);//选卡
-	PcdAuthState(0x60/*PICC_AUTHENT1A*/,0/*块*/,assWd,SN1);//验证A密匙
-	PcdRead(1,data);//读0区1块
+	func_rfidmod_mf522_PcdSelect(SN1);//选卡
+	func_rfidmod_mf522_PcdAuthState(0x60/*IHU_VMWM_RFIDMOD_MF522_PICC_AUTHENT1A*/,0/*块*/,assWd,SN1);//验证A密匙
+	func_rfidmod_mf522_PcdRead(1,data);//读0区1块
 	IhuDebugPrint("VMMWRFID: Data Area = 0x[%x/%x/%x/%x/%x/%x/%x/%x/%x/%x/%x/%x/%x/%x/%x/%x/].\n", data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],data[14],data[15]);
-	PcdHalt();//命令卡片进入休眠状态
+	func_rfidmod_mf522_PcdHalt();//命令卡片进入休眠状态
 
 	//循环读取
 	res = IHU_FAILURE;
@@ -220,21 +220,21 @@ OPSTAT ihu_vmmw_rfidmod_rc522_spi_read_id(uint8_t *rfidAddr, uint8_t len)
 		ihu_usleep(IHU_BSP_STM32_SPI_RX_MAX_DELAY); //这里的周期就是以绝对ms为单位的
 		tickTotal--;
     /*寻卡*/
-		if ( ( ucStatusReturn = PcdRequest ( PICC_REQALL, ucArray_ID ) ) != MI_OK )                                   
+		if ( ( ucStatusReturn = func_rfidmod_mf522_PcdRequest ( IHU_VMWM_RFIDMOD_MF522_PICC_REQALL, ucArray_ID ) ) != IHU_VMWM_RFIDMOD_MF522_MI_OK )                                   
 			 /*若失败再次寻卡*/
-      ucStatusReturn = PcdRequest ( PICC_REQALL, ucArray_ID );		
+      ucStatusReturn = func_rfidmod_mf522_PcdRequest ( IHU_VMWM_RFIDMOD_MF522_PICC_REQALL, ucArray_ID );		
 		IhuDebugPrint("VMMWRFID: Step1 reach.\n");
-		if ( ucStatusReturn == MI_OK  )
+		if ( ucStatusReturn == IHU_VMWM_RFIDMOD_MF522_MI_OK  )
 		{
       /*防冲撞（当有多张卡进入读写器操作范围时，防冲突机制会从其中选择一张进行操作）*/
 			IhuDebugPrint("VMMWRFID: Step2 reach.\n");
-			if ( PcdAnticoll(ucArray_ID) == MI_OK )  
+			if ( func_rfidmod_mf522_PcdAnticoll(ucArray_ID) == IHU_VMWM_RFIDMOD_MF522_MI_OK )  
 			{
 				memcpy(rfidAddr, ucArray_ID, 4);
 				sprintf(cStr, "The Card ID is: %02X%02X%02X%02X", ucArray_ID[0], ucArray_ID[1], ucArray_ID[2], ucArray_ID[3] );							
 				IhuDebugPrint("VMMWRFID: [%s]\n", cStr);
 				res = IHU_SUCCESS;
-				PcdHalt (); 		
+				func_rfidmod_mf522_PcdHalt (); 		
       }
 		}
 	}
@@ -269,172 +269,172 @@ OPSTAT ihu_vmmw_rfidmod_rc522_spi_read_id(uint8_t *rfidAddr, uint8_t len)
 
 
 /*
- * 函数名：ReadRawRC
- * 描述  ：读RC522寄存器
+ * 函数名：func_rfidmod_mf522_ReadRawRC
+ * 描述  ：读MF522寄存器
  * 输入  ：ucAddress，寄存器地址
  * 返回  : 寄存器的当前值
  * 调用  ：内部调用
  */
-uint8_t ReadRawRC ( uint8_t ucAddress )
+uint8_t func_rfidmod_mf522_ReadRawRC ( uint8_t ucAddress )
 {
 	uint8_t ucAddr, ucReturn;
 	
 	ucAddr = ( ( ucAddress << 1 ) & 0x7E ) | 0x80;
-	macRC522_CS_Enable() ;
-	SPI_FLASH_SendByte ( ucAddr );
-	ucReturn = SPI_FLASH_ReadByte ();
-	macRC522_CS_Disable();
+	ihu_l1hd_spi_mf522_cs_enable() ;
+	ihu_l1hd_spi_flash_send_byte ( ucAddr );
+	ucReturn = ihu_l1hd_spi_flash_read_byte ();
+	ihu_l1hd_spi_mf522_cs_disable();
 	return ucReturn;
 }
 
 /*
- * 函数名：WriteRawRC
- * 描述  ：写RC522寄存器
+ * 函数名：func_rfidmod_mf522_WriteRawRC
+ * 描述  ：写MF522寄存器
  * 输入  ：ucAddress，寄存器地址
  *         ucValue，写入寄存器的值
  * 返回  : 无
  * 调用  ：内部调用
  */
-void WriteRawRC ( uint8_t ucAddress, uint8_t ucValue )
+void func_rfidmod_mf522_WriteRawRC ( uint8_t ucAddress, uint8_t ucValue )
 {  
 	uint8_t ucAddr;
 	
 	ucAddr = ( ucAddress << 1 ) & 0x7E;
-	macRC522_CS_Enable() ;
-	SPI_FLASH_SendByte ( ucAddr );
-	SPI_FLASH_SendByte ( ucValue );
-	macRC522_CS_Disable();	
+	ihu_l1hd_spi_mf522_cs_enable() ;
+	ihu_l1hd_spi_flash_send_byte ( ucAddr );
+	ihu_l1hd_spi_flash_send_byte ( ucValue );
+	ihu_l1hd_spi_mf522_cs_disable();	
 }
 
 /*
- * 函数名：SetBitMask
- * 描述  ：对RC522寄存器置位
+ * 函数名：func_rfidmod_mf522_SetBitMask
+ * 描述  ：对MF522寄存器置位
  * 输入  ：ucReg，寄存器地址
  *         ucMask，置位值
  * 返回  : 无
  * 调用  ：内部调用
  */
-void SetBitMask ( uint8_t ucReg, uint8_t ucMask )  
+void func_rfidmod_mf522_SetBitMask ( uint8_t ucReg, uint8_t ucMask )  
 {
     uint8_t ucTemp;
 	
-    ucTemp = ReadRawRC ( ucReg );
-    WriteRawRC ( ucReg, ucTemp | ucMask );         // set bit mask
+    ucTemp = func_rfidmod_mf522_ReadRawRC ( ucReg );
+    func_rfidmod_mf522_WriteRawRC ( ucReg, ucTemp | ucMask );         // set bit mask
 }
 
 /*
- * 函数名：ClearBitMask
- * 描述  ：对RC522寄存器清位
+ * 函数名：func_rfidmod_mf522_ClearBitMask
+ * 描述  ：对MF522寄存器清位
  * 输入  ：ucReg，寄存器地址
  *         ucMask，清位值
  * 返回  : 无
  * 调用  ：内部调用
  */
-void ClearBitMask ( uint8_t ucReg, uint8_t ucMask )  
+void func_rfidmod_mf522_ClearBitMask ( uint8_t ucReg, uint8_t ucMask )  
 {
     uint8_t ucTemp;
 	
-    ucTemp = ReadRawRC ( ucReg );
-    WriteRawRC ( ucReg, ucTemp & ( ~ ucMask) );  // clear bit mask
+    ucTemp = func_rfidmod_mf522_ReadRawRC ( ucReg );
+    func_rfidmod_mf522_WriteRawRC ( ucReg, ucTemp & ( ~ ucMask) );  // clear bit mask
 }
 
 /*
- * 函数名：PcdAntennaOn
+ * 函数名：func_rfidmod_mf522_PcdAntennaOn
  * 描述  ：开启天线 
  * 输入  ：无
  * 返回  : 无
  * 调用  ：内部调用
  */
-void PcdAntennaOn ( void )
+void func_rfidmod_mf522_PcdAntennaOn ( void )
 {
     uint8_t uc;
 	
-    uc = ReadRawRC ( TxControlReg );
+    uc = func_rfidmod_mf522_ReadRawRC ( IHU_VMWM_RFIDMOD_MF522_TxControlReg );
     if ( ! ( uc & 0x03 ) )
-			SetBitMask(TxControlReg, 0x03);
+			func_rfidmod_mf522_SetBitMask(IHU_VMWM_RFIDMOD_MF522_TxControlReg, 0x03);
 }
 
 
 /*
- * 函数名：PcdAntennaOff
+ * 函数名：func_rfidmod_mf522_PcdAntennaOff
  * 描述  ：开启天线 
  * 输入  ：无
  * 返回  : 无
  * 调用  ：内部调用
  */
-void PcdAntennaOff ( void )
+void func_rfidmod_mf522_PcdAntennaOff ( void )
 {
-  ClearBitMask ( TxControlReg, 0x03 );
+  func_rfidmod_mf522_ClearBitMask ( IHU_VMWM_RFIDMOD_MF522_TxControlReg, 0x03 );
 }
 
 /*
  * 函数名：PcdRese
- * 描述  ：复位RC522 
+ * 描述  ：复位MF522 
  * 输入  ：无
  * 返回  : 无
  * 调用  ：外部调用
  */
-void PcdReset ( void )
+void func_rfidmod_mf522_PcdReset ( void )
 {
-	macRC522_Reset_Disable();
-	HAL_Delay ( 100 );
-	macRC522_Reset_Enable();
-	HAL_Delay ( 100 );
-	macRC522_Reset_Disable();
-	HAL_Delay ( 100 );
-	WriteRawRC ( CommandReg, PCD_RESETPHASE );
-	while ( ReadRawRC ( CommandReg ) & 0x10 );
-	HAL_Delay ( 100 );
-  WriteRawRC ( ModeReg, 0x3D );            //定义发送和接收常用模式 和Mifare卡通讯，CRC初始值0x6363
-  WriteRawRC ( TReloadRegL, 30 );          //16位定时器低位    
-	WriteRawRC ( TReloadRegH, 0 );			     //16位定时器高位
-  WriteRawRC ( TModeReg, 0x8D );				   //定义内部定时器的设置
-  WriteRawRC ( TPrescalerReg, 0x3E );			 //设置定时器分频系数
-	WriteRawRC ( TxAutoReg, 0x40 );				   //调制发送信号为100%ASK
-	PcdAntennaOff();
-  HAL_Delay ( 100 );
-  PcdAntennaOn();
+	ihu_l1hd_spi_mf522_reset_disable();
+	ihu_sleep ( 1 );
+	ihu_l1hd_spi_mf522_reset_enable();
+	ihu_sleep ( 1 );
+	ihu_l1hd_spi_mf522_reset_disable();
+	ihu_sleep ( 1 );
+	func_rfidmod_mf522_WriteRawRC ( IHU_VMWM_RFIDMOD_MF522_CommandReg, IHU_VMWM_RFIDMOD_MF522_PCD_RESETPHASE );
+	while ( func_rfidmod_mf522_ReadRawRC ( IHU_VMWM_RFIDMOD_MF522_CommandReg ) & 0x10 );
+	ihu_sleep ( 1 );
+  func_rfidmod_mf522_WriteRawRC ( IHU_VMWM_RFIDMOD_MF522_ModeReg, 0x3D );            //定义发送和接收常用模式 和Mifare卡通讯，CRC初始值0x6363
+  func_rfidmod_mf522_WriteRawRC ( IHU_VMWM_RFIDMOD_MF522_TReloadRegL, 30 );          //16位定时器低位    
+	func_rfidmod_mf522_WriteRawRC ( IHU_VMWM_RFIDMOD_MF522_TReloadRegH, 0 );			     //16位定时器高位
+  func_rfidmod_mf522_WriteRawRC ( IHU_VMWM_RFIDMOD_MF522_TModeReg, 0x8D );				   //定义内部定时器的设置
+  func_rfidmod_mf522_WriteRawRC ( IHU_VMWM_RFIDMOD_MF522_TPrescalerReg, 0x3E );			 //设置定时器分频系数
+	func_rfidmod_mf522_WriteRawRC ( IHU_VMWM_RFIDMOD_MF522_TxAutoReg, 0x40 );				   //调制发送信号为100%ASK
+	func_rfidmod_mf522_PcdAntennaOff();
+  ihu_sleep ( 1 );
+  func_rfidmod_mf522_PcdAntennaOn();
 }
 
 /*
- * 函数名：M500PcdConfigISOType
- * 描述  ：设置RC522的工作方式
+ * 函数名：func_rfidmod_mf522_M500PcdConfigISOType
+ * 描述  ：设置MF522的工作方式
  * 输入  ：ucType，工作方式
  * 返回  : 无
  * 调用  ：外部调用
  */
-void M500PcdConfigISOType ( uint8_t ucType )
+void func_rfidmod_mf522_M500PcdConfigISOType ( uint8_t ucType )
 {
 	if ( ucType == 'A')                     //ISO14443_A
   {
-		ClearBitMask ( Status2Reg, 0x08 );
-    WriteRawRC ( ModeReg, 0x3D );//3F
-		WriteRawRC ( RxSelReg, 0x86 );//84
-		WriteRawRC( RFCfgReg, 0x7F );   //4F
-		WriteRawRC( TReloadRegL, 30 );//tmoLength);// TReloadVal = 'h6a =tmoLength(dec) 
-		WriteRawRC ( TReloadRegH, 0 );
-		WriteRawRC ( TModeReg, 0x8D );
-		WriteRawRC ( TPrescalerReg, 0x3E );
-		HAL_Delay ( 2 );
-		PcdAntennaOn ();//开天线
+		func_rfidmod_mf522_ClearBitMask ( IHU_VMWM_RFIDMOD_MF522_Status2Reg, 0x08 );
+    func_rfidmod_mf522_WriteRawRC ( IHU_VMWM_RFIDMOD_MF522_ModeReg, 0x3D );//3F
+		func_rfidmod_mf522_WriteRawRC ( IHU_VMWM_RFIDMOD_MF522_RxSelReg, 0x86 );//84
+		func_rfidmod_mf522_WriteRawRC( IHU_VMWM_RFIDMOD_MF522_RFCfgReg, 0x7F );   //4F
+		func_rfidmod_mf522_WriteRawRC( IHU_VMWM_RFIDMOD_MF522_TReloadRegL, 30 );//tmoLength);// TReloadVal = 'h6a =tmoLength(dec) 
+		func_rfidmod_mf522_WriteRawRC ( IHU_VMWM_RFIDMOD_MF522_TReloadRegH, 0 );
+		func_rfidmod_mf522_WriteRawRC ( IHU_VMWM_RFIDMOD_MF522_TModeReg, 0x8D );
+		func_rfidmod_mf522_WriteRawRC ( IHU_VMWM_RFIDMOD_MF522_TPrescalerReg, 0x3E );
+		ihu_usleep( 20 );
+		func_rfidmod_mf522_PcdAntennaOn ();//开天线
    }
 }
 
 /*
- * 函数名：PcdComMF522
- * 描述  ：通过RC522和ISO14443卡通讯
- * 输入  ：ucCommand，RC522命令字
- *         pInData，通过RC522发送到卡片的数据
+ * 函数名：func_rfidmod_mf522_PcdComMF522
+ * 描述  ：通过MF522和ISO14443卡通讯
+ * 输入  ：ucCommand，MF522命令字
+ *         pInData，通过MF522发送到卡片的数据
  *         ucInLenByte，发送数据的字节长度
  *         pOutData，接收到的卡片返回数据
  *         pOutLenBit，返回数据的位长度
  * 返回  : 状态值
- *         = MI_OK，成功
+ *         = IHU_VMWM_RFIDMOD_MF522_MI_OK，成功
  * 调用  ：内部调用
  */
-char PcdComMF522 ( uint8_t ucCommand, uint8_t * pInData, uint8_t ucInLenByte, uint8_t * pOutData, uint32_t * pOutLenBit )		
+char func_rfidmod_mf522_PcdComMF522 ( uint8_t ucCommand, uint8_t * pInData, uint8_t ucInLenByte, uint8_t * pOutData, uint32_t * pOutLenBit )		
 {
-    char cStatus = MI_ERR;
+    char cStatus = IHU_VMWM_RFIDMOD_MF522_MI_ERR;
     uint8_t ucIrqEn   = 0x00;
     uint8_t ucWaitFor = 0x00;
     uint8_t ucLastBits;
@@ -443,66 +443,66 @@ char PcdComMF522 ( uint8_t ucCommand, uint8_t * pInData, uint8_t ucInLenByte, ui
 	
     switch ( ucCommand )
     {
-       case PCD_AUTHENT:		//Mifare认证
+       case IHU_VMWM_RFIDMOD_MF522_PCD_AUTHENT:		//Mifare认证
           ucIrqEn   = 0x12;		//允许错误中断请求ErrIEn  允许空闲中断IdleIEn
           ucWaitFor = 0x10;		//认证寻卡等待时候 查询空闲中断标志位
           break;
-       case PCD_TRANSCEIVE:		//接收发送 发送接收
+       case IHU_VMWM_RFIDMOD_MF522_PCD_TRANSCEIVE:		//接收发送 发送接收
           ucIrqEn   = 0x77;		//允许TxIEn RxIEn IdleIEn LoAlertIEn ErrIEn TimerIEn
           ucWaitFor = 0x30;		//寻卡等待时候 查询接收中断标志位与 空闲中断标志位
           break;
        default:
          break;
     }
-    WriteRawRC ( ComIEnReg, ucIrqEn | 0x80 );		//IRqInv置位管脚IRQ与Status1Reg的IRq位的值相反 
-    ClearBitMask ( ComIrqReg, 0x80 );			//Set1该位清零时，CommIRqReg的屏蔽位清零
-    WriteRawRC ( CommandReg, PCD_IDLE );		//写空闲命令
-    SetBitMask ( FIFOLevelReg, 0x80 );			//置位FlushBuffer清除内部FIFO的读和写指针以及ErrReg的BufferOvfl标志位被清除
+    func_rfidmod_mf522_WriteRawRC ( IHU_VMWM_RFIDMOD_MF522_ComIEnReg, ucIrqEn | 0x80 );		//IRqInv置位管脚IRQ与IHU_VMWM_RFIDMOD_MF522_Status1Reg的IRq位的值相反 
+    func_rfidmod_mf522_ClearBitMask ( IHU_VMWM_RFIDMOD_MF522_ComIrqReg, 0x80 );			//Set1该位清零时，CommIRqReg的屏蔽位清零
+    func_rfidmod_mf522_WriteRawRC ( IHU_VMWM_RFIDMOD_MF522_CommandReg, IHU_VMWM_RFIDMOD_MF522_PCD_IDLE );		//写空闲命令
+    func_rfidmod_mf522_SetBitMask ( IHU_VMWM_RFIDMOD_MF522_FIFOLevelReg, 0x80 );			//置位FlushBuffer清除内部FIFO的读和写指针以及ErrReg的BufferOvfl标志位被清除
     for ( ul = 0; ul < ucInLenByte; ul ++ )
-		  WriteRawRC ( FIFODataReg, pInData [ ul ] );    		//写数据进FIFOdata
-    WriteRawRC ( CommandReg, ucCommand );					//写命令
-    if ( ucCommand == PCD_TRANSCEIVE )
-			SetBitMask(BitFramingReg,0x80);  				//StartSend置位启动数据发送 该位与收发命令使用时才有效
+		  func_rfidmod_mf522_WriteRawRC ( IHU_VMWM_RFIDMOD_MF522_FIFODataReg, pInData [ ul ] );    		//写数据进FIFOdata
+    func_rfidmod_mf522_WriteRawRC ( IHU_VMWM_RFIDMOD_MF522_CommandReg, ucCommand );					//写命令
+    if ( ucCommand == IHU_VMWM_RFIDMOD_MF522_PCD_TRANSCEIVE )
+			func_rfidmod_mf522_SetBitMask(IHU_VMWM_RFIDMOD_MF522_BitFramingReg,0x80);  				//StartSend置位启动数据发送 该位与收发命令使用时才有效
     ul = 1000;//根据时钟频率调整，操作M1卡最大等待时间25ms
     do 														//认证 与寻卡等待时间	
     {
-         ucN = ReadRawRC ( ComIrqReg );							//查询事件中断
+         ucN = func_rfidmod_mf522_ReadRawRC ( IHU_VMWM_RFIDMOD_MF522_ComIrqReg );							//查询事件中断
          ul --;
     } while ( ( ul != 0 ) && ( ! ( ucN & 0x01 ) ) && ( ! ( ucN & ucWaitFor ) ) );		//退出条件i=0,定时器中断，与写空闲命令
-    ClearBitMask ( BitFramingReg, 0x80 );					//清理允许StartSend位
+    func_rfidmod_mf522_ClearBitMask ( IHU_VMWM_RFIDMOD_MF522_BitFramingReg, 0x80 );					//清理允许StartSend位
     if ( ul != 0 )
     {
-			if ( ! ( ReadRawRC ( ErrorReg ) & 0x1B ) )			//读错误标志寄存器BufferOfI CollErr ParityErr ProtocolErr
+			if ( ! ( func_rfidmod_mf522_ReadRawRC ( IHU_VMWM_RFIDMOD_MF522_ErrorReg ) & 0x1B ) )			//读错误标志寄存器BufferOfI CollErr ParityErr ProtocolErr
 			{
-				cStatus = MI_OK;
+				cStatus = IHU_VMWM_RFIDMOD_MF522_MI_OK;
 				if ( ucN & ucIrqEn & 0x01 )					//是否发生定时器中断
-				  cStatus = MI_NOTAGERR;   
-				if ( ucCommand == PCD_TRANSCEIVE )
+				  cStatus = IHU_VMWM_RFIDMOD_MF522_MI_NOTAGERR;   
+				if ( ucCommand == IHU_VMWM_RFIDMOD_MF522_PCD_TRANSCEIVE )
 				{
-					ucN = ReadRawRC ( FIFOLevelReg );			//读FIFO中保存的字节数
-					ucLastBits = ReadRawRC ( ControlReg ) & 0x07;	//最后接收到得字节的有效位数
+					ucN = func_rfidmod_mf522_ReadRawRC ( IHU_VMWM_RFIDMOD_MF522_FIFOLevelReg );			//读FIFO中保存的字节数
+					ucLastBits = func_rfidmod_mf522_ReadRawRC ( IHU_VMWM_RFIDMOD_MF522_ControlReg ) & 0x07;	//最后接收到得字节的有效位数
 					if ( ucLastBits )
 						* pOutLenBit = ( ucN - 1 ) * 8 + ucLastBits;   	//N个字节数减去1（最后一个字节）+最后一位的位数 读取到的数据总位数
 					else
 						* pOutLenBit = ucN * 8;   					//最后接收到的字节整个字节有效
 					if ( ucN == 0 )		
             ucN = 1;    
-					if ( ucN > MAXRLEN )
-						ucN = MAXRLEN;   
+					if ( ucN > IHU_VMWM_RFIDMOD_MF522_MAXRLEN )
+						ucN = IHU_VMWM_RFIDMOD_MF522_MAXRLEN;   
 					for ( ul = 0; ul < ucN; ul ++ )
-					  pOutData [ ul ] = ReadRawRC ( FIFODataReg );   
+					  pOutData [ ul ] = func_rfidmod_mf522_ReadRawRC ( IHU_VMWM_RFIDMOD_MF522_FIFODataReg );   
 					}
       }
 			else
-				cStatus = MI_ERR;   
+				cStatus = IHU_VMWM_RFIDMOD_MF522_MI_ERR;   
     }
-   SetBitMask ( ControlReg, 0x80 );           // stop timer now
-   WriteRawRC ( CommandReg, PCD_IDLE ); 
+   func_rfidmod_mf522_SetBitMask ( IHU_VMWM_RFIDMOD_MF522_ControlReg, 0x80 );           // stop timer now
+   func_rfidmod_mf522_WriteRawRC ( IHU_VMWM_RFIDMOD_MF522_CommandReg, IHU_VMWM_RFIDMOD_MF522_PCD_IDLE ); 
    return cStatus;
 }
 
 /*
- * 函数名：PcdRequest
+ * 函数名：func_rfidmod_mf522_PcdRequest
  * 描述  ：寻卡
  * 输入  ：ucReq_code，寻卡方式
  *                     = 0x52，寻感应区内所有符合14443A标准的卡
@@ -514,52 +514,52 @@ char PcdComMF522 ( uint8_t ucCommand, uint8_t * pInData, uint8_t ucInLenByte, ui
  *                   = 0x0800，Mifare_Pro(X))
  *                   = 0x4403，Mifare_DESFire
  * 返回  : 状态值
- *         = MI_OK，成功
+ *         = IHU_VMWM_RFIDMOD_MF522_MI_OK，成功
  * 调用  ：外部调用
  */
-char PcdRequest ( uint8_t ucReq_code, uint8_t * pTagType )
+char func_rfidmod_mf522_PcdRequest ( uint8_t ucReq_code, uint8_t * pTagType )
 {
    char cStatus;  
-	 uint8_t ucComMF522Buf [ MAXRLEN ]; 
+	 uint8_t ucComMF522Buf [ IHU_VMWM_RFIDMOD_MF522_MAXRLEN ]; 
    uint32_t ulLen;
 	
-   ClearBitMask ( Status2Reg, 0x08 );	//清理指示MIFARECyptol单元接通以及所有卡的数据通信被加密的情况
-   WriteRawRC ( BitFramingReg, 0x07 );	//	发送的最后一个字节的 七位
-   SetBitMask ( TxControlReg, 0x03 );	//TX1,TX2管脚的输出信号传递经发送调制的13.56的能量载波信号
+   func_rfidmod_mf522_ClearBitMask ( IHU_VMWM_RFIDMOD_MF522_Status2Reg, 0x08 );	//清理指示MIFARECyptol单元接通以及所有卡的数据通信被加密的情况
+   func_rfidmod_mf522_WriteRawRC ( IHU_VMWM_RFIDMOD_MF522_BitFramingReg, 0x07 );	//	发送的最后一个字节的 七位
+   func_rfidmod_mf522_SetBitMask ( IHU_VMWM_RFIDMOD_MF522_TxControlReg, 0x03 );	//TX1,TX2管脚的输出信号传递经发送调制的13.56的能量载波信号
    ucComMF522Buf [ 0 ] = ucReq_code;		//存入 卡片命令字
-   cStatus = PcdComMF522 ( PCD_TRANSCEIVE,	ucComMF522Buf, 1, ucComMF522Buf, & ulLen );	//寻卡  
-   if ( ( cStatus == MI_OK ) && ( ulLen == 0x10 ) )	//寻卡成功返回卡类型 
+   cStatus = func_rfidmod_mf522_PcdComMF522 ( IHU_VMWM_RFIDMOD_MF522_PCD_TRANSCEIVE,	ucComMF522Buf, 1, ucComMF522Buf, & ulLen );	//寻卡  
+   if ( ( cStatus == IHU_VMWM_RFIDMOD_MF522_MI_OK ) && ( ulLen == 0x10 ) )	//寻卡成功返回卡类型 
    {    
        * pTagType = ucComMF522Buf [ 0 ];
        * ( pTagType + 1 ) = ucComMF522Buf [ 1 ];
    }
    else
-     cStatus = MI_ERR;
+     cStatus = IHU_VMWM_RFIDMOD_MF522_MI_ERR;
    return cStatus;
 }
 
 /*
- * 函数名：PcdAnticoll
+ * 函数名：func_rfidmod_mf522_PcdAnticoll
  * 描述  ：防冲撞
  * 输入  ：pSnr，卡片序列号，4字节
  * 返回  : 状态值
- *         = MI_OK，成功
+ *         = IHU_VMWM_RFIDMOD_MF522_MI_OK，成功
  * 调用  ：外部调用
  */
-char PcdAnticoll ( uint8_t * pSnr )
+char func_rfidmod_mf522_PcdAnticoll ( uint8_t * pSnr )
 {
     char cStatus;
     uint8_t uc, ucSnr_check = 0;
-    uint8_t ucComMF522Buf [ MAXRLEN ]; 
+    uint8_t ucComMF522Buf [ IHU_VMWM_RFIDMOD_MF522_MAXRLEN ]; 
 	  uint32_t ulLen;
  
-    ClearBitMask ( Status2Reg, 0x08 );		//清MFCryptol On位 只有成功执行MFAuthent命令后，该位才能置位
-    WriteRawRC ( BitFramingReg, 0x00);		//清理寄存器 停止收发
-    ClearBitMask ( CollReg, 0x80 );			  //清ValuesAfterColl所有接收的位在冲突后被清除
-    ucComMF522Buf [ 0 ] = PICC_ANTICOLL1;	//卡片防冲突命令
+    func_rfidmod_mf522_ClearBitMask ( IHU_VMWM_RFIDMOD_MF522_Status2Reg, 0x08 );		//清MFCryptol On位 只有成功执行MFAuthent命令后，该位才能置位
+    func_rfidmod_mf522_WriteRawRC ( IHU_VMWM_RFIDMOD_MF522_BitFramingReg, 0x00);		//清理寄存器 停止收发
+    func_rfidmod_mf522_ClearBitMask ( IHU_VMWM_RFIDMOD_MF522_CollReg, 0x80 );			  //清ValuesAfterColl所有接收的位在冲突后被清除
+    ucComMF522Buf [ 0 ] = IHU_VMWM_RFIDMOD_MF522_PICC_ANTICOLL1;	//卡片防冲突命令
     ucComMF522Buf [ 1 ] = 0x20;
-    cStatus = PcdComMF522 ( PCD_TRANSCEIVE, ucComMF522Buf, 2, ucComMF522Buf, & ulLen);//与卡片通信
-    if ( cStatus == MI_OK)		//通信成功
+    cStatus = func_rfidmod_mf522_PcdComMF522 ( IHU_VMWM_RFIDMOD_MF522_PCD_TRANSCEIVE, ucComMF522Buf, 2, ucComMF522Buf, & ulLen);//与卡片通信
+    if ( cStatus == IHU_VMWM_RFIDMOD_MF522_MI_OK)		//通信成功
     {
 			for ( uc = 0; uc < 4; uc ++ )
 			{
@@ -567,15 +567,15 @@ char PcdAnticoll ( uint8_t * pSnr )
          ucSnr_check ^= ucComMF522Buf [ uc ];
       }
       if ( ucSnr_check != ucComMF522Buf [ uc ] )
-				cStatus = MI_ERR;    
+				cStatus = IHU_VMWM_RFIDMOD_MF522_MI_ERR;    
     }
-    SetBitMask ( CollReg, 0x80 );		
+    func_rfidmod_mf522_SetBitMask ( IHU_VMWM_RFIDMOD_MF522_CollReg, 0x80 );		
     return cStatus;
 }
 
 /*
  * 函数名：CalulateCRC
- * 描述  ：用RC522计算CRC16
+ * 描述  ：用MF522计算CRC16
  * 输入  ：pIndata，计算CRC16的数组
  *         ucLen，计算CRC16的数组字节长度
  *         pOutData，存放计算结果存放的首地址
@@ -586,40 +586,40 @@ void CalulateCRC ( uint8_t * pIndata, uint8_t ucLen, uint8_t * pOutData )
 {
     uint8_t uc, ucN;
 	
-    ClearBitMask(DivIrqReg,0x04);
-    WriteRawRC(CommandReg, PCD_IDLE);
-    SetBitMask(FIFOLevelReg,0x80);
+    func_rfidmod_mf522_ClearBitMask(IHU_VMWM_RFIDMOD_MF522_DivIrqReg,0x04);
+    func_rfidmod_mf522_WriteRawRC(IHU_VMWM_RFIDMOD_MF522_CommandReg, IHU_VMWM_RFIDMOD_MF522_PCD_IDLE);
+    func_rfidmod_mf522_SetBitMask(IHU_VMWM_RFIDMOD_MF522_FIFOLevelReg,0x80);
     for ( uc = 0; uc < ucLen; uc ++)
-	    WriteRawRC ( FIFODataReg, * ( pIndata + uc ) );   
+	    func_rfidmod_mf522_WriteRawRC ( IHU_VMWM_RFIDMOD_MF522_FIFODataReg, * ( pIndata + uc ) );   
 
-    WriteRawRC ( CommandReg, PCD_CALCCRC );
+    func_rfidmod_mf522_WriteRawRC ( IHU_VMWM_RFIDMOD_MF522_CommandReg, IHU_VMWM_RFIDMOD_MF522_PCD_CALCCRC );
     uc = 0xFF;
     do 
     {
-        ucN = ReadRawRC ( DivIrqReg );
+        ucN = func_rfidmod_mf522_ReadRawRC ( IHU_VMWM_RFIDMOD_MF522_DivIrqReg );
         uc --;
     } while ( ( uc != 0 ) && ! ( ucN & 0x04 ) );
 		
-    pOutData [ 0 ] = ReadRawRC ( CRCResultRegL );
-    pOutData [ 1 ] = ReadRawRC ( CRCResultRegM );
+    pOutData [ 0 ] = func_rfidmod_mf522_ReadRawRC ( IHU_VMWM_RFIDMOD_MF522_CRCResultRegL );
+    pOutData [ 1 ] = func_rfidmod_mf522_ReadRawRC ( IHU_VMWM_RFIDMOD_MF522_CRCResultRegM );
 }
 
 /*
- * 函数名：PcdSelect
+ * 函数名：func_rfidmod_mf522_PcdSelect
  * 描述  ：选定卡片
  * 输入  ：pSnr，卡片序列号，4字节
  * 返回  : 状态值
- *         = MI_OK，成功
+ *         = IHU_VMWM_RFIDMOD_MF522_MI_OK，成功
  * 调用  ：外部调用
  */
-char PcdSelect ( uint8_t * pSnr )
+char func_rfidmod_mf522_PcdSelect ( uint8_t * pSnr )
 {
     char ucN;
     uint8_t uc;
-	  uint8_t ucComMF522Buf [ MAXRLEN ]; 
+	  uint8_t ucComMF522Buf [ IHU_VMWM_RFIDMOD_MF522_MAXRLEN ]; 
     uint32_t  ulLen;
     
-    ucComMF522Buf [ 0 ] = PICC_ANTICOLL1;
+    ucComMF522Buf [ 0 ] = IHU_VMWM_RFIDMOD_MF522_PICC_ANTICOLL1;
     ucComMF522Buf [ 1 ] = 0x70;
     ucComMF522Buf [ 6 ] = 0;
     for ( uc = 0; uc < 4; uc ++ )
@@ -628,17 +628,17 @@ char PcdSelect ( uint8_t * pSnr )
     	ucComMF522Buf [ 6 ] ^= * ( pSnr + uc );
     }
     CalulateCRC ( ucComMF522Buf, 7, & ucComMF522Buf [ 7 ] );
-    ClearBitMask ( Status2Reg, 0x08 );
-    ucN = PcdComMF522 ( PCD_TRANSCEIVE, ucComMF522Buf, 9, ucComMF522Buf, & ulLen );
-    if ( ( ucN == MI_OK ) && ( ulLen == 0x18 ) )
-      ucN = MI_OK;  
+    func_rfidmod_mf522_ClearBitMask ( IHU_VMWM_RFIDMOD_MF522_Status2Reg, 0x08 );
+    ucN = func_rfidmod_mf522_PcdComMF522 ( IHU_VMWM_RFIDMOD_MF522_PCD_TRANSCEIVE, ucComMF522Buf, 9, ucComMF522Buf, & ulLen );
+    if ( ( ucN == IHU_VMWM_RFIDMOD_MF522_MI_OK ) && ( ulLen == 0x18 ) )
+      ucN = IHU_VMWM_RFIDMOD_MF522_MI_OK;  
     else
-      ucN = MI_ERR;    
+      ucN = IHU_VMWM_RFIDMOD_MF522_MI_ERR;    
     return ucN;		
 }
 
 /*
- * 函数名：PcdAuthState
+ * 函数名：func_rfidmod_mf522_PcdAuthState
  * 描述  ：验证卡片密码
  * 输入  ：ucAuth_mode，密码验证模式
  *                     = 0x60，验证A密钥
@@ -647,13 +647,13 @@ char PcdSelect ( uint8_t * pSnr )
  *         pKey，密码
  *         pSnr，卡片序列号，4字节
  * 返回  : 状态值
- *         = MI_OK，成功
+ *         = IHU_VMWM_RFIDMOD_MF522_MI_OK，成功
  * 调用  ：外部调用
  */
-char PcdAuthState ( uint8_t ucAuth_mode, uint8_t ucAddr, uint8_t * pKey, uint8_t * pSnr )
+char func_rfidmod_mf522_PcdAuthState ( uint8_t ucAuth_mode, uint8_t ucAddr, uint8_t * pKey, uint8_t * pSnr )
 {
     char cStatus;
-	  uint8_t uc, ucComMF522Buf [ MAXRLEN ];
+	  uint8_t uc, ucComMF522Buf [ IHU_VMWM_RFIDMOD_MF522_MAXRLEN ];
     uint32_t ulLen;
     
     ucComMF522Buf [ 0 ] = ucAuth_mode;
@@ -662,109 +662,326 @@ char PcdAuthState ( uint8_t ucAuth_mode, uint8_t ucAddr, uint8_t * pKey, uint8_t
 	    ucComMF522Buf [ uc + 2 ] = * ( pKey + uc );   
     for ( uc = 0; uc < 6; uc ++ )
 	    ucComMF522Buf [ uc + 8 ] = * ( pSnr + uc );   
-    cStatus = PcdComMF522 ( PCD_AUTHENT, ucComMF522Buf, 12, ucComMF522Buf, & ulLen );
-    if ( ( cStatus != MI_OK ) || ( ! ( ReadRawRC ( Status2Reg ) & 0x08 ) ) )
-      cStatus = MI_ERR;   
+    cStatus = func_rfidmod_mf522_PcdComMF522 ( IHU_VMWM_RFIDMOD_MF522_PCD_AUTHENT, ucComMF522Buf, 12, ucComMF522Buf, & ulLen );
+    if ( ( cStatus != IHU_VMWM_RFIDMOD_MF522_MI_OK ) || ( ! ( func_rfidmod_mf522_ReadRawRC ( IHU_VMWM_RFIDMOD_MF522_Status2Reg ) & 0x08 ) ) )
+      cStatus = IHU_VMWM_RFIDMOD_MF522_MI_ERR;   
     return cStatus;			
 }
 
 /*
- * 函数名：PcdWrite
+ * 函数名：func_rfidmod_mf522_PcdWrite
  * 描述  ：写数据到M1卡一块
  * 输入  ：uint8_t ucAddr，块地址
  *         pData，写入的数据，16字节
  * 返回  : 状态值
- *         = MI_OK，成功
+ *         = IHU_VMWM_RFIDMOD_MF522_MI_OK，成功
  * 调用  ：外部调用
  */
-char PcdWrite ( uint8_t ucAddr, uint8_t * pData )
+char func_rfidmod_mf522_PcdWrite ( uint8_t ucAddr, uint8_t * pData )
 {
     char cStatus;
-	  uint8_t uc, ucComMF522Buf [ MAXRLEN ];
+	  uint8_t uc, ucComMF522Buf [ IHU_VMWM_RFIDMOD_MF522_MAXRLEN ];
     uint32_t ulLen;
      
-    ucComMF522Buf [ 0 ] = PICC_WRITE;
+    ucComMF522Buf [ 0 ] = IHU_VMWM_RFIDMOD_MF522_PICC_WRITE;
     ucComMF522Buf [ 1 ] = ucAddr;
     CalulateCRC ( ucComMF522Buf, 2, & ucComMF522Buf [ 2 ] );
-    cStatus = PcdComMF522 ( PCD_TRANSCEIVE, ucComMF522Buf, 4, ucComMF522Buf, & ulLen );
-    if ( ( cStatus != MI_OK ) || ( ulLen != 4 ) || ( ( ucComMF522Buf [ 0 ] & 0x0F ) != 0x0A ) )
-      cStatus = MI_ERR;   
-    if ( cStatus == MI_OK )
+    cStatus = func_rfidmod_mf522_PcdComMF522 ( IHU_VMWM_RFIDMOD_MF522_PCD_TRANSCEIVE, ucComMF522Buf, 4, ucComMF522Buf, & ulLen );
+    if ( ( cStatus != IHU_VMWM_RFIDMOD_MF522_MI_OK ) || ( ulLen != 4 ) || ( ( ucComMF522Buf [ 0 ] & 0x0F ) != 0x0A ) )
+      cStatus = IHU_VMWM_RFIDMOD_MF522_MI_ERR;   
+    if ( cStatus == IHU_VMWM_RFIDMOD_MF522_MI_OK )
     {
 			//memcpy(ucComMF522Buf, pData, 16);
       for ( uc = 0; uc < 16; uc ++ )
 			  ucComMF522Buf [ uc ] = * ( pData + uc );  
       CalulateCRC ( ucComMF522Buf, 16, & ucComMF522Buf [ 16 ] );
-      cStatus = PcdComMF522 ( PCD_TRANSCEIVE, ucComMF522Buf, 18, ucComMF522Buf, & ulLen );
-			if ( ( cStatus != MI_OK ) || ( ulLen != 4 ) || ( ( ucComMF522Buf [ 0 ] & 0x0F ) != 0x0A ) )
-        cStatus = MI_ERR;   
+      cStatus = func_rfidmod_mf522_PcdComMF522 ( IHU_VMWM_RFIDMOD_MF522_PCD_TRANSCEIVE, ucComMF522Buf, 18, ucComMF522Buf, & ulLen );
+			if ( ( cStatus != IHU_VMWM_RFIDMOD_MF522_MI_OK ) || ( ulLen != 4 ) || ( ( ucComMF522Buf [ 0 ] & 0x0F ) != 0x0A ) )
+        cStatus = IHU_VMWM_RFIDMOD_MF522_MI_ERR;   
     } 	
     return cStatus;
 }
 
 /*
- * 函数名：PcdRead
+ * 函数名：func_rfidmod_mf522_PcdRead
  * 描述  ：读取M1卡一块数据
  * 输入  ：uint8_t ucAddr，块地址
  *         pData，读出的数据，16字节
  * 返回  : 状态值
- *         = MI_OK，成功
+ *         = IHU_VMWM_RFIDMOD_MF522_MI_OK，成功
  * 调用  ：外部调用
  */
-char PcdRead ( uint8_t ucAddr, uint8_t * pData )
+char func_rfidmod_mf522_PcdRead ( uint8_t ucAddr, uint8_t * pData )
 {
     char cStatus;
-	  uint8_t uc, ucComMF522Buf [ MAXRLEN ]; 
+	  uint8_t uc, ucComMF522Buf [ IHU_VMWM_RFIDMOD_MF522_MAXRLEN ]; 
     uint32_t ulLen;
 
-    ucComMF522Buf [ 0 ] = PICC_READ;
+    ucComMF522Buf [ 0 ] = IHU_VMWM_RFIDMOD_MF522_PICC_READ;
     ucComMF522Buf [ 1 ] = ucAddr;
     CalulateCRC ( ucComMF522Buf, 2, & ucComMF522Buf [ 2 ] );
-    cStatus = PcdComMF522 ( PCD_TRANSCEIVE, ucComMF522Buf, 4, ucComMF522Buf, & ulLen );
-    if ( ( cStatus == MI_OK ) && ( ulLen == 0x90 ) )
+    cStatus = func_rfidmod_mf522_PcdComMF522 ( IHU_VMWM_RFIDMOD_MF522_PCD_TRANSCEIVE, ucComMF522Buf, 4, ucComMF522Buf, & ulLen );
+    if ( ( cStatus == IHU_VMWM_RFIDMOD_MF522_MI_OK ) && ( ulLen == 0x90 ) )
     {
 			for ( uc = 0; uc < 16; uc ++ )
         * ( pData + uc ) = ucComMF522Buf [ uc ];   
     }
     else
-      cStatus = MI_ERR;   		
+      cStatus = IHU_VMWM_RFIDMOD_MF522_MI_ERR;   		
     return cStatus;
 }
 
 /*
- * 函数名：PcdHalt
+ * 函数名：func_rfidmod_mf522_PcdHalt
  * 描述  ：命令卡片进入休眠状态
  * 输入  ：无
  * 返回  : 状态值
- *         = MI_OK，成功
+ *         = IHU_VMWM_RFIDMOD_MF522_MI_OK，成功
  * 调用  ：外部调用
  */
-char PcdHalt( void )
+char func_rfidmod_mf522_PcdHalt( void )
 {
-	uint8_t ucComMF522Buf [ MAXRLEN ]; 
+	uint8_t ucComMF522Buf [ IHU_VMWM_RFIDMOD_MF522_MAXRLEN ]; 
 	uint32_t  ulLen;
   
-  ucComMF522Buf [ 0 ] = PICC_HALT;
+  ucComMF522Buf [ 0 ] = IHU_VMWM_RFIDMOD_MF522_PICC_HALT;
   ucComMF522Buf [ 1 ] = 0;
   CalulateCRC ( ucComMF522Buf, 2, & ucComMF522Buf [ 2 ] );
- 	PcdComMF522 ( PCD_TRANSCEIVE, ucComMF522Buf, 4, ucComMF522Buf, & ulLen );
-  return MI_OK;
+ 	func_rfidmod_mf522_PcdComMF522 ( IHU_VMWM_RFIDMOD_MF522_PCD_TRANSCEIVE, ucComMF522Buf, 4, ucComMF522Buf, & ulLen );
+  return IHU_VMWM_RFIDMOD_MF522_MI_OK;
 }
 
-void IC_CMT ( uint8_t * UID, uint8_t * KEY, uint8_t RW, uint8_t * Dat )
+void func_rfidmod_mf522_IC_CMT ( uint8_t * UID, uint8_t * KEY, uint8_t RW, uint8_t * Dat )
 {
   uint8_t ucArray_ID [ 4 ] = { 0 };//先后存放IC卡的类型和UID(IC卡序列号)
   
-  PcdRequest ( 0x52, ucArray_ID );//寻卡
-  PcdAnticoll ( ucArray_ID );//防冲撞
-  PcdSelect ( UID );//选定卡
-  PcdAuthState ( 0x60, 0x10, KEY, UID );//校验
+  func_rfidmod_mf522_PcdRequest ( 0x52, ucArray_ID );//寻卡
+  func_rfidmod_mf522_PcdAnticoll ( ucArray_ID );//防冲撞
+  func_rfidmod_mf522_PcdSelect ( UID );//选定卡
+  func_rfidmod_mf522_PcdAuthState ( 0x60, 0x10, KEY, UID );//校验
 	if ( RW )//读写选择，1是读，0是写
-    PcdRead ( 0x10, Dat );
+    func_rfidmod_mf522_PcdRead ( 0x10, Dat );
    else 
-     PcdWrite ( 0x10, Dat );
-   PcdHalt (); 
+     func_rfidmod_mf522_PcdWrite ( 0x10, Dat );
+   func_rfidmod_mf522_PcdHalt (); 
 }
+
+
+
+/*
+ *
+ * NRF24L01的中间件操作过程
+ *
+ *
+ *
+*/
+
+const uint8_t TX_ADDRESS[IHU_VMWM_RFIDMOD_NRF24L01_TX_ADR_WIDTH]={0xb0,0x43,0x10,0x10,0x01}; //发送地址
+const uint8_t RX_ADDRESS[IHU_VMWM_RFIDMOD_NRF24L01_RX_ADR_WIDTH]={0xb0,0x43,0x10,0x10,0x01};
+
+/**
+  * 函数功能: SPI写寄存器
+  * 输入参数: 无
+  * 返 回 值: 无
+  * 说    明：reg:指定寄存器地址
+  *           
+  */ 
+uint8_t func_rfidmod_nrf24l01_write_reg(uint8_t reg,uint8_t value)
+{
+	uint8_t status;	
+  ihu_l1hd_spi_nrf24l01_cs_enable();                 //使能SPI传输
+  status =ihu_l1hd_spi_nrf24l01_read_write_byte(reg);//发送寄存器号 
+  ihu_l1hd_spi_nrf24l01_read_write_byte(value);      //写入寄存器的值
+  ihu_l1hd_spi_nrf24l01_cs_disable();                 //禁止SPI传输	   
+  return(status);       			//返回状态值
+}
+
+/**
+  * 函数功能: 读取SPI寄存器值
+  * 输入参数: 无
+  * 返 回 值: 无
+  * 说    明：reg:要读的寄存器
+  *           
+  */ 
+uint8_t func_rfidmod_nrf24l01_read_reg(uint8_t reg)
+{
+	uint8_t reg_val;	    
+ 	ihu_l1hd_spi_nrf24l01_cs_enable();          //使能SPI传输		
+  ihu_l1hd_spi_nrf24l01_read_write_byte(reg);   //发送寄存器号
+  reg_val=ihu_l1hd_spi_nrf24l01_read_write_byte(0XFF);//读取寄存器内容
+  ihu_l1hd_spi_nrf24l01_cs_disable();          //禁止SPI传输		    
+  return(reg_val);           //返回状态值
+}	
+
+
+/**
+  * 函数功能: 在指定位置读出指定长度的数据
+  * 输入参数: 无
+  * 返 回 值: 此次读到的状态寄存器值 
+  * 说    明：无
+  *           
+  */ 
+uint8_t func_rfidmod_nrf24l01_read_buf(uint8_t reg,uint8_t *pBuf,uint8_t len)
+{
+	uint8_t status,uint8_t_ctr;	   
+  
+  ihu_l1hd_spi_nrf24l01_cs_enable();           //使能SPI传输
+  status=ihu_l1hd_spi_nrf24l01_read_write_byte(reg);//发送寄存器值(位置),并读取状态值   	   
+ 	for(uint8_t_ctr=0;uint8_t_ctr<len;uint8_t_ctr++)
+  {
+    pBuf[uint8_t_ctr]=ihu_l1hd_spi_nrf24l01_read_write_byte(0XFF);//读出数据
+  }
+  ihu_l1hd_spi_nrf24l01_cs_disable();       //关闭SPI传输
+  return status;        //返回读到的状态值
+}
+
+/**
+  * 函数功能: 在指定位置写指定长度的数据
+  * 输入参数: 无
+  * 返 回 值: 无
+  * 说    明：reg:寄存器(位置)  *pBuf:数据指针  len:数据长度
+  *           
+  */ 
+uint8_t func_rfidmod_nrf24l01_write_buf(uint8_t reg, uint8_t *pBuf, uint8_t len)
+{
+	uint8_t status,uint8_t_ctr;	    
+ 	ihu_l1hd_spi_nrf24l01_cs_enable();          //使能SPI传输
+  status = ihu_l1hd_spi_nrf24l01_read_write_byte(reg);//发送寄存器值(位置),并读取状态值
+  for(uint8_t_ctr=0; uint8_t_ctr<len; uint8_t_ctr++)
+  {
+    ihu_l1hd_spi_nrf24l01_read_write_byte(*pBuf++); //写入数据	 
+  }
+  ihu_l1hd_spi_nrf24l01_cs_disable();       //关闭SPI传输
+  return status;          //返回读到的状态值
+}				   
+
+/**
+  * 函数功能: 检测24L01是否存在
+  * 输入参数: 无
+  * 返 回 值: 0，成功;1，失败
+  * 说    明：无          
+  */ 
+uint8_t func_rfidmod_nrf24l01_check(void)
+{
+	uint8_t buf[5]={0XA5,0XA5,0XA5,0XA5,0XA5};
+	uint8_t i;
+	func_rfidmod_nrf24l01_write_buf(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_TX_ADDR,buf,5);//写入5个字节的地址.	
+	func_rfidmod_nrf24l01_read_buf(IHU_VMWM_RFIDMOD_NRF24L01_TX_ADDR,buf,5); //读出写入的地址  
+	for(i=0;i<5;i++)if(buf[i]!=0XA5)break;	 							   
+	if(i!=5)return 1;//检测24L01错误	
+	return 0;		 //检测到24L01
+}	 	 
+
+/**
+  * 函数功能: 启动NRF24L01发送一次数据
+  * 输入参数: 无
+  * 返 回 值: 发送完成状况
+  * 说    明：txbuf:待发送数据首地址
+  *           
+  */ 
+uint8_t func_rfidmod_nrf24l01_tx_package(uint8_t *txbuf)
+{
+	uint8_t sta;
+	ihu_l1hd_spi_nrf24l01_ce_low();
+  func_rfidmod_nrf24l01_write_buf(IHU_VMWM_RFIDMOD_NRF24L01_WR_TX_PLOAD,txbuf,IHU_VMWM_RFIDMOD_NRF24L01_TX_PLOAD_WIDTH);//写数据到TX BUF  32个字节
+ 	ihu_l1hd_spi_nrf24l01_ce_high();//启动发送	 
+  
+	while(ihu_l1hd_spi_nrf24l01_irq_read()!=0);//等待发送完成
+  
+	sta=func_rfidmod_nrf24l01_read_reg(IHU_VMWM_RFIDMOD_NRF24L01_STATUS);  //读取状态寄存器的值	   
+	func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_STATUS,sta); //清除TX_DS或MAX_RT中断标志
+	if(sta&IHU_VMWM_RFIDMOD_NRF24L01_MAX_TX)//达到最大重发次数
+	{
+		func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_FLUSH_TX,0xff);//清除TX FIFO寄存器 
+		return IHU_VMWM_RFIDMOD_NRF24L01_MAX_TX; 
+	}
+	if(sta&IHU_VMWM_RFIDMOD_NRF24L01_TX_OK)//发送完成
+	{
+		return IHU_VMWM_RFIDMOD_NRF24L01_TX_OK;
+	}
+	return 0xff;//其他原因发送失败
+}
+
+/**
+  * 函数功能:启动NRF24L01接收一次数据
+  * 输入参数: 无
+  * 返 回 值: 无
+  * 说    明：无
+  *           
+  */ 
+uint8_t func_rfidmod_nrf24l01_rx_package(uint8_t *rxbuf)
+{
+	uint8_t sta;		    							   
+	sta=func_rfidmod_nrf24l01_read_reg(IHU_VMWM_RFIDMOD_NRF24L01_STATUS);  //读取状态寄存器的值    	 
+	func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_STATUS,sta); //清除TX_DS或MAX_RT中断标志
+	if(sta&IHU_VMWM_RFIDMOD_NRF24L01_RX_OK)//接收到数据
+	{
+		func_rfidmod_nrf24l01_read_buf(IHU_VMWM_RFIDMOD_NRF24L01_RD_RX_PLOAD,rxbuf,IHU_VMWM_RFIDMOD_NRF24L01_RX_PLOAD_WIDTH);//读取数据
+		func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_FLUSH_RX,0xff);//清除RX FIFO寄存器 
+		return 0; 
+	}	   
+	return 1;//没收到任何数据
+}					    
+
+/**
+  * 函数功能: 该函数初始化NRF24L01到RX模式
+  * 输入参数: 无
+  * 返 回 值: 无
+  * 说    明：无
+  *           
+  */ 
+void func_rfidmod_nrf24l01_rx_mode(void)
+{
+	ihu_l1hd_spi_nrf24l01_ce_low();	  
+  func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_CONFIG, 0x0F);//配置基本工作模式的参数;PWR_UP,EN_CRC,16BIT_CRC 
+  func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_EN_AA,0x01);    //使能通道0的自动应答    
+  func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_EN_RXADDR,0x01);//使能通道0的接收地址  	 
+  func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_RF_CH,40);	     //设置RF通信频率		  
+  func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_RF_SETUP,0x0f);//设置TX发射参数,0db增益,2Mbps,低噪声增益开启   
+  
+  func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_RX_PW_P0,IHU_VMWM_RFIDMOD_NRF24L01_RX_PLOAD_WIDTH);//选择通道0的有效数据宽度 	    
+    
+  func_rfidmod_nrf24l01_write_buf(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_RX_ADDR_P0,(uint8_t*)RX_ADDRESS,IHU_VMWM_RFIDMOD_NRF24L01_RX_ADR_WIDTH);//写RX节点地址
+	  
+  
+  ihu_l1hd_spi_nrf24l01_ce_high(); //CE为高,进入接收模式 
+  ihu_usleep(10);
+}						 
+
+/**
+  * 函数功能: 该函数初始化NRF24L01到TX模式
+  * 输入参数: 无
+  * 返 回 值: 无
+  * 说    明：无
+  *           
+  */ 
+void func_rfidmod_nrf24l01_tx_mode(void)
+{														 
+	ihu_l1hd_spi_nrf24l01_ce_low();	    
+  func_rfidmod_nrf24l01_write_buf(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_TX_ADDR,(uint8_t*)TX_ADDRESS,IHU_VMWM_RFIDMOD_NRF24L01_TX_ADR_WIDTH);//写TX节点地址 
+  func_rfidmod_nrf24l01_write_buf(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_RX_ADDR_P0,(uint8_t*)RX_ADDRESS,IHU_VMWM_RFIDMOD_NRF24L01_RX_ADR_WIDTH); //设置TX节点地址,主要为了使能ACK	  
+
+  func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_EN_AA,0x01);     //使能通道0的自动应答    
+  func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_EN_RXADDR,0x01); //使能通道0的接收地址  
+  func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_SETUP_RETR,0xff);//设置自动重发间隔时间:4000us + 86us;最大自动重发次数:15次
+  func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_RF_CH,40);       //设置RF通道为40
+  func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_RF_SETUP,0x0f);  //设置TX发射参数,0db增益,2Mbps,低噪声增益开启   
+  func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_CONFIG,0x0e);    //配置基本工作模式的参数;PWR_UP,EN_CRC,16BIT_CRC,接收模式,开启所有中断
+	ihu_l1hd_spi_nrf24l01_ce_high();//CE为高,10us后启动发送
+  ihu_usleep(10);
+}
+   
+
+
+//NRF24L01模块的读取ID
+OPSTAT ihu_vmmw_rfidmod_nrf24l01_spi_read_id(uint8_t *rfidAddr, uint8_t len)
+{
+
+	return IHU_SUCCESS;
+}
+
+
+
 
 
 
