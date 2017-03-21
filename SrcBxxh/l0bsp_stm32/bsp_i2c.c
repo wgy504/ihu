@@ -273,7 +273,7 @@ static void I2C_BSP_STM32_MPU6050_Error (void)
   * 返 回 值: 无
   * 说    明: 无
   */
-void ihu_bsp_stm32_i2c_mpu6050_write_data(uint16_t Addr, uint8_t Reg, uint8_t Value)
+int8_t ihu_bsp_stm32_i2c_mpu6050_write_data(uint16_t Addr, uint8_t Reg, uint8_t Value)
 {
   HAL_StatusTypeDef status = HAL_OK;
   
@@ -284,7 +284,9 @@ void ihu_bsp_stm32_i2c_mpu6050_write_data(uint16_t Addr, uint8_t Reg, uint8_t Va
   {
     /* 调用I2C通信错误处理函数 */
     I2C_BSP_STM32_MPU6050_Error();
+		return IHU_FAILURE;
   }
+	return IHU_SUCCESS;
 }
 
 /**

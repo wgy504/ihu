@@ -110,7 +110,7 @@ void func_i2caries_bfsc_frame_send(strIhuI2cariesMotoFrame_t *frame);
 
 
 //GPRS/BLE/RFIDMOD/NAVIGMOD的模组操作
-extern void 	 ihu_vmmw_navig_mpu6050_init(void);
+extern int8_t  ihu_vmmw_navig_mpu6050_init(void);
 extern float   ihu_wmmw_navig_mpu6050_axis_z_angle_caculate_by_static_method(void);
 
 

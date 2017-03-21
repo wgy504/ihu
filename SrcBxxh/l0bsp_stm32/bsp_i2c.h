@@ -21,7 +21,7 @@ extern "C" {
 
 //不能在这里出现管脚的任何配置和初始化，必须在STM32CubeMX中完成，这里使用STM32CubeMX给出的端口俗名
 
-#define IHU_BSP_STM32_I2C_TIMEOUT_TX_MAX                   3000
+#define IHU_BSP_STM32_I2C_TIMEOUT_TX_MAX                   300
 
 	
 //IHU_SYSDIM_MSG_BODY_LEN_MAX-2是因为发送到上层SPSVIRGO的数据缓冲区受到消息结构msg_struct_spsvirgo_l2frame_rcv_t的影响
@@ -74,7 +74,7 @@ extern int ihu_bsp_stm32_i2c_ccl_sensor_rcv_data(uint8_t* buff, uint16_t len);
 
 
 //向上提供的API
-void               ihu_bsp_stm32_i2c_mpu6050_write_data(uint16_t Addr, uint8_t Reg, uint8_t Value);
+int8_t             ihu_bsp_stm32_i2c_mpu6050_write_data(uint16_t Addr, uint8_t Reg, uint8_t Value);
 HAL_StatusTypeDef  ihu_bsp_stm32_i2c_mpu6050_write_buffer(uint16_t Addr, uint8_t Reg, uint16_t RegSize, uint8_t *pBuffer, uint16_t Length);
 uint8_t            ihu_bsp_stm32_i2c_mpu6050_read_data(uint16_t Addr, uint8_t Reg);
 HAL_StatusTypeDef  ihu_bsp_stm32_i2c_mpu6050_read_buffer(uint16_t Addr, uint8_t Reg, uint16_t RegSize, uint8_t *pBuffer, uint16_t Length);

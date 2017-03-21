@@ -26,9 +26,12 @@
   * 返 回 值: 无
   * 说    明: 无
   */ 
-void func_vmmw_navig_mpu6050_write_reg(uint8_t reg_add,uint8_t reg_dat)
+int8_t func_vmmw_navig_mpu6050_write_reg(uint8_t reg_add,uint8_t reg_dat)
 {
-  ihu_l1hd_i2c_mpu6050_write_data(IHU_VMMW_NAVIG_MPU6050_SLAVE_ADDRESS,reg_add,reg_dat);
+  if (ihu_l1hd_i2c_mpu6050_write_data(IHU_VMMW_NAVIG_MPU6050_SLAVE_ADDRESS,reg_add,reg_dat) == IHU_FAILURE)
+		return IHU_FAILURE;
+	else
+		return IHU_SUCCESS;
 }
 
 /**
@@ -48,7 +51,7 @@ void func_vmmw_navig_mpu6050_read_data(uint8_t reg_add,unsigned char *Read,uint8
   * 返 回 值: 无
   * 说    明: 无
   */ 
-void ihu_vmmw_navig_mpu6050_init(void)
+int8_t ihu_vmmw_navig_mpu6050_init(void)
 {
 	ihu_usleep(200);
 	
@@ -60,6 +63,14 @@ void ihu_vmmw_navig_mpu6050_init(void)
 	func_vmmw_navig_mpu6050_write_reg(IHU_VMMW_NAVIG_MPU6050_RA_CONFIG , 0x06);	        //低通滤波器的设置，截止频率是1K，带宽是5K
 	func_vmmw_navig_mpu6050_write_reg(IHU_VMMW_NAVIG_MPU6050_RA_ACCEL_CONFIG , 0x01);	  //配置加速度传感器工作在2G模式，不自检 0=>1，让其自检
 	func_vmmw_navig_mpu6050_write_reg(IHU_VMMW_NAVIG_MPU6050_RA_GYRO_CONFIG, 0x18);     //陀螺仪自检及测量范围，典型值：0x18(不自检，2000deg/s)
+	
+	//需要根据I2C设备是否存在，进而决定是否要返回错误，不然后期的操作会阻塞在I2C设备里面
+	if (func_vmmw_navig_mpu6050_write_reg(IHU_VMMW_NAVIG_MPU6050_RA_GYRO_CONFIG, 0x18) == IHU_FAILURE){
+		IHU_DEBUG_PRINT_IPT("VMMWNAVIG: Fall Angle sensor (MPU6050) not detected!\n");
+		return IHU_FAILURE;
+	}
+	else
+		return IHU_SUCCESS;
 }
 
 /**

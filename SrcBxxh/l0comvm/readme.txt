@@ -16,9 +16,7 @@
 //= ZJL, 2017 Mar.15, CURRENT_SW_DELIVERY R03.122 =>CCL项目
 = 增加NRF24L01的基础读写函数，然后将驱动放在MW_RFID里面
 = 将BSP层次和传感器访问层分离，从而提高两者之间的隔离能力
-
-
-
+= 优化I2C不安装时的超时时间，以及对其初始化的检测，从而加快系统的反应速度
 
 
 //= ZJL, 2017 Mar.9, CURRENT_SW_DELIVERY R03.121 =>CCL项目

@@ -415,9 +415,9 @@ int ihu_bsp_stm32_spi_rfid522_rcv_data(uint8_t* buff, uint16_t len)
   */
 uint8_t ihu_bsp_stm32_spi_flash_read_byte(void)
 {
-  uint8_t d_read,d_send=IHU_BSP_STM32_SPI_DUMMY_BYTE;
+  uint8_t d_read,d_send=IHU_BSP_STM32_SPI_TX_RX_MAX_DELAY;
   if(HAL_SPI_TransmitReceive(&IHU_BSP_STM32_SPI_RFID522_HANDLER,&d_send,&d_read,1,0xFFFFFF)!=HAL_OK)
-    d_read=IHU_BSP_STM32_SPI_DUMMY_BYTE;
+    d_read=IHU_BSP_STM32_SPI_TX_RX_MAX_DELAY;
   
   return d_read;    
 }
@@ -432,7 +432,7 @@ uint8_t ihu_bsp_stm32_spi_flash_send_byte(uint8_t byte)
 {
   uint8_t d_read,d_send=byte;
   if(HAL_SPI_TransmitReceive(&IHU_BSP_STM32_SPI_RFID522_HANDLER,&d_send,&d_read,1,0xFFFFFF)!=HAL_OK)
-    d_read=IHU_BSP_STM32_SPI_DUMMY_BYTE;
+    d_read=IHU_BSP_STM32_SPI_TX_RX_MAX_DELAY;
   
   return d_read; 
 }
@@ -510,17 +510,17 @@ uint8_t ihu_bsp_stm32_spi_nrf24l01_irq_read(void)
 
 
 /**
-  * 函数功能: 往串行Flash读取写入一个字节数据并接收一个字节数据
+  * 函数功能: 往目标读取写入一个字节数据并接收一个字节数据
   * 输入参数: byte：待发送数据
   * 返 回 值: uint8_t：接收到的数据
   * 说    明：无
   */
 uint8_t ihu_bsp_stm32_spi_nrf24l01_read_write_byte(uint8_t byte)
 {
-  uint8_t d_read,d_send=byte;
-  if(HAL_SPI_TransmitReceive(&IHU_BSP_STM32_SPI_RFID_NRF24L01_HANDLER, &d_send,&d_read,1,IHU_BSP_STM32_SPI_DUMMY_BYTE)!=HAL_OK)
+  uint8_t d_read = 0, d_send = byte;
+  if(HAL_SPI_TransmitReceive(&IHU_BSP_STM32_SPI_RFID_NRF24L01_HANDLER, &d_send,&d_read,1,IHU_BSP_STM32_SPI_TX_RX_MAX_DELAY)!=HAL_OK)
   {
-    d_read=IHU_BSP_STM32_SPI_DUMMY_BYTE;
+    d_read = IHU_BSP_STM32_SPI_TX_RX_MAX_DELAY;
   }
   return d_read; 
 }

@@ -97,7 +97,7 @@ int func_bsp_spi_start_receive(SPI_HandleTypeDef *hspi, uint8_t *rx_buffer, uint
 //发送和接受数据的延迟时间长度
 #define IHU_BSP_STM32_SPI_TX_MAX_DELAY 						100
 #define IHU_BSP_STM32_SPI_RX_MAX_DELAY 						100
-#define IHU_BSP_STM32_SPI_DUMMY_BYTE              0xFF
+#define IHU_BSP_STM32_SPI_TX_RX_MAX_DELAY         0xFF
 
 
 //SPI Handler指针交换矩阵

@@ -193,7 +193,7 @@ OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_in_AT_cmd_mode(uint8_t *macAddr,
 			if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWBLE: Not detect BLE module, trying to reconnecting!\n");
 		}
 		ihu_usleep(200);
-		if (repeatCnt == 0) IHU_ERROR_PRINT_BLEMOD("VMMWBLE: BLE detect failure!\n");
+		if (repeatCnt == 0) IHU_ERROR_PRINT_BLEMOD("VMMWBLE: BLE sensor (HC05) not detected!\n");
 	}
 
 	

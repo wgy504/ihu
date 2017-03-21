@@ -43,10 +43,7 @@ void func_rfidmod_send_string(char* s);
 #define func_rfidmod_send_LR() func_rfidmod_send_string("\r\n");
 
 //高级定义，简化程序的可读性
-#define IHU_ERROR_PRINT_RFIDMOD	zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++; IhuErrorPrint
-
-
-
+#define IHU_ERROR_PRINT_RFIDMOD(arg...)	do{zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;  IhuErrorPrint(##arg);  return IHU_FAILURE; }while(0)
 
 
 /*
@@ -254,9 +251,9 @@ uint8_t func_rfidmod_nrf24l01_write_buf(uint8_t reg, uint8_t *pBuf, uint8_t uint
 uint8_t func_rfidmod_nrf24l01_read_buf(uint8_t reg, uint8_t *pBuf, uint8_t uint8_ts);	//读数据区		  
 uint8_t func_rfidmod_nrf24l01_read_reg(uint8_t reg);					//读寄存器
 uint8_t func_rfidmod_nrf24l01_write_reg(uint8_t reg, uint8_t value);		//写寄存器
-uint8_t func_rfidmod_nrf24l01_check(void);						//检查24L01是否存在
-uint8_t func_rfidmod_nrf24l01_tx_package(uint8_t *txbuf);				//发送一个包的数据
-uint8_t func_rfidmod_nrf24l01_rx_package(uint8_t *rxbuf);				//接收一个包的数据
+int8_t  func_rfidmod_nrf24l01_check(void);						//检查24L01是否存在
+int8_t func_rfidmod_nrf24l01_tx_package(uint8_t *txbuf);				//发送一个包的数据
+int8_t func_rfidmod_nrf24l01_rx_package(uint8_t *rxbuf);				//接收一个包的数据
 
 #endif /* L1FREERTOS_MOD_RFID_H_ */
 

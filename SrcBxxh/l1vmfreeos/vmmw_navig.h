@@ -25,7 +25,7 @@
 
 
 //Local APIs
-void func_vmmw_navig_mpu6050_write_reg(uint8_t reg_add,uint8_t reg_dat);
+int8_t func_vmmw_navig_mpu6050_write_reg(uint8_t reg_add,uint8_t reg_dat);
 void func_vmmw_navig_mpu6050_read_data(uint8_t reg_add,unsigned char *Read,uint8_t num);
 
 
@@ -42,7 +42,7 @@ void ihu_vmmw_navig_mpu6050_return_temp(int16_t*Temperature);
 int8_t ihu_vmmw_navig_mpu6050_return_id(void);
 
 //MPU6050三轴传感器的滤波算法函数
-extern void 	 ihu_vmmw_navig_mpu6050_init(void);
+extern int8_t  ihu_vmmw_navig_mpu6050_init(void);
 extern int32_t ihu_vmmw_navig_mpu6050_calc_angle_accel(void);
 extern int32_t ihu_vmmw_navig_mpu6050_calc_angle_gyro(void);
 extern float   ihu_vmmw_navig_mpu6050_complement_filter(int32_t simpleGyro);

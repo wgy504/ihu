@@ -166,7 +166,7 @@ OPSTAT ihu_vmmw_gprsmod_sms_transmit_with_confirm(char *calledNumber, char *inpu
 	
 	//会话前的初始化
 	if (func_gprsmod_module_session_init() == IHU_FAILURE){
-		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: Init GPRSMOD hardware/software before sessioin failure!\n");
+		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: Init GPRSMOD hardware/software session failure!\n");
 		return IHU_FAILURE;
 	}
 	

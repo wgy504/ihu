@@ -175,7 +175,7 @@ OPSTAT ihu_vmmw_rfidmod_mf522_spi_read_id(uint8_t *rfidAddr, uint8_t len)
 	//清空缓冲区
 	func_rfidmod_clear_receive_buffer();
 	
-	//复位MF522外设
+	//复位MF522外设：需要探测是否成功，如果不成功，则直接返回，并输出错误，从而加快整个程序的执行过程
 	func_rfidmod_mf522_PcdReset();
 	
 	//设置工作方式	
@@ -861,15 +861,15 @@ uint8_t func_rfidmod_nrf24l01_write_buf(uint8_t reg, uint8_t *pBuf, uint8_t len)
   * 返 回 值: 0，成功;1，失败
   * 说    明：无          
   */ 
-uint8_t func_rfidmod_nrf24l01_check(void)
+int8_t func_rfidmod_nrf24l01_check(void)
 {
 	uint8_t buf[5]={0XA5,0XA5,0XA5,0XA5,0XA5};
 	uint8_t i;
 	func_rfidmod_nrf24l01_write_buf(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_TX_ADDR,buf,5);//写入5个字节的地址.	
 	func_rfidmod_nrf24l01_read_buf(IHU_VMWM_RFIDMOD_NRF24L01_TX_ADDR,buf,5); //读出写入的地址  
 	for(i=0;i<5;i++)if(buf[i]!=0XA5)break;	 							   
-	if(i!=5)return 1;//检测24L01错误	
-	return 0;		 //检测到24L01
+	if(i!=5)return IHU_FAILURE;//检测24L01错误	
+	return IHU_SUCCESS;		 //检测到24L01
 }	 	 
 
 /**
@@ -879,7 +879,7 @@ uint8_t func_rfidmod_nrf24l01_check(void)
   * 说    明：txbuf:待发送数据首地址
   *           
   */ 
-uint8_t func_rfidmod_nrf24l01_tx_package(uint8_t *txbuf)
+int8_t func_rfidmod_nrf24l01_tx_package(uint8_t *txbuf)
 {
 	uint8_t sta;
 	ihu_l1hd_spi_nrf24l01_ce_low();
@@ -899,7 +899,7 @@ uint8_t func_rfidmod_nrf24l01_tx_package(uint8_t *txbuf)
 	{
 		return IHU_VMWM_RFIDMOD_NRF24L01_TX_OK;
 	}
-	return 0xff;//其他原因发送失败
+	return 0xFF;//其他原因发送失败
 }
 
 /**
@@ -909,7 +909,7 @@ uint8_t func_rfidmod_nrf24l01_tx_package(uint8_t *txbuf)
   * 说    明：无
   *           
   */ 
-uint8_t func_rfidmod_nrf24l01_rx_package(uint8_t *rxbuf)
+int8_t func_rfidmod_nrf24l01_rx_package(uint8_t *rxbuf)
 {
 	uint8_t sta;		    							   
 	sta=func_rfidmod_nrf24l01_read_reg(IHU_VMWM_RFIDMOD_NRF24L01_STATUS);  //读取状态寄存器的值    	 
@@ -918,9 +918,9 @@ uint8_t func_rfidmod_nrf24l01_rx_package(uint8_t *rxbuf)
 	{
 		func_rfidmod_nrf24l01_read_buf(IHU_VMWM_RFIDMOD_NRF24L01_RD_RX_PLOAD,rxbuf,IHU_VMWM_RFIDMOD_NRF24L01_RX_PLOAD_WIDTH);//读取数据
 		func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_FLUSH_RX,0xff);//清除RX FIFO寄存器 
-		return 0; 
+		return IHU_SUCCESS; 
 	}	   
-	return 1;//没收到任何数据
+	return IHU_FAILURE;//没收到任何数据
 }					    
 
 /**
@@ -972,11 +972,30 @@ void func_rfidmod_nrf24l01_tx_mode(void)
 }
    
 
-
 //NRF24L01模块的读取ID
 OPSTAT ihu_vmmw_rfidmod_nrf24l01_spi_read_id(uint8_t *rfidAddr, uint8_t len)
 {
+	int res;
+	
+	uint32_t tickTotal = 3;
+	
+	//先判定设备是否存在
+	res = IHU_FAILURE;
+	while((tickTotal > 0) && (res == IHU_FAILURE))
+	{
+		ihu_sleep(1); //这里的周期就是以绝对ms为单位的
+		tickTotal--;
+		if(func_rfidmod_nrf24l01_check() == IHU_FAILURE)
+			 res = IHU_FAILURE;
+		else
+			 res = IHU_SUCCESS;
+	}
+	if (res == IHU_FAILURE) IHU_ERROR_PRINT_RFIDMOD("VMMWRFID: RFID sensor (NRF24L01) not detected!\n");
 
+	//再进入干活
+  func_rfidmod_nrf24l01_rx_mode();
+  if(func_rfidmod_nrf24l01_rx_package(rfidAddr)==IHU_FAILURE) IHU_ERROR_PRINT_RFIDMOD("VMMWRFID: Device NRF24L01 receive package error!\n");
+	
 	return IHU_SUCCESS;
 }
 

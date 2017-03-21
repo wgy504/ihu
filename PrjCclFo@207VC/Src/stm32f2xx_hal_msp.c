@@ -282,11 +282,6 @@ void HAL_I2C_MspDeInit(I2C_HandleTypeDef* hi2c)
     */
     HAL_GPIO_DeInit(GPIOB, CUBEMX_PIN_F2_I2C_SCL_Pin|CUBEMX_PIN_F2_I2C_SA_Pin);
 
-    /* Peripheral interrupt DeInit*/
-    HAL_NVIC_DisableIRQ(I2C1_EV_IRQn);
-
-    HAL_NVIC_DisableIRQ(I2C1_ER_IRQn);
-
   }
   /* USER CODE BEGIN I2C1_MspDeInit 1 */
 
@@ -360,9 +355,6 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi)
     GPIO_InitStruct.Alternate = GPIO_AF5_SPI2;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-    /* Peripheral interrupt init */
-    HAL_NVIC_SetPriority(SPI2_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(SPI2_IRQn);
   /* USER CODE BEGIN SPI2_MspInit 1 */
 
   /* USER CODE END SPI2_MspInit 1 */
@@ -390,9 +382,6 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef* hspi)
     HAL_GPIO_DeInit(CUBEMX_PIN_F2_SPI2_MOSI_GPIO_Port, CUBEMX_PIN_F2_SPI2_MOSI_Pin);
 
     HAL_GPIO_DeInit(GPIOB, CUBEMX_PIN_F2_SPI2_SCK_Pin|CUBEMX_PIN_F2_SPI2_CS_Pin|CUBEMX_PIN_F2_SPI2_MISO_Pin);
-
-    /* Peripheral interrupt DeInit*/
-    HAL_NVIC_DisableIRQ(SPI2_IRQn);
 
   }
   /* USER CODE BEGIN SPI2_MspDeInit 1 */
