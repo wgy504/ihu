@@ -296,9 +296,11 @@ int ihu_bsp_stm32_spi_slave_hw_init(void)
   zIhuBspStm32SpiGeneral1RxCount = 0;               //接收字符串的起始存储位置
 	zIhuBspStm32SpiGeneral1RxState = 0;
 	zIhuBspStm32SpiGeneral1RxLen = 0;
-	
+
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)	
   ihu_bsp_stm32_spi_mf522_reset_disable();
 	ihu_bsp_stm32_spi_mf522_cs_disable();	
+#endif
 	
 	return BSP_SUCCESS;
 }
@@ -353,6 +355,7 @@ int ihu_bsp_stm32_spi_spare1_rcv_data(uint8_t* buff, uint16_t len)
 		return BSP_FAILURE;
 }
 
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 /*
  *
  *
@@ -437,6 +440,7 @@ uint8_t ihu_bsp_stm32_spi_flash_send_byte(uint8_t byte)
   return d_read; 
 }
 
+#endif
 
 /*
  *
@@ -482,6 +486,8 @@ int ihu_bsp_stm32_spi_ad_scale_rcv_data(uint8_t* buff, uint16_t len)
  *
  *
 */
+
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 void ihu_bsp_stm32_spi_nrf24l01_cs_enable(void)
 {
 	BSP_STM32_SPI_NRF24L01_SPI_CS_ENABLE();
@@ -524,9 +530,7 @@ uint8_t ihu_bsp_stm32_spi_nrf24l01_read_write_byte(uint8_t byte)
   }
   return d_read; 
 }
-
-
-
+#endif
 
 /*
  *
