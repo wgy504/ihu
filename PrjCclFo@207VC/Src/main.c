@@ -44,31 +44,19 @@
 #include "main.h"
 #include "stm32f2xx_hal.h"
 #include "cmsis_os.h"
+#include "adc.h"
+#include "dcmi.h"
+#include "i2c.h"
+#include "rtc.h"
+#include "spi.h"
+#include "usart.h"
+#include "gpio.h"
 
 /* USER CODE BEGIN Includes */
-#include "vmfreeoslayer.h"
+
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
-ADC_HandleTypeDef hadc1;
-
-DCMI_HandleTypeDef hdcmi;
-
-I2C_HandleTypeDef hi2c1;
-
-RTC_HandleTypeDef hrtc;
-
-SPI_HandleTypeDef hspi2;
-
-UART_HandleTypeDef huart4;
-UART_HandleTypeDef huart1;
-UART_HandleTypeDef huart2;
-UART_HandleTypeDef huart3;
-
-osThreadId defaultTaskHandle;
-osThreadId myTask02Handle;
-osMessageQId myQueue01Handle;
-osTimerId myTimer01Handle;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
@@ -81,19 +69,7 @@ uint8_t zIhuI2cRxBuffer[2];
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 void Error_Handler(void);
-static void MX_GPIO_Init(void);
-static void MX_I2C1_Init(void);
-static void MX_UART4_Init(void);
-static void MX_USART1_UART_Init(void);
-static void MX_USART2_UART_Init(void);
-static void MX_USART3_UART_Init(void);
-static void MX_RTC_Init(void);
-static void MX_DCMI_Init(void);
-static void MX_ADC1_Init(void);
-static void MX_SPI2_Init(void);
-void StartDefaultTask(void const * argument);
-void StartTask02(void const * argument);
-void Callback01(void const * argument);
+void MX_FREERTOS_Init(void);
 static void MX_NVIC_Init(void);
 
 /* USER CODE BEGIN PFP */
@@ -152,52 +128,12 @@ int main(void)
 	HAL_I2C_Master_Receive_IT(&hi2c1, (uint16_t)IHU_BSP_STM32_I2C_CCL_SENSOR_SLAVE_ADDRESS, &zIhuI2cRxBuffer[0], 1);	
 #endif
   //HAL_CAN_Receive_IT(&hcan1, 0);
-  //HAL_CAN_Receive_IT(&hcan2, 1);
+  //HAL_CAN_Receive_IT(&hcan2, 1);	
 	
   /* USER CODE END 2 */
 
-  /* USER CODE BEGIN RTOS_MUTEX */
-  /* add mutexes, ... */
-  /* USER CODE END RTOS_MUTEX */
-
-  /* USER CODE BEGIN RTOS_SEMAPHORES */
-  /* add semaphores, ... */
-  /* USER CODE END RTOS_SEMAPHORES */
-
-  /* Create the timer(s) */
-  /* definition and creation of myTimer01 */
-  osTimerDef(myTimer01, Callback01);
-  myTimer01Handle = osTimerCreate(osTimer(myTimer01), osTimerPeriodic, NULL);
-
-  /* USER CODE BEGIN RTOS_TIMERS */
-  /* start timers, add new ones, ... */
-  /* USER CODE END RTOS_TIMERS */
-
-  /* Create the thread(s) */
-  /* definition and creation of defaultTask */
-  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 512);
-  defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
-
-  /* definition and creation of myTask02 */
-  osThreadDef(myTask02, StartTask02, osPriorityNormal, 0, 512);
-  myTask02Handle = osThreadCreate(osThread(myTask02), NULL);
-
-  /* USER CODE BEGIN RTOS_THREADS */
-  /* add threads, ... */
-  /* USER CODE END RTOS_THREADS */
-
-  /* Create the queue(s) */
-  /* definition and creation of myQueue01 */
-  osMessageQDef(myQueue01, 16, uint16_t);
-  myQueue01Handle = osMessageCreate(osMessageQ(myQueue01), NULL);
-
-  /* USER CODE BEGIN RTOS_QUEUES */
-  /* add queues, ... */
-	//Self defined main task entry
-	ihu_vm_main();
-	
-  /* USER CODE END RTOS_QUEUES */
- 
+  /* Call init function for freertos objects (in freertos.c) */
+  MX_FREERTOS_Init();
 
   /* Start scheduler */
   osKernelStart();
@@ -292,355 +228,6 @@ static void MX_NVIC_Init(void)
   HAL_NVIC_EnableIRQ(UART4_IRQn);
 }
 
-/* ADC1 init function */
-static void MX_ADC1_Init(void)
-{
-
-  ADC_ChannelConfTypeDef sConfig;
-
-    /**Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
-    */
-  hadc1.Instance = ADC1;
-  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
-  hadc1.Init.Resolution = ADC_RESOLUTION_12B;
-  hadc1.Init.ScanConvMode = DISABLE;
-  hadc1.Init.ContinuousConvMode = DISABLE;
-  hadc1.Init.DiscontinuousConvMode = DISABLE;
-  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
-  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc1.Init.NbrOfConversion = 1;
-  hadc1.Init.DMAContinuousRequests = DISABLE;
-  hadc1.Init.EOCSelection = ADC_EOC_SEQ_CONV;
-  if (HAL_ADC_Init(&hadc1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-    /**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
-    */
-  sConfig.Channel = ADC_CHANNEL_10;
-  sConfig.Rank = 1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
-  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-}
-
-/* DCMI init function */
-static void MX_DCMI_Init(void)
-{
-
-  hdcmi.Instance = DCMI;
-  hdcmi.Init.SynchroMode = DCMI_SYNCHRO_EMBEDDED;
-  hdcmi.Init.PCKPolarity = DCMI_PCKPOLARITY_FALLING;
-  hdcmi.Init.CaptureRate = DCMI_CR_ALL_FRAME;
-  hdcmi.Init.ExtendedDataMode = DCMI_EXTEND_DATA_8B;
-  hdcmi.Init.SyncroCode.FrameEndCode = 0;
-  hdcmi.Init.SyncroCode.FrameStartCode = 0;
-  hdcmi.Init.SyncroCode.LineStartCode = 0;
-  hdcmi.Init.SyncroCode.LineEndCode = 0;
-  hdcmi.Init.JPEGMode = DCMI_JPEG_DISABLE;
-  if (HAL_DCMI_Init(&hdcmi) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-}
-
-/* I2C1 init function */
-static void MX_I2C1_Init(void)
-{
-
-  hi2c1.Instance = I2C1;
-  hi2c1.Init.ClockSpeed = 100000;
-  hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
-  hi2c1.Init.OwnAddress1 = 0;
-  hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
-  hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
-  hi2c1.Init.OwnAddress2 = 0;
-  hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
-  hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
-  if (HAL_I2C_Init(&hi2c1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-}
-
-/* RTC init function */
-static void MX_RTC_Init(void)
-{
-
-  RTC_TimeTypeDef sTime;
-  RTC_DateTypeDef sDate;
-
-    /**Initialize RTC Only 
-    */
-  hrtc.Instance = RTC;
-  hrtc.Init.HourFormat = RTC_HOURFORMAT_24;
-  hrtc.Init.AsynchPrediv = 127;
-  hrtc.Init.SynchPrediv = 255;
-  hrtc.Init.OutPut = RTC_OUTPUT_DISABLE;
-  hrtc.Init.OutPutPolarity = RTC_OUTPUT_POLARITY_HIGH;
-  hrtc.Init.OutPutType = RTC_OUTPUT_TYPE_OPENDRAIN;
-  if (HAL_RTC_Init(&hrtc) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-    /**Initialize RTC and set the Time and Date 
-    */
-  sTime.Hours = 0x21;
-  sTime.Minutes = 0x20;
-  sTime.Seconds = 0x40;
-  sTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
-  sTime.StoreOperation = RTC_STOREOPERATION_RESET;
-  if (HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BCD) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-  sDate.WeekDay = RTC_WEEKDAY_MONDAY;
-  sDate.Month = RTC_MONTH_JANUARY;
-  sDate.Date = 0x2;
-  sDate.Year = 0x17;
-
-  if (HAL_RTC_SetDate(&hrtc, &sDate, RTC_FORMAT_BCD) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-}
-
-/* SPI2 init function */
-static void MX_SPI2_Init(void)
-{
-
-  hspi2.Instance = SPI2;
-  hspi2.Init.Mode = SPI_MODE_MASTER;
-  hspi2.Init.Direction = SPI_DIRECTION_2LINES;
-  hspi2.Init.DataSize = SPI_DATASIZE_8BIT;
-  hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
-  hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
-  hspi2.Init.NSS = SPI_NSS_HARD_OUTPUT;
-  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_256;
-  hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
-  hspi2.Init.TIMode = SPI_TIMODE_DISABLE;
-  hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
-  hspi2.Init.CRCPolynomial = 10;
-  if (HAL_SPI_Init(&hspi2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-}
-
-/* UART4 init function */
-static void MX_UART4_Init(void)
-{
-
-  huart4.Instance = UART4;
-  huart4.Init.BaudRate = 38400;
-  huart4.Init.WordLength = UART_WORDLENGTH_8B;
-  huart4.Init.StopBits = UART_STOPBITS_1;
-  huart4.Init.Parity = UART_PARITY_NONE;
-  huart4.Init.Mode = UART_MODE_TX_RX;
-  huart4.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart4.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart4) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-}
-
-/* USART1 init function */
-static void MX_USART1_UART_Init(void)
-{
-
-  huart1.Instance = USART1;
-  huart1.Init.BaudRate = 115200;
-  huart1.Init.WordLength = UART_WORDLENGTH_8B;
-  huart1.Init.StopBits = UART_STOPBITS_1;
-  huart1.Init.Parity = UART_PARITY_NONE;
-  huart1.Init.Mode = UART_MODE_TX_RX;
-  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-}
-
-/* USART2 init function */
-static void MX_USART2_UART_Init(void)
-{
-
-  huart2.Instance = USART2;
-  huart2.Init.BaudRate = 115200;
-  huart2.Init.WordLength = UART_WORDLENGTH_8B;
-  huart2.Init.StopBits = UART_STOPBITS_1;
-  huart2.Init.Parity = UART_PARITY_NONE;
-  huart2.Init.Mode = UART_MODE_TX_RX;
-  huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart2.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-}
-
-/* USART3 init function */
-static void MX_USART3_UART_Init(void)
-{
-
-  huart3.Instance = USART3;
-  huart3.Init.BaudRate = 115200;
-  huart3.Init.WordLength = UART_WORDLENGTH_8B;
-  huart3.Init.StopBits = UART_STOPBITS_1;
-  huart3.Init.Parity = UART_PARITY_NONE;
-  huart3.Init.Mode = UART_MODE_TX_RX;
-  huart3.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart3.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart3) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-}
-
-/** Configure pins as 
-        * Analog 
-        * Input 
-        * Output
-        * EVENT_OUT
-        * EXTI
-     PA8   ------> RCC_MCO_1
-*/
-static void MX_GPIO_Init(void)
-{
-
-  GPIO_InitTypeDef GPIO_InitStruct;
-
-  /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOE_CLK_ENABLE();
-  __HAL_RCC_GPIOC_CLK_ENABLE();
-  __HAL_RCC_GPIOH_CLK_ENABLE();
-  __HAL_RCC_GPIOA_CLK_ENABLE();
-  __HAL_RCC_GPIOB_CLK_ENABLE();
-  __HAL_RCC_GPIOD_CLK_ENABLE();
-
-  /*Configure GPIO pins : CUBEMX_PIN_F2_GPIO_DI_DHT11_Pin CUBEMX_PIN_F2_GPIO_DI_DOOR3_RESTRICTION_Pin CUBEMX_PIN_F2_GPIO_DI_LOCK3_DI2_TONGUE_Pin CUBEMX_PIN_F2_GPIO_DI_DOOR2_RESTRICTION_Pin 
-                           CUBEMX_PIN_F2_GPIO_DI_LOCK2_DI2_TONGUE_Pin CUBEMX_PIN_F2_GPIO_DI_SHAKE_SENSOR_Pin */
-  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_GPIO_DI_DHT11_Pin|CUBEMX_PIN_F2_GPIO_DI_DOOR3_RESTRICTION_Pin|CUBEMX_PIN_F2_GPIO_DI_LOCK3_DI2_TONGUE_Pin|CUBEMX_PIN_F2_GPIO_DI_DOOR2_RESTRICTION_Pin 
-                          |CUBEMX_PIN_F2_GPIO_DI_LOCK2_DI2_TONGUE_Pin|CUBEMX_PIN_F2_GPIO_DI_SHAKE_SENSOR_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : CUBEMX_PIN_F2_GPIO_DO_LED_POWER_Pin CUBEMX_PIN_F2_GPIO_DO_LOCK3_DO1_Pin CUBEMX_PIN_F2_GPIO_DO_LOCK2_DO1_Pin */
-  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_GPIO_DO_LED_POWER_Pin|CUBEMX_PIN_F2_GPIO_DO_LOCK3_DO1_Pin|CUBEMX_PIN_F2_GPIO_DO_LOCK2_DO1_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : CUBEMX_PIN_F2_GPIO_DI_FALL_SNESOR_Pin CUBEMX_PIN_F2_GPIO_DI_DOOR1_RESTRICTION_Pin */
-  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_GPIO_DI_FALL_SNESOR_Pin|CUBEMX_PIN_F2_GPIO_DI_DOOR1_RESTRICTION_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : CUBEMX_PIN_F2_GPIO_LED_207VC_TEST_Pin */
-  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_GPIO_LED_207VC_TEST_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(CUBEMX_PIN_F2_GPIO_LED_207VC_TEST_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : CUBEMX_PIN_F2_GPIO_DO_LED_WORK_STATE_Pin CUBEMX_PIN_F2_GPIO_DO_LED_COMMU_Pin */
-  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_GPIO_DO_LED_WORK_STATE_Pin|CUBEMX_PIN_F2_GPIO_DO_LED_COMMU_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : CUBEMX_PIN_F2_GPIO_DI_LOCK1_DI1_TRIGGER_Pin */
-  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_GPIO_DI_LOCK1_DI1_TRIGGER_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(CUBEMX_PIN_F2_GPIO_DI_LOCK1_DI1_TRIGGER_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : CUBEMX_PIN_F2_GPIO_DI_LOCK1_DI2_TONGUE_Pin CUBEMX_PIN_F2_SPI2_IRQ_Pin */
-  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_GPIO_DI_LOCK1_DI2_TONGUE_Pin|CUBEMX_PIN_F2_SPI2_IRQ_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : CUBEMX_PIN_F2_GPIO_DO_LOCK1_DO1_Pin CUBEMX_PIN_F2_SPI2_CE_Pin */
-  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_GPIO_DO_LOCK1_DO1_Pin|CUBEMX_PIN_F2_SPI2_CE_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : CUBEMX_PIN_F2_GPIO_DI_LOCK3_DI1_TRIGGER_Pin CUBEMX_PIN_F2_GPIO_DI_LOCK2_DI1_TRIGGER_Pin */
-  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_GPIO_DI_LOCK3_DI1_TRIGGER_Pin|CUBEMX_PIN_F2_GPIO_DI_LOCK2_DI1_TRIGGER_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : CUBEMX_PIN_F2_SPI2_GPIO_RST_Pin CUBEMX_PIN_F2_GPIO_DO_LOCK4_DO1_Pin CUBEMX_PIN_F2_GPIO_DO_BEEP_Pin CUBEMX_PIN_F2_DO_BLE_ATCMD_Pin 
-                           CUBEMX_PIN_F2_DO_SENSOR_PWR_Pin CUBEMX_PIN_F2_DO_RFID_PWR_Pin CUBEMX_PIN_F2_DO_BLE_PWR_Pin CUBEMX_PIN_F2_DO_GPRSMOD_PWR_Pin */
-  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_SPI2_GPIO_RST_Pin|CUBEMX_PIN_F2_GPIO_DO_LOCK4_DO1_Pin|CUBEMX_PIN_F2_GPIO_DO_BEEP_Pin|CUBEMX_PIN_F2_DO_BLE_ATCMD_Pin 
-                          |CUBEMX_PIN_F2_DO_SENSOR_PWR_Pin|CUBEMX_PIN_F2_DO_RFID_PWR_Pin|CUBEMX_PIN_F2_DO_BLE_PWR_Pin|CUBEMX_PIN_F2_DO_GPRSMOD_PWR_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : CUBEMX_PIN_F2_GPIO_DI_DOOR4_RESTRICTION_Pin CUBEMX_PIN_F2_GPIO_DI_LOCK4_DI2_TONGUE_Pin CUBEMX_PIN_F2_GPIO_DI_SMOKE_SENSOR_Pin CUBEMX_PIN_F2_GPIO_DI_WATER_SENSOR_Pin */
-  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_GPIO_DI_DOOR4_RESTRICTION_Pin|CUBEMX_PIN_F2_GPIO_DI_LOCK4_DI2_TONGUE_Pin|CUBEMX_PIN_F2_GPIO_DI_SMOKE_SENSOR_Pin|CUBEMX_PIN_F2_GPIO_DI_WATER_SENSOR_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : CUBEMX_PIN_F2_GPIO_DI_LOCK4_DI1_TRIGGER_Pin */
-  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_GPIO_DI_LOCK4_DI1_TRIGGER_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(CUBEMX_PIN_F2_GPIO_DI_LOCK4_DI1_TRIGGER_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : CUBEMX_PIN_F2_RCC_MCO_1_Pin */
-  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_RCC_MCO_1_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-  GPIO_InitStruct.Alternate = GPIO_AF0_MCO;
-  HAL_GPIO_Init(CUBEMX_PIN_F2_RCC_MCO_1_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOE, CUBEMX_PIN_F2_GPIO_DO_LED_POWER_Pin|CUBEMX_PIN_F2_GPIO_DO_LOCK3_DO1_Pin|CUBEMX_PIN_F2_GPIO_DO_LOCK2_DO1_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(CUBEMX_PIN_F2_GPIO_LED_207VC_TEST_GPIO_Port, CUBEMX_PIN_F2_GPIO_LED_207VC_TEST_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, CUBEMX_PIN_F2_GPIO_DO_LED_WORK_STATE_Pin|CUBEMX_PIN_F2_GPIO_DO_LED_COMMU_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, CUBEMX_PIN_F2_GPIO_DO_LOCK1_DO1_Pin|CUBEMX_PIN_F2_SPI2_CE_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOD, CUBEMX_PIN_F2_SPI2_GPIO_RST_Pin|CUBEMX_PIN_F2_GPIO_DO_LOCK4_DO1_Pin|CUBEMX_PIN_F2_GPIO_DO_BEEP_Pin|CUBEMX_PIN_F2_DO_BLE_ATCMD_Pin 
-                          |CUBEMX_PIN_F2_DO_SENSOR_PWR_Pin|CUBEMX_PIN_F2_DO_RFID_PWR_Pin|CUBEMX_PIN_F2_DO_BLE_PWR_Pin|CUBEMX_PIN_F2_DO_GPRSMOD_PWR_Pin, GPIO_PIN_RESET);
-
-}
-
 /* USER CODE BEGIN 4 */
 //As this function has to call MX_I2C1_Init(), we have to put this function into MAIN module, otherwise the include
 //relationship is too much complex.
@@ -652,39 +239,6 @@ void I2C_BSP_STM32_MPU6050_Error (void)
 
 
 /* USER CODE END 4 */
-
-/* StartDefaultTask function */
-void StartDefaultTask(void const * argument)
-{
-
-  /* USER CODE BEGIN 5 */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
-  /* USER CODE END 5 */ 
-}
-
-/* StartTask02 function */
-void StartTask02(void const * argument)
-{
-  /* USER CODE BEGIN StartTask02 */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
-  /* USER CODE END StartTask02 */
-}
-
-/* Callback01 function */
-void Callback01(void const * argument)
-{
-  /* USER CODE BEGIN Callback01 */
-  
-  /* USER CODE END Callback01 */
-}
 
 /**
   * @brief  Period elapsed callback in non blocking mode
