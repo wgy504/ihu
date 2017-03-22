@@ -419,7 +419,7 @@ int ihu_bsp_stm32_spi_rfid522_rcv_data(uint8_t* buff, uint16_t len)
 uint8_t ihu_bsp_stm32_spi_flash_read_byte(void)
 {
   uint8_t d_read,d_send=IHU_BSP_STM32_SPI_TX_RX_MAX_DELAY;
-  if(HAL_SPI_TransmitReceive(&IHU_BSP_STM32_SPI_RFID522_HANDLER,&d_send,&d_read,1,0xFFFFFF)!=HAL_OK)
+  if(HAL_SPI_TransmitReceive(&IHU_BSP_STM32_SPI_RFID522_HANDLER,&d_send,&d_read,1, IHU_BSP_STM32_SPI_TX_MAX_DELAY)!=HAL_OK)
     d_read=IHU_BSP_STM32_SPI_TX_RX_MAX_DELAY;
   
   return d_read;    
@@ -434,7 +434,7 @@ uint8_t ihu_bsp_stm32_spi_flash_read_byte(void)
 uint8_t ihu_bsp_stm32_spi_flash_send_byte(uint8_t byte)
 {
   uint8_t d_read,d_send=byte;
-  if(HAL_SPI_TransmitReceive(&IHU_BSP_STM32_SPI_RFID522_HANDLER,&d_send,&d_read,1,0xFFFFFF)!=HAL_OK)
+  if(HAL_SPI_TransmitReceive(&IHU_BSP_STM32_SPI_RFID522_HANDLER,&d_send,&d_read,1, IHU_BSP_STM32_SPI_TX_RX_MAX_DELAY)!=HAL_OK)
     d_read=IHU_BSP_STM32_SPI_TX_RX_MAX_DELAY;
   
   return d_read; 

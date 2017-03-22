@@ -186,7 +186,7 @@ void    func_rfidmod_mf522_ClearBitMask ( uint8_t ucReg, uint8_t ucMask );
 void    func_rfidmod_mf522_PcdAntennaOn ( void);
 void    func_rfidmod_mf522_PcdAntennaOff ( void );
 char    func_rfidmod_mf522_PcdComMF522 ( uint8_t ucCommand, uint8_t * pInData, uint8_t ucInLenByte, uint8_t * pOutData, uint32_t * pOutLenBit );
-
+void    func_rfidmod_mf522_CalulateCRC ( uint8_t * pIndata, uint8_t ucLen, uint8_t * pOutData );
 
 /*
  *

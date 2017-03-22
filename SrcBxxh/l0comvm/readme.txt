@@ -15,7 +15,7 @@
 
 //= ZJL, 2017 Mar.21, CURRENT_SW_DELIVERY R03.123 =>CCL项目
 = 查阅SPI的初始化问题，核对NRF24L01的工作逻辑
-
+= 集成XPH的MFRF522程序到本项目中完成，待使用真实的13.56MHz模块进行验证
 
 
 

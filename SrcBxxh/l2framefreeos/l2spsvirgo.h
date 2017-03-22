@@ -52,6 +52,7 @@ enum FSM_STATE_SPSVIRGO
 //#define FSM_STATE_END   0xFE
 //#define FSM_STATE_INVALID 0xFF
 
+
 //Global variables
 extern IhuFsmStateItem_t IhuFsmSpsvirgo[];
 
@@ -76,6 +77,8 @@ extern IhuFsmStateItem_t IhuFsmSpsvirgo[];
 #define IHU_SPSVIRGO_PERIOD_TIMER_DEACTIVE 2
 #define IHU_SPSVIRGO_PERIOD_TIMER_SET IHU_SPSVIRGO_PERIOD_TIMER_DEACTIVE
 
+#define IHU_SPSVIRGO_RFID_LEN_FIX 16	
+	
 //API
 extern OPSTAT fsm_spsvirgo_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_spsvirgo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
