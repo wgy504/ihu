@@ -149,7 +149,7 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef* i2cHandle)
 	__HAL_RCC_GPIOB_CLK_ENABLE();
 
 
-/* USER CODE END I2C2_MspInit 1 */
+  /* USER CODE END I2C2_MspInit 1 */
   }
 }
 

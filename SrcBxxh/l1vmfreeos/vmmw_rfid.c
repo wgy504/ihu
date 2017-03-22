@@ -785,9 +785,13 @@ uint8_t func_rfidmod_nrf24l01_write_reg(uint8_t reg,uint8_t value)
 {
 	uint8_t status;	
   ihu_l1hd_spi_nrf24l01_cs_enable();                 //使能SPI传输
+  ihu_usleep(10);	
   status =ihu_l1hd_spi_nrf24l01_read_write_byte(reg);//发送寄存器号 
+  ihu_usleep(10);	
   ihu_l1hd_spi_nrf24l01_read_write_byte(value);      //写入寄存器的值
+  ihu_usleep(10);	
   ihu_l1hd_spi_nrf24l01_cs_disable();                 //禁止SPI传输	   
+  ihu_usleep(10);	
   return(status);       			//返回状态值
 }
 
@@ -801,10 +805,14 @@ uint8_t func_rfidmod_nrf24l01_write_reg(uint8_t reg,uint8_t value)
 uint8_t func_rfidmod_nrf24l01_read_reg(uint8_t reg)
 {
 	uint8_t reg_val;	    
- 	ihu_l1hd_spi_nrf24l01_cs_enable();          //使能SPI传输		
+ 	ihu_l1hd_spi_nrf24l01_cs_enable();          //使能SPI传输
+  ihu_usleep(10);	
   ihu_l1hd_spi_nrf24l01_read_write_byte(reg);   //发送寄存器号
+  ihu_usleep(10);	
   reg_val=ihu_l1hd_spi_nrf24l01_read_write_byte(0XFF);//读取寄存器内容
+  ihu_usleep(10);	
   ihu_l1hd_spi_nrf24l01_cs_disable();          //禁止SPI传输		    
+  ihu_usleep(10);	
   return(reg_val);           //返回状态值
 }	
 
@@ -821,12 +829,16 @@ uint8_t func_rfidmod_nrf24l01_read_buf(uint8_t reg,uint8_t *pBuf,uint8_t len)
 	uint8_t status,uint8_t_ctr;	   
   
   ihu_l1hd_spi_nrf24l01_cs_enable();           //使能SPI传输
-  status=ihu_l1hd_spi_nrf24l01_read_write_byte(reg);//发送寄存器值(位置),并读取状态值   	   
+	ihu_usleep(10);
+  status=ihu_l1hd_spi_nrf24l01_read_write_byte(reg);//发送寄存器值(位置),并读取状态值
+	ihu_usleep(10);
  	for(uint8_t_ctr=0;uint8_t_ctr<len;uint8_t_ctr++)
   {
     pBuf[uint8_t_ctr]=ihu_l1hd_spi_nrf24l01_read_write_byte(0XFF);//读出数据
+		ihu_usleep(10);
   }
   ihu_l1hd_spi_nrf24l01_cs_disable();       //关闭SPI传输
+	ihu_usleep(10);
   return status;        //返回读到的状态值
 }
 
@@ -841,12 +853,16 @@ uint8_t func_rfidmod_nrf24l01_write_buf(uint8_t reg, uint8_t *pBuf, uint8_t len)
 {
 	uint8_t status,uint8_t_ctr;	    
  	ihu_l1hd_spi_nrf24l01_cs_enable();          //使能SPI传输
+	ihu_usleep(10);
   status = ihu_l1hd_spi_nrf24l01_read_write_byte(reg);//发送寄存器值(位置),并读取状态值
+	ihu_usleep(10);
   for(uint8_t_ctr=0; uint8_t_ctr<len; uint8_t_ctr++)
   {
-    ihu_l1hd_spi_nrf24l01_read_write_byte(*pBuf++); //写入数据	 
+    ihu_l1hd_spi_nrf24l01_read_write_byte(*pBuf++); //写入数据
+		ihu_usleep(10);
   }
   ihu_l1hd_spi_nrf24l01_cs_disable();       //关闭SPI传输
+	ihu_usleep(10);
   return status;          //返回读到的状态值
 }				   
 
@@ -978,7 +994,7 @@ OPSTAT ihu_vmmw_rfidmod_nrf24l01_spi_read_id(uint8_t *rfidAddr, uint8_t len)
 	res = IHU_FAILURE;
 	while((tickTotal > 0) && (res == IHU_FAILURE))
 	{
-		ihu_sleep(1); //这里的周期就是以绝对ms为单位的
+		ihu_sleep(1); //这里的周期就是以绝对s为单位的
 		tickTotal--;
 		if(func_rfidmod_nrf24l01_check() == IHU_FAILURE)
 			 res = IHU_FAILURE;

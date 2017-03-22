@@ -122,6 +122,13 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(CUBEMX_PIN_F2_BOOT1_GPIO_Port, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_SPI2_CS_ADC_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
+  HAL_GPIO_Init(CUBEMX_PIN_F2_SPI2_CS_ADC_GPIO_Port, &GPIO_InitStruct);
+
   /*Configure GPIO pins : PD10 PD11 PD0 PD1 
                            PD2 PD3 PD4 PD5 
                            PD6 PD7 */
@@ -165,6 +172,9 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(CUBEMX_PIN_F2_SPI2_CS_ADC_GPIO_Port, CUBEMX_PIN_F2_SPI2_CS_ADC_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOD, CUBEMX_PIN_F2_GPIO_DO_BEEP_Pin|CUBEMX_PIN_F2_GPIO_DO_LED_SERV3_Pin|CUBEMX_PIN_F2_GPIO_DO_LED_SERV2_Pin, GPIO_PIN_RESET);
