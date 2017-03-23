@@ -919,20 +919,24 @@ int8_t func_rfidmod_nrf24l01_tx_package(uint8_t *txbuf)
   * 返 回 值: 无
   * 说    明：无
   *           
-  */ 
+  */
 int8_t func_rfidmod_nrf24l01_rx_package(uint8_t *rxbuf)
 {
 	uint8_t sta;		    							   
 	sta=func_rfidmod_nrf24l01_read_reg(IHU_VMWM_RFIDMOD_NRF24L01_STATUS);  //读取状态寄存器的值    	 
+	ihu_usleep(10);
 	func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_STATUS,sta); //清除TX_DS或MAX_RT中断标志
+	ihu_usleep(10);
 	if(sta&IHU_VMWM_RFIDMOD_NRF24L01_RX_OK)//接收到数据
 	{
 		func_rfidmod_nrf24l01_read_buf(IHU_VMWM_RFIDMOD_NRF24L01_RD_RX_PLOAD,rxbuf,IHU_VMWM_RFIDMOD_NRF24L01_RX_PLOAD_WIDTH);//读取数据
+		ihu_usleep(10);
 		func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_FLUSH_RX,0xff);//清除RX FIFO寄存器 
+		ihu_usleep(10);
 		return IHU_SUCCESS; 
 	}	   
 	return IHU_FAILURE;//没收到任何数据
-}					    
+}
 
 /**
   * 函数功能: 该函数初始化NRF24L01到RX模式
@@ -943,18 +947,22 @@ int8_t func_rfidmod_nrf24l01_rx_package(uint8_t *rxbuf)
   */ 
 void func_rfidmod_nrf24l01_rx_mode(void)
 {
-	ihu_l1hd_spi_nrf24l01_ce_low();	  
+	ihu_l1hd_spi_nrf24l01_ce_low();
+	ihu_usleep(10);
   func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_CONFIG, 0x0F);//配置基本工作模式的参数;PWR_UP,EN_CRC,16BIT_CRC 
+	ihu_usleep(10);
   func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_EN_AA,0x01);    //使能通道0的自动应答    
+	ihu_usleep(10);
   func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_EN_RXADDR,0x01);//使能通道0的接收地址  	 
+	ihu_usleep(10);
   func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_RF_CH,40);	     //设置RF通信频率		  
+	ihu_usleep(10);
   func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_RF_SETUP,0x0f);//设置TX发射参数,0db增益,2Mbps,低噪声增益开启   
-  
+	ihu_usleep(10);
   func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_RX_PW_P0,IHU_VMWM_RFIDMOD_NRF24L01_RX_PLOAD_WIDTH);//选择通道0的有效数据宽度 	    
-    
+	ihu_usleep(10);
   func_rfidmod_nrf24l01_write_buf(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_RX_ADDR_P0,(uint8_t*)RX_ADDRESS,IHU_VMWM_RFIDMOD_NRF24L01_RX_ADR_WIDTH);//写RX节点地址
-	  
-  
+	ihu_usleep(10);
   ihu_l1hd_spi_nrf24l01_ce_high(); //CE为高,进入接收模式 
   ihu_usleep(10);
 }						 
@@ -969,15 +977,23 @@ void func_rfidmod_nrf24l01_rx_mode(void)
 void func_rfidmod_nrf24l01_tx_mode(void)
 {														 
 	ihu_l1hd_spi_nrf24l01_ce_low();	    
+	ihu_usleep(10);
   func_rfidmod_nrf24l01_write_buf(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_TX_ADDR,(uint8_t*)TX_ADDRESS,IHU_VMWM_RFIDMOD_NRF24L01_TX_ADR_WIDTH);//写TX节点地址 
+	ihu_usleep(10);
   func_rfidmod_nrf24l01_write_buf(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_RX_ADDR_P0,(uint8_t*)RX_ADDRESS,IHU_VMWM_RFIDMOD_NRF24L01_RX_ADR_WIDTH); //设置TX节点地址,主要为了使能ACK	  
-
+	ihu_usleep(10);
   func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_EN_AA,0x01);     //使能通道0的自动应答    
+	ihu_usleep(10);
   func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_EN_RXADDR,0x01); //使能通道0的接收地址  
+	ihu_usleep(10);
   func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_SETUP_RETR,0xff);//设置自动重发间隔时间:4000us + 86us;最大自动重发次数:15次
+	ihu_usleep(10);
   func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_RF_CH,40);       //设置RF通道为40
+	ihu_usleep(10);
   func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_RF_SETUP,0x0f);  //设置TX发射参数,0db增益,2Mbps,低噪声增益开启   
+	ihu_usleep(10);
   func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_NRF_WRITE_REG+IHU_VMWM_RFIDMOD_NRF24L01_CONFIG,0x0e);    //配置基本工作模式的参数;PWR_UP,EN_CRC,16BIT_CRC,接收模式,开启所有中断
+	ihu_usleep(10);
 	ihu_l1hd_spi_nrf24l01_ce_high();//CE为高,10us后启动发送
   ihu_usleep(10);
 }
@@ -1001,11 +1017,23 @@ OPSTAT ihu_vmmw_rfidmod_nrf24l01_spi_read_id(uint8_t *rfidAddr, uint8_t len)
 		else
 			 res = IHU_SUCCESS;
 	}
-	if (res == IHU_FAILURE) IHU_ERROR_PRINT_RFIDMOD("VMMWRFID: RFID sensor (NRF24L01) not detected!\n");
+	if (res == IHU_FAILURE) IHU_ERROR_PRINT_RFIDMOD("VMMWRFID: RFID sensor (NRF24L01) in RX mode, not detected!\n");
 
-	//再进入干活
-  func_rfidmod_nrf24l01_rx_mode();
-  if(func_rfidmod_nrf24l01_rx_package(rfidAddr)==IHU_FAILURE) IHU_ERROR_PRINT_RFIDMOD("VMMWRFID: Device NRF24L01 receive package error!\n");
+	//再进入干活：这里先放3秒，太长的话，整个系统就太肉
+	tickTotal = 3;
+	res = IHU_FAILURE;
+	while((tickTotal > 0) && (res == IHU_FAILURE))
+	{
+		ihu_sleep(1); //这里的周期就是以绝对s为单位的
+		tickTotal--;
+		func_rfidmod_nrf24l01_rx_mode();
+		ihu_usleep(10);
+		if(func_rfidmod_nrf24l01_rx_package(rfidAddr)==IHU_FAILURE)
+			 res = IHU_FAILURE;
+		else
+			 res = IHU_SUCCESS;
+	}	
+  if(res == IHU_FAILURE) IHU_ERROR_PRINT_RFIDMOD("VMMWRFID: RFID sensor (NRF24L01) in RX mode, can not receive peer package!\n");
 	
 	return IHU_SUCCESS;
 }

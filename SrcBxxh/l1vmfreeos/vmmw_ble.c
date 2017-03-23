@@ -17,9 +17,10 @@
 extern int8_t zIhuBspStm32SpsBleRxBuff[IHU_BSP_STM32_SPS_BLE_REC_MAX_LEN];			//串口BLE数据接收缓冲区 
 extern int16_t zIhuBspStm32SpsBleRxCount;																				//当前接收数据的字节数 	  
 
+//本驱动程序中，HC05工作在从模式，等待APP/手机做为主模式来连接
 
 BLTDev bltDevList;   //蓝牙设备列表，在main文件中定义
-#define DEFAULT_HC05_ROLE           0 // 默认从模式
+#define DEFAULT_HC05_ROLE           0 // 默认从模式  
 //#define DEFAULT_HC05_ROLE           1 // 默认主模式
 BLTDev bltDevList;
 char zIhuBlemodSendData[1024];
@@ -193,7 +194,7 @@ OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_in_AT_cmd_mode(uint8_t *macAddr,
 			if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWBLE: Not detect BLE module, trying to reconnecting!\n");
 		}
 		ihu_usleep(200);
-		if (repeatCnt == 0) IHU_ERROR_PRINT_BLEMOD("VMMWBLE: BLE sensor (HC05) not detected!\n");
+		if (repeatCnt == 0) IHU_ERROR_PRINT_BLEMOD("VMMWBLE: BLE sensor (HC05) in slave/broadcasting mode, not detected!\n");
 	}
 
 	
@@ -319,7 +320,7 @@ OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_in_AT_cmd_mode(uint8_t *macAddr,
 			}
 		}
 		repeatCnt--;
-		if (repeatCnt == 0) IHU_ERROR_PRINT_BLEMOD("VMMWBLE: Read Equipment failure!\n");
+		if (repeatCnt == 0) IHU_ERROR_PRINT_BLEMOD("VMMWBLE: BLE read Equipment failure!\n");
 	}
 
 	//设置BLE模块进入透传状态
