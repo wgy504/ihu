@@ -73,6 +73,22 @@ void   ihu_bsp_stm32_led_f2board_negation (void)
     LED_F205RG_board_negation();
 }
 
+static void func_bsp_stm32_led_delay(__IO uint32_t nCount)	
+{
+	for(; nCount != 0; nCount--);
+}
+
+void ihu_bsp_stm32_led_f2board_test_flag(int times, int dur)
+{
+	int i = 0;
+	for (i = 0; i<times; i++){
+    ihu_bsp_stm32_led_f2board_on();
+		func_bsp_stm32_led_delay(dur);
+		ihu_bsp_stm32_led_f2board_off();
+		func_bsp_stm32_led_delay(dur);
+	}
+}
+
 
 /*
 *--------------------------------------------------------------------------------------------------------

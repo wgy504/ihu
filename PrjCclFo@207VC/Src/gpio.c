@@ -113,10 +113,10 @@ void MX_GPIO_Init(void)
   HAL_GPIO_Init(CUBEMX_PIN_F2_GPIO_LED_207VC_TEST_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_SYS_WKUP_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_SYS_WKUP_KEY1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
-  HAL_GPIO_Init(CUBEMX_PIN_F2_SYS_WKUP_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(CUBEMX_PIN_F2_SYS_WKUP_KEY1_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PA1 PA7 PA11 PA12 */
   GPIO_InitStruct.Pin = GPIO_PIN_1|GPIO_PIN_7|GPIO_PIN_11|GPIO_PIN_12;
@@ -246,11 +246,8 @@ void MX_GPIO_Init(void)
                           |CUBEMX_PIN_F2_DO_RFID_PWR_Pin|CUBEMX_PIN_F2_DO_BLE_PWR_Pin|CUBEMX_PIN_F2_DO_GPRSMOD_PWR_Pin, GPIO_PIN_RESET);
 
   /* EXTI interrupt init*/
-  HAL_NVIC_SetPriority(EXTI0_IRQn, 5, 0);
-  HAL_NVIC_EnableIRQ(EXTI0_IRQn);
-
-  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 5, 0);
-  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 
 }
 

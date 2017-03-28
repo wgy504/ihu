@@ -194,7 +194,7 @@ OPSTAT fsm_ledpisces_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UIN
 OPSTAT func_ledpisces_hw_init(void)
 {
 	//启动定时工作状态灯，暂时使用了ihu_l1hd_led_f2board_timer_ind_negation这个灯来表达
-	ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_GLOBAL_WORK_STATE, 0xFFFFFF);  //时间长度随便设置为很长
+	//ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_GLOBAL_WORK_STATE, 0xFFFFFF);  //时间长度随便设置为很长
 	return IHU_SUCCESS;
 }
 

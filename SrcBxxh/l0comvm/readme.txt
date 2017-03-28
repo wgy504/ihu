@@ -19,6 +19,9 @@
 = KEY2采用了拉高的方式，下降沿触发
 = 将ihu_l1hd_pwr_sav_enter_into_stop_mode() STOP MODE的进入函数，挂载到L3CCL.C的主函数中去，验证停止模式工作与否
 = CubeMX工程中，PA0 WKUP管脚改为EXTI0，同时打开了NVIC的配置，将EXTI0/EXTI15全部打开了
+= 将PB7/KEY2配置为下降沿触发，这正好是207VC评估板上的KEY1按键，充分验证了上升沿和下降沿的工作逻辑
+= PB7/KEY2的电路图是按键拉高的，所以在初始化配置中需要选择Pull-up。按键就是接地拉低的过程。
+
 
 
 //= ZJL, 2017 Mar.21, CURRENT_SW_DELIVERY R03.123 =>CCL项目

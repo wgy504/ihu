@@ -23,11 +23,13 @@ extern "C" {
 
 
 //本地定义的交换矩阵
-//#define BSP_STM32_PWR_SAV_KEY1_PIN 					CUBEMX_PIN_F2_SYS_WKUP_Pin
-//#define BSP_STM32_PWR_SAV_KEY1_PORT     		CUBEMX_PIN_F2_SYS_WKUP_GPIO_Port
+#define BSP_STM32_PWR_SAV_KEY1_PIN 						CUBEMX_PIN_F2_SYS_WKUP_KEY1_Pin
+#define BSP_STM32_PWR_SAV_KEY1_PORT     			CUBEMX_PIN_F2_SYS_WKUP_KEY1_Port
+#define BSP_STM32_PWR_SAV_KEY1_DOWN_LEVEL     1  /* 根据原理图设计，KEY1按下时引脚为高电平，所以这里设置为1 */
+
 #define BSP_STM32_PWR_SAV_KEY2_PIN 						CUBEMX_PIN_F2_WKUP_KEY2_Pin
 #define BSP_STM32_PWR_SAV_KEY2_PORT    				CUBEMX_PIN_F2_WKUP_KEY2_GPIO_Port
-#define BSP_STM32_PWR_SAV_KEY2_DOWN_LEVEL   	1 /* 根据原理图设计，KEY1按下时引脚为高电平，所以这里设置为1 */
+#define BSP_STM32_PWR_SAV_KEY2_DOWN_LEVEL     0  /* 根据原理图设计，KEY2按下时引脚为低电平，所以这里设置为0 */
 
 
 //全局函数

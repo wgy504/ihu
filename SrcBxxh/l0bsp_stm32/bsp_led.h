@@ -120,17 +120,19 @@ extern void ihu_bsp_stm32_led_serv3_f2board_toggle(void);
 #endif
 
 
-//待去掉，纯用于207VC评估板测试
+//待改进，目前纯粹用于207VC评估板测试，未来需要改进管腿配置，从而明确工作状态指示灯
 extern void ihu_bsp_stm32_led_f2board_on(void);
 extern void ihu_bsp_stm32_led_f2board_off(void);
 extern void ihu_bsp_stm32_led_f2board_negation(void);
 extern void ihu_bsp_stm32_led_f2board_timer_ind_on(void);
 extern void ihu_bsp_stm32_led_f2board_timer_ind_off(void);
 extern void ihu_bsp_stm32_led_f2board_timer_ind_negation(void);
-
+extern void ihu_bsp_stm32_led_f2board_test_flag(int times, int dur);
 
 
 //Local APIs
+static void func_bsp_stm32_led_delay(__IO uint32_t nCount);
+
 
 
 #ifdef __cplusplus

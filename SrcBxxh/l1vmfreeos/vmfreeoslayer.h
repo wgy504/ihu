@@ -626,6 +626,7 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_led_f2board_on 								ihu_bsp_stm32_led_f2board_on
 #define ihu_l1hd_led_f2board_off 								ihu_bsp_stm32_led_f2board_off
 #define ihu_l1hd_led_f2board_negation 					ihu_bsp_stm32_led_f2board_negation
+#define ihu_l1hd_led_f2board_test_flag 					ihu_bsp_stm32_led_f2board_test_flag
 #define ihu_l1hd_led_f2board_timer_ind_on 			ihu_bsp_stm32_led_f2board_timer_ind_on
 #define ihu_l1hd_led_f2board_timer_ind_off 			ihu_bsp_stm32_led_f2board_timer_ind_off
 #define ihu_l1hd_led_f2board_timer_ind_negation ihu_bsp_stm32_led_f2board_timer_ind_negation

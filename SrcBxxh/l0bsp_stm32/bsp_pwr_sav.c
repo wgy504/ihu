@@ -33,6 +33,7 @@
 //使用的方式是：先关闭所有的传感器电源（MOSFET开关），然后进入执行该函数，进入STOP MODE
 void ihu_bsp_stm32_enter_into_stop_mode(void)
 {
+	ihu_l1hd_led_f2board_test_flag(5, 0x1FFFFF);
   /* 进入停止模式，设置电压调节器为低功耗模式，等待中断唤醒 KEY2 按键下降沿唤醒*/
 	HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON,PWR_STOPENTRY_WFI);
 }
@@ -70,10 +71,10 @@ void SYSCLKConfig_STOP(void)
 }
 
 //简单的延时函数
-static void Delay(__IO uint32_t nCount)	
-{
-	for(; nCount != 0; nCount--);
-}
+//static void Delay(__IO uint32_t nCount)	
+//{
+//	for(; nCount != 0; nCount--);
+//}
 
 /**
   * 函数功能: 按键外部中断服务函数
@@ -92,10 +93,12 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 		SYSCLKConfig_STOP();											//停机唤醒后需要启动HSE	
 		
 		//亮板子上的状态灯，
-		ihu_l1hd_led_f2board_on();
-		//LED1_ON;	LED2_ON;	LED3_ON;				//点亮所有LED一段时间指示停机唤醒
-		Delay(0x1FFFFF);
-		ihu_l1hd_led_f2board_off();
+		//IHU_DEBUG_PRINT_FAT("BSP_PWR_SAV: Test on  EXTI Call back function.\n");
+		ihu_l1hd_led_f2board_test_flag(3, 0x7FFFFF);
+		
+//		//LED1_ON;	LED2_ON;	LED3_ON;				//点亮所有LED一段时间指示停机唤醒
+//		Delay(0x1FFFFF);
+//		ihu_l1hd_led_f2board_off();
 		//LED1_OFF;	LED2_OFF;	LED3_OFF;	
 		
 		/*由于前面已经重新启动了HSE，
