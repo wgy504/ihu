@@ -55,6 +55,7 @@
 "prjcclfo@207vc\bsp_camera.o"
 "prjcclfo@207vc\bsp_ov2640.o"
 "prjcclfo@207vc\bsp_spi.o"
+"prjcclfo@207vc\bsp_pwr_sav.o"
 "prjcclfo@207vc\l1timer_freeos.o"
 "prjcclfo@207vc\vmfreeoslayer.o"
 "prjcclfo@207vc\l1vmfo.o"

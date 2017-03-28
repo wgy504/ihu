@@ -13,8 +13,12 @@
 
 //= ZJL, 2017 Mar.22, CURRENT_SW_DELIVERY R03.124 =>CCL项目
 = 改进NRF24L01的接收工作模式，让其能连续读取多次
-
-
+= 增加PWR_SAVING代码，并实验外部中断源EXTI和低功耗的基本工作模式
+= ihu_vmmw_rfidmod_nrf24l01_spi_read_id: RFID的重复次数为3，为了增加重复成功率，改为300次，暂时未能成功找到外部的卡
+= 增加PB7=KEY2，复用207VC板子上的KEY1按键，确定唤醒逻辑是否可行
+= KEY2采用了拉高的方式，下降沿触发
+= 将ihu_l1hd_pwr_sav_enter_into_stop_mode() STOP MODE的进入函数，挂载到L3CCL.C的主函数中去，验证停止模式工作与否
+= CubeMX工程中，PA0 WKUP管脚改为EXTI0，同时打开了NVIC的配置，将EXTI0/EXTI15全部打开了
 
 
 //= ZJL, 2017 Mar.21, CURRENT_SW_DELIVERY R03.123 =>CCL项目
@@ -37,7 +41,7 @@
 
 //= ZJL, 2017 Mar.9, CURRENT_SW_DELIVERY R03.121 =>CCL项目
 = 证实SW02的功能：将GPIO读取做了3次平均，确保读取的稳定性
-= 集成进去MPU6050模块，I2C初选HAL_BUSY的问题
+= 集成进去MPU6050模块，I2C出现HAL_BUSY的问题
 = 将void I2C_BSP_STM32_MPU6050_Error (void)移动到main.c模块中，不然包含关系太混乱
 = http://bbs.elecfans.com/jishu_1104025_1_1.html
   http://blog.csdn.net/jcmilktea/article/details/50456130
@@ -47,7 +51,7 @@
   都要手工修改，比较麻烦
 = 成功将VMMW_NAVIG模块引入，且将MPU6050的解算与I2C的接口访问分离
 = 基本完成MPU6050倾角模块的集成，输出角度浮点数据，在正式使用时采用NF2即可
-= 更加高档完善的算法，比如卡尔曼滤波、卡库塔快速算法，原则上航空航天领域的经度东西，以后如果在动态情况下需要，都可以逐步引入进来
+= 更加高档完善的算法，比如卡尔曼滤波、卡库塔快速算法，原则上航空航天领域的经典东西，以后如果在动态情况下需要，都可以逐步引入进来
 
 //= ZJL, 2017 Mar.2, CURRENT_SW_DELIVERY R03.120 =>CCL项目
 = 将该项目的主频降低到12MHz，结果功耗没有什么变化，很奇怪。先保留该状态，未来再确定问题的根源。

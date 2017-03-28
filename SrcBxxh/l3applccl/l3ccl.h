@@ -25,6 +25,7 @@
 #include "l2dcmiaris.h"
 #include "huixmlcodec.h"
 #include "bsp_dido.h"
+#include "bsp_pwr_sav.h"
 
 //State definition
 //#define FSM_STATE_ENTRY  0x00

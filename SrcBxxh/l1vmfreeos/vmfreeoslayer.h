@@ -752,10 +752,6 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_dido_f2board_ds18b20_init    					ihu_bsp_stm32_dido_ds18b20_init
 #define ihu_l1hd_dido_f2board_ds18b20_temp_read     		ihu_bsp_stm32_dido_f2board_ds18b20_temp_read 
 
-
-
-
-
 //L0BSP=>L1HD: WDOG
 #define ihu_l1hd_watch_dog_refresh      				ihu_bsp_stm32_watch_dog_refresh
 
@@ -778,6 +774,10 @@ extern void ihu_timer_routine_handler_10ms(void);
 
 //L0BSP=>L1HD: STMFLASH/IAP
 #define ihu_l1hd_f2board_equid_get				      ihu_bsp_stm32_f2board_equid_get
+
+//L0BSP=>L1HD: Power Saving feature
+#define ihu_l1hd_pwr_sav_enter_into_stop_mode		ihu_bsp_stm32_enter_into_stop_mode
+
 
 //BFSC独有的映射
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
