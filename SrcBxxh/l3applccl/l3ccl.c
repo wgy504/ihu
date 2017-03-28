@@ -173,7 +173,6 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 	//测试整体硬件进入休眠状态
 	//ihu_l1hd_pwr_sav_enter_into_stop_mode();
 	
-	
 	//返回
 	return IHU_SUCCESS;
 }

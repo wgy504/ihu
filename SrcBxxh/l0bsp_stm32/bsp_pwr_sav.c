@@ -29,6 +29,26 @@
 
 /* 函数体 --------------------------------------------------------------------*/
 
+//进入SLEEP_MODE的函数
+//使用的方式是：先关闭所有的传感器电源（MOSFET开关），然后进入执行该函数，进入SLEEP MODE
+void ihu_bsp_stm32_enter_into_sleep_mode(void)
+{
+	//先给一个测试信号
+	ihu_l1hd_led_f2board_test_flag(5, 0x0FFFFF);
+
+	/* 挂起滴答定时器增加以避免滴答定时器中断唤醒睡眠模式 */
+	HAL_SuspendTick();
+	/* 进入睡眠模式，等待中断唤醒  KEY2按键下降沿唤醒*/
+	//HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI); 
+	HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFE); 
+	/* 退出睡眠模式之后，释放滴答定时器中断 */
+	HAL_ResumeTick();
+	
+	//休眠退出之后，会继续下面的程序执行
+	ihu_l1hd_led_f2board_test_flag(10, 0x0FFFFF);
+}
+
+
 //进入STOP_MODE的函数
 //使用的方式是：先关闭所有的传感器电源（MOSFET开关），然后进入执行该函数，进入STOP MODE
 void ihu_bsp_stm32_enter_into_stop_mode(void)
@@ -117,12 +137,34 @@ void func_bsp_stm32_pwr_sav_sys_clk_cfg_by_stop_mode(void)
 //	for(; nCount != 0; nCount--);
 //}
 
+
+
 /**
   * 函数功能: 按键外部中断服务函数
   * 输入参数: GPIO_Pin：中断引脚
   * 返 回 值: 无
   * 说    明: 无
   */
+
+#if (BSP_STM32_PWR_SAV_LOW_PWR_MODE_SELECTION == BSP_STM32_PWR_SAV_SLEEP_MODE)
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  if(GPIO_Pin==BSP_STM32_PWR_SAV_KEY2_PIN)
+  {
+    //printf("\n EXTI13中断 \n");	
+    __HAL_GPIO_EXTI_CLEAR_IT(BSP_STM32_PWR_SAV_KEY2_PIN);
+  }
+}
+#endif
+
+
+/**
+  * 函数功能: 按键外部中断服务函数
+  * 输入参数: GPIO_Pin：中断引脚
+  * 返 回 值: 无
+  * 说    明: 无
+  */
+#if (BSP_STM32_PWR_SAV_LOW_PWR_MODE_SELECTION == BSP_STM32_PWR_SAV_STOP_MODE)
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
   if(GPIO_Pin==BSP_STM32_PWR_SAV_KEY2_PIN)
@@ -148,5 +190,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     __HAL_GPIO_EXTI_CLEAR_IT(BSP_STM32_PWR_SAV_KEY2_PIN);
   }
 }
+#endif
 
 

@@ -777,6 +777,7 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_f2board_equid_get				      ihu_bsp_stm32_f2board_equid_get
 
 //L0BSP=>L1HD: Power Saving feature
+#define ihu_l1hd_pwr_sav_enter_into_sleep_mode			ihu_bsp_stm32_enter_into_sleep_mode
 #define ihu_l1hd_pwr_sav_enter_into_stop_mode				ihu_bsp_stm32_enter_into_stop_mode
 #define ihu_l1hd_pwr_sav_enter_into_standby_mode		ihu_bsp_stm32_enter_into_standby_mode
 

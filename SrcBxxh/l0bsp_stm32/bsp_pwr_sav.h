@@ -32,9 +32,15 @@ extern "C" {
 #define BSP_STM32_PWR_SAV_KEY2_DOWN_LEVEL     0  /* 根据原理图设计，KEY2按下时引脚为低电平，所以这里设置为0 */
 
 
+#define BSP_STM32_PWR_SAV_SLEEP_MODE 1
+#define BSP_STM32_PWR_SAV_STOP_MODE  2
+#define BSP_STM32_PWR_SAV_STANDBY_MODE 3
+#define BSP_STM32_PWR_SAV_LOW_PWR_MODE_SELECTION	BSP_STM32_PWR_SAV_STOP_MODE
+
 //全局函数
-extern void ihu_bsp_stm32_enter_into_stop_mode(void);
-extern void ihu_bsp_stm32_enter_into_standby_mode(void);
+extern void ihu_bsp_stm32_enter_into_sleep_mode(void);  //省电
+extern void ihu_bsp_stm32_enter_into_stop_mode(void);   //很省电
+extern void ihu_bsp_stm32_enter_into_standby_mode(void);  //最省电
 
 //Local APIs
 static void func_bsp_stm32_pwr_sav_delay(__IO uint32_t nCount);

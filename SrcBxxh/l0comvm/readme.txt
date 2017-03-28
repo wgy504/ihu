@@ -18,6 +18,9 @@
 = 在STOP MODE下，PB7复用评估板上的KEY1，按键唤醒工作正常，相当于RESET：程序直接忽略了启动部分的再次进入休眠模式指令，有点怪异
 = 在STANDBY MODE下，参考程序使用了PA0的激活方式，根据目前GPIO_MODE_INPUT/GPIO_PULLDOWN的配置，将PA0脚接到3.3v电源拉高，就成功的唤醒了整个系统，工作正常
 = ihu_l1hd_pwr_sav_enter_into_stop_mode / ihu_l1hd_pwr_sav_enter_into_standby_mode暂时放在CCL初始化入口，未来状态机调整好了之后，需要放到SLEEP状态下
+= 同步引入了SLEEP MODE的ihu_l1hd_pwr_sav_enter_into_sleep_mode，但并没实验成功，程序在执行HAL_PWR_EnterSLEEPMode的时候，并没有进入SLEEP模式
+= 注意，多个模式的选择，需要在bsp_pwr_sav.h中进行选择，而不光是简单的调用函数，因为回调函数是共享的
+= 递交代码的时候，还是暂时去掉了这个挂载在CCL中的执行函数，等待以后状态机完善以后，再全部挂载完成。
 
 //= ZJL, 2017 Mar.22, CURRENT_SW_DELIVERY R03.124 =>CCL项目
 = 改进NRF24L01的接收工作模式，让其能连续读取多次
