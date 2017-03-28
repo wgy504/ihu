@@ -34,12 +34,16 @@ extern "C" {
 
 //全局函数
 extern void ihu_bsp_stm32_enter_into_stop_mode(void);
-
+extern void ihu_bsp_stm32_enter_into_standby_mode(void);
 
 //Local APIs
-static void Delay(__IO uint32_t nCount);
+static void func_bsp_stm32_pwr_sav_delay(__IO uint32_t nCount);
+void func_bsp_stm32_pwr_sav_sys_clk_cfg_by_stop_mode(void);
+
+
+//全局回调函数
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
-void SYSCLKConfig_STOP(void);
+
 
 
 #ifdef __cplusplus

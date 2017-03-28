@@ -33,10 +33,51 @@
 //使用的方式是：先关闭所有的传感器电源（MOSFET开关），然后进入执行该函数，进入STOP MODE
 void ihu_bsp_stm32_enter_into_stop_mode(void)
 {
+	//先给一个测试信号
 	ihu_l1hd_led_f2board_test_flag(5, 0x1FFFFF);
   /* 进入停止模式，设置电压调节器为低功耗模式，等待中断唤醒 KEY2 按键下降沿唤醒*/
 	HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON,PWR_STOPENTRY_WFI);
 }
+
+
+//进入STANDBY_MODE的函数
+//使用的方式是：先关闭所有的传感器电源（MOSFET开关），然后进入执行该函数，进入STANDBY MODE
+void ihu_bsp_stm32_enter_into_standby_mode(void)
+{
+	//先给一个测试信号
+	ihu_l1hd_led_f2board_test_flag(5, 0x1FFFFF);
+  
+  /* 检测系统是否是从待机模式启动的 */ 
+  if (__HAL_PWR_GET_FLAG(PWR_FLAG_SB) != RESET)
+  {
+    /* 清除待机标志位 */
+    __HAL_PWR_CLEAR_FLAG(PWR_FLAG_SB);
+  }
+  else
+  {
+  }
+  	
+	/* The Following Wakeup sequence is highly recommended prior to each Standby mode entry
+		mainly when using more than one wakeup source this is to not miss any wakeup event.
+		 - Disable all used wakeup sources,
+		 - Clear all related wakeup flags, 
+		 - Re-enable all used wakeup sources,
+		 - Enter the Standby mode.
+	*/
+	/* 禁用所有唤醒源: 唤醒引脚PA0 */
+	HAL_PWR_DisableWakeUpPin(PWR_WAKEUP_PIN1);
+
+	/* 清除所有唤醒标志位 */
+	__HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);
+
+	/* 使能唤醒引脚：PA0做为系统唤醒输入 */
+	HAL_PWR_EnableWakeUpPin(PWR_WAKEUP_PIN1);
+
+	/* 进入待机模式 */
+	HAL_PWR_EnterSTANDBYMode();	
+	
+}
+
 
 /**
   * 函数功能: 停机唤醒后配置系统时钟: 使能 HSE, PLL
@@ -45,7 +86,7 @@ void ihu_bsp_stm32_enter_into_stop_mode(void)
   * 返 回 值: 无
   * 说    明: 无
   */
-void SYSCLKConfig_STOP(void)
+void func_bsp_stm32_pwr_sav_sys_clk_cfg_by_stop_mode(void)
 {
   /* 使能 HSE */
   __HAL_RCC_HSE_CONFIG(RCC_HSE_ON);
@@ -71,7 +112,7 @@ void SYSCLKConfig_STOP(void)
 }
 
 //简单的延时函数
-//static void Delay(__IO uint32_t nCount)	
+//static void func_bsp_stm32_pwr_sav_delay(__IO uint32_t nCount)	
 //{
 //	for(; nCount != 0; nCount--);
 //}
@@ -90,14 +131,14 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 		此printf语句的内容不能正常发送出去 */
 		//printf("\n 进入中断 \n");		
 		
-		SYSCLKConfig_STOP();											//停机唤醒后需要启动HSE	
+		func_bsp_stm32_pwr_sav_sys_clk_cfg_by_stop_mode();											//停机唤醒后需要启动HSE	
 		
 		//亮板子上的状态灯，
 		//IHU_DEBUG_PRINT_FAT("BSP_PWR_SAV: Test on  EXTI Call back function.\n");
 		ihu_l1hd_led_f2board_test_flag(3, 0x7FFFFF);
 		
 //		//LED1_ON;	LED2_ON;	LED3_ON;				//点亮所有LED一段时间指示停机唤醒
-//		Delay(0x1FFFFF);
+//		func_bsp_stm32_pwr_sav_delay(0x1FFFFF);
 //		ihu_l1hd_led_f2board_off();
 		//LED1_OFF;	LED2_OFF;	LED3_OFF;	
 		
