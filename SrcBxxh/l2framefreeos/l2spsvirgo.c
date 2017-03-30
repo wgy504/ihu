@@ -317,13 +317,13 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	//RFID DEVICE，将根据实际板子，只配置使用一种，这里是为了两种硬件的测试而已
 	//未来需要禁止掉一个，只留下一个
 	
-	//采用无源RFID待调测=>目前的长度为16
+	//采用13.56MHz MFRC522无源RFID待调测=>目前的长度为16
 	else if (ihu_vmmw_rfidmod_mf522_spi_read_id(pMsgProc.authReq.rfidAddr, IHU_SPSVIRGO_RFID_LEN_FIX) == IHU_SUCCESS){
 		pMsgProc.authReq.rfidAddrLen = IHU_SPSVIRGO_RFID_LEN_FIX;
 		pMsgProc.authReq.authReqType = HUITP_IEID_UNI_CCL_LOCK_AUTH_REQ_TYPE_RFID;
 	}
 
-	//采用有源RFID待调测=>目前的长度为16
+	//采用2.4G ISM NRF24L01有源RFID待调测=>目前的长度为16
 	else if (ihu_vmmw_rfidmod_nrf24l01_spi_read_id(pMsgProc.authReq.rfidAddr, IHU_SPSVIRGO_RFID_LEN_FIX) == IHU_SUCCESS){
 		pMsgProc.authReq.rfidAddrLen = IHU_SPSVIRGO_RFID_LEN_FIX;
 		pMsgProc.authReq.authReqType = HUITP_IEID_UNI_CCL_LOCK_AUTH_REQ_TYPE_RFID;
@@ -332,6 +332,7 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	else{
 		pMsgProc.authReq.authReqType = HUITP_IEID_UNI_CCL_LOCK_AUTH_REQ_TYPE_LOCK;	
 	}
+	
 	//Pack message
 	StrMsg_HUITP_MSGID_uni_general_message_t pMsgInput;
 	memset(&pMsgInput, 0, sizeof(StrMsg_HUITP_MSGID_uni_general_message_t));

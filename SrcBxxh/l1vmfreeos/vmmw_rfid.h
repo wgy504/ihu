@@ -31,7 +31,7 @@
 #define IHU_VMWM_RFIDMOD_SCAN_MF522_MAX_TIME 4
 
 //向上提供全局统一服务的入口
-extern OPSTAT ihu_vmmw_rfidmod_mf522_spi_send_command(uint8_t *command);
+extern OPSTAT ihu_vmmw_rfidmod_mf522_spi_send_command(uint8_t *command);  //暂时没有实现，也用不到
 extern OPSTAT ihu_vmmw_rfidmod_mf522_spi_read_id(uint8_t *rfidAddr, uint8_t len);
 extern OPSTAT ihu_vmmw_rfidmod_nrf24l01_spi_read_id(uint8_t *rfidAddr, uint8_t len);
 

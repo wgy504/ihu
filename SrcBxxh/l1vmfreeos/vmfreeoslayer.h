@@ -662,7 +662,7 @@ extern void ihu_timer_routine_handler_10ms(void);
 //BFSC AD Scale
 #define ihu_l1hd_spi_ad_scale_send_data 				ihu_bsp_stm32_spi_ad_scale_send_data
 #define ihu_l1hd_spi_ad_scale_receive_data 			ihu_bsp_stm32_spi_ad_scale_rcv_data
-//NRC522
+//MFRC522
 #define ihu_l1hd_spi_rfid522_send_data 					ihu_bsp_stm32_spi_rfid522_send_data
 #define ihu_l1hd_spi_rfid522_receive_data 			ihu_bsp_stm32_spi_rfid522_rcv_data
 #define ihu_l1hd_spi_flash_read_byte           	ihu_bsp_stm32_spi_flash_read_byte

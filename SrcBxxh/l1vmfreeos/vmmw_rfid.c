@@ -200,9 +200,9 @@ OPSTAT ihu_vmmw_rfidmod_mf522_spi_read_id(uint8_t *rfidAddr, uint8_t len)
 	if (func_rfidmod_mf522_PcdAnticoll(SN1) == IHU_VMWM_RFIDMOD_MF522_MI_OK){
 		IHU_DEBUG_PRINT_INF("VMMWRFID: Card type = [0x%x, 0x%x], Card number = [0x%x, 0x%x, 0x%x, 0x%x].\n", CT[0], CT[1], SN1[0], SN1[1], SN1[2], SN1[3]);
 		if(!memcmp(SN1, card_1, 4))
-			IHU_DEBUG_PRINT_INF("VMMWRFID: Other card find!\n");
+			IHU_DEBUG_PRINT_FAT("VMMWRFID: Other card find!\n");
 		else if(!memcmp(SN1, card_2, 4)) 
-			IHU_DEBUG_PRINT_INF("VMMWRFID: White card find!\n");
+			IHU_DEBUG_PRINT_FAT("VMMWRFID: White card find!\n");
 	}
 	else{
 		IHU_ERROR_PRINT_TASK(TASK_ID_VMFO, "VMMWRFID: RDID device (MFRC522) can not pass anticoll procedure!\n");
@@ -1020,11 +1020,11 @@ OPSTAT ihu_vmmw_rfidmod_nrf24l01_spi_read_id(uint8_t *rfidAddr, uint8_t len)
 	if (res == IHU_FAILURE) IHU_ERROR_PRINT_RFIDMOD("VMMWRFID: RFID sensor (NRF24L01) in RX mode, not detected!\n");
 
 	//再进入干活：这里先放3秒，太长的话，整个系统就太肉
-	tickTotal = 3;
+	tickTotal = 50;
 	res = IHU_FAILURE;
 	while((tickTotal > 0) && (res == IHU_FAILURE))
 	{
-		ihu_sleep(1); //这里的周期就是以绝对s为单位的
+		ihu_usleep(10); //这里的周期就是以绝对s为单位的
 		tickTotal--;
 		func_rfidmod_nrf24l01_rx_mode();
 		ihu_usleep(10);
