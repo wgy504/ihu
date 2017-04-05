@@ -194,7 +194,7 @@ OPSTAT ihu_vmmw_rfidmod_mf522_spi_read_id(uint8_t *rfidAddr, uint8_t len)
 
 	//寻卡测试
 	if (func_rfidmod_mf522_PcdRequest(IHU_VMWM_RFIDMOD_MF522_PICC_REQALL, CT) != IHU_VMWM_RFIDMOD_MF522_MI_OK)
-		IHU_ERROR_PRINT_TASK(TASK_ID_VMFO, "VMMWRFID: RDID device (MFRC522) can not find card!\n");
+		IHU_ERROR_PRINT_TASK(TASK_ID_VMFO, "VMMWRFID: RFID device (MFRC522) can not find card!\n");
 	
 	//防冲撞,至此，SN1中保存了卡号
 	if (func_rfidmod_mf522_PcdAnticoll(SN1) == IHU_VMWM_RFIDMOD_MF522_MI_OK){
@@ -934,7 +934,7 @@ int8_t func_rfidmod_nrf24l01_rx_package(uint8_t *rxbuf)
 		func_rfidmod_nrf24l01_write_reg(IHU_VMWM_RFIDMOD_NRF24L01_FLUSH_RX,0xff);//清除RX FIFO寄存器 
 		ihu_usleep(10);
 		return IHU_SUCCESS; 
-	}	   
+	}
 	return IHU_FAILURE;//没收到任何数据
 }
 
@@ -965,7 +965,7 @@ void func_rfidmod_nrf24l01_rx_mode(void)
 	ihu_usleep(10);
   ihu_l1hd_spi_nrf24l01_ce_high(); //CE为高,进入接收模式 
   ihu_usleep(10);
-}						 
+}
 
 /**
   * 函数功能: 该函数初始化NRF24L01到TX模式
@@ -1020,14 +1020,15 @@ OPSTAT ihu_vmmw_rfidmod_nrf24l01_spi_read_id(uint8_t *rfidAddr, uint8_t len)
 	if (res == IHU_FAILURE) IHU_ERROR_PRINT_RFIDMOD("VMMWRFID: RFID sensor (NRF24L01) in RX mode, not detected!\n");
 
 	//再进入干活：这里先放3秒，太长的话，整个系统就太肉
-	tickTotal = 50;
+	tickTotal = 3;
 	res = IHU_FAILURE;
 	while((tickTotal > 0) && (res == IHU_FAILURE))
 	{
 		ihu_usleep(10); //这里的周期就是以绝对s为单位的
 		tickTotal--;
 		func_rfidmod_nrf24l01_rx_mode();
-		ihu_usleep(10);
+		ihu_usleep(100);
+		//ihu_sleep(5);
 		if(func_rfidmod_nrf24l01_rx_package(rfidAddr)==IHU_FAILURE)
 			 res = IHU_FAILURE;
 		else
