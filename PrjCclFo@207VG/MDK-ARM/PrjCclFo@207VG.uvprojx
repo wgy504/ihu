@@ -332,7 +332,7 @@
               <MiscControls>--C99</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F207xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;../Drivers/STM32F2xx_HAL_Driver/Inc;../Drivers/STM32F2xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;../Drivers/CMSIS/Device/ST/STM32F2xx/Include;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Drivers/CMSIS/Include;..\..\SrcBxxh\l0bsp_stm32;..\..\SrcBxxh\l0commsgccl;..\..\SrcBxxh\l0comvm;..\..\SrcBxxh\l1vmfreeos;..\..\SrcBxxh\l2framefreeos;..\..\SrcBxxh\l3applccl</IncludePath>
+              <IncludePath>../Inc;  ../Drivers/STM32F2xx_HAL_Driver/Inc;  ../Drivers/STM32F2xx_HAL_Driver/Inc/Legacy;  ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;  ../Drivers/CMSIS/Device/ST/STM32F2xx/Include;  ../Middlewares/Third_Party/FreeRTOS/Source/include;  ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;  ../Drivers/CMSIS/Include;  ..\..\SrcBxxh\l0bsp_stm32;  ..\..\SrcBxxh\l0commsgccl;  ..\..\SrcBxxh\l0comvm;  ..\..\SrcBxxh\l1vmfreeos;  ..\..\SrcBxxh\l2framefreeos;  ..\..\SrcBxxh\l3applccl</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -419,11 +419,6 @@
               <FileName>stm32f2xx_hal_tim_ex.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_tim_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f2xx_hal_dcmi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_dcmi.c</FilePath>
             </File>
             <File>
               <FileName>stm32f2xx_hal_gpio.c</FileName>
@@ -596,11 +591,6 @@
               <FilePath>../Src/stm32f2xx_it.c</FilePath>
             </File>
             <File>
-              <FileName>dcmi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Src/dcmi.c</FilePath>
-            </File>
-            <File>
               <FileName>freertos.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Src/freertos.c</FilePath>
@@ -712,26 +702,6 @@
               <FileName>bsp_stmflash.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_stmflash.h</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_camera.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_camera.c</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_camera.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_camera.h</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_ov2640.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_ov2640.c</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_ov2640.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\SrcBxxh\l0bsp_stm32\bsp_ov2640.h</FilePath>
             </File>
             <File>
               <FileName>bsp_spi.c</FileName>
