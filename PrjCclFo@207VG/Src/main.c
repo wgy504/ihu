@@ -45,7 +45,6 @@
 #include "stm32f2xx_hal.h"
 #include "cmsis_os.h"
 #include "adc.h"
-#include "dcmi.h"
 #include "i2c.h"
 #include "rtc.h"
 #include "spi.h"
@@ -100,14 +99,13 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_ADC1_Init();
-  MX_DCMI_Init();
   MX_I2C1_Init();
   MX_RTC_Init();
-  MX_SPI2_Init();
   MX_UART4_Init();
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
+  MX_SPI1_Init();
 
   /* Initialize interrupts */
   MX_NVIC_Init();
@@ -119,8 +117,8 @@ int main(void)
   HAL_UART_Receive_IT(&huart4,&zIhuUartRxBuffer[3],1);
   //HAL_UART_Receive_IT(&huart5,&zIhuUartRxBuffer[4],1);
   //HAL_UART_Receive_IT(&huart6,&zIhuUartRxBuffer[5],1);
-  //HAL_SPI_Receive_IT(&hspi1,&zIhuSpiRxBuffer[0],1);
-  HAL_SPI_Receive_IT(&hspi2,&zIhuSpiRxBuffer[1],1);
+  HAL_SPI_Receive_IT(&hspi1,&zIhuSpiRxBuffer[0],1);
+  //HAL_SPI_Receive_IT(&hspi2,&zIhuSpiRxBuffer[1],1);
 #if (BSP_STM32_I2C_WORK_MODE_CHOICE == BSP_STM32_I2C_WORK_MODE_IAU)
   HAL_I2C_Slave_Receive_IT(&hi2c1, &zIhuI2cRxBuffer[0], 1);
 #elif (BSP_STM32_I2C_WORK_MODE_CHOICE == BSP_STM32_I2C_WORK_MODE_MPU6050)

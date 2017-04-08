@@ -93,24 +93,34 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
+  /*Configure GPIO pins : PE4 PE5 PE6 PE0 
+                           PE1 */
+  GPIO_InitStruct.Pin = GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_0 
+                          |GPIO_PIN_1;
+  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+
   /*Configure GPIO pins : PCPin PCPin */
-  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_GPIO_DI_FALL_SNESOR_Pin|CUBEMX_PIN_F2_GPIO_DI_DOOR1_RESTRICTION_Pin;
+  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_GPIO_DI_FALL_SNESOR_Pin|CUBEMX_PIN_F2_SPI1_IRQ_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PC1 PC12 */
-  GPIO_InitStruct.Pin = GPIO_PIN_1|GPIO_PIN_12;
+  /*Configure GPIO pins : PC1 PC3 PC6 PC7 
+                           PC8 PC9 PC12 */
+  GPIO_InitStruct.Pin = GPIO_PIN_1|GPIO_PIN_3|GPIO_PIN_6|GPIO_PIN_7 
+                          |GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_12;
   GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_GPIO_LED_207VC_TEST_Pin;
+  /*Configure GPIO pins : PCPin PCPin */
+  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_GPIO_LED_207VC_TEST_Pin|CUBEMX_PIN_F2_SPI1_CE_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(CUBEMX_PIN_F2_GPIO_LED_207VC_TEST_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = CUBEMX_PIN_F2_SYS_WKUP_KEY1_Pin;
@@ -118,42 +128,30 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(CUBEMX_PIN_F2_SYS_WKUP_KEY1_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PA1 PA7 PA11 PA12 */
-  GPIO_InitStruct.Pin = GPIO_PIN_1|GPIO_PIN_7|GPIO_PIN_11|GPIO_PIN_12;
+  /*Configure GPIO pins : PA1 PA11 PA12 */
+  GPIO_InitStruct.Pin = GPIO_PIN_1|GPIO_PIN_11|GPIO_PIN_12;
   GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PAPin PAPin */
-  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_GPIO_DO_LED_WORK_STATE_Pin|CUBEMX_PIN_F2_GPIO_DO_LED_COMMU_Pin;
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_SPI1_CS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  HAL_GPIO_Init(CUBEMX_PIN_F2_SPI1_CS_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_GPIO_DI_LOCK1_DI1_TRIGGER_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(CUBEMX_PIN_F2_GPIO_DI_LOCK1_DI1_TRIGGER_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : PBPin PBPin */
-  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_GPIO_DI_LOCK1_DI2_TONGUE_Pin|CUBEMX_PIN_F2_SPI2_IRQ_Pin;
+  /*Configure GPIO pins : PBPin PBPin PBPin */
+  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_GPIO_DI_LOCK1_DI2_TONGUE_Pin|CUBEMX_PIN_F2_GPIO_DI_DOOR1_RESTRICTION_Pin|CUBEMX_PIN_F2_GPIO_DI_LOCK1_DI1_TRIGGER_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_GPIO_DO_LOCK1_DO1_Pin;
+  /*Configure GPIO pins : PBPin PBPin PBPin */
+  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_GPIO_DO_LOCK1_DO1_Pin|CUBEMX_PIN_F2_SPI1_GPIO_RST_Pin|CUBEMX_PIN_F2_GPIO_DO_LED_WORK_STATE_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(CUBEMX_PIN_F2_GPIO_DO_LOCK1_DO1_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : PB2 PB5 */
-  GPIO_InitStruct.Pin = GPIO_PIN_2|GPIO_PIN_5;
-  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PEPin PEPin */
@@ -162,33 +160,31 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PBPin PBPin */
-  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_SPI2_CS_Pin|CUBEMX_PIN_F2_SPI2_CE_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  /*Configure GPIO pins : PB15 PB5 PB6 */
+  GPIO_InitStruct.Pin = GPIO_PIN_15|GPIO_PIN_5|GPIO_PIN_6;
+  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_SPI2_GPIO_RST_Pin;
+  /*Configure GPIO pins : PDPin PDPin PDPin PDPin 
+                           PDPin PDPin PDPin PDPin */
+  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_GPIO_DO_LED_COMMU_Pin|CUBEMX_PIN_F2_GPIO_DO_LOCK4_DO1_Pin|CUBEMX_PIN_F2_GPIO_DO_BEEP_Pin|CUBEMX_PIN_F2_DO_BLE_ATCMD_Pin 
+                          |CUBEMX_PIN_F2_DO_SENSOR_PWR_Pin|CUBEMX_PIN_F2_DO_RFID_PWR_Pin|CUBEMX_PIN_F2_DO_BLE_PWR_Pin|CUBEMX_PIN_F2_DO_GPRSMOD_PWR_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
-  HAL_GPIO_Init(CUBEMX_PIN_F2_SPI2_GPIO_RST_GPIO_Port, &GPIO_InitStruct);
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PD9 PD1 PD2 */
+  GPIO_InitStruct.Pin = GPIO_PIN_9|GPIO_PIN_1|GPIO_PIN_2;
+  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PDPin PDPin PDPin PDPin */
   GPIO_InitStruct.Pin = CUBEMX_PIN_F2_GPIO_DI_DOOR4_RESTRICTION_Pin|CUBEMX_PIN_F2_GPIO_DI_LOCK4_DI2_TONGUE_Pin|CUBEMX_PIN_F2_GPIO_DI_SMOKE_SENSOR_Pin|CUBEMX_PIN_F2_GPIO_DI_WATER_SENSOR_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : PDPin PDPin PDPin PDPin 
-                           PDPin PDPin PDPin */
-  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_GPIO_DO_LOCK4_DO1_Pin|CUBEMX_PIN_F2_GPIO_DO_BEEP_Pin|CUBEMX_PIN_F2_DO_BLE_ATCMD_Pin|CUBEMX_PIN_F2_DO_SENSOR_PWR_Pin 
-                          |CUBEMX_PIN_F2_DO_RFID_PWR_Pin|CUBEMX_PIN_F2_DO_BLE_PWR_Pin|CUBEMX_PIN_F2_DO_GPRSMOD_PWR_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PtPin */
@@ -205,45 +201,27 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Alternate = GPIO_AF0_MCO;
   HAL_GPIO_Init(CUBEMX_PIN_F2_RCC_MCO_1_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PD1 PD2 */
-  GPIO_InitStruct.Pin = GPIO_PIN_1|GPIO_PIN_2;
-  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-
   /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = CUBEMX_PIN_F2_WKUP_KEY2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(CUBEMX_PIN_F2_WKUP_KEY2_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PE0 PE1 */
-  GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1;
-  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
-
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOE, CUBEMX_PIN_F2_GPIO_DO_LED_POWER_Pin|CUBEMX_PIN_F2_GPIO_DO_LOCK3_DO1_Pin|CUBEMX_PIN_F2_GPIO_DO_LOCK2_DO1_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(CUBEMX_PIN_F2_GPIO_LED_207VC_TEST_GPIO_Port, CUBEMX_PIN_F2_GPIO_LED_207VC_TEST_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, CUBEMX_PIN_F2_GPIO_LED_207VC_TEST_Pin|CUBEMX_PIN_F2_SPI1_CE_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, CUBEMX_PIN_F2_GPIO_DO_LED_WORK_STATE_Pin|CUBEMX_PIN_F2_GPIO_DO_LED_COMMU_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(CUBEMX_PIN_F2_SPI1_CS_GPIO_Port, CUBEMX_PIN_F2_SPI1_CS_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(CUBEMX_PIN_F2_GPIO_DO_LOCK1_DO1_GPIO_Port, CUBEMX_PIN_F2_GPIO_DO_LOCK1_DO1_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, CUBEMX_PIN_F2_GPIO_DO_LOCK1_DO1_Pin|CUBEMX_PIN_F2_SPI1_GPIO_RST_Pin|CUBEMX_PIN_F2_GPIO_DO_LED_WORK_STATE_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, CUBEMX_PIN_F2_SPI2_CS_Pin|CUBEMX_PIN_F2_SPI2_CE_Pin, GPIO_PIN_SET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(CUBEMX_PIN_F2_SPI2_GPIO_RST_GPIO_Port, CUBEMX_PIN_F2_SPI2_GPIO_RST_Pin, GPIO_PIN_SET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOD, CUBEMX_PIN_F2_GPIO_DO_LOCK4_DO1_Pin|CUBEMX_PIN_F2_GPIO_DO_BEEP_Pin|CUBEMX_PIN_F2_DO_BLE_ATCMD_Pin|CUBEMX_PIN_F2_DO_SENSOR_PWR_Pin 
-                          |CUBEMX_PIN_F2_DO_RFID_PWR_Pin|CUBEMX_PIN_F2_DO_BLE_PWR_Pin|CUBEMX_PIN_F2_DO_GPRSMOD_PWR_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOD, CUBEMX_PIN_F2_GPIO_DO_LED_COMMU_Pin|CUBEMX_PIN_F2_GPIO_DO_LOCK4_DO1_Pin|CUBEMX_PIN_F2_GPIO_DO_BEEP_Pin|CUBEMX_PIN_F2_DO_BLE_ATCMD_Pin 
+                          |CUBEMX_PIN_F2_DO_SENSOR_PWR_Pin|CUBEMX_PIN_F2_DO_RFID_PWR_Pin|CUBEMX_PIN_F2_DO_BLE_PWR_Pin|CUBEMX_PIN_F2_DO_GPRSMOD_PWR_Pin, GPIO_PIN_RESET);
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI9_5_IRQn, 5, 0);
