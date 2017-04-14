@@ -101,7 +101,6 @@ int main(void)
   MX_ADC1_Init();
   MX_I2C1_Init();
   MX_RTC_Init();
-  MX_UART4_Init();
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
@@ -114,7 +113,7 @@ int main(void)
   HAL_UART_Receive_IT(&huart1,&zIhuUartRxBuffer[0],1);	
   HAL_UART_Receive_IT(&huart2,&zIhuUartRxBuffer[1],1);
   HAL_UART_Receive_IT(&huart3,&zIhuUartRxBuffer[2],1);
-  HAL_UART_Receive_IT(&huart4,&zIhuUartRxBuffer[3],1);
+  //HAL_UART_Receive_IT(&huart4,&zIhuUartRxBuffer[3],1);
   //HAL_UART_Receive_IT(&huart5,&zIhuUartRxBuffer[4],1);
   //HAL_UART_Receive_IT(&huart6,&zIhuUartRxBuffer[5],1);
   HAL_SPI_Receive_IT(&hspi1,&zIhuSpiRxBuffer[0],1);
@@ -224,9 +223,6 @@ static void MX_NVIC_Init(void)
   /* USART3_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(USART3_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(USART3_IRQn);
-  /* UART4_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(UART4_IRQn, 5, 0);
-  HAL_NVIC_EnableIRQ(UART4_IRQn);
 }
 
 /* USER CODE BEGIN 4 */

@@ -189,6 +189,7 @@ OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_in_AT_cmd_mode(uint8_t *macAddr,
 	repeatCnt = IHU_VMMW_BLEMOD_UART_REPEAT_CNT;
 	while((repeatCnt > 0) && (func_blemod_uart_send_AT_command((uint8_t*)"AT", (uint8_t*)"OK", 2) != IHU_SUCCESS))//查询是否应到AT指令
 	{
+		IHU_DEBUG_PRINT_FAT("VMMWBLE: 1st time AT CMD FEEDBACK len = %d, Buffer = [%s]!\n", strlen((char*)zIhuBspStm32SpsBleRxBuff), zIhuBspStm32SpsBleRxBuff);
 		repeatCnt--;
 		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE){
 			if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWBLE: Not detect BLE module, trying to reconnecting!\n");
@@ -197,10 +198,10 @@ OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_in_AT_cmd_mode(uint8_t *macAddr,
 		if (repeatCnt == 0) IHU_ERROR_PRINT_BLEMOD("VMMWBLE: BLE sensor (HC05) in slave/broadcasting mode, not detected!\n");
 	}
 
-	
 	//查阅版本
 	func_blemod_uart_clear_receive_buffer();
 	if (func_blemod_uart_send_AT_command((uint8_t*)"AT+VERSION?", (uint8_t*)"OK", 2) == IHU_SUCCESS){
+		
 		if(strstr((const char*)zIhuBspStm32SpsBleRxBuff, "+VERSION:") != NULL){
 			IHU_DEBUG_PRINT_INF("VMMWBLE: BLE Version = [%s]!\n", zIhuBspStm32SpsBleRxBuff);
 		}
@@ -218,6 +219,7 @@ OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_in_AT_cmd_mode(uint8_t *macAddr,
 	repeatCnt = IHU_VMMW_BLEMOD_UART_REPEAT_CNT;
 	while((repeatCnt > 0) && (func_blemod_uart_send_AT_command((uint8_t*)"AT", (uint8_t*)"OK", 2) != IHU_SUCCESS))//查询是否应到AT指令
 	{
+		IHU_DEBUG_PRINT_FAT("VMMWBLE: 2nd time AT CMD FEEDBACK len = %d, Buffer = [%s]!\n", strlen((char*)zIhuBspStm32SpsBleRxBuff), zIhuBspStm32SpsBleRxBuff);
 		repeatCnt--;
 		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE){
 			if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWBLE: Not detect BLE module, trying to reconnecting!\n");

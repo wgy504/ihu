@@ -337,11 +337,26 @@ int ihu_bsp_stm32_sps_spare2_rcv_data_timeout(uint8_t* buff, uint16_t len, uint3
   * 因为GPRS和UART模式不可能重复，这里将L2FRAME放在SPARE1中断中，留待未来进一步使用。GPRS是非常明确的，不需要这个机制。
   *
   * L2FRAME需要未来进一步进行稳定性测试，暂时需要等待
-  *
+  * 
+  * BUG FIX 1:  由于多个项目可能共享usartx, 下面采用else if将造成某些handle不能到达的错误，改为if
+  * 
+  * 
   */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 {
 	uint8_t res = 0;
+
+  if(UartHandle==&IHU_BSP_STM32_UART_BLE_HANDLER)
+  {
+		zIhuBspStm32SpsBleRxBuff[zIhuBspStm32SpsBleRxCount] = zIhuUartRxBuffer[IHU_BSP_STM32_UART_BLE_HANDLER_ID-1];
+		zIhuBspStm32SpsBleRxCount++;
+		if (zIhuBspStm32SpsBleRxCount >= IHU_BSP_STM32_SPS_BLE_REC_MAX_LEN)
+			zIhuBspStm32SpsBleRxCount = 0;
+		//重新设置中断
+		HAL_UART_Receive_IT(&IHU_BSP_STM32_UART_BLE_HANDLER, &zIhuUartRxBuffer[IHU_BSP_STM32_UART_BLE_HANDLER_ID-1], 1);
+  }	
+
+	
   if(UartHandle==&IHU_BSP_STM32_UART_GPRS_HANDLER)
   {
 		res = zIhuUartRxBuffer[IHU_BSP_STM32_UART_GPRS_HANDLER_ID-1];
@@ -351,7 +366,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 		//重新设置中断
 		HAL_UART_Receive_IT(&IHU_BSP_STM32_UART_GPRS_HANDLER, &zIhuUartRxBuffer[IHU_BSP_STM32_UART_GPRS_HANDLER_ID-1], 1);
   }
-  else if(UartHandle==&IHU_BSP_STM32_UART_RFID_HANDLER)
+  if(UartHandle==&IHU_BSP_STM32_UART_RFID_HANDLER)
   {
 		zIhuBspStm32SpsRfidRxBuff[zIhuBspStm32SpsRfidRxCount] = zIhuUartRxBuffer[IHU_BSP_STM32_UART_RFID_HANDLER_ID-1];
 		zIhuBspStm32SpsRfidRxCount++;
@@ -360,7 +375,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 		//重新设置中断
 		HAL_UART_Receive_IT(&IHU_BSP_STM32_UART_RFID_HANDLER, &zIhuUartRxBuffer[IHU_BSP_STM32_UART_RFID_HANDLER_ID-1], 1);
   }
-  else if(UartHandle==&IHU_BSP_STM32_UART_PRINT_HANDLER)
+  if(UartHandle==&IHU_BSP_STM32_UART_PRINT_HANDLER)
   {
 		zIhuBspStm32SpsPrintRxBuff[zIhuBspStm32SpsPrintRxCount] = zIhuUartRxBuffer[IHU_BSP_STM32_UART_PRINT_HANDLER_ID-1];
 		zIhuBspStm32SpsPrintRxCount++;
@@ -369,16 +384,16 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 		//重新设置中断
 		HAL_UART_Receive_IT(&IHU_BSP_STM32_UART_PRINT_HANDLER, &zIhuUartRxBuffer[IHU_BSP_STM32_UART_PRINT_HANDLER_ID-1], 1);
   }	
-  else if(UartHandle==&IHU_BSP_STM32_UART_BLE_HANDLER)
-  {
-		zIhuBspStm32SpsBleRxBuff[zIhuBspStm32SpsBleRxCount] = zIhuUartRxBuffer[IHU_BSP_STM32_UART_BLE_HANDLER_ID-1];
-		zIhuBspStm32SpsBleRxCount++;
-		if (zIhuBspStm32SpsBleRxCount >= IHU_BSP_STM32_SPS_BLE_REC_MAX_LEN)
-			zIhuBspStm32SpsBleRxCount = 0;
-		//重新设置中断
-		HAL_UART_Receive_IT(&IHU_BSP_STM32_UART_BLE_HANDLER, &zIhuUartRxBuffer[IHU_BSP_STM32_UART_BLE_HANDLER_ID-1], 1);
-  }	
-  else if(UartHandle==&IHU_BSP_STM32_UART_SPARE1_HANDLER)
+//  if(UartHandle==&IHU_BSP_STM32_UART_BLE_HANDLER)
+//  {
+//		zIhuBspStm32SpsBleRxBuff[zIhuBspStm32SpsBleRxCount] = zIhuUartRxBuffer[IHU_BSP_STM32_UART_BLE_HANDLER_ID-1];
+//		zIhuBspStm32SpsBleRxCount++;
+//		if (zIhuBspStm32SpsBleRxCount >= IHU_BSP_STM32_SPS_BLE_REC_MAX_LEN)
+//			zIhuBspStm32SpsBleRxCount = 0;
+//		//重新设置中断
+//		HAL_UART_Receive_IT(&IHU_BSP_STM32_UART_BLE_HANDLER, &zIhuUartRxBuffer[IHU_BSP_STM32_UART_BLE_HANDLER_ID-1], 1);
+//  }	
+  if(UartHandle==&IHU_BSP_STM32_UART_SPARE1_HANDLER)
   {
 		zIhuBspStm32SpsSpare1RxBuff[zIhuBspStm32SpsSpare1RxCount] = zIhuUartRxBuffer[IHU_BSP_STM32_UART_SPARE1_HANDLER_ID-1];
 		zIhuBspStm32SpsSpare1RxCount++;
@@ -446,7 +461,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 		//重新设置中断
 		HAL_UART_Receive_IT(&IHU_BSP_STM32_UART_SPARE1_HANDLER, &zIhuUartRxBuffer[IHU_BSP_STM32_UART_SPARE1_HANDLER_ID-1], 1);
   }
-  else if(UartHandle==&IHU_BSP_STM32_UART6_PRESENT_HANDLER)
+  if(UartHandle==&IHU_BSP_STM32_UART6_PRESENT_HANDLER)
   {
 		zIhuBspStm32SpsSpare2RxBuff[zIhuBspStm32SpsSpare2RxCount] = zIhuUartRxBuffer[IHU_BSP_STM32_UART6_PRESENT_HANDLER_ID-1];
 		zIhuBspStm32SpsSpare2RxCount++;
