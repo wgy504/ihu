@@ -1008,6 +1008,8 @@ OPSTAT ihu_vmmw_rfidmod_nrf24l01_spi_read_id(uint8_t *rfidAddr, uint8_t len)
 	
 	//先判定设备是否存在
 	res = IHU_FAILURE;
+	//是不是这个模块的工作，必须先拉低CE信号？待完善
+	//ihu_l1hd_spi_nrf24l01_ce_low();
 	while((tickTotal > 0) && (res == IHU_FAILURE))
 	{
 		ihu_sleep(1); //这里的周期就是以绝对s为单位的
