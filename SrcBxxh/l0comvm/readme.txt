@@ -19,6 +19,9 @@
 = 由于复用了DIDO驱动文件，207VC项目已经编译不过了，这个在未来需要逐步删掉
 = 系统成207VC改为207VG以后，发现系统跑如HardwareFault死机。将任务堆栈从600改为800，FreeRTOS的TOTAL_HEAP_SIZE从0xAC00改为0xCC00，整体编译后的RAM占用
   从90KB上升到100KB左右，整个系统跑稳定了
+= 为了测试目的，将周期性上报时钟长度TIMER_ID_1S_CCL_EVENT_REPORT_PEROID_SCAN从600改为60（1分钟），最终需要改为8H = 28800
+= I2C倾角传感器得到验证
+
 
 
 

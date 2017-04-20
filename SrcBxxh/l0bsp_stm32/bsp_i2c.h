@@ -80,6 +80,8 @@ uint8_t            ihu_bsp_stm32_i2c_mpu6050_read_data(uint16_t Addr, uint8_t Re
 HAL_StatusTypeDef  ihu_bsp_stm32_i2c_mpu6050_read_buffer(uint16_t Addr, uint8_t Reg, uint16_t RegSize, uint8_t *pBuffer, uint16_t Length);
 HAL_StatusTypeDef  ihu_bsp_stm32_i2c_mpu6050_is_device_ready(uint16_t DevAddress, uint32_t Trials);
 
+//外部引用API
+//extern void I2C_BSP_STM32_MPU6050_Error (void);
 
 #ifdef __cplusplus
 }

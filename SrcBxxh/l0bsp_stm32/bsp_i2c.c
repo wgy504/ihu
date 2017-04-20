@@ -254,15 +254,15 @@ void HAL_I2C_RxCpltCallback(I2C_HandleTypeDef *I2cHandle)
   * 返 回 值: 无
   * 说    明: 一般在I2C通信超时时调用该函数
   */
-static void I2C_BSP_STM32_MPU6050_Error (void)
-{
+//static void I2C_BSP_STM32_MPU6050_Error (void)
+//{
 //  /* 反初始化I2C通信总线 */
 //  HAL_I2C_DeInit(&IHU_BSP_STM32_I2C_MPU6050_HANDLER);
 //  
 //  /* 重新初始化I2C通信总线*/
 //  MX_I2C1_Init();
 //	//考虑到这里需要重新初始化，不再真正执行重新初始化
-}
+//}
 
 
 /**
