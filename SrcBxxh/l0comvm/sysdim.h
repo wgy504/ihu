@@ -262,7 +262,7 @@
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 	#define IHU_SYSDIM_TASK_NBR_MAX 11
 	#define IHU_SYSDIM_TASK_NAME_LEN_MAX 12
-  #define IHU_SYSDIM_TASK_STACK_SIZE_MAX 600 //任务堆栈长度，非常重要，将影响HardFault陷入崩溃的产生
+  #define IHU_SYSDIM_TASK_STACK_SIZE_MAX 800 //任务堆栈长度，非常重要，将影响HardFault陷入崩溃的产生
 	//系统消息级
 	//maxmum state number and msg number in one task, no instance concept
 	//#define IHU_TASK_QUEUE_ID_START 1024

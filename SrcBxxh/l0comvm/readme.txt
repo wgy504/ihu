@@ -17,9 +17,8 @@
 
 //= ZJL, 2017 Apr.20, CURRENT_SW_DELIVERY R03.129 =>CCL项目
 = 由于复用了DIDO驱动文件，207VC项目已经编译不过了，这个在未来需要逐步删掉
-
-
-
+= 系统成207VC改为207VG以后，发现系统跑如HardwareFault死机。将任务堆栈从600改为800，FreeRTOS的TOTAL_HEAP_SIZE从0xAC00改为0xCC00，整体编译后的RAM占用
+  从90KB上升到100KB左右，整个系统跑稳定了
 
 
 
