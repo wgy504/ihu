@@ -21,8 +21,9 @@
   从90KB上升到100KB左右，整个系统跑稳定了
 = 为了测试目的，将周期性上报时钟长度TIMER_ID_1S_CCL_EVENT_REPORT_PEROID_SCAN从600改为60（1分钟），最终需要改为8H = 28800
 = I2C倾角传感器得到验证
-
-
+= SMOKE暂时未装MQ2
+= 震动传感器GPIO口正常
+= DHT11温湿度不正常：PD0一直处于高电平状态，无法拉低，所以相当于DHT11没反应，程序出错退出
 
 
 //= ZJL, 2017 Apr.8, CURRENT_SW_DELIVERY R03.128 =>CCL项目

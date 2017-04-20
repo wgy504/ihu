@@ -25,8 +25,10 @@ int16_t ihu_bsp_stm32_dido_f2board_dht11_temp_read(void)
 	StrDht11DataTypeDef_t output;
 	memset(&output, 0, sizeof(StrDht11DataTypeDef_t));
 	if (func_bsp_stm32_dido_dht11_read_temp_and_humidity(&output) == SUCCESS){
+		IHU_DEBUG_PRINT_FAT("BSP_DIDO: Temperature Read result = %d\n", output.temperature*100);
 		return (int16_t)(output.temperature*100);
 	}else{
+		IHU_DEBUG_PRINT_FAT("BSP_DIDO: Temperature Read result = %d\n", 0xFFFF);
 		return 0xFFFF;
 	}
 }
@@ -37,8 +39,10 @@ int16_t ihu_bsp_stm32_dido_f2board_dht11_humid_read(void)
 	StrDht11DataTypeDef_t output;
 	memset(&output, 0, sizeof(StrDht11DataTypeDef_t));
 	if (func_bsp_stm32_dido_dht11_read_temp_and_humidity(&output) == SUCCESS){
+		IHU_DEBUG_PRINT_FAT("BSP_DIDO: Humidity Read result = %d\n", output.humidity*100);
 		return (int16_t)(output.humidity*100);
 	}else{
+		IHU_DEBUG_PRINT_FAT("BSP_DIDO: Humidity Read result = %d\n", 0xFFFF);
 		return 0xFFFF;
 	}
 }
@@ -67,6 +71,7 @@ int16_t ihu_bsp_stm32_dido_f2board_shake_read(void)
 	res[0] = ((BSP_STM32_DIDO_SHAKE_READ == GPIO_PIN_RESET)?1:-1);
 
 	total = res[0] + res[1] + res[2];
+	IHU_DEBUG_PRINT_FAT("BSP_DIDO: SHAKE Read result = %d\n", total);
 	
 	if (total > 0)
 		return FALSE;
@@ -76,7 +81,20 @@ int16_t ihu_bsp_stm32_dido_f2board_shake_read(void)
 
 int16_t ihu_bsp_stm32_dido_f2board_smoke_read(void)
 {
-	if (BSP_STM32_DIDO_SMOKE_READ == GPIO_PIN_RESET)
+	int8_t res[3];
+	int8_t total = 0;
+	
+	memset(res, 0, sizeof(res));
+	res[0] = ((BSP_STM32_DIDO_SMOKE_READ == GPIO_PIN_RESET)?1:-1);
+	ihu_usleep(100);
+	res[0] = ((BSP_STM32_DIDO_SMOKE_READ == GPIO_PIN_RESET)?1:-1);
+	ihu_usleep(100);
+	res[0] = ((BSP_STM32_DIDO_SMOKE_READ == GPIO_PIN_RESET)?1:-1);	
+	
+	total = res[0] + res[1] + res[2];
+	IHU_DEBUG_PRINT_FAT("BSP_DIDO: SMOKE Read result = %d\n", total);
+	
+	if (total < 0)
 		return FALSE;
 	else
 		return TRUE;
