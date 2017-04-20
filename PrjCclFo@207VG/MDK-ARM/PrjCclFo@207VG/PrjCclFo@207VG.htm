@@ -3,7 +3,7 @@
 <title>Static Call Graph - [PrjCclFo@207VG\PrjCclFo@207VG.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image PrjCclFo@207VG\PrjCclFo@207VG.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Wed Apr 19 14:42:22 2017
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Thu Apr 20 09:13:23 2017
 <BR><P>
 <H3>Maximum Stack Usage =       2832 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -5275,8 +5275,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 </UL>
-<BR>[Called By]<UL><LI><a href="#[1ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_vmmw_rfidmod_nrf24l01_spi_read_id
-<LI><a href="#[22c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_rfidmod_nrf24l01_rx_mode
+<BR>[Called By]<UL><LI><a href="#[22c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_rfidmod_nrf24l01_rx_mode
 </UL>
 
 <P><STRONG><a name="[22a]"></a>ihu_bsp_stm32_spi_nrf24l01_cs_disable</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, bsp_spi.o(i.ihu_bsp_stm32_spi_nrf24l01_cs_disable))
@@ -5961,14 +5960,13 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_spsvirgo_ccl_open_auth_inq
 </UL>
 
-<P><STRONG><a name="[1ac]"></a>ihu_vmmw_rfidmod_nrf24l01_spi_read_id</STRONG> (Thumb, 170 bytes, Stack size 24 bytes, vmmw_rfid.o(i.ihu_vmmw_rfidmod_nrf24l01_spi_read_id))
+<P><STRONG><a name="[1ac]"></a>ihu_vmmw_rfidmod_nrf24l01_spi_read_id</STRONG> (Thumb, 166 bytes, Stack size 24 bytes, vmmw_rfid.o(i.ihu_vmmw_rfidmod_nrf24l01_spi_read_id))
 <BR><BR>[Stack]<UL><LI>Max Depth = 480<LI>Call Chain = ihu_vmmw_rfidmod_nrf24l01_spi_read_id &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[179]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_usleep
 <LI><a href="#[f1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_sleep
 <LI><a href="#[ec]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
 <LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
-<LI><a href="#[22d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_spi_nrf24l01_ce_low
 <LI><a href="#[230]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_rfidmod_nrf24l01_rx_package
 <LI><a href="#[22c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_rfidmod_nrf24l01_rx_mode
 <LI><a href="#[225]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_rfidmod_nrf24l01_check
