@@ -362,7 +362,8 @@ static void func_bsp_stm32_dido_dht11_mode_out_PP(void)
   /* 串口外设功能GPIO配置 */
   GPIO_InitStruct.Pin = BSP_STM32_DIDO_DHT11_GPIO_PIN;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(BSP_STM32_DIDO_DHT11_GPIO, &GPIO_InitStruct); 	 
 }
 
