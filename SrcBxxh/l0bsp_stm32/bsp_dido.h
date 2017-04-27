@@ -32,7 +32,8 @@ typedef struct StrDht11DataTypeDef
   float    humidity;        //实际湿度
   float    temperature;     //实际温度  
 }StrDht11DataTypeDef_t;	
-	
+
+extern int dido_time_base;
 
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 //本地定义的交换矩阵	

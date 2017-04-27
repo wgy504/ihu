@@ -15,8 +15,6 @@
 
 //本地全局变量
 
-
-
 /* 函数体 --------------------------------------------------------------------*/
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 //该传感器的具体读数：以两位数表达的整数
@@ -24,8 +22,11 @@ int16_t ihu_bsp_stm32_dido_f2board_dht11_temp_read(void)
 {
 	StrDht11DataTypeDef_t output;
 	memset(&output, 0, sizeof(StrDht11DataTypeDef_t));
+	ihu_usleep(100);
+	ihu_bsp_stm32_dido_ds18b20_init();
+	ihu_usleep(100);
 	if (func_bsp_stm32_dido_dht11_read_temp_and_humidity(&output) == SUCCESS){
-		IHU_DEBUG_PRINT_FAT("BSP_DIDO: Temperature Read result = %d\n", output.temperature*100);
+		IHU_DEBUG_PRINT_FAT("BSP_DIDO: Temperature Read result = %4.1f\n", output.temperature);
 		return (int16_t)(output.temperature*100);
 	}else{
 		IHU_DEBUG_PRINT_FAT("BSP_DIDO: Temperature Read result = %d\n", 0xFFFF);
@@ -38,8 +39,11 @@ int16_t ihu_bsp_stm32_dido_f2board_dht11_humid_read(void)
 {
 	StrDht11DataTypeDef_t output;
 	memset(&output, 0, sizeof(StrDht11DataTypeDef_t));
+	ihu_usleep(100);
+	ihu_bsp_stm32_dido_ds18b20_init();
+	ihu_usleep(100);
 	if (func_bsp_stm32_dido_dht11_read_temp_and_humidity(&output) == SUCCESS){
-		IHU_DEBUG_PRINT_FAT("BSP_DIDO: Humidity Read result = %d\n", output.humidity*100);
+		IHU_DEBUG_PRINT_FAT("BSP_DIDO: Humidity Read result = %4.1f\n", output.humidity);
 		return (int16_t)(output.humidity*100);
 	}else{
 		IHU_DEBUG_PRINT_FAT("BSP_DIDO: Humidity Read result = %d\n", 0xFFFF);
@@ -301,19 +305,25 @@ void ihu_bsp_stm32_dido_f2board_ble_atcmd_mode_ctrl_off(void)
 
 
 //公共函数
-
+//在207VC评估板的情况下，下面的常量采用10，工作正常
+//在207VG自己板子的情况下，下面的常量改为20，工作才正常
+//在官方参考例子中，主频使用72MHz
+//在我们自己的207VC/207VG中，均采用了120MHz的HCLK主频
+//为什么有这种差异，待调查情况
+//猜测可能跟HCLK的SysTick相关
 static void DHT11_Delay(uint16_t time)
 {
 	uint8_t i;
 
   while(time)
   {    
-	  for (i = 0; i < 10; i++)
+	  for (i = 0; i < 20; i++)
     {
       
     }
     time--;
   }
+	//ihu_usleep(time);
 }
 
 /**
@@ -344,7 +354,7 @@ static void func_bsp_stm32_dido_dht11_mode_IPU(void)
   /* 串口外设功能GPIO配置 */
   GPIO_InitStruct.Pin   = BSP_STM32_DIDO_DHT11_GPIO_PIN;
   GPIO_InitStruct.Mode  = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull  = GPIO_PULLUP;
+  //GPIO_InitStruct.Pull  = GPIO_PULLUP; //GPIO_PULLDOWN; //GPIO_NOPULL; //GPIO_PULLUP;
   HAL_GPIO_Init(BSP_STM32_DIDO_DHT11_GPIO, &GPIO_InitStruct);
 	
 }
@@ -425,17 +435,16 @@ uint8_t func_bsp_stm32_dido_dht11_read_temp_and_humidity(StrDht11DataTypeDef_t *
 	/*主机拉低*/
 	BSP_STM32_DIDO_DHT11_Dout_LOW();
 	/*延时18ms*/
-	ihu_usleep(18);
+	ihu_usleep(28);
 
 	/*总线拉高 主机延时30us*/
 	BSP_STM32_DIDO_DHT11_Dout_HIGH(); 
-
 	DHT11_Delay(30);   //延时30us
 
 	/*主机设为输入 判断从机响应信号*/ 
 	func_bsp_stm32_dido_dht11_mode_IPU();
 
-	/*判断从机是否有低电平响应信号 如不响应则跳出，响应则向下运行*/   
+	/*判断从机是否有低电平响应信号 如不响应则跳出，响应则向下运行*/
 	if(BSP_STM32_DIDO_DHT11_Data_IN()==GPIO_PIN_RESET)     
 	{
     /*轮询直到从机发出 的80us 低电平 响应信号结束*/  
@@ -470,11 +479,17 @@ uint8_t func_bsp_stm32_dido_dht11_read_temp_and_humidity(StrDht11DataTypeDef_t *
     { 
       return SUCCESS;
     }
-    else 
+    else
+		{
+			IHU_DEBUG_PRINT_IPT("BSP_DIDO: Read DHT11 data error!\n");
       return ERROR;
+		}
 	}	
 	else
+	{
+		IHU_DEBUG_PRINT_IPT("BSP_DIDO: DHT11 no reaponse!\n");
 		return ERROR;
+	}
 }
 
 
