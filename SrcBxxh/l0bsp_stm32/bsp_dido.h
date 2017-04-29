@@ -48,8 +48,10 @@ extern int dido_time_base;
 	#define BSP_STM32_DIDO_SMOKE_GPIO												CUBEMX_PIN_F2_GPIO_DI_SMOKE_SENSOR_GPIO_Port         
 	#define BSP_STM32_DIDO_WATER_GPIO_PIN										CUBEMX_PIN_F2_GPIO_DI_WATER_SENSOR_Pin               
 	#define BSP_STM32_DIDO_WATER_GPIO												CUBEMX_PIN_F2_GPIO_DI_WATER_SENSOR_GPIO_Port
-	#define BSP_STM32_DIDO_GPRSMOD_PWR_CTRL_GPIO_PIN				CUBEMX_PIN_F2_DO_GPRSMOD_PWR_Pin                     
-	#define BSP_STM32_DIDO_GPRSMOD_PWR_CTRL_GPIO						CUBEMX_PIN_F2_DO_GPRSMOD_PWR_GPIO_Port               
+	#define BSP_STM32_DIDO_GPRSMOD_PWR_SUPPLY_GPIO_PIN			CUBEMX_PIN_F2_DO_GPRSMOD_PWR_SUPPLY_Pin
+  #define BSP_STM32_DIDO_GPRSMOD_PWR_SUPPLY_GPIO					CUBEMX_PIN_F2_DO_GPRSMOD_PWR_SUPPLY_GPIO_Port               
+	#define BSP_STM32_DIDO_GPRSMOD_PWR_KEY_GPIO_PIN				  CUBEMX_PIN_F2_DO_GPRSMOD_PWR_KEY_Pin
+  #define BSP_STM32_DIDO_GPRSMOD_PWR_KEY_GPIO						  CUBEMX_PIN_F2_DO_GPRSMOD_PWR_KEY_GPIO_Port               
 	#define BSP_STM32_DIDO_BLE_PWR_CTRL_GPIO_PIN						CUBEMX_PIN_F2_DO_BLE_PWR_Pin                         
 	#define BSP_STM32_DIDO_BLE_PWR_CTRL_GPIO								CUBEMX_PIN_F2_DO_BLE_PWR_GPIO_Port                   
 	#define BSP_STM32_DIDO_RFID_PWR_CTRL_GPIO_PIN						CUBEMX_PIN_F2_DO_RFID_PWR_Pin                        
@@ -152,8 +154,10 @@ extern int dido_time_base;
 	#define BSP_STM32_DIDO_LOCK4_DO1_ON             HAL_GPIO_WritePin(BSP_STM32_DIDO_LOCK4_DO1_GPIO, BSP_STM32_DIDO_LOCK4_DO1_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
 	#define BSP_STM32_DIDO_LOCK4_DO1_OFF            HAL_GPIO_WritePin(BSP_STM32_DIDO_LOCK4_DO1_GPIO, BSP_STM32_DIDO_LOCK4_DO1_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
 	#define BSP_STM32_DIDO_DOOR4_RESTRICTION_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_DOOR4_RESTRICTION_GPIO, BSP_STM32_DIDO_DOOR4_RESTRICTION_GPIO_PIN)
-	#define BSP_STM32_DIDO_GPRSMOD_PWR_CTRL_ON      HAL_GPIO_WritePin(BSP_STM32_DIDO_GPRSMOD_PWR_CTRL_GPIO, BSP_STM32_DIDO_GPRSMOD_PWR_CTRL_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
-	#define BSP_STM32_DIDO_GPRSMOD_PWR_CTRL_OFF     HAL_GPIO_WritePin(BSP_STM32_DIDO_GPRSMOD_PWR_CTRL_GPIO, BSP_STM32_DIDO_GPRSMOD_PWR_CTRL_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
+	#define BSP_STM32_DIDO_GPRSMOD_PWR_SUPPLY_ON    HAL_GPIO_WritePin(BSP_STM32_DIDO_GPRSMOD_PWR_SUPPLY_GPIO, BSP_STM32_DIDO_GPRSMOD_PWR_SUPPLY_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
+	#define BSP_STM32_DIDO_GPRSMOD_PWR_SUPPLY_OFF   HAL_GPIO_WritePin(BSP_STM32_DIDO_GPRSMOD_PWR_SUPPLY_GPIO, BSP_STM32_DIDO_GPRSMOD_PWR_SUPPLY_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
+	#define BSP_STM32_DIDO_GPRSMOD_PWR_KEY_ON       HAL_GPIO_WritePin(BSP_STM32_DIDO_GPRSMOD_PWR_KEY_GPIO, BSP_STM32_DIDO_GPRSMOD_PWR_KEY_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
+	#define BSP_STM32_DIDO_GPRSMOD_PWR_KEY_OFF      HAL_GPIO_WritePin(BSP_STM32_DIDO_GPRSMOD_PWR_KEY_GPIO, BSP_STM32_DIDO_GPRSMOD_PWR_KEY_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
 	#define BSP_STM32_DIDO_BLE_PWR_CTRL_ON      		HAL_GPIO_WritePin(BSP_STM32_DIDO_BLE_PWR_CTRL_GPIO, BSP_STM32_DIDO_BLE_PWR_CTRL_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
 	#define BSP_STM32_DIDO_BLE_PWR_CTRL_OFF     		HAL_GPIO_WritePin(BSP_STM32_DIDO_BLE_PWR_CTRL_GPIO, BSP_STM32_DIDO_BLE_PWR_CTRL_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
 	#define BSP_STM32_DIDO_RFID_PWR_CTRL_ON      		HAL_GPIO_WritePin(BSP_STM32_DIDO_RFID_PWR_CTRL_GPIO, BSP_STM32_DIDO_RFID_PWR_CTRL_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
@@ -193,8 +197,10 @@ extern int dido_time_base;
 	extern void ihu_bsp_stm32_dido_f2board_lock4_do1_on(void);
 	extern void ihu_bsp_stm32_dido_f2board_lock4_do1_off(void);
 	extern int16_t ihu_bsp_stm32_dido_f2board_door4_restriction_read(void);
-	extern void ihu_bsp_stm32_dido_f2board_gprsmod_power_ctrl_on(void);
-	extern void ihu_bsp_stm32_dido_f2board_gprsmod_power_ctrl_off(void);
+	extern void ihu_bsp_stm32_dido_f2board_gprsmod_power_supply_on(void);
+	extern void ihu_bsp_stm32_dido_f2board_gprsmod_power_supply_off(void);
+	extern void ihu_bsp_stm32_dido_f2board_gprsmod_power_key_on(void);
+	extern void ihu_bsp_stm32_dido_f2board_gprsmod_power_key_off(void);
 	extern void ihu_bsp_stm32_dido_f2board_ble_power_ctrl_on(void);
 	extern void ihu_bsp_stm32_dido_f2board_ble_power_ctrl_off(void);
 	extern void ihu_bsp_stm32_dido_f2board_rfid_power_ctrl_on(void);

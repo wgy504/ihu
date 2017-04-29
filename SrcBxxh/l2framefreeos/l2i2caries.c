@@ -449,6 +449,7 @@ OPSTAT fsm_i2caries_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * pa
 		IHU_DEBUG_PRINT_IPT("I2CARIES: Fall Angle Read Result = [%4.2f]\n", (snd.sensor.rsv1Value*1.0)/100.0);
 	}else{
 		snd.sensor.rsv1Value = 0;
+		IHU_DEBUG_PRINT_IPT("I2CARIES: Fall Angle Read Result error!\n");
 	}
 	
 	snd.length = sizeof(msg_struct_i2c_ccl_sensor_status_rep_t);
