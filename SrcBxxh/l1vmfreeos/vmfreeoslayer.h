@@ -740,8 +740,10 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_dido_f2board_lock4_do1_on             ihu_bsp_stm32_dido_f2board_lock4_do1_on          
 #define ihu_l1hd_dido_f2board_lock4_do1_off            ihu_bsp_stm32_dido_f2board_lock4_do1_off         
 #define ihu_l1hd_dido_f2board_door4_restriction_read   ihu_bsp_stm32_dido_f2board_door4_restriction_read
-#define ihu_l1hd_dido_f2board_gprsmod_power_ctrl_on    ihu_bsp_stm32_dido_f2board_gprsmod_power_ctrl_on 
-#define ihu_l1hd_dido_f2board_gprsmod_power_ctrl_off   ihu_bsp_stm32_dido_f2board_gprsmod_power_ctrl_off
+#define ihu_l1hd_dido_f2board_gprsmod_power_supply_on  ihu_bsp_stm32_dido_f2board_gprsmod_power_supply_on 
+#define ihu_l1hd_dido_f2board_gprsmod_power_supply_off ihu_bsp_stm32_dido_f2board_gprsmod_power_supply_off
+#define ihu_l1hd_dido_f2board_gprsmod_power_key_on     ihu_bsp_stm32_dido_f2board_gprsmod_power_key_on 
+#define ihu_l1hd_dido_f2board_gprsmod_power_key_off    ihu_bsp_stm32_dido_f2board_gprsmod_power_key_off
 #define ihu_l1hd_dido_f2board_ble_power_ctrl_on        ihu_bsp_stm32_dido_f2board_ble_power_ctrl_on     
 #define ihu_l1hd_dido_f2board_ble_power_ctrl_off       ihu_bsp_stm32_dido_f2board_ble_power_ctrl_off    
 #define ihu_l1hd_dido_f2board_rfid_power_ctrl_on       ihu_bsp_stm32_dido_f2board_rfid_power_ctrl_on    

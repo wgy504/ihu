@@ -962,7 +962,13 @@ OPSTAT fsm_ccl_sps_fault_report_cfm(UINT8 dest_id, UINT8 src_id, void * param_pt
 //打开所有的外设
 void func_ccl_open_all_sensor(void)
 {
-	ihu_l1hd_dido_f2board_gprsmod_power_ctrl_on();
+	//GPRS模块必须先上电，然后RST拉低2S的方波
+	ihu_l1hd_dido_f2board_gprsmod_power_supply_on();
+	ihu_usleep(100);
+	ihu_l1hd_dido_f2board_gprsmod_power_key_off();
+	ihu_sleep(2);
+	ihu_l1hd_dido_f2board_gprsmod_power_key_on();
+	//BLE等外设电源
 	ihu_l1hd_dido_f2board_ble_power_ctrl_on();
 	ihu_l1hd_dido_f2board_rfid_power_ctrl_on();
 	ihu_l1hd_dido_f2board_sensor_power_ctrl_on();
@@ -974,7 +980,13 @@ void func_ccl_open_all_sensor(void)
 //关掉所有的外设
 void func_ccl_close_all_sensor(void)
 {
-	ihu_l1hd_dido_f2board_gprsmod_power_ctrl_off();
+	//GPRSMOD的关电：先关闭POWER_KEY，防止数据丢失，然后再下电
+	ihu_l1hd_dido_f2board_gprsmod_power_key_off();
+	ihu_sleep(2);
+	ihu_l1hd_dido_f2board_gprsmod_power_key_on();
+	ihu_usleep(100);
+	ihu_l1hd_dido_f2board_gprsmod_power_supply_off();
+	//BLE等外设关电
 	ihu_l1hd_dido_f2board_ble_power_ctrl_off();	
 	ihu_l1hd_dido_f2board_rfid_power_ctrl_off();
 	ihu_l1hd_dido_f2board_sensor_power_ctrl_off();

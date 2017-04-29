@@ -480,7 +480,7 @@ OPSTAT fsm_didocap_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * par
 	}
 	snd.sensor.smokeState = ((rand()%2 == 0)?IHU_CCL_SENSOR_STATE_DEACTIVE:IHU_CCL_SENSOR_STATE_ACTIVE);
 	snd.sensor.waterState = ((rand()%2 == 0)?IHU_CCL_SENSOR_STATE_DEACTIVE:IHU_CCL_SENSOR_STATE_ACTIVE);
-	snd.sensor.fallState = ((rand()%2 == 0)?IHU_CCL_SENSOR_STATE_DEACTIVE:IHU_CCL_SENSOR_STATE_ACTIVE);
+	snd.sensor.fallState = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_fall_state() == FALSE)?IHU_CCL_SENSOR_STATE_DEACTIVE:IHU_CCL_SENSOR_STATE_ACTIVE);
 	snd.sensor.batteryState = ((rand()%2 == 0)?IHU_CCL_SENSOR_STATE_DEACTIVE:IHU_CCL_SENSOR_STATE_ACTIVE);	
 	snd.sensor.tempValue = rand()%100;
 	snd.sensor.humidValue = rand()%100;

@@ -248,15 +248,26 @@ int16_t ihu_bsp_stm32_dido_f2board_door4_restriction_read(void)
 		return TRUE;		
 }   	
 
-void ihu_bsp_stm32_dido_f2board_gprsmod_power_ctrl_on(void)
+void ihu_bsp_stm32_dido_f2board_gprsmod_power_supply_on(void)
 {
-    BSP_STM32_DIDO_GPRSMOD_PWR_CTRL_ON;
+    BSP_STM32_DIDO_GPRSMOD_PWR_SUPPLY_ON;
 }
 
-void ihu_bsp_stm32_dido_f2board_gprsmod_power_ctrl_off(void)
+void ihu_bsp_stm32_dido_f2board_gprsmod_power_supply_off(void)
 {
-    BSP_STM32_DIDO_GPRSMOD_PWR_CTRL_OFF;
+    BSP_STM32_DIDO_GPRSMOD_PWR_SUPPLY_OFF;
 }
+
+void ihu_bsp_stm32_dido_f2board_gprsmod_power_key_on(void)
+{
+    BSP_STM32_DIDO_GPRSMOD_PWR_KEY_ON;
+}
+
+void ihu_bsp_stm32_dido_f2board_gprsmod_power_key_off(void)
+{
+    BSP_STM32_DIDO_GPRSMOD_PWR_KEY_OFF;
+}
+
 
 void ihu_bsp_stm32_dido_f2board_ble_power_ctrl_on(void)
 {
