@@ -137,6 +137,8 @@ int main(void)
 	bsp_can_init(&hcan1, 0x10);
 	HAL_CAN_Receive_IT(&hcan1, 0);
 	
+	CS5532Init();
+	
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */

@@ -59,7 +59,8 @@ void ihu_bsp_stm32_adc1_stop(void)
 //In normal mode
 int ihu_bsp_stm32_adc1_get_sample_value(void)
 {
-	return HAL_ADC_GetValue(&IHU_BSP_STM32_ADC1_HANDLER);
+	//return HAL_ADC_GetValue(&IHU_BSP_STM32_ADC1_HANDLER);
+	return ReadSeriesADValue();  //MYC
 }
 
 //In normal mode
