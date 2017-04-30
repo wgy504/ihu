@@ -47,6 +47,7 @@
 #include "adc.h"
 #include "can.h"
 #include "crc.h"
+#include "dac.h"
 #include "dma.h"
 #include "i2c.h"
 #include "rtc.h"
@@ -123,6 +124,7 @@ int main(void)
   MX_TIM7_Init();
   MX_TIM6_Init();
   MX_TIM1_Init();
+  MX_DAC_Init();
 
   /* Initialize interrupts */
   MX_NVIC_Init();
