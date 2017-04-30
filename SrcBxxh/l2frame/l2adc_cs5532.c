@@ -3,25 +3,25 @@
 #include "main.h"
 
 typedef struct Structuint32_t
-      {
-       unsigned char  uint8_t_3;
-       unsigned char  uint8_t_2;
-       unsigned char  uint8_t_1;
-       unsigned char  uint8_t_0;
-      }uint32_tStruct1;
+{
+		 unsigned char  uint8_t_3;
+		 unsigned char  uint8_t_2;
+		 unsigned char  uint8_t_1;
+		 unsigned char  uint8_t_0;
+}uint32_tStruct1;
 
 typedef union Unionuint32_t
-      {
-        uint32_tStruct1         uint32_tStruct;
-        unsigned int          uint32_tData;
-      }uint32_tUnion;
+{
+			uint32_tStruct1         uint32_tStruct;
+			unsigned int          uint32_tData;
+}uint32_tUnion;
 			
 /*转换速率　　　0～9   0:120    1:60    2:30    3:15    4:7.5    5:3840    6:1920    7:960    8:480    9:240*/
-uint8_t  CollectionFF =       0x01      ;          //采样频率
+uint8_t  CollectionFF =       0x00      ;          //采样频率
 /*通道0增益     0～6   0:1  1:2  2:4  3:8  4:16  5:32  6:64*/ 
-uint8_t  Chan0Gain    =       0x04;
+uint8_t  Chan0Gain    =       0x05;
 
-SPI_HandleTypeDef SpiHandle;
+//SPI_HandleTypeDef hspi3;
 			
 /*
 ** ====================================================================
@@ -75,9 +75,10 @@ uint32_t WeightSensorReadCurrent(void);
 
 void AD_delay(uint32_t val)
 {
-  while(val--)
-  {
-  }
+//  while(val--)
+//  {
+//  }
+	HAL_Delay(val);
 }
 /****************************************************************************
 * 名称：MSPI0_WR_Data()
@@ -88,7 +89,7 @@ void AD_delay(uint32_t val)
 ****************************************************************************/
 uint8_t MSPI0_WR_Data(uint8_t send_data)
 {
-	 HAL_SPI_Transmit(&SpiHandle,&send_data,1,1);
+	 HAL_SPI_Transmit(&hspi3,&send_data,1,1);
    return(0);
 }
 /****************************************************************************
@@ -103,7 +104,7 @@ uint8_t MSPI0_RD_Data()
   uint8_t rec;
 	uint8_t send = 0x00;
 	
-	HAL_SPI_TransmitReceive(&SpiHandle, (uint8_t*)&send, (uint8_t *)&rec, 1, 1);
+	HAL_SPI_TransmitReceive(&hspi3, (uint8_t*)&send, (uint8_t *)&rec, 1, 1);
 
   return(rec);
 }
@@ -602,7 +603,7 @@ uint32_t ReadSeriesADValue(void)
 
     MSPI0_WR_Data(0x00);
     TempData = CS5532ReadData();
-	TempData = TempData >> 8;
+		TempData = TempData >> 8;
 
     return TempData;
 }              
@@ -660,13 +661,13 @@ void  InitCS5532(void)
 	Set_CS5532();
 	for(i=0;i<100;i++)
     { 
-	   AD_delay(200);
+	   AD_delay(1);
 	}
 
     Clr_CS5532();
     for(i=0;i<100;i++)
     { 
-	   AD_delay(200);
+	   AD_delay(1);
     }
 
 	/*使系统进入命令模式*/
@@ -679,13 +680,13 @@ void  InitCS5532(void)
    /*转换速率　0～9   0:120    1:60    2:30    3:15    4:7.5    5:3840    6:1920    7:960    8:480    9:240 */
 		
     WriteChannelSetupRegEx(0,0,Chan0Gain,CollectionFF,1,0);		//setup1:选择的物理通道1,增益4,双极性,字速率60sps
-    WriteChannelSetupRegEx(1,1,6,CollectionFF,0,1);;
-    WriteChannelSetupRegEx(2,1,0,2,0,1);
-		WriteChannelSetupRegEx(3,1,0,2,0,1);
-    WriteChannelSetupRegEx(4,1,0,2,0,1);
-    WriteChannelSetupRegEx(5,1,0,2,0,1);
-    WriteChannelSetupRegEx(6,1,0,2,0,1);
-    WriteChannelSetupRegEx(7,1,0,2,0,1);
+//    WriteChannelSetupRegEx(1,1,6,CollectionFF,0,1);;
+//    WriteChannelSetupRegEx(2,1,0,2,0,1);
+//		WriteChannelSetupRegEx(3,1,0,2,0,1);
+//    WriteChannelSetupRegEx(4,1,0,2,0,1);
+//    WriteChannelSetupRegEx(5,1,0,2,0,1);
+//    WriteChannelSetupRegEx(6,1,0,2,0,1);
+//    WriteChannelSetupRegEx(7,1,0,2,0,1);
 
 
   /* 入口参数：CC  　　1:自偏移校准

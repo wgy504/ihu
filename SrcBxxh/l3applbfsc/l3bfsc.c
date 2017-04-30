@@ -382,12 +382,20 @@ OPSTAT fsm_bfsc_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 OPSTAT func_bfsc_time_out_period_scan(void)
 {
 	int ret = 0;
+	uint32_t tempVal = 0;
 	
 	//发送HeartBeat消息给VMFO模块，实现喂狗功能
 	msg_struct_com_heart_beat_t snd;
 	memset(&snd, 0, sizeof(msg_struct_com_heart_beat_t));
 	snd.length = sizeof(msg_struct_com_heart_beat_t);
 	ret = ihu_message_send(MSG_ID_COM_HEART_BEAT, TASK_ID_VMFO, TASK_ID_BFSC, &snd, snd.length);
+	
+	//读取假数据
+	//需要直接访问ADC的HAL函数
+	//tempVal = rand() % 1000;  // MYC comment 2017/04/30 
+	tempVal = ihu_l1hd_adc_bfsc_get_value(); // MYC added 2017/04/30
+	IhuDebugPrint("ADCLIBRA: func_bfsc_time_out_period_scan: tempVal = 0x%x\n", tempVal);
+	
 	if (ret == IHU_FAILURE){
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_BFSC]++;
 		IhuErrorPrint("BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_VMFO].taskName);
