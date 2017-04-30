@@ -635,6 +635,16 @@
               <FileType>1</FileType>
               <FilePath>../Src/stm32f2xx_hal_timebase_TIM.c</FilePath>
             </File>
+            <File>
+              <FileName>blk230.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\blk230.c</FilePath>
+            </File>
+            <File>
+              <FileName>pca8547a.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\pca8547a.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
