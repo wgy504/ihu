@@ -446,9 +446,9 @@ typedef struct WmcInventory
 	UINT32 stm32_cpu_id;
 	UINT32 weight_sensor_type;
 	UINT32 motor_type;
-	UINT8  wmc_id;               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */
-	UINT8  spare1;
-	UINT16 spare2;
+	UINT32 wmc_id;               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */
+	UINT32 spare1;
+	UINT32 spare2;
 }WmcInventory_t;
 
 typedef struct msg_struct_l3bfsc_wmc_startup_ind
@@ -711,7 +711,7 @@ typedef struct msg_struct_l3bfsc_wmc_msg_header
 #define		AWS_CAN_ID_PREFIX												(0x600U)
 #define		WMC_CAN_ID_PREFIX												(0x400U)
 #define		AWS_CAN_ID_SUFFIX												(0x001U)
-#define		WMC_CAN_ID_SUFFIX												(0x001U)
+#define		WMC_CAN_ID_SUFFIX												((zWmcInvenory.wmc_id&0x2F))
 #define		AWS_CAN_ID															((AWS_CAN_ID_PREFIX)|(AWS_CAN_ID_SUFFIX))
 #define		WMC_CAN_ID															((AWS_CAN_ID_PREFIX)|(AWS_CAN_ID_SUFFIX))
 

@@ -3,7 +3,7 @@
 <title>Static Call Graph - [PrjBfscFo@207VG\PrjBfscFo@207VG.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image PrjBfscFo@207VG\PrjBfscFo@207VG.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Sun Apr 30 17:49:23 2017
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Mon May 01 00:18:28 2017
 <BR><P>
 <H3>Maximum Stack Usage =       1328 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1017,7 +1017,7 @@ Global Symbols
 <LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_bfsc_canvela_init_req
 </UL>
 
-<P><STRONG><a name="[e5]"></a>GetWmcId</STRONG> (Thumb, 86 bytes, Stack size 16 bytes, l3bfsc.o(i.GetWmcId))
+<P><STRONG><a name="[e5]"></a>GetWmcId</STRONG> (Thumb, 136 bytes, Stack size 16 bytes, l3bfsc.o(i.GetWmcId))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = GetWmcId &rArr; HAL_GPIO_ReadPin
 </UL>
 <BR>[Calls]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
@@ -2844,8 +2844,8 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> l3bfsc.o(.data)
 </UL>
-<P><STRONG><a name="[36]"></a>fsm_bfsc_init</STRONG> (Thumb, 492 bytes, Stack size 128 bytes, l3bfsc.o(i.fsm_bfsc_init))
-<BR><BR>[Stack]<UL><LI>Max Depth = 1136<LI>Call Chain = fsm_bfsc_init &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<P><STRONG><a name="[36]"></a>fsm_bfsc_init</STRONG> (Thumb, 492 bytes, Stack size 136 bytes, l3bfsc.o(i.fsm_bfsc_init))
+<BR><BR>[Stack]<UL><LI>Max Depth = 1144<LI>Call Chain = fsm_bfsc_init &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
 <LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
@@ -2863,7 +2863,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> l3bfsc.o(.data)
 </UL>
 <P><STRONG><a name="[38]"></a>fsm_bfsc_restart</STRONG> (Thumb, 32 bytes, Stack size 8 bytes, l3bfsc.o(i.fsm_bfsc_restart))
-<BR><BR>[Stack]<UL><LI>Max Depth = 1144<LI>Call Chain = fsm_bfsc_restart &rArr; fsm_bfsc_init &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<BR><BR>[Stack]<UL><LI>Max Depth = 1152<LI>Call Chain = fsm_bfsc_restart &rArr; fsm_bfsc_init &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
 <LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
