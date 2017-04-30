@@ -150,8 +150,73 @@ void   ihu_bsp_stm32_led_f2board_timer_ind_negation (void)
   * 返 回 值: 无
   * 说    明：该函数使用类似HALA库函数的编程方法，方便理解HAL库函数编程思想。
   */
+
 #if ((IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID) || \
 	(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID))
+
+//void ihu_bsp_stm32_beep_f2board_on(void)
+//{
+//    BSP_STM32_BEEP_ON;/* 蜂鸣器响 */
+//}
+
+//void ihu_bsp_stm32_beep_f2board_off(void)
+//{
+//    BSP_STM32_BEEP_OFF;/* 蜂鸣器停 */
+//}
+
+//void ihu_bsp_stm32_beep_f2board_toggle(void)
+//{
+//    BSP_STM32_BEEP_TOGGLE;/* 蜂鸣器反转 */
+//}
+
+//void ihu_bsp_stm32_led_power_f2board_on(void)
+//{
+//    BSP_STM32_LED_POWER_ON;
+//}
+
+//void ihu_bsp_stm32_led_power_f2board_off(void)
+//{
+//    BSP_STM32_LED_POWER_OFF;
+//}
+
+//void ihu_bsp_stm32_led_power_f2board_toggle(void)
+//{
+//    BSP_STM32_LED_POWER_TOGGLE;
+//}
+
+void ihu_bsp_stm32_led_commu_f2board_on(void)
+{
+    BSP_STM32_LED_COMMU_ON;
+}
+
+void ihu_bsp_stm32_led_commu_f2board_off(void)
+{
+    BSP_STM32_LED_COMMU_OFF;
+}
+
+void ihu_bsp_stm32_led_commu_f2board_toggle(void)
+{
+    BSP_STM32_LED_COMMU_TOGGLE;
+}
+
+void ihu_bsp_stm32_led_work_state_f2board_on(void)
+{
+    BSP_STM32_LED_WORK_STATE_ON;
+}
+
+void ihu_bsp_stm32_led_work_state_f2board_off(void)
+{
+    BSP_STM32_LED_WORK_STATE_OFF;
+}
+
+void ihu_bsp_stm32_led_work_state_f2board_toggle(void)
+{
+    BSP_STM32_LED_WORK_STATE_TOGGLE;
+}
+#endif //#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+
+#if ((IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID))
+
 void ihu_bsp_stm32_beep_f2board_on(void)
 {
     BSP_STM32_BEEP_ON;/* 蜂鸣器响 */
@@ -230,34 +295,34 @@ void ihu_bsp_stm32_led_serv1_f2board_toggle(void)
     BSP_STM32_LED_SERV1_TOGGLE;
 }
 
-void ihu_bsp_stm32_led_serv2_f2board_on(void)
-{
-    BSP_STM32_LED_SERV2_ON;
-}
+//void ihu_bsp_stm32_led_serv2_f2board_on(void)
+//{
+//    BSP_STM32_LED_SERV2_ON;
+//}
 
-void ihu_bsp_stm32_led_serv2_f2board_off(void)
-{
-    BSP_STM32_LED_SERV2_OFF;
-}
+//void ihu_bsp_stm32_led_serv2_f2board_off(void)
+//{
+//    BSP_STM32_LED_SERV2_OFF;
+//}
 
-void ihu_bsp_stm32_led_serv2_f2board_toggle(void)
-{
-    BSP_STM32_LED_SERV2_TOGGLE;
-}
+//void ihu_bsp_stm32_led_serv2_f2board_toggle(void)
+//{
+//    BSP_STM32_LED_SERV2_TOGGLE;
+//}
 
-void ihu_bsp_stm32_led_serv3_f2board_on(void)
-{
-    BSP_STM32_LED_SERV3_ON;
-}
+//void ihu_bsp_stm32_led_serv3_f2board_on(void)
+//{
+//    BSP_STM32_LED_SERV3_ON;
+//}
 
-void ihu_bsp_stm32_led_serv3_f2board_off(void)
-{
-    BSP_STM32_LED_SERV3_OFF;
-}
+//void ihu_bsp_stm32_led_serv3_f2board_off(void)
+//{
+//    BSP_STM32_LED_SERV3_OFF;
+//}
 
-void ihu_bsp_stm32_led_serv3_f2board_toggle(void)
-{
-    BSP_STM32_LED_SERV3_TOGGLE;
-}
+//void ihu_bsp_stm32_led_serv3_f2board_toggle(void)
+//{
+//    BSP_STM32_LED_SERV3_TOGGLE;
+//}
 
 #endif

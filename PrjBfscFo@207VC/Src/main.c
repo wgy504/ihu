@@ -141,6 +141,12 @@ int main(void)
   //HAL_CAN_Receive_IT(&hcan2, 1);
 	bsp_can_init(&hcan1, 0x10);
 	HAL_CAN_Receive_IT(&hcan1, 0);
+	
+	
+	Set_CS5532();
+	CS5532Init();
+	printf("Init Success (SystemCoreClock = %d)...\r\n", SystemCoreClock);
+	
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */

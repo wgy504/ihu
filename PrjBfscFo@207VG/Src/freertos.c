@@ -217,10 +217,23 @@ void StartDefaultTask(void const * argument)
 {
 
   /* USER CODE BEGIN StartDefaultTask */
-  /* Infinite loop */
+	uint32_t temp;
+  
+	/* Infinite loop */
   for(;;)
   {
     osDelay(1);
+//		if(ReadWheChanOk())
+//		{
+//				temp = ReadSeriesADValue();
+//				printf("ReadValue = %x\n", temp);
+//		}		
+////		uint8_t send_data = 0x0B;
+////		HAL_SPI_Transmit(&SpiHandle,&send_data,1,0);
+////	  send_data = 0x00;
+////		HAL_SPI_Transmit(&SpiHandle,&send_data,1,0);		
+//		HAL_Delay(2000);
+		
   }
   /* USER CODE END StartDefaultTask */
 }
