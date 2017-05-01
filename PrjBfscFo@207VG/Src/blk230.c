@@ -47,6 +47,73 @@ int32_t blk230_init()
 	return HAL_OK;
 }
 
+void blk230_test_task(void const * argument)
+{
+	uint32_t testLoop = 0;
+	
+	PCA8574A_init();
+	blk230_init();
+	
+	while(1)
+	{
+		osDelay(1000);
+		
+		uint32_t rpm = 0;
+		/* 0~7: speed = 500, run, cw
+		* 8~15: speed = 2000, run, cw
+		* 16~23: speed = 0, stop
+		* 24~31: speed = 1000, run, ccw
+		*/
+		if((testLoop % 16) == 0)
+		{
+			rpm=100;
+			bufprint("start with speed %d rpm\n", rpm);
+			blk230_set_dc_speed(rpm);
+			blk230_set_stop(0);
+			blk230_set_brake(0);
+			blk230_set_ccw(0);
+		}
+		else if((testLoop % 16) == 4)
+		{
+			rpm=1000;
+			bufprint("start with speed %d rpm\n", rpm);
+			blk230_set_dc_speed(rpm);
+			blk230_set_stop(0);
+			blk230_set_brake(0);
+			blk230_set_ccw(0);
+		}
+		else if((testLoop % 16) == 8)
+		{
+			rpm=0;
+			bufprint("start with speed %d rpm\n", rpm);
+			blk230_set_dc_speed(rpm);
+			blk230_set_stop(1);
+			blk230_set_brake(0);
+			blk230_set_ccw(0);
+		}
+		else if((testLoop % 16) == 10)
+		{
+			rpm=200;
+			bufprint("start with speed %d rpm\n", rpm);
+			blk230_set_dc_speed(rpm);
+			blk230_set_stop(0);
+			blk230_set_brake(0);
+			blk230_set_ccw(1);
+		}
+		else if((testLoop % 16) == 14)
+		{
+			rpm=0;
+			bufprint("start with speed %d rpm\n", rpm);
+			blk230_set_dc_speed(rpm);
+			blk230_set_stop(1);
+			blk230_set_brake(0);
+			blk230_set_ccw(1);
+		}
+		
+		testLoop ++;
+	}
+}
+
 /*
  * motor task framework, TBD
  */
