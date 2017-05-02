@@ -7,6 +7,10 @@ extern "C" {
 
 #include "stm32f2xx_hal.h"
 	
+#include "l3bfsc.h"
+#include "l3bfsc_msg.h"
+#include "main.h"
+	
 ///* Definition for SPIx clock resources */
 //#define SPIx                             SPI3
 //#define SPIx_CLK_ENABLE()                __HAL_RCC_SPI3_CLK_ENABLE()
@@ -46,6 +50,9 @@ extern unsigned char  CollectionFF;          /*采样频率，默认0x09*/
 extern unsigned char  Chan0Gain;              /*默认0x02*/
 
 extern SPI_HandleTypeDef hspi3;
+
+extern WeightSensorParamaters_t					zWeightSensorParam;
+
 /**********************************************************************
 ***CS5532 ADC初始化
 **输入参数：IntEnable: 是否中断使能
@@ -75,6 +82,74 @@ extern   void         CS5532_SDO_ConfigSpi(void);
 **判断转换是否完成.1：完成。0:未完成
 ********************************************************/
 extern unsigned char   ReadWheChanOk(void);
+
+
+#define WEIGHT_SENSOR_NOT_INIT      0
+#define WEIGHT_SENSOR_HAD_INITED		1
+
+/* Initialize Sensor */
+uint32_t WeightSensorInit(WeightSensorParamaters_t *pwsp);
+
+/* Reconfig Sensor */
+uint32_t weightSensorConfig(WeightSensorParamaters_t *pwsp);
+
+/* Zero Load Sensor */
+uint32_t WeightSensorCalibrationZero(WeightSensorParamaters_t *pwsp);
+
+/* Full/Nominal Load Sensor */
+uint32_t WeightSensorCalibrationFull(WeightSensorParamaters_t *pwsp);
+
+/* Read Load Sensor */
+int32_t WeightSensorReadCurrent(WeightSensorParamaters_t *pwsp);
+
+/* mapping table */
+uint32_t SpsGainToBitwidthMapping(uint32_t gain_index, uint32_t wordrate_index);
+
+#define 		WORDRATE_INDEX_NUMBER						7
+#define 		GAIN_INDEX_NUMBER								10
+
+#define			ADC_AMPLIFIER_GAIN_1X						0
+#define			ADC_AMPLIFIER_GAIN_2X						1
+#define			ADC_AMPLIFIER_GAIN_4X						2
+#define			ADC_AMPLIFIER_GAIN_8X						3
+#define			ADC_AMPLIFIER_GAIN_16X					4
+#define			ADC_AMPLIFIER_GAIN_32X					5
+#define			ADC_AMPLIFIER_GAIN_64X					6
+
+#define			ADC_AMPLIFIER_WORDRATE_120SPS		0
+#define			ADC_AMPLIFIER_WORDRATE_60SPS		1
+#define			ADC_AMPLIFIER_WORDRATE_30SPS		2
+#define			ADC_AMPLIFIER_WORDRATE_15SPS		3
+#define			ADC_AMPLIFIER_WORDRATE_7_5SPS		4
+#define			ADC_AMPLIFIER_WORDRATE_3840SPS	5
+#define			ADC_AMPLIFIER_WORDRATE_1920SPS	6
+#define			ADC_AMPLIFIER_WORDRATE_960SPS		7
+#define			ADC_AMPLIFIER_WORDRATE_480SPS		8
+#define			ADC_AMPLIFIER_WORDRATE_240SPS		9
+
+
+//000 Gain = 1, (Input Span = [(VREF+)-(VREF-)]/1*A for unipolar).
+//001 Gain = 2, (Input Span = [(VREF+)-(VREF-)]/2*A for unipolar).
+//010 Gain = 4, (Input Span = [(VREF+)-(VREF-)]/4*A for unipolar).
+//011 Gain = 8, (Input Span = [(VREF+)-(VREF-)]/8*A for unipolar).
+//100 Gain = 16, (Input Span = [(VREF+)-(VREF-)]/16*A for unipolar).
+//101 Gain = 32, (Input Span = [(VREF+)-(VREF-)]/32*A for unipolar).
+//110 Gain = 64, (Input Span = [(VREF+)-(VREF-)]/64*A for unipolar).
+																																								
+//Bit WR (FRS = 0) WR (FRS = 1)
+//0000 120 Sps 		100 Sps
+//0001 60 Sps 		50 Sps
+//0010 30 Sps 		25 Sps
+//0011 15 Sps 		12.5 Sps
+//0100 7.5 Sps 		6.25 Sps
+//1000 3840 Sps 	3200 Sps
+//1001 1920 Sps 	1600 Sps
+//1010 960 Sps 		800 Sps
+//1011 480 Sps 		400 Sps
+//1100 240 Sps		200 Sps
+
+//*      Gain    ??     0~6   0:1  1:2  2:4  3:8  4:16  5:32  6:64 
+//*      WordRate  ????   0~9   0:120    1:60    2:30    3:15    4:7.5    5:3840    6:1920    7:960    8:480    9:240 
 
 #ifdef __cplusplus
     }

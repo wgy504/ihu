@@ -57,6 +57,9 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
+#include "l3bfsc.h"
+#include "l3bfsc_msg.h"
+#include "main.h"
 
 /* USER CODE END Includes */
 
@@ -67,7 +70,7 @@
 uint8_t zIhuUartRxBuffer[6];
 uint8_t zIhuSpiRxBuffer[2];
 uint8_t zIhuI2cRxBuffer[2];
-
+extern WeightSensorParamaters_t					zWeightSensorParam;
 
 /* USER CODE END PV */
 
@@ -146,8 +149,9 @@ int main(void)
 	
 	//Set_CS5532();
 	HAL_GPIO_WritePin(CUBEMX_PIN_F2_ADCS_GPIO_Port, CUBEMX_PIN_F2_ADCS_Pin, GPIO_PIN_SET);
-	CS5532Init();
-	printf("Init Success (SystemCoreClock = %d)...\r\n", SystemCoreClock);
+	//CS5532Init();
+	//WeightSensorInit(&zWeightSensorParam);  -> MOVED TO BFSC
+	printf("Init Success (SystemCoreClock = %d), 0x%08X...\r\n", SystemCoreClock, (uint8_t *)&zWeightSensorParam);
 	ihu_bsp_stm32_led_commu_f2board_on();
 	ihu_bsp_stm32_led_serv1_f2board_on();
 	ihu_bsp_stm32_led_work_state_f2board_on();

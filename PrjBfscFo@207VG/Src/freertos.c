@@ -59,7 +59,7 @@ osMessageQId myQueue01Handle;
 osTimerId myTimer01Handle;
 
 /* USER CODE BEGIN Variables */
-
+extern WeightSensorParamaters_t					zWeightSensorParam;
 /* USER CODE END Variables */
 
 /* Function prototypes -------------------------------------------------------*/
@@ -218,22 +218,42 @@ void StartDefaultTask(void const * argument)
 {
 
   /* USER CODE BEGIN StartDefaultTask */
-	uint32_t temp;
+	uint32_t temp, temp2;
+	int i;
+	
+	for(i = 10; i >= 0; i--)
+	{
+			printf("Wait for %d sec to call WeightSensorCalibrationZero() ...\r\n", i);
+			HAL_Delay(1000);
+	}
+	
+	temp = WeightSensorCalibrationZero(&zWeightSensorParam);
+	printf("WeightSensorCalibrationZero() return %d (0x%x) ...\r\n", temp, temp);
+	
+	for(i = 10; i >= 0; i--)
+	{
+			printf("Wait for %d sec to call WeightSensorCalibrationFull() ...\r\n", i);
+			HAL_Delay(1000);
+	}
+	
+	temp = WeightSensorCalibrationFull(&zWeightSensorParam);
+	printf("WeightSensorCalibrationFull() return %d (0x%x) ...\r\n", temp, temp);
   
 	/* Infinite loop */
   for(;;)
   {
     osDelay(1);
-//		if(ReadWheChanOk())
-//		{
-//				temp = ReadSeriesADValue();
-//				printf("ReadValue = %x\n", temp);
-//		}		
-////		uint8_t send_data = 0x0B;
-////		HAL_SPI_Transmit(&SpiHandle,&send_data,1,0);
-////	  send_data = 0x00;
-////		HAL_SPI_Transmit(&SpiHandle,&send_data,1,0);		
-//		HAL_Delay(2000);
+		if(ReadWheChanOk())
+		{
+				temp = ReadSeriesADValue();
+				temp2 = WeightSensorReadCurrent(&zWeightSensorParam);
+				printf("ReadValue = %d(%x) mapped %d\r\n", temp, temp, temp2);
+		}		
+//		uint8_t send_data = 0x0B;
+//		HAL_SPI_Transmit(&SpiHandle,&send_data,1,0);
+//	  send_data = 0x00;
+//		HAL_SPI_Transmit(&SpiHandle,&send_data,1,0);		
+		HAL_Delay(2000);
 		
   }
   /* USER CODE END StartDefaultTask */

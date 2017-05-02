@@ -35,42 +35,43 @@ uint8_t  Chan0Gain    =       0x05;
 **
 ** =====================================================================
 */			
-typedef struct WeightSensorParamaters
-{
-	uint32_t	WeightSensorInitOrNot;
-	uint32_t	WeightSensorAdcSampleFreq;
-	uint32_t	WeightSensorAdcBitwidth;
-	uint32_t  WeightSensorAdcValue;
-	uint32_t	WeightSensorCalibrationZeroAdcValue;
-	uint32_t	WeightSensorCalibrationFullAdcValue;
-	uint32_t	WeightSensorCalibrationFullWeight;
-	uint32_t	WeightSensorCalibrationK;
-	uint32_t	WeightSensorCalibrationB;
-	uint32_t	WeightSensorStaticZeroValue;
-	uint32_t	WeightSensorTailorValue;
-	uint32_t	WeightSensorDynamicZeroThreadValue;
-	uint32_t	WeightSensorDynamicZeroHysteresisMs;
-	uint32_t  WeightSensorFilterCoeff[32];
-	uint32_t  WeightSensorOutputValue[32];
-}WeightSensorParamaters_t;
+//typedef struct WeightSensorParamaters
+//{
+//	uint32_t	WeightSensorInitOrNot;
+//	uint32_t	WeightSensorAdcSampleFreq;
+//	uint32_t	WeightSensorAdcBitwidth;
+//	uint32_t  WeightSensorAdcValue;
+//	uint32_t	WeightSensorCalibrationZeroAdcValue;
+//	uint32_t	WeightSensorCalibrationFullAdcValue;
+//	uint32_t	WeightSensorCalibrationFullWeight;
+//	uint32_t	WeightSensorCalibrationK;
+//	uint32_t	WeightSensorCalibrationB;
+//	uint32_t	WeightSensorStaticZeroValue;
+//	uint32_t	WeightSensorTailorValue;
+//	uint32_t	WeightSensorDynamicZeroThreadValue;
+//	uint32_t	WeightSensorDynamicZeroHysteresisMs;
+//	uint32_t  WeightSensorFilterCoeff[32];
+//	uint32_t  WeightSensorOutputValue[32];
+//}WeightSensorParamaters_t;
 
 /* Global Varaibles for Weight Sensor */
-WeightSensorParamaters_t g_wsp;
+//WeightSensorParamaters_t g_wsp;
 
-/* Initialize Sensor */
-uint32_t WeightSensorInit(WeightSensorParamaters_t *pwsp);
 
-/* Reconfig Sensor */
-uint32_t weightSensorConfig(WeightSensorParamaters_t *pwsp);
+///* Initialize Sensor */
+//uint32_t WeightSensorInit(WeightSensorParamaters_t *pwsp);
 
-/* Zero Load Sensor */
-uint32_t WeightSensorCalibrationZero(WeightSensorParamaters_t *pwsp);
+///* Reconfig Sensor */
+//uint32_t weightSensorConfig(WeightSensorParamaters_t *pwsp);
 
-/* Full/Nominal Load Sensor */
-uint32_t WeightSensorCalibrationFull(WeightSensorParamaters_t *pwsp);
+///* Zero Load Sensor */
+//uint32_t WeightSensorCalibrationZero(WeightSensorParamaters_t *pwsp);
 
-/* Read Load Sensor */
-uint32_t WeightSensorReadCurrent(void);
+///* Full/Nominal Load Sensor */
+//uint32_t WeightSensorCalibrationFull(WeightSensorParamaters_t *pwsp);
+
+///* Read Load Sensor */
+//uint32_t WeightSensorReadCurrent(void);
 
 
 void AD_delay(uint32_t val)
@@ -604,6 +605,7 @@ uint32_t ReadSeriesADValue(void)
     MSPI0_WR_Data(0x00);
     TempData = CS5532ReadData();
 		TempData = TempData >> 8;
+		TempData = TempData >> (24 - zWeightSensorParam.WeightSensorAdcBitwidth);
 
     return TempData;
 }              
@@ -679,7 +681,8 @@ void  InitCS5532(void)
 
    /*转换速率　0～9   0:120    1:60    2:30    3:15    4:7.5    5:3840    6:1920    7:960    8:480    9:240 */
 		
-    WriteChannelSetupRegEx(0,0,Chan0Gain,CollectionFF,1,0);		//setup1:选择的物理通道1,增益4,双极性,字速率60sps
+    //WriteChannelSetupRegEx(0,0,Chan0Gain,CollectionFF,1,0);		//setup1:选择的物理通道1,增益4,双极性,字速率60sps
+		WriteChannelSetupRegEx(0,0,zWeightSensorParam.WeightSensorAdcGain,zWeightSensorParam.WeightSensorAdcSampleFreq,1,0);
 //    WriteChannelSetupRegEx(1,1,6,CollectionFF,0,1);;
 //    WriteChannelSetupRegEx(2,1,0,2,0,1);
 //		WriteChannelSetupRegEx(3,1,0,2,0,1);
@@ -710,3 +713,238 @@ void CS5532Init()
 {
 	InitCS5532();  
 }
+
+/* ===================================
+** Weight Sensor Parameters and APIs
+** ===================================
+*/
+//???
+//-----Freq-----x64-----x32-----x16-----x8-----x4-----x2-----x1
+//     7.5       19      20      21     22     22     22     22
+
+uint32_t WeightSensorInit(WeightSensorParamaters_t *pwsp)
+{	
+		if(NULL == pwsp)
+		{
+				printf("l2adc_cs5532: WeightSensorInit: NULL == pwsp, return IHU_FAILURE\r\n");
+				return IHU_FAILURE;
+		}
+		
+		//printf("l2adc_cs5532: WeightSensorInit: pwsp = 0x%08X\r\n", pwsp);
+		pwsp->WeightSensorAdcSampleFreq = ADC_AMPLIFIER_WORDRATE_120SPS; //0:120sps  1:60sps  2:30sps  3:15sps  4:7.5sps  8:3840sps  9:1920sps  10:960sps  11:480sps  12:240sps
+		pwsp->WeightSensorAdcGain = ADC_AMPLIFIER_GAIN_8X;			//0:X1  1:X2  2:X4  3:X8  4:X16  5:X32  6:X64
+		pwsp->WeightSensorAdcBitwidth = SpsGainToBitwidthMapping(pwsp->WeightSensorAdcGain, pwsp->WeightSensorAdcSampleFreq);
+		pwsp->WeightSensorCalibrationFullWeight = 100000;//0.01g????
+		pwsp->WeightSensorInitOrNot = WEIGHT_SENSOR_HAD_INITED;
+		
+//		pwsp->WeightSensorAdcSampleFreq = 0;//0:120sps  1:60sps  2:30sps  3:15sps  4:7.5sps  8:3840sps  9:1920sps  10:960sps  11:480sps  12:240sps
+//		pwsp->WeightSensorAdcGain = 3;			//0:X1  1:X2  2:X4  3:X8  4:X16  5:X32  6:X64
+//		pwsp->WeightSensorAdcBitwidth = 20;
+//		pwsp->WeightSensorCalibrationFullWeight = 100000;//0.01g????
+//		pwsp->WeightSensorInitOrNot = WEIGHT_SENSOR_HAD_INITED;
+	
+		CS5532Init();
+	
+		return IHU_SUCCESS;
+}
+
+/* Reconfig Sensor */
+uint32_t weightSensorConfig(WeightSensorParamaters_t *pwsp)
+{
+	
+		if(NULL == pwsp)
+		{
+				IhuErrorPrint("l2adc_cs5532: weightSensorConfig: NULL == pwsp, return IHU_FAILURE\r\n");
+				return IHU_FAILURE;
+		}
+		
+		zWeightSensorParam.WeightSensorAdcSampleFreq = pwsp->WeightSensorAdcSampleFreq;
+		zWeightSensorParam.WeightSensorAdcGain = pwsp->WeightSensorAdcGain;
+		zWeightSensorParam.WeightSensorAdcBitwidth = pwsp->WeightSensorAdcBitwidth;
+		zWeightSensorParam.WeightSensorAdcValue = pwsp->WeightSensorAdcValue;
+		zWeightSensorParam.WeightSensorCalibrationZeroAdcValue = pwsp->WeightSensorCalibrationZeroAdcValue;
+		zWeightSensorParam.WeightSensorCalibrationFullAdcValue = pwsp->WeightSensorCalibrationFullAdcValue;
+		zWeightSensorParam.WeightSensorCalibrationFullWeight = pwsp->WeightSensorCalibrationFullWeight;
+		zWeightSensorParam.WeightSensorCalibrationK = pwsp->WeightSensorCalibrationK;
+		zWeightSensorParam.WeightSensorCalibrationB = pwsp->WeightSensorCalibrationB;
+		zWeightSensorParam.WeightSensorStaticZeroValue = pwsp->WeightSensorStaticZeroValue;
+		zWeightSensorParam.WeightSensorTailorValue = pwsp->WeightSensorTailorValue;
+		zWeightSensorParam.WeightSensorDynamicZeroThreadValue = pwsp->WeightSensorDynamicZeroThreadValue;
+		zWeightSensorParam.WeightSensorDynamicZeroHysteresisMs = pwsp->WeightSensorDynamicZeroHysteresisMs;
+	
+	return IHU_SUCCESS;
+}
+
+//?????
+uint32_t WeightSensorCalibrationZero(WeightSensorParamaters_t *pwsp)
+{
+	int i;
+	uint32_t temp = 0;
+	
+	if(NULL == pwsp)
+	{
+			IhuErrorPrint("l2adc_cs5532: WeightSensorCalibrationZero: NULL == pwsp, return IHU_FAILURE\r\n");
+			return IHU_FAILURE;
+	}
+	
+	//printf("l2adc_cs5532: WeightSensorCalibrationZero: pwsp = 0x%08X\r\n", pwsp);
+	
+	for(i = 0; i < 32; i ++)
+	{
+		if(ReadWheChanOk())
+		{
+				pwsp->WeightSensorOutputValue[i] = ReadSeriesADValue();
+				temp += pwsp->WeightSensorOutputValue[i];
+		}
+		HAL_Delay(20);
+	}
+	temp = temp >> 5;
+	
+	pwsp->WeightSensorCalibrationZeroAdcValue = temp;
+	
+	pwsp->WeightSensorCalibrationB = pwsp->WeightSensorCalibrationZeroAdcValue;
+	if (0 != pwsp->WeightSensorCalibrationFullAdcValue)
+	{
+		//pwsp->WeightSensorCalibrationB = pwsp->WeightSensorCalibrationZeroAdcValue;
+		pwsp->WeightSensorCalibrationK = (double)(pwsp->WeightSensorCalibrationFullAdcValue-pwsp->WeightSensorCalibrationZeroAdcValue)/pwsp->WeightSensorCalibrationFullWeight;
+	}
+	
+	IhuDebugPrint("l2adc_cs5532: WeightSensorCalibrationZero: K=%f, B=%d\r\n", pwsp->WeightSensorCalibrationK, pwsp->WeightSensorCalibrationB);
+	return pwsp->WeightSensorCalibrationZeroAdcValue;
+}
+
+//?????
+uint32_t WeightSensorCalibrationFull(WeightSensorParamaters_t *pwsp)
+{
+	int i;
+	uint32_t temp = 0;
+	
+	if(NULL == pwsp)
+	{
+			IhuErrorPrint("l2adc_cs5532: WeightSensorCalibrationFull: NULL == pwsp, return IHU_FAILURE\r\n");
+			return IHU_FAILURE;
+	}
+	
+	//printf("l2adc_cs5532: WeightSensorCalibrationFull: pwsp = 0x%08X\r\n", pwsp);
+	
+	for(i = 0; i < 32; i ++)
+	{
+		if(ReadWheChanOk())
+		{
+				pwsp->WeightSensorOutputValue[i] = ReadSeriesADValue();
+				temp += pwsp->WeightSensorOutputValue[i];
+		}
+		HAL_Delay(20);
+	}
+	temp = temp >> 5;
+	
+	pwsp->WeightSensorCalibrationFullAdcValue = temp;
+	
+	//IhuDebugPrint("l2adc_cs5532: WeightSensorCalibrationFull: pwsp->WeightSensorCalibrationFullWeight = %d\r\n", pwsp->WeightSensorCalibrationFullWeight);
+	if (0 != pwsp->WeightSensorCalibrationFullWeight)
+	{
+		//pwsp->WeightSensorCalibrationB = pwsp->WeightSensorCalibrationZeroAdcValue;
+		pwsp->WeightSensorCalibrationK = (double)pwsp->WeightSensorCalibrationFullAdcValue - (double)pwsp->WeightSensorCalibrationZeroAdcValue;
+		//IhuDebugPrint("l2adc_cs5532: WeightSensorCalibrationFull: pwsp->WeightSensorCalibrationK = %f\r\n", pwsp->WeightSensorCalibrationK);
+		
+		pwsp->WeightSensorCalibrationK = pwsp->WeightSensorCalibrationK / (double)pwsp->WeightSensorCalibrationFullWeight;
+		//IhuDebugPrint("l2adc_cs5532: WeightSensorCalibrationFull: pwsp->WeightSensorCalibrationK = %f\r\n", pwsp->WeightSensorCalibrationK);
+	}
+	
+	IhuDebugPrint("l2adc_cs5532: WeightSensorCalibrationFull: K=%f, B=%d\r\n", pwsp->WeightSensorCalibrationK, pwsp->WeightSensorCalibrationB);
+	return pwsp->WeightSensorCalibrationFullAdcValue;
+	
+}
+//??K?B
+void WeightSensorCalibrationKB(WeightSensorParamaters_t *pwsp)
+{
+	pwsp->WeightSensorCalibrationB = pwsp->WeightSensorCalibrationZeroAdcValue;
+	pwsp->WeightSensorCalibrationK = (double)(pwsp->WeightSensorCalibrationFullAdcValue-pwsp->WeightSensorCalibrationZeroAdcValue)/pwsp->WeightSensorCalibrationFullWeight;
+}
+
+//??????
+int32_t WeightSensorReadCurrent(WeightSensorParamaters_t *pwsp)
+{
+	int i;
+	uint32_t temp = 0;
+	static double temp2 = 0;
+	
+	if(NULL == pwsp)
+	{
+			IhuErrorPrint("l2adc_cs5532: WeightSensorReadCurrent: NULL == pwsp, return 0\r\n");
+			return 0;
+	}
+	
+	if(0 == pwsp->WeightSensorCalibrationK)
+	{
+			IhuErrorPrint("l2adc_cs5532: WeightSensorReadCurrent: 0 == pwsp->WeightSensorCalibrationK, return 0\r\n");
+			return 0;
+	}
+	
+	for(i = 0; i < 32; i ++)
+	{
+		if(ReadWheChanOk())
+		{
+				pwsp->WeightSensorOutputValue[i] = ReadSeriesADValue();
+				temp += pwsp->WeightSensorOutputValue[i];
+		}
+		HAL_Delay(10);
+	}
+	temp = temp >> 5;
+	
+	pwsp->WeightSensorAdcValue = temp;
+	
+	temp2 = temp-pwsp->WeightSensorCalibrationB;
+	
+	return (int32_t)(temp2/pwsp->WeightSensorCalibrationK);
+}	
+
+uint32_t SpsGainToBitwidthMappingTable[GAIN_INDEX_NUMBER][WORDRATE_INDEX_NUMBER] = { 
+/*Gain   														1,		2,		4,		8,		16,		32,		64    */
+/*0000 120 Sps 		100 Sps			*/	{	21,		21,		21,		21,		20,		19,		18 },
+/*0001 60 Sps 		50 Sps			*/	{	21,		21,		21,		21,		21,		20,		19 },
+/*0010 30 Sps 		25 Sps			*/	{	22,		22,		22,		22,		21,		20,		19 },
+/*0011 15 Sps 		12.5 Sps		*/	{	22,		22,		22,		22,		22,		21,		20 },
+/*0100 7.5 Sps 		6.25 Sps		*/	{	23,		23,		23,		23,		22,		21,		20 },
+/*1000 3840 Sps 	3200 Sps		*/	{	13,		13,		13,		13,		13,		13,		13 },
+/*1001 1920 Sps 	1600 Sps		*/	{	16,		16,		16,		16,		16,		16,		16 },
+/*1010 960 Sps 		800 Sps			*/	{	17,		17,		17,		17,		17,		16,		16 },
+/*1011 480 Sps 		400 Sps			*/	{	17,		17,		17,		17,		17,		17,		17 },
+/*1100 240 Sps		200 Sps			*/	{	18,		18,		18,		18,		18,		17,		17 }, };
+
+uint32_t SpsGainToBitwidthMapping(uint32_t gain_index, uint32_t wordrate_index)
+{
+		if (( gain_index >= GAIN_INDEX_NUMBER) || (wordrate_index >= WORDRATE_INDEX_NUMBER) )
+		{
+				printf("l2adc_cs5532: SpsGainToBitwidthMapping: Invalid parameter, gain_index(%d)>=GAIN_INDEX_NUMBER(%d), or, wordrate_index(%d) >= WORDRATE_INDEX_NUMBER(%d), return 0xFFFFFFFF\r\b", gain_index, GAIN_INDEX_NUMBER, wordrate_index, WORDRATE_INDEX_NUMBER);
+				return 0xFFFFFFFF;
+		}
+		
+		printf("l2adc_cs5532: SpsGainToBitwidthMapping: [gain_index(%d),wordrate_index(%d)] => Bitwidth(%d)\r\n", gain_index, wordrate_index, SpsGainToBitwidthMappingTable[gain_index][wordrate_index]);
+		return SpsGainToBitwidthMappingTable[gain_index][wordrate_index];
+		
+}
+
+//int a[5][3]={ {80,75,92}, {61,65,71}, {59,63,70}, {85,87,90}, {76,77,85} };
+//*      Gain    ??     0~6   0:1  1:2  2:4  3:8  4:16  5:32  6:64 
+//*      WordRate  ????   0~9   0:120    1:60    2:30    3:15    4:7.5    5:3840    6:1920    7:960    8:480    9:240 
+																																								
+//000 Gain = 1, (Input Span = [(VREF+)-(VREF-)]/1*A for unipolar).
+//001 Gain = 2, (Input Span = [(VREF+)-(VREF-)]/2*A for unipolar).
+//010 Gain = 4, (Input Span = [(VREF+)-(VREF-)]/4*A for unipolar).
+//011 Gain = 8, (Input Span = [(VREF+)-(VREF-)]/8*A for unipolar).
+//100 Gain = 16, (Input Span = [(VREF+)-(VREF-)]/16*A for unipolar).
+//101 Gain = 32, (Input Span = [(VREF+)-(VREF-)]/32*A for unipolar).
+//110 Gain = 64, (Input Span = [(VREF+)-(VREF-)]/64*A for unipolar).
+																																								
+//Bit WR (FRS = 0) WR (FRS = 1)
+//0000 120 Sps 		100 Sps
+//0001 60 Sps 		50 Sps
+//0010 30 Sps 		25 Sps
+//0011 15 Sps 		12.5 Sps
+//0100 7.5 Sps 		6.25 Sps
+//1000 3840 Sps 	3200 Sps
+//1001 1920 Sps 	1600 Sps
+//1010 960 Sps 		800 Sps
+//1011 480 Sps 		400 Sps
+//1100 240 Sps		200 Sps

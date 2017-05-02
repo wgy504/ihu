@@ -508,10 +508,23 @@ typedef struct WeightSensorParamaters
 	UINT32	WeightSensorPickupDetectionTimeMs;
 	UINT32	StardardReadyTimeMs;					//???
 	UINT32	MaxAllowedWeight;						//如果发现超过这个最大值，说明Sensor出错
-	UINT32	spare1;
-	UINT32	spare2;
-	UINT32	spare3;
-	UINT32	spare4;
+	
+	UINT32	WeightSensorInitOrNot;
+	UINT32	WeightSensorAdcSampleFreq;
+	UINT32	WeightSensorAdcGain;
+	UINT32	WeightSensorAdcBitwidth;
+	UINT32  WeightSensorAdcValue;
+	UINT32	WeightSensorCalibrationZeroAdcValue;
+	UINT32	WeightSensorCalibrationFullAdcValue;
+	UINT32	WeightSensorCalibrationFullWeight;
+	double	WeightSensorCalibrationK;
+	UINT32	WeightSensorCalibrationB;
+	UINT32	WeightSensorStaticZeroValue;
+	UINT32	WeightSensorTailorValue;
+	UINT32	WeightSensorDynamicZeroThreadValue;
+	UINT32	WeightSensorDynamicZeroHysteresisMs;
+	UINT32  WeightSensorFilterCoeff[32];
+	UINT32  WeightSensorOutputValue[32];
 }WeightSensorParamaters_t;
 
 typedef struct MotorControlParamaters
