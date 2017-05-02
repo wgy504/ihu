@@ -47,7 +47,7 @@ int32_t blk230_init()
 	return HAL_OK;
 }
 
-void blk230_test_task(void const * argument)
+void blk230_test_task_entry(void const * argument)
 {
 	uint32_t testLoop = 0;
 	
