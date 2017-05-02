@@ -332,7 +332,7 @@
               <MiscControls>--C99</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F207xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;../Drivers/STM32F2xx_HAL_Driver/Inc;../Drivers/STM32F2xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;../Drivers/CMSIS/Device/ST/STM32F2xx/Include;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Drivers/CMSIS/Include;..\..\SrcBxxh\l0bsp_stm32;..\..\SrcBxxh\l0commsgbfsc;..\..\SrcBxxh\l0comvm;..\..\SrcBxxh\l1vmfreeos;..\..\SrcBxxh\l2frame;..\..\SrcBxxh\l2framefreeos;..\..\SrcBxxh\l3applbfsc</IncludePath>
+              <IncludePath>../Inc;         ../Drivers/STM32F2xx_HAL_Driver/Inc;         ../Drivers/STM32F2xx_HAL_Driver/Inc/Legacy;         ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;         ../Drivers/CMSIS/Device/ST/STM32F2xx/Include;         ../Middlewares/Third_Party/FreeRTOS/Source/include;         ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;         ../Drivers/CMSIS/Include;         ..\..\SrcBxxh\l0bsp_stm32;         ..\..\SrcBxxh\l0commsgbfsc;         ..\..\SrcBxxh\l0comvm;         ..\..\SrcBxxh\l1vmfreeos;         ..\..\SrcBxxh\l2frame;         ..\..\SrcBxxh\l2framefreeos;         ..\..\SrcBxxh\l3applbfsc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -388,7 +388,7 @@
             <File>
               <FileName>system_stm32f2xx.c</FileName>
               <FileType>1</FileType>
-              <FilePath>../Drivers/CMSIS/Device/ST/STM32F2xx/Source/Templates/system_stm32f2xx.c</FilePath>
+              <FilePath>../Src/system_stm32f2xx.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -466,11 +466,6 @@
               <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_crc.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f2xx_hal_dac_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_dac_ex.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32f2xx_hal_cortex.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_cortex.c</FilePath>
@@ -531,11 +526,6 @@
               <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_adc.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f2xx_hal_dac.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_dac.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32f2xx_hal_can.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_can.c</FilePath>
@@ -565,6 +555,16 @@
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_pwr_ex.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f2xx_hal_dac_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_dac_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f2xx_hal_dac.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_dac.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -589,11 +589,6 @@
               <FileName>stm32f2xx_hal_msp.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Src/stm32f2xx_hal_msp.c</FilePath>
-            </File>
-            <File>
-              <FileName>dac.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Src/dac.c</FilePath>
             </File>
             <File>
               <FileName>rtc.c</FileName>
@@ -636,11 +631,6 @@
               <FilePath>../Src/freertos.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f2xx_hal_timebase_TIM.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Src/stm32f2xx_hal_timebase_TIM.c</FilePath>
-            </File>
-            <File>
               <FileName>dma.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Src/dma.c</FilePath>
@@ -649,6 +639,26 @@
               <FileName>stm32f2xx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Src/stm32f2xx_it.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f2xx_hal_timebase_TIM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Src/stm32f2xx_hal_timebase_TIM.c</FilePath>
+            </File>
+            <File>
+              <FileName>blk230.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\blk230.c</FilePath>
+            </File>
+            <File>
+              <FileName>pca8547a.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\pca8547a.c</FilePath>
+            </File>
+            <File>
+              <FileName>dac.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Src/dac.c</FilePath>
             </File>
           </Files>
         </Group>

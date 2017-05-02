@@ -13,6 +13,7 @@
  
 #include "l3bfsc.h"
 #include "l3bfsc_msg.h"
+#include "main.h"
  
 /*
 ** FSM of the BFSC
@@ -246,8 +247,8 @@ UINT32 GetWmcId()
 	GPIO_PinState ps;
 	UINT32 wmc_id = 0;
 	
-	/* SW0 <= PA5 */
-	ps = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_5);
+	/* SW0 <= PE10 */
+	ps = HAL_GPIO_ReadPin(GPIOE, CUBEMX_PIN_ADD_SW0_NODEID_BIT0_Pin);
 	if (GPIO_PIN_RESET == ps)
 	{
 		wmc_id = wmc_id & 0xFFFFFFFE;  //1110
@@ -257,8 +258,8 @@ UINT32 GetWmcId()
 		wmc_id = wmc_id | 0x00000001;  //0001
 	}
 	
-	/* SW1 <= PA6 */
-	ps = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_6);
+	/* SW1 <= PE11 */
+	ps = HAL_GPIO_ReadPin(GPIOE, CUBEMX_PIN_ADD_SW1_NODEID_BIT1_Pin);
 	if (GPIO_PIN_RESET == ps)
 	{
 		wmc_id = wmc_id & 0xFFFFFFFD;  //1101
@@ -268,8 +269,8 @@ UINT32 GetWmcId()
 		wmc_id = wmc_id | 0x00000002;  //0010
 	}
 	
-	/* SW2 <= PA7 */
-	ps = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_7);
+	/* SW2 <= PE12 */
+	ps = HAL_GPIO_ReadPin(GPIOE, CUBEMX_PIN_ADD_SW2_NODEID_BIT2_Pin);
 	if (GPIO_PIN_RESET == ps)
 	{
 		wmc_id = wmc_id & 0xFFFFFFFB;  //1011
@@ -279,8 +280,8 @@ UINT32 GetWmcId()
 		wmc_id = wmc_id | 0x00000004;  //0100
 	}
 	
-	/* SW3 <= PA8 */
-	ps = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8);
+	/* SW3 <= PE13 */
+	ps = HAL_GPIO_ReadPin(GPIOE, CUBEMX_PIN_ADD_SW3_NODEID_BIT3_Pin);
 	if (GPIO_PIN_RESET == ps)
 	{
 		wmc_id = wmc_id & 0xFFFFFFF7;  //0111
@@ -290,8 +291,30 @@ UINT32 GetWmcId()
 		wmc_id = wmc_id | 0x00000008;  //1000
 	}
 	
-	/* make sure only the last 4 digit values */
-	wmc_id = wmc_id & 0xF;
+	/* SW4 <= PE14 */
+	ps = HAL_GPIO_ReadPin(GPIOE, CUBEMX_PIN_ADD_SW4_NODEID_BIT4_Pin);
+	if (GPIO_PIN_RESET == ps)
+	{
+		wmc_id = wmc_id & 0xFFFFFFEF;  //11101111
+	}
+	else
+	{
+		wmc_id = wmc_id | 0x00000010;  //00010000
+	}
+	
+	/* SW5 <= PE15 */
+	ps = HAL_GPIO_ReadPin(GPIOE, CUBEMX_PIN_ADD_SW5_RESERVED_Pin);
+	if (GPIO_PIN_RESET == ps)
+	{
+		wmc_id = wmc_id & 0xFFFFFFDF;  //11011111
+	}
+	else
+	{
+		wmc_id = wmc_id | 0x00000020;  //00100000
+	}
+	
+	/* make sure only the last 6 digit values */
+	wmc_id = wmc_id & 0x2F;
 	return wmc_id;
 }
 //MYC
@@ -315,7 +338,7 @@ OPSTAT func_bfsc_hw_init(WmcInventory_t *pwi)
 	pwi->weight_sensor_type = 0x2;
 	pwi->motor_type = 0x03;
 	pwi->wmc_id = GetWmcId();               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */
-	IhuDebugPrint("L3BFSC: func_bfsc_hw_init: wmc_id = [0x%01X]\n", pwi->wmc_id);
+	IhuDebugPrint("L3BFSC: func_bfsc_hw_init: wmc_id = [0x%02X]\n", pwi->wmc_id);
 	
 	return IHU_SUCCESS;
 }
@@ -382,12 +405,20 @@ OPSTAT fsm_bfsc_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 OPSTAT func_bfsc_time_out_period_scan(void)
 {
 	int ret = 0;
+	uint32_t tempVal = 0;
 	
 	//发送HeartBeat消息给VMFO模块，实现喂狗功能
 	msg_struct_com_heart_beat_t snd;
 	memset(&snd, 0, sizeof(msg_struct_com_heart_beat_t));
 	snd.length = sizeof(msg_struct_com_heart_beat_t);
 	ret = ihu_message_send(MSG_ID_COM_HEART_BEAT, TASK_ID_VMFO, TASK_ID_BFSC, &snd, snd.length);
+	
+	//读取假数据
+	//需要直接访问ADC的HAL函数
+	//tempVal = rand() % 1000;  // MYC comment 2017/04/30 
+	tempVal = ihu_l1hd_adc_bfsc_get_value(); // MYC added 2017/04/30
+	IhuDebugPrint("ADCLIBRA: func_bfsc_time_out_period_scan: tempVal = 0x%x\n", tempVal);
+	
 	if (ret == IHU_FAILURE){
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_BFSC]++;
 		IhuErrorPrint("BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_VMFO].taskName);

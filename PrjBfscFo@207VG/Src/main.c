@@ -79,7 +79,13 @@ static void MX_NVIC_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
-
+#ifdef __GNUC__
+  /* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
+     set to 'Yes') calls __io_putchar() */
+  #define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#else
+  #define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#endif /* __GNUC__ */
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
@@ -107,17 +113,18 @@ int main(void)
   MX_ADC1_Init();
   MX_CAN1_Init();
   MX_CRC_Init();
-  MX_DAC_Init();
   MX_I2C1_Init();
   MX_I2C2_Init();
   MX_RTC_Init();
   MX_SPI2_Init();
   MX_SPI3_Init();
-  MX_TIM6_Init();
-  MX_TIM7_Init();
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
+  MX_TIM7_Init();
+  MX_TIM6_Init();
+  MX_TIM1_Init();
+  MX_DAC_Init();
 
   /* Initialize interrupts */
   MX_NVIC_Init();
@@ -137,6 +144,14 @@ int main(void)
 	bsp_can_init(&hcan1, 0x10);
 	HAL_CAN_Receive_IT(&hcan1, 0);
 	
+	//Set_CS5532();
+	HAL_GPIO_WritePin(CUBEMX_PIN_F2_ADCS_GPIO_Port, CUBEMX_PIN_F2_ADCS_Pin, GPIO_PIN_SET);
+	CS5532Init();
+	printf("Init Success (SystemCoreClock = %d)...\r\n", SystemCoreClock);
+	ihu_bsp_stm32_led_commu_f2board_on();
+	ihu_bsp_stm32_led_serv1_f2board_on();
+	ihu_bsp_stm32_led_work_state_f2board_on();
+	
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */
@@ -154,7 +169,6 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-
   }
   /* USER CODE END 3 */
 
@@ -207,8 +221,6 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 
-  HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_HSI, RCC_MCODIV_1);
-
     /**Configure the Systick interrupt time 
     */
   HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
@@ -237,12 +249,19 @@ static void MX_NVIC_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+PUTCHAR_PROTOTYPE
+{
+  /* Place your implementation of fputc here */
+  /* e.g. write a character to the EVAL_COM1 and Loop until the end of transmission */
+  HAL_UART_Transmit(&huart3, (uint8_t *)&ch, 1, 0xFFFF); 
 
+  return ch;
+}
 /* USER CODE END 4 */
 
 /**
   * @brief  Period elapsed callback in non blocking mode
-  * @note   This function is called  when TIM1 interrupt took place, inside
+  * @note   This function is called  when TIM2 interrupt took place, inside
   * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
   * a global variable "uwTick" used as application time base.
   * @param  htim : TIM handle
@@ -253,7 +272,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 /* USER CODE BEGIN Callback 0 */
 
 /* USER CODE END Callback 0 */
-  if (htim->Instance == TIM1) {
+  if (htim->Instance == TIM2) {
     HAL_IncTick();
   }
 /* USER CODE BEGIN Callback 1 */
