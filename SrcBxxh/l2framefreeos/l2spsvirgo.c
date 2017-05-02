@@ -306,6 +306,14 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	
 	//统一考虑三种触发方式：BLE/RFID/LOCK, 后台会再加上PID/电话号码方式，总共5种方式
 	
+	//测试LOCK1的开关
+	ihu_sleep(1);
+	IHU_DEBUG_PRINT_IPT("SPSVORGO: Starting to test open Lock 1\n");
+	ihu_l1hd_dido_f2board_lock1_do1_on();
+	ihu_sleep(5);
+	IHU_DEBUG_PRINT_IPT("SPSVORGO: Starting to test close Lock 1\n");
+	ihu_l1hd_dido_f2board_lock1_do1_off();
+	
 	//不用使用透传工作方式，而采用ATCMD方式
 	//if (ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_in_transparant_mode(pMsgProc.authReq.bleMacAddr, 6) == IHU_SUCCESS){
 	if (ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_in_AT_cmd_mode(pMsgProc.authReq.bleMacAddr, 6) == IHU_SUCCESS){

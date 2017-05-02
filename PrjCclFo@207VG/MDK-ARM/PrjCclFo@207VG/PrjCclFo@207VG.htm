@@ -3,7 +3,7 @@
 <title>Static Call Graph - [PrjCclFo@207VG\PrjCclFo@207VG.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image PrjCclFo@207VG\PrjCclFo@207VG.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Sat Apr 29 16:30:52 2017
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Tue May 02 09:51:58 2017
 <BR><P>
 <H3>Maximum Stack Usage =       2832 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -2319,7 +2319,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[15f]"></a>MX_GPIO_Init</STRONG> (Thumb, 588 bytes, Stack size 64 bytes, gpio.o(i.MX_GPIO_Init))
+<P><STRONG><a name="[15f]"></a>MX_GPIO_Init</STRONG> (Thumb, 594 bytes, Stack size 64 bytes, gpio.o(i.MX_GPIO_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = MX_GPIO_Init &rArr; HAL_GPIO_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[fc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
@@ -3330,7 +3330,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> l2spsvirgo.o(.data)
 </UL>
-<P><STRONG><a name="[37]"></a>fsm_spsvirgo_ccl_event_report_send</STRONG> (Thumb, 1168 bytes, Stack size 896 bytes, l2spsvirgo.o(i.fsm_spsvirgo_ccl_event_report_send))
+<P><STRONG><a name="[37]"></a>fsm_spsvirgo_ccl_event_report_send</STRONG> (Thumb, 1166 bytes, Stack size 896 bytes, l2spsvirgo.o(i.fsm_spsvirgo_ccl_event_report_send))
 <BR><BR>[Stack]<UL><LI>Max Depth = 2832<LI>Call Chain = fsm_spsvirgo_ccl_event_report_send &rArr; func_cloud_standard_xml_unpack &rArr; func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
@@ -3392,12 +3392,15 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> l2spsvirgo.o(.data)
 </UL>
-<P><STRONG><a name="[35]"></a>fsm_spsvirgo_ccl_open_auth_inq</STRONG> (Thumb, 616 bytes, Stack size 840 bytes, l2spsvirgo.o(i.fsm_spsvirgo_ccl_open_auth_inq))
+<P><STRONG><a name="[35]"></a>fsm_spsvirgo_ccl_open_auth_inq</STRONG> (Thumb, 686 bytes, Stack size 840 bytes, l2spsvirgo.o(i.fsm_spsvirgo_ccl_open_auth_inq))
 <BR><BR>[Stack]<UL><LI>Max Depth = 2776<LI>Call Chain = fsm_spsvirgo_ccl_open_auth_inq &rArr; func_cloud_standard_xml_unpack &rArr; func_cloud_spsvirgo_ccl_msg_ccl_state_confirm_received_handle &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
 <LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintFo
+<LI><a href="#[27]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_dido_f2board_lock1_do1_on
+<LI><a href="#[28]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_dido_f2board_lock1_do1_off
 <LI><a href="#[148]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_message_send
+<LI><a href="#[f1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_sleep
 <LI><a href="#[ed]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FsmSetState
 <LI><a href="#[ec]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
 <LI><a href="#[1b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_vmmw_rfidmod_nrf24l01_spi_read_id
@@ -5080,21 +5083,23 @@ Global Symbols
 <LI><a href="#[19e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open_state
 </UL>
 
-<P><STRONG><a name="[28]"></a>ihu_bsp_stm32_dido_f2board_lock1_do1_off</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, bsp_dido.o(i.ihu_bsp_stm32_dido_f2board_lock1_do1_off))
+<P><STRONG><a name="[28]"></a>ihu_bsp_stm32_dido_f2board_lock1_do1_off</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, bsp_dido.o(i.ihu_bsp_stm32_dido_f2board_lock1_do1_off))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = ihu_bsp_stm32_dido_f2board_lock1_do1_off &rArr; HAL_GPIO_WritePin
 </UL>
 <BR>[Calls]<UL><LI><a href="#[fc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 </UL>
 <BR>[Called By]<UL><LI><a href="#[18f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_didocap_ccl_work_mode_dl_cmd_close_lock
+<LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_spsvirgo_ccl_open_auth_inq
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> l2ledpisces.o(.data)
 </UL>
-<P><STRONG><a name="[27]"></a>ihu_bsp_stm32_dido_f2board_lock1_do1_on</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, bsp_dido.o(i.ihu_bsp_stm32_dido_f2board_lock1_do1_on))
+<P><STRONG><a name="[27]"></a>ihu_bsp_stm32_dido_f2board_lock1_do1_on</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, bsp_dido.o(i.ihu_bsp_stm32_dido_f2board_lock1_do1_on))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = ihu_bsp_stm32_dido_f2board_lock1_do1_on &rArr; HAL_GPIO_WritePin
 </UL>
 <BR>[Calls]<UL><LI><a href="#[fc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 </UL>
 <BR>[Called By]<UL><LI><a href="#[18e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_didocap_ccl_work_mode_dl_cmd_open_lock
+<LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_spsvirgo_ccl_open_auth_inq
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> l2ledpisces.o(.data)
 </UL>
@@ -5116,7 +5121,7 @@ Global Symbols
 <LI><a href="#[19e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open_state
 </UL>
 
-<P><STRONG><a name="[2a]"></a>ihu_bsp_stm32_dido_f2board_lock2_do1_off</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, bsp_dido.o(i.ihu_bsp_stm32_dido_f2board_lock2_do1_off))
+<P><STRONG><a name="[2a]"></a>ihu_bsp_stm32_dido_f2board_lock2_do1_off</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, bsp_dido.o(i.ihu_bsp_stm32_dido_f2board_lock2_do1_off))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = ihu_bsp_stm32_dido_f2board_lock2_do1_off &rArr; HAL_GPIO_WritePin
 </UL>
 <BR>[Calls]<UL><LI><a href="#[fc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
@@ -5125,7 +5130,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> l2ledpisces.o(.data)
 </UL>
-<P><STRONG><a name="[29]"></a>ihu_bsp_stm32_dido_f2board_lock2_do1_on</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, bsp_dido.o(i.ihu_bsp_stm32_dido_f2board_lock2_do1_on))
+<P><STRONG><a name="[29]"></a>ihu_bsp_stm32_dido_f2board_lock2_do1_on</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, bsp_dido.o(i.ihu_bsp_stm32_dido_f2board_lock2_do1_on))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = ihu_bsp_stm32_dido_f2board_lock2_do1_on &rArr; HAL_GPIO_WritePin
 </UL>
 <BR>[Calls]<UL><LI><a href="#[fc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
@@ -5152,7 +5157,7 @@ Global Symbols
 <LI><a href="#[19e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open_state
 </UL>
 
-<P><STRONG><a name="[2c]"></a>ihu_bsp_stm32_dido_f2board_lock3_do1_off</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, bsp_dido.o(i.ihu_bsp_stm32_dido_f2board_lock3_do1_off))
+<P><STRONG><a name="[2c]"></a>ihu_bsp_stm32_dido_f2board_lock3_do1_off</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, bsp_dido.o(i.ihu_bsp_stm32_dido_f2board_lock3_do1_off))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = ihu_bsp_stm32_dido_f2board_lock3_do1_off &rArr; HAL_GPIO_WritePin
 </UL>
 <BR>[Calls]<UL><LI><a href="#[fc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
@@ -5161,7 +5166,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> l2ledpisces.o(.data)
 </UL>
-<P><STRONG><a name="[2b]"></a>ihu_bsp_stm32_dido_f2board_lock3_do1_on</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, bsp_dido.o(i.ihu_bsp_stm32_dido_f2board_lock3_do1_on))
+<P><STRONG><a name="[2b]"></a>ihu_bsp_stm32_dido_f2board_lock3_do1_on</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, bsp_dido.o(i.ihu_bsp_stm32_dido_f2board_lock3_do1_on))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = ihu_bsp_stm32_dido_f2board_lock3_do1_on &rArr; HAL_GPIO_WritePin
 </UL>
 <BR>[Calls]<UL><LI><a href="#[fc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
@@ -5187,7 +5192,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[207]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_didocap_ccl_work_mode_ul_scan_door_and_lock_status_change
 </UL>
 
-<P><STRONG><a name="[2e]"></a>ihu_bsp_stm32_dido_f2board_lock4_do1_off</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, bsp_dido.o(i.ihu_bsp_stm32_dido_f2board_lock4_do1_off))
+<P><STRONG><a name="[2e]"></a>ihu_bsp_stm32_dido_f2board_lock4_do1_off</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, bsp_dido.o(i.ihu_bsp_stm32_dido_f2board_lock4_do1_off))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = ihu_bsp_stm32_dido_f2board_lock4_do1_off &rArr; HAL_GPIO_WritePin
 </UL>
 <BR>[Calls]<UL><LI><a href="#[fc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
@@ -5196,7 +5201,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> l2ledpisces.o(.data)
 </UL>
-<P><STRONG><a name="[2d]"></a>ihu_bsp_stm32_dido_f2board_lock4_do1_on</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, bsp_dido.o(i.ihu_bsp_stm32_dido_f2board_lock4_do1_on))
+<P><STRONG><a name="[2d]"></a>ihu_bsp_stm32_dido_f2board_lock4_do1_on</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, bsp_dido.o(i.ihu_bsp_stm32_dido_f2board_lock4_do1_on))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = ihu_bsp_stm32_dido_f2board_lock4_do1_on &rArr; HAL_GPIO_WritePin
 </UL>
 <BR>[Calls]<UL><LI><a href="#[fc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
@@ -5746,6 +5751,7 @@ Global Symbols
 <LI><a href="#[227]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_rfidmod_mf522_PcdReset
 <LI><a href="#[183]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_ccl_open_all_sensor
 <LI><a href="#[185]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_ccl_close_all_sensor
+<LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_spsvirgo_ccl_open_auth_inq
 </UL>
 
 <P><STRONG><a name="[262]"></a>ihu_system_task_init_call</STRONG> (Thumb, 238 bytes, Stack size 32 bytes, vmfreeoslayer.o(i.ihu_system_task_init_call))
