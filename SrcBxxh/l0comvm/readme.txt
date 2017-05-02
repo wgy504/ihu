@@ -21,6 +21,8 @@
 = 通过调整两个电源管脚的设置GPRSMOD_POWER_SUPPLY和GPRSMOD_POWER_KEY，其中POWER_SUPPLY设置为OUTPUT模式，操控MOSFET开关，POWER_KEY设置为非上拉高电平的开漏，
   结果完全正常了
 = GPRS ATTACHED换成移动卡，正常，但后台反馈不正常，需要调整后台的消息格式等内容，HUITP的端口等等，需要再行调整
+= DIDO的锁具控制逻辑，调整正常了
+
 
 //= ZJL, 2017 Apr.20, CURRENT_SW_DELIVERY R03.129 =>CCL项目
 = 由于复用了DIDO驱动文件，207VC项目已经编译不过了，这个在未来需要逐步删掉

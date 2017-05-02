@@ -128,14 +128,15 @@ int16_t ihu_bsp_stm32_dido_f2board_lock1_di2_tongue_read(void)
 		return TRUE;			
 }
 
+//锁具的开关，采用的低电平，所以ON/OFF应该反向
 void ihu_bsp_stm32_dido_f2board_lock1_do1_on(void)
 {
-	BSP_STM32_DIDO_LOCK1_DO1_ON;
+	BSP_STM32_DIDO_LOCK1_DO1_OFF;
 }
 
 void ihu_bsp_stm32_dido_f2board_lock1_do1_off(void)
 {
-	BSP_STM32_DIDO_LOCK1_DO1_OFF;
+	BSP_STM32_DIDO_LOCK1_DO1_ON;
 }
 
 int16_t ihu_bsp_stm32_dido_f2board_door1_restriction_read(void)
@@ -164,12 +165,12 @@ int16_t ihu_bsp_stm32_dido_f2board_lock2_di2_tongue_read(void)
 
 void ihu_bsp_stm32_dido_f2board_lock2_do1_on(void)
 {
-    BSP_STM32_DIDO_LOCK2_DO1_ON;
+    BSP_STM32_DIDO_LOCK2_DO1_OFF;
 }
 
 void ihu_bsp_stm32_dido_f2board_lock2_do1_off(void)
 {
-    BSP_STM32_DIDO_LOCK2_DO1_OFF;
+    BSP_STM32_DIDO_LOCK2_DO1_ON;
 }
 
 int16_t ihu_bsp_stm32_dido_f2board_door2_restriction_read(void)
@@ -198,12 +199,12 @@ int16_t ihu_bsp_stm32_dido_f2board_lock3_di2_tongue_read(void)
 
 void ihu_bsp_stm32_dido_f2board_lock3_do1_on(void)
 {
-    BSP_STM32_DIDO_LOCK3_DO1_ON;
+    BSP_STM32_DIDO_LOCK3_DO1_OFF;
 }
 
 void ihu_bsp_stm32_dido_f2board_lock3_do1_off(void)
 {
-    BSP_STM32_DIDO_LOCK3_DO1_OFF;
+    BSP_STM32_DIDO_LOCK3_DO1_ON;
 }
 
 int16_t ihu_bsp_stm32_dido_f2board_door3_restriction_read(void)
@@ -232,12 +233,12 @@ int16_t ihu_bsp_stm32_dido_f2board_lock4_di2_tongue_read(void)
 
 void ihu_bsp_stm32_dido_f2board_lock4_do1_on(void)
 {
-    BSP_STM32_DIDO_LOCK4_DO1_ON;
+    BSP_STM32_DIDO_LOCK4_DO1_OFF;
 }
 
 void ihu_bsp_stm32_dido_f2board_lock4_do1_off(void)
 {
-    BSP_STM32_DIDO_LOCK4_DO1_OFF;
+    BSP_STM32_DIDO_LOCK4_DO1_ON;
 }
 
 int16_t ihu_bsp_stm32_dido_f2board_door4_restriction_read(void)
