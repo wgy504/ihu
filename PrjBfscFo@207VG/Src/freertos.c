@@ -64,9 +64,8 @@ extern WeightSensorParamaters_t					zWeightSensorParam;
 
 /* Function prototypes -------------------------------------------------------*/
 void StartDefaultTask(void const * argument);
-void StartTask02(void const * argument);
+void blk230_test_task(void const * argument);
 void Callback01(void const * argument);
-extern void blk230_test_task(void const * argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -259,16 +258,17 @@ void StartDefaultTask(void const * argument)
   /* USER CODE END StartDefaultTask */
 }
 
-/* StartTask02 function */
-void StartTask02(void const * argument)
+/* blk230_test_task function */
+void blk230_test_task(void const * argument)
 {
-  /* USER CODE BEGIN StartTask02 */
+  /* USER CODE BEGIN blk230_test_task */
+	blk230_test_task_entry(argument);
   /* Infinite loop */
   for(;;)
   {
     osDelay(1);
   }
-  /* USER CODE END StartTask02 */
+  /* USER CODE END blk230_test_task */
 }
 
 /* Callback01 function */

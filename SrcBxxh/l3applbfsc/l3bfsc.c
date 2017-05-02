@@ -166,6 +166,7 @@ OPSTAT fsm_bfsc_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 	
 	//初始化Weight Sensor ADC
 	WeightSensorInit(&zWeightSensorParam);
+	IhuDebugPrint("L3BFSC: fsm_bfsc_init: WeightSensorInit()\r\n");
 
 	//Global Variables
 	zIhuSysStaPm.taskRunErrCnt[TASK_ID_BFSC] = 0;
