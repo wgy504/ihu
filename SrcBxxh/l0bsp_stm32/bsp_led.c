@@ -231,6 +231,30 @@ void ihu_bsp_stm32_beep_f2board_toggle(void)
     BSP_STM32_BEEP_TOGGLE;/* 蜂鸣器反转 */
 }
 
+void ihu_bsp_stm32_beep_f2board_pattern_05s(void)
+{
+  ihu_bsp_stm32_beep_f2board_on();
+	ihu_usleep(500);
+  ihu_bsp_stm32_beep_f2board_off();
+	ihu_usleep(500);	
+}
+
+void ihu_bsp_stm32_beep_f2board_pattern_1s(void)
+{
+  ihu_bsp_stm32_beep_f2board_on();
+	ihu_usleep(1000);
+  ihu_bsp_stm32_beep_f2board_off();
+	ihu_usleep(1000);	
+}
+
+void ihu_bsp_stm32_beep_f2board_pattern_2s(void)
+{
+  ihu_bsp_stm32_beep_f2board_on();
+	ihu_usleep(2000);
+  ihu_bsp_stm32_beep_f2board_off();
+	ihu_usleep(2000);	
+}
+
 void ihu_bsp_stm32_led_power_f2board_on(void)
 {
     BSP_STM32_LED_POWER_ON;

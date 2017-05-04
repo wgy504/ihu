@@ -69,6 +69,9 @@ GlobalGalowagCtrlTable_t zIhuGalogwagCtrlTable[] =
 	{GALOWAG_CTRL_ID_CCL_LOCK2, GALOWAG_CTRL_STATE_OFF, 1, 10, 11, 22, 0, 0, ihu_l1hd_dido_f2board_lock2_do1_on, ihu_l1hd_dido_f2board_lock2_do1_off},
 	{GALOWAG_CTRL_ID_CCL_LOCK3, GALOWAG_CTRL_STATE_OFF, 1, 10, 11, 22, 0, 0, ihu_l1hd_dido_f2board_lock3_do1_on, ihu_l1hd_dido_f2board_lock3_do1_off},
 	{GALOWAG_CTRL_ID_CCL_LOCK4, GALOWAG_CTRL_STATE_OFF, 1, 10, 11, 22, 0, 0, ihu_l1hd_dido_f2board_lock4_do1_on, ihu_l1hd_dido_f2board_lock4_do1_off},
+	//BEEP的声音模式，也采用了跟LED一样的控制方式，从而产生不同的图案
+	{GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_1, GALOWAG_CTRL_STATE_OFF, 1, 1, 2, 6, 0, 0, ihu_l1hd_beep_f2board_on, ihu_l1hd_beep_f2board_off},
+	{GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_2, GALOWAG_CTRL_STATE_OFF, 1, 2, 3, 8, 0, 0, ihu_l1hd_beep_f2board_on, ihu_l1hd_beep_f2board_off},
 #endif	
   {GALOWAG_CTRL_ID_MAX,GALOWAG_CTRL_STATE_MIN, 0, 0, 0, 0, 0, 0, NULL, NULL},//Ending
 };
@@ -281,8 +284,12 @@ void func_ledpisces_time_out_galowag_scan(void)
 	for (i = GALOWAG_CTRL_ID_MIN+1; i<GALOWAG_CTRL_ID_MAX; i++){
 		if (zIhuGalogwagCtrlTable[i].galState == GALOWAG_CTRL_STATE_ON){
 			zIhuGalogwagCtrlTable[i].galTotalWorkCounter++;
-			if (zIhuGalogwagCtrlTable[i].galTotalWorkCounter >= zIhuGalogwagCtrlTable[i].galTotalDuration) zIhuGalogwagCtrlTable[i].galState = GALOWAG_CTRL_STATE_OFF;
-			if (zIhuGalogwagCtrlTable[i].galPeriodWorkCounter == 0){
+			if (zIhuGalogwagCtrlTable[i].galTotalWorkCounter >= zIhuGalogwagCtrlTable[i].galTotalDuration) {
+				zIhuGalogwagCtrlTable[i].galState = GALOWAG_CTRL_STATE_OFF;
+				//为了防止BEEP或者LED灯在闪烁图案结束的时候还常亮，所以必须强制停止
+				(void)zIhuGalogwagCtrlTable[i].galFuncOff();
+			}
+			if ((zIhuGalogwagCtrlTable[i].galState == GALOWAG_CTRL_STATE_ON) && (zIhuGalogwagCtrlTable[i].galPeriodWorkCounter == 0)){
 				(void)zIhuGalogwagCtrlTable[i].galFuncOn();
 			}
 			if (zIhuGalogwagCtrlTable[i].galPeriodWorkCounter == zIhuGalogwagCtrlTable[i].galPattenOn){

@@ -104,6 +104,9 @@ extern void ihu_bsp_stm32_led_work_state_f2board_toggle(void);
 extern void ihu_bsp_stm32_beep_f2board_on(void);
 extern void ihu_bsp_stm32_beep_f2board_off(void);
 extern void ihu_bsp_stm32_beep_f2board_toggle(void);
+extern void ihu_bsp_stm32_beep_f2board_pattern_05s(void);
+extern void ihu_bsp_stm32_beep_f2board_pattern_1s(void);
+extern void ihu_bsp_stm32_beep_f2board_pattern_2s(void);
 #else
 	#error Un-correct constant definition
 #endif
