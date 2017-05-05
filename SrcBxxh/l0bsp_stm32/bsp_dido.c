@@ -298,7 +298,17 @@ void ihu_bsp_stm32_dido_f2board_sensor_power_ctrl_on(void)
 void ihu_bsp_stm32_dido_f2board_sensor_power_ctrl_off(void)
 {
     BSP_STM32_DIDO_SENSOR_PWR_CTRL_OFF;
-}      		
+}
+
+void ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_on(void)
+{
+    BSP_STM32_DIDO_CPU_PWR_CTRL_ON;
+}
+
+void ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_off(void)
+{
+    BSP_STM32_DIDO_CPU_PWR_CTRL_OFF;
+}
 
 void ihu_bsp_stm32_dido_f2board_ble_atcmd_mode_ctrl_on(void)
 {

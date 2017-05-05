@@ -59,11 +59,14 @@ void ihu_bsp_stm32_adc1_stop(void)
 }
 
 //In normal mode
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 int ihu_bsp_stm32_adc1_get_sample_value(void)
 {
 	//return HAL_ADC_GetValue(&IHU_BSP_STM32_ADC1_HANDLER);
 	return WeightSensorReadCurrent(&zWeightSensorParam);  //MYC
 }
+#endif
+
 
 //In normal mode
 //定标，未来再完善，这里给出的数值只是NF2两位小数数据

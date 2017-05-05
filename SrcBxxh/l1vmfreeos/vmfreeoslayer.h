@@ -610,6 +610,10 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_beep_f2board_on	 							ihu_bsp_stm32_beep_f2board_on
 #define ihu_l1hd_beep_f2board_off 							ihu_bsp_stm32_beep_f2board_off
 #define ihu_l1hd_beep_f2board_toggle 						ihu_bsp_stm32_beep_f2board_toggle
+#define ihu_l1hd_beep_f2board_pattern_05s	 			ihu_bsp_stm32_beep_f2board_pattern_05s
+#define ihu_l1hd_beep_f2board_pattern_1s	 			ihu_bsp_stm32_beep_f2board_pattern_1s
+#define ihu_l1hd_beep_f2board_pattern_2s	 			ihu_bsp_stm32_beep_f2board_pattern_2s
+
 //LED->BFSC独特业务部分
 #define ihu_l1hd_led_serv1_f2board_on 					ihu_bsp_stm32_led_serv1_f2board_on
 #define ihu_l1hd_led_serv1_f2board_off					ihu_bsp_stm32_led_serv1_f2board_off
@@ -750,6 +754,8 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_dido_f2board_rfid_power_ctrl_off      ihu_bsp_stm32_dido_f2board_rfid_power_ctrl_off   
 #define ihu_l1hd_dido_f2board_sensor_power_ctrl_on     ihu_bsp_stm32_dido_f2board_sensor_power_ctrl_on  
 #define ihu_l1hd_dido_f2board_sensor_power_ctrl_off    ihu_bsp_stm32_dido_f2board_sensor_power_ctrl_off 
+#define ihu_l1hd_dido_f2board_cpu_power_ctrl_on        ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_on  
+#define ihu_l1hd_dido_f2board_cpu_power_ctrl_off       ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_off 
 #define ihu_l1hd_dido_f2board_ble_atcmd_mode_ctrl_on   ihu_bsp_stm32_dido_f2board_ble_atcmd_mode_ctrl_on     
 #define ihu_l1hd_dido_f2board_ble_atcmd_mode_ctrl_off  ihu_bsp_stm32_dido_f2board_ble_atcmd_mode_ctrl_off
 #define ihu_l1hd_dido_f2board_ds18b20_init    					ihu_bsp_stm32_dido_ds18b20_init

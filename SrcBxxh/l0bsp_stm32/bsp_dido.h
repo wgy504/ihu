@@ -57,7 +57,9 @@ extern int dido_time_base;
 	#define BSP_STM32_DIDO_RFID_PWR_CTRL_GPIO_PIN						CUBEMX_PIN_F2_DO_RFID_PWR_Pin                        
 	#define BSP_STM32_DIDO_RFID_PWR_CTRL_GPIO								CUBEMX_PIN_F2_DO_RFID_PWR_GPIO_Port               
 	#define BSP_STM32_DIDO_SENSOR_PWR_CTRL_GPIO_PIN					CUBEMX_PIN_F2_DO_SENSOR_PWR_Pin                      
-	#define BSP_STM32_DIDO_SENSOR_PWR_CTRL_GPIO							CUBEMX_PIN_F2_DO_SENSOR_PWR_GPIO_Port                
+	#define BSP_STM32_DIDO_SENSOR_PWR_CTRL_GPIO							CUBEMX_PIN_F2_DO_SENSOR_PWR_GPIO_Port    
+	#define BSP_STM32_DIDO_CPU_PWR_CTRL_GPIO_PIN					  CUBEMX_PIN_F2_DO_CPU_PWR_Pin                      
+	#define BSP_STM32_DIDO_CPU_PWR_CTRL_GPIO							  CUBEMX_PIN_F2_DO_CPU_PWR_GPIO_Port   	
 	#define BSP_STM32_DIDO_BLE_ATCMD_CTRL_GPIO_PIN					CUBEMX_PIN_F2_DO_BLE_ATCMD_Pin                         
 	#define BSP_STM32_DIDO_BLE_ATCMD_CTRL_GPIO							CUBEMX_PIN_F2_DO_BLE_ATCMD_GPIO_Port    
 	#define BSP_STM32_DIDO_DOOR1_RESTRICTION_GPIO_PIN				CUBEMX_PIN_F2_GPIO_DI_DOOR1_RESTRICTION_Pin          
@@ -138,6 +140,8 @@ extern int dido_time_base;
 	#define BSP_STM32_DIDO_RFID_PWR_CTRL_OFF     		HAL_GPIO_WritePin(BSP_STM32_DIDO_RFID_PWR_CTRL_GPIO, BSP_STM32_DIDO_RFID_PWR_CTRL_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
 	#define BSP_STM32_DIDO_SENSOR_PWR_CTRL_ON      	HAL_GPIO_WritePin(BSP_STM32_DIDO_SENSOR_PWR_CTRL_GPIO, BSP_STM32_DIDO_SENSOR_PWR_CTRL_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
 	#define BSP_STM32_DIDO_SENSOR_PWR_CTRL_OFF     	HAL_GPIO_WritePin(BSP_STM32_DIDO_SENSOR_PWR_CTRL_GPIO, BSP_STM32_DIDO_SENSOR_PWR_CTRL_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
+	#define BSP_STM32_DIDO_CPU_PWR_CTRL_ON        	HAL_GPIO_WritePin(BSP_STM32_DIDO_CPU_PWR_CTRL_GPIO, BSP_STM32_DIDO_CPU_PWR_CTRL_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
+	#define BSP_STM32_DIDO_CPU_PWR_CTRL_OFF       	HAL_GPIO_WritePin(BSP_STM32_DIDO_CPU_PWR_CTRL_GPIO, BSP_STM32_DIDO_CPU_PWR_CTRL_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
 	#define BSP_STM32_DIDO_BLE_ATCMD_CTRL_ON      	HAL_GPIO_WritePin(BSP_STM32_DIDO_BLE_ATCMD_CTRL_GPIO, BSP_STM32_DIDO_BLE_ATCMD_CTRL_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
 	#define BSP_STM32_DIDO_BLE_ATCMD_CTRL_OFF     	HAL_GPIO_WritePin(BSP_STM32_DIDO_BLE_ATCMD_CTRL_GPIO, BSP_STM32_DIDO_BLE_ATCMD_CTRL_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
 
@@ -181,6 +185,8 @@ extern int dido_time_base;
 	extern void ihu_bsp_stm32_dido_f2board_rfid_power_ctrl_off(void);
 	extern void ihu_bsp_stm32_dido_f2board_sensor_power_ctrl_on(void);
 	extern void ihu_bsp_stm32_dido_f2board_sensor_power_ctrl_off(void);
+	extern void ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_on(void);
+	extern void ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_off(void);
 	extern void ihu_bsp_stm32_dido_f2board_ble_atcmd_mode_ctrl_on(void);
 	extern void ihu_bsp_stm32_dido_f2board_ble_atcmd_mode_ctrl_off(void);
 	
