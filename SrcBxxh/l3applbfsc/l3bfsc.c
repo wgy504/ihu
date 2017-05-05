@@ -421,7 +421,7 @@ OPSTAT func_bfsc_time_out_period_scan(void)
 	//需要直接访问ADC的HAL函数
 	//tempVal = rand() % 1000;  // MYC comment 2017/04/30 
 	tempVal = ihu_l1hd_adc_bfsc_get_value(); // MYC added 2017/04/30
-	IhuDebugPrint("ADCLIBRA: func_bfsc_time_out_period_scan: tempVal = 0x%x\n", tempVal);
+	IhuDebugPrint("ADCLIBRA: func_bfsc_time_out_period_scan: tempVal = %d\n", tempVal);
 	
 	if (ret == IHU_FAILURE){
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_BFSC]++;

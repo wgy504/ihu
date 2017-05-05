@@ -732,8 +732,8 @@ uint32_t WeightSensorInit(WeightSensorParamaters_t *pwsp)
 		
 		//printf("l2adc_cs5532: WeightSensorInit: pwsp = 0x%08X\r\n", pwsp);
 		pwsp->WeightSensorAdcSampleFreq = ADC_AMPLIFIER_WORDRATE_120SPS; //0:120sps  1:60sps  2:30sps  3:15sps  4:7.5sps  8:3840sps  9:1920sps  10:960sps  11:480sps  12:240sps
-		pwsp->WeightSensorAdcGain = ADC_AMPLIFIER_GAIN_8X;			//0:X1  1:X2  2:X4  3:X8  4:X16  5:X32  6:X64
-		pwsp->WeightSensorAdcBitwidth = SpsGainToBitwidthMapping(pwsp->WeightSensorAdcGain, pwsp->WeightSensorAdcSampleFreq);
+		pwsp->WeightSensorAdcGain = ADC_AMPLIFIER_GAIN_16X;			//0:X1  1:X2  2:X4  3:X8  4:X16  5:X32  6:X64
+		pwsp->WeightSensorAdcBitwidth = SpsGainToBitwidthMapping(pwsp->WeightSensorAdcSampleFreq, pwsp->WeightSensorAdcGain);
 		pwsp->WeightSensorCalibrationFullWeight = 100000;//0.01g????
 		pwsp->WeightSensorInitOrNot = WEIGHT_SENSOR_HAD_INITED;
 		
@@ -867,7 +867,8 @@ int32_t WeightSensorReadCurrent(WeightSensorParamaters_t *pwsp)
 {
 	int i;
 	uint32_t temp = 0;
-	static double temp2 = 0;
+	int32_t temp2 = 0;
+	int32_t temp3 = 0;
 	
 	if(NULL == pwsp)
 	{
@@ -885,21 +886,26 @@ int32_t WeightSensorReadCurrent(WeightSensorParamaters_t *pwsp)
 	{
 		if(ReadWheChanOk())
 		{
-				pwsp->WeightSensorOutputValue[i] = ReadSeriesADValue();
-				temp += pwsp->WeightSensorOutputValue[i];
+			pwsp->WeightSensorOutputValue[i] = ReadSeriesADValue();
+			temp += pwsp->WeightSensorOutputValue[i];
 		}
 		HAL_Delay(10);
 	}
+	
 	temp = temp >> 5;
 	
 	pwsp->WeightSensorAdcValue = temp;
 	
-	temp2 = temp-pwsp->WeightSensorCalibrationB;
+	if(pwsp->WeightSensorCalibrationK == 0)
+		return 0xFFFFFFFF;
 	
-	return (int32_t)(temp2/pwsp->WeightSensorCalibrationK);
+	temp2 = temp-pwsp->WeightSensorCalibrationB;
+	temp3 = temp2/pwsp->WeightSensorCalibrationK;
+	
+	return temp3;
 }	
 
-uint32_t SpsGainToBitwidthMappingTable[GAIN_INDEX_NUMBER][WORDRATE_INDEX_NUMBER] = { 
+uint32_t SpsGainToBitwidthMappingTable[WORDRATE_INDEX_NUMBER][WORDRATE_INDEX_NUMBER] = { 
 /*Gain   														1,		2,		4,		8,		16,		32,		64    */
 /*0000 120 Sps 		100 Sps			*/	{	21,		21,		21,		21,		20,		19,		18 },
 /*0001 60 Sps 		50 Sps			*/	{	21,		21,		21,		21,		21,		20,		19 },
@@ -912,7 +918,7 @@ uint32_t SpsGainToBitwidthMappingTable[GAIN_INDEX_NUMBER][WORDRATE_INDEX_NUMBER]
 /*1011 480 Sps 		400 Sps			*/	{	17,		17,		17,		17,		17,		17,		17 },
 /*1100 240 Sps		200 Sps			*/	{	18,		18,		18,		18,		18,		17,		17 }, };
 
-uint32_t SpsGainToBitwidthMapping(uint32_t gain_index, uint32_t wordrate_index)
+uint32_t SpsGainToBitwidthMapping(uint32_t wordrate_index, uint32_t gain_index)
 {
 		if (( gain_index >= GAIN_INDEX_NUMBER) || (wordrate_index >= WORDRATE_INDEX_NUMBER) )
 		{
@@ -920,8 +926,8 @@ uint32_t SpsGainToBitwidthMapping(uint32_t gain_index, uint32_t wordrate_index)
 				return 0xFFFFFFFF;
 		}
 		
-		printf("l2adc_cs5532: SpsGainToBitwidthMapping: [gain_index(%d),wordrate_index(%d)] => Bitwidth(%d)\r\n", gain_index, wordrate_index, SpsGainToBitwidthMappingTable[gain_index][wordrate_index]);
-		return SpsGainToBitwidthMappingTable[gain_index][wordrate_index];
+		printf("l2adc_cs5532: SpsGainToBitwidthMapping: [wordrate_index(%d), gain_index(%d)] => Bitwidth(%d)\r\n", gain_index, wordrate_index, SpsGainToBitwidthMappingTable[gain_index][wordrate_index]);
+		return SpsGainToBitwidthMappingTable[wordrate_index][gain_index];
 		
 }
 

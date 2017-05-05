@@ -181,8 +181,8 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle)
     */
     GPIO_InitStruct.Pin = CUBEMX_PIN_F2_SPI3_SCK_ADC_Pin|CUBEMX_PIN_F2_SPI3_MISO_ADC_Pin|CUBEMX_PIN_F2_SPI3_MOSI_ADC_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
     GPIO_InitStruct.Alternate = GPIO_AF6_SPI3;
     HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 

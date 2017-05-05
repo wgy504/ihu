@@ -229,8 +229,10 @@ OPSTAT fsm_adclibra_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 	}
 
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
-	else if ((rcv.timeId == TIMER_ID_10MS_BFSC_ADCLIBRA_SCAN_TIMER) &&(rcv.timeRes == TIMER_RESOLUTION_10MS)){
-		if (zIhuAdcBfscWs.WeightWorkingMode == IHU_BFSC_ADC_WEIGHT_WORKING_MODE_NORMAL) func_adclibra_time_out_bfsc_read_weight_scan();
+	else if ((rcv.timeId == TIMER_ID_10MS_BFSC_ADCLIBRA_SCAN_TIMER) &&(rcv.timeRes == TIMER_RESOLUTION_10MS))
+	{
+		if (zIhuAdcBfscWs.WeightWorkingMode == IHU_BFSC_ADC_WEIGHT_WORKING_MODE_NORMAL) 
+			func_adclibra_time_out_bfsc_read_weight_scan();
 	}
 #endif
 	

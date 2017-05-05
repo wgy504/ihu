@@ -105,8 +105,8 @@ int32_t WeightSensorReadCurrent(WeightSensorParamaters_t *pwsp);
 /* mapping table */
 uint32_t SpsGainToBitwidthMapping(uint32_t gain_index, uint32_t wordrate_index);
 
-#define 		WORDRATE_INDEX_NUMBER						7
-#define 		GAIN_INDEX_NUMBER								10
+#define 		WORDRATE_INDEX_NUMBER						10
+#define 		GAIN_INDEX_NUMBER								7
 
 #define			ADC_AMPLIFIER_GAIN_1X						0
 #define			ADC_AMPLIFIER_GAIN_2X						1

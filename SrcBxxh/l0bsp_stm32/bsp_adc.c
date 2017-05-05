@@ -32,6 +32,8 @@ uint16_t zIhuAdc1ConvertedValue[BSP_STM32_ADC_ARRAY_NUMBER];
 uint16_t zIhuAdc2ConvertedValue[BSP_STM32_ADC_ARRAY_NUMBER];
 uint16_t zIhuAdc3ConvertedValue[BSP_STM32_ADC_ARRAY_NUMBER];
 
+extern WeightSensorParamaters_t					zWeightSensorParam;
+
 //In IT mode
 void ihu_bsp_stm32_adc_cpu_temp_start(void)
 {
@@ -60,7 +62,7 @@ void ihu_bsp_stm32_adc1_stop(void)
 int ihu_bsp_stm32_adc1_get_sample_value(void)
 {
 	//return HAL_ADC_GetValue(&IHU_BSP_STM32_ADC1_HANDLER);
-	return ReadSeriesADValue();  //MYC
+	return WeightSensorReadCurrent(&zWeightSensorParam);  //MYC
 }
 
 //In normal mode
