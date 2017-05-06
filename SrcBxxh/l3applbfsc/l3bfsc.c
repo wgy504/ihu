@@ -75,9 +75,9 @@ IhuFsmStateItem_t IhuFsmBfsc[] =
 	{MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ,			FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_set_config_req},	//MYC
 	{MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ,			FSM_STATE_BFSC_COMBINATION,								fsm_bfsc_wmc_set_config_req},	//MYC
 
-	{MSG_ID_L3BFSC_WMC_GET_CONFIG_REQ,			FSM_STATE_BFSC_ACTIVED,										fsm_bfsc_wmc_get_config_req},	//MYC
-	{MSG_ID_L3BFSC_WMC_GET_CONFIG_REQ,			FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_get_config_req},	//MYC
-	{MSG_ID_L3BFSC_WMC_GET_CONFIG_REQ,			FSM_STATE_BFSC_COMBINATION,								fsm_bfsc_wmc_get_config_req},	//MYC
+//	{MSG_ID_L3BFSC_WMC_GET_CONFIG_REQ,			FSM_STATE_BFSC_ACTIVED,										fsm_bfsc_wmc_get_config_req},	//MYC
+//	{MSG_ID_L3BFSC_WMC_GET_CONFIG_REQ,			FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_get_config_req},	//MYC
+//	{MSG_ID_L3BFSC_WMC_GET_CONFIG_REQ,			FSM_STATE_BFSC_COMBINATION,								fsm_bfsc_wmc_get_config_req},	//MYC
 	
 	{MSG_ID_L3BFSC_WMC_START_REQ,						FSM_STATE_BFSC_ACTIVED,										fsm_bfsc_wmc_start_req},	//MYC
 	{MSG_ID_L3BFSC_WMC_START_REQ,						FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_start_req},	//MYC
@@ -201,7 +201,7 @@ OPSTAT fsm_bfsc_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 		memset(&snd, 0, sizeof(msg_struct_l3bfsc_wmc_startup_ind_t));
 		snd.length = sizeof(msg_struct_l3bfsc_wmc_startup_ind_t);
 		snd.msgid = MSG_ID_L3BFSC_WMC_STARTUP_IND;
-		snd.wmc_state = FSM_STATE_BFSC_ACTIVED;
+		//snd.wmc_state = FSM_STATE_BFSC_ACTIVED;
 		memcpy(&snd.wmc_inventory, &zWmcInvenory, sizeof(WmcInventory_t));
 		
 		ret = ihu_message_send(MSG_ID_L3BFSC_WMC_STARTUP_IND, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length);
@@ -341,7 +341,7 @@ OPSTAT func_bfsc_hw_init(WmcInventory_t *pwi)
 	//MYC TODO
 	pwi->weight_sensor_type = 0x2;
 	pwi->motor_type = 0x03;
-	pwi->wmc_id = GetWmcId();               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */
+	pwi->wmc_id.wmc_id = GetWmcId();               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */
 	IhuDebugPrint("L3BFSC: func_bfsc_hw_init: wmc_id = [0x%02X]\n", pwi->wmc_id);
 	
 	return IHU_SUCCESS;
@@ -973,7 +973,7 @@ void func_bfsc_stm_main_recovery_from_fault(void)
 //#define 	MSG_SIZE_L3BFSC_WMC_STOP_REQ						(sizeof(msg_struct_l3bfsc_wmc_stop_req_t))
 //#define 	MSG_SIZE_L3BFSC_WMC_STOP_RESP						(sizeof(msg_struct_l3bfsc_wmc_resp_t))
 //#define 	MSG_SIZE_L3BFSC_WMC_WEIGHT_IND					(sizeof(msg_struct_l3bfsc_wmc_weight_ind_t))
-//#define 	MSG_SIZE_L3BFSC_WMC_COMBIN_REQ					(sizeof(msg_struct_l3bfsc_wmc_combin_req_t))
+//#define 	MSG_SIZE_L3BFSC_WMC_COMBIN_REQ					(sizeof(msg_struct_l3bfsc_wmc_combin_out_req_t))
 //#define 	MSG_SIZE_L3BFSC_WMC_COMBIN_RESP					(sizeof(msg_struct_l3bfsc_wmc_resp_t))
 //#define 	MSG_SIZE_L3BFSC_WMC_FAULT_IND						(sizeof(msg_struct_l3bfsc_wmc_fault_ind_t))
 //#define 	MSG_SIZE_L3BFSC_WMC_COMMNAD_REQ					(sizeof(msg_struct_l3bfsc_wmc_command_req_t))
@@ -1019,33 +1019,33 @@ OPSTAT fsm_bfsc_wmc_set_config_req(UINT8 dest_id, UINT8 src_id, void *param_ptr,
 	return ret;
 }
 
-OPSTAT fsm_bfsc_wmc_get_config_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)	//MYC
-{
-	OPSTAT ret = IHU_SUCCESS;
-	error_code_t error_code;
-	msg_struct_l3bfsc_wmc_get_config_req_t rcv;
-	
-	//收到消息并做参数检查
-	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_wmc_get_config_req_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_wmc_get_config_req_t)))
-		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Receive message error!\n");
-	memcpy(&rcv, param_ptr, param_len);
-	
-	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_get_config_req_t: rcv.msgid = 0x%08X, rcv.length = %d\r\n", rcv.msgid, rcv.length);
+//OPSTAT fsm_bfsc_wmc_get_config_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)	//MYC
+//{
+//	OPSTAT ret = IHU_SUCCESS;
+//	error_code_t error_code;
+//	msg_struct_l3bfsc_wmc_get_config_req_t rcv;
+//	
+//	//收到消息并做参数检查
+//	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_wmc_get_config_req_t));
+//	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_wmc_get_config_req_t)))
+//		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Receive message error!\n");
+//	memcpy(&rcv, param_ptr, param_len);
+//	
+//	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_get_config_req_t: rcv.msgid = 0x%08X, rcv.length = %d\r\n", rcv.msgid, rcv.length);
 
-	/* PROCESS TO BE ADDED */
-	/* !!!!!!!!!!!!!!!!!!!!*/
-	/* Process Message */
-	msg_wmc_get_config_req_process(param_ptr, &error_code);
-	
-	/* Send back the response */
-	msg_wmc_get_config_resp(error_code);
-	
-	//FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_CONFIGURATION);
+//	/* PROCESS TO BE ADDED */
+//	/* !!!!!!!!!!!!!!!!!!!!*/
+//	/* Process Message */
+//	msg_wmc_get_config_req_process(param_ptr, &error_code);
+//	
+//	/* Send back the response */
+//	msg_wmc_get_config_resp(error_code);
+//	
+//	//FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_CONFIGURATION);
 
-	//返回
-	return ret;
-}
+//	//返回
+//	return ret;
+//}
 
 OPSTAT fsm_bfsc_wmc_start_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)	//MYC
 {
@@ -1146,15 +1146,15 @@ OPSTAT fsm_bfsc_wmc_combin_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UIN
 {
 	OPSTAT ret = IHU_SUCCESS;
 	error_code_t error_code;
-	msg_struct_l3bfsc_wmc_combin_req_t rcv;
+	msg_struct_l3bfsc_wmc_combin_out_req_t rcv;
 	
 	//收到消息并做参数检查
-	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_wmc_combin_req_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_wmc_combin_req_t)))
+	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_wmc_combin_out_req_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_wmc_combin_out_req_t)))
 		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);
 	
-	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_combin_req_t: rcv.msgid = 0x%08X, rcv.length = %d\r\n", rcv.msgid, rcv.length);
+	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_combin_out_req_t: rcv.msgid = 0x%08X, rcv.length = %d\r\n", rcv.msgid, rcv.length);
 
 	/* PROCESS TO BE ADDED */
 	/* !!!!!!!!!!!!!!!!!!!!*/

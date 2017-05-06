@@ -245,6 +245,7 @@ void StartDefaultTask(void const * argument)
 		if(ReadWheChanOk())
 		{
 				//temp = ReadSeriesADValue();
+				ihu_bsp_stm32_led_serv1_f2board_toggle();
 				temp2 = WeightSensorReadCurrent(&zWeightSensorParam);
 				printf("ReadValue = %d(%x) mapped %d\r\n", zWeightSensorParam.WeightSensorAdcValue, zWeightSensorParam.WeightSensorAdcValue, temp2);
 		}		
