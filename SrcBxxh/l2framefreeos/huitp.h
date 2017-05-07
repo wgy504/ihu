@@ -526,13 +526,13 @@ typedef enum
 	HUITP_MSGID_sui_bfsc_stop_resp                   = 0x3B93,
 	//重量汇报过程
 	HUITP_MSGID_sui_bfsc_new_ws_event                = 0x3B94,
-	HUITP_MSGID_sui_bfsc_repeat_ws_event             = 0x3B94,
+	//HUITP_MSGID_sui_bfsc_repeat_ws_event             = 0x3B94,  //TO BE REMOVE
 	//组合出料过程
 	HUITP_MSGID_sui_bfsc_ws_comb_out_req             = 0x3B15,
 	HUITP_MSGID_sui_bfsc_ws_comb_out_resp            = 0x3B95,
 	//抛料过程
-	HUITP_MSGID_sui_bfsc_ws_give_up_req              = 0x3B16,
-	HUITP_MSGID_sui_bfsc_ws_give_up_resp             = 0x3B96,
+	//HUITP_MSGID_sui_bfsc_ws_give_up_req              = 0x3B16,
+	//HUITP_MSGID_sui_bfsc_ws_give_up_resp             = 0x3B96,
 	//特殊命令过程（测试等过程）
 	HUITP_MSGID_sui_bfsc_command_req                 = 0x3B17,
 	HUITP_MSGID_sui_bfsc_command_resp                = 0x3B97,
@@ -541,7 +541,7 @@ typedef enum
 	HUITP_MSGID_sui_bfsc_err_inq_cmd_req             = 0x3B19,
 	HUITP_MSGID_sui_bfsc_err_inq_cmd_resp            = 0x3B99,
 	//统一结束符
-	HUITP_MSGID_uni_bfsc_comb_scale_max,
+	//HUITP_MSGID_uni_bfsc_comb_scale_max,
 
   //云控锁-锁-旧系统兼容
 	HUITP_MSGID_uni_ccl_lock_old_min                 = 0x4000,  

@@ -244,9 +244,10 @@ void StartDefaultTask(void const * argument)
     osDelay(1);
 		if(ReadWheChanOk())
 		{
-				temp = ReadSeriesADValue();
+				//temp = ReadSeriesADValue();
+				ihu_bsp_stm32_led_serv1_f2board_toggle();
 				temp2 = WeightSensorReadCurrent(&zWeightSensorParam);
-				printf("ReadValue = %d(%x) mapped %d\r\n", temp, temp, temp2);
+				printf("ReadValue = %d(%x) mapped %d\r\n", zWeightSensorParam.WeightSensorAdcValue, zWeightSensorParam.WeightSensorAdcValue, temp2);
 		}		
 //		uint8_t send_data = 0x0B;
 //		HAL_SPI_Transmit(&SpiHandle,&send_data,1,0);
@@ -262,7 +263,7 @@ void StartDefaultTask(void const * argument)
 void blk230_test_task(void const * argument)
 {
   /* USER CODE BEGIN blk230_test_task */
-	blk230_test_task_entry(argument);
+	//blk230_test_task_entry(argument);
   /* Infinite loop */
   for(;;)
   {
