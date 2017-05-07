@@ -10,6 +10,12 @@
 => 后续还需要继续验证 1. 有源RFID NRF24L01， 2 USB HOST的摄像头方案  3. 串口摄像头 4. 低功耗优化 5. 集成IAP和看门狗 6. 后台传输通道测试。
 **************************************************************************
 
+
+//= ZJL, 2017 May.2, CURRENT_SW_DELIVERY R03.132 =>CCL项目
+= Merge with MYC BFSC project update for L3 message list
+= 准备RTC调测
+
+
 //= ZJL, 2017 May.2, CURRENT_SW_DELIVERY R03.131 =>CCL项目
 = Merge with BFSC update for 207VG
 = DIDO的CPU 3.3v控制开关逻辑
