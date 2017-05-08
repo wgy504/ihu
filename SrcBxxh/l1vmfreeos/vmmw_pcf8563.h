@@ -71,20 +71,13 @@
                   应用到不同的外设头文件请在这里修改即可                        
 ******************************************************************************/
 
-//#include "iic.h"
-
 #include "stm32f2xx_hal.h"
-#include "stdio.h"
-#include "string.h"
-#include "sysdim.h"
 #include "vmfreeoslayer.h"
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-	#include "commsgccl.h"
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
-	#include "commsgbfsc.h"
-#else
-	#error Un-correct constant definition
-#endif		
+#include "bsp_usart.h"
+#include "bsp_i2c.h"
+#include "FreeRTOS.h"
+#include "cmsis_os.h"
+
 		
 /******************************************************************************
                                  参数宏定义
@@ -251,9 +244,9 @@ typedef struct
 //
 //闹铃开关
 //
-#define RTC_AlarmNewState_Open                   (u8)0x01
-#define RTC_AlarmNewState_Close                  (u8)0x02  //闹铃关闭，并且关闭中断输出
-#define RTC_AlarmNewState_Open_INT_Enable        (u8)0x04  //闹铃开启并开启中断输出
+#define RTC_AlarmNewState_Open                   (uint8_t)0x01
+#define RTC_AlarmNewState_Close                  (uint8_t)0x02  //闹铃关闭，并且关闭中断输出
+#define RTC_AlarmNewState_Open_INT_Enable        (uint8_t)0x04  //闹铃开启并开启中断输出
 //
 //定义闹铃类型
 //
@@ -425,6 +418,18 @@ void          PCF8563_SetAlarm                   (unsigned char PCF_Format, _PCF
 void          PCF8563_GetAlarm                   (unsigned char PCF_Format, _PCF8563_Alarm_Typedef* PCF_DataStruct);  //PCF8563读取闹铃信息
 
 
+//全局使用的常量定义
+
+
+//Local APIs
+int8_t func_vmmw_rtc_pcf8563_write_reg(uint8_t reg_add,uint8_t reg_dat);
+int8_t func_vmmw_rtc_pcf8563_write_buffer(uint8_t reg_add, uint8_t length, uint8_t *buffer);
+void func_vmmw_rtc_pcf8563_read_data(uint8_t reg_add,unsigned char *Read,uint8_t num);
+uint8_t func_vmmw_rtc_pcf8563_read_byte(uint8_t reg_add);
+int8_t func_vmmw_rtc_pcf8563_check(void);
+
+
+																								
 /**
   ****************************** Support C++ **********************************
 **/

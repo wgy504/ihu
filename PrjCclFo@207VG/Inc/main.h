@@ -163,6 +163,7 @@
 #define CUBEMX_PIN_F2_WKUP_KEY2_GPIO_Port GPIOE
 /* USER CODE BEGIN Private defines */
 extern void I2C_BSP_STM32_MPU6050_Error (void);
+extern void I2C_BSP_STM32_PCF8563_Error (void);
 /* USER CODE END Private defines */
 
 /**

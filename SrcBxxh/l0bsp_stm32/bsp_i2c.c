@@ -377,8 +377,6 @@ HAL_StatusTypeDef ihu_bsp_stm32_i2c_mpu6050_is_device_ready(uint16_t DevAddress,
 }
 
 
-
-
 //CCL SENSOR：给传感器发送数据和控制命令
 int ihu_bsp_stm32_i2c_ccl_send_data(uint8_t* buff, uint16_t len)
 {    
@@ -398,6 +396,81 @@ int ihu_bsp_stm32_i2c_ccl_sensor_rcv_data(uint8_t* buff, uint16_t len)
 }
 
 
+/************************************************
+ *
+ *
+ *  RTC PCF8563相关的处理过程
+ *
+ *
+ *
+**************************************************/
+int8_t ihu_bsp_stm32_i2c_pcf8563_write_data(uint16_t Addr, uint8_t Reg, uint8_t Value)
+{
+  HAL_StatusTypeDef status = HAL_OK;
+  
+  status = HAL_I2C_Mem_Write(&IHU_BSP_STM32_I2C_PCF8563_HANDLER, Addr, (uint16_t)Reg, I2C_MEMADD_SIZE_8BIT, &Value, 1, IHU_BSP_STM32_I2C_TIMEOUT_TX_MAX);
+  
+  /* 检测I2C通信状态 */
+  if(status != HAL_OK)
+  {
+    /* 调用I2C通信错误处理函数 */
+    I2C_BSP_STM32_PCF8563_Error();
+		return IHU_FAILURE;
+  }
+	return IHU_SUCCESS;
+}
+
+HAL_StatusTypeDef ihu_bsp_stm32_i2c_pcf8563_write_buffer(uint16_t Addr, uint8_t Reg, uint16_t RegSize, uint8_t *pBuffer, uint16_t Length)
+{
+  HAL_StatusTypeDef status = HAL_OK;
+  
+  status = HAL_I2C_Mem_Write(&IHU_BSP_STM32_I2C_PCF8563_HANDLER, Addr, (uint16_t)Reg, RegSize, pBuffer, Length, IHU_BSP_STM32_I2C_TIMEOUT_TX_MAX); 
+
+  /* 检测I2C通信状态 */
+  if(status != HAL_OK)
+  {
+    /* 调用I2C通信错误处理函数 */
+    I2C_BSP_STM32_PCF8563_Error();
+  }        
+  return status;
+}
+
+uint8_t ihu_bsp_stm32_i2c_pcf8563_read_data(uint16_t Addr, uint8_t Reg)
+{
+  HAL_StatusTypeDef status = HAL_OK;
+  uint8_t value = 0;
+  
+  status = HAL_I2C_Mem_Read(&IHU_BSP_STM32_I2C_PCF8563_HANDLER, Addr, Reg, I2C_MEMADD_SIZE_8BIT, &value, 1, IHU_BSP_STM32_I2C_TIMEOUT_TX_MAX);
+ 
+  /* 检测I2C通信状态 */
+  if(status != HAL_OK)
+  {
+    /* 调用I2C通信错误处理函数 */
+    I2C_BSP_STM32_PCF8563_Error();
+  
+  }
+  return value;
+}
+
+HAL_StatusTypeDef ihu_bsp_stm32_i2c_pcf8563_read_buffer(uint16_t Addr, uint8_t Reg, uint16_t RegSize, uint8_t *pBuffer, uint16_t Length)
+{
+  HAL_StatusTypeDef status = HAL_OK;
+
+  status = HAL_I2C_Mem_Read(&IHU_BSP_STM32_I2C_PCF8563_HANDLER, Addr, (uint16_t)Reg, RegSize, pBuffer, Length, IHU_BSP_STM32_I2C_TIMEOUT_TX_MAX);
+  
+  /* 检测I2C通信状态 */
+  if(status != HAL_OK)
+  {
+    /* 调用I2C通信错误处理函数 */
+    I2C_BSP_STM32_PCF8563_Error();
+  }        
+  return status;
+}
+
+HAL_StatusTypeDef ihu_bsp_stm32_i2c_pcf8563_is_device_ready(uint16_t DevAddress, uint32_t Trials)
+{ 
+  return (HAL_I2C_IsDeviceReady(&IHU_BSP_STM32_I2C_PCF8563_HANDLER, DevAddress, Trials, IHU_BSP_STM32_I2C_TIMEOUT_TX_MAX));
+}
 
 
 

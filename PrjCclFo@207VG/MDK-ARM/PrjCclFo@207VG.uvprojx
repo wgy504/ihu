@@ -843,6 +843,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l1vmfreeos\vmmw_navig.h</FilePath>
             </File>
+            <File>
+              <FileName>vmmw_pcf8563.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\vmmw_pcf8563.c</FilePath>
+            </File>
+            <File>
+              <FileName>vmmw_pcf8563.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\vmmw_pcf8563.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

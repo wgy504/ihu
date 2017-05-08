@@ -234,6 +234,12 @@ void I2C_BSP_STM32_MPU6050_Error (void)
   MX_I2C1_Init();
 }
 
+void I2C_BSP_STM32_PCF8563_Error (void)
+{
+  HAL_I2C_DeInit(&hi2c1);
+  MX_I2C1_Init();
+}
+
 /* USER CODE END 4 */
 
 /**

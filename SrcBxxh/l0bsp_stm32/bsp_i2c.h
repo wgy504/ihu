@@ -48,9 +48,13 @@ extern "C" {
 //MPU6050陀螺仪的I2C控制传感器，工作在MASTER模式下
 #define IHU_BSP_STM32_I2C_MPU6050_HANDLER					hi2c1
 #define IHU_BSP_STM32_I2C_MPU6050_HANDLER_ID  		1
-////被控从模式设备的地址：当AD0接地或者悬空时，地址为0x68，接VCC时，地址为0x69
+//被控从模式设备的地址：当AD0接地或者悬空时，地址为0x68，接VCC时，地址为0x69
 #define IHU_BSP_STM32_I2C_MPU6050_SENSOR_SLAVE_ADDRESS	    0x68  //0x30F  
 #define IHU_BSP_STM32_I2C_MPU6050_FIX_FRAME_LEN	    0x10  //通信帧长度，用于接收帧控制
+//PCF8563的I2C控制传感器，工作在MASTER模式下
+#define IHU_BSP_STM32_I2C_PCF8563_HANDLER					hi2c1
+#define IHU_BSP_STM32_I2C_PCF8563_HANDLER_ID  		1
+
 
 //CCL所对应的I2C控制传感器，工作在MASTER模式下
 #define IHU_BSP_STM32_I2C_CCL_SENSOR_HANDLER			hi2c1
@@ -80,8 +84,35 @@ uint8_t            ihu_bsp_stm32_i2c_mpu6050_read_data(uint16_t Addr, uint8_t Re
 HAL_StatusTypeDef  ihu_bsp_stm32_i2c_mpu6050_read_buffer(uint16_t Addr, uint8_t Reg, uint16_t RegSize, uint8_t *pBuffer, uint16_t Length);
 HAL_StatusTypeDef  ihu_bsp_stm32_i2c_mpu6050_is_device_ready(uint16_t DevAddress, uint32_t Trials);
 
+//RTC PCF8563
+int8_t             ihu_bsp_stm32_i2c_pcf8563_write_data(uint16_t Addr, uint8_t Reg, uint8_t Value);
+HAL_StatusTypeDef  ihu_bsp_stm32_i2c_pcf8563_write_buffer(uint16_t Addr, uint8_t Reg, uint16_t RegSize, uint8_t *pBuffer, uint16_t Length);
+uint8_t            ihu_bsp_stm32_i2c_pcf8563_read_data(uint16_t Addr, uint8_t Reg);
+HAL_StatusTypeDef  ihu_bsp_stm32_i2c_pcf8563_read_buffer(uint16_t Addr, uint8_t Reg, uint16_t RegSize, uint8_t *pBuffer, uint16_t Length);
+HAL_StatusTypeDef  ihu_bsp_stm32_i2c_pcf8563_is_device_ready(uint16_t DevAddress, uint32_t Trials);
+
+
 //外部引用API
 //extern void I2C_BSP_STM32_MPU6050_Error (void);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #ifdef __cplusplus
 }

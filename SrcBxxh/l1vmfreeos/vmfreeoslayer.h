@@ -701,6 +701,13 @@ extern void ihu_timer_routine_handler_10ms(void);
 //CCL SENSOR传感器
 #define ihu_l1hd_i2c_ccl_send_data 							ihu_bsp_stm32_i2c_ccl_send_data
 #define ihu_l1hd_i2c_ccl_sensor_rcv_data 				ihu_bsp_stm32_i2c_ccl_sensor_rcv_data
+//RTC时钟芯片PCF8563
+#define ihu_l1hd_i2c_pcf8563_write_data 				ihu_bsp_stm32_i2c_pcf8563_write_data
+#define ihu_l1hd_i2c_pcf8563_write_buffer 			ihu_bsp_stm32_i2c_pcf8563_write_buffer
+#define ihu_l1hd_i2c_pcf8563_read_data 					ihu_bsp_stm32_i2c_pcf8563_read_data
+#define ihu_l1hd_i2c_pcf8563_read_buffer 				ihu_bsp_stm32_i2c_pcf8563_read_buffer
+#define ihu_l1hd_i2c_pcf8563_is_device_ready 		ihu_bsp_stm32_i2c_pcf8563_is_device_ready
+
 
 //L0BSP=>L1HD: CAN
 #define ihu_l1hd_can_slave_hw_init							ihu_bsp_stm32_can_slave_hw_init
