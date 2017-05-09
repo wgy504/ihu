@@ -420,6 +420,9 @@ void          PCF8563_GetAlarm                   (unsigned char PCF_Format, _PCF
 
 //全局使用的常量定义
 
+//Global API
+extern int8_t func_vmmw_rtc_pcf8563_init(void);
+extern int8_t func_vmmw_rtc_pcf8563_set_alarm_process(void);
 
 //Local APIs
 int8_t func_vmmw_rtc_pcf8563_write_reg(uint8_t reg_add,uint8_t reg_dat);
@@ -427,7 +430,9 @@ int8_t func_vmmw_rtc_pcf8563_write_buffer(uint8_t reg_add, uint8_t length, uint8
 void func_vmmw_rtc_pcf8563_read_data(uint8_t reg_add,unsigned char *Read,uint8_t num);
 uint8_t func_vmmw_rtc_pcf8563_read_byte(uint8_t reg_add);
 int8_t func_vmmw_rtc_pcf8563_check(void);
-
+int8_t func_vmmw_rtc_pcf8563_boot_flag_process(void);
+int8_t func_vmmw_rtc_pcf8563_get_network_time_stamp_process(_PCF8563_Time_Typedef* PCF_DataStruct);
+int8_t func_vmmw_rtc_pcf8563_get_network_date_process(_PCF8563_Date_Typedef* PCF_DataStruct);
 
 																								
 /**

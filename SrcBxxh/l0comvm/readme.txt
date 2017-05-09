@@ -14,7 +14,8 @@
 //= ZJL, 2017 May.2, CURRENT_SW_DELIVERY R03.132 =>CCL项目
 = Merge with MYC BFSC project update for L3 message list
 = 准备RTC调测：使用HAL，参照MPU6050，重写PCF8563的驱动程序，层次结构放在VMMW层次，以便跟其他保持一致
-
+= RTC搞定，使用了ALARM闹铃方式
+= ADC确认是输入参考电压VREF没有连接，导致错误，连上之后就解决了
 
 //= ZJL, 2017 May.2, CURRENT_SW_DELIVERY R03.131 =>CCL项目
 = Merge with BFSC update for 207VG

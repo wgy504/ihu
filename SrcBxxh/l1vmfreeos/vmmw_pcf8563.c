@@ -580,17 +580,17 @@ static unsigned char RTC_Bcd2ToBin(unsigned char BCDValue)
   * @Return : none
   *****************************************************************************
 **/
-static void IS_PCF8563_Data(_PCF8563_Register_Typedef* PCF_DataStruct)
-{
-	if (PCF_DataStruct->Years > 99)           PCF_DataStruct->Years          = 0;  //恢复00年
-	if (PCF_DataStruct->Months_Century > 12)  PCF_DataStruct->Months_Century = 1;  //恢复1月
-	if (PCF_DataStruct->Days > 31)            PCF_DataStruct->Days           = 1;  //恢复1日
-	if (PCF_DataStruct->WeekDays > 6)         PCF_DataStruct->WeekDays       = 1;  //恢复星期一
-	
-	if (PCF_DataStruct->Hours > 23)           PCF_DataStruct->Hours          = 0;  //恢复0小时
-	if (PCF_DataStruct->Minutes > 59)         PCF_DataStruct->Minutes        = 0;  //恢复0分钟
-	if (PCF_DataStruct->Seconds > 59)         PCF_DataStruct->Seconds        = 0;  //恢复0秒
-}
+//static void IS_PCF8563_Data(_PCF8563_Register_Typedef* PCF_DataStruct)
+//{
+//	if (PCF_DataStruct->Years > 99)           PCF_DataStruct->Years          = 0;  //恢复00年
+//	if (PCF_DataStruct->Months_Century > 12)  PCF_DataStruct->Months_Century = 1;  //恢复1月
+//	if (PCF_DataStruct->Days > 31)            PCF_DataStruct->Days           = 1;  //恢复1日
+//	if (PCF_DataStruct->WeekDays > 6)         PCF_DataStruct->WeekDays       = 1;  //恢复星期一
+//	
+//	if (PCF_DataStruct->Hours > 23)           PCF_DataStruct->Hours          = 0;  //恢复0小时
+//	if (PCF_DataStruct->Minutes > 59)         PCF_DataStruct->Minutes        = 0;  //恢复0分钟
+//	if (PCF_DataStruct->Seconds > 59)         PCF_DataStruct->Seconds        = 0;  //恢复0秒
+//}
 
 /**
   *****************************************************************************
@@ -1154,7 +1154,7 @@ int8_t func_vmmw_rtc_pcf8563_write_reg(uint8_t reg_add, uint8_t reg_dat)
 //RegSize = 1，待确定
 int8_t func_vmmw_rtc_pcf8563_write_buffer(uint8_t reg_add, uint8_t length, uint8_t *buffer)
 {
-  if (ihu_l1hd_i2c_pcf8563_write_buffer(PCF8563_Write, reg_add, 1, buffer, length) == IHU_FAILURE)
+  if (ihu_l1hd_i2c_pcf8563_write_buffer(PCF8563_Write, reg_add, 1, buffer, length) != HAL_OK)
 		return IHU_FAILURE;
 	else
 		return IHU_SUCCESS;
@@ -1594,4 +1594,101 @@ void PCF8563_GetAlarm(unsigned char PCF_Format, _PCF8563_Alarm_Typedef* PCF_Data
 	}
 }
 
+
+
+
+/*
+
+RTC设计的一些考虑
+
+下午说的，程序APP/FACTORY LOAD启动的时候，设置一把RTC的定时，这个方式不能正确的工作
+因为程序本身的启动，CPU并不能判定是由于人工触发（通过锁具），还是由于定期唤醒导致的。如果是由于人工触发，将导致每一次启动，都会去重置RTC，会导致RTC定时周期的延时到达，比如8小时定时又会重新设置为8小时
+如果此时设置的是闹铃唤醒，倒是没太大问题，但必须是网络时钟，不然，CPU的APP只能设置一个固定的时间，嵌入式此时读取人工手动输入，也没有接口手段
+也就是说，CPU启动，必须从后台读取网络日历，并将此时间重新写到RTC，并重新设置闹铃。
+这种方式，当CPU频繁RESET的时候，会造成对RTC的多次重写，也不是特别优美。只有配合下午说的BOOT区标记位，才能既能起到不重复写的作用，又能保持必要的时间校准。这个标志位采用U8，每次访问+1，如果归零，就重新写一次，否则忽略，这样比较安全。
+
+*/
+
+
+
+//每一次程序启动的时候，都需要重新设置一下RTC的定时，因为它不能判定是由于人工触发的，还是由定时器触发的
+int8_t func_vmmw_rtc_pcf8563_init(void)
+{
+	ihu_usleep(200);
+
+	//需要根据I2C设备是否存在，进而决定是否要返回错误，不然后期的操作会阻塞在I2C设备里面
+	if (func_vmmw_rtc_pcf8563_check() == IHU_FAILURE){
+		IhuErrorPrint("VMMWRTC: RTC sensor (PCF8365) not detected!\n");
+		return IHU_FAILURE;
+	}
+	else
+		return IHU_SUCCESS;
+}
+
+//将RTC的所有处理全部放在一个函数中处理完成，方便上层的应用
+int8_t func_vmmw_rtc_pcf8563_set_alarm_process(void)
+{
+	//首先判定BOOT区的标识，自动加1，并判定是否为0
+	if (func_vmmw_rtc_pcf8563_boot_flag_process() != 0)
+	return IHU_SUCCESS;	
+	
+	//获取网络时钟
+	_PCF8563_Time_Typedef PCF_DataStruct_Time;
+	_PCF8563_Date_Typedef PCF_DataStruct_Date;
+	
+	func_vmmw_rtc_pcf8563_get_network_time_stamp_process(&PCF_DataStruct_Time);
+	func_vmmw_rtc_pcf8563_get_network_date_process(&PCF_DataStruct_Date);
+	
+	//然后将网络时钟数据写入RTC日历
+	unsigned char PCF_Format = PCF_Format_BCD;
+	unsigned char PCF_Century = PCF_Century_20xx;
+	PCF8563_SetTime(PCF_Format, &PCF_DataStruct_Time);
+	PCF8563_SetDate(PCF_Format, PCF_Century, &PCF_DataStruct_Date);
+	
+	//设置告警时间
+	_PCF8563_Alarm_Typedef PCF_DataStruct_Alarm;
+	PCF_DataStruct_Alarm.RTC_AlarmNewState = RTC_AlarmNewState_Open_INT_Enable;
+	PCF_DataStruct_Alarm.RTC_AlarmDays = 0;
+	PCF_DataStruct_Alarm.RTC_AlarmHours = 0;
+	PCF_DataStruct_Alarm.RTC_AlarmMinutes = 1;
+	PCF_DataStruct_Alarm.RTC_AlarmWeekDays = 0;
+	PCF_DataStruct_Alarm.RTC_AlarmType = RTC_AlarmType_Minutes | RTC_AlarmType_Hours | RTC_AlarmType_Days | RTC_AlarmType_WeekDays;
+	
+	//PCF_DataStruct_Alarm->
+	PCF8563_SetAlarm(PCF_Format_BCD, &PCF_DataStruct_Alarm);
+	IHU_DEBUG_PRINT_IPT("VMMWRTC: RTC sensor (PCF8365) set Alarm success, test duration = %d min!\n", PCF_DataStruct_Alarm.RTC_AlarmMinutes);
+
+//结束处理
+	return IHU_SUCCESS;
+}
+
+//Local API
+//如果是0，则意味着需要重新写入，否则就不需要
+int8_t func_vmmw_rtc_pcf8563_boot_flag_process(void)
+{
+	
+	return 0;
+}
+
+//获取网络时钟，并且以BCD格式为准
+int8_t func_vmmw_rtc_pcf8563_get_network_time_stamp_process(_PCF8563_Time_Typedef* PCF_DataStruct)
+{
+	PCF_DataStruct->RTC_Hours = 0;
+	PCF_DataStruct->RTC_Minutes = 0;
+	PCF_DataStruct->RTC_Seconds = 0;
+
+	return IHU_SUCCESS;
+}
+
+	
+//获取网络日历，并且以BCD格式为准
+int8_t func_vmmw_rtc_pcf8563_get_network_date_process(_PCF8563_Date_Typedef* PCF_DataStruct)
+{
+	PCF_DataStruct->RTC_Years = 17;
+	PCF_DataStruct->RTC_Months = 1;
+	PCF_DataStruct->RTC_Days = 1;
+	PCF_DataStruct->RTC_WeekDays = 1;
+
+	return IHU_SUCCESS;
+}
 

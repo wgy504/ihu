@@ -83,7 +83,7 @@ int16_t ihu_bsp_stm32_adc1_ccl_get_battery_value(void)
 	
 	ihu_bsp_stm32_adc1_start();
 	temp = (float)HAL_ADC_GetValue(&IHU_BSP_STM32_ADC1_HANDLER);
-	temp = temp / 4095 * 10000;
+	temp = temp / 4095 * 100;
 	ihu_bsp_stm32_adc1_stop();
 	return (((int)temp)&0xFFFF);
 }

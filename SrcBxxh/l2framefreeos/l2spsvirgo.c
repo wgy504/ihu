@@ -315,8 +315,16 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	ihu_l1hd_adc1_start();
 	ihu_sleep(1);
 	ihu_l1hd_adc1_ccl_get_battery_value();
-	IHU_DEBUG_PRINT_IPT("SPSVORGO: Battery Result = %d\n", ihu_l1hd_adc1_ccl_get_battery_value());
+	IHU_DEBUG_PRINT_IPT("SPSVORGO: Battery Result = %d%%\n", ihu_l1hd_adc1_ccl_get_battery_value());
 	ihu_sleep(1);
+	
+	//测试RTC
+	if (func_vmmw_rtc_pcf8563_init() == IHU_SUCCESS){
+		func_vmmw_rtc_pcf8563_set_alarm_process();
+	}
+	
+	//测试CPU停止
+//	ihu_l1hd_dido_f2board_cpu_power_ctrl_off();
 	
 	//不用使用透传工作方式，而采用ATCMD方式
 	//if (ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_in_transparant_mode(pMsgProc.authReq.bleMacAddr, 6) == IHU_SUCCESS){
