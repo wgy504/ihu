@@ -231,6 +231,14 @@ int16_t ihu_bsp_stm32_dido_f2board_lock4_di2_tongue_read(void)
 		return TRUE;	
 }
 
+int16_t ihu_bsp_stm32_dido_f2board_lock_act_flag_read(void)
+{
+	if (BSP_STM32_DIDO_LOCK_ACT_FLAG_READ == GPIO_PIN_RESET)
+		return FALSE;
+	else
+		return TRUE;	
+}
+
 void ihu_bsp_stm32_dido_f2board_lock4_do1_on(void)
 {
     BSP_STM32_DIDO_LOCK4_DO1_OFF;

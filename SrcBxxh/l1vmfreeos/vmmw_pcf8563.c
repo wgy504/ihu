@@ -1626,7 +1626,9 @@ int8_t func_vmmw_rtc_pcf8563_init(void)
 }
 
 //将RTC的所有处理全部放在一个函数中处理完成，方便上层的应用
-int8_t func_vmmw_rtc_pcf8563_set_alarm_process(void)
+//duration时间参数：以分钟为单位
+//只接受使用Hour/Min来控制闹铃的时间
+int8_t func_vmmw_rtc_pcf8563_set_alarm_process(int16_t duration)
 {
 	//首先判定BOOT区的标识，自动加1，并判定是否为0
 	if (func_vmmw_rtc_pcf8563_boot_flag_process() != 0)
@@ -1635,6 +1637,8 @@ int8_t func_vmmw_rtc_pcf8563_set_alarm_process(void)
 	//获取网络时钟
 	_PCF8563_Time_Typedef PCF_DataStruct_Time;
 	_PCF8563_Date_Typedef PCF_DataStruct_Date;
+	memset(&PCF_DataStruct_Time, 0, sizeof(_PCF8563_Time_Typedef));
+	memset(&PCF_DataStruct_Date, 0, sizeof(_PCF8563_Date_Typedef));
 	
 	func_vmmw_rtc_pcf8563_get_network_time_stamp_process(&PCF_DataStruct_Time);
 	func_vmmw_rtc_pcf8563_get_network_date_process(&PCF_DataStruct_Date);
@@ -1647,18 +1651,25 @@ int8_t func_vmmw_rtc_pcf8563_set_alarm_process(void)
 	
 	//设置告警时间
 	_PCF8563_Alarm_Typedef PCF_DataStruct_Alarm;
+	memset(&PCF_DataStruct_Alarm, 0, sizeof(_PCF8563_Alarm_Typedef));
 	PCF_DataStruct_Alarm.RTC_AlarmNewState = RTC_AlarmNewState_Open_INT_Enable;
-	PCF_DataStruct_Alarm.RTC_AlarmDays = 0;
-	PCF_DataStruct_Alarm.RTC_AlarmHours = 0;
-	PCF_DataStruct_Alarm.RTC_AlarmMinutes = 1;
-	PCF_DataStruct_Alarm.RTC_AlarmWeekDays = 0;
-	PCF_DataStruct_Alarm.RTC_AlarmType = RTC_AlarmType_Minutes | RTC_AlarmType_Hours | RTC_AlarmType_Days | RTC_AlarmType_WeekDays;
+	int16_t tmpHour = 0, tmpMin = 0;
+	tmpHour = duration / 60;
+	tmpMin = duration - tmpHour * 60;
+	if (tmpHour >= 24) tmpHour = tmpHour - (tmpHour/24)*24;
 	
-	//PCF_DataStruct_Alarm->
+	PCF_DataStruct_Alarm.RTC_AlarmDays = 0;
+	PCF_DataStruct_Alarm.RTC_AlarmHours = tmpHour;
+	PCF_DataStruct_Alarm.RTC_AlarmMinutes = tmpMin;
+	PCF_DataStruct_Alarm.RTC_AlarmWeekDays = 0;
+	//只接受使用Hour/Min来控制闹铃的时间
+	PCF_DataStruct_Alarm.RTC_AlarmType = RTC_AlarmType_Minutes | RTC_AlarmType_Hours;
+	//PCF_DataStruct_Alarm.RTC_AlarmType = RTC_AlarmType_Minutes | RTC_AlarmType_Hours | RTC_AlarmType_Days | RTC_AlarmType_WeekDays;
+	
 	PCF8563_SetAlarm(PCF_Format_BCD, &PCF_DataStruct_Alarm);
-	IHU_DEBUG_PRINT_IPT("VMMWRTC: RTC sensor (PCF8365) set Alarm success, test duration = %d min!\n", PCF_DataStruct_Alarm.RTC_AlarmMinutes);
+	//IHU_DEBUG_PRINT_IPT("VMMWRTC: RTC sensor (PCF8365) set Alarm success, test duration = %d min!\n", PCF_DataStruct_Alarm.RTC_AlarmMinutes);
 
-//结束处理
+	//结束处理
 	return IHU_SUCCESS;
 }
 
@@ -1691,4 +1702,51 @@ int8_t func_vmmw_rtc_pcf8563_get_network_date_process(_PCF8563_Date_Typedef* PCF
 
 	return IHU_SUCCESS;
 }
+
+//从当前时间以及ALARM闹铃的时间，判定闹铃是不是刚刚发生了
+//这里就不用对比日历，因为这个闹铃缺省认为，肯定是每天都发生的，所以只需要对比小时/分就可以了，秒都不用对齐
+bool func_vmmw_rtc_pcf8563_judge_alarm_happen(void)
+{
+	//声明新变量：不能是指针，不然没有分配内存
+	_PCF8563_Time_Typedef PCF_DataStruct_Time;
+	_PCF8563_Alarm_Typedef PCF_DataStruct_Alarm;
+	memset(&PCF_DataStruct_Time, 0, sizeof(_PCF8563_Time_Typedef));
+	memset(&PCF_DataStruct_Alarm, 0, sizeof(_PCF8563_Alarm_Typedef));
+	
+	//获取数据
+	PCF8563_GetTime(PCF_Format_BCD, &PCF_DataStruct_Time);
+	PCF8563_GetAlarm(PCF_Format_BCD, &PCF_DataStruct_Alarm);
+
+	//对比，确定是不是刚刚发生的
+	unsigned char delta_hour = 0, delta_min = 0;
+	if (PCF_DataStruct_Time.RTC_Hours > PCF_DataStruct_Alarm.RTC_AlarmHours) delta_hour = PCF_DataStruct_Time.RTC_Hours - PCF_DataStruct_Alarm.RTC_AlarmHours;
+	else delta_hour = PCF_DataStruct_Alarm.RTC_AlarmHours - PCF_DataStruct_Time.RTC_Hours;
+	
+	if (PCF_DataStruct_Time.RTC_Minutes > PCF_DataStruct_Alarm.RTC_AlarmMinutes) delta_min = PCF_DataStruct_Time.RTC_Minutes - PCF_DataStruct_Alarm.RTC_AlarmMinutes;
+	else delta_min = PCF_DataStruct_Alarm.RTC_AlarmMinutes - PCF_DataStruct_Time.RTC_Minutes;
+	
+	if ((delta_hour == 0) && (delta_min <= 1)) return TRUE;
+	else if ((delta_hour == 1) && (delta_min >= 59)) return TRUE;
+	else if ((delta_hour == 24) && (delta_min >= 59)) return TRUE;
+	else return FALSE;
+}
+
+//获取ALARM闹铃的时间长度：以分钟为单位
+//该函数并不仔细处理各种例外情况，只为自己方便的使用。比如，DAY、Foramt等信息都没有处理。这个ALARM闹铃的用法息息相关。
+//如果想做成非常通用的泛化函数，需要考虑各种情况了
+int16_t func_vmmw_rtc_pcf8563_get_alarm_duration(void)
+{
+	_PCF8563_Alarm_Typedef PCF_DataStruct_Alarm;
+	memset(&PCF_DataStruct_Alarm, 0, sizeof(_PCF8563_Alarm_Typedef));
+
+	//获取数据
+	PCF8563_GetAlarm(PCF_Format_BCD, &PCF_DataStruct_Alarm);	
+	
+	int16_t temp = 0;
+	temp = PCF_DataStruct_Alarm.RTC_AlarmHours*60 + PCF_DataStruct_Alarm.RTC_AlarmMinutes;
+
+	return temp;
+}
+
+
 

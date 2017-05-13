@@ -422,7 +422,11 @@ void          PCF8563_GetAlarm                   (unsigned char PCF_Format, _PCF
 
 //Global API
 extern int8_t func_vmmw_rtc_pcf8563_init(void);
-extern int8_t func_vmmw_rtc_pcf8563_set_alarm_process(void);
+extern int8_t func_vmmw_rtc_pcf8563_set_alarm_process(int16_t duration);
+extern bool func_vmmw_rtc_pcf8563_judge_alarm_happen(void);
+extern int16_t func_vmmw_rtc_pcf8563_get_alarm_duration(void);
+
+
 
 //Local APIs
 int8_t func_vmmw_rtc_pcf8563_write_reg(uint8_t reg_add,uint8_t reg_dat);

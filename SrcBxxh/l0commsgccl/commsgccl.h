@@ -86,7 +86,7 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_DIDO_CCL_EVENT_FAULT_TRIGGER,
 	MSG_ID_DIDO_CCL_EVENT_STATUS_UPDATE,
 	MSG_ID_DIDO_CCL_DOOR_OPEN_EVENT,
-	MSG_ID_DIDO_CCL_LOCK_C_DOOR_C_EVENT,
+	MSG_ID_DIDO_CCL_DOOR_CLOSE_EVENT,
 
 	//SPS
 	MSG_ID_SPS_L2FRAME_SEND,
@@ -114,6 +114,9 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_DCMI_CCL_SENSOR_STATUS_RESP,
 	
 	//CCL
+	MSG_ID_CCL_PERIOD_REPORT_TRIGGER,  //周期性触发
+	MSG_ID_CCL_FAULT_STATE_TRIGGER,          //差错触发
+	MSG_ID_CCL_HAND_ACTIVE_TRIGGER,          //人工触发
 	MSG_ID_CCL_SPS_OPEN_AUTH_INQ,  	   //后台查询
 	MSG_ID_CCL_COM_SENSOR_STATUS_REQ,
 	MSG_ID_CCL_COM_CTRL_CMD,
@@ -246,12 +249,12 @@ typedef struct msg_struct_dido_door_open_event
 	UINT16 length;
 }msg_struct_dido_ccl_door_open_event_t;
 
-//MSG_ID_DIDO_CCL_LOCK_C_DOOR_C_EVENT
-typedef struct msg_struct_dido_ccl_lock_c_door_c_event
+//MSG_ID_DIDO_CCL_DOOR_CLOSE_EVENT
+typedef struct msg_struct_dido_ccl_door_close_event
 {
 	UINT8 cmdid;
 	UINT16 length;
-}msg_struct_dido_ccl_lock_c_door_c_event_t;
+}msg_struct_dido_ccl_door_close_event_t;
 
 //SPS消息定义
 typedef struct msg_struct_spsvirgo_l2frame_send
@@ -367,6 +370,27 @@ typedef struct msg_struct_dcmi_ccl_sensor_status_rep
 }msg_struct_dcmi_ccl_sensor_status_rep_t;
 
 //CCL
+//MSG_ID_CCL_PERIOD_REPORT_TRIGGER,
+typedef struct msg_struct_ccl_period_reoport_trigger
+{
+	UINT8 cmdid;
+	UINT16 length;
+}msg_struct_ccl_period_reoport_trigger_t;
+
+//MSG_ID_CCL_FAULT_STATE_TRIGGER,
+typedef struct msg_struct_ccl_fault_state_trigger
+{
+	UINT8 cmdid;
+	UINT16 length;
+}msg_struct_ccl_fault_state_trigger_t;
+
+//MSG_ID_CCL_HAND_ACTIVE_TRIGGER,
+typedef struct msg_struct_ccl_hand_active_trigger
+{
+	UINT8 cmdid;
+	UINT16 length;
+}msg_struct_ccl_hand_active_trigger_t;
+
 //MSG_ID_CCL_SPS_OPEN_AUTH_INQ
 #define IHU_SYSMSG_CCL_BH_CTRL_CMD_BUF_LEN 20
 typedef struct msg_struct_ccl_sps_open_auth_inq

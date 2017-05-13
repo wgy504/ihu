@@ -998,9 +998,9 @@ void func_cloud_standard_xml_generate_message_test_data(void)
 	pMsgProc3.lockState.ieLen = HUITP_ENDIAN_EXG16(2 + IHU_CCL_SENSOR_LOCK_NUMBER_MAX); //实际上配置的锁的多少
 	pMsgProc3.lockState.maxLockNo = IHU_CCL_SENSOR_LOCK_NUMBER_MAX;
 	pMsgProc3.lockState.lockId = IHU_CCL_SENSOR_LOCK_NUMBER_MAX; //这个表示全部
-	for (i = 0; i < IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
-		pMsgProc3.lockState.lockState[i] = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open_state(i) == TRUE)?HUITP_IEID_UNI_LOCK_STATE_OPEN:HUITP_IEID_UNI_LOCK_STATE_CLOSE);
-	}
+//	for (i = 0; i < IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
+//		pMsgProc3.lockState.lockState[i] = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open_state(i) == TRUE)?HUITP_IEID_UNI_LOCK_STATE_OPEN:HUITP_IEID_UNI_LOCK_STATE_CLOSE);
+//	}
 	//StrIe_HUITP_IEID_uni_ccl_door_state_t
 	pMsgProc3.doorState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_lock_state);
 	pMsgProc3.doorState.ieLen = HUITP_ENDIAN_EXG16(2 + IHU_CCL_SENSOR_LOCK_NUMBER_MAX); //实际上配置的门的多少

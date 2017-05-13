@@ -311,17 +311,17 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 //	ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_1, 12);
 			
 	//测试ADC采样数据
-	ihu_sleep(1);
-	ihu_l1hd_adc1_start();
-	ihu_sleep(1);
-	ihu_l1hd_adc1_ccl_get_battery_value();
-	IHU_DEBUG_PRINT_IPT("SPSVORGO: Battery Result = %d%%\n", ihu_l1hd_adc1_ccl_get_battery_value());
-	ihu_sleep(1);
+//	ihu_sleep(1);
+//	ihu_l1hd_adc1_start();
+//	ihu_sleep(1);
+//	ihu_l1hd_adc1_ccl_get_battery_value();
+//	IHU_DEBUG_PRINT_IPT("SPSVORGO: Battery Result = %d%%\n", ihu_l1hd_adc1_ccl_get_battery_value());
+//	ihu_sleep(1);
 	
 	//测试RTC
-	if (func_vmmw_rtc_pcf8563_init() == IHU_SUCCESS){
-		func_vmmw_rtc_pcf8563_set_alarm_process();
-	}
+//	if (func_vmmw_rtc_pcf8563_init() == IHU_SUCCESS){
+//		func_vmmw_rtc_pcf8563_set_alarm_process(1);
+//	}
 	
 	//测试CPU停止
 //	ihu_l1hd_dido_f2board_cpu_power_ctrl_off();
@@ -489,9 +489,9 @@ OPSTAT fsm_spsvirgo_ccl_event_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 	pMsgProc.lockState.ieLen = HUITP_ENDIAN_EXG16(2 + IHU_CCL_SENSOR_LOCK_NUMBER_MAX); //实际上配置的锁的多少
 	pMsgProc.lockState.maxLockNo = IHU_CCL_SENSOR_LOCK_NUMBER_MAX;
 	pMsgProc.lockState.lockId = IHU_CCL_SENSOR_LOCK_NUMBER_MAX; //这个表示全部
-	for (i = 0; i < IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
-		pMsgProc.lockState.lockState[i] = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open_state(i) == TRUE)?HUITP_IEID_UNI_LOCK_STATE_OPEN:HUITP_IEID_UNI_LOCK_STATE_CLOSE);
-	}
+//	for (i = 0; i < IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
+//		pMsgProc.lockState.lockState[i] = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open_state(i) == TRUE)?HUITP_IEID_UNI_LOCK_STATE_OPEN:HUITP_IEID_UNI_LOCK_STATE_CLOSE);
+//	}
 	//StrIe_HUITP_IEID_uni_ccl_door_state_t
 	pMsgProc.doorState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_lock_state);
 	pMsgProc.doorState.ieLen = HUITP_ENDIAN_EXG16(2 + IHU_CCL_SENSOR_LOCK_NUMBER_MAX); //实际上配置的门的多少
@@ -669,9 +669,9 @@ OPSTAT fsm_spsvirgo_ccl_fault_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 	pMsgProc.lockState.ieLen = HUITP_ENDIAN_EXG16(2 + IHU_CCL_SENSOR_LOCK_NUMBER_MAX); //实际上配置的锁的多少
 	pMsgProc.lockState.maxLockNo = IHU_CCL_SENSOR_LOCK_NUMBER_MAX;
 	pMsgProc.lockState.lockId = IHU_CCL_SENSOR_LOCK_NUMBER_MAX; //这个表示全部
-	for (i = 0; i < IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
-		pMsgProc.lockState.lockState[i] = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open_state(i) == TRUE)?HUITP_IEID_UNI_LOCK_STATE_OPEN:HUITP_IEID_UNI_LOCK_STATE_CLOSE);
-	}
+//	for (i = 0; i < IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
+//		pMsgProc.lockState.lockState[i] = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open_state(i) == TRUE)?HUITP_IEID_UNI_LOCK_STATE_OPEN:HUITP_IEID_UNI_LOCK_STATE_CLOSE);
+//	}
 	//StrIe_HUITP_IEID_uni_ccl_door_state_t
 	pMsgProc.doorState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_lock_state);
 	pMsgProc.doorState.ieLen = HUITP_ENDIAN_EXG16(2 + IHU_CCL_SENSOR_LOCK_NUMBER_MAX); //实际上配置的门的多少
@@ -827,9 +827,9 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 	pMsgProc.lockState.ieLen = HUITP_ENDIAN_EXG16(2 + IHU_CCL_SENSOR_LOCK_NUMBER_MAX); //实际上配置的锁的多少
 	pMsgProc.lockState.maxLockNo = IHU_CCL_SENSOR_LOCK_NUMBER_MAX;
 	pMsgProc.lockState.lockId = IHU_CCL_SENSOR_LOCK_NUMBER_MAX; //这个表示全部
-	for (i = 0; i < IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
-		pMsgProc.lockState.lockState[i] = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open_state(i) == TRUE)?HUITP_IEID_UNI_LOCK_STATE_OPEN:HUITP_IEID_UNI_LOCK_STATE_CLOSE);
-	}
+//	for (i = 0; i < IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
+//		pMsgProc.lockState.lockState[i] = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open_state(i) == TRUE)?HUITP_IEID_UNI_LOCK_STATE_OPEN:HUITP_IEID_UNI_LOCK_STATE_CLOSE);
+//	}
 	//StrIe_HUITP_IEID_uni_ccl_door_state_t
 	pMsgProc.doorState.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_lock_state);
 	pMsgProc.doorState.ieLen = HUITP_ENDIAN_EXG16(2 + IHU_CCL_SENSOR_LOCK_NUMBER_MAX); //实际上配置的门的多少

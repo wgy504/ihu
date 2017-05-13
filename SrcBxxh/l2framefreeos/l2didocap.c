@@ -394,11 +394,11 @@ void func_didocap_time_out_work_mode_period_scan(void)
 	if ((FsmGetState(TASK_ID_CCL) == FSM_STATE_CCL_DOOR_OPEN) || (FsmGetState(TASK_ID_CCL) == FSM_STATE_CCL_FATAL_FAULT)){
 		if (func_didocap_ccl_work_mode_ul_scan_any_door_open() == TRUE)
 		{
-			msg_struct_dido_ccl_lock_c_door_c_event_t snd2;
-			memset(&snd2, 0, sizeof(msg_struct_dido_ccl_lock_c_door_c_event_t));
+			msg_struct_dido_ccl_door_close_event_t snd2;
+			memset(&snd2, 0, sizeof(msg_struct_dido_ccl_door_close_event_t));
 			snd2.cmdid = IHU_CCL_DH_CMDID_EVENT_IND_DOOR_LOCK_ALL_C;
-			snd2.length = sizeof(msg_struct_dido_ccl_lock_c_door_c_event_t);
-			ret = ihu_message_send(MSG_ID_DIDO_CCL_LOCK_C_DOOR_C_EVENT, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd2, snd2.length);
+			snd2.length = sizeof(msg_struct_dido_ccl_door_close_event_t);
+			ret = ihu_message_send(MSG_ID_DIDO_CCL_DOOR_CLOSE_EVENT, TASK_ID_CCL, TASK_ID_DIDOCAP, &snd2, snd2.length);
 			if (ret == IHU_FAILURE){
 				zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
 				IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName, zIhuVmCtrTab.task[TASK_ID_CCL].taskName);
@@ -420,7 +420,7 @@ void func_didocap_time_out_work_mode_period_scan(void)
 			zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
 			IhuErrorPrint("DIDOCAP: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName, zIhuVmCtrTab.task[TASK_ID_CCL].taskName);
 			return ;
-		}		
+		}
 	}
 
 	//WORK_MODE/FAULT_MODE下的状态变化，则发送UPDATE消息给CCL，暂时没有什么用途
@@ -701,7 +701,8 @@ bool func_didocap_ccl_work_mode_ul_scan_all_door_and_lock_close(void)
 
 //WORK_MODE下的四种EVENT扫描情况，目前暂时只需要这四种，不需要更多的
 //寻找任何的锁触发信号
-//TRUE：至少一个锁触发被激活，FLASE：所有锁触发均关。
+//TRUE：至少一个锁触发被激活，FLASE：所有锁触发均关
+//在新的触发模式下，这个函数已经不再有效。为了历史原因，暂时保留
 bool func_didocap_ccl_work_mode_ul_scan_enable_lock_trigger(void)
 {
 	int i = 0;
@@ -726,11 +727,34 @@ bool func_didocap_ccl_work_mode_ul_scan_enable_lock_trigger(void)
 //WORK_MODE下的四种EVENT扫描情况，目前暂时只需要这四种，不需要更多的
 //速锁是否至少一个门或者锁具被打开
 //TRUE：至少一个门或者锁具开，FLASE：所有门锁均关。
+//在新的触发模式下，这个函数中的tongue不再有效
 bool func_didocap_ccl_work_mode_ul_scan_door_and_lock_status_change(void)
 {
 	int i = 0;
 	bool flag = FALSE;
 
+	//OLD MODE，综合判定门限和门舌
+	//寻找唯一的污染源
+//	for (i = 0; i<IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
+//		if (i==0){
+//			flag = (flag || ihu_l1hd_dido_f2board_door1_restriction_read());
+//			flag = (flag || ihu_l1hd_dido_f2board_lock1_di2_tongue_read());
+//		}
+//		if (i==1){
+//			flag = (flag || ihu_l1hd_dido_f2board_door2_restriction_read());
+//			flag = (flag || ihu_l1hd_dido_f2board_lock2_di2_tongue_read());
+//		}
+//		if (i==2){
+//			flag = (flag || ihu_l1hd_dido_f2board_door3_restriction_read());
+//			flag = (flag || ihu_l1hd_dido_f2board_lock3_di2_tongue_read());
+//		}
+//		if (i==3){
+//			flag = (flag || ihu_l1hd_dido_f2board_door4_restriction_read());
+//			flag = (flag || ihu_l1hd_dido_f2board_lock4_di2_tongue_read());
+//		}
+//	}
+	
+	//NEW MODE: 只判定门限
 	//寻找唯一的污染源
 	for (i = 0; i<IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
 		if (i==0){
@@ -762,6 +786,7 @@ bool func_didocap_ccl_work_mode_ul_scan_door_and_lock_status_change(void)
 //SLEEP模式下扫描
 //寻找任何的锁触发信号
 //TRUE：至少一个锁触发被激活，FLASE：所有锁触发均关。
+//在新的触发模式下，这个函数已经不再有效。为了历史原因，暂时保留
 bool func_didocap_ccl_sleep_mode_ul_scan_lock_trigger(void)
 {
 	int i = 0;
@@ -786,12 +811,12 @@ bool func_didocap_ccl_sleep_mode_ul_scan_lock_trigger(void)
 //SLEEP模式下扫描
 bool func_didocap_ccl_sleep_mode_ul_scan_shake_trigger(void)
 {
-	//return ihu_l1hd_dido_f2board_shake_read();
+	return ihu_l1hd_dido_f2board_shake_read();
 
-	if (rand()%5 == 1)
-		return TRUE;
-	else
-		return FALSE;
+//	if (rand()%5 == 1)
+//		return TRUE;
+//	else
+//		return FALSE;
 }
 
 //SLEEP&FAULT模式下扫描：或者综合结果
@@ -804,8 +829,8 @@ bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_status(void)
 	for (i=0; i<IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
 		zIhuCclDidocapCtrlTable.sensor.doorState[i] = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_door_open_state(i) == TRUE)?IHU_CCL_SENSOR_STATE_OPEN:IHU_CCL_SENSOR_STATE_CLOSE);
 		if (zIhuCclDidocapCtrlTable.sensor.doorState[i] == IHU_CCL_SENSOR_STATE_OPEN) {tmp++; LockDoorCnt++;}
-		zIhuCclDidocapCtrlTable.sensor.lockTongueState[i] = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open_state(i) == TRUE)?IHU_CCL_SENSOR_STATE_OPEN:IHU_CCL_SENSOR_STATE_CLOSE);
-		if (zIhuCclDidocapCtrlTable.sensor.lockTongueState[i] == IHU_CCL_SENSOR_STATE_OPEN) {tmp++; LockDoorCnt++;}
+//		zIhuCclDidocapCtrlTable.sensor.lockTongueState[i] = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open_state(i) == TRUE)?IHU_CCL_SENSOR_STATE_OPEN:IHU_CCL_SENSOR_STATE_CLOSE);
+//		if (zIhuCclDidocapCtrlTable.sensor.lockTongueState[i] == IHU_CCL_SENSOR_STATE_OPEN) {tmp++; LockDoorCnt++;}
 	}
 	zIhuCclDidocapCtrlTable.sensor.waterState = ((ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_water_state() == TRUE)?IHU_CCL_SENSOR_STATE_ACTIVE:IHU_CCL_SENSOR_STATE_DEACTIVE);
 	if (zIhuCclDidocapCtrlTable.sensor.waterState == IHU_CCL_SENSOR_STATE_ACTIVE) tmp++;
@@ -843,7 +868,8 @@ bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_recover(void)
 	else return FALSE;
 }
 
-//SLEEP&FAULT模式下扫描：扫描出哪个门，如果是IHU_CCL_SENSOR_LOCK_NUMBER_MAX则意味着没有
+//SLEEP&FAULT模式下扫描：扫描出哪个门，
+//如果是IHU_CCL_SENSOR_LOCK_NUMBER_MAX则意味着扫描所有的门
 bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_door_open_state(UINT8 doorid)
 {
 	if (doorid < IHU_CCL_SENSOR_LOCK_NUMBER_MAX){
@@ -852,8 +878,19 @@ bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_door_open_state(UINT8 
 		else if (doorid==2) return ((ihu_l1hd_dido_f2board_door3_restriction_read()==FALSE)?FALSE:TRUE);
 		else if (doorid==3) return ((ihu_l1hd_dido_f2board_door4_restriction_read()==FALSE)?FALSE:TRUE);
 	}
+	//意味着使用了更大的doorid
+	else{
+		if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX == 1) return ((ihu_l1hd_dido_f2board_door1_restriction_read()==FALSE)?FALSE:TRUE);
+		else if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX == 2){
+			return (((ihu_l1hd_dido_f2board_door1_restriction_read()==FALSE)?FALSE:TRUE) || ((ihu_l1hd_dido_f2board_door2_restriction_read()==FALSE)?FALSE:TRUE));
+		}
+		else if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX == 4){
+			return (((ihu_l1hd_dido_f2board_door1_restriction_read()==FALSE)?FALSE:TRUE) || ((ihu_l1hd_dido_f2board_door2_restriction_read()==FALSE)?FALSE:TRUE) ||
+				((ihu_l1hd_dido_f2board_door3_restriction_read()==FALSE)?FALSE:TRUE) || ((ihu_l1hd_dido_f2board_door4_restriction_read()==FALSE)?FALSE:TRUE));
+		}
+	}
 	
-	//DOORID出错了
+	//DOORID出错了，或者其它条件出错了
 	return TRUE;
 	
 //	if (rand()%2 == 1)
@@ -863,23 +900,24 @@ bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_door_open_state(UINT8 
 }
 
 //SLEEP&FAULT模式下扫描：扫描出哪个锁，如果是IHU_CCL_SENSOR_LOCK_NUMBER_MAX则意味着没有
-bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open_state(UINT8 lockid)
-{
-	if (lockid < IHU_CCL_SENSOR_LOCK_NUMBER_MAX){
-		if (lockid==0) return ((ihu_l1hd_dido_f2board_lock1_di2_tongue_read()==FALSE)?FALSE:TRUE);
-		else if (lockid==1) return ((ihu_l1hd_dido_f2board_lock2_di2_tongue_read()==FALSE)?FALSE:TRUE);
-		else if (lockid==2) return ((ihu_l1hd_dido_f2board_lock3_di2_tongue_read()==FALSE)?FALSE:TRUE);
-		else if (lockid==3) return ((ihu_l1hd_dido_f2board_lock3_di2_tongue_read()==FALSE)?FALSE:TRUE);
-	}
-	
-	//lockid出错了
-	return TRUE;
-	
-//	if (rand()%2 == 1)
-//		return TRUE;
-//	else
-//		return FALSE;
-}
+//在新的触发模式下，这个函数已经不再有效。为了历史原因，暂时保留
+//bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open_state(UINT8 lockid)
+//{
+//	if (lockid < IHU_CCL_SENSOR_LOCK_NUMBER_MAX){
+//		if (lockid==0) return ((ihu_l1hd_dido_f2board_lock1_di2_tongue_read()==FALSE)?FALSE:TRUE);
+//		else if (lockid==1) return ((ihu_l1hd_dido_f2board_lock2_di2_tongue_read()==FALSE)?FALSE:TRUE);
+//		else if (lockid==2) return ((ihu_l1hd_dido_f2board_lock3_di2_tongue_read()==FALSE)?FALSE:TRUE);
+//		else if (lockid==3) return ((ihu_l1hd_dido_f2board_lock3_di2_tongue_read()==FALSE)?FALSE:TRUE);
+//	}
+//	
+//	//lockid出错了
+//	return TRUE;
+//	
+////	if (rand()%2 == 1)
+////		return TRUE;
+////	else
+////		return FALSE;
+//}
 
 //SLEEP&FAULT模式下扫描：扫描水
 bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_water_state(void)

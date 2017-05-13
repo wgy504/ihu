@@ -349,7 +349,7 @@ enum IHU_TIMER_ID_ALL
 	TIMER_ID_1S_EMC68X_PERIOD_SCAN,
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 	TIMER_ID_1S_CCL_PERIOD_SCAN,
-	TIMER_ID_1S_CCL_EVENT_REPORT_PEROID_SCAN,
+	//TIMER_ID_1S_CCL_EVENT_REPORT_PEROID_SCAN,
 	TIMER_ID_1S_CCL_LOCK_WORK_ACTIVE,    			//锁具最长的激活时间
 	TIMER_ID_1S_CCL_LOCK_WORK_WAIT_TO_OPEN,   //锁被打开，等待开门的时间
 	TIMER_ID_1S_CCL_DIDO_TRIGGER_PERIOD_SCAN,  //SLEEP模式下触发工作的定时器
@@ -767,6 +767,8 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_dido_f2board_ble_atcmd_mode_ctrl_off  ihu_bsp_stm32_dido_f2board_ble_atcmd_mode_ctrl_off
 #define ihu_l1hd_dido_f2board_ds18b20_init    					ihu_bsp_stm32_dido_ds18b20_init
 #define ihu_l1hd_dido_f2board_ds18b20_temp_read     		ihu_bsp_stm32_dido_f2board_ds18b20_temp_read 
+#define ihu_l1hd_dido_f2board_lock_act_flag_read     		ihu_bsp_stm32_dido_f2board_lock_act_flag_read 
+
 
 //L0BSP=>L1HD: WDOG
 #define ihu_l1hd_watch_dog_refresh      				ihu_bsp_stm32_watch_dog_refresh

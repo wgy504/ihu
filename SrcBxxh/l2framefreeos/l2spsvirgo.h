@@ -168,7 +168,7 @@ extern int ihu_bsp_stm32_spi_slave_hw_init(void);
 extern OPSTAT ihu_vmmw_rfidmod_mf522_spi_read_id(uint8_t *rfidAddr, uint8_t len);
 extern OPSTAT ihu_vmmw_rfidmod_nrf24l01_spi_read_id(uint8_t *rfidAddr, uint8_t len);
 extern int8_t func_vmmw_rtc_pcf8563_init(void);
-extern int8_t func_vmmw_rtc_pcf8563_set_alarm_process(void);
+extern int8_t func_vmmw_rtc_pcf8563_set_alarm_process(int16_t duration);
 
 //高级定义，简化程序的可读性
 #define IHU_ERROR_PRINT_SPSVIRGO(...)	do{zIhuSysStaPm.taskRunErrCnt[TASK_ID_SPSVIRGO]++;  IhuErrorPrint(__VA_ARGS__);  return IHU_FAILURE;}while(0)	

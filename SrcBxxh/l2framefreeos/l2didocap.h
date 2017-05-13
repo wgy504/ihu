@@ -118,7 +118,7 @@ bool func_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_recover(void);
 
 //全局函数
 extern bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_door_open_state(UINT8 doorid);
-extern bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open_state(UINT8 lockid);
+//extern bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_lock_open_state(UINT8 lockid);
 extern bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_water_state(void);
 extern bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_smoke_state(void);
 extern bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_fall_state(void);
