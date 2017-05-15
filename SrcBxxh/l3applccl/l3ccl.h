@@ -110,8 +110,8 @@ void func_ccl_time_out_period_event_report(void);
 //void func_ccl_time_out_event_report_period_scan(void);
 OPSTAT func_ccl_time_out_lock_work_active(void);
 OPSTAT func_ccl_time_out_lock_work_wait_door_for_open(void);
-void func_ccl_close_all_sensor(void);
-void func_ccl_open_all_sensor(void);
+void func_ccl_close_all_sensor_power(void);
+void func_ccl_open_all_sensor_power(void);
 void func_ccl_stm_main_recovery_from_fault(void);  //提供了一种比RESTART更低层次的状态恢复方式
 
 //高级定义，简化程序的可读性，包括return IHU_FAILURE在内的宏定义，没搞定。。。

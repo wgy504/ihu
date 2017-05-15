@@ -231,6 +231,7 @@ int16_t ihu_bsp_stm32_dido_f2board_door3_restriction_read(void)
 //		return TRUE;	
 //}
 
+//4、  增加按钮启动识别信号输入：SW_FLAG为PB13（PIN52）高电平为按钮上电，低电平为RTC闹铃上电
 int16_t ihu_bsp_stm32_dido_f2board_lock_act_flag_read(void)
 {
 	if (BSP_STM32_DIDO_LOCK_ACT_FLAG_READ == GPIO_PIN_RESET)
@@ -277,27 +278,6 @@ void ihu_bsp_stm32_dido_f2board_gprsmod_power_key_off(void)
     BSP_STM32_DIDO_GPRSMOD_PWR_KEY_OFF;
 }
 
-
-void ihu_bsp_stm32_dido_f2board_ble_power_ctrl_on(void)
-{
-    BSP_STM32_DIDO_BLE_PWR_CTRL_ON;
-}
-
-void ihu_bsp_stm32_dido_f2board_ble_power_ctrl_off(void)
-{
-    BSP_STM32_DIDO_BLE_PWR_CTRL_OFF;
-}
-
-void ihu_bsp_stm32_dido_f2board_rfid_power_ctrl_on(void)
-{
-    BSP_STM32_DIDO_RFID_PWR_CTRL_ON;
-}
-
-void ihu_bsp_stm32_dido_f2board_rfid_power_ctrl_off(void)
-{
-    BSP_STM32_DIDO_RFID_PWR_CTRL_OFF;
-}
-
 void ihu_bsp_stm32_dido_f2board_sensor_power_ctrl_on(void)
 {
     BSP_STM32_DIDO_SENSOR_PWR_CTRL_ON;
@@ -313,10 +293,21 @@ void ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_on(void)
     BSP_STM32_DIDO_CPU_PWR_CTRL_ON;
 }
 
+void ihu_bsp_stm32_dido_f2board_mq2_cam_power_ctrl_off(void)
+{
+    BSP_STM32_DIDO_MQ2_CAM_PWR_CTRL_OFF;
+}
+
+void ihu_bsp_stm32_dido_f2board_mq2_cam_power_ctrl_on(void)
+{
+    BSP_STM32_DIDO_MQ2_CAM_PWR_CTRL_ON;
+}
+
 void ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_off(void)
 {
     BSP_STM32_DIDO_CPU_PWR_CTRL_OFF;
 }
+
 
 void ihu_bsp_stm32_dido_f2board_ble_atcmd_mode_ctrl_on(void)
 {

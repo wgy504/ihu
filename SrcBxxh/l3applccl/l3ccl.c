@@ -172,7 +172,7 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 	ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_1, 9);
 	
 	//等待3秒，以便其它任务进入稳定状态
-	func_ccl_close_all_sensor();
+	func_ccl_close_all_sensor_power();
 	ihu_sleep(3);
 
 	//判定是人工触发
@@ -196,7 +196,8 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 	}
 	
 	//闹铃唤醒的，判定是哪一种闹铃：8小时周期报告定时，还是10分钟差错闹铃
-	else if (func_vmmw_rtc_pcf8563_judge_alarm_happen() == TRUE){
+	//else if (func_vmmw_rtc_pcf8563_judge_alarm_happen() == TRUE){
+	else {
 		//读取闹铃设置信息
 		if (func_vmmw_rtc_pcf8563_get_alarm_duration() == IHU_CCL_ALARM_FAULT_PERIOD_DURATION){
 			//扫描门限
@@ -255,22 +256,22 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 	}
 	
 	//既不是定时，也不是人工设定，是某种差错，统一当周期性汇报处理
-	else{
-		//正常的进入周期性汇报状态机
-		if (func_vmmw_rtc_pcf8563_init() == IHU_SUCCESS){
-			func_vmmw_rtc_pcf8563_set_alarm_process(IHU_CCL_ALARM_NORMAL_PERIOD_DURATION);
-		}
-		//进入8小时正常的报告状态
-		FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_EVENT_REPORT);
+//	else {
+//		//正常的进入周期性汇报状态机
+//		if (func_vmmw_rtc_pcf8563_init() == IHU_SUCCESS){
+//			func_vmmw_rtc_pcf8563_set_alarm_process(IHU_CCL_ALARM_NORMAL_PERIOD_DURATION);
+//		}
+//		//进入8小时正常的报告状态
+//		FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_EVENT_REPORT);
 
-		//发送触发消息给CCL模块
-		msg_struct_ccl_period_reoport_trigger_t snd;
-		memset(&snd, 0, sizeof(msg_struct_ccl_period_reoport_trigger_t));	
-		snd.length = sizeof(msg_struct_ccl_period_reoport_trigger_t);
-		ret = ihu_message_send(MSG_ID_CCL_PERIOD_REPORT_TRIGGER, TASK_ID_CCL, TASK_ID_CCL, &snd, snd.length);
-		if (ret == IHU_FAILURE)
-			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_CCL].taskName);
-	}	
+//		//发送触发消息给CCL模块
+//		msg_struct_ccl_period_reoport_trigger_t snd;
+//		memset(&snd, 0, sizeof(msg_struct_ccl_period_reoport_trigger_t));	
+//		snd.length = sizeof(msg_struct_ccl_period_reoport_trigger_t);
+//		ret = ihu_message_send(MSG_ID_CCL_PERIOD_REPORT_TRIGGER, TASK_ID_CCL, TASK_ID_CCL, &snd, snd.length);
+//		if (ret == IHU_FAILURE)
+//			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_CCL].taskName);
+//	}
 	
 	//测试整体硬件进入休眠状态
 	//ihu_l1hd_pwr_sav_enter_into_stop_mode();
@@ -531,7 +532,7 @@ OPSTAT fsm_ccl_sps_event_report_cfm(UINT8 dest_id, UINT8 src_id, void * param_pt
 	memcpy(&rcv, param_ptr, param_len);
 		
 	//关闭所有接口
-	func_ccl_close_all_sensor();
+	func_ccl_close_all_sensor_power();
 	
 	//延时并关断CPU系统
 	ihu_sleep(2);
@@ -575,7 +576,7 @@ void func_ccl_time_out_period_event_report(void)
 //	msg_struct_ccl_com_sensor_status_req_t snd;
 
 //	//打开所有接口
-//	func_ccl_open_all_sensor();
+//	func_ccl_open_all_sensor_power();
 //	
 //	//先进入EVENT_REPORT状态
 //	if (FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_EVENT_REPORT) == IHU_FAILURE){
@@ -611,7 +612,7 @@ OPSTAT fsm_ccl_period_report_trigger(UINT8 dest_id, UINT8 src_id, void * param_p
 	msg_struct_ccl_com_sensor_status_req_t snd;
 
 	//打开所有接口
-	func_ccl_open_all_sensor();
+	func_ccl_open_all_sensor_power();
 	
 	//控制所有传感器，进入工作模式
 	//作为周期采样模式，这里是不必要的，只有在工作模式下才需要这个过程
@@ -662,7 +663,7 @@ OPSTAT func_ccl_time_out_lock_work_active(void)
 //			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DCMIARIS].taskName);
 		
 		//关闭所有接口
-		func_ccl_close_all_sensor();
+		func_ccl_close_all_sensor_power();
 		
 		//延时并关断CPU系统
 		ihu_sleep(2);
@@ -798,7 +799,7 @@ OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 //			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DCMIARIS].taskName);
 		
 		//关闭所有接口
-		func_ccl_close_all_sensor();
+		func_ccl_close_all_sensor_power();
 		
 		//停止定时器
 		if (ihu_timer_stop(TASK_ID_CCL, TIMER_ID_1S_CCL_LOCK_WORK_ACTIVE, TIMER_RESOLUTION_1S) == IHU_FAILURE)
@@ -1004,7 +1005,7 @@ OPSTAT fsm_ccl_sps_close_door_report_cfm(UINT8 dest_id, UINT8 src_id, void * par
 //		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DCMIARIS].taskName);
 	
 	//关闭所有接口
-	func_ccl_close_all_sensor();
+	func_ccl_close_all_sensor_power();
 	
 	//停止定时器
 	//实际上只有在FSM_STATE_CCL_DOOR_OPEN状态下才有意义，在FSM_STATE_CCL_FATAL_FAULT状态下这个定时器本来就没有被激活
@@ -1073,7 +1074,7 @@ OPSTAT fsm_ccl_hand_active_trigger_to_work(UINT8 dest_id, UINT8 src_id, void * p
 	memcpy(&rcv, param_ptr, param_len);	
 	
 	//打开所有接口
-	func_ccl_open_all_sensor();
+	func_ccl_open_all_sensor_power();
 	
 	//发送控制给所有下位机
 //	memset(&snd, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
@@ -1134,7 +1135,7 @@ OPSTAT fsm_ccl_fault_state_trigger(UINT8 dest_id, UINT8 src_id, void * param_ptr
 	memcpy(&rcv, param_ptr, param_len);	
 	
 	//打开所有接口
-	func_ccl_open_all_sensor();
+	func_ccl_open_all_sensor_power();
 	
 	//拉灯拉BEEP
 	ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_2, 30);
@@ -1184,7 +1185,7 @@ OPSTAT fsm_ccl_fault_state_trigger(UINT8 dest_id, UINT8 src_id, void * param_ptr
 //	memcpy(&rcv, param_ptr, param_len);	
 //			
 //	//打开所有接口
-//	func_ccl_open_all_sensor();
+//	func_ccl_open_all_sensor_power();
 
 //	//控制所有下位机到到差错状态
 //	memset(&snd, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
@@ -1255,7 +1256,7 @@ OPSTAT fsm_ccl_sps_fault_report_cfm(UINT8 dest_id, UINT8 src_id, void * param_pt
 	memcpy(&rcv, param_ptr, param_len);
 
 	//关闭所有接口
-	func_ccl_close_all_sensor();
+	func_ccl_close_all_sensor_power();
 	
 	//延时并关断CPU系统
 	ihu_sleep(5);
@@ -1266,7 +1267,7 @@ OPSTAT fsm_ccl_sps_fault_report_cfm(UINT8 dest_id, UINT8 src_id, void * param_pt
 }
 
 //打开所有的外设
-void func_ccl_open_all_sensor(void)
+void func_ccl_open_all_sensor_power(void)
 {
 	//GPRS模块必须先上电，然后RST拉低2S的方波
 	ihu_l1hd_dido_f2board_gprsmod_power_supply_on();
@@ -1275,16 +1276,18 @@ void func_ccl_open_all_sensor(void)
 	ihu_sleep(2);
 	ihu_l1hd_dido_f2board_gprsmod_power_key_on();
 	//BLE等外设电源
-	ihu_l1hd_dido_f2board_ble_power_ctrl_on();
-	ihu_l1hd_dido_f2board_rfid_power_ctrl_on();
 	ihu_l1hd_dido_f2board_sensor_power_ctrl_on();
+	ihu_l1hd_dido_f2board_mq2_cam_power_ctrl_on();
 	//未来需要确定，温度传感器等耗电的传感器是否在用GPIO控制开关在控
 	//打开温湿度传感器
 	ihu_l1hd_dido_f2board_dht11_init();
+	//打开ADC的控制
+	ihu_l1hd_adc1_start();
+	//其它的传感器，角度传感器MPU6050_SPI，震动传感器SW420等初始化，RTC I2C，均留给程序自己去搞定初始化
 }
 
 //关掉所有的外设
-void func_ccl_close_all_sensor(void)
+void func_ccl_close_all_sensor_power(void)
 {
 	//GPRSMOD的关电：先关闭POWER_KEY，防止数据丢失，然后再下电
 	ihu_l1hd_dido_f2board_gprsmod_power_key_off();
@@ -1293,9 +1296,8 @@ void func_ccl_close_all_sensor(void)
 	ihu_usleep(100);
 	ihu_l1hd_dido_f2board_gprsmod_power_supply_off();
 	//BLE等外设关电
-	ihu_l1hd_dido_f2board_ble_power_ctrl_off();	
-	ihu_l1hd_dido_f2board_rfid_power_ctrl_off();
 	ihu_l1hd_dido_f2board_sensor_power_ctrl_off();
+	ihu_l1hd_dido_f2board_mq2_cam_power_ctrl_off();
 }
 
 //由于错误，直接关机，等待再次被激活
@@ -1304,7 +1306,7 @@ void func_ccl_stm_main_recovery_from_fault(void)
 	//msg_struct_ccl_com_ctrl_cmd_t snd;
 
 	//关闭所有外部器件的电源
-	func_ccl_close_all_sensor();
+	func_ccl_close_all_sensor_power();
 
 	//设置三个模块进入SLEEP工作模式，发送控制给所有下位机
 //	memset(&snd, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));

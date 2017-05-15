@@ -8,8 +8,20 @@
 
 //= ZJL, 2017 May.15, CURRENT_SW_DELIVERY R03.135 =>CCL项目
 = 跑G502的稳定性
-
-
+= PEM2修改管脚
+	1、  震动输入：ZD_57（第一版信号名称是SW-57）从PD2（PIN83）改为PE12（PIN43）
+	2、  蜂鸣器输出控制：SPK从PC8（PIN65）改为PE13（PIN44）
+	3、  关断主电源输出：OFF_VM（第一版为EN_VM）从PC7（PIN64）改为PB12（PIN51）
+	增加: 
+	4、  增加按钮启动识别信号输入：SW_FLAG为PB13（PIN52）高电平为按钮上电，低电平为RTC闹铃上电。CPU
+	5、  增加UART4：
+	PC10（PIN78） 为UART4_TX_CAM
+	PC11（PIN79） 为UART4_RX_CAM 
+	6、  增加外设电源控制：
+	 SW_V5_P（MQ-2电源、串口摄像机）： PE14（PIN45）
+	SW_V33_P（BLT、MPU6050、RFID、DHT、SW2电源）：PE15（PIN46）
+= 调整电源管脚配置，去掉BLE/RFID的电源单独控制，归并到SENSOR电源控制中
+= 增加MQ2_CAM电源控制，因为这个电源电压不太一样
 
 //= ZJL, 2017 May.13, CURRENT_SW_DELIVERY R03.134 =>CCL项目
 = 继续晚上CCL状态机

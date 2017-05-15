@@ -306,15 +306,6 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	
 	//统一考虑三种触发方式：BLE/RFID/LOCK, 后台会再加上PID/电话号码方式，总共5种方式
 			
-	//测试ADC采样数据
-//	ihu_sleep(1);
-//	ihu_l1hd_adc1_start();
-//	ihu_sleep(1);
-//	ihu_l1hd_adc1_ccl_get_battery_value();
-//	IHU_DEBUG_PRINT_IPT("SPSVORGO: Battery Result = %d%%\n", ihu_l1hd_adc1_ccl_get_battery_value());
-//	ihu_sleep(1);
-
-	
 	//不用使用透传工作方式，而采用ATCMD方式
 	//if (ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_in_transparant_mode(pMsgProc.authReq.bleMacAddr, 6) == IHU_SUCCESS){
 	if (ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_in_AT_cmd_mode(pMsgProc.authReq.bleMacAddr, 6) == IHU_SUCCESS){
