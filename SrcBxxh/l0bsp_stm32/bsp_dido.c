@@ -26,10 +26,10 @@ int16_t ihu_bsp_stm32_dido_f2board_dht11_temp_read(void)
 	ihu_bsp_stm32_dido_ds18b20_init();
 	ihu_usleep(100);
 	if (func_bsp_stm32_dido_dht11_read_temp_and_humidity(&output) == SUCCESS){
-		IHU_DEBUG_PRINT_FAT("BSP_DIDO: Temperature Read result = %4.1f\n", output.temperature);
+		IHU_DEBUG_PRINT_INF("BSP_DIDO: Temperature Read result = %4.1f\n", output.temperature);
 		return (int16_t)(output.temperature*100);
 	}else{
-		IHU_DEBUG_PRINT_FAT("BSP_DIDO: Temperature Read result = %d\n", 0xFFFF);
+		IHU_DEBUG_PRINT_INF("BSP_DIDO: Temperature Read result = %d\n", 0xFFFF);
 		return 0xFFFF;
 	}
 }
@@ -43,10 +43,10 @@ int16_t ihu_bsp_stm32_dido_f2board_dht11_humid_read(void)
 	ihu_bsp_stm32_dido_ds18b20_init();
 	ihu_usleep(100);
 	if (func_bsp_stm32_dido_dht11_read_temp_and_humidity(&output) == SUCCESS){
-		IHU_DEBUG_PRINT_FAT("BSP_DIDO: Humidity Read result = %4.1f\n", output.humidity);
+		IHU_DEBUG_PRINT_INF("BSP_DIDO: Humidity Read result = %4.1f\n", output.humidity);
 		return (int16_t)(output.humidity*100);
 	}else{
-		IHU_DEBUG_PRINT_FAT("BSP_DIDO: Humidity Read result = %d\n", 0xFFFF);
+		IHU_DEBUG_PRINT_INF("BSP_DIDO: Humidity Read result = %d\n", 0xFFFF);
 		return 0xFFFF;
 	}
 }
@@ -75,7 +75,7 @@ int16_t ihu_bsp_stm32_dido_f2board_shake_read(void)
 	res[0] = ((BSP_STM32_DIDO_SHAKE_READ == GPIO_PIN_RESET)?1:-1);
 
 	total = res[0] + res[1] + res[2];
-	IHU_DEBUG_PRINT_FAT("BSP_DIDO: SHAKE Read result = %d\n", total);
+	IHU_DEBUG_PRINT_INF("BSP_DIDO: SHAKE Read result = %d\n", total);
 	
 	if (total > 0)
 		return FALSE;
@@ -96,7 +96,7 @@ int16_t ihu_bsp_stm32_dido_f2board_smoke_read(void)
 	res[0] = ((BSP_STM32_DIDO_SMOKE_READ == GPIO_PIN_RESET)?1:-1);	
 	
 	total = res[0] + res[1] + res[2];
-	IHU_DEBUG_PRINT_FAT("BSP_DIDO: SMOKE Read result = %d\n", total);
+	IHU_DEBUG_PRINT_INF("BSP_DIDO: SMOKE Read result = %d\n", total);
 	
 	if (total < 0)
 		return FALSE;
@@ -291,6 +291,7 @@ void ihu_bsp_stm32_dido_f2board_sensor_power_ctrl_off(void)
 void ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_on(void)
 {
     BSP_STM32_DIDO_CPU_PWR_CTRL_ON;
+	
 }
 
 void ihu_bsp_stm32_dido_f2board_mq2_cam_power_ctrl_off(void)
@@ -305,7 +306,9 @@ void ihu_bsp_stm32_dido_f2board_mq2_cam_power_ctrl_on(void)
 
 void ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_off(void)
 {
-    BSP_STM32_DIDO_CPU_PWR_CTRL_OFF;
+	IHU_DEBUG_PRINT_FAT("BSP_DIDO: CPU starting to power off...\n");
+	ihu_usleep(200);
+  BSP_STM32_DIDO_CPU_PWR_CTRL_OFF;
 }
 
 

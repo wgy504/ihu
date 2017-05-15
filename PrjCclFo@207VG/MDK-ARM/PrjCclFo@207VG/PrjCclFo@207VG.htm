@@ -3,7 +3,7 @@
 <title>Static Call Graph - [PrjCclFo@207VG\PrjCclFo@207VG.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image PrjCclFo@207VG\PrjCclFo@207VG.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Mon May 15 16:29:44 2017
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Mon May 15 17:05:35 2017
 <BR><P>
 <H3>Maximum Stack Usage =       2832 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1904,6 +1904,7 @@ Global Symbols
 <LI><a href="#[255]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_dido_f2board_shake_read
 <LI><a href="#[253]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_dido_f2board_dht11_temp_read
 <LI><a href="#[251]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_dido_f2board_dht11_humid_read
+<LI><a href="#[197]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_off
 <LI><a href="#[1d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_bsp_stm32_dido_dht11_read_temp_and_humidity
 <LI><a href="#[148]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_message_send
 <LI><a href="#[26a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_vm_system_ctr_table_init
@@ -1951,6 +1952,7 @@ Global Symbols
 <LI><a href="#[255]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_dido_f2board_shake_read
 <LI><a href="#[253]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_dido_f2board_dht11_temp_read
 <LI><a href="#[251]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_dido_f2board_dht11_humid_read
+<LI><a href="#[197]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_off
 <LI><a href="#[1d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_bsp_stm32_dido_dht11_read_temp_and_humidity
 <LI><a href="#[148]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_message_send
 <LI><a href="#[26a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_vm_system_ctr_table_init
@@ -2942,7 +2944,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> l3ccl.o(.data)
 </UL>
 <P><STRONG><a name="[4c]"></a>fsm_ccl_sps_event_report_cfm</STRONG> (Thumb, 76 bytes, Stack size 8 bytes, l3ccl.o(i.fsm_ccl_sps_event_report_cfm))
-<BR><BR>[Stack]<UL><LI>Max Depth = 464<LI>Call Chain = fsm_ccl_sps_event_report_cfm &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<BR><BR>[Stack]<UL><LI>Max Depth = 480<LI>Call Chain = fsm_ccl_sps_event_report_cfm &rArr; func_ccl_stm_main_recovery_from_fault &rArr; ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_off &rArr; IhuDebugPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
 <LI><a href="#[197]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_off
@@ -2955,7 +2957,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> l3ccl.o(.data)
 </UL>
 <P><STRONG><a name="[53]"></a>fsm_ccl_sps_fault_report_cfm</STRONG> (Thumb, 76 bytes, Stack size 8 bytes, l3ccl.o(i.fsm_ccl_sps_fault_report_cfm))
-<BR><BR>[Stack]<UL><LI>Max Depth = 464<LI>Call Chain = fsm_ccl_sps_fault_report_cfm &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<BR><BR>[Stack]<UL><LI>Max Depth = 480<LI>Call Chain = fsm_ccl_sps_fault_report_cfm &rArr; func_ccl_stm_main_recovery_from_fault &rArr; ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_off &rArr; IhuDebugPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
 <LI><a href="#[197]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_off
@@ -3201,7 +3203,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> l2didocap.o(.data)
 </UL>
-<P><STRONG><a name="[1f]"></a>fsm_i2caries_ccl_sensor_status_req</STRONG> (Thumb, 268 bytes, Stack size 72 bytes, l2i2caries.o(i.fsm_i2caries_ccl_sensor_status_req))
+<P><STRONG><a name="[1f]"></a>fsm_i2caries_ccl_sensor_status_req</STRONG> (Thumb, 260 bytes, Stack size 72 bytes, l2i2caries.o(i.fsm_i2caries_ccl_sensor_status_req))
 <BR><BR>[Stack]<UL><LI>Max Depth = 1384<LI>Call Chain = fsm_i2caries_ccl_sensor_status_req &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fmul
@@ -3756,7 +3758,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[18c]"></a>func_ccl_stm_main_recovery_from_fault</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, l3ccl.o(i.func_ccl_stm_main_recovery_from_fault))
-<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = func_ccl_stm_main_recovery_from_fault &rArr; func_ccl_close_all_sensor_power &rArr; ihu_usleep &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<BR><BR>[Stack]<UL><LI>Max Depth = 472<LI>Call Chain = func_ccl_stm_main_recovery_from_fault &rArr; ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_off &rArr; IhuDebugPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[197]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_off
 <LI><a href="#[f1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_sleep
@@ -4953,10 +4955,13 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[1bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_in_AT_cmd_mode
 </UL>
 
-<P><STRONG><a name="[197]"></a>ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_off</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, bsp_dido.o(i.ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_off))
-<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_off &rArr; HAL_GPIO_WritePin
+<P><STRONG><a name="[197]"></a>ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_off</STRONG> (Thumb, 50 bytes, Stack size 8 bytes, bsp_dido.o(i.ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_off))
+<BR><BR>[Stack]<UL><LI>Max Depth = 464<LI>Call Chain = ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_off &rArr; IhuDebugPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[fc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
+<LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
+<LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintFo
+<LI><a href="#[188]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_usleep
 </UL>
 <BR>[Called By]<UL><LI><a href="#[199]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_ccl_time_out_lock_work_active
 <LI><a href="#[18c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_ccl_stm_main_recovery_from_fault
@@ -5861,6 +5866,7 @@ Global Symbols
 <LI><a href="#[255]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_dido_f2board_shake_read
 <LI><a href="#[253]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_dido_f2board_dht11_temp_read
 <LI><a href="#[251]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_dido_f2board_dht11_humid_read
+<LI><a href="#[197]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_off
 <LI><a href="#[1d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_bsp_stm32_dido_dht11_read_temp_and_humidity
 <LI><a href="#[f3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_message_rcv
 <LI><a href="#[1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_timer_init

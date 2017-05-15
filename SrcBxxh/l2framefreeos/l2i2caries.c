@@ -446,10 +446,10 @@ OPSTAT fsm_i2caries_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * pa
 	if (ihu_vmmw_navig_mpu6050_init() == IHU_SUCCESS){
 		//采用NF2结构
 		snd.sensor.rsv1Value = (UINT16)(ihu_wmmw_navig_mpu6050_axis_z_angle_caculate_by_static_method() * 100);
-		IHU_DEBUG_PRINT_IPT("I2CARIES: Fall Angle Read Result = [%4.2f]\n", (snd.sensor.rsv1Value*1.0)/100.0);
+		IHU_DEBUG_PRINT_INF("I2CARIES: Fall Angle Read Result = [%4.2f]\n", (snd.sensor.rsv1Value*1.0)/100.0);
 	}else{
 		snd.sensor.rsv1Value = 0;
-		IHU_DEBUG_PRINT_IPT("I2CARIES: Fall Angle Read Result error!\n");
+		IhuErrorPrint("I2CARIES: Fall Angle Read Result error!\n");
 	}
 	
 	snd.length = sizeof(msg_struct_i2c_ccl_sensor_status_rep_t);

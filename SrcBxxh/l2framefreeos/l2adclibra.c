@@ -532,7 +532,7 @@ bool ihu_adclibra_ccl_scan_battery_warning_level(void)
 	ihu_usleep(200);
 	
 	//打印信息，方便调测
-	IHU_DEBUG_PRINT_IPT("ADCLIBRA: Battery Result = %d%%\n", ihu_l1hd_adc1_ccl_get_battery_value());
+	IHU_DEBUG_PRINT_INF("ADCLIBRA: Battery Result = %d%%\n", ihu_l1hd_adc1_ccl_get_battery_value());
 	
 	if ((ihu_l1hd_adc1_ccl_get_battery_value() > IHU_CCL_ADC_BATTERY_WARNING_MAX_VALUE) || (ihu_l1hd_adc1_ccl_get_battery_value() < IHU_CCL_ADC_BATTERY_WARNING_MIN_VALUE))
 		return TRUE;
