@@ -112,21 +112,21 @@ int16_t ihu_bsp_stm32_dido_f2board_water_read(void)
 		return TRUE;	
 }					
 								
-int16_t ihu_bsp_stm32_dido_f2board_lock1_di1_trigger_read(void)
-{
-	if (BSP_STM32_DIDO_LOCK1_DI1_TRIGGER_READ == GPIO_PIN_RESET)
-		return FALSE;
-	else
-		return TRUE;		
-}									
+//int16_t ihu_bsp_stm32_dido_f2board_lock1_di1_trigger_read(void)
+//{
+//	if (BSP_STM32_DIDO_LOCK1_DI1_TRIGGER_READ == GPIO_PIN_RESET)
+//		return FALSE;
+//	else
+//		return TRUE;		
+//}									
 
-int16_t ihu_bsp_stm32_dido_f2board_lock1_di2_tongue_read(void)
-{
-	if (BSP_STM32_DIDO_LOCK1_DI2_TONGUE_READ == GPIO_PIN_RESET)
-		return FALSE;
-	else
-		return TRUE;			
-}
+//int16_t ihu_bsp_stm32_dido_f2board_lock1_di2_tongue_read(void)
+//{
+//	if (BSP_STM32_DIDO_LOCK1_DI2_TONGUE_READ == GPIO_PIN_RESET)
+//		return FALSE;
+//	else
+//		return TRUE;			
+//}
 
 //锁具的开关，采用的低电平，所以ON/OFF应该反向
 void ihu_bsp_stm32_dido_f2board_lock1_do1_on(void)
@@ -147,21 +147,21 @@ int16_t ihu_bsp_stm32_dido_f2board_door1_restriction_read(void)
 		return TRUE;
 }         
             
-int16_t ihu_bsp_stm32_dido_f2board_lock2_di1_trigger_read(void)
-{
-	if (BSP_STM32_DIDO_LOCK2_DI1_TRIGGER_READ == GPIO_PIN_RESET)
-		return FALSE;
-	else
-		return TRUE;
-}									
+//int16_t ihu_bsp_stm32_dido_f2board_lock2_di1_trigger_read(void)
+//{
+//	if (BSP_STM32_DIDO_LOCK2_DI1_TRIGGER_READ == GPIO_PIN_RESET)
+//		return FALSE;
+//	else
+//		return TRUE;
+//}									
 
-int16_t ihu_bsp_stm32_dido_f2board_lock2_di2_tongue_read(void)
-{
-	if (BSP_STM32_DIDO_LOCK2_DI2_TONGUE_READ == GPIO_PIN_RESET)
-		return FALSE;
-	else
-		return TRUE;
-}
+//int16_t ihu_bsp_stm32_dido_f2board_lock2_di2_tongue_read(void)
+//{
+//	if (BSP_STM32_DIDO_LOCK2_DI2_TONGUE_READ == GPIO_PIN_RESET)
+//		return FALSE;
+//	else
+//		return TRUE;
+//}
 
 void ihu_bsp_stm32_dido_f2board_lock2_do1_on(void)
 {
@@ -181,21 +181,21 @@ int16_t ihu_bsp_stm32_dido_f2board_door2_restriction_read(void)
 		return TRUE;
 }   	
 
-int16_t ihu_bsp_stm32_dido_f2board_lock3_di1_trigger_read(void)
-{
-	if (BSP_STM32_DIDO_LOCK3_DI1_TRIGGER_READ == GPIO_PIN_RESET)
-		return FALSE;
-	else
-		return TRUE;
-}
+//int16_t ihu_bsp_stm32_dido_f2board_lock3_di1_trigger_read(void)
+//{
+//	if (BSP_STM32_DIDO_LOCK3_DI1_TRIGGER_READ == GPIO_PIN_RESET)
+//		return FALSE;
+//	else
+//		return TRUE;
+//}
 
-int16_t ihu_bsp_stm32_dido_f2board_lock3_di2_tongue_read(void)
-{
-	if (BSP_STM32_DIDO_LOCK3_DI2_TONGUE_READ == GPIO_PIN_RESET)
-		return FALSE;
-	else
-		return TRUE;
-}
+//int16_t ihu_bsp_stm32_dido_f2board_lock3_di2_tongue_read(void)
+//{
+//	if (BSP_STM32_DIDO_LOCK3_DI2_TONGUE_READ == GPIO_PIN_RESET)
+//		return FALSE;
+//	else
+//		return TRUE;
+//}
 
 void ihu_bsp_stm32_dido_f2board_lock3_do1_on(void)
 {
@@ -215,21 +215,21 @@ int16_t ihu_bsp_stm32_dido_f2board_door3_restriction_read(void)
 		return TRUE;
 }   	
 
-int16_t ihu_bsp_stm32_dido_f2board_lock4_di1_trigger_read(void)
-{
-	if (BSP_STM32_DIDO_LOCK4_DI1_TRIGGER_READ == GPIO_PIN_RESET)
-		return FALSE;
-	else
-		return TRUE;
-}									
+//int16_t ihu_bsp_stm32_dido_f2board_lock4_di1_trigger_read(void)
+//{
+//	if (BSP_STM32_DIDO_LOCK4_DI1_TRIGGER_READ == GPIO_PIN_RESET)
+//		return FALSE;
+//	else
+//		return TRUE;
+//}									
 
-int16_t ihu_bsp_stm32_dido_f2board_lock4_di2_tongue_read(void)
-{
-	if (BSP_STM32_DIDO_LOCK4_DI2_TONGUE_READ == GPIO_PIN_RESET)
-		return FALSE;
-	else
-		return TRUE;	
-}
+//int16_t ihu_bsp_stm32_dido_f2board_lock4_di2_tongue_read(void)
+//{
+//	if (BSP_STM32_DIDO_LOCK4_DI2_TONGUE_READ == GPIO_PIN_RESET)
+//		return FALSE;
+//	else
+//		return TRUE;	
+//}
 
 int16_t ihu_bsp_stm32_dido_f2board_lock_act_flag_read(void)
 {

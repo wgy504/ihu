@@ -84,22 +84,22 @@ extern int dido_time_base;
 	#define BSP_STM32_DIDO_LOCK4_DO1_GPIO										CUBEMX_PIN_F2_GPIO_DO_LOCK4_SWITCH_GPIO_Port
 
 	//从业务逻辑上，待删除
-	#define BSP_STM32_DIDO_LOCK1_DI1_TRIGGER_GPIO_PIN				GPIO_PIN_13          
-	#define BSP_STM32_DIDO_LOCK1_DI1_TRIGGER_GPIO						GPIOB    
-	#define BSP_STM32_DIDO_LOCK1_DI2_TONGUE_GPIO_PIN				GPIO_PIN_13           
-	#define BSP_STM32_DIDO_LOCK1_DI2_TONGUE_GPIO						GPIOB     
-	#define BSP_STM32_DIDO_LOCK2_DI1_TRIGGER_GPIO_PIN				GPIO_PIN_13          
-	#define BSP_STM32_DIDO_LOCK2_DI1_TRIGGER_GPIO						GPIOB    
-	#define BSP_STM32_DIDO_LOCK2_DI2_TONGUE_GPIO_PIN				GPIO_PIN_13           
-	#define BSP_STM32_DIDO_LOCK2_DI2_TONGUE_GPIO						GPIOB     
-	#define BSP_STM32_DIDO_LOCK3_DI1_TRIGGER_GPIO_PIN				GPIO_PIN_13          
-	#define BSP_STM32_DIDO_LOCK3_DI1_TRIGGER_GPIO						GPIOB    
-	#define BSP_STM32_DIDO_LOCK3_DI2_TONGUE_GPIO_PIN				GPIO_PIN_13           
-	#define BSP_STM32_DIDO_LOCK3_DI2_TONGUE_GPIO						GPIOB     
-	#define BSP_STM32_DIDO_LOCK4_DI1_TRIGGER_GPIO_PIN				GPIO_PIN_13          
-	#define BSP_STM32_DIDO_LOCK4_DI1_TRIGGER_GPIO						GPIOB    
-	#define BSP_STM32_DIDO_LOCK4_DI2_TONGUE_GPIO_PIN				GPIO_PIN_13           
-	#define BSP_STM32_DIDO_LOCK4_DI2_TONGUE_GPIO						GPIOB     
+//	#define BSP_STM32_DIDO_LOCK1_DI1_TRIGGER_GPIO_PIN				GPIO_PIN_13          
+//	#define BSP_STM32_DIDO_LOCK1_DI1_TRIGGER_GPIO						GPIOB    
+//	#define BSP_STM32_DIDO_LOCK1_DI2_TONGUE_GPIO_PIN				GPIO_PIN_13           
+//	#define BSP_STM32_DIDO_LOCK1_DI2_TONGUE_GPIO						GPIOB     
+//	#define BSP_STM32_DIDO_LOCK2_DI1_TRIGGER_GPIO_PIN				GPIO_PIN_13          
+//	#define BSP_STM32_DIDO_LOCK2_DI1_TRIGGER_GPIO						GPIOB    
+//	#define BSP_STM32_DIDO_LOCK2_DI2_TONGUE_GPIO_PIN				GPIO_PIN_13           
+//	#define BSP_STM32_DIDO_LOCK2_DI2_TONGUE_GPIO						GPIOB     
+//	#define BSP_STM32_DIDO_LOCK3_DI1_TRIGGER_GPIO_PIN				GPIO_PIN_13          
+//	#define BSP_STM32_DIDO_LOCK3_DI1_TRIGGER_GPIO						GPIOB    
+//	#define BSP_STM32_DIDO_LOCK3_DI2_TONGUE_GPIO_PIN				GPIO_PIN_13           
+//	#define BSP_STM32_DIDO_LOCK3_DI2_TONGUE_GPIO						GPIOB     
+//	#define BSP_STM32_DIDO_LOCK4_DI1_TRIGGER_GPIO_PIN				GPIO_PIN_13          
+//	#define BSP_STM32_DIDO_LOCK4_DI1_TRIGGER_GPIO						GPIOB    
+//	#define BSP_STM32_DIDO_LOCK4_DI2_TONGUE_GPIO_PIN				GPIO_PIN_13           
+//	#define BSP_STM32_DIDO_LOCK4_DI2_TONGUE_GPIO						GPIOB     
 
 
 
@@ -112,23 +112,23 @@ extern int dido_time_base;
 	#define BSP_STM32_DIDO_SHAKE_READ								HAL_GPIO_ReadPin(BSP_STM32_DIDO_SHAKE_GPIO, BSP_STM32_DIDO_SHAKE_GPIO_PIN)
 	#define BSP_STM32_DIDO_SMOKE_READ								HAL_GPIO_ReadPin(BSP_STM32_DIDO_SMOKE_GPIO, BSP_STM32_DIDO_SMOKE_GPIO_PIN)
 	#define BSP_STM32_DIDO_WATER_READ								HAL_GPIO_ReadPin(BSP_STM32_DIDO_WATER_GPIO, BSP_STM32_DIDO_WATER_GPIO_PIN)
-	#define BSP_STM32_DIDO_LOCK1_DI1_TRIGGER_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_LOCK1_DI1_TRIGGER_GPIO, BSP_STM32_DIDO_LOCK1_DI1_TRIGGER_GPIO_PIN)
-	#define BSP_STM32_DIDO_LOCK1_DI2_TONGUE_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_LOCK1_DI2_TONGUE_GPIO, BSP_STM32_DIDO_LOCK1_DI2_TONGUE_GPIO_PIN)
+//	#define BSP_STM32_DIDO_LOCK1_DI1_TRIGGER_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_LOCK1_DI1_TRIGGER_GPIO, BSP_STM32_DIDO_LOCK1_DI1_TRIGGER_GPIO_PIN)
+//	#define BSP_STM32_DIDO_LOCK1_DI2_TONGUE_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_LOCK1_DI2_TONGUE_GPIO, BSP_STM32_DIDO_LOCK1_DI2_TONGUE_GPIO_PIN)
 	#define BSP_STM32_DIDO_LOCK1_DO1_ON             HAL_GPIO_WritePin(BSP_STM32_DIDO_LOCK1_DO1_GPIO, BSP_STM32_DIDO_LOCK1_DO1_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
 	#define BSP_STM32_DIDO_LOCK1_DO1_OFF            HAL_GPIO_WritePin(BSP_STM32_DIDO_LOCK1_DO1_GPIO, BSP_STM32_DIDO_LOCK1_DO1_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
 	#define BSP_STM32_DIDO_DOOR1_RESTRICTION_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_DOOR1_RESTRICTION_GPIO, BSP_STM32_DIDO_DOOR1_RESTRICTION_GPIO_PIN)
-	#define BSP_STM32_DIDO_LOCK2_DI1_TRIGGER_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_LOCK2_DI1_TRIGGER_GPIO, BSP_STM32_DIDO_LOCK2_DI1_TRIGGER_GPIO_PIN)
-	#define BSP_STM32_DIDO_LOCK2_DI2_TONGUE_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_LOCK2_DI2_TONGUE_GPIO, BSP_STM32_DIDO_LOCK2_DI2_TONGUE_GPIO_PIN)
+//	#define BSP_STM32_DIDO_LOCK2_DI1_TRIGGER_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_LOCK2_DI1_TRIGGER_GPIO, BSP_STM32_DIDO_LOCK2_DI1_TRIGGER_GPIO_PIN)
+//	#define BSP_STM32_DIDO_LOCK2_DI2_TONGUE_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_LOCK2_DI2_TONGUE_GPIO, BSP_STM32_DIDO_LOCK2_DI2_TONGUE_GPIO_PIN)
 	#define BSP_STM32_DIDO_LOCK2_DO1_ON             HAL_GPIO_WritePin(BSP_STM32_DIDO_LOCK2_DO1_GPIO, BSP_STM32_DIDO_LOCK2_DO1_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
 	#define BSP_STM32_DIDO_LOCK2_DO1_OFF            HAL_GPIO_WritePin(BSP_STM32_DIDO_LOCK2_DO1_GPIO, BSP_STM32_DIDO_LOCK2_DO1_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
 	#define BSP_STM32_DIDO_DOOR2_RESTRICTION_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_DOOR2_RESTRICTION_GPIO, BSP_STM32_DIDO_DOOR2_RESTRICTION_GPIO_PIN)
-	#define BSP_STM32_DIDO_LOCK3_DI1_TRIGGER_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_LOCK3_DI1_TRIGGER_GPIO, BSP_STM32_DIDO_LOCK3_DI1_TRIGGER_GPIO_PIN)
-	#define BSP_STM32_DIDO_LOCK3_DI2_TONGUE_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_LOCK3_DI2_TONGUE_GPIO, BSP_STM32_DIDO_LOCK3_DI2_TONGUE_GPIO_PIN)
+//	#define BSP_STM32_DIDO_LOCK3_DI1_TRIGGER_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_LOCK3_DI1_TRIGGER_GPIO, BSP_STM32_DIDO_LOCK3_DI1_TRIGGER_GPIO_PIN)
+//	#define BSP_STM32_DIDO_LOCK3_DI2_TONGUE_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_LOCK3_DI2_TONGUE_GPIO, BSP_STM32_DIDO_LOCK3_DI2_TONGUE_GPIO_PIN)
 	#define BSP_STM32_DIDO_LOCK3_DO1_ON             HAL_GPIO_WritePin(BSP_STM32_DIDO_LOCK3_DO1_GPIO, BSP_STM32_DIDO_LOCK3_DO1_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
 	#define BSP_STM32_DIDO_LOCK3_DO1_OFF            HAL_GPIO_WritePin(BSP_STM32_DIDO_LOCK3_DO1_GPIO, BSP_STM32_DIDO_LOCK3_DO1_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
 	#define BSP_STM32_DIDO_DOOR3_RESTRICTION_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_DOOR3_RESTRICTION_GPIO, BSP_STM32_DIDO_DOOR3_RESTRICTION_GPIO_PIN)
-	#define BSP_STM32_DIDO_LOCK4_DI1_TRIGGER_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_LOCK4_DI1_TRIGGER_GPIO, BSP_STM32_DIDO_LOCK4_DI1_TRIGGER_GPIO_PIN)
-	#define BSP_STM32_DIDO_LOCK4_DI2_TONGUE_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_LOCK4_DI2_TONGUE_GPIO, BSP_STM32_DIDO_LOCK4_DI2_TONGUE_GPIO_PIN)
+//	#define BSP_STM32_DIDO_LOCK4_DI1_TRIGGER_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_LOCK4_DI1_TRIGGER_GPIO, BSP_STM32_DIDO_LOCK4_DI1_TRIGGER_GPIO_PIN)
+//	#define BSP_STM32_DIDO_LOCK4_DI2_TONGUE_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_LOCK4_DI2_TONGUE_GPIO, BSP_STM32_DIDO_LOCK4_DI2_TONGUE_GPIO_PIN)
 	#define BSP_STM32_DIDO_LOCK_ACT_FLAG_READ				HAL_GPIO_ReadPin(BSP_STM32_DIDO_LOCK_ACT_FLAG_GPIO, BSP_STM32_DIDO_LOCK_ACT_FLAG_PIN)
 	#define BSP_STM32_DIDO_LOCK4_DO1_ON             HAL_GPIO_WritePin(BSP_STM32_DIDO_LOCK4_DO1_GPIO, BSP_STM32_DIDO_LOCK4_DO1_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
 	#define BSP_STM32_DIDO_LOCK4_DO1_OFF            HAL_GPIO_WritePin(BSP_STM32_DIDO_LOCK4_DO1_GPIO, BSP_STM32_DIDO_LOCK4_DO1_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
@@ -158,23 +158,23 @@ extern int dido_time_base;
 	extern int16_t ihu_bsp_stm32_dido_f2board_shake_read(void);
 	extern int16_t ihu_bsp_stm32_dido_f2board_smoke_read(void);
 	extern int16_t ihu_bsp_stm32_dido_f2board_water_read(void);
-	extern int16_t ihu_bsp_stm32_dido_f2board_lock1_di1_trigger_read(void);
-	extern int16_t ihu_bsp_stm32_dido_f2board_lock1_di2_tongue_read(void);
+//	extern int16_t ihu_bsp_stm32_dido_f2board_lock1_di1_trigger_read(void);
+//	extern int16_t ihu_bsp_stm32_dido_f2board_lock1_di2_tongue_read(void);
 	extern void ihu_bsp_stm32_dido_f2board_lock1_do1_on(void);
 	extern void ihu_bsp_stm32_dido_f2board_lock1_do1_off(void);
 	extern int16_t ihu_bsp_stm32_dido_f2board_door1_restriction_read(void);
-	extern int16_t ihu_bsp_stm32_dido_f2board_lock2_di1_trigger_read(void);
-	extern int16_t ihu_bsp_stm32_dido_f2board_lock2_di2_tongue_read(void);
+//	extern int16_t ihu_bsp_stm32_dido_f2board_lock2_di1_trigger_read(void);
+//	extern int16_t ihu_bsp_stm32_dido_f2board_lock2_di2_tongue_read(void);
 	extern void ihu_bsp_stm32_dido_f2board_lock2_do1_on(void);
 	extern void ihu_bsp_stm32_dido_f2board_lock2_do1_off(void);
 	extern int16_t ihu_bsp_stm32_dido_f2board_door2_restriction_read(void);
-	extern int16_t ihu_bsp_stm32_dido_f2board_lock3_di1_trigger_read(void);
-	extern int16_t ihu_bsp_stm32_dido_f2board_lock3_di2_tongue_read(void);
+//	extern int16_t ihu_bsp_stm32_dido_f2board_lock3_di1_trigger_read(void);
+//	extern int16_t ihu_bsp_stm32_dido_f2board_lock3_di2_tongue_read(void);
 	extern void ihu_bsp_stm32_dido_f2board_lock3_do1_on(void);
 	extern void ihu_bsp_stm32_dido_f2board_lock3_do1_off(void);
 	extern int16_t ihu_bsp_stm32_dido_f2board_door3_restriction_read(void);
-	extern int16_t ihu_bsp_stm32_dido_f2board_lock4_di1_trigger_read(void);
-	extern int16_t ihu_bsp_stm32_dido_f2board_lock4_di2_tongue_read(void);
+//	extern int16_t ihu_bsp_stm32_dido_f2board_lock4_di1_trigger_read(void);
+//	extern int16_t ihu_bsp_stm32_dido_f2board_lock4_di2_tongue_read(void);
 	extern void ihu_bsp_stm32_dido_f2board_lock4_do1_on(void);
 	extern void ihu_bsp_stm32_dido_f2board_lock4_do1_off(void);
 	extern int16_t ihu_bsp_stm32_dido_f2board_door4_restriction_read(void);
