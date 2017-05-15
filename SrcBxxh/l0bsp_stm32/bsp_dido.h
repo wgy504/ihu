@@ -48,18 +48,6 @@ extern int dido_time_base;
 	#define BSP_STM32_DIDO_SMOKE_GPIO												CUBEMX_PIN_F2_GPIO_DI_SMOKE_SENSOR_GPIO_Port         
 	#define BSP_STM32_DIDO_WATER_GPIO_PIN										CUBEMX_PIN_F2_GPIO_DI_WATER_SENSOR_Pin               
 	#define BSP_STM32_DIDO_WATER_GPIO												CUBEMX_PIN_F2_GPIO_DI_WATER_SENSOR_GPIO_Port
-	#define BSP_STM32_DIDO_GPRSMOD_PWR_SUPPLY_GPIO_PIN			CUBEMX_PIN_F2_DO_GPRSMOD_PWR_SUPPLY_Pin
-  #define BSP_STM32_DIDO_GPRSMOD_PWR_SUPPLY_GPIO					CUBEMX_PIN_F2_DO_GPRSMOD_PWR_SUPPLY_GPIO_Port               
-	#define BSP_STM32_DIDO_GPRSMOD_PWR_KEY_GPIO_PIN				  CUBEMX_PIN_F2_DO_GPRSMOD_PWR_KEY_Pin
-  #define BSP_STM32_DIDO_GPRSMOD_PWR_KEY_GPIO						  CUBEMX_PIN_F2_DO_GPRSMOD_PWR_KEY_GPIO_Port               
-	#define BSP_STM32_DIDO_BLE_PWR_CTRL_GPIO_PIN						CUBEMX_PIN_F2_DO_BLE_PWR_Pin                         
-	#define BSP_STM32_DIDO_BLE_PWR_CTRL_GPIO								CUBEMX_PIN_F2_DO_BLE_PWR_GPIO_Port                   
-	#define BSP_STM32_DIDO_RFID_PWR_CTRL_GPIO_PIN						CUBEMX_PIN_F2_DO_RFID_PWR_Pin                        
-	#define BSP_STM32_DIDO_RFID_PWR_CTRL_GPIO								CUBEMX_PIN_F2_DO_RFID_PWR_GPIO_Port               
-	#define BSP_STM32_DIDO_SENSOR_PWR_CTRL_GPIO_PIN					CUBEMX_PIN_F2_DO_SENSOR_PWR_Pin                      
-	#define BSP_STM32_DIDO_SENSOR_PWR_CTRL_GPIO							CUBEMX_PIN_F2_DO_SENSOR_PWR_GPIO_Port    
-	#define BSP_STM32_DIDO_CPU_PWR_CTRL_GPIO_PIN					  CUBEMX_PIN_F2_DO_CPU_PWR_Pin                      
-	#define BSP_STM32_DIDO_CPU_PWR_CTRL_GPIO							  CUBEMX_PIN_F2_DO_CPU_PWR_GPIO_Port   	
 	#define BSP_STM32_DIDO_BLE_ATCMD_CTRL_GPIO_PIN					CUBEMX_PIN_F2_DO_BLE_ATCMD_Pin                         
 	#define BSP_STM32_DIDO_BLE_ATCMD_CTRL_GPIO							CUBEMX_PIN_F2_DO_BLE_ATCMD_GPIO_Port    
 	#define BSP_STM32_DIDO_DOOR1_RESTRICTION_GPIO_PIN				CUBEMX_PIN_F2_GPIO_DI_DOOR1_RESTRICTION_Pin          
@@ -70,8 +58,22 @@ extern int dido_time_base;
 	#define BSP_STM32_DIDO_DOOR3_RESTRICTION_GPIO						CUBEMX_PIN_F2_GPIO_DI_DOOR3_RESTRICTION_GPIO_Port    
 	#define BSP_STM32_DIDO_DOOR4_RESTRICTION_GPIO_PIN				CUBEMX_PIN_F2_GPIO_DI_DOOR4_RESTRICTION_Pin          
 	#define BSP_STM32_DIDO_DOOR4_RESTRICTION_GPIO						CUBEMX_PIN_F2_GPIO_DI_DOOR4_RESTRICTION_GPIO_Port     
+	#define BSP_STM32_DIDO_LOCK_ACT_FLAG_PIN								CUBEMX_PIN_F2_DI_LOCK_ACT_FLAG_Pin          
+	#define BSP_STM32_DIDO_LOCK_ACT_FLAG_GPIO								CUBEMX_PIN_F2_DI_LOCK_ACT_FLAG_GPIO_Port
 
-  //新板子的方案
+	//PWR CONTROL
+	#define BSP_STM32_DIDO_CPU_PWR_CTRL_GPIO_PIN					  CUBEMX_PIN_F2_DO_CPU_PWR_Pin                      
+	#define BSP_STM32_DIDO_CPU_PWR_CTRL_GPIO							  CUBEMX_PIN_F2_DO_CPU_PWR_GPIO_Port   	
+	#define BSP_STM32_DIDO_MQ2_CAM_PWR_CTRL_GPIO_PIN				CUBEMX_PIN_F2_DO_MQ2_CAM_PWR_Pin                      
+	#define BSP_STM32_DIDO_MQ2_CAM_PWR_CTRL_GPIO						CUBEMX_PIN_F2_DO_MQ2_CAM_PWR_GPIO_Port
+	#define BSP_STM32_DIDO_GPRSMOD_PWR_SUPPLY_GPIO_PIN			CUBEMX_PIN_F2_DO_GPRSMOD_PWR_SUPPLY_Pin
+  #define BSP_STM32_DIDO_GPRSMOD_PWR_SUPPLY_GPIO					CUBEMX_PIN_F2_DO_GPRSMOD_PWR_SUPPLY_GPIO_Port               
+	#define BSP_STM32_DIDO_GPRSMOD_PWR_KEY_GPIO_PIN				  CUBEMX_PIN_F2_DO_GPRSMOD_PWR_KEY_Pin
+  #define BSP_STM32_DIDO_GPRSMOD_PWR_KEY_GPIO						  CUBEMX_PIN_F2_DO_GPRSMOD_PWR_KEY_GPIO_Port               
+	#define BSP_STM32_DIDO_SENSOR_PWR_CTRL_GPIO_PIN					CUBEMX_PIN_F2_DO_SENSOR_PWR_Pin                      
+	#define BSP_STM32_DIDO_SENSOR_PWR_CTRL_GPIO							CUBEMX_PIN_F2_DO_SENSOR_PWR_GPIO_Port    
+
+  //新板子的方案：LOCK_POWER_CTRL
 	#define BSP_STM32_DIDO_LOCK1_DO1_GPIO_PIN								CUBEMX_PIN_F2_GPIO_DO_LOCK1_SWITCH_Pin                  
 	#define BSP_STM32_DIDO_LOCK1_DO1_GPIO										CUBEMX_PIN_F2_GPIO_DO_LOCK1_SWITCH_GPIO_Port            
 	#define BSP_STM32_DIDO_LOCK2_DO1_GPIO_PIN								CUBEMX_PIN_F2_GPIO_DO_LOCK2_SWITCH_Pin                  
@@ -81,27 +83,8 @@ extern int dido_time_base;
 	#define BSP_STM32_DIDO_LOCK4_DO1_GPIO_PIN								CUBEMX_PIN_F2_GPIO_DO_LOCK4_SWITCH_Pin                  
 	#define BSP_STM32_DIDO_LOCK4_DO1_GPIO										CUBEMX_PIN_F2_GPIO_DO_LOCK4_SWITCH_GPIO_Port
 
-	//从业务逻辑上，待删除
-	#define BSP_STM32_DIDO_LOCK1_DI1_TRIGGER_GPIO_PIN				GPIO_PIN_13          
-	#define BSP_STM32_DIDO_LOCK1_DI1_TRIGGER_GPIO						GPIOB    
-	#define BSP_STM32_DIDO_LOCK1_DI2_TONGUE_GPIO_PIN				GPIO_PIN_13           
-	#define BSP_STM32_DIDO_LOCK1_DI2_TONGUE_GPIO						GPIOB     
-	#define BSP_STM32_DIDO_LOCK2_DI1_TRIGGER_GPIO_PIN				GPIO_PIN_13          
-	#define BSP_STM32_DIDO_LOCK2_DI1_TRIGGER_GPIO						GPIOB    
-	#define BSP_STM32_DIDO_LOCK2_DI2_TONGUE_GPIO_PIN				GPIO_PIN_13           
-	#define BSP_STM32_DIDO_LOCK2_DI2_TONGUE_GPIO						GPIOB     
-	#define BSP_STM32_DIDO_LOCK3_DI1_TRIGGER_GPIO_PIN				GPIO_PIN_13          
-	#define BSP_STM32_DIDO_LOCK3_DI1_TRIGGER_GPIO						GPIOB    
-	#define BSP_STM32_DIDO_LOCK3_DI2_TONGUE_GPIO_PIN				GPIO_PIN_13           
-	#define BSP_STM32_DIDO_LOCK3_DI2_TONGUE_GPIO						GPIOB     
-	#define BSP_STM32_DIDO_LOCK4_DI1_TRIGGER_GPIO_PIN				GPIO_PIN_13          
-	#define BSP_STM32_DIDO_LOCK4_DI1_TRIGGER_GPIO						GPIOB    
-	#define BSP_STM32_DIDO_LOCK4_DI2_TONGUE_GPIO_PIN				GPIO_PIN_13           
-	#define BSP_STM32_DIDO_LOCK4_DI2_TONGUE_GPIO						GPIOB     
 
-
-
-//有效的函数体
+	//有效的函数体
 	#define BSP_STM32_DIDO_DHT11_READ								HAL_GPIO_ReadPin(BSP_STM32_DIDO_DHT11_GPIO, BSP_STM32_DIDO_DHT11_GPIO_PIN)
 	#define BSP_STM32_DIDO_DHT11_Dout_LOW()         HAL_GPIO_WritePin(BSP_STM32_DIDO_DHT11_GPIO,BSP_STM32_DIDO_DHT11_GPIO_PIN,GPIO_PIN_RESET) 
 	#define BSP_STM32_DIDO_DHT11_Dout_HIGH()        HAL_GPIO_WritePin(BSP_STM32_DIDO_DHT11_GPIO,BSP_STM32_DIDO_DHT11_GPIO_PIN,GPIO_PIN_SET)
@@ -110,40 +93,33 @@ extern int dido_time_base;
 	#define BSP_STM32_DIDO_SHAKE_READ								HAL_GPIO_ReadPin(BSP_STM32_DIDO_SHAKE_GPIO, BSP_STM32_DIDO_SHAKE_GPIO_PIN)
 	#define BSP_STM32_DIDO_SMOKE_READ								HAL_GPIO_ReadPin(BSP_STM32_DIDO_SMOKE_GPIO, BSP_STM32_DIDO_SMOKE_GPIO_PIN)
 	#define BSP_STM32_DIDO_WATER_READ								HAL_GPIO_ReadPin(BSP_STM32_DIDO_WATER_GPIO, BSP_STM32_DIDO_WATER_GPIO_PIN)
-	#define BSP_STM32_DIDO_LOCK1_DI1_TRIGGER_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_LOCK1_DI1_TRIGGER_GPIO, BSP_STM32_DIDO_LOCK1_DI1_TRIGGER_GPIO_PIN)
-	#define BSP_STM32_DIDO_LOCK1_DI2_TONGUE_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_LOCK1_DI2_TONGUE_GPIO, BSP_STM32_DIDO_LOCK1_DI2_TONGUE_GPIO_PIN)
 	#define BSP_STM32_DIDO_LOCK1_DO1_ON             HAL_GPIO_WritePin(BSP_STM32_DIDO_LOCK1_DO1_GPIO, BSP_STM32_DIDO_LOCK1_DO1_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
 	#define BSP_STM32_DIDO_LOCK1_DO1_OFF            HAL_GPIO_WritePin(BSP_STM32_DIDO_LOCK1_DO1_GPIO, BSP_STM32_DIDO_LOCK1_DO1_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
 	#define BSP_STM32_DIDO_DOOR1_RESTRICTION_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_DOOR1_RESTRICTION_GPIO, BSP_STM32_DIDO_DOOR1_RESTRICTION_GPIO_PIN)
-	#define BSP_STM32_DIDO_LOCK2_DI1_TRIGGER_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_LOCK2_DI1_TRIGGER_GPIO, BSP_STM32_DIDO_LOCK2_DI1_TRIGGER_GPIO_PIN)
-	#define BSP_STM32_DIDO_LOCK2_DI2_TONGUE_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_LOCK2_DI2_TONGUE_GPIO, BSP_STM32_DIDO_LOCK2_DI2_TONGUE_GPIO_PIN)
 	#define BSP_STM32_DIDO_LOCK2_DO1_ON             HAL_GPIO_WritePin(BSP_STM32_DIDO_LOCK2_DO1_GPIO, BSP_STM32_DIDO_LOCK2_DO1_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
 	#define BSP_STM32_DIDO_LOCK2_DO1_OFF            HAL_GPIO_WritePin(BSP_STM32_DIDO_LOCK2_DO1_GPIO, BSP_STM32_DIDO_LOCK2_DO1_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
 	#define BSP_STM32_DIDO_DOOR2_RESTRICTION_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_DOOR2_RESTRICTION_GPIO, BSP_STM32_DIDO_DOOR2_RESTRICTION_GPIO_PIN)
-	#define BSP_STM32_DIDO_LOCK3_DI1_TRIGGER_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_LOCK3_DI1_TRIGGER_GPIO, BSP_STM32_DIDO_LOCK3_DI1_TRIGGER_GPIO_PIN)
-	#define BSP_STM32_DIDO_LOCK3_DI2_TONGUE_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_LOCK3_DI2_TONGUE_GPIO, BSP_STM32_DIDO_LOCK3_DI2_TONGUE_GPIO_PIN)
 	#define BSP_STM32_DIDO_LOCK3_DO1_ON             HAL_GPIO_WritePin(BSP_STM32_DIDO_LOCK3_DO1_GPIO, BSP_STM32_DIDO_LOCK3_DO1_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
 	#define BSP_STM32_DIDO_LOCK3_DO1_OFF            HAL_GPIO_WritePin(BSP_STM32_DIDO_LOCK3_DO1_GPIO, BSP_STM32_DIDO_LOCK3_DO1_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
 	#define BSP_STM32_DIDO_DOOR3_RESTRICTION_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_DOOR3_RESTRICTION_GPIO, BSP_STM32_DIDO_DOOR3_RESTRICTION_GPIO_PIN)
-	#define BSP_STM32_DIDO_LOCK4_DI1_TRIGGER_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_LOCK4_DI1_TRIGGER_GPIO, BSP_STM32_DIDO_LOCK4_DI1_TRIGGER_GPIO_PIN)
-	#define BSP_STM32_DIDO_LOCK4_DI2_TONGUE_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_LOCK4_DI2_TONGUE_GPIO, BSP_STM32_DIDO_LOCK4_DI2_TONGUE_GPIO_PIN)
+	#define BSP_STM32_DIDO_LOCK_ACT_FLAG_READ				HAL_GPIO_ReadPin(BSP_STM32_DIDO_LOCK_ACT_FLAG_GPIO, BSP_STM32_DIDO_LOCK_ACT_FLAG_PIN)
 	#define BSP_STM32_DIDO_LOCK4_DO1_ON             HAL_GPIO_WritePin(BSP_STM32_DIDO_LOCK4_DO1_GPIO, BSP_STM32_DIDO_LOCK4_DO1_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
 	#define BSP_STM32_DIDO_LOCK4_DO1_OFF            HAL_GPIO_WritePin(BSP_STM32_DIDO_LOCK4_DO1_GPIO, BSP_STM32_DIDO_LOCK4_DO1_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
 	#define BSP_STM32_DIDO_DOOR4_RESTRICTION_READ		HAL_GPIO_ReadPin(BSP_STM32_DIDO_DOOR4_RESTRICTION_GPIO, BSP_STM32_DIDO_DOOR4_RESTRICTION_GPIO_PIN)
+	#define BSP_STM32_DIDO_BLE_ATCMD_CTRL_ON      	HAL_GPIO_WritePin(BSP_STM32_DIDO_BLE_ATCMD_CTRL_GPIO, BSP_STM32_DIDO_BLE_ATCMD_CTRL_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
+	#define BSP_STM32_DIDO_BLE_ATCMD_CTRL_OFF     	HAL_GPIO_WritePin(BSP_STM32_DIDO_BLE_ATCMD_CTRL_GPIO, BSP_STM32_DIDO_BLE_ATCMD_CTRL_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
+
+	//POWER CONTROL
+	#define BSP_STM32_DIDO_CPU_PWR_CTRL_ON        	HAL_GPIO_WritePin(BSP_STM32_DIDO_CPU_PWR_CTRL_GPIO, BSP_STM32_DIDO_CPU_PWR_CTRL_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
+	#define BSP_STM32_DIDO_CPU_PWR_CTRL_OFF       	HAL_GPIO_WritePin(BSP_STM32_DIDO_CPU_PWR_CTRL_GPIO, BSP_STM32_DIDO_CPU_PWR_CTRL_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
+	#define BSP_STM32_DIDO_MQ2_CAM_PWR_CTRL_ON      HAL_GPIO_WritePin(BSP_STM32_DIDO_MQ2_CAM_PWR_CTRL_GPIO, BSP_STM32_DIDO_MQ2_CAM_PWR_CTRL_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
+	#define BSP_STM32_DIDO_MQ2_CAM_PWR_CTRL_OFF     HAL_GPIO_WritePin(BSP_STM32_DIDO_MQ2_CAM_PWR_CTRL_GPIO, BSP_STM32_DIDO_MQ2_CAM_PWR_CTRL_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
 	#define BSP_STM32_DIDO_GPRSMOD_PWR_SUPPLY_ON    HAL_GPIO_WritePin(BSP_STM32_DIDO_GPRSMOD_PWR_SUPPLY_GPIO, BSP_STM32_DIDO_GPRSMOD_PWR_SUPPLY_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
 	#define BSP_STM32_DIDO_GPRSMOD_PWR_SUPPLY_OFF   HAL_GPIO_WritePin(BSP_STM32_DIDO_GPRSMOD_PWR_SUPPLY_GPIO, BSP_STM32_DIDO_GPRSMOD_PWR_SUPPLY_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
 	#define BSP_STM32_DIDO_GPRSMOD_PWR_KEY_ON       HAL_GPIO_WritePin(BSP_STM32_DIDO_GPRSMOD_PWR_KEY_GPIO, BSP_STM32_DIDO_GPRSMOD_PWR_KEY_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
 	#define BSP_STM32_DIDO_GPRSMOD_PWR_KEY_OFF      HAL_GPIO_WritePin(BSP_STM32_DIDO_GPRSMOD_PWR_KEY_GPIO, BSP_STM32_DIDO_GPRSMOD_PWR_KEY_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
-	#define BSP_STM32_DIDO_BLE_PWR_CTRL_ON      		HAL_GPIO_WritePin(BSP_STM32_DIDO_BLE_PWR_CTRL_GPIO, BSP_STM32_DIDO_BLE_PWR_CTRL_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
-	#define BSP_STM32_DIDO_BLE_PWR_CTRL_OFF     		HAL_GPIO_WritePin(BSP_STM32_DIDO_BLE_PWR_CTRL_GPIO, BSP_STM32_DIDO_BLE_PWR_CTRL_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
-	#define BSP_STM32_DIDO_RFID_PWR_CTRL_ON      		HAL_GPIO_WritePin(BSP_STM32_DIDO_RFID_PWR_CTRL_GPIO, BSP_STM32_DIDO_RFID_PWR_CTRL_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
-	#define BSP_STM32_DIDO_RFID_PWR_CTRL_OFF     		HAL_GPIO_WritePin(BSP_STM32_DIDO_RFID_PWR_CTRL_GPIO, BSP_STM32_DIDO_RFID_PWR_CTRL_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
 	#define BSP_STM32_DIDO_SENSOR_PWR_CTRL_ON      	HAL_GPIO_WritePin(BSP_STM32_DIDO_SENSOR_PWR_CTRL_GPIO, BSP_STM32_DIDO_SENSOR_PWR_CTRL_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
 	#define BSP_STM32_DIDO_SENSOR_PWR_CTRL_OFF     	HAL_GPIO_WritePin(BSP_STM32_DIDO_SENSOR_PWR_CTRL_GPIO, BSP_STM32_DIDO_SENSOR_PWR_CTRL_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
-	#define BSP_STM32_DIDO_CPU_PWR_CTRL_ON        	HAL_GPIO_WritePin(BSP_STM32_DIDO_CPU_PWR_CTRL_GPIO, BSP_STM32_DIDO_CPU_PWR_CTRL_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
-	#define BSP_STM32_DIDO_CPU_PWR_CTRL_OFF       	HAL_GPIO_WritePin(BSP_STM32_DIDO_CPU_PWR_CTRL_GPIO, BSP_STM32_DIDO_CPU_PWR_CTRL_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
-	#define BSP_STM32_DIDO_BLE_ATCMD_CTRL_ON      	HAL_GPIO_WritePin(BSP_STM32_DIDO_BLE_ATCMD_CTRL_GPIO, BSP_STM32_DIDO_BLE_ATCMD_CTRL_GPIO_PIN, GPIO_PIN_SET)    	// 输出高电平
-	#define BSP_STM32_DIDO_BLE_ATCMD_CTRL_OFF     	HAL_GPIO_WritePin(BSP_STM32_DIDO_BLE_ATCMD_CTRL_GPIO, BSP_STM32_DIDO_BLE_ATCMD_CTRL_GPIO_PIN, GPIO_PIN_RESET)  	// 输出低电平
 
 
 //External APIs
@@ -155,41 +131,40 @@ extern int dido_time_base;
 	extern int16_t ihu_bsp_stm32_dido_f2board_shake_read(void);
 	extern int16_t ihu_bsp_stm32_dido_f2board_smoke_read(void);
 	extern int16_t ihu_bsp_stm32_dido_f2board_water_read(void);
-	extern int16_t ihu_bsp_stm32_dido_f2board_lock1_di1_trigger_read(void);
-	extern int16_t ihu_bsp_stm32_dido_f2board_lock1_di2_tongue_read(void);
+//	extern int16_t ihu_bsp_stm32_dido_f2board_lock1_di1_trigger_read(void);
+//	extern int16_t ihu_bsp_stm32_dido_f2board_lock1_di2_tongue_read(void);
 	extern void ihu_bsp_stm32_dido_f2board_lock1_do1_on(void);
 	extern void ihu_bsp_stm32_dido_f2board_lock1_do1_off(void);
 	extern int16_t ihu_bsp_stm32_dido_f2board_door1_restriction_read(void);
-	extern int16_t ihu_bsp_stm32_dido_f2board_lock2_di1_trigger_read(void);
-	extern int16_t ihu_bsp_stm32_dido_f2board_lock2_di2_tongue_read(void);
+//	extern int16_t ihu_bsp_stm32_dido_f2board_lock2_di1_trigger_read(void);
+//	extern int16_t ihu_bsp_stm32_dido_f2board_lock2_di2_tongue_read(void);
 	extern void ihu_bsp_stm32_dido_f2board_lock2_do1_on(void);
 	extern void ihu_bsp_stm32_dido_f2board_lock2_do1_off(void);
 	extern int16_t ihu_bsp_stm32_dido_f2board_door2_restriction_read(void);
-	extern int16_t ihu_bsp_stm32_dido_f2board_lock3_di1_trigger_read(void);
-	extern int16_t ihu_bsp_stm32_dido_f2board_lock3_di2_tongue_read(void);
+//	extern int16_t ihu_bsp_stm32_dido_f2board_lock3_di1_trigger_read(void);
+//	extern int16_t ihu_bsp_stm32_dido_f2board_lock3_di2_tongue_read(void);
 	extern void ihu_bsp_stm32_dido_f2board_lock3_do1_on(void);
 	extern void ihu_bsp_stm32_dido_f2board_lock3_do1_off(void);
 	extern int16_t ihu_bsp_stm32_dido_f2board_door3_restriction_read(void);
-	extern int16_t ihu_bsp_stm32_dido_f2board_lock4_di1_trigger_read(void);
-	extern int16_t ihu_bsp_stm32_dido_f2board_lock4_di2_tongue_read(void);
+//	extern int16_t ihu_bsp_stm32_dido_f2board_lock4_di1_trigger_read(void);
+//	extern int16_t ihu_bsp_stm32_dido_f2board_lock4_di2_tongue_read(void);
 	extern void ihu_bsp_stm32_dido_f2board_lock4_do1_on(void);
 	extern void ihu_bsp_stm32_dido_f2board_lock4_do1_off(void);
 	extern int16_t ihu_bsp_stm32_dido_f2board_door4_restriction_read(void);
+	extern void ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_on(void);
+	extern void ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_off(void);
+	extern void ihu_bsp_stm32_dido_f2board_mq2_cam_power_ctrl_on(void);
+	extern void ihu_bsp_stm32_dido_f2board_mq2_cam_power_ctrl_off(void);
 	extern void ihu_bsp_stm32_dido_f2board_gprsmod_power_supply_on(void);
 	extern void ihu_bsp_stm32_dido_f2board_gprsmod_power_supply_off(void);
 	extern void ihu_bsp_stm32_dido_f2board_gprsmod_power_key_on(void);
 	extern void ihu_bsp_stm32_dido_f2board_gprsmod_power_key_off(void);
-	extern void ihu_bsp_stm32_dido_f2board_ble_power_ctrl_on(void);
-	extern void ihu_bsp_stm32_dido_f2board_ble_power_ctrl_off(void);
-	extern void ihu_bsp_stm32_dido_f2board_rfid_power_ctrl_on(void);
-	extern void ihu_bsp_stm32_dido_f2board_rfid_power_ctrl_off(void);
 	extern void ihu_bsp_stm32_dido_f2board_sensor_power_ctrl_on(void);
 	extern void ihu_bsp_stm32_dido_f2board_sensor_power_ctrl_off(void);
-	extern void ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_on(void);
-	extern void ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_off(void);
 	extern void ihu_bsp_stm32_dido_f2board_ble_atcmd_mode_ctrl_on(void);
 	extern void ihu_bsp_stm32_dido_f2board_ble_atcmd_mode_ctrl_off(void);
-	
+	extern int16_t ihu_bsp_stm32_dido_f2board_lock_act_flag_read(void);
+
 //Local APIs
 static void func_bsp_stm32_dido_dht11_mode_IPU(void);
 static void func_bsp_stm32_dido_dht11_mode_out_PP(void);

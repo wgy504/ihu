@@ -105,6 +105,7 @@ int main(void)
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
   MX_SPI1_Init();
+  MX_UART4_Init();
 
   /* Initialize interrupts */
   MX_NVIC_Init();
@@ -229,6 +230,12 @@ static void MX_NVIC_Init(void)
 //As this function has to call MX_I2C1_Init(), we have to put this function into MAIN module, otherwise the include
 //relationship is too much complex.
 void I2C_BSP_STM32_MPU6050_Error (void)
+{
+  HAL_I2C_DeInit(&hi2c1);
+  MX_I2C1_Init();
+}
+
+void I2C_BSP_STM32_PCF8563_Error (void)
 {
   HAL_I2C_DeInit(&hi2c1);
   MX_I2C1_Init();

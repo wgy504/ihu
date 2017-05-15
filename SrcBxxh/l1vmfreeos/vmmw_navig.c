@@ -66,7 +66,7 @@ int8_t ihu_vmmw_navig_mpu6050_init(void)
 	
 	//需要根据I2C设备是否存在，进而决定是否要返回错误，不然后期的操作会阻塞在I2C设备里面
 	if (func_vmmw_navig_mpu6050_write_reg(IHU_VMMW_NAVIG_MPU6050_RA_GYRO_CONFIG, 0x18) == IHU_FAILURE){
-		IHU_DEBUG_PRINT_IPT("VMMWNAVIG: Fall Angle sensor (MPU6050) not detected!\n");
+		IhuErrorPrint("VMMWNAVIG: Fall Angle sensor (MPU6050) not detected!\n");
 		return IHU_FAILURE;
 	}
 	else

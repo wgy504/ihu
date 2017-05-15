@@ -32,7 +32,9 @@ uint16_t zIhuAdc1ConvertedValue[BSP_STM32_ADC_ARRAY_NUMBER];
 uint16_t zIhuAdc2ConvertedValue[BSP_STM32_ADC_ARRAY_NUMBER];
 uint16_t zIhuAdc3ConvertedValue[BSP_STM32_ADC_ARRAY_NUMBER];
 
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 extern WeightSensorParamaters_t					zWeightSensorParam;
+#endif
 
 //In IT mode
 void ihu_bsp_stm32_adc_cpu_temp_start(void)
@@ -71,13 +73,17 @@ int ihu_bsp_stm32_adc1_get_sample_value(void)
 //In normal mode
 //定标，未来再完善，这里给出的数值只是NF2两位小数数据
 //目前STM32CubeMX选择的12bit，所以应该将该小数转化为有意义的数据
+//满量程是4095，而非4096
+//这里选择的是百分比输出，如果用户真正希望看到的是电压，那又不一样的
+//由于电压各式各样，原则上选择输出百分比，更好
+//输出的百分比，带两位小数的，但采用了NF2+百分比的形式
 int16_t ihu_bsp_stm32_adc1_ccl_get_battery_value(void)
 {
 	float temp = 0;
 	
 	ihu_bsp_stm32_adc1_start();
 	temp = (float)HAL_ADC_GetValue(&IHU_BSP_STM32_ADC1_HANDLER);
-	temp = temp / 4096 * 100;
+	temp = temp / 4095 * 100;
 	ihu_bsp_stm32_adc1_stop();
 	return (((int)temp)&0xFFFF);
 }

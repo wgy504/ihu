@@ -349,15 +349,15 @@ enum IHU_TIMER_ID_ALL
 	TIMER_ID_1S_EMC68X_PERIOD_SCAN,
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 	TIMER_ID_1S_CCL_PERIOD_SCAN,
-	TIMER_ID_1S_CCL_EVENT_REPORT_PEROID_SCAN,
+	//TIMER_ID_1S_CCL_EVENT_REPORT_PEROID_SCAN,
 	TIMER_ID_1S_CCL_LOCK_WORK_ACTIVE,    			//锁具最长的激活时间
 	TIMER_ID_1S_CCL_LOCK_WORK_WAIT_TO_OPEN,   //锁被打开，等待开门的时间
-	TIMER_ID_1S_CCL_DIDO_TRIGGER_PERIOD_SCAN,  //SLEEP模式下触发工作的定时器
-	TIMER_ID_1S_CCL_DIDO_WORKING_PERIOD_SCAN,  //WORKING模式下外部传感器的定时扫描
-	TIMER_ID_1S_CCL_SPS_WORKING_PERIOD_SCAN,   //WORKING模式下外部传感器的定时扫描，并未启用
-	TIMER_ID_1S_CCL_I2C_WORKING_PERIOD_SCAN,   //WORKING模式下外部传感器的定时扫描，并未启用
-	TIMER_ID_1S_CCL_DCMI_WORKING_PERIOD_SCAN,	 //WORKING模式下外部传感器的定时扫描，并未启用
-	TIMER_ID_1S_CCL_ADC_WORKING_PERIOD_SCAN,	 //WORKING模式下外部传感器的定时扫描，并未启用
+	//TIMER_ID_1S_CCL_DIDO_TRIGGER_PERIOD_SCAN,  //SLEEP模式下触发工作的定时器：G502改版以后不再需要
+	//TIMER_ID_1S_CCL_DIDO_WORKING_PERIOD_SCAN,  //WORKING模式下外部传感器的定时扫描：G502改版以后不再需要
+	//TIMER_ID_1S_CCL_SPS_WORKING_PERIOD_SCAN,   //WORKING模式下外部传感器的定时扫描，并未启用
+	//TIMER_ID_1S_CCL_I2C_WORKING_PERIOD_SCAN,   //WORKING模式下外部传感器的定时扫描，并未启用
+	//TIMER_ID_1S_CCL_DCMI_WORKING_PERIOD_SCAN,	 //WORKING模式下外部传感器的定时扫描，并未启用
+	//TIMER_ID_1S_CCL_ADC_WORKING_PERIOD_SCAN,	 //WORKING模式下外部传感器的定时扫描，并未启用
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
   TIMER_ID_1S_BFSC_STARTUP_IND,
 	TIMER_ID_1S_BFSC_PERIOD_SCAN,
@@ -562,13 +562,6 @@ extern void ihu_timer_routine_handler_10ms(void);
 
 
 
-
-
-
-
-
-
-
 /*
  *	
  *	
@@ -702,6 +695,13 @@ extern void ihu_timer_routine_handler_10ms(void);
 //CCL SENSOR传感器
 #define ihu_l1hd_i2c_ccl_send_data 							ihu_bsp_stm32_i2c_ccl_send_data
 #define ihu_l1hd_i2c_ccl_sensor_rcv_data 				ihu_bsp_stm32_i2c_ccl_sensor_rcv_data
+//RTC时钟芯片PCF8563
+#define ihu_l1hd_i2c_pcf8563_write_data 				ihu_bsp_stm32_i2c_pcf8563_write_data
+#define ihu_l1hd_i2c_pcf8563_write_buffer 			ihu_bsp_stm32_i2c_pcf8563_write_buffer
+#define ihu_l1hd_i2c_pcf8563_read_data 					ihu_bsp_stm32_i2c_pcf8563_read_data
+#define ihu_l1hd_i2c_pcf8563_read_buffer 				ihu_bsp_stm32_i2c_pcf8563_read_buffer
+#define ihu_l1hd_i2c_pcf8563_is_device_ready 		ihu_bsp_stm32_i2c_pcf8563_is_device_ready
+
 
 //L0BSP=>L1HD: CAN
 #define ihu_l1hd_can_slave_hw_init							ihu_bsp_stm32_can_slave_hw_init
@@ -724,43 +724,35 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_dido_f2board_fall_read                ihu_bsp_stm32_dido_f2board_fall_read
 #define ihu_l1hd_dido_f2board_shake_read               ihu_bsp_stm32_dido_f2board_shake_read
 #define ihu_l1hd_dido_f2board_smoke_read               ihu_bsp_stm32_dido_f2board_smoke_read            
-#define ihu_l1hd_dido_f2board_water_read               ihu_bsp_stm32_dido_f2board_water_read            
-#define ihu_l1hd_dido_f2board_lock1_di1_trigger_read   ihu_bsp_stm32_dido_f2board_lock1_di1_trigger_read
-#define ihu_l1hd_dido_f2board_lock1_di2_tongue_read    ihu_bsp_stm32_dido_f2board_lock1_di2_tongue_read 
+#define ihu_l1hd_dido_f2board_water_read               ihu_bsp_stm32_dido_f2board_water_read     
 #define ihu_l1hd_dido_f2board_lock1_do1_on             ihu_bsp_stm32_dido_f2board_lock1_do1_on          
 #define ihu_l1hd_dido_f2board_lock1_do1_off            ihu_bsp_stm32_dido_f2board_lock1_do1_off         
 #define ihu_l1hd_dido_f2board_door1_restriction_read   ihu_bsp_stm32_dido_f2board_door1_restriction_read
-#define ihu_l1hd_dido_f2board_lock2_di1_trigger_read   ihu_bsp_stm32_dido_f2board_lock2_di1_trigger_read
-#define ihu_l1hd_dido_f2board_lock2_di2_tongue_read    ihu_bsp_stm32_dido_f2board_lock2_di2_tongue_read 
 #define ihu_l1hd_dido_f2board_lock2_do1_on             ihu_bsp_stm32_dido_f2board_lock2_do1_on          
 #define ihu_l1hd_dido_f2board_lock2_do1_off            ihu_bsp_stm32_dido_f2board_lock2_do1_off         
 #define ihu_l1hd_dido_f2board_door2_restriction_read   ihu_bsp_stm32_dido_f2board_door2_restriction_read
-#define ihu_l1hd_dido_f2board_lock3_di1_trigger_read   ihu_bsp_stm32_dido_f2board_lock3_di1_trigger_read
-#define ihu_l1hd_dido_f2board_lock3_di2_tongue_read    ihu_bsp_stm32_dido_f2board_lock3_di2_tongue_read 
 #define ihu_l1hd_dido_f2board_lock3_do1_on             ihu_bsp_stm32_dido_f2board_lock3_do1_on          
 #define ihu_l1hd_dido_f2board_lock3_do1_off            ihu_bsp_stm32_dido_f2board_lock3_do1_off         
 #define ihu_l1hd_dido_f2board_door3_restriction_read   ihu_bsp_stm32_dido_f2board_door3_restriction_read
-#define ihu_l1hd_dido_f2board_lock4_di1_trigger_read   ihu_bsp_stm32_dido_f2board_lock4_di1_trigger_read
-#define ihu_l1hd_dido_f2board_lock4_di2_tongue_read    ihu_bsp_stm32_dido_f2board_lock4_di2_tongue_read 
 #define ihu_l1hd_dido_f2board_lock4_do1_on             ihu_bsp_stm32_dido_f2board_lock4_do1_on          
 #define ihu_l1hd_dido_f2board_lock4_do1_off            ihu_bsp_stm32_dido_f2board_lock4_do1_off         
 #define ihu_l1hd_dido_f2board_door4_restriction_read   ihu_bsp_stm32_dido_f2board_door4_restriction_read
+#define ihu_l1hd_dido_f2board_cpu_power_ctrl_on        ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_on  
+#define ihu_l1hd_dido_f2board_cpu_power_ctrl_off       ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_off 
+#define ihu_l1hd_dido_f2board_mq2_cam_power_ctrl_on    ihu_bsp_stm32_dido_f2board_mq2_cam_power_ctrl_on  
+#define ihu_l1hd_dido_f2board_mq2_cam_power_ctrl_off   ihu_bsp_stm32_dido_f2board_mq2_cam_power_ctrl_off 
 #define ihu_l1hd_dido_f2board_gprsmod_power_supply_on  ihu_bsp_stm32_dido_f2board_gprsmod_power_supply_on 
 #define ihu_l1hd_dido_f2board_gprsmod_power_supply_off ihu_bsp_stm32_dido_f2board_gprsmod_power_supply_off
 #define ihu_l1hd_dido_f2board_gprsmod_power_key_on     ihu_bsp_stm32_dido_f2board_gprsmod_power_key_on 
 #define ihu_l1hd_dido_f2board_gprsmod_power_key_off    ihu_bsp_stm32_dido_f2board_gprsmod_power_key_off
-#define ihu_l1hd_dido_f2board_ble_power_ctrl_on        ihu_bsp_stm32_dido_f2board_ble_power_ctrl_on     
-#define ihu_l1hd_dido_f2board_ble_power_ctrl_off       ihu_bsp_stm32_dido_f2board_ble_power_ctrl_off    
-#define ihu_l1hd_dido_f2board_rfid_power_ctrl_on       ihu_bsp_stm32_dido_f2board_rfid_power_ctrl_on    
-#define ihu_l1hd_dido_f2board_rfid_power_ctrl_off      ihu_bsp_stm32_dido_f2board_rfid_power_ctrl_off   
 #define ihu_l1hd_dido_f2board_sensor_power_ctrl_on     ihu_bsp_stm32_dido_f2board_sensor_power_ctrl_on  
 #define ihu_l1hd_dido_f2board_sensor_power_ctrl_off    ihu_bsp_stm32_dido_f2board_sensor_power_ctrl_off 
-#define ihu_l1hd_dido_f2board_cpu_power_ctrl_on        ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_on  
-#define ihu_l1hd_dido_f2board_cpu_power_ctrl_off       ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_off 
 #define ihu_l1hd_dido_f2board_ble_atcmd_mode_ctrl_on   ihu_bsp_stm32_dido_f2board_ble_atcmd_mode_ctrl_on     
 #define ihu_l1hd_dido_f2board_ble_atcmd_mode_ctrl_off  ihu_bsp_stm32_dido_f2board_ble_atcmd_mode_ctrl_off
 #define ihu_l1hd_dido_f2board_ds18b20_init    					ihu_bsp_stm32_dido_ds18b20_init
 #define ihu_l1hd_dido_f2board_ds18b20_temp_read     		ihu_bsp_stm32_dido_f2board_ds18b20_temp_read 
+#define ihu_l1hd_dido_f2board_lock_act_flag_read     		ihu_bsp_stm32_dido_f2board_lock_act_flag_read 
+
 
 //L0BSP=>L1HD: WDOG
 #define ihu_l1hd_watch_dog_refresh      				ihu_bsp_stm32_watch_dog_refresh

@@ -26,10 +26,10 @@ int16_t ihu_bsp_stm32_dido_f2board_dht11_temp_read(void)
 	ihu_bsp_stm32_dido_ds18b20_init();
 	ihu_usleep(100);
 	if (func_bsp_stm32_dido_dht11_read_temp_and_humidity(&output) == SUCCESS){
-		IHU_DEBUG_PRINT_FAT("BSP_DIDO: Temperature Read result = %4.1f\n", output.temperature);
+		IHU_DEBUG_PRINT_INF("BSP_DIDO: Temperature Read result = %4.1f\n", output.temperature);
 		return (int16_t)(output.temperature*100);
 	}else{
-		IHU_DEBUG_PRINT_FAT("BSP_DIDO: Temperature Read result = %d\n", 0xFFFF);
+		IHU_DEBUG_PRINT_INF("BSP_DIDO: Temperature Read result = %d\n", 0xFFFF);
 		return 0xFFFF;
 	}
 }
@@ -43,10 +43,10 @@ int16_t ihu_bsp_stm32_dido_f2board_dht11_humid_read(void)
 	ihu_bsp_stm32_dido_ds18b20_init();
 	ihu_usleep(100);
 	if (func_bsp_stm32_dido_dht11_read_temp_and_humidity(&output) == SUCCESS){
-		IHU_DEBUG_PRINT_FAT("BSP_DIDO: Humidity Read result = %4.1f\n", output.humidity);
+		IHU_DEBUG_PRINT_INF("BSP_DIDO: Humidity Read result = %4.1f\n", output.humidity);
 		return (int16_t)(output.humidity*100);
 	}else{
-		IHU_DEBUG_PRINT_FAT("BSP_DIDO: Humidity Read result = %d\n", 0xFFFF);
+		IHU_DEBUG_PRINT_INF("BSP_DIDO: Humidity Read result = %d\n", 0xFFFF);
 		return 0xFFFF;
 	}
 }
@@ -75,7 +75,7 @@ int16_t ihu_bsp_stm32_dido_f2board_shake_read(void)
 	res[0] = ((BSP_STM32_DIDO_SHAKE_READ == GPIO_PIN_RESET)?1:-1);
 
 	total = res[0] + res[1] + res[2];
-	IHU_DEBUG_PRINT_FAT("BSP_DIDO: SHAKE Read result = %d\n", total);
+	IHU_DEBUG_PRINT_INF("BSP_DIDO: SHAKE Read result = %d\n", total);
 	
 	if (total > 0)
 		return FALSE;
@@ -96,7 +96,7 @@ int16_t ihu_bsp_stm32_dido_f2board_smoke_read(void)
 	res[0] = ((BSP_STM32_DIDO_SMOKE_READ == GPIO_PIN_RESET)?1:-1);	
 	
 	total = res[0] + res[1] + res[2];
-	IHU_DEBUG_PRINT_FAT("BSP_DIDO: SMOKE Read result = %d\n", total);
+	IHU_DEBUG_PRINT_INF("BSP_DIDO: SMOKE Read result = %d\n", total);
 	
 	if (total < 0)
 		return FALSE;
@@ -112,21 +112,21 @@ int16_t ihu_bsp_stm32_dido_f2board_water_read(void)
 		return TRUE;	
 }					
 								
-int16_t ihu_bsp_stm32_dido_f2board_lock1_di1_trigger_read(void)
-{
-	if (BSP_STM32_DIDO_LOCK1_DI1_TRIGGER_READ == GPIO_PIN_RESET)
-		return FALSE;
-	else
-		return TRUE;		
-}									
+//int16_t ihu_bsp_stm32_dido_f2board_lock1_di1_trigger_read(void)
+//{
+//	if (BSP_STM32_DIDO_LOCK1_DI1_TRIGGER_READ == GPIO_PIN_RESET)
+//		return FALSE;
+//	else
+//		return TRUE;		
+//}									
 
-int16_t ihu_bsp_stm32_dido_f2board_lock1_di2_tongue_read(void)
-{
-	if (BSP_STM32_DIDO_LOCK1_DI2_TONGUE_READ == GPIO_PIN_RESET)
-		return FALSE;
-	else
-		return TRUE;			
-}
+//int16_t ihu_bsp_stm32_dido_f2board_lock1_di2_tongue_read(void)
+//{
+//	if (BSP_STM32_DIDO_LOCK1_DI2_TONGUE_READ == GPIO_PIN_RESET)
+//		return FALSE;
+//	else
+//		return TRUE;			
+//}
 
 //锁具的开关，采用的低电平，所以ON/OFF应该反向
 void ihu_bsp_stm32_dido_f2board_lock1_do1_on(void)
@@ -147,21 +147,21 @@ int16_t ihu_bsp_stm32_dido_f2board_door1_restriction_read(void)
 		return TRUE;
 }         
             
-int16_t ihu_bsp_stm32_dido_f2board_lock2_di1_trigger_read(void)
-{
-	if (BSP_STM32_DIDO_LOCK2_DI1_TRIGGER_READ == GPIO_PIN_RESET)
-		return FALSE;
-	else
-		return TRUE;
-}									
+//int16_t ihu_bsp_stm32_dido_f2board_lock2_di1_trigger_read(void)
+//{
+//	if (BSP_STM32_DIDO_LOCK2_DI1_TRIGGER_READ == GPIO_PIN_RESET)
+//		return FALSE;
+//	else
+//		return TRUE;
+//}									
 
-int16_t ihu_bsp_stm32_dido_f2board_lock2_di2_tongue_read(void)
-{
-	if (BSP_STM32_DIDO_LOCK2_DI2_TONGUE_READ == GPIO_PIN_RESET)
-		return FALSE;
-	else
-		return TRUE;
-}
+//int16_t ihu_bsp_stm32_dido_f2board_lock2_di2_tongue_read(void)
+//{
+//	if (BSP_STM32_DIDO_LOCK2_DI2_TONGUE_READ == GPIO_PIN_RESET)
+//		return FALSE;
+//	else
+//		return TRUE;
+//}
 
 void ihu_bsp_stm32_dido_f2board_lock2_do1_on(void)
 {
@@ -181,21 +181,21 @@ int16_t ihu_bsp_stm32_dido_f2board_door2_restriction_read(void)
 		return TRUE;
 }   	
 
-int16_t ihu_bsp_stm32_dido_f2board_lock3_di1_trigger_read(void)
-{
-	if (BSP_STM32_DIDO_LOCK3_DI1_TRIGGER_READ == GPIO_PIN_RESET)
-		return FALSE;
-	else
-		return TRUE;
-}
+//int16_t ihu_bsp_stm32_dido_f2board_lock3_di1_trigger_read(void)
+//{
+//	if (BSP_STM32_DIDO_LOCK3_DI1_TRIGGER_READ == GPIO_PIN_RESET)
+//		return FALSE;
+//	else
+//		return TRUE;
+//}
 
-int16_t ihu_bsp_stm32_dido_f2board_lock3_di2_tongue_read(void)
-{
-	if (BSP_STM32_DIDO_LOCK3_DI2_TONGUE_READ == GPIO_PIN_RESET)
-		return FALSE;
-	else
-		return TRUE;
-}
+//int16_t ihu_bsp_stm32_dido_f2board_lock3_di2_tongue_read(void)
+//{
+//	if (BSP_STM32_DIDO_LOCK3_DI2_TONGUE_READ == GPIO_PIN_RESET)
+//		return FALSE;
+//	else
+//		return TRUE;
+//}
 
 void ihu_bsp_stm32_dido_f2board_lock3_do1_on(void)
 {
@@ -215,17 +215,26 @@ int16_t ihu_bsp_stm32_dido_f2board_door3_restriction_read(void)
 		return TRUE;
 }   	
 
-int16_t ihu_bsp_stm32_dido_f2board_lock4_di1_trigger_read(void)
-{
-	if (BSP_STM32_DIDO_LOCK4_DI1_TRIGGER_READ == GPIO_PIN_RESET)
-		return FALSE;
-	else
-		return TRUE;
-}									
+//int16_t ihu_bsp_stm32_dido_f2board_lock4_di1_trigger_read(void)
+//{
+//	if (BSP_STM32_DIDO_LOCK4_DI1_TRIGGER_READ == GPIO_PIN_RESET)
+//		return FALSE;
+//	else
+//		return TRUE;
+//}									
 
-int16_t ihu_bsp_stm32_dido_f2board_lock4_di2_tongue_read(void)
+//int16_t ihu_bsp_stm32_dido_f2board_lock4_di2_tongue_read(void)
+//{
+//	if (BSP_STM32_DIDO_LOCK4_DI2_TONGUE_READ == GPIO_PIN_RESET)
+//		return FALSE;
+//	else
+//		return TRUE;	
+//}
+
+//4、  增加按钮启动识别信号输入：SW_FLAG为PB13（PIN52）高电平为按钮上电，低电平为RTC闹铃上电
+int16_t ihu_bsp_stm32_dido_f2board_lock_act_flag_read(void)
 {
-	if (BSP_STM32_DIDO_LOCK4_DI2_TONGUE_READ == GPIO_PIN_RESET)
+	if (BSP_STM32_DIDO_LOCK_ACT_FLAG_READ == GPIO_PIN_RESET)
 		return FALSE;
 	else
 		return TRUE;	
@@ -269,27 +278,6 @@ void ihu_bsp_stm32_dido_f2board_gprsmod_power_key_off(void)
     BSP_STM32_DIDO_GPRSMOD_PWR_KEY_OFF;
 }
 
-
-void ihu_bsp_stm32_dido_f2board_ble_power_ctrl_on(void)
-{
-    BSP_STM32_DIDO_BLE_PWR_CTRL_ON;
-}
-
-void ihu_bsp_stm32_dido_f2board_ble_power_ctrl_off(void)
-{
-    BSP_STM32_DIDO_BLE_PWR_CTRL_OFF;
-}
-
-void ihu_bsp_stm32_dido_f2board_rfid_power_ctrl_on(void)
-{
-    BSP_STM32_DIDO_RFID_PWR_CTRL_ON;
-}
-
-void ihu_bsp_stm32_dido_f2board_rfid_power_ctrl_off(void)
-{
-    BSP_STM32_DIDO_RFID_PWR_CTRL_OFF;
-}
-
 void ihu_bsp_stm32_dido_f2board_sensor_power_ctrl_on(void)
 {
     BSP_STM32_DIDO_SENSOR_PWR_CTRL_ON;
@@ -303,12 +291,26 @@ void ihu_bsp_stm32_dido_f2board_sensor_power_ctrl_off(void)
 void ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_on(void)
 {
     BSP_STM32_DIDO_CPU_PWR_CTRL_ON;
+	
+}
+
+void ihu_bsp_stm32_dido_f2board_mq2_cam_power_ctrl_off(void)
+{
+    BSP_STM32_DIDO_MQ2_CAM_PWR_CTRL_OFF;
+}
+
+void ihu_bsp_stm32_dido_f2board_mq2_cam_power_ctrl_on(void)
+{
+    BSP_STM32_DIDO_MQ2_CAM_PWR_CTRL_ON;
 }
 
 void ihu_bsp_stm32_dido_f2board_cpu_power_ctrl_off(void)
 {
-    BSP_STM32_DIDO_CPU_PWR_CTRL_OFF;
+	IHU_DEBUG_PRINT_FAT("BSP_DIDO: CPU starting to power off...\n");
+	ihu_usleep(200);
+  BSP_STM32_DIDO_CPU_PWR_CTRL_OFF;
 }
+
 
 void ihu_bsp_stm32_dido_f2board_ble_atcmd_mode_ctrl_on(void)
 {

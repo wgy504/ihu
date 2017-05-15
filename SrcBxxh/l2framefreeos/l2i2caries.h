@@ -65,11 +65,11 @@ typedef struct strIhuBfscI2cMotoPar
 #define IHU_BFSC_I2C_MOTO_TURN_MODE_STOP 2
 
 //I2C工作状态
-#define IHU_CCL_I2C_WORKING_MODE_NONE 0
-#define IHU_CCL_I2C_WORKING_MODE_SLEEP 1
-#define IHU_CCL_I2C_WORKING_MODE_ACTIVE 2
-#define IHU_CCL_I2C_WORKING_MODE_FAULT 3
-#define IHU_CCL_I2C_WORKING_MODE_INVALID 0xFF
+//#define IHU_CCL_I2C_WORKING_MODE_NONE 0
+//#define IHU_CCL_I2C_WORKING_MODE_SLEEP 1
+//#define IHU_CCL_I2C_WORKING_MODE_ACTIVE 2
+//#define IHU_CCL_I2C_WORKING_MODE_FAULT 3
+//#define IHU_CCL_I2C_WORKING_MODE_INVALID 0xFF
 
 //本地需要用到的核心参数
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
@@ -94,7 +94,7 @@ extern OPSTAT fsm_i2caries_time_out(UINT8 dest_id, UINT8 src_id, void * param_pt
 extern OPSTAT fsm_i2caries_bfsc_moto_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_i2caries_bfsc_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_i2caries_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
-extern OPSTAT fsm_i2caries_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+//extern OPSTAT fsm_i2caries_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 
 //全局函数
 extern INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv1_value(void);

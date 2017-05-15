@@ -383,8 +383,6 @@ extern float   ihu_vmmw_navig_mpu6050_angle_caculate_by_acc_xyz(float x, float y
 
 
 
-
-
 //高级定义，简化程序的可读性
 #define IHU_ERROR_PRINT_NAVIG	zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++; IhuErrorPrint
 

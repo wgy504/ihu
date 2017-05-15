@@ -527,6 +527,13 @@ INT32 func_adclibra_bfsc_read_origin(void)
 //CCL项目下通过扫描电池判定是否有电量过高或者过低的告警
 bool ihu_adclibra_ccl_scan_battery_warning_level(void)
 {
+	//先启动一会儿
+	ihu_l1hd_adc1_start();
+	ihu_usleep(200);
+	
+	//打印信息，方便调测
+	IHU_DEBUG_PRINT_INF("ADCLIBRA: Battery Result = %d%%\n", ihu_l1hd_adc1_ccl_get_battery_value());
+	
 	if ((ihu_l1hd_adc1_ccl_get_battery_value() > IHU_CCL_ADC_BATTERY_WARNING_MAX_VALUE) || (ihu_l1hd_adc1_ccl_get_battery_value() < IHU_CCL_ADC_BATTERY_WARNING_MIN_VALUE))
 		return TRUE;
 	else

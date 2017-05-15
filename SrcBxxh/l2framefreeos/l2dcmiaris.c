@@ -43,7 +43,7 @@ IhuFsmStateItem_t IhuFsmDcmiaris[] =
 	//Task level actived status
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
   {MSG_ID_CCL_COM_SENSOR_STATUS_REQ,			FSM_STATE_DCMIARIS_ACTIVED,         					fsm_dcmiaris_ccl_sensor_status_req},
-  {MSG_ID_CCL_COM_CTRL_CMD,								FSM_STATE_DCMIARIS_ACTIVED,         					fsm_dcmiaris_ccl_ctrl_cmd},
+  //{MSG_ID_CCL_COM_CTRL_CMD,								FSM_STATE_DCMIARIS_ACTIVED,         					fsm_dcmiaris_ccl_ctrl_cmd},
 #endif
 	
   //结束点，固定定义，不要改动
@@ -105,7 +105,7 @@ OPSTAT fsm_dcmiaris_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 	memset(&zIhuCclDcmiarisCtrlTable, 0, sizeof(strIhuCclDcmiPar_t));
-	zIhuCclDcmiarisCtrlTable.cclDcmiWorkingMode = IHU_CCL_DCMI_WORKING_MODE_SLEEP;  //初始化就进入SLEEP，然后就看是否有触发
+//	zIhuCclDcmiarisCtrlTable.cclDcmiWorkingMode = IHU_CCL_DCMI_WORKING_MODE_SLEEP;  //初始化就进入SLEEP，然后就看是否有触发
 #else
 	#error Un-correct constant definition
 #endif	
@@ -282,33 +282,33 @@ OPSTAT fsm_dcmiaris_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * pa
 }
 
 //控制状态
-OPSTAT fsm_dcmiaris_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
-{
-	//int ret;
-	msg_struct_ccl_com_ctrl_cmd_t rcv;
-	
-	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_com_ctrl_cmd_t))){
-		IhuErrorPrint("DCMIARIS: Receive message error!\n");
-		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DCMIARIS]++;
-		return IHU_FAILURE;
-	}
-	memcpy(&rcv, param_ptr, param_len);
+//OPSTAT fsm_dcmiaris_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+//{
+//	//int ret;
+//	msg_struct_ccl_com_ctrl_cmd_t rcv;
+//	
+//	//Receive message and copy to local variable
+//	memset(&rcv, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
+//	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_com_ctrl_cmd_t))){
+//		IhuErrorPrint("DCMIARIS: Receive message error!\n");
+//		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DCMIARIS]++;
+//		return IHU_FAILURE;
+//	}
+//	memcpy(&rcv, param_ptr, param_len);
 
-	//操作状态
-	if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_ACTIVE) zIhuCclDcmiarisCtrlTable.cclDcmiWorkingMode = IHU_CCL_DCMI_WORKING_MODE_ACTIVE;
-	else if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_SLEEP) zIhuCclDcmiarisCtrlTable.cclDcmiWorkingMode = IHU_CCL_DCMI_WORKING_MODE_SLEEP;
-	else if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_FAULT) zIhuCclDcmiarisCtrlTable.cclDcmiWorkingMode = IHU_CCL_DCMI_WORKING_MODE_FAULT;
-	else{
-		IhuErrorPrint("DIDOCAP: Receive message error!\n");
-		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
-		return IHU_FAILURE;		
-	}
-	
-	//返回
-	return IHU_SUCCESS;
-}
+//	//操作状态
+//	if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_ACTIVE) zIhuCclDcmiarisCtrlTable.cclDcmiWorkingMode = IHU_CCL_DCMI_WORKING_MODE_ACTIVE;
+//	else if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_SLEEP) zIhuCclDcmiarisCtrlTable.cclDcmiWorkingMode = IHU_CCL_DCMI_WORKING_MODE_SLEEP;
+//	else if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_FAULT) zIhuCclDcmiarisCtrlTable.cclDcmiWorkingMode = IHU_CCL_DCMI_WORKING_MODE_FAULT;
+//	else{
+//		IhuErrorPrint("DIDOCAP: Receive message error!\n");
+//		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DIDOCAP]++;
+//		return IHU_FAILURE;		
+//	}
+//	
+//	//返回
+//	return IHU_SUCCESS;
+//}
 
 //SLEEP&FAULT模式下扫描：扫描DCMI, 数据格式HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2
 INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value(void)

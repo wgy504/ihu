@@ -34,16 +34,24 @@
 enum FSM_STATE_CCL
 {
 	FSM_STATE_CCL_INITED = FSM_STATE_COMMON + 1,  //IHU被唤醒，开始工作。开的原因可能是触发电源，也可能是定时触发
+	FSM_STATE_CCL_ACTIVE,
 	FSM_STATE_CCL_CLOUD_INQUERY,
 	FSM_STATE_CCL_TO_OPEN_DOOR,
 	FSM_STATE_CCL_DOOR_OPEN,
 	FSM_STATE_CCL_FATAL_FAULT,
 	FSM_STATE_CCL_EVENT_REPORT,
-	FSM_STATE_CCL_SLEEP,
+	//FSM_STATE_CCL_SLEEP,
 	FSM_STATE_CCL_MAX,
 };
 //#define FSM_STATE_END   0xFE
 //#define FSM_STATE_INVALID 0xFF
+
+
+//CONST常量
+#define IHU_CCL_ALARM_FAULT_PERIOD_DURATION    	10   	//In minutes
+#define IHU_CCL_ALARM_NORMAL_PERIOD_DURATION    8*60  //In minutes
+
+
 
 //Global variables
 extern IhuFsmStateItem_t IhuFsmCcl[];
@@ -80,22 +88,30 @@ extern OPSTAT fsm_ccl_sps_event_report_cfm(UINT8 dest_id, UINT8 src_id, void * p
 	
 extern OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_ccl_dido_door_open_event(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
-extern OPSTAT fsm_ccl_lock_and_door_close_event(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
-extern OPSTAT fsm_ccl_dido_event_status_update(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT fsm_ccl_door_close_event(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+//extern OPSTAT fsm_ccl_dido_event_status_update(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_ccl_sps_close_door_report_cfm(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 	
-extern OPSTAT fsm_ccl_event_lock_trigger_to_work(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
-extern OPSTAT fsm_ccl_event_fault_trigger_to_stop(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT fsm_ccl_hand_active_trigger_to_work(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+//extern OPSTAT fsm_ccl_event_fault_trigger_to_stop(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_ccl_sps_fault_report_cfm(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+
+extern OPSTAT fsm_ccl_period_report_trigger(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT fsm_ccl_fault_state_trigger(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+
+
+extern int8_t func_vmmw_rtc_pcf8563_set_alarm_process(int16_t duration);
+extern bool func_vmmw_rtc_pcf8563_judge_alarm_happen(void);
+extern int16_t func_vmmw_rtc_pcf8563_get_alarm_duration(void);
 
 //Local API
 OPSTAT func_ccl_hw_init(void);
 void func_ccl_time_out_period_event_report(void);
-void func_ccl_time_out_event_report_period_scan(void);
+//void func_ccl_time_out_event_report_period_scan(void);
 OPSTAT func_ccl_time_out_lock_work_active(void);
 OPSTAT func_ccl_time_out_lock_work_wait_door_for_open(void);
-void func_ccl_close_all_sensor(void);
-void func_ccl_open_all_sensor(void);
+void func_ccl_close_all_sensor_power(void);
+void func_ccl_open_all_sensor_power(void);
 void func_ccl_stm_main_recovery_from_fault(void);  //提供了一种比RESTART更低层次的状态恢复方式
 
 //高级定义，简化程序的可读性，包括return IHU_FAILURE在内的宏定义，没搞定。。。

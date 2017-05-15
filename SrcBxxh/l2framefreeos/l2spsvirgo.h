@@ -68,11 +68,11 @@ extern IhuFsmStateItem_t IhuFsmSpsvirgo[];
 #endif
 
 //SPS工作状态
-#define IHU_CCL_SPS_WORKING_MODE_NONE 0
-#define IHU_CCL_SPS_WORKING_MODE_SLEEP 1
-#define IHU_CCL_SPS_WORKING_MODE_ACTIVE 2
-#define IHU_CCL_SPS_WORKING_MODE_FAULT 3
-#define IHU_CCL_SPS_WORKING_MODE_INVALID 0xFF
+//#define IHU_CCL_SPS_WORKING_MODE_NONE 0
+//#define IHU_CCL_SPS_WORKING_MODE_SLEEP 1
+//#define IHU_CCL_SPS_WORKING_MODE_ACTIVE 2
+//#define IHU_CCL_SPS_WORKING_MODE_FAULT 3
+//#define IHU_CCL_SPS_WORKING_MODE_INVALID 0xFF
 
 //控制定时器定时扫描是否启动
 #define IHU_SPSVIRGO_PERIOD_TIMER_ACTIVE 1
@@ -90,7 +90,7 @@ extern OPSTAT fsm_spsvirgo_time_out(UINT8 dest_id, UINT8 src_id, void * param_pt
 extern OPSTAT fsm_spsvirgo_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_spsvirgo_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
-extern OPSTAT fsm_spsvirgo_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+//extern OPSTAT fsm_spsvirgo_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_spsvirgo_ccl_event_report_send(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_spsvirgo_ccl_fault_report_send(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
@@ -167,7 +167,8 @@ extern OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_in_transparant_mode(uint8
 extern int ihu_bsp_stm32_spi_slave_hw_init(void);
 extern OPSTAT ihu_vmmw_rfidmod_mf522_spi_read_id(uint8_t *rfidAddr, uint8_t len);
 extern OPSTAT ihu_vmmw_rfidmod_nrf24l01_spi_read_id(uint8_t *rfidAddr, uint8_t len);
-
+extern int8_t func_vmmw_rtc_pcf8563_init(void);
+extern int8_t func_vmmw_rtc_pcf8563_set_alarm_process(int16_t duration);
 
 //高级定义，简化程序的可读性
 #define IHU_ERROR_PRINT_SPSVIRGO(...)	do{zIhuSysStaPm.taskRunErrCnt[TASK_ID_SPSVIRGO]++;  IhuErrorPrint(__VA_ARGS__);  return IHU_FAILURE;}while(0)	
