@@ -266,7 +266,7 @@
 	//系统消息级
 	//maxmum state number and msg number in one task, no instance concept
 	//#define IHU_TASK_QUEUE_ID_START 1024
-	#define IHU_SYSDIM_MSGID_NBR_MAX 43 //一个任务中最多定义的消息数量，之前放254个，优化后更省内存，暂时用不了这么多
+	#define IHU_SYSDIM_MSGID_NBR_MAX 40 //一个任务中最多定义的消息数量，之前放254个，优化后更省内存，暂时用不了这么多
 	#define IHU_SYSDIM_MSGID_MASK_SET 255 //消息号段在同一个任务中必须连续到这个范围内
 	#define IHU_SYSDIM_TASK_STATE_NBR_MAX 10  //一个任务之中最多定义的状态数量
 	#define IHU_SYSDIM_FSM_ENTRY_NBR_MAX 42   //一个任务之中，STATE-MSGID成对处理函数最多数量

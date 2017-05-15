@@ -47,7 +47,7 @@ IhuFsmStateItem_t IhuFsmSpsvirgo[] =
 	{MSG_ID_CCL_SPS_OPEN_AUTH_INQ,					FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_open_auth_inq},
 	{MSG_ID_CCL_COM_SENSOR_STATUS_REQ,			FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_sensor_status_req},
 	{MSG_ID_CCL_SPS_EVENT_REPORT_SEND,			FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_event_report_send},
-	{MSG_ID_CCL_COM_CTRL_CMD,								FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_ctrl_cmd},	
+	//{MSG_ID_CCL_COM_CTRL_CMD,								FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_ctrl_cmd},	
 	{MSG_ID_CCL_SPS_FAULT_REPORT_SEND,			FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_fault_report_send},
 	{MSG_ID_CCL_SPS_CLOSE_REPORT_SEND,			FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_close_door_report_send},
 #endif
@@ -122,7 +122,7 @@ OPSTAT fsm_spsvirgo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 	memset(&zIhuCclSpsvirgoCtrlTable, 0, sizeof(strIhuCclSpsPar_t));
 	memset(&zIhuSpsvirgoMsgRcvBuf, 0, sizeof(msg_struct_ccl_com_cloud_data_rx_t));
-	zIhuCclSpsvirgoCtrlTable.cclSpsWorkingMode = IHU_CCL_SPS_WORKING_MODE_SLEEP;  //初始化就进入SLEEP，然后就看是否有触发
+	//zIhuCclSpsvirgoCtrlTable.cclSpsWorkingMode = IHU_CCL_SPS_WORKING_MODE_SLEEP;  //初始化就进入SLEEP，然后就看是否有触发
 #else
 	#error Un-correct constant definition
 #endif
@@ -305,10 +305,6 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	pMsgProc.authReq.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_lock_auth_req_t) - 4);
 	
 	//统一考虑三种触发方式：BLE/RFID/LOCK, 后台会再加上PID/电话号码方式，总共5种方式
-	
-	//拉灯以及BEEP，给测试和工作人员外部指示
-//	ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_GLOBAL_WORK_STATE, 10);
-//	ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_1, 12);
 			
 	//测试ADC采样数据
 //	ihu_sleep(1);
@@ -317,14 +313,7 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 //	ihu_l1hd_adc1_ccl_get_battery_value();
 //	IHU_DEBUG_PRINT_IPT("SPSVORGO: Battery Result = %d%%\n", ihu_l1hd_adc1_ccl_get_battery_value());
 //	ihu_sleep(1);
-	
-	//测试RTC
-//	if (func_vmmw_rtc_pcf8563_init() == IHU_SUCCESS){
-//		func_vmmw_rtc_pcf8563_set_alarm_process(1);
-//	}
-	
-	//测试CPU停止
-//	ihu_l1hd_dido_f2board_cpu_power_ctrl_off();
+
 	
 	//不用使用透传工作方式，而采用ATCMD方式
 	//if (ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_in_transparant_mode(pMsgProc.authReq.bleMacAddr, 6) == IHU_SUCCESS){
@@ -609,26 +598,26 @@ OPSTAT fsm_spsvirgo_ccl_event_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 
 
 //控制状态
-OPSTAT fsm_spsvirgo_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
-{
-	//int ret;
-	msg_struct_ccl_com_ctrl_cmd_t rcv;
-	
-	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_com_ctrl_cmd_t)))
-		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Receive message error!\n");
-	memcpy(&rcv, param_ptr, param_len);
+//OPSTAT fsm_spsvirgo_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+//{
+//	//int ret;
+//	msg_struct_ccl_com_ctrl_cmd_t rcv;
+//	
+//	//Receive message and copy to local variable
+//	memset(&rcv, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
+//	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_com_ctrl_cmd_t)))
+//		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Receive message error!\n");
+//	memcpy(&rcv, param_ptr, param_len);
 
-	//操作状态
-	if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_ACTIVE) zIhuCclSpsvirgoCtrlTable.cclSpsWorkingMode = IHU_CCL_SPS_WORKING_MODE_ACTIVE;
-	else if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_SLEEP) zIhuCclSpsvirgoCtrlTable.cclSpsWorkingMode = IHU_CCL_SPS_WORKING_MODE_SLEEP;
-	else if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_FAULT) zIhuCclSpsvirgoCtrlTable.cclSpsWorkingMode = IHU_CCL_SPS_WORKING_MODE_FAULT;
-	else IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Receive message error!\n");
-	
-	//返回
-	return IHU_SUCCESS;
-}
+//	//操作状态
+//	if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_ACTIVE) zIhuCclSpsvirgoCtrlTable.cclSpsWorkingMode = IHU_CCL_SPS_WORKING_MODE_ACTIVE;
+//	else if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_SLEEP) zIhuCclSpsvirgoCtrlTable.cclSpsWorkingMode = IHU_CCL_SPS_WORKING_MODE_SLEEP;
+//	else if (rcv.workmode == IHU_CCL_DH_CMDID_WORK_MODE_FAULT) zIhuCclSpsvirgoCtrlTable.cclSpsWorkingMode = IHU_CCL_SPS_WORKING_MODE_FAULT;
+//	else IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Receive message error!\n");
+//	
+//	//返回
+//	return IHU_SUCCESS;
+//}
 
 //发送差错报告后的证实给CCL
 OPSTAT fsm_spsvirgo_ccl_fault_report_send(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)

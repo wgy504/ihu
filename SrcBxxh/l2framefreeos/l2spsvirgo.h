@@ -68,11 +68,11 @@ extern IhuFsmStateItem_t IhuFsmSpsvirgo[];
 #endif
 
 //SPS工作状态
-#define IHU_CCL_SPS_WORKING_MODE_NONE 0
-#define IHU_CCL_SPS_WORKING_MODE_SLEEP 1
-#define IHU_CCL_SPS_WORKING_MODE_ACTIVE 2
-#define IHU_CCL_SPS_WORKING_MODE_FAULT 3
-#define IHU_CCL_SPS_WORKING_MODE_INVALID 0xFF
+//#define IHU_CCL_SPS_WORKING_MODE_NONE 0
+//#define IHU_CCL_SPS_WORKING_MODE_SLEEP 1
+//#define IHU_CCL_SPS_WORKING_MODE_ACTIVE 2
+//#define IHU_CCL_SPS_WORKING_MODE_FAULT 3
+//#define IHU_CCL_SPS_WORKING_MODE_INVALID 0xFF
 
 //控制定时器定时扫描是否启动
 #define IHU_SPSVIRGO_PERIOD_TIMER_ACTIVE 1
@@ -90,7 +90,7 @@ extern OPSTAT fsm_spsvirgo_time_out(UINT8 dest_id, UINT8 src_id, void * param_pt
 extern OPSTAT fsm_spsvirgo_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_spsvirgo_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
-extern OPSTAT fsm_spsvirgo_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+//extern OPSTAT fsm_spsvirgo_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_spsvirgo_ccl_event_report_send(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_spsvirgo_ccl_fault_report_send(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);

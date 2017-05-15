@@ -8,6 +8,8 @@
 
 //= ZJL, 2017 May.13, CURRENT_SW_DELIVERY R03.134 =>CCL项目
 = 继续晚上CCL状态机
+= SYSDIM中修改了消息支持数量：优化完毕
+= 基本上完成了新状态的架构，可以开始拷机测试了
 
 //= ZJL, 2017 May.9, CURRENT_SW_DELIVERY R03.133 =>CCL项目
 = 开始优化整个状态机的工作

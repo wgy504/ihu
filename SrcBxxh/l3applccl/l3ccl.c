@@ -56,17 +56,17 @@ IhuFsmStateItem_t IhuFsmCcl[] =
 	//启动以后直接干活
 	{MSG_ID_CCL_HAND_ACTIVE_TRIGGER,				FSM_STATE_CCL_ACTIVE,         					fsm_ccl_hand_active_trigger_to_work},  //人工激活触发	
 
-	//FSM_STATE_CCL_CLOUD_INQUERY：启动SESSION定时4.5分钟 = 270秒，等待后台回传指令，开门授权则进入TO_OPEN_DOOR状态，否则回到SLEEP状态
+	//FSM_STATE_CCL_CLOUD_INQUERY：启动SESSION定时4.5分钟 = 270秒，等待后台回传指令，开门授权则进入TO_OPEN_DOOR状态，否则关机
 	{MSG_ID_SPS_CCL_CLOUD_FB,								FSM_STATE_CCL_CLOUD_INQUERY,         		fsm_ccl_sps_cloud_fb}, 							//后台反馈	
 	
 	//FSM_STATE_CCL_TO_OPEN_DOOR：启动30S开门定时，等待人工开门，超时则关门回归SLEEP
 	{MSG_ID_DIDO_CCL_DOOR_OPEN_EVENT,				FSM_STATE_CCL_TO_OPEN_DOOR,         		fsm_ccl_dido_door_open_event},      //开门事件
-	{MSG_ID_DIDO_CCL_EVENT_STATUS_UPDATE,		FSM_STATE_CCL_TO_OPEN_DOOR,         		fsm_ccl_dido_event_status_update},  //事件更新，重复触发
+	//{MSG_ID_DIDO_CCL_EVENT_STATUS_UPDATE,		FSM_STATE_CCL_TO_OPEN_DOOR,         		fsm_ccl_dido_event_status_update},  //事件更新，重复触发
 	{MSG_ID_SPS_CCL_CLOSE_REPORT_CFM,				FSM_STATE_CCL_TO_OPEN_DOOR,         		fsm_ccl_sps_close_door_report_cfm},	//发送一次开关门报告的证实			
 	
-	//FSM_STATE_CCL_DOOR_OPEN：监控门限和门锁，大定时器超时进入FATAL FAULT。正常关门则发送报告给后台，然后进入SLEEP状态
+	//FSM_STATE_CCL_DOOR_OPEN：监控门限和门锁，大定时器超时进入FATAL FAULT。正常关门则发送报告给后台，然后关机
 	{MSG_ID_DIDO_CCL_DOOR_CLOSE_EVENT,			FSM_STATE_CCL_DOOR_OPEN,         				fsm_ccl_door_close_event}, //关门事件
-	{MSG_ID_DIDO_CCL_EVENT_STATUS_UPDATE,		FSM_STATE_CCL_DOOR_OPEN,         				fsm_ccl_dido_event_status_update},  //事件更新，重复触发
+	//{MSG_ID_DIDO_CCL_EVENT_STATUS_UPDATE,		FSM_STATE_CCL_DOOR_OPEN,         				fsm_ccl_dido_event_status_update},  //事件更新，重复触发
 	{MSG_ID_SPS_CCL_CLOSE_REPORT_CFM,				FSM_STATE_CCL_DOOR_OPEN,         				fsm_ccl_sps_close_door_report_cfm},	//发送一次开关门报告的证实		
 	
 	//FSM_STATE_CCL_FATAL_FAULT：严重错误状态，发送报告给后台，等待人工干预。然后还需要修改闹铃定时器，以便再次唤醒并进行监控
@@ -78,7 +78,7 @@ IhuFsmStateItem_t IhuFsmCcl[] =
 	//需要不需要此事继续扫描，并判定关门的情形？如果不扫描，肯定简单多了，但系统比较肉。如果扫描，系统复杂，但系统反应灵敏
 	//折中：CCL主动进行扫描，而不是等待DIDO模块进行事件性扫描，简化状态机。这样还是有可能收到CLOSE_REPORT_CFM消息的
 	//{MSG_ID_DIDO_CCL_DOOR_CLOSE_EVENT,			FSM_STATE_CCL_FATAL_FAULT,         			fsm_ccl_door_close_event},	  					//关门事件：也有可能正好此事完成了关门
-	{MSG_ID_SPS_CCL_CLOSE_REPORT_CFM,				FSM_STATE_CCL_FATAL_FAULT,         			fsm_ccl_sps_close_door_report_cfm},			//有可能发生定时器超时与SPS传输并发的问题
+	//{MSG_ID_SPS_CCL_CLOSE_REPORT_CFM,				FSM_STATE_CCL_FATAL_FAULT,         			fsm_ccl_sps_close_door_report_cfm},			//有可能发生定时器超时与SPS传输并发的问题
 
 	//FSM_STATE_CCL_SLEEP: 休眠状态，修改闹铃到8小时，启动5秒休眠定器，超时以后关断自己
 	//{MSG_ID_DIDO_CCL_EVENT_LOCK_TRIGGER,		FSM_STATE_CCL_SLEEP,         						fsm_ccl_hand_active_trigger_to_work},  //锁具激活触发
@@ -179,7 +179,9 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 	if (handActFlag == TRUE){
 		//必须人为的设置一次8小时定时RTC，不然有可能遇到系统第一次启动的情形，从未设置过
 		//多次重复设置的问题，留给驱动解决：通过BOOT区的计数器判定是否设定过
-		func_vmmw_rtc_pcf8563_set_alarm_process(IHU_CCL_ALARM_NORMAL_PERIOD_DURATION);
+		if (func_vmmw_rtc_pcf8563_init() == IHU_SUCCESS){
+			func_vmmw_rtc_pcf8563_set_alarm_process(IHU_CCL_ALARM_NORMAL_PERIOD_DURATION);
+		}
 
 		//再进行状态转移
 		FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_ACTIVE);
@@ -199,7 +201,9 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 		if (func_vmmw_rtc_pcf8563_get_alarm_duration() == IHU_CCL_ALARM_FAULT_PERIOD_DURATION){
 			//扫描门限
 			if (ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_door_open_state(IHU_CCL_SENSOR_LOCK_NUMBER_MAX) == TRUE){
-				func_vmmw_rtc_pcf8563_set_alarm_process(IHU_CCL_ALARM_FAULT_PERIOD_DURATION);
+				if (func_vmmw_rtc_pcf8563_init() == IHU_SUCCESS){
+					func_vmmw_rtc_pcf8563_set_alarm_process(IHU_CCL_ALARM_FAULT_PERIOD_DURATION);
+				}
 				
 				//进入差错状态机
 				FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_FATAL_FAULT);
@@ -215,7 +219,9 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 			
 			//进入正常的8小时周期报告
 			else{
-				func_vmmw_rtc_pcf8563_set_alarm_process(IHU_CCL_ALARM_NORMAL_PERIOD_DURATION);
+				if (func_vmmw_rtc_pcf8563_init() == IHU_SUCCESS){
+					func_vmmw_rtc_pcf8563_set_alarm_process(IHU_CCL_ALARM_NORMAL_PERIOD_DURATION);
+				}
 				//进入8小时正常的报告状态
 				FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_EVENT_REPORT);
 
@@ -232,7 +238,9 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 		//其它情况，非10分钟定时，可以是8小时定时，或者其它原因。都当做定时周期性汇报。为了确保安全性，重新设置ALARM定时报告
 		else{
 			//正常的进入周期性汇报状态机
-			func_vmmw_rtc_pcf8563_set_alarm_process(IHU_CCL_ALARM_NORMAL_PERIOD_DURATION);
+			if (func_vmmw_rtc_pcf8563_init() == IHU_SUCCESS){
+				func_vmmw_rtc_pcf8563_set_alarm_process(IHU_CCL_ALARM_NORMAL_PERIOD_DURATION);
+			}
 			//进入8小时正常的报告状态
 			FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_EVENT_REPORT);	
 
@@ -249,7 +257,9 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 	//既不是定时，也不是人工设定，是某种差错，统一当周期性汇报处理
 	else{
 		//正常的进入周期性汇报状态机
-		func_vmmw_rtc_pcf8563_set_alarm_process(IHU_CCL_ALARM_NORMAL_PERIOD_DURATION);
+		if (func_vmmw_rtc_pcf8563_init() == IHU_SUCCESS){
+			func_vmmw_rtc_pcf8563_set_alarm_process(IHU_CCL_ALARM_NORMAL_PERIOD_DURATION);
+		}
 		//进入8小时正常的报告状态
 		FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_EVENT_REPORT);
 
@@ -628,36 +638,36 @@ OPSTAT fsm_ccl_period_report_trigger(UINT8 dest_id, UINT8 src_id, void * param_p
 OPSTAT func_ccl_time_out_lock_work_active(void)
 {
 	int ret = 0;
-	msg_struct_ccl_com_ctrl_cmd_t snd;
+	//msg_struct_ccl_com_ctrl_cmd_t snd;
 	msg_struct_ccl_sps_close_report_send_t snd1;
 	msg_struct_ccl_sps_fault_report_send_t snd2;
 	
 	//只需要去激活所有下位机
 	if (FsmGetState(TASK_ID_CCL) == FSM_STATE_CCL_CLOUD_INQUERY){
 		//去激活所有下位机，此时不需要发送后台命令，因为后台都连不上
-		memset(&snd, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
-		snd.length = sizeof(msg_struct_ccl_com_ctrl_cmd_t);
-		snd.workmode = IHU_CCL_DH_CMDID_WORK_MODE_SLEEP;
-		ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length);
-		if (ret == IHU_FAILURE)
-			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName);
-		ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length);
-		if (ret == IHU_FAILURE)
-			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName);
-		ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_I2CARIES, TASK_ID_CCL, &snd, snd.length);		
-		if (ret == IHU_FAILURE)
-			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName);
-		ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DCMIARIS, TASK_ID_CCL, &snd, snd.length);
-		if (ret == IHU_FAILURE)
-			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DCMIARIS].taskName);
+//		memset(&snd, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
+//		snd.length = sizeof(msg_struct_ccl_com_ctrl_cmd_t);
+//		snd.workmode = IHU_CCL_DH_CMDID_WORK_MODE_SLEEP;
+//		ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length);
+//		if (ret == IHU_FAILURE)
+//			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName);
+//		ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length);
+//		if (ret == IHU_FAILURE)
+//			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName);
+//		ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_I2CARIES, TASK_ID_CCL, &snd, snd.length);		
+//		if (ret == IHU_FAILURE)
+//			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName);
+//		ret = ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DCMIARIS, TASK_ID_CCL, &snd, snd.length);
+//		if (ret == IHU_FAILURE)
+//			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DCMIARIS].taskName);
 		
 		//关闭所有接口
 		func_ccl_close_all_sensor();
 		
-		//状态转移：直接去SLEEP状态了
-		//这个待完善
-//		if (FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_SLEEP) == IHU_FAILURE)
-//			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Error Set FSM State!");
+		//延时并关断CPU系统
+		ihu_sleep(2);
+		ihu_l1hd_dido_f2board_cpu_power_ctrl_off();
+
 	}
 	
 	//待开门，意味着门还未开：这里面也有个逻辑，就是必须也得等待CLOSE_REPORT_CFM的到来，不然也会出现问题
@@ -674,22 +684,40 @@ OPSTAT func_ccl_time_out_lock_work_active(void)
 		ret = ihu_message_send(MSG_ID_CCL_SPS_CLOSE_REPORT_SEND, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd1, snd1.length);
 		if (ret == IHU_FAILURE)
 			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName);
+		
+		//然后将门关上
+		//关门控制：独特的技巧，复用这些参数
+		if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX >= 1){
+			ihu_usleep(200);
+			ihu_l1hd_dido_f2board_lock1_do1_off();
+		}
+		if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX >= 2){
+			ihu_usleep(200);
+			ihu_l1hd_dido_f2board_lock2_do1_off();
+		}
+		if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX >= 4){
+			ihu_usleep(200);
+			ihu_l1hd_dido_f2board_lock3_do1_off();
+			ihu_usleep(200);
+			ihu_l1hd_dido_f2board_lock4_do1_off();
+		}
+		
 	}
 	
 	//门开着，为收到关门信号，这个就要进入差错了
 	else if (FsmGetState(TASK_ID_CCL) == FSM_STATE_CCL_DOOR_OPEN){
 		//改变下位机状态
-		memset(&snd, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
-		snd.length = sizeof(msg_struct_ccl_com_ctrl_cmd_t);
-		snd.workmode = IHU_CCL_DH_CMDID_WORK_MODE_FAULT;
-		if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
-			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName);
-		if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
-			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName);
-		if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_I2CARIES, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
-			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName);
-		if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DCMIARIS, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
-			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DCMIARIS].taskName);
+//		memset(&snd, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
+//		snd.length = sizeof(msg_struct_ccl_com_ctrl_cmd_t);
+//		snd.workmode = IHU_CCL_DH_CMDID_WORK_MODE_FAULT;
+//		if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
+//			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName);
+//		if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
+//			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName);
+//		if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_I2CARIES, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
+//			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName);
+//		if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DCMIARIS, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
+//			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DCMIARIS].taskName);
 		
 		//发送差错状态报告给后台
 		memset(&snd2, 0, sizeof(msg_struct_ccl_sps_fault_report_send_t));
@@ -697,10 +725,38 @@ OPSTAT func_ccl_time_out_lock_work_active(void)
 		snd2.length = sizeof(msg_struct_ccl_sps_fault_report_send_t);
 		if (ihu_message_send(MSG_ID_CCL_SPS_FAULT_REPORT_SEND, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd2, snd2.length) == IHU_FAILURE)
 			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName);
-
+		
+		//然后将锁关上
+		//关门控制：独特的技巧，复用这些参数
+		if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX >= 1){
+			ihu_usleep(200);
+			ihu_l1hd_dido_f2board_lock1_do1_off();
+		}
+		if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX >= 2){
+			ihu_usleep(200);
+			ihu_l1hd_dido_f2board_lock2_do1_off();
+		}
+		if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX >= 4){
+			ihu_usleep(200);
+			ihu_l1hd_dido_f2board_lock3_do1_off();
+			ihu_usleep(200);
+			ihu_l1hd_dido_f2board_lock4_do1_off();
+		}		
+		
 		//状态转移：直接去FATAL_FAULT状态了
 		if (FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_FATAL_FAULT) == IHU_FAILURE)
 			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Error Set FSM State!");
+		
+		//调整ALARM的时间长度，以便及时醒来，再监控	
+		if (func_vmmw_rtc_pcf8563_init() == IHU_SUCCESS){
+			func_vmmw_rtc_pcf8563_set_alarm_process(IHU_CCL_ALARM_FAULT_PERIOD_DURATION);
+		}		
+		
+		//拉灯拉BEEP
+		ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_GLOBAL_WORK_STATE, 5);
+		ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_2, 30);		
+		
+		//关机，等待FAULT REPORT收到以后，会自动干的
 	}
 	
 	//不应该还有其它可能性
@@ -717,7 +773,7 @@ OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 {	
 	int ret = 0;
 	msg_struct_spsvirgo_ccl_cloud_fb_t rcv;
-	msg_struct_ccl_com_ctrl_cmd_t snd;
+	msg_struct_ccl_dido_door_open_req_t snd;
 	
 	//入参检查
 	//Receive message and copy to local variable
@@ -729,17 +785,17 @@ OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 	//对收到的后台指令反馈结果进行处理
 	if (rcv.authResult == IHU_CCL_LOCK_AUTH_RESULT_NOK){
 		//去激活所有下位机
-		memset(&snd, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
-		snd.length = sizeof(msg_struct_ccl_com_ctrl_cmd_t);
-		snd.workmode = IHU_CCL_DH_CMDID_WORK_MODE_SLEEP;
-		if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
-			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName);
-		if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
-			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName);
-		if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_I2CARIES, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
-			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName);
-		if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DCMIARIS, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
-			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DCMIARIS].taskName);
+//		memset(&snd, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
+//		snd.length = sizeof(msg_struct_ccl_com_ctrl_cmd_t);
+//		snd.workmode = IHU_CCL_DH_CMDID_WORK_MODE_SLEEP;
+//		if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
+//			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName);
+//		if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
+//			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName);
+//		if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_I2CARIES, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
+//			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName);
+//		if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DCMIARIS, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
+//			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DCMIARIS].taskName);
 		
 		//关闭所有接口
 		func_ccl_close_all_sensor();
@@ -747,22 +803,39 @@ OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 		//停止定时器
 		if (ihu_timer_stop(TASK_ID_CCL, TIMER_ID_1S_CCL_LOCK_WORK_ACTIVE, TIMER_RESOLUTION_1S) == IHU_FAILURE)
 			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Error start timer!\n");
+		
+		//拉灯拉BEEP，指示整个工作过程不成功
+		ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_GLOBAL_WORK_STATE, 5);
+		ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_2, 30);		
 
-		//状态转移：直接去SLEEP状态了
-		//等待完善
-//		if (FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_SLEEP) == IHU_FAILURE)
-//			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Error Set FSM State!");
+		//延时并关断CPU系统
+		ihu_sleep(5);
+		ihu_l1hd_dido_f2board_cpu_power_ctrl_off();
 	}
 		
 	//如果是得到开门授权指令，则发送命令到DIDO模块
 	else if (rcv.authResult == IHU_CCL_LOCK_AUTH_RESULT_OK){
-		memset(&snd, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
-		snd.length = sizeof(msg_struct_ccl_com_ctrl_cmd_t);
-		snd.workmode = IHU_CCL_DH_CMDID_WORK_MODE_CTRL;
-		snd.cmdid = IHU_CCL_DH_CMDID_CMD_DOOR_OPEN;
-		snd.lockid = IHU_CCL_SENSOR_LOCK_NUMBER_MAX;
-		if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
+		memset(&snd, 0, sizeof(msg_struct_ccl_dido_door_open_req_t));
+		snd.length = sizeof(msg_struct_ccl_dido_door_open_req_t);
+		snd.doorid = IHU_CCL_SENSOR_LOCK_NUMBER_MAX;
+		if (ihu_message_send(MSG_ID_CCL_DIDO_DOOR_OPEN_REQ, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
 			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName);
+		
+		//开门控制：独特的技巧，复用这些参数
+		if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX >= 1){
+			ihu_usleep(200);
+			ihu_l1hd_dido_f2board_lock1_do1_on();
+		}
+		if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX >= 2){
+			ihu_usleep(200);
+			ihu_l1hd_dido_f2board_lock2_do1_on();
+		}
+		if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX >= 4){
+			ihu_usleep(200);
+			ihu_l1hd_dido_f2board_lock3_do1_on();
+			ihu_usleep(200);
+			ihu_l1hd_dido_f2board_lock4_do1_on();
+		}
 		
 		//启动定时器
 		ret = ihu_timer_start(TASK_ID_CCL, TIMER_ID_1S_CCL_LOCK_WORK_WAIT_TO_OPEN, \
@@ -800,6 +873,33 @@ OPSTAT fsm_ccl_dido_door_open_event(UINT8 dest_id, UINT8 src_id, void * param_pt
 	if (ihu_timer_stop(TASK_ID_CCL, TIMER_ID_1S_CCL_LOCK_WORK_WAIT_TO_OPEN, TIMER_RESOLUTION_1S) == IHU_FAILURE)
 		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Error start timer!\n");
 	
+	//关锁，不然凭空耗电，不值得
+	//关门控制：独特的技巧，复用这些参数
+	if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX >= 1){
+		ihu_usleep(200);
+		ihu_l1hd_dido_f2board_lock1_do1_off();
+	}
+	if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX >= 2){
+		ihu_usleep(200);
+		ihu_l1hd_dido_f2board_lock2_do1_off();
+	}
+	if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX >= 4){
+		ihu_usleep(200);
+		ihu_l1hd_dido_f2board_lock3_do1_off();
+		ihu_usleep(200);
+		ihu_l1hd_dido_f2board_lock4_do1_off();
+	}
+	
+	//发送消息给DIDO
+	msg_struct_ccl_dido_door_close_req_t snd;
+	memset(&snd, 0, sizeof(msg_struct_ccl_dido_door_close_req_t));
+	snd.length = sizeof(msg_struct_ccl_dido_door_close_req_t);
+	snd.doorid = IHU_CCL_SENSOR_LOCK_NUMBER_MAX;
+	if (ihu_message_send(MSG_ID_CCL_DIDO_DOOR_CLOSE_REQ, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
+		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName);
+
+	//启动监控定时器：其实这个定时器可以被大定时代替，所以暂时不启动
+		
 	//状态转移
 	if (FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_DOOR_OPEN) == IHU_FAILURE)
 		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Error Set FSM State!");
@@ -812,17 +912,34 @@ OPSTAT fsm_ccl_dido_door_open_event(UINT8 dest_id, UINT8 src_id, void * param_pt
 OPSTAT func_ccl_time_out_lock_work_wait_door_for_open(void)
 {
 	//int ret = 0;
-	msg_struct_ccl_com_ctrl_cmd_t snd;
+	//msg_struct_ccl_com_ctrl_cmd_t snd;
 	msg_struct_ccl_sps_close_report_send_t snd1;
 	
 	//先发送关锁命令
-	memset(&snd, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
-	snd.length = sizeof(msg_struct_ccl_com_ctrl_cmd_t);
-	snd.workmode = IHU_CCL_DH_CMDID_WORK_MODE_CTRL;
-	snd.cmdid = IHU_CCL_DH_CMDID_CMD_DOOR_CLOSE;
-	if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
-		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName);
+//	memset(&snd, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
+//	snd.length = sizeof(msg_struct_ccl_com_ctrl_cmd_t);
+//	snd.workmode = IHU_CCL_DH_CMDID_WORK_MODE_CTRL;
+//	snd.cmdid = IHU_CCL_DH_CMDID_CMD_DOOR_CLOSE;
+//	if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
+//		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName);
 
+	//关锁，不然凭空耗电，不值得
+	//关门控制：独特的技巧，复用这些参数
+	if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX >= 1){
+		ihu_usleep(200);
+		ihu_l1hd_dido_f2board_lock1_do1_off();
+	}
+	if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX >= 2){
+		ihu_usleep(200);
+		ihu_l1hd_dido_f2board_lock2_do1_off();
+	}
+	if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX >= 4){
+		ihu_usleep(200);
+		ihu_l1hd_dido_f2board_lock3_do1_off();
+		ihu_usleep(200);
+		ihu_l1hd_dido_f2board_lock4_do1_off();
+	}	
+	
 	//发送关门报告给后台
 	memset(&snd1, 0, sizeof(msg_struct_ccl_sps_close_report_send_t));
 	snd1.cause = IHU_SYSMSG_CCL_CLOSE_DOOR_NOT_YET_OPEN;
@@ -864,7 +981,7 @@ OPSTAT fsm_ccl_sps_close_door_report_cfm(UINT8 dest_id, UINT8 src_id, void * par
 {	
 	int ret = 0;
 	msg_struct_sps_ccl_close_report_cfm_t rcv;
-	msg_struct_ccl_com_ctrl_cmd_t snd;
+	//msg_struct_ccl_com_ctrl_cmd_t snd;
 	
 	//入参检查
 	//Receive message and copy to local variable
@@ -874,17 +991,17 @@ OPSTAT fsm_ccl_sps_close_door_report_cfm(UINT8 dest_id, UINT8 src_id, void * par
 	memcpy(&rcv, param_ptr, param_len);
 		
 	//去激活所有下位机
-	memset(&snd, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
-	snd.length = sizeof(msg_struct_ccl_com_ctrl_cmd_t);
-	snd.workmode = IHU_CCL_DH_CMDID_WORK_MODE_SLEEP;
-	if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
-		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName);
-	if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
-		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName);
-	if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_I2CARIES, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
-		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName);
-	if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DCMIARIS, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
-		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DCMIARIS].taskName);
+//	memset(&snd, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
+//	snd.length = sizeof(msg_struct_ccl_com_ctrl_cmd_t);
+//	snd.workmode = IHU_CCL_DH_CMDID_WORK_MODE_SLEEP;
+//	if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
+//		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName);
+//	if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
+//		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName);
+//	if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_I2CARIES, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
+//		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName);
+//	if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DCMIARIS, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
+//		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DCMIARIS].taskName);
 	
 	//关闭所有接口
 	func_ccl_close_all_sensor();
@@ -910,48 +1027,48 @@ OPSTAT fsm_ccl_sps_close_door_report_cfm(UINT8 dest_id, UINT8 src_id, void * par
 
 
 //工作状态下的一些门锁状态变化
-OPSTAT fsm_ccl_dido_event_status_update(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
-{	
-	int ret = 0;
-	msg_struct_dido_ccl_status_update_t rcv;
-	
-	//入参检查
-	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_dido_ccl_status_update_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_dido_ccl_status_update_t)))
-		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Receive message error!\n");
-	memcpy(&rcv, param_ptr, param_len);	
-	
-	//如果重复收到锁被激活，则持续延长工作定时器长度
-	if (rcv.cmdid == IHU_CCL_DH_CMDID_EVENT_IND_LOCK_TRIGGER){
-		ret = ihu_timer_start(TASK_ID_CCL, TIMER_ID_1S_CCL_LOCK_WORK_ACTIVE, \
-			zIhuSysEngPar.timer.array[TIMER_ID_1S_CCL_LOCK_WORK_ACTIVE].dur, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
-		if (ret == IHU_FAILURE)
-			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Error start timer!\n");
-	}	
-	
-	//其它事件，暂时不干啥
-	else if (rcv.cmdid == IHU_CCL_DH_CMDID_EVENT_IND_LOCK_O_TO_C){
-		//do nothing
-	}
+//OPSTAT fsm_ccl_dido_event_status_update(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+//{	
+//	int ret = 0;
+//	msg_struct_dido_ccl_status_update_t rcv;
+//	
+//	//入参检查
+//	//Receive message and copy to local variable
+//	memset(&rcv, 0, sizeof(msg_struct_dido_ccl_status_update_t));
+//	if ((param_ptr == NULL || param_len > sizeof(msg_struct_dido_ccl_status_update_t)))
+//		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Receive message error!\n");
+//	memcpy(&rcv, param_ptr, param_len);	
+//	
+//	//如果重复收到锁被激活，则持续延长工作定时器长度
+//	if (rcv.cmdid == IHU_CCL_DH_CMDID_EVENT_IND_LOCK_TRIGGER){
+//		ret = ihu_timer_start(TASK_ID_CCL, TIMER_ID_1S_CCL_LOCK_WORK_ACTIVE, \
+//			zIhuSysEngPar.timer.array[TIMER_ID_1S_CCL_LOCK_WORK_ACTIVE].dur, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
+//		if (ret == IHU_FAILURE)
+//			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Error start timer!\n");
+//	}	
+//	
+//	//其它事件，暂时不干啥
+//	else if (rcv.cmdid == IHU_CCL_DH_CMDID_EVENT_IND_LOCK_O_TO_C){
+//		//do nothing
+//	}
 
-	//返回
-	return IHU_SUCCESS;
-}
+//	//返回
+//	return IHU_SUCCESS;
+//}
 
 
 //触发激活系统到工作
 OPSTAT fsm_ccl_hand_active_trigger_to_work(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {	
 	int ret = 0;
-	msg_struct_dido_ccl_event_lock_trigger_t rcv;
-	msg_struct_ccl_com_ctrl_cmd_t snd;
+	msg_struct_ccl_hand_active_trigger_t rcv;
+	//msg_struct_ccl_com_ctrl_cmd_t snd;
 	msg_struct_ccl_sps_open_auth_inq_t snd1;
 	
 	//入参检查
 	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_dido_ccl_event_lock_trigger_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_dido_ccl_event_lock_trigger_t)))
+	memset(&rcv, 0, sizeof(msg_struct_ccl_hand_active_trigger_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_hand_active_trigger_t)))
 		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);	
 	
@@ -959,17 +1076,17 @@ OPSTAT fsm_ccl_hand_active_trigger_to_work(UINT8 dest_id, UINT8 src_id, void * p
 	func_ccl_open_all_sensor();
 	
 	//发送控制给所有下位机
-	memset(&snd, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
-	snd.length = sizeof(msg_struct_ccl_com_ctrl_cmd_t);
-	snd.workmode = IHU_CCL_DH_CMDID_WORK_MODE_ACTIVE;
-	if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
-		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName);
-	if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
-		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName);
-	if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_I2CARIES, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
-		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName);
-	if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DCMIARIS, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
-		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DCMIARIS].taskName);
+//	memset(&snd, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
+//	snd.length = sizeof(msg_struct_ccl_com_ctrl_cmd_t);
+//	snd.workmode = IHU_CCL_DH_CMDID_WORK_MODE_ACTIVE;
+//	if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
+//		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName);
+//	if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
+//		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName);
+//	if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_I2CARIES, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
+//		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName);
+//	if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DCMIARIS, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
+//		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DCMIARIS].taskName);
 	
 	//启动定时器：如果是在工作模式下，允许被重复触发
 	ret = ihu_timer_start(TASK_ID_CCL, TIMER_ID_1S_CCL_LOCK_WORK_ACTIVE, \
@@ -977,14 +1094,14 @@ OPSTAT fsm_ccl_hand_active_trigger_to_work(UINT8 dest_id, UINT8 src_id, void * p
 	if (ret == IHU_FAILURE)
 		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Error start timer!\n");
 	
-	//控制其它锁具的触发
-	memset(&snd, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
-	snd.length = sizeof(msg_struct_ccl_com_ctrl_cmd_t);
-	snd.workmode = IHU_CCL_DH_CMDID_WORK_MODE_CTRL;
-	snd.cmdid = IHU_CCL_DH_CMDID_CMD_ENABLE_LOCK;
-	snd.lockid = rcv.lockid;
-	if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
-		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName);
+	//控制其它锁具的触发：这个过程已经不存在了
+//	memset(&snd, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
+//	snd.length = sizeof(msg_struct_ccl_com_ctrl_cmd_t);
+//	snd.workmode = IHU_CCL_DH_CMDID_WORK_MODE_CTRL;
+//	snd.cmdid = IHU_CCL_DH_CMDID_CMD_ENABLE_LOCK;
+//	snd.lockid = rcv.lockid;
+//	if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
+//		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName);
 		
 	//发送后台查询命令
 	memset(&snd1, 0, sizeof(msg_struct_ccl_sps_open_auth_inq_t));
@@ -1001,8 +1118,50 @@ OPSTAT fsm_ccl_hand_active_trigger_to_work(UINT8 dest_id, UINT8 src_id, void * p
 }
 
 
+//差错情形下，将状态报告给后台
+//这里采用简单模式，不控制所有模块都到FAULT状态，而只是控制SPSVIRGO，因为它要发送后台
 OPSTAT fsm_ccl_fault_state_trigger(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
+	//int ret = 0;
+	msg_struct_ccl_fault_state_trigger_t rcv;
+	msg_struct_ccl_sps_fault_report_send_t snd;
+	
+	//入参检查
+	//Receive message and copy to local variable
+	memset(&rcv, 0, sizeof(msg_struct_ccl_fault_state_trigger_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_ccl_fault_state_trigger_t)))
+		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Receive message error!\n");
+	memcpy(&rcv, param_ptr, param_len);	
+	
+	//打开所有接口
+	func_ccl_open_all_sensor();
+	
+	//拉灯拉BEEP
+	ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_2, 30);
+	
+	//也根本不需要发送控制命令给各个传感器模块
+//	//发送控制给SPSVIRGO
+//	memset(&snd, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
+//	snd.length = sizeof(msg_struct_ccl_com_ctrl_cmd_t);
+//	snd.workmode = IHU_CCL_DH_CMDID_WORK_MODE_FAULT;
+//	if (ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
+//		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName);
+	
+	//不需要启动定时器，因为SPSVIRGO会控制消息返回，并设置定时器的
+//	//启动定时器：如果是在工作模式下，允许被重复触发
+//	ret = ihu_timer_start(TASK_ID_CCL, TIMER_ID_1S_CCL_LOCK_WORK_ACTIVE, \
+//		zIhuSysEngPar.timer.array[TIMER_ID_1S_CCL_LOCK_WORK_ACTIVE].dur, TIMER_TYPE_ONE_TIME, TIMER_RESOLUTION_1S);
+//	if (ret == IHU_FAILURE)
+//		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Error start timer!\n");
+			
+	//发送后台报告
+		//发送差错状态报告给后台
+	memset(&snd, 0, sizeof(msg_struct_ccl_sps_fault_report_send_t));
+	snd.cause = IHU_SYSMSG_CCL_FAULT_CAUSE_CLOSE_DOOR_TIME_OUT;
+	snd.length = sizeof(msg_struct_ccl_sps_fault_report_send_t);
+	if (ihu_message_send(MSG_ID_CCL_SPS_FAULT_REPORT_SEND, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length) == IHU_FAILURE)
+		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName);
+	
 	//返回
 	return IHU_SUCCESS;
 }
@@ -1099,7 +1258,7 @@ OPSTAT fsm_ccl_sps_fault_report_cfm(UINT8 dest_id, UINT8 src_id, void * param_pt
 	func_ccl_close_all_sensor();
 	
 	//延时并关断CPU系统
-	ihu_sleep(2);
+	ihu_sleep(5);
 	ihu_l1hd_dido_f2board_cpu_power_ctrl_off();		
 	
 	//返回
@@ -1142,19 +1301,19 @@ void func_ccl_close_all_sensor(void)
 //由于错误，直接关机，等待再次被激活
 void func_ccl_stm_main_recovery_from_fault(void)
 {
-	msg_struct_ccl_com_ctrl_cmd_t snd;
+	//msg_struct_ccl_com_ctrl_cmd_t snd;
 
 	//关闭所有外部器件的电源
 	func_ccl_close_all_sensor();
 
 	//设置三个模块进入SLEEP工作模式，发送控制给所有下位机
-	memset(&snd, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
-	snd.length = sizeof(msg_struct_ccl_com_ctrl_cmd_t);
-	snd.workmode = IHU_CCL_DH_CMDID_WORK_MODE_SLEEP;
-	ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length);
-	ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length);
-	ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_I2CARIES, TASK_ID_CCL, &snd, snd.length);		
-	ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DCMIARIS, TASK_ID_CCL, &snd, snd.length);
+//	memset(&snd, 0, sizeof(msg_struct_ccl_com_ctrl_cmd_t));
+//	snd.length = sizeof(msg_struct_ccl_com_ctrl_cmd_t);
+//	snd.workmode = IHU_CCL_DH_CMDID_WORK_MODE_SLEEP;
+//	ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DIDOCAP, TASK_ID_CCL, &snd, snd.length);
+//	ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length);
+//	ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_I2CARIES, TASK_ID_CCL, &snd, snd.length);		
+//	ihu_message_send(MSG_ID_CCL_COM_CTRL_CMD, TASK_ID_DCMIARIS, TASK_ID_CCL, &snd, snd.length);
 	
 	//延时并关断CPU系统
 	ihu_sleep(2);
