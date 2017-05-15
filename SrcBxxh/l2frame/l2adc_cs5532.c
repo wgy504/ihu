@@ -793,8 +793,7 @@ uint32_t WeightSensorCalibrationZero(WeightSensorParamaters_t *pwsp)
 	{
 		if(ReadWheChanOk())
 		{
-				pwsp->WeightSensorOutputValue[i] = ReadSeriesADValue();
-				temp += pwsp->WeightSensorOutputValue[i];
+				temp += ReadSeriesADValue();
 		}
 		HAL_Delay(20);
 	}
@@ -831,8 +830,7 @@ uint32_t WeightSensorCalibrationFull(WeightSensorParamaters_t *pwsp)
 	{
 		if(ReadWheChanOk())
 		{
-				pwsp->WeightSensorOutputValue[i] = ReadSeriesADValue();
-				temp += pwsp->WeightSensorOutputValue[i];
+				temp += ReadSeriesADValue();
 		}
 		HAL_Delay(20);
 	}
@@ -886,8 +884,7 @@ int32_t WeightSensorReadCurrent(WeightSensorParamaters_t *pwsp)
 	{
 		if(ReadWheChanOk())
 		{
-			pwsp->WeightSensorOutputValue[i] = ReadSeriesADValue();
-			temp += pwsp->WeightSensorOutputValue[i];
+			temp += ReadSeriesADValue();
 		}
 		HAL_Delay(10);
 	}

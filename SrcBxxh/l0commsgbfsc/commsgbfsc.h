@@ -469,6 +469,7 @@ typedef struct msg_struct_l3bfsc_wmc_resp
 	UINT16	msgid;
 	UINT16  length;
 	WmcId_t wmc_id;               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */
+  WmcErrorCode_t result;
 }msg_struct_l3bfsc_wmc_resp_t;
 
 
@@ -542,8 +543,8 @@ typedef struct WeightSensorParamaters
 	UINT32	WeightSensorTailorValue;						
 	UINT32	WeightSensorDynamicZeroThreadValue;	
 	UINT32	WeightSensorDynamicZeroHysteresisMs;
-	UINT32  WeightSensorFilterCoeff[32];				// NOT for GUI
-	UINT32  WeightSensorOutputValue[32];				// NOT for GUI
+	//UINT32  WeightSensorFilterCoeff[32];				// NOT for GUI
+	//UINT32  WeightSensorOutputValue[32];				// NOT for GUI
 }WeightSensorParamaters_t;
 
 typedef struct MotorControlParamaters
@@ -684,8 +685,8 @@ typedef struct msg_struct_l3bfsc_wmc_command_req
 typedef struct msg_struct_l3bfsc_wmc_command_resp
 {
 	UINT16	msgid;
-	UINT16	result;
-	UINT16	error_code;
+	WmcId_t wmc_id;               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */
+  WmcErrorCode_t result;
 	UINT32 	motor_speed;
 	UINT32 	sensor_weight;
 }msg_struct_l3bfsc_wmc_command_resp_t;
