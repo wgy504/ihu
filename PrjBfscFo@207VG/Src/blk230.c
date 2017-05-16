@@ -10,6 +10,7 @@
  */
 #include "stm32f2xx_hal.h"
 #include "stm32f2xx_hal_dac.h"
+#include "cmsis_os.h"
 
 #include "pca8547a.h"
 #include "blk230.h"
@@ -21,6 +22,7 @@
 extern DAC_HandleTypeDef hdac;
 #define DACx_CHANNEL DAC_CHANNEL_2
 
+blk230_cmd_t g_motor_cmd;
 
 int32_t blk230_init()
 {
@@ -34,15 +36,16 @@ int32_t blk230_init()
 		bufprint("error: failed to start DAC\n");
 		return status;
 	}
-	
+
+	blk230_set_stop(1);
+  blk230_set_brake(0);
+  
 	status = blk230_set_dc_speed(0);
 	if(status != HAL_OK)
 	{
 		bufprint("error: failed to set motor speed 0\n");
 		return status;
 	}
-	
-	blk230_set_stop(1);
 	
 	return HAL_OK;
 }
@@ -114,6 +117,34 @@ void blk230_test_task_entry(void const * argument)
 	}
 }
 
+int blk230_send_cmd(uint32_t start, uint32_t ccw, uint32_t speed, uint32_t duration)
+{
+  blk230_cmd_t command;
+
+  command.valid = 1;
+  command.brake = 0;
+  command.ccw = ccw;
+  command.stop = !start;
+  command.speed = speed;
+  command.time2stop = duration;
+  
+  taskENTER_CRITICAL();
+  g_motor_cmd = command;
+  taskEXIT_CRITICAL();
+  
+  return g_motor_cmd.valid;
+}
+
+int blk230_recv_cmd(blk230_cmd_t *command)
+{
+  taskENTER_CRITICAL();
+  *command = g_motor_cmd;
+  g_motor_cmd.valid = 0;
+  taskEXIT_CRITICAL();
+  
+  return command->valid;
+}
+
 /*
  * motor task framework, TBD
  */
@@ -122,49 +153,57 @@ void blk230_task(void *param)
 	blk230_cmd_t command;
 	int32_t status;
 	int alarm = 0;
-	int target_speed = 0;
-	
+	uint32_t now, time2stop = 0;
+
+  PCA8574A_init();
+	blk230_init();
+
 	while(1)
 	{
-		command.cmd = BLK230_CMD_NONE;
 		status = 0;
 		
-		/* TBD: wait for command from upper */
-		
-		
-		/* process each command */
-		switch(command.cmd)
-		{
-			case BLK230_CMD_STOP:
-				status = blk230_set_stop(command.param0);
-				break;
-			
-			case BLK230_CMD_BRAKE:
-				status = blk230_set_brake(command.param0);
-				break;
-			
-			case BLK230_CMD_CCW:
-				status = blk230_set_ccw(command.param0);
-				break;
-			
-			case BLK230_CMD_SPEED:
-				target_speed = command.param1;
-				status = blk230_set_dc_speed(target_speed);
-				break;
-		}
-		
-		/* check the status */
-		if(status != 0)
-		{
-			bufprint("warn: status=%d command=0x%x\n", status, *(uint32_t *)(&command));
-		}
+		/* wait for a new command */
+		osDelay(10);
+    now = osKernelSysTick();
+		if(blk230_recv_cmd(&command))
+    {
+      status = blk230_set_brake(command.brake);
+			OS_ASSERT(status == HAL_OK);
+      status = blk230_set_ccw(command.ccw);
+			OS_ASSERT(status == HAL_OK);
+      status = blk230_set_dc_speed(command.speed);
+			OS_ASSERT(status == HAL_OK);
+      status = blk230_set_stop(command.stop);
+			OS_ASSERT(status == HAL_OK);
+
+      if(command.time2stop > 0)
+        time2stop = now + command.time2stop;
+      else
+        time2stop = 0;
+    }
+
+    // need stop motor?
+    if((time2stop != 0) && (now > time2stop))
+    {
+      status = blk230_set_dc_speed(0);
+			OS_ASSERT(status == HAL_OK);
+      status = blk230_set_stop(1);
+			OS_ASSERT(status == HAL_OK);
+      time2stop = 0;
+    }
 		
 		/* check alarm */
 		alarm = blk230_read_alarm();
 		if(alarm)
 		{
 			bufprint("warn: motor alarm! report and reset it...\n", alarm);
-			blk230_set_alarm(0);
+      status = blk230_set_stop(1);
+			OS_ASSERT(status == HAL_OK);
+      status = blk230_set_dc_speed(0);
+			OS_ASSERT(status == HAL_OK);
+			status = blk230_set_alarm(0);
+			OS_ASSERT(status == HAL_OK);
+      time2stop = 0;
 		}
 	}
 }

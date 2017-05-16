@@ -81,6 +81,10 @@ extern OPSTAT fsm_bfsc_wmc_command_req(UINT8 dest_id, UINT8 src_id, void *param_
 extern OPSTAT fsm_bfsc_wmc_stop_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len);				//MYC
 extern OPSTAT fsm_bfsc_wmc_combin_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len);			//MYC
 
+OPSTAT fsm_bfsc_wmc_startind_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+OPSTAT fsm_bfsc_wmc_inited_config_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+OPSTAT fsm_bfsc_wmc_combine_timeout(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len);
+
 //Local API
 OPSTAT func_bfsc_hw_init(WmcInventory_t *pwi);
 OPSTAT func_bfsc_time_out_period_scan(void);

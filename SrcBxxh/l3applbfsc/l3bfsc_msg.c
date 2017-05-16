@@ -13,6 +13,11 @@
  
 #include "l3bfsc.h"
 #include "l3bfsc_msg.h"
+#include "blk230.h"
+
+extern WmcInventory_t										zWmcInvenory;
+extern WeightSensorParamaters_t					zWeightSensorParam;
+extern MotorControlParamaters_t 					zMotorControlParam;
 
 //#define 	MSG_SIZE_L3BFSC_WMC_STARTUP_IND					(sizeof(msg_struct_l3bfsc_wmc_startup_ind_t))
 //#define 	MSG_SIZE_L3BFSC_WMC_SET_CONFIG_REQ			(sizeof(msg_struct_l3bfsc_wmc_set_config_req_t))
@@ -41,7 +46,8 @@
 //OPSTAT fsm_bfsc_wmc_set_config_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)	//MYC
 void msg_wmc_set_config_req_process(void *param_ptr, error_code_t *ec_ptr)
 {
-	
+	  msg_struct_l3bfsc_wmc_set_config_req_t *config_req = (msg_struct_l3bfsc_wmc_set_config_req_t *)param_ptr;
+    
 		IhuDebugPrint("L3BFSC: msg_wmc_set_config_req_process start ...\r\n");
 	
 		/* Check Input Parameter */
@@ -76,7 +82,10 @@ void msg_wmc_set_config_req_process(void *param_ptr, error_code_t *ec_ptr)
 		}
 		
 		/* Process the message */
-		
+    // TODO: check each parameters...
+    zWeightSensorParam = config_req->weight_sensor_param;
+    zMotorControlParam = config_req->motor_control_param;
+    
 		return;
 }
 
@@ -110,16 +119,8 @@ void msg_wmc_set_config_resp(error_code_t ec)
 		
 		/* Build Message Content */
 		msg_wmc_set_config_resp.msgid = MSG_ID_L3BFSC_WMC_SET_CONFIG_RESP;
-//		msg_wmc_set_config_resp.wmc_state = FsmGetState(TASK_ID_BFSC);
-//		msg_wmc_set_config_resp.error_code = ec;		
-		if(ERROR_CODE_NO_ERROR == ec)
-		{
-				//msg_wmc_set_config_resp.result = IHU_SUCCESS;
-		}
-		else
-		{
-				//msg_wmc_set_config_resp.result = IHU_FAILURE;
-		}
+    msg_wmc_set_config_resp.wmc_id = zWmcInvenory.wmc_id;
+		msg_wmc_set_config_resp.result.error_code = ec;
 		
 		IhuDebugPrint("L3BFSC: msg_wmc_set_config_resp: msgid = 0x%08X", \
 										msg_wmc_set_config_resp.msgid);
@@ -277,7 +278,11 @@ void msg_wmc_start_req_process(void *param_ptr, error_code_t *ec_ptr)
 		}
 		
 		/* Process the message */
-		
+		if (FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_COMBINATION) == IHU_FAILURE){
+  		IhuErrorPrint("L3BFSC: Error Set FSM State FSM_STATE_BFSC_COMBINATION");	
+  		return;
+  	}
+    
 		return;
 }
 
@@ -312,16 +317,8 @@ void msg_wmc_start_resp(error_code_t ec)
 
 		/* Build Message Content */
 		msg_wmc_start_resp.msgid = MSG_ID_L3BFSC_WMC_START_RESP;
-		//msg_wmc_start_resp.wmc_state = FsmGetState(TASK_ID_BFSC);
-		//msg_wmc_start_resp.error_code = ec;		
-		if(ERROR_CODE_NO_ERROR == ec)
-		{
-				//msg_wmc_start_resp.result = IHU_SUCCESS;
-		}
-		else
-		{
-				//msg_wmc_start_resp.result = IHU_FAILURE;
-		}
+    msg_wmc_start_resp.wmc_id = zWmcInvenory.wmc_id;
+		msg_wmc_start_resp.result.error_code = ec;
 		
 		IhuDebugPrint("L3BFSC: msg_wmc_start_resp: msgid = 0x%08X\r\n", \
 										msg_wmc_start_resp.msgid);
@@ -410,16 +407,8 @@ void msg_wmc_stop_resp(error_code_t ec)
 
 		/* Build Message Content */
 		msg_wmc_stop_resp.msgid = MSG_ID_L3BFSC_WMC_STOP_RESP;
-		//msg_wmc_stop_resp.wmc_state = FsmGetState(TASK_ID_BFSC);
-		//msg_wmc_stop_resp.error_code = ec;		
-		if(ERROR_CODE_NO_ERROR == ec)
-		{
-				//msg_wmc_stop_resp.result = IHU_SUCCESS;
-		}
-		else
-		{
-				//msg_wmc_stop_resp.result = IHU_FAILURE;
-		}
+		msg_wmc_stop_resp.wmc_id = zWmcInvenory.wmc_id;
+		msg_wmc_stop_resp.result.error_code = ec;
 		
 		IhuDebugPrint("L3BFSC: msg_wmc_stop_resp: msgid = 0x%08X\r\n", \
 										msg_wmc_stop_resp.msgid);
@@ -509,16 +498,8 @@ void msg_wmc_command_resp(error_code_t ec)
 
 		/* Build Message Content Header */
 		msg_wmc_command_resp.msgid = MSG_ID_L3BFSC_WMC_COMMAND_RESP;
-		//msg_wmc_command_resp.wmc_state = FsmGetState(TASK_ID_BFSC);
-		//msg_wmc_command_resp.error_code = ec;		
-		if(ERROR_CODE_NO_ERROR == ec)
-		{
-				//msg_wmc_command_resp.result = IHU_SUCCESS;
-		}
-		else
-		{
-				//msg_wmc_command_resp.result = IHU_FAILURE;
-		}
+		msg_wmc_command_resp.wmc_id = zWmcInvenory.wmc_id;
+		msg_wmc_command_resp.result.error_code = ec;
 		
 		/* Build Message Content Body */
 		/* TODO */
@@ -574,8 +555,9 @@ void msg_wmc_combin_req_process(void *param_ptr, error_code_t *ec_ptr)
 				return;
 		}
 		
-		/* Process the message */
-		
+		/* Process the message: start motor */
+    blk230_send_cmd(1, zMotorControlParam.MotorDirection, zMotorControlParam.MotorSpeed, zMotorControlParam.MotorRollingStartMs);
+
 		return;
 }
 
@@ -610,16 +592,8 @@ void msg_wmc_combin_resp(error_code_t ec)
 		
 		/* Build Message Content Header */
 		msg_wmc_combin_resp.msgid = MSG_ID_L3BFSC_WMC_COMBIN_RESP;
-		//msg_wmc_combin_resp.wmc_state = FsmGetState(TASK_ID_BFSC);
-		//msg_wmc_combin_resp.error_code = ec;		
-		if(ERROR_CODE_NO_ERROR == ec)
-		{
-				//msg_wmc_combin_resp.result = IHU_SUCCESS;
-		}
-		else
-		{
-				//msg_wmc_combin_resp.result = IHU_FAILURE;
-		}
+		msg_wmc_combin_resp.wmc_id = zWmcInvenory.wmc_id;
+		msg_wmc_combin_resp.result.error_code = ec;
 		
 		IhuDebugPrint("L3BFSC: msg_wmc_combin_resp: msgid = 0x%08X\r\n", \
 										msg_wmc_combin_resp.msgid);

@@ -8,13 +8,6 @@
 #define BLK230_START_BIT           (0x04)
 #define BLK230_RUN_BIT             (0x08)
 
-// command list
-#define BLK230_CMD_NONE 0
-#define BLK230_CMD_STOP 1
-#define BLK230_CMD_BRAKE 2
-#define BLK230_CMD_CCW 3
-#define BLK230_CMD_SPEED 4
-
 // PID parameters
 #define BLK230_KP (1)
 #define BLK230_KI (0)
@@ -22,9 +15,12 @@
 
 typedef struct blk230_cmd_s
 {
-	uint32_t cmd:8;
-	uint32_t param0:8;
-	uint32_t param1:16;
+  uint32_t valid:1;
+  uint32_t stop:1;
+  uint32_t brake:1;
+  uint32_t ccw:1;
+  uint32_t speed:12;      // unit rpm
+  uint32_t time2stop:16;  // unit ms
 }blk230_cmd_t;
 
 int32_t blk230_init(void);
@@ -35,5 +31,8 @@ int blk230_set_brake(uint32_t flag);
 int blk230_set_ccw(uint32_t flag);
 int blk230_read_alarm(void);
 int blk230_read_speed(void);
+int blk230_send_cmd(uint32_t start, uint32_t ccw, uint32_t speed, uint32_t duration);
+int blk230_recv_cmd(blk230_cmd_t *command);
+void blk230_task(void *param);
 
 #endif // _BLK230_H_
