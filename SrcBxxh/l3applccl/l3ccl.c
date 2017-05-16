@@ -11,7 +11,7 @@
  ****************************************************************************************
  */
  
- #include "l3ccl.h"
+#include "l3ccl.h"
  
 /*
 ** FSM of the CCL
@@ -28,11 +28,9 @@ IhuFsmStateItem_t IhuFsmCcl[] =
   {MSG_ID_COM_INIT,       								FSM_STATE_IDLE,            							fsm_ccl_init},
   {MSG_ID_COM_INIT_FB,       							FSM_STATE_IDLE,            							fsm_com_do_nothing},
 
-
   //Task level initialization
   {MSG_ID_COM_INIT,       								FSM_STATE_CCL_INITED,            				fsm_ccl_init},
   {MSG_ID_COM_INIT_FB,       							FSM_STATE_CCL_INITED,            				fsm_com_do_nothing},
-
 
 	//ANY state entry
   {MSG_ID_COM_INIT_FB,                    FSM_STATE_COMMON,                       fsm_com_do_nothing},

@@ -40,8 +40,8 @@ extern int dido_time_base;
 	#define BSP_STM32_DIDO_DHT11_GPIO_PIN										CUBEMX_PIN_F2_GPIO_DI_DHT11_Pin
 	#define BSP_STM32_DIDO_DHT11_GPIO												CUBEMX_PIN_F2_GPIO_DI_DHT11_GPIO_Port                         
 	#define BSP_STM32_DIDO_DHT11_Dout_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOD_CLK_ENABLE()
-	#define BSP_STM32_DIDO_FALL_GPIO_PIN										CUBEMX_PIN_F2_GPIO_DI_FALL_SNESOR_Pin                
-	#define BSP_STM32_DIDO_FALL_GPIO												CUBEMX_PIN_F2_GPIO_DI_FALL_SNESOR_GPIO_Port          
+//	#define BSP_STM32_DIDO_FALL_GPIO_PIN										CUBEMX_PIN_F2_GPIO_DI_FALL_SNESOR_Pin                
+//	#define BSP_STM32_DIDO_FALL_GPIO												CUBEMX_PIN_F2_GPIO_DI_FALL_SNESOR_GPIO_Port          
 	#define BSP_STM32_DIDO_SHAKE_GPIO_PIN										CUBEMX_PIN_F2_GPIO_DI_SHAKE_SENSOR_Pin               
 	#define BSP_STM32_DIDO_SHAKE_GPIO												CUBEMX_PIN_F2_GPIO_DI_SHAKE_SENSOR_GPIO_Port         
 	#define BSP_STM32_DIDO_SMOKE_GPIO_PIN										CUBEMX_PIN_F2_GPIO_DI_SMOKE_SENSOR_Pin               
@@ -89,7 +89,7 @@ extern int dido_time_base;
 	#define BSP_STM32_DIDO_DHT11_Dout_LOW()         HAL_GPIO_WritePin(BSP_STM32_DIDO_DHT11_GPIO,BSP_STM32_DIDO_DHT11_GPIO_PIN,GPIO_PIN_RESET) 
 	#define BSP_STM32_DIDO_DHT11_Dout_HIGH()        HAL_GPIO_WritePin(BSP_STM32_DIDO_DHT11_GPIO,BSP_STM32_DIDO_DHT11_GPIO_PIN,GPIO_PIN_SET)
 	#define BSP_STM32_DIDO_DHT11_Data_IN()	        HAL_GPIO_ReadPin(BSP_STM32_DIDO_DHT11_GPIO,BSP_STM32_DIDO_DHT11_GPIO_PIN)	
-	#define BSP_STM32_DIDO_FALL_READ								HAL_GPIO_ReadPin(BSP_STM32_DIDO_FALL_GPIO, BSP_STM32_DIDO_FALL_GPIO_PIN)
+//	#define BSP_STM32_DIDO_FALL_READ								HAL_GPIO_ReadPin(BSP_STM32_DIDO_FALL_GPIO, BSP_STM32_DIDO_FALL_GPIO_PIN)
 	#define BSP_STM32_DIDO_SHAKE_READ								HAL_GPIO_ReadPin(BSP_STM32_DIDO_SHAKE_GPIO, BSP_STM32_DIDO_SHAKE_GPIO_PIN)
 	#define BSP_STM32_DIDO_SMOKE_READ								HAL_GPIO_ReadPin(BSP_STM32_DIDO_SMOKE_GPIO, BSP_STM32_DIDO_SMOKE_GPIO_PIN)
 	#define BSP_STM32_DIDO_WATER_READ								HAL_GPIO_ReadPin(BSP_STM32_DIDO_WATER_GPIO, BSP_STM32_DIDO_WATER_GPIO_PIN)
@@ -127,7 +127,7 @@ extern int dido_time_base;
 	extern void    ihu_bsp_stm32_dido_f2board_dht11_init( void );
 	extern int16_t ihu_bsp_stm32_dido_f2board_dht11_temp_read(void);
 	extern int16_t ihu_bsp_stm32_dido_f2board_dht11_humid_read(void);
-	extern int16_t ihu_bsp_stm32_dido_f2board_fall_read(void);
+//	extern int16_t ihu_bsp_stm32_dido_f2board_fall_read(void);
 	extern int16_t ihu_bsp_stm32_dido_f2board_shake_read(void);
 	extern int16_t ihu_bsp_stm32_dido_f2board_smoke_read(void);
 	extern int16_t ihu_bsp_stm32_dido_f2board_water_read(void);

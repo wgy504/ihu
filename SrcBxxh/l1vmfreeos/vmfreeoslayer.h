@@ -720,7 +720,7 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_dido_f2board_dht11_init               ihu_bsp_stm32_dido_f2board_dht11_init
 #define ihu_l1hd_dido_f2board_dht11_temp_read          ihu_bsp_stm32_dido_f2board_dht11_temp_read   
 #define ihu_l1hd_dido_f2board_dht11_humid_read         ihu_bsp_stm32_dido_f2board_dht11_humid_read   
-#define ihu_l1hd_dido_f2board_fall_read                ihu_bsp_stm32_dido_f2board_fall_read
+//#define ihu_l1hd_dido_f2board_fall_read                ihu_bsp_stm32_dido_f2board_fall_read
 #define ihu_l1hd_dido_f2board_shake_read               ihu_bsp_stm32_dido_f2board_shake_read
 #define ihu_l1hd_dido_f2board_smoke_read               ihu_bsp_stm32_dido_f2board_smoke_read            
 #define ihu_l1hd_dido_f2board_water_read               ihu_bsp_stm32_dido_f2board_water_read     

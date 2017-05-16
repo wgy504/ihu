@@ -134,7 +134,8 @@
 #define CUBEMX_PIN_F2_CAN1_TX_Pin GPIO_PIN_9
 #define CUBEMX_PIN_F2_CAN1_TX_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
-
+extern void I2C_BSP_STM32_MPU6050_Error (void);
+extern void I2C_BSP_STM32_PCF8563_Error (void);
 /* USER CODE END Private defines */
 
 /**

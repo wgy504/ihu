@@ -66,6 +66,7 @@ void StartDefaultTask(void const * argument);
 void StartTask02(void const * argument);
 void Callback01(void const * argument);
 
+extern void MX_USB_HOST_Init(void);
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
 /* USER CODE BEGIN FunctionPrototypes */
@@ -215,6 +216,8 @@ void MX_FREERTOS_Init(void) {
 /* StartDefaultTask function */
 void StartDefaultTask(void const * argument)
 {
+  /* init code for USB_HOST */
+  MX_USB_HOST_Init();
 
   /* USER CODE BEGIN StartDefaultTask */
   /* Infinite loop */

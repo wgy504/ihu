@@ -10,7 +10,12 @@
 //= ZJL, 2017 May.15, CURRENT_SW_DELIVERY R03.136 =>CCL项目
 = 经过初步测试，周期汇报和人工触发，均符合逻辑预期
 = PEM1板子和PEM2的板子在触发逻辑上有差异，待真实PEM2板子拿到后需要做长时间稳定性测试
+= 增加USB的连接，将LED COMMU/WORK_STATE/POWER移到别处，跟USB接线相冲突
+= 暂时未增加USB的中间件组件：选择USB HOST，暂时跟硬件版图设计有冲突
 = 着手做串口CAM摄像头驱动的问题了
+
+
+
 
 
 

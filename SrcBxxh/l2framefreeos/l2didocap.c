@@ -1035,7 +1035,14 @@ bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_smoke_state(void)
 //目前这一版硬件暂时不支持FALL倾倒/三轴MPU6050传感器
 bool ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_fall_state(void)
 {
-	return ((ihu_l1hd_dido_f2board_fall_read()==FALSE)?FALSE:TRUE);
+	float tmp;
+	if (ihu_vmmw_navig_mpu6050_init() == IHU_SUCCESS){
+		tmp = ihu_wmmw_navig_mpu6050_axis_z_angle_caculate_by_static_method();
+		//角度数据：30度就意味着这个夹角太大
+		if (tmp > 45) return TRUE;
+		else return FALSE;
+	}
+	return FALSE;
 }
 
 //SLEEP&FAULT模式下扫描：扫描震

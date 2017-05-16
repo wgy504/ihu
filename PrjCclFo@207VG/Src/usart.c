@@ -156,7 +156,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
     /* Peripheral interrupt init */
-    HAL_NVIC_SetPriority(UART4_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(UART4_IRQn, 5, 0);
     HAL_NVIC_EnableIRQ(UART4_IRQn);
   /* USER CODE BEGIN UART4_MspInit 1 */
 
@@ -200,7 +200,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     PA2     ------> USART2_TX
     PA3     ------> USART2_RX 
     */
-    GPIO_InitStruct.Pin = CUBEMX_PIN_F2_USART2_TX_RFID_Pin|CUBEMX_PIN_F2_USART2_RX_RFID_Pin;
+    GPIO_InitStruct.Pin = CUBEMX_PIN_F2_USART2_TX_GPRS_Pin|CUBEMX_PIN_F2_USART2_RX_GPRS_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_PULLUP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
@@ -293,7 +293,7 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
     PA2     ------> USART2_TX
     PA3     ------> USART2_RX 
     */
-    HAL_GPIO_DeInit(GPIOA, CUBEMX_PIN_F2_USART2_TX_RFID_Pin|CUBEMX_PIN_F2_USART2_RX_RFID_Pin);
+    HAL_GPIO_DeInit(GPIOA, CUBEMX_PIN_F2_USART2_TX_GPRS_Pin|CUBEMX_PIN_F2_USART2_RX_GPRS_Pin);
 
     /* Peripheral interrupt Deinit*/
     HAL_NVIC_DisableIRQ(USART2_IRQn);

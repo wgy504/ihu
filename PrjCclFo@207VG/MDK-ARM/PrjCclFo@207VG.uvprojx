@@ -332,7 +332,7 @@
               <MiscControls>--C99</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F207xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;                                                       ../Drivers/STM32F2xx_HAL_Driver/Inc;                                                       ../Drivers/STM32F2xx_HAL_Driver/Inc/Legacy;                                                       ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;                                                       ../Drivers/CMSIS/Device/ST/STM32F2xx/Include;                                                       ../Middlewares/Third_Party/FreeRTOS/Source/include;                                                       ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;                                                       ../Drivers/CMSIS/Include;                                                       ..\..\SrcBxxh\l0bsp_stm32;                                                       ..\..\SrcBxxh\l0commsgccl;                                                       ..\..\SrcBxxh\l0comvm;                                                       ..\..\SrcBxxh\l1vmfreeos;                                                       ..\..\SrcBxxh\l2framefreeos;                                                       ..\..\SrcBxxh\l3applccl</IncludePath>
+              <IncludePath>../Inc;                                                           ../Drivers/STM32F2xx_HAL_Driver/Inc;                                                           ../Drivers/STM32F2xx_HAL_Driver/Inc/Legacy;                                                           ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;                                                           ../Drivers/CMSIS/Device/ST/STM32F2xx/Include;                                                           ../Middlewares/Third_Party/FreeRTOS/Source/include;                                                           ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;                                                           ../Drivers/CMSIS/Include;                                                           ..\..\SrcBxxh\l0bsp_stm32;                                                           ..\..\SrcBxxh\l0commsgccl;                                                           ..\..\SrcBxxh\l0comvm;                                                           ..\..\SrcBxxh\l1vmfreeos;                                                           ..\..\SrcBxxh\l2framefreeos;                                                           ..\..\SrcBxxh\l3applccl;   ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc;   ../Middlewares/ST/STM32_USB_Host_Library/Class/AUDIO/Inc;   ../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc;   ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc;   ../Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc;   ../Middlewares/ST/STM32_USB_Host_Library/Class/MTP/Inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -485,6 +485,16 @@
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_uart.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f2xx_hal_hcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_hal_hcd.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f2xx_ll_usb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F2xx_HAL_Driver/Src/stm32f2xx_ll_usb.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -594,6 +604,16 @@
               <FileName>freertos.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Src/freertos.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_host.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Src/usb_host.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_conf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Src/usbh_conf.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -947,6 +967,86 @@
               <FileName>l3ccl.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l3applccl\l3ccl.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Middlewares/USB_Host_Library</GroupName>
+          <Files>
+            <File>
+              <FileName>usbh_ctlreq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Middlewares/ST/STM32_USB_Host_Library/Core/Src/usbh_ctlreq.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_ioreq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Middlewares/ST/STM32_USB_Host_Library/Core/Src/usbh_ioreq.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_audio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Middlewares/ST/STM32_USB_Host_Library/Class/AUDIO/Src/usbh_audio.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_cdc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Src/usbh_cdc.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_mtp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Middlewares/ST/STM32_USB_Host_Library/Class/MTP/Src/usbh_mtp.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_msc_bot.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Src/usbh_msc_bot.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_hid_mouse.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Src/usbh_hid_mouse.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_hid_parser.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Src/usbh_hid_parser.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Middlewares/ST/STM32_USB_Host_Library/Core/Src/usbh_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_hid_keybd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Src/usbh_hid_keybd.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_msc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Src/usbh_msc.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_mtp_ptp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Middlewares/ST/STM32_USB_Host_Library/Class/MTP/Src/usbh_mtp_ptp.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_msc_scsi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Src/usbh_msc_scsi.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_hid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Src/usbh_hid.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_pipes.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Middlewares/ST/STM32_USB_Host_Library/Core/Src/usbh_pipes.c</FilePath>
             </File>
           </Files>
         </Group>

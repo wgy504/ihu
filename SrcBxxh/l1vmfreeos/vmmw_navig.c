@@ -314,6 +314,7 @@ float ihu_vmmw_navig_mpu6050_angle_caculate_by_acc_xyz(float x, float y, float z
 /*   反正切求角度：这里只考虑Z轴数据夹角数据，其它的夹角如果需要可以再行计算                               */
 /*---------------------------------------------------------------------------------------------------------*/
 #define IHU_IHU_VMMW_NAVIG_I2C_MPU6050_ANGLE_CAC_REP_NBR 100
+//返回单位为度
 float ihu_wmmw_navig_mpu6050_axis_z_angle_caculate_by_static_method(void)
 {
 	int16_t input[3];
