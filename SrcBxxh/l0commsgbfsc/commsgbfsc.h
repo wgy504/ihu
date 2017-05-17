@@ -667,7 +667,7 @@ typedef struct msg_struct_l3bfsc_fault_ind
 
 typedef struct msg_struct_l3bfsc_wmc_command_req
 {
-	UINT32 msgid;
+	UINT16 msgid;
 	UINT16 length;
 	UINT16 spare;
 	UINT32 wmc_state;
@@ -685,6 +685,7 @@ typedef struct msg_struct_l3bfsc_wmc_command_req
 typedef struct msg_struct_l3bfsc_wmc_command_resp
 {
 	UINT16	msgid;
+	UINT16 length;
 	WmcId_t wmc_id;               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */
   WmcErrorCode_t result;
 	UINT32 	motor_speed;

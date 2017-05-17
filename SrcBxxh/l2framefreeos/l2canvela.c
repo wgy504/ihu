@@ -725,6 +725,7 @@ OPSTAT WmcAwsMsgCheck(void * param_ptr, UINT16 msg_len)
 {
 	UINT32	msgid = 0xFFFFFFFF;
 	char s3[IHU_SYSDIM_MSGID_NAME_LEN_MAX] = "";
+	msg_struct_l3bfsc_wmc_start_req_t *pMsg = (msg_struct_l3bfsc_wmc_start_req_t *) param_ptr;
 	
 	if(NULL == param_ptr)
 	{
@@ -739,7 +740,7 @@ OPSTAT WmcAwsMsgCheck(void * param_ptr, UINT16 msg_len)
 	}
 	
 	/* Get MsgId */
-	msgid = *((UINT32 *)param_ptr);
+	msgid = pMsg->msgid;
 	ihu_msgid_to_string(msgid, s3);
 	IhuDebugPrint("CANVELA: WmcAwsMsgCheck: received msgid = [0x%08X]%s, msg_len = [%d]\n", msgid, s3, msg_len);
 	switch (msgid)
@@ -825,11 +826,13 @@ OPSTAT fsm_canvela_bfsc_l2frame_snd(UINT8 dest_id, UINT8 src_id, void * param_pt
 	if(NULL == param_ptr)
 	{
 		IhuErrorPrint("CANVELA: fsm_canvela_bfsc_l2frame_snd, param_ptr = NULL, return!\n");
+    return IHU_FAILURE;
 	}
 	
 	if(IHU_FAILURE == WmcAwsMsgCheck(param_ptr, param_len))
 	{
 		IhuErrorPrint("CANVELA: fsm_canvela_bfsc_l2frame_snd, msg check failure, return!\n");
+    return IHU_FAILURE;
 	}
 	
 	/* Clear buffer all to 0*/
