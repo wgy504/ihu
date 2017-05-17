@@ -368,6 +368,7 @@ typedef struct msg_struct_dcmi_ccl_sensor_status_rep
 {
 	UINT8 cmdid;
 	com_sensor_status_t sensor;
+	bool  pictureExist;
 	UINT16 length;
 }msg_struct_dcmi_ccl_sensor_status_rep_t;
 

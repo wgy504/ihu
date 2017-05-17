@@ -64,6 +64,7 @@
 "prjcclfo@207vg\vmmw_rfid.o"
 "prjcclfo@207vg\vmmw_navig.o"
 "prjcclfo@207vg\vmmw_pcf8563.o"
+"prjcclfo@207vg\vmmw_cam.o"
 "prjcclfo@207vg\huixmlcodec.o"
 "prjcclfo@207vg\l2adclibra.o"
 "prjcclfo@207vg\l2didocap.o"

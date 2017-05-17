@@ -873,6 +873,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l1vmfreeos\vmmw_pcf8563.h</FilePath>
             </File>
+            <File>
+              <FileName>vmmw_cam.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\vmmw_cam.c</FilePath>
+            </File>
+            <File>
+              <FileName>vmmw_cam.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l1vmfreeos\vmmw_cam.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

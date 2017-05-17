@@ -155,7 +155,7 @@ extern INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_humid_value(vo
 extern INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_bat_value(void);
 extern INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv1_value(void);
 extern INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rsv2_value(void);
-extern INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value(void);
+extern INT16 ihu_dcmiaris_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value(void);
 
 //GPRS/BLE/RFIDMOD的模组操作
 extern OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input, int16_t inlen, char *output, uint16_t *outlen);

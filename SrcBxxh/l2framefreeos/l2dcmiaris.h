@@ -79,12 +79,15 @@ extern OPSTAT fsm_dcmiaris_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, vo
 //extern OPSTAT fsm_dcmiaris_ccl_ctrl_cmd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 
 //全局函数
-extern INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value(void);
-
+extern INT16 ihu_dcmiaris_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value(void);
+extern OPSTAT ihu_dcmiaris_take_picture(UINT8 cameraId);
 
 //Local API
 OPSTAT func_dcmiaris_hw_init(void);
 void func_dcmiaris_time_out_period_scan(void);
+
+//external APIs
+extern OPSTAT ihu_vmmw_cam_ulcdsc03_uart_get_picture(uint8_t *buffer, uint32_t bufLen, UINT32* actualPkg);
 
 #endif /* L2FRAME_L2DCMIARIS_H_ */
 

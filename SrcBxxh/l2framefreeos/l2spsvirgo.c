@@ -67,8 +67,11 @@ IhuFsmStateItem_t IhuFsmSpsvirgo[] =
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 	UINT8 zIhuGprsOperationFlag = 0;
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+	#include "l3ccl.h"
+	extern strIhuCclCtrlPar_t zIhuCclSensorStatus;	
 	strIhuCclSpsPar_t zIhuCclSpsvirgoCtrlTable;
 	msg_struct_ccl_com_cloud_data_rx_t zIhuSpsvirgoMsgRcvBuf;
+
 #else
 	#error Un-correct constant definition
 #endif
@@ -534,7 +537,7 @@ OPSTAT fsm_spsvirgo_ccl_event_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 	pMsgProc.dcmiValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_dcmi_value);
 	pMsgProc.dcmiValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_dcmi_value_t) - 4);
 	pMsgProc.dcmiValue.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc.dcmiValue.dcmiValue = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value());	
+	pMsgProc.dcmiValue.dcmiValue = HUITP_ENDIAN_EXG16(ihu_dcmiaris_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value());	
 
 	//Pack message
 	StrMsg_HUITP_MSGID_uni_general_message_t pMsgInput;
@@ -714,7 +717,7 @@ OPSTAT fsm_spsvirgo_ccl_fault_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 	pMsgProc.dcmiValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_dcmi_value);
 	pMsgProc.dcmiValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_dcmi_value_t) - 4);
 	pMsgProc.dcmiValue.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc.dcmiValue.dcmiValue = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value());	
+	pMsgProc.dcmiValue.dcmiValue = HUITP_ENDIAN_EXG16(ihu_dcmiaris_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value());	
 
 	//Pack message
 	StrMsg_HUITP_MSGID_uni_general_message_t pMsgInput;
@@ -872,7 +875,7 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 	pMsgProc.dcmiValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_dcmi_value);
 	pMsgProc.dcmiValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_dcmi_value_t) - 4);
 	pMsgProc.dcmiValue.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc.dcmiValue.dcmiValue = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value());	
+	pMsgProc.dcmiValue.dcmiValue = HUITP_ENDIAN_EXG16(ihu_dcmiaris_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value());	
 
 	//Pack message
 	StrMsg_HUITP_MSGID_uni_general_message_t pMsgInput;
@@ -889,6 +892,13 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 	//具体的发送命令
 	memset(&zIhuSpsvirgoMsgRcvBuf, 0, sizeof(msg_struct_ccl_com_cloud_data_rx_t));
 	ret = ihu_vmmw_gprsmod_http_data_transmit_with_receive((char *)(pMsgOutput.buf), pMsgOutput.bufferLen, zIhuSpsvirgoMsgRcvBuf.buf, &(zIhuSpsvirgoMsgRcvBuf.length));	
+
+	//再使用TCP_U8，将图像数据发送到后台
+	//数据源是CCL的上下文全局变量=> zIhuCclSensorStatus.picBuf
+	//服务器地址，待完善
+	//两次发送，处理逻辑待完善
+	memset(&zIhuSpsvirgoMsgRcvBuf, 0, sizeof(msg_struct_ccl_com_cloud_data_rx_t));
+	ret = ihu_vmmw_gprsmod_tcp_u8_data_transmit_with_receive((int8_t *)(zIhuCclSensorStatus.picBuf), zIhuCclSensorStatus.picActualPkgSize, (int8_t*)zIhuSpsvirgoMsgRcvBuf.buf, &(zIhuSpsvirgoMsgRcvBuf.length));	
 	
 	//再进入正常状态
 	FsmSetState(TASK_ID_SPSVIRGO, FSM_STATE_SPSVIRGO_ACTIVED);
@@ -902,7 +912,7 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 		if (ret == IHU_FAILURE)
 			IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_SPSVIRGO].taskName, zIhuVmCtrTab.task[TASK_ID_CCL].taskName);
 	}
-
+	
 	//如果从后台收到有价值的反馈
 	else{
 		//对于缓冲区的数据，进行分别处理，将帧变成不同的消息，分门别类发送到L3模块进行处理

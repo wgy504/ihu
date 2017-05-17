@@ -898,7 +898,12 @@ OPSTAT fsm_ccl_dido_door_open_event(UINT8 dest_id, UINT8 src_id, void * param_pt
 		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName);
 
 	//启动监控定时器：其实这个定时器可以被大定时代替，所以暂时不启动
-		
+	
+	//启动摄像头，并将数据存入到CCL的上下文中
+	//只启动了缺省的第一个摄像头。更多的摄像头启动并传输，等待后续需求的明确，以及业务流程的设计。
+	//这里的关键点是，摄像头产生的图像数据太多，需要共享内存，然后按照顺序传输。如果的确需要，需要建立起内部交付的业务流程才可以多次拍摄
+	ihu_dcmiaris_take_picture(0);
+	
 	//状态转移
 	if (FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_DOOR_OPEN) == IHU_FAILURE)
 		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Error Set FSM State!");

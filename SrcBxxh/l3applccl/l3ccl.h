@@ -67,12 +67,17 @@ extern IhuFsmStateItem_t IhuFsmCcl[];
 //LED+BEEP: GPIO，都混装在LED模块中
 
 //本地需要用到的核心参数
+#define  IHU_CCL_PICTURE_BUFFER_SIZE_MAX 10000 //10KB, in BYTES
 typedef struct strIhuCclCtrlPar
 {
 	com_sensor_status_t sensor;
 	UINT16  faultReportCnt;  //防止向后台送报告过于频繁，这里做一个分频控制
+	UINT8  picBuf[IHU_CCL_PICTURE_BUFFER_SIZE_MAX];
+	UINT32 picActualPkgSize;
 }strIhuCclCtrlPar_t;
 #define IHU_CCL_FALULT_REPORT_TIMES_MAX 200
+
+extern strIhuCclCtrlPar_t zIhuCclSensorStatus;
 
 //API
 extern OPSTAT fsm_ccl_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
@@ -100,9 +105,13 @@ extern OPSTAT fsm_ccl_period_report_trigger(UINT8 dest_id, UINT8 src_id, void * 
 extern OPSTAT fsm_ccl_fault_state_trigger(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 
 
+//External APIs
 extern int8_t func_vmmw_rtc_pcf8563_set_alarm_process(int16_t duration);
 extern bool func_vmmw_rtc_pcf8563_judge_alarm_happen(void);
 extern int16_t func_vmmw_rtc_pcf8563_get_alarm_duration(void);
+extern OPSTAT ihu_dcmiaris_take_picture(UINT8 cameraId);
+
+
 
 //Local API
 OPSTAT func_ccl_hw_init(void);
