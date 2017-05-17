@@ -28,6 +28,7 @@ extern "C" {
 #define IHU_BSP_STM32_SPS_RFID_REC_MAX_LEN 				IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX
 #define IHU_BSP_STM32_SPS_BLE_REC_MAX_LEN 				IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX
 #define IHU_BSP_STM32_SPS_PRINT_REC_MAX_LEN 			IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX
+#define IHU_BSP_STM32_SPS_CAM_REC_MAX_LEN 				IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX
 #define IHU_BSP_STM32_SPS_SPARE1_REC_MAX_LEN 			IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX
 #define IHU_BSP_STM32_SPS_SPARE2_REC_MAX_LEN 			IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX
 
@@ -53,16 +54,19 @@ typedef struct IHU_HUITP_L2FRAME_STD_UART_frame_header
 
 //本地定义的交换矩阵
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-	#define IHU_BSP_STM32_UART_GPRS_HANDLER					huart2  //根据最新板子修改
-	#define IHU_BSP_STM32_UART_GPRS_HANDLER_ID  		2
-  #define IHU_BSP_STM32_UART_RFID_HANDLER					huart1  //其实是不用的，而使用了SPI接口
-	#define IHU_BSP_STM32_UART_RFID_HANDLER_ID  		1
-	#define IHU_BSP_STM32_UART_PRINT_HANDLER				huart3
-	#define IHU_BSP_STM32_UART_PRINT_HANDLER_ID  		3
 	#define IHU_BSP_STM32_UART_BLE_HANDLER					huart1  //根据最新板子修改
 	#define IHU_BSP_STM32_UART_BLE_HANDLER_ID  			1
+	#define IHU_BSP_STM32_UART_GPRS_HANDLER					huart2  //根据最新板子修改
+	#define IHU_BSP_STM32_UART_GPRS_HANDLER_ID  		2
+	#define IHU_BSP_STM32_UART_PRINT_HANDLER				huart3  //根据最新板子修改
+	#define IHU_BSP_STM32_UART_PRINT_HANDLER_ID  		3
+	#define IHU_BSP_STM32_UART_CAM_HANDLER					huart4  //根据最新板子修改
+	#define IHU_BSP_STM32_UART_CAM_HANDLER_ID  			4
+	//纯粹是为了少该程序，下面几个均为启用
+	#define IHU_BSP_STM32_UART_RFID_HANDLER					huart1  //其实是不用的，而使用了SPI接口
+	#define IHU_BSP_STM32_UART_RFID_HANDLER_ID  		1
 	#define IHU_BSP_STM32_UART_SPARE1_HANDLER				huart1
-	#define IHU_BSP_STM32_UART_SPARE1_HANDLER_ID  	5
+	#define IHU_BSP_STM32_UART_SPARE1_HANDLER_ID  	1
 	#define IHU_BSP_STM32_UART6_PRESENT_HANDLER			huart6
 	#define IHU_BSP_STM32_UART6_PRESENT_HANDLER_ID  6
 
@@ -137,6 +141,9 @@ extern int ihu_bsp_stm32_sps_rfid_rcv_data_timeout(uint8_t* buff, uint16_t len, 
 extern int ihu_bsp_stm32_sps_ble_send_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_sps_ble_rcv_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_sps_ble_rcv_data_timeout(uint8_t* buff, uint16_t len, uint32_t timeout);
+extern int ihu_bsp_stm32_sps_cam_send_data(uint8_t* buff, uint16_t len);
+extern int ihu_bsp_stm32_sps_cam_rcv_data(uint8_t* buff, uint16_t len);
+extern int ihu_bsp_stm32_sps_cam_rcv_data_timeout(uint8_t* buff, uint16_t len, uint32_t timeout);
 extern int ihu_bsp_stm32_sps_spare1_send_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_sps_spare1_rcv_data(uint8_t* buff, uint16_t len);
 extern int ihu_bsp_stm32_sps_spare1_rcv_data_timeout(uint8_t* buff, uint16_t len, uint32_t timeout);

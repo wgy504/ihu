@@ -51,10 +51,10 @@
 
 /* USER CODE END 0 */
 
-UART_HandleTypeDef huart4;
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 UART_HandleTypeDef huart3;
+UART_HandleTypeDef huart4;
 
 /* UART4 init function */
 void MX_UART4_Init(void)

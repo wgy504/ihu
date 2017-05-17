@@ -115,7 +115,7 @@ int main(void)
   HAL_UART_Receive_IT(&huart1,&zIhuUartRxBuffer[0],1);	
   HAL_UART_Receive_IT(&huart2,&zIhuUartRxBuffer[1],1);
   HAL_UART_Receive_IT(&huart3,&zIhuUartRxBuffer[2],1);
-  //HAL_UART_Receive_IT(&huart4,&zIhuUartRxBuffer[3],1);
+  HAL_UART_Receive_IT(&huart4,&zIhuUartRxBuffer[3],1);
   //HAL_UART_Receive_IT(&huart5,&zIhuUartRxBuffer[4],1);
   //HAL_UART_Receive_IT(&huart6,&zIhuUartRxBuffer[5],1);
   HAL_SPI_Receive_IT(&hspi1,&zIhuSpiRxBuffer[0],1);

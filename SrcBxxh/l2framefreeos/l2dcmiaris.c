@@ -53,7 +53,9 @@ IhuFsmStateItem_t IhuFsmDcmiaris[] =
 //Global variables defination
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+#include "l3ccl.h"
 strIhuCclDcmiPar_t zIhuCclDcmiarisCtrlTable;
+extern strIhuCclCtrlPar_t zIhuCclSensorStatus;
 #else
 	#error Un-correct constant definition
 #endif
@@ -260,9 +262,7 @@ OPSTAT fsm_dcmiaris_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * pa
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DCMIARIS]++;
 		return IHU_FAILURE;
 	}
-	
-	//具体扫描处理
-	
+		
 	//扫描后将结果发给上层
 	memset(&snd, 0, sizeof(msg_struct_dcmi_ccl_sensor_status_rep_t));
 	snd.cmdid = IHU_CCL_DH_CMDID_RESP_STATUS_DCMI;
@@ -311,10 +311,49 @@ OPSTAT fsm_dcmiaris_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * pa
 //}
 
 //SLEEP&FAULT模式下扫描：扫描DCMI, 数据格式HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2
-INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value(void)
+INT16 ihu_dcmiaris_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value(void)
 {
 	return rand()% 1000000;
 }
+
+//摄像头拍照
+//CameraId = 0...3最多
+OPSTAT ihu_dcmiaris_take_picture(UINT8 cameraId)
+{
+	//先初始化这个数据为0。如果失败，或者不存在，上层可以利用这个来判定是否存在图像数据
+	zIhuCclSensorStatus.picActualPkgSize = 0;
+	
+	//再进行具体的传送
+	if (IHU_CCL_SENSOR_CAM_NUMBER_MAX == 0){
+		return IHU_SUCCESS;
+	}
+	
+	else if (IHU_CCL_SENSOR_CAM_NUMBER_MAX == 1){
+		if (ihu_vmmw_cam_ulcdsc03_uart_get_picture(zIhuCclSensorStatus.picBuf, sizeof(zIhuCclSensorStatus.picBuf), &(zIhuCclSensorStatus.picActualPkgSize)) == IHU_FAILURE){
+			zIhuSysStaPm.taskRunErrCnt[TASK_ID_DCMIARIS]++;
+			IhuErrorPrint("DCMIARIS: Read camera sensor error!\n");
+			return IHU_FAILURE;
+		}
+	}
+	
+	//两个摄像头：如何处理？顺序传送？
+	else if (IHU_CCL_SENSOR_CAM_NUMBER_MAX == 2){
+	}
+
+	//两个摄像头：如何处理？顺序传送？
+	else if (IHU_CCL_SENSOR_CAM_NUMBER_MAX == 4){
+	}
+	
+	else{
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_DCMIARIS]++;
+		IhuErrorPrint("DCMIARIS: Configuration camera error!\n");
+		return IHU_FAILURE;	
+	}
+	
+	return IHU_SUCCESS;
+}
+
+
 
 #else
 #endif

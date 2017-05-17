@@ -19,7 +19,7 @@
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
-//extern UART_HandleTypeDef huart4;
+extern UART_HandleTypeDef huart4;
 UART_HandleTypeDef huart5;
 UART_HandleTypeDef huart6; //MAIN中未定义，这里重新定义是为了复用
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
@@ -52,6 +52,10 @@ int8_t 	zIhuBspStm32SpsPrintRxBuff[IHU_BSP_STM32_SPS_BLE_REC_MAX_LEN];					//串
 int8_t 	zIhuBspStm32SpsPrintRxState=0;																					//串口PRINT接收状态
 int16_t zIhuBspStm32SpsPrintRxCount=0;																					//当前接收数据的字节数 	  
 int16_t zIhuBspStm32SpsPrintRxLen=0;
+int8_t 	zIhuBspStm32SpsCamRxBuff[IHU_BSP_STM32_SPS_CAM_REC_MAX_LEN];			//串口CAM数据接收缓冲区 
+int8_t 	zIhuBspStm32SpsCamRxState=0;																					//串口CAM接收状态
+int16_t zIhuBspStm32SpsCamRxCount=0;																					//当前接收数据的字节数 	  
+int16_t zIhuBspStm32SpsCamRxLen=0;
 int8_t 	zIhuBspStm32SpsSpare1RxBuff[IHU_BSP_STM32_SPS_SPARE1_REC_MAX_LEN];			//串口SPARE1数据接收缓冲区 
 int8_t 	zIhuBspStm32SpsSpare1RxState=0;																					//串口SPARE1接收状态
 int16_t zIhuBspStm32SpsSpare1RxCount=0;																					//当前接收数据的字节数 	  
@@ -97,6 +101,14 @@ int ihu_bsp_stm32_sps_slave_hw_init(void)
   zIhuBspStm32SpsPrintRxCount = 0;               //接收字符串的起始存储位置
 	zIhuBspStm32SpsPrintRxState = 0;
 	zIhuBspStm32SpsPrintRxLen = 0;	
+
+	for(k=0;k<IHU_BSP_STM32_SPS_CAM_REC_MAX_LEN;k++)      //将缓存内容清零
+	{
+		zIhuBspStm32SpsCamRxBuff[k] = 0x00;
+	}
+  zIhuBspStm32SpsCamRxCount = 0;               //接收字符串的起始存储位置
+	zIhuBspStm32SpsCamRxState = 0;
+	zIhuBspStm32SpsCamRxLen = 0;	
 
 	for(k=0;k<IHU_BSP_STM32_SPS_SPARE1_REC_MAX_LEN;k++)      //将缓存内容清零
 	{
@@ -264,6 +276,39 @@ int ihu_bsp_stm32_sps_ble_rcv_data_timeout(uint8_t* buff, uint16_t len, uint32_t
 	else
 		return BSP_FAILURE;
 }
+
+/*******************************************************************************
+* 函数名  : USART_SendData
+* 描述    : UART_SPARE1发送数据缓冲区数据
+* 输入    : *buff：数据缓冲区指针，len：发送数据长度
+* 输出    : 无
+* 返回    : 无 
+* 说明    : 无
+*******************************************************************************/
+int ihu_bsp_stm32_sps_cam_send_data(uint8_t* buff, uint16_t len)
+{    
+	if (HAL_UART_Transmit(&IHU_BSP_STM32_UART_CAM_HANDLER, (uint8_t *)buff, len, IHU_BSP_STM32_SPS_TX_MAX_DELAY) == HAL_OK)
+		return BSP_SUCCESS;
+	else
+		return BSP_FAILURE;
+}
+
+int ihu_bsp_stm32_sps_cam_rcv_data(uint8_t* buff, uint16_t len)
+{    
+	if (HAL_UART_Receive(&IHU_BSP_STM32_UART_CAM_HANDLER, buff, len, IHU_BSP_STM32_SPS_RX_MAX_DELAY) == HAL_OK)
+		return BSP_SUCCESS;
+	else
+		return BSP_FAILURE;
+}
+
+int ihu_bsp_stm32_sps_cam_rcv_data_timeout(uint8_t* buff, uint16_t len, uint32_t timeout)
+{    
+	if (HAL_UART_Receive(&IHU_BSP_STM32_UART_CAM_HANDLER, buff, len, timeout) == HAL_OK)
+		return BSP_SUCCESS;
+	else
+		return BSP_FAILURE;
+}
+
 
 /*******************************************************************************
 * 函数名  : USART_SendData
