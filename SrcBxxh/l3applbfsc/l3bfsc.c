@@ -1019,7 +1019,8 @@ OPSTAT fsm_bfsc_wmc_startind_time_out(UINT8 dest_id, UINT8 src_id, void * param_
 		snd.length = sizeof(msg_struct_l3bfsc_wmc_startup_ind_t);
 		snd.msgid = MSG_ID_L3BFSC_WMC_STARTUP_IND;
 		memcpy(&snd.wmc_inventory, &zWmcInvenory, sizeof(WmcInventory_t));
-		
+
+    IhuDebugPrint("send WMC_START_IND (%d bytes): 0x%08x\n", snd.length, *(UINT32 *)&snd);
 		ret = ihu_message_send(MSG_ID_L3BFSC_WMC_STARTUP_IND, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length);
 		if (ret == IHU_FAILURE){
 			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC], zIhuVmCtrTab.task[TASK_ID_CANVELA]);
