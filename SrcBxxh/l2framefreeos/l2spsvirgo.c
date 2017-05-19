@@ -46,10 +46,9 @@ IhuFsmStateItem_t IhuFsmSpsvirgo[] =
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 	{MSG_ID_CCL_SPS_OPEN_AUTH_INQ,					FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_open_auth_inq},
 	{MSG_ID_CCL_COM_SENSOR_STATUS_REQ,			FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_sensor_status_req},
-	{MSG_ID_CCL_SPS_EVENT_REPORT_SEND,			FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_event_report_send},
-	//{MSG_ID_CCL_COM_CTRL_CMD,								FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_ctrl_cmd},	
-	{MSG_ID_CCL_SPS_FAULT_REPORT_SEND,			FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_fault_report_send},
-	{MSG_ID_CCL_SPS_CLOSE_REPORT_SEND,			FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_close_door_report_send},
+	{MSG_ID_CCL_SPS_EVENT_REPORT_SEND,			FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_event_report_send}, //8H周期性报告
+	{MSG_ID_CCL_SPS_FAULT_REPORT_SEND,			FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_fault_report_send}, //10分钟差错周期报告
+	{MSG_ID_CCL_SPS_CLOSE_REPORT_SEND,			FSM_STATE_SPSVIRGO_ACTIVED,         				  fsm_spsvirgo_ccl_close_door_report_send},  //关门报告
 #endif
 	
 	//通信状态：为了让其它任务有个判断，到底系统是否还处于通信状态，还是正常的激活状态
@@ -349,6 +348,7 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	}
 	
 	//将组装好的消息发送到GPRSMOD模组中去，送往后台
+	//测试HTTP和TCP_TEXT两种模式，最终经过测试，确定一种稳定可靠的高效模式，待跟后台测试以后完善确定
 	memset(&zIhuSpsvirgoMsgRcvBuf, 0, sizeof(msg_struct_ccl_com_cloud_data_rx_t));
 	//ret = ihu_vmmw_gprsmod_http_data_transmit_with_receive((char *)(pMsgOutput.buf), pMsgOutput.bufferLen, zIhuSpsvirgoMsgRcvBuf.buf, &(zIhuSpsvirgoMsgRcvBuf.length));	
 	ret = ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive((char *)(pMsgOutput.buf), pMsgOutput.bufferLen, zIhuSpsvirgoMsgRcvBuf.buf, &(zIhuSpsvirgoMsgRcvBuf.length));	
@@ -369,7 +369,7 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	if (ret == IHU_FAILURE){
 		memset(&snd, 0, sizeof(msg_struct_spsvirgo_ccl_cloud_fb_t));
 		//如果采用随机工作方式
-		//snd.authResult = ((rand()%2 == 1)?IHU_CCL_LOCK_AUTH_RESULT_OK:IHU_CCL_LOCK_AUTH_RESULT_NOK);
+		//snd.authResult = ((rand()%2 == 1)?IHU_CCL_LOCK_AUTH_RESULT_OK:IHU_CCL_LOCK_AUTH_RESULT_NOK); //纯粹是为了测试目的
 		snd.authResult = IHU_CCL_LOCK_AUTH_RESULT_NOK;
 		snd.length = sizeof(msg_struct_spsvirgo_ccl_cloud_fb_t);
 		ret = ihu_message_send(MSG_ID_SPS_CCL_CLOUD_FB, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
@@ -381,12 +381,13 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	else{
 		//对于缓冲区的数据，进行分别处理，将帧变成不同的消息，分门别类发送到L3模块进行处理
 		//注意，这里是CHAR数据，不是L2FRAME的比特数据
+		//在xml_unpack函数中，正常的向上汇报的消息已经完成
 		ret = func_cloud_standard_xml_unpack(&zIhuSpsvirgoMsgRcvBuf, HUITP_MSGID_uni_ccl_lock_auth_resp);
 		if (ret == IHU_FAILURE){
 			zIhuSysStaPm.taskRunErrCnt[TASK_ID_SPSVIRGO]++;
 			IhuErrorPrint("SPSVIRGO: Unpack and processing receiving message error!\n");
 			
-			//不能直接返回差错，因为上层还巴巴的等着回复这个消息，不然状态机会出错
+			//不能直接返回差错，因为上层还巴巴的等着回复这个消息，不然状态机会需要等待超长定时器4.5分钟结束以后才能恢复，整个系统的反应就太慢了
 			memset(&snd, 0, sizeof(msg_struct_spsvirgo_ccl_cloud_fb_t));
 			snd.authResult = IHU_CCL_LOCK_AUTH_RESULT_NOK;
 			snd.length = sizeof(msg_struct_spsvirgo_ccl_cloud_fb_t);
@@ -400,6 +401,7 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	return IHU_SUCCESS;
 }
 
+//获取SPS为基础的传感器信息
 OPSTAT fsm_spsvirgo_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
 	int ret = 0;
@@ -422,7 +424,7 @@ OPSTAT fsm_spsvirgo_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * pa
 	//扫描后将结果发给上层
 	memset(&snd, 0, sizeof(msg_struct_sps_ccl_sensor_status_rep_t));
 	snd.cmdid = IHU_CCL_DH_CMDID_RESP_STATUS_SPS;
-	snd.sensor.rssiValue = rand()%100;
+	snd.sensor.rssiValue = ihu_spsvirgo_ccl_fetch_rssi_value();
 	snd.length = sizeof(msg_struct_sps_ccl_sensor_status_rep_t);
 	ret = ihu_message_send(MSG_ID_SPS_CCL_SENSOR_STATUS_RESP, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);
 	if (ret == IHU_FAILURE)
@@ -532,7 +534,7 @@ OPSTAT fsm_spsvirgo_ccl_event_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 	pMsgProc.rssiValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_rssi_value);
 	pMsgProc.rssiValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_rssi_value_t) - 4);
 	pMsgProc.rssiValue.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc.rssiValue.rssiValue = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rssi_value());	
+	pMsgProc.rssiValue.rssiValue = HUITP_ENDIAN_EXG16(ihu_spsvirgo_ccl_fetch_rssi_value());	
 	//StrIe_HUITP_IEID_uni_ccl_dcmi_value_t
 	pMsgProc.dcmiValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_dcmi_value);
 	pMsgProc.dcmiValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_dcmi_value_t) - 4);
@@ -712,7 +714,7 @@ OPSTAT fsm_spsvirgo_ccl_fault_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 	pMsgProc.rssiValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_rssi_value);
 	pMsgProc.rssiValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_rssi_value_t) - 4);
 	pMsgProc.rssiValue.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc.rssiValue.rssiValue = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rssi_value());	
+	pMsgProc.rssiValue.rssiValue = HUITP_ENDIAN_EXG16(ihu_spsvirgo_ccl_fetch_rssi_value());	
 	//StrIe_HUITP_IEID_uni_ccl_dcmi_value_t
 	pMsgProc.dcmiValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_dcmi_value);
 	pMsgProc.dcmiValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_dcmi_value_t) - 4);
@@ -775,6 +777,7 @@ OPSTAT fsm_spsvirgo_ccl_fault_report_send(UINT8 dest_id, UINT8 src_id, void * pa
 OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
 	int ret = 0, i = 0;
+	int ret1 = 0, ret2 = 0;
 	msg_struct_ccl_sps_close_report_send_t rcv;
 	msg_struct_sps_ccl_close_report_cfm_t snd;
 	
@@ -786,6 +789,13 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 	
 	//先进入通信状态
 	FsmSetState(TASK_ID_SPSVIRGO, FSM_STATE_SPSVIRGO_COMMU);
+
+	//先传送图像
+	//再使用TCP_U8，将图像数据发送到后台
+	//数据源是CCL的上下文全局变量=> zIhuCclSensorStatus.picBuf
+	memset(&zIhuSpsvirgoMsgRcvBuf, 0, sizeof(msg_struct_ccl_com_cloud_data_rx_t));
+	ret2 = ihu_vmmw_gprsmod_tcp_u8_data_transmit_with_receive((int8_t *)(zIhuCclSensorStatus.picBuf), zIhuCclSensorStatus.picActualPkgSize, (int8_t*)zIhuSpsvirgoMsgRcvBuf.buf, &(zIhuSpsvirgoMsgRcvBuf.length));		
+	//不单独处理图像文件回传的消息
 	
 	//干活，成功了，自然通过ISR将返回发送到L3
 	//关门独特信息，未来可考虑再根据情况，填入到下表中
@@ -870,7 +880,7 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 	pMsgProc.rssiValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_rssi_value);
 	pMsgProc.rssiValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_rssi_value_t) - 4);
 	pMsgProc.rssiValue.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc.rssiValue.rssiValue = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rssi_value());	
+	pMsgProc.rssiValue.rssiValue = HUITP_ENDIAN_EXG16(ihu_spsvirgo_ccl_fetch_rssi_value());	
 	//StrIe_HUITP_IEID_uni_ccl_dcmi_value_t
 	pMsgProc.dcmiValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_dcmi_value);
 	pMsgProc.dcmiValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_dcmi_value_t) - 4);
@@ -891,17 +901,13 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 	
 	//具体的发送命令
 	memset(&zIhuSpsvirgoMsgRcvBuf, 0, sizeof(msg_struct_ccl_com_cloud_data_rx_t));
-	ret = ihu_vmmw_gprsmod_http_data_transmit_with_receive((char *)(pMsgOutput.buf), pMsgOutput.bufferLen, zIhuSpsvirgoMsgRcvBuf.buf, &(zIhuSpsvirgoMsgRcvBuf.length));	
+	ret1 = ihu_vmmw_gprsmod_http_data_transmit_with_receive((char *)(pMsgOutput.buf), pMsgOutput.bufferLen, zIhuSpsvirgoMsgRcvBuf.buf, &(zIhuSpsvirgoMsgRcvBuf.length));	
 
-	//再使用TCP_U8，将图像数据发送到后台
-	//数据源是CCL的上下文全局变量=> zIhuCclSensorStatus.picBuf
-	//服务器地址，待完善
-	//两次发送，处理逻辑待完善
-	memset(&zIhuSpsvirgoMsgRcvBuf, 0, sizeof(msg_struct_ccl_com_cloud_data_rx_t));
-	ret = ihu_vmmw_gprsmod_tcp_u8_data_transmit_with_receive((int8_t *)(zIhuCclSensorStatus.picBuf), zIhuCclSensorStatus.picActualPkgSize, (int8_t*)zIhuSpsvirgoMsgRcvBuf.buf, &(zIhuSpsvirgoMsgRcvBuf.length));	
-	
 	//再进入正常状态
 	FsmSetState(TASK_ID_SPSVIRGO, FSM_STATE_SPSVIRGO_ACTIVED);
+	
+	//确定反馈的结果
+	ret = (((ret1 == IHU_FAILURE) || (ret2 == IHU_FAILURE))? IHU_FAILURE:IHU_SUCCESS);
 	
 	//如果干活失败，则发送差错消息回L3
 	if (ret == IHU_FAILURE){
@@ -936,7 +942,7 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 }
 
 //SLEEP&FAULT模式下扫描：扫描RSSI, 数据格式HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2
-INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rssi_value(void)
+INT16 ihu_spsvirgo_ccl_fetch_rssi_value(void)
 {
 	return ihu_vmmw_gprsmod_get_rssi_value();
 }

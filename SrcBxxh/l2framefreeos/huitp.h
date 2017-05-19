@@ -12,7 +12,7 @@
 #pragma pack (1) //强制1字节对齐
 /*
  *
- *  顺从并更新到技术规范《慧HUITP接口规范v2.2, LAST UPDATE@2007/2》
+ *  顺从并更新到技术规范《慧HUITP接口规范v2.3, LAST UPDATE@2007/5》
  *
  */
 

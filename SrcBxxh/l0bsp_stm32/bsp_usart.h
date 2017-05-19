@@ -79,6 +79,8 @@ typedef struct IHU_HUITP_L2FRAME_STD_UART_frame_header
 	#define IHU_BSP_STM32_UART_PRINT_HANDLER_ID  		3
 	#define IHU_BSP_STM32_UART_BLE_HANDLER					huart1 //huart4, MYC update for BFSC 2017/03/19
 	#define IHU_BSP_STM32_UART_BLE_HANDLER_ID  			4
+	#define IHU_BSP_STM32_UART_CAM_HANDLER					huart3  //本项目不用，只是为了编译环境
+	#define IHU_BSP_STM32_UART_CAM_HANDLER_ID  			4
 	#define IHU_BSP_STM32_UART_SPARE1_HANDLER				huart1 //huart5, MYC update for BFSC 2017/03/19
 	#define IHU_BSP_STM32_UART_SPARE1_HANDLER_ID  	5
 	#define IHU_BSP_STM32_UART6_PRESENT_HANDLER			huart6

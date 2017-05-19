@@ -135,7 +135,7 @@ extern OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_i
 	extern OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, int expectMsgId);
 #endif
 
-extern INT16 ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rssi_value(void);
+extern INT16 ihu_spsvirgo_ccl_fetch_rssi_value(void);
 
 //Local API
 OPSTAT func_spsvirgo_hw_init(void);
