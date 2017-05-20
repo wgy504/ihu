@@ -83,6 +83,12 @@ extern   void         CS5532_SDO_ConfigSpi(void);
 ********************************************************/
 extern unsigned char   ReadWheChanOk(void);
 
+typedef struct WeightSensorCalirationKB
+{
+		uint32_t 	b;
+		double 		k;
+}WeightSensorCalirationKB_t;
+
 
 #define WEIGHT_SENSOR_NOT_INIT      0
 #define WEIGHT_SENSOR_HAD_INITED		1
