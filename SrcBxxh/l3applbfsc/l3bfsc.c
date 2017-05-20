@@ -184,46 +184,6 @@ OPSTAT fsm_bfsc_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 		return IHU_FAILURE;
 	}
 	
-#if 0
-	//设置状态机到目标状态
-	if (FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_ACTIVED) == IHU_FAILURE){
-		zIhuSysStaPm.taskRunErrCnt[TASK_ID_BFSC]++;
-		IhuErrorPrint("L3BFSC: Error Set FSM State!");
-		return IHU_FAILURE;
-	}
-	
-	//启动本地定时器，如果有必要	
-	ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_1S_BFSC_PERIOD_SCAN, \
-		zIhuSysEngPar.timer.array[TIMER_ID_1S_BFSC_PERIOD_SCAN].dur, TIMER_TYPE_PERIOD, TIMER_RESOLUTION_1S);
-	if (ret == IHU_FAILURE){
-		zIhuSysStaPm.taskRunErrCnt[TASK_ID_BFSC]++;
-		IhuErrorPrint("L3BFSC: Error start timer!\n");
-		return IHU_FAILURE;
-	}
-	
-	//打印报告进入常规状态
-	if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_FAT_ON) != FALSE){
-		IhuDebugPrint("L3BFSC: Enter FSM_STATE_BFSC_ACTIVE status, Keeping refresh here!\n");
-	}
-
-	//MYC add the first message to AWS
-	if ((src_id > TASK_ID_MIN) &&(src_id < TASK_ID_MAX)){
-		//Send back MSG_ID_COM_INIT_FB to VMFO
-		msg_struct_l3bfsc_wmc_startup_ind_t snd;
-		memset(&snd, 0, sizeof(msg_struct_l3bfsc_wmc_startup_ind_t));
-		snd.length = sizeof(msg_struct_l3bfsc_wmc_startup_ind_t);
-		snd.msgid = MSG_ID_L3BFSC_WMC_STARTUP_IND;
-		//snd.wmc_state = FSM_STATE_BFSC_ACTIVED;
-		memcpy(&snd.wmc_inventory, &zWmcInvenory, sizeof(WmcInventory_t));
-		
-		ret = ihu_message_send(MSG_ID_L3BFSC_WMC_STARTUP_IND, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length);
-		if (ret == IHU_FAILURE){
-			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC], zIhuVmCtrTab.task[TASK_ID_CANVELA]);
-			return IHU_FAILURE;
-		}
-	}
-#endif
-	
 	//返回
 	return IHU_SUCCESS;
 }
@@ -975,30 +935,6 @@ void func_bfsc_stm_main_recovery_from_fault(void)
 	return;
 }
 
-//MYC
-///* Message Length definition */
-//#define 	MSG_SIZE_L3BFSC_WMC_STARTUP_IND					(sizeof(msg_struct_l3bfsc_wmc_startup_ind_t))
-//#define 	MSG_SIZE_L3BFSC_WMC_SET_CONFIG_REQ			(sizeof(msg_struct_l3bfsc_wmc_set_config_req_t))
-//#define 	MSG_SIZE_L3BFSC_WMC_SET_CONFIG_RESP			(sizeof(msg_struct_l3bfsc_wmc_resp_t))
-//#define 	MSG_SIZE_L3BFSC_WMC_GET_CONFIG_REQ			(sizeof(msg_struct_l3bfsc_wmc_get_config_req_t))
-//#define 	MSG_SIZE_L3BFSC_WMC_GET_CONFIG_RESP			(sizeof(msg_struct_l3bfsc_wmc_get_config_resp_t))
-//#define 	MSG_SIZE_L3BFSC_WMC_START_REQ						(sizeof(msg_struct_l3bfsc_wmc_start_req_t))
-//#define 	MSG_SIZE_L3BFSC_WMC_START_RESP					(sizeof(msg_struct_l3bfsc_wmc_resp_t))
-//#define 	MSG_SIZE_L3BFSC_WMC_STOP_REQ						(sizeof(msg_struct_l3bfsc_wmc_stop_req_t))
-//#define 	MSG_SIZE_L3BFSC_WMC_STOP_RESP						(sizeof(msg_struct_l3bfsc_wmc_resp_t))
-//#define 	MSG_SIZE_L3BFSC_WMC_WEIGHT_IND					(sizeof(msg_struct_l3bfsc_wmc_weight_ind_t))
-//#define 	MSG_SIZE_L3BFSC_WMC_COMBIN_REQ					(sizeof(msg_struct_l3bfsc_wmc_combin_out_req_t))
-//#define 	MSG_SIZE_L3BFSC_WMC_COMBIN_RESP					(sizeof(msg_struct_l3bfsc_wmc_resp_t))
-//#define 	MSG_SIZE_L3BFSC_WMC_FAULT_IND						(sizeof(msg_struct_l3bfsc_wmc_fault_ind_t))
-//#define 	MSG_SIZE_L3BFSC_WMC_COMMNAD_REQ					(sizeof(msg_struct_l3bfsc_wmc_command_req_t))
-//#define 	MSG_SIZE_L3BFSC_WMC_COMMNAD_RESP				(sizeof(msg_struct_l3bfsc_wmc_command_resp_t))
-
-//OPSTAT fsm_bfsc_wmc_set_config_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)	//MYC
-//OPSTAT fsm_bfsc_wmc_get_config_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)	//MYC
-//OPSTAT fsm_bfsc_wmc_start_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)				//MYC
-//OPSTAT fsm_bfsc_wmc_command_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)			//MYC
-//OPSTAT fsm_bfsc_wmc_stop_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)				//MYC
-//OPSTAT fsm_bfsc_wmc_combin_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)			//MYC
 
 OPSTAT fsm_bfsc_wmc_startind_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
@@ -1167,7 +1103,7 @@ OPSTAT fsm_bfsc_wmc_command_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UI
 		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);
 	
-	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_command_req_t: rcv.msgid = 0x%08X, rcv.length = %d\r\n", rcv.msgid, rcv.length);
+	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_command_req_t: rcv.msgid = 0x%08X, rcv.length = %d cmd_flags=0x%08x\r\n", rcv.msgid, rcv.length, rcv.comand_flags);
 
 	/* PROCESS TO BE ADDED */
 	/* !!!!!!!!!!!!!!!!!!!!*/
@@ -1266,8 +1202,8 @@ OPSTAT fsm_bfsc_wmc_combine_timeout(UINT8 dest_id, UINT8 src_id, void *param_ptr
 	{
     // send weight indication
 		msg_struct_l3bfsc_wmc_weight_ind_t snd;
-		memset(&snd, 0, sizeof(msg_struct_l3bfsc_wmc_startup_ind_t));
-		snd.length = sizeof(msg_struct_l3bfsc_wmc_startup_ind_t);
+		memset(&snd, 0, sizeof(msg_struct_l3bfsc_wmc_weight_ind_t));
+		snd.length = sizeof(msg_struct_l3bfsc_wmc_weight_ind_t);
 		snd.msgid = MSG_ID_L3BFSC_WMC_WEIGHT_IND;
     snd.wmc_id = zWmcInvenory.wmc_id;
     snd.weight_ind.average_weight = WeightSensorReadCurrent(&zWeightSensorParam);  // read weight sensor

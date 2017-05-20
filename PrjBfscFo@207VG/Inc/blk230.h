@@ -33,6 +33,6 @@ int blk230_read_alarm(void);
 int blk230_read_speed(void);
 int blk230_send_cmd(uint32_t start, uint32_t ccw, uint32_t speed, uint32_t duration);
 int blk230_recv_cmd(blk230_cmd_t *command);
-void blk230_task(void *param);
+void blk230_task(void const *param);
 
 #endif // _BLK230_H_

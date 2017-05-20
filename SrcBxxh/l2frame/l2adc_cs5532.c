@@ -22,56 +22,6 @@ uint8_t  CollectionFF =       0x00      ;          //²ÉÑùÆµÂÊ
 uint8_t  Chan0Gain    =       0x05;
 
 //SPI_HandleTypeDef hspi3;
-			
-/*
-** ====================================================================
-** Weight Sensor Parameters and APIs
-**
-**
-**
-**
-**
-**
-**
-** =====================================================================
-*/			
-//typedef struct WeightSensorParamaters
-//{
-//	uint32_t	WeightSensorInitOrNot;
-//	uint32_t	WeightSensorAdcSampleFreq;
-//	uint32_t	WeightSensorAdcBitwidth;
-//	uint32_t  WeightSensorAdcValue;
-//	uint32_t	WeightSensorCalibrationZeroAdcValue;
-//	uint32_t	WeightSensorCalibrationFullAdcValue;
-//	uint32_t	WeightSensorCalibrationFullWeight;
-//	uint32_t	WeightSensorCalibrationK;
-//	uint32_t	WeightSensorCalibrationB;
-//	uint32_t	WeightSensorStaticZeroValue;
-//	uint32_t	WeightSensorTailorValue;
-//	uint32_t	WeightSensorDynamicZeroThreadValue;
-//	uint32_t	WeightSensorDynamicZeroHysteresisMs;
-//	uint32_t  WeightSensorFilterCoeff[32];
-//	uint32_t  WeightSensorOutputValue[32];
-//}WeightSensorParamaters_t;
-
-/* Global Varaibles for Weight Sensor */
-//WeightSensorParamaters_t g_wsp;
-
-
-///* Initialize Sensor */
-//uint32_t WeightSensorInit(WeightSensorParamaters_t *pwsp);
-
-///* Reconfig Sensor */
-//uint32_t weightSensorConfig(WeightSensorParamaters_t *pwsp);
-
-///* Zero Load Sensor */
-//uint32_t WeightSensorCalibrationZero(WeightSensorParamaters_t *pwsp);
-
-///* Full/Nominal Load Sensor */
-//uint32_t WeightSensorCalibrationFull(WeightSensorParamaters_t *pwsp);
-
-///* Read Load Sensor */
-//uint32_t WeightSensorReadCurrent(void);
 
 
 void AD_delay(uint32_t val)
@@ -727,7 +677,7 @@ uint32_t WeightSensorInit(WeightSensorParamaters_t *pwsp)
 		if(NULL == pwsp)
 		{
 				printf("l2adc_cs5532: WeightSensorInit: NULL == pwsp, return IHU_FAILURE\r\n");
-				return IHU_FAILURE;
+				return 1;
 		}
 		
 		//printf("l2adc_cs5532: WeightSensorInit: pwsp = 0x%08X\r\n", pwsp);
@@ -745,7 +695,7 @@ uint32_t WeightSensorInit(WeightSensorParamaters_t *pwsp)
 	
 		CS5532Init();
 	
-		return IHU_SUCCESS;
+		return 0;
 }
 
 /* Reconfig Sensor */
@@ -755,7 +705,7 @@ uint32_t weightSensorConfig(WeightSensorParamaters_t *pwsp)
 		if(NULL == pwsp)
 		{
 				IhuErrorPrint("l2adc_cs5532: weightSensorConfig: NULL == pwsp, return IHU_FAILURE\r\n");
-				return IHU_FAILURE;
+				return 1;
 		}
 		
 		zWeightSensorParam.WeightSensorAdcSampleFreq = pwsp->WeightSensorAdcSampleFreq;
@@ -765,14 +715,12 @@ uint32_t weightSensorConfig(WeightSensorParamaters_t *pwsp)
 		zWeightSensorParam.WeightSensorCalibrationZeroAdcValue = pwsp->WeightSensorCalibrationZeroAdcValue;
 		zWeightSensorParam.WeightSensorCalibrationFullAdcValue = pwsp->WeightSensorCalibrationFullAdcValue;
 		zWeightSensorParam.WeightSensorCalibrationFullWeight = pwsp->WeightSensorCalibrationFullWeight;
-		zWeightSensorParam.WeightSensorCalibrationK = pwsp->WeightSensorCalibrationK;
-		zWeightSensorParam.WeightSensorCalibrationB = pwsp->WeightSensorCalibrationB;
 		zWeightSensorParam.WeightSensorStaticZeroValue = pwsp->WeightSensorStaticZeroValue;
 		zWeightSensorParam.WeightSensorTailorValue = pwsp->WeightSensorTailorValue;
 		zWeightSensorParam.WeightSensorDynamicZeroThreadValue = pwsp->WeightSensorDynamicZeroThreadValue;
 		zWeightSensorParam.WeightSensorDynamicZeroHysteresisMs = pwsp->WeightSensorDynamicZeroHysteresisMs;
 	
-	return IHU_SUCCESS;
+	return 0;
 }
 
 //?????
@@ -784,7 +732,7 @@ uint32_t WeightSensorCalibrationZero(WeightSensorParamaters_t *pwsp)
 	if(NULL == pwsp)
 	{
 			IhuErrorPrint("l2adc_cs5532: WeightSensorCalibrationZero: NULL == pwsp, return IHU_FAILURE\r\n");
-			return IHU_FAILURE;
+			return 0;
 	}
 	
 	//printf("l2adc_cs5532: WeightSensorCalibrationZero: pwsp = 0x%08X\r\n", pwsp);
@@ -801,14 +749,8 @@ uint32_t WeightSensorCalibrationZero(WeightSensorParamaters_t *pwsp)
 	
 	pwsp->WeightSensorCalibrationZeroAdcValue = temp;
 	
-	pwsp->WeightSensorCalibrationB = pwsp->WeightSensorCalibrationZeroAdcValue;
-	if (0 != pwsp->WeightSensorCalibrationFullAdcValue)
-	{
-		//pwsp->WeightSensorCalibrationB = pwsp->WeightSensorCalibrationZeroAdcValue;
-		pwsp->WeightSensorCalibrationK = (double)(pwsp->WeightSensorCalibrationFullAdcValue-pwsp->WeightSensorCalibrationZeroAdcValue)/pwsp->WeightSensorCalibrationFullWeight;
-	}
-	
-	IhuDebugPrint("l2adc_cs5532: WeightSensorCalibrationZero: K=%f, B=%d\r\n", pwsp->WeightSensorCalibrationK, pwsp->WeightSensorCalibrationB);
+	IhuDebugPrint("l2adc_cs5532: WeightSensorCalibrationZero: ZeroADC=%d FullADC=%d FullWeigth=%d\r\n", 
+								pwsp->WeightSensorCalibrationZeroAdcValue, pwsp->WeightSensorCalibrationFullAdcValue, pwsp->WeightSensorCalibrationFullWeight);
 	return pwsp->WeightSensorCalibrationZeroAdcValue;
 }
 
@@ -821,7 +763,7 @@ uint32_t WeightSensorCalibrationFull(WeightSensorParamaters_t *pwsp)
 	if(NULL == pwsp)
 	{
 			IhuErrorPrint("l2adc_cs5532: WeightSensorCalibrationFull: NULL == pwsp, return IHU_FAILURE\r\n");
-			return IHU_FAILURE;
+			return 1;
 	}
 	
 	//printf("l2adc_cs5532: WeightSensorCalibrationFull: pwsp = 0x%08X\r\n", pwsp);
@@ -838,26 +780,17 @@ uint32_t WeightSensorCalibrationFull(WeightSensorParamaters_t *pwsp)
 	
 	pwsp->WeightSensorCalibrationFullAdcValue = temp;
 	
-	//IhuDebugPrint("l2adc_cs5532: WeightSensorCalibrationFull: pwsp->WeightSensorCalibrationFullWeight = %d\r\n", pwsp->WeightSensorCalibrationFullWeight);
-	if (0 != pwsp->WeightSensorCalibrationFullWeight)
-	{
-		//pwsp->WeightSensorCalibrationB = pwsp->WeightSensorCalibrationZeroAdcValue;
-		pwsp->WeightSensorCalibrationK = (double)pwsp->WeightSensorCalibrationFullAdcValue - (double)pwsp->WeightSensorCalibrationZeroAdcValue;
-		//IhuDebugPrint("l2adc_cs5532: WeightSensorCalibrationFull: pwsp->WeightSensorCalibrationK = %f\r\n", pwsp->WeightSensorCalibrationK);
-		
-		pwsp->WeightSensorCalibrationK = pwsp->WeightSensorCalibrationK / (double)pwsp->WeightSensorCalibrationFullWeight;
-		//IhuDebugPrint("l2adc_cs5532: WeightSensorCalibrationFull: pwsp->WeightSensorCalibrationK = %f\r\n", pwsp->WeightSensorCalibrationK);
-	}
+	IhuDebugPrint("l2adc_cs5532: WeightSensorCalibrationFull: ZeroADC=%d FullADC=%d FullWeigth=%d\r\n", 
+								pwsp->WeightSensorCalibrationZeroAdcValue, pwsp->WeightSensorCalibrationFullAdcValue, pwsp->WeightSensorCalibrationFullWeight);
 	
-	IhuDebugPrint("l2adc_cs5532: WeightSensorCalibrationFull: K=%f, B=%d\r\n", pwsp->WeightSensorCalibrationK, pwsp->WeightSensorCalibrationB);
 	return pwsp->WeightSensorCalibrationFullAdcValue;
 	
 }
 //??K?B
 void WeightSensorCalibrationKB(WeightSensorParamaters_t *pwsp)
 {
-	pwsp->WeightSensorCalibrationB = pwsp->WeightSensorCalibrationZeroAdcValue;
-	pwsp->WeightSensorCalibrationK = (double)(pwsp->WeightSensorCalibrationFullAdcValue-pwsp->WeightSensorCalibrationZeroAdcValue)/pwsp->WeightSensorCalibrationFullWeight;
+//	pwsp->WeightSensorCalibrationB = pwsp->WeightSensorCalibrationZeroAdcValue;
+//	pwsp->WeightSensorCalibrationK = (double)(pwsp->WeightSensorCalibrationFullAdcValue-pwsp->WeightSensorCalibrationZeroAdcValue)/pwsp->WeightSensorCalibrationFullWeight;
 }
 
 //??????
@@ -874,9 +807,10 @@ int32_t WeightSensorReadCurrent(WeightSensorParamaters_t *pwsp)
 			return 0;
 	}
 	
-	if(0 == pwsp->WeightSensorCalibrationK)
+	if(pwsp->WeightSensorCalibrationFullAdcValue <= pwsp->WeightSensorCalibrationZeroAdcValue)
 	{
-			IhuErrorPrint("l2adc_cs5532: WeightSensorReadCurrent: 0 == pwsp->WeightSensorCalibrationK, return 0\r\n");
+			IhuErrorPrint("l2adc_cs5532: WeightSensorReadCurrent: FullADC %d <= ZeroADC %d, return 0\r\n",
+										pwsp->WeightSensorCalibrationFullAdcValue, pwsp->WeightSensorCalibrationZeroAdcValue);
 			return 0;
 	}
 	
@@ -893,11 +827,8 @@ int32_t WeightSensorReadCurrent(WeightSensorParamaters_t *pwsp)
 	
 	pwsp->WeightSensorAdcValue = temp;
 	
-	if(pwsp->WeightSensorCalibrationK == 0)
-		return 0xFFFFFFFF;
-	
-	temp2 = temp-pwsp->WeightSensorCalibrationB;
-	temp3 = temp2/pwsp->WeightSensorCalibrationK;
+	temp2 = temp-pwsp->WeightSensorCalibrationZeroAdcValue;
+	temp3 = (temp2*pwsp->WeightSensorCalibrationFullWeight)/(pwsp->WeightSensorCalibrationFullAdcValue-pwsp->WeightSensorCalibrationZeroAdcValue);
 	
 	return temp3;
 }	

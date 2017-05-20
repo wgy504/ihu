@@ -148,7 +148,7 @@ int blk230_recv_cmd(blk230_cmd_t *command)
 /*
  * motor task framework, TBD
  */
-void blk230_task(void *param)
+void blk230_task(void const *param)
 {
 	blk230_cmd_t command;
 	int32_t status;

@@ -406,25 +406,6 @@ typedef struct msg_struct_l3bfsc_canvela_cmd_resp
 ** ====================================================================
 */
 
-/*
-** 	//WMC <-> AWS
-**	MSG_ID_L3BFSC_WMC_STARTUP_IND,
-**	MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ,
-**	MSG_ID_L3BFSC_WMC_SET_CONFIG_RESP,
-**	MSG_ID_L3BFSC_WMC_GET_CONFIG_REQ,
-**	MSG_ID_L3BFSC_WMC_GET_CONFIG_RESP,
-**	MSG_ID_L3BFSC_WMC_START_REQ,
-**	MSG_ID_L3BFSC_WMC_START_RESP,
-**	MSG_ID_L3BFSC_WMC_STOP_REQ,
-**	MSG_ID_L3BFSC_WMC_STOP_RESP,
-**	MSG_ID_L3BFSC_WMC_WEIGHT_IND,
-**	MSG_ID_L3BFSC_WMC_COMBIN_REQ,
-**	MSG_ID_L3BFSC_WMC_COMBIN_RESP,
-**	MSG_ID_L3BFSC_WMC_FAULT_IND,
-**	MSG_ID_L3BFSC_WMC_COMMAND_REQ,
-**	MSG_ID_L3BFSC_WMC_COMMAND_RESP,
-*/
-
 //	//HCU-IHU SUI新增内容
 //	//上电过程
 //	HUITP_MSGID_sui_bfsc_startup_ind                 = 0x3B90,
@@ -537,8 +518,6 @@ typedef struct WeightSensorParamaters
 	UINT32	WeightSensorCalibrationZeroAdcValue;// NOT for GUI
 	UINT32	WeightSensorCalibrationFullAdcValue;// NOT for GUI
 	UINT32	WeightSensorCalibrationFullWeight;	
-	double	WeightSensorCalibrationK;						// NOT for GUI
-	UINT32	WeightSensorCalibrationB;						// NOT for GUI
 	UINT32	WeightSensorStaticZeroValue;				
 	UINT32	WeightSensorTailorValue;						
 	UINT32	WeightSensorDynamicZeroThreadValue;	
@@ -619,12 +598,6 @@ typedef struct msg_struct_l3bfsc_wmc_weight_ind
 //#define 	LED_COMMNAD_ID_BINKING_HIGHSPEED		(3)
 //#define 	LED_COMMNAD_ID_BINKING_LOWSPEED			(4)
 
-//#define 	MOTOR_COMMAND_ID_IGORE						(0) //MUSR BE 0
-//#define 	MOTOR_COMMAND_ID_START						(1)
-//#define 	MOTOR_COMMAND_ID_STOP							(2)
-//#define 	MOTOR_COMMAND_ID_ROLLONCE					(3)
-//#define 	MOTOR_COMMAND_ID_SPEED_READ				(4)
-
 // CombineType Defination
 // COMNINETPYE_ROOLOUT_START
 // COMNINETPYE_ROOLOUT_COMPLETE
@@ -662,15 +635,23 @@ typedef struct msg_struct_l3bfsc_fault_ind
 /*
 **	MSG_ID_L3BFSC_WMC_COMMAND_REQ
 */
-#define 	SESOR_COMMAND_ID_IGORE							(0) //MUSR BE 0
-#define 	SESOR_COMMAND_ID_WEITGH_READ				(3)
+#define SENSOR_COMMAND_ID_WEITGH_READ (0x0001)
+#define MOTOR_COMMAND_ID (0x0002)
+#define LED1_COMMAND_ID (0x0004)
+#define LED2_COMMAND_ID (0x0008)
+#define LED3_COMMAND_ID (0x0010)
+#define LED4_COMMAND_ID (0x0020)
+
+#define 	LED_COMMNAD_ON										(1)
+#define 	LED_COMMNAD_OFF									  (2)
+#define 	LED_COMMNAD_BINKING_HIGHSPEED		  (3)
+#define 	LED_COMMNAD_BINKING_LOWSPEED			(4)
 
 typedef struct msg_struct_l3bfsc_wmc_command_req
 {
 	UINT16 msgid;
 	UINT16 length;
-	UINT16 spare;
-	UINT32 wmc_state;
+	UINT32 comand_flags;
 	UINT8 led1_command;
 	UINT8 led2_command;
 	UINT8 led3_command;
@@ -697,10 +678,8 @@ typedef struct msg_struct_l3bfsc_wmc_command_resp
 */
 typedef struct msg_struct_l3bfsc_wmc_msg_header
 {
-	UINT32 msgid;
+	UINT16 msgid;
 	UINT16 length;
-	UINT16 spare;
-	UINT32 wmc_state;
 }msg_struct_l3bfsc_wmc_msg_header_t;
 
 /* Message Length definition */
@@ -724,7 +703,7 @@ typedef struct msg_struct_l3bfsc_wmc_msg_header
 #define		AWS_CAN_ID_SUFFIX												(0x001U)
 #define		WMC_CAN_ID_SUFFIX												((zWmcInvenory.wmc_id&0x2F))
 #define		AWS_CAN_ID															((AWS_CAN_ID_PREFIX)|(AWS_CAN_ID_SUFFIX))
-#define		WMC_CAN_ID															((AWS_CAN_ID_PREFIX)|(AWS_CAN_ID_SUFFIX))
+#define		WMC_CAN_ID															((WMC_CAN_ID_PREFIX)|(WMC_CAN_ID_SUFFIX))
 
 /* CAN Msg Lenth */
 #define		MAX_WMC_CONTROL_MSG_LEN									(256U)

@@ -277,6 +277,7 @@ int ihu_bsp_stm32_sps_ble_rcv_data_timeout(uint8_t* buff, uint16_t len, uint32_t
 		return BSP_FAILURE;
 }
 
+#if 0
 /*******************************************************************************
 * 函数名  : USART_SendData
 * 描述    : UART_SPARE1发送数据缓冲区数据
@@ -308,7 +309,7 @@ int ihu_bsp_stm32_sps_cam_rcv_data_timeout(uint8_t* buff, uint16_t len, uint32_t
 	else
 		return BSP_FAILURE;
 }
-
+#endif
 
 /*******************************************************************************
 * 函数名  : USART_SendData

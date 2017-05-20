@@ -14,6 +14,7 @@
 #include "l3bfsc.h"
 #include "l3bfsc_msg.h"
 #include "blk230.h"
+#include "l2adc_cs5532.h"
 
 extern WmcInventory_t										zWmcInvenory;
 extern WeightSensorParamaters_t					zWeightSensorParam;
@@ -428,8 +429,8 @@ void msg_wmc_stop_resp(error_code_t ec)
 //OPSTAT fsm_bfsc_wmc_command_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)			//MYC
 void msg_wmc_command_req_process(void *param_ptr, error_code_t *ec_ptr)
 {
-
-		IhuDebugPrint("L3BFSC: msg_wmc_command_req_process start ...\r\n");
+		msg_struct_l3bfsc_wmc_command_req_t *cmd_req = (msg_struct_l3bfsc_wmc_command_req_t *)param_ptr;
+		*ec_ptr = ERROR_CODE_NO_ERROR;
 	
 		/* Check Input Parameter */
 		if(NULL == param_ptr)
@@ -443,6 +444,7 @@ void msg_wmc_command_req_process(void *param_ptr, error_code_t *ec_ptr)
 		if(NULL == ec_ptr)
 		{
 				IhuErrorPrint("L3BFSC: msg_wmc_command_req_process: NULL == ec_ptr, return\r\n");
+				*ec_ptr = ERROR_CODE_CALLING_ERROR;
 				return;
 		}
 		
@@ -459,10 +461,23 @@ void msg_wmc_command_req_process(void *param_ptr, error_code_t *ec_ptr)
 		if(ERROR_CODE_INPUT_PARAMETER_KO == *ec_ptr)
 		{
 				IhuErrorPrint("L3BFSC: msg_wmc_command_req_process: parameters check nok, return\r\n");
+				*ec_ptr = ERROR_CODE_CALLING_ERROR;
 				return;
 		}
 		
 		/* Process the message */
+		if(cmd_req->comand_flags & SENSOR_COMMAND_ID_WEITGH_READ)
+		{
+				IhuDebugPrint("L3BFSC: msg_wmc_command_req_process: SENSOR_COMMAND_ID_WEITGH_READ\r\n");
+		}
+		
+		if(cmd_req->comand_flags & MOTOR_COMMAND_ID)
+		{
+				IhuDebugPrint("L3BFSC: msg_wmc_command_req_process: MOTOR_COMMAND_ID 0x%x\r\n", cmd_req->motor_command);
+			
+				blk230_cmd_t motor_cmd = *(blk230_cmd_t *)(&cmd_req->motor_command);
+				blk230_send_cmd(!motor_cmd.stop, motor_cmd.ccw, motor_cmd.speed, motor_cmd.time2stop);
+		}
 		
 		return;
 }
@@ -498,11 +513,13 @@ void msg_wmc_command_resp(error_code_t ec)
 
 		/* Build Message Content Header */
 		msg_wmc_command_resp.msgid = MSG_ID_L3BFSC_WMC_COMMAND_RESP;
+    msg_wmc_command_resp.length = sizeof(msg_struct_l3bfsc_wmc_command_resp_t);
 		msg_wmc_command_resp.wmc_id = zWmcInvenory.wmc_id;
 		msg_wmc_command_resp.result.error_code = ec;
 		
 		/* Build Message Content Body */
-		/* TODO */
+		msg_wmc_command_resp.motor_speed = zMotorControlParam.MotorSpeed;
+    msg_wmc_command_resp.sensor_weight = WeightSensorReadCurrent(&zWeightSensorParam);
 		
 		IhuDebugPrint("L3BFSC: msg_wmc_command_resp: msgid = 0x%08X\r\n", \
 										msg_wmc_command_resp.msgid);
