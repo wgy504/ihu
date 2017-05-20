@@ -707,7 +707,16 @@ uint32_t weightSensorConfig(WeightSensorParamaters_t *pwsp)
 				IhuErrorPrint("l2adc_cs5532: weightSensorConfig: NULL == pwsp, return IHU_FAILURE\r\n");
 				return 1;
 		}
-		
+
+#if 0
+    IhuDebugPrint("weightSensorConfig: AdcSampleFreq=%d AdcGain=%d ZeroAdcValue=%d FullAdcValue=%d FullWeight=%d\r\r",
+                  pwsp->WeightSensorAdcSampleFreq,
+                  pwsp->WeightSensorAdcGain,
+                  pwsp->WeightSensorCalibrationZeroAdcValue,
+                  pwsp->WeightSensorCalibrationFullAdcValue,
+                  pwsp->WeightSensorCalibrationFullWeight);
+#endif
+    
 		zWeightSensorParam.WeightSensorAdcSampleFreq = pwsp->WeightSensorAdcSampleFreq;
 		zWeightSensorParam.WeightSensorAdcGain = pwsp->WeightSensorAdcGain;
 		zWeightSensorParam.WeightSensorAdcBitwidth = pwsp->WeightSensorAdcBitwidth;

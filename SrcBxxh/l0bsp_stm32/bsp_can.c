@@ -82,9 +82,9 @@ int ihu_bsp_stm32_can_send_data(uint8_t* buff, uint16_t len)
 //	hcan1.pRxMsg = &RxMessage;
 	
 	IHU_BSP_STM32_CAN_IAU_HANDLER.pTxMsg->StdId = AWS_CAN_ID;  //CAN ID for AWS
-	IHU_BSP_STM32_CAN_IAU_HANDLER.pTxMsg->ExtId = 0x01;
+	IHU_BSP_STM32_CAN_IAU_HANDLER.pTxMsg->ExtId = AWS_CAN_ID;
   IHU_BSP_STM32_CAN_IAU_HANDLER.pTxMsg->RTR = CAN_RTR_DATA;
-  IHU_BSP_STM32_CAN_IAU_HANDLER.pTxMsg->IDE = CAN_ID_STD;
+  IHU_BSP_STM32_CAN_IAU_HANDLER.pTxMsg->IDE = CAN_ID_EXT;
 	
 	IhuDebugPrint("CANVELA: ihu_bsp_stm32_can_send_data: To send %d bytes [%02X %02X %02X %02X %02X %02X %02X %02X]\n", \
 				len, buff[0], buff[1], buff[2], buff[3], buff[4], buff[5], buff[6], buff[7]);
@@ -107,7 +107,7 @@ int ihu_bsp_stm32_can_send_data(uint8_t* buff, uint16_t len)
 		if (HAL_CAN_Transmit(&hcan1, IHU_BSP_STM32_CAN_TX_MAX_DELAY) == HAL_OK)
 		{
 			CanTotalFrameLen = CanTotalFrameLen + CanCurrentFrameLen;  //Counter how many has been sent
-			IhuDebugPrint("CANVELA: ihu_bsp_stm32_can_send_data: send %d bytes [%02X %02X %02X %02X %02X %02X %02X %02X]\n", \
+			//IhuDebugPrint("CANVELA: ihu_bsp_stm32_can_send_data: send %d bytes [%02X %02X %02X %02X %02X %02X %02X %02X]\n", \
 			hcan1.pTxMsg->DLC, \
 			hcan1.pTxMsg->Data[0], hcan1.pTxMsg->Data[1], \
 			hcan1.pTxMsg->Data[2], hcan1.pTxMsg->Data[3], \
@@ -121,7 +121,7 @@ int ihu_bsp_stm32_can_send_data(uint8_t* buff, uint16_t len)
 			}
 			
 			//osDelay(1); //make sure we do not break ther OS.
-			IhuDebugPrint("CANVELA: ihu_bsp_stm32_can_send_data: Sent CanTotalFrameLen(%d)\n", CanTotalFrameLen);
+			//IhuDebugPrint("CANVELA: ihu_bsp_stm32_can_send_data: Sent CanTotalFrameLen(%d)\n", CanTotalFrameLen);
 		}
 		else
 		{
@@ -278,15 +278,18 @@ void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef* CanHandle)
 		frame_desc = &g_can_packet_desc[0];
 	else
 		frame_desc = &g_can_packet_desc[1];
-	
-	printf("stdId 0x%x length %d, data: 0x%08x 0x%08x\n", 
-		CanHandle->pRxMsg->StdId,
-		CanHandle->pRxMsg->DLC,
-		*(uint32_t *)(&CanHandle->pRxMsg->Data[0]),
-		*(uint32_t *)(&CanHandle->pRxMsg->Data[4])
-		);
-	
-	l2packet_rx_bytes(frame_desc, CanHandle->pRxMsg->Data, CanHandle->pRxMsg->DLC);
+/*
+  printf("ExtId 0x%x length %d, data: 0x%08x 0x%08x\n", 
+  		CanHandle->pRxMsg->ExtId,
+  		CanHandle->pRxMsg->DLC,
+  		*(uint32_t *)(&CanHandle->pRxMsg->Data[0]),
+  		*(uint32_t *)(&CanHandle->pRxMsg->Data[4])
+  		);
+*/
+  if(CanHandle->pRxMsg->StdId == WMC_CAN_ID || CanHandle->pRxMsg->ExtId == WMC_CAN_ID)
+  {
+  	l2packet_rx_bytes(frame_desc, CanHandle->pRxMsg->Data, CanHandle->pRxMsg->DLC);
+  }
 	
 	/* Receive again */
 	if(HAL_CAN_Receive_IT(CanHandle, CAN_FIFO0) != HAL_OK)
@@ -305,12 +308,12 @@ void app_can_loopback_callback(IHU_HUITP_L2FRAME_Desc_t *pdesc)
 	//assert(CanHandle);
 
 	CanHandle = (CAN_HandleTypeDef* )pdesc->UserData;
-
+/*
 	printf("CAN ISR: L2Packet %d bytes, first: 0x%02x %02x last: 0x%02x %02x\n", 
 		pdesc->RxXferCount,
 		CanHandle->pRxMsg->Data[0], CanHandle->pRxMsg->Data[1],
 		CanHandle->pRxMsg->Data[6], CanHandle->pRxMsg->Data[7]);
-	
+*/
 	//Forward to TASK_ID_CANVELA
 	ret = ihu_message_send_isr(MSG_ID_CAN_L2FRAME_RCV, TASK_ID_CANVELA, TASK_ID_CANVELA, g_can_rx_buffer, pdesc->RxXferCount);
 	if (ret == IHU_FAILURE){
@@ -345,6 +348,7 @@ int bsp_can_start_rx(CAN_HandleTypeDef* CanHandle, void (*app_rx_callback)(), ui
 	if(HAL_CAN_Receive_IT(CanHandle, CAN_FIFO0) != HAL_OK)
 	{
 		/* Reception Error */
+    IhuErrorPrint("HAL_CAN_Receive_IT() error...\n");
 		return (1);
 	}
 	
@@ -407,9 +411,9 @@ void bsp_can_init(CAN_HandleTypeDef* CanHandle, uint32_t std_id)
 	
 	/*##-3- Configure Transmission process #####################################*/
 	CanHandle->pTxMsg->StdId = AWS_CAN_ID;
-  CanHandle->pTxMsg->ExtId = 0x01;
+  CanHandle->pTxMsg->ExtId = AWS_CAN_ID;
   CanHandle->pTxMsg->RTR = CAN_RTR_DATA;
-  CanHandle->pTxMsg->IDE = CAN_ID_STD;
+  CanHandle->pTxMsg->IDE = CAN_ID_EXT;
   CanHandle->pTxMsg->DLC = 0;
 	
 	bsp_can_start_rx(CanHandle, app_can_loopback_callback, g_can_rx_buffer, BFSC_CAN_MAX_RX_BUF_SIZE, CanHandle);

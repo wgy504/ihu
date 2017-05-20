@@ -248,7 +248,7 @@ IhuSysEngTimerStaticCfg_t zIhuSysEngTimerStaticCfg[] ={
   //{TIMER_ID_1S_CCL_ADC_WORKING_PERIOD_SCAN,        "TID_1S_CCL_ADC_WORKING_PERIOD_SCAN",     3,       TIMER_RESOLUTION_1S},  
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID) 
   {TIMER_ID_1S_LEDPISCES_PERIOD_SCAN,              "TID_1S_LEDPISCES_PERIOD_SCAN",           4,       TIMER_RESOLUTION_1S},
-  {TIMER_ID_1S_BFSC_STARTUP_IND,                   "TIMER_ID_1S_BFSC_STARTUP_IND",           1,       TIMER_RESOLUTION_1S},
+  {TIMER_ID_1S_BFSC_STARTUP_IND,                   "TIMER_ID_1S_BFSC_STARTUP_IND",           5,       TIMER_RESOLUTION_1S},
   {TIMER_ID_1S_BFSC_PERIOD_SCAN,                   "TID_1S_BFSC_PERIOD_SCAN",                1,       TIMER_RESOLUTION_1S},
   {TIMER_ID_1S_BFSC_L3BFSC_WAIT_WEIGHT_TIMER,      "TID_1S_BFSC_L3BFSC_WAIT_WEIGHT_TIMER",   25,      TIMER_RESOLUTION_1S},
   {TIMER_ID_1S_BFSC_L3BFSC_ROLL_OUT_TIMER,         "TID_1S_BFSC_L3BFSC_ROLL_OUT_TIMER",      3,       TIMER_RESOLUTION_1S},
@@ -1757,7 +1757,7 @@ OPSTAT ihu_message_send_isr(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *pa
 //    //zIhuVmCtrTab.task[dest_id].QueFullFlag = IHU_SYSCFG_TASK_QUEUE_FULL_TRUE;
 //    return IHU_FAILURE;
 //  }
-	printf("VMFO: Calling OS_QUEUE_PUT_FROM_ISR() end.\r\n");
+	//printf("VMFO: Calling OS_QUEUE_PUT_FROM_ISR() end.\r\n");
 	/*
 	 *  Message Trace processing
 	 *  注意字符串长度，太小会出现内存飞掉的情形，MessageTrace的数据配置来源于数据库，层次比这个还要高，虽然有点怪怪的，但不影响总体架构

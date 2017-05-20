@@ -953,7 +953,7 @@ OPSTAT fsm_bfsc_wmc_startind_time_out(UINT8 dest_id, UINT8 src_id, void * param_
 		msg_struct_l3bfsc_wmc_startup_ind_t snd;
 		memset(&snd, 0, sizeof(msg_struct_l3bfsc_wmc_startup_ind_t));
 		snd.length = sizeof(msg_struct_l3bfsc_wmc_startup_ind_t);
-		snd.msgid = MSG_ID_L3BFSC_WMC_STARTUP_IND;
+		snd.msgid = (MSG_ID_L3BFSC_WMC_STARTUP_IND);
 		memcpy(&snd.wmc_inventory, &zWmcInvenory, sizeof(WmcInventory_t));
 
     IhuDebugPrint("send WMC_START_IND (%d bytes): 0x%08x\n", snd.length, *(UINT32 *)&snd);
@@ -1204,7 +1204,7 @@ OPSTAT fsm_bfsc_wmc_combine_timeout(UINT8 dest_id, UINT8 src_id, void *param_ptr
 		msg_struct_l3bfsc_wmc_weight_ind_t snd;
 		memset(&snd, 0, sizeof(msg_struct_l3bfsc_wmc_weight_ind_t));
 		snd.length = sizeof(msg_struct_l3bfsc_wmc_weight_ind_t);
-		snd.msgid = MSG_ID_L3BFSC_WMC_WEIGHT_IND;
+		snd.msgid = (MSG_ID_L3BFSC_WMC_WEIGHT_IND);
     snd.wmc_id = zWmcInvenory.wmc_id;
     snd.weight_ind.average_weight = WeightSensorReadCurrent(&zWeightSensorParam);  // read weight sensor
     snd.weight_ind.weight_event = WEIGHT_EVENT_ID_LOAD;

@@ -65,7 +65,7 @@ extern WeightSensorParamaters_t					zWeightSensorParam;
 /* Function prototypes -------------------------------------------------------*/
 void StartDefaultTask(void const * argument);
 void blk230_test_task(void const * argument);
-void blk230_task(void *param);
+void blk230_task(void const * argument);
 void Callback01(void const * argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
@@ -188,8 +188,8 @@ void MX_FREERTOS_Init(void) {
 
   /* Create the thread(s) */
   /* definition and creation of defaultTask */
-  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 512);
-  defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
+  //osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 512);
+  //defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
   /* definition and creation of myTask02 */
   osThreadDef(myTask02, blk230_task, osPriorityNormal, 0, 512);

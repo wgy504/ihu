@@ -13,6 +13,8 @@
  
  #include "l2canvela.h"
  #include "l2packet.h"
+ #include "huitp.h"
+ 
  
 /*
 ** FSM of the CANVELA
@@ -476,6 +478,52 @@ OPSTAT fsm_canvela_l3bfsc_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr
 	return IHU_SUCCESS;
 }
 
+uint16_t HuitpMsgIdMapToInternalMsgId(uint32_t huitp_msgid)
+{
+//	HUITP_MSGID_sui_bfsc_startup_ind                 = 0x3B90,
+//	//配置过程
+//	HUITP_MSGID_sui_bfsc_set_config_req              = 0x3B11,
+//	HUITP_MSGID_sui_bfsc_set_config_resp             = 0x3B91,
+//	//启动过程
+//	HUITP_MSGID_sui_bfsc_start_req                   = 0x3B12,
+//	HUITP_MSGID_sui_bfsc_start_resp                  = 0x3B92,
+//	HUITP_MSGID_sui_bfsc_stop_req                    = 0x3B13,
+//	HUITP_MSGID_sui_bfsc_stop_resp                   = 0x3B93,
+//	//重量汇报过程
+//	HUITP_MSGID_sui_bfsc_new_ws_event                = 0x3B94,
+//	HUITP_MSGID_sui_bfsc_repeat_ws_event             = 0x3B94,
+//	//组合出料过程
+//	HUITP_MSGID_sui_bfsc_ws_comb_out_req             = 0x3B15,
+//	HUITP_MSGID_sui_bfsc_ws_comb_out_resp            = 0x3B95,
+//	//抛料过程
+//	HUITP_MSGID_sui_bfsc_ws_give_up_req              = 0x3B16,
+//	HUITP_MSGID_sui_bfsc_ws_give_up_resp             = 0x3B96,
+//	//特殊命令过程（测试等过程）
+//	HUITP_MSGID_sui_bfsc_command_req                 = 0x3B17,
+//	HUITP_MSGID_sui_bfsc_command_resp                = 0x3B97,
+//	//差错过程
+//	HUITP_MSGID_sui_bfsc_fault_ind                   = 0x3B98,
+//	HUITP_MSGID_sui_bfsc_err_inq_cmd_req             = 0x3B19,
+//	HUITP_MSGID_sui_bfsc_err_inq_cmd_resp            = 0x3B99,
+//
+	switch (huitp_msgid)
+	{
+		case HUITP_MSGID_sui_bfsc_set_config_req:
+		  return MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ;
+		case HUITP_MSGID_sui_bfsc_start_req:
+			return MSG_ID_L3BFSC_WMC_START_REQ;
+		case HUITP_MSGID_sui_bfsc_stop_req:
+			return MSG_ID_L3BFSC_WMC_STOP_REQ;
+		case HUITP_MSGID_sui_bfsc_ws_comb_out_req:
+			return MSG_ID_L3BFSC_WMC_COMBIN_REQ;
+		case HUITP_MSGID_sui_bfsc_command_req:
+			return MSG_ID_L3BFSC_WMC_COMMAND_REQ;
+		default:
+			return 0xFFFF;
+	}
+}
+
+
 //MSG_ID_CAN_L2FRAME_RCV
 OPSTAT fsm_canvela_bfsc_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)
 {
@@ -488,8 +536,9 @@ OPSTAT fsm_canvela_bfsc_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void *param_ptr
 	pMsgOutHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)param_ptr;
 	pMsgInnerHeader = (msg_struct_l3bfsc_wmc_msg_header_t *)((UINT8 *)param_ptr + 4);
 	msg_len = pMsgInnerHeader->length;
+  pMsgInnerHeader->msgid = HuitpMsgIdMapToInternalMsgId(pMsgInnerHeader->msgid);
 	msg_id = pMsgInnerHeader->msgid;
-	
+  
 	/* Check message length */
 	if( msg_len != (param_len - MAX_WMC_CONTROL_MSG_HEADER_LEN))
 	{
@@ -507,7 +556,6 @@ OPSTAT fsm_canvela_bfsc_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void *param_ptr
 	}
 
 	IhuDebugPrint("CANVELA: Header (msg_id = 0x%08X, msg_len = %d bytes)\r\n", msg_id, msg_len);
-	IhuDebugPrint("CANVELA: Header + Payload(%d bytes):", msg_len);
 	for(i = 0; i < msg_len; i++)
 	{
 			if(0 == (i % 32))  printf("\r\n");
@@ -515,7 +563,7 @@ OPSTAT fsm_canvela_bfsc_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void *param_ptr
 			//OSTimeDlyHMSM(0, 0, 0, 1);  //schedule other task, so that not block
 	}
 	printf("\r\n");
-	
+  
 //	ret = ihu_message_send(MSG_ID_CAN_L3BFSC_CMD_CTRL, TASK_ID_BFSC, TASK_ID_CANVELA, &snd, snd.length);
 //	if (ret == IHU_FAILURE){
 //		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
@@ -814,6 +862,61 @@ OPSTAT WmcAwsMsgCheck(void * param_ptr, UINT16 msg_len)
 	return IHU_FAILURE;
 }
 
+
+
+uint16_t InternalMsgIdMapToHuitpMsgId(uint32_t internal_msgid)
+{
+//	HUITP_MSGID_sui_bfsc_startup_ind                 = 0x3B90,
+//	//配置过程
+//	HUITP_MSGID_sui_bfsc_set_config_req              = 0x3B11,
+//	HUITP_MSGID_sui_bfsc_set_config_resp             = 0x3B91,
+//	//启动过程
+//	HUITP_MSGID_sui_bfsc_start_req                   = 0x3B12,
+//	HUITP_MSGID_sui_bfsc_start_resp                  = 0x3B92,
+//	HUITP_MSGID_sui_bfsc_stop_req                    = 0x3B13,
+//	HUITP_MSGID_sui_bfsc_stop_resp                   = 0x3B93,
+//	//重量汇报过程
+//	HUITP_MSGID_sui_bfsc_new_ws_event                = 0x3B94,
+//	HUITP_MSGID_sui_bfsc_repeat_ws_event             = 0x3B94,
+//	//组合出料过程
+//	HUITP_MSGID_sui_bfsc_ws_comb_out_req             = 0x3B15,
+//	HUITP_MSGID_sui_bfsc_ws_comb_out_resp            = 0x3B95,
+//	//抛料过程
+//	HUITP_MSGID_sui_bfsc_ws_give_up_req              = 0x3B16,
+//	HUITP_MSGID_sui_bfsc_ws_give_up_resp             = 0x3B96,
+//	//特殊命令过程（测试等过程）
+//	HUITP_MSGID_sui_bfsc_command_req                 = 0x3B17,
+//	HUITP_MSGID_sui_bfsc_command_resp                = 0x3B97,
+//	//差错过程
+//	HUITP_MSGID_sui_bfsc_fault_ind                   = 0x3B98,
+//	HUITP_MSGID_sui_bfsc_err_inq_cmd_req             = 0x3B19,
+//	HUITP_MSGID_sui_bfsc_err_inq_cmd_resp            = 0x3B99,
+//
+	switch (internal_msgid)
+	{
+		case MSG_ID_L3BFSC_WMC_STARTUP_IND:
+			return HUITP_MSGID_sui_bfsc_startup_ind;
+		case MSG_ID_L3BFSC_WMC_SET_CONFIG_RESP:
+		  return HUITP_MSGID_sui_bfsc_set_config_resp;
+		case MSG_ID_L3BFSC_WMC_START_RESP:
+			return HUITP_MSGID_sui_bfsc_start_resp;
+		case MSG_ID_L3BFSC_WMC_STOP_RESP:
+			return HUITP_MSGID_sui_bfsc_stop_resp;
+		case MSG_ID_L3BFSC_WMC_WEIGHT_IND:
+			return HUITP_MSGID_sui_bfsc_new_ws_event;
+		case MSG_ID_L3BFSC_WMC_COMBIN_RESP:
+			return HUITP_MSGID_sui_bfsc_ws_comb_out_resp;
+		case MSG_ID_L3BFSC_WMC_COMMAND_RESP:
+			return HUITP_MSGID_sui_bfsc_command_resp;
+		case MSG_ID_L3BFSC_WMC_FAULT_IND:
+			return HUITP_MSGID_sui_bfsc_fault_ind;
+		//case MSG_ID_L3BFSC_WMC_ERR_INQ_CMD_RESP:
+			//return HUITP_MSGID_sui_bfsc_err_inq_cmd_resp;
+		default:
+			return 0xFFFF;
+	}
+}
+
 //MYC TODO: to see whether we have other global variables to use
 //MYC TODO: to think about how we use when we need to do SW update
 UINT8	ctrlMsgBuf[MAX_WMC_CONTROL_MSG_LEN];
@@ -822,6 +925,7 @@ OPSTAT fsm_canvela_bfsc_l2frame_snd(UINT8 dest_id, UINT8 src_id, void * param_pt
 {
 	//int ret = 0;
 	IHU_HUITP_L2FRAME_STD_frame_header_t *pFrameHeader = NULL;
+  msg_struct_l3bfsc_wmc_msg_header_t *pBFHeader = (msg_struct_l3bfsc_wmc_msg_header_t *)param_ptr;
 	
 	if(NULL == param_ptr)
 	{
@@ -834,7 +938,10 @@ OPSTAT fsm_canvela_bfsc_l2frame_snd(UINT8 dest_id, UINT8 src_id, void * param_pt
 		IhuErrorPrint("CANVELA: fsm_canvela_bfsc_l2frame_snd, msg check failure, return!\n");
     return IHU_FAILURE;
 	}
-	
+
+  /* change the internal msg id to external msg id */
+  pBFHeader->msgid = InternalMsgIdMapToHuitpMsgId(pBFHeader->msgid);
+  
 	/* Clear buffer all to 0*/
 	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
 	

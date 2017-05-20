@@ -84,7 +84,7 @@ void msg_wmc_set_config_req_process(void *param_ptr, error_code_t *ec_ptr)
 		
 		/* Process the message */
     // TODO: check each parameters...
-    zWeightSensorParam = config_req->weight_sensor_param;
+    weightSensorConfig(&config_req->weight_sensor_param);
     zMotorControlParam = config_req->motor_control_param;
     
 		return;
@@ -119,12 +119,14 @@ void msg_wmc_set_config_resp(error_code_t ec)
 		}
 		
 		/* Build Message Content */
-		msg_wmc_set_config_resp.msgid = MSG_ID_L3BFSC_WMC_SET_CONFIG_RESP;
+		msg_wmc_set_config_resp.msgid = (MSG_ID_L3BFSC_WMC_SET_CONFIG_RESP);
+    msg_wmc_set_config_resp.length = sizeof(msg_struct_l3bfsc_wmc_resp_t);
     msg_wmc_set_config_resp.wmc_id = zWmcInvenory.wmc_id;
 		msg_wmc_set_config_resp.result.error_code = ec;
+    msg_wmc_set_config_resp.result.spare1 = 0;
 		
-		IhuDebugPrint("L3BFSC: msg_wmc_set_config_resp: msgid = 0x%08X", \
-										msg_wmc_set_config_resp.msgid);
+		IhuDebugPrint("L3BFSC: msg_wmc_set_config_resp: msgid = 0x%08X error_code=%d", \
+										msg_wmc_set_config_resp.msgid, ec);
 		
 		/* Send Message to CAN Task */
 		ret = ihu_message_send(MSG_ID_L3BFSC_WMC_SET_CONFIG_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, \
@@ -317,7 +319,7 @@ void msg_wmc_start_resp(error_code_t ec)
 		}
 
 		/* Build Message Content */
-		msg_wmc_start_resp.msgid = MSG_ID_L3BFSC_WMC_START_RESP;
+		msg_wmc_start_resp.msgid = (MSG_ID_L3BFSC_WMC_START_RESP);
     msg_wmc_start_resp.wmc_id = zWmcInvenory.wmc_id;
 		msg_wmc_start_resp.result.error_code = ec;
 		
@@ -407,7 +409,7 @@ void msg_wmc_stop_resp(error_code_t ec)
 		}
 
 		/* Build Message Content */
-		msg_wmc_stop_resp.msgid = MSG_ID_L3BFSC_WMC_STOP_RESP;
+		msg_wmc_stop_resp.msgid = (MSG_ID_L3BFSC_WMC_STOP_RESP);
 		msg_wmc_stop_resp.wmc_id = zWmcInvenory.wmc_id;
 		msg_wmc_stop_resp.result.error_code = ec;
 		
@@ -512,7 +514,7 @@ void msg_wmc_command_resp(error_code_t ec)
 		}
 
 		/* Build Message Content Header */
-		msg_wmc_command_resp.msgid = MSG_ID_L3BFSC_WMC_COMMAND_RESP;
+		msg_wmc_command_resp.msgid = (MSG_ID_L3BFSC_WMC_COMMAND_RESP);
     msg_wmc_command_resp.length = sizeof(msg_struct_l3bfsc_wmc_command_resp_t);
 		msg_wmc_command_resp.wmc_id = zWmcInvenory.wmc_id;
 		msg_wmc_command_resp.result.error_code = ec;
@@ -608,7 +610,7 @@ void msg_wmc_combin_resp(error_code_t ec)
 		}
 		
 		/* Build Message Content Header */
-		msg_wmc_combin_resp.msgid = MSG_ID_L3BFSC_WMC_COMBIN_RESP;
+		msg_wmc_combin_resp.msgid = (MSG_ID_L3BFSC_WMC_COMBIN_RESP);
 		msg_wmc_combin_resp.wmc_id = zWmcInvenory.wmc_id;
 		msg_wmc_combin_resp.result.error_code = ec;
 		
