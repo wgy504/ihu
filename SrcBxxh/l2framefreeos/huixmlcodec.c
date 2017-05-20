@@ -1058,7 +1058,7 @@ void func_cloud_standard_xml_generate_message_test_data(void)
 	pMsgProc3.rssiValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_rssi_value);
 	pMsgProc3.rssiValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_rssi_value_t) - 4);
 	pMsgProc3.rssiValue.dataFormat = HUITP_IEID_UNI_COM_FORMAT_TYPE_FLOAT_WITH_NF2;  //100倍放大
-	pMsgProc3.rssiValue.rssiValue = HUITP_ENDIAN_EXG16(ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_rssi_value());	
+	pMsgProc3.rssiValue.rssiValue = HUITP_ENDIAN_EXG16(ihu_spsvirgo_ccl_fetch_rssi_value());	
 	//StrIe_HUITP_IEID_uni_ccl_dcmi_value_t
 	pMsgProc3.dcmiValue.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_ccl_dcmi_value);
 	pMsgProc3.dcmiValue.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_ccl_dcmi_value_t) - 4);

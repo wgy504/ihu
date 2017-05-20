@@ -143,9 +143,9 @@ typedef struct com_gps_pos //
 
 typedef struct com_sensor_status //
 {
-	UINT8 lockTongueState[IHU_CCL_SENSOR_LOCK_NUMBER_MAX];
-	UINT8 lockiTriggerState[IHU_CCL_SENSOR_LOCK_NUMBER_MAX];
-	UINT8 lockoEnableState[IHU_CCL_SENSOR_LOCK_NUMBER_MAX];
+//	UINT8 lockTongueState[IHU_CCL_SENSOR_LOCK_NUMBER_MAX];
+//	UINT8 lockiTriggerState[IHU_CCL_SENSOR_LOCK_NUMBER_MAX];
+//	UINT8 lockoEnableState[IHU_CCL_SENSOR_LOCK_NUMBER_MAX];
 	UINT8 doorState[IHU_CCL_SENSOR_LOCK_NUMBER_MAX];
 	UINT8 cameraState[IHU_CCL_SENSOR_LOCK_NUMBER_MAX];
 	UINT8 smokeState;

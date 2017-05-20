@@ -70,8 +70,13 @@ GlobalGalowagCtrlTable_t zIhuGalogwagCtrlTable[] =
 	{GALOWAG_CTRL_ID_CCL_LOCK3, GALOWAG_CTRL_STATE_OFF, 1, 10, 11, 22, 0, 0, ihu_l1hd_dido_f2board_lock3_do1_on, ihu_l1hd_dido_f2board_lock3_do1_off},
 	{GALOWAG_CTRL_ID_CCL_LOCK4, GALOWAG_CTRL_STATE_OFF, 1, 10, 11, 22, 0, 0, ihu_l1hd_dido_f2board_lock4_do1_on, ihu_l1hd_dido_f2board_lock4_do1_off},
 	//BEEP的声音模式，也采用了跟LED一样的控制方式，从而产生不同的图案
-	{GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_1, GALOWAG_CTRL_STATE_OFF, 1, 1, 2, 6, 0, 0, ihu_l1hd_beep_f2board_on, ihu_l1hd_beep_f2board_off},
-	{GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_2, GALOWAG_CTRL_STATE_OFF, 1, 2, 3, 8, 0, 0, ihu_l1hd_beep_f2board_on, ihu_l1hd_beep_f2board_off},
+	{GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_SYS_START, GALOWAG_CTRL_STATE_OFF, 1, 1, 2, 20, 0, 0, ihu_l1hd_beep_f2board_on, ihu_l1hd_beep_f2board_off},
+	{GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_SYS_SHUT_DOWN, GALOWAG_CTRL_STATE_OFF, 1, 2, 3, 20, 0, 0, ihu_l1hd_beep_f2board_on, ihu_l1hd_beep_f2board_off},
+	{GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_SYS_FAULT, GALOWAG_CTRL_STATE_OFF, 1, 3, 4, 20, 0, 0, ihu_l1hd_beep_f2board_on, ihu_l1hd_beep_f2board_off},
+	{GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_LOCK1_TRIGGER, GALOWAG_CTRL_STATE_OFF, 2, 1, 3, 20, 0, 0, ihu_l1hd_beep_f2board_on, ihu_l1hd_beep_f2board_off},
+	{GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_LOCK2_TRIGGER, GALOWAG_CTRL_STATE_OFF, 2, 2, 4, 20, 0, 0, ihu_l1hd_beep_f2board_on, ihu_l1hd_beep_f2board_off},
+	{GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_LOCK3_TRIGGER, GALOWAG_CTRL_STATE_OFF, 2, 3, 5, 20, 0, 0, ihu_l1hd_beep_f2board_on, ihu_l1hd_beep_f2board_off},
+	{GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_LOCK4_TRIGGER, GALOWAG_CTRL_STATE_OFF, 2, 4, 6, 20, 0, 0, ihu_l1hd_beep_f2board_on, ihu_l1hd_beep_f2board_off},
 #endif	
   {GALOWAG_CTRL_ID_MAX,GALOWAG_CTRL_STATE_MIN, 0, 0, 0, 0, 0, 0, NULL, NULL},//Ending
 };

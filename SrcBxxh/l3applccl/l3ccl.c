@@ -166,8 +166,8 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 	handActFlag = ihu_l1hd_dido_f2board_lock_act_flag_read();
 	
 	//拉灯拉BEEP
-	ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_GLOBAL_WORK_STATE, 5);
-	ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_1, 9);
+	ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_GLOBAL_WORK_STATE, 20);
+	ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_SYS_START, 20);
 	
 	//等待3秒，以便其它任务进入稳定状态
 	func_ccl_close_all_sensor_power();
@@ -392,8 +392,8 @@ OPSTAT fsm_ccl_dido_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param
 	//获取报告数据
 	for (i=0; i<IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
 		zIhuCclSensorStatus.sensor.doorState[i] = rcv.sensor.doorState[i];
-		zIhuCclSensorStatus.sensor.lockiTriggerState[i] = rcv.sensor.lockiTriggerState[i];
-		zIhuCclSensorStatus.sensor.lockoEnableState[i] = rcv.sensor.lockoEnableState[i];
+//		zIhuCclSensorStatus.sensor.lockiTriggerState[i] = rcv.sensor.lockiTriggerState[i];
+//		zIhuCclSensorStatus.sensor.lockoEnableState[i] = rcv.sensor.lockoEnableState[i];
 	}
 	zIhuCclSensorStatus.sensor.batteryValue = rcv.sensor.batteryValue;
 	zIhuCclSensorStatus.sensor.fallState = rcv.sensor.fallState;
@@ -753,7 +753,7 @@ OPSTAT func_ccl_time_out_lock_work_active(void)
 		
 		//拉灯拉BEEP
 		ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_GLOBAL_WORK_STATE, 5);
-		ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_2, 30);		
+		ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_SYS_SHUT_DOWN, 30);		
 		
 		//关机，等待FAULT REPORT收到以后，会自动干的
 	}
@@ -805,7 +805,7 @@ OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 		
 		//拉灯拉BEEP，指示整个工作过程不成功
 		ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_GLOBAL_WORK_STATE, 5);
-		ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_2, 30);		
+		ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_SYS_SHUT_DOWN, 30);		
 
 		//延时并关断CPU系统
 		ihu_sleep(5);
@@ -821,19 +821,35 @@ OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 			IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CCL].taskName, zIhuVmCtrTab.task[TASK_ID_DIDOCAP].taskName);
 		
 		//开门控制：独特的技巧，复用这些参数
+		//由于整机电源功率的限制，这里的锁具供电必须串行，而不能一起给电。所以我们采用顺序供电的模式，每一个保持5秒，如果不能及时开锁，就断电。
 		if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX >= 1){
 			ihu_usleep(200);
 			ihu_l1hd_dido_f2board_lock1_do1_on();
+			ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_LOCK1_TRIGGER, 30);
+			ihu_sleep(5);
+			ihu_l1hd_dido_f2board_lock1_do1_off();
 		}
+		
 		if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX >= 2){
 			ihu_usleep(200);
 			ihu_l1hd_dido_f2board_lock2_do1_on();
+			ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_LOCK2_TRIGGER, 30);
+			ihu_sleep(5);
+			ihu_l1hd_dido_f2board_lock2_do1_off();
 		}
+
 		if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX >= 4){
 			ihu_usleep(200);
 			ihu_l1hd_dido_f2board_lock3_do1_on();
+			ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_LOCK3_TRIGGER, 30);
+			ihu_sleep(5);
+			ihu_l1hd_dido_f2board_lock3_do1_off();
+			
 			ihu_usleep(200);
 			ihu_l1hd_dido_f2board_lock4_do1_on();
+			ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_LOCK4_TRIGGER, 30);
+			ihu_sleep(5);
+			ihu_l1hd_dido_f2board_lock4_do1_off();
 		}
 		
 		//启动定时器
@@ -1141,7 +1157,7 @@ OPSTAT fsm_ccl_fault_state_trigger(UINT8 dest_id, UINT8 src_id, void * param_ptr
 	func_ccl_open_all_sensor_power();
 	
 	//拉灯拉BEEP
-	ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_2, 30);
+	ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_SYS_FAULT, 30);
 	
 	//也根本不需要发送控制命令给各个传感器模块
 //	//发送控制给SPSVIRGO

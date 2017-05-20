@@ -1,0 +1,122 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ¦ÌVision V5.18.0.0
+Copyright (C) 2016 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: z MAMA, Microsoft, LIC=JDA30-BZJU5-68CFC-7RXXZ-QM63C-6Q9JT
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Professional  Version: 5.18
+Toolchain Path:  C:\Keil_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 1 (build 61)
+Assembler:       Armasm.exe V5.06 update 1 (build 61)
+Linker/Locator:  ArmLink.exe V5.06 update 1 (build 61)
+Library Manager: ArmAr.exe V5.06 update 1 (build 61)
+Hex Converter:   FromElf.exe V5.06 update 1 (build 61)
+CPU DLL:         SARMCM3.DLL V5.18
+Dialog DLL:      DCM.DLL V1.13.6.0
+Target DLL:      UL2CM3.DLL V1.157.5.0
+Dialog DLL:      TCM.DLL V1.14.8.0
+ 
+<h2>Project:</h2>
+D:\IHUSRC\ihu\PrjBfscFo@207VG\MDK-ARM\PrjBfscFo@207VG.uvprojx
+Project File Date:  05/07/2017
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 1 (build 61)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
+Build Project 'PrjBfscFo@207VG' - Target 'PrjBfscFo@207VG'
+compiling main.c...
+compiling bsp_spi.c...
+compiling freertos.c...
+D:\IHUSRC\ihu\PrjBfscFo@207VG\Src\freertos.c(229): warning:  #223-D: function "WeightSensorCalibrationZero" declared implicitly
+  	temp = WeightSensorCalibrationZero(&zWeightSensorParam);
+D:\IHUSRC\ihu\PrjBfscFo@207VG\Src\freertos.c(238): warning:  #223-D: function "WeightSensorCalibrationFull" declared implicitly
+  	temp = WeightSensorCalibrationFull(&zWeightSensorParam);
+D:\IHUSRC\ihu\PrjBfscFo@207VG\Src\freertos.c(245): warning:  #223-D: function "ReadWheChanOk" declared implicitly
+  		if(ReadWheChanOk())
+D:\IHUSRC\ihu\PrjBfscFo@207VG\Src\freertos.c(249): warning:  #223-D: function "WeightSensorReadCurrent" declared implicitly
+  				temp2 = WeightSensorReadCurrent(&zWeightSensorParam);
+../Src/freertos.c: 4 warnings, 0 errors
+compiling blk230.c...
+compiling bsp_usart.c...
+compiling bsp_adc.c...
+D:\IHUSRC\ihu\SrcBxxh\l0bsp_stm32\bsp_adc.c(68): warning:  #223-D: function "WeightSensorReadCurrent" declared implicitly
+  	return WeightSensorReadCurrent(&zWeightSensorParam);  //MYC
+..\..\SrcBxxh\l0bsp_stm32\bsp_adc.c: 1 warning, 0 errors
+compiling bsp_led.c...
+compiling bsp_dido.c...
+compiling bsp_i2c.c...
+compiling bsp_crc.c...
+compiling bsp_cpuid.c...
+compiling bsp_can.c...
+D:\IHUSRC\ihu\SrcBxxh\l0bsp_stm32\bsp_can.c(73): warning:  #177-D: variable "CanFrameNumber" was declared but never referenced
+  	uint16_t CanFrameNumber = 0;
+D:\IHUSRC\ihu\SrcBxxh\l0bsp_stm32\bsp_can.c(77): warning:  #177-D: variable "i" was declared but never referenced
+  	uint16_t i = 0;
+..\..\SrcBxxh\l0bsp_stm32\bsp_can.c: 2 warnings, 0 errors
+compiling bsp_rtc.c...
+compiling bsp_calendar.c...
+compiling bsp_stmflash.c...
+compiling l1vmfo.c...
+compiling l1timer_freeos.c...
+compiling l2adclibra.c...
+compiling l2i2caries.c...
+compiling l2ledpisces.c...
+compiling l2spileo.c...
+compiling vmfreeoslayer.c...
+compiling l2canvela.c...
+D:\IHUSRC\ihu\SrcBxxh\l2framefreeos\l2canvela.c(502): warning:  #223-D: function "WmcAwsMsgCheck" declared implicitly
+  	if(
+HU_FAILURE == WmcAwsMsgCheck(pMsgInnerHeader, msg_len))
+D:\IHUSRC\ihu\SrcBxxh\l2framefreeos\l2canvela.c(485): warning:  #550-D: variable "pMsgOutHeader" was set but never used
+  	IHU_HUITP_L2FRAME_STD_frame_header_t *pMsgOutHeader;
+D:\IHUSRC\ihu\SrcBxxh\l2framefreeos\l2canvela.c(638): warning:  #550-D: parameter "prefixcmdid" was set but never used
+  OPSTAT func_canvela_frame_decode(strIhuCanvelaCmdFrame_t *pframe, UINT8 prefixcmdid, UINT8 optid, UINT8 optpar, UINT32 modbusval)
+D:\IHUSRC\ihu\SrcBxxh\l2framefreeos\l2canvela.c(638): warning:  #550-D: parameter "optpar" was set but never used
+  OPSTAT func_canvela_frame_decode(strIhuCanvelaCmdFrame_t *pframe, UINT8 prefixcmdid, UINT8 optid, UINT8 optpar, UINT32 modbusval)
+D:\IHUSRC\ihu\SrcBxxh\l2framefreeos\l2canvela.c(638): warning:  #550-D: parameter "modbusval" was set but never used
+  OPSTAT func_canvela_frame_decode(strIhuCanvelaCmdFrame_t *pframe, UINT8 prefixcmdid, UINT8 optid, UINT8 optpar, UINT32 modbusval)
+..\..\SrcBxxh\l2framefreeos\l2canvela.c: 5 warnings, 0 errors
+compiling l2adc_cs5532.c...
+D:\IHUSRC\ihu\SrcBxxh\l2frame\l2adc_cs5532.c(730): warning:  #68-D: integer conversion resulted in a change of sign
+  				return 
+HU_FAILURE;
+D:\IHUSRC\ihu\SrcBxxh\l2frame\l2adc_cs5532.c(758): warning:  #68-D: integer conversion resulted in a change of sign
+  				return 
+HU_FAILURE;
+D:\IHUSRC\ihu\SrcBxxh\l2frame\l2adc_cs5532.c(787): warning:  #68-D: integer conversion resulted in a change of sign
+  			return 
+HU_FAILURE;
+D:\IHUSRC\ihu\SrcBxxh\l2frame\l2adc_cs5532.c(824): warning:  #68-D: integer conversion resulted in a change of sign
+  			return 
+HU_FAILURE;
+..\..\SrcBxxh\l2frame\l2adc_cs5532.c: 4 warnings, 0 errors
+compiling l3bfsc.c...
+compiling l3bfsc_msg.c...
+linking...
+Program Size: Code=81448 RO-data=6476 RW-data=7548 ZI-data=90388  
+FromELF: creating hex file...
+"PrjBfscFo@207VG\PrjBfscFo@207VG.axf" - 0 Error(s), 16 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                http://www.keil.com/pack/ARM.CMSIS.5.0.0-Beta4.pack
+                ARM::CMSIS:CORE:5.0.0
+                CMSIS (Cortex Microcontroller Software Interface Standard)
+   * Component: CORE Version: 5.0.0
+
+<h2>Collection of Component include folders:</h2>
+  D:\IHUSRC\ihu\PrjBfscFo@207VG\MDK-ARM\RTE
+  C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0-Beta4\CMSIS\Include
+  C:\Keil_v5\ARM\PACK\Keil\STM32F2xx_DFP\2.6.0\Drivers\CMSIS\Device\ST\STM32F2xx\Include
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ARM::CMSIS:CORE:5.0.0
+Build Time Elapsed:  00:00:36
+</pre>
+</body>
+</html>
