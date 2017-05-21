@@ -154,6 +154,7 @@ void blk230_task(void const *param)
 	int32_t status;
 	int alarm = 0;
 	uint32_t now, time2stop = 0;
+
 	uint32_t i = 0;
 
   PCA8574A_init();
@@ -170,9 +171,9 @@ void blk230_task(void const *param)
 		if(100 == i)
 		{
 				ihu_bsp_stm32_led_serv1_f2board_toggle();
-				i = 0;
-			
+				i = 0;			
 		}
+		
     now = osKernelSysTick();
 		if(blk230_recv_cmd(&command))
     {

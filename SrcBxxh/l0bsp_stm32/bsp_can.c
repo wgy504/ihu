@@ -75,7 +75,7 @@ int ihu_bsp_stm32_can_send_data(uint8_t* buff, uint16_t len)
 	uint16_t CanCurrentFrameLen = 0;
 	uint16_t CanLastFrameLen = (len % 8);
 	uint16_t i = 0;
-	HAL_StatusTypeDef status;
+  HAL_StatusTypeDef status;
 	
 //	static CanTxMsgTypeDef        TxMessage;
 //	static CanRxMsgTypeDef        RxMessage;
@@ -104,7 +104,7 @@ int ihu_bsp_stm32_can_send_data(uint8_t* buff, uint16_t len)
 		hcan1.pTxMsg->DLC = CanCurrentFrameLen;
 		/* Fill msg body */
 		memcpy( hcan1.pTxMsg->Data, &buff[CanTotalFrameLen], CanCurrentFrameLen);
-	
+
 		/* CAN Transmit need to disable Interrupt */
 		taskENTER_CRITICAL();
 		status = HAL_CAN_Transmit(&hcan1, IHU_BSP_STM32_CAN_TX_MAX_DELAY);
@@ -115,12 +115,13 @@ int ihu_bsp_stm32_can_send_data(uint8_t* buff, uint16_t len)
 		if (status == HAL_OK)
 		{
 			CanTotalFrameLen = CanTotalFrameLen + CanCurrentFrameLen;  //Counter how many has been sent
-			//IhuDebugPrint("CANVELA: ihu_bsp_stm32_can_send_data: send %d bytes [%02X %02X %02X %02X %02X %02X %02X %02X]\n", \
+			/*IhuDebugPrint("CANVELA: ihu_bsp_stm32_can_send_data: send %d bytes [%02X %02X %02X %02X %02X %02X %02X %02X]\n", \
 			hcan1.pTxMsg->DLC, \
 			hcan1.pTxMsg->Data[0], hcan1.pTxMsg->Data[1], \
 			hcan1.pTxMsg->Data[2], hcan1.pTxMsg->Data[3], \
 			hcan1.pTxMsg->Data[4], hcan1.pTxMsg->Data[5], \
-			hcan1.pTxMsg->Data[6], hcan1.pTxMsg->Data[7]);
+			hcan1.pTxMsg->Data[6], hcan1.pTxMsg->Data[7]); */
+			
 			ihu_bsp_stm32_led_work_state_f2board_toggle();
 			if(CanTotalFrameLen == len) 
 			{
@@ -133,7 +134,7 @@ int ihu_bsp_stm32_can_send_data(uint8_t* buff, uint16_t len)
 		}
 		else
 		{
-			IhuDebugPrint("CANVELA: ihu_bsp_stm32_can_send_data: HAL_CAN_Transmit NOK, status = %d\n", status);
+			IhuErrorPrint("CANVELA: ihu_bsp_stm32_can_send_data: HAL_CAN_Transmit NOK: %d TSR=0x%x\n", status, hcan1.Instance->TSR);
 			//TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			//TODO: !!!!!!!!!!! CAN Link Faifure NEED TO BE CONSIDERRED !!!!!!!!!!
 			//TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -284,6 +285,8 @@ void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef* CanHandle)
 	HAL_StatusTypeDef status;
 	
 	IHU_HUITP_L2FRAME_Desc_t *frame_desc;
+  //HAL_StatusTypeDef status;
+  
 	if(CanHandle->Instance == CAN1)
 		frame_desc = &g_can_packet_desc[0];
 	else
@@ -305,7 +308,6 @@ void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef* CanHandle)
 	status = HAL_CAN_Receive_IT(CanHandle, CAN_FIFO0);
 	if(status != HAL_OK)
 	{
-		/* Reception Error */
 		//printf("HAL_CAN_Receive_IT() error. status = \n", status);
 	}
 }
@@ -379,7 +381,9 @@ uint32_t bsp_can_transmit(CAN_HandleTypeDef* CanHandle, uint8_t *buffer, uint32_
 		translen = (length > 8)?8:length;
 		CanHandle->pTxMsg->DLC = translen;
 		memcpy(CanHandle->pTxMsg->Data, buffer, translen);
+    taskENTER_CRITICAL();
 		status = HAL_CAN_Transmit(CanHandle, timeout);
+    taskEXIT_CRITICAL();
 		if(status == HAL_OK)
 		{
 			length -= translen;
