@@ -61,6 +61,8 @@
 #define HUITP_MSG_HUIXML_MSGTYPE_ALARM_REPORT_STRING 	"huitp_alarm"  //for alarm report
 #define HUITP_MSG_HUIXML_MSGTYPE_PM_REPORT_ID 			6
 #define HUITP_MSG_HUIXML_MSGTYPE_PM_REPORT_STRING 		"huitp_pm"  //for pm report
+#define HUITP_MSG_HUIXML_MSGTYPE_COMMON_ID 			7
+#define HUITP_MSG_HUIXML_MSGTYPE_COMMON_STRING 		"hcu_huitp"  //use common string for the moment
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
