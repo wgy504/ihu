@@ -277,7 +277,7 @@ int ihu_bsp_stm32_sps_ble_rcv_data_timeout(uint8_t* buff, uint16_t len, uint32_t
 		return BSP_FAILURE;
 }
 
-#if 0
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 /*******************************************************************************
 * 函数名  : USART_SendData
 * 描述    : UART_SPARE1发送数据缓冲区数据
