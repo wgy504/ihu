@@ -640,6 +640,9 @@ extern void ihu_timer_routine_handler_10ms(void);
 #define ihu_l1hd_sps_ble_send_data 							ihu_bsp_stm32_sps_ble_send_data
 #define ihu_l1hd_sps_ble_rcv_data 		  				ihu_bsp_stm32_sps_ble_rcv_data
 #define ihu_l1hd_sps_ble_rcv_data_timeout 		  ihu_bsp_stm32_sps_ble_rcv_data_timeout
+#define ihu_l1hd_sps_cam_send_data 							ihu_bsp_stm32_sps_cam_send_data
+#define ihu_l1hd_sps_cam_rcv_data 		  				ihu_bsp_stm32_sps_cam_rcv_data
+#define ihu_l1hd_sps_cam_rcv_data_timeout 			ihu_bsp_stm32_sps_cam_rcv_data_timeout
 #define ihu_l1hd_sps_print_send_data 						ihu_bsp_stm32_sps_print_send_data
 #define ihu_l1hd_sps_print_rcv_data 		  			ihu_bsp_stm32_sps_print_rcv_data
 #define ihu_l1hd_sps_print_rcv_data_timeout 		ihu_bsp_stm32_sps_print_rcv_data_timeout

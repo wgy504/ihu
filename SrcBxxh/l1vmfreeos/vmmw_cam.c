@@ -95,14 +95,14 @@ OPSTAT ihu_vmmw_cam_ulcdsc03_uart_frame_procedure_sync(void)
 {
 	//发送同步帧
 	ihu_usleep(100);
-	if (ihu_bsp_stm32_sps_cam_send_data(zIhuVmmwCamUlcdsc03FrameCamSynTxSnd, IHU_VMMW_CAM_UART_FRAME_SIZE) == BSP_FAILURE)
+	if (ihu_l1hd_sps_cam_send_data(zIhuVmmwCamUlcdsc03FrameCamSynTxSnd, IHU_VMMW_CAM_UART_FRAME_SIZE) == BSP_FAILURE)
 		return IHU_FAILURE;
 	ihu_usleep(100);
 	
 	//等待去收摄像头的应答
 	uint8_t rcvBuffer[IHU_VMMW_CAM_UART_FRAME_SIZE];
 	memset(rcvBuffer, 0, sizeof(rcvBuffer));
-	if (ihu_bsp_stm32_sps_cam_rcv_data_timeout(rcvBuffer, IHU_VMMW_CAM_UART_FRAME_SIZE, IHU_VMMW_CAM_UART_RX_MAX_DELAY) == BSP_FAILURE)
+	if (ihu_l1hd_sps_cam_rcv_data_timeout(rcvBuffer, IHU_VMMW_CAM_UART_FRAME_SIZE, IHU_VMMW_CAM_UART_RX_MAX_DELAY) == BSP_FAILURE)
 		return IHU_FAILURE;
 	
 	int i = 0;
@@ -122,13 +122,13 @@ UINT32 ihu_vmmw_cam_ulcdsc03_uart_frame_procedure_take_picture(void)
 	
 	//发送开始拍照指令
 	ihu_usleep(100);
-	if (ihu_bsp_stm32_sps_cam_send_data(zIhuVmmwCamUlcdsc03FrameCamPicTxStart, IHU_VMMW_CAM_UART_FRAME_SIZE) == BSP_FAILURE)
+	if (ihu_l1hd_sps_cam_send_data(zIhuVmmwCamUlcdsc03FrameCamPicTxStart, IHU_VMMW_CAM_UART_FRAME_SIZE) == BSP_FAILURE)
 		return 0;
 	ihu_usleep(100);
 	
 	//等待摄像头应答
 	memset(rcvBuffer, 0, sizeof(rcvBuffer));
-	if (ihu_bsp_stm32_sps_cam_rcv_data_timeout(rcvBuffer, IHU_VMMW_CAM_UART_FRAME_SIZE, IHU_VMMW_CAM_UART_RX_MAX_DELAY) == BSP_FAILURE)
+	if (ihu_l1hd_sps_cam_rcv_data_timeout(rcvBuffer, IHU_VMMW_CAM_UART_FRAME_SIZE, IHU_VMMW_CAM_UART_RX_MAX_DELAY) == BSP_FAILURE)
 		return 0;
 	for (i = 0; i < IHU_VMMW_CAM_UART_FRAME_SIZE; i++){
 		if ((zIhuVmmwCamUlcdsc03FrameCamPicRxAns[i] != 0xFF) && (zIhuVmmwCamUlcdsc03FrameCamPicRxAns[i] != rcvBuffer[i]))
@@ -137,7 +137,7 @@ UINT32 ihu_vmmw_cam_ulcdsc03_uart_frame_procedure_take_picture(void)
 	
 	//等待摄像头启动拍照程序的结果
 	memset(rcvBuffer, 0, sizeof(rcvBuffer));
-	if (ihu_bsp_stm32_sps_cam_rcv_data_timeout(rcvBuffer, IHU_VMMW_CAM_UART_FRAME_SIZE, IHU_VMMW_CAM_UART_PICTURE_MAX_DELAY) == BSP_FAILURE)
+	if (ihu_l1hd_sps_cam_rcv_data_timeout(rcvBuffer, IHU_VMMW_CAM_UART_FRAME_SIZE, IHU_VMMW_CAM_UART_PICTURE_MAX_DELAY) == BSP_FAILURE)
 		return 0;
 	for (i = 0; i < 3; i++){
 		if ((zIhuVmmwCamUlcdsc03FrameCamPicRxComp[i] != 0xFF) && (zIhuVmmwCamUlcdsc03FrameCamPicRxComp[i] != rcvBuffer[i]))
@@ -162,13 +162,13 @@ UINT16 ihu_vmmw_cam_ulcdsc03_uart_frame_procedure_fetch_picture(UINT8 *buffer, U
 	indexHigh = ((index & 0xFF00)>>8);
 	zIhuVmmwCamUlcdsc03FrameCamPicTxPkg[IHU_VMMW_CAM_UART_FRAME_SIZE-2] = indexLow;
 	zIhuVmmwCamUlcdsc03FrameCamPicTxPkg[IHU_VMMW_CAM_UART_FRAME_SIZE-1] = indexHigh;
-	if (ihu_bsp_stm32_sps_cam_send_data(zIhuVmmwCamUlcdsc03FrameCamPicTxPkg, IHU_VMMW_CAM_UART_FRAME_SIZE) == BSP_FAILURE)
+	if (ihu_l1hd_sps_cam_send_data(zIhuVmmwCamUlcdsc03FrameCamPicTxPkg, IHU_VMMW_CAM_UART_FRAME_SIZE) == BSP_FAILURE)
 		return 0;
 	ihu_usleep(100);	
 
 	//接收摄像头应答
 	memset(buffer, 0, sizeof(buffer));
-	if (ihu_bsp_stm32_sps_cam_rcv_data_timeout(buffer, sizeof(buffer), IHU_VMMW_CAM_UART_RX_MAX_DELAY) == BSP_FAILURE)
+	if (ihu_l1hd_sps_cam_rcv_data_timeout(buffer, sizeof(buffer), IHU_VMMW_CAM_UART_RX_MAX_DELAY) == BSP_FAILURE)
 		return 0;
 	if ((buffer[0] != indexLow) || (buffer[1] != indexHigh))
 		return 0;
