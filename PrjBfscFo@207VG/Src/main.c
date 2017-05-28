@@ -71,7 +71,7 @@ uint8_t zIhuUartRxBuffer[6];
 uint8_t zIhuSpiRxBuffer[2];
 uint8_t zIhuI2cRxBuffer[2];
 extern WeightSensorParamaters_t					zWeightSensorParam;
-
+extern WmcInventory_t										zWmcInvenory;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -106,7 +106,7 @@ int main(void)
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
-	
+
   /* Configure the system clock */
   SystemClock_Config();
 
@@ -144,7 +144,14 @@ int main(void)
   //HAL_SPI_Receive_IT(&hspi2,&zIhuSpiRxBuffer[1],1);
   HAL_I2C_Slave_Receive_IT(&hi2c1,&zIhuI2cRxBuffer[0],1);
   //HAL_CAN_Receive_IT(&hcan2, 1);
+	
+	/* 
+	** THIS IS USED TO INIT CAN INTERFACE:
+	** MAKE SURE bsp_can_config_filter() called after bsp_can_init() & func_bfsc_hw_init();
+	*/
 	bsp_can_init(&hcan1, 0x10);
+	//func_bfsc_hw_init(&zWmcInvenory);
+	//bsp_can_config_filter(&hcan1, WMC_CAN_ID);
 	HAL_CAN_Receive_IT(&hcan1, 0);
 	
 	//Set_CS5532();
@@ -155,6 +162,9 @@ int main(void)
 	ihu_bsp_stm32_led_commu_f2board_on();
 	ihu_bsp_stm32_led_serv1_f2board_on();
 	ihu_bsp_stm32_led_work_state_f2board_on();
+	
+	/* CREATE IHU VM */
+	ihu_vm_main();
 	
   /* USER CODE END 2 */
 

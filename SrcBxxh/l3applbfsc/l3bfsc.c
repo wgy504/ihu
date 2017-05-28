@@ -175,9 +175,9 @@ OPSTAT fsm_bfsc_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 	zIhuL3bfscMotoRecoverTimes = 0;
 
   // start a timer to send startup ind 
-	ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_1S_BFSC_STARTUP_IND, \
-		zIhuSysEngPar.timer.array[TIMER_ID_1S_BFSC_STARTUP_IND].dur, TIMER_TYPE_PERIOD, 
-		zIhuSysEngPar.timer.array[TIMER_ID_1S_BFSC_STARTUP_IND].gradunarity);
+	ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_10MS_BFSC_STARTUP_IND, \
+		zIhuSysEngPar.timer.array[TIMER_ID_10MS_BFSC_STARTUP_IND].dur, TIMER_TYPE_PERIOD, 
+		zIhuSysEngPar.timer.array[TIMER_ID_10MS_BFSC_STARTUP_IND].gradunarity);
 	if (ret == IHU_FAILURE){
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_BFSC]++;
 		IhuErrorPrint("L3BFSC: Error start TIMER_ID_1S_BFSC_STARTUP_IND\n");
@@ -316,7 +316,10 @@ OPSTAT func_bfsc_hw_init(WmcInventory_t *pwi)
 	pwi->motor_type = 0x03;
 	pwi->wmc_id.wmc_id = GetWmcId();               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */
 	IhuDebugPrint("L3BFSC: func_bfsc_hw_init: wmc_id = [0x%02X]\n", pwi->wmc_id);
-	
+
+	extern CAN_HandleTypeDef hcan1;
+	bsp_can_config_filter(&hcan1, WMC_CAN_ID);
+
 	return IHU_SUCCESS;
 }
 
@@ -935,7 +938,7 @@ void func_bfsc_stm_main_recovery_from_fault(void)
 	return;
 }
 
-
+static long number_of_wmc_startind = 0;
 OPSTAT fsm_bfsc_wmc_startind_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
   OPSTAT ret;
@@ -948,7 +951,7 @@ OPSTAT fsm_bfsc_wmc_startind_time_out(UINT8 dest_id, UINT8 src_id, void * param_
 	}
 	memcpy(&rcv, param_ptr, param_len);
 
-	if(rcv.timeId == TIMER_ID_1S_BFSC_STARTUP_IND)
+	if(rcv.timeId == TIMER_ID_10MS_BFSC_STARTUP_IND)
 	{
 		msg_struct_l3bfsc_wmc_startup_ind_t snd;
 		memset(&snd, 0, sizeof(msg_struct_l3bfsc_wmc_startup_ind_t));
@@ -956,14 +959,16 @@ OPSTAT fsm_bfsc_wmc_startind_time_out(UINT8 dest_id, UINT8 src_id, void * param_
 		snd.msgid = (MSG_ID_L3BFSC_WMC_STARTUP_IND);
 		memcpy(&snd.wmc_inventory, &zWmcInvenory, sizeof(WmcInventory_t));
 
-    IhuDebugPrint("send WMC_START_IND (%d bytes): 0x%08x\n", snd.length, *(UINT32 *)&snd);
+		number_of_wmc_startind++;
+    IhuDebugPrint("send WMC_START_IND (%d bytes, %d times): 0x%08x\n", snd.length, number_of_wmc_startind, *(UINT32 *)&snd);
 		ret = ihu_message_send(MSG_ID_L3BFSC_WMC_STARTUP_IND, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length);
-		if (ret == IHU_FAILURE){
+ 		if (ret == IHU_FAILURE){
 			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC], zIhuVmCtrTab.task[TASK_ID_CANVELA]);
 			return IHU_FAILURE;
 		}
 	}
 
+	
 	return IHU_SUCCESS;
 }
 
@@ -972,7 +977,7 @@ OPSTAT fsm_bfsc_wmc_inited_config_req(UINT8 dest_id, UINT8 src_id, void * param_
 	OPSTAT ret;
 
 	// stop the timer TIMER_ID_1S_BFSC_STARTUP_IND
-	ihu_timer_stop(TASK_ID_BFSC, TIMER_ID_1S_BFSC_STARTUP_IND, zIhuSysEngPar.timer.array[TIMER_ID_1S_BFSC_STARTUP_IND].gradunarity);
+	ihu_timer_stop(TASK_ID_BFSC, TIMER_ID_10MS_BFSC_STARTUP_IND, zIhuSysEngPar.timer.array[TIMER_ID_10MS_BFSC_STARTUP_IND].gradunarity);
 	
 	// forward the config message to next state
 	ret = ihu_message_send(MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ, TASK_ID_BFSC, TASK_ID_BFSC, param_ptr, param_len);
@@ -990,6 +995,10 @@ OPSTAT fsm_bfsc_wmc_inited_config_req(UINT8 dest_id, UINT8 src_id, void * param_
 	return IHU_SUCCESS;
 }
 
+/*
+**
+*/
+static long number_of_wmc_set_config_req = 0;
 OPSTAT fsm_bfsc_wmc_set_config_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)	//MYC
 {
 	OPSTAT ret = IHU_SUCCESS;
@@ -1001,8 +1010,10 @@ OPSTAT fsm_bfsc_wmc_set_config_req(UINT8 dest_id, UINT8 src_id, void *param_ptr,
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_wmc_set_config_req_t)))
 		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);
-	
-	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_set_config_req_t: rcv.msgid = 0x%08X, rcv.length = %d\r\n", rcv.msgid, rcv.length);
+
+	number_of_wmc_set_config_req++;	
+	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_set_config_req_t (%d times): rcv.msgid = 0x%08X, rcv.length = %d\r\n", 
+									number_of_wmc_set_config_req, rcv.msgid, rcv.length);
 	
 	/* PROCESS TO BE ADDED */
 	/* !!!!!!!!!!!!!!!!!!!!*/
@@ -1074,12 +1085,12 @@ OPSTAT fsm_bfsc_wmc_start_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT
 	if (ERROR_CODE_NO_ERROR == error_code)
 	{
     // start a timer to read weight sensor
-  	ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_1S_BFSC_PERIOD_SCAN, \
-  		zIhuSysEngPar.timer.array[TIMER_ID_1S_BFSC_PERIOD_SCAN].dur, TIMER_TYPE_PERIOD, 
-  		zIhuSysEngPar.timer.array[TIMER_ID_1S_BFSC_PERIOD_SCAN].gradunarity);
+  	ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_10MS_BFSC_PERIOD_SCAN, \
+  		zIhuSysEngPar.timer.array[TIMER_ID_10MS_BFSC_PERIOD_SCAN].dur, TIMER_TYPE_PERIOD, 
+  		zIhuSysEngPar.timer.array[TIMER_ID_10MS_BFSC_PERIOD_SCAN].gradunarity);
   	if (ret == IHU_FAILURE){
   		zIhuSysStaPm.taskRunErrCnt[TASK_ID_BFSC]++;
-  		IhuErrorPrint("L3BFSC: Error start TIMER_ID_1S_BFSC_PERIOD_SCAN\n");
+  		IhuErrorPrint("L3BFSC: Error start TIMER_ID_10MS_BFSC_PERIOD_SCAN\n");
   		return IHU_FAILURE;
   	}
 	}
@@ -1143,7 +1154,7 @@ OPSTAT fsm_bfsc_wmc_stop_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT1
 	if (ERROR_CODE_NO_ERROR == error_code)
 	{
 	  // stop the timer TIMER_ID_1S_BFSC_PERIOD_SCAN
-	  ihu_timer_stop(TASK_ID_BFSC, TIMER_ID_1S_BFSC_PERIOD_SCAN, zIhuSysEngPar.timer.array[TIMER_ID_1S_BFSC_PERIOD_SCAN].gradunarity);
+	  ihu_timer_stop(TASK_ID_BFSC, TIMER_ID_10MS_BFSC_PERIOD_SCAN, zIhuSysEngPar.timer.array[TIMER_ID_10MS_BFSC_PERIOD_SCAN].gradunarity);
     
 		FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_CONFIGURATION);
 		IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_stop_req_t: Set to FSM_STATE_BFSC_CONFIGURATION\r\n");
@@ -1185,9 +1196,15 @@ OPSTAT fsm_bfsc_wmc_combin_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UIN
 }
 
 
+long number_of_wmc_combin_timeout = 0;
+extern long counter_can_tx_nok;
+extern long counter_can_tx_total;
+extern long counter_can_rx_nok;
+extern long counter_can_rx_total;
+
 OPSTAT fsm_bfsc_wmc_combine_timeout(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)
 {
-  OPSTAT ret;
+  OPSTAT ret = SUCCESS;
   msg_struct_com_time_out_t rcv;
 
   //Receive message and copy to local variable
@@ -1198,7 +1215,7 @@ OPSTAT fsm_bfsc_wmc_combine_timeout(UINT8 dest_id, UINT8 src_id, void *param_ptr
 	}
 	memcpy(&rcv, param_ptr, param_len);
   
-	if(rcv.timeId == TIMER_ID_1S_BFSC_PERIOD_SCAN)
+	if(rcv.timeId == TIMER_ID_10MS_BFSC_PERIOD_SCAN)
 	{
     // send weight indication
 		msg_struct_l3bfsc_wmc_weight_ind_t snd;
@@ -1209,10 +1226,19 @@ OPSTAT fsm_bfsc_wmc_combine_timeout(UINT8 dest_id, UINT8 src_id, void *param_ptr
     snd.weight_ind.average_weight = WeightSensorReadCurrent(&zWeightSensorParam);  // read weight sensor
     snd.weight_ind.weight_event = WEIGHT_EVENT_ID_LOAD;
 		
+		
 		ret = ihu_message_send(MSG_ID_L3BFSC_WMC_WEIGHT_IND, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length);
 		if (ret == IHU_FAILURE){
 			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC], zIhuVmCtrTab.task[TASK_ID_CANVELA]);
 			return IHU_FAILURE;
+		}
+		{
+			number_of_wmc_combin_timeout++;
+			if(0 == (number_of_wmc_combin_timeout % 100))
+			{
+				printf("%d:T:%d,%d,R:%d,%d,W+:%d\r\n",osKernelSysTick(), counter_can_tx_nok, counter_can_tx_total, counter_can_rx_nok, counter_can_rx_total, number_of_wmc_combin_timeout);
+				//IhuErrorPrint("L3BFSC: Send Weight Ind (%d times)\r\n", number_of_wmc_combin_timeout);
+			}
 		}
 	}
 

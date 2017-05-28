@@ -64,7 +64,6 @@ extern WeightSensorParamaters_t					zWeightSensorParam;
 
 /* Function prototypes -------------------------------------------------------*/
 void StartDefaultTask(void const * argument);
-void blk230_test_task(void const * argument);
 void blk230_task(void const * argument);
 void Callback01(void const * argument);
 
@@ -163,7 +162,6 @@ void PostSleepProcessing(uint32_t *ulExpectedIdleTime)
 /* USER CODE END PREPOSTSLEEP */
 
 /* Init FreeRTOS */
-#define IHU_MAIN
 
 void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN Init */
@@ -177,13 +175,11 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
   /* USER CODE END RTOS_SEMAPHORES */
-  
-#ifdef IHU_MAIN
+
   /* Create the timer(s) */
   /* definition and creation of myTimer01 */
   osTimerDef(myTimer01, Callback01);
   myTimer01Handle = osTimerCreate(osTimer(myTimer01), osTimerPeriodic, NULL);
-#endif
 
   /* USER CODE BEGIN RTOS_TIMERS */
   /* start timers, add new ones, ... */
@@ -191,23 +187,21 @@ void MX_FREERTOS_Init(void) {
 
   /* Create the thread(s) */
   /* definition and creation of defaultTask */
-  //osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 512);
-  //defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
+//  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 512);
+//  defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
   /* definition and creation of myTask02 */
   osThreadDef(myTask02, blk230_task, osPriorityNormal, 0, 512);
   myTask02Handle = osThreadCreate(osThread(myTask02), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
-  /* add threads, ... */
+
   /* USER CODE END RTOS_THREADS */
 
-#ifdef IHU_MAIN
   /* Create the queue(s) */
   /* definition and creation of myQueue01 */
   osMessageQDef(myQueue01, 16, uint16_t);
   myQueue01Handle = osMessageCreate(osMessageQ(myQueue01), NULL);
-#endif
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
@@ -266,18 +260,17 @@ void StartDefaultTask(void const * argument)
   /* USER CODE END StartDefaultTask */
 }
 
-/* blk230_test_task function */
-void blk230_test_task(void const * argument)
-{
-  /* USER CODE BEGIN blk230_test_task */
-	//blk230_test_task_entry(argument);
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
-  /* USER CODE END blk230_test_task */
-}
+///* blk230_task function */
+//void blk230_task(void const * argument)
+//{
+//  /* USER CODE BEGIN blk230_task */
+//  /* Infinite loop */
+//  for(;;)
+//  {
+//    osDelay(1);
+//  }
+//  /* USER CODE END blk230_task */
+//}
 
 /* Callback01 function */
 void Callback01(void const * argument)

@@ -67,6 +67,14 @@ int ihu_bsp_stm32_can_slave_hw_init(void)
 * 返回    : 无 
 * 说明    : 无
 *******************************************************************************/
+long counter_can_tx_nok = 0;
+long counter_can_tx_total = 0;
+long counter_can_rx_nok = 0;
+long counter_can_rx_total = 0;
+#define TEST_PRINT_PERIOD_COUNTER		500
+
+extern long number_of_wmc_combin_timeout;
+
 int ihu_bsp_stm32_can_send_data(uint8_t* buff, uint16_t len)
 { 
 	//这里是帧处理的过程，未来待完善数据的发送接收处理过程
@@ -87,8 +95,8 @@ int ihu_bsp_stm32_can_send_data(uint8_t* buff, uint16_t len)
   IHU_BSP_STM32_CAN_IAU_HANDLER.pTxMsg->RTR = CAN_RTR_DATA;
   IHU_BSP_STM32_CAN_IAU_HANDLER.pTxMsg->IDE = CAN_ID_EXT;
 	
-	IhuDebugPrint("CANVELA: ihu_bsp_stm32_can_send_data: To send %d bytes [%02X %02X %02X %02X %02X %02X %02X %02X]\n", \
-				len, buff[0], buff[1], buff[2], buff[3], buff[4], buff[5], buff[6], buff[7]);
+//	IhuDebugPrint("CANVELA: CAN Send %d bytes [%02X %02X %02X %02X %02X %02X %02X %02X]\n", \
+//				len, buff[0], buff[1], buff[2], buff[3], buff[4], buff[5], buff[6], buff[7]);
 	
 	for(;;) // 8 byte is the max frame lenth for CAN
 	{
@@ -109,6 +117,7 @@ int ihu_bsp_stm32_can_send_data(uint8_t* buff, uint16_t len)
 		taskENTER_CRITICAL();
 		status = HAL_CAN_Transmit(&hcan1, IHU_BSP_STM32_CAN_TX_MAX_DELAY);
 		taskEXIT_CRITICAL();
+		counter_can_tx_total++;
 		/* CAN Transmit need to disable Interrupt */
 		
 		
@@ -125,7 +134,7 @@ int ihu_bsp_stm32_can_send_data(uint8_t* buff, uint16_t len)
 			ihu_bsp_stm32_led_work_state_f2board_toggle();
 			if(CanTotalFrameLen == len) 
 			{
-				IhuDebugPrint("CANVELA: ihu_bsp_stm32_can_send_data: CanTotalFrameLen(%d)== len(%d)\n", CanTotalFrameLen, len);
+				//IhuDebugPrint("CANVELA: ihu_bsp_stm32_can_send_data: CanTotalFrameLen(%d)== len(%d)\n", CanTotalFrameLen, len);
 				break; //if all has been sent, break the loop, and exit with normal exit.
 			}
 			
@@ -134,12 +143,21 @@ int ihu_bsp_stm32_can_send_data(uint8_t* buff, uint16_t len)
 		}
 		else
 		{
-			IhuErrorPrint("CANVELA: ihu_bsp_stm32_can_send_data: HAL_CAN_Transmit NOK: %d TSR=0x%x\n", status, hcan1.Instance->TSR);
+			counter_can_tx_nok++;
+			IhuErrorPrint("CANVELA: HAL_CAN_Transmit NOK: status=%d, total_nok=%d, MCR=0x%x, MSR=0x%x, TSR=0x%x, ESR=0x%x\n", 
+											status, counter_can_tx_nok, hcan1.Instance->MCR, hcan1.Instance->MSR, 
+											hcan1.Instance->TSR, hcan1.Instance->ESR);
+			
 			//TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			//TODO: !!!!!!!!!!! CAN Link Faifure NEED TO BE CONSIDERRED !!!!!!!!!!
 			//TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			return BSP_FAILURE;
-		}		
+		}
+		if( 0 == (counter_can_tx_total % TEST_PRINT_PERIOD_COUNTER))
+		{
+			printf("%d:T+:%d,%d,R:%d,%d,W:%d\r\n",osKernelSysTick(), counter_can_tx_nok, counter_can_tx_total, counter_can_rx_nok, counter_can_rx_total, number_of_wmc_combin_timeout);				
+		}
+		
 	}
 	return BSP_SUCCESS;
 }
@@ -299,17 +317,36 @@ void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef* CanHandle)
   		*(uint32_t *)(&CanHandle->pRxMsg->Data[4])
   		);
 */
-  if(CanHandle->pRxMsg->StdId == WMC_CAN_ID || CanHandle->pRxMsg->ExtId == WMC_CAN_ID)
+	/* PAY ATTENTION THAT THE MASK */
+  if(CanHandle->pRxMsg->StdId == WMC_CAN_ID || (CanHandle->pRxMsg->ExtId) == WMC_CAN_ID)
+	//if( ((CanHandle->pRxMsg->ExtId & 0x00F00000) == AWS_TO_WMC_CAN_ID_PREFIX) &&
+	//	  ( (CanHandle->pRxMsg->ExtId & (1<<WMC_CAN_ID_SUFFIX)) == 1))
+  
   {
   	l2packet_rx_bytes(frame_desc, CanHandle->pRxMsg->Data, CanHandle->pRxMsg->DLC);
   }
 	
 	/* Receive again */
 	status = HAL_CAN_Receive_IT(CanHandle, CAN_FIFO0);
+	counter_can_rx_total++;
+	
 	if(status != HAL_OK)
 	{
-		//printf("HAL_CAN_Receive_IT() error. status = \n", status);
+		counter_can_rx_nok++;
+		printf("HAL_CAN_Receive_IT() NOK, status=%d, total_nok=%d, MCR=%d, MSR=%d, TSR=%d, ESR=%d\n", 
+		    status, counter_can_rx_nok, hcan1.Instance->MCR, hcan1.Instance->MSR, 
+				hcan1.Instance->TSR, hcan1.Instance->ESR);
 	}
+	else
+	{
+			ihu_bsp_stm32_led_commu_f2board_toggle();
+	}
+	
+  if (0 == ((counter_can_rx_total) % TEST_PRINT_PERIOD_COUNTER))
+	{
+		printf("%d:T:%d,%d,R+:%d,%d,W:%d\r\n",osKernelSysTick(), counter_can_tx_nok, counter_can_tx_total, counter_can_rx_nok, counter_can_rx_total, number_of_wmc_combin_timeout);				
+	}
+
 }
 
 void app_can_loopback_callback(IHU_HUITP_L2FRAME_Desc_t *pdesc)
@@ -366,6 +403,10 @@ int bsp_can_start_rx(CAN_HandleTypeDef* CanHandle, void (*app_rx_callback)(), ui
     //printf("HAL_CAN_Receive_IT() error... status = %d\n", status);
 		return (1);
 	}
+	else
+	{
+			ihu_bsp_stm32_led_commu_f2board_toggle();
+	}
 	
 	return 0;
 }
@@ -397,6 +438,42 @@ uint32_t bsp_can_transmit(CAN_HandleTypeDef* CanHandle, uint8_t *buffer, uint32_
 	}
 
 	return length;
+}
+
+void bsp_can_config_filter(CAN_HandleTypeDef* CanHandle, uint32_t can_id)
+{
+	CAN_FilterConfTypeDef  sFilterConfig;
+	
+	IhuErrorPrint("bsp_can_config_filter() can_id = 0x%08x\r\n", can_id);
+	
+	/* ref to 1) http://m.blog.csdn.net/article/details?id=52317532 */
+	/* ref to 2) Figure 305. Filter bank scale configuration - register organization  */
+	/*            in DocID15403 Rev 7, Page 792, Reference Manuel 0033*/
+	/* 32 Bit Mask Mode */
+	/* FilterIdHigh & FilterIdLow => ID after bit Mask */
+	/* FilterMaskIdHigh & FilterMaskIdLow => Mask */
+	/* For both ID and Mask, low 3 bit are [bit2=IDE], [bit1=RTR], [bit0=0] */
+	/* IDE => Identifier Extension Bit, StdId (0) or ExtId (1) */
+	/* RTR => Remote Transmission Request, Data Frame (0), Remote Frame (1) */
+    
+	/*##-2- Configure the CAN Filter ###########################################*/
+  sFilterConfig.FilterNumber = 0;
+  sFilterConfig.FilterMode = CAN_FILTERMODE_IDMASK;
+  sFilterConfig.FilterScale = CAN_FILTERSCALE_32BIT;
+  sFilterConfig.FilterIdHigh = ((can_id <<3) >> 16) & 0xFFFF;
+  sFilterConfig.FilterIdLow = ((can_id <<3) & 0xFFFF) | 0x04;   // Extend Frame & Data Frame //
+  sFilterConfig.FilterMaskIdHigh = ((((can_id <<3) >> 16) & 0xFFFF));
+  sFilterConfig.FilterMaskIdLow = (((can_id <<3) & 0xFFFF)) | 0x04 ;  // Extend Frame & Data Frame //
+  sFilterConfig.FilterFIFOAssignment = 0;
+  sFilterConfig.FilterActivation = ENABLE;
+  sFilterConfig.BankNumber = 14;
+	
+	if(HAL_CAN_ConfigFilter(CanHandle, &sFilterConfig) != HAL_OK)
+  {
+    /* Filter configuration Error */
+		IhuErrorPrint("bsp_can_filter() NOK\r\n");
+    return;
+  }
 }
 
 void bsp_can_init(CAN_HandleTypeDef* CanHandle, uint32_t std_id)

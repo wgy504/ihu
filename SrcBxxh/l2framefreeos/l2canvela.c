@@ -790,7 +790,7 @@ OPSTAT WmcAwsMsgCheck(void * param_ptr, UINT16 msg_len)
 	/* Get MsgId */
 	msgid = pMsg->msgid;
 	ihu_msgid_to_string(msgid, s3);
-	IhuDebugPrint("CANVELA: WmcAwsMsgCheck: received msgid = [0x%08X]%s, msg_len = [%d]\n", msgid, s3, msg_len);
+	//IhuDebugPrint("CANVELA: WmcAwsMsgCheck: received msgid = [0x%08X]%s, msg_len = [%d]\n", msgid, s3, msg_len);
 	switch (msgid)
 	{
 		case MSG_ID_L3BFSC_WMC_STARTUP_IND:
@@ -950,7 +950,7 @@ OPSTAT fsm_canvela_bfsc_l2frame_snd(UINT8 dest_id, UINT8 src_id, void * param_pt
 	pFrameHeader->len = param_len + MAX_WMC_CONTROL_MSG_HEADER_LEN;
 	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
 	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], param_ptr, param_len);
-	IhuDebugPrint("CANVELA: fsm_canvela_bfsc_l2frame_snd: start = [0x%02X], chksum = [0x%02X], len = [%d]\n", pFrameHeader->start, pFrameHeader->chksum, pFrameHeader->len);
+	//IhuDebugPrint("CANVELA: fsm_canvela_bfsc_l2frame_snd: start = [0x%02X], chksum = [0x%02X], len = [%d]\n", pFrameHeader->start, pFrameHeader->chksum, pFrameHeader->len);
 	
 	//发送FRAME出去
 //	strIhuCanvelaCmdFrame_t snd;

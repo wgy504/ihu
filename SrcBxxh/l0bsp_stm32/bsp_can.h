@@ -49,6 +49,7 @@ extern int ihu_bsp_stm32_can_spare1_rcv_data(uint8_t* buff, uint16_t len);
 int bsp_can_start_rx(CAN_HandleTypeDef* CanHandle, void (*app_rx_callback)(), uint8_t *pRxBuffPtr, uint16_t rxBufferSize, void *user_data);
 uint32_t bsp_can_transmit(CAN_HandleTypeDef* CanHandle, uint8_t *buffer, uint32_t length, uint32_t timeout);
 void bsp_can_init(CAN_HandleTypeDef* CanHandle, uint32_t std_id);
+void bsp_can_config_filter(CAN_HandleTypeDef* CanHandle, uint32_t can_id);
 
 
 #ifdef __cplusplus

@@ -710,12 +710,12 @@ typedef struct msg_struct_l3bfsc_wmc_msg_header
 
 /* 3: WMC to AWS: */
 /* CAN ID: 0x0030 0000 (WMC Node ID 0) to 0x0030 000F (WMC Node ID 15) */
-#define WMC_TO_AWS_CAN_ID_PREFIX		(0x00300000U)
+#define WMC_TO_AWS_CAN_ID_PREFIX		(0x00200000U)
 //#define WMC_TO_AWS_CAN_ID_SUFFIX		(mwc_id)
 
 /* 4: WMC-S to AWS: */
 /* CAN ID: 0x0030 0010 (Node ID 0) */
-#define WMCS_TO_AWS_CAN_ID				(0x00300010U)
+#define WMCS_TO_AWS_CAN_ID				(0x00200010U)
 
 /* Can ID for communication between AWS and WMC */
 

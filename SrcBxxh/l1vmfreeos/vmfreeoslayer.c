@@ -248,8 +248,8 @@ IhuSysEngTimerStaticCfg_t zIhuSysEngTimerStaticCfg[] ={
   //{TIMER_ID_1S_CCL_ADC_WORKING_PERIOD_SCAN,        "TID_1S_CCL_ADC_WORKING_PERIOD_SCAN",     3,       TIMER_RESOLUTION_1S},  
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID) 
   {TIMER_ID_1S_LEDPISCES_PERIOD_SCAN,              "TID_1S_LEDPISCES_PERIOD_SCAN",           4,       TIMER_RESOLUTION_1S},
-  {TIMER_ID_1S_BFSC_STARTUP_IND,                   "TIMER_ID_1S_BFSC_STARTUP_IND",           1,       TIMER_RESOLUTION_1S},
-  {TIMER_ID_1S_BFSC_PERIOD_SCAN,                   "TID_1S_BFSC_PERIOD_SCAN",                1,       TIMER_RESOLUTION_1S},
+  {TIMER_ID_10MS_BFSC_STARTUP_IND,                 "TIMER_ID_1S_BFSC_STARTUP_IND",           10,      TIMER_RESOLUTION_10MS},
+  {TIMER_ID_10MS_BFSC_PERIOD_SCAN,                 "TID_1S_BFSC_PERIOD_SCAN",                10,       TIMER_RESOLUTION_10MS},
   {TIMER_ID_1S_BFSC_L3BFSC_WAIT_WEIGHT_TIMER,      "TID_1S_BFSC_L3BFSC_WAIT_WEIGHT_TIMER",   25,      TIMER_RESOLUTION_1S},
   {TIMER_ID_1S_BFSC_L3BFSC_ROLL_OUT_TIMER,         "TID_1S_BFSC_L3BFSC_ROLL_OUT_TIMER",      3,       TIMER_RESOLUTION_1S},
   {TIMER_ID_1S_BFSC_L3BFSC_GIVE_UP_TIMER,          "TID_1S_BFSC_L3BFSC_GIVE_UP_TIMER",       5,       TIMER_RESOLUTION_1S},
@@ -813,7 +813,7 @@ OPSTAT ihu_msgid_to_string(UINT8 id, char *string)
 	char tmp[IHU_SYSDIM_MSGID_NAME_LEN_MAX-2]="";
 	
 	if (id < MSG_ID_COM_MIN || id >= MSG_ID_COM_MAX)
-		IHU_ERROR_PRINT_TASK(TASK_ID_VMFO, "VMFO: Error Message Id input!\n");
+		IHU_ERROR_PRINT_TASK(TASK_ID_VMFO, "VMFO: Error Message Id (%d) input!\n", id);
 
 	strcpy(string, "[");
 	if (strlen(zIhuSysEngPar.traceList.msg[id].msgName)>0){
@@ -1488,7 +1488,7 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 			ihu_taskid_to_string(src_id, s2);
 			ihu_msgid_to_string(msg_id, s3);
 			if (msg_id != MSG_ID_COM_TIME_OUT){
-				IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
+				//IhuDebugPrint("MSGTRC: MSGID=%02X%s,DID=%02X%s,SID=%02X%s,LEN=%d\n", msg_id, s3, dest_id, s1, src_id, s2, param_len);
 			}
 			break;
 

@@ -840,6 +840,7 @@ int32_t WeightSensorReadCurrent(WeightSensorParamaters_t *pwsp)
 	uint32_t temp = 0;
 	int32_t temp2 = 0;
 	int32_t temp3 = 0;
+	static uint8_t sw = 0;
 	
 	if(NULL == pwsp)
 	{
@@ -870,18 +871,38 @@ int32_t WeightSensorReadCurrent(WeightSensorParamaters_t *pwsp)
 	if(wsckb.k == 0)
 		return 0xFFFFFFFF;
 	
+	if(0 == temp)
+	{
+		if(1 == sw)
+		{
+			temp = 10000;
+			sw = 0;
+		}
+		else
+		{
+			temp = 20000;
+			sw = 1;
+		}
+	}
+	
 	temp2 = temp - wsckb.b;
 	temp3 = temp2 / wsckb.k;
 		
 //	temp2 = temp-pwsp->WeightSensorCalibrationZeroAdcValue;
 //	temp3 = (temp2*pwsp->WeightSensorCalibrationFullWeight)/(pwsp->WeightSensorCalibrationFullAdcValue-pwsp->WeightSensorCalibrationZeroAdcValue);
 	
-	IhuDebugPrint("l2adc_cs5532: WeightSensorReadCurrent: temp=%d, temp2=%d, ZeroAdc=%d, FullAdc=%d, FullWeight=%d, k=%f, b=%d, temp3=%d\r\n",
-								temp, temp2, pwsp->WeightSensorCalibrationZeroAdcValue, 
-								pwsp->WeightSensorCalibrationFullAdcValue, pwsp->WeightSensorCalibrationFullWeight, 
-	              wsckb.k, wsckb.b, temp3);
+//	IhuDebugPrint("l2adc_cs5532: WeightSensorReadCurrent: temp=%d, temp2=%d, ZeroAdc=%d, FullAdc=%d, FullWeight=%d, k=%f, b=%d, temp3=%d\r\n",
+//								temp, temp2, pwsp->WeightSensorCalibrationZeroAdcValue, 
+//								pwsp->WeightSensorCalibrationFullAdcValue, pwsp->WeightSensorCalibrationFullWeight, 
+//	              wsckb.k, wsckb.b, temp3);
+//	printf("l2adc_cs5532: WeightSensorReadCurrent: temp=%d, temp2=%d, ZeroAdc=%d, FullAdc=%d, FullWeight=%d, k=%f, b=%d, temp3=%d\r\n",
+//								temp, temp2, pwsp->WeightSensorCalibrationZeroAdcValue, 
+//								pwsp->WeightSensorCalibrationFullAdcValue, pwsp->WeightSensorCalibrationFullWeight, 
+//	              wsckb.k, wsckb.b, temp3);
 
-	return temp3;
+	return temp; ///THIS IS ONLY FOR TEST
+	//return temp3;
+	
 }	
 
 uint32_t SpsGainToBitwidthMappingTable[WORDRATE_INDEX_NUMBER][WORDRATE_INDEX_NUMBER] = { 
