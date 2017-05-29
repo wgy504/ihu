@@ -13,7 +13,7 @@
  
  #include "l2canvela.h"
  #include "l2packet.h"
- #include "huitp.h"
+ #include "commsgbfsc.h"
  
  
 /*
@@ -56,10 +56,9 @@ IhuFsmStateItem_t IhuFsmCanvela[] =
 	//MYC update for state machine
 	{MSG_ID_L3BFSC_WMC_STARTUP_IND,					FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
 	{MSG_ID_L3BFSC_WMC_SET_CONFIG_RESP,			FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
-	{MSG_ID_L3BFSC_WMC_GET_CONFIG_RESP,			FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
 	{MSG_ID_L3BFSC_WMC_START_RESP,					FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
 	{MSG_ID_L3BFSC_WMC_STOP_RESP,						FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
-	{MSG_ID_L3BFSC_WMC_WEIGHT_IND,					FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
+	{MSG_ID_L3BFSC_WMC_NEW_WS_EVENT,				FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
 	{MSG_ID_L3BFSC_WMC_COMBIN_RESP,					FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
 	{MSG_ID_L3BFSC_WMC_FAULT_IND,						FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
 	{MSG_ID_L3BFSC_WMC_COMMAND_RESP,				FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
@@ -803,8 +802,8 @@ OPSTAT WmcAwsMsgCheck(void * param_ptr, UINT16 msg_len)
 			if(MSG_SIZE_L3BFSC_WMC_STOP_RESP == msg_len) return IHU_SUCCESS;
 			break;
 		
-		case MSG_ID_L3BFSC_WMC_WEIGHT_IND:
-			if(MSG_SIZE_L3BFSC_WMC_WEIGHT_IND == msg_len) return IHU_SUCCESS;
+		case MSG_ID_L3BFSC_WMC_NEW_WS_EVENT:
+			if(MSG_SIZE_L3BFSC_WMC_NEW_WS_EVENT == msg_len) return IHU_SUCCESS;
 			break;
 		
 		case MSG_ID_L3BFSC_WMC_COMBIN_REQ:
@@ -850,7 +849,7 @@ uint16_t InternalMsgIdMapToHuitpMsgId(uint32_t internal_msgid)
 			return HUITP_MSGID_sui_bfsc_start_resp;
 		case MSG_ID_L3BFSC_WMC_STOP_RESP:
 			return HUITP_MSGID_sui_bfsc_stop_resp;
-		case MSG_ID_L3BFSC_WMC_WEIGHT_IND:
+		case MSG_ID_L3BFSC_WMC_NEW_WS_EVENT:
 			return HUITP_MSGID_sui_bfsc_new_ws_event;
 		case MSG_ID_L3BFSC_WMC_COMBIN_RESP:
 			return HUITP_MSGID_sui_bfsc_ws_comb_out_resp;

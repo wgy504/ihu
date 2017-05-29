@@ -320,6 +320,7 @@ void msg_wmc_start_resp(error_code_t ec)
 
 		/* Build Message Content */
 		msg_wmc_start_resp.msgid = (MSG_ID_L3BFSC_WMC_START_RESP);
+		msg_wmc_start_resp.length = MSG_SIZE_L3BFSC_WMC_START_RESP;
     msg_wmc_start_resp.wmc_id = zWmcInvenory.wmc_id;
 		msg_wmc_start_resp.result.error_code = ec;
 		

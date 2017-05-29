@@ -1218,16 +1218,18 @@ OPSTAT fsm_bfsc_wmc_combine_timeout(UINT8 dest_id, UINT8 src_id, void *param_ptr
 	if(rcv.timeId == TIMER_ID_10MS_BFSC_PERIOD_SCAN)
 	{
     // send weight indication
-		msg_struct_l3bfsc_wmc_weight_ind_t snd;
-		memset(&snd, 0, sizeof(msg_struct_l3bfsc_wmc_weight_ind_t));
-		snd.length = sizeof(msg_struct_l3bfsc_wmc_weight_ind_t);
-		snd.msgid = (MSG_ID_L3BFSC_WMC_WEIGHT_IND);
+		msg_struct_l3bfsc_wmc_ws_event_t snd;
+		memset(&snd, 0, sizeof(msg_struct_l3bfsc_wmc_ws_event_t));
+		snd.length = sizeof(msg_struct_l3bfsc_wmc_ws_event_t);
+		snd.msgid = (MSG_ID_L3BFSC_WMC_NEW_WS_EVENT);
     snd.wmc_id = zWmcInvenory.wmc_id;
     snd.weight_ind.average_weight = WeightSensorReadCurrent(&zWeightSensorParam);  // read weight sensor
     snd.weight_ind.weight_event = WEIGHT_EVENT_ID_LOAD;
+		snd.weight_ind.repeat_times = 0;
 		
+		//printf("MSG_ID_L3BFSC_WMC_NEW_WS_EVENT: snd.length=%d, snd.msgid=%d(0x%x)\r\n",snd.length, snd.msgid);
 		
-		ret = ihu_message_send(MSG_ID_L3BFSC_WMC_WEIGHT_IND, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length);
+		ret = ihu_message_send(MSG_ID_L3BFSC_WMC_NEW_WS_EVENT, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length);
 		if (ret == IHU_FAILURE){
 			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC], zIhuVmCtrTab.task[TASK_ID_CANVELA]);
 			return IHU_FAILURE;

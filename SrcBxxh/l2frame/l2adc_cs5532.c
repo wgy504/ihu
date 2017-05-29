@@ -899,7 +899,7 @@ int32_t WeightSensorReadCurrent(WeightSensorParamaters_t *pwsp)
 //								temp, temp2, pwsp->WeightSensorCalibrationZeroAdcValue, 
 //								pwsp->WeightSensorCalibrationFullAdcValue, pwsp->WeightSensorCalibrationFullWeight, 
 //	              wsckb.k, wsckb.b, temp3);
-
+  temp = 10000 + (rand() % 5000) - 2500;
 	return temp; ///THIS IS ONLY FOR TEST
 	//return temp3;
 	
