@@ -8,13 +8,19 @@
 
 
 
+//= ZJL, 2017 May.27, CURRENT_SW_DELIVERY R03.140 =>CCL项目
+= 清理所有的无用状态机
+= 激活电平转换，高低电平换了
+= ccl.h中，告警周期10分钟改为1分钟，长周期监控周期8小时改为5分钟。未来量产需要改过来。
+
+//= ZJL, 2017 May.24, CURRENT_SW_DELIVERY R03.139 =>BFSC项目
+= HUITP.H，建立初始化的BFSC消息和结构体
 
 //= ZJL, 2017 May.19, CURRENT_SW_DELIVERY R03.138 =>CCL项目
 = 最后的修缮：摄像头的启动逻辑，先传输图像，然后再传输其它传感器数据，这样可以避免对于两个接收缓冲区的处理冲突问题
 = 基于新锁的工作逻辑，去掉对于LockTongue, LockTrigger, LockEnable的支持
 = 实施了一种简单的串行给锁具上电的方式，避免电流叠加冲击对于板子的影响
 = 详细定义了BEEP的PATTERN，不同状态将可以拉出不同的响声
-
 
 //= ZJL, 2017 May.17, CURRENT_SW_DELIVERY R03.137 =>CCL项目
 = 3. 串口摄像头 

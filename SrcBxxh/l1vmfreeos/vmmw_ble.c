@@ -195,7 +195,7 @@ OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_in_AT_cmd_mode(uint8_t *macAddr,
 			if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE) IhuDebugPrint("VMMWBLE: Not detect BLE module, trying to reconnecting!\n");
 		}
 		ihu_usleep(200);
-		if (repeatCnt == 0) IHU_ERROR_PRINT_BLEMOD("VMMWBLE: BLE sensor (HC05) in slave/broadcasting mode, not detected!\n");
+		if (repeatCnt == 0) IHU_ERROR_PRINT_BLEMOD("VMMWBLE: BLE sensor (HC05) in slave/broadcasting mode, 1st time run and not detected!\n");
 	}
 
 	//查阅版本
@@ -322,7 +322,7 @@ OPSTAT ihu_vmmw_blemod_hc05_uart_fetch_mac_addr_in_AT_cmd_mode(uint8_t *macAddr,
 			}
 		}
 		repeatCnt--;
-		if (repeatCnt == 0) IHU_ERROR_PRINT_BLEMOD("VMMWBLE: BLE read Equipment failure!\n");
+		if (repeatCnt == 0) IHU_ERROR_PRINT_BLEMOD("VMMWBLE: BLE module is running, but read external equipment failure!\n");
 	}
 
 	//设置BLE模块进入透传状态

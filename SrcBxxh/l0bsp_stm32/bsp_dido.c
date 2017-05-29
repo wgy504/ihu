@@ -231,13 +231,13 @@ int16_t ihu_bsp_stm32_dido_f2board_door3_restriction_read(void)
 //		return TRUE;	
 //}
 
-//4、  增加按钮启动识别信号输入：SW_FLAG为PB13（PIN52）高电平为按钮上电，低电平为RTC闹铃上电
+//4、  增加按钮启动识别信号输入：SW_FLAG为PB13（PIN52）低电平为按钮上电，高电平为RTC闹铃上电
 int16_t ihu_bsp_stm32_dido_f2board_lock_act_flag_read(void)
 {
 	if (BSP_STM32_DIDO_LOCK_ACT_FLAG_READ == GPIO_PIN_RESET)
-		return FALSE;
+		return TRUE;
 	else
-		return TRUE;	
+		return FALSE;	
 }
 
 void ihu_bsp_stm32_dido_f2board_lock4_do1_on(void)

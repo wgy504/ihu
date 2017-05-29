@@ -480,32 +480,6 @@ OPSTAT fsm_canvela_l3bfsc_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr
 
 uint16_t HuitpMsgIdMapToInternalMsgId(uint32_t huitp_msgid)
 {
-//	HUITP_MSGID_sui_bfsc_startup_ind                 = 0x3B90,
-//	//配置过程
-//	HUITP_MSGID_sui_bfsc_set_config_req              = 0x3B11,
-//	HUITP_MSGID_sui_bfsc_set_config_resp             = 0x3B91,
-//	//启动过程
-//	HUITP_MSGID_sui_bfsc_start_req                   = 0x3B12,
-//	HUITP_MSGID_sui_bfsc_start_resp                  = 0x3B92,
-//	HUITP_MSGID_sui_bfsc_stop_req                    = 0x3B13,
-//	HUITP_MSGID_sui_bfsc_stop_resp                   = 0x3B93,
-//	//重量汇报过程
-//	HUITP_MSGID_sui_bfsc_new_ws_event                = 0x3B94,
-//	HUITP_MSGID_sui_bfsc_repeat_ws_event             = 0x3B94,
-//	//组合出料过程
-//	HUITP_MSGID_sui_bfsc_ws_comb_out_req             = 0x3B15,
-//	HUITP_MSGID_sui_bfsc_ws_comb_out_resp            = 0x3B95,
-//	//抛料过程
-//	HUITP_MSGID_sui_bfsc_ws_give_up_req              = 0x3B16,
-//	HUITP_MSGID_sui_bfsc_ws_give_up_resp             = 0x3B96,
-//	//特殊命令过程（测试等过程）
-//	HUITP_MSGID_sui_bfsc_command_req                 = 0x3B17,
-//	HUITP_MSGID_sui_bfsc_command_resp                = 0x3B97,
-//	//差错过程
-//	HUITP_MSGID_sui_bfsc_fault_ind                   = 0x3B98,
-//	HUITP_MSGID_sui_bfsc_err_inq_cmd_req             = 0x3B19,
-//	HUITP_MSGID_sui_bfsc_err_inq_cmd_resp            = 0x3B99,
-//
 	switch (huitp_msgid)
 	{
 		case HUITP_MSGID_sui_bfsc_set_config_req:
@@ -866,32 +840,6 @@ OPSTAT WmcAwsMsgCheck(void * param_ptr, UINT16 msg_len)
 
 uint16_t InternalMsgIdMapToHuitpMsgId(uint32_t internal_msgid)
 {
-//	HUITP_MSGID_sui_bfsc_startup_ind                 = 0x3B90,
-//	//配置过程
-//	HUITP_MSGID_sui_bfsc_set_config_req              = 0x3B11,
-//	HUITP_MSGID_sui_bfsc_set_config_resp             = 0x3B91,
-//	//启动过程
-//	HUITP_MSGID_sui_bfsc_start_req                   = 0x3B12,
-//	HUITP_MSGID_sui_bfsc_start_resp                  = 0x3B92,
-//	HUITP_MSGID_sui_bfsc_stop_req                    = 0x3B13,
-//	HUITP_MSGID_sui_bfsc_stop_resp                   = 0x3B93,
-//	//重量汇报过程
-//	HUITP_MSGID_sui_bfsc_new_ws_event                = 0x3B94,
-//	HUITP_MSGID_sui_bfsc_repeat_ws_event             = 0x3B94,
-//	//组合出料过程
-//	HUITP_MSGID_sui_bfsc_ws_comb_out_req             = 0x3B15,
-//	HUITP_MSGID_sui_bfsc_ws_comb_out_resp            = 0x3B95,
-//	//抛料过程
-//	HUITP_MSGID_sui_bfsc_ws_give_up_req              = 0x3B16,
-//	HUITP_MSGID_sui_bfsc_ws_give_up_resp             = 0x3B96,
-//	//特殊命令过程（测试等过程）
-//	HUITP_MSGID_sui_bfsc_command_req                 = 0x3B17,
-//	HUITP_MSGID_sui_bfsc_command_resp                = 0x3B97,
-//	//差错过程
-//	HUITP_MSGID_sui_bfsc_fault_ind                   = 0x3B98,
-//	HUITP_MSGID_sui_bfsc_err_inq_cmd_req             = 0x3B19,
-//	HUITP_MSGID_sui_bfsc_err_inq_cmd_resp            = 0x3B99,
-//
 	switch (internal_msgid)
 	{
 		case MSG_ID_L3BFSC_WMC_STARTUP_IND:

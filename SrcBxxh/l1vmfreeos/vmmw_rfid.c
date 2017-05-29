@@ -1019,7 +1019,7 @@ OPSTAT ihu_vmmw_rfidmod_nrf24l01_spi_read_id(uint8_t *rfidAddr, uint8_t len)
 		else
 			 res = IHU_SUCCESS;
 	}
-	if (res == IHU_FAILURE) IHU_ERROR_PRINT_RFIDMOD("VMMWRFID: RFID sensor (NRF24L01) in RX mode, not detected!\n");
+	if (res == IHU_FAILURE) IHU_ERROR_PRINT_RFIDMOD("VMMWRFID: RFID sensor (NRF24L01) in RX mode, 1st time run and not detected!\n");
 
 	//再进入干活：这里先放3秒，太长的话，整个系统就太肉
 	tickTotal = 3;
@@ -1030,13 +1030,12 @@ OPSTAT ihu_vmmw_rfidmod_nrf24l01_spi_read_id(uint8_t *rfidAddr, uint8_t len)
 		tickTotal--;
 		func_rfidmod_nrf24l01_rx_mode();
 		ihu_usleep(100);
-		//ihu_sleep(5);
 		if(func_rfidmod_nrf24l01_rx_package(rfidAddr)==IHU_FAILURE)
 			 res = IHU_FAILURE;
 		else
 			 res = IHU_SUCCESS;
 	}	
-  if(res == IHU_FAILURE) IHU_ERROR_PRINT_RFIDMOD("VMMWRFID: RFID sensor (NRF24L01) in RX mode, can not receive peer package!\n");
+  if(res == IHU_FAILURE) IHU_ERROR_PRINT_RFIDMOD("VMMWRFID: RFID sensor (NRF24L01) in RX mode, RFID is runnning but can not receive peer package!\n");
 	
 	return IHU_SUCCESS;
 }

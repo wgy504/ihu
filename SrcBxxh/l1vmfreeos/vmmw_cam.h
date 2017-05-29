@@ -41,9 +41,6 @@ OPSTAT ihu_vmmw_cam_ulcdsc03_uart_frame_procedure_sync(void);
 uint32_t ihu_vmmw_cam_ulcdsc03_uart_frame_procedure_take_picture(void);
 UINT16 ihu_vmmw_cam_ulcdsc03_uart_frame_procedure_fetch_picture(UINT8 *buffer, UINT16 index);
 
-
-
-
 //高级定义，简化程序的可读性
 #define IHU_ERROR_PRINT_CAM(arg...)	do{zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++; IhuErrorPrint(##arg);  return IHU_FAILURE; }while(0)
 

@@ -556,7 +556,6 @@ typedef struct msg_struct_l3bfsc_wmc_start_req
 {
 	UINT16 msgid;
 	UINT16 length;
-	
 }msg_struct_l3bfsc_wmc_start_req_t;
 
 /*
