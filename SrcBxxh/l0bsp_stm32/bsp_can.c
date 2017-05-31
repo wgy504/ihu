@@ -318,9 +318,9 @@ void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef* CanHandle)
   		);
 */
 	/* PAY ATTENTION THAT THE MASK */
-  if(CanHandle->pRxMsg->StdId == WMC_CAN_ID || (CanHandle->pRxMsg->ExtId) == WMC_CAN_ID)
-	//if( ((CanHandle->pRxMsg->ExtId & 0x00F00000) == AWS_TO_WMC_CAN_ID_PREFIX) &&
-	//	  ( (CanHandle->pRxMsg->ExtId & (1<<WMC_CAN_ID_SUFFIX)) == 1))
+  //if(CanHandle->pRxMsg->StdId == WMC_CAN_ID || (CanHandle->pRxMsg->ExtId) == WMC_CAN_ID)
+	if( ((CanHandle->pRxMsg->ExtId & AWS_TO_WMC_CAN_ID_PREFIX) == AWS_TO_WMC_CAN_ID_PREFIX) &&
+		  ( (CanHandle->pRxMsg->ExtId & (1<<WMC_CAN_ID_SUFFIX)) == (1<<WMC_CAN_ID_SUFFIX)))
   
   {
   	l2packet_rx_bytes(frame_desc, CanHandle->pRxMsg->Data, CanHandle->pRxMsg->DLC);
@@ -336,6 +336,7 @@ void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef* CanHandle)
 		printf("HAL_CAN_Receive_IT() NOK, status=%d, total_nok=%d, MCR=%d, MSR=%d, TSR=%d, ESR=%d\n", 
 		    status, counter_can_rx_nok, hcan1.Instance->MCR, hcan1.Instance->MSR, 
 				hcan1.Instance->TSR, hcan1.Instance->ESR);
+		
 	}
 	else
 	{
@@ -344,7 +345,7 @@ void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef* CanHandle)
 	
   if (0 == ((counter_can_rx_total) % TEST_PRINT_PERIOD_COUNTER))
 	{
-		printf("%d:T:%d,%d,R+:%d,%d,W:%d\r\n",osKernelSysTick(), counter_can_tx_nok, counter_can_tx_total, counter_can_rx_nok, counter_can_rx_total, number_of_wmc_combin_timeout);				
+			printf("%d:T:%d,%d,R+:%d,%d(ID:0x%08X),W:%d\r\n",osKernelSysTick(), counter_can_tx_nok, counter_can_tx_total, counter_can_rx_nok, counter_can_rx_total, CanHandle->pRxMsg->ExtId, number_of_wmc_combin_timeout);				
 	}
 
 }

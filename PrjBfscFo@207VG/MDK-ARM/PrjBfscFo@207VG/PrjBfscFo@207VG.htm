@@ -3,7 +3,7 @@
 <title>Static Call Graph - [PrjBfscFo@207VG\PrjBfscFo@207VG.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image PrjBfscFo@207VG\PrjBfscFo@207VG.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Mon May 29 18:33:57 2017
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Thu Jun 01 00:05:03 2017
 <BR><P>
 <H3>Maximum Stack Usage =       1248 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -809,14 +809,14 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f207xx.o(RESET)
 </UL>
 <P><STRONG><a name="[63]"></a>CAN1_RX0_IRQHandler</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, stm32f2xx_it.o(i.CAN1_RX0_IRQHandler))
-<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = CAN1_RX0_IRQHandler &rArr; HAL_CAN_IRQHandler &rArr; CAN_Receive_IT &rArr; HAL_CAN_RxCpltCallback &rArr; l2packet_rx_bytes
+<BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = CAN1_RX0_IRQHandler &rArr; HAL_CAN_IRQHandler &rArr; CAN_Receive_IT &rArr; HAL_CAN_RxCpltCallback &rArr; l2packet_rx_bytes
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_CAN_IRQHandler
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f207xx.o(RESET)
 </UL>
 <P><STRONG><a name="[64]"></a>CAN1_RX1_IRQHandler</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, stm32f2xx_it.o(i.CAN1_RX1_IRQHandler))
-<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = CAN1_RX1_IRQHandler &rArr; HAL_CAN_IRQHandler &rArr; CAN_Receive_IT &rArr; HAL_CAN_RxCpltCallback &rArr; l2packet_rx_bytes
+<BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = CAN1_RX1_IRQHandler &rArr; HAL_CAN_IRQHandler &rArr; CAN_Receive_IT &rArr; HAL_CAN_RxCpltCallback &rArr; l2packet_rx_bytes
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_CAN_IRQHandler
 </UL>
@@ -1083,7 +1083,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[c8]"></a>HAL_CAN_IRQHandler</STRONG> (Thumb, 380 bytes, Stack size 8 bytes, stm32f2xx_hal_can.o(i.HAL_CAN_IRQHandler))
-<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = HAL_CAN_IRQHandler &rArr; CAN_Receive_IT &rArr; HAL_CAN_RxCpltCallback &rArr; l2packet_rx_bytes
+<BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = HAL_CAN_IRQHandler &rArr; CAN_Receive_IT &rArr; HAL_CAN_RxCpltCallback &rArr; l2packet_rx_bytes
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ed]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_CAN_ErrorCallback
 <LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_Transmit_IT
@@ -1123,8 +1123,8 @@ Global Symbols
 <LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_CAN_RxCpltCallback
 </UL>
 
-<P><STRONG><a name="[ca]"></a>HAL_CAN_RxCpltCallback</STRONG> (Thumb, 166 bytes, Stack size 32 bytes, bsp_can.o(i.HAL_CAN_RxCpltCallback))
-<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = HAL_CAN_RxCpltCallback &rArr; l2packet_rx_bytes
+<P><STRONG><a name="[ca]"></a>HAL_CAN_RxCpltCallback</STRONG> (Thumb, 170 bytes, Stack size 40 bytes, bsp_can.o(i.HAL_CAN_RxCpltCallback))
+<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = HAL_CAN_RxCpltCallback &rArr; l2packet_rx_bytes
 </UL>
 <BR>[Calls]<UL><LI><a href="#[f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osKernelSysTick
 <LI><a href="#[f3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_CAN_Receive_IT
@@ -5723,7 +5723,7 @@ Local Symbols
 </UL>
 
 <P><STRONG><a name="[c9]"></a>CAN_Receive_IT</STRONG> (Thumb, 306 bytes, Stack size 8 bytes, stm32f2xx_hal_can.o(i.CAN_Receive_IT))
-<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = CAN_Receive_IT &rArr; HAL_CAN_RxCpltCallback &rArr; l2packet_rx_bytes
+<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = CAN_Receive_IT &rArr; HAL_CAN_RxCpltCallback &rArr; l2packet_rx_bytes
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_CAN_RxCpltCallback
 </UL>

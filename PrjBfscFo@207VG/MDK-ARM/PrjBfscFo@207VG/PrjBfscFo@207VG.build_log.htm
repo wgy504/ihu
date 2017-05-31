@@ -27,11 +27,22 @@ Project File Date:  05/29/2017
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 1 (build 61)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build Project 'PrjBfscFo@207VG' - Target 'PrjBfscFo@207VG'
-compiling bsp_rtc.c...
+compiling bsp_can.c...
+D:\Myc\Project\Baxian\Git\ihu\SrcBxxh\l0bsp_stm32\bsp_can.c(158): warning:  #223-D: function "osKernelSysTick" declared implicitly
+  			printf("%d:T+:%d,%d,R:%d,%d,W:%d\r\n",osKernelSysTick(), counter_can_tx_nok, counter_can_tx_total, counter_can_rx_nok, counter_can_rx_total, number_of_wmc_combin_timeout);				
+D:\Myc\Project\Baxian\Git\ihu\SrcBxxh\l0bsp_stm32\bsp_can.c(81): warning:  #177-D: variable "CanFrameNumber" was declared but never referenced
+  	uint16_t CanFrameNumber = 0;
+D:\Myc\Project\Baxian\Git\ihu\SrcBxxh\l0bsp_stm32\bsp_can.c(85): warning:  #177-D: variable "i" was declared but never referenced
+  	uint16_t i = 0;
+D:\Myc\Project\Baxian\Git\ihu\SrcBxxh\l0bsp_stm32\bsp_can.c(348): warning:  #223-D: function "osKernelSysTick" declared implicitly
+  			printf("%d:T:%d,%d,R+:%d,%d(ID:0x%08X),W:%d\r\n",osKernelSysTick(), counter_can_tx_nok, counter_can_tx_total, counter_can_rx_nok, counter_can_rx_total, CanHandle->pRxMsg->ExtId, number_of_wmc_combin_timeout);				
+D:\Myc\Project\Baxian\Git\ihu\SrcBxxh\l0bsp_stm32\bsp_can.c(355): warning:  #550-D: variable "CanHandle" was set but never used
+  	CAN_HandleTypeDef* CanHandle;
+..\..\SrcBxxh\l0bsp_stm32\bsp_can.c: 5 warnings, 0 errors
 linking...
-Program Size: Code=84456 RO-data=6060 RW-data=7504 ZI-data=90424  
+Program Size: Code=84472 RO-data=6060 RW-data=7504 ZI-data=90424  
 FromELF: creating hex file...
-"PrjBfscFo@207VG\PrjBfscFo@207VG.axf" - 0 Error(s), 0 Warning(s).
+"PrjBfscFo@207VG\PrjBfscFo@207VG.axf" - 0 Error(s), 5 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -49,7 +60,7 @@ Package Vendor: ARM
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.0.0
-Build Time Elapsed:  00:00:07
+Build Time Elapsed:  00:00:08
 </pre>
 </body>
 </html>
