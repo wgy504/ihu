@@ -147,9 +147,9 @@ void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PEPin PEPin PEPin PEPin 
-                           PEPin PEPin */
+                           PEPin */
   GPIO_InitStruct.Pin = CUBEMX_PIN_F2_GPIO_DO_LED_POWER_Pin|CUBEMX_PIN_F2_GPIO_DO_LED_COMMU_Pin|CUBEMX_PIN_F2_GPIO_DO_LED_WORK_STATE_Pin|CUBEMX_PIN_F2_GPIO_DO_BEEP_Pin 
-                          |CUBEMX_PIN_F2_DO_MQ2_CAM_PWR_Pin|CUBEMX_PIN_F2_DO_SENSOR_PWR_Pin;
+                          |CUBEMX_PIN_F2_DO_MQ2_CAM_PWR_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -160,6 +160,13 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = CUBEMX_PIN_F2_DO_SENSOR_PWR_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(CUBEMX_PIN_F2_DO_SENSOR_PWR_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = CUBEMX_PIN_F2_DI_LOCK_ACT_FLAG_Pin;
@@ -228,7 +235,10 @@ void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOE, CUBEMX_PIN_F2_GPIO_DO_LED_POWER_Pin|CUBEMX_PIN_F2_GPIO_DO_LED_COMMU_Pin|CUBEMX_PIN_F2_GPIO_DO_LED_WORK_STATE_Pin|CUBEMX_PIN_F2_GPIO_DO_BEEP_Pin 
-                          |CUBEMX_PIN_F2_DO_MQ2_CAM_PWR_Pin|CUBEMX_PIN_F2_DO_SENSOR_PWR_Pin, GPIO_PIN_RESET);
+                          |CUBEMX_PIN_F2_DO_MQ2_CAM_PWR_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(CUBEMX_PIN_F2_DO_SENSOR_PWR_GPIO_Port, CUBEMX_PIN_F2_DO_SENSOR_PWR_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, CUBEMX_PIN_F2_DO_CPU_PWR_Pin|CUBEMX_PIN_F2_GPIO_DO_LOCK1_SWITCH_Pin|CUBEMX_PIN_F2_GPIO_DO_LOCK2_SWITCH_Pin, GPIO_PIN_SET);
