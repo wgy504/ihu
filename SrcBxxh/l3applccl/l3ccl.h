@@ -49,7 +49,7 @@ enum FSM_STATE_CCL
 
 //CONST常量
 #define IHU_CCL_ALARM_FAULT_PERIOD_DURATION    	1 //10   	//In minutes  正常为10分钟，未来待修改
-#define IHU_CCL_ALARM_NORMAL_PERIOD_DURATION    5 //8*60  //In minutes  正常为8小时，未来待修改
+#define IHU_CCL_ALARM_NORMAL_PERIOD_DURATION    3 //8*60  //In minutes  正常为8小时，未来待修改
 
 
 

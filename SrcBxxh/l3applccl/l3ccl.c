@@ -146,7 +146,7 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 	
 	//拉灯拉BEEP
 	ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_GLOBAL_WORK_STATE, 20);
-	ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_SYS_START, 20);
+	ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_SYS_START, 6);
 	
 	//等待3秒，以便其它任务进入稳定状态
 	func_ccl_close_all_sensor_power();
@@ -154,10 +154,14 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 
 	//判定是人工触发
 	if (handActFlag == TRUE){
+		IHU_DEBUG_PRINT_FAT("CCL: I am in the handal active state!!!\n");
 		//必须人为的设置一次8小时定时RTC，不然有可能遇到系统第一次启动的情形，从未设置过
 		//多次重复设置的问题，留给驱动解决：通过BOOT区的计数器判定是否设定过
 		if (func_vmmw_rtc_pcf8563_init() == IHU_SUCCESS){
 			func_vmmw_rtc_pcf8563_set_alarm_process(IHU_CCL_ALARM_NORMAL_PERIOD_DURATION);
+		}
+		else{
+			IhuErrorPrint("CCL: Error set RTC PCF8563!\n");
 		}
 
 		//再进行状态转移
@@ -177,6 +181,7 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 	else {
 		//读取闹铃设置信息
 		if (func_vmmw_rtc_pcf8563_get_alarm_duration() == IHU_CCL_ALARM_FAULT_PERIOD_DURATION){
+			IHU_DEBUG_PRINT_FAT("CCL: I am in the FAULT ALARM active state!!!\n");
 			//扫描门限
 			if (ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_door_open_state(IHU_CCL_SENSOR_LOCK_NUMBER_MAX) == TRUE){
 				if (func_vmmw_rtc_pcf8563_init() == IHU_SUCCESS){
@@ -197,6 +202,7 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 			
 			//进入正常的8小时周期报告
 			else{
+				IHU_DEBUG_PRINT_FAT("CCL: I am in the NORMAL ALARM active state!!!\n");
 				if (func_vmmw_rtc_pcf8563_init() == IHU_SUCCESS){
 					func_vmmw_rtc_pcf8563_set_alarm_process(IHU_CCL_ALARM_NORMAL_PERIOD_DURATION);
 				}
@@ -633,7 +639,7 @@ OPSTAT func_ccl_time_out_lock_work_active(void)
 		
 		//拉灯拉BEEP
 		ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_GLOBAL_WORK_STATE, 5);
-		ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_SYS_SHUT_DOWN, 30);		
+		ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_SYS_SHUT_DOWN, 6);		
 		
 		//关机，等待FAULT REPORT收到以后，会自动干的
 	}
@@ -672,7 +678,7 @@ OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 		
 		//拉灯拉BEEP，指示整个工作过程不成功
 		ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_GLOBAL_WORK_STATE, 5);
-		ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_SYS_SHUT_DOWN, 30);		
+		ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_SYS_SHUT_DOWN, 6);		
 
 		//延时并关断CPU系统
 		ihu_sleep(5);
@@ -891,6 +897,7 @@ OPSTAT fsm_ccl_sps_close_door_report_cfm(UINT8 dest_id, UINT8 src_id, void * par
 OPSTAT fsm_ccl_hand_active_trigger_to_work(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {	
 	int ret = 0;
+	int temp = 0;
 	msg_struct_ccl_hand_active_trigger_t rcv;
 	msg_struct_ccl_sps_open_auth_inq_t snd1;
 	
@@ -903,6 +910,24 @@ OPSTAT fsm_ccl_hand_active_trigger_to_work(UINT8 dest_id, UINT8 src_id, void * p
 	
 	//打开所有接口
 	func_ccl_open_all_sensor_power();
+	
+////////////////////TEST CODE, TO BE DELETE//////////////	
+	
+	ihu_dcmiaris_take_picture(0);
+	
+	//测试倾角传感器
+	ihu_usleep(200);
+	
+	if (ihu_vmmw_navig_mpu6050_init() == IHU_SUCCESS){
+		//采用NF2结构
+		ihu_usleep(200);
+		temp = (UINT16)(ihu_wmmw_navig_mpu6050_axis_z_angle_caculate_by_static_method() * 100);
+		IHU_DEBUG_PRINT_NOR("I2CARIES: Fall Angle Read Result = [%4.2f]\n", (float)(temp*1.0)/100.0);
+	}else{
+		IhuErrorPrint("I2CARIES: Fall Angle Read Result error!\n");
+	}
+	
+////////////////////TEST CODE, TO BE DELETE//////////////	
 	
 	//启动定时器：如果是在工作模式下，允许被重复触发
 	ret = ihu_timer_start(TASK_ID_CCL, TIMER_ID_1S_CCL_LOCK_WORK_ACTIVE, \
@@ -944,7 +969,7 @@ OPSTAT fsm_ccl_fault_state_trigger(UINT8 dest_id, UINT8 src_id, void * param_ptr
 	func_ccl_open_all_sensor_power();
 	
 	//拉灯拉BEEP
-	ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_SYS_FAULT, 30);
+	ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_SYS_FAULT, 6);
 				
 	//发送后台报告
 		//发送差错状态报告给后台
