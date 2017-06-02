@@ -202,7 +202,7 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 			
 			//进入正常的8小时周期报告
 			else{
-				IHU_DEBUG_PRINT_FAT("CCL: I am in the NORMAL ALARM active state!!!\n");
+				IHU_DEBUG_PRINT_FAT("CCL: I am in the FAULT recover to NORMAL ALARM active state!!!\n");
 				if (func_vmmw_rtc_pcf8563_init() == IHU_SUCCESS){
 					func_vmmw_rtc_pcf8563_set_alarm_process(IHU_CCL_ALARM_NORMAL_PERIOD_DURATION);
 				}
@@ -221,6 +221,7 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 		
 		//其它情况，非10分钟定时，可以是8小时定时，或者其它原因。都当做定时周期性汇报。为了确保安全性，重新设置ALARM定时报告
 		else{
+			IHU_DEBUG_PRINT_FAT("CCL: I am in the NORMAL ALARM active state!!!\n");
 			//正常的进入周期性汇报状态机
 			if (func_vmmw_rtc_pcf8563_init() == IHU_SUCCESS){
 				func_vmmw_rtc_pcf8563_set_alarm_process(IHU_CCL_ALARM_NORMAL_PERIOD_DURATION);
