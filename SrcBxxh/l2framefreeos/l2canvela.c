@@ -508,7 +508,7 @@ OPSTAT fsm_canvela_bfsc_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void *param_ptr
 	
 	pMsgOutHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)param_ptr;
 	pMsgInnerHeader = (msg_struct_l3bfsc_wmc_msg_header_t *)((UINT8 *)param_ptr + 4);
-	msg_len = pMsgInnerHeader->length;
+	msg_len = pMsgInnerHeader->length + 4; ////!!!TO Align to HCU HUITP msg lenth
   pMsgInnerHeader->msgid = HuitpMsgIdMapToInternalMsgId(pMsgInnerHeader->msgid);
 	msg_id = pMsgInnerHeader->msgid;
   
@@ -521,7 +521,7 @@ OPSTAT fsm_canvela_bfsc_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void *param_ptr
 	}
 	
 	/* Check message ID and message length mapping */
-	if(IHU_FAILURE == WmcAwsMsgCheck(pMsgInnerHeader, msg_len))
+	if(IHU_FAILURE == WmcAwsMsgCheck(pMsgInnerHeader, msg_len)) ////!!!TO Align to HCU HUITP msg lenth
 	{
 			IhuErrorPrint("CANVELA: fsm_canvela_bfsc_l2frame_rcv, msg check failure, return!\n");
 			zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
@@ -888,7 +888,7 @@ OPSTAT fsm_canvela_bfsc_l2frame_snd(UINT8 dest_id, UINT8 src_id, void * param_pt
 
   /* change the internal msg id to external msg id */
   pBFHeader->msgid = InternalMsgIdMapToHuitpMsgId(pBFHeader->msgid);
-  
+  pBFHeader->length = param_len - 4; ///!!!! TO ALIGN WITH HCU !!!!
 	/* Clear buffer all to 0*/
 	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
 	
