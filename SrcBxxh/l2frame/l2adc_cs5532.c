@@ -954,3 +954,136 @@ uint32_t SpsGainToBitwidthMapping(uint32_t wordrate_index, uint32_t gain_index)
 //1010 960 Sps 		800 Sps
 //1011 480 Sps 		400 Sps
 //1100 240 Sps		200 Sps
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#define WIGHT_SENSOR_CMD_TYPE_STOP 0
+#define WIGHT_SENSOR_CMD_TYPE_START 1
+
+typedef struct weight_sensor_cmd_s
+{
+  uint32_t valid:1
+  uint32_t type:7;
+  uint32_t reserved:24;
+}weight_sensor_cmd_t;
+
+weight_sensor_cmd_t g_weight_sensor_cmd;
+
+// send a comman to weight sensor
+int weight_sensor_send_cmd(uint32_t type)
+{
+  weight_sensor_cmd_t command;
+
+  command.valid = 1;
+  command.type = type;
+  command.reserved = 0;
+  
+  taskENTER_CRITICAL();
+  g_weight_sensor_cmd = command;
+  taskEXIT_CRITICAL();
+  
+  return g_weight_sensor_cmd.valid;
+}
+
+// weight sensor task receive a command
+int weight_sensor_recv_cmd(weight_sensor_cmd_t *command)
+{
+  taskENTER_CRITICAL();
+  *command = g_weight_sensor_cmd;
+  g_weight_sensor_cmd.valid = 0;
+  taskEXIT_CRITICAL();
+  
+  return command->valid;
+}
+
+typedef struct weight_sensor_filter_s
+{
+  uint32_t adc_filtered[2];
+  uint32_t beta_num[2];
+  uint32_t stable_thresh;
+  uint32_t change_thresh;
+}weight_sensor_filter_t;
+
+weight_sensor_filter_t g_weight_sensor_filter;
+
+#define WS_BETA_DEN   4
+#define WS_BETA_NUM1  15
+#define WS_BETA_NUM2  10
+uint32_t weight_sensor_read_and_filtering(weight_sensor_filter_t *wsf)
+{
+  uint32_t adc_raw;
+  
+  if(ReadWheChanOk())
+	{
+		adc_raw = ReadSeriesADValue();
+
+    wsf->adc_filtered_prev[0] = wsf->adc_filtered[0];
+    wsf->adc_filtered_prev[1] = wsf->adc_filtered[1];
+    wsf->adc_filtered[0] = ((wsf->adc_filtered[0] - adc_raw) * wsf->beta_num[0]) >> WS_BETA_DEN + adc_raw;
+    wsf->adc_filtered[1] = ((wsf->adc_filtered[1] - adc_raw) * wsf->beta_num[1]) >> WS_BETA_DEN + adc_raw;
+
+    IhuDebugPrint("adc_raw=%d adc_filtered=(%d, %d)\n", adc_raw, wsf->adc_filtered[0]£¬ wsf->adc_filtered[1]);
+    
+    if(abs(wsf->adc_filtered[0] - wsf->adc_filtered[1]) < wsf->stable_thresh)
+    {
+      return 1;
+    }
+	}
+
+  return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// weight sensor task
+// 1) process the L3BF message
+// 2) filter the ADC and report the weight value
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void weight_sensor_task(void const *param)
+{
+	weight_sensor_cmd_t command;
+	int32_t status;
+	int is_started = 0;
+	uint32_t last_adc_filtered = 0xFFFF, adc_filtered;
+  WeightSensorParamaters_t *wsparm = (WeightSensorParamaters_t *)param;
+
+  g_weight_sensor_filter.adc_filtered[0] = 0;
+  g_weight_sensor_filter.adc_filtered[1] = 0;
+  g_weight_sensor_filter.beta_num[0] = WS_BETA_NUM1;
+  g_weight_sensor_filter.beta_num[1] = WS_BETA_NUM2;
+  g_weight_sensor_filter.stable_thresh = 10;
+  g_weight_sensor_filter.change_thresh = 30
+  
+	while(1)
+	{
+		status = 0;
+		
+		/* wait for a new command */
+		osDelay(10);
+		
+    now = osKernelSysTick();
+
+    // process command
+		if(weight_sensor_recv_cmd(&command))
+    {
+      if(command.type == WIGHT_SENSOR_CMD_TYPE_STOP)
+        is_started = 0;
+      else if(command.type == WIGHT_SENSOR_CMD_TYPE_START)
+        is_started = 1;
+    }
+
+    if(is_started)
+    {
+      // read sensor for a stable value
+      if(weight_sensor_read_and_filtering(&g_weight_sensor_filter))
+      {
+        adc_filtered = (g_weight_sensor_filter.adc_filtered[0] + g_weight_sensor_filter.adc_filtered[1]) >> 1;
+
+        if(abs(adc_filtered - last_adc_filtered) > g_weight_sensor_filter.change_thresh)
+        {
+          // send weight indication to L3BFSC
+        }
+      }
+    }
+	}
+}
+
