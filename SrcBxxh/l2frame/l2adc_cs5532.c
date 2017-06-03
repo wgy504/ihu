@@ -957,16 +957,6 @@ uint32_t SpsGainToBitwidthMapping(uint32_t wordrate_index, uint32_t gain_index)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define WIGHT_SENSOR_CMD_TYPE_STOP 0
-#define WIGHT_SENSOR_CMD_TYPE_START 1
-
-typedef struct weight_sensor_cmd_s
-{
-  uint32_t valid:1
-  uint32_t type:7;
-  uint32_t reserved:24;
-}weight_sensor_cmd_t;
-
 weight_sensor_cmd_t g_weight_sensor_cmd;
 
 // send a comman to weight sensor
@@ -996,14 +986,6 @@ int weight_sensor_recv_cmd(weight_sensor_cmd_t *command)
   return command->valid;
 }
 
-typedef struct weight_sensor_filter_s
-{
-  uint32_t adc_filtered[2];
-  uint32_t beta_num[2];
-  uint32_t stable_thresh;
-  uint32_t change_thresh;
-}weight_sensor_filter_t;
-
 weight_sensor_filter_t g_weight_sensor_filter;
 
 #define WS_BETA_DEN   4
@@ -1017,12 +999,10 @@ uint32_t weight_sensor_read_and_filtering(weight_sensor_filter_t *wsf)
 	{
 		adc_raw = ReadSeriesADValue();
 
-    wsf->adc_filtered_prev[0] = wsf->adc_filtered[0];
-    wsf->adc_filtered_prev[1] = wsf->adc_filtered[1];
-    wsf->adc_filtered[0] = ((wsf->adc_filtered[0] - adc_raw) * wsf->beta_num[0]) >> WS_BETA_DEN + adc_raw;
-    wsf->adc_filtered[1] = ((wsf->adc_filtered[1] - adc_raw) * wsf->beta_num[1]) >> WS_BETA_DEN + adc_raw;
+    wsf->adc_filtered[0] = (((wsf->adc_filtered[0] - adc_raw) * wsf->beta_num[0]) >> WS_BETA_DEN) + adc_raw;
+    wsf->adc_filtered[1] = (((wsf->adc_filtered[1] - adc_raw) * wsf->beta_num[1]) >> WS_BETA_DEN) + adc_raw;
 
-    IhuDebugPrint("adc_raw=%d adc_filtered=(%d, %d)\n", adc_raw, wsf->adc_filtered[0]£¬ wsf->adc_filtered[1]);
+    IhuDebugPrint("adc_raw=%d adc_filtered=(%d, %d)\n", adc_raw, wsf->adc_filtered[0], wsf->adc_filtered[1]);
     
     if(abs(wsf->adc_filtered[0] - wsf->adc_filtered[1]) < wsf->stable_thresh)
     {
@@ -1041,9 +1021,11 @@ uint32_t weight_sensor_read_and_filtering(weight_sensor_filter_t *wsf)
 void weight_sensor_task(void const *param)
 {
 	weight_sensor_cmd_t command;
-	int32_t status;
 	int is_started = 0;
 	uint32_t last_adc_filtered = 0xFFFF, adc_filtered;
+  uint32_t last_adc_tick = 0xFFFF, current_tick, repeat_times = 0;
+  msg_struct_l3bfsc_weight_ind_t weight_ind;
+  OPSTAT ret;
   WeightSensorParamaters_t *wsparm = (WeightSensorParamaters_t *)param;
 
   g_weight_sensor_filter.adc_filtered[0] = 0;
@@ -1051,17 +1033,11 @@ void weight_sensor_task(void const *param)
   g_weight_sensor_filter.beta_num[0] = WS_BETA_NUM1;
   g_weight_sensor_filter.beta_num[1] = WS_BETA_NUM2;
   g_weight_sensor_filter.stable_thresh = 10;
-  g_weight_sensor_filter.change_thresh = 30
+  g_weight_sensor_filter.change_thresh = 30;
   
 	while(1)
-	{
-		status = 0;
-		
+	{		
 		/* wait for a new command */
-		osDelay(10);
-		
-    now = osKernelSysTick();
-
     // process command
 		if(weight_sensor_recv_cmd(&command))
     {
@@ -1080,10 +1056,45 @@ void weight_sensor_task(void const *param)
 
         if(abs(adc_filtered - last_adc_filtered) > g_weight_sensor_filter.change_thresh)
         {
-          // send weight indication to L3BFSC
+          last_adc_filtered = adc_filtered;
+          last_adc_tick = osKernelSysTick();
+          repeat_times = 0;
+          
+          weight_ind.adc_filtered = adc_filtered;
+          weight_ind.repeat_times = repeat_times;
+          
+          // weight changed, send weight indication to L3BFSC
+          ret = ihu_message_send(MSG_ID_L3BFSC_WMC_WEIGHT_IND, TASK_ID_BFSC, TASK_ID_BFSC, \
+														&weight_ind, sizeof(msg_struct_l3bfsc_weight_ind_t));
+
+          if (ret == IHU_FAILURE){
+      			IhuErrorPrint("WS: Send new weight ind message error!\n");
+      		}
+        }
+        else
+        {
+          current_tick = osKernelSysTick();
+          if(current_tick - last_adc_tick > 2000)
+          {
+            last_adc_tick = current_tick;
+            repeat_times ++;
+            
+            weight_ind.adc_filtered = adc_filtered;
+            weight_ind.repeat_times = repeat_times;
+            
+            // weight changed, send weight indication to L3BFSC
+            ret = ihu_message_send(MSG_ID_L3BFSC_WMC_WEIGHT_IND, TASK_ID_BFSC, TASK_ID_BFSC, \
+  														&weight_ind, sizeof(msg_struct_l3bfsc_weight_ind_t));
+
+            if (ret == IHU_FAILURE){
+        			IhuErrorPrint("WS: Send repeat weight ind message error!\n");
+        		}
+          }
         }
       }
     }
+
+    osDelay(1);
 	}
 }
 

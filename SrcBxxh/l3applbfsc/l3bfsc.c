@@ -82,12 +82,20 @@ IhuFsmStateItem_t IhuFsmBfsc[] =
   {MSG_ID_L3BFSC_WMC_STOP_REQ,				    FSM_STATE_BFSC_CONFIGURATION,						  fsm_bfsc_wmc_stop_req},	//MYC	
   {MSG_ID_L3BFSC_WMC_COMBIN_REQ,				  FSM_STATE_BFSC_COMBINATION,								fsm_bfsc_wmc_combin_req},	//MYC	
 
+  {MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ,			FSM_STATE_BFSC_SCAN,							        fsm_bfsc_wmc_set_config_req},	//MYC
+	{MSG_ID_L3BFSC_WMC_START_REQ,				    FSM_STATE_BFSC_SCAN,							        fsm_bfsc_wmc_start_req},	//MYC
+  {MSG_ID_L3BFSC_WMC_COMMAND_REQ,				  FSM_STATE_BFSC_SCAN,							        fsm_bfsc_wmc_command_req},	//MYC
+  {MSG_ID_L3BFSC_WMC_STOP_REQ,				    FSM_STATE_BFSC_SCAN,						          fsm_bfsc_wmc_stop_req},	//MYC	
+  {MSG_ID_L3BFSC_WMC_COMBIN_REQ,				  FSM_STATE_BFSC_SCAN,								      fsm_bfsc_wmc_combin_req},	//MYC	
+  {MSG_ID_L3BFSC_WMC_WEIGHT_IND,				  FSM_STATE_BFSC_SCAN,								      fsm_bfsc_wmc_weight_ind},	//MYC	
+  
   {MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ,			FSM_STATE_BFSC_COMBINATION,			  				fsm_bfsc_wmc_set_config_req},	//MYC
 	{MSG_ID_L3BFSC_WMC_START_REQ,				    FSM_STATE_BFSC_COMBINATION,					  		fsm_bfsc_wmc_start_req},	//MYC
   {MSG_ID_L3BFSC_WMC_COMMAND_REQ,				  FSM_STATE_BFSC_COMBINATION,								fsm_bfsc_wmc_command_req},	//MYC	
   {MSG_ID_L3BFSC_WMC_STOP_REQ,				    FSM_STATE_BFSC_COMBINATION,								fsm_bfsc_wmc_stop_req},	//MYC	
   {MSG_ID_L3BFSC_WMC_COMBIN_REQ,				  FSM_STATE_BFSC_COMBINATION,								fsm_bfsc_wmc_combin_req},	//MYC	
   {MSG_ID_COM_TIME_OUT,                   FSM_STATE_BFSC_COMBINATION,               fsm_bfsc_wmc_combine_timeout},
+  {MSG_ID_L3BFSC_WMC_WEIGHT_IND,				  FSM_STATE_BFSC_COMBINATION,								fsm_bfsc_wmc_weight_ind},	//MYC	
   
 	{MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ,			FSM_STATE_BFSC_ACTIVED,										fsm_bfsc_wmc_set_config_req},	//MYC
 	{MSG_ID_L3BFSC_WMC_START_REQ,						FSM_STATE_BFSC_ACTIVED,										fsm_bfsc_wmc_start_req},	//MYC
@@ -1084,15 +1092,7 @@ OPSTAT fsm_bfsc_wmc_start_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT
 	/* STATE CHANGE IF OK */
 	if (ERROR_CODE_NO_ERROR == error_code)
 	{
-    // start a timer to read weight sensor
-  	ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_10MS_BFSC_PERIOD_SCAN, \
-  		zIhuSysEngPar.timer.array[TIMER_ID_10MS_BFSC_PERIOD_SCAN].dur, TIMER_TYPE_PERIOD, 
-  		zIhuSysEngPar.timer.array[TIMER_ID_10MS_BFSC_PERIOD_SCAN].gradunarity);
-  	if (ret == IHU_FAILURE){
-  		zIhuSysStaPm.taskRunErrCnt[TASK_ID_BFSC]++;
-  		IhuErrorPrint("L3BFSC: Error start TIMER_ID_10MS_BFSC_PERIOD_SCAN\n");
-  		return IHU_FAILURE;
-  	}
+    weight_sensor_send_cmd(WIGHT_SENSOR_CMD_TYPE_START);
 	}
 	
 	/* Send back the response */
@@ -1153,8 +1153,7 @@ OPSTAT fsm_bfsc_wmc_stop_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT1
 	/* STATE CHANGE IF OK */
 	if (ERROR_CODE_NO_ERROR == error_code)
 	{
-	  // stop the timer TIMER_ID_1S_BFSC_PERIOD_SCAN
-	  ihu_timer_stop(TASK_ID_BFSC, TIMER_ID_10MS_BFSC_PERIOD_SCAN, zIhuSysEngPar.timer.array[TIMER_ID_10MS_BFSC_PERIOD_SCAN].gradunarity);
+    weight_sensor_send_cmd(WIGHT_SENSOR_CMD_TYPE_STOP);
     
 		FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_CONFIGURATION);
 		IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_stop_req_t: Set to FSM_STATE_BFSC_CONFIGURATION\r\n");
@@ -1195,6 +1194,95 @@ OPSTAT fsm_bfsc_wmc_combin_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UIN
 	return ret;
 }
 
+extern WeightSensorCalirationKB_t wsckb;
+// new stable weight event coming from sensor
+OPSTAT fsm_bfsc_wmc_weight_ind(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)	//MYC
+{
+  OPSTAT ret = IHU_SUCCESS;
+	msg_struct_l3bfsc_weight_ind_t rcv;
+  msg_struct_l3bfsc_wmc_ws_event_t msg_wmc_ws_event;
+  uint32_t weight;
+	
+	//收到消息并做参数检查
+	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_weight_ind_t));
+	if ((param_ptr == NULL || param_len != sizeof(msg_struct_l3bfsc_weight_ind_t)))
+		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Receive message error!\n");
+	memcpy(&rcv, param_ptr, param_len);
+
+  weight = (rcv.adc_filtered - wsckb.b) / wsckb.k;
+  
+	/* Process Message */
+	/* Check If it is the right/valid state to process the message */
+	if( FSM_STATE_BFSC_SCAN != FsmGetState(TASK_ID_BFSC) || FSM_STATE_BFSC_COMBINATION != FsmGetState(TASK_ID_BFSC))
+	{
+			IhuErrorPrint("L3BFSC: fsm_bfsc_wmc_weight_ind: in wrong FsmGetState(TASK_ID_BFSC), return\r\n");
+			return IHU_FAILURE;
+	};
+
+  if(FSM_STATE_BFSC_SCAN == FsmGetState(TASK_ID_BFSC))
+  {
+    // send new weight event
+    IhuDebugPrint("L3BFSC: fsm_bfsc_wmc_weight_ind in FSM_STATE_BFSC_SCAN...\r\n");
+    
+    /* Build Message Content Header */
+    if(rcv.repeat_times > 0)
+      msg_wmc_ws_event.msgid = (MSG_ID_L3BFSC_WMC_REPEAT_WS_EVENT);
+    else
+      msg_wmc_ws_event.msgid = (MSG_ID_L3BFSC_WMC_NEW_WS_EVENT);
+    msg_wmc_ws_event.wmc_id = zWmcInvenory.wmc_id;
+    msg_wmc_ws_event.length = sizeof(msg_struct_l3bfsc_wmc_ws_event_t);
+    msg_wmc_ws_event.weight_ind.average_weight = 	weight;
+    msg_wmc_ws_event.weight_ind.weight_event = WEIGHT_EVENT_ID_LOAD;
+    msg_wmc_ws_event.weight_ind.repeat_times = rcv.repeat_times;
+    
+    /* Send Message to CAN Task */
+    ret = ihu_message_send(MSG_ID_L3BFSC_WMC_NEW_WS_EVENT, TASK_ID_CANVELA, TASK_ID_BFSC, \
+                            &msg_wmc_ws_event, MSG_SIZE_L3BFSC_WMC_NEW_WS_EVENT);
+    if (ret == IHU_FAILURE){
+      IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC], zIhuVmCtrTab.task[TASK_ID_CANVELA]);
+      return ret;
+    }
+  }
+  else if (FSM_STATE_BFSC_COMBINATION == FsmGetState(TASK_ID_BFSC))
+  {
+    IhuDebugPrint("L3BFSC: fsm_bfsc_wmc_weight_ind in FSM_STATE_BFSC_COMBINATION...\r\n");
+    
+    if(weight < zWeightSensorParam.WeightSensorEmptyThread)
+    {
+      // send combination response
+      msg_struct_l3bfsc_wmc_resp_t msg_wmc_combin_resp;
+        
+      /* Build Message Content Header */
+      msg_wmc_combin_resp.msgid = (MSG_ID_L3BFSC_WMC_COMBIN_RESP);
+      msg_wmc_combin_resp.wmc_id = zWmcInvenory.wmc_id;
+      msg_wmc_combin_resp.length = sizeof(msg_struct_l3bfsc_wmc_resp_t);
+      msg_wmc_combin_resp.result.error_code = ERROR_CODE_NO_ERROR;
+      msg_wmc_combin_resp.result.spare1 = 0;
+      
+      IhuDebugPrint("L3BFSC: msg_wmc_combin_resp: msgid = 0x%08X\r\n", \
+                      msg_wmc_combin_resp.msgid);
+      
+      /* Send Message to CAN Task */
+      ret = ihu_message_send(MSG_ID_L3BFSC_WMC_COMBIN_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, \
+                              &msg_wmc_combin_resp, MSG_SIZE_L3BFSC_WMC_COMBIN_RESP);
+      if (ret == IHU_FAILURE){
+        IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC], zIhuVmCtrTab.task[TASK_ID_CANVELA]);
+        return ret;
+      }
+      
+      // switch to SCAN state
+      FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_SCAN);
+    }
+  }
+  else{
+    IhuErrorPrint("L3BFSC: fsm_bfsc_wmc_weight_ind: in wrong FsmGetState(TASK_ID_BFSC), return\r\n");
+    ret = IHU_FAILURE;
+  }
+  
+	//返回
+	return ret;
+}
+
 
 long number_of_wmc_combin_timeout = 0;
 extern long counter_can_tx_nok;
@@ -1204,7 +1292,7 @@ extern long counter_can_rx_total;
 
 OPSTAT fsm_bfsc_wmc_combine_timeout(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)
 {
-  OPSTAT ret = SUCCESS;
+  //OPSTAT ret = SUCCESS;
   msg_struct_com_time_out_t rcv;
 
   //Receive message and copy to local variable
@@ -1217,23 +1305,6 @@ OPSTAT fsm_bfsc_wmc_combine_timeout(UINT8 dest_id, UINT8 src_id, void *param_ptr
   
 	if(rcv.timeId == TIMER_ID_10MS_BFSC_PERIOD_SCAN)
 	{
-    // send weight indication
-		msg_struct_l3bfsc_wmc_ws_event_t snd;
-		memset(&snd, 0, sizeof(msg_struct_l3bfsc_wmc_ws_event_t));
-		snd.length = sizeof(msg_struct_l3bfsc_wmc_ws_event_t);
-		snd.msgid = (MSG_ID_L3BFSC_WMC_NEW_WS_EVENT);
-    snd.wmc_id = zWmcInvenory.wmc_id;
-    snd.weight_ind.average_weight = WeightSensorReadCurrent(&zWeightSensorParam);  // read weight sensor
-    snd.weight_ind.weight_event = WEIGHT_EVENT_ID_LOAD;
-		snd.weight_ind.repeat_times = 0;
-		
-		//printf("MSG_ID_L3BFSC_WMC_NEW_WS_EVENT: snd.length=%d, snd.msgid=%d(0x%x)\r\n",snd.length, snd.msgid);
-		
-		ret = ihu_message_send(MSG_ID_L3BFSC_WMC_NEW_WS_EVENT, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length);
-		if (ret == IHU_FAILURE){
-			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC], zIhuVmCtrTab.task[TASK_ID_CANVELA]);
-			return IHU_FAILURE;
-		}
 		{
 			number_of_wmc_combin_timeout++;
 			if(0 == (number_of_wmc_combin_timeout % 100))

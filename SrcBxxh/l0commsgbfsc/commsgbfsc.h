@@ -130,6 +130,7 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_L3BFSC_WMC_FAULT_IND,
 	MSG_ID_L3BFSC_WMC_COMMAND_REQ,
 	MSG_ID_L3BFSC_WMC_COMMAND_RESP,
+	MSG_ID_L3BFSC_WMC_WEIGHT_IND,
 	
 	//END FLAG
 	MSG_ID_COM_MAX, //Ending point
@@ -398,6 +399,17 @@ typedef struct msg_struct_l3bfsc_canvela_cmd_resp
 #define IHU_SYSMSG_BFSC_CAN_CMD_TYPE_START_CFM 1
 #define IHU_SYSMSG_BFSC_CAN_CMD_TYPE_STOP_CFM 2
 #define IHU_SYSMSG_BFSC_CAN_CMD_TYPE_RESP 3
+
+// MSG_ID_L3BFSC_WMC_WEIGHT_IND
+typedef struct msg_struct_l3bfsc_weight_ind
+{
+	UINT32 adc_filtered;
+  UINT32 repeat_times;
+}msg_struct_l3bfsc_weight_ind_t;
+
+
+
+
 
 /* 
 ** ====================================================================

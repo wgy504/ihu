@@ -193,6 +193,7 @@ IhuVmCtrMsgStaticCfg_t zIhuVmCtrMsgStaticCfg[] = {
   {MSG_ID_L3BFSC_WMC_FAULT_IND,                   "MSG_ID_L3BFSC_WMC_FAULT_IND",            1, 1, 1},
   {MSG_ID_L3BFSC_WMC_COMMAND_REQ,                 "MSG_ID_L3BFSC_WMC_COMMAND_REQ",          1, 1, 1},
   {MSG_ID_L3BFSC_WMC_COMMAND_RESP,                "MSG_ID_L3BFSC_WMC_COMMAND_RESP",         1, 1, 1},
+  {MSG_ID_L3BFSC_WMC_WEIGHT_IND,                  "MSG_ID_L3BFSC_WMC_WEIGHT_IND",           1, 1, 1},
 #else
   #error Un-correct constant definition
 #endif
