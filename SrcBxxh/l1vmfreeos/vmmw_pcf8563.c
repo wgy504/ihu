@@ -1748,5 +1748,10 @@ int16_t func_vmmw_rtc_pcf8563_get_alarm_duration(void)
 	return temp;
 }
 
+//清掉AF标志位并下电CPU
+extern void func_vmmw_rtc_pcf8563_clear_af_and_power_off_cpu(void)
+{
 
+	return;
+}
 

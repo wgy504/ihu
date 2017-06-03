@@ -55,7 +55,7 @@ IhuFsmStateItem_t IhuFsmDcmiaris[] =
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 #include "l3ccl.h"
 strIhuCclDcmiPar_t zIhuCclDcmiarisCtrlTable;
-extern strIhuCclCtrlPar_t zIhuCclSensorStatus;
+extern strIhuCclTaskContext_t zIhuCclTaskContext;
 #else
 	#error Un-correct constant definition
 #endif
@@ -321,7 +321,7 @@ INT16 ihu_dcmiaris_ccl_sleep_and_fault_mode_ul_scan_illegal_dcmi_value(void)
 OPSTAT ihu_dcmiaris_take_picture(UINT8 cameraId)
 {
 	//先初始化这个数据为0。如果失败，或者不存在，上层可以利用这个来判定是否存在图像数据
-	zIhuCclSensorStatus.picActualPkgSize = 0;
+	zIhuCclTaskContext.picActualPkgSize = 0;
 	
 	//再进行具体的传送
 	if (IHU_CCL_SENSOR_CAM_NUMBER_MAX == 0){
@@ -329,7 +329,7 @@ OPSTAT ihu_dcmiaris_take_picture(UINT8 cameraId)
 	}
 	
 	else if (IHU_CCL_SENSOR_CAM_NUMBER_MAX == 1){
-		if (ihu_vmmw_cam_ulcdsc03_uart_get_picture(zIhuCclSensorStatus.picBuf, sizeof(zIhuCclSensorStatus.picBuf), &(zIhuCclSensorStatus.picActualPkgSize)) == IHU_FAILURE){
+		if (ihu_vmmw_cam_ulcdsc03_uart_get_picture(zIhuCclTaskContext.picBuf, sizeof(zIhuCclTaskContext.picBuf), &(zIhuCclTaskContext.picActualPkgSize)) == IHU_FAILURE){
 			zIhuSysStaPm.taskRunErrCnt[TASK_ID_DCMIARIS]++;
 			IhuErrorPrint("DCMIARIS: Read camera sensor error!\n");
 			return IHU_FAILURE;

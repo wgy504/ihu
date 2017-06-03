@@ -425,7 +425,7 @@ extern int8_t func_vmmw_rtc_pcf8563_init(void);
 extern int8_t func_vmmw_rtc_pcf8563_set_alarm_process(int16_t duration);
 extern bool func_vmmw_rtc_pcf8563_judge_alarm_happen(void);
 extern int16_t func_vmmw_rtc_pcf8563_get_alarm_duration(void);
-
+extern void func_vmmw_rtc_pcf8563_clear_af_and_power_off_cpu(void);
 
 
 //Local APIs
