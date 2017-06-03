@@ -78,7 +78,7 @@ IhuFsmStateItem_t IhuFsmCcl[] =
 };
 
 //Global variables defination
-strIhuCclCtrlPar_t zIhuCclSensorStatus;
+strIhuCclTaskContext_t zIhuCclTaskContext;
 
 //Main Entry
 //Input parameter would be useless, but just for similar structure purpose
@@ -124,7 +124,7 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 
 	//Global Variables
 	zIhuSysStaPm.taskRunErrCnt[TASK_ID_CCL] = 0;
-	memset(&zIhuCclSensorStatus, 0, sizeof(strIhuCclCtrlPar_t));
+	memset(&zIhuCclTaskContext, 0, sizeof(strIhuCclTaskContext_t));
 	
 	//启动心跳定时器，确保喂狗的基本功能
 	ret = ihu_timer_start(TASK_ID_CCL, TIMER_ID_1S_CCL_PERIOD_SCAN, \
@@ -141,23 +141,26 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 	}
 
 	//尽快读取门按钮的状态，以防止丢失。其实就是扫描门按钮的高低电平，判定系统是被谁唤醒的
-	bool handActFlag = FALSE;
-	handActFlag = ihu_l1hd_dido_f2board_lock_act_flag_read();
+	zIhuCclTaskContext.handActFlag = ihu_l1hd_dido_f2board_lock_act_flag_read();
 	
 	//拉灯拉BEEP
 	ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_GLOBAL_WORK_STATE, 20);
-	ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_SYS_START, 20);
+	ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_SYS_START, 6);
 	
 	//等待3秒，以便其它任务进入稳定状态
 	func_ccl_close_all_sensor_power();
 	ihu_sleep(3);
 
 	//判定是人工触发
-	if (handActFlag == TRUE){
+	if (zIhuCclTaskContext.handActFlag == TRUE){
+		IHU_DEBUG_PRINT_FAT("CCL: I am in the handal active state!!!\n");
 		//必须人为的设置一次8小时定时RTC，不然有可能遇到系统第一次启动的情形，从未设置过
 		//多次重复设置的问题，留给驱动解决：通过BOOT区的计数器判定是否设定过
 		if (func_vmmw_rtc_pcf8563_init() == IHU_SUCCESS){
 			func_vmmw_rtc_pcf8563_set_alarm_process(IHU_CCL_ALARM_NORMAL_PERIOD_DURATION);
+		}
+		else{
+			IhuErrorPrint("CCL: Error set RTC PCF8563!\n");
 		}
 
 		//再进行状态转移
@@ -177,6 +180,7 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 	else {
 		//读取闹铃设置信息
 		if (func_vmmw_rtc_pcf8563_get_alarm_duration() == IHU_CCL_ALARM_FAULT_PERIOD_DURATION){
+			IHU_DEBUG_PRINT_FAT("CCL: I am in the FAULT ALARM active state!!!\n");
 			//扫描门限
 			if (ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_door_open_state(IHU_CCL_SENSOR_LOCK_NUMBER_MAX) == TRUE){
 				if (func_vmmw_rtc_pcf8563_init() == IHU_SUCCESS){
@@ -197,6 +201,7 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 			
 			//进入正常的8小时周期报告
 			else{
+				IHU_DEBUG_PRINT_FAT("CCL: I am in the FAULT recover to NORMAL ALARM active state!!!\n");
 				if (func_vmmw_rtc_pcf8563_init() == IHU_SUCCESS){
 					func_vmmw_rtc_pcf8563_set_alarm_process(IHU_CCL_ALARM_NORMAL_PERIOD_DURATION);
 				}
@@ -215,6 +220,7 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 		
 		//其它情况，非10分钟定时，可以是8小时定时，或者其它原因。都当做定时周期性汇报。为了确保安全性，重新设置ALARM定时报告
 		else{
+			IHU_DEBUG_PRINT_FAT("CCL: I am in the NORMAL ALARM active state!!!\n");
 			//正常的进入周期性汇报状态机
 			if (func_vmmw_rtc_pcf8563_init() == IHU_SUCCESS){
 				func_vmmw_rtc_pcf8563_set_alarm_process(IHU_CCL_ALARM_NORMAL_PERIOD_DURATION);
@@ -347,12 +353,12 @@ OPSTAT fsm_ccl_dido_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param
 		
 	//获取报告数据
 	for (i=0; i<IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
-		zIhuCclSensorStatus.sensor.doorState[i] = rcv.sensor.doorState[i];
+		zIhuCclTaskContext.sensor.doorState[i] = rcv.sensor.doorState[i];
 	}
-	zIhuCclSensorStatus.sensor.batteryValue = rcv.sensor.batteryValue;
-	zIhuCclSensorStatus.sensor.fallState = rcv.sensor.fallState;
-	zIhuCclSensorStatus.sensor.tempValue = rcv.sensor.tempValue;
-	zIhuCclSensorStatus.sensor.humidValue = rcv.sensor.humidValue;
+	zIhuCclTaskContext.sensor.batteryValue = rcv.sensor.batteryValue;
+	zIhuCclTaskContext.sensor.fallState = rcv.sensor.fallState;
+	zIhuCclTaskContext.sensor.tempValue = rcv.sensor.tempValue;
+	zIhuCclTaskContext.sensor.humidValue = rcv.sensor.humidValue;
 	
 	//按照顺序，继续扫描第二组SPS传感器的数据
 	memset(&snd, 0, sizeof(msg_struct_ccl_com_sensor_status_req_t));
@@ -385,7 +391,7 @@ OPSTAT fsm_ccl_sps_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param_
 		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Receive message error!\n");
 		
 	//获取报告数据
-	zIhuCclSensorStatus.sensor.rssiValue = rcv.sensor.rssiValue;
+	zIhuCclTaskContext.sensor.rssiValue = rcv.sensor.rssiValue;
 	
 	//按照顺序，继续扫描第三组I2C传感器的数据
 	memset(&snd, 0, sizeof(msg_struct_ccl_com_sensor_status_req_t));
@@ -418,8 +424,8 @@ OPSTAT fsm_ccl_i2c_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param_
 		IHU_ERROR_PRINT_CCL_RECOVERY("CCL: Receive message error!\n");
 		
 	//获取报告数据
-	zIhuCclSensorStatus.sensor.rsv1Value = rcv.sensor.rsv1Value;
-	zIhuCclSensorStatus.sensor.rsv2Value = rcv.sensor.rsv2Value;
+	zIhuCclTaskContext.sensor.rsv1Value = rcv.sensor.rsv1Value;
+	zIhuCclTaskContext.sensor.rsv2Value = rcv.sensor.rsv2Value;
 	
 	//按照顺序，继续扫描第四组DCMI传感器的数据
 	memset(&snd, 0, sizeof(msg_struct_ccl_com_sensor_status_req_t));
@@ -453,13 +459,13 @@ OPSTAT fsm_ccl_dcmi_sensor_status_resp(UINT8 dest_id, UINT8 src_id, void * param
 		
 	//获取报告数据
 	for (i=0; i<IHU_CCL_SENSOR_LOCK_NUMBER_MAX; i++){
-		zIhuCclSensorStatus.sensor.cameraState[i] = rcv.sensor.cameraState[i];
+		zIhuCclTaskContext.sensor.cameraState[i] = rcv.sensor.cameraState[i];
 	}
 	
 	//发送SPS数据给串口，形成发送的报告
 	memset(&snd, 0, sizeof(msg_struct_ccl_sps_event_report_send_t));
 	snd.cmdid = IHU_CCL_DH_CMDID_EVENT_REPORT;
-	memcpy(&(snd.sensor), &zIhuCclSensorStatus.sensor, sizeof(com_sensor_status_t));
+	memcpy(&(snd.sensor), &zIhuCclTaskContext.sensor, sizeof(com_sensor_status_t));
 	snd.length = sizeof(msg_struct_ccl_sps_event_report_send_t);
 	ret = ihu_message_send(MSG_ID_CCL_SPS_EVENT_REPORT_SEND, TASK_ID_SPSVIRGO, TASK_ID_CCL, &snd, snd.length);
 	if (ret == IHU_FAILURE)
@@ -487,7 +493,7 @@ OPSTAT fsm_ccl_sps_event_report_cfm(UINT8 dest_id, UINT8 src_id, void * param_pt
 	
 	//延时并关断CPU系统
 	ihu_sleep(2);
-	ihu_l1hd_dido_f2board_cpu_power_ctrl_off();
+	func_cccl_cpu_power_off();
 		
 	//返回
 	return IHU_SUCCESS;
@@ -526,7 +532,7 @@ OPSTAT fsm_ccl_period_report_trigger(UINT8 dest_id, UINT8 src_id, void * param_p
 	//作为周期采样模式，这里是不必要的，只有在工作模式下才需要这个过程
 	
 	//准备接收数据的缓冲区
-	memset(&zIhuCclSensorStatus.sensor, 0, sizeof(com_sensor_status_t));
+	memset(&zIhuCclTaskContext.sensor, 0, sizeof(com_sensor_status_t));
 	
 	//由于消息队列的长度问题，这里采用串行发送接收模式，避免了多个接口的消息同时到达
 	//发送第一组DIDO采样命令
@@ -558,7 +564,7 @@ OPSTAT func_ccl_time_out_lock_work_active(void)
 		
 		//延时并关断CPU系统
 		ihu_sleep(2);
-		ihu_l1hd_dido_f2board_cpu_power_ctrl_off();
+		func_cccl_cpu_power_off();
 
 	}
 	
@@ -633,7 +639,7 @@ OPSTAT func_ccl_time_out_lock_work_active(void)
 		
 		//拉灯拉BEEP
 		ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_GLOBAL_WORK_STATE, 5);
-		ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_SYS_SHUT_DOWN, 30);		
+		ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_SYS_SHUT_DOWN, 6);		
 		
 		//关机，等待FAULT REPORT收到以后，会自动干的
 	}
@@ -672,11 +678,11 @@ OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 		
 		//拉灯拉BEEP，指示整个工作过程不成功
 		ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_GLOBAL_WORK_STATE, 5);
-		ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_SYS_SHUT_DOWN, 30);		
+		ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_SYS_SHUT_DOWN, 6);		
 
 		//延时并关断CPU系统
 		ihu_sleep(5);
-		ihu_l1hd_dido_f2board_cpu_power_ctrl_off();
+		func_cccl_cpu_power_off();
 	}
 		
 	//如果是得到开门授权指令，则发送命令到DIDO模块
@@ -881,7 +887,7 @@ OPSTAT fsm_ccl_sps_close_door_report_cfm(UINT8 dest_id, UINT8 src_id, void * par
 	
 	//延时并关断CPU系统
 	ihu_sleep(2);
-	ihu_l1hd_dido_f2board_cpu_power_ctrl_off();	
+	func_cccl_cpu_power_off();	
 	
 	//返回
 	return IHU_SUCCESS;
@@ -891,6 +897,7 @@ OPSTAT fsm_ccl_sps_close_door_report_cfm(UINT8 dest_id, UINT8 src_id, void * par
 OPSTAT fsm_ccl_hand_active_trigger_to_work(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {	
 	int ret = 0;
+	int temp = 0;
 	msg_struct_ccl_hand_active_trigger_t rcv;
 	msg_struct_ccl_sps_open_auth_inq_t snd1;
 	
@@ -903,6 +910,24 @@ OPSTAT fsm_ccl_hand_active_trigger_to_work(UINT8 dest_id, UINT8 src_id, void * p
 	
 	//打开所有接口
 	func_ccl_open_all_sensor_power();
+	
+////////////////////TEST CODE, TO BE DELETE//////////////	
+	
+	ihu_dcmiaris_take_picture(0);
+	
+	//测试倾角传感器
+	ihu_usleep(200);
+	
+	if (ihu_vmmw_navig_mpu6050_init() == IHU_SUCCESS){
+		//采用NF2结构
+		ihu_usleep(200);
+		temp = (UINT16)(ihu_wmmw_navig_mpu6050_axis_z_angle_caculate_by_static_method() * 100);
+		IHU_DEBUG_PRINT_NOR("I2CARIES: Fall Angle Read Result = [%4.2f]\n", (float)(temp*1.0)/100.0);
+	}else{
+		IhuErrorPrint("I2CARIES: Fall Angle Read Result error!\n");
+	}
+	
+////////////////////TEST CODE, TO BE DELETE//////////////	
 	
 	//启动定时器：如果是在工作模式下，允许被重复触发
 	ret = ihu_timer_start(TASK_ID_CCL, TIMER_ID_1S_CCL_LOCK_WORK_ACTIVE, \
@@ -944,7 +969,7 @@ OPSTAT fsm_ccl_fault_state_trigger(UINT8 dest_id, UINT8 src_id, void * param_ptr
 	func_ccl_open_all_sensor_power();
 	
 	//拉灯拉BEEP
-	ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_SYS_FAULT, 30);
+	ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_SYS_FAULT, 6);
 				
 	//发送后台报告
 		//发送差错状态报告给后台
@@ -976,7 +1001,7 @@ OPSTAT fsm_ccl_sps_fault_report_cfm(UINT8 dest_id, UINT8 src_id, void * param_pt
 	
 	//延时并关断CPU系统
 	ihu_sleep(5);
-	ihu_l1hd_dido_f2board_cpu_power_ctrl_off();		
+	func_cccl_cpu_power_off();		
 	
 	//返回
 	return IHU_SUCCESS;
@@ -1016,6 +1041,23 @@ void func_ccl_close_all_sensor_power(void)
 	ihu_l1hd_dido_f2board_mq2_cam_power_ctrl_off();
 }
 
+//关掉CPU的电源
+void func_cccl_cpu_power_off(void)
+{
+	//判定是人工触发
+	if (zIhuCclTaskContext.handActFlag == TRUE){
+		ihu_l1hd_dido_f2board_cpu_power_ctrl_off();
+	}
+	
+	//是RTC触发下电
+	else{
+		func_vmmw_rtc_pcf8563_clear_af_and_power_off_cpu();
+	}
+
+	return;
+}
+
+
 //由于错误，直接关机，等待再次被激活
 void func_ccl_stm_main_recovery_from_fault(void)
 {
@@ -1026,7 +1068,7 @@ void func_ccl_stm_main_recovery_from_fault(void)
 	
 	//延时并关断CPU系统
 	ihu_sleep(2);
-	ihu_l1hd_dido_f2board_cpu_power_ctrl_off();
+	func_cccl_cpu_power_off();
 	
 	//初始化模块的任务资源
 	//初始化定时器：暂时决定不做，除非该模块重新RESTART

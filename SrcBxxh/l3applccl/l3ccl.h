@@ -49,7 +49,7 @@ enum FSM_STATE_CCL
 
 //CONST常量
 #define IHU_CCL_ALARM_FAULT_PERIOD_DURATION    	1 //10   	//In minutes  正常为10分钟，未来待修改
-#define IHU_CCL_ALARM_NORMAL_PERIOD_DURATION    5 //8*60  //In minutes  正常为8小时，未来待修改
+#define IHU_CCL_ALARM_NORMAL_PERIOD_DURATION    3 //8*60  //In minutes  正常为8小时，未来待修改
 
 
 
@@ -68,16 +68,17 @@ extern IhuFsmStateItem_t IhuFsmCcl[];
 
 //本地需要用到的核心参数
 #define  IHU_CCL_PICTURE_BUFFER_SIZE_MAX 10000 //10KB, in BYTES
-typedef struct strIhuCclCtrlPar
+typedef struct strIhuCclCtrlContext
 {
 	com_sensor_status_t sensor;
-	UINT16  faultReportCnt;  //防止向后台送报告过于频繁，这里做一个分频控制
+	UINT16 faultReportCnt;  //防止向后台送报告过于频繁，这里做一个分频控制
 	UINT8  picBuf[IHU_CCL_PICTURE_BUFFER_SIZE_MAX];
 	UINT32 picActualPkgSize;
-}strIhuCclCtrlPar_t;
+	bool   handActFlag;
+}strIhuCclTaskContext_t;
 #define IHU_CCL_FALULT_REPORT_TIMES_MAX 200
 
-extern strIhuCclCtrlPar_t zIhuCclSensorStatus;
+extern strIhuCclTaskContext_t zIhuCclTaskContext;
 
 //API
 extern OPSTAT fsm_ccl_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
@@ -110,7 +111,7 @@ extern int8_t func_vmmw_rtc_pcf8563_set_alarm_process(int16_t duration);
 extern bool func_vmmw_rtc_pcf8563_judge_alarm_happen(void);
 extern int16_t func_vmmw_rtc_pcf8563_get_alarm_duration(void);
 extern OPSTAT ihu_dcmiaris_take_picture(UINT8 cameraId);
-
+extern void func_vmmw_rtc_pcf8563_clear_af_and_power_off_cpu(void);
 
 
 //Local API
@@ -121,7 +122,10 @@ OPSTAT func_ccl_time_out_lock_work_active(void);
 OPSTAT func_ccl_time_out_lock_work_wait_door_for_open(void);
 void func_ccl_close_all_sensor_power(void);
 void func_ccl_open_all_sensor_power(void);
+void func_cccl_cpu_power_off(void);
 void func_ccl_stm_main_recovery_from_fault(void);  //提供了一种比RESTART更低层次的状态恢复方式
+
+
 
 //高级定义，简化程序的可读性，包括return IHU_FAILURE在内的宏定义，没搞定。。。
 #define IHU_ERROR_PRINT_CCL_WO_RETURN zIhuSysStaPm.taskRunErrCnt[TASK_ID_CCL]++; func_ccl_stm_main_recovery_from_fault(); IhuErrorPrint

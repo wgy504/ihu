@@ -5030,7 +5030,7 @@ typedef struct StrMsg_HUITP_MSGID_uni_bfsc_statistic_confirm
 //MSG_ID_L3BFSC_WMC_STOP_REQ,             //       = 0x3B13,
 //MSG_ID_L3BFSC_WMC_STOP_RESP,            //       = 0x3B93,
 //MSG_ID_L3BFSC_WMC_NEW_WS_EVENT,         //       = 0x3B94,
-//MSG_ID_L3BFSC_WMC_REPEAT_WS_EVENT,	  	//	   	 = 0x3B95,
+//MSG_ID_L3BFSC_WMC_REPEAT_WS_EVENT,	  //	   = 0x3B95,
 //MSG_ID_L3BFSC_WMC_WS_COMB_OUT_REQ,      //       = 0x3B15,
 //MSG_ID_L3BFSC_WMC_WS_COMB_OUT_RESP,     //       = 0x3B95,
 //MSG_ID_L3BFSC_WMC_COMMAND_REQ,          //       = 0x3B17,
@@ -5160,6 +5160,9 @@ typedef struct StrMsg_HUITP_MSGID_sui_bfsc_set_config_resp
 {
 	UINT16 msgid;
 	UINT16 length;
+	UINT8  validFlag;  //是否执行成功
+	UINT8  spare1;
+	UINT16  errCode;
 }StrMsg_HUITP_MSGID_sui_bfsc_set_config_resp_t;
 
 /*
@@ -5177,6 +5180,9 @@ typedef struct StrMsg_HUITP_MSGID_sui_bfsc_start_resp
 {
 	UINT16 msgid;
 	UINT16 length;
+	UINT8  validFlag;  //是否执行成功
+	UINT8  spare1;
+	UINT16  errCode;
 }StrMsg_HUITP_MSGID_sui_bfsc_start_resp_t;
 
 //HUITP_MSGID_sui_bfsc_stop_req                    = 0x3B13,
@@ -5191,6 +5197,9 @@ typedef struct StrMsg_HUITP_MSGID_sui_bfsc_stop_resp
 {
 	UINT16 msgid;
 	UINT16 length;
+	UINT8  validFlag;  //是否执行成功
+	UINT8  spare1;
+	UINT16  errCode;
 }StrMsg_HUITP_MSGID_sui_bfsc_stop_resp_t;
 /*
 **	MSG_ID_L3BFSC_WMC_NEW_WS_EVENT,         //       = 0x3B94,
@@ -5202,9 +5211,21 @@ typedef struct StrMsg_HUITP_MSGID_sui_bfsc_stop_resp
 **	**
 **
 */
-#define 	WEIGHT_EVENT_ID_LOAD						   (0)
+#define 	WEIGHT_EVENT_ID_LOAD						(0)
 #define 	WEIGHT_EVENT_ID_EMPTY						(1)
 #define 	WEIGHT_EVENT_ID_PICKUP						(2)
+
+typedef struct CombineType
+{
+	UINT32	WeightCombineType;
+	UINT32	ActionDelayMs;
+}CombineType_t;
+#define HUITP_IEID_SUI_BFSC_COMINETYPE_NULL 0
+#define HUITP_IEID_SUI_BFSC_COMINETYPE_ROOLOUT 1
+#define HUITP_IEID_SUI_BFSC_COMINETYPE_DROP 2
+#define HUITP_IEID_SUI_BFSC_COMINETYPE_WARNING 3
+#define HUITP_IEID_SUI_BFSC_COMINETYPE_ERROR 4
+#define HUITP_IEID_SUI_BFSC_COMINETYPE_INVALID 0xFF
 
 typedef struct WeightIndication
 {
@@ -5219,6 +5240,7 @@ typedef struct StrMsg_HUITP_MSGID_sui_bfsc_new_ws_event
 	UINT16 length;
 	WmcId_t wmc_id;               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */
 	WeightIndication_t weight_ind;
+	CombineType_t weight_combin_type;
 }StrMsg_HUITP_MSGID_sui_bfsc_new_ws_event_t;
 
 //HUITP_MSGID_sui_bfsc_repeat_ws_event             = 0x3B95,
@@ -5228,6 +5250,7 @@ typedef struct StrMsg_HUITP_MSGID_sui_bfsc_repeat_ws_event
 	UINT16 length;
 	WmcId_t wmc_id;               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */
 	WeightIndication_t weight_ind;
+	CombineType_t weight_combin_type;
 }StrMsg_HUITP_MSGID_sui_bfsc_repeat_ws_event_t;
 
 /*
@@ -5255,12 +5278,6 @@ typedef struct StrMsg_HUITP_MSGID_sui_bfsc_repeat_ws_event
 // COMNINETPYE_ERROR_START
 // COMNINETPYE_ERROR_COMPLETE
 
-typedef struct CombineType
-{
-	UINT32	WeightCombineType;
-	UINT32	ActionDelayMs;
-}CombineType_t;
-
 //HUITP_MSGID_sui_bfsc_ws_comb_out_req             = 0x3B16,
 typedef struct StrMsg_HUITP_MSGID_sui_bfsc_ws_comb_out_req
 {
@@ -5274,6 +5291,7 @@ typedef struct StrMsg_HUITP_MSGID_sui_bfsc_ws_comb_out_resp
 {
 	UINT16 msgid;
 	UINT16 length;
+	CombineType_t weight_combin_type;
 }StrMsg_HUITP_MSGID_sui_bfsc_ws_comb_out_resp_t;
 
 /*
@@ -5298,15 +5316,15 @@ typedef struct StrMsg_HUITP_MSGID_sui_bfsc_fault_ind
 #define LED3_COMMAND_ID (0x0010)
 #define LED4_COMMAND_ID (0x0020)
 
-#define 	LED_COMMNAD_ON						(1)
-#define 	LED_COMMNAD_OFF						(2)
-#define 	LED_COMMNAD_BINKING_HIGHSPEED		(3)
-#define 	LED_COMMNAD_BINKING_LOWSPEED		(4)
+#define LED_COMMNAD_ON						(1)
+#define LED_COMMNAD_OFF						(2)
+#define LED_COMMNAD_BINKING_HIGHSPEED		(3)
+#define LED_COMMNAD_BINKING_LOWSPEED		(4)
 
-#define 	SESOR_COMMAND_ID_IGORE						(0) //MUSR BE 0
-#define 	SESOR_COMMAND_ID_WEITGH_READ				(3)
-#define 	SESOR_COMMAND_ID_CALIBRATION_ZERO			(4)
-#define 	SESOR_COMMAND_ID_CALIBRATION_FULL			(5)
+#define SESOR_COMMAND_ID_IGORE						(0) //MUSR BE 0
+#define SESOR_COMMAND_ID_WEITGH_READ				(3)
+#define SESOR_COMMAND_ID_CALIBRATION_ZERO			(4)
+#define SESOR_COMMAND_ID_CALIBRATION_FULL			(5)
 
 //特殊命令过程（测试等过程）
 typedef struct StrMsg_HUITP_MSGID_sui_bfsc_command_req
@@ -5328,9 +5346,12 @@ typedef struct StrMsg_HUITP_MSGID_sui_bfsc_command_resp
 	UINT16	msgid;
 	UINT16 length;
 	WmcId_t wmc_id;               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */
-  WmcErrorCode_t result;
+    WmcErrorCode_t result;
 	UINT32 	motor_speed;
 	UINT32 	sensor_weight;
+	UINT8  validFlag;  //是否执行成功
+	UINT8  spare1;
+	UINT16 spare2;
 }StrMsg_HUITP_MSGID_sui_bfsc_command_resp_t;
 
 /*
@@ -5352,6 +5373,10 @@ typedef struct StrMsg_HUITP_MSGID_sui_bfsc_err_inq_cmd_resp
 	UINT16 	length;
 	WmcId_t wmc_id;               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */
 	UINT16	error_code;
+	UINT32  average_weight;
+	UINT8  validFlag;  //是否执行成功
+	UINT8  spare1;
+	UINT16 spare2;
 }StrMsg_HUITP_MSGID_sui_bfsc_err_inq_cmd_resp_t;
 
 
@@ -5392,12 +5417,12 @@ typedef struct StrMsg_HUITP_MSGID_sui_bfsc_wmc_msg_header
 
 /* 3: WMC to AWS: */
 /* CAN ID: 0x0020 0000 (WMC Node ID 0) to 0x0020 000F (WMC Node ID 15) */
-#define WMC_TO_AWS_CAN_ID_PREFIX		(0x00200000U)
+#define WMC_TO_AWS_CAN_ID_PREFIX		(0x00300000U)
 //#define WMC_TO_AWS_CAN_ID_SUFFIX		(mwc_id)
 
 /* 4: WMC-S to AWS: */
-/* CAN ID: 0x0020 0010 (Node ID 0) */
-#define WMCS_TO_AWS_CAN_ID				(0x00200010U)
+/* CAN ID: 0x0030 0010 (Node ID 0) */
+#define WMCS_TO_AWS_CAN_ID				(0x00300010U)
 
 /* CAN Msg Length */
 //#define		MAX_WMC_CONTROL_MSG_LEN				(256U)
