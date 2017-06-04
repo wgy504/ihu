@@ -27,22 +27,20 @@ Project File Date:  06/03/2017
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 1 (build 61)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'PrjBfscFo@207VG'
-compiling l2adc_cs5532.c...
-..\..\SrcBxxh\l2frame\l2adc_cs5532.c(842): warning:  #550-D: variable "temp3" was set but never used
-  	int32_t temp3 = 0;
-..\..\SrcBxxh\l2frame\l2adc_cs5532.c(1060): warning:  #223-D: function "osKernelSysTick" declared implicitly
-            last_adc_tick = osKernelSysTick();
-..\..\SrcBxxh\l2frame\l2adc_cs5532.c(1076): warning:  #223-D: function "osKernelSysTick" declared implicitly
-            current_tick = osKernelSysTick();
-..\..\SrcBxxh\l2frame\l2adc_cs5532.c(1097): warning:  #223-D: function "osDelay" declared implicitly
-      osDelay(1);
-..\..\SrcBxxh\l2frame\l2adc_cs5532.c(1029): warning:  #177-D: variable "wsparm" was declared but never referenced
-    WeightSensorParamaters_t *wsparm = (WeightSensorParamaters_t *)param;
-..\..\SrcBxxh\l2frame\l2adc_cs5532.c: 5 warnings, 0 errors
+compiling freertos.c...
+../Src/freertos.c(234): warning:  #223-D: function "WeightSensorCalibrationZero" declared implicitly
+  	temp = WeightSensorCalibrationZero(&zWeightSensorParam);
+../Src/freertos.c(243): warning:  #223-D: function "WeightSensorCalibrationFull" declared implicitly
+  	temp = WeightSensorCalibrationFull(&zWeightSensorParam);
+../Src/freertos.c(250): warning:  #223-D: function "ReadWheChanOk" declared implicitly
+  		if(ReadWheChanOk())
+../Src/freertos.c(254): warning:  #223-D: function "WeightSensorReadCurrent" declared implicitly
+  				temp2 = WeightSensorReadCurrent(&zWeightSensorParam);
+../Src/freertos.c: 4 warnings, 0 errors
 linking...
-Program Size: Code=85016 RO-data=6196 RW-data=7640 ZI-data=90448  
+Program Size: Code=85040 RO-data=6228 RW-data=7644 ZI-data=90452  
 FromELF: creating hex file...
-"PrjBfscFo@207VG\PrjBfscFo@207VG.axf" - 0 Error(s), 5 Warning(s).
+"PrjBfscFo@207VG\PrjBfscFo@207VG.axf" - 0 Error(s), 4 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -60,7 +58,7 @@ Package Vendor: ARM
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:4.3.0
-Build Time Elapsed:  00:00:05
+Build Time Elapsed:  00:00:04
 </pre>
 </body>
 </html>

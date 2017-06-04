@@ -54,6 +54,7 @@
 
 /* Variables -----------------------------------------------------------------*/
 osThreadId defaultTaskHandle;
+osThreadId myTask01Handle;
 osThreadId myTask02Handle;
 osMessageQId myQueue01Handle;
 osTimerId myTimer01Handle;
@@ -190,8 +191,11 @@ void MX_FREERTOS_Init(void) {
 //  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 512);
 //  defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
+  osThreadDef(myTask01, blk230_task, osPriorityNormal, 0, 1024);
+  myTask01Handle = osThreadCreate(osThread(myTask01), NULL);
+  
   /* definition and creation of myTask02 */
-  osThreadDef(myTask02, blk230_task, osPriorityNormal, 0, 512);
+  osThreadDef(myTask02, blk230_task, osPriorityNormal, 0, 1024);
   myTask02Handle = osThreadCreate(osThread(myTask02), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
