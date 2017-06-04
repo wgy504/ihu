@@ -67,7 +67,7 @@ extern WeightSensorParamaters_t					zWeightSensorParam;
 void StartDefaultTask(void const * argument);
 void blk230_task(void const * argument);
 void Callback01(void const * argument);
-
+void weight_sensor_task(void const *param);
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
 /* USER CODE BEGIN FunctionPrototypes */
@@ -188,14 +188,15 @@ void MX_FREERTOS_Init(void) {
 
   /* Create the thread(s) */
   /* definition and creation of defaultTask */
-//  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 512);
-//  defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
+  //osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 512);
+  //osThreadDef(defaultTask, weight_sensor_task, osPriorityNormal, 0, 1024);
+  //defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
-  osThreadDef(myTask01, blk230_task, osPriorityNormal, 0, 1024);
+  osThreadDef(myTask01, weight_sensor_task, osPriorityNormal, 0, 512);
   myTask01Handle = osThreadCreate(osThread(myTask01), NULL);
   
   /* definition and creation of myTask02 */
-  osThreadDef(myTask02, blk230_task, osPriorityNormal, 0, 1024);
+  osThreadDef(myTask02, blk230_task, osPriorityNormal, 0, 512);
   myTask02Handle = osThreadCreate(osThread(myTask02), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
@@ -224,7 +225,11 @@ void StartDefaultTask(void const * argument)
   /* USER CODE BEGIN StartDefaultTask */
 	uint32_t temp, temp2;
 	int i;
-	
+  
+  //初始化Weight Sensor ADC
+	WeightSensorInit(&zWeightSensorParam);
+	printf("L3BFSC: fsm_bfsc_init: WeightSensorInit()\r\n");
+  
 	for(i = 10; i >= 0; i--)
 	{
 			printf("Wait for %d sec to call WeightSensorCalibrationZero() ...\r\n", i);

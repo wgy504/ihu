@@ -121,9 +121,10 @@ void msg_wmc_set_config_resp(error_code_t ec)
 		/* Build Message Content */
 		msg_wmc_set_config_resp.msgid = (MSG_ID_L3BFSC_WMC_SET_CONFIG_RESP);
     msg_wmc_set_config_resp.length = sizeof(msg_struct_l3bfsc_wmc_resp_t);
-    msg_wmc_set_config_resp.wmc_id = zWmcInvenory.wmc_id;
-		msg_wmc_set_config_resp.result.error_code = ec;
-    msg_wmc_set_config_resp.result.spare1 = 0;
+    //msg_wmc_set_config_resp.wmc_id = zWmcInvenory.wmc_id;
+		msg_wmc_set_config_resp.errCode = ec;
+    msg_wmc_set_config_resp.spare1 = 0;
+    msg_wmc_set_config_resp.validFlag = TRUE;
 		
 		IhuDebugPrint("L3BFSC: msg_wmc_set_config_resp: msgid = 0x%08X error_code=%d", \
 										msg_wmc_set_config_resp.msgid, ec);
@@ -281,8 +282,8 @@ void msg_wmc_start_req_process(void *param_ptr, error_code_t *ec_ptr)
 		}
 		
 		/* Process the message */
-		if (FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_COMBINATION) == IHU_FAILURE){
-  		IhuErrorPrint("L3BFSC: Error Set FSM State FSM_STATE_BFSC_COMBINATION");	
+		if (FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_SCAN) == IHU_FAILURE){
+  		IhuErrorPrint("L3BFSC: Error Set FSM State FSM_STATE_BFSC_SCAN");	
   		return;
   	}
     
@@ -321,8 +322,10 @@ void msg_wmc_start_resp(error_code_t ec)
 		/* Build Message Content */
 		msg_wmc_start_resp.msgid = (MSG_ID_L3BFSC_WMC_START_RESP);
 		msg_wmc_start_resp.length = MSG_SIZE_L3BFSC_WMC_START_RESP;
-    msg_wmc_start_resp.wmc_id = zWmcInvenory.wmc_id;
-		msg_wmc_start_resp.result.error_code = ec;
+    //msg_wmc_start_resp.wmc_id = zWmcInvenory.wmc_id;
+		msg_wmc_start_resp.errCode = ec;
+    msg_wmc_start_resp.validFlag = TRUE;
+    msg_wmc_start_resp.spare1 = 0;
 		
 		IhuDebugPrint("L3BFSC: msg_wmc_start_resp: msgid = 0x%08X\r\n", \
 										msg_wmc_start_resp.msgid);
@@ -411,8 +414,10 @@ void msg_wmc_stop_resp(error_code_t ec)
 
 		/* Build Message Content */
 		msg_wmc_stop_resp.msgid = (MSG_ID_L3BFSC_WMC_STOP_RESP);
-		msg_wmc_stop_resp.wmc_id = zWmcInvenory.wmc_id;
-		msg_wmc_stop_resp.result.error_code = ec;
+		//msg_wmc_stop_resp.wmc_id = zWmcInvenory.wmc_id;
+		msg_wmc_stop_resp.errCode = ec;
+    msg_wmc_stop_resp.validFlag = TRUE;
+    msg_wmc_stop_resp.spare1 = 0;
 		
 		IhuDebugPrint("L3BFSC: msg_wmc_stop_resp: msgid = 0x%08X\r\n", \
 										msg_wmc_stop_resp.msgid);
@@ -612,8 +617,10 @@ void msg_wmc_combin_resp(error_code_t ec)
 		
 		/* Build Message Content Header */
 		msg_wmc_combin_resp.msgid = (MSG_ID_L3BFSC_WMC_COMBIN_RESP);
-		msg_wmc_combin_resp.wmc_id = zWmcInvenory.wmc_id;
-		msg_wmc_combin_resp.result.error_code = ec;
+		//msg_wmc_combin_resp.wmc_id = zWmcInvenory.wmc_id;
+		msg_wmc_combin_resp.errCode = ec;
+    msg_wmc_combin_resp.validFlag = TRUE;
+    msg_wmc_combin_resp.spare1 = 0;
 		
 		IhuDebugPrint("L3BFSC: msg_wmc_combin_resp: msgid = 0x%08X\r\n", \
 										msg_wmc_combin_resp.msgid);

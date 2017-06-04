@@ -162,20 +162,12 @@ OPSTAT fsm_bfsc_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 	IhuDebugPrint("L3BFSC: fsm_bfsc_init: zWmcInvenory set 0, size = %d bytes\n", sizeof(WmcInventory_t));	
 	memset(&zCombAlgoParam, 0, sizeof(CombinationAlgorithmParamaters_t));
 	IhuDebugPrint("L3BFSC: fsm_bfsc_init: zCombAlgoParam set 0, size = %d bytes\n", sizeof(CombinationAlgorithmParamaters_t));	
-	memset(&zWeightSensorParam, 0, sizeof(WeightSensorParamaters_t));
-	IhuDebugPrint("L3BFSC: fsm_bfsc_init: zWeightSensorParam set 0, size = %d bytes\n", sizeof(WeightSensorParamaters_t));	
-	memset(&zMotorControlParam, 0, sizeof(MotorControlParamaters_t));
-	IhuDebugPrint("L3BFSC: fsm_bfsc_init: zMotorControlParam set 0, size = %d bytes\n", sizeof(MotorControlParamaters_t));
 
 	//初始化硬件接口
 	if (func_bfsc_hw_init(&zWmcInvenory) == IHU_FAILURE){	
 		IhuErrorPrint("L3BFSC: Error initialize interface!");
 		return IHU_FAILURE;
 	}
-	
-	//初始化Weight Sensor ADC
-	WeightSensorInit(&zWeightSensorParam);
-	IhuDebugPrint("L3BFSC: fsm_bfsc_init: WeightSensorInit()\r\n");
 
 	//Global Variables
 	zIhuSysStaPm.taskRunErrCnt[TASK_ID_BFSC] = 0;
@@ -1209,20 +1201,22 @@ OPSTAT fsm_bfsc_wmc_weight_ind(UINT8 dest_id, UINT8 src_id, void *param_ptr, UIN
 		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);
 
+  if(wsckb.k == 0) wsckb.k = 1;
+  
   weight = (rcv.adc_filtered - wsckb.b) / wsckb.k;
   
 	/* Process Message */
 	/* Check If it is the right/valid state to process the message */
-	if( FSM_STATE_BFSC_SCAN != FsmGetState(TASK_ID_BFSC) || FSM_STATE_BFSC_COMBINATION != FsmGetState(TASK_ID_BFSC))
+	if( FSM_STATE_BFSC_SCAN != FsmGetState(TASK_ID_BFSC) && FSM_STATE_BFSC_COMBINATION != FsmGetState(TASK_ID_BFSC))
 	{
-			IhuErrorPrint("L3BFSC: fsm_bfsc_wmc_weight_ind: in wrong FsmGetState(TASK_ID_BFSC), return\r\n");
+			IhuErrorPrint("L3BFSC: fsm_bfsc_wmc_weight_ind: in wrong state %d, return\r\n", FsmGetState(TASK_ID_BFSC));
 			return IHU_FAILURE;
 	};
 
   if(FSM_STATE_BFSC_SCAN == FsmGetState(TASK_ID_BFSC))
   {
     // send new weight event
-    IhuDebugPrint("L3BFSC: fsm_bfsc_wmc_weight_ind in FSM_STATE_BFSC_SCAN...\r\n");
+    IhuDebugPrint("L3BFSC: fsm_bfsc_wmc_weight_ind: k=%f b=%d weight=%d adc_filtered=%d repeat_times=%d\r\n", wsckb.k, wsckb.b, weight, rcv.adc_filtered, rcv.repeat_times);
     
     /* Build Message Content Header */
     if(rcv.repeat_times > 0)
@@ -1234,6 +1228,8 @@ OPSTAT fsm_bfsc_wmc_weight_ind(UINT8 dest_id, UINT8 src_id, void *param_ptr, UIN
     msg_wmc_ws_event.weight_ind.average_weight = 	weight;
     msg_wmc_ws_event.weight_ind.weight_event = WEIGHT_EVENT_ID_LOAD;
     msg_wmc_ws_event.weight_ind.repeat_times = rcv.repeat_times;
+    msg_wmc_ws_event.weight_combin_type.ActionDelayMs = 0;
+    msg_wmc_ws_event.weight_combin_type.WeightCombineType = HUITP_IEID_SUI_BFSC_COMINETYPE_NULL;
     
     /* Send Message to CAN Task */
     ret = ihu_message_send(MSG_ID_L3BFSC_WMC_NEW_WS_EVENT, TASK_ID_CANVELA, TASK_ID_BFSC, \
@@ -1245,7 +1241,7 @@ OPSTAT fsm_bfsc_wmc_weight_ind(UINT8 dest_id, UINT8 src_id, void *param_ptr, UIN
   }
   else if (FSM_STATE_BFSC_COMBINATION == FsmGetState(TASK_ID_BFSC))
   {
-    IhuDebugPrint("L3BFSC: fsm_bfsc_wmc_weight_ind in FSM_STATE_BFSC_COMBINATION...\r\n");
+    IhuDebugPrint("L3BFSC: fsm_bfsc_wmc_weight_ind: weight=%d adc_filtered=%d rep_times=%d\r\n", weight, rcv.adc_filtered, rcv.repeat_times);
     
     if(weight < zWeightSensorParam.WeightSensorEmptyThread)
     {
@@ -1254,10 +1250,11 @@ OPSTAT fsm_bfsc_wmc_weight_ind(UINT8 dest_id, UINT8 src_id, void *param_ptr, UIN
         
       /* Build Message Content Header */
       msg_wmc_combin_resp.msgid = (MSG_ID_L3BFSC_WMC_COMBIN_RESP);
-      msg_wmc_combin_resp.wmc_id = zWmcInvenory.wmc_id;
+      //msg_wmc_combin_resp.wmc_id = zWmcInvenory.wmc_id;
       msg_wmc_combin_resp.length = sizeof(msg_struct_l3bfsc_wmc_resp_t);
-      msg_wmc_combin_resp.result.error_code = ERROR_CODE_NO_ERROR;
-      msg_wmc_combin_resp.result.spare1 = 0;
+      msg_wmc_combin_resp.errCode = ERROR_CODE_NO_ERROR;
+      msg_wmc_combin_resp.validFlag = TRUE;
+      msg_wmc_combin_resp.spare1 = 0;
       
       IhuDebugPrint("L3BFSC: msg_wmc_combin_resp: msgid = 0x%08X\r\n", \
                       msg_wmc_combin_resp.msgid);
@@ -1275,7 +1272,7 @@ OPSTAT fsm_bfsc_wmc_weight_ind(UINT8 dest_id, UINT8 src_id, void *param_ptr, UIN
     }
   }
   else{
-    IhuErrorPrint("L3BFSC: fsm_bfsc_wmc_weight_ind: in wrong FsmGetState(TASK_ID_BFSC), return\r\n");
+    IhuErrorPrint("L3BFSC: fsm_bfsc_wmc_weight_ind: in wrong state: %d, return\r\n", FsmGetState(TASK_ID_BFSC));
     ret = IHU_FAILURE;
   }
   

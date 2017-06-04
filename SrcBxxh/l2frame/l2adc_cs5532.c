@@ -1,4 +1,5 @@
 #include <inttypes.h>
+#include "cmsis_os.h"
 #include "l2adc_cs5532.h"
 #include "main.h"
 
@@ -820,9 +821,11 @@ uint32_t WeightSensorCalibrationFull(WeightSensorParamaters_t *pwsp)
 	
 	pwsp->WeightSensorCalibrationFullAdcValue = temp;
 	
-	IhuDebugPrint("l2adc_cs5532: WeightSensorCalibrationFull: ZeroADC=%d FullADC=%d FullWeigth=%d\r\n", 
-								pwsp->WeightSensorCalibrationZeroAdcValue, pwsp->WeightSensorCalibrationFullAdcValue, pwsp->WeightSensorCalibrationFullWeight);
-	
+  WeightSensorCalibrationKB(pwsp);
+
+  IhuDebugPrint("l2adc_cs5532: WeightSensorCalibrationFull: ZeroADC=%d FullADC=%d FullWeigth=%d k=%f b=%d\r\n", 
+								pwsp->WeightSensorCalibrationZeroAdcValue, pwsp->WeightSensorCalibrationFullAdcValue, pwsp->WeightSensorCalibrationFullWeight, wsckb.k, wsckb.b);
+  
 	return pwsp->WeightSensorCalibrationFullAdcValue;
 	
 }
@@ -888,8 +891,8 @@ int32_t WeightSensorReadCurrent(WeightSensorParamaters_t *pwsp)
 	temp2 = temp - wsckb.b;
 	temp3 = temp2 / wsckb.k;
 		
-//	temp2 = temp-pwsp->WeightSensorCalibrationZeroAdcValue;
-//	temp3 = (temp2*pwsp->WeightSensorCalibrationFullWeight)/(pwsp->WeightSensorCalibrationFullAdcValue-pwsp->WeightSensorCalibrationZeroAdcValue);
+	temp2 = temp-pwsp->WeightSensorCalibrationZeroAdcValue;
+	temp3 = (temp2*pwsp->WeightSensorCalibrationFullWeight)/(pwsp->WeightSensorCalibrationFullAdcValue-pwsp->WeightSensorCalibrationZeroAdcValue);
 	
 //	IhuDebugPrint("l2adc_cs5532: WeightSensorReadCurrent: temp=%d, temp2=%d, ZeroAdc=%d, FullAdc=%d, FullWeight=%d, k=%f, b=%d, temp3=%d\r\n",
 //								temp, temp2, pwsp->WeightSensorCalibrationZeroAdcValue, 
@@ -899,9 +902,9 @@ int32_t WeightSensorReadCurrent(WeightSensorParamaters_t *pwsp)
 //								temp, temp2, pwsp->WeightSensorCalibrationZeroAdcValue, 
 //								pwsp->WeightSensorCalibrationFullAdcValue, pwsp->WeightSensorCalibrationFullWeight, 
 //	              wsckb.k, wsckb.b, temp3);
-  temp = 10000 + (rand() % 5000) - 2500;
-	return temp; ///THIS IS ONLY FOR TEST
-	//return temp3;
+  //temp = 10000 + (rand() % 5000) - 2500;
+	//return temp; ///THIS IS ONLY FOR TEST
+	return temp3;
 	
 }	
 
@@ -1028,6 +1031,13 @@ void weight_sensor_task(void const *param)
   OPSTAT ret;
   WeightSensorParamaters_t *wsparm = (WeightSensorParamaters_t *)param;
 
+  //初始化Weight Sensor ADC
+	WeightSensorInit(&zWeightSensorParam);
+	IhuDebugPrint("L3BFSC: fsm_bfsc_init: WeightSensorInit()\r\n");
+
+  wsckb.k = 0.089660;
+  wsckb.b = 7139;
+  
   g_weight_sensor_filter.adc_filtered[0] = 0;
   g_weight_sensor_filter.adc_filtered[1] = 0;
   g_weight_sensor_filter.beta_num[0] = WS_BETA_NUM1;
@@ -1063,6 +1073,8 @@ void weight_sensor_task(void const *param)
           weight_ind.adc_filtered = adc_filtered;
           weight_ind.repeat_times = repeat_times;
           
+					IhuDebugPrint("WS: new weight ind: adc_filtered=%d\n", adc_filtered);
+					
           // weight changed, send weight indication to L3BFSC
           ret = ihu_message_send(MSG_ID_L3BFSC_WMC_WEIGHT_IND, TASK_ID_BFSC, TASK_ID_BFSC, \
 														&weight_ind, sizeof(msg_struct_l3bfsc_weight_ind_t));
@@ -1082,6 +1094,8 @@ void weight_sensor_task(void const *param)
             weight_ind.adc_filtered = adc_filtered;
             weight_ind.repeat_times = repeat_times;
             
+						IhuDebugPrint("WS: repeat weight ind: adc_filtered=%d repeat_times=%d\n", adc_filtered, repeat_times);
+						
             // weight changed, send weight indication to L3BFSC
             ret = ihu_message_send(MSG_ID_L3BFSC_WMC_WEIGHT_IND, TASK_ID_BFSC, TASK_ID_BFSC, \
   														&weight_ind, sizeof(msg_struct_l3bfsc_weight_ind_t));
@@ -1094,7 +1108,7 @@ void weight_sensor_task(void const *param)
       }
     }
 
-    osDelay(1);
+    osDelay(1000);
 	}
 }
 

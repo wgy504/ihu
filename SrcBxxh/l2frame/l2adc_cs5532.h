@@ -170,7 +170,7 @@ typedef struct weight_sensor_cmd_s
 
 typedef struct weight_sensor_filter_s
 {
-  uint32_t adc_filtered[2];
+  int32_t adc_filtered[2];
   uint32_t beta_num[2];
   uint32_t stable_thresh;
   uint32_t change_thresh;

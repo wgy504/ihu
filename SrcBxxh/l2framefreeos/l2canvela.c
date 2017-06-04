@@ -825,13 +825,17 @@ OPSTAT WmcAwsMsgCheck(void * param_ptr, UINT16 msg_len)
 		case MSG_ID_L3BFSC_WMC_COMMAND_RESP:
 			if(MSG_SIZE_L3BFSC_WMC_COMMAND_RESP == msg_len) return IHU_SUCCESS;
 			break;
-		
+
+    case MSG_ID_L3BFSC_WMC_REPEAT_WS_EVENT:
+      if(MSG_SIZE_L3BFSC_WMC_REPEAT_WS_EVENT == msg_len) return IHU_SUCCESS;
+      break;
+      
 		default:
 			IhuErrorPrint("CANVELA: WmcAwsMsgCheck, Invalid msgid = [0x%08X], return\n", msgid);
 			return IHU_FAILURE;
 	}
 	
-	IhuErrorPrint("CANVELA: WmcAwsMsgCheck, should not enter here, return\n");
+	IhuErrorPrint("CANVELA: WmcAwsMsgCheck, should not enter here, msgid=%d msglen=%d return\n", msgid, msg_len);
 	return IHU_FAILURE;
 }
 
@@ -851,6 +855,8 @@ uint16_t InternalMsgIdMapToHuitpMsgId(uint32_t internal_msgid)
 			return HUITP_MSGID_sui_bfsc_stop_resp;
 		case MSG_ID_L3BFSC_WMC_NEW_WS_EVENT:
 			return HUITP_MSGID_sui_bfsc_new_ws_event;
+    case MSG_ID_L3BFSC_WMC_REPEAT_WS_EVENT:
+      return HUITP_MSGID_sui_bfsc_repeat_ws_event;
 		case MSG_ID_L3BFSC_WMC_COMBIN_RESP:
 			return HUITP_MSGID_sui_bfsc_ws_comb_out_resp;
 		case MSG_ID_L3BFSC_WMC_COMMAND_RESP:

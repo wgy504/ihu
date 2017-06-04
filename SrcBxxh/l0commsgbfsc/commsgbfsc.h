@@ -116,8 +116,8 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_L3BFSC_CAN_CMD_RESP,
 	
 	//WMC <-> AWS //MYC
-	MSG_ID_L3BFSC_WMC_STARTUP_IND,
-	MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ,
+	MSG_ID_L3BFSC_WMC_STARTUP_IND,      
+	MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ,    //0x24
 	MSG_ID_L3BFSC_WMC_SET_CONFIG_RESP,
 	MSG_ID_L3BFSC_WMC_START_REQ,
 	MSG_ID_L3BFSC_WMC_START_RESP,
@@ -460,9 +460,13 @@ typedef struct msg_struct_l3bfsc_wmc_resp
 {
 	UINT16	msgid;
 	UINT16  length;
-	WmcId_t wmc_id;               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */
-  WmcErrorCode_t result;
+  UINT8  validFlag;  //是否执行成功
+	UINT8  spare1;
+	UINT16  errCode;
+	//WmcId_t wmc_id;               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */
+  //WmcErrorCode_t result;
 }msg_struct_l3bfsc_wmc_resp_t;
+
 
 
 //typedef struct WmcInventory
@@ -597,6 +601,7 @@ typedef struct msg_struct_l3bfsc_wmc_ws_event
 	UINT16 length;
 	WmcId_t wmc_id;               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */
 	WeightIndication_t weight_ind;
+  CombineType_t weight_combin_type;
 }msg_struct_l3bfsc_wmc_ws_event_t;
 
 /*
