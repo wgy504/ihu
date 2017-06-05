@@ -176,6 +176,7 @@ typedef struct weight_sensor_filter_s
   uint32_t change_thresh;
 }weight_sensor_filter_t;
 
+int weight_sensor_map_adc_to_weight(uint32_t adc_value);
 int weight_sensor_send_cmd(uint32_t type);
 int weight_sensor_recv_cmd(weight_sensor_cmd_t *command);
 uint32_t weight_sensor_read_and_filtering(weight_sensor_filter_t *wsf);

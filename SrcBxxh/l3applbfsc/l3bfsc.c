@@ -173,7 +173,6 @@ OPSTAT fsm_bfsc_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 	zIhuSysStaPm.taskRunErrCnt[TASK_ID_BFSC] = 0;
 	zIhuL3bfscLatestMeasureWeightValue = 0;
 	zIhuL3bfscMotoRecoverTimes = 0;
-
   // start a timer to send startup ind 
 	ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_10MS_BFSC_STARTUP_IND, \
 		zIhuSysEngPar.timer.array[TIMER_ID_10MS_BFSC_STARTUP_IND].dur, TIMER_TYPE_PERIOD, 
@@ -183,7 +182,6 @@ OPSTAT fsm_bfsc_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 		IhuErrorPrint("L3BFSC: Error start TIMER_ID_1S_BFSC_STARTUP_IND\n");
 		return IHU_FAILURE;
 	}
-	
 	//返回
 	return IHU_SUCCESS;
 }
@@ -1193,7 +1191,7 @@ OPSTAT fsm_bfsc_wmc_weight_ind(UINT8 dest_id, UINT8 src_id, void *param_ptr, UIN
   OPSTAT ret = IHU_SUCCESS;
 	msg_struct_l3bfsc_weight_ind_t rcv;
   msg_struct_l3bfsc_wmc_ws_event_t msg_wmc_ws_event;
-  uint32_t weight;
+  int weight;
 	
 	//收到消息并做参数检查
 	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_weight_ind_t));
@@ -1201,9 +1199,7 @@ OPSTAT fsm_bfsc_wmc_weight_ind(UINT8 dest_id, UINT8 src_id, void *param_ptr, UIN
 		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);
 
-  if(wsckb.k == 0) wsckb.k = 1;
-  
-  weight = (rcv.adc_filtered - wsckb.b) / wsckb.k;
+  weight = weight_sensor_map_adc_to_weight(rcv.adc_filtered);
   
 	/* Process Message */
 	/* Check If it is the right/valid state to process the message */

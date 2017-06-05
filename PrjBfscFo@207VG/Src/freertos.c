@@ -189,7 +189,6 @@ void MX_FREERTOS_Init(void) {
   /* Create the thread(s) */
   /* definition and creation of defaultTask */
   //osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 512);
-  //osThreadDef(defaultTask, weight_sensor_task, osPriorityNormal, 0, 1024);
   //defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
   osThreadDef(myTask01, weight_sensor_task, osPriorityNormal, 0, 512);
