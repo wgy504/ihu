@@ -1497,10 +1497,18 @@ void PCF8563_SetAlarm(unsigned char PCF_Format, _PCF8563_Alarm_Typedef* PCF_Data
 	//读取控制/状态寄存器2值
 	//
 	Alarm_Interrupt = func_vmmw_rtc_pcf8563_read_byte(PCF8563_Address_Control_Status_2);
-	Alarm_Interrupt &= PCF_Alarm_INT_Close;  //先关闭中断输出
-	Alarm_Interrupt &= PCF_Control_ClearAF;;  //清除标志
-	func_vmmw_rtc_pcf8563_write_reg(PCF8563_Address_Control_Status_2, Alarm_Interrupt);
+	IhuDebugPrint("VMMWRTC: PCF8563_Address_Control_Status_2: 0x%02X(before clear AIE)\n", Alarm_Interrupt);
 	
+	//Alarm_Interrupt &= PCF_Time_INT_Close;  //先关闭中断输出
+	//Alarm_Interrupt &= PCF_Alarm_INT_Close;  //先关闭中断输出 // Clean this INT will also make INT high, so remove it !!!!!!
+	//Alarm_Interrupt &= PCF_Control_ClearAF;;  //清除标志
+	//Alarm_Interrupt &= PCF_Control_ClearAF;;  //清除标志
+	
+	func_vmmw_rtc_pcf8563_write_reg(PCF8563_Address_Control_Status_2, Alarm_Interrupt);
+
+	Alarm_Interrupt = func_vmmw_rtc_pcf8563_read_byte(PCF8563_Address_Control_Status_2);
+	IhuDebugPrint("VMMWRTC: PCF8563_Address_Control_Status_2: 0x%02X(after clear AIE)\n", Alarm_Interrupt);
+
 	//
 	//根据开启类型进行相应操作
 	//
@@ -1518,14 +1526,19 @@ void PCF8563_SetAlarm(unsigned char PCF_Format, _PCF8563_Alarm_Typedef* PCF_Data
 		if (PCF_DataStruct->RTC_AlarmType & RTC_AlarmType_Minutes)   PCF_DataStruct->RTC_AlarmMinutes  |= PCF_Alarm_MinutesClose;  //分钟闹铃
 		if (PCF_DataStruct->RTC_AlarmType & RTC_AlarmType_WeekDays)  PCF_DataStruct->RTC_AlarmWeekDays |= PCF_Alarm_WeekDaysClose;  //分钟闹铃
 	}
+
 	//
 	//判断是否开启中断输出
 	//
 	if (Alarm_State == 2)
 	{
 		Alarm_Interrupt |= PCF_Alarm_INT_Open;
-		Alarm_Interrupt &= PCF_Control_ClearAF;;  //清除标志
+		//Alarm_Interrupt &= PCF_Control_ClearAF;;  //清除标志
+		//Clear AF will disable INT pin, INT will goes high, and system will be power off, so move this two end of the process
+		//!!!!! BE AWARE THAT "Alarm_Interrupt &= PCF_Control_ClearAF" MUST BE PUT IN LAST STEP OF EVERY WAKEUP!!!!
+		//!!!!! THIS IS RELATED TO THE CCL HW DESIGN, Clean AT/TF will power down the CPU !!!!!
 	}
+
 	//
 	//拷贝数据
 	//
@@ -1541,6 +1554,10 @@ void PCF8563_SetAlarm(unsigned char PCF_Format, _PCF8563_Alarm_Typedef* PCF_Data
 	//写入控制/状态寄存器2数值
 	//
 	func_vmmw_rtc_pcf8563_write_reg(PCF8563_Address_Control_Status_2, Alarm_Interrupt);
+	
+	Alarm_Interrupt = func_vmmw_rtc_pcf8563_read_byte(PCF8563_Address_Control_Status_2);
+	IhuDebugPrint("VMMWRTC: PCF8563_Address_Control_Status_2: 0x%02X(after set AIE)\n", Alarm_Interrupt);	
+	
 }
 
 /**
@@ -1649,6 +1666,24 @@ int8_t func_vmmw_rtc_pcf8563_set_alarm_process(int16_t duration)
 	PCF8563_SetTime(PCF_Format, &PCF_DataStruct_Time);
 	PCF8563_SetDate(PCF_Format, PCF_Century, &PCF_DataStruct_Date);
 	
+	//MYC 2017/06/06, ADDED TO GET THE CURRENT TIME
+	_PCF8563_Time_Typedef PCF_DataStructTime;
+	_PCF8563_Date_Typedef PCF_DataStructDate;
+	
+	memset(&PCF_DataStructTime, 0, sizeof(_PCF8563_Time_Typedef));
+	memset(&PCF_DataStructDate, 0, sizeof(_PCF8563_Date_Typedef));
+	
+	PCF8563_GetTime(PCF_Format_BCD, &PCF_DataStructTime);
+	PCF8563_GetDate(PCF_Format_BCD, &PCF_Century, &PCF_DataStructDate);
+	
+	IhuDebugPrint("VMMWRTC: Current Time: TimeSecond=0x%02X, TimeMinutes=0x%02X, TimeHours=0x%02X\n",
+								PCF_DataStructTime.RTC_Seconds, PCF_DataStructTime.RTC_Minutes,	PCF_DataStructTime.RTC_Hours);	
+
+  IhuDebugPrint("VMMWRTC: Current Date: TimeWeekDay=0x%02X, TimeDay=0x%02X, TimeMonth=0x%02X, TimeYear=0x%02X\n",
+								PCF_DataStructDate.RTC_WeekDays, PCF_DataStructDate.RTC_Days,	
+								PCF_DataStructDate.RTC_Months, PCF_DataStructDate.RTC_Years);	
+
+	
 	//设置告警时间
 	_PCF8563_Alarm_Typedef PCF_DataStruct_Alarm;
 	memset(&PCF_DataStruct_Alarm, 0, sizeof(_PCF8563_Alarm_Typedef));
@@ -1658,10 +1693,15 @@ int8_t func_vmmw_rtc_pcf8563_set_alarm_process(int16_t duration)
 	tmpMin = duration - tmpHour * 60;
 	if (tmpHour >= 24) tmpHour = tmpHour - (tmpHour/24)*24;
 	
-	PCF_DataStruct_Alarm.RTC_AlarmDays = 0;
-	PCF_DataStruct_Alarm.RTC_AlarmHours = tmpHour;
-	PCF_DataStruct_Alarm.RTC_AlarmMinutes = tmpMin;
-	PCF_DataStruct_Alarm.RTC_AlarmWeekDays = 0;
+	PCF_DataStruct_Alarm.RTC_AlarmDays = PCF_DataStructDate.RTC_Days;
+	PCF_DataStruct_Alarm.RTC_AlarmHours = (PCF_DataStructTime.RTC_Hours + tmpHour) % 24;
+	PCF_DataStruct_Alarm.RTC_AlarmMinutes = (PCF_DataStructTime.RTC_Minutes + tmpMin) % 60;
+	PCF_DataStruct_Alarm.RTC_AlarmWeekDays = PCF_DataStructDate.RTC_WeekDays;
+	
+	IhuDebugPrint("VMMWRTC: Set alarm to WeekDay=0x%02X, Day=0x%02X, Hour=0x%02X, Minute=0x%02X\n",
+								PCF_DataStruct_Alarm.RTC_AlarmWeekDays, PCF_DataStruct_Alarm.RTC_AlarmDays,	
+								PCF_DataStruct_Alarm.RTC_AlarmHours, PCF_DataStruct_Alarm.RTC_AlarmMinutes);	
+
 	//只接受使用Hour/Min来控制闹铃的时间
 	PCF_DataStruct_Alarm.RTC_AlarmType = RTC_AlarmType_Minutes | RTC_AlarmType_Hours;
 	//PCF_DataStruct_Alarm.RTC_AlarmType = RTC_AlarmType_Minutes | RTC_AlarmType_Hours | RTC_AlarmType_Days | RTC_AlarmType_WeekDays;
@@ -1751,7 +1791,18 @@ int16_t func_vmmw_rtc_pcf8563_get_alarm_duration(void)
 //清掉AF标志位并下电CPU
 extern void func_vmmw_rtc_pcf8563_clear_af_and_power_off_cpu(void)
 {
+	unsigned char Alarm_Interrupt = 0;  //控制/状态寄存器闹铃中断缓存
+
+	Alarm_Interrupt = func_vmmw_rtc_pcf8563_read_byte(PCF8563_Address_Control_Status_2);
+	IHU_DEBUG_PRINT_FAT("CCL: PCF8563_Address_Control_Status_2=0x%02X, clear AF & TF to power down CPU\n", Alarm_Interrupt);
+	
+	//Alarm_Interrupt &= PCF_Alarm_INT_Close;  //先关闭中断输出 //make sure this is processed when enable timer
+	Alarm_Interrupt &= PCF_Control_ClearAF;;  //清除标志
+
+	//Alarm_Interrupt &= PCF_Time_INT_Close;  //先关闭中断输出 //make sure this is processed when enable timer
+	Alarm_Interrupt &= PCF_Control_ClearTF;;  //清除标志
+
+	func_vmmw_rtc_pcf8563_write_reg(PCF8563_Address_Control_Status_2, Alarm_Interrupt);
 
 	return;
 }
-
