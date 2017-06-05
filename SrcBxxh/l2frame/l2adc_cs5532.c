@@ -890,18 +890,15 @@ int32_t WeightSensorReadCurrent(WeightSensorParamaters_t *pwsp)
 	
 	temp2 = temp - wsckb.b;
 	temp3 = temp2 / wsckb.k;
-		
-	temp2 = temp-pwsp->WeightSensorCalibrationZeroAdcValue;
-	temp3 = (temp2*pwsp->WeightSensorCalibrationFullWeight)/(pwsp->WeightSensorCalibrationFullAdcValue-pwsp->WeightSensorCalibrationZeroAdcValue);
 	
 //	IhuDebugPrint("l2adc_cs5532: WeightSensorReadCurrent: temp=%d, temp2=%d, ZeroAdc=%d, FullAdc=%d, FullWeight=%d, k=%f, b=%d, temp3=%d\r\n",
 //								temp, temp2, pwsp->WeightSensorCalibrationZeroAdcValue, 
 //								pwsp->WeightSensorCalibrationFullAdcValue, pwsp->WeightSensorCalibrationFullWeight, 
 //	              wsckb.k, wsckb.b, temp3);
-//	printf("l2adc_cs5532: WeightSensorReadCurrent: temp=%d, temp2=%d, ZeroAdc=%d, FullAdc=%d, FullWeight=%d, k=%f, b=%d, temp3=%d\r\n",
-//								temp, temp2, pwsp->WeightSensorCalibrationZeroAdcValue, 
-//								pwsp->WeightSensorCalibrationFullAdcValue, pwsp->WeightSensorCalibrationFullWeight, 
-//	              wsckb.k, wsckb.b, temp3);
+	printf("l2adc_cs5532: WeightSensorReadCurrent: temp=%d, temp2=%d, ZeroAdc=%d, FullAdc=%d, FullWeight=%d, k=%f, b=%d, temp3=%d\r\n",
+								temp, temp2, pwsp->WeightSensorCalibrationZeroAdcValue, 
+								pwsp->WeightSensorCalibrationFullAdcValue, pwsp->WeightSensorCalibrationFullWeight, 
+	              wsckb.k, wsckb.b, temp3);
   //temp = 10000 + (rand() % 5000) - 2500;
 	//return temp; ///THIS IS ONLY FOR TEST
 	return temp3;
@@ -962,6 +959,22 @@ uint32_t SpsGainToBitwidthMapping(uint32_t wordrate_index, uint32_t gain_index)
 
 weight_sensor_cmd_t g_weight_sensor_cmd;
 
+int weight_sensor_map_adc_to_weight(uint32_t adc_value)
+{
+  int den, weight;
+  
+  den = (zWeightSensorParam.WeightSensorCalibrationFullAdcValue - zWeightSensorParam.WeightSensorCalibrationZeroAdcValue);
+  if(den <= 0)
+    den = 6000;  // set a default value
+  
+  weight = (adc_value-zWeightSensorParam.WeightSensorCalibrationZeroAdcValue);
+  if(weight < 0)
+    weight = 0;
+  weight = weight*zWeightSensorParam.WeightSensorCalibrationFullWeight/den;
+
+  return weight;
+}
+
 // send a comman to weight sensor
 int weight_sensor_send_cmd(uint32_t type)
 {
@@ -991,31 +1004,51 @@ int weight_sensor_recv_cmd(weight_sensor_cmd_t *command)
 
 weight_sensor_filter_t g_weight_sensor_filter;
 
-#define WS_BETA_DEN   4
+#define WS_BETA_DEN   4  // DEN=1<<4
 #define WS_BETA_NUM1  15
 #define WS_BETA_NUM2  10
 uint32_t weight_sensor_read_and_filtering(weight_sensor_filter_t *wsf)
 {
-  uint32_t adc_raw;
-  
-  if(ReadWheChanOk())
-	{
-		adc_raw = ReadSeriesADValue();
+  int i=0, adc_raw=0;
+  int temp;
 
-    wsf->adc_filtered[0] = (((wsf->adc_filtered[0] - adc_raw) * wsf->beta_num[0]) >> WS_BETA_DEN) + adc_raw;
-    wsf->adc_filtered[1] = (((wsf->adc_filtered[1] - adc_raw) * wsf->beta_num[1]) >> WS_BETA_DEN) + adc_raw;
-
-    IhuDebugPrint("adc_raw=%d adc_filtered=(%d, %d)\n", adc_raw, wsf->adc_filtered[0], wsf->adc_filtered[1]);
-    
-    if(abs(wsf->adc_filtered[0] - wsf->adc_filtered[1]) < wsf->stable_thresh)
+  do
+  {
+    if(ReadWheChanOk())
     {
-      return 1;
+      temp = ReadSeriesADValue();
+      // skip the abnormal adc value
+      if((temp > zWeightSensorParam.WeightSensorCalibrationZeroAdcValue/2) && (temp < zWeightSensorParam.WeightSensorCalibrationFullAdcValue*15))
+      {
+        adc_raw += temp;
+        i++;
+      }
+      //IhuDebugPrint("adc_raw=%d\n", temp);
     }
-	}
+
+    osDelay(8);
+  }while(i<4);
+
+  adc_raw = adc_raw >> 2;
+  
+  temp = ((wsf->adc_filtered[0] - adc_raw) * wsf->beta_num[0]);
+  wsf->adc_filtered[0] = (temp >> WS_BETA_DEN) + adc_raw;
+  temp = ((wsf->adc_filtered[1] - adc_raw) * wsf->beta_num[1]);
+  wsf->adc_filtered[1] = (temp >> WS_BETA_DEN) + adc_raw;
+  //wsf->adc_filtered[0] = (((wsf->adc_filtered[0] - adc_raw) * wsf->beta_num[0]) >> WS_BETA_DEN) + adc_raw;
+  //wsf->adc_filtered[1] = (((wsf->adc_filtered[1] - adc_raw) * wsf->beta_num[1]) >> WS_BETA_DEN) + adc_raw;
+
+  //IhuDebugPrint("adc_raw=%d adc_filtered=(%d, %d)\n", adc_raw, wsf->adc_filtered[0], wsf->adc_filtered[1]);
+  
+  if(abs(wsf->adc_filtered[0] - wsf->adc_filtered[1]) < wsf->stable_thresh)
+  {
+    return 1;
+  }
 
   return 0;
 }
 
+#define NOTEST
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // weight sensor task
 // 1) process the L3BF message
@@ -1035,16 +1068,18 @@ void weight_sensor_task(void const *param)
 	WeightSensorInit(&zWeightSensorParam);
 	IhuDebugPrint("L3BFSC: fsm_bfsc_init: WeightSensorInit()\r\n");
 
-  wsckb.k = 0.089660;
-  wsckb.b = 7139;
+  zWeightSensorParam.WeightSensorCalibrationZeroAdcValue = 7125;
+  zWeightSensorParam.WeightSensorCalibrationFullAdcValue = 13375;
+  zWeightSensorParam.WeightSensorCalibrationFullWeight = 100000;
   
   g_weight_sensor_filter.adc_filtered[0] = 0;
   g_weight_sensor_filter.adc_filtered[1] = 0;
   g_weight_sensor_filter.beta_num[0] = WS_BETA_NUM1;
   g_weight_sensor_filter.beta_num[1] = WS_BETA_NUM2;
-  g_weight_sensor_filter.stable_thresh = 10;
-  g_weight_sensor_filter.change_thresh = 30;
-  
+  g_weight_sensor_filter.stable_thresh = 12;    // ~2g
+  g_weight_sensor_filter.change_thresh = 30;    // ~5g
+
+  //is_started = 1; // for test
 	while(1)
 	{		
 		/* wait for a new command */
@@ -1073,8 +1108,8 @@ void weight_sensor_task(void const *param)
           weight_ind.adc_filtered = adc_filtered;
           weight_ind.repeat_times = repeat_times;
           
-					IhuDebugPrint("WS: new weight ind: adc_filtered=%d\n", adc_filtered);
-					
+					IhuDebugPrint("tick%d: WS: new weight ind: adc_filtered=%d weight=%d\n", last_adc_tick, adc_filtered, weight_sensor_map_adc_to_weight(adc_filtered));
+					#ifdef NOTEST
           // weight changed, send weight indication to L3BFSC
           ret = ihu_message_send(MSG_ID_L3BFSC_WMC_WEIGHT_IND, TASK_ID_BFSC, TASK_ID_BFSC, \
 														&weight_ind, sizeof(msg_struct_l3bfsc_weight_ind_t));
@@ -1082,6 +1117,7 @@ void weight_sensor_task(void const *param)
           if (ret == IHU_FAILURE){
       			IhuErrorPrint("WS: Send new weight ind message error!\n");
       		}
+          #endif
         }
         else
         {
@@ -1094,8 +1130,9 @@ void weight_sensor_task(void const *param)
             weight_ind.adc_filtered = adc_filtered;
             weight_ind.repeat_times = repeat_times;
             
-						IhuDebugPrint("WS: repeat weight ind: adc_filtered=%d repeat_times=%d\n", adc_filtered, repeat_times);
-						
+						IhuDebugPrint("tick%d: WS: repeat weight ind: adc_filtered=%d weight=%d repeat_times=%d\n", last_adc_tick, adc_filtered, weight_sensor_map_adc_to_weight(adc_filtered), repeat_times);
+
+            #ifdef NOTEST
             // weight changed, send weight indication to L3BFSC
             ret = ihu_message_send(MSG_ID_L3BFSC_WMC_WEIGHT_IND, TASK_ID_BFSC, TASK_ID_BFSC, \
   														&weight_ind, sizeof(msg_struct_l3bfsc_weight_ind_t));
@@ -1103,12 +1140,12 @@ void weight_sensor_task(void const *param)
             if (ret == IHU_FAILURE){
         			IhuErrorPrint("WS: Send repeat weight ind message error!\n");
         		}
+            #endif
           }
         }
       }
     }
 
-    osDelay(1000);
 	}
 }
 
