@@ -145,7 +145,7 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 	
 	//拉灯拉BEEP
 	ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_GLOBAL_WORK_STATE, 20);
-	ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_SYS_START, 1);
+	ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_SYS_START, 6);
 	
 	//等待3秒，以便其它任务进入稳定状态
 	func_ccl_close_all_sensor_power();
@@ -661,7 +661,7 @@ OPSTAT func_ccl_time_out_lock_work_active(void)
 		
 		//拉灯拉BEEP
 		ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_GLOBAL_WORK_STATE, 5);
-		ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_SYS_SHUT_DOWN, 1);		
+		ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_SYS_SHUT_DOWN, 6);		
 		
 		//关机，等待FAULT REPORT收到以后，会自动干的
 	}
@@ -700,7 +700,7 @@ OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 		
 		//拉灯拉BEEP，指示整个工作过程不成功
 		ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_GLOBAL_WORK_STATE, 5);
-		ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_SYS_SHUT_DOWN, 1);		
+		ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_SYS_SHUT_DOWN, 6);		
 
 		//延时并关断CPU系统
 		ihu_sleep(5);
