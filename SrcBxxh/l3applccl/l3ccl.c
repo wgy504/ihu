@@ -157,10 +157,12 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 		//必须人为的设置一次8小时定时RTC，不然有可能遇到系统第一次启动的情形，从未设置过
 		//多次重复设置的问题，留给驱动解决：通过BOOT区的计数器判定是否设定过
 		if (func_vmmw_rtc_pcf8563_init() == IHU_SUCCESS){
+			IhuDebugPrint("CCL: OK set RTC PCF8563, set alarm to next %d minute!\n", IHU_CCL_ALARM_NORMAL_PERIOD_DURATION);
 			func_vmmw_rtc_pcf8563_set_alarm_process(IHU_CCL_ALARM_NORMAL_PERIOD_DURATION);
-		}
+			}
 		else{
-			IhuErrorPrint("CCL: Error set RTC PCF8563!\n");
+			IhuErrorPrint("CCL: Error set RTC PCF8563, Force to set alarm to next %d minute!\n", IHU_CCL_ALARM_NORMAL_PERIOD_DURATION);
+			func_vmmw_rtc_pcf8563_set_alarm_process(IHU_CCL_ALARM_NORMAL_PERIOD_DURATION);
 		}
 
 		//再进行状态转移
@@ -183,9 +185,17 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 			IHU_DEBUG_PRINT_FAT("CCL: I am in the FAULT ALARM active state!!!\n");
 			//扫描门限
 			if (ihu_didocap_ccl_sleep_and_fault_mode_ul_scan_illegal_door_open_state(IHU_CCL_SENSOR_LOCK_NUMBER_MAX) == TRUE){
+
 				if (func_vmmw_rtc_pcf8563_init() == IHU_SUCCESS){
+					IhuDebugPrint("CCL: OK set RTC PCF8563, set alarm to next %d minute!\n", IHU_CCL_ALARM_FAULT_PERIOD_DURATION);
 					func_vmmw_rtc_pcf8563_set_alarm_process(IHU_CCL_ALARM_FAULT_PERIOD_DURATION);
-				}
+					}
+				else{
+					IhuErrorPrint("CCL: Error set RTC PCF8563, Force to set alarm to next %d minute!\n", IHU_CCL_ALARM_FAULT_PERIOD_DURATION);
+					func_vmmw_rtc_pcf8563_set_alarm_process(IHU_CCL_ALARM_FAULT_PERIOD_DURATION);
+					}
+
+
 				
 				//进入差错状态机
 				FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_FATAL_FAULT);
@@ -201,10 +211,16 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 			
 			//进入正常的8小时周期报告
 			else{
-				IHU_DEBUG_PRINT_FAT("CCL: I am in the FAULT recover to NORMAL ALARM active state!!!\n");
+				IHU_DEBUG_PRINT_FAT("CCL: I am in the FAULT recover to NORMAL ALARM active state!!!\n");				
 				if (func_vmmw_rtc_pcf8563_init() == IHU_SUCCESS){
+					IhuDebugPrint("CCL: OK set RTC PCF8563, set alarm to next %d minute!\n", IHU_CCL_ALARM_NORMAL_PERIOD_DURATION);
 					func_vmmw_rtc_pcf8563_set_alarm_process(IHU_CCL_ALARM_NORMAL_PERIOD_DURATION);
-				}
+					}
+				else{
+					IhuErrorPrint("CCL: Error set RTC PCF8563, Force to set alarm to next %d minute!\n", IHU_CCL_ALARM_NORMAL_PERIOD_DURATION);
+					func_vmmw_rtc_pcf8563_set_alarm_process(IHU_CCL_ALARM_NORMAL_PERIOD_DURATION);
+					}
+				
 				//进入8小时正常的报告状态
 				FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_EVENT_REPORT);
 
@@ -223,8 +239,14 @@ OPSTAT fsm_ccl_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_
 			IHU_DEBUG_PRINT_FAT("CCL: I am in the NORMAL ALARM active state!!!\n");
 			//正常的进入周期性汇报状态机
 			if (func_vmmw_rtc_pcf8563_init() == IHU_SUCCESS){
+				IhuDebugPrint("CCL: OK set RTC PCF8563, set alarm to next %d minute!\n", IHU_CCL_ALARM_NORMAL_PERIOD_DURATION);
 				func_vmmw_rtc_pcf8563_set_alarm_process(IHU_CCL_ALARM_NORMAL_PERIOD_DURATION);
 			}
+			else{
+				IhuErrorPrint("CCL: Error set RTC PCF8563, Force to set alarm to next %d minute!\n", IHU_CCL_ALARM_NORMAL_PERIOD_DURATION);
+				func_vmmw_rtc_pcf8563_set_alarm_process(IHU_CCL_ALARM_NORMAL_PERIOD_DURATION);
+			}
+			
 			//进入8小时正常的报告状态
 			FsmSetState(TASK_ID_CCL, FSM_STATE_CCL_EVENT_REPORT);	
 
