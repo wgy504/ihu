@@ -1064,6 +1064,9 @@ void weight_sensor_task(void const *param)
   OPSTAT ret;
   WeightSensorParamaters_t *wsparm = (WeightSensorParamaters_t *)param;
 
+  // give control to other tasks
+  osDelay(20);
+  
   //初始化Weight Sensor ADC
 	WeightSensorInit(&zWeightSensorParam);
 	IhuDebugPrint("L3BFSC: fsm_bfsc_init: WeightSensorInit()\r\n");
@@ -1145,7 +1148,8 @@ void weight_sensor_task(void const *param)
         }
       }
     }
-
+    else
+      osDelay(10);
 	}
 }
 
