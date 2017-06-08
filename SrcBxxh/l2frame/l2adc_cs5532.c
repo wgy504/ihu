@@ -1057,7 +1057,11 @@ uint32_t weight_sensor_read_and_filtering(weight_sensor_filter_t *wsf)
 void weight_sensor_task(void const *param)
 {
 	weight_sensor_cmd_t command;
+  #ifdef NOTEST
 	int is_started = 0;
+  #else
+  int is_started = 1;
+  #endif
 	uint32_t last_adc_filtered = 0xFFFF, adc_filtered;
   uint32_t last_adc_tick = 0xFFFF, current_tick, repeat_times = 0;
   msg_struct_l3bfsc_weight_ind_t weight_ind;
@@ -1082,7 +1086,6 @@ void weight_sensor_task(void const *param)
   g_weight_sensor_filter.stable_thresh = 12;    // ~2g
   g_weight_sensor_filter.change_thresh = 30;    // ~5g
 
-  //is_started = 1; // for test
 	while(1)
 	{		
 		/* wait for a new command */
