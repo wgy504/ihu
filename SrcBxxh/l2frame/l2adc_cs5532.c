@@ -971,6 +971,8 @@ int weight_sensor_map_adc_to_weight(uint32_t adc_value)
   if(weight < 0)
     weight = 0;
   weight = weight*zWeightSensorParam.WeightSensorCalibrationFullWeight/den;
+	
+  weight = 10000 + (rand() % 10000);
 
   return weight;
 }

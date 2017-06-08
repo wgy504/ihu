@@ -505,12 +505,22 @@ OPSTAT fsm_canvela_bfsc_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void *param_ptr
 	msg_struct_l3bfsc_wmc_msg_header_t *pMsgInnerHeader;
 	IHU_HUITP_L2FRAME_STD_frame_header_t *pMsgOutHeader;
 	UINT16 msg_len = 0;
-	
+
 	pMsgOutHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)param_ptr;
 	pMsgInnerHeader = (msg_struct_l3bfsc_wmc_msg_header_t *)((UINT8 *)param_ptr + 4);
 	msg_len = pMsgInnerHeader->length + 4; ////!!!TO Align to HCU HUITP msg lenth
-  pMsgInnerHeader->msgid = HuitpMsgIdMapToInternalMsgId(pMsgInnerHeader->msgid);
+  IhuDebugPrint("CANVELA: Header (huitp_msg_id = 0x%08X, msg_len = %d bytes)\r\n", pMsgInnerHeader->msgid, msg_len);
+	pMsgInnerHeader->msgid = HuitpMsgIdMapToInternalMsgId(pMsgInnerHeader->msgid);
 	msg_id = pMsgInnerHeader->msgid;
+
+	IhuDebugPrint("CANVELA: Header (mwc_msg_id = 0x%08X, msg_len = %d bytes)\r\n", msg_id, msg_len);
+	for(i = 0; i < msg_len; i++)
+	{
+			if(0 == (i % 32))  printf("\r\n");
+			printf("%02X ", *(((UINT8 *)pMsgInnerHeader)+i));
+			//OSTimeDlyHMSM(0, 0, 0, 1);  //schedule other task, so that not block
+	}
+	printf("\r\n");
   
 	/* Check message length */
 	if( msg_len != (param_len - MAX_WMC_CONTROL_MSG_HEADER_LEN))
@@ -528,14 +538,14 @@ OPSTAT fsm_canvela_bfsc_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void *param_ptr
 			return IHU_FAILURE;
 	}
 
-	IhuDebugPrint("CANVELA: Header (msg_id = 0x%08X, msg_len = %d bytes)\r\n", msg_id, msg_len);
-	for(i = 0; i < msg_len; i++)
-	{
-			if(0 == (i % 32))  printf("\r\n");
-			printf("%02X ", *(((UINT8 *)pMsgInnerHeader)+i));
-			//OSTimeDlyHMSM(0, 0, 0, 1);  //schedule other task, so that not block
-	}
-	printf("\r\n");
+//	IhuDebugPrint("CANVELA: Header (msg_id = 0x%08X, msg_len = %d bytes)\r\n", msg_id, msg_len);
+//	for(i = 0; i < msg_len; i++)
+//	{
+//			if(0 == (i % 32))  printf("\r\n");
+//			printf("%02X ", *(((UINT8 *)pMsgInnerHeader)+i));
+//			//OSTimeDlyHMSM(0, 0, 0, 1);  //schedule other task, so that not block
+//	}
+//	printf("\r\n");
   
 //	ret = ihu_message_send(MSG_ID_CAN_L3BFSC_CMD_CTRL, TASK_ID_BFSC, TASK_ID_CANVELA, &snd, snd.length);
 //	if (ret == IHU_FAILURE){
