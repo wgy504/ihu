@@ -166,66 +166,50 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>1075</LineNumber>
+          <LineNumber>2764</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134315634</Address>
+          <Address>134302022</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>&lt;6&gt;..\..\SrcBxxh\l2frame\l2adc_cs5532.c</Filename>
+          <Filename>&lt;5&gt;..\..\SrcBxxh\l1vmfreeos\vmfreeoslayer.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\PrjBfscFo_207VG\../../SrcBxxh/l2frame/l2adc_cs5532.c\1075</Expression>
+          <Expression>\\PrjBfscFo_207VG\../../SrcBxxh/l1vmfreeos/vmfreeoslayer.c\2764</Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>1104</LineNumber>
+          <LineNumber>167</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134315746</Address>
+          <Address>134302774</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>&lt;6&gt;..\..\SrcBxxh\l2frame\l2adc_cs5532.c</Filename>
+          <Filename>&lt;8&gt;../Src/main.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\PrjBfscFo_207VG\../../SrcBxxh/l2frame/l2adc_cs5532.c\1104</Expression>
+          <Expression>\\PrjBfscFo_207VG\../Src/main.c\167</Expression>
         </Bp>
         <Bp>
           <Number>2</Number>
           <Type>0</Type>
-          <LineNumber>1077</LineNumber>
+          <LineNumber>2191</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
+          <Address>134298808</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>&lt;6&gt;..\..\SrcBxxh\l2frame\l2adc_cs5532.c</Filename>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>&lt;5&gt;..\..\SrcBxxh\l1vmfreeos\vmfreeoslayer.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-        <Bp>
-          <Number>3</Number>
-          <Type>0</Type>
-          <LineNumber>1106</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>&lt;6&gt;..\..\SrcBxxh\l2frame\l2adc_cs5532.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
+          <Expression>\\PrjBfscFo_207VG\../../SrcBxxh/l1vmfreeos/vmfreeoslayer.c\2191</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -241,7 +225,7 @@
       <DebugFlag>
         <trace>0</trace>
         <periodic>1</periodic>
-        <aLwin>0</aLwin>
+        <aLwin>1</aLwin>
         <aCover>0</aCover>
         <aSer1>0</aSer1>
         <aSer2>0</aSer2>
@@ -301,7 +285,7 @@
 
   <Group>
     <GroupName>Drivers/CMSIS</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -965,7 +949,7 @@
 
   <Group>
     <GroupName>L0bsp_stm32</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1353,7 +1337,7 @@
 
   <Group>
     <GroupName>L1vmfo</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

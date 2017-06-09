@@ -158,29 +158,29 @@ uint32_t SpsGainToBitwidthMapping(uint32_t gain_index, uint32_t wordrate_index);
 //*      WordRate  ????   0~9   0:120    1:60    2:30    3:15    4:7.5    5:3840    6:1920    7:960    8:480    9:240 
 
 ////////////////////////////////////////////////////////////////////////////////
-#define WIGHT_SENSOR_CMD_TYPE_STOP 0
-#define WIGHT_SENSOR_CMD_TYPE_START 1
+//#define WIGHT_SENSOR_CMD_TYPE_STOP 0
+//#define WIGHT_SENSOR_CMD_TYPE_START 1
 
-typedef struct weight_sensor_cmd_s
-{
-  uint32_t valid:1;
-  uint32_t type:7;
-  uint32_t reserved:24;
-}weight_sensor_cmd_t;
+//typedef struct weight_sensor_cmd_s
+//{
+//  uint32_t valid:1;
+//  uint32_t type:7;
+//  uint32_t reserved:24;
+//}weight_sensor_cmd_t;
 
-typedef struct weight_sensor_filter_s
-{
-  int32_t adc_filtered[2];
-  uint32_t beta_num[2];
-  uint32_t stable_thresh;
-  uint32_t change_thresh;
-}weight_sensor_filter_t;
+//typedef struct weight_sensor_filter_s
+//{
+//  int32_t adc_filtered[2];
+//  uint32_t beta_num[2];
+//  uint32_t stable_thresh;
+//  uint32_t change_thresh;
+//}weight_sensor_filter_t;
 
-int weight_sensor_map_adc_to_weight(uint32_t adc_value);
-int weight_sensor_send_cmd(uint32_t type);
-int weight_sensor_recv_cmd(weight_sensor_cmd_t *command);
-uint32_t weight_sensor_read_and_filtering(weight_sensor_filter_t *wsf);
-void weight_sensor_task(void const *param);
+//int weight_sensor_map_adc_to_weight(uint32_t adc_value);
+//int weight_sensor_send_cmd(uint32_t type);
+//int weight_sensor_recv_cmd(weight_sensor_cmd_t *command);
+//uint32_t weight_sensor_read_and_filtering(weight_sensor_filter_t *wsf);
+//void weight_sensor_task(void const *param);
 
 
 #ifdef __cplusplus

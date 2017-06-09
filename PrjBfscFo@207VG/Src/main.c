@@ -165,14 +165,17 @@ int main(void)
 	
 	/* CREATE IHU VM */
 	ihu_vm_main();
+	printf("ihu_vm_main() launched...\r\n");
 	
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */
   MX_FREERTOS_Init();
+	printf("MX_FREERTOS_Init() launched...\r\n");
 
   /* Start scheduler */
   osKernelStart();
+	printf("osKernelStart...\r\n");
   
   /* We should never get here as control is now taken by the scheduler */
 
