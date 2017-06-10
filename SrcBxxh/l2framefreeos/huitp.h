@@ -14,6 +14,7 @@
 /*
  *
  *  顺从并更新到技术规范《慧HUITP接口规范v2.5, LAST UPDATE@2007/5/27》
+ *  2017/06/10, MA Yuchu, Modify the huitp.h for BFSC
  *
  */
 
@@ -2990,6 +2991,7 @@ typedef struct StrIe_HUITP_IEID_uni_performance_info_element
 	UINT32 cpuOccupy;
 	UINT32 memOccupy;
 	UINT32 diskOccupy;
+	UINT32 cpuTemp;
 	UINT32 timeStamp;
 }StrIe_HUITP_IEID_uni_performance_info_element_t;
 
@@ -5111,7 +5113,7 @@ typedef struct WeightSensorParamaters
 	UINT32	WeightSensorPickupDetectionTimeMs;	// NOT for GUI
 	UINT32	StardardReadyTimeMs;								//???
 	UINT32	MaxAllowedWeight;										//如果发现超过这个最大值，说明Sensor出错
-	//UINT32	RemainDetectionTimeSec;					  // RemainDetionTime in Seconds
+	UINT32	RemainDetectionTimeSec;					  // RemainDetionTime in Seconds
 
 	UINT32	WeightSensorInitOrNot;							// NOT for GUI
 	UINT32	WeightSensorAdcSampleFreq;
@@ -5125,8 +5127,8 @@ typedef struct WeightSensorParamaters
 	UINT32	WeightSensorTailorValue;
 	UINT32	WeightSensorDynamicZeroThreadValue;
 	UINT32	WeightSensorDynamicZeroHysteresisMs;
-	//UINT32  WeightSensorFilterCoeff[32];				// NOT for GUI
-	//UINT32  WeightSensorOutputValue[32];				// NOT for GUI
+	UINT32  WeightSensorFilterCoeff[4];				// NOT for GUI
+	UINT32  WeightSensorOutputValue[4];				// NOT for GUI
 }WeightSensorParamaters_t;
 
 typedef struct MotorControlParamaters
@@ -5421,7 +5423,7 @@ typedef struct StrMsg_HUITP_MSGID_sui_bfsc_wmc_msg_header
 //#define WMC_TO_AWS_CAN_ID_SUFFIX		(mwc_id)
 
 /* 4: WMC-S to AWS: */
-/* CAN ID: 0x0020 0010 (Node ID 0) */
+/* CAN ID: 0x0030 0010 (Node ID 0) */
 #define WMCS_TO_AWS_CAN_ID				(0x00200010U)
 
 /* CAN Msg Length */

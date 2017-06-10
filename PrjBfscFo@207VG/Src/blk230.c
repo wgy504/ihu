@@ -17,6 +17,7 @@
 //#include "bufprint.h"
 #include "vmfreeoslayer.h"
 
+
 #define bufprint IhuDebugPrint
 
 extern DAC_HandleTypeDef hdac;
@@ -327,3 +328,55 @@ int blk230_set_ccw(uint32_t flag)
 	return status;
 }
 
+/*
+**
+**
+** #define WMC_LAMP_OUT1   	  				(0x01)
+** #define WMC_LAMP_OUT2     	 				(0x02)
+** #define WMC_LAMP_OUT3			  	    (0x03)
+
+** #define WMC_LAMP_OFF  		  				(0x00)
+** #define WMC_LAMP_ON 	    	 				(0x01)
+** 
+** blk230_set_lamp(WMC_LAMP_OUT1, WMC_LAMP_ON);
+** blk230_set_lamp(WMC_LAMP_OUT1, WMC_LAMP_OFF);
+*/
+
+int blk230_set_lamp(uint32_t lamp_id, uint8_t flag)
+{
+	uint8_t flags;
+	uint32_t status;
+	uint8_t lamp_mask;
+	
+	if(WMC_LAMP_OUT1 == lamp_id)
+	{
+			lamp_mask = BLK230_LAMP_OUT1_BIT;
+	}
+	else if(WMC_LAMP_OUT2 == lamp_id)
+	{
+			lamp_mask = BLK230_LAMP_OUT2_BIT;
+	}
+	else if (WMC_LAMP_OUT3 == lamp_id)
+	{
+			lamp_mask = BLK230_LAMP_OUT3_BIT;
+	}
+	else
+	{
+			//do nothing
+	}
+	
+//	flag = 1; // for ON
+//	flag = 0; // for OFF
+	
+	status = PCA8574A_read(&flags);
+	//if(status == 0)
+	//{
+		flags &= ~lamp_mask;
+		if(flag)
+			flags |= lamp_mask;
+		
+		status = PCA8574A_write(flags);
+	//}
+	
+	return status;	
+}

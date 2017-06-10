@@ -12,7 +12,7 @@
  */
  
 #include "l2adclibra.h"
- 
+#include "l3bfsc.h" 
 /*
 ** FSM of the ADCLIBRA
 */
@@ -544,6 +544,7 @@ bool ihu_adclibra_ccl_scan_battery_warning_level(void)
 //START: Local API from Xiong Puhui, for ADC Weight Filter
 //=======================================================
 extern WeightSensorParamaters_t					zWeightSensorParam;
+extern WmcInventory_t										zWmcInvenory;
 
 weight_sensor_cmd_t g_weight_sensor_cmd;
 
@@ -559,9 +560,18 @@ int weight_sensor_map_adc_to_weight(uint32_t adc_value)
   if(weight < 0)
     weight = 0;
   weight = weight*zWeightSensorParam.WeightSensorCalibrationFullWeight/den;
-	
-  weight = 10000 + (rand() % 10000);
 
+	////// FOR TEST !!!!!!!!! ////
+extern BfscWmcState_t										zBfscWmcState;
+	if( HUITP_IEID_SUI_BFSC_COMINETYPE_NULL == zBfscWmcState.last_combin_type.WeightCombineType )
+	{
+			weight = 10000 + (rand() % 30000);
+	}
+	else
+	{
+			weight = 0;  // SO THAT the COMBIN_OUT MESSAGE WILL BE SENT OUT //
+	}
+	
   return weight;
 }
 
@@ -676,6 +686,8 @@ void weight_sensor_task(void const *param)
   g_weight_sensor_filter.stable_thresh = 12;    // ~2g
   g_weight_sensor_filter.change_thresh = 30;    // ~5g
 
+	srand(zWmcInvenory.wmc_id.wmc_id);
+	
 	while(1)
 	{		
 		/* wait for a new command */
@@ -691,20 +703,25 @@ void weight_sensor_task(void const *param)
     if(is_started)
     {
       // read sensor for a stable value
-      if(weight_sensor_read_and_filtering(&g_weight_sensor_filter))
+      //if(weight_sensor_read_and_filtering(&g_weight_sensor_filter))
+			if(1)
       {
         adc_filtered = (g_weight_sensor_filter.adc_filtered[0] + g_weight_sensor_filter.adc_filtered[1]) >> 1;
 
-        if(abs(adc_filtered - last_adc_filtered) > g_weight_sensor_filter.change_thresh)
-        {
+        //if(abs(adc_filtered - last_adc_filtered) > g_weight_sensor_filter.change_thresh)
+        if(1)
+				{
           last_adc_filtered = adc_filtered;
           last_adc_tick = osKernelSysTick();
           repeat_times = 0;
           
           weight_ind.adc_filtered = adc_filtered;
-          weight_ind.repeat_times = repeat_times;
+          //weight_ind.adc_filtered = 10000 + (rand() % 10000);  /// TO BE REMOVED, OR ADD TO TEST MODE
+					weight_ind.repeat_times = repeat_times;
           
-					IhuDebugPrint("tick%d: WS: new weight ind: adc_filtered=%d weight=%d\n", last_adc_tick, adc_filtered, weight_sensor_map_adc_to_weight(adc_filtered));
+					//IhuDebugPrint("tick%d: WS: new weight ind: adc_filtered=%d weight=%d\n", last_adc_tick, adc_filtered, weight_sensor_map_adc_to_weight(adc_filtered));
+					IhuDebugPrint("tick%d: WS: new weight ind: adc_filtered=%d\n", last_adc_tick, adc_filtered);
+					
 					#ifdef NOTEST
           // weight changed, send weight indication to L3BFSC
           ret = ihu_message_send(MSG_ID_L3BFSC_WMC_WEIGHT_IND, TASK_ID_BFSC, TASK_ID_BFSC, \
@@ -726,7 +743,8 @@ void weight_sensor_task(void const *param)
             weight_ind.adc_filtered = adc_filtered;
             weight_ind.repeat_times = repeat_times;
             
-						IhuDebugPrint("tick%d: WS: repeat weight ind: adc_filtered=%d weight=%d repeat_times=%d\n", last_adc_tick, adc_filtered, weight_sensor_map_adc_to_weight(adc_filtered), repeat_times);
+						//IhuDebugPrint("tick%d: WS: repeat weight ind: adc_filtered=%d weight=%d repeat_times=%d\n", last_adc_tick, adc_filtered, weight_sensor_map_adc_to_weight(adc_filtered), repeat_times);
+						IhuDebugPrint("tick%d: WS: repeat weight ind: adc_filtered=%d repeat_times=%d\n", last_adc_tick, adc_filtered, repeat_times);
 
             #ifdef NOTEST
             // weight changed, send weight indication to L3BFSC
@@ -742,14 +760,13 @@ void weight_sensor_task(void const *param)
       }
     }
     else
-      osDelay(10);
+    {  
+			osDelay(5000);
+		}
+		osDelay(5000); // For Test ONLY
 	}
 }
 
 //=======================================================
 //END: Local API from Xiong Puhui, for ADC Weight Filter
 //=======================================================
-
-
-
-

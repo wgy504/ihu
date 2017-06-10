@@ -18,7 +18,8 @@
 
 extern WmcInventory_t										zWmcInvenory;
 extern WeightSensorParamaters_t					zWeightSensorParam;
-extern MotorControlParamaters_t 					zMotorControlParam;
+extern MotorControlParamaters_t 				zMotorControlParam;
+extern BfscWmcState_t										zBfscWmcState;
 
 //#define 	MSG_SIZE_L3BFSC_WMC_STARTUP_IND					(sizeof(msg_struct_l3bfsc_wmc_startup_ind_t))
 //#define 	MSG_SIZE_L3BFSC_WMC_SET_CONFIG_REQ			(sizeof(msg_struct_l3bfsc_wmc_set_config_req_t))
@@ -67,12 +68,13 @@ void msg_wmc_set_config_req_process(void *param_ptr, error_code_t *ec_ptr)
 		}
 		
 		/* Check If it is the right/valid state to process the message */
-		if( FSM_STATE_BFSC_COMBINATION == FsmGetState(TASK_ID_BFSC) )
-		{
-				IhuErrorPrint("L3BFSC: msg_wmc_set_config_req_process: FSM_STATE_BFSC_COMBINATION == FsmGetState(TASK_ID_BFSC), return\r\n");
-				*ec_ptr = ERROR_CODE_WRONG_WMC_STATE;
-				return;
-		}
+		/* 
+//		if( FSM_STATE_BFSC_COMBINATION == FsmGetState(TASK_ID_BFSC) )
+//		{
+//				IhuErrorPrint("L3BFSC: msg_wmc_set_config_req_process: FSM_STATE_BFSC_COMBINATION == FsmGetState(TASK_ID_BFSC), return\r\n");
+//				*ec_ptr = ERROR_CODE_WRONG_WMC_STATE;
+//				return;
+//		}
 	
 		/* Check Parameters */
 		*ec_ptr = msg_wmc_set_config_req_check(param_ptr);
@@ -86,6 +88,16 @@ void msg_wmc_set_config_req_process(void *param_ptr, error_code_t *ec_ptr)
     // TODO: check each parameters...
     weightSensorConfig(&config_req->weight_sensor_param);
     zMotorControlParam = config_req->motor_control_param;
+		
+		/* Force to STOP */
+		weight_sensor_send_cmd(WIGHT_SENSOR_CMD_TYPE_STOP);
+
+		/* Force to BACK TO FSM_STATE_BFSC_CONFIGURATION */
+		if( FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_CONFIGURATION) == IHU_FAILURE)
+		{
+				IhuErrorPrint("L3BFSC: Error Set FSM State FSM_STATE_BFSC_CONFIGURATION");	
+				return;
+		}
     
 		return;
 }
@@ -286,6 +298,12 @@ void msg_wmc_start_req_process(void *param_ptr, error_code_t *ec_ptr)
   		IhuErrorPrint("L3BFSC: Error Set FSM State FSM_STATE_BFSC_SCAN");	
   		return;
   	}
+		
+		/* NEED TO RE-INIT zBfscWmcState, every time received a START_REQ */
+		zBfscWmcState.state = BFSC_MWC_STATE_WAIT_FOR_COMBIN_OUT;
+		
+		/* Active the Weight Sensor */
+		weight_sensor_send_cmd(WIGHT_SENSOR_CMD_TYPE_START);
     
 		return;
 }
@@ -548,6 +566,7 @@ void msg_wmc_command_resp(error_code_t ec)
 void msg_wmc_combin_req_process(void *param_ptr, error_code_t *ec_ptr)
 {
 		IhuDebugPrint("L3BFSC: msg_wmc_combin_req_process start ...\r\n");
+		msg_struct_l3bfsc_wmc_combin_out_req_t *pCombinOut;
 	
 		/* Check Input Parameter */
 		if(NULL == param_ptr)
@@ -582,7 +601,22 @@ void msg_wmc_combin_req_process(void *param_ptr, error_code_t *ec_ptr)
 		
 		/* Process the message: start motor */
     blk230_send_cmd(1, zMotorControlParam.MotorDirection, zMotorControlParam.MotorSpeed, zMotorControlParam.MotorRollingStartMs);
-
+		blk230_set_lamp(WMC_LAMP_OUT1, WMC_LAMP_ON);
+		blk230_set_lamp(WMC_LAMP_OUT2, WMC_LAMP_ON);
+		blk230_set_lamp(WMC_LAMP_OUT3, WMC_LAMP_ON);
+		
+		pCombinOut = (msg_struct_l3bfsc_wmc_combin_out_req_t *)param_ptr;
+		
+		zBfscWmcState.state = BFSC_MWC_STATE_ALREADY_COMBIN_OUT;
+    zBfscWmcState.last_combin_type.WeightCombineType = pCombinOut->weight_combin_type.WeightCombineType;
+		IhuDebugPrint("L3BFSC: Set to FSM_STATE_BFSC_COMBINATION, WeightCombineType=%d", zBfscWmcState.last_combin_type.WeightCombineType);	
+		
+		if (FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_COMBINATION) == IHU_FAILURE){
+				IhuErrorPrint("L3BFSC: Error Set FSM State FSM_STATE_BFSC_COMBINATION");	
+				return;
+		}
+		
+		IhuDebugPrint("L3BFSC: Set to FSM_STATE_BFSC_COMBINATION, WeightCombineType=%d", zBfscWmcState.last_combin_type);	
 		return;
 }
 
@@ -622,16 +656,16 @@ void msg_wmc_combin_resp(error_code_t ec)
     msg_wmc_combin_resp.validFlag = TRUE;
     msg_wmc_combin_resp.spare1 = 0;
 		
-		IhuDebugPrint("L3BFSC: msg_wmc_combin_resp: msgid = 0x%08X\r\n", \
+		IhuDebugPrint("L3BFSC: msg_wmc_combin_resp: msgid = 0x%08X, will be wait for wait goes to 0.\r\n", \
 										msg_wmc_combin_resp.msgid);
 		
-		/* Send Message to CAN Task */
-		ret = ihu_message_send(MSG_ID_L3BFSC_WMC_COMBIN_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, \
-														&msg_wmc_combin_resp, MSG_SIZE_L3BFSC_WMC_COMBIN_RESP);
-		if (ret == IHU_FAILURE){
-			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC], zIhuVmCtrTab.task[TASK_ID_CANVELA]);
-			return;
-		}
+//		/* Send Message to CAN Task */
+//		ret = ihu_message_send(MSG_ID_L3BFSC_WMC_COMBIN_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, \
+//														&msg_wmc_combin_resp, MSG_SIZE_L3BFSC_WMC_COMBIN_RESP);
+//		if (ret == IHU_FAILURE){
+//			IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC], zIhuVmCtrTab.task[TASK_ID_CANVELA]);
+//			return;
+//		}
 
 		return;
 }

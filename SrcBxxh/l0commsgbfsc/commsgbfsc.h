@@ -638,6 +638,15 @@ typedef struct msg_struct_l3bfsc_wmc_combin_out_req
 	CombineType_t weight_combin_type;
 }msg_struct_l3bfsc_wmc_combin_out_req_t;
 
+
+typedef struct msg_struct_l3bfsc_wmc_combin_out_resp
+{
+	UINT16 msgid;
+	UINT16 length;
+	CombineType_t weight_combin_type;
+}msg_struct_l3bfsc_wmc_combin_out_resp_t;
+
+
 /*
 **	MSG_ID_L3BFSC_WMC_FAULT_IND
 */
@@ -710,7 +719,7 @@ typedef struct msg_struct_l3bfsc_wmc_msg_header
 #define 	MSG_SIZE_L3BFSC_WMC_NEW_WS_EVENT				(sizeof(msg_struct_l3bfsc_wmc_ws_event_t))
 #define 	MSG_SIZE_L3BFSC_WMC_REPEAT_WS_EVENT			(sizeof(msg_struct_l3bfsc_wmc_ws_event_t))	
 #define 	MSG_SIZE_L3BFSC_WMC_COMBIN_REQ					(sizeof(msg_struct_l3bfsc_wmc_combin_out_req_t))
-#define 	MSG_SIZE_L3BFSC_WMC_COMBIN_RESP					(sizeof(msg_struct_l3bfsc_wmc_resp_t))
+#define 	MSG_SIZE_L3BFSC_WMC_COMBIN_RESP					(sizeof(msg_struct_l3bfsc_wmc_combin_out_resp_t))
 #define 	MSG_SIZE_L3BFSC_WMC_FAULT_IND						(sizeof(msg_struct_l3bfsc_wmc_fault_ind_t))
 #define 	MSG_SIZE_L3BFSC_WMC_COMMAND_REQ					(sizeof(msg_struct_l3bfsc_wmc_command_req_t))
 #define 	MSG_SIZE_L3BFSC_WMC_COMMAND_RESP				(sizeof(msg_struct_l3bfsc_wmc_command_resp_t))

@@ -52,6 +52,32 @@ enum FSM_STATE_BFSC
 //#define FSM_STATE_END   0xFE
 //#define FSM_STATE_INVALID 0xFF
 
+typedef struct BfscWmcState
+{
+		UINT8	state;
+		UINT8 spare1;
+		UINT8	spare2;
+		UINT8	spare3;
+		CombineType_t last_combin_type;
+}BfscWmcState_t;
+
+#define BFSC_MWC_STATE_WAIT_FOR_COMBIN_OUT		0;
+#define BFSC_MWC_STATE_ALREADY_COMBIN_OUT			1;
+
+/* design as following */
+/*
+- Valid only in FSM_STATE_BFSC_COMBINATION
+- Initialized as in BFSC_MWC_STATE_WAIT_FOR_COMBIN_OUT
+- When there is NEW_WS_EVENT happens, report the weight to AWS, and AWS may select it to be combined
+	- If there is HUITP_MSGID_sui_bfsc_ws_comb_out_req command send to WMC, set to BFSC_MWC_STATE_ALREADY_COMBIN_OUT
+	- If there is no HUITP_MSGID_sui_bfsc_ws_comb_out_req send to WMC, and timeout for RemainDetectionTimeSec
+    There will be REPEAT_WS_EVENT report to AWS
+  - If during the period, the weight become EMPTY, we will report empty event to AWS, set to 
+    BFSC_MWC_STATE_WAIT_FOR_COMBIN_OUT
+
+*/
+
+
 //Global variables
 extern IhuFsmStateItem_t IhuFsmBfsc[];
 

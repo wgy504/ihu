@@ -3,10 +3,23 @@
 #include <inttypes.h>
 
 // control bits
+// 7-6-5-4-3-2-1-0
 #define BLK230_ALARST_BIT          (0x01)
 #define BLK230_CW_BIT              (0x02)
 #define BLK230_START_BIT           (0x04)
 #define BLK230_RUN_BIT             (0x08)
+#define BLK230_LAMP_OUT1_BIT       (0x10)
+#define BLK230_LAMP_OUT2_BIT       (0x20)
+#define BLK230_LAMP_OUT3_BIT       (0x40)
+#define BLK230_CPU_TRG_OUT1_BIT    (0x80)
+
+#define WMC_LAMP_OUT1   	  				(0x01)
+#define WMC_LAMP_OUT2     	 				(0x02)
+#define WMC_LAMP_OUT3			  	     	(0x03)
+
+#define WMC_LAMP_OFF  		  				(0x00)
+#define WMC_LAMP_ON 	    	 				(0x01)
+
 
 // PID parameters
 #define BLK230_KP (1)
@@ -29,6 +42,7 @@ int blk230_set_alarm(uint32_t flag);
 int blk230_set_stop(uint32_t flag);
 int blk230_set_brake(uint32_t flag);
 int blk230_set_ccw(uint32_t flag);
+int blk230_set_lamp(uint32_t lamp_id, uint8_t flag);
 int blk230_read_alarm(void);
 int blk230_read_speed(void);
 int blk230_send_cmd(uint32_t start, uint32_t ccw, uint32_t speed, uint32_t duration);

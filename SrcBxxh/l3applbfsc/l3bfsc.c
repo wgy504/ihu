@@ -119,6 +119,7 @@ WeightSensorParamaters_t					zWeightSensorParam;
 MotorControlParamaters_t 					zMotorControlParam;
 UINT16														zAwsCanIdPrefix;
 UINT16														zWmcCanIdPrefix;
+BfscWmcState_t										zBfscWmcState;
 
 
 //Main Entry
@@ -160,9 +161,16 @@ OPSTAT fsm_bfsc_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 	//MYC Initialize globale variables:
 	memset(&zWmcInvenory, 0, sizeof(WmcInventory_t));
 	IhuDebugPrint("L3BFSC: fsm_bfsc_init: zWmcInvenory set 0, size = %d bytes\n", sizeof(WmcInventory_t));	
+	
 	memset(&zCombAlgoParam, 0, sizeof(CombinationAlgorithmParamaters_t));
 	IhuDebugPrint("L3BFSC: fsm_bfsc_init: zCombAlgoParam set 0, size = %d bytes\n", sizeof(CombinationAlgorithmParamaters_t));	
-
+	
+	memset(&zBfscWmcState, 0, sizeof(BfscWmcState_t));
+	IhuDebugPrint("L3BFSC: fsm_bfsc_init: zBfscWmcState set 0, size = %d bytes\n", sizeof(BfscWmcState_t));	
+	
+	/*  SHOULD BE SET TO BFSC_MWC_STATE_WAIT_FOR_COMBIN_OUT, every time receved START_REQ */
+	zBfscWmcState.state = BFSC_MWC_STATE_WAIT_FOR_COMBIN_OUT;
+	
 	//初始化硬件接口
 	if (func_bfsc_hw_init(&zWmcInvenory) == IHU_FAILURE){	
 		IhuErrorPrint("L3BFSC: Error initialize interface!");
@@ -1082,7 +1090,7 @@ OPSTAT fsm_bfsc_wmc_start_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT
 	/* STATE CHANGE IF OK */
 	if (ERROR_CODE_NO_ERROR == error_code)
 	{
-    weight_sensor_send_cmd(WIGHT_SENSOR_CMD_TYPE_START);
+    //weight_sensor_send_cmd(WIGHT_SENSOR_CMD_TYPE_START);
 	}
 	
 	/* Send back the response */
@@ -1177,8 +1185,6 @@ OPSTAT fsm_bfsc_wmc_combin_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UIN
 	
 	/* Send back the response */
 	msg_wmc_combin_resp(error_code);
-	
-	//FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_COMBINATION);
 
 	//返回
 	return ret;
@@ -1212,47 +1218,73 @@ OPSTAT fsm_bfsc_wmc_weight_ind(UINT8 dest_id, UINT8 src_id, void *param_ptr, UIN
   if(FSM_STATE_BFSC_SCAN == FsmGetState(TASK_ID_BFSC))
   {
     // send new weight event
-    IhuDebugPrint("L3BFSC: fsm_bfsc_wmc_weight_ind: k=%f b=%d weight=%d adc_filtered=%d repeat_times=%d\r\n", wsckb.k, wsckb.b, weight, rcv.adc_filtered, rcv.repeat_times);
+    IhuDebugPrint("L3BFSC: fsm_bfsc_wmc_weight_ind: weight=%d adc_filtered=%d rep_times=%d k=%f b=%d\r\n", weight, rcv.adc_filtered, rcv.repeat_times, wsckb.k, wsckb.b);
     
-    /* Build Message Content Header */
+		/* Build Message Content Header */
     if(rcv.repeat_times > 0)
       msg_wmc_ws_event.msgid = (MSG_ID_L3BFSC_WMC_REPEAT_WS_EVENT);
     else
       msg_wmc_ws_event.msgid = (MSG_ID_L3BFSC_WMC_NEW_WS_EVENT);
+		
     msg_wmc_ws_event.wmc_id = zWmcInvenory.wmc_id;
     msg_wmc_ws_event.length = sizeof(msg_struct_l3bfsc_wmc_ws_event_t);
-    msg_wmc_ws_event.weight_ind.average_weight = 	weight;
+    msg_wmc_ws_event.weight_ind.average_weight = weight;
     msg_wmc_ws_event.weight_ind.weight_event = WEIGHT_EVENT_ID_LOAD;
     msg_wmc_ws_event.weight_ind.repeat_times = rcv.repeat_times;
     msg_wmc_ws_event.weight_combin_type.ActionDelayMs = 0;
     msg_wmc_ws_event.weight_combin_type.WeightCombineType = HUITP_IEID_SUI_BFSC_COMINETYPE_NULL;
     
     /* Send Message to CAN Task */
-    ret = ihu_message_send(MSG_ID_L3BFSC_WMC_NEW_WS_EVENT, TASK_ID_CANVELA, TASK_ID_BFSC, \
-                            &msg_wmc_ws_event, MSG_SIZE_L3BFSC_WMC_NEW_WS_EVENT);
-    if (ret == IHU_FAILURE){
-      IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC], zIhuVmCtrTab.task[TASK_ID_CANVELA]);
-      return ret;
+    /* Build Message Content Header */
+    if(rcv.repeat_times > 0)
+		{
+      msg_wmc_ws_event.msgid = (MSG_ID_L3BFSC_WMC_REPEAT_WS_EVENT);
+			ret = ihu_message_send(MSG_ID_L3BFSC_WMC_NEW_WS_EVENT, TASK_ID_CANVELA, TASK_ID_BFSC, \
+															&msg_wmc_ws_event, MSG_SIZE_L3BFSC_WMC_NEW_WS_EVENT);
+			if (ret == IHU_FAILURE){
+				IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC], zIhuVmCtrTab.task[TASK_ID_CANVELA]);
+				return ret;
     }
+    
+		}
+		else
+    {
+			msg_wmc_ws_event.msgid = (MSG_ID_L3BFSC_WMC_NEW_WS_EVENT);
+			ret = ihu_message_send(MSG_ID_L3BFSC_WMC_NEW_WS_EVENT, TASK_ID_CANVELA, TASK_ID_BFSC, \
+															&msg_wmc_ws_event, MSG_SIZE_L3BFSC_WMC_NEW_WS_EVENT);
+			if (ret == IHU_FAILURE){
+				IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC], zIhuVmCtrTab.task[TASK_ID_CANVELA]);
+				return ret;
+			}
+		}
   }
   else if (FSM_STATE_BFSC_COMBINATION == FsmGetState(TASK_ID_BFSC))
   {
-    IhuDebugPrint("L3BFSC: fsm_bfsc_wmc_weight_ind: weight=%d adc_filtered=%d rep_times=%d\r\n", weight, rcv.adc_filtered, rcv.repeat_times);
+    IhuDebugPrint("L3BFSC: fsm_bfsc_wmc_weight_ind(rep): weight=%d emptyThred=%d, adc_filtered=%d rep_times=%d k=%f b=%d\r\n", \
+							weight, zWeightSensorParam.WeightSensorEmptyThread, rcv.adc_filtered, rcv.repeat_times, wsckb.k, wsckb.b);
     
-    if(weight < zWeightSensorParam.WeightSensorEmptyThread)
-    {
+    //if(weight < zWeightSensorParam.WeightSensorEmptyThread)
+		if(weight < 100)
+		{
       // send combination response
-      msg_struct_l3bfsc_wmc_resp_t msg_wmc_combin_resp;
+      msg_struct_l3bfsc_wmc_combin_out_resp_t msg_wmc_combin_resp;
         
       /* Build Message Content Header */
       msg_wmc_combin_resp.msgid = (MSG_ID_L3BFSC_WMC_COMBIN_RESP);
       //msg_wmc_combin_resp.wmc_id = zWmcInvenory.wmc_id;
       msg_wmc_combin_resp.length = sizeof(msg_struct_l3bfsc_wmc_resp_t);
-      msg_wmc_combin_resp.errCode = ERROR_CODE_NO_ERROR;
-      msg_wmc_combin_resp.validFlag = TRUE;
-      msg_wmc_combin_resp.spare1 = 0;
+			msg_wmc_combin_resp.weight_combin_type.ActionDelayMs = 0;
+			msg_wmc_combin_resp.weight_combin_type.WeightCombineType = zBfscWmcState.last_combin_type.WeightCombineType;
       
-      IhuDebugPrint("L3BFSC: msg_wmc_combin_resp: msgid = 0x%08X\r\n", \
+//			#define HUITP_IEID_SUI_BFSC_COMINETYPE_NULL 0
+//			#define HUITP_IEID_SUI_BFSC_COMINETYPE_ROOLOUT 1
+//			#define HUITP_IEID_SUI_BFSC_COMINETYPE_DROP 2
+//			#define HUITP_IEID_SUI_BFSC_COMINETYPE_WARNING 3
+//			#define HUITP_IEID_SUI_BFSC_COMINETYPE_ERROR 4
+//			#define HUITP_IEID_SUI_BFSC_COMINETYPE_INVALID 0xFF
+			
+      osDelay(1000);
+			IhuDebugPrint("L3BFSC: msg_wmc_combin_resp: msgid = 0x%08X\r\n", \
                       msg_wmc_combin_resp.msgid);
       
       /* Send Message to CAN Task */
@@ -1265,6 +1297,8 @@ OPSTAT fsm_bfsc_wmc_weight_ind(UINT8 dest_id, UINT8 src_id, void *param_ptr, UIN
       
       // switch to SCAN state
       FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_SCAN);
+			zBfscWmcState.last_combin_type.WeightCombineType = HUITP_IEID_SUI_BFSC_COMINETYPE_NULL;
+			
     }
   }
   else{
