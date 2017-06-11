@@ -176,8 +176,8 @@ IhuVmCtrMsgStaticCfg_t zIhuVmCtrMsgStaticCfg[] = {
   {MSG_ID_L3BFSC_CAN_GIVE_UP_RESP,                "MSG_ID_L3BFSC_CAN_GIVE_UP_RESP",         1, 1, 1},
   {MSG_ID_L3BFSC_CAN_ERROR_STATUS_REPORT,         "MSG_ID_L3BFSC_CAN_ERROR_STATUS_REPORT",  1, 1, 1},
   {MSG_ID_L3BFSC_ADC_WS_CMD_CTRL,                 "MSG_ID_L3BFSC_ADC_WS_CMD_CTRL",          1, 1, 1},
-  {MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL,               "MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL",        1, 1, 1},
-  {MSG_ID_L3BFSC_CAN_CMD_RESP,                    "MSG_ID_L3BFSC_CAN_CMD_RESP",             1, 1, 1},
+//  {MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL,               "MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL",        1, 1, 1},
+//  {MSG_ID_L3BFSC_CAN_CMD_RESP,                    "MSG_ID_L3BFSC_CAN_CMD_RESP",             1, 1, 1},
   //WMC <-> AWS //MYC                                                                      
   {MSG_ID_L3BFSC_WMC_STARTUP_IND,                 "MSG_ID_L3BFSC_WMC_STARTUP_IND",          1, 1, 1},
   {MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ,              "MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ",       1, 1, 1},

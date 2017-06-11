@@ -111,6 +111,10 @@ int32_t WeightSensorReadCurrent(WeightSensorParamaters_t *pwsp);
 /* mapping table */
 uint32_t SpsGainToBitwidthMapping(uint32_t gain_index, uint32_t wordrate_index);
 
+/* Calibration KB*/
+void WeightSensorCalibrationKB(WeightSensorParamaters_t *pwsp);
+
+
 #define 		WORDRATE_INDEX_NUMBER						10
 #define 		GAIN_INDEX_NUMBER								7
 

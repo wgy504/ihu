@@ -683,10 +683,10 @@ uint32_t WeightSensorInit(WeightSensorParamaters_t *pwsp)
 		}
 		
 		//printf("l2adc_cs5532: WeightSensorInit: pwsp = 0x%08X\r\n", pwsp);
-		pwsp->WeightSensorAdcSampleFreq = ADC_AMPLIFIER_WORDRATE_120SPS; //0:120sps  1:60sps  2:30sps  3:15sps  4:7.5sps  8:3840sps  9:1920sps  10:960sps  11:480sps  12:240sps
-		pwsp->WeightSensorAdcGain = ADC_AMPLIFIER_GAIN_16X;			//0:X1  1:X2  2:X4  3:X8  4:X16  5:X32  6:X64
+		pwsp->WeightSensorAdcSampleFreq = ADC_AMPLIFIER_WORDRATE_15SPS; //0:120sps  1:60sps  2:30sps  3:15sps  4:7.5sps  8:3840sps  9:1920sps  10:960sps  11:480sps  12:240sps
+		pwsp->WeightSensorAdcGain = ADC_AMPLIFIER_GAIN_64X;			//0:X1  1:X2  2:X4  3:X8  4:X16  5:X32  6:X64
 		pwsp->WeightSensorAdcBitwidth = SpsGainToBitwidthMapping(pwsp->WeightSensorAdcSampleFreq, pwsp->WeightSensorAdcGain);
-		pwsp->WeightSensorCalibrationFullWeight = 100000;//0.01g????
+		pwsp->WeightSensorCalibrationFullWeight = 10000;//0.1g  /£¯DISCUSSED WITH BF, NO NEED FOR 0.01g
 		pwsp->WeightSensorInitOrNot = WEIGHT_SENSOR_HAD_INITED;
 		
 //		pwsp->WeightSensorAdcSampleFreq = 0;//0:120sps  1:60sps  2:30sps  3:15sps  4:7.5sps  8:3840sps  9:1920sps  10:960sps  11:480sps  12:240sps
@@ -695,6 +695,8 @@ uint32_t WeightSensorInit(WeightSensorParamaters_t *pwsp)
 //		pwsp->WeightSensorCalibrationFullWeight = 100000;//0.01g????
 //		pwsp->WeightSensorInitOrNot = WEIGHT_SENSOR_HAD_INITED;
 	
+		WeightSensorCalibrationKB(&zWeightSensorParam);
+		
 		CS5532Init();
 	
 		return 0;
@@ -748,12 +750,12 @@ uint32_t weightSensorConfig(WeightSensorParamaters_t *pwsp)
 		zWeightSensorParam.WeightSensorDynamicZeroHysteresisMs = pwsp->WeightSensorDynamicZeroHysteresisMs;
 
 		/* THIS IS FOR TEST ONLY, NEEDS TO REMOVE AFTER PARAMETERS SAVED IN AWS */
-		zWeightSensorParam.WeightSensorAdcSampleFreq = ADC_AMPLIFIER_WORDRATE_120SPS; //0:120sps  1:60sps  2:30sps  3:15sps  4:7.5sps  8:3840sps  9:1920sps  10:960sps  11:480sps  12:240sps
-		zWeightSensorParam.WeightSensorAdcGain = ADC_AMPLIFIER_GAIN_16X;			//0:X1  1:X2  2:X4  3:X8  4:X16  5:X32  6:X64
+		zWeightSensorParam.WeightSensorAdcSampleFreq = ADC_AMPLIFIER_WORDRATE_15SPS; //0:120sps  1:60sps  2:30sps  3:15sps  4:7.5sps  8:3840sps  9:1920sps  10:960sps  11:480sps  12:240sps
+		zWeightSensorParam.WeightSensorAdcGain = ADC_AMPLIFIER_GAIN_64X;			//0:X1  1:X2  2:X4  3:X8  4:X16  5:X32  6:X64
 		zWeightSensorParam.WeightSensorAdcBitwidth = SpsGainToBitwidthMapping(pwsp->WeightSensorAdcSampleFreq, pwsp->WeightSensorAdcGain);
-		zWeightSensorParam.WeightSensorCalibrationFullWeight = 100000;//0.01g????
-		zWeightSensorParam.WeightSensorCalibrationZeroAdcValue = 7293;
-		zWeightSensorParam.WeightSensorCalibrationFullAdcValue = 11048;
+		zWeightSensorParam.WeightSensorCalibrationFullWeight = 100000;//0.1g????
+		zWeightSensorParam.WeightSensorCalibrationZeroAdcValue = 435609;
+		zWeightSensorParam.WeightSensorCalibrationFullAdcValue = 507909;
 		
 		WeightSensorCalibrationKB(&zWeightSensorParam);
 		

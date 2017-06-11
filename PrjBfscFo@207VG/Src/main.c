@@ -162,6 +162,8 @@ int main(void)
 	ihu_bsp_stm32_led_commu_f2board_on();
 	ihu_bsp_stm32_led_serv1_f2board_on();
 	ihu_bsp_stm32_led_work_state_f2board_on();
+
+	//blk230_set_lamp(WMC_LAMP_OUT1, WMC_LAMP_ON);
 	
 	/* CREATE IHU VM */
 	ihu_vm_main();

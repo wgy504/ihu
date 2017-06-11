@@ -15,6 +15,8 @@
 #include "l3bfsc_msg.h"
 #include "main.h"
 #include "l2adc_cs5532.h"
+#include "blk230.h"
+
 /*
 ** FSM of the BFSC
 */
@@ -75,19 +77,22 @@ IhuFsmStateItem_t IhuFsmBfsc[] =
   {MSG_ID_L3BFSC_WMC_COMMAND_REQ,				  FSM_STATE_BFSC_INITED,						      	fsm_bfsc_wmc_command_req},	//MYC
   {MSG_ID_L3BFSC_WMC_STOP_REQ,				    FSM_STATE_BFSC_INITED,						        fsm_bfsc_wmc_stop_req},	//MYC	
   {MSG_ID_L3BFSC_WMC_COMBIN_REQ,				  FSM_STATE_BFSC_INITED,							    	fsm_bfsc_wmc_combin_req},	//MYC	
+	{MSG_ID_L3BFSC_WMC_ERR_INQ_CMD_REQ,			FSM_STATE_BFSC_INITED,								    fsm_bfsc_wmc_err_inq_req},	//MYC	
   
   {MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ,			FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_set_config_req},	//MYC
 	{MSG_ID_L3BFSC_WMC_START_REQ,				    FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_start_req},	//MYC
   {MSG_ID_L3BFSC_WMC_COMMAND_REQ,				  FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_command_req},	//MYC
   {MSG_ID_L3BFSC_WMC_STOP_REQ,				    FSM_STATE_BFSC_CONFIGURATION,						  fsm_bfsc_wmc_stop_req},	//MYC	
-  {MSG_ID_L3BFSC_WMC_COMBIN_REQ,				  FSM_STATE_BFSC_COMBINATION,								fsm_bfsc_wmc_combin_req},	//MYC	
-
+  {MSG_ID_L3BFSC_WMC_COMBIN_REQ,				  FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_combin_req},	//MYC	
+	{MSG_ID_L3BFSC_WMC_ERR_INQ_CMD_REQ,			FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_err_inq_req},	//MYC	
+	
   {MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ,			FSM_STATE_BFSC_SCAN,							        fsm_bfsc_wmc_set_config_req},	//MYC
 	{MSG_ID_L3BFSC_WMC_START_REQ,				    FSM_STATE_BFSC_SCAN,							        fsm_bfsc_wmc_start_req},	//MYC
   {MSG_ID_L3BFSC_WMC_COMMAND_REQ,				  FSM_STATE_BFSC_SCAN,							        fsm_bfsc_wmc_command_req},	//MYC
   {MSG_ID_L3BFSC_WMC_STOP_REQ,				    FSM_STATE_BFSC_SCAN,						          fsm_bfsc_wmc_stop_req},	//MYC	
   {MSG_ID_L3BFSC_WMC_COMBIN_REQ,				  FSM_STATE_BFSC_SCAN,								      fsm_bfsc_wmc_combin_req},	//MYC	
   {MSG_ID_L3BFSC_WMC_WEIGHT_IND,				  FSM_STATE_BFSC_SCAN,								      fsm_bfsc_wmc_weight_ind},	//MYC	
+	{MSG_ID_L3BFSC_WMC_ERR_INQ_CMD_REQ,			FSM_STATE_BFSC_SCAN,								    	fsm_bfsc_wmc_err_inq_req},	//MYC	
   
   {MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ,			FSM_STATE_BFSC_COMBINATION,			  				fsm_bfsc_wmc_set_config_req},	//MYC
 	{MSG_ID_L3BFSC_WMC_START_REQ,				    FSM_STATE_BFSC_COMBINATION,					  		fsm_bfsc_wmc_start_req},	//MYC
@@ -96,13 +101,14 @@ IhuFsmStateItem_t IhuFsmBfsc[] =
   {MSG_ID_L3BFSC_WMC_COMBIN_REQ,				  FSM_STATE_BFSC_COMBINATION,								fsm_bfsc_wmc_combin_req},	//MYC	
   {MSG_ID_COM_TIME_OUT,                   FSM_STATE_BFSC_COMBINATION,               fsm_bfsc_wmc_combine_timeout},
   {MSG_ID_L3BFSC_WMC_WEIGHT_IND,				  FSM_STATE_BFSC_COMBINATION,								fsm_bfsc_wmc_weight_ind},	//MYC	
+	{MSG_ID_L3BFSC_WMC_ERR_INQ_CMD_REQ,			FSM_STATE_BFSC_COMBINATION,								fsm_bfsc_wmc_err_inq_req},	//MYC	
   
 	{MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ,			FSM_STATE_BFSC_ACTIVED,										fsm_bfsc_wmc_set_config_req},	//MYC
 	{MSG_ID_L3BFSC_WMC_START_REQ,						FSM_STATE_BFSC_ACTIVED,										fsm_bfsc_wmc_start_req},	//MYC
 	{MSG_ID_L3BFSC_WMC_COMMAND_REQ,					FSM_STATE_BFSC_ACTIVED,										fsm_bfsc_wmc_command_req},	//MYC
 	{MSG_ID_L3BFSC_WMC_STOP_REQ,						FSM_STATE_BFSC_ACTIVED,										fsm_bfsc_wmc_stop_req},	//MYC
 	{MSG_ID_L3BFSC_WMC_COMBIN_REQ,					FSM_STATE_BFSC_ACTIVED,										fsm_bfsc_wmc_combin_req},	//MYC
-	
+	{MSG_ID_L3BFSC_WMC_ERR_INQ_CMD_REQ,			FSM_STATE_BFSC_ACTIVED,								    fsm_bfsc_wmc_err_inq_req},	//MYC	
 	
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             								NULL},  //Ending
@@ -478,8 +484,8 @@ OPSTAT func_bfsc_time_out_roll_out_process(void)
 		memset(&snd2, 0, sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t));
 		snd2.cmdid = IHU_SYSMSG_BFSC_I2C_MOTO_CMD_TYPE_STOP;
 		snd2.length = sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t);
-		if (ihu_message_send(MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL, TASK_ID_I2CARIES, TASK_ID_BFSC, &snd2, snd2.length) == IHU_FAILURE)
-			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName);
+//		if (ihu_message_send(MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL, TASK_ID_I2CARIES, TASK_ID_BFSC, &snd2, snd2.length) == IHU_FAILURE)
+//			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName);
 	}
 	
 	//返回
@@ -530,8 +536,8 @@ OPSTAT func_bfsc_time_out_give_up_process(void)
 		memset(&snd2, 0, sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t));
 		snd2.cmdid = IHU_SYSMSG_BFSC_I2C_MOTO_CMD_TYPE_STOP;
 		snd2.length = sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t);
-		if (ihu_message_send(MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL, TASK_ID_I2CARIES, TASK_ID_BFSC, &snd2, snd2.length) == IHU_FAILURE)
-			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName);
+//		if (ihu_message_send(MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL, TASK_ID_I2CARIES, TASK_ID_BFSC, &snd2, snd2.length) == IHU_FAILURE)
+//			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName);
 	}
 	
 	//返回
@@ -570,8 +576,8 @@ OPSTAT fsm_bfsc_canvela_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 		snd.cmd.optpar = rcv.cmd.optpar;
 		snd.cmd.modbusVal = rcv.cmd.modbusVal;
 		snd.length = sizeof(msg_struct_l3bfsc_canvela_cmd_resp_t);
-		if (ihu_message_send(MSG_ID_L3BFSC_CAN_CMD_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length) == IHU_FAILURE)
-			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName);
+//		if (ihu_message_send(MSG_ID_L3BFSC_CAN_CMD_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length) == IHU_FAILURE)
+//			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName);
 	}
 	
 	//发送命令给ADC
@@ -596,8 +602,8 @@ OPSTAT fsm_bfsc_canvela_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 		snd2.cmd.optpar = rcv.cmd.optpar;
 		snd2.cmd.modbusVal = rcv.cmd.modbusVal;
 		snd2.length = sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t);
-		if (ihu_message_send(MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL, TASK_ID_I2CARIES, TASK_ID_BFSC, &snd2, snd2.length) == IHU_FAILURE)
-			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName);
+//		if (ihu_message_send(MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL, TASK_ID_I2CARIES, TASK_ID_BFSC, &snd2, snd2.length) == IHU_FAILURE)
+//			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName);
 	}
 	
 	//返回
@@ -629,8 +635,8 @@ OPSTAT fsm_bfsc_adc_meas_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr,
 	snd.cmd.optpar = rcv.cmd.optpar;
 	snd.cmd.modbusVal = rcv.cmd.modbusVal;
 	snd.length = sizeof(msg_struct_l3bfsc_canvela_cmd_resp_t);
-	if (ihu_message_send(MSG_ID_L3BFSC_CAN_CMD_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length) == IHU_FAILURE)
-		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName);
+//	if (ihu_message_send(MSG_ID_L3BFSC_CAN_CMD_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length) == IHU_FAILURE)
+//		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName);
 	
 	//返回
 	return IHU_SUCCESS;
@@ -661,8 +667,8 @@ OPSTAT fsm_bfsc_i2c_moto_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr,
 	snd.cmd.optpar = rcv.cmd.optpar;
 	snd.cmd.modbusVal = rcv.cmd.modbusVal;
 	snd.length = sizeof(msg_struct_l3bfsc_canvela_cmd_resp_t);
-	if (ihu_message_send(MSG_ID_L3BFSC_CAN_CMD_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length) == IHU_FAILURE)
-		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName);
+//	if (ihu_message_send(MSG_ID_L3BFSC_CAN_CMD_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length) == IHU_FAILURE)
+//		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName);
 	
 	//返回
 	return IHU_SUCCESS;
@@ -696,8 +702,8 @@ OPSTAT fsm_bfsc_canvela_init_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 	memset(&snd2, 0, sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t));
 	snd2.cmdid = IHU_SYSMSG_BFSC_I2C_MOTO_CMD_TYPE_START;
 	snd2.length = sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t);
-	if (ihu_message_send(MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL, TASK_ID_I2CARIES, TASK_ID_BFSC, &snd2, snd2.length) == IHU_FAILURE)
-		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName);
+//	if (ihu_message_send(MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL, TASK_ID_I2CARIES, TASK_ID_BFSC, &snd2, snd2.length) == IHU_FAILURE)
+//		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_I2CARIES].taskName);
 	
 	//发送反馈消息出去
 	memset(&snd, 0, sizeof(msg_struct_l3bfsc_canvela_init_resp_t));
@@ -932,7 +938,7 @@ void func_bfsc_stm_main_recovery_from_fault(void)
 	memset(&snd2, 0, sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t));
 	snd2.cmdid = IHU_SYSMSG_BFSC_I2C_MOTO_CMD_TYPE_START;
 	snd2.length = sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t);
-	ihu_message_send(MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL, TASK_ID_I2CARIES, TASK_ID_BFSC, &snd2, snd2.length);
+//	ihu_message_send(MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL, TASK_ID_I2CARIES, TASK_ID_BFSC, &snd2, snd2.length);
 	
 	//状态转移到SCAN状态
 	FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_SCAN);
@@ -1197,7 +1203,7 @@ OPSTAT fsm_bfsc_wmc_weight_ind(UINT8 dest_id, UINT8 src_id, void *param_ptr, UIN
   OPSTAT ret = IHU_SUCCESS;
 	msg_struct_l3bfsc_weight_ind_t rcv;
   msg_struct_l3bfsc_wmc_ws_event_t msg_wmc_ws_event;
-  int weight;
+  //int weight;
 	
 	//收到消息并做参数检查
 	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_weight_ind_t));
@@ -1205,7 +1211,8 @@ OPSTAT fsm_bfsc_wmc_weight_ind(UINT8 dest_id, UINT8 src_id, void *param_ptr, UIN
 		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);
 
-  weight = weight_sensor_map_adc_to_weight(rcv.adc_filtered);
+  //weight = weight_sensor_map_adc_to_weight(rcv.adc_filtered);
+	// removed by MYC, because the mapping is done in WeightThred !!!!
   
 	/* Process Message */
 	/* Check If it is the right/valid state to process the message */
@@ -1218,7 +1225,7 @@ OPSTAT fsm_bfsc_wmc_weight_ind(UINT8 dest_id, UINT8 src_id, void *param_ptr, UIN
   if(FSM_STATE_BFSC_SCAN == FsmGetState(TASK_ID_BFSC))
   {
     // send new weight event
-    IhuDebugPrint("L3BFSC: fsm_bfsc_wmc_weight_ind: weight=%d adc_filtered=%d rep_times=%d k=%f b=%d\r\n", weight, rcv.adc_filtered, rcv.repeat_times, wsckb.k, wsckb.b);
+    IhuDebugPrint("L3BFSC: fsm_bfsc_wmc_weight_ind: weight=%d adc_filtered=%d rep_times=%d k=%f b=%d\r\n", rcv.average_weight, rcv.adc_filtered, rcv.repeat_times, wsckb.k, wsckb.b);
     
 		/* Build Message Content Header */
     if(rcv.repeat_times > 0)
@@ -1228,7 +1235,7 @@ OPSTAT fsm_bfsc_wmc_weight_ind(UINT8 dest_id, UINT8 src_id, void *param_ptr, UIN
 		
     msg_wmc_ws_event.wmc_id = zWmcInvenory.wmc_id;
     msg_wmc_ws_event.length = sizeof(msg_struct_l3bfsc_wmc_ws_event_t);
-    msg_wmc_ws_event.weight_ind.average_weight = weight;
+    msg_wmc_ws_event.weight_ind.average_weight = rcv.average_weight;
     msg_wmc_ws_event.weight_ind.weight_event = WEIGHT_EVENT_ID_LOAD;
     msg_wmc_ws_event.weight_ind.repeat_times = rcv.repeat_times;
     msg_wmc_ws_event.weight_combin_type.ActionDelayMs = 0;
@@ -1261,10 +1268,10 @@ OPSTAT fsm_bfsc_wmc_weight_ind(UINT8 dest_id, UINT8 src_id, void *param_ptr, UIN
   else if (FSM_STATE_BFSC_COMBINATION == FsmGetState(TASK_ID_BFSC))
   {
     IhuDebugPrint("L3BFSC: fsm_bfsc_wmc_weight_ind(rep): weight=%d emptyThred=%d, adc_filtered=%d rep_times=%d k=%f b=%d\r\n", \
-							weight, zWeightSensorParam.WeightSensorEmptyThread, rcv.adc_filtered, rcv.repeat_times, wsckb.k, wsckb.b);
+							rcv.average_weight, zWeightSensorParam.WeightSensorEmptyThread, rcv.adc_filtered, rcv.repeat_times, wsckb.k, wsckb.b);
     
     //if(weight < zWeightSensorParam.WeightSensorEmptyThread)
-		if(weight < 100)
+		if(rcv.average_weight < 500)
 		{
       // send combination response
       msg_struct_l3bfsc_wmc_combin_out_resp_t msg_wmc_combin_resp;
@@ -1283,10 +1290,10 @@ OPSTAT fsm_bfsc_wmc_weight_ind(UINT8 dest_id, UINT8 src_id, void *param_ptr, UIN
 //			#define HUITP_IEID_SUI_BFSC_COMINETYPE_ERROR 4
 //			#define HUITP_IEID_SUI_BFSC_COMINETYPE_INVALID 0xFF
 			
-      osDelay(1000);
-			IhuDebugPrint("L3BFSC: msg_wmc_combin_resp: msgid = 0x%08X\r\n", \
-                      msg_wmc_combin_resp.msgid);
-      
+      osDelay(1000); ///THIS
+			IhuDebugPrint("L3BFSC: msg_wmc_combin_resp: msgid = 0x%08X\r\n", msg_wmc_combin_resp.msgid);
+      blk230_set_lamp(WMC_LAMP_OUT2_GREEN, WMC_LAMP_OFF);
+		
       /* Send Message to CAN Task */
       ret = ihu_message_send(MSG_ID_L3BFSC_WMC_COMBIN_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, \
                               &msg_wmc_combin_resp, MSG_SIZE_L3BFSC_WMC_COMBIN_RESP);
@@ -1345,3 +1352,30 @@ OPSTAT fsm_bfsc_wmc_combine_timeout(UINT8 dest_id, UINT8 src_id, void *param_ptr
 	return IHU_SUCCESS;
 }
 
+
+
+OPSTAT fsm_bfsc_wmc_err_inq_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)	//MYC
+{
+	OPSTAT ret = IHU_SUCCESS;
+	error_code_t error_code;
+	msg_struct_l3bfsc_wmc_err_inq_req_t rcv;
+	
+	//收到消息并做参数检查
+	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_wmc_err_inq_req_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_wmc_err_inq_req_t)))
+		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Receive message error!\n");
+	memcpy(&rcv, param_ptr, param_len);
+	
+	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_err_inq_req_t: rcv.msgid = 0x%08X, rcv.length = %d\r\n", rcv.msgid, rcv.length);
+
+	/* PROCESS TO BE ADDED */
+	/* !!!!!!!!!!!!!!!!!!!!*/
+	/* Process Message */
+	msg_wmc_err_inq_req_process(param_ptr, &error_code);
+	
+	/* Send back the response */
+	msg_wmc_err_inq_resp(error_code);
+
+	//返回
+	return ret;
+}

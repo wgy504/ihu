@@ -160,6 +160,33 @@ void blk230_task(void const *param)
 
   PCA8574A_init();
 	blk230_init();
+	
+
+//	blk230_set_lamp(WMC_LAMP_OUT1, WMC_LAMP_ON);
+//	osDelay(1000);
+//	
+//	blk230_set_lamp(WMC_LAMP_OUT1, WMC_LAMP_OFF);
+//	osDelay(1000);
+
+
+	blk230_set_dc_speed(200);
+	blk230_set_stop(0);
+	blk230_set_brake(0);
+	blk230_set_ccw(0);
+	
+	blk230_set_lamp(WMC_LAMP_OUT2_GREEN, WMC_LAMP_OFF);
+	blk230_set_lamp(WMC_LAMP_OUT3_YELLOW, WMC_LAMP_OFF);
+	osDelay(1000);
+	
+	blk230_set_lamp(WMC_LAMP_OUT2_GREEN, WMC_LAMP_ON);
+	blk230_set_lamp(WMC_LAMP_OUT3_YELLOW, WMC_LAMP_ON);
+	osDelay(1000);
+
+	blk230_set_lamp(WMC_LAMP_OUT2_GREEN, WMC_LAMP_OFF);
+	blk230_set_lamp(WMC_LAMP_OUT3_YELLOW, WMC_LAMP_OFF);
+
+	blk230_set_stop(1);
+
 
 	while(1)
 	{
@@ -191,6 +218,20 @@ void blk230_task(void const *param)
         time2stop = now + command.time2stop;
       else
         time2stop = 0;
+			
+			//MYC add to change the LIGHT
+			if(1 == command.stop)
+			{
+					blk230_set_lamp(WMC_LAMP_OUT2_GREEN, WMC_LAMP_OFF);
+			}
+			else if(0 == command.stop)
+			{
+					blk230_set_lamp(WMC_LAMP_OUT2_GREEN, WMC_LAMP_ON);
+			}
+			else
+			{
+			}
+			
     }
 
     // need stop motor?
@@ -201,6 +242,9 @@ void blk230_task(void const *param)
       status = blk230_set_stop(1);
 			OS_ASSERT(status == HAL_OK);
       time2stop = 0;
+			
+			blk230_set_lamp(WMC_LAMP_OUT2_GREEN, WMC_LAMP_OFF);
+
     }
 		
 		/* check alarm */
@@ -352,11 +396,11 @@ int blk230_set_lamp(uint32_t lamp_id, uint8_t flag)
 	{
 			lamp_mask = BLK230_LAMP_OUT1_BIT;
 	}
-	else if(WMC_LAMP_OUT2 == lamp_id)
+	else if(WMC_LAMP_OUT2_GREEN == lamp_id)
 	{
 			lamp_mask = BLK230_LAMP_OUT2_BIT;
 	}
-	else if (WMC_LAMP_OUT3 == lamp_id)
+	else if (WMC_LAMP_OUT3_YELLOW == lamp_id)
 	{
 			lamp_mask = BLK230_LAMP_OUT3_BIT;
 	}

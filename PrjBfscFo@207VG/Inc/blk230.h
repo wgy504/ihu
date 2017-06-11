@@ -13,12 +13,12 @@
 #define BLK230_LAMP_OUT3_BIT       (0x40)
 #define BLK230_CPU_TRG_OUT1_BIT    (0x80)
 
-#define WMC_LAMP_OUT1   	  				(0x01)
-#define WMC_LAMP_OUT2     	 				(0x02)
-#define WMC_LAMP_OUT3			  	     	(0x03)
+#define WMC_LAMP_OUT1								(0x01)
+#define WMC_LAMP_OUT2_GREEN					(0x02)
+#define WMC_LAMP_OUT3_YELLOW				(0x03)
 
-#define WMC_LAMP_OFF  		  				(0x00)
-#define WMC_LAMP_ON 	    	 				(0x01)
+#define WMC_LAMP_ON 	 		  				(0x00)
+#define WMC_LAMP_OFF 	    	 				(0x01)
 
 
 // PID parameters

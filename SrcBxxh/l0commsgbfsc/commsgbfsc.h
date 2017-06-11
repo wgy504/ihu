@@ -112,8 +112,8 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_L3BFSC_CAN_GIVE_UP_RESP,
 	MSG_ID_L3BFSC_CAN_ERROR_STATUS_REPORT,
 	MSG_ID_L3BFSC_ADC_WS_CMD_CTRL,
-	MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL,
-	MSG_ID_L3BFSC_CAN_CMD_RESP,
+//	MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL,
+//	MSG_ID_L3BFSC_CAN_CMD_RESP,
 	
 	//WMC <-> AWS //MYC
 	MSG_ID_L3BFSC_WMC_STARTUP_IND,      
@@ -131,8 +131,8 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_L3BFSC_WMC_COMMAND_REQ,
 	MSG_ID_L3BFSC_WMC_COMMAND_RESP,
 	MSG_ID_L3BFSC_WMC_WEIGHT_IND,
-//	MSG_ID_L3BFSC_WMC_ERR_INQ_CMD_REQ,
-//	MSG_ID_L3BFSC_WMC_ERR_INQ_CMD_RESP,
+	MSG_ID_L3BFSC_WMC_ERR_INQ_CMD_REQ,
+	MSG_ID_L3BFSC_WMC_ERR_INQ_CMD_RESP,
 	
 	//END FLAG
 	MSG_ID_COM_MAX, //Ending point
@@ -402,16 +402,6 @@ typedef struct msg_struct_l3bfsc_canvela_cmd_resp
 #define IHU_SYSMSG_BFSC_CAN_CMD_TYPE_STOP_CFM 2
 #define IHU_SYSMSG_BFSC_CAN_CMD_TYPE_RESP 3
 
-// MSG_ID_L3BFSC_WMC_WEIGHT_IND
-typedef struct msg_struct_l3bfsc_weight_ind
-{
-	UINT32 adc_filtered;
-  UINT32 repeat_times;
-}msg_struct_l3bfsc_weight_ind_t;
-
-
-
-
 
 /* 
 ** ====================================================================
@@ -597,6 +587,15 @@ typedef struct msg_struct_l3bfsc_wmc_stop_req
 //	UINT32 average_weight;	//average value in the detect window  // <--- MUST
 //}WeightIndication_t;
 
+// MSG_ID_L3BFSC_WMC_WEIGHT_IND -> This is pure for internal message between Weight Thread and L3BFSC thread
+typedef struct msg_struct_l3bfsc_weight_ind
+{
+	UINT32 adc_filtered;
+	UINT32 average_weight;
+  UINT32 repeat_times;
+}msg_struct_l3bfsc_weight_ind_t;
+
+
 typedef struct msg_struct_l3bfsc_wmc_ws_event
 {
 	UINT16 msgid;
@@ -699,6 +698,29 @@ typedef struct msg_struct_l3bfsc_wmc_command_resp
 	UINT32 	sensor_weight;
 }msg_struct_l3bfsc_wmc_command_resp_t;
 
+
+typedef struct msg_struct_l3bfsc_wmc_err_inq_req
+{
+	UINT16 	msgid;
+	UINT16 	length;
+	WmcId_t wmc_id;               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */
+	UINT16	error_code;
+}msg_struct_l3bfsc_wmc_err_inq_req_t;
+
+
+//HUITP_MSGID_sui_bfsc_err_inq_cmd_resp            = 0x3B9A,
+typedef struct msg_struct_l3bfsc_wmc_err_inq_resp
+{
+	UINT16 	msgid;
+	UINT16 	length;
+	WmcId_t wmc_id;               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */
+	UINT16	error_code;
+	UINT32  average_weight;
+	UINT8  validFlag;  //是否执行成功
+	UINT8  spare1;
+	UINT16 spare2;
+}msg_struct_l3bfsc_wmc_err_inq_resp_t;
+
 /*
 **	MSG_ID_L3BFSC_WMC_MSH_HEADER
 */
@@ -723,6 +745,8 @@ typedef struct msg_struct_l3bfsc_wmc_msg_header
 #define 	MSG_SIZE_L3BFSC_WMC_FAULT_IND						(sizeof(msg_struct_l3bfsc_wmc_fault_ind_t))
 #define 	MSG_SIZE_L3BFSC_WMC_COMMAND_REQ					(sizeof(msg_struct_l3bfsc_wmc_command_req_t))
 #define 	MSG_SIZE_L3BFSC_WMC_COMMAND_RESP				(sizeof(msg_struct_l3bfsc_wmc_command_resp_t))
+#define 	MSG_SIZE_L3BFSC_WMC_ERR_INQ_REQ					(sizeof(msg_struct_l3bfsc_wmc_err_inq_req_t))
+#define 	MSG_SIZE_L3BFSC_WMC_ERR_INQ_RESP				(sizeof(msg_struct_l3bfsc_wmc_err_inq_resp_t))
 
 /* Can ID for communication between AWS and WMC */
 /* 1: AWS to WMC: 1 to n, n = 0 ... 15       */

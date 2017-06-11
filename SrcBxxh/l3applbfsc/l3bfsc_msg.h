@@ -71,5 +71,10 @@ void msg_wmc_combin_req_process(void *param_ptr, error_code_t *ec_ptr);
 error_code_t msg_wmc_combin_req_check(void *param_ptr);
 void msg_wmc_combin_resp(error_code_t ec);
 
+void msg_wmc_err_inq_req_process(void *param_ptr, error_code_t *ec_ptr);
+error_code_t msg_wmc_err_inq_req_check(void *param_ptr);
+void msg_wmc_err_inq_resp(error_code_t ec);
+
+
 #endif /* L3APPL_L3BFSC_MSG_H_ */
 

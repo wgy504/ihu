@@ -42,7 +42,7 @@ IhuFsmStateItem_t IhuFsmI2caries[] =
 
 	//Task level actived status
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
-  {MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL,				FSM_STATE_I2CARIES_ACTIVED,         				fsm_i2caries_bfsc_moto_cmd_ctrl},	
+//  {MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL,				FSM_STATE_I2CARIES_ACTIVED,         				fsm_i2caries_bfsc_moto_cmd_ctrl},	
   {MSG_ID_I2C_L2FRAME_RCV,								FSM_STATE_I2CARIES_ACTIVED,         				fsm_i2caries_bfsc_l2frame_rcv},	
 
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
