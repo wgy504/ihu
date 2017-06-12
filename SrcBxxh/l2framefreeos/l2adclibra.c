@@ -275,7 +275,7 @@ OPSTAT func_adclibra_time_out_bfsc_read_weight_scan(void)
 	//也足以应付各种情况了，所以设置为100MS应该是理论上最好的效果了，足够了
 	UINT32 tempWeight = 0;
 	tempWeight = func_adclibra_bfsc_read_weight();
-	//IhuErrorPrint("ADCLIBRA: func_adclibra_time_out_bfsc_read_weight_scan: tempWeight = %d\n", tempWeight);
+	IhuDebugPrint("ADCLIBRA: func_adclibra_time_out_bfsc_read_weight_scan: T:%d, tempWeight = %d\n", osKernelSysTick(), tempWeight);
 	
 	//传感器一直是0重量
 	if ((tempWeight == 0) && (zIhuAdcBfscWs.WeightExistCnt == 0))
@@ -581,7 +581,7 @@ extern WeightSensorCalirationKB_t wsckb;
 extern BfscWmcState_t										zBfscWmcState;
 	if( HUITP_IEID_SUI_BFSC_COMINETYPE_NULL == zBfscWmcState.last_combin_type.WeightCombineType )
 	{
-			//weight = 10000 + (rand() % 30000);
+			weight = 10000 + (rand() % 30000);
 	}
 	else
 	{
@@ -792,7 +792,7 @@ void weight_sensor_task(void const *param)
     {  
 			osDelay(5000);
 		}
-		osDelay(2000); // For Test ONLY
+		osDelay(1000); // For Test ONLY
 	}
 }
 
