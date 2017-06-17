@@ -16,6 +16,7 @@
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
 #include "l3bfsc.h" 
 #include "l2adc_cs5532.h"
+#include "blk230.h"
 #endif
 
 /*
@@ -707,6 +708,8 @@ void WeightLoadEmptyEventReport(strIhuBfscAdcWeightPar_t *pbawp, WeightSensorPar
 				SendWeightIndicationToBfsc(pwsp->WeightSensorAdcValue, pbawp->WeightCurrValue, \
 														WEIGHT_EVENT_ID_EMPTY, pbawp->RepeatTimes);
 			
+				blk230_set_lamp(WMC_LAMP_OUT3_YELLOW, WMC_LAMP_OFF); /* Yellow Lamp Off */
+			
 		}
 		/* Case 3: EMPTY -> LOAD */
 		else if( (WEIGHT_EVENT_ID_LOAD == pbawp->WeightCurrEventType) && 
@@ -731,11 +734,20 @@ void WeightLoadEmptyEventReport(strIhuBfscAdcWeightPar_t *pbawp, WeightSensorPar
 						IhuDebugPrint("S7:%d:%d:%d:%d: Load->Load, WeightCurrValue=%d, ConsecutiveTimes=%d, RepeatTimes=%d\n", pbawp->SysTicksMs, pbawp->WeightCurrentTicks, \
 					                 pbawp->WeightCurrEventTicks, pbawp->WeightLastEventTicks, pbawp->WeightCurrValue, pbawp->ConsecutiveTimes, pbawp->RepeatTimes);
 
-						SendWeightIndicationToBfsc(pwsp->WeightSensorAdcValue, pbawp->WeightCurrValue, \
+						if(pbawp->RepeatTimes <= 10)  /* Define 10 times of remain time as the largest allowed times */
+						{	
+								SendWeightIndicationToBfsc(pwsp->WeightSensorAdcValue, pbawp->WeightCurrValue, \
 					                              WEIGHT_EVENT_ID_LOAD, pbawp->RepeatTimes);
+						}
+						else
+						{
+								blk230_set_lamp(WMC_LAMP_OUT3_YELLOW, WMC_LAMP_ON); /* Yellow Lamp On */
+						}
 					
 						pbawp->RepeatTimes++;
 						pbawp->ConsecutiveTimes = 0;
+						
+						
 				}			
 				pbawp->ConsecutiveTimes++;
 		}

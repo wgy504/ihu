@@ -895,6 +895,17 @@ uint32_t weightSensorConfig(WeightSensorParamaters_t *pwsp)
 		IhuDebugPrint("zWeightSensorParam.StardardReadyTimeMs=%d\n", zWeightSensorParam.StardardReadyTimeMs);
 		IhuDebugPrint("zWeightSensorParam.MaxAllowedWeight=%d\n", zWeightSensorParam.MaxAllowedWeight);
 		IhuDebugPrint("zWeightSensorParam.RemainDetectionTimeSec=%d\n", zWeightSensorParam.RemainDetectionTimeSec);
+		
+		if(zWeightSensorParam.RemainDetectionTimeSec < 2)
+		{
+				IhuDebugPrint("zWeightSensorParam.RemainDetectionTimeSec=%d, < 2, force set to 2 sec\n", zWeightSensorParam.RemainDetectionTimeSec);
+				zWeightSensorParam.RemainDetectionTimeSec = 2;
+		}
+		else
+		{
+				IhuDebugPrint("zWeightSensorParam.RemainDetectionTimeSec=%d\n", zWeightSensorParam.RemainDetectionTimeSec);
+		}
+		
 
 		//zWeightSensorParam.WeightSensorInitOrNot = pwsp->WeightSensorInitOrNot;
 		zWeightSensorParam.WeightSensorAdcSampleFreq = pwsp->WeightSensorAdcSampleFreq;
@@ -1021,10 +1032,22 @@ uint32_t weightSensorConfig(WeightSensorParamaters_t *pwsp)
 				IhuDebugPrint("WeightSensorDefaultCalibrationValue(&zWeightSensorParam);\n", zWeightSensorParam.WeightSensorDynamicZeroHysteresisMs);
 				WeightSensorDefaultCalibrationValue(&zWeightSensorParam);
 				IhuDebugPrint("======================================================================================\n");
-
+		}
+		else
+		{
+				IhuDebugPrint("zWeightSensorParam.WeightSensorOutputValue[0]=%d, GET HCU PARAMETER FOR SENSOR!!!\n", zWeightSensorParam.WeightSensorOutputValue[0]);
 		}
 		
-		IhuDebugPrint("WeightSensorCalibrationKB(&zWeightSensorParam)\n", zWeightSensorParam.WeightSensorDynamicZeroHysteresisMs);
+		if(1 == zWeightSensorParam.WeightSensorOutputValue[1])
+		{
+				IhuDebugPrint("1 == zWeightSensorParam.WeightSensorOutputValue[1], ADC Simu Mode [100000-400000], NOT Real Value\n");
+		}
+		else
+		{
+				IhuDebugPrint("0 == zWeightSensorParam.WeightSensorOutputValue[1], ADC Normal Mode, Real Value !!!\n");
+		}
+		
+		IhuDebugPrint("WeightSensorCalibrationKB(&zWeightSensorParam)\n");
 		WeightSensorCalibrationKB(&zWeightSensorParam);
 		InitWeightAdcBfscLocalParam(&zWeightSensorParam);
 		

@@ -284,9 +284,11 @@ void msg_wmc_start_req_process(void *param_ptr, error_code_t *ec_ptr)
 		}
 		
 		/* Check If it is the right/valid state to process the message */
-		if( FSM_STATE_BFSC_CONFIGURATION != FsmGetState(TASK_ID_BFSC) )
+		if( (FSM_STATE_BFSC_CONFIGURATION != FsmGetState(TASK_ID_BFSC)) && 
+			  (FSM_STATE_BFSC_COMBINATION != FsmGetState(TASK_ID_BFSC)) && 
+				(FSM_STATE_BFSC_SCAN != FsmGetState(TASK_ID_BFSC)) )
 		{
-				IhuErrorPrint("L3BFSC: msg_wmc_start_req_process: FSM_STATE_BFSC_CONFIGURATION != FsmGetState(TASK_ID_BFSC), return\r\n");
+				IhuErrorPrint("L3BFSC: msg_wmc_start_req_process: FSM_STATE_BFSC_CONFIGURATION/COMBINATION/SCAN != FsmGetState(TASK_ID_BFSC), return\r\n");
 				*ec_ptr = ERROR_CODE_WRONG_WMC_STATE;
 				return;
 		}		
