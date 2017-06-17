@@ -65,7 +65,7 @@ void msg_wmc_stop_resp(error_code_t ec);
 
 void msg_wmc_command_req_process(void *param_ptr, error_code_t *ec_ptr);
 error_code_t msg_wmc_command_req_check(void *param_ptr);
-void msg_wmc_command_resp(error_code_t ec);
+void msg_wmc_command_resp(error_code_t ec, msg_struct_l3bfsc_wmc_command_req_t *p_msg);
 
 void msg_wmc_combin_req_process(void *param_ptr, error_code_t *ec_ptr);
 error_code_t msg_wmc_combin_req_check(void *param_ptr);

@@ -331,7 +331,16 @@ OPSTAT func_bfsc_hw_init(WmcInventory_t *pwi)
 
 	extern CAN_HandleTypeDef hcan1;
 	bsp_can_config_filter(&hcan1, WMC_CAN_ID);
-
+	
+	/* Load Default Parameters */
+	WeightSensorInit(&zWeightSensorParam);
+	IhuDebugPrint("L3BFSC: func_bfsc_hw_init: WeightSensorInit()\r\n");
+	
+	WeightSensorDefaultCalibrationValue(&zWeightSensorParam);
+	IhuDebugPrint("L3BFSC: func_bfsc_hw_init: WeightSensorDefaultCalibrationValue()\r\n");
+	
+	srand(zWmcInvenory.wmc_id.wmc_id); /* For generating ramdon value for test */
+	
 	return IHU_SUCCESS;
 }
 
@@ -1126,7 +1135,7 @@ OPSTAT fsm_bfsc_wmc_command_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UI
 	msg_wmc_command_req_process(param_ptr, &error_code);
 	
 	/* Send back the response */
-	msg_wmc_command_resp(error_code);
+	msg_wmc_command_resp(error_code, &rcv);
 	
 	//FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_CONFIGURATION);
 
@@ -1157,7 +1166,7 @@ OPSTAT fsm_bfsc_wmc_stop_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT1
 	/* STATE CHANGE IF OK */
 	if (ERROR_CODE_NO_ERROR == error_code)
 	{
-    weight_sensor_send_cmd(WIGHT_SENSOR_CMD_TYPE_STOP);
+
     
 		FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_CONFIGURATION);
 		IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_stop_req_t: Set to FSM_STATE_BFSC_CONFIGURATION\r\n");
@@ -1236,7 +1245,7 @@ OPSTAT fsm_bfsc_wmc_weight_ind(UINT8 dest_id, UINT8 src_id, void *param_ptr, UIN
     msg_wmc_ws_event.wmc_id = zWmcInvenory.wmc_id;
     msg_wmc_ws_event.length = sizeof(msg_struct_l3bfsc_wmc_ws_event_t);
     msg_wmc_ws_event.weight_ind.average_weight = rcv.average_weight;
-    msg_wmc_ws_event.weight_ind.weight_event = WEIGHT_EVENT_ID_LOAD;
+    msg_wmc_ws_event.weight_ind.weight_event = rcv.weight_event;
     msg_wmc_ws_event.weight_ind.repeat_times = rcv.repeat_times;
     msg_wmc_ws_event.weight_combin_type.ActionDelayMs = 0;
     msg_wmc_ws_event.weight_combin_type.WeightCombineType = HUITP_IEID_SUI_BFSC_COMINETYPE_NULL;
@@ -1271,7 +1280,8 @@ OPSTAT fsm_bfsc_wmc_weight_ind(UINT8 dest_id, UINT8 src_id, void *param_ptr, UIN
 							rcv.average_weight, zWeightSensorParam.WeightSensorEmptyThread, rcv.adc_filtered, rcv.repeat_times, wsckb.k, wsckb.b);
     
     //if(weight < zWeightSensorParam.WeightSensorEmptyThread)
-		if(rcv.average_weight < 500)
+		//if(rcv.average_weight < 500) // ONLY FOR TEST
+		if(WEIGHT_EVENT_ID_EMPTY == rcv.weight_event)
 		{
       // send combination response
       msg_struct_l3bfsc_wmc_combin_out_resp_t msg_wmc_combin_resp;
@@ -1290,7 +1300,7 @@ OPSTAT fsm_bfsc_wmc_weight_ind(UINT8 dest_id, UINT8 src_id, void *param_ptr, UIN
 //			#define HUITP_IEID_SUI_BFSC_COMINETYPE_ERROR 4
 //			#define HUITP_IEID_SUI_BFSC_COMINETYPE_INVALID 0xFF
 			
-      osDelay(1000); ///THIS
+      //osDelay(1000); ///THIS
 			IhuDebugPrint("L3BFSC: msg_wmc_combin_resp: msgid = 0x%08X\r\n", msg_wmc_combin_resp.msgid);
       blk230_set_lamp(WMC_LAMP_OUT2_GREEN, WMC_LAMP_OFF);
 		

@@ -401,12 +401,25 @@ void func_timer_routine_handler_1s(OS_TIMER timerid)
 
 
 //函数机制，搞定时器
+//uint32_t counter_10ms_test = 0;
+//uint32_t tick_to_record_10ms[100];
+
+//uint32_t counter_200ms_test = 0;
+//uint32_t tick_to_record_200ms[100];
+
 void func_timer_routine_handler_10ms(OS_TIMER timerid)
 {
   int i=0, ret=0;
   msg_struct_com_time_out_t snd;
 
   //入参检查
+//	counter_10ms_test++;
+//	tick_to_record_10ms[counter_10ms_test%100] = osKernelSysTick();
+//	if(99 == counter_10ms_test%100)
+//	{
+//			IhuErrorPrint("TIMER: %d, 10ms\r\n", tick_to_record_10ms[99]);
+//	}
+
 
   //扫描
   for (i=0;i<IHU_SYSDIM_TIMERID_NBR_MAX_10MS;i++)
@@ -442,6 +455,19 @@ void func_timer_routine_handler_10ms(OS_TIMER timerid)
           IhuErrorPrint("TIMER: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_TIMER].taskName, zIhuVmCtrTab.task[zIhuTimerTable.timer10ms[i].taskId].taskName);
           return;
         }
+				
+//				if(TIMER_ID_10MS_BFSC_ADCLIBRA_SCAN_TIMER == zIhuTimerTable.timer10ms[i].timerId)
+//				{
+//						counter_200ms_test++;
+//						tick_to_record_200ms[counter_200ms_test%5] = osKernelSysTick();
+//						if(4 == counter_200ms_test%5)
+//						{
+//								IhuErrorPrint("TIMER: %d, 200ms\r\n", tick_to_record_200ms[4]);
+//						}
+//				}
+				
+				
+				
       }//Elapse <= 0, timeout reach
     }
     //START status

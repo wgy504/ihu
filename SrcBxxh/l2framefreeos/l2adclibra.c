@@ -12,8 +12,12 @@
  */
  
 #include "l2adclibra.h"
+
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
 #include "l3bfsc.h" 
 #include "l2adc_cs5532.h"
+#endif
+
 /*
 ** FSM of the ADCLIBRA
 */
@@ -54,6 +58,8 @@ IhuFsmStateItem_t IhuFsmAdclibra[] =
 //Global variables defination
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 strIhuBfscAdcWeightPar_t zIhuAdcBfscWs;
+extern WeightSensorParamaters_t					zWeightSensorParam;
+
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 strIhuCclAdcPar_t zIhuCclAdclibraCtrlTable;
 #else
@@ -179,6 +185,10 @@ OPSTAT fsm_adclibra_stop_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 }
 
 //Local APIs
+
+//uint32_t counter_200ms_test_rcv = 0;
+//uint32_t tick_to_record_200ms_rcv[100];
+
 OPSTAT func_adclibra_hw_init(void)
 {
 	return IHU_SUCCESS;
@@ -232,8 +242,15 @@ OPSTAT fsm_adclibra_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
 	else if ((rcv.timeId == TIMER_ID_10MS_BFSC_ADCLIBRA_SCAN_TIMER) &&(rcv.timeRes == TIMER_RESOLUTION_10MS))
 	{
-		if (zIhuAdcBfscWs.WeightWorkingMode == IHU_BFSC_ADC_WEIGHT_WORKING_MODE_NORMAL) 
+		//if (zIhuAdcBfscWs.WeightWorkingMode == IHU_BFSC_ADC_WEIGHT_WORKING_MODE_NORMAL) 
 			func_adclibra_time_out_bfsc_read_weight_scan();
+		
+//		counter_200ms_test_rcv++;
+//		tick_to_record_200ms_rcv[counter_200ms_test_rcv%5] = osKernelSysTick();
+//		if(4 == counter_200ms_test_rcv%5)
+//		{
+//				IhuErrorPrint("TIMER: %d, 200ms R\r\n", tick_to_record_200ms_rcv[4]);
+//		}
 	}
 #endif
 	
@@ -266,70 +283,581 @@ void func_adclibra_time_out_period_scan(void)
 }
 
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+//OPSTAT func_adclibra_time_out_bfsc_read_weight_scan(void)
+//{
+//	int ret = 0;
+//	//扫描ADC的数据，这里应该有采样，以及滤波算法
+//	//先生成假数据，用于极度疯狂的系统测试，暂时将采样周期定位250ms，后面甚至可以设置10ms级别，以验证系统的可靠性与稳定性
+//	//正常情况下，100MS的采样，已经足以够得着人工处理速度了。如果这是一条产线，按照每分钟200包、一秒钟3包的速度，300MS的一半两次采样，100MS<150MS，
+//	//也足以应付各种情况了，所以设置为100MS应该是理论上最好的效果了，足够了
+//	UINT32 tempWeight = 0;
+//	tempWeight = func_adclibra_bfsc_read_weight();
+//	IhuDebugPrint("ADCLIBRA: func_adclibra_time_out_bfsc_read_weight_scan: T:%d, tempWeight = %d\n", osKernelSysTick(), tempWeight);
+//	
+//	//传感器一直是0重量
+//	if ((tempWeight == 0) && (zIhuAdcBfscWs.WeightExistCnt == 0))
+//	{
+//		//Do nothing
+//	}
+//	
+//	//传感器突然变成了0重量
+//	else if ((tempWeight == 0) && (zIhuAdcBfscWs.WeightExistCnt > 0))
+//	{
+//		//IhuErrorPrint("ADCLIBRA: func_adclibra_time_out_bfsc_read_weight_scan: tempWeight = %d, WeightExistCnt = %d\n", tempWeight, zIhuAdcBfscWs.WeightExistCnt);
+//		zIhuAdcBfscWs.WeightExistCnt = 0;
+//		//发送MSG_ID_ADC_MATERIAL_DROP到L3BFSC
+//		msg_struct_adc_material_drop_t snd1;
+//		memset(&snd1, 0, sizeof(msg_struct_adc_material_drop_t));
+//		snd1.length = sizeof(msg_struct_adc_material_drop_t);
+//		ret = ihu_message_send(MSG_ID_ADC_MATERIAL_DROP, TASK_ID_BFSC, TASK_ID_ADCLIBRA, &snd1, snd1.length);
+//		if (ret == IHU_FAILURE){
+//			zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA]++;
+//			IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_ADCLIBRA].taskName, zIhuVmCtrTab.task[TASK_ID_BFSC].taskName);
+//			return IHU_FAILURE;
+//		}
+//	}
+//	
+//	//传感器有新重量：这里的误差，得有算法来控制结果，只要是重量不一样，这里的程序就得上报，不管是不是真的有变化，以确保系统反应的敏感性
+//	else if (tempWeight > 0)
+//	{
+//		//IhuErrorPrint("ADCLIBRA: func_adclibra_time_out_bfsc_read_weight_scan: tempWeight = %d, WeightExistCnt = %d\n", tempWeight, zIhuAdcBfscWs.WeightExistCnt);
+//		zIhuAdcBfscWs.WeightExistCnt++;
+//		if (tempWeight != zIhuAdcBfscWs.Weightvalue)
+//		{
+//			//发送MSG_ID_ADC_NEW_MATERIAL_WS
+//			zIhuAdcBfscWs.Weightvalue = tempWeight;
+//			msg_struct_adc_new_material_ws_t snd2;
+//			memset(&snd2, 0, sizeof(msg_struct_adc_new_material_ws_t));
+//			snd2.length = sizeof(msg_struct_adc_new_material_ws_t);
+//			ret = ihu_message_send(MSG_ID_ADC_NEW_MATERIAL_WS, TASK_ID_BFSC, TASK_ID_ADCLIBRA, &snd2, snd2.length);
+//			if (ret == IHU_FAILURE){
+//				zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA]++;
+//				IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_ADCLIBRA].taskName, zIhuVmCtrTab.task[TASK_ID_BFSC].taskName);
+//				return IHU_FAILURE;
+//			}
+//		}//if (tempWeight != zIhuAdcBfscSensorWeightValue)
+//	}
+//	
+//	//垃圾CASE，应该不能到达
+//	else
+//	{
+//		zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA]++;
+//		IhuErrorPrint("ADCLIBRA: Wrong scan result!\n");
+//		return IHU_FAILURE;	
+//	}
+//	
+//	return IHU_SUCCESS;
+//}
+
+/*
+**
+** MA Yuchu, rewrite for Weight Sensor Scan process 
+**
+*/
+weight_sensor_filter_t g_weight_sensor_filter;
+
+void WeightCalculateMaxMin(INT32* pWeightValueAdjusted, UINT32 ScanTicks, INT32 *pWeightMax, INT32 *pWeightMin)
+{
+		INT32 weight_max = 0;
+		INT32 weight_min = 0;
+		UINT32 index = 0;
+	
+		if(NULL == pWeightValueAdjusted)
+			return;
+		
+		if(NULL == pWeightMax)
+			return;
+		
+		if(NULL == pWeightMin)
+			return;
+		
+		weight_max = pWeightValueAdjusted[0];
+		weight_min = pWeightValueAdjusted[0];	
+		for(index = 0; index < ScanTicks; index++)
+		{
+				if(pWeightValueAdjusted[index] >= weight_max)
+						weight_max = pWeightValueAdjusted[index];
+				
+				if(pWeightValueAdjusted[index] <= weight_min)
+						weight_min = pWeightValueAdjusted[index];
+		}
+		
+		*pWeightMax = weight_max;
+		*pWeightMin = weight_min;
+		
+		return;
+		
+}
+
+
+INT32 WeightCalculateAverage(INT32* pWeightValueRaw, UINT32 MovingAverageTicks)
+{
+		UINT32 index = 0;
+		INT32 average = 0;
+		double average_double = 0;
+	
+		if(NULL == pWeightValueRaw)
+			return 0;
+		
+		for(index = 0; index < MovingAverageTicks; index++)
+				average_double = average_double + (double)(*(pWeightValueRaw + index));
+		
+		average = (INT32)((average_double)/((double)MovingAverageTicks));
+		return average;
+}
+
+void WeightSaveHistory(strIhuBfscAdcWeightPar_t *pBfscAdcWeightPar, INT32 WeightValueCurrentMovingAverage)
+{
+		UINT32	index = 0;
+	
+		if(NULL == pBfscAdcWeightPar)
+			return;
+		
+		//MAKE SURE WeightValueEvaluated[0] is the latest one, WeightValueEvaluated[WEIGHT_SENSOR_MAX_TICKS_SAVED-1] is the oldest one
+		for(index = WEIGHT_SENSOR_MAX_TICKS_SAVED - 1; index > 0; index--)
+		{
+				pBfscAdcWeightPar->WeightValueEvaluated[index] = pBfscAdcWeightPar->WeightValueEvaluated[index-1];
+		}
+		
+		//SAVE the latest one
+		pBfscAdcWeightPar->WeightValueEvaluated[0] = WeightValueCurrentMovingAverage;
+		//IhuDebugPrint("S4:WeightValueEvaluated[0]=%d\n", pBfscAdcWeightPar->WeightValueEvaluated[0]);
+		
+		return;		
+}
+
+void WeightAdjustHistory(strIhuBfscAdcWeightPar_t *pbawp, WeightSensorParamaters_t *pwsp)
+{
+		
+		UINT32	WeightSensorLoadDetectionTimeMs;
+		UINT32	WeightSensorLoadThread;
+		UINT32	WeightSensorEmptyThread;
+		UINT32	WeightSensorEmptyDetectionTimeMs;
+		UINT32	MaxAllowedWeight;										
+
+		UINT32	WeightSensorStaticZeroValue;				
+		UINT32	WeightSensorTailorValue;						
+		UINT32	WeightSensorDynamicZeroThreadValue;	
+		UINT32	WeightSensorDynamicZeroHysteresisMs;
+	
+		UINT32  Index;
+		UINT32	WeightSensorLoadDetectionTicks; // = WeightSensorLoadDetectionTimeMs / WEIGHT_SENSOR_ADC_READ_TICK_MS;
+		UINT32 	WeightSensorEmptyDetectionTicks; // = WeightSensorEmptyDetectionTimeMs / WEIGHT_SENSOR_ADC_READ_TICK_MS;
+		UINT32	WeightSensorDynamicZeroHysteresisTicks; // = WeightSensorDynamicZeroHysteresisMs / WEIGHT_SENSOR_ADC_READ_TICK_MS;
+	
+		if((NULL == pbawp)||(NULL == pwsp))
+		{
+				return;
+		}
+		
+		/* Save parameters */
+		WeightSensorLoadDetectionTimeMs = pwsp->WeightSensorLoadDetectionTimeMs;
+		WeightSensorLoadThread = pwsp->WeightSensorLoadThread;
+		WeightSensorEmptyThread = pwsp->WeightSensorEmptyThread;
+		WeightSensorEmptyDetectionTimeMs = pwsp->WeightSensorEmptyDetectionTimeMs;
+		MaxAllowedWeight = pwsp->MaxAllowedWeight;										
+
+		WeightSensorStaticZeroValue = pwsp->WeightSensorStaticZeroValue;				
+		WeightSensorTailorValue = pwsp->WeightSensorTailorValue;						
+		WeightSensorDynamicZeroThreadValue = pwsp->WeightSensorDynamicZeroThreadValue;	
+		WeightSensorDynamicZeroHysteresisMs = pwsp->WeightSensorDynamicZeroHysteresisMs;
+		//IhuDebugPrint("pwsp->WeightSensorDynamicZeroHysteresisMs=%d\n", pwsp->WeightSensorDynamicZeroHysteresisMs);
+
+//		WeightSensorLoadDetectionTicks = WeightSensorLoadDetectionTimeMs / WEIGHT_SENSOR_ADC_READ_TICK_MS;
+//		WeightSensorEmptyDetectionTicks = WeightSensorEmptyDetectionTimeMs / WEIGHT_SENSOR_ADC_READ_TICK_MS;
+		WeightSensorDynamicZeroHysteresisTicks = WeightSensorDynamicZeroHysteresisMs / WEIGHT_SENSOR_ADC_READ_TICK_MS;
+		
+		/* Static zero and tailor */
+		for (Index = 0; Index < WeightSensorDynamicZeroHysteresisTicks; Index++)
+		{
+				pbawp->WeightValueAdjusted[Index] = pbawp->WeightValueEvaluated[Index] - \
+			                                      pwsp->WeightSensorStaticZeroValue - \
+																						pwsp->WeightSensorTailorValue - \
+																						pbawp->WeightDynamicZeroValue;
+		}
+		
+		/* Auto Zero */
+		for (Index = 0; Index < WeightSensorDynamicZeroHysteresisTicks; Index++)
+		{
+				if(pbawp->WeightValueEvaluated[Index] > WeightSensorDynamicZeroThreadValue)
+						break;
+		}
+		
+		/* WHICH MEANS ALL [0, WeightSensorDynamicZeroHysteresisTicks-1] ARE ALL LESS THAN WeightSensorDynamicZeroThreadValue */
+		if( (Index == WeightSensorDynamicZeroHysteresisTicks) && (0 != Index) ) //(0 != Index) to avoid TOO SHORT WeightSensorDynamicZeroHysteresisTicks
+				pbawp->WeightDynamicZeroValue = pbawp->WeightValueEvaluated[0];
+		else
+				pbawp->WeightDynamicZeroValue = 0;
+		
+		//IhuDebugPrint("S5:WeightValueAdjusted[0]=%d, WeightDynamicZeroValue=%d, Index=%d, HysteresisTicks=%d, HysteresisMs=%d\n", pbawp->WeightValueAdjusted[0], pbawp->WeightDynamicZeroValue, Index, WeightSensorDynamicZeroHysteresisTicks, WeightSensorDynamicZeroHysteresisMs);
+
+}
+
+void WeightLoadEmptyDetection(strIhuBfscAdcWeightPar_t *pbawp, WeightSensorParamaters_t *pwsp)
+{
+
+		UINT32	WeightSensorLoadDetectionTimeMs;
+		UINT32	WeightSensorLoadThread;
+		UINT32	WeightSensorEmptyThread;
+		UINT32	WeightSensorEmptyDetectionTimeMs;
+		UINT32	MaxAllowedWeight;										
+
+		UINT32	WeightSensorStaticZeroValue;				
+		UINT32	WeightSensorTailorValue;						
+		UINT32	WeightSensorDynamicZeroThreadValue;	
+		UINT32	WeightSensorDynamicZeroHysteresisMs;
+	
+		UINT32	RemainDetectionTimeSec;
+	
+		UINT32  Index;
+		UINT32	WeightSensorLoadDetectionTicks; // = WeightSensorLoadDetectionTimeMs / WEIGHT_SENSOR_ADC_READ_TICK_MS;
+		UINT32 	WeightSensorEmptyDetectionTicks; // = WeightSensorEmptyDetectionTimeMs / WEIGHT_SENSOR_ADC_READ_TICK_MS;
+		UINT32	WeightSensorDynamicZeroHysteresisTicks; // = WeightSensorDynamicZeroHysteresisMs / WEIGHT_SENSOR_ADC_READ_TICK_MS;
+	
+		INT32	WeightMaxLoad, WeightMinLoad, WeightMaxEmpty, WeightMinEmpty;
+	
+		if((NULL == pbawp)||(NULL == pwsp))
+		{
+				return;
+		}
+		
+		/* Save parameters */
+		WeightSensorLoadDetectionTimeMs = pwsp->WeightSensorLoadDetectionTimeMs;
+		WeightSensorLoadThread = pwsp->WeightSensorLoadThread;
+		WeightSensorEmptyThread = pwsp->WeightSensorEmptyThread;
+		WeightSensorEmptyDetectionTimeMs = pwsp->WeightSensorEmptyDetectionTimeMs;
+		MaxAllowedWeight = pwsp->MaxAllowedWeight;
+		
+		RemainDetectionTimeSec = pwsp->RemainDetectionTimeSec;
+
+		WeightSensorStaticZeroValue = pwsp->WeightSensorStaticZeroValue;				
+		WeightSensorTailorValue = pwsp->WeightSensorTailorValue;						
+		WeightSensorDynamicZeroThreadValue = pwsp->WeightSensorDynamicZeroThreadValue;	
+		WeightSensorDynamicZeroHysteresisMs = pwsp->WeightSensorDynamicZeroHysteresisMs;
+		
+		WeightSensorLoadDetectionTicks = WeightSensorLoadDetectionTimeMs / WEIGHT_SENSOR_ADC_READ_TICK_MS;
+		WeightSensorEmptyDetectionTicks = WeightSensorEmptyDetectionTimeMs / WEIGHT_SENSOR_ADC_READ_TICK_MS;
+		WeightSensorDynamicZeroHysteresisTicks = WeightSensorDynamicZeroHysteresisMs / WEIGHT_SENSOR_ADC_READ_TICK_MS;
+		
+		/* Get Max and Min value within WeightSensorLoadDetectionTicks &WeightSensorEmptyDetectionTicks */
+		WeightCalculateMaxMin(pbawp->WeightValueAdjusted, WeightSensorLoadDetectionTicks, &WeightMaxLoad, &WeightMinLoad);
+		WeightCalculateMaxMin(pbawp->WeightValueAdjusted, WeightSensorEmptyDetectionTicks, &WeightMaxEmpty, &WeightMinEmpty);
+
+		/* Event Detection */
+		/* EMPTY EVENT */
+		if( (abs(WeightMaxEmpty) <= WeightSensorEmptyThread) && (abs(WeightMinEmpty) <= WeightSensorEmptyThread))
+		{
+				pbawp->WeightValueLastLoadTicks = pbawp->WeightValueCurrLoadTicks;
+				pbawp->WeightValueLastLoadValue = pbawp->WeightValueCurrLoadValue;
+				pbawp->WeightValueCurrLoadTicks = pbawp->WeightCurrentTicks;
+				pbawp->WeightValueCurrLoadValue = pbawp->WeightValueAdjusted[0];
+			
+				pbawp->WeightLastEventType = pbawp->WeightCurrEventType;
+				pbawp->WeightLastEventTicks = pbawp->WeightCurrEventTicks;
+				pbawp->WeightLastValue = pbawp->WeightCurrValue;
+				pbawp->WeightCurrEventType = WEIGHT_EVENT_ID_EMPTY;
+				pbawp->WeightCurrEventTicks = pbawp->WeightCurrentTicks;
+				pbawp->WeightCurrValue = pbawp->WeightValueAdjusted[0];
+			
+				IhuDebugPrint("S6:%d:%d:[L(%d):Max=%d,Min=%d,Max-Min=%d,T=%d][E(%d):Max=%d,Min=%d,T=%d]:EmptyEvent\n", zIhuAdcBfscWs.SysTicksMs, zIhuAdcBfscWs.WeightCurrentTicks,\
+										WeightSensorLoadDetectionTicks, WeightMaxLoad, WeightMinLoad, (WeightMaxLoad-WeightMinLoad), WeightSensorLoadThread, \
+										WeightSensorEmptyDetectionTicks, WeightMaxEmpty, WeightMinEmpty, WeightSensorEmptyThread);
+		}
+		else if( ((WeightMaxLoad - WeightMinLoad) <= WeightSensorLoadThread) && /* LOAD EVENT */
+						 (WeightMinLoad >= (WeightSensorEmptyThread*2)) && 
+						 (WeightMinLoad > 0) )
+		{
+				pbawp->WeightValueLastLoadTicks = pbawp->WeightValueCurrLoadTicks;
+				pbawp->WeightValueLastLoadValue = pbawp->WeightValueCurrLoadValue;
+				pbawp->WeightValueCurrLoadTicks = pbawp->WeightCurrentTicks;
+				pbawp->WeightValueCurrLoadValue = pbawp->WeightValueAdjusted[0];
+			
+				pbawp->WeightLastEventType = pbawp->WeightCurrEventType;
+				pbawp->WeightLastEventTicks = pbawp->WeightCurrEventTicks;
+				pbawp->WeightLastValue = pbawp->WeightCurrValue;
+				pbawp->WeightCurrEventType = WEIGHT_EVENT_ID_LOAD;
+				pbawp->WeightCurrEventTicks = pbawp->WeightCurrentTicks;
+				pbawp->WeightCurrValue = pbawp->WeightValueAdjusted[0];
+			
+				IhuDebugPrint("S6:%d:%d:[L(%d):Max=%d,Min=%d,Max-Min=%d,T=%d][E(%d):Max=%d,Min=%d,T=%d]:LoadEvent\n", zIhuAdcBfscWs.SysTicksMs, zIhuAdcBfscWs.WeightCurrentTicks,\
+										WeightSensorLoadDetectionTicks, WeightMaxLoad, WeightMinLoad, (WeightMaxLoad-WeightMinLoad), WeightSensorLoadThread, \
+										WeightSensorEmptyDetectionTicks, WeightMaxEmpty, WeightMinEmpty, WeightSensorEmptyThread);			
+		}
+		else
+		{			
+				pbawp->WeightLastEventType = pbawp->WeightCurrEventType;
+				pbawp->WeightLastEventTicks = pbawp->WeightCurrEventTicks;
+				pbawp->WeightLastValue = pbawp->WeightCurrValue;
+				pbawp->WeightCurrEventType = WEIGHT_EVENT_ID_PICKUP;
+				pbawp->WeightCurrEventTicks = pbawp->WeightCurrentTicks;
+				pbawp->WeightCurrValue = pbawp->WeightValueAdjusted[0];
+			
+				IhuDebugPrint("S6:%d:%d:[L(%d):Max=%d,Min=%d,Max-Min=%d,T=%d][E(%d):Max=%d,Min=%d,T=%d]:Pickuping\n", zIhuAdcBfscWs.SysTicksMs, zIhuAdcBfscWs.WeightCurrentTicks,\
+										WeightSensorLoadDetectionTicks, WeightMaxLoad, WeightMinLoad, (WeightMaxLoad-WeightMinLoad), WeightSensorLoadThread, \
+										WeightSensorEmptyDetectionTicks, WeightMaxEmpty, WeightMinEmpty, WeightSensorEmptyThread);
+		}
+
+}
+
+void SendWeightIndicationToBfsc(UINT32 adc_filtered, UINT32 average_weight, UINT32 weight_event, UINT32 repeat_times)
+{
+		msg_struct_l3bfsc_weight_ind_t weight_ind;
+		OPSTAT ret;
+	
+		weight_ind.adc_filtered = adc_filtered;
+		weight_ind.average_weight = average_weight;
+		weight_ind.repeat_times = weight_event;
+		weight_ind.repeat_times = repeat_times;
+	
+		ret = ihu_message_send(MSG_ID_L3BFSC_WMC_WEIGHT_IND, TASK_ID_BFSC, TASK_ID_BFSC, \
+										       &weight_ind, sizeof(msg_struct_l3bfsc_weight_ind_t));
+
+		if (ret == IHU_FAILURE){
+			IhuErrorPrint("WS: SendWeightIndicationToBfsc error!\n");
+		}
+		
+}
+
+
+void WeightLoadEmptyEventReport(strIhuBfscAdcWeightPar_t *pbawp, WeightSensorParamaters_t *pwsp)
+{
+		
+		if((NULL == pbawp)||(NULL == pwsp))
+		{
+				return;
+		}
+		
+		/* Four cases considerred */
+		/* Case 1: EMPTY -> EMPTY */
+		if( (WEIGHT_EVENT_ID_EMPTY == pbawp->WeightCurrEventType) && 
+			  (WEIGHT_EVENT_ID_EMPTY == pbawp->WeightLastEventType) )
+		{
+				if((pbawp->ConsecutiveTimes) >= ( (pwsp->RemainDetectionTimeSec * 1000)/WEIGHT_SENSOR_ADC_READ_TICK_MS) )
+				{					
+					
+						IhuDebugPrint("S7:%d:%d:%d:%d: Empty->Empty, WeightCurrValue=%d, ConsecutiveTimes=%d, RepeatTimes=%d\n", pbawp->SysTicksMs, pbawp->WeightCurrentTicks, \
+					                 pbawp->WeightCurrEventTicks, pbawp->WeightLastEventTicks, pbawp->WeightCurrValue, pbawp->ConsecutiveTimes, pbawp->RepeatTimes);
+
+						SendWeightIndicationToBfsc(pwsp->WeightSensorAdcValue, pbawp->WeightCurrValue, \
+					                              WEIGHT_EVENT_ID_EMPTY, pbawp->RepeatTimes);
+					
+						pbawp->RepeatTimes++;
+						pbawp->ConsecutiveTimes = 0;
+				}
+				
+				pbawp->ConsecutiveTimes++;
+				
+		}
+		/* Case 2: LOAD -> EMPTY */
+		else if( (WEIGHT_EVENT_ID_EMPTY == pbawp->WeightCurrEventType) && 
+			       (WEIGHT_EVENT_ID_EMPTY != pbawp->WeightLastEventType) )
+		{
+							
+				pbawp->RepeatTimes = 0;
+				pbawp->ConsecutiveTimes = 0;
+			
+				IhuDebugPrint("S7:%d:%d:%d:%d: !Empty->Empty, WeightCurrValue=%d, ConsecutiveTimes=%d, RepeatTimes=%d\n", pbawp->SysTicksMs, pbawp->WeightCurrentTicks, \
+											 pbawp->WeightCurrEventTicks, pbawp->WeightLastEventTicks, pbawp->WeightCurrValue, pbawp->ConsecutiveTimes, pbawp->RepeatTimes);
+
+				SendWeightIndicationToBfsc(pwsp->WeightSensorAdcValue, pbawp->WeightCurrValue, \
+														WEIGHT_EVENT_ID_EMPTY, pbawp->RepeatTimes);
+			
+		}
+		/* Case 3: EMPTY -> LOAD */
+		else if( (WEIGHT_EVENT_ID_LOAD == pbawp->WeightCurrEventType) && 
+			       (WEIGHT_EVENT_ID_LOAD != pbawp->WeightLastEventType) )
+		{
+				pbawp->RepeatTimes = 0;
+				pbawp->ConsecutiveTimes = 0;
+			
+				IhuDebugPrint("S7:%d:%d:%d:%d: !Load->Load, WeightCurrValue=%d, ConsecutiveTimes=%d, RepeatTimes=%d\n", pbawp->SysTicksMs, pbawp->WeightCurrentTicks, \
+											 pbawp->WeightCurrEventTicks, pbawp->WeightLastEventTicks, pbawp->WeightCurrValue, pbawp->ConsecutiveTimes, pbawp->RepeatTimes);			
+			
+				SendWeightIndicationToBfsc(pwsp->WeightSensorAdcValue, pbawp->WeightCurrValue, \
+														WEIGHT_EVENT_ID_LOAD, pbawp->RepeatTimes);
+		}
+		/* Case 4: LOAD -> LOAD */
+		else if( (WEIGHT_EVENT_ID_LOAD == pbawp->WeightCurrEventType) && 
+			       (WEIGHT_EVENT_ID_LOAD == pbawp->WeightLastEventType) )
+		{
+				if( (pbawp->ConsecutiveTimes) >= ( (pwsp->RemainDetectionTimeSec *1000)/WEIGHT_SENSOR_ADC_READ_TICK_MS ) )
+				{
+					
+						IhuDebugPrint("S7:%d:%d:%d:%d: Load->Load, WeightCurrValue=%d, ConsecutiveTimes=%d, RepeatTimes=%d\n", pbawp->SysTicksMs, pbawp->WeightCurrentTicks, \
+					                 pbawp->WeightCurrEventTicks, pbawp->WeightLastEventTicks, pbawp->WeightCurrValue, pbawp->ConsecutiveTimes, pbawp->RepeatTimes);
+
+						SendWeightIndicationToBfsc(pwsp->WeightSensorAdcValue, pbawp->WeightCurrValue, \
+					                              WEIGHT_EVENT_ID_LOAD, pbawp->RepeatTimes);
+					
+						pbawp->RepeatTimes++;
+						pbawp->ConsecutiveTimes = 0;
+				}			
+				pbawp->ConsecutiveTimes++;
+		}
+		/* Case 5: ELSE */
+		else
+		{
+			
+		}
+}
+
+/*
+** WeightSensorFilterCoeff[4];				// NOT for GUI
+**
+** WeightSensorFilterCoeff[0] => 0, Moving average
+** WeightSensorFilterCoeff[1] => 0 
+**
+** Input:
+**  g_weight_sensor_filter.beta_num[0] = WS_BETA_NUM1;    => WeightSensorFilterCoeff[0]
+**  g_weight_sensor_filter.beta_num[1] = WS_BETA_NUM2;    => WeightSensorFilterCoeff[1]
+**  g_weight_sensor_filter.stable_thresh = 12;    // ~2g  => WeightSensorFilterCoeff[2]
+**  g_weight_sensor_filter.change_thresh = 30;    // ~5g  => WeightSensorFilterCoeff[3]
+**
+** Output:
+**
+**
+*/
+#define NOTEST
 OPSTAT func_adclibra_time_out_bfsc_read_weight_scan(void)
 {
-	int ret = 0;
-	//扫描ADC的数据，这里应该有采样，以及滤波算法
-	//先生成假数据，用于极度疯狂的系统测试，暂时将采样周期定位250ms，后面甚至可以设置10ms级别，以验证系统的可靠性与稳定性
-	//正常情况下，100MS的采样，已经足以够得着人工处理速度了。如果这是一条产线，按照每分钟200包、一秒钟3包的速度，300MS的一半两次采样，100MS<150MS，
-	//也足以应付各种情况了，所以设置为100MS应该是理论上最好的效果了，足够了
-	UINT32 tempWeight = 0;
-	tempWeight = func_adclibra_bfsc_read_weight();
-	IhuDebugPrint("ADCLIBRA: func_adclibra_time_out_bfsc_read_weight_scan: T:%d, tempWeight = %d\n", osKernelSysTick(), tempWeight);
 	
-	//传感器一直是0重量
-	if ((tempWeight == 0) && (zIhuAdcBfscWs.WeightExistCnt == 0))
-	{
-		//Do nothing
-	}
+//	INT32	WeightValueRaw[WEIGHT_SENSOR_MOVING_AVERAGE_TICKS];
+//	INT32	WeightValueMovingAverage[WEIGHT_SENSOR_MOVING_AVERAGE_TICKS];
+//	UIN32	WeightValueCurrentIndexMovingAverage;
+//	INT32 WeightValueEvaluated[WEIGHT_SENSOR_MAX_TICKS_SAVED];
+//	UIN32	WeightValueCurrentIndexEvaluated;
 	
-	//传感器突然变成了0重量
-	else if ((tempWeight == 0) && (zIhuAdcBfscWs.WeightExistCnt > 0))
-	{
-		//IhuErrorPrint("ADCLIBRA: func_adclibra_time_out_bfsc_read_weight_scan: tempWeight = %d, WeightExistCnt = %d\n", tempWeight, zIhuAdcBfscWs.WeightExistCnt);
-		zIhuAdcBfscWs.WeightExistCnt = 0;
-		//发送MSG_ID_ADC_MATERIAL_DROP到L3BFSC
-		msg_struct_adc_material_drop_t snd1;
-		memset(&snd1, 0, sizeof(msg_struct_adc_material_drop_t));
-		snd1.length = sizeof(msg_struct_adc_material_drop_t);
-		ret = ihu_message_send(MSG_ID_ADC_MATERIAL_DROP, TASK_ID_BFSC, TASK_ID_ADCLIBRA, &snd1, snd1.length);
-		if (ret == IHU_FAILURE){
-			zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA]++;
-			IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_ADCLIBRA].taskName, zIhuVmCtrTab.task[TASK_ID_BFSC].taskName);
-			return IHU_FAILURE;
-		}
-	}
+		weight_sensor_cmd_t command;
+		#ifdef NOTEST
+		int is_started = 0;
+		#else
+		int is_started = 1;
+		#endif
+		uint32_t last_adc_filtered = 0xFFFF, adc_filtered;
+		uint32_t last_adc_tick = 0xFFFF, current_tick, repeat_times = 0;
+		int weight = 0;
+		msg_struct_l3bfsc_weight_ind_t weight_ind;
+		OPSTAT ret;
 	
-	//传感器有新重量：这里的误差，得有算法来控制结果，只要是重量不一样，这里的程序就得上报，不管是不是真的有变化，以确保系统反应的敏感性
-	else if (tempWeight > 0)
-	{
-		//IhuErrorPrint("ADCLIBRA: func_adclibra_time_out_bfsc_read_weight_scan: tempWeight = %d, WeightExistCnt = %d\n", tempWeight, zIhuAdcBfscWs.WeightExistCnt);
-		zIhuAdcBfscWs.WeightExistCnt++;
-		if (tempWeight != zIhuAdcBfscWs.Weightvalue)
+		/* wait for a new command */
+		// process command
+		if(weight_sensor_recv_cmd(&command))
 		{
-			//发送MSG_ID_ADC_NEW_MATERIAL_WS
-			zIhuAdcBfscWs.Weightvalue = tempWeight;
-			msg_struct_adc_new_material_ws_t snd2;
-			memset(&snd2, 0, sizeof(msg_struct_adc_new_material_ws_t));
-			snd2.length = sizeof(msg_struct_adc_new_material_ws_t);
-			ret = ihu_message_send(MSG_ID_ADC_NEW_MATERIAL_WS, TASK_ID_BFSC, TASK_ID_ADCLIBRA, &snd2, snd2.length);
-			if (ret == IHU_FAILURE){
-				zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA]++;
-				IhuErrorPrint("ADCLIBRA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_ADCLIBRA].taskName, zIhuVmCtrTab.task[TASK_ID_BFSC].taskName);
-				return IHU_FAILURE;
-			}
-		}//if (tempWeight != zIhuAdcBfscSensorWeightValue)
-	}
+			if(command.type == WIGHT_SENSOR_CMD_TYPE_STOP)
+				is_started = 0;
+			else if(command.type == WIGHT_SENSOR_CMD_TYPE_START)
+				is_started = 1;
+		}
+		
+		/* IF NOT STARTED, DIRECT RETURN */
+		if( 0 == is_started )
+			return SUCCESS;
 	
-	//垃圾CASE，应该不能到达
-	else
-	{
-		zIhuSysStaPm.taskRunErrCnt[TASK_ID_ADCLIBRA]++;
-		IhuErrorPrint("ADCLIBRA: Wrong scan result!\n");
-		return IHU_FAILURE;	
-	}
-	
-	return IHU_SUCCESS;
+		/* IF if( 1 == is_started ), continue for two option algorithm */
+		
+		/* MA ALGORITHM */
+		if( (0 == zWeightSensorParam.WeightSensorFilterCoeff[0]) && (0 == zWeightSensorParam.WeightSensorFilterCoeff[1]) )
+		{
+				INT32	WeightValueCurrentMovingAverage = 0;
+				
+				// STEP 0, Record Time/Ticks
+				//zIhuAdcBfscWs.WeightCurrentTicks++;
+				zIhuAdcBfscWs.SysTicksMs = osKernelSysTick();
+				
+				// STEP 1, READ ADC VALUE, MAPPED TO WEIGHT VALUE
+				zIhuAdcBfscWs.WeightValueRaw[zIhuAdcBfscWs.WeightValueCurrentIndexMovingAverage] = WeightSensorReadCurrent(&zWeightSensorParam);
+				//IhuDebugPrint("S1:%d:%d:%d:[RAW:%d]\n", zIhuAdcBfscWs.SysTicksMs, zIhuAdcBfscWs.WeightCurrentTicks,zIhuAdcBfscWs.WeightValueCurrentIndexMovingAverage, zIhuAdcBfscWs.WeightValueRaw[zIhuAdcBfscWs.WeightValueCurrentIndexMovingAverage]);
+				
+				// STEP 2, MOVE THE POINTER TO NEXT INDEX OF MOVING AVERAE
+				zIhuAdcBfscWs.WeightValueCurrentIndexMovingAverage++;
+				if( WEIGHT_SENSOR_MOVING_AVERAGE_TICKS == zIhuAdcBfscWs.WeightValueCurrentIndexMovingAverage) 
+						zIhuAdcBfscWs.WeightValueCurrentIndexMovingAverage = 0;
+				
+				// STEP 3, CALCULATE MOVING AVEARAGE
+				WeightValueCurrentMovingAverage = WeightCalculateAverage(zIhuAdcBfscWs.WeightValueRaw, WEIGHT_SENSOR_MOVING_AVERAGE_TICKS);
+				//IhuDebugPrint("S3:%d:%d:[MA:%d]\n", zIhuAdcBfscWs.SysTicksMs, zIhuAdcBfscWs.WeightCurrentTicks, WeightValueCurrentMovingAverage);
+
+				// STEP 4, SAVE IN THE INTERNAL BUFFER
+				WeightSaveHistory(&zIhuAdcBfscWs, WeightValueCurrentMovingAverage);
+				
+				// STEP 5, Adjust the weight according to tailoring and also Auto Zero
+				WeightAdjustHistory(&zIhuAdcBfscWs, &zWeightSensorParam);
+				
+				// STEP 6, LOAD/EMPTY DETECTION DETECTION
+				WeightLoadEmptyDetection(&zIhuAdcBfscWs, &zWeightSensorParam);
+				
+				// STEP 7, Decide how to report !!!
+				WeightLoadEmptyEventReport(&zIhuAdcBfscWs, &zWeightSensorParam);
+
+				// STEP 8, Record Time/Ticks
+				zIhuAdcBfscWs.WeightCurrentTicks++;
+		}
+		else /* FILTER ALGORITHM */
+		{
+				// read sensor for a stable value
+				if(weight_sensor_read_and_filtering(&g_weight_sensor_filter))
+				{
+						adc_filtered = (g_weight_sensor_filter.adc_filtered[0] + g_weight_sensor_filter.adc_filtered[1]) >> 1;
+
+						if(abs(adc_filtered - last_adc_filtered) > g_weight_sensor_filter.change_thresh)
+						{
+								last_adc_filtered = adc_filtered;
+								last_adc_tick = osKernelSysTick();
+								repeat_times = 0;
+								
+								weight_ind.adc_filtered = adc_filtered;
+								weight = weight_sensor_map_adc_to_weight(adc_filtered);
+								
+								if (weight >= 0)
+										weight_ind.average_weight = weight;
+								else
+										weight_ind.average_weight = 0;
+								
+								zWeightSensorParam.WeightSensorOutputValue[0] = weight_ind.average_weight;
+								
+								weight_ind.repeat_times = repeat_times;
+								
+								IhuDebugPrint("tick%d: WS: new weight ind: adc_filtered=%d weight=%d\n", last_adc_tick, adc_filtered, weight_ind.average_weight);
+								//IhuDebugPrint("tick%d: WS: new weight ind: adc_filtered=%d\n", last_adc_tick, adc_filtered);
+								
+								#ifdef NOTEST
+								// weight changed, send weight indication to L3BFSC
+								ret = ihu_message_send(MSG_ID_L3BFSC_WMC_WEIGHT_IND, TASK_ID_BFSC, TASK_ID_BFSC, \
+																	&weight_ind, sizeof(msg_struct_l3bfsc_weight_ind_t));
+
+								if (ret == IHU_FAILURE){
+									IhuErrorPrint("WS: Send new weight ind message error!\n");
+								}
+								#endif
+						}
+						else
+						{
+								current_tick = osKernelSysTick();
+								if(current_tick - last_adc_tick > 2000)
+								{
+									last_adc_tick = current_tick;
+									repeat_times ++;
+									
+									weight_ind.adc_filtered = adc_filtered;
+									weight_ind.repeat_times = repeat_times;
+									
+									//IhuDebugPrint("tick%d: WS: repeat weight ind: adc_filtered=%d weight=%d repeat_times=%d\n", last_adc_tick, adc_filtered, weight_sensor_map_adc_to_weight(adc_filtered), repeat_times);
+									IhuDebugPrint("tick%d: WS: repeat weight ind: adc_filtered=%d repeat_times=%d\n", last_adc_tick, adc_filtered, repeat_times);
+
+									#ifdef NOTEST
+									// weight changed, send weight indication to L3BFSC
+									ret = ihu_message_send(MSG_ID_L3BFSC_WMC_WEIGHT_IND, TASK_ID_BFSC, TASK_ID_BFSC, \
+																		&weight_ind, sizeof(msg_struct_l3bfsc_weight_ind_t));
+
+									if (ret == IHU_FAILURE){
+										IhuErrorPrint("WS: Send repeat weight ind message error!\n");
+									}
+									#endif
+								}
+						}
+				}
+		}
+
 }
 
 //MSG_ID_L3BFSC_ADC_WS_CMD_CTRL
@@ -544,6 +1072,7 @@ bool ihu_adclibra_ccl_scan_battery_warning_level(void)
 //=======================================================
 //START: Local API from Xiong Puhui, for ADC Weight Filter
 //=======================================================
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
 extern WeightSensorParamaters_t					zWeightSensorParam;
 extern WmcInventory_t										zWmcInvenory;
 
@@ -555,6 +1084,9 @@ int weight_sensor_map_adc_to_weight(uint32_t adc_value)
 	uint32_t temp = 0;
 	int32_t temp2 = 0;
 	int32_t temp3 = 0;
+	
+	static int test_sample_count_1 = 0;
+	static int32_t test_sample_value_1 = 0;
 
   
   den = (zWeightSensorParam.WeightSensorCalibrationFullAdcValue - zWeightSensorParam.WeightSensorCalibrationZeroAdcValue);
@@ -577,17 +1109,32 @@ extern WeightSensorCalirationKB_t wsckb;
 
 	weight = temp3;
 	
-	////// FOR TEST !!!!!!!!! ////
-extern BfscWmcState_t										zBfscWmcState;
-	if( HUITP_IEID_SUI_BFSC_COMINETYPE_NULL == zBfscWmcState.last_combin_type.WeightCombineType )
+	////// !!!!!!!!!!! FOR TEST !!!!!!!!! //////
+	if(0 == zWeightSensorParam.WeightSensorOutputValue[1])
 	{
-			weight = 10000 + (rand() % 30000);
+			return temp3;
 	}
-	else
+	/* Test Code Skip All ADC, but Generate ramdom ADC/Weight */
+	else if(1 == zWeightSensorParam.WeightSensorOutputValue[1])
 	{
-			weight = 0;  // SO THAT the COMBIN_OUT MESSAGE WILL BE SENT OUT //
+extern BfscWmcState_t										zBfscWmcState;			
+			if( HUITP_IEID_SUI_BFSC_COMINETYPE_NULL == zBfscWmcState.last_combin_type.WeightCombineType )
+			{
+					if(0 == test_sample_count_1)
+					{
+							test_sample_value_1 = 10000 + (rand() % 30000);  /* 100g ~ 400g */
+							test_sample_count_1 = 1;
+					}
+					return test_sample_value_1 + ((rand() % 300) - 150);
+					
+			}
+			else /* HUITP_IEID_SUI_BFSC_COMINETYPE_ROOLOUT */
+			{
+					test_sample_value_1 = 10000 + (rand() % 30000);  /* Next random data, 100g ~ 400g */
+					return ((rand() % 200) - 100);  // SO THAT the COMBIN_OUT MESSAGE WILL BE SENT OUT //
+			}		
 	}
-	
+
   return weight;
 }
 
@@ -612,17 +1159,15 @@ int weight_sensor_recv_cmd(weight_sensor_cmd_t *command)
 {
   taskENTER_CRITICAL();
   *command = g_weight_sensor_cmd;
-  g_weight_sensor_cmd.valid = 0;
+  g_weight_sensor_cmd.valid = 1;
   taskEXIT_CRITICAL();
   
   return command->valid;
 }
 
-weight_sensor_filter_t g_weight_sensor_filter;
 
-#define WS_BETA_DEN   4  // DEN=1<<4
-#define WS_BETA_NUM1  15
-#define WS_BETA_NUM2  10
+
+
 uint32_t weight_sensor_read_and_filtering(weight_sensor_filter_t *wsf)
 {
   int i=0, adc_raw=0;
@@ -643,10 +1188,10 @@ uint32_t weight_sensor_read_and_filtering(weight_sensor_filter_t *wsf)
     }
 
     osDelay(1);
-  }while(i<1);
+  }while(i<4);
 
-  //adc_raw = adc_raw >> 2;
-	IhuDebugPrint("adc_raw=%d\n", temp);
+  adc_raw = adc_raw >> 2;
+	//IhuDebugPrint("adc_raw=%d\n", temp);
   
   temp = ((wsf->adc_filtered[0] - adc_raw) * wsf->beta_num[0]);
   wsf->adc_filtered[0] = (temp >> WS_BETA_DEN) + adc_raw;
@@ -655,19 +1200,19 @@ uint32_t weight_sensor_read_and_filtering(weight_sensor_filter_t *wsf)
   //wsf->adc_filtered[0] = (((wsf->adc_filtered[0] - adc_raw) * wsf->beta_num[0]) >> WS_BETA_DEN) + adc_raw;
   //wsf->adc_filtered[1] = (((wsf->adc_filtered[1] - adc_raw) * wsf->beta_num[1]) >> WS_BETA_DEN) + adc_raw;
 
-  //IhuDebugPrint("adc_raw=%d adc_filtered=(%d, %d)\n", adc_raw, wsf->adc_filtered[0], wsf->adc_filtered[1]);
-  wsf->adc_filtered[0] = adc_raw;
-	wsf->adc_filtered[1] = adc_raw;
+  IhuDebugPrint("adc_raw=%d adc_filtered=(%d-%d=%d), stable_thresh = %d\n", adc_raw, wsf->adc_filtered[0], wsf->adc_filtered[1], wsf->adc_filtered[0] - wsf->adc_filtered[1], wsf->stable_thresh);
+	//  wsf->adc_filtered[0] = adc_raw;
+	//	wsf->adc_filtered[1] = adc_raw;
 	
   if(abs(wsf->adc_filtered[0] - wsf->adc_filtered[1]) < wsf->stable_thresh)
   {
     return 1;
   }
 
-  return 1;  /// Only for Test 
+  return 0;  /// Only for Test 
 }
 
-#define NOTEST
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // weight sensor task
 // 1) process the L3BF message
@@ -795,7 +1340,7 @@ void weight_sensor_task(void const *param)
 		osDelay(1000); // For Test ONLY
 	}
 }
-
+#endif
 //=======================================================
 //END: Local API from Xiong Puhui, for ADC Weight Filter
 //=======================================================

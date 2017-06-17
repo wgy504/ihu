@@ -146,6 +146,11 @@ int blk230_recv_cmd(blk230_cmd_t *command)
   return command->valid;
 }
 
+int blk230_led_send_cmd(uint32_t led_id, uint8_t led_command)
+{
+	
+}
+
 /*
  * motor task framework, TBD
  */
@@ -169,7 +174,7 @@ void blk230_task(void const *param)
 //	osDelay(1000);
 
 
-	blk230_set_dc_speed(200);
+	blk230_set_dc_speed(300);
 	blk230_set_stop(0);
 	blk230_set_brake(0);
 	blk230_set_ccw(0);

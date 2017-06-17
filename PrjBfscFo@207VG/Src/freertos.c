@@ -188,11 +188,11 @@ void MX_FREERTOS_Init(void) {
 
   /* Create the thread(s) */
   /* definition and creation of defaultTask */
-  //osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 512);
-  //defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
+//  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 512);
+//  defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
-  osThreadDef(myTask01, weight_sensor_task, osPriorityNormal, 0, 512);
-  myTask01Handle = osThreadCreate(osThread(myTask01), NULL);
+//  osThreadDef(myTask01, weight_sensor_task, osPriorityNormal, 0, 512);
+//  myTask01Handle = osThreadCreate(osThread(myTask01), NULL);
   
   /* definition and creation of myTask02 */
   osThreadDef(myTask02, blk230_task, osPriorityNormal, 0, 512);
@@ -227,9 +227,9 @@ void StartDefaultTask(void const * argument)
   
   //初始化Weight Sensor ADC
 	WeightSensorInit(&zWeightSensorParam);
-	printf("L3BFSC: fsm_bfsc_init: WeightSensorInit()\r\n");
+	printf("L3BFSC: WeightSensorInit()\r\n");
   
-	for(i = 10; i >= 0; i--)
+	for(i = 20; i >= 0; i--)
 	{
 			printf("Wait for %d sec to call WeightSensorCalibrationZero() ...\r\n", i);
 			HAL_Delay(1000);
@@ -238,7 +238,7 @@ void StartDefaultTask(void const * argument)
 	temp = WeightSensorCalibrationZero(&zWeightSensorParam);
 	printf("WeightSensorCalibrationZero() return %d (0x%x) ...\r\n", temp, temp);
 	
-	for(i = 10; i >= 0; i--)
+	for(i = 20; i >= 0; i--)
 	{
 			printf("Wait for %d sec to call WeightSensorCalibrationFull() ...\r\n", i);
 			HAL_Delay(1000);
@@ -256,13 +256,13 @@ void StartDefaultTask(void const * argument)
 				//temp = ReadSeriesADValue();
 				ihu_bsp_stm32_led_serv1_f2board_toggle();
 				temp2 = WeightSensorReadCurrent(&zWeightSensorParam);
-				printf("ReadValue = %d(%x) mapped %d\r\n", zWeightSensorParam.WeightSensorAdcValue, zWeightSensorParam.WeightSensorAdcValue, temp2);
+			printf("%d:%d(%x),%d\r\n", osKernelSysTick(), zWeightSensorParam.WeightSensorAdcValue, zWeightSensorParam.WeightSensorAdcValue, temp2);
 		}		
 //		uint8_t send_data = 0x0B;
 //		HAL_SPI_Transmit(&SpiHandle,&send_data,1,0);
 //	  send_data = 0x00;
 //		HAL_SPI_Transmit(&SpiHandle,&send_data,1,0);		
-		HAL_Delay(2000);
+		HAL_Delay(200);
 		
   }
   /* USER CODE END StartDefaultTask */

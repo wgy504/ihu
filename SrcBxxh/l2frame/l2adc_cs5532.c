@@ -1,6 +1,7 @@
 #include <inttypes.h>
 #include "cmsis_os.h"
 #include "l2adc_cs5532.h"
+#include "l2adclibra.h"
 #include "main.h"
 
 typedef struct Structuint32_t
@@ -674,6 +675,116 @@ void CS5532Init()
 //-----Freq-----x64-----x32-----x16-----x8-----x4-----x2-----x1
 //     7.5       19      20      21     22     22     22     22
 
+extern weight_sensor_filter_t g_weight_sensor_filter;
+
+uint32_t WeightSensorDefaultCalibrationValue(WeightSensorParamaters_t *pwsp)
+{
+		if(NULL == pwsp)
+		{
+				printf("l2adc_cs5532: WeightSensorInit: NULL == pwsp, return IHU_FAILURE\r\n");
+				return 1;
+		}
+//		0					1000
+//1		0x0673f4	0x078e24
+//2		0x06b526	0x07d0b5
+//3		0x068e14	0x07a480
+//4		0x06bedb	0x07d660
+//5		0x067e60	0x079862
+//6		0x06902c	0x07a9e5
+//7		0x06b320	0x07cf4b
+//8		0x070c3c	0x08329f
+//9		0x069605	0x07aee0
+//10	0x06bcc1	0x07d996
+
+extern WmcInventory_t										zWmcInvenory;
+		
+		switch(zWmcInvenory.wmc_id.wmc_id)
+		{
+				case 0:
+						pwsp->WeightSensorCalibrationZeroAdcValue = 0x0673f4;
+						pwsp->WeightSensorCalibrationFullAdcValue = 0x078e24;
+						pwsp->WeightSensorCalibrationFullWeight = 100000;
+
+						break;
+				
+				case 1:
+						pwsp->WeightSensorCalibrationZeroAdcValue = 0x0673f4;
+						pwsp->WeightSensorCalibrationFullAdcValue = 0x078e24;
+						pwsp->WeightSensorCalibrationFullWeight = 100000;		
+						break;
+				
+				case 2:
+						pwsp->WeightSensorCalibrationZeroAdcValue = 0x06b526;
+						pwsp->WeightSensorCalibrationFullAdcValue = 0x07d0b5;
+						pwsp->WeightSensorCalibrationFullWeight = 100000;		
+						break;
+				
+				case 3:
+						pwsp->WeightSensorCalibrationZeroAdcValue = 0x068e14;
+						pwsp->WeightSensorCalibrationFullAdcValue = 0x07a480;
+						pwsp->WeightSensorCalibrationFullWeight = 100000;		
+						break;
+				
+				case 4:
+						pwsp->WeightSensorCalibrationZeroAdcValue = 0x06bedb;
+						pwsp->WeightSensorCalibrationFullAdcValue = 0x07d660;
+						pwsp->WeightSensorCalibrationFullWeight = 100000;		
+						break;
+				
+				case 5:
+						pwsp->WeightSensorCalibrationZeroAdcValue = 0x067e60;
+						pwsp->WeightSensorCalibrationFullAdcValue = 0x079862;
+						pwsp->WeightSensorCalibrationFullWeight = 100000;		
+						break;
+				
+				case 6:
+						pwsp->WeightSensorCalibrationZeroAdcValue = 0x06902c;
+						pwsp->WeightSensorCalibrationFullAdcValue = 0x07a9e5;
+						pwsp->WeightSensorCalibrationFullWeight = 100000;	
+						break;
+				
+				case 7:
+						pwsp->WeightSensorCalibrationZeroAdcValue = 0x06b320;
+						pwsp->WeightSensorCalibrationFullAdcValue = 0x07cf4b;
+						pwsp->WeightSensorCalibrationFullWeight = 100000;		
+						break;
+				
+				case 8:
+						pwsp->WeightSensorCalibrationZeroAdcValue = 0x070c3c;
+						pwsp->WeightSensorCalibrationFullAdcValue = 0x08329f;
+						pwsp->WeightSensorCalibrationFullWeight = 100000;		
+						break;
+				
+				case 9:
+						pwsp->WeightSensorCalibrationZeroAdcValue = 0x069605;
+						pwsp->WeightSensorCalibrationFullAdcValue = 0x07aee0;
+						pwsp->WeightSensorCalibrationFullWeight = 100000;		
+						break;
+				
+				case 10:
+						pwsp->WeightSensorCalibrationZeroAdcValue = 0x06bcc1;
+						pwsp->WeightSensorCalibrationFullAdcValue = 0x07d996;
+						pwsp->WeightSensorCalibrationFullWeight = 100000;		
+						break;
+				
+				default:
+						pwsp->WeightSensorCalibrationZeroAdcValue = 31560;
+						pwsp->WeightSensorCalibrationFullAdcValue = 81512;
+						pwsp->WeightSensorCalibrationFullWeight = 100000;		
+						break;
+		}
+		
+		IhuDebugPrint("WeightSensorDefaultCalibrationValue, ZeroAdc=%d(%x), FullAdc=%(%x), FullWeight=%d, WmcId=%d\n", \
+													pwsp->WeightSensorCalibrationZeroAdcValue, pwsp->WeightSensorCalibrationZeroAdcValue, \
+													pwsp->WeightSensorCalibrationFullAdcValue, pwsp->WeightSensorCalibrationFullAdcValue, \
+													pwsp->WeightSensorCalibrationFullWeight, zWmcInvenory.wmc_id.wmc_id);
+		
+		WeightSensorCalibrationKB(pwsp);
+		return 0;
+}
+	
+	
+
 uint32_t WeightSensorInit(WeightSensorParamaters_t *pwsp)
 {	
 		if(NULL == pwsp)
@@ -682,20 +793,47 @@ uint32_t WeightSensorInit(WeightSensorParamaters_t *pwsp)
 				return 1;
 		}
 		
+		pwsp->WeightSensorLoadDetectionTimeMs = WEIGHT_SENSOR_LOAD_DETECTION_TIME_MS;
+		pwsp->WeightSensorLoadThread = WEIGHT_SENSOR_LOAD_THREDSHOLD;
+		pwsp->WeightSensorEmptyDetectionTimeMs = WEIGHT_SENSOR_EMPTY_DETECTION_TIME_MS;		
+		pwsp->WeightSensorEmptyThread = WEIGHT_SENSOR_EMPTY_DETECTION_THREDSHOLD;
+		pwsp->RemainDetectionTimeSec = 10;
+		pwsp->MaxAllowedWeight = 1000000;
+//		pwsp->WeightSensorCalibrationZeroAdcValue = 31560;
+//		pwsp->WeightSensorCalibrationFullAdcValue = 81512;
+//		pwsp->WeightSensorCalibrationFullWeight = 100000;
+		pwsp->WeightSensorStaticZeroValue = WEIGHT_SENSOR_STATIC_ZERO_VALUE;
+		pwsp->WeightSensorTailorValue = WEIGHT_SENSOR_TAILOR_VALUE;
+		pwsp->WeightSensorDynamicZeroThreadValue = WEIGHT_SENSOR_DYNAMIC_ZERO_THREDSHOLD_VALUE;
+		pwsp->WeightSensorDynamicZeroHysteresisMs = WEIGHT_SENSOR_DYNAMIC_ZERO_HYSTERESIS_MS;
+		
 		//printf("l2adc_cs5532: WeightSensorInit: pwsp = 0x%08X\r\n", pwsp);
 		pwsp->WeightSensorAdcSampleFreq = ADC_AMPLIFIER_WORDRATE_15SPS; //0:120sps  1:60sps  2:30sps  3:15sps  4:7.5sps  8:3840sps  9:1920sps  10:960sps  11:480sps  12:240sps
 		pwsp->WeightSensorAdcGain = ADC_AMPLIFIER_GAIN_64X;			//0:X1  1:X2  2:X4  3:X8  4:X16  5:X32  6:X64
 		pwsp->WeightSensorAdcBitwidth = SpsGainToBitwidthMapping(pwsp->WeightSensorAdcSampleFreq, pwsp->WeightSensorAdcGain);
-		pwsp->WeightSensorCalibrationFullWeight = 10000;//0.1g  /£¯DISCUSSED WITH BF, NO NEED FOR 0.01g
 		pwsp->WeightSensorInitOrNot = WEIGHT_SENSOR_HAD_INITED;
+	
+		zWeightSensorParam.WeightSensorFilterCoeff[0] = 0;//WS_BETA_NUM1;
+		zWeightSensorParam.WeightSensorFilterCoeff[1] = 0;//WS_BETA_NUM2;
+		zWeightSensorParam.WeightSensorFilterCoeff[2] = 12;
+		zWeightSensorParam.WeightSensorFilterCoeff[3] = 30;
+
+		g_weight_sensor_filter.adc_filtered[0] = 0;
+		g_weight_sensor_filter.adc_filtered[1] = 0;
+		g_weight_sensor_filter.beta_num[0] = zWeightSensorParam.WeightSensorFilterCoeff[0]; // WS_BETA_NUM1;
+		g_weight_sensor_filter.beta_num[1] = zWeightSensorParam.WeightSensorFilterCoeff[1]; // WS_BETA_NUM2;
+		g_weight_sensor_filter.stable_thresh = zWeightSensorParam.WeightSensorFilterCoeff[2]; // 12;    // ~2g
+		g_weight_sensor_filter.change_thresh = zWeightSensorParam.WeightSensorFilterCoeff[3]; // 30;    // ~5g
+		
+		zWeightSensorParam.WeightSensorOutputValue[1] = 1; // 1 => Generate randam value */
 		
 //		pwsp->WeightSensorAdcSampleFreq = 0;//0:120sps  1:60sps  2:30sps  3:15sps  4:7.5sps  8:3840sps  9:1920sps  10:960sps  11:480sps  12:240sps
 //		pwsp->WeightSensorAdcGain = 3;			//0:X1  1:X2  2:X4  3:X8  4:X16  5:X32  6:X64
 //		pwsp->WeightSensorAdcBitwidth = 20;
 //		pwsp->WeightSensorCalibrationFullWeight = 100000;//0.01g????
 //		pwsp->WeightSensorInitOrNot = WEIGHT_SENSOR_HAD_INITED;
-	
-		WeightSensorCalibrationKB(&zWeightSensorParam);
+		//WeightSensorDefaultCalibrationValue(pwsp);
+		WeightSensorCalibrationKB(pwsp);
 		
 		CS5532Init();
 	
@@ -737,10 +875,32 @@ uint32_t weightSensorConfig(WeightSensorParamaters_t *pwsp)
                   pwsp->WeightSensorCalibrationFullWeight);
 #endif
     
+		zWeightSensorParam.WeightSensorLoadDetectionTimeMs = pwsp->WeightSensorLoadDetectionTimeMs;
+		zWeightSensorParam.WeightSensorLoadThread = pwsp->WeightSensorLoadThread;
+		zWeightSensorParam.WeightSensorEmptyDetectionTimeMs = pwsp->WeightSensorEmptyDetectionTimeMs;		
+		zWeightSensorParam.WeightSensorEmptyThread = pwsp->WeightSensorEmptyThread;
+		zWeightSensorParam.WeightSensorPickupThread = pwsp->WeightSensorPickupThread;
+		zWeightSensorParam.WeightSensorPickupDetectionTimeMs = pwsp->WeightSensorPickupDetectionTimeMs;
+		zWeightSensorParam.StardardReadyTimeMs = pwsp->StardardReadyTimeMs;		
+		zWeightSensorParam.MaxAllowedWeight = pwsp->MaxAllowedWeight;
+    zWeightSensorParam.RemainDetectionTimeSec = pwsp->RemainDetectionTimeSec;
+
+		IhuDebugPrint("zWeightSensorParam.WeightSensorLoadDetectionTimeMs=%d\n", zWeightSensorParam.WeightSensorLoadDetectionTimeMs);
+		IhuDebugPrint("zWeightSensorParam.WeightSensorLoadThread=%d\n", zWeightSensorParam.WeightSensorLoadThread);
+		IhuDebugPrint("zWeightSensorParam.WeightSensorEmptyDetectionTimeMs=%d\n", zWeightSensorParam.WeightSensorEmptyDetectionTimeMs);
+		IhuDebugPrint("zWeightSensorParam.WeightSensorEmptyThread=%d\n", zWeightSensorParam.WeightSensorEmptyThread);
+
+		IhuDebugPrint("zWeightSensorParam.WeightSensorPickupThread=%d\n", zWeightSensorParam.WeightSensorPickupThread);
+		IhuDebugPrint("zWeightSensorParam.WeightSensorPickupDetectionTimeMs=%d\n", zWeightSensorParam.WeightSensorPickupDetectionTimeMs);
+		IhuDebugPrint("zWeightSensorParam.StardardReadyTimeMs=%d\n", zWeightSensorParam.StardardReadyTimeMs);
+		IhuDebugPrint("zWeightSensorParam.MaxAllowedWeight=%d\n", zWeightSensorParam.MaxAllowedWeight);
+		IhuDebugPrint("zWeightSensorParam.RemainDetectionTimeSec=%d\n", zWeightSensorParam.RemainDetectionTimeSec);
+
+		//zWeightSensorParam.WeightSensorInitOrNot = pwsp->WeightSensorInitOrNot;
 		zWeightSensorParam.WeightSensorAdcSampleFreq = pwsp->WeightSensorAdcSampleFreq;
 		zWeightSensorParam.WeightSensorAdcGain = pwsp->WeightSensorAdcGain;
 		zWeightSensorParam.WeightSensorAdcBitwidth = pwsp->WeightSensorAdcBitwidth;
-		zWeightSensorParam.WeightSensorAdcValue = pwsp->WeightSensorAdcValue;
+		//zWeightSensorParam.WeightSensorAdcValue = pwsp->WeightSensorAdcValue;
 		zWeightSensorParam.WeightSensorCalibrationZeroAdcValue = pwsp->WeightSensorCalibrationZeroAdcValue;
 		zWeightSensorParam.WeightSensorCalibrationFullAdcValue = pwsp->WeightSensorCalibrationFullAdcValue;
 		zWeightSensorParam.WeightSensorCalibrationFullWeight = pwsp->WeightSensorCalibrationFullWeight;
@@ -749,17 +909,132 @@ uint32_t weightSensorConfig(WeightSensorParamaters_t *pwsp)
 		zWeightSensorParam.WeightSensorDynamicZeroThreadValue = pwsp->WeightSensorDynamicZeroThreadValue;
 		zWeightSensorParam.WeightSensorDynamicZeroHysteresisMs = pwsp->WeightSensorDynamicZeroHysteresisMs;
 
-		/* THIS IS FOR TEST ONLY, NEEDS TO REMOVE AFTER PARAMETERS SAVED IN AWS */
-		zWeightSensorParam.WeightSensorAdcSampleFreq = ADC_AMPLIFIER_WORDRATE_15SPS; //0:120sps  1:60sps  2:30sps  3:15sps  4:7.5sps  8:3840sps  9:1920sps  10:960sps  11:480sps  12:240sps
-		zWeightSensorParam.WeightSensorAdcGain = ADC_AMPLIFIER_GAIN_64X;			//0:X1  1:X2  2:X4  3:X8  4:X16  5:X32  6:X64
-		zWeightSensorParam.WeightSensorAdcBitwidth = SpsGainToBitwidthMapping(pwsp->WeightSensorAdcSampleFreq, pwsp->WeightSensorAdcGain);
-		zWeightSensorParam.WeightSensorCalibrationFullWeight = 100000;//0.1g????
-		zWeightSensorParam.WeightSensorCalibrationZeroAdcValue = 435609;
-		zWeightSensorParam.WeightSensorCalibrationFullAdcValue = 507909;
+		IhuDebugPrint("zWeightSensorParam.WeightSensorAdcSampleFreq=%d\n", zWeightSensorParam.WeightSensorAdcSampleFreq);
+		IhuDebugPrint("zWeightSensorParam.WeightSensorAdcGain=%d\n", zWeightSensorParam.WeightSensorAdcGain);
+		IhuDebugPrint("zWeightSensorParam.WeightSensorAdcBitwidth=%d\n", zWeightSensorParam.WeightSensorAdcBitwidth);
+		IhuDebugPrint("zWeightSensorParam.WeightSensorCalibrationZeroAdcValue=%d\n", zWeightSensorParam.WeightSensorCalibrationZeroAdcValue);
+		IhuDebugPrint("zWeightSensorParam.WeightSensorCalibrationFullAdcValue=%d\n", zWeightSensorParam.WeightSensorCalibrationFullAdcValue);
 		
+		IhuDebugPrint("zWeightSensorParam.WeightSensorCalibrationFullWeight=%d\n", zWeightSensorParam.WeightSensorCalibrationFullWeight);
+		IhuDebugPrint("zWeightSensorParam.WeightSensorStaticZeroValue=%d\n", zWeightSensorParam.WeightSensorStaticZeroValue);
+		IhuDebugPrint("zWeightSensorParam.WeightSensorTailorValue=%d\n", zWeightSensorParam.WeightSensorTailorValue);
+		IhuDebugPrint("zWeightSensorParam.WeightSensorDynamicZeroThreadValue=%d\n", zWeightSensorParam.WeightSensorDynamicZeroThreadValue);
+		IhuDebugPrint("zWeightSensorParam.WeightSensorDynamicZeroHysteresisMs=%d\n", zWeightSensorParam.WeightSensorDynamicZeroHysteresisMs);
+
+		zWeightSensorParam.WeightSensorFilterCoeff[0] = pwsp->WeightSensorFilterCoeff[0];
+		zWeightSensorParam.WeightSensorFilterCoeff[1] = pwsp->WeightSensorFilterCoeff[1];
+		zWeightSensorParam.WeightSensorFilterCoeff[2] = pwsp->WeightSensorFilterCoeff[2];
+		zWeightSensorParam.WeightSensorFilterCoeff[3] = pwsp->WeightSensorFilterCoeff[3];
+		zWeightSensorParam.WeightSensorOutputValue[0] = pwsp->WeightSensorOutputValue[0];
+		zWeightSensorParam.WeightSensorOutputValue[1] = pwsp->WeightSensorOutputValue[1];
+		zWeightSensorParam.WeightSensorOutputValue[2] = pwsp->WeightSensorOutputValue[2];
+		zWeightSensorParam.WeightSensorOutputValue[3] = pwsp->WeightSensorOutputValue[3];
+
+		IhuDebugPrint("zWeightSensorParam.WeightSensorFilterCoeff[0]=%d\n", zWeightSensorParam.WeightSensorFilterCoeff[0]);
+		IhuDebugPrint("zWeightSensorParam.WeightSensorFilterCoeff[1]=%d\n", zWeightSensorParam.WeightSensorFilterCoeff[1]);
+		IhuDebugPrint("zWeightSensorParam.WeightSensorFilterCoeff[2]=%d\n", zWeightSensorParam.WeightSensorFilterCoeff[2]);
+		IhuDebugPrint("zWeightSensorParam.WeightSensorFilterCoeff[3]=%d\n", zWeightSensorParam.WeightSensorFilterCoeff[3]);
+		if( (0==zWeightSensorParam.WeightSensorFilterCoeff[0]) && (0==zWeightSensorParam.WeightSensorFilterCoeff[1]) )
+		{
+				IhuDebugPrint("zWeightSensorParam.WeightSensorFilterCoeff[0,1]=%d, MOVING EVERAGE MODE CONFIGURE FROM HCU!\n", zWeightSensorParam.WeightSensorFilterCoeff[0]);
+		}
+		else
+		{
+				IhuDebugPrint("zWeightSensorParam.WeightSensorFilterCoeff[0,1]=%d, FILTERING MODE CONFIGURE FROM HCU!\n", zWeightSensorParam.WeightSensorFilterCoeff[0]);			
+		}
+		
+		IhuDebugPrint("zWeightSensorParam.WeightSensorOutputValue[0]=%d\n", zWeightSensorParam.WeightSensorOutputValue[0]);
+		IhuDebugPrint("zWeightSensorParam.WeightSensorOutputValue[1]=%d\n", zWeightSensorParam.WeightSensorOutputValue[1]);
+		IhuDebugPrint("zWeightSensorParam.WeightSensorOutputValue[2]=%d\n", zWeightSensorParam.WeightSensorOutputValue[2]);
+		IhuDebugPrint("zWeightSensorParam.WeightSensorOutputValue[3]=%d\n", zWeightSensorParam.WeightSensorOutputValue[3]);
+		
+		/* THESE IS ONLY FOR TEST */
+		/* 1 == zWeightSensorParam.WeightSensorOutputValue[0], LOAD DEFAULT PARAMETER, = 0 Follow SetConfigReq */
+		/* 1 == zWeightSensorParam.WeightSensorOutputValue[1], Auto Generate Value, without reading ADC */
+    /* 2 == */		
+		if(1 == zWeightSensorParam.WeightSensorOutputValue[0])
+		{
+				IhuDebugPrint("======================================================================================\n");
+				IhuDebugPrint("zWeightSensorParam.WeightSensorOutputValue[0]=%d, LOAD DEFAULT PARAMETER FOR SENSOR!!!\n", zWeightSensorParam.WeightSensorOutputValue[0]);
+
+				g_weight_sensor_filter.adc_filtered[0] = 0;
+				g_weight_sensor_filter.adc_filtered[1] = 0;
+				g_weight_sensor_filter.beta_num[0] = 0;//zWeightSensorParam.WeightSensorFilterCoeff[0]; // WS_BETA_NUM1;
+				g_weight_sensor_filter.beta_num[1] = 0;//zWeightSensorParam.WeightSensorFilterCoeff[1]; // WS_BETA_NUM2;
+				g_weight_sensor_filter.stable_thresh = 12;    // ~2g
+				g_weight_sensor_filter.change_thresh = 30;    // ~5g
+				IhuDebugPrint("g_weight_sensor_filter.beta_num[0]=%d\n", g_weight_sensor_filter.beta_num[0]);
+				IhuDebugPrint("g_weight_sensor_filter.beta_num[1]=%d\n", g_weight_sensor_filter.beta_num[1]);
+				IhuDebugPrint("g_weight_sensor_filter.stable_thresh=%d\n", g_weight_sensor_filter.stable_thresh);
+				IhuDebugPrint("g_weight_sensor_filter.change_thresh=%d\n", g_weight_sensor_filter.change_thresh);
+				if( (0==g_weight_sensor_filter.beta_num[0]) && (0==g_weight_sensor_filter.beta_num[1]) )
+				{
+						IhuDebugPrint("g_weight_sensor_filter.beta_num[0,1]=%d, MOVING EVERAGE MODE FROM DEFAULT PARAMETER!!!\n", g_weight_sensor_filter.beta_num[0]);
+				}
+				else
+				{
+						IhuDebugPrint("g_weight_sensor_filter.beta_num[0,1]=%d, FILTERING MODE FROM DEFAULT PARAMETER!!!\n", g_weight_sensor_filter.beta_num[0]);
+				}
+			
+				/* THIS IS FOR TEST ONLY, NEEDS TO REMOVE AFTER PARAMETERS SAVED IN AWS */
+				zWeightSensorParam.WeightSensorLoadDetectionTimeMs = WEIGHT_SENSOR_LOAD_DETECTION_TIME_MS;
+				zWeightSensorParam.WeightSensorLoadThread = WEIGHT_SENSOR_LOAD_THREDSHOLD;
+				zWeightSensorParam.WeightSensorEmptyDetectionTimeMs = WEIGHT_SENSOR_EMPTY_DETECTION_TIME_MS;		
+				zWeightSensorParam.WeightSensorEmptyThread = WEIGHT_SENSOR_EMPTY_DETECTION_THREDSHOLD;
+				zWeightSensorParam.RemainDetectionTimeSec = 10;
+				zWeightSensorParam.MaxAllowedWeight = 1000000;
+
+				zWeightSensorParam.WeightSensorStaticZeroValue = WEIGHT_SENSOR_STATIC_ZERO_VALUE;
+				zWeightSensorParam.WeightSensorTailorValue = WEIGHT_SENSOR_TAILOR_VALUE;
+				zWeightSensorParam.WeightSensorDynamicZeroThreadValue = WEIGHT_SENSOR_DYNAMIC_ZERO_THREDSHOLD_VALUE;
+				zWeightSensorParam.WeightSensorDynamicZeroHysteresisMs = WEIGHT_SENSOR_DYNAMIC_ZERO_HYSTERESIS_MS;
+				IhuDebugPrint("zWeightSensorParam.WeightSensorDynamicZeroHysteresisMs=%d\n", zWeightSensorParam.WeightSensorDynamicZeroHysteresisMs);
+
+				zWeightSensorParam.WeightSensorAdcSampleFreq = ADC_AMPLIFIER_WORDRATE_15SPS; //0:120sps  1:60sps  2:30sps  3:15sps  4:7.5sps  8:3840sps  9:1920sps  10:960sps  11:480sps  12:240sps
+				zWeightSensorParam.WeightSensorAdcGain = ADC_AMPLIFIER_GAIN_64X;			//0:X1  1:X2  2:X4  3:X8  4:X16  5:X32  6:X64
+				zWeightSensorParam.WeightSensorAdcBitwidth = SpsGainToBitwidthMapping(pwsp->WeightSensorAdcSampleFreq, pwsp->WeightSensorAdcGain);
+
+				IhuDebugPrint("zWeightSensorParam.WeightSensorLoadDetectionTimeMs=%d\n", zWeightSensorParam.WeightSensorLoadDetectionTimeMs);
+				IhuDebugPrint("zWeightSensorParam.WeightSensorLoadThread=%d\n", zWeightSensorParam.WeightSensorLoadThread);
+				IhuDebugPrint("zWeightSensorParam.WeightSensorEmptyDetectionTimeMs=%d\n", zWeightSensorParam.WeightSensorEmptyDetectionTimeMs);
+				IhuDebugPrint("zWeightSensorParam.WeightSensorEmptyThread=%d\n", zWeightSensorParam.WeightSensorEmptyThread);
+
+				IhuDebugPrint("zWeightSensorParam.WeightSensorPickupThread=%d\n", zWeightSensorParam.WeightSensorPickupThread);
+				IhuDebugPrint("zWeightSensorParam.WeightSensorPickupDetectionTimeMs=%d\n", zWeightSensorParam.WeightSensorPickupDetectionTimeMs);
+				IhuDebugPrint("zWeightSensorParam.StardardReadyTimeMs=%d\n", zWeightSensorParam.StardardReadyTimeMs);
+				IhuDebugPrint("zWeightSensorParam.MaxAllowedWeight=%d\n", zWeightSensorParam.MaxAllowedWeight);
+				IhuDebugPrint("zWeightSensorParam.RemainDetectionTimeSec=%d\n", zWeightSensorParam.RemainDetectionTimeSec);
+
+				IhuDebugPrint("zWeightSensorParam.WeightSensorAdcSampleFreq=%d\n", zWeightSensorParam.WeightSensorAdcSampleFreq);
+				IhuDebugPrint("zWeightSensorParam.WeightSensorAdcGain=%d\n", zWeightSensorParam.WeightSensorAdcGain);
+				IhuDebugPrint("zWeightSensorParam.WeightSensorAdcBitwidth=%d\n", zWeightSensorParam.WeightSensorAdcBitwidth);
+				IhuDebugPrint("zWeightSensorParam.WeightSensorCalibrationZeroAdcValue=%d\n", zWeightSensorParam.WeightSensorCalibrationZeroAdcValue);
+				IhuDebugPrint("zWeightSensorParam.WeightSensorCalibrationFullAdcValue=%d\n", zWeightSensorParam.WeightSensorCalibrationFullAdcValue);
+				
+				IhuDebugPrint("zWeightSensorParam.WeightSensorCalibrationFullWeight=%d\n", zWeightSensorParam.WeightSensorCalibrationFullWeight);
+				IhuDebugPrint("zWeightSensorParam.WeightSensorStaticZeroValue=%d\n", zWeightSensorParam.WeightSensorStaticZeroValue);
+				IhuDebugPrint("zWeightSensorParam.WeightSensorTailorValue=%d\n", zWeightSensorParam.WeightSensorTailorValue);
+				IhuDebugPrint("zWeightSensorParam.WeightSensorDynamicZeroThreadValue=%d\n", zWeightSensorParam.WeightSensorDynamicZeroThreadValue);
+				IhuDebugPrint("zWeightSensorParam.WeightSensorDynamicZeroHysteresisMs=%d\n", zWeightSensorParam.WeightSensorDynamicZeroHysteresisMs);
+		
+				/* THESE LOAD THE DEFAULT PARAMETERS FOR CALIBRATION */
+				IhuDebugPrint("WeightSensorDefaultCalibrationValue(&zWeightSensorParam);\n", zWeightSensorParam.WeightSensorDynamicZeroHysteresisMs);
+				WeightSensorDefaultCalibrationValue(&zWeightSensorParam);
+				IhuDebugPrint("======================================================================================\n");
+
+		}
+		
+		IhuDebugPrint("WeightSensorCalibrationKB(&zWeightSensorParam)\n", zWeightSensorParam.WeightSensorDynamicZeroHysteresisMs);
 		WeightSensorCalibrationKB(&zWeightSensorParam);
 		
 		//zWeightSensorParam.WeightSensorInitOrNot = WEIGHT_SENSOR_HAD_INITED;
+		
+	//		  g_weight_sensor_filter.adc_filtered[0] = 0;
+	//			g_weight_sensor_filter.adc_filtered[1] = 0;
+	//			g_weight_sensor_filter.beta_num[0] = zWeightSensorParam.WeightSensorFilterCoeff[0]; // WS_BETA_NUM1;
+	//			g_weight_sensor_filter.beta_num[1] = zWeightSensorParam.WeightSensorFilterCoeff[1]; // WS_BETA_NUM2;
+	//			g_weight_sensor_filter.stable_thresh = zWeightSensorParam.WeightSensorFilterCoeff[2]; // 12;    // ~2g
+	//			g_weight_sensor_filter.change_thresh = zWeightSensorParam.WeightSensorFilterCoeff[3]; // 30;    // ~5g
 		
 	return 0;
 }
@@ -792,8 +1067,11 @@ uint32_t WeightSensorCalibrationZero(WeightSensorParamaters_t *pwsp)
 	
 	pwsp->WeightSensorCalibrationZeroAdcValue = temp;
 	
-	IhuDebugPrint("l2adc_cs5532: WeightSensorCalibrationZero: ZeroADC=%d FullADC=%d FullWeigth=%d\r\n", 
-								pwsp->WeightSensorCalibrationZeroAdcValue, pwsp->WeightSensorCalibrationFullAdcValue, pwsp->WeightSensorCalibrationFullWeight);
+	WeightSensorCalibrationKB(pwsp);
+	
+  IhuDebugPrint("l2adc_cs5532: WeightSensorCalibrationZero: ZeroADC=%d FullADC=%d FullWeigth=%d k=%f b=%d\r\n", 
+								pwsp->WeightSensorCalibrationZeroAdcValue, pwsp->WeightSensorCalibrationFullAdcValue, pwsp->WeightSensorCalibrationFullWeight, wsckb.k, wsckb.b);
+
 	return pwsp->WeightSensorCalibrationZeroAdcValue;
 }
 
@@ -839,6 +1117,25 @@ uint32_t WeightSensorCalibrationFull(WeightSensorParamaters_t *pwsp)
 //}
 
 //??????
+uint32_t WeightSensorReadInstantAdc()
+{
+		int i;
+		uint32_t temp = 0;
+		
+		for(i = 0; i < 16; i ++)
+		{
+				if(ReadWheChanOk())
+				{
+					temp += ReadSeriesADValue();
+				}
+				HAL_Delay(200);
+		}
+		
+		temp = temp >> 4;
+		return temp;
+}
+
+
 int32_t WeightSensorReadCurrent(WeightSensorParamaters_t *pwsp)
 {
 	int i;
@@ -846,6 +1143,9 @@ int32_t WeightSensorReadCurrent(WeightSensorParamaters_t *pwsp)
 	int32_t temp2 = 0;
 	int32_t temp3 = 0;
 	static uint8_t sw = 0;
+	
+	static int test_sample_count = 0;
+	static int32_t test_sample_value = 0;
 	
 	if(NULL == pwsp)
 	{
@@ -860,7 +1160,7 @@ int32_t WeightSensorReadCurrent(WeightSensorParamaters_t *pwsp)
 			return 0;
 	}
 	
-	for(i = 0; i < 32; i ++)
+	for(i = 0; i < 1; i ++)
 	{
 		if(ReadWheChanOk())
 		{
@@ -869,26 +1169,12 @@ int32_t WeightSensorReadCurrent(WeightSensorParamaters_t *pwsp)
 		HAL_Delay(10);
 	}
 	
-	temp = temp >> 5;
+	temp = temp >> 0;
 	
 	pwsp->WeightSensorAdcValue = temp;
 	
 	if(wsckb.k == 0)
 		return 0xFFFFFFFF;
-	
-	if(0 == temp)
-	{
-		if(1 == sw)
-		{
-			temp = 10000;
-			sw = 0;
-		}
-		else
-		{
-			temp = 20000;
-			sw = 1;
-		}
-	}
 	
 	temp2 = temp - wsckb.b;
 	temp3 = temp2 / wsckb.k;
@@ -897,13 +1183,38 @@ int32_t WeightSensorReadCurrent(WeightSensorParamaters_t *pwsp)
 //								temp, temp2, pwsp->WeightSensorCalibrationZeroAdcValue, 
 //								pwsp->WeightSensorCalibrationFullAdcValue, pwsp->WeightSensorCalibrationFullWeight, 
 //	              wsckb.k, wsckb.b, temp3);
-	printf("l2adc_cs5532: WeightSensorReadCurrent: temp=%d, temp2=%d, ZeroAdc=%d, FullAdc=%d, FullWeight=%d, k=%f, b=%d, temp3=%d\r\n",
-								temp, temp2, pwsp->WeightSensorCalibrationZeroAdcValue, 
-								pwsp->WeightSensorCalibrationFullAdcValue, pwsp->WeightSensorCalibrationFullWeight, 
-	              wsckb.k, wsckb.b, temp3);
+//	printf("l2adc_cs5532: WeightSensorReadCurrent: temp=%d, temp2=%d, ZeroAdc=%d, FullAdc=%d, FullWeight=%d, k=%f, b=%d, temp3=%d\r\n",
+//								temp, temp2, pwsp->WeightSensorCalibrationZeroAdcValue, 
+//								pwsp->WeightSensorCalibrationFullAdcValue, pwsp->WeightSensorCalibrationFullWeight, 
+//	              wsckb.k, wsckb.b, temp3);
   //temp = 10000 + (rand() % 5000) - 2500;
 	//return temp; ///THIS IS ONLY FOR TEST
-	return temp3;
+
+	/* 0 == zWeightSensorParam.WeightSensorOutputValue[1] ==> THIS IS NORMAL CAEE */
+	if(0 == zWeightSensorParam.WeightSensorOutputValue[1])
+	{
+			return temp3;
+	}
+	/* Test Code Skip All ADC, but Generate ramdom ADC/Weight */
+	else if(1 == zWeightSensorParam.WeightSensorOutputValue[1])
+	{
+extern BfscWmcState_t										zBfscWmcState;			
+			if( HUITP_IEID_SUI_BFSC_COMINETYPE_NULL == zBfscWmcState.last_combin_type.WeightCombineType )
+			{
+					if(0 == test_sample_count)
+					{
+							test_sample_value = 10000 + (rand() % 30000);  /* 100g ~ 400g */
+							test_sample_count = 1;
+					}
+					return test_sample_value + ((rand() % 300) - 150);
+					
+			}
+			else /* HUITP_IEID_SUI_BFSC_COMINETYPE_ROOLOUT */
+			{
+					test_sample_value = 10000 + (rand() % 30000);  /* Next random data, 100g ~ 400g */
+					return ((rand() % 200) - 100);  // SO THAT the COMBIN_OUT MESSAGE WILL BE SENT OUT //
+			}		
+	}
 	
 }	
 

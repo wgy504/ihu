@@ -400,6 +400,7 @@ void msg_wmc_stop_req_process(void *param_ptr, error_code_t *ec_ptr)
 		}
 		
 		/* Process the message */
+		weight_sensor_send_cmd(WIGHT_SENSOR_CMD_TYPE_STOP);
 		
 		return;
 }
@@ -497,7 +498,7 @@ void msg_wmc_command_req_process(void *param_ptr, error_code_t *ec_ptr)
 		/* Process the message */
 		if(cmd_req->comand_flags & SENSOR_COMMAND_ID_WEITGH_READ)
 		{
-				IhuDebugPrint("L3BFSC: msg_wmc_command_req_process: SENSOR_COMMAND_ID_WEITGH_READ\r\n");
+				IhuDebugPrint("L3BFSC: msg_wmc_command_req_process: SENSOR_COMMAND_ID_WEITGH_READ\r\n");				
 		}
 		
 		if(cmd_req->comand_flags & MOTOR_COMMAND_ID)
@@ -506,6 +507,18 @@ void msg_wmc_command_req_process(void *param_ptr, error_code_t *ec_ptr)
 			
 				blk230_cmd_t motor_cmd = *(blk230_cmd_t *)(&cmd_req->motor_command);
 				blk230_send_cmd(!motor_cmd.stop, motor_cmd.ccw, motor_cmd.speed, motor_cmd.time2stop);
+		}
+		
+		if(cmd_req->comand_flags & LED1_COMMAND_ID)
+		{
+				IhuDebugPrint("L3BFSC: msg_wmc_command_req_process: LED1_COMMAND_ID 0x%x\r\n", cmd_req->led1_command);
+				//blk230_led_send_cmd(1, cmd_req->led1_command);
+		}
+		
+		if(cmd_req->comand_flags & LED2_COMMAND_ID)
+		{
+				IhuDebugPrint("L3BFSC: msg_wmc_command_req_process: LED1_COMMAND_ID 0x%x\r\n", cmd_req->led2_command);
+				//blk230_led_send_cmd(2, cmd_req->led2_command);
 		}
 		
 		return;
@@ -525,7 +538,7 @@ error_code_t msg_wmc_command_req_check(void *param_ptr)
 		return ERROR_CODE_NO_ERROR;
 }
 
-void msg_wmc_command_resp(error_code_t ec)
+void msg_wmc_command_resp(error_code_t ec, msg_struct_l3bfsc_wmc_command_req_t *p_msg)
 {
 	
 		OPSTAT ret = IHU_SUCCESS;
@@ -545,13 +558,31 @@ void msg_wmc_command_resp(error_code_t ec)
     msg_wmc_command_resp.length = sizeof(msg_struct_l3bfsc_wmc_command_resp_t);
 		msg_wmc_command_resp.wmc_id = zWmcInvenory.wmc_id;
 		msg_wmc_command_resp.result.error_code = ec;
+		msg_wmc_command_resp.validFlag = TRUE;
+		
 		
 		/* Build Message Content Body */
 		msg_wmc_command_resp.motor_speed = zMotorControlParam.MotorSpeed;
-    msg_wmc_command_resp.sensor_weight = WeightSensorReadCurrent(&zWeightSensorParam);
 		
-		IhuDebugPrint("L3BFSC: msg_wmc_command_resp: msgid = 0x%08X\r\n", \
-										msg_wmc_command_resp.msgid);
+		if( SESOR_COMMAND_ID_WEITGH_READ == p_msg->sensor_command)
+		{
+				msg_wmc_command_resp.sensor_weight = WeightSensorReadCurrent(&zWeightSensorParam);
+		}
+		else if ( SESOR_COMMAND_ID_CALIBRATION_ZERO == p_msg->sensor_command )
+		{
+				zWeightSensorParam.WeightSensorCalibrationZeroAdcValue = WeightSensorReadInstantAdc();
+				msg_wmc_command_resp.sensor_weight = zWeightSensorParam.WeightSensorCalibrationZeroAdcValue;
+				WeightSensorCalibrationZero(&zWeightSensorParam);
+		}
+		else if ( SESOR_COMMAND_ID_CALIBRATION_FULL == p_msg->sensor_command ) 
+		{	
+				zWeightSensorParam.WeightSensorCalibrationFullAdcValue = WeightSensorReadInstantAdc();
+				msg_wmc_command_resp.sensor_weight = zWeightSensorParam.WeightSensorCalibrationFullAdcValue;
+				WeightSensorCalibrationFull(&zWeightSensorParam);
+		}
+		
+		IhuDebugPrint("L3BFSC: msg_wmc_command_resp: msgid=0x%08X, sensor_weight=%d, sensor_command=%d[0(null),3(read weight),4(cal.zero),5(cal.full)]\r\n", \
+										msg_wmc_command_resp.msgid, msg_wmc_command_resp.sensor_weight, p_msg->sensor_command);
 		
 		/* Send Message to CAN Task */
 		ret = ihu_message_send(MSG_ID_L3BFSC_WMC_COMMAND_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, \

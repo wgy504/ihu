@@ -49,22 +49,7 @@ enum FSM_STATE_ADCLIBRA
 //Global variables
 extern IhuFsmStateItem_t IhuFsmAdclibra[];
 
-//本地需要用到的核心参数
-typedef struct strIhuBfscAdcWeightPar
-{
-	INT32 WeightExistCnt;  //用于BFSC项目中判定扫描到的重物，是否一直有重量的情形
-	INT32 Weightvalue;  //用于BFSC项目中称重结果
-	INT32 WeightBasket;  //皮重
-	INT32 WeightManSetZero;  //手动清零重量
-	UINT8 WeightZeroTrackMode;  //这个值的设定，将会使得每一次称重，自动清零，判定的标准是单体重量小于设定目标重量的10%s
-	INT32 WeightMaxScale;   //重量最大量程
-	INT32 WeightMinSens;    //最小灵敏度值
-	INT32 WeightStaticRange; //静态量程范围
-	INT32 WeightStaticDur;  //静态时间时长
-	INT32 WeightCal0Kg;        //0KG的校准
-	INT32 WeightCal1Kg;         //1KG的校准
-	UINT8 WeightWorkingMode;  //秤工作模式
-}strIhuBfscAdcWeightPar_t;
+
 
 #define IHU_BFSC_ADC_WEIGHT_ZERO_TRACK_MODE_NONE 0
 #define IHU_BFSC_ADC_WEIGHT_ZERO_TRACK_MODE_ACTIVE 1
@@ -140,13 +125,97 @@ typedef struct weight_sensor_filter_s
   uint32_t change_thresh;
 }weight_sensor_filter_t;
 
-
+#define WS_BETA_DEN   4  // DEN=1<<4
+#define WS_BETA_NUM1  15
+#define WS_BETA_NUM2  10
 
 int weight_sensor_map_adc_to_weight(uint32_t adc_value);
 int weight_sensor_send_cmd(uint32_t type);
 int weight_sensor_recv_cmd(weight_sensor_cmd_t *command);
 uint32_t weight_sensor_read_and_filtering(weight_sensor_filter_t *wsf);
 void weight_sensor_task(void const *param);
+
+// ======= ADDED BY MA YUCHU =======
+// Make sure in the vmfreeoslayer.c have the following line:
+//  {TIMER_ID_10MS_BFSC_ADCLIBRA_SCAN_TIMER,         "TID_10MS_BFSC_ADCLIBRA_SCAN_TIMER",      20,      TIMER_RESOLUTION_10MS}, 
+//                                                                                             ^^
+//	UINT32	WeightSensorLoadDetectionTimeMs;
+//	UINT32	WeightSensorLoadThread;
+//	UINT32	WeightSensorEmptyThread;
+//	UINT32	WeightSensorEmptyDetectionTimeMs;
+//	UINT32	MaxAllowedWeight;										
+
+//	UINT32	WeightSensorStaticZeroValue;				
+//	UINT32	WeightSensorTailorValue;						
+//	UINT32	WeightSensorDynamicZeroThreadValue;	
+//	UINT32	WeightSensorDynamicZeroHysteresisMs;
+
+#define 	WEIGHT_SENSOR_ADC_READ_TICK_MS										(400)     // MAKE SURE   200/10 = 20   || 
+#define 	WEIGHT_SENSOR_MOVING_AVERAGE_TICKS								(5)
+#define 	WEIGHT_SENSOR_MAX_TICKS_SAVED											(32)
+
+
+#define		WEIGHT_SENSOR_LOAD_DETECTION_TIME_MS							(2000)		
+#define		WEIGHT_SENSOR_LOAD_THREDSHOLD											(200)			// for 2g with 0.01 granuality
+#define		WEIGHT_SENSOR_EMPTY_DETECTION_TIME_MS							(2000)		
+#define		WEIGHT_SENSOR_EMPTY_DETECTION_THREDSHOLD					(200)			// for 2g with 0.01 granuality
+#define		WEIGHT_SENSOR_MAX_ALLOWED_WEIGHT									(1000000)	// 10kg
+
+#define		WEIGHT_SENSOR_STATIC_ZERO_VALUE										(0)
+#define		WEIGHT_SENSOR_TAILOR_VALUE												(0)
+
+#define		WEIGHT_SENSOR_DYNAMIC_ZERO_THREDSHOLD_VALUE				(0)			// 1g
+#define		WEIGHT_SENSOR_DYNAMIC_ZERO_HYSTERESIS_MS					(10000)		// 5s
+
+//本地需要用到的核心参数
+typedef struct strIhuBfscAdcWeightPar
+{
+	INT32 WeightExistCnt;  //用于BFSC项目中判定扫描到的重物，是否一直有重量的情形
+	INT32 Weightvalue;  //用于BFSC项目中称重结果
+	INT32 WeightBasket;  //皮重
+	INT32 WeightManSetZero;  //手动清零重量
+	UINT8 WeightZeroTrackMode;  //这个值的设定，将会使得每一次称重，自动清零，判定的标准是单体重量小于设定目标重量的10%s
+	INT32 WeightMaxScale;   //重量最大量程
+	INT32 WeightMinSens;    //最小灵敏度值
+	INT32 WeightStaticRange; //静态量程范围
+	INT32 WeightStaticDur;  //静态时间时长
+	INT32 WeightCal0Kg;        //0KG的校准
+	INT32 WeightCal1Kg;         //1KG的校准
+	UINT8 WeightWorkingMode;  //秤工作模式
+	//ADDED BY MA YUCHU
+	INT32	WeightValueRaw[WEIGHT_SENSOR_MOVING_AVERAGE_TICKS];
+	UINT32 WeightValueCurrentIndexMovingAverage;
+	INT32 WeightValueEvaluated[WEIGHT_SENSOR_MAX_TICKS_SAVED];
+	INT32 WeightValueAdjusted[WEIGHT_SENSOR_MAX_TICKS_SAVED];
+	INT32 WeightDynamicZeroValue;
+	
+	UINT32 WeightValueLastLoadTicks;
+	INT32 WeightValueLastLoadValue;
+	UINT32 WeightValueCurrLoadTicks;
+	INT32 WeightValueCurrLoadValue;
+	
+	UINT32 WeightValueLastEmptyTicks;
+	INT32 WeightValueLastEmptyValue;
+	UINT32 WeightValueCurrtEmptyTicks;
+	INT32 WeightValueCurrEmptyValue;
+
+//#define 	WEIGHT_EVENT_ID_LOAD						(0)
+//#define 	WEIGHT_EVENT_ID_EMPTY						(1)
+//#define 	WEIGHT_EVENT_ID_PICKUP						(2)
+	UINT32 WeightLastEventType;
+	UINT32 WeightLastEventTicks;
+	INT32 WeightLastValue;	
+	UINT32 WeightCurrEventType;
+	UINT32 WeightCurrEventTicks;
+	INT32 WeightCurrValue;
+	
+	UINT32 WeightCurrentTicks;  // Dimension: 2^32 = 4294967296*0.2s = 858993459.2s = 238609.29 hour = 9942 days = 27.2 years
+	UINT32 SysTicksMs;
+	UINT32 RepeatTimes;
+	UINT32 ConsecutiveTimes;
+	
+}strIhuBfscAdcWeightPar_t;
+
 //=======================================================
 //END: Local API from Xiong Puhui, for ADC Weight Filter
 //=======================================================

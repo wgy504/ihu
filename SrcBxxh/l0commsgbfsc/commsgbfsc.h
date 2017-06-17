@@ -592,6 +592,7 @@ typedef struct msg_struct_l3bfsc_weight_ind
 {
 	UINT32 adc_filtered;
 	UINT32 average_weight;
+	UINT32 weight_event;
   UINT32 repeat_times;
 }msg_struct_l3bfsc_weight_ind_t;
 
@@ -696,6 +697,9 @@ typedef struct msg_struct_l3bfsc_wmc_command_resp
   WmcErrorCode_t result;
 	UINT32 	motor_speed;
 	UINT32 	sensor_weight;
+	UINT8  validFlag;  //是否执行成功
+	UINT8  spare1;
+	UINT16 spare2;
 }msg_struct_l3bfsc_wmc_command_resp_t;
 
 
