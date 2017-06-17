@@ -651,7 +651,7 @@ void SendWeightIndicationToBfsc(UINT32 adc_filtered, UINT32 average_weight, UINT
 	
 		weight_ind.adc_filtered = adc_filtered;
 		weight_ind.average_weight = average_weight;
-		weight_ind.repeat_times = weight_event;
+		weight_ind.weight_event = weight_event;
 		weight_ind.repeat_times = repeat_times;
 	
 		ret = ihu_message_send(MSG_ID_L3BFSC_WMC_WEIGHT_IND, TASK_ID_BFSC, TASK_ID_BFSC, \
