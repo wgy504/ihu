@@ -960,6 +960,22 @@ OPSTAT fsm_canvela_bfsc_l2frame_snd(UINT8 dest_id, UINT8 src_id, void * param_pt
 //		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 //		return IHU_FAILURE;		
 //	}
+
+//	//对接收到的上层命令进行分解处理，并组装消息发送给后台
+//	StrMsg_HUITP_MSGID_uni_ccl_state_report_t pMsgProc;
+//	UINT16 msgProcLen = sizeof(StrMsg_HUITP_MSGID_uni_ccl_state_report_t);
+//	memset(&pMsgProc, 0, msgProcLen);
+//	pMsgProc.msgId.cmdId = (HUITP_MSGID_uni_ccl_state_report>>8)&0xFF;
+//	pMsgProc.msgId.optId = HUITP_MSGID_uni_ccl_state_report&0xFF;
+//	pMsgProc.msgLen = HUITP_ENDIAN_EXG16(msgProcLen - 4);
+//	//StrIe_HUITP_IEID_uni_com_report_t
+//	pMsgProc.baseReport.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_com_report);
+//	pMsgProc.baseReport.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_com_report_t) - 4);
+//	pMsgProc.baseReport.comReport = HUITP_IEID_UNI_COM_REPORT_YES;
+
+
+
+
 	
 	//然后执行L2FRAME发送原语命令，通过中断函数将L2FRAME发送出去
 	func_canvela_frame_send(pFrameHeader);

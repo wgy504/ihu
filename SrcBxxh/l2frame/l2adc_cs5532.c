@@ -1026,6 +1026,7 @@ uint32_t weightSensorConfig(WeightSensorParamaters_t *pwsp)
 		
 		IhuDebugPrint("WeightSensorCalibrationKB(&zWeightSensorParam)\n", zWeightSensorParam.WeightSensorDynamicZeroHysteresisMs);
 		WeightSensorCalibrationKB(&zWeightSensorParam);
+		InitWeightAdcBfscLocalParam(&zWeightSensorParam);
 		
 		//zWeightSensorParam.WeightSensorInitOrNot = WEIGHT_SENSOR_HAD_INITED;
 		

@@ -200,6 +200,7 @@ OPSTAT fsm_adclibra_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 	int ret;
 	msg_struct_com_restart_t snd0;
 	msg_struct_com_time_out_t rcv;
+	static uint32_t number_of_200ms_ticks = 0;
 	
 	//Receive message and copy to local variable
 	memset(&rcv, 0, sizeof(msg_struct_com_time_out_t));
@@ -243,7 +244,11 @@ OPSTAT fsm_adclibra_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 	else if ((rcv.timeId == TIMER_ID_10MS_BFSC_ADCLIBRA_SCAN_TIMER) &&(rcv.timeRes == TIMER_RESOLUTION_10MS))
 	{
 		//if (zIhuAdcBfscWs.WeightWorkingMode == IHU_BFSC_ADC_WEIGHT_WORKING_MODE_NORMAL) 
-			func_adclibra_time_out_bfsc_read_weight_scan();
+//			if( (number_of_200ms_ticks % (WEIGHT_SENSOR_ADC_READ_TICK_MS/200) == 0))
+			{
+					func_adclibra_time_out_bfsc_read_weight_scan();
+					number_of_200ms_ticks++;
+			}
 		
 //		counter_200ms_test_rcv++;
 //		tick_to_record_200ms_rcv[counter_200ms_test_rcv%5] = osKernelSysTick();
@@ -354,6 +359,28 @@ void func_adclibra_time_out_period_scan(void)
 ** MA Yuchu, rewrite for Weight Sensor Scan process 
 **
 */
+
+void InitWeightAdcBfscLocalParam(WeightSensorParamaters_t *pwsp)
+{
+		if((NULL == pwsp))
+		{
+				IhuErrorPrint("InitWeightAdcBfscLocalParam, (NULL == pwsp), return\n");
+				return;
+		}
+		
+		zIhuAdcBfscWs.WeightSensorLoadDetectionTicks = pwsp->WeightSensorLoadDetectionTimeMs / WEIGHT_SENSOR_ADC_READ_TICK_MS;
+		IhuErrorPrint("zIhuAdcBfscWs.WeightSensorLoadDetectionTicks=%d\n", zIhuAdcBfscWs.WeightSensorLoadDetectionTicks);
+		
+		zIhuAdcBfscWs.WeightSensorEmptyDetectionTicks = pwsp->WeightSensorEmptyDetectionTimeMs / WEIGHT_SENSOR_ADC_READ_TICK_MS;
+		IhuErrorPrint("zIhuAdcBfscWs.WeightSensorEmptyDetectionTicks=%d\n", zIhuAdcBfscWs.WeightSensorEmptyDetectionTicks);
+		
+		zIhuAdcBfscWs.WeightSensorDynamicZeroHysteresisTicks = pwsp->WeightSensorDynamicZeroHysteresisMs / WEIGHT_SENSOR_ADC_READ_TICK_MS;
+		IhuErrorPrint("zIhuAdcBfscWs.WeightSensorDynamicZeroHysteresisTicks=%d\n", zIhuAdcBfscWs.WeightSensorDynamicZeroHysteresisTicks);
+		
+}	
+	
+
+
 weight_sensor_filter_t g_weight_sensor_filter;
 
 void WeightCalculateMaxMin(INT32* pWeightValueAdjusted, UINT32 ScanTicks, INT32 *pWeightMax, INT32 *pWeightMin)
@@ -465,9 +492,27 @@ void WeightAdjustHistory(strIhuBfscAdcWeightPar_t *pbawp, WeightSensorParamaters
 
 //		WeightSensorLoadDetectionTicks = WeightSensorLoadDetectionTimeMs / WEIGHT_SENSOR_ADC_READ_TICK_MS;
 //		WeightSensorEmptyDetectionTicks = WeightSensorEmptyDetectionTimeMs / WEIGHT_SENSOR_ADC_READ_TICK_MS;
-		WeightSensorDynamicZeroHysteresisTicks = WeightSensorDynamicZeroHysteresisMs / WEIGHT_SENSOR_ADC_READ_TICK_MS;
+//		WeightSensorDynamicZeroHysteresisTicks = WeightSensorDynamicZeroHysteresisMs / WEIGHT_SENSOR_ADC_READ_TICK_MS;
+		WeightSensorDynamicZeroHysteresisTicks = pbawp->WeightSensorDynamicZeroHysteresisTicks;
 		
 		/* Static zero and tailor */
+		
+		/*
+		** Paramter checking !!!!! make sure these parameter relationship: 
+		** (WEIGHT_SENSOR_DYNAMIC_ZERO_HYSTERESIS_MS / WEIGHT_SENSOR_ADC_READ_TICK_MS) < WEIGHT_SENSOR_MAX_TICKS_SAVED
+		** (WEIGHT_SENSOR_LOAD_DETECTION_TIME_MS / WEIGHT_SENSOR_ADC_READ_TICK_MS) < WEIGHT_SENSOR_MAX_TICKS_SAVED
+		** (WEIGHT_SENSOR_EMPTY_DETECTION_TIME_MS / WEIGHT_SENSOR_ADC_READ_TICK_MS) < WEIGHT_SENSOR_MAX_TICKS_SAVED
+		** !!!! If these parameter are not checked, memory will be corrupt !!!!
+		*/
+		/* 
+		** PROTECTION MEMORY START, as WeightValueAdjusted[Index], Index needs to be small than WEIGHT_SENSOR_MAX_TICKS_SAVED 
+		*/
+		if(WeightSensorDynamicZeroHysteresisTicks > WEIGHT_SENSOR_MAX_TICKS_SAVED)
+		{
+				WeightSensorDynamicZeroHysteresisTicks = WEIGHT_SENSOR_MAX_TICKS_SAVED;
+		}
+		/* PROTECTION MEMORY END */
+		
 		for (Index = 0; Index < WeightSensorDynamicZeroHysteresisTicks; Index++)
 		{
 				pbawp->WeightValueAdjusted[Index] = pbawp->WeightValueEvaluated[Index] - \
@@ -535,9 +580,9 @@ void WeightLoadEmptyDetection(strIhuBfscAdcWeightPar_t *pbawp, WeightSensorParam
 		WeightSensorDynamicZeroThreadValue = pwsp->WeightSensorDynamicZeroThreadValue;	
 		WeightSensorDynamicZeroHysteresisMs = pwsp->WeightSensorDynamicZeroHysteresisMs;
 		
-		WeightSensorLoadDetectionTicks = WeightSensorLoadDetectionTimeMs / WEIGHT_SENSOR_ADC_READ_TICK_MS;
-		WeightSensorEmptyDetectionTicks = WeightSensorEmptyDetectionTimeMs / WEIGHT_SENSOR_ADC_READ_TICK_MS;
-		WeightSensorDynamicZeroHysteresisTicks = WeightSensorDynamicZeroHysteresisMs / WEIGHT_SENSOR_ADC_READ_TICK_MS;
+		WeightSensorLoadDetectionTicks = pbawp->WeightSensorLoadDetectionTicks;
+		WeightSensorEmptyDetectionTicks = pbawp->WeightSensorEmptyDetectionTicks;
+		WeightSensorDynamicZeroHysteresisTicks = pbawp->WeightSensorDynamicZeroHysteresisTicks;
 		
 		/* Get Max and Min value within WeightSensorLoadDetectionTicks &WeightSensorEmptyDetectionTicks */
 		WeightCalculateMaxMin(pbawp->WeightValueAdjusted, WeightSensorLoadDetectionTicks, &WeightMaxLoad, &WeightMinLoad);

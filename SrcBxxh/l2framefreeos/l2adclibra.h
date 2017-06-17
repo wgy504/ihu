@@ -150,14 +150,14 @@ void weight_sensor_task(void const *param);
 //	UINT32	WeightSensorDynamicZeroThreadValue;	
 //	UINT32	WeightSensorDynamicZeroHysteresisMs;
 
-#define 	WEIGHT_SENSOR_ADC_READ_TICK_MS										(400)     // MAKE SURE   200/10 = 20   || 
+#define 	WEIGHT_SENSOR_ADC_READ_TICK_MS										(200)     // MAKE SURE   200/10 = 20   || 
 #define 	WEIGHT_SENSOR_MOVING_AVERAGE_TICKS								(5)
-#define 	WEIGHT_SENSOR_MAX_TICKS_SAVED											(32)
+#define 	WEIGHT_SENSOR_MAX_TICKS_SAVED											(64)
 
 
-#define		WEIGHT_SENSOR_LOAD_DETECTION_TIME_MS							(2000)		
+#define		WEIGHT_SENSOR_LOAD_DETECTION_TIME_MS							(1000)		
 #define		WEIGHT_SENSOR_LOAD_THREDSHOLD											(200)			// for 2g with 0.01 granuality
-#define		WEIGHT_SENSOR_EMPTY_DETECTION_TIME_MS							(2000)		
+#define		WEIGHT_SENSOR_EMPTY_DETECTION_TIME_MS							(1000)		
 #define		WEIGHT_SENSOR_EMPTY_DETECTION_THREDSHOLD					(200)			// for 2g with 0.01 granuality
 #define		WEIGHT_SENSOR_MAX_ALLOWED_WEIGHT									(1000000)	// 10kg
 
@@ -166,6 +166,15 @@ void weight_sensor_task(void const *param);
 
 #define		WEIGHT_SENSOR_DYNAMIC_ZERO_THREDSHOLD_VALUE				(0)			// 1g
 #define		WEIGHT_SENSOR_DYNAMIC_ZERO_HYSTERESIS_MS					(10000)		// 5s
+
+/*
+** Paramter checking !!!!! make sure these parameter relationship: 
+** (WEIGHT_SENSOR_DYNAMIC_ZERO_HYSTERESIS_MS / WEIGHT_SENSOR_ADC_READ_TICK_MS) < WEIGHT_SENSOR_MAX_TICKS_SAVED
+** (WEIGHT_SENSOR_LOAD_DETECTION_TIME_MS / WEIGHT_SENSOR_ADC_READ_TICK_MS) < WEIGHT_SENSOR_MAX_TICKS_SAVED
+** (WEIGHT_SENSOR_EMPTY_DETECTION_TIME_MS / WEIGHT_SENSOR_ADC_READ_TICK_MS) < WEIGHT_SENSOR_MAX_TICKS_SAVED
+** !!!! If these parameter are not checked, memory will be corrupt !!!!
+*/
+
 
 //本地需要用到的核心参数
 typedef struct strIhuBfscAdcWeightPar
@@ -183,36 +192,40 @@ typedef struct strIhuBfscAdcWeightPar
 	INT32 WeightCal1Kg;         //1KG的校准
 	UINT8 WeightWorkingMode;  //秤工作模式
 	//ADDED BY MA YUCHU
-	INT32	WeightValueRaw[WEIGHT_SENSOR_MOVING_AVERAGE_TICKS];
-	UINT32 WeightValueCurrentIndexMovingAverage;
-	INT32 WeightValueEvaluated[WEIGHT_SENSOR_MAX_TICKS_SAVED];
-	INT32 WeightValueAdjusted[WEIGHT_SENSOR_MAX_TICKS_SAVED];
-	INT32 WeightDynamicZeroValue;
+	INT32		WeightValueRaw[WEIGHT_SENSOR_MOVING_AVERAGE_TICKS];
+	UINT32 	WeightValueCurrentIndexMovingAverage;
+	INT32 	WeightValueEvaluated[WEIGHT_SENSOR_MAX_TICKS_SAVED];
+	INT32 	WeightValueAdjusted[WEIGHT_SENSOR_MAX_TICKS_SAVED];
+	INT32 	WeightDynamicZeroValue;
 	
-	UINT32 WeightValueLastLoadTicks;
-	INT32 WeightValueLastLoadValue;
-	UINT32 WeightValueCurrLoadTicks;
-	INT32 WeightValueCurrLoadValue;
+	UINT32 	WeightValueLastLoadTicks;
+	INT32 	WeightValueLastLoadValue;
+	UINT32 	WeightValueCurrLoadTicks;
+	INT32 	WeightValueCurrLoadValue;
 	
-	UINT32 WeightValueLastEmptyTicks;
-	INT32 WeightValueLastEmptyValue;
-	UINT32 WeightValueCurrtEmptyTicks;
-	INT32 WeightValueCurrEmptyValue;
+	UINT32 	WeightValueLastEmptyTicks;
+	INT32 	WeightValueLastEmptyValue;
+	UINT32 	WeightValueCurrtEmptyTicks;
+	INT32 	WeightValueCurrEmptyValue;
 
 //#define 	WEIGHT_EVENT_ID_LOAD						(0)
 //#define 	WEIGHT_EVENT_ID_EMPTY						(1)
 //#define 	WEIGHT_EVENT_ID_PICKUP						(2)
-	UINT32 WeightLastEventType;
-	UINT32 WeightLastEventTicks;
-	INT32 WeightLastValue;	
-	UINT32 WeightCurrEventType;
-	UINT32 WeightCurrEventTicks;
-	INT32 WeightCurrValue;
+	UINT32 	WeightLastEventType;
+	UINT32 	WeightLastEventTicks;
+	INT32 	WeightLastValue;	
+	UINT32 	WeightCurrEventType;
+	UINT32 	WeightCurrEventTicks;
+	INT32 	WeightCurrValue;
 	
-	UINT32 WeightCurrentTicks;  // Dimension: 2^32 = 4294967296*0.2s = 858993459.2s = 238609.29 hour = 9942 days = 27.2 years
-	UINT32 SysTicksMs;
-	UINT32 RepeatTimes;
-	UINT32 ConsecutiveTimes;
+	UINT32 	WeightCurrentTicks;  // Dimension: 2^32 = 4294967296*0.2s = 858993459.2s = 238609.29 hour = 9942 days = 27.2 years
+	UINT32 	SysTicksMs;
+	UINT32 	RepeatTimes;
+	UINT32 	ConsecutiveTimes;
+	
+	UINT32	WeightSensorLoadDetectionTicks; // = WeightSensorLoadDetectionTimeMs / WEIGHT_SENSOR_ADC_READ_TICK_MS;
+	UINT32 	WeightSensorEmptyDetectionTicks; // = WeightSensorEmptyDetectionTimeMs / WEIGHT_SENSOR_ADC_READ_TICK_MS;
+	UINT32	WeightSensorDynamicZeroHysteresisTicks; // = WeightSensorDynamicZeroHysteresisMs / WEIGHT_SENSOR_ADC_READ_TICK_MS;
 	
 }strIhuBfscAdcWeightPar_t;
 

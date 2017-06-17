@@ -15,11 +15,14 @@
 #include "l3bfsc_msg.h"
 #include "blk230.h"
 #include "l2adc_cs5532.h"
+#include "l2adclibra.h"
 
 extern WmcInventory_t										zWmcInvenory;
 extern WeightSensorParamaters_t					zWeightSensorParam;
 extern MotorControlParamaters_t 				zMotorControlParam;
 extern BfscWmcState_t										zBfscWmcState;
+
+extern strIhuBfscAdcWeightPar_t 				zIhuAdcBfscWs;
 
 //#define 	MSG_SIZE_L3BFSC_WMC_STARTUP_IND					(sizeof(msg_struct_l3bfsc_wmc_startup_ind_t))
 //#define 	MSG_SIZE_L3BFSC_WMC_SET_CONFIG_REQ			(sizeof(msg_struct_l3bfsc_wmc_set_config_req_t))
@@ -791,7 +794,7 @@ void msg_wmc_err_inq_resp(error_code_t ec)
 		/* Build Message Content Header */
 		msg_wmc_err_inq_resp.msgid = (MSG_ID_L3BFSC_WMC_ERR_INQ_CMD_RESP);
 		msg_wmc_err_inq_resp.wmc_id.wmc_id = zWmcInvenory.wmc_id.wmc_id;
-		msg_wmc_err_inq_resp.average_weight = zWeightSensorParam.WeightSensorOutputValue[0];
+		msg_wmc_err_inq_resp.average_weight = zIhuAdcBfscWs.WeightCurrValue; /// READ DIRECTLY FROM LOCAL ///
 		msg_wmc_err_inq_resp.error_code = ec;
     msg_wmc_err_inq_resp.validFlag = TRUE;
     msg_wmc_err_inq_resp.spare1 = 0;
