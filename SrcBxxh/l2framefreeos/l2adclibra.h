@@ -151,12 +151,12 @@ void weight_sensor_task(void const *param);
 //	UINT32	WeightSensorDynamicZeroHysteresisMs;
 
 #define 	WEIGHT_SENSOR_ADC_READ_TICK_MS										(200)     // MAKE SURE   200/10 = 20   || 
-#define 	WEIGHT_SENSOR_MOVING_AVERAGE_TICKS								(1)
+#define 	WEIGHT_SENSOR_MOVING_AVERAGE_TICKS								(2)
 #define 	WEIGHT_SENSOR_MAX_TICKS_SAVED											(64)
 
 
 #define		WEIGHT_SENSOR_LOAD_DETECTION_TIME_MS							(1000)		
-#define		WEIGHT_SENSOR_LOAD_THREDSHOLD											(200)			// for 2g with 0.01 granuality
+#define		WEIGHT_SENSOR_LOAD_THREDSHOLD											(50)			// for 2g with 0.01 granuality
 #define		WEIGHT_SENSOR_EMPTY_DETECTION_TIME_MS							(1000)		
 #define		WEIGHT_SENSOR_EMPTY_DETECTION_THREDSHOLD					(5000)			// for 2g with 0.01 granuality
 #define		WEIGHT_SENSOR_MAX_ALLOWED_WEIGHT									(1000000)	// 10kg

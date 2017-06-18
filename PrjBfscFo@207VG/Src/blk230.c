@@ -16,6 +16,7 @@
 #include "blk230.h"
 //#include "bufprint.h"
 #include "vmfreeoslayer.h"
+#include "huitp.h"
 
 
 #define bufprint IhuDebugPrint
@@ -24,6 +25,7 @@ extern DAC_HandleTypeDef hdac;
 #define DACx_CHANNEL DAC_CHANNEL_2
 
 blk230_cmd_t g_motor_cmd;
+blk230_led_cmd_t g_led_cmd;
 
 int32_t blk230_init()
 {
@@ -146,9 +148,35 @@ int blk230_recv_cmd(blk230_cmd_t *command)
   return command->valid;
 }
 
+/*
+** led_id:
+** #define WMC_LAMP_OUT1								(0x01)
+** #define WMC_LAMP_OUT2_GREEN					(0x02)
+** #define WMC_LAMP_OUT3_YELLOW					(0x03)
+**
+** led_command:
+** #define LED_COMMNAD_ON										(1)
+** #define LED_COMMNAD_OFF									(2)
+** #define LED_COMMNAD_BINKING_HIGHSPEED		(3)
+** #define LED_COMMNAD_BINKING_LOWSPEED			(4)
+**
+** blk230_led_send_cmd(WMC_LAMP_OUT3_YELLOW, LED_COMMNAD_BINKING_HIGHSPEED);
+**
+*/
+
 int blk230_led_send_cmd(uint32_t led_id, uint8_t led_command)
 {
-	
+		if(led_id > 3)
+				return -1;
+		
+		//IhuDebugPrint("blk230_led_send_cmd(led_id=%d, led_command=%d)\n", led_id, led_command);
+		taskENTER_CRITICAL();
+		//__disable_irq();
+		g_led_cmd.led_command[led_id] = led_command;
+		//__enable_irq();
+		taskEXIT_CRITICAL();
+		
+		return 0;
 }
 
 /*
@@ -160,8 +188,14 @@ void blk230_task(void const *param)
 	int32_t status;
 	int alarm = 0;
 	uint32_t now, time2stop = 0;
-
+	
+	static uint8_t led_fast_on_off = 0;
+	static uint8_t led_slow_on_off = 0;
+	static uint32_t led_last_fast_tick = 0;
+	static uint32_t led_last_slow_tick = 0;
+	
 	uint32_t i = 0;
+	uint32_t j = 0;
 
   PCA8574A_init();
 	blk230_init();
@@ -265,6 +299,70 @@ void blk230_task(void const *param)
 			OS_ASSERT(status == HAL_OK);
       time2stop = 0;
 		}
+		
+		
+		/* BLIKNING MODE FAST */
+		if( ((now - led_last_fast_tick) >= 500) )
+		{
+				led_last_fast_tick = now;
+				if(0 == led_fast_on_off)
+				{
+						for(j = 0; j < 4; j++)
+						{
+								if(LED_COMMNAD_BINKING_HIGHSPEED == g_led_cmd.led_command[j])		blk230_set_lamp(j, WMC_LAMP_OFF);								
+								if(LED_COMMNAD_ON == g_led_cmd.led_command[j]) 									blk230_set_lamp(j, WMC_LAMP_ON);								
+								if(LED_COMMNAD_OFF == g_led_cmd.led_command[j])									blk230_set_lamp(j, WMC_LAMP_OFF);
+								
+								//printf("[%d][led_fast_on_off=%d][%d,%d,%d,%d]\r\n", now, led_fast_on_off, g_led_cmd.led_command[0], g_led_cmd.led_command[1], g_led_cmd.led_command[2], g_led_cmd.led_command[3]);
+						}
+						led_fast_on_off = 1;
+				}
+				else
+				{
+						for(j = 0; j < 4; j++)
+						{
+								if(LED_COMMNAD_BINKING_HIGHSPEED == g_led_cmd.led_command[j])		blk230_set_lamp(j, WMC_LAMP_ON);							
+								if(LED_COMMNAD_ON == g_led_cmd.led_command[j])									blk230_set_lamp(j, WMC_LAMP_ON);							
+								if(LED_COMMNAD_OFF == g_led_cmd.led_command[j])									blk230_set_lamp(j, WMC_LAMP_OFF);
+							
+								//printf("[%d][led_fast_on_off=%d][%d,%d,%d,%d]\r\n", now, led_fast_on_off, g_led_cmd.led_command[0], g_led_cmd.led_command[1], g_led_cmd.led_command[2], g_led_cmd.led_command[3]);
+							
+						}
+						led_fast_on_off = 0;
+				}
+		} /* end of if(0 == (now % 500)) */
+		
+		/* BLIKNING MODE SLOW */
+		if( ((now - led_last_slow_tick) >= 2000) )
+		{
+				led_last_slow_tick = now;
+				if(0 == led_slow_on_off)
+				{
+						for(j = 0; j < 4; j++)
+						{
+								if(LED_COMMNAD_BINKING_LOWSPEED == g_led_cmd.led_command[j])		blk230_set_lamp(j, WMC_LAMP_OFF);
+								if(LED_COMMNAD_ON == g_led_cmd.led_command[j])									blk230_set_lamp(j, WMC_LAMP_ON);
+								if(LED_COMMNAD_OFF == g_led_cmd.led_command[j])									blk230_set_lamp(j, WMC_LAMP_OFF);
+							
+								//printf("[%d][led_fast_on_off=%d][%d,%d,%d,%d]\r\n", now, led_fast_on_off, g_led_cmd.led_command[0], g_led_cmd.led_command[1], g_led_cmd.led_command[2], g_led_cmd.led_command[3]);
+							
+						}
+						led_slow_on_off = 1;
+				}
+				else
+				{
+						for(j = 0; j < 4; j++)
+						{
+								if(LED_COMMNAD_BINKING_LOWSPEED == g_led_cmd.led_command[j])		blk230_set_lamp(j, WMC_LAMP_ON);
+								if(LED_COMMNAD_ON == g_led_cmd.led_command[j])									blk230_set_lamp(j, WMC_LAMP_ON);
+								if(LED_COMMNAD_OFF == g_led_cmd.led_command[j])									blk230_set_lamp(j, WMC_LAMP_OFF);
+								
+								//printf("[%d][led_fast_on_off=%d][%d,%d,%d,%d]\r\n", now, led_fast_on_off, g_led_cmd.led_command[0], g_led_cmd.led_command[1], g_led_cmd.led_command[2], g_led_cmd.led_command[3]);
+							
+						}
+						led_slow_on_off = 0;
+				}
+		}  /* end of if(0 == (now % 2000)) */
 	}
 }
 
@@ -412,6 +510,7 @@ int blk230_set_lamp(uint32_t lamp_id, uint8_t flag)
 	else
 	{
 			//do nothing
+			return 0;
 	}
 	
 //	flag = 1; // for ON

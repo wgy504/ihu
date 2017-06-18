@@ -19,8 +19,10 @@ int32_t PCA8574A_write(uint8_t val)
 {
 	HAL_StatusTypeDef status;
 	
+	__disable_irq();
 	status = HAL_I2C_Master_Transmit(PCA8574A_I2C_HANDLE, PCA8574A_DEVADR, &val, 1, PCA8547A_I2C_TIMEOUT);
-  
+  __enable_irq();
+	
 	return status;
 }
 
@@ -29,7 +31,9 @@ int32_t PCA8574A_read(uint8_t *val)
 {
 	HAL_StatusTypeDef status;
   
+	__disable_irq();
 	status = HAL_I2C_Master_Receive(PCA8574A_I2C_HANDLE, PCA8574A_DEVADR, val, 1, PCA8547A_I2C_TIMEOUT);
+	__enable_irq();
 	
 	return status;
 }

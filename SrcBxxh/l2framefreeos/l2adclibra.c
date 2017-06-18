@@ -708,7 +708,11 @@ void WeightLoadEmptyEventReport(strIhuBfscAdcWeightPar_t *pbawp, WeightSensorPar
 				SendWeightIndicationToBfsc(pwsp->WeightSensorAdcValue, pbawp->WeightCurrValue, \
 														WEIGHT_EVENT_ID_EMPTY, pbawp->RepeatTimes);
 			
-				blk230_set_lamp(WMC_LAMP_OUT3_YELLOW, WMC_LAMP_OFF); /* Yellow Lamp Off */
+				//blk230_set_lamp(WMC_LAMP_OUT3_YELLOW, WMC_LAMP_OFF); /* Yellow Lamp Off */
+				blk230_led_send_cmd(WMC_LAMP_OUT3_YELLOW, LED_COMMNAD_OFF);
+				//blk230_led_send_cmd(WMC_LAMP_OUT2_GREEN, LED_COMMNAD_OFF);
+				//blk230_led_send_cmd(WMC_LAMP_OUT2_GREEN, LED_COMMNAD_ON);
+				//blk230_led_send_cmd(WMC_LAMP_OUT3_YELLOW, LED_COMMNAD_ON);
 			
 		}
 		/* Case 3: EMPTY -> LOAD */
@@ -723,6 +727,11 @@ void WeightLoadEmptyEventReport(strIhuBfscAdcWeightPar_t *pbawp, WeightSensorPar
 			
 				SendWeightIndicationToBfsc(pwsp->WeightSensorAdcValue, pbawp->WeightCurrValue, \
 														WEIGHT_EVENT_ID_LOAD, pbawp->RepeatTimes);
+			
+				//blk230_led_send_cmd(WMC_LAMP_OUT2_GREEN, LED_COMMNAD_BINKING_LOWSPEED);
+				//blk230_led_send_cmd(WMC_LAMP_OUT3_YELLOW, LED_COMMNAD_BINKING_LOWSPEED);
+				//blk230_led_send_cmd(WMC_LAMP_OUT3_YELLOW, LED_COMMNAD_BINKING_LOWSPEED);
+				//blk230_led_send_cmd(WMC_LAMP_OUT2_GREEN, LED_COMMNAD_BINKING_HIGHSPEED);
 		}
 		/* Case 4: LOAD -> LOAD */
 		else if( (WEIGHT_EVENT_ID_LOAD == pbawp->WeightCurrEventType) && 
@@ -738,10 +747,13 @@ void WeightLoadEmptyEventReport(strIhuBfscAdcWeightPar_t *pbawp, WeightSensorPar
 						{	
 								SendWeightIndicationToBfsc(pwsp->WeightSensorAdcValue, pbawp->WeightCurrValue, \
 					                              WEIGHT_EVENT_ID_LOAD, pbawp->RepeatTimes);
+							
 						}
 						else
 						{
-								blk230_set_lamp(WMC_LAMP_OUT3_YELLOW, WMC_LAMP_ON); /* Yellow Lamp On */
+								//blk230_set_lamp(WMC_LAMP_OUT3_YELLOW, WMC_LAMP_ON); /* Yellow Lamp On */
+								blk230_led_send_cmd(WMC_LAMP_OUT3_YELLOW, LED_COMMNAD_ON);
+								//blk230_led_send_cmd(WMC_LAMP_OUT3_YELLOW, LED_COMMNAD_BINKING_LOWSPEED);
 						}
 					
 						pbawp->RepeatTimes++;

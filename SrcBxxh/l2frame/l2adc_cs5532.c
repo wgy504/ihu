@@ -612,12 +612,12 @@ void  InitCS5532(void)
 {
   uint8_t  AinPort , i;
 
-   /*cs不使能*/
-	Set_CS5532();
-	for(i=0;i<100;i++)
-    { 
-	   AD_delay(200);
-	}
+		/*cs不使能*/
+		Set_CS5532();
+		for(i=0;i<100;i++)
+			{ 
+			 AD_delay(200);
+		}
 
     Clr_CS5532();
     for(i=0;i<100;i++)
@@ -625,17 +625,32 @@ void  InitCS5532(void)
 	   AD_delay(200);
     }
 
-	/*使系统进入命令模式*/
+		/*使系统进入命令模式*/
+		taskENTER_CRITICAL();
+		__disable_irq(); /* PROTECTION SPI READ/WRITE */
     CS5532InCmdMode();
+		__enable_irq();
+		taskEXIT_CRITICAL();
+
 	     
     CS5532Reset(); 
 
+		taskENTER_CRITICAL();
+		__disable_irq(); /* PROTECTION SPI READ/WRITE */
     WriteConfigRegEx(0x00,0x01);
+		__enable_irq();
+		taskEXIT_CRITICAL();
 
    /*转换速率　0～9   0:120    1:60    2:30    3:15    4:7.5    5:3840    6:1920    7:960    8:480    9:240 */
 		
     //WriteChannelSetupRegEx(0,0,Chan0Gain,CollectionFF,1,0);		//setup1:选择的物理通道1,增益4,双极性,字速率60sps
+		IhuDebugPrint("InitCS5532: zWeightSensorParam.WeightSensorAdcGain=%d, zWeightSensorParam.WeightSensorAdcSampleFreq=%d\r\n", zWeightSensorParam.WeightSensorAdcGain, zWeightSensorParam.WeightSensorAdcSampleFreq);
+		
+		taskENTER_CRITICAL();
+		__disable_irq(); /* PROTECTION SPI READ/WRITE */
 		WriteChannelSetupRegEx(0,0,zWeightSensorParam.WeightSensorAdcGain,zWeightSensorParam.WeightSensorAdcSampleFreq,1,0);
+		__enable_irq();
+		taskEXIT_CRITICAL();
 //    WriteChannelSetupRegEx(1,1,6,CollectionFF,0,1);;
 //    WriteChannelSetupRegEx(2,1,0,2,0,1);
 //		WriteChannelSetupRegEx(3,1,0,2,0,1);
@@ -652,10 +667,13 @@ void  InitCS5532(void)
 　　　　　　  CSRP　　 通道设置寄存器指针　0~7
   */
     AinPort  = 0x00;
-
+		taskENTER_CRITICAL();
+		__disable_irq();   /* PROTECTION SPI READ/WRITE */
     WriteOffsetReg(AinPort,0x00);        //偏移寄存器1写0
     PerformCalibration(0x02,AinPort);    //setup1:自增益校准
     StartSeriesConversion(AinPort);      //setup1:连续模式
+		__enable_irq();
+		taskEXIT_CRITICAL();
 }
 
 /**********************************************************************
@@ -664,7 +682,12 @@ void  InitCS5532(void)
 ***********************************************************************/
 void CS5532Init()
 {
-	InitCS5532();  
+//		taskENTER_CRITICAL();
+//		__disable_irq();
+		InitCS5532();  
+//		__enable_irq();
+//		taskEXIT_CRITICAL();
+		
 }
 
 /* ===================================
@@ -682,7 +705,7 @@ uint32_t WeightSensorDefaultCalibrationValue(WeightSensorParamaters_t *pwsp)
 		uint32_t wmc_id = 0;
 		if(NULL == pwsp)
 		{
-				printf("l2adc_cs5532: WeightSensorInit: NULL == pwsp, return IHU_FAILURE\r\n");
+				IhuDebugPrint("l2adc_cs5532: WeightSensorInit: NULL == pwsp, return IHU_FAILURE\r\n");
 				return 1;
 		}
 //		0					1000
@@ -791,7 +814,7 @@ uint32_t WeightSensorInit(WeightSensorParamaters_t *pwsp)
 {	
 		if(NULL == pwsp)
 		{
-				printf("l2adc_cs5532: WeightSensorInit: NULL == pwsp, return IHU_FAILURE\r\n");
+				IhuDebugPrint("l2adc_cs5532: WeightSensorInit: NULL == pwsp, return IHU_FAILURE\r\n");
 				return 1;
 		}
 		
@@ -1006,7 +1029,7 @@ uint32_t weightSensorConfig(WeightSensorParamaters_t *pwsp)
 
 				zWeightSensorParam.WeightSensorAdcSampleFreq = ADC_AMPLIFIER_WORDRATE_15SPS; //0:120sps  1:60sps  2:30sps  3:15sps  4:7.5sps  8:3840sps  9:1920sps  10:960sps  11:480sps  12:240sps
 				zWeightSensorParam.WeightSensorAdcGain = ADC_AMPLIFIER_GAIN_64X;			//0:X1  1:X2  2:X4  3:X8  4:X16  5:X32  6:X64
-				zWeightSensorParam.WeightSensorAdcBitwidth = SpsGainToBitwidthMapping(pwsp->WeightSensorAdcSampleFreq, pwsp->WeightSensorAdcGain);
+				zWeightSensorParam.WeightSensorAdcBitwidth = SpsGainToBitwidthMapping(zWeightSensorParam.WeightSensorAdcSampleFreq, zWeightSensorParam.WeightSensorAdcGain);
 
 				IhuDebugPrint("zWeightSensorParam.WeightSensorLoadDetectionTimeMs=%d\n", zWeightSensorParam.WeightSensorLoadDetectionTimeMs);
 				IhuDebugPrint("zWeightSensorParam.WeightSensorLoadThread=%d\n", zWeightSensorParam.WeightSensorLoadThread);
@@ -1052,7 +1075,12 @@ uint32_t weightSensorConfig(WeightSensorParamaters_t *pwsp)
 		
 		IhuDebugPrint("WeightSensorCalibrationKB(&zWeightSensorParam)\n");
 		WeightSensorCalibrationKB(&zWeightSensorParam);
+		
+		IhuDebugPrint("InitWeightAdcBfscLocalParam(&zWeightSensorParam)\n");
 		InitWeightAdcBfscLocalParam(&zWeightSensorParam);
+		
+		IhuDebugPrint("CS5532Init(), ReInit CS5532 ADC for Weight Sendor\n");
+		CS5532Init();
 		
 		//zWeightSensorParam.WeightSensorInitOrNot = WEIGHT_SENSOR_HAD_INITED;
 		
@@ -1085,7 +1113,7 @@ uint32_t WeightSensorCalibrationZero(WeightSensorParamaters_t *pwsp)
 	for(i = 0; i < 32; i ++)
 	{
 		taskENTER_CRITICAL();
-		__disable_irq();
+		__disable_irq(); /* THIS IS VERY IMPORTANT, OR, THE SPI WILL BE INTERRUPT and THE ADC VALUE WILL BE JUMP UP/DOWN */
 		if(ReadWheChanOk())
 		{
 				temp += ReadSeriesADValue();
@@ -1123,7 +1151,7 @@ uint32_t WeightSensorCalibrationFull(WeightSensorParamaters_t *pwsp)
 	for(i = 0; i < 32; i ++)
 	{
 		taskENTER_CRITICAL();
-		__disable_irq();
+		__disable_irq(); /* THIS IS VERY IMPORTANT, OR, THE SPI WILL BE INTERRUPT and THE ADC VALUE WILL BE JUMP UP/DOWN */
 		if(ReadWheChanOk())
 		{
 				temp += ReadSeriesADValue();
@@ -1160,7 +1188,7 @@ uint32_t WeightSensorReadInstantAdc()
 		for(i = 0; i < 16; i ++)
 		{
 				taskENTER_CRITICAL();
-				__disable_irq();
+				__disable_irq(); /* THIS IS VERY IMPORTANT, OR, THE SPI WILL BE INTERRUPT and THE ADC VALUE WILL BE JUMP UP/DOWN */
 				if(ReadWheChanOk())
 				{
 					temp += ReadSeriesADValue();
@@ -1200,7 +1228,7 @@ int32_t WeightSensorReadCurrent(WeightSensorParamaters_t *pwsp)
 	}
 	
 	taskENTER_CRITICAL();
-	__disable_irq();
+	__disable_irq();  /* THIS IS VERY IMPORTANT, OR, THE SPI WILL BE INTERRUPT and THE ADC VALUE WILL BE JUMP UP/DOWN */
 	for(i = 0; i < 1; i ++)
 	{
 		if(ReadWheChanOk())
@@ -1249,13 +1277,13 @@ extern BfscWmcState_t										zBfscWmcState;
 							test_sample_value = 10000 + (rand() % 30000);  /* 100g ~ 400g */
 							test_sample_count = 1;
 					}
-					return test_sample_value + ((rand() % 300) - 150);
+					return test_sample_value + ((rand() % (WEIGHT_SENSOR_LOAD_THREDSHOLD-2)) - ((WEIGHT_SENSOR_LOAD_THREDSHOLD>>1) - 1) );
 					
 			}
 			else /* HUITP_IEID_SUI_BFSC_COMINETYPE_ROOLOUT */
 			{
 					test_sample_value = 10000 + (rand() % 30000);  /* Next random data, 100g ~ 400g */
-					return ((rand() % 200) - 100);  // SO THAT the COMBIN_OUT MESSAGE WILL BE SENT OUT //
+					return ((rand() % WEIGHT_SENSOR_LOAD_THREDSHOLD) - (WEIGHT_SENSOR_LOAD_THREDSHOLD>>1));  // SO THAT the COMBIN_OUT MESSAGE WILL BE SENT OUT //
 			}		
 	}
 	
@@ -1278,11 +1306,11 @@ uint32_t SpsGainToBitwidthMapping(uint32_t wordrate_index, uint32_t gain_index)
 {
 		if (( gain_index >= GAIN_INDEX_NUMBER) || (wordrate_index >= WORDRATE_INDEX_NUMBER) )
 		{
-				printf("l2adc_cs5532: SpsGainToBitwidthMapping: Invalid parameter, gain_index(%d)>=GAIN_INDEX_NUMBER(%d), or, wordrate_index(%d) >= WORDRATE_INDEX_NUMBER(%d), return 0xFFFFFFFF\r\b", gain_index, GAIN_INDEX_NUMBER, wordrate_index, WORDRATE_INDEX_NUMBER);
+				IhuDebugPrint("l2adc_cs5532: SpsGainToBitwidthMapping: Invalid parameter, gain_index(%d)>=GAIN_INDEX_NUMBER(%d), or, wordrate_index(%d) >= WORDRATE_INDEX_NUMBER(%d), return 0xFFFFFFFF\r\b", gain_index, GAIN_INDEX_NUMBER, wordrate_index, WORDRATE_INDEX_NUMBER);
 				return 0xFFFFFFFF;
 		}
 		
-		printf("l2adc_cs5532: SpsGainToBitwidthMapping: [wordrate_index(%d), gain_index(%d)] => Bitwidth(%d)\r\n", gain_index, wordrate_index, SpsGainToBitwidthMappingTable[gain_index][wordrate_index]);
+		IhuDebugPrint("l2adc_cs5532: SpsGainToBitwidthMapping: [wordrate_index(%d), gain_index(%d)] => Bitwidth(%d)\r\n", wordrate_index, gain_index, SpsGainToBitwidthMappingTable[wordrate_index][gain_index]);
 		return SpsGainToBitwidthMappingTable[wordrate_index][gain_index];
 		
 }

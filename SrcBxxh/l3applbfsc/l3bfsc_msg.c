@@ -94,8 +94,10 @@ void msg_wmc_set_config_req_process(void *param_ptr, error_code_t *ec_ptr)
 		
 		/* Force to STOP */
 		weight_sensor_send_cmd(WIGHT_SENSOR_CMD_TYPE_STOP);
-		blk230_set_lamp(WMC_LAMP_OUT2_GREEN, WMC_LAMP_OFF);
-		blk230_set_lamp(WMC_LAMP_OUT3_YELLOW, WMC_LAMP_OFF);
+		//blk230_set_lamp(WMC_LAMP_OUT2_GREEN, WMC_LAMP_OFF);
+		blk230_led_send_cmd(WMC_LAMP_OUT2_GREEN, LED_COMMNAD_OFF);
+		//blk230_set_lamp(WMC_LAMP_OUT3_YELLOW, WMC_LAMP_OFF);
+		blk230_led_send_cmd(WMC_LAMP_OUT3_YELLOW, LED_COMMNAD_OFF);
 		blk230_set_stop(1);
 
 		/* Force to BACK TO FSM_STATE_BFSC_CONFIGURATION */
@@ -284,6 +286,7 @@ void msg_wmc_start_req_process(void *param_ptr, error_code_t *ec_ptr)
 		}
 		
 		/* Check If it is the right/valid state to process the message */
+		/* IF NOT IN THE FOLLOW STATE, REPLY ERROR TO HCU/AWS */
 		if( (FSM_STATE_BFSC_CONFIGURATION != FsmGetState(TASK_ID_BFSC)) && 
 			  (FSM_STATE_BFSC_COMBINATION != FsmGetState(TASK_ID_BFSC)) && 
 				(FSM_STATE_BFSC_SCAN != FsmGetState(TASK_ID_BFSC)) )
@@ -302,6 +305,43 @@ void msg_wmc_start_req_process(void *param_ptr, error_code_t *ec_ptr)
 		}
 		
 		/* Process the message */
+		/* IF ALREADY RECEIVED COMBIN_OUT */
+		/* STOP ALL RUNNING PROCESS, START TO REPORT NEW WEIGHT EVENT */
+		if( (FSM_STATE_BFSC_COMBINATION == FsmGetState(TASK_ID_BFSC)) )
+		{
+				IhuDebugPrint("L3BFSC: FSM_STATE_BFSC_COMBINATION == FsmGetState(TASK_ID_BFSC), STOP, THEN RESTART\n");
+				/* Step 1: STOP SENSOR */
+				weight_sensor_send_cmd(WIGHT_SENSOR_CMD_TYPE_STOP);
+			
+				/* Step 2: STOP MOTOR */
+				blk230_set_stop(1);
+			
+				/* Step 3: Restore Light */
+				//blk230_set_lamp(WMC_LAMP_OUT2_GREEN, WMC_LAMP_OFF);
+				blk230_led_send_cmd(WMC_LAMP_OUT2_GREEN, LED_COMMNAD_OFF);
+				//blk230_set_lamp(WMC_LAMP_OUT3_YELLOW, WMC_LAMP_OFF);
+				blk230_led_send_cmd(WMC_LAMP_OUT3_YELLOW, LED_COMMNAD_OFF);
+			
+				/* Step 4: Make sure these two are exective in sequence */
+				memset(&zIhuAdcBfscWs, 0, sizeof(strIhuBfscAdcWeightPar_t));
+				InitWeightAdcBfscLocalParam(&zWeightSensorParam);
+		}
+		else if( (FSM_STATE_BFSC_CONFIGURATION == FsmGetState(TASK_ID_BFSC)) )
+		{
+				IhuDebugPrint("L3BFSC: FSM_STATE_BFSC_CONFIGURATION == FsmGetState(TASK_ID_BFSC), START NOW\n");
+		}
+		else
+		{
+				IhuDebugPrint("L3BFSC: FSM_STATE_BFSC_SCAN == FsmGetState(TASK_ID_BFSC), ALREADY START, DO NOTHING\n");
+		}
+			
+		/*
+		** Re-enter in FSM_STATE_BFSC_SCAN state
+		**
+		** FSM_STATE_BFSC_CONFIGURATION -> FSM_STATE_BFSC_SCAN
+		** FSM_STATE_BFSC_COMBINATION -> FSM_STATE_BFSC_SCAN
+		**
+		*/
 		if (FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_SCAN) == IHU_FAILURE){
   		IhuErrorPrint("L3BFSC: Error Set FSM State FSM_STATE_BFSC_SCAN");	
   		return;
@@ -517,13 +557,13 @@ void msg_wmc_command_req_process(void *param_ptr, error_code_t *ec_ptr)
 		if(cmd_req->comand_flags & LED1_COMMAND_ID)
 		{
 				IhuDebugPrint("L3BFSC: msg_wmc_command_req_process: LED1_COMMAND_ID 0x%x\r\n", cmd_req->led1_command);
-				//blk230_led_send_cmd(1, cmd_req->led1_command);
+				blk230_led_send_cmd(WMC_LAMP_OUT2_GREEN, cmd_req->led1_command);
 		}
 		
 		if(cmd_req->comand_flags & LED2_COMMAND_ID)
 		{
 				IhuDebugPrint("L3BFSC: msg_wmc_command_req_process: LED1_COMMAND_ID 0x%x\r\n", cmd_req->led2_command);
-				//blk230_led_send_cmd(2, cmd_req->led2_command);
+				blk230_led_send_cmd(WMC_LAMP_OUT3_YELLOW, cmd_req->led2_command);
 		}
 		
 		return;
@@ -640,7 +680,8 @@ void msg_wmc_combin_req_process(void *param_ptr, error_code_t *ec_ptr)
 		
 		/* Process the message: start motor */
     blk230_send_cmd(1, zMotorControlParam.MotorDirection, zMotorControlParam.MotorSpeed, zMotorControlParam.MotorRollingStartMs);
-		blk230_set_lamp(WMC_LAMP_OUT2_GREEN, WMC_LAMP_ON);
+		//blk230_set_lamp(WMC_LAMP_OUT2_GREEN, WMC_LAMP_ON);
+		blk230_led_send_cmd(WMC_LAMP_OUT2_GREEN, LED_COMMNAD_ON);
 		
 		pCombinOut = (msg_struct_l3bfsc_wmc_combin_out_req_t *)param_ptr;
 		
@@ -745,9 +786,11 @@ void msg_wmc_err_inq_req_process(void *param_ptr, error_code_t *ec_ptr)
 		}
 		
 		/* Process the message: start motor */
-		blk230_set_lamp(WMC_LAMP_OUT3_YELLOW, WMC_LAMP_ON);
+		//blk230_set_lamp(WMC_LAMP_OUT3_YELLOW, WMC_LAMP_ON);
+		blk230_led_send_cmd(WMC_LAMP_OUT3_YELLOW, LED_COMMNAD_BINKING_HIGHSPEED);
+		
 		blk230_set_stop(1);
-		IhuDebugPrint("L3BFSC: Set WMC_LAMP_OUT3_YELLOW to ON, STOP MOTOR", zBfscWmcState.last_combin_type.WeightCombineType);	
+		IhuDebugPrint("L3BFSC: Set WMC_LAMP_OUT3_YELLOW to LED_COMMNAD_BINKING_HIGHSPEED, STOP MOTOR", zBfscWmcState.last_combin_type.WeightCombineType);	
 		/* Other Action Like Reset to be added */
 		
 		pCombinOut = (msg_struct_l3bfsc_wmc_err_inq_req_t *)param_ptr;

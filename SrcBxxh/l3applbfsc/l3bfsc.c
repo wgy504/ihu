@@ -1234,7 +1234,7 @@ OPSTAT fsm_bfsc_wmc_weight_ind(UINT8 dest_id, UINT8 src_id, void *param_ptr, UIN
   if(FSM_STATE_BFSC_SCAN == FsmGetState(TASK_ID_BFSC))
   {
     // send new weight event
-    IhuDebugPrint("L3BFSC: fsm_bfsc_wmc_weight_ind: weight=%d adc_filtered=%d rep_times=%d k=%f b=%d\r\n", rcv.average_weight, rcv.adc_filtered, rcv.repeat_times, wsckb.k, wsckb.b);
+    //IhuDebugPrint("L3BFSC: fsm_bfsc_wmc_weight_ind: weight=%d adc_filtered=%d rep_times=%d k=%f b=%d\r\n", rcv.average_weight, rcv.adc_filtered, rcv.repeat_times, wsckb.k, wsckb.b);
     
 		/* Build Message Content Header */
     if(rcv.repeat_times > 0)
@@ -1302,7 +1302,8 @@ OPSTAT fsm_bfsc_wmc_weight_ind(UINT8 dest_id, UINT8 src_id, void *param_ptr, UIN
 			
       //osDelay(1000); ///THIS
 			IhuDebugPrint("L3BFSC: msg_wmc_combin_resp: msgid = 0x%08X\r\n", msg_wmc_combin_resp.msgid);
-      blk230_set_lamp(WMC_LAMP_OUT2_GREEN, WMC_LAMP_OFF);
+      //blk230_set_lamp(WMC_LAMP_OUT2_GREEN, WMC_LAMP_OFF);
+			blk230_led_send_cmd(WMC_LAMP_OUT2_GREEN, LED_COMMNAD_OFF);
 		
       /* Send Message to CAN Task */
       ret = ihu_message_send(MSG_ID_L3BFSC_WMC_COMBIN_RESP, TASK_ID_CANVELA, TASK_ID_BFSC, \

@@ -524,8 +524,8 @@ uint16_t HuitpMsgIdMapToInternalMsgId(uint32_t huitp_msgid)
 		case HUITP_MSGID_sui_bfsc_command_req:
 			return MSG_ID_L3BFSC_WMC_COMMAND_REQ;
 
-//		case HUITP_MSGID_sui_bfsc_err_inq_cmd_req:
-//			return MSG_ID_L3BFSC_WMC_ERR_INQ_CMD_REQ;
+		case HUITP_MSGID_sui_bfsc_err_inq_cmd_req:
+			return MSG_ID_L3BFSC_WMC_ERR_INQ_CMD_REQ;
 		
 		default:
 			return 0xFFFF;

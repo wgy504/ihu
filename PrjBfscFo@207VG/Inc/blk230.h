@@ -36,6 +36,15 @@ typedef struct blk230_cmd_s
   uint32_t time2stop:16;  // unit ms
 }blk230_cmd_t;
 
+//#define LED_COMMNAD_ON									(1)
+//#define LED_COMMNAD_OFF									(2)
+//#define LED_COMMNAD_BINKING_HIGHSPEED		(3)
+//#define LED_COMMNAD_BINKING_LOWSPEED		(4)
+typedef struct blk230_led_cmd_s
+{
+		uint8_t led_command[4];
+}blk230_led_cmd_t;
+
 int32_t blk230_init(void);
 int32_t blk230_set_dc_speed(uint32_t speed);
 int blk230_set_alarm(uint32_t flag);
