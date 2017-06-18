@@ -28,10 +28,10 @@ uint8_t  Chan0Gain    =       0x05;
 
 void AD_delay(uint32_t val)
 {
-//  while(val--)
-//  {
-//  }
-	HAL_Delay(val);
+  while(val--)
+  {
+  }
+	//HAL_Delay(val);
 }
 /****************************************************************************
 * 名称：MSPI0_WR_Data()
@@ -616,13 +616,13 @@ void  InitCS5532(void)
 	Set_CS5532();
 	for(i=0;i<100;i++)
     { 
-	   AD_delay(1);
+	   AD_delay(200);
 	}
 
     Clr_CS5532();
     for(i=0;i<100;i++)
     { 
-	   AD_delay(1);
+	   AD_delay(200);
     }
 
 	/*使系统进入命令模式*/
@@ -679,6 +679,7 @@ extern weight_sensor_filter_t g_weight_sensor_filter;
 
 uint32_t WeightSensorDefaultCalibrationValue(WeightSensorParamaters_t *pwsp)
 {
+		uint32_t wmc_id = 0;
 		if(NULL == pwsp)
 		{
 				printf("l2adc_cs5532: WeightSensorInit: NULL == pwsp, return IHU_FAILURE\r\n");
@@ -697,8 +698,9 @@ uint32_t WeightSensorDefaultCalibrationValue(WeightSensorParamaters_t *pwsp)
 //10	0x06bcc1	0x07d996
 
 extern WmcInventory_t										zWmcInvenory;
-		
-		switch(zWmcInvenory.wmc_id.wmc_id)
+		wmc_id = GetWmcId();
+		//switch(zWmcInvenory.wmc_id.wmc_id)
+		switch(wmc_id)
 		{
 				case 0:
 						pwsp->WeightSensorCalibrationZeroAdcValue = 0x0673f4;
@@ -774,7 +776,7 @@ extern WmcInventory_t										zWmcInvenory;
 						break;
 		}
 		
-		IhuDebugPrint("WeightSensorDefaultCalibrationValue, ZeroAdc=%d(%x), FullAdc=%(%x), FullWeight=%d, WmcId=%d\n", \
+		IhuDebugPrint("WeightSensorDefaultCalibrationValue, ZeroAdc=%d(%x), FullAdc=%d(%x), FullWeight=%d, WmcId=%d\n", \
 													pwsp->WeightSensorCalibrationZeroAdcValue, pwsp->WeightSensorCalibrationZeroAdcValue, \
 													pwsp->WeightSensorCalibrationFullAdcValue, pwsp->WeightSensorCalibrationFullAdcValue, \
 													pwsp->WeightSensorCalibrationFullWeight, zWmcInvenory.wmc_id.wmc_id);
@@ -825,6 +827,7 @@ uint32_t WeightSensorInit(WeightSensorParamaters_t *pwsp)
 		g_weight_sensor_filter.stable_thresh = zWeightSensorParam.WeightSensorFilterCoeff[2]; // 12;    // ~2g
 		g_weight_sensor_filter.change_thresh = zWeightSensorParam.WeightSensorFilterCoeff[3]; // 30;    // ~5g
 		
+		zWeightSensorParam.WeightSensorOutputValue[0] = 1; // 1 => Generate randam value */
 		zWeightSensorParam.WeightSensorOutputValue[1] = 1; // 1 => Generate randam value */
 		
 //		pwsp->WeightSensorAdcSampleFreq = 0;//0:120sps  1:60sps  2:30sps  3:15sps  4:7.5sps  8:3840sps  9:1920sps  10:960sps  11:480sps  12:240sps
@@ -832,7 +835,7 @@ uint32_t WeightSensorInit(WeightSensorParamaters_t *pwsp)
 //		pwsp->WeightSensorAdcBitwidth = 20;
 //		pwsp->WeightSensorCalibrationFullWeight = 100000;//0.01g????
 //		pwsp->WeightSensorInitOrNot = WEIGHT_SENSOR_HAD_INITED;
-		//WeightSensorDefaultCalibrationValue(pwsp);
+		WeightSensorDefaultCalibrationValue(pwsp);
 		WeightSensorCalibrationKB(pwsp);
 		
 		CS5532Init();
@@ -1081,10 +1084,14 @@ uint32_t WeightSensorCalibrationZero(WeightSensorParamaters_t *pwsp)
 	
 	for(i = 0; i < 32; i ++)
 	{
+		taskENTER_CRITICAL();
+		__disable_irq();
 		if(ReadWheChanOk())
 		{
 				temp += ReadSeriesADValue();
 		}
+		__enable_irq();
+		taskEXIT_CRITICAL();
 		HAL_Delay(20);
 	}
 	temp = temp >> 5;
@@ -1115,10 +1122,14 @@ uint32_t WeightSensorCalibrationFull(WeightSensorParamaters_t *pwsp)
 	
 	for(i = 0; i < 32; i ++)
 	{
+		taskENTER_CRITICAL();
+		__disable_irq();
 		if(ReadWheChanOk())
 		{
 				temp += ReadSeriesADValue();
 		}
+		__enable_irq();
+		taskEXIT_CRITICAL();
 		HAL_Delay(20);
 	}
 	temp = temp >> 5;
@@ -1148,10 +1159,14 @@ uint32_t WeightSensorReadInstantAdc()
 		
 		for(i = 0; i < 16; i ++)
 		{
+				taskENTER_CRITICAL();
+				__disable_irq();
 				if(ReadWheChanOk())
 				{
 					temp += ReadSeriesADValue();
 				}
+				__enable_irq();
+				taskEXIT_CRITICAL();
 				HAL_Delay(200);
 		}
 		
@@ -1184,14 +1199,18 @@ int32_t WeightSensorReadCurrent(WeightSensorParamaters_t *pwsp)
 			return 0;
 	}
 	
+	taskENTER_CRITICAL();
+	__disable_irq();
 	for(i = 0; i < 1; i ++)
 	{
 		if(ReadWheChanOk())
 		{
 			temp += ReadSeriesADValue();
 		}
-		HAL_Delay(10);
+		//HAL_Delay(10);
 	}
+	__enable_irq();	
+	taskEXIT_CRITICAL();
 	
 	temp = temp >> 0;
 	

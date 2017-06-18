@@ -605,7 +605,7 @@ void WeightLoadEmptyDetection(strIhuBfscAdcWeightPar_t *pbawp, WeightSensorParam
 				pbawp->WeightCurrEventTicks = pbawp->WeightCurrentTicks;
 				pbawp->WeightCurrValue = pbawp->WeightValueAdjusted[0];
 			
-				IhuDebugPrint("S6:%d:%d:[L(%d):Max=%d,Min=%d,Max-Min=%d,T=%d][E(%d):Max=%d,Min=%d,T=%d]:EmptyEvent\n", zIhuAdcBfscWs.SysTicksMs, zIhuAdcBfscWs.WeightCurrentTicks,\
+			IhuDebugPrint("S6:%d:%d:[%d:%d][L(%d):Ma=%d,Mi=%d,D=%d,T=%d][E(%d):Ma=%d,Mi=%d,T=%d]:EmptyEvent\n", zIhuAdcBfscWs.SysTicksMs, zIhuAdcBfscWs.WeightCurrentTicks, zWeightSensorParam.WeightSensorAdcValue, pbawp->WeightCurrValue,\
 										WeightSensorLoadDetectionTicks, WeightMaxLoad, WeightMinLoad, (WeightMaxLoad-WeightMinLoad), WeightSensorLoadThread, \
 										WeightSensorEmptyDetectionTicks, WeightMaxEmpty, WeightMinEmpty, WeightSensorEmptyThread);
 		}
@@ -625,7 +625,7 @@ void WeightLoadEmptyDetection(strIhuBfscAdcWeightPar_t *pbawp, WeightSensorParam
 				pbawp->WeightCurrEventTicks = pbawp->WeightCurrentTicks;
 				pbawp->WeightCurrValue = pbawp->WeightValueAdjusted[0];
 			
-				IhuDebugPrint("S6:%d:%d:[L(%d):Max=%d,Min=%d,Max-Min=%d,T=%d][E(%d):Max=%d,Min=%d,T=%d]:LoadEvent\n", zIhuAdcBfscWs.SysTicksMs, zIhuAdcBfscWs.WeightCurrentTicks,\
+			IhuDebugPrint("S6:%d:%d:[%d:%d][L(%d):Ma=%d,Mi=%d,D=%d,T=%d][E(%d):Ma=%d,Mi=%d,T=%d]:LoadEvent\n", zIhuAdcBfscWs.SysTicksMs, zIhuAdcBfscWs.WeightCurrentTicks, zWeightSensorParam.WeightSensorAdcValue, pbawp->WeightCurrValue, \
 										WeightSensorLoadDetectionTicks, WeightMaxLoad, WeightMinLoad, (WeightMaxLoad-WeightMinLoad), WeightSensorLoadThread, \
 										WeightSensorEmptyDetectionTicks, WeightMaxEmpty, WeightMinEmpty, WeightSensorEmptyThread);			
 		}
@@ -638,7 +638,7 @@ void WeightLoadEmptyDetection(strIhuBfscAdcWeightPar_t *pbawp, WeightSensorParam
 				pbawp->WeightCurrEventTicks = pbawp->WeightCurrentTicks;
 				pbawp->WeightCurrValue = pbawp->WeightValueAdjusted[0];
 			
-				IhuDebugPrint("S6:%d:%d:[L(%d):Max=%d,Min=%d,Max-Min=%d,T=%d][E(%d):Max=%d,Min=%d,T=%d]:Pickuping\n", zIhuAdcBfscWs.SysTicksMs, zIhuAdcBfscWs.WeightCurrentTicks,\
+			IhuDebugPrint("S6:%d:%d:[%d:%d][L(%d):Ma=%d,Mi=%d,D=%d,T=%d][E(%d):Ma=%d,Mi=%d,T=%d]:Pickup\n", zIhuAdcBfscWs.SysTicksMs, zIhuAdcBfscWs.WeightCurrentTicks, zWeightSensorParam.WeightSensorAdcValue, pbawp->WeightCurrValue, \
 										WeightSensorLoadDetectionTicks, WeightMaxLoad, WeightMinLoad, (WeightMaxLoad-WeightMinLoad), WeightSensorLoadThread, \
 										WeightSensorEmptyDetectionTicks, WeightMaxEmpty, WeightMinEmpty, WeightSensorEmptyThread);
 		}

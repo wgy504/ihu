@@ -195,8 +195,8 @@ void MX_FREERTOS_Init(void) {
 //  myTask01Handle = osThreadCreate(osThread(myTask01), NULL);
   
   /* definition and creation of myTask02 */
-  osThreadDef(myTask02, blk230_task, osPriorityNormal, 0, 512);
-  myTask02Handle = osThreadCreate(osThread(myTask02), NULL);
+//  osThreadDef(myTask02, blk230_task, osPriorityNormal, 0, 512);
+//  myTask02Handle = osThreadCreate(osThread(myTask02), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
 
