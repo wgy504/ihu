@@ -594,7 +594,69 @@
 	#define IHU_SYSCFG_BOOT_BLOCK2_LOAD_MAX_LEN  0x40000  //256KB
 	#define IHU_SYSCFG_BOOT_FLASH_END_START	0x800FFFFF
 	
+
+ /***********************************************************************************
+ *
+ * IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_IAP_ID
+ *
+ ***********************************************************************************/
+ #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_IAP_ID)
+	//可选项通信端口的全局定义，未来需要通过ConfigXml进一步优化
+	#define IHU_SYSCFG_COMM_BACK_HAWL_CON 1 //0=NULL, 1=ETHERNET, 2=WIFI, 3=3G4G, 4=USBNET, 5/OTHERS=INVALID
+
+	//Series Port config
+	#define IHU_SYSCFG_GPS_SERIES_PORT_DEFAULT  1
+	//定义后台CLOUD连接到服务器
+	#define IHU_SYSCFG_BH_HTTP_LOCAL_ADDR 			"http://127.0.0.1/test.php"
+	#define IHU_SYSCFG_BH_HTTP_SVR_ENTRY_ADDR 	"http://www.hkrob.com/mfunhcu/l1mainentry/cloud_callback_hcu.php"
+	#define IHU_SYSCFG_BH_HTTP_SVR_NAME 				"XHZN_HCU"
+	#define IHU_SYSCFG_BH_HCU_NAME_SELF 				"HCU_G514_FHYS_SH001"
+	#define IHU_SYSCFG_BH_TCP_SVR_HTTP_ADDR 		"http://www.hkrob.com/"
+	#define IHU_SYSCFG_BH_TCP_SVR_IP_ADDR 			"121.40.118.33"
+	#define IHU_SYSCFG_BH_TCP_SVR_PORT 					"9501"
+	#define IHU_SYSCFG_BH_FTP_SVR_ADDR 					"http://www.hkrob.com/mfunhcu/l1mainentry/cloud_callback_hcu.php"
+	#define IHU_SYSCFG_BH_FTP_USR_NAME 					"test1234"
+	#define IHU_SYSCFG_BH_FTP_PSWD 							"123456"
+	#define IHU_SYSCFG_BH_FTP_FILE_NAME 				"ihu_new_pkg.bin"
+	#define IHU_SYSCFG_BH_FTP_FILE_PATH 				"/"
 	
+	//local SW storage address
+	#define  IHU_SYSCFG_SW_DOWNLOAD_DIR_DEFAULT 		"/home/pi/ihu_sw_download/"
+	#define  IHU_SYSCFG_SW_ACTIVE_DIR_DEFAULT 			"/home/pi/ihu_sw_active/"
+	#define  IHU_SYSCFG_SW_BACKUP_DIR_DEFAULT 			"/home/pi/ihu_sw_backup/"
+	//系统定义的服务器以及本机名称，用于与服务器之间的通信
+	#define IHU_SYSCFG_CLOUD_BH_ITF_STD_SET 		IHU_SYSCFG_CLOUD_BH_ITF_STD_XML
+	//DEBUG开关，缺省打开
+	#define IHU_SYSCFG_TRACE_DEBUG_SET IHU_SYSCFG_TRACE_DEBUG_NOR_ON + IHU_SYSCFG_TRACE_DEBUG_IPT_ON + IHU_SYSCFG_TRACE_DEBUG_CRT_ON + IHU_SYSCFG_TRACE_DEBUG_FAT_ON  //利用以上标示位，确定TRACE的级别 IHU_SYSCFG_TRACE_DEBUG_INF_ON +
+	//TRACE开关，缺省打开
+	#define IHU_SYSCFG_TRACE_MSG_SET  IHU_SYSCFG_TRACE_MSG_MODE_ALL_BUT_TIME_OUT_AND_HEART_BEAT //IHU_SYSCFG_TRACE_MSG_MODE_ALL_BUT_TIME_OUT_AND_HEART_BEAT  // IHU_SYSCFG_TRACE_MSG_MODE_ALL_BUT_TIME_OUT //IHU_SYSCFG_TRACE_MSG_MODE_ALL // 
+	
+	#define IHU_VMMW_GPRSMOD_SMS_CENTER_NUMBER  "+8613010314500"  //短信中心号码
+	#define IHU_VMMW_GPRSMOD_SMS_TARGET_NUMBER  "+8613701629240"  //将短信发给谁，暂时没用上，目前短信是交给了后台进行的处理
+	
+	//模块启动的时间长度
+	#define IHU_SYSCFG_MODULE_START_DISTRIBUTION_DELAY_DURATION  10  //in micro-second
+	
+	//CURRENT HW PRODUCT CATELOG
+	#define IHU_SYSCFG_HW_PRODUCT_CAT_TYPE 0x0513 // HUITP_IEID_UNI_INVENT_HWTYPE_PDTYPE_G5_FHYS_5103 0x0513
+
+	//定义是否进入批量生产，从而确定硬件标识从哪里读取
+	#define IHU_SYSCFG_HW_MASSIVE_PRODUCTION_SET IHU_SYSCFG_HW_MASSIVE_PRODUCTION_NO
+	//定义固件是否自动升级
+	#define IHU_SYSCFG_HDD_FW_UPGRADE_SET IHU_SYSCFG_HBB_FW_UPGRADE_NO_NEED
+	
+	//启动区地址指示
+	#define IHU_SYSCFG_BOOT_IAP_START_ADDRESS 0x80000000
+	#define IHU_SYSCFG_BOOT_IAP_MAX_LEN  0x20000  //128KB
+	#define IHU_SYSCFG_BOOT_FAC_LOAD_START_ADDRESS 0x80020000
+	#define IHU_SYSCFG_BOOT_FAC_LOAD_MAX_LEN  0x40000  //256KB
+	#define IHU_SYSCFG_BOOT_BLOCK1_LOAD_START_ADDRESS 0x80060000
+	#define IHU_SYSCFG_BOOT_BLOCK1_LOAD_MAX_LEN  0x40000  //256KB
+	#define IHU_SYSCFG_BOOT_BLOCK2_LOAD_START_ADDRESS 0x800A0000
+	#define IHU_SYSCFG_BOOT_BLOCK2_LOAD_MAX_LEN  0x40000  //256KB
+	#define IHU_SYSCFG_BOOT_FLASH_END_START	0x800FFFFF
+
+
 //==============================================================================================================================
 #else //IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID
 	#error Un-correct constant definition

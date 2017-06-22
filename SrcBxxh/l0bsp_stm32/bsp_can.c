@@ -20,6 +20,9 @@ CAN_HandleTypeDef hcan2;
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 extern CAN_HandleTypeDef hcan1;
 CAN_HandleTypeDef hcan2; //MAIN中未定义，这里重新定义是为了复用
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_IAP_ID)
+extern CAN_HandleTypeDef hcan1;
+CAN_HandleTypeDef hcan2; //MAIN中未定义，这里重新定义是为了复用
 #endif
 
 extern uint8_t zIhuCanRxBuffer[2];
@@ -75,6 +78,7 @@ long counter_can_rx_total = 0;
 
 extern long number_of_wmc_combin_timeout;
 
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 int ihu_bsp_stm32_can_send_data(uint8_t* buff, uint16_t len)
 { 
 	//这里是帧处理的过程，未来待完善数据的发送接收处理过程
@@ -161,6 +165,7 @@ int ihu_bsp_stm32_can_send_data(uint8_t* buff, uint16_t len)
 	}
 	return BSP_SUCCESS;
 }
+#endif
 
 int ihu_bsp_stm32_can_rcv_data(uint8_t* buff, uint16_t len)
 {    
@@ -298,6 +303,7 @@ uint8_t g_can_rx_buffer[BFSC_CAN_MAX_RX_BUF_SIZE];
   *         the configuration information for the specified CAN.
   * @retval None
   */
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef* CanHandle)
 {
 	HAL_StatusTypeDef status;
@@ -349,6 +355,8 @@ void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef* CanHandle)
 	}
 
 }
+#endif
+
 
 void app_can_loopback_callback(IHU_HUITP_L2FRAME_Desc_t *pdesc)
 {
@@ -477,6 +485,7 @@ void bsp_can_config_filter(CAN_HandleTypeDef* CanHandle, uint32_t can_id)
   }
 }
 
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 void bsp_can_init(CAN_HandleTypeDef* CanHandle, uint32_t std_id)
 {
 	CAN_FilterConfTypeDef  sFilterConfig;
@@ -513,21 +522,7 @@ void bsp_can_init(CAN_HandleTypeDef* CanHandle, uint32_t std_id)
 	
 	bsp_can_start_rx(CanHandle, app_can_loopback_callback, g_can_rx_buffer, BFSC_CAN_MAX_RX_BUF_SIZE, CanHandle);
 }
+#endif
 
-////MYC Forward the complete/valid CAN Frame from CAN Interrupt to CAN Task
-////MSG_ID_CAN_L2FRAME_RCV
-//OPSTAT complete_wmc_control_frame_forward_canvela(void *p_msg, UINT16 msg_len)
-//{
-//	int ret = 0;
-//	msg_struct_canvela_l2frame_rcv_t rcv;
 
-//	ret = ihu_message_send(MSG_ID_CAN_L3BFSC_CMD_CTRL, TASK_ID_BFSC, TASK_ID_CANVELA, p_msg, msg_len);
-//	if (ret == IHU_FAILURE){
-//		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
-//		IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName, zIhuVmCtrTab.task[TASK_ID_BFSC].taskName);
-//		return IHU_FAILURE;
-//	}	
-//	//返回
-//	return IHU_SUCCESS;
-//}
 

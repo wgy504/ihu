@@ -16,19 +16,26 @@
 //从MAIN.x中继承过来的函数
 //UART_HandleTypeDef husart_debug;
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
-extern UART_HandleTypeDef huart1;
-extern UART_HandleTypeDef huart2;
-extern UART_HandleTypeDef huart3;
-extern UART_HandleTypeDef huart4;
-UART_HandleTypeDef huart5;
-UART_HandleTypeDef huart6; //MAIN中未定义，这里重新定义是为了复用
+	extern UART_HandleTypeDef huart1;
+	extern UART_HandleTypeDef huart2;
+	extern UART_HandleTypeDef huart3;
+	extern UART_HandleTypeDef huart4;
+	UART_HandleTypeDef huart5;
+	UART_HandleTypeDef huart6; //MAIN中未定义，这里重新定义是为了复用
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
-extern UART_HandleTypeDef huart1;
-extern UART_HandleTypeDef huart2;
-extern UART_HandleTypeDef huart3;
-//extern UART_HandleTypeDef huart4;
-//extern UART_HandleTypeDef huart5;
-UART_HandleTypeDef huart6; //MAIN中未定义，这里重新定义是为了复用
+	extern UART_HandleTypeDef huart1;
+	extern UART_HandleTypeDef huart2;
+	extern UART_HandleTypeDef huart3;
+	UART_HandleTypeDef huart4;
+	UART_HandleTypeDef huart5;
+	UART_HandleTypeDef huart6; //MAIN中未定义，这里重新定义是为了复用
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_IAP_ID)
+	UART_HandleTypeDef huart1;
+	extern UART_HandleTypeDef huart2;
+	extern UART_HandleTypeDef huart3;
+	UART_HandleTypeDef huart4;
+	UART_HandleTypeDef huart5;
+	UART_HandleTypeDef huart6; //MAIN中未定义，这里重新定义是为了复用
 #else
 	#error Un-correct constant definition
 #endif

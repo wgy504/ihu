@@ -3,7 +3,7 @@
 <title>Static Call Graph - [PrjBfscFo@207VG\PrjBfscFo@207VG.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image PrjBfscFo@207VG\PrjBfscFo@207VG.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Wed Jun 21 19:53:11 2017
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Thu Jun 22 14:16:04 2017
 <BR><P>
 <H3>Maximum Stack Usage =       1296 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1281,8 +1281,8 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;assert_failed
 </UL>
 <BR>[Called By]<UL><LI><a href="#[189]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadWheChanOk
-<LI><a href="#[185]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadSOD0
 <LI><a href="#[e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetWmcId
+<LI><a href="#[185]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadSOD0
 </UL>
 
 <P><STRONG><a name="[103]"></a>HAL_GPIO_TogglePin</STRONG> (Thumb, 30 bytes, Stack size 16 bytes, stm32f2xx_hal_gpio.o(i.HAL_GPIO_TogglePin))
@@ -1915,7 +1915,6 @@ Global Symbols
 <LI><a href="#[a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_vmfo_init_fb
 <LI><a href="#[6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_vmfo_init
 <LI><a href="#[1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_timer_init
-<LI><a href="#[18c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SpsGainToBitwidthMapping
 <LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InitCS5532
 <LI><a href="#[28]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_canvela_init
 <LI><a href="#[31]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_canvela_bfsc_l2frame_rcv
@@ -1958,6 +1957,7 @@ Global Symbols
 <LI><a href="#[34]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_bfsc_init
 <LI><a href="#[218]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;weightSensorConfig
 <LI><a href="#[198]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WeightSensorDefaultCalibrationValue
+<LI><a href="#[18c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SpsGainToBitwidthMapping
 </UL>
 
 <P><STRONG><a name="[db]"></a>IhuDebugPrintId</STRONG> (Thumb, 114 bytes, Stack size 32 bytes, vmfreeoslayer.o(i.IhuDebugPrintId))
@@ -2010,7 +2010,6 @@ Global Symbols
 <LI><a href="#[1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_timer_init
 <LI><a href="#[1f2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_can_send_data
 <LI><a href="#[1ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bsp_can_config_filter
-<LI><a href="#[18c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SpsGainToBitwidthMapping
 <LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InitCS5532
 <LI><a href="#[1da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_canvela_time_out_period_scan
 <LI><a href="#[1d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_canvela_frame_encode
@@ -2102,6 +2101,7 @@ Global Symbols
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_bfsc_adc_meas_cmd_resp
 <LI><a href="#[218]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;weightSensorConfig
 <LI><a href="#[198]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WeightSensorDefaultCalibrationValue
+<LI><a href="#[18c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SpsGainToBitwidthMapping
 </UL>
 
 <P><STRONG><a name="[dd]"></a>IhuErrorPrintFo</STRONG> (Thumb, 290 bytes, Stack size 336 bytes, vmfreeoslayer.o(i.IhuErrorPrintFo))
@@ -2509,8 +2509,8 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = PerformCalibration &rArr; CS5532SendCmd &rArr; MSPI0_WR_Data &rArr; HAL_SPI_Transmit &rArr; SPI_CheckFlag_BSY &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
-<LI><a href="#[185]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadSOD0
 <LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CS5532SendCmd
+<LI><a href="#[185]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadSOD0
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InitCS5532
 </UL>
@@ -2549,10 +2549,10 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 136<LI>Call Chain = ReadADDataReg &rArr; CS5532ReadData &rArr; MSPI0_RD_Data &rArr; HAL_SPI_TransmitReceive &rArr; SPI_CheckFlag_BSY &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
-<LI><a href="#[185]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadSOD0
 <LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MSPI0_WR_Data
 <LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CS5532SendCmd
 <LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CS5532ReadData
+<LI><a href="#[185]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadSOD0
 </UL>
 <BR>[Called By]<UL><LI><a href="#[16a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;StartSeriesConversion
 </UL>
@@ -2837,10 +2837,10 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
 <LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintFo
-<LI><a href="#[18c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SpsGainToBitwidthMapping
 <LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CS5532Init
 <LI><a href="#[198]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WeightSensorDefaultCalibrationValue
 <LI><a href="#[196]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WeightSensorCalibrationKB
+<LI><a href="#[18c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SpsGainToBitwidthMapping
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_bfsc_hw_init
 </UL>
@@ -5327,11 +5327,11 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
 <LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintFo
 <LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
-<LI><a href="#[18c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SpsGainToBitwidthMapping
 <LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CS5532Init
 <LI><a href="#[16b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InitWeightAdcBfscLocalParam
 <LI><a href="#[198]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WeightSensorDefaultCalibrationValue
 <LI><a href="#[196]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WeightSensorCalibrationKB
+<LI><a href="#[18c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SpsGainToBitwidthMapping
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msg_wmc_set_config_req_process
 </UL>

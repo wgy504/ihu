@@ -65,6 +65,8 @@ IhuFsmStateItem_t IhuFsmSpsvirgo[] =
 //Global variables defination
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 	UINT8 zIhuGprsOperationFlag = 0;
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_IAP_ID)
+	UINT8 zIhuGprsOperationFlag = 0;
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 	#include "l3ccl.h"
 	extern strIhuCclTaskContext_t zIhuCclTaskContext;	
@@ -121,6 +123,7 @@ OPSTAT fsm_spsvirgo_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 p
 	//Global Variables
 	zIhuSysStaPm.taskRunErrCnt[TASK_ID_SPSVIRGO] = 0;
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_IAP_ID)
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 	memset(&zIhuCclSpsvirgoCtrlTable, 0, sizeof(strIhuCclSpsPar_t));
 	memset(&zIhuSpsvirgoMsgRcvBuf, 0, sizeof(msg_struct_ccl_com_cloud_data_rx_t));

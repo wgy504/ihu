@@ -15,6 +15,8 @@ extern "C" {
 	#include "commsgccl.h"
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 	#include "commsgbfsc.h"
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_IAP_ID)
+	#include "commsgiap.h"
 #else
 	#error Un-correct constant definition
 #endif
@@ -85,6 +87,25 @@ typedef struct IHU_HUITP_L2FRAME_STD_UART_frame_header
 	#define IHU_BSP_STM32_UART_SPARE1_HANDLER_ID  	5
 	#define IHU_BSP_STM32_UART6_PRESENT_HANDLER			huart6
 	#define IHU_BSP_STM32_UART6_PRESENT_HANDLER_ID  6
+
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_IAP_ID)
+	#define IHU_BSP_STM32_UART_GPRS_HANDLER					huart1
+	#define IHU_BSP_STM32_UART_GPRS_HANDLER_ID  		1
+	#define IHU_BSP_STM32_UART_RFID_HANDLER					huart2
+	#define IHU_BSP_STM32_UART_RFID_HANDLER_ID  		2
+	#define IHU_BSP_STM32_UART_PRINT_HANDLER				huart3
+	#define IHU_BSP_STM32_UART_PRINT_HANDLER_ID  		3
+	#define IHU_BSP_STM32_UART_BLE_HANDLER					huart1 //huart4, MYC update for BFSC 2017/03/19
+	#define IHU_BSP_STM32_UART_BLE_HANDLER_ID  			4
+	#define IHU_BSP_STM32_UART_CAM_HANDLER					huart3  //本项目不用，只是为了编译环境
+	#define IHU_BSP_STM32_UART_CAM_HANDLER_ID  			4
+	#define IHU_BSP_STM32_UART_SPARE1_HANDLER				huart1 //huart5, MYC update for BFSC 2017/03/19
+	#define IHU_BSP_STM32_UART_SPARE1_HANDLER_ID  	5
+	#define IHU_BSP_STM32_UART6_PRESENT_HANDLER			huart6
+	#define IHU_BSP_STM32_UART6_PRESENT_HANDLER_ID  6
+
+#else
+	#error Un-correct constant definition
 #endif
 
 

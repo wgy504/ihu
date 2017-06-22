@@ -11,10 +11,8 @@
  ****************************************************************************************
  */
  
- #include "l2canvela.h"
- #include "l2packet.h"
- #include "commsgbfsc.h"
- 
+#include "l2canvela.h"
+#include "l2packet.h"
  
 /*
 ** FSM of the CANVELA
@@ -73,6 +71,7 @@ IhuFsmStateItem_t IhuFsmCanvela[] =
 //Global variables defination
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_IAP_ID)
 #else
 	#error Un-correct constant definition
 #endif
@@ -123,6 +122,7 @@ OPSTAT fsm_canvela_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 pa
 	zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA] = 0;
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_IAP_ID)
 #else
 	#error Un-correct constant definition
 #endif

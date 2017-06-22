@@ -64,6 +64,11 @@ IhuVmCtrTaskStaticCfg_t zIhuVmCtrTaskStaticCfg[] =
 	{TASK_ID_I2CARIES, 		"I2CARIES", 		&IhuFsmI2caries,       IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
 	{TASK_ID_LEDPISCES, 	"LEDPISCES", 		&IhuFsmLedpisces,      IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
 	{TASK_ID_BFSC, 				"BFSC", 				&IhuFsmBfsc,           IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_IAP_ID)	
+	{TASK_ID_CANVELA, 		"CANVELA", 			&IhuFsmCanvela,        IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_SPSVIRGO, 		"SPSVIRGO", 		&IhuFsmSpsvirgo,       IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_LEDPISCES, 	"LEDPISCES", 		&IhuFsmLedpisces,      IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
+	{TASK_ID_IAP, 				"IAP", 				  &IhuFsmIap,            IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
 //为了提供完成列表，而且需要按照顺序来                        
 #else 
 	{TASK_ID_ADCLIBRA, 		"ADCLIBRA", 		&IhuFsmAdclibra,       IHU_SYSCFG_TASK_PNP_ON,     1, 1, 1, 1, 1},
@@ -194,6 +199,15 @@ IhuVmCtrMsgStaticCfg_t zIhuVmCtrMsgStaticCfg[] = {
   {MSG_ID_L3BFSC_WMC_COMMAND_REQ,                 "MSG_ID_L3BFSC_WMC_COMMAND_REQ",          1, 1, 1},
   {MSG_ID_L3BFSC_WMC_COMMAND_RESP,                "MSG_ID_L3BFSC_WMC_COMMAND_RESP",         1, 1, 1},
   {MSG_ID_L3BFSC_WMC_WEIGHT_IND,                  "MSG_ID_L3BFSC_WMC_WEIGHT_IND",           1, 1, 1},
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_IAP_ID)
+  //VMFO                                                                                 
+  {MSG_ID_VMFO_TIMER_1S_PERIOD,                   "MSG_ID_VMFO_TIMER_1S_PERIOD",            1, 1, 1},
+  //UART                                                                                  
+  {MSG_ID_SPS_L2FRAME_SEND,                       "MSG_ID_SPS_L2FRAME_SEND",                1, 1, 1},
+  {MSG_ID_SPS_L2FRAME_RCV,                        "MSG_ID_SPS_L2FRAME_RCV",                 1, 1, 1},
+  //CAN                                                                                    
+  {MSG_ID_CAN_L2FRAME_SEND,                       "MSG_ID_CAN_L2FRAME_SEND",                1, 1, 1},
+  {MSG_ID_CAN_L2FRAME_RCV,                        "MSG_ID_CAN_L2FRAME_RCV",                 1, 1, 1},
 #else
   #error Un-correct constant definition
 #endif
@@ -254,7 +268,12 @@ IhuSysEngTimerStaticCfg_t zIhuSysEngTimerStaticCfg[] ={
   {TIMER_ID_1S_BFSC_L3BFSC_ROLL_OUT_TIMER,         "TID_1S_BFSC_L3BFSC_ROLL_OUT_TIMER",      3,       TIMER_RESOLUTION_1S},
   {TIMER_ID_1S_BFSC_L3BFSC_GIVE_UP_TIMER,          "TID_1S_BFSC_L3BFSC_GIVE_UP_TIMER",       5,       TIMER_RESOLUTION_1S},
   {TIMER_ID_10MS_BFSC_ADCLIBRA_SCAN_TIMER,         "TID_10MS_BFSC_ADCLIBRA_SCAN_TIMER",      20,      TIMER_RESOLUTION_10MS}, 
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_IAP_ID) 
+  {TIMER_ID_1S_LEDPISCES_PERIOD_SCAN,              "TID_1S_LEDPISCES_PERIOD_SCAN",           4,       TIMER_RESOLUTION_1S},
+  {TIMER_ID_1S_IAP_PERIOD_SCAN,              			 "TID_1S_IAP_PERIOD_SCAN",                 10,      TIMER_RESOLUTION_1S},
+	
 #else
+	#error Un-correct constant definition
 #endif  
 	//END FLAG
   {TIMER_ID_MAX,                                   "TID_MAX",                                0,       TIMER_RESOLUTION_1S},   //END
@@ -325,13 +344,15 @@ void IhuDebugPrintFo(UINT8 index, char *format, ...)
 	}
 	ihu_l1hd_sps_print_send_data(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer);
 	OS_MUTEX_PUT(zIhuVmCtrTab.print.prtMutex);
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
+#elif ((IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	|| \
+	(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_IAP_ID))
 	if (OS_MUTEX_GET(zIhuVmCtrTab.print.prtMutex, IHU_SYSDIM_PRINT_MUTEX_TIME_OUT_DUR) != OS_MUTEX_TAKEN){
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 		return;
 	}
 	ihu_l1hd_sps_print_send_data(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer);
-	OS_MUTEX_PUT(zIhuVmCtrTab.print.prtMutex);	
+	OS_MUTEX_PUT(zIhuVmCtrTab.print.prtMutex);
+
 #else
 	#error Un-correct constant definition
 #endif
@@ -385,7 +406,8 @@ void IhuErrorPrintFo(UINT8 index, char *format, ...)
 	}
 	ihu_l1hd_sps_print_send_data(zIhuVmCtrTab.print.prtBuf[index].PrintBuffer);
 	OS_MUTEX_PUT(zIhuVmCtrTab.print.prtMutex);
-#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
+#elif ((IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	||\
+		(IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_IAP_ID))
 	if (OS_MUTEX_GET(zIhuVmCtrTab.print.prtMutex, IHU_SYSDIM_PRINT_MUTEX_TIME_OUT_DUR) != OS_MUTEX_TAKEN){
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
 		return;

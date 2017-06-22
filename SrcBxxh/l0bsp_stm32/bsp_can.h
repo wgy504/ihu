@@ -15,6 +15,8 @@ extern "C" {
 	#include "commsgccl.h"
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 	#include "commsgbfsc.h"
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_IAP_ID)
+	#include "commsgiap.h"	
 #else
 #endif
 

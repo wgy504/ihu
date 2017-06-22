@@ -25,6 +25,7 @@
 
 //XML自定义标准的编码函数方式
 //inputLen：这是包括MsgHead在内的所有缓冲区长度，正常情况下=sizeof(StrMsg_HUITP_MSGID_uni_general_message_t)，或者IE_BODY+4
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 OPSTAT func_cloud_standard_xml_pack(UINT8 msgType, char *funcFlag, UINT16 msgId, StrMsg_HUITP_MSGID_uni_general_message_t *inputPar, UINT16 inputLen, CloudDataSendBuf_t *output)
 {
 	//声明一个缓冲区长度，不能超越消息体内容的最长长度
@@ -185,10 +186,12 @@ OPSTAT func_cloud_standard_xml_pack(UINT8 msgType, char *funcFlag, UINT16 msgId,
 	//返回
 	return IHU_SUCCESS;
 }
+#endif
 
 //解码接收到的消息
 //该消息以CHAR为单位，从纯CDATA模式修改为<xml>格式，所以需要加入这个内容
 //expectMsgId是接收消息解码时带入的目标函数，如果设置为-1则意味着忽略这个判定条件
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, int expectMsgId)
 {
 	UINT32 index=0, msgId=0, msgLen=0;
@@ -471,7 +474,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 	//再来进行消息的统一处理
 	switch(msgId)
 	{
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
+//#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_CCL_ID)
 		//心跳请求
 		case HUITP_MSGID_uni_heart_beat_req:
 		{
@@ -904,8 +907,6 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 		}
 			break;
 		
-#endif
-		
 		default:
 		{
 			zIhuSysStaPm.taskRunErrCnt[TASK_ID_SPSVIRGO]++;
@@ -918,6 +919,7 @@ OPSTAT func_cloud_standard_xml_unpack(msg_struct_ccl_com_cloud_data_rx_t *rcv, i
 	//返回
 	return ret;
 }
+
 
 void func_cloud_standard_xml_generate_message_test_data(void)
 {
@@ -1098,6 +1100,9 @@ void func_cloud_standard_xml_generate_message_test_data(void)
 	IhuDebugPrint("HUITPXML: StateType=%d, StateConfirm=[%s]\n", pMsgProc4.reportType.event, pMsgOutput.buf);	
 	
 }
+#endif
+
+
 
 
 

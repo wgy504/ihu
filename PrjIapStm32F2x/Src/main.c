@@ -57,6 +57,10 @@
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
+uint8_t zIhuUartRxBuffer[6];
+uint8_t zIhuSpiRxBuffer[2];
+uint8_t zIhuI2cRxBuffer[2];
+
 
 /* USER CODE END PV */
 
@@ -101,7 +105,10 @@ int main(void)
   MX_NVIC_Init();
 
   /* USER CODE BEGIN 2 */
-
+  HAL_UART_Receive_IT(&huart2,&zIhuUartRxBuffer[1],1);
+  HAL_UART_Receive_IT(&huart3,&zIhuUartRxBuffer[2],1);
+  HAL_CAN_Receive_IT(&hcan1, 0);
+	
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */
