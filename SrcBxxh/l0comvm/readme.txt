@@ -7,9 +7,13 @@
 **************************************************************************
 
 
+//= MYC/ZJL, 2017 June.21, CURRENT_SW_DELIVERY R03.142 =>BFSC项目
+= 为IAP生成新的项目工程PrjIapStm32Fx
+= IAP也采用CubeMX进行配置
+
+
 //= MYC/ZJL, 2017 June.1, CURRENT_SW_DELIVERY R03.141 =>BFSC项目
 = 完善HUITP.H的定义，还未来得及更新相应文档
-
 
 //= ZJL, 2017 May.27, CURRENT_SW_DELIVERY R03.140 =>CCL项目
 = 清理所有的无用状态机

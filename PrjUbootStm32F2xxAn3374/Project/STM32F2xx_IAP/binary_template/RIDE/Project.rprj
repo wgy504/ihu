@@ -1,4 +1,0 @@
-
-<Project Header="Project 'STM322xG_EVAL'" Path=".\Project.rprj" Project="Yes" OutputFile="" sate="98" ActiveApp="STM322xG_EVAL" AsyncBuild="" >
-	<ApplicationBuild Header="STM322xG_EVAL" Extern=".\STM322xG_EVAL.rapp" Path=".\STM322xG_EVAL.rapp" OutputFile=".\STM322xG_EVAL\STM322xG_EVAL.elf" sate="96" Config="STM322xG_EVAL" AsyncBuild="" />
-</Project>

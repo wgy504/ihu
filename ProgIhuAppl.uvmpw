@@ -20,15 +20,9 @@
   </project>
 
   <project>
-    <PathAndName>.\PrjUbootStm32F2xxAn3374\Project\STM32F2xx_IAP\MDK-ARM\PrjUbootStm32F2.uvproj</PathAndName>
-  </project>
-
-  <project>
-    <PathAndName>.\PrjCclFo@207VC\MDK-ARM\PrjCclFo@207VC.uvprojx</PathAndName>
-  </project>
-
-  <project>
-    <PathAndName>.\PrjBfscFo@207VC\MDK-ARM\PrjBfscFo@207VC.uvprojx</PathAndName>
+    <PathAndName>.\PrjIapStm32F2x\MDK-ARM\PrjIapStm32F2x.uvprojx</PathAndName>
+    <NodeIsActive>1</NodeIsActive>
+    <NodeIsExpanded>1</NodeIsExpanded>
   </project>
 
   <project>
@@ -37,8 +31,6 @@
 
   <project>
     <PathAndName>.\PrjBfscFo@207VG\MDK-ARM\PrjBfscFo@207VG.uvprojx</PathAndName>
-    <NodeIsActive>1</NodeIsActive>
-    <NodeIsExpanded>1</NodeIsExpanded>
   </project>
 
 </ProjectWorkspace>
