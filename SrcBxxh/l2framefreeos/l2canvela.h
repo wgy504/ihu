@@ -79,6 +79,8 @@ OPSTAT func_canvela_frame_encode(UINT8 prefixcmdid, UINT8 optid, UINT8 optpar, U
 OPSTAT func_canvela_frame_decode(strIhuCanvelaCmdFrame_t *pframe, UINT8 prefixcmdid, UINT8 optid, UINT8 optpar, UINT32 modbusval);
 void func_canvela_frame_send(IHU_HUITP_L2FRAME_STD_frame_header_t *pframe);
 
+OPSTAT WmcAwsMsgCheck(void * param_ptr, UINT16 msg_len);
+
 
 #endif /* L2FRAME_L2CANVELA_H_ */
 

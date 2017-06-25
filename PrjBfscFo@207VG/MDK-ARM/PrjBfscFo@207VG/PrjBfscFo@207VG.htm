@@ -3,7 +3,7 @@
 <title>Static Call Graph - [PrjBfscFo@207VG\PrjBfscFo@207VG.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image PrjBfscFo@207VG\PrjBfscFo@207VG.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Thu Jun 22 14:16:04 2017
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Mon Jun 26 00:52:41 2017
 <BR><P>
 <H3>Maximum Stack Usage =       1296 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -668,10 +668,10 @@ Global Symbols
 <LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_double_round
 <LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_double_epilogue
 </UL>
-<BR>[Called By]<UL><LI><a href="#[190]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WeightCalculateAverage
-<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_drsub
+<BR>[Called By]<UL><LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_drsub
 <LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dsub
 <LI><a href="#[1a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_fp_digits
+<LI><a href="#[190]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WeightCalculateAverage
 </UL>
 
 <P><STRONG><a name="[bb]"></a>__aeabi_dsub</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, dadd.o(.text), UNUSED)
@@ -694,10 +694,10 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_double_round
 </UL>
 <BR>[Called By]<UL><LI><a href="#[19a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WeightSensorReadCurrent
+<LI><a href="#[1a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_fp_digits
 <LI><a href="#[1ef]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;weight_sensor_map_adc_to_weight
 <LI><a href="#[190]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WeightCalculateAverage
 <LI><a href="#[196]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WeightSensorCalibrationKB
-<LI><a href="#[1a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_fp_digits
 </UL>
 
 <P><STRONG><a name="[bf]"></a>__aeabi_i2d</STRONG> (Thumb, 34 bytes, Stack size 16 bytes, dflti.o(.text))
@@ -751,19 +751,19 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[b7]"></a>__aeabi_llsl</STRONG> (Thumb, 30 bytes, Stack size 0 bytes, llshl.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dadd
-<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uldivmod
+<BR><BR>[Called By]<UL><LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uldivmod
 <LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_double_epilogue
 <LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2ulz
+<LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dadd
 </UL>
 
 <P><STRONG><a name="[270]"></a>_ll_shift_l</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, llshl.o(.text), UNUSED)
 
 <P><STRONG><a name="[c2]"></a>__aeabi_llsr</STRONG> (Thumb, 32 bytes, Stack size 0 bytes, llushr.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2iz
-<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uldivmod
+<BR><BR>[Called By]<UL><LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uldivmod
 <LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_double_epilogue
 <LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2ulz
+<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2iz
 </UL>
 
 <P><STRONG><a name="[271]"></a>_ll_ushift_r</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, llushr.o(.text), UNUSED)
@@ -779,9 +779,9 @@ Global Symbols
 <P><STRONG><a name="[ba]"></a>_double_round</STRONG> (Thumb, 30 bytes, Stack size 8 bytes, depilogue.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = _double_round
 </UL>
-<BR>[Called By]<UL><LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ddiv
+<BR>[Called By]<UL><LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_double_epilogue
+<LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ddiv
 <LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dadd
-<LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_double_epilogue
 </UL>
 
 <P><STRONG><a name="[b9]"></a>_double_epilogue</STRONG> (Thumb, 156 bytes, Stack size 32 bytes, depilogue.o(.text))
@@ -864,17 +864,17 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MSPI0_RD_Data
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadConfigReg
-<LI><a href="#[187]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadChannelSetupReg
+<BR>[Called By]<UL><LI><a href="#[187]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadChannelSetupReg
 <LI><a href="#[186]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadADDataReg
 <LI><a href="#[188]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadSeriesADValue
+<LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadConfigReg
 </UL>
 
 <P><STRONG><a name="[d4]"></a>CS5532Reset</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, l2adc_cs5532.o(i.CS5532Reset))
 <BR><BR>[Stack]<UL><LI>Max Depth = 136<LI>Call Chain = CS5532Reset &rArr; ReadConfigReg &rArr; CS5532ReadData &rArr; MSPI0_RD_Data &rArr; HAL_SPI_TransmitReceive &rArr; SPI_CheckFlag_BSY &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadConfigReg
-<LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteConfigReg
+<BR>[Calls]<UL><LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteConfigReg
+<LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadConfigReg
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InitCS5532
 </UL>
@@ -884,13 +884,13 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MSPI0_WR_Data
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadConfigReg
-<LI><a href="#[187]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadChannelSetupReg
+<BR>[Called By]<UL><LI><a href="#[187]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadChannelSetupReg
 <LI><a href="#[186]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadADDataReg
 <LI><a href="#[169]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PerformCalibration
 <LI><a href="#[168]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteOffsetReg
 <LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteConfigReg
 <LI><a href="#[1a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteChannelSetupReg
+<LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadConfigReg
 </UL>
 
 <P><STRONG><a name="[d8]"></a>CS5532SendData</STRONG> (Thumb, 40 bytes, Stack size 16 bytes, l2adc_cs5532.o(i.CS5532SendData))
@@ -1307,7 +1307,6 @@ Global Symbols
 <LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[1f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_led_f2board_on
 <LI><a href="#[20]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_led_f2board_off
-<LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadConfigReg
 <LI><a href="#[187]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadChannelSetupReg
 <LI><a href="#[186]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadADDataReg
 <LI><a href="#[169]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PerformCalibration
@@ -1316,6 +1315,7 @@ Global Symbols
 <LI><a href="#[168]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteOffsetReg
 <LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteConfigReg
 <LI><a href="#[1a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteChannelSetupReg
+<LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadConfigReg
 </UL>
 
 <P><STRONG><a name="[ef]"></a>HAL_GetTick</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, stm32f2xx_hal.o(i.HAL_GetTick))
@@ -1892,11 +1892,11 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[15e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueTakeMutexRecursive
 <LI><a href="#[160]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGiveMutexRecursive
 <LI><a href="#[15f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_sps_print_send_data
+<LI><a href="#[15a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vsnprintf
+<LI><a href="#[15b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 <LI><a href="#[15d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strncat
 <LI><a href="#[15c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
 <LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr
-<LI><a href="#[15a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vsnprintf
-<LI><a href="#[15b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;blk230_init
 <LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;blk230_task
@@ -1963,10 +1963,10 @@ Global Symbols
 <P><STRONG><a name="[db]"></a>IhuDebugPrintId</STRONG> (Thumb, 114 bytes, Stack size 32 bytes, vmfreeoslayer.o(i.IhuDebugPrintId))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = IhuDebugPrintId &rArr; __2snprintf
 </UL>
-<BR>[Calls]<UL><LI><a href="#[162]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strcat
-<LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr
-<LI><a href="#[15b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
+<BR>[Calls]<UL><LI><a href="#[15b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 <LI><a href="#[161]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2snprintf
+<LI><a href="#[162]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strcat
+<LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;blk230_init
 <LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;blk230_task
@@ -2110,11 +2110,11 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[15e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueTakeMutexRecursive
 <LI><a href="#[160]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGiveMutexRecursive
 <LI><a href="#[15f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_sps_print_send_data
+<LI><a href="#[15a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vsnprintf
+<LI><a href="#[15b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 <LI><a href="#[15d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strncat
 <LI><a href="#[15c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
 <LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr
-<LI><a href="#[15a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vsnprintf
-<LI><a href="#[15b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[19a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WeightSensorReadCurrent
 <LI><a href="#[197]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WeightSensorCalibrationZero
@@ -2723,8 +2723,8 @@ Global Symbols
 <P><STRONG><a name="[4a]"></a>UsageFault_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f2xx_it.o(i.UsageFault_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f207xx.o(RESET)
 </UL>
-<P><STRONG><a name="[1ed]"></a>WeightAdjustHistory</STRONG> (Thumb, 158 bytes, Stack size 40 bytes, l2adclibra.o(i.WeightAdjustHistory))
-<BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = WeightAdjustHistory
+<P><STRONG><a name="[1ed]"></a>WeightAdjustHistory</STRONG> (Thumb, 112 bytes, Stack size 16 bytes, l2adclibra.o(i.WeightAdjustHistory))
+<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = WeightAdjustHistory
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_adclibra_time_out_bfsc_read_weight_scan
 </UL>
@@ -2747,8 +2747,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[191]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WeightLoadEmptyDetection
 </UL>
 
-<P><STRONG><a name="[191]"></a>WeightLoadEmptyDetection</STRONG> (Thumb, 510 bytes, Stack size 128 bytes, l2adclibra.o(i.WeightLoadEmptyDetection))
-<BR><BR>[Stack]<UL><LI>Max Depth = 584<LI>Call Chain = WeightLoadEmptyDetection &rArr; IhuDebugPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<P><STRONG><a name="[191]"></a>WeightLoadEmptyDetection</STRONG> (Thumb, 480 bytes, Stack size 96 bytes, l2adclibra.o(i.WeightLoadEmptyDetection))
+<BR><BR>[Stack]<UL><LI>Max Depth = 552<LI>Call Chain = WeightLoadEmptyDetection &rArr; IhuDebugPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
 <LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintFo
@@ -2757,7 +2757,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[1c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_adclibra_time_out_bfsc_read_weight_scan
 </UL>
 
-<P><STRONG><a name="[193]"></a>WeightLoadEmptyEventReport</STRONG> (Thumb, 472 bytes, Stack size 40 bytes, l2adclibra.o(i.WeightLoadEmptyEventReport))
+<P><STRONG><a name="[193]"></a>WeightLoadEmptyEventReport</STRONG> (Thumb, 432 bytes, Stack size 40 bytes, l2adclibra.o(i.WeightLoadEmptyEventReport))
 <BR><BR>[Stack]<UL><LI>Max Depth = 1096<LI>Call Chain = WeightLoadEmptyEventReport &rArr; SendWeightIndicationToBfsc &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
@@ -2832,7 +2832,7 @@ Global Symbols
 <LI><a href="#[218]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;weightSensorConfig
 </UL>
 
-<P><STRONG><a name="[199]"></a>WeightSensorInit</STRONG> (Thumb, 182 bytes, Stack size 16 bytes, l2adc_cs5532.o(i.WeightSensorInit))
+<P><STRONG><a name="[199]"></a>WeightSensorInit</STRONG> (Thumb, 180 bytes, Stack size 16 bytes, l2adc_cs5532.o(i.WeightSensorInit))
 <BR><BR>[Stack]<UL><LI>Max Depth = 504<LI>Call Chain = WeightSensorInit &rArr; CS5532Init &rArr; InitCS5532 &rArr; IhuDebugPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
@@ -3027,8 +3027,8 @@ Global Symbols
 
 <P><STRONG><a name="[286]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
 
-<P><STRONG><a name="[a7]"></a>app_can_loopback_callback</STRONG> (Thumb, 46 bytes, Stack size 24 bytes, bsp_can.o(i.app_can_loopback_callback))
-<BR><BR>[Stack]<UL><LI>Max Depth = 976<LI>Call Chain = app_can_loopback_callback &rArr; ihu_message_send_isr &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<P><STRONG><a name="[a7]"></a>app_can_loopback_callback</STRONG> (Thumb, 44 bytes, Stack size 16 bytes, bsp_can.o(i.app_can_loopback_callback))
+<BR><BR>[Stack]<UL><LI>Max Depth = 968<LI>Call Chain = app_can_loopback_callback &rArr; ihu_message_send_isr &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_message_send_isr
 <LI><a href="#[f4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
@@ -3194,7 +3194,7 @@ Global Symbols
 <LI><a href="#[1cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msg_wmc_err_inq_req_process
 </UL>
 
-<P><STRONG><a name="[af]"></a>blk230_task</STRONG> (Thumb, 822 bytes, Stack size 8 bytes, blk230.o(i.blk230_task))
+<P><STRONG><a name="[af]"></a>blk230_task</STRONG> (Thumb, 820 bytes, Stack size 8 bytes, blk230.o(i.blk230_task))
 <BR><BR>[Stack]<UL><LI>Max Depth = 480<LI>Call Chain = blk230_task &rArr; blk230_init &rArr; IhuDebugPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[f6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osKernelSysTick
@@ -3447,8 +3447,8 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[f6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osKernelSysTick
 <LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
 <LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
-<LI><a href="#[1bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
 <LI><a href="#[f4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
+<LI><a href="#[1bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> l3bfsc.o(.data)
 </UL>
@@ -3546,7 +3546,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> l3bfsc.o(.data)
 </UL>
-<P><STRONG><a name="[43]"></a>fsm_bfsc_wmc_weight_ind</STRONG> (Thumb, 626 bytes, Stack size 152 bytes, l3bfsc.o(i.fsm_bfsc_wmc_weight_ind))
+<P><STRONG><a name="[43]"></a>fsm_bfsc_wmc_weight_ind</STRONG> (Thumb, 688 bytes, Stack size 152 bytes, l3bfsc.o(i.fsm_bfsc_wmc_weight_ind))
 <BR><BR>[Stack]<UL><LI>Max Depth = 1200<LI>Call Chain = fsm_bfsc_wmc_weight_ind &rArr; func_bfsc_stm_main_recovery_from_fault &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
@@ -3562,16 +3562,16 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> l3bfsc.o(.data)
 </UL>
-<P><STRONG><a name="[31]"></a>fsm_canvela_bfsc_l2frame_rcv</STRONG> (Thumb, 296 bytes, Stack size 40 bytes, l2canvela.o(i.fsm_canvela_bfsc_l2frame_rcv))
+<P><STRONG><a name="[31]"></a>fsm_canvela_bfsc_l2frame_rcv</STRONG> (Thumb, 292 bytes, Stack size 40 bytes, l2canvela.o(i.fsm_canvela_bfsc_l2frame_rcv))
 <BR><BR>[Stack]<UL><LI>Max Depth = 1048<LI>Call Chain = fsm_canvela_bfsc_l2frame_rcv &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
 <LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintFo
 <LI><a href="#[18b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_message_send
 <LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
+<LI><a href="#[f4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 <LI><a href="#[19e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WmcAwsMsgCheck
 <LI><a href="#[1d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HuitpMsgIdMapToInternalMsgId
-<LI><a href="#[f4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> l2canvela.o(.data)
 </UL>
@@ -4054,7 +4054,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_adclibra_init
 </UL>
 
-<P><STRONG><a name="[1c4]"></a>func_adclibra_time_out_bfsc_read_weight_scan</STRONG> (Thumb, 444 bytes, Stack size 64 bytes, l2adclibra.o(i.func_adclibra_time_out_bfsc_read_weight_scan))
+<P><STRONG><a name="[1c4]"></a>func_adclibra_time_out_bfsc_read_weight_scan</STRONG> (Thumb, 446 bytes, Stack size 64 bytes, l2adclibra.o(i.func_adclibra_time_out_bfsc_read_weight_scan))
 <BR><BR>[Stack]<UL><LI>Max Depth = 1160<LI>Call Chain = func_adclibra_time_out_bfsc_read_weight_scan &rArr; WeightLoadEmptyEventReport &rArr; SendWeightIndicationToBfsc &rArr; ihu_message_send &rArr; ihu_msgid_to_string &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[f6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osKernelSysTick
@@ -4134,7 +4134,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[1d7]"></a>func_canvela_frame_send</STRONG> (Thumb, 14 bytes, Stack size 8 bytes, l2canvela.o(i.func_canvela_frame_send))
-<BR><BR>[Stack]<UL><LI>Max Depth = 520<LI>Call Chain = func_canvela_frame_send &rArr; ihu_bsp_stm32_can_send_data &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<BR><BR>[Stack]<UL><LI>Max Depth = 512<LI>Call Chain = func_canvela_frame_send &rArr; ihu_bsp_stm32_can_send_data &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1f2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_can_send_data
 </UL>
@@ -4282,8 +4282,8 @@ Global Symbols
 <LI><a href="#[1be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_adclibra_bfsc_read_origin
 </UL>
 
-<P><STRONG><a name="[1f2]"></a>ihu_bsp_stm32_can_send_data</STRONG> (Thumb, 316 bytes, Stack size 56 bytes, bsp_can.o(i.ihu_bsp_stm32_can_send_data))
-<BR><BR>[Stack]<UL><LI>Max Depth = 512<LI>Call Chain = ihu_bsp_stm32_can_send_data &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<P><STRONG><a name="[1f2]"></a>ihu_bsp_stm32_can_send_data</STRONG> (Thumb, 308 bytes, Stack size 48 bytes, bsp_can.o(i.ihu_bsp_stm32_can_send_data))
+<BR><BR>[Stack]<UL><LI>Max Depth = 504<LI>Call Chain = ihu_bsp_stm32_can_send_data &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[f6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osKernelSysTick
 <LI><a href="#[165]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
@@ -4292,8 +4292,8 @@ Global Symbols
 <LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
 <LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
 <LI><a href="#[1f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_led_work_state_f2board_toggle
-<LI><a href="#[1bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
 <LI><a href="#[f4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
+<LI><a href="#[1bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_canvela_frame_send
 </UL>
@@ -4406,8 +4406,8 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[1fe]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericCreate
 <LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
 <LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
-<LI><a href="#[200]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strerror
 <LI><a href="#[1ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_errno_addr
+<LI><a href="#[200]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strerror
 </UL>
 <BR>[Called By]<UL><LI><a href="#[209]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_task_create_and_run
 </UL>
@@ -4419,8 +4419,8 @@ Global Symbols
 <LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
 <LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
 <LI><a href="#[1bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_usleep
-<LI><a href="#[200]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strerror
 <LI><a href="#[1ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_errno_addr
+<LI><a href="#[200]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strerror
 </UL>
 <BR>[Called By]<UL><LI><a href="#[aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FsmProcessingLaunch
 </UL>
@@ -4435,10 +4435,10 @@ Global Symbols
 <LI><a href="#[204]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_timerid_to_string
 <LI><a href="#[203]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_taskid_to_string
 <LI><a href="#[19f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_msgid_to_string
+<LI><a href="#[1ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_errno_addr
 <LI><a href="#[200]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strerror
 <LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 <LI><a href="#[1bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
-<LI><a href="#[1ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_errno_addr
 </UL>
 <BR>[Called By]<UL><LI><a href="#[20d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_vm_send_init_msg_to_app_task
 <LI><a href="#[e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_com_heart_beat_rcv
@@ -4484,11 +4484,11 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[205]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericSendFromISR
 <LI><a href="#[203]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_taskid_to_string
 <LI><a href="#[19f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_msgid_to_string
+<LI><a href="#[1ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_errno_addr
+<LI><a href="#[f4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 <LI><a href="#[200]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strerror
 <LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 <LI><a href="#[1bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
-<LI><a href="#[1ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_errno_addr
-<LI><a href="#[f4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_can_loopback_callback
 </UL>
@@ -4534,8 +4534,8 @@ Global Symbols
 <LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
 <LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintFo
 <LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
-<LI><a href="#[200]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strerror
 <LI><a href="#[1ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_errno_addr
+<LI><a href="#[200]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strerror
 </UL>
 <BR>[Called By]<UL><LI><a href="#[209]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_task_create_and_run
 </UL>
@@ -4724,7 +4724,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[1c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msg_wmc_combin_req_process
 </UL>
 
-<P><STRONG><a name="[1c7]"></a>msg_wmc_combin_req_process</STRONG> (Thumb, 278 bytes, Stack size 32 bytes, l3bfsc_msg.o(i.msg_wmc_combin_req_process))
+<P><STRONG><a name="[1c7]"></a>msg_wmc_combin_req_process</STRONG> (Thumb, 320 bytes, Stack size 32 bytes, l3bfsc_msg.o(i.msg_wmc_combin_req_process))
 <BR><BR>[Stack]<UL><LI>Max Depth = 504<LI>Call Chain = msg_wmc_combin_req_process &rArr; FsmGetState &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
@@ -4739,7 +4739,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_bfsc_wmc_combin_req
 </UL>
 
-<P><STRONG><a name="[1c8]"></a>msg_wmc_combin_resp</STRONG> (Thumb, 96 bytes, Stack size 24 bytes, l3bfsc_msg.o(i.msg_wmc_combin_resp))
+<P><STRONG><a name="[1c8]"></a>msg_wmc_combin_resp</STRONG> (Thumb, 98 bytes, Stack size 24 bytes, l3bfsc_msg.o(i.msg_wmc_combin_resp))
 <BR><BR>[Stack]<UL><LI>Max Depth = 480<LI>Call Chain = msg_wmc_combin_resp &rArr; IhuDebugPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
@@ -4799,8 +4799,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[1cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;msg_wmc_err_inq_req_process
 </UL>
 
-<P><STRONG><a name="[1cb]"></a>msg_wmc_err_inq_req_process</STRONG> (Thumb, 256 bytes, Stack size 32 bytes, l3bfsc_msg.o(i.msg_wmc_err_inq_req_process))
-<BR><BR>[Stack]<UL><LI>Max Depth = 504<LI>Call Chain = msg_wmc_err_inq_req_process &rArr; FsmSetState &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<P><STRONG><a name="[1cb]"></a>msg_wmc_err_inq_req_process</STRONG> (Thumb, 250 bytes, Stack size 24 bytes, l3bfsc_msg.o(i.msg_wmc_err_inq_req_process))
+<BR><BR>[Stack]<UL><LI>Max Depth = 496<LI>Call Chain = msg_wmc_err_inq_req_process &rArr; FsmSetState &rArr; IhuErrorPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
 <LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintFo
@@ -4813,7 +4813,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_bfsc_wmc_err_inq_req
 </UL>
 
-<P><STRONG><a name="[1cc]"></a>msg_wmc_err_inq_resp</STRONG> (Thumb, 122 bytes, Stack size 40 bytes, l3bfsc_msg.o(i.msg_wmc_err_inq_resp))
+<P><STRONG><a name="[1cc]"></a>msg_wmc_err_inq_resp</STRONG> (Thumb, 124 bytes, Stack size 40 bytes, l3bfsc_msg.o(i.msg_wmc_err_inq_resp))
 <BR><BR>[Stack]<UL><LI>Max Depth = 496<LI>Call Chain = msg_wmc_err_inq_resp &rArr; IhuDebugPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
@@ -5321,7 +5321,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PendSV_Handler
 </UL>
 
-<P><STRONG><a name="[218]"></a>weightSensorConfig</STRONG> (Thumb, 4018 bytes, Stack size 16 bytes, l2adc_cs5532.o(i.weightSensorConfig))
+<P><STRONG><a name="[218]"></a>weightSensorConfig</STRONG> (Thumb, 4016 bytes, Stack size 16 bytes, l2adc_cs5532.o(i.weightSensorConfig))
 <BR><BR>[Stack]<UL><LI>Max Depth = 504<LI>Call Chain = weightSensorConfig &rArr; CS5532Init &rArr; InitCS5532 &rArr; IhuDebugPrintFo &rArr; xQueueTakeMutexRecursive &rArr; xQueueGenericReceive &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
@@ -6143,11 +6143,11 @@ Local Symbols
 
 <P><STRONG><a name="[1a6]"></a>_fp_digits</STRONG> (Thumb, 334 bytes, Stack size 56 bytes, printfa.o(i._fp_digits), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
-<LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ddiv
-<LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dadd
 <LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uldivmod
 <LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2ulz
 <LI><a href="#[1a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cdrcmple
+<LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ddiv
+<LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dadd
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_core
 </UL>

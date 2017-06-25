@@ -16,6 +16,7 @@
 #include "main.h"
 #include "l2adc_cs5532.h"
 #include "blk230.h"
+#include "cmsis_os.h"
 
 /*
 ** FSM of the BFSC
@@ -126,6 +127,7 @@ MotorControlParamaters_t 					zMotorControlParam;
 UINT16														zAwsCanIdPrefix;
 UINT16														zWmcCanIdPrefix;
 BfscWmcState_t										zBfscWmcState;
+extern strIhuBfscAdcWeightPar_t 	zIhuAdcBfscWs;
 
 
 //Main Entry
@@ -1318,6 +1320,20 @@ OPSTAT fsm_bfsc_wmc_weight_ind(UINT8 dest_id, UINT8 src_id, void *param_ptr, UIN
 			zBfscWmcState.last_combin_type.WeightCombineType = HUITP_IEID_SUI_BFSC_COMINETYPE_NULL;
 			
     }
+		else if(WEIGHT_EVENT_ID_LOAD == rcv.weight_event)  //2017/06/25 "15s" GIVE GREEN LIGHT BLINK SLOW
+		{
+				if( (zIhuAdcBfscWs.WeightCurrentTicks - zIhuAdcBfscWs.WeightCombinOutReceivedTicks) >= \
+						MAX_WEIGHT_TICKS_TO_REMOVE_AFTER_COMBIN_OUT )
+				{
+						blk230_led_send_cmd(WMC_LAMP_OUT2_GREEN, LED_COMMNAD_BINKING_LOWSPEED);
+						FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_SCAN); // BACK TO SCAN STATE
+						//besides blink, do nothing else
+				}
+		}
+		else
+		{
+				IhuErrorPrint("L3BFSC: fsm_bfsc_wmc_weight_ind: should NOT enter here.\n");
+		}
   }
   else{
     IhuErrorPrint("L3BFSC: fsm_bfsc_wmc_weight_ind: in wrong state: %d, return\r\n", FsmGetState(TASK_ID_BFSC));

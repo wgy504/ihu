@@ -152,13 +152,13 @@ void weight_sensor_task(void const *param);
 //	UINT32	WeightSensorDynamicZeroHysteresisMs;
 
 #define 	WEIGHT_SENSOR_ADC_READ_TICK_MS										(200)     // MAKE SURE   200/10 = 20   || 
-#define 	WEIGHT_SENSOR_MOVING_AVERAGE_TICKS								(2)
+#define 	WEIGHT_SENSOR_MOVING_AVERAGE_TICKS								(1)
 #define 	WEIGHT_SENSOR_MAX_TICKS_SAVED											(64)
 
 
-#define		WEIGHT_SENSOR_LOAD_DETECTION_TIME_MS							(1000)		
+#define		WEIGHT_SENSOR_LOAD_DETECTION_TIME_MS							(600)		
 #define		WEIGHT_SENSOR_LOAD_THREDSHOLD											(50)			// for 2g with 0.01 granuality
-#define		WEIGHT_SENSOR_EMPTY_DETECTION_TIME_MS							(1000)		
+#define		WEIGHT_SENSOR_EMPTY_DETECTION_TIME_MS							(400)		
 #define		WEIGHT_SENSOR_EMPTY_DETECTION_THREDSHOLD					(5000)			// for 2g with 0.01 granuality
 #define		WEIGHT_SENSOR_MAX_ALLOWED_WEIGHT									(1000000)	// 10kg
 
@@ -167,6 +167,8 @@ void weight_sensor_task(void const *param);
 
 #define		WEIGHT_SENSOR_DYNAMIC_ZERO_THREDSHOLD_VALUE				(0)			// 1g
 #define		WEIGHT_SENSOR_DYNAMIC_ZERO_HYSTERESIS_MS					(10000)		// 5s
+
+#define		MAX_WEIGHT_TICKS_TO_REMOVE_AFTER_COMBIN_OUT				(75) // 75 * 200ms => 15000ms = 15s
 
 /*
 ** Paramter checking !!!!! make sure these parameter relationship: 
@@ -211,13 +213,14 @@ typedef struct strIhuBfscAdcWeightPar
 
 //#define 	WEIGHT_EVENT_ID_LOAD						(0)
 //#define 	WEIGHT_EVENT_ID_EMPTY						(1)
-//#define 	WEIGHT_EVENT_ID_PICKUP						(2)
+//#define 	WEIGHT_EVENT_ID_PICKUP					(2)
 	UINT32 	WeightLastEventType;
 	UINT32 	WeightLastEventTicks;
 	INT32 	WeightLastValue;	
 	UINT32 	WeightCurrEventType;
 	UINT32 	WeightCurrEventTicks;
 	INT32 	WeightCurrValue;
+	UINT32	WeightCombinOutReceivedTicks;			//15s => 15000ms/200ms = 75
 	
 	UINT32 	WeightCurrentTicks;  // Dimension: 2^32 = 4294967296*0.2s = 858993459.2s = 238609.29 hour = 9942 days = 27.2 years
 	UINT32 	SysTicksMs;
@@ -229,6 +232,9 @@ typedef struct strIhuBfscAdcWeightPar
 	UINT32	WeightSensorDynamicZeroHysteresisTicks; // = WeightSensorDynamicZeroHysteresisMs / WEIGHT_SENSOR_ADC_READ_TICK_MS;
 	
 }strIhuBfscAdcWeightPar_t;
+
+
+void InitWeightAdcBfscLocalParam(WeightSensorParamaters_t *pwsp);
 
 //=======================================================
 //END: Local API from Xiong Puhui, for ADC Weight Filter

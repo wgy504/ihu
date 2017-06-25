@@ -302,7 +302,7 @@ void blk230_task(void const *param)
 		
 		
 		/* BLIKNING MODE FAST */
-		if( ((now - led_last_fast_tick) >= 500) )
+		if( ((now - led_last_fast_tick) >= LED_BINKING_HIGHSPEED_MS) )
 		{
 				led_last_fast_tick = now;
 				if(0 == led_fast_on_off)
@@ -333,7 +333,7 @@ void blk230_task(void const *param)
 		} /* end of if(0 == (now % 500)) */
 		
 		/* BLIKNING MODE SLOW */
-		if( ((now - led_last_slow_tick) >= 2000) )
+		if( ((now - led_last_slow_tick) >= LED_BINKING_LOWSPEED_MS) )
 		{
 				led_last_slow_tick = now;
 				if(0 == led_slow_on_off)

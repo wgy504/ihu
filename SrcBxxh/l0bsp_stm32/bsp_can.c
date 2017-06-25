@@ -20,6 +20,8 @@ CAN_HandleTypeDef hcan2;
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 extern CAN_HandleTypeDef hcan1;
 CAN_HandleTypeDef hcan2; //MAIN中未定义，这里重新定义是为了复用
+#include "l2adc_cs5532.h"
+#include "cmsis_os.h"
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_IAP_ID)
 extern CAN_HandleTypeDef hcan1;
 CAN_HandleTypeDef hcan2; //MAIN中未定义，这里重新定义是为了复用
@@ -82,11 +84,11 @@ extern long number_of_wmc_combin_timeout;
 int ihu_bsp_stm32_can_send_data(uint8_t* buff, uint16_t len)
 { 
 	//这里是帧处理的过程，未来待完善数据的发送接收处理过程
-	uint16_t CanFrameNumber = 0;
+	//uint16_t CanFrameNumber = 0;
 	uint16_t CanTotalFrameLen = 0;
 	uint16_t CanCurrentFrameLen = 0;
 	uint16_t CanLastFrameLen = (len % 8);
-	uint16_t i = 0;
+	//uint16_t i = 0;
   HAL_StatusTypeDef status;
 	
 //	static CanTxMsgTypeDef        TxMessage;
@@ -360,13 +362,13 @@ void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef* CanHandle)
 
 void app_can_loopback_callback(IHU_HUITP_L2FRAME_Desc_t *pdesc)
 {
-	CAN_HandleTypeDef* CanHandle;
+	//CAN_HandleTypeDef* CanHandle;
 	int ret = 0;
 
 	//assert(pdesc);
 	//assert(CanHandle);
 
-	CanHandle = (CAN_HandleTypeDef* )pdesc->UserData;
+	//CanHandle = (CAN_HandleTypeDef* )pdesc->UserData;
 /*
 	printf("CAN ISR: L2Packet %d bytes, first: 0x%02x %02x last: 0x%02x %02x\n", 
 		pdesc->RxXferCount,

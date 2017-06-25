@@ -71,7 +71,7 @@ void msg_wmc_set_config_req_process(void *param_ptr, error_code_t *ec_ptr)
 		}
 		
 		/* Check If it is the right/valid state to process the message */
-		/* 
+		/* */
 //		if( FSM_STATE_BFSC_COMBINATION == FsmGetState(TASK_ID_BFSC) )
 //		{
 //				IhuErrorPrint("L3BFSC: msg_wmc_set_config_req_process: FSM_STATE_BFSC_COMBINATION == FsmGetState(TASK_ID_BFSC), return\r\n");
@@ -683,6 +683,11 @@ void msg_wmc_combin_req_process(void *param_ptr, error_code_t *ec_ptr)
 		//blk230_set_lamp(WMC_LAMP_OUT2_GREEN, WMC_LAMP_ON);
 		blk230_led_send_cmd(WMC_LAMP_OUT2_GREEN, LED_COMMNAD_ON);
 		
+		/* Save WeightCurrentTicks to WeightCombinOutReceivedTicks */
+		zIhuAdcBfscWs.WeightCombinOutReceivedTicks = zIhuAdcBfscWs.WeightCurrentTicks;
+		IhuDebugPrint("L3BFSC: msg_wmc_combin_req_process start: WeightCombinOutReceivedTicks(%d) <= WeightCurrentTicks(%d)\r\n", \
+										zIhuAdcBfscWs.WeightCombinOutReceivedTicks, zIhuAdcBfscWs.WeightCurrentTicks);
+		
 		pCombinOut = (msg_struct_l3bfsc_wmc_combin_out_req_t *)param_ptr;
 		
 		zBfscWmcState.state = BFSC_MWC_STATE_ALREADY_COMBIN_OUT;
@@ -716,9 +721,12 @@ error_code_t msg_wmc_combin_req_check(void *param_ptr)
 void msg_wmc_combin_resp(error_code_t ec)
 {
 		OPSTAT ret = IHU_SUCCESS;
+			
 		msg_struct_l3bfsc_wmc_resp_t msg_wmc_combin_resp;
 	
 		IhuDebugPrint("L3BFSC: msg_wmc_combin_resp start ...\r\n");
+	
+		ret = ret;
 	
 		/* Check Input Parameter */
 		if(ec > ERROR_CODE_MAX)
@@ -752,7 +760,7 @@ void msg_wmc_combin_resp(error_code_t ec)
 void msg_wmc_err_inq_req_process(void *param_ptr, error_code_t *ec_ptr)
 {
 		IhuDebugPrint("L3BFSC: msg_wmc_err_inq_req_process start ...\r\n");
-		msg_struct_l3bfsc_wmc_err_inq_req_t *pCombinOut;
+		//msg_struct_l3bfsc_wmc_err_inq_req_t *pCombinOut;
 	
 		/* Check Input Parameter */
 		if(NULL == param_ptr)
@@ -793,7 +801,7 @@ void msg_wmc_err_inq_req_process(void *param_ptr, error_code_t *ec_ptr)
 		IhuDebugPrint("L3BFSC: Set WMC_LAMP_OUT3_YELLOW to LED_COMMNAD_BINKING_HIGHSPEED, STOP MOTOR", zBfscWmcState.last_combin_type.WeightCombineType);	
 		/* Other Action Like Reset to be added */
 		
-		pCombinOut = (msg_struct_l3bfsc_wmc_err_inq_req_t *)param_ptr;
+		//pCombinOut = (msg_struct_l3bfsc_wmc_err_inq_req_t *)param_ptr;
 		zBfscWmcState.state = BFSC_MWC_STATE_ALREADY_COMBIN_OUT;
     zBfscWmcState.last_combin_type.WeightCombineType = HUITP_IEID_SUI_BFSC_COMINETYPE_NULL;
 		IhuDebugPrint("L3BFSC: Set to FSM_STATE_BFSC_CONFIGURATION, WeightCombineType=%d", zBfscWmcState.last_combin_type.WeightCombineType);	
@@ -828,6 +836,8 @@ void msg_wmc_err_inq_resp(error_code_t ec)
 		msg_struct_l3bfsc_wmc_err_inq_resp_t msg_wmc_err_inq_resp;
 	
 		IhuDebugPrint("L3BFSC: msg_wmc_err_inq_resp start ...\r\n");
+	
+		ret = ret;
 	
 		/* Check Input Parameter */
 		if(ec > ERROR_CODE_MAX)

@@ -539,10 +539,10 @@ OPSTAT fsm_canvela_bfsc_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void *param_ptr
 	int ret = 0, i = 0;
 	UINT32 msg_id = 0;
 	msg_struct_l3bfsc_wmc_msg_header_t *pMsgInnerHeader;
-	IHU_HUITP_L2FRAME_STD_frame_header_t *pMsgOutHeader;
+	//IHU_HUITP_L2FRAME_STD_frame_header_t *pMsgOutHeader;
 	UINT16 msg_len = 0;
 
-	pMsgOutHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)param_ptr;
+	//pMsgOutHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)param_ptr;
 	pMsgInnerHeader = (msg_struct_l3bfsc_wmc_msg_header_t *)((UINT8 *)param_ptr + 4);
 	msg_len = pMsgInnerHeader->length + 4; ////!!!TO Align to HCU HUITP msg lenth
   IhuDebugPrint("CANVELA: Header (huitp_msg_id = 0x%08X, msg_len = %d bytes)\r\n", pMsgInnerHeader->msgid, msg_len);
@@ -718,7 +718,14 @@ OPSTAT func_canvela_frame_decode(strIhuCanvelaCmdFrame_t *pframe, UINT8 prefixcm
 		return IHU_FAILURE;
 	}
 	prefixcmdid = pframe->bfscCmdId;
+	prefixcmdid = prefixcmdid;
+	
 	optid = pframe->bfscOptId;
+	optid = optid;
+	
+	modbusval = modbusval;
+	optpar = optpar;
+	
 	if ((optid <=IHU_CANVELA_OPTID_min) || (optid >=IHU_CANVELA_OPTID_max)){
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
 		IhuErrorPrint("CANVELA: Encoding Canitf frame OptId error!\n");

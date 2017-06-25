@@ -48,7 +48,7 @@
 
 /* USER CODE BEGIN Includes */     
 #include "vmfreeoslayer.h"
-
+#include "l2adc_cs5532.h"
 
 /* USER CODE END Includes */
 

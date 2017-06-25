@@ -2,6 +2,7 @@
 #include "cmsis_os.h"
 #include "l2adc_cs5532.h"
 #include "l2adclibra.h"
+#include "l3bfsc.h"
 #include "main.h"
 
 typedef struct Structuint32_t
@@ -1209,7 +1210,7 @@ int32_t WeightSensorReadCurrent(WeightSensorParamaters_t *pwsp)
 	uint32_t temp = 0;
 	int32_t temp2 = 0;
 	int32_t temp3 = 0;
-	static uint8_t sw = 0;
+	//static uint8_t sw = 0;
 	
 	static int test_sample_count = 0;
 	static int32_t test_sample_value = 0;
@@ -1287,6 +1288,7 @@ extern BfscWmcState_t										zBfscWmcState;
 			}		
 	}
 	
+	return 0;
 }	
 
 uint32_t SpsGainToBitwidthMappingTable[WORDRATE_INDEX_NUMBER][WORDRATE_INDEX_NUMBER] = { 
