@@ -823,7 +823,7 @@ uint32_t WeightSensorInit(WeightSensorParamaters_t *pwsp)
 		pwsp->WeightSensorLoadThread = WEIGHT_SENSOR_LOAD_THREDSHOLD;
 		pwsp->WeightSensorEmptyDetectionTimeMs = WEIGHT_SENSOR_EMPTY_DETECTION_TIME_MS;		
 		pwsp->WeightSensorEmptyThread = WEIGHT_SENSOR_EMPTY_DETECTION_THREDSHOLD;
-		pwsp->RemainDetectionTimeSec = 10;
+		pwsp->RemainDetectionTimeSec = 2;
 		pwsp->MaxAllowedWeight = 1000000;
 //		pwsp->WeightSensorCalibrationZeroAdcValue = 31560;
 //		pwsp->WeightSensorCalibrationFullAdcValue = 81512;
@@ -963,8 +963,8 @@ uint32_t weightSensorConfig(WeightSensorParamaters_t *pwsp)
 		zWeightSensorParam.WeightSensorFilterCoeff[1] = pwsp->WeightSensorFilterCoeff[1];
 		zWeightSensorParam.WeightSensorFilterCoeff[2] = pwsp->WeightSensorFilterCoeff[2];
 		zWeightSensorParam.WeightSensorFilterCoeff[3] = pwsp->WeightSensorFilterCoeff[3];
-		zWeightSensorParam.WeightSensorOutputValue[0] = pwsp->WeightSensorOutputValue[0];
-		zWeightSensorParam.WeightSensorOutputValue[1] = pwsp->WeightSensorOutputValue[1];
+		zWeightSensorParam.WeightSensorOutputValue[0] = 1; //pwsp->WeightSensorOutputValue[0]; /* 1: IHU, FIXED AS IT IS DIFFICULT FOR FACTORY/JIANLIN TO REMEMBER */
+		zWeightSensorParam.WeightSensorOutputValue[1] = 0; //pwsp->WeightSensorOutputValue[1]; /* 0: Read ADC, FIXED AS IT IS DIFFICULT FOR FACTORY/JIANLIN TO REMEMBER */
 		zWeightSensorParam.WeightSensorOutputValue[2] = pwsp->WeightSensorOutputValue[2];
 		zWeightSensorParam.WeightSensorOutputValue[3] = pwsp->WeightSensorOutputValue[3];
 
@@ -1282,6 +1282,26 @@ extern BfscWmcState_t										zBfscWmcState;
 					
 			}
 			else /* HUITP_IEID_SUI_BFSC_COMINETYPE_ROOLOUT */
+			{
+					test_sample_value = 10000 + (rand() % 30000);  /* Next random data, 100g ~ 400g */
+					return ((rand() % WEIGHT_SENSOR_LOAD_THREDSHOLD) - (WEIGHT_SENSOR_LOAD_THREDSHOLD>>1));  // SO THAT the COMBIN_OUT MESSAGE WILL BE SENT OUT //
+			}		
+	}
+	
+	else if(2 == zWeightSensorParam.WeightSensorOutputValue[1])
+	{
+extern BfscWmcState_t										zBfscWmcState;			
+//			if( HUITP_IEID_SUI_BFSC_COMINETYPE_NULL == zBfscWmcState.last_combin_type.WeightCombineType )
+//			{
+//					if(0 == test_sample_count)
+//					{
+//							test_sample_value = 10000 + (rand() % 30000);  /* 100g ~ 400g */
+//							test_sample_count = 1;
+//					}
+//					return test_sample_value + ((rand() % (WEIGHT_SENSOR_LOAD_THREDSHOLD-2)) - ((WEIGHT_SENSOR_LOAD_THREDSHOLD>>1) - 1) );
+//					
+//			}
+//			else /* HUITP_IEID_SUI_BFSC_COMINETYPE_ROOLOUT */
 			{
 					test_sample_value = 10000 + (rand() % 30000);  /* Next random data, 100g ~ 400g */
 					return ((rand() % WEIGHT_SENSOR_LOAD_THREDSHOLD) - (WEIGHT_SENSOR_LOAD_THREDSHOLD>>1));  // SO THAT the COMBIN_OUT MESSAGE WILL BE SENT OUT //

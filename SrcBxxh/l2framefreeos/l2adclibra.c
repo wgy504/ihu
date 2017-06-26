@@ -459,7 +459,7 @@ void WeightAdjustHistory(strIhuBfscAdcWeightPar_t *pbawp, WeightSensorParamaters
 {
 		
 		//UINT32	WeightSensorLoadDetectionTimeMs;
-		//UINT32	WeightSensorLoadThread;
+		UINT32	WeightSensorLoadThread;
 		//UINT32	WeightSensorEmptyThread;
 		//UINT32	WeightSensorEmptyDetectionTimeMs;
 		//UINT32	MaxAllowedWeight;										
@@ -474,6 +474,9 @@ void WeightAdjustHistory(strIhuBfscAdcWeightPar_t *pbawp, WeightSensorParamaters
 		//UINT32 	WeightSensorEmptyDetectionTicks; // = WeightSensorEmptyDetectionTimeMs / WEIGHT_SENSOR_ADC_READ_TICK_MS;
 		UINT32	WeightSensorDynamicZeroHysteresisTicks; // = WeightSensorDynamicZeroHysteresisMs / WEIGHT_SENSOR_ADC_READ_TICK_MS;
 	
+		INT32		DynamicZeroMaxWeight, DynamicZeroMinWeight;
+		
+	
 		if((NULL == pbawp)||(NULL == pwsp))
 		{
 				return;
@@ -481,7 +484,7 @@ void WeightAdjustHistory(strIhuBfscAdcWeightPar_t *pbawp, WeightSensorParamaters
 		
 		/* Save parameters */
 		//WeightSensorLoadDetectionTimeMs = pwsp->WeightSensorLoadDetectionTimeMs;
-		//WeightSensorLoadThread = pwsp->WeightSensorLoadThread;
+		WeightSensorLoadThread = pwsp->WeightSensorLoadThread;
 		//WeightSensorEmptyThread = pwsp->WeightSensorEmptyThread;
 		//WeightSensorEmptyDetectionTimeMs = pwsp->WeightSensorEmptyDetectionTimeMs;
 		//MaxAllowedWeight = pwsp->MaxAllowedWeight;										
@@ -524,17 +527,28 @@ void WeightAdjustHistory(strIhuBfscAdcWeightPar_t *pbawp, WeightSensorParamaters
 		}
 		
 		/* Auto Zero */
-		for (Index = 0; Index < WeightSensorDynamicZeroHysteresisTicks; Index++)
+		/* Find max, min value in WeightValueEvaluated */
+		WeightCalculateMaxMin(pbawp->WeightValueEvaluated, WeightSensorDynamicZeroHysteresisTicks, &DynamicZeroMaxWeight, &DynamicZeroMinWeight);
+		
+		if( ((DynamicZeroMaxWeight - DynamicZeroMinWeight) <= WeightSensorLoadThread) && \
+				(abs(DynamicZeroMaxWeight) <= WeightSensorDynamicZeroThreadValue) && \
+				(abs(DynamicZeroMinWeight) <= WeightSensorDynamicZeroThreadValue) )
 		{
-				if(pbawp->WeightValueEvaluated[Index] > WeightSensorDynamicZeroThreadValue)
-						break;
+				pbawp->WeightDynamicZeroValue = pbawp->WeightValueEvaluated[0];
 		}
 		
+		/* FORGET THIS METHOD */
+		//for (Index = 0; Index < WeightSensorDynamicZeroHysteresisTicks; Index++)
+		//{
+		//		if(pbawp->WeightValueEvaluated[Index] > WeightSensorDynamicZeroThreadValue)
+		//				break;
+		//}
+		
 		/* WHICH MEANS ALL [0, WeightSensorDynamicZeroHysteresisTicks-1] ARE ALL LESS THAN WeightSensorDynamicZeroThreadValue */
-		if( (Index == WeightSensorDynamicZeroHysteresisTicks) && (0 != Index) ) //(0 != Index) to avoid TOO SHORT WeightSensorDynamicZeroHysteresisTicks
-				pbawp->WeightDynamicZeroValue = pbawp->WeightValueEvaluated[0];
-		else
-				pbawp->WeightDynamicZeroValue = 0;
+		//if( (Index == WeightSensorDynamicZeroHysteresisTicks) && (0 != Index) ) //(0 != Index) to avoid TOO SHORT WeightSensorDynamicZeroHysteresisTicks
+		//		pbawp->WeightDynamicZeroValue = pbawp->WeightValueEvaluated[0];
+		//else
+		//		{/*pbawp->WeightDynamicZeroValue = 0;*/}
 		
 		//IhuDebugPrint("S5:WeightValueAdjusted[0]=%d, WeightDynamicZeroValue=%d, Index=%d, HysteresisTicks=%d, HysteresisMs=%d\n", pbawp->WeightValueAdjusted[0], pbawp->WeightDynamicZeroValue, Index, WeightSensorDynamicZeroHysteresisTicks, WeightSensorDynamicZeroHysteresisMs);
 
@@ -606,12 +620,12 @@ void WeightLoadEmptyDetection(strIhuBfscAdcWeightPar_t *pbawp, WeightSensorParam
 				pbawp->WeightCurrEventTicks = pbawp->WeightCurrentTicks;
 				pbawp->WeightCurrValue = pbawp->WeightValueAdjusted[0];
 			
-			IhuDebugPrint("S6:%d:%d:[%d:%d][L(%d):Ma=%d,Mi=%d,D=%d,T=%d][E(%d):Ma=%d,Mi=%d,T=%d]:EmptyEvent\n", zIhuAdcBfscWs.SysTicksMs, zIhuAdcBfscWs.WeightCurrentTicks, zWeightSensorParam.WeightSensorAdcValue, pbawp->WeightCurrValue,\
+			IhuDebugPrint("S6:%d:%d:[%d:%d][DZ=%d][L(%d):Ma=%d,Mi=%d,D=%d,T=%d][E(%d):Ma=%d,Mi=%d,T=%d]:EmptyEvent\n", zIhuAdcBfscWs.SysTicksMs, zIhuAdcBfscWs.WeightCurrentTicks, zWeightSensorParam.WeightSensorAdcValue, pbawp->WeightCurrValue, pbawp->WeightDynamicZeroValue, \
 										WeightSensorLoadDetectionTicks, WeightMaxLoad, WeightMinLoad, (WeightMaxLoad-WeightMinLoad), WeightSensorLoadThread, \
 										WeightSensorEmptyDetectionTicks, WeightMaxEmpty, WeightMinEmpty, WeightSensorEmptyThread);
 		}
 		else if( ((WeightMaxLoad - WeightMinLoad) <= WeightSensorLoadThread) && /* LOAD EVENT */
-						 (WeightMinLoad >= (WeightSensorEmptyThread*2)) && 
+						 (WeightMinLoad >= (WeightSensorEmptyThread*2)) && //
 						 (WeightMinLoad > 0) )
 		{
 				pbawp->WeightValueLastLoadTicks = pbawp->WeightValueCurrLoadTicks;
@@ -626,7 +640,7 @@ void WeightLoadEmptyDetection(strIhuBfscAdcWeightPar_t *pbawp, WeightSensorParam
 				pbawp->WeightCurrEventTicks = pbawp->WeightCurrentTicks;
 				pbawp->WeightCurrValue = pbawp->WeightValueAdjusted[0];
 			
-			IhuDebugPrint("S6:%d:%d:[%d:%d][L(%d):Ma=%d,Mi=%d,D=%d,T=%d][E(%d):Ma=%d,Mi=%d,T=%d]:LoadEvent\n", zIhuAdcBfscWs.SysTicksMs, zIhuAdcBfscWs.WeightCurrentTicks, zWeightSensorParam.WeightSensorAdcValue, pbawp->WeightCurrValue, \
+			IhuDebugPrint("S6:%d:%d:[%d:%d][DZ=%d][L(%d):Ma=%d,Mi=%d,D=%d,T=%d][E(%d):Ma=%d,Mi=%d,T=%d]:LoadEvent\n", zIhuAdcBfscWs.SysTicksMs, zIhuAdcBfscWs.WeightCurrentTicks, zWeightSensorParam.WeightSensorAdcValue, pbawp->WeightCurrValue, pbawp->WeightDynamicZeroValue, \
 										WeightSensorLoadDetectionTicks, WeightMaxLoad, WeightMinLoad, (WeightMaxLoad-WeightMinLoad), WeightSensorLoadThread, \
 										WeightSensorEmptyDetectionTicks, WeightMaxEmpty, WeightMinEmpty, WeightSensorEmptyThread);			
 		}
@@ -639,7 +653,7 @@ void WeightLoadEmptyDetection(strIhuBfscAdcWeightPar_t *pbawp, WeightSensorParam
 				pbawp->WeightCurrEventTicks = pbawp->WeightCurrentTicks;
 				pbawp->WeightCurrValue = pbawp->WeightValueAdjusted[0];
 			
-			IhuDebugPrint("S6:%d:%d:[%d:%d][L(%d):Ma=%d,Mi=%d,D=%d,T=%d][E(%d):Ma=%d,Mi=%d,T=%d]:Pickup\n", zIhuAdcBfscWs.SysTicksMs, zIhuAdcBfscWs.WeightCurrentTicks, zWeightSensorParam.WeightSensorAdcValue, pbawp->WeightCurrValue, \
+			IhuDebugPrint("S6:%d:%d:[%d:%d][DZ=%d][L(%d):Ma=%d,Mi=%d,D=%d,T=%d][E(%d):Ma=%d,Mi=%d,T=%d]:Pickup\n", zIhuAdcBfscWs.SysTicksMs, zIhuAdcBfscWs.WeightCurrentTicks, zWeightSensorParam.WeightSensorAdcValue, pbawp->WeightCurrValue, pbawp->WeightDynamicZeroValue, \
 										WeightSensorLoadDetectionTicks, WeightMaxLoad, WeightMinLoad, (WeightMaxLoad-WeightMinLoad), WeightSensorLoadThread, \
 										WeightSensorEmptyDetectionTicks, WeightMaxEmpty, WeightMinEmpty, WeightSensorEmptyThread);
 		}
@@ -683,11 +697,14 @@ void WeightLoadEmptyEventReport(strIhuBfscAdcWeightPar_t *pbawp, WeightSensorPar
 				{					
 					
 						//2017/06/25, disable emptyevent with repeat times > 1
-						//IhuDebugPrint("S7:%d:%d:%d:%d: Empty->Empty, WeightCurrValue=%d, ConsecutiveTimes=%d, RepeatTimes=%d\n", pbawp->SysTicksMs, pbawp->WeightCurrentTicks, \
+						//if(2 == zWeightSensorParam.WeightSensorOutputValue[1]) /// THIS IS PURE FOR TEST TO BE REMVOE!!!
+						//{
+						//		IhuDebugPrint("S7:%d:%d:%d:%d: Empty->Empty, WeightCurrValue=%d, ConsecutiveTimes=%d, RepeatTimes=%d\n", pbawp->SysTicksMs, pbawp->WeightCurrentTicks, \
 					  //               pbawp->WeightCurrEventTicks, pbawp->WeightLastEventTicks, pbawp->WeightCurrValue, pbawp->ConsecutiveTimes, pbawp->RepeatTimes);
 
-						//SendWeightIndicationToBfsc(pwsp->WeightSensorAdcValue, pbawp->WeightCurrValue, \
+						//		SendWeightIndicationToBfsc(pwsp->WeightSensorAdcValue, pbawp->WeightCurrValue, \
 					  //                            WEIGHT_EVENT_ID_EMPTY, pbawp->RepeatTimes);
+						//}
 					
 						pbawp->RepeatTimes++;
 						pbawp->ConsecutiveTimes = 0;

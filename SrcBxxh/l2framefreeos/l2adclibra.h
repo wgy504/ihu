@@ -165,8 +165,8 @@ void weight_sensor_task(void const *param);
 #define		WEIGHT_SENSOR_STATIC_ZERO_VALUE										(0)
 #define		WEIGHT_SENSOR_TAILOR_VALUE												(0)
 
-#define		WEIGHT_SENSOR_DYNAMIC_ZERO_THREDSHOLD_VALUE				(0)			// 1g
-#define		WEIGHT_SENSOR_DYNAMIC_ZERO_HYSTERESIS_MS					(10000)		// 5s
+#define		WEIGHT_SENSOR_DYNAMIC_ZERO_THREDSHOLD_VALUE				(4900)			// 1g
+#define		WEIGHT_SENSOR_DYNAMIC_ZERO_HYSTERESIS_MS					(5000)		// 5s
 
 #define		MAX_WEIGHT_TICKS_TO_REMOVE_AFTER_COMBIN_OUT				(75) // 75 * 200ms => 15000ms = 15s
 
