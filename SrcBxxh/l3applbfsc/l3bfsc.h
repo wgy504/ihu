@@ -111,7 +111,8 @@ OPSTAT fsm_bfsc_wmc_err_inq_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UI
 OPSTAT fsm_bfsc_wmc_weight_ind(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len);
 OPSTAT fsm_bfsc_wmc_startind_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 OPSTAT fsm_bfsc_wmc_inited_config_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
-OPSTAT fsm_bfsc_wmc_combine_timeout(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len);
+OPSTAT fsm_bfsc_wmc_heart_beat_timeout(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len);
+OPSTAT fsm_bfsc_wmc_heart_beat_confirm(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len);
 
 //Local API
 OPSTAT func_bfsc_hw_init(WmcInventory_t *pwi);

@@ -47,7 +47,7 @@ IhuFsmStateItem_t IhuFsmCanvela[] =
 	{MSG_ID_L3BFSC_CAN_NEW_WS_EVENT,				FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_new_ws_event},	//收到新的物料
 	{MSG_ID_L3BFSC_CAN_ROLL_OUT_RESP,				FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_roll_out_resp}, //出料证实
 	{MSG_ID_L3BFSC_CAN_GIVE_UP_RESP,				FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_give_up_resp},	//退料证实
-	{MSG_ID_L3BFSC_CAN_ERROR_STATUS_REPORT,	FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_error_status_report},	//差错报告发送
+//	{MSG_ID_L3BFSC_CAN_ERROR_STATUS_REPORT,	FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_error_status_report},	//差错报告发送
 //	{MSG_ID_L3BFSC_CAN_CMD_RESP,						FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_cmd_resp}, 
 	{MSG_ID_CAN_L2FRAME_RCV,								FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_bfsc_l2frame_rcv},
 
@@ -61,7 +61,7 @@ IhuFsmStateItem_t IhuFsmCanvela[] =
 	{MSG_ID_L3BFSC_WMC_COMBIN_RESP,					FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
 	{MSG_ID_L3BFSC_WMC_FAULT_IND,						FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
 	{MSG_ID_L3BFSC_WMC_COMMAND_RESP,				FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
-	
+	{MSG_ID_L3BFSC_WMC_HEART_BEAT_REPORT,		FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
 #endif
 	
   //结束点，固定定义，不要改动
@@ -527,6 +527,9 @@ uint16_t HuitpMsgIdMapToInternalMsgId(uint32_t huitp_msgid)
 		case HUITP_MSGID_sui_bfsc_err_inq_cmd_req:
 			return MSG_ID_L3BFSC_WMC_ERR_INQ_CMD_REQ;
 		
+		case HUITP_MSGID_sui_bfsc_heart_beat_confirm:
+			return MSG_ID_L3BFSC_WMC_HEART_BEAT_CONFIRM;
+
 		default:
 			return 0xFFFF;
 	}
@@ -882,6 +885,14 @@ OPSTAT WmcAwsMsgCheck(void * param_ptr, UINT16 msg_len)
     case MSG_ID_L3BFSC_WMC_REPEAT_WS_EVENT:
       if(MSG_SIZE_L3BFSC_WMC_REPEAT_WS_EVENT == msg_len) return IHU_SUCCESS;
       break;
+		
+		case MSG_ID_L3BFSC_WMC_HEART_BEAT_REPORT:
+			if(MSG_SIZE_L3BFSC_WMC_HEART_BEAT_REP == msg_len) return IHU_SUCCESS;
+			break;
+
+    case MSG_ID_L3BFSC_WMC_HEART_BEAT_CONFIRM:
+      if(MSG_SIZE_L3BFSC_WMC_HEART_BEAT_CONF == msg_len) return IHU_SUCCESS;
+      break;
       
 		default:
 			IhuErrorPrint("CANVELA: WmcAwsMsgCheck, Invalid msgid = [0x%08X], return\n", msgid);
@@ -916,8 +927,11 @@ uint16_t InternalMsgIdMapToHuitpMsgId(uint32_t internal_msgid)
 			return HUITP_MSGID_sui_bfsc_command_resp;
 		case MSG_ID_L3BFSC_WMC_FAULT_IND:
 			return HUITP_MSGID_sui_bfsc_fault_ind;
-//		case MSG_ID_L3BFSC_WMC_ERR_INQ_CMD_RESP:
-//			return HUITP_MSGID_sui_bfsc_err_inq_cmd_resp;
+		case MSG_ID_L3BFSC_WMC_ERR_INQ_CMD_RESP:
+			return HUITP_MSGID_sui_bfsc_err_inq_cmd_resp;
+		case MSG_ID_L3BFSC_WMC_HEART_BEAT_REPORT:
+			return HUITP_MSGID_sui_bfsc_heart_beat_report;
+
 		default:
 			return 0xFFFF;
 	}

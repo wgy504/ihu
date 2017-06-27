@@ -45,10 +45,10 @@ IhuFsmStateItem_t IhuFsmBfsc[] =
   {MSG_ID_COM_RESTART,                    FSM_STATE_COMMON,                         fsm_bfsc_restart},
 
 	//Task level actived status：等待初始化指令的到来，然后进行初始化，完成后进入SCAN工作状态
-	{MSG_ID_CAN_L3BFSC_CMD_CTRL,						FSM_STATE_BFSC_ACTIVED,         					fsm_bfsc_canvela_cmd_ctrl},  //参数配置设置
-	{MSG_ID_ADC_L3BFSC_MEAS_CMD_RESP,				FSM_STATE_BFSC_ACTIVED,         					fsm_bfsc_adc_meas_cmd_resp}, //参数配置反馈
-	{MSG_ID_I2C_L3BFSC_MOTO_CMD_RESP,				FSM_STATE_BFSC_ACTIVED,         					fsm_bfsc_i2c_moto_cmd_resp}, //参数配置反馈
-	{MSG_ID_CAN_L3BFSC_INIT_REQ,						FSM_STATE_BFSC_ACTIVED,         					fsm_bfsc_canvela_init_req},  //初始化完成
+//	{MSG_ID_CAN_L3BFSC_CMD_CTRL,						FSM_STATE_BFSC_ACTIVED,         					fsm_bfsc_canvela_cmd_ctrl},  //参数配置设置
+//	{MSG_ID_ADC_L3BFSC_MEAS_CMD_RESP,				FSM_STATE_BFSC_ACTIVED,         					fsm_bfsc_adc_meas_cmd_resp}, //参数配置反馈
+//	{MSG_ID_I2C_L3BFSC_MOTO_CMD_RESP,				FSM_STATE_BFSC_ACTIVED,         					fsm_bfsc_i2c_moto_cmd_resp}, //参数配置反馈
+//	{MSG_ID_CAN_L3BFSC_INIT_REQ,						FSM_STATE_BFSC_ACTIVED,         					fsm_bfsc_canvela_init_req},  //初始化完成
 
 //	//扫描模式工作状态：等待ADC上报合法的称重结果
 //	{MSG_ID_ADC_NEW_MATERIAL_WS,						FSM_STATE_BFSC_SCAN,         				  		fsm_bfsc_adc_new_material_ws}, //新的称重结果
@@ -86,6 +86,7 @@ IhuFsmStateItem_t IhuFsmBfsc[] =
   {MSG_ID_L3BFSC_WMC_STOP_REQ,				    FSM_STATE_BFSC_CONFIGURATION,						  fsm_bfsc_wmc_stop_req},	//MYC	
   {MSG_ID_L3BFSC_WMC_COMBIN_REQ,				  FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_combin_req},	//MYC	
 	{MSG_ID_L3BFSC_WMC_ERR_INQ_CMD_REQ,			FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_err_inq_req},	//MYC	
+	{MSG_ID_COM_TIME_OUT,										FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_heart_beat_timeout},
 	
   {MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ,			FSM_STATE_BFSC_SCAN,							        fsm_bfsc_wmc_set_config_req},	//MYC
 	{MSG_ID_L3BFSC_WMC_START_REQ,				    FSM_STATE_BFSC_SCAN,							        fsm_bfsc_wmc_start_req},	//MYC
@@ -93,16 +94,19 @@ IhuFsmStateItem_t IhuFsmBfsc[] =
   {MSG_ID_L3BFSC_WMC_STOP_REQ,				    FSM_STATE_BFSC_SCAN,						          fsm_bfsc_wmc_stop_req},	//MYC	
   {MSG_ID_L3BFSC_WMC_COMBIN_REQ,				  FSM_STATE_BFSC_SCAN,								      fsm_bfsc_wmc_combin_req},	//MYC	
   {MSG_ID_L3BFSC_WMC_WEIGHT_IND,				  FSM_STATE_BFSC_SCAN,								      fsm_bfsc_wmc_weight_ind},	//MYC	
-	{MSG_ID_L3BFSC_WMC_ERR_INQ_CMD_REQ,			FSM_STATE_BFSC_SCAN,								    	fsm_bfsc_wmc_err_inq_req},	//MYC	
+	{MSG_ID_L3BFSC_WMC_ERR_INQ_CMD_REQ,			FSM_STATE_BFSC_SCAN,								    	fsm_bfsc_wmc_err_inq_req},	//MYC
+	{MSG_ID_COM_TIME_OUT,										FSM_STATE_BFSC_SCAN,											fsm_bfsc_wmc_heart_beat_timeout},
+	{MSG_ID_L3BFSC_WMC_HEART_BEAT_CONFIRM,	FSM_STATE_BFSC_SCAN,											fsm_bfsc_wmc_heart_beat_confirm},
   
   {MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ,			FSM_STATE_BFSC_COMBINATION,			  				fsm_bfsc_wmc_set_config_req},	//MYC
 	{MSG_ID_L3BFSC_WMC_START_REQ,				    FSM_STATE_BFSC_COMBINATION,					  		fsm_bfsc_wmc_start_req},	//MYC
   {MSG_ID_L3BFSC_WMC_COMMAND_REQ,				  FSM_STATE_BFSC_COMBINATION,								fsm_bfsc_wmc_command_req},	//MYC	
   {MSG_ID_L3BFSC_WMC_STOP_REQ,				    FSM_STATE_BFSC_COMBINATION,								fsm_bfsc_wmc_stop_req},	//MYC	
   {MSG_ID_L3BFSC_WMC_COMBIN_REQ,				  FSM_STATE_BFSC_COMBINATION,								fsm_bfsc_wmc_combin_req},	//MYC	
-  {MSG_ID_COM_TIME_OUT,                   FSM_STATE_BFSC_COMBINATION,               fsm_bfsc_wmc_combine_timeout},
   {MSG_ID_L3BFSC_WMC_WEIGHT_IND,				  FSM_STATE_BFSC_COMBINATION,								fsm_bfsc_wmc_weight_ind},	//MYC	
 	{MSG_ID_L3BFSC_WMC_ERR_INQ_CMD_REQ,			FSM_STATE_BFSC_COMBINATION,								fsm_bfsc_wmc_err_inq_req},	//MYC	
+  {MSG_ID_COM_TIME_OUT,                   FSM_STATE_BFSC_COMBINATION,               fsm_bfsc_wmc_heart_beat_timeout},
+	{MSG_ID_L3BFSC_WMC_HEART_BEAT_CONFIRM,	FSM_STATE_BFSC_COMBINATION,								fsm_bfsc_wmc_heart_beat_confirm},
   
 	{MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ,			FSM_STATE_BFSC_ACTIVED,										fsm_bfsc_wmc_set_config_req},	//MYC
 	{MSG_ID_L3BFSC_WMC_START_REQ,						FSM_STATE_BFSC_ACTIVED,										fsm_bfsc_wmc_start_req},	//MYC
@@ -110,6 +114,8 @@ IhuFsmStateItem_t IhuFsmBfsc[] =
 	{MSG_ID_L3BFSC_WMC_STOP_REQ,						FSM_STATE_BFSC_ACTIVED,										fsm_bfsc_wmc_stop_req},	//MYC
 	{MSG_ID_L3BFSC_WMC_COMBIN_REQ,					FSM_STATE_BFSC_ACTIVED,										fsm_bfsc_wmc_combin_req},	//MYC
 	{MSG_ID_L3BFSC_WMC_ERR_INQ_CMD_REQ,			FSM_STATE_BFSC_ACTIVED,								    fsm_bfsc_wmc_err_inq_req},	//MYC	
+  {MSG_ID_COM_TIME_OUT,                   FSM_STATE_BFSC_ACTIVED,               		fsm_bfsc_wmc_heart_beat_timeout},
+	{MSG_ID_L3BFSC_WMC_HEART_BEAT_CONFIRM,	FSM_STATE_BFSC_ACTIVED,										fsm_bfsc_wmc_heart_beat_confirm},
 	
   //结束点，固定定义，不要改动
   {MSG_ID_END,            								FSM_STATE_END,             								NULL},  //Ending
@@ -196,6 +202,15 @@ OPSTAT fsm_bfsc_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 	if (ret == IHU_FAILURE){
 		zIhuSysStaPm.taskRunErrCnt[TASK_ID_BFSC]++;
 		IhuErrorPrint("L3BFSC: Error start TIMER_ID_1S_BFSC_STARTUP_IND\n");
+		return IHU_FAILURE;
+	}
+	
+	ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_1S_BFSC_HEART_BEAT, \
+		zIhuSysEngPar.timer.array[TIMER_ID_1S_BFSC_HEART_BEAT].dur, TIMER_TYPE_PERIOD, \
+		zIhuSysEngPar.timer.array[TIMER_ID_1S_BFSC_HEART_BEAT].gradunarity);
+	if (ret == IHU_FAILURE){
+		zIhuSysStaPm.taskRunErrCnt[TASK_ID_BFSC]++;
+		IhuErrorPrint("L3BFSC: Error start TIMER_ID_1S_BFSC_HEART_BEAT!\n");
 		return IHU_FAILURE;
 	}
 	//返回
@@ -464,7 +479,7 @@ OPSTAT func_bfsc_time_out_roll_out_process(void)
 	//发送错误报告给上位机
 	memset(&snd, 0, sizeof(msg_struct_l3bfsc_canvela_error_status_report_t));
 	snd.length = sizeof(msg_struct_l3bfsc_canvela_error_status_report_t);
-	if (ihu_message_send(MSG_ID_L3BFSC_CAN_ERROR_STATUS_REPORT, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length) == IHU_FAILURE)
+//	if (ihu_message_send(MSG_ID_L3BFSC_CAN_ERROR_STATUS_REPORT, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length) == IHU_FAILURE)
 		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName);
 
 	//出错次数统计
@@ -489,7 +504,7 @@ OPSTAT func_bfsc_time_out_roll_out_process(void)
 		memset(&snd1, 0, sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t));
 		snd1.cmdid = IHU_SYSMSG_BFSC_ADC_WS_CMD_TYPE_STOP;
 		snd1.length = sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t);
-		if (ihu_message_send(MSG_ID_L3BFSC_ADC_WS_CMD_CTRL, TASK_ID_ADCLIBRA, TASK_ID_BFSC, &snd1, snd1.length) == IHU_FAILURE)
+//		if (ihu_message_send(MSG_ID_L3BFSC_ADC_WS_CMD_CTRL, TASK_ID_ADCLIBRA, TASK_ID_BFSC, &snd1, snd1.length) == IHU_FAILURE)
 			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_ADCLIBRA].taskName);
 		//发送命令给I2C-MOTO，停止测量工作
 		memset(&snd2, 0, sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t));
@@ -514,7 +529,7 @@ OPSTAT func_bfsc_time_out_give_up_process(void)
 	//发送错误报告给上位机
 	memset(&snd, 0, sizeof(msg_struct_l3bfsc_canvela_error_status_report_t));
 	snd.length = sizeof(msg_struct_l3bfsc_canvela_error_status_report_t);
-	if (ihu_message_send(MSG_ID_L3BFSC_CAN_ERROR_STATUS_REPORT, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length) == IHU_FAILURE)
+//	if (ihu_message_send(MSG_ID_L3BFSC_CAN_ERROR_STATUS_REPORT, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length) == IHU_FAILURE)
 		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName);
 	
 	//出错次数统计
@@ -540,7 +555,7 @@ OPSTAT func_bfsc_time_out_give_up_process(void)
 		memset(&snd1, 0, sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t));
 		snd1.length = sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t);
 		snd1.cmdid = IHU_SYSMSG_BFSC_ADC_WS_CMD_TYPE_STOP;
-		if (ihu_message_send(MSG_ID_L3BFSC_ADC_WS_CMD_CTRL, TASK_ID_ADCLIBRA, TASK_ID_BFSC, &snd1, snd1.length) == IHU_FAILURE)
+//		if (ihu_message_send(MSG_ID_L3BFSC_ADC_WS_CMD_CTRL, TASK_ID_ADCLIBRA, TASK_ID_BFSC, &snd1, snd1.length) == IHU_FAILURE)
 			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_ADCLIBRA].taskName);
 
 		//发送命令给I2C-MOTO，停止测量工作
@@ -600,7 +615,7 @@ OPSTAT fsm_bfsc_canvela_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 		snd1.cmd.optpar = rcv.cmd.optpar;
 		snd1.cmd.modbusVal = rcv.cmd.modbusVal;
 		snd1.length = sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t);
-		if (ihu_message_send(MSG_ID_L3BFSC_ADC_WS_CMD_CTRL, TASK_ID_ADCLIBRA, TASK_ID_BFSC, &snd1, snd1.length) == IHU_FAILURE)
+//		if (ihu_message_send(MSG_ID_L3BFSC_ADC_WS_CMD_CTRL, TASK_ID_ADCLIBRA, TASK_ID_BFSC, &snd1, snd1.length) == IHU_FAILURE)
 			IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_ADCLIBRA].taskName);
 	}
 	
@@ -706,7 +721,7 @@ OPSTAT fsm_bfsc_canvela_init_req(UINT8 dest_id, UINT8 src_id, void * param_ptr, 
 	memset(&snd1, 0, sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t));
 	snd1.length = sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t);
 	snd1.cmdid = IHU_SYSMSG_BFSC_ADC_WS_CMD_TYPE_START;
-	if (ihu_message_send(MSG_ID_L3BFSC_ADC_WS_CMD_CTRL, TASK_ID_ADCLIBRA, TASK_ID_BFSC, &snd1, snd1.length) == IHU_FAILURE)
+//	if (ihu_message_send(MSG_ID_L3BFSC_ADC_WS_CMD_CTRL, TASK_ID_ADCLIBRA, TASK_ID_BFSC, &snd1, snd1.length) == IHU_FAILURE)
 		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_ADCLIBRA].taskName);
 
 	//发送命令给I2C-MOTO，开始测量工作
@@ -944,7 +959,7 @@ void func_bfsc_stm_main_recovery_from_fault(void)
 	memset(&snd1, 0, sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t));
 	snd1.length = sizeof(msg_struct_l3bfsc_adc_ws_cmd_ctrl_t);
 	snd1.cmdid = IHU_SYSMSG_BFSC_ADC_WS_CMD_TYPE_START;
-	ihu_message_send(MSG_ID_L3BFSC_ADC_WS_CMD_CTRL, TASK_ID_ADCLIBRA, TASK_ID_BFSC, &snd1, snd1.length);
+//	ihu_message_send(MSG_ID_L3BFSC_ADC_WS_CMD_CTRL, TASK_ID_ADCLIBRA, TASK_ID_BFSC, &snd1, snd1.length);
 	//发送命令给I2C-MOTO，开始测量工作
 	memset(&snd2, 0, sizeof(msg_struct_l3bfsc_i2c_moto_cmd_ctrl_t));
 	snd2.cmdid = IHU_SYSMSG_BFSC_I2C_MOTO_CMD_TYPE_START;
@@ -1346,15 +1361,18 @@ OPSTAT fsm_bfsc_wmc_weight_ind(UINT8 dest_id, UINT8 src_id, void *param_ptr, UIN
 
 
 long number_of_wmc_combin_timeout = 0;
+long number_of_heart_beat_report = 0;
+long number_of_heart_beat_confirm = 0;
 extern long counter_can_tx_nok;
 extern long counter_can_tx_total;
 extern long counter_can_rx_nok;
 extern long counter_can_rx_total;
 
-OPSTAT fsm_bfsc_wmc_combine_timeout(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)
+OPSTAT fsm_bfsc_wmc_heart_beat_timeout(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)
 {
-  //OPSTAT ret = SUCCESS;
+  OPSTAT ret = SUCCESS;
   msg_struct_com_time_out_t rcv;
+	msg_struct_l3bfsc_wmc_heart_beat_report_t snd;
 
   //Receive message and copy to local variable
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_com_time_out_t))){
@@ -1364,7 +1382,7 @@ OPSTAT fsm_bfsc_wmc_combine_timeout(UINT8 dest_id, UINT8 src_id, void *param_ptr
 	}
 	memcpy(&rcv, param_ptr, param_len);
   
-	if(rcv.timeId == TIMER_ID_10MS_BFSC_PERIOD_SCAN)
+	if(TIMER_ID_10MS_BFSC_PERIOD_SCAN == rcv.timeId)
 	{
 		{
 			number_of_wmc_combin_timeout++;
@@ -1375,11 +1393,34 @@ OPSTAT fsm_bfsc_wmc_combine_timeout(UINT8 dest_id, UINT8 src_id, void *param_ptr
 			}
 		}
 	}
-
+	
+	if(TIMER_ID_1S_BFSC_HEART_BEAT == rcv.timeId)
+	{
+			number_of_heart_beat_report++;
+		
+			snd.msgid = MSG_ID_L3BFSC_WMC_HEART_BEAT_REPORT;
+			snd.length = MSG_SIZE_L3BFSC_WMC_HEART_BEAT_REP;
+			snd.wmc_id.wmc_id = zWmcInvenory.wmc_id.wmc_id;
+			/* TimeStemp TO be added */
+		
+			IhuDebugPrint("send MSG_ID_L3BFSC_WMC_HEART_BEAT_REPORT, wmc_id=%d, report=%d, confirm=%d, SysTick=%d\n", zWmcInvenory.wmc_id.wmc_id, number_of_heart_beat_report, number_of_heart_beat_confirm, osKernelSysTick());
+			ret = ihu_message_send(MSG_ID_L3BFSC_WMC_HEART_BEAT_REPORT, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length);
+			if (ret == IHU_FAILURE)
+			{
+					IhuErrorPrint("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC], zIhuVmCtrTab.task[TASK_ID_CANVELA]);
+					return IHU_FAILURE;
+			}	
+	}
 	return IHU_SUCCESS;
 }
 
-
+OPSTAT fsm_bfsc_wmc_heart_beat_confirm(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)
+{
+	
+	number_of_heart_beat_confirm++;
+	IhuDebugPrint("Receive MSG_ID_L3BFSC_WMC_HEART_BEAT_CONFIRM, wmc_id=%d, report=%d, confirm=%d, SysTick=%d\n", zWmcInvenory.wmc_id.wmc_id, number_of_heart_beat_report, number_of_heart_beat_confirm, osKernelSysTick());
+	return IHU_SUCCESS;
+}
 
 OPSTAT fsm_bfsc_wmc_err_inq_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)	//MYC
 {

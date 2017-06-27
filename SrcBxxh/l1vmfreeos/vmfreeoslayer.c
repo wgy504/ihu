@@ -179,8 +179,8 @@ IhuVmCtrMsgStaticCfg_t zIhuVmCtrMsgStaticCfg[] = {
   {MSG_ID_L3BFSC_CAN_NEW_WS_EVENT,                "MSG_ID_L3BFSC_CAN_NEW_WS_EVENT",         1, 1, 1},
   {MSG_ID_L3BFSC_CAN_ROLL_OUT_RESP,               "MSG_ID_L3BFSC_CAN_ROLL_OUT_RESP",        1, 1, 1},
   {MSG_ID_L3BFSC_CAN_GIVE_UP_RESP,                "MSG_ID_L3BFSC_CAN_GIVE_UP_RESP",         1, 1, 1},
-  {MSG_ID_L3BFSC_CAN_ERROR_STATUS_REPORT,         "MSG_ID_L3BFSC_CAN_ERROR_STATUS_REPORT",  1, 1, 1},
-  {MSG_ID_L3BFSC_ADC_WS_CMD_CTRL,                 "MSG_ID_L3BFSC_ADC_WS_CMD_CTRL",          1, 1, 1},
+//  {MSG_ID_L3BFSC_CAN_ERROR_STATUS_REPORT,         "MSG_ID_L3BFSC_CAN_ERROR_STATUS_REPORT",  1, 1, 1},
+//  {MSG_ID_L3BFSC_ADC_WS_CMD_CTRL,                 "MSG_ID_L3BFSC_ADC_WS_CMD_CTRL",          1, 1, 1},
 //  {MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL,               "MSG_ID_L3BFSC_I2C_MOTO_CMD_CTRL",        1, 1, 1},
 //  {MSG_ID_L3BFSC_CAN_CMD_RESP,                    "MSG_ID_L3BFSC_CAN_CMD_RESP",             1, 1, 1},
   //WMC <-> AWS //MYC                                                                      
@@ -268,6 +268,7 @@ IhuSysEngTimerStaticCfg_t zIhuSysEngTimerStaticCfg[] ={
   {TIMER_ID_1S_BFSC_L3BFSC_ROLL_OUT_TIMER,         "TID_1S_BFSC_L3BFSC_ROLL_OUT_TIMER",      3,       TIMER_RESOLUTION_1S},
   {TIMER_ID_1S_BFSC_L3BFSC_GIVE_UP_TIMER,          "TID_1S_BFSC_L3BFSC_GIVE_UP_TIMER",       5,       TIMER_RESOLUTION_1S},
   {TIMER_ID_10MS_BFSC_ADCLIBRA_SCAN_TIMER,         "TID_10MS_BFSC_ADCLIBRA_SCAN_TIMER",      20,      TIMER_RESOLUTION_10MS}, 
+  {TIMER_ID_1S_BFSC_HEART_BEAT,                    "TID_1S_BFSC_HEART_BEAT",      					 5,      	TIMER_RESOLUTION_1S}, 
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_IAP_ID) 
   {TIMER_ID_1S_LEDPISCES_PERIOD_SCAN,              "TID_1S_LEDPISCES_PERIOD_SCAN",           4,       TIMER_RESOLUTION_1S},
   {TIMER_ID_1S_IAP_PERIOD_SCAN,              			 "TID_1S_IAP_PERIOD_SCAN",                 10,      TIMER_RESOLUTION_1S},
@@ -554,7 +555,6 @@ void ihu_vm_system_ctr_table_init(void)
 	memset(&zIhuVmCtrTab, 0, sizeof(IhuVmCtrTab_t));
 	memset(&zIhuSysEngPar, 0, sizeof(IhuSysEngParTab_t));
 	memset(&zIhuSysStaPm, 0, sizeof(IhuSysStaPm_t));
-	 	
 
 	/*
 	 *  初始化打印缓冲区 
