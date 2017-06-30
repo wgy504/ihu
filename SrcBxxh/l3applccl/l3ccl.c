@@ -548,7 +548,9 @@ OPSTAT fsm_ccl_period_report_trigger(UINT8 dest_id, UINT8 src_id, void * param_p
 	msg_struct_ccl_com_sensor_status_req_t snd;
 
 	//打开所有接口
+	IhuDebugPrint("I2CARIES: fsm_ccl_period_report_trigger: func_ccl_open_all_sensor_power()(%d) start.\n", osKernelSysTick());
 	func_ccl_open_all_sensor_power();
+	IhuDebugPrint("I2CARIES: fsm_ccl_period_report_trigger: func_ccl_open_all_sensor_power()(%d) complete.\n", osKernelSysTick());
 	
 	//控制所有传感器，进入工作模式
 	//作为周期采样模式，这里是不必要的，只有在工作模式下才需要这个过程
@@ -931,7 +933,9 @@ OPSTAT fsm_ccl_hand_active_trigger_to_work(UINT8 dest_id, UINT8 src_id, void * p
 	memcpy(&rcv, param_ptr, param_len);	
 	
 	//打开所有接口
+	IhuDebugPrint("I2CARIES: fsm_ccl_hand_active_trigger_to_work: func_ccl_open_all_sensor_power()(%d) start.\n", osKernelSysTick());
 	func_ccl_open_all_sensor_power();
+	IhuDebugPrint("I2CARIES: fsm_ccl_hand_active_trigger_to_work: func_ccl_open_all_sensor_power()(%d) complete.\n", osKernelSysTick());
 	
 ////////////////////TEST CODE, TO BE DELETE//////////////	
 	

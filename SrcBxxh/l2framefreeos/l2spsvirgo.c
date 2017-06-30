@@ -422,7 +422,12 @@ OPSTAT fsm_spsvirgo_ccl_sensor_status_req(UINT8 dest_id, UINT8 src_id, void * pa
 		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Receive message error!\n");
 	
 	//具体扫描处理
-	ihu_usleep(300);
+	IhuDebugPrint("fsm_spsvirgo_ccl_sensor_status_req, delay start\n");
+	do
+	{
+		IhuDebugPrint("fsm_spsvirgo_ccl_sensor_status_req, delay 1s (%d)\n", osKernelSysTick());
+		ihu_usleep(1000);
+	}while(osKernelSysTick() < 28000);
 	
 	//扫描后将结果发给上层
 	memset(&snd, 0, sizeof(msg_struct_sps_ccl_sensor_status_rep_t));
