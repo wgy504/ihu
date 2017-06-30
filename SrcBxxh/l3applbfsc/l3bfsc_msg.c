@@ -429,7 +429,7 @@ void msg_wmc_stop_req_process(void *param_ptr, error_code_t *ec_ptr)
 		}
 		
 		/* Check If it is the right/valid state to process the message */
-		if( FSM_STATE_BFSC_SCAN != FsmGetState(TASK_ID_BFSC) || FSM_STATE_BFSC_COMBINATION != FsmGetState(TASK_ID_BFSC))
+		if( FSM_STATE_BFSC_SCAN != FsmGetState(TASK_ID_BFSC) && FSM_STATE_BFSC_COMBINATION != FsmGetState(TASK_ID_BFSC))
 		{
 				IhuErrorPrint("L3BFSC: msg_wmc_stop_req_process: FSM_STATE_BFSC_SCAN != FsmGetState(TASK_ID_BFSC), return\r\n");
 				*ec_ptr = ERROR_CODE_WRONG_WMC_STATE;
@@ -446,6 +446,14 @@ void msg_wmc_stop_req_process(void *param_ptr, error_code_t *ec_ptr)
 		
 		/* Process the message */
 		weight_sensor_send_cmd(WIGHT_SENSOR_CMD_TYPE_STOP);
+		
+		/* STOP MOTOR */
+		blk230_set_stop(1);
+		
+		/* TURN OFF LIGHT */
+		blk230_led_send_cmd(WMC_LAMP_OUT2_GREEN, LED_COMMNAD_OFF);
+		blk230_led_send_cmd(WMC_LAMP_OUT3_YELLOW, LED_COMMNAD_OFF);
+
 		
 		return;
 }

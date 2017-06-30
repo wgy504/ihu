@@ -483,7 +483,8 @@ OPSTAT func_bfsc_time_out_roll_out_process(void)
 		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName);
 
 	//出错次数统计
-	zIhuL3bfscMotoRecoverTimes++;
+	//zIhuL3bfscMotoRecoverTimes++;
+	zIhuL3bfscMotoRecoverTimes = zIhuL3bfscMotoRecoverTimes + 1;
 	
 	if (zIhuL3bfscMotoRecoverTimes < IHU_L3BFSC_MOTO_HW_ERROR_RECOVER_TIMES_MAX)
 	{
@@ -533,7 +534,8 @@ OPSTAT func_bfsc_time_out_give_up_process(void)
 		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_BFSC].taskName, zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName);
 	
 	//出错次数统计
-	zIhuL3bfscMotoRecoverTimes++;
+	//zIhuL3bfscMotoRecoverTimes++;
+	zIhuL3bfscMotoRecoverTimes = zIhuL3bfscMotoRecoverTimes + 1;
 	
 	if (zIhuL3bfscMotoRecoverTimes < IHU_L3BFSC_MOTO_HW_ERROR_RECOVER_TIMES_MAX)
 	{
