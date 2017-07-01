@@ -50,6 +50,7 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
+#include "l3iap.h"
 
 /* USER CODE END Includes */
 
@@ -107,7 +108,21 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_UART_Receive_IT(&huart2,&zIhuUartRxBuffer[1],1);
   HAL_UART_Receive_IT(&huart3,&zIhuUartRxBuffer[2],1);
-  HAL_CAN_Receive_IT(&hcan1, 0);
+	
+	/* 
+	** THIS IS USED TO INIT CAN INTERFACE:
+	** MAKE SURE bsp_can_config_filter() called after bsp_can_init() & func_bfsc_hw_init();
+	*/	
+	//bsp_can_init(&hcan1, 0x10);
+	HAL_CAN_Receive_IT(&hcan1, 0);
+	
+	ihu_bsp_stm32_led_commu_f2board_on();
+	//ihu_bsp_stm32_led_serv1_f2board_on();
+	ihu_bsp_stm32_led_work_state_f2board_on();
+	
+	/* CREATE IHU VM */
+	ihu_vm_main();
+	printf("ihu_vm_main() launched...\r\n");
 	
   /* USER CODE END 2 */
 

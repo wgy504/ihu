@@ -21,6 +21,8 @@
 
   <project>
     <PathAndName>.\PrjIapStm32F2x\MDK-ARM\PrjIapStm32F2x.uvprojx</PathAndName>
+    <NodeIsActive>1</NodeIsActive>
+    <NodeIsExpanded>1</NodeIsExpanded>
   </project>
 
   <project>
@@ -29,8 +31,6 @@
 
   <project>
     <PathAndName>.\PrjBfscFo@207VG\MDK-ARM\PrjBfscFo@207VG.uvprojx</PathAndName>
-    <NodeIsActive>1</NodeIsActive>
-    <NodeIsExpanded>1</NodeIsExpanded>
   </project>
 
 </ProjectWorkspace>
