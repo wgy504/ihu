@@ -7,10 +7,13 @@
 **************************************************************************
 
 
+//= MYC, 2017 June.29, CURRENT_SW_DELIVERY R03.143 =>BFSC项目
+= 解决了GPRS连接后台不顺畅的问题：增加了强大的延时
+= 更新HUITP.H V2.7版本
+
 //= MYC/ZJL, 2017 June.21, CURRENT_SW_DELIVERY R03.142 =>BFSC项目
 = 为IAP生成新的项目工程PrjIapStm32Fx
 = IAP也采用CubeMX进行配置
-
 
 //= MYC/ZJL, 2017 June.1, CURRENT_SW_DELIVERY R03.141 =>BFSC项目
 = 完善HUITP.H的定义，还未来得及更新相应文档
