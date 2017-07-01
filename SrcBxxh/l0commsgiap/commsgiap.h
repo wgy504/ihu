@@ -84,9 +84,11 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_CAN_L2FRAME_SEND,
 	MSG_ID_CAN_L2FRAME_RCV,
 
-	//IAP
-	
-	
+	//L3IAP
+	MSG_ID_L3IAP_CANVELA_INVENTORY_REPORT,
+	MSG_ID_L3IAP_CANVELA_SW_PACKAGE_REPORT,
+	MSG_ID_CANVELA_L3IAP_INVENTORY_CONFIRM,
+	MSG_ID_CANVELA_L3IAP_SW_PACKAGE_CONFIRM,
 	
 	//END FLAG
 	MSG_ID_COM_MAX, //Ending point
@@ -169,16 +171,49 @@ typedef struct msg_struct_spsvirgo_l2frame_rcv
 }msg_struct_spsvirgo_l2frame_rcv_t;
 
 //CAN消息定义
+//MSG_ID_CAN_L2FRAME_SEND,
 typedef struct msg_struct_canvela_l2frame_send
 {
 	UINT8 data[IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX];
 	UINT16 length;
 }msg_struct_canvela_l2frame_send_t;
+
+//MSG_ID_CAN_L2FRAME_RCV,
 typedef struct msg_struct_canvela_l2frame_rcv
 {
 	UINT8 data[IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX];
 	UINT16 length;
 }msg_struct_canvela_l2frame_rcv_t;
+
+
+//L3IAP
+//MSG_ID_L3IAP_CANVELA_INVENTORY_REPORT,
+typedef struct msg_struct_l3iap_canvela_inventory_report
+{
+	UINT16 length;
+}msg_struct_l3iap_canvela_inventory_report_t;
+
+//MSG_ID_L3IAP_CANVELA_SW_PACKAGE_REPORT,
+typedef struct msg_struct_l3iap_canvela_sw_package_report
+{
+	UINT16 length;
+}msg_struct_l3iap_canvela_sw_package_report_t;
+
+//MSG_ID_CANVELA_L3IAP_INVENTORY_CONFIRM,
+typedef struct msg_struct_canvela_l3iap_inventory_confirm
+{
+	UINT16 length;
+}msg_struct_canvela_l3iap_inventory_confirm_t;
+
+//MSG_ID_CANVELA_L3IAP_SW_PACKAGE_CONFIRM,
+typedef struct msg_struct_canvela_l3iap_sw_package_confirm
+{
+	UINT16 length;
+}msg_struct_canvela_l3iap_sw_package_confirm_t;
+
+
+
+
 
 
 #endif /* L0COMVM_COMMSGCCL_H_ */

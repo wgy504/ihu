@@ -316,7 +316,7 @@ BOOL func_vmfo_heart_caculate_all_received(void)
 			if (zIhuVmfoTaskInitCtrlInfo[TASK_ID_BFSC].heart != IHU_VMFO_TASK_HEART_RECEIVED) return FALSE;
 			else return TRUE;
 		#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_IAP_ID)
-			if (zIhuVmfoTaskInitCtrlInfo[TASK_ID_IAP].heart != IHU_VMFO_TASK_HEART_RECEIVED) return FALSE;
+			if (zIhuVmfoTaskInitCtrlInfo[TASK_ID_L3IAP].heart != IHU_VMFO_TASK_HEART_RECEIVED) return FALSE;
 			else return TRUE;
 		#else
 			#error Un-correct constant definition

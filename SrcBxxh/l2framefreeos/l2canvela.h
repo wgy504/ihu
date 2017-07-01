@@ -71,6 +71,10 @@ extern OPSTAT fsm_canvela_l3bfsc_error_status_report(UINT8 dest_id, UINT8 src_id
 extern OPSTAT fsm_canvela_l3bfsc_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_canvela_bfsc_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 extern OPSTAT fsm_canvela_bfsc_l2frame_snd(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT fsm_canvela_l3iap_inventory_report(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+extern OPSTAT fsm_canvela_l3iap_sw_package_report(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
+
+
 
 //Local API
 OPSTAT func_canvela_hw_init(void);
@@ -81,6 +85,9 @@ void func_canvela_frame_send(IHU_HUITP_L2FRAME_STD_frame_header_t *pframe);
 
 OPSTAT WmcAwsMsgCheck(void * param_ptr, UINT16 msg_len);
 
+
+//高级定义，简化程序的可读性
+#define IHU_ERROR_PRINT_CANVELA(...)	do{zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;  IhuErrorPrint(__VA_ARGS__);  return IHU_FAILURE;}while(0)	
 
 #endif /* L2FRAME_L2CANVELA_H_ */
 

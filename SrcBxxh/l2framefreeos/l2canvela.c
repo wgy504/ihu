@@ -43,10 +43,10 @@ IhuFsmStateItem_t IhuFsmCanvela[] =
 
 	//Task level actived status
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
-	{MSG_ID_L3BFSC_CAN_INIT_RESP,						FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_init_resp},	//初始化过程
-	{MSG_ID_L3BFSC_CAN_NEW_WS_EVENT,				FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_new_ws_event},	//收到新的物料
-	{MSG_ID_L3BFSC_CAN_ROLL_OUT_RESP,				FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_roll_out_resp}, //出料证实
-	{MSG_ID_L3BFSC_CAN_GIVE_UP_RESP,				FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_give_up_resp},	//退料证实
+//	{MSG_ID_L3BFSC_CAN_INIT_RESP,						FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_init_resp},	//初始化过程
+//	{MSG_ID_L3BFSC_CAN_NEW_WS_EVENT,				FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_new_ws_event},	//收到新的物料
+//	{MSG_ID_L3BFSC_CAN_ROLL_OUT_RESP,				FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_roll_out_resp}, //出料证实
+//	{MSG_ID_L3BFSC_CAN_GIVE_UP_RESP,				FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_give_up_resp},	//退料证实
 //	{MSG_ID_L3BFSC_CAN_ERROR_STATUS_REPORT,	FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_error_status_report},	//差错报告发送
 //	{MSG_ID_L3BFSC_CAN_CMD_RESP,						FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_cmd_resp}, 
 	{MSG_ID_CAN_L2FRAME_RCV,								FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_bfsc_l2frame_rcv},
@@ -62,6 +62,12 @@ IhuFsmStateItem_t IhuFsmCanvela[] =
 	{MSG_ID_L3BFSC_WMC_FAULT_IND,						FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
 	{MSG_ID_L3BFSC_WMC_COMMAND_RESP,				FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
 	{MSG_ID_L3BFSC_WMC_HEART_BEAT_REPORT,		FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
+#endif
+	
+	//Task level actived status	
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_IAP_ID)
+	{MSG_ID_L3IAP_CANVELA_INVENTORY_REPORT,	FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_l3iap_inventory_report},
+	{MSG_ID_L3IAP_CANVELA_SW_PACKAGE_REPORT,FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_l3iap_sw_package_report},
 #endif
 	
   //结束点，固定定义，不要改动
@@ -606,7 +612,6 @@ OPSTAT fsm_canvela_bfsc_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void *param_ptr
 		return IHU_FAILURE;
 	}
 	
-	
 	//返回
 	return IHU_SUCCESS;
 }
@@ -993,10 +998,6 @@ OPSTAT fsm_canvela_bfsc_l2frame_snd(UINT8 dest_id, UINT8 src_id, void * param_pt
 //	pMsgProc.baseReport.ieId = HUITP_ENDIAN_EXG16(HUITP_IEID_uni_com_report);
 //	pMsgProc.baseReport.ieLen = HUITP_ENDIAN_EXG16(sizeof(StrIe_HUITP_IEID_uni_com_report_t) - 4);
 //	pMsgProc.baseReport.comReport = HUITP_IEID_UNI_COM_REPORT_YES;
-
-
-
-
 	
 	//然后执行L2FRAME发送原语命令，通过中断函数将L2FRAME发送出去
 	func_canvela_frame_send(pFrameHeader);
@@ -1015,4 +1016,43 @@ void func_canvela_frame_send(IHU_HUITP_L2FRAME_STD_frame_header_t *pframe)
 
 #endif //#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
 
+
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_IAP_ID)	
+OPSTAT fsm_canvela_l3iap_inventory_report(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{
+	//int ret = 0;
+	msg_struct_l3iap_canvela_inventory_report_t rcv;
+	
+	//Receive message and copy to local variable
+	memset(&rcv, 0, sizeof(msg_struct_l3iap_canvela_inventory_report_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3iap_canvela_inventory_report_t)))
+			IHU_ERROR_PRINT_CANVELA("CANVELA: Receive message error!\n");
+	memcpy(&rcv, param_ptr, param_len);	
+
+	//然后执行L2FRAME发送原语命令，通过中断函数将L2FRAME发送出去
+	//func_canvela_frame_send(pFrameHeader);
+	
+	//返回
+	return IHU_SUCCESS;
+}
+
+OPSTAT fsm_canvela_l3iap_sw_package_report(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{
+	//int ret = 0;
+	msg_struct_l3iap_canvela_sw_package_report_t rcv;
+	
+	//Receive message and copy to local variable
+	memset(&rcv, 0, sizeof(msg_struct_l3iap_canvela_sw_package_report_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3iap_canvela_sw_package_report_t)))
+			IHU_ERROR_PRINT_CANVELA("CANVELA: Receive message error!\n");
+	memcpy(&rcv, param_ptr, param_len);	
+
+	//然后执行L2FRAME发送原语命令，通过中断函数将L2FRAME发送出去
+	//func_canvela_frame_send(pFrameHeader);
+	
+	//返回
+	return IHU_SUCCESS;
+}
+
+#endif //#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_IAP_ID)	
 

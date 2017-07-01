@@ -190,7 +190,7 @@
 		//TASK_ID_ETHORION,
 		//TASK_ID_DCMIARIS,	
 		//TASK_ID_BFSC,
-		TASK_ID_IAP,
+		TASK_ID_L3IAP,
 		TASK_ID_MAX,
 		TASK_ID_INVALID = 0xFF,
 	}; //end of IHU_TASK_NAME_ID	
@@ -327,7 +327,7 @@ extern IhuFsmStateItem_t IhuFsmDcmiaris[];                        //状态机
 extern IhuFsmStateItem_t IhuFsmEmc68x[];                          //状态机
 extern IhuFsmStateItem_t IhuFsmCcl[];                          	  //状态机
 extern IhuFsmStateItem_t IhuFsmBfsc[];                          	//状态机 
-extern IhuFsmStateItem_t IhuFsmIap[];                            	//状态机 
+extern IhuFsmStateItem_t IhuFsmL3iap[];                            	//状态机 
 
 //任务TASK初始化配置静态表
 typedef struct IhuVmCtrTaskStaticCfg
@@ -405,7 +405,7 @@ enum IHU_TIMER_ID_ALL
 	TIMER_ID_1S_BFSC_L3BFSC_GIVE_UP_TIMER,
 	TIMER_ID_1S_BFSC_HEART_BEAT,
 #elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_IAP_ID)	
-  TIMER_ID_1S_IAP_PERIOD_SCAN,
+  TIMER_ID_1S_L3IAP_PERIOD_SCAN,
 #else
 #endif	
 	TIMER_ID_1S_MAX,
