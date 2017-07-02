@@ -261,7 +261,7 @@ void HAL_CAN_RxCpltCallback1111(CAN_HandleTypeDef *CanHandle)   // Puhuix: renam
 				zIhuBspStm32CanIauRxState = IHU_HUITP_L2FRAME_STD_RX_STATE_IDLE;
 				zIhuBspStm32CanIauRxLen = 0;
 				zIhuBspStm32CanIauRxCount = 0;
-				//发送数据到上层CANARIES模块
+				//发送数据到上层CANVELA模块
 				memset(&snd, 0, sizeof(msg_struct_canvela_l2frame_rcv_t));
 				memcpy(snd.data, &zIhuBspStm32CanIauRxBuff[4], ((zIhuBspStm32CanIauRxBuff[2]<<8)+zIhuBspStm32CanIauRxBuff[3]));
 				snd.length = sizeof(msg_struct_canvela_l2frame_rcv_t);				
