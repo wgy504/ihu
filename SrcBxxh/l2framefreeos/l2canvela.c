@@ -729,9 +729,9 @@ OPSTAT fsm_canvela_bfsc_l2frame_startup_ind(UINT8 dest_id, UINT8 src_id, void * 
 	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
 	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
 	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
-	pFrameHeader->len = param_len + MAX_WMC_CONTROL_MSG_HEADER_LEN;
+	pFrameHeader->len = msgProcLen + MAX_WMC_CONTROL_MSG_HEADER_LEN;
 	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
-	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], param_ptr, param_len);
+	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], &pMsgProc, msgProcLen);
 	func_canvela_frame_send(pFrameHeader);
 	
 	return IHU_SUCCESS;
@@ -763,9 +763,9 @@ OPSTAT fsm_canvela_bfsc_l2frame_set_config_resp(UINT8 dest_id, UINT8 src_id, voi
 	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
 	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
 	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
-	pFrameHeader->len = param_len + MAX_WMC_CONTROL_MSG_HEADER_LEN;
+	pFrameHeader->len = msgProcLen + MAX_WMC_CONTROL_MSG_HEADER_LEN;
 	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
-	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], param_ptr, param_len);
+	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], &pMsgProc, msgProcLen);
 	func_canvela_frame_send(pFrameHeader);
 	
 	return IHU_SUCCESS;
@@ -797,9 +797,9 @@ OPSTAT fsm_canvela_bfsc_l2frame_start_resp(UINT8 dest_id, UINT8 src_id, void * p
 	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
 	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
 	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
-	pFrameHeader->len = param_len + MAX_WMC_CONTROL_MSG_HEADER_LEN;
+	pFrameHeader->len = msgProcLen + MAX_WMC_CONTROL_MSG_HEADER_LEN;
 	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
-	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], param_ptr, param_len);
+	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], &pMsgProc, msgProcLen);
 	func_canvela_frame_send(pFrameHeader);
 	
 	return IHU_SUCCESS;
@@ -831,9 +831,9 @@ OPSTAT fsm_canvela_bfsc_l2frame_stop_resp(UINT8 dest_id, UINT8 src_id, void * pa
 	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
 	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
 	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
-	pFrameHeader->len = param_len + MAX_WMC_CONTROL_MSG_HEADER_LEN;
+	pFrameHeader->len = msgProcLen + MAX_WMC_CONTROL_MSG_HEADER_LEN;
 	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
-	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], param_ptr, param_len);
+	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], &pMsgProc, msgProcLen);
 	func_canvela_frame_send(pFrameHeader);
 	
 	return IHU_SUCCESS;
@@ -869,9 +869,9 @@ OPSTAT fsm_canvela_bfsc_l2frame_new_ws_event(UINT8 dest_id, UINT8 src_id, void *
 	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
 	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
 	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
-	pFrameHeader->len = param_len + MAX_WMC_CONTROL_MSG_HEADER_LEN;
+	pFrameHeader->len = msgProcLen + MAX_WMC_CONTROL_MSG_HEADER_LEN;
 	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
-	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], param_ptr, param_len);
+	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], &pMsgProc, msgProcLen);
 	func_canvela_frame_send(pFrameHeader);	
 	
 	return IHU_SUCCESS;
@@ -907,9 +907,9 @@ OPSTAT fsm_canvela_bfsc_l2frame_repeat_ws_event(UINT8 dest_id, UINT8 src_id, voi
 	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
 	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
 	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
-	pFrameHeader->len = param_len + MAX_WMC_CONTROL_MSG_HEADER_LEN;
+	pFrameHeader->len = msgProcLen + MAX_WMC_CONTROL_MSG_HEADER_LEN;
 	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
-	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], param_ptr, param_len);
+	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], &pMsgProc, msgProcLen);
 	func_canvela_frame_send(pFrameHeader);
 	
 	return IHU_SUCCESS;
@@ -941,9 +941,9 @@ OPSTAT fsm_canvela_bfsc_l2frame_combin_resp(UINT8 dest_id, UINT8 src_id, void * 
 	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
 	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
 	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
-	pFrameHeader->len = param_len + MAX_WMC_CONTROL_MSG_HEADER_LEN;
+	pFrameHeader->len = msgProcLen + MAX_WMC_CONTROL_MSG_HEADER_LEN;
 	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
-	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], param_ptr, param_len);
+	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], &pMsgProc, msgProcLen);
 	func_canvela_frame_send(pFrameHeader);
 	
 	return IHU_SUCCESS;
@@ -975,9 +975,9 @@ OPSTAT fsm_canvela_bfsc_l2frame_fault_ind(UINT8 dest_id, UINT8 src_id, void * pa
 	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
 	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
 	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
-	pFrameHeader->len = param_len + MAX_WMC_CONTROL_MSG_HEADER_LEN;
+	pFrameHeader->len = msgProcLen + MAX_WMC_CONTROL_MSG_HEADER_LEN;
 	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
-	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], param_ptr, param_len);
+	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], &pMsgProc, msgProcLen);
 	func_canvela_frame_send(pFrameHeader);
 	
 	return IHU_SUCCESS;
@@ -1012,9 +1012,9 @@ OPSTAT fsm_canvela_bfsc_l2frame_command_resp(UINT8 dest_id, UINT8 src_id, void *
 	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
 	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
 	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
-	pFrameHeader->len = param_len + MAX_WMC_CONTROL_MSG_HEADER_LEN;
+	pFrameHeader->len = msgProcLen + MAX_WMC_CONTROL_MSG_HEADER_LEN;
 	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
-	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], param_ptr, param_len);
+	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], &pMsgProc, msgProcLen);
 	func_canvela_frame_send(pFrameHeader);
 	
 	return IHU_SUCCESS;
@@ -1046,9 +1046,9 @@ OPSTAT fsm_canvela_bfsc_l2frame_heart_beat_report(UINT8 dest_id, UINT8 src_id, v
 	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
 	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
 	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
-	pFrameHeader->len = param_len + MAX_WMC_CONTROL_MSG_HEADER_LEN;
+	pFrameHeader->len = msgProcLen + MAX_WMC_CONTROL_MSG_HEADER_LEN;
 	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
-	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], param_ptr, param_len);
+	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], &pMsgProc, msgProcLen);
 	func_canvela_frame_send(pFrameHeader);
 	
 	return IHU_SUCCESS;
@@ -1087,9 +1087,9 @@ OPSTAT fsm_canvela_l3iap_inventory_report(UINT8 dest_id, UINT8 src_id, void * pa
 	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
 	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
 	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
-	pFrameHeader->len = param_len + MAX_WMC_CONTROL_MSG_HEADER_LEN;
+	pFrameHeader->len = msgProcLen + MAX_WMC_CONTROL_MSG_HEADER_LEN;
 	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
-	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], param_ptr, param_len);
+	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], &pMsgProc, msgProcLen);
 	func_canvela_frame_send(pFrameHeader);
 	
 	//返回
@@ -1118,9 +1118,9 @@ OPSTAT fsm_canvela_l3iap_sw_package_report(UINT8 dest_id, UINT8 src_id, void * p
 	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
 	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
 	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
-	pFrameHeader->len = param_len + MAX_WMC_CONTROL_MSG_HEADER_LEN;
+	pFrameHeader->len = msgProcLen + MAX_WMC_CONTROL_MSG_HEADER_LEN;
 	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
-	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], param_ptr, param_len);
+	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], &pMsgProc, msgProcLen);
 	func_canvela_frame_send(pFrameHeader);
 	
 	//返回
