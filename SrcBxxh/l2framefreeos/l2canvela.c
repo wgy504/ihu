@@ -42,7 +42,8 @@ IhuFsmStateItem_t IhuFsmCanvela[] =
 	{MSG_ID_COM_TIME_OUT,                   FSM_STATE_COMMON,                           fsm_canvela_time_out},
 
 	//Task level actived status
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
+	  //老式消息处理过程
 //	{MSG_ID_L3BFSC_CAN_INIT_RESP,						FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_init_resp},	//初始化过程
 //	{MSG_ID_L3BFSC_CAN_NEW_WS_EVENT,				FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_new_ws_event},	//收到新的物料
 //	{MSG_ID_L3BFSC_CAN_ROLL_OUT_RESP,				FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_l3bfsc_roll_out_resp}, //出料证实
@@ -52,28 +53,28 @@ IhuFsmStateItem_t IhuFsmCanvela[] =
 //	{MSG_ID_CAN_L2FRAME_RCV,								FSM_STATE_CANVELA_ACTIVED,         					fsm_canvela_bfsc_l2frame_rcv},
 
 	//MYC update for state machine
-	{MSG_ID_L3BFSC_WMC_STARTUP_IND,					FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
-	{MSG_ID_L3BFSC_WMC_SET_CONFIG_RESP,			FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
-	{MSG_ID_L3BFSC_WMC_START_RESP,					FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
-	{MSG_ID_L3BFSC_WMC_STOP_RESP,						FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
-	{MSG_ID_L3BFSC_WMC_NEW_WS_EVENT,				FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
-	{MSG_ID_L3BFSC_WMC_REPEAT_WS_EVENT,			FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
-	{MSG_ID_L3BFSC_WMC_COMBIN_RESP,					FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
-	{MSG_ID_L3BFSC_WMC_FAULT_IND,						FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
-	{MSG_ID_L3BFSC_WMC_COMMAND_RESP,				FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
-	{MSG_ID_L3BFSC_WMC_HEART_BEAT_REPORT,		FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
+//	{MSG_ID_L3BFSC_WMC_STARTUP_IND,					FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
+//	{MSG_ID_L3BFSC_WMC_SET_CONFIG_RESP,			FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
+//	{MSG_ID_L3BFSC_WMC_START_RESP,					FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
+//	{MSG_ID_L3BFSC_WMC_STOP_RESP,						FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
+//	{MSG_ID_L3BFSC_WMC_NEW_WS_EVENT,				FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
+//	{MSG_ID_L3BFSC_WMC_REPEAT_WS_EVENT,			FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
+//	{MSG_ID_L3BFSC_WMC_COMBIN_RESP,					FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
+//	{MSG_ID_L3BFSC_WMC_FAULT_IND,						FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
+//	{MSG_ID_L3BFSC_WMC_COMMAND_RESP,				FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
+//	{MSG_ID_L3BFSC_WMC_HEART_BEAT_REPORT,		FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_snd},
 
-	//分别处理
+	//分别处理：每个消息独立处理，并包括大小端字序处理过程
 	{MSG_ID_L3BFSC_WMC_STARTUP_IND,					FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_startup_ind},
-//	{MSG_ID_L3BFSC_WMC_SET_CONFIG_RESP,			FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_set_config_resp},
-//	{MSG_ID_L3BFSC_WMC_START_RESP,					FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_start_resp},
-//	{MSG_ID_L3BFSC_WMC_STOP_RESP,						FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_stop_resp},
-//	{MSG_ID_L3BFSC_WMC_NEW_WS_EVENT,				FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_new_ws_event},
-//	{MSG_ID_L3BFSC_WMC_REPEAT_WS_EVENT,			FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_repeat_ws_event},
-//	{MSG_ID_L3BFSC_WMC_COMBIN_RESP,					FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_combin_resp},
-//	{MSG_ID_L3BFSC_WMC_FAULT_IND,						FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_fault_ind},
-//	{MSG_ID_L3BFSC_WMC_COMMAND_RESP,				FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_command_resp},
-//	{MSG_ID_L3BFSC_WMC_HEART_BEAT_REPORT,		FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_heart_beat_report},	
+	{MSG_ID_L3BFSC_WMC_SET_CONFIG_RESP,			FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_set_config_resp},
+	{MSG_ID_L3BFSC_WMC_START_RESP,					FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_start_resp},
+	{MSG_ID_L3BFSC_WMC_STOP_RESP,						FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_stop_resp},
+	{MSG_ID_L3BFSC_WMC_NEW_WS_EVENT,				FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_new_ws_event},
+	{MSG_ID_L3BFSC_WMC_REPEAT_WS_EVENT,			FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_repeat_ws_event},
+	{MSG_ID_L3BFSC_WMC_COMBIN_RESP,					FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_combin_resp},
+	{MSG_ID_L3BFSC_WMC_FAULT_IND,						FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_fault_ind},
+	{MSG_ID_L3BFSC_WMC_COMMAND_RESP,				FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_command_resp},
+	{MSG_ID_L3BFSC_WMC_HEART_BEAT_REPORT,		FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_heart_beat_report},	
 #endif
 	
 	//Task level actived status	
@@ -740,6 +741,7 @@ OPSTAT fsm_canvela_bfsc_l2frame_set_config_resp(UINT8 dest_id, UINT8 src_id, voi
 {
 	//int ret = 0;
 	msg_struct_l3bfsc_set_config_resp_t rcv;
+	IHU_HUITP_L2FRAME_STD_frame_header_t *pFrameHeader = NULL;
 	
 	//收到消息并做参数检查
 	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_set_config_resp_t));
@@ -747,8 +749,24 @@ OPSTAT fsm_canvela_bfsc_l2frame_set_config_resp(UINT8 dest_id, UINT8 src_id, voi
 			IHU_ERROR_PRINT_CANVELA("CANVELA: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);
 
-
-
+	//准备组装发送消息
+	StrMsg_HUITP_MSGID_sui_bfsc_set_config_resp_t pMsgProc;
+	UINT16 msgProcLen = sizeof(StrMsg_HUITP_MSGID_sui_bfsc_set_config_resp_t);
+	memset(&pMsgProc, 0, msgProcLen);
+	pMsgProc.msgid = HUITP_ENDIAN_EXG16(HUITP_MSGID_sui_bfsc_set_config_resp);
+	pMsgProc.length = HUITP_ENDIAN_EXG16(msgProcLen - 4);
+	
+	pMsgProc.validFlag = rcv.validFlag;
+	pMsgProc.errCode = HUITP_ENDIAN_EXG16(rcv.errCode);
+	
+	//发送出去
+	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
+	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
+	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
+	pFrameHeader->len = param_len + MAX_WMC_CONTROL_MSG_HEADER_LEN;
+	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
+	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], param_ptr, param_len);
+	func_canvela_frame_send(pFrameHeader);
 	
 	return IHU_SUCCESS;
 }
@@ -757,6 +775,7 @@ OPSTAT fsm_canvela_bfsc_l2frame_start_resp(UINT8 dest_id, UINT8 src_id, void * p
 {
 	//int ret = 0;
 	msg_struct_l3bfsc_start_resp_t rcv;
+	IHU_HUITP_L2FRAME_STD_frame_header_t *pFrameHeader = NULL;
 	
 	//收到消息并做参数检查
 	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_start_resp_t));
@@ -764,6 +783,24 @@ OPSTAT fsm_canvela_bfsc_l2frame_start_resp(UINT8 dest_id, UINT8 src_id, void * p
 			IHU_ERROR_PRINT_CANVELA("CANVELA: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);
 
+	//准备组装发送消息
+	StrMsg_HUITP_MSGID_sui_bfsc_start_resp_t pMsgProc;
+	UINT16 msgProcLen = sizeof(StrMsg_HUITP_MSGID_sui_bfsc_start_resp_t);
+	memset(&pMsgProc, 0, msgProcLen);
+	pMsgProc.msgid = HUITP_ENDIAN_EXG16(HUITP_MSGID_sui_bfsc_start_resp);
+	pMsgProc.length = HUITP_ENDIAN_EXG16(msgProcLen - 4);
+	
+	pMsgProc.validFlag = rcv.validFlag;
+	pMsgProc.errCode = HUITP_ENDIAN_EXG16(rcv.errCode);
+	
+	//发送出去
+	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
+	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
+	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
+	pFrameHeader->len = param_len + MAX_WMC_CONTROL_MSG_HEADER_LEN;
+	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
+	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], param_ptr, param_len);
+	func_canvela_frame_send(pFrameHeader);
 	
 	return IHU_SUCCESS;
 }
@@ -772,6 +809,7 @@ OPSTAT fsm_canvela_bfsc_l2frame_stop_resp(UINT8 dest_id, UINT8 src_id, void * pa
 {
 	//int ret = 0;
 	msg_struct_l3bfsc_stop_resp_t rcv;
+	IHU_HUITP_L2FRAME_STD_frame_header_t *pFrameHeader = NULL;
 	
 	//收到消息并做参数检查
 	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_stop_resp_t));
@@ -779,7 +817,24 @@ OPSTAT fsm_canvela_bfsc_l2frame_stop_resp(UINT8 dest_id, UINT8 src_id, void * pa
 			IHU_ERROR_PRINT_CANVELA("CANVELA: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);
 	
+	//准备组装发送消息
+	StrMsg_HUITP_MSGID_sui_bfsc_stop_resp_t pMsgProc;
+	UINT16 msgProcLen = sizeof(StrMsg_HUITP_MSGID_sui_bfsc_stop_resp_t);
+	memset(&pMsgProc, 0, msgProcLen);
+	pMsgProc.msgid = HUITP_ENDIAN_EXG16(HUITP_MSGID_sui_bfsc_stop_resp);
+	pMsgProc.length = HUITP_ENDIAN_EXG16(msgProcLen - 4);
 	
+	pMsgProc.validFlag = rcv.validFlag;
+	pMsgProc.errCode = HUITP_ENDIAN_EXG16(rcv.errCode);
+	
+	//发送出去
+	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
+	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
+	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
+	pFrameHeader->len = param_len + MAX_WMC_CONTROL_MSG_HEADER_LEN;
+	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
+	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], param_ptr, param_len);
+	func_canvela_frame_send(pFrameHeader);
 	
 	return IHU_SUCCESS;
 }
@@ -787,15 +842,37 @@ OPSTAT fsm_canvela_bfsc_l2frame_stop_resp(UINT8 dest_id, UINT8 src_id, void * pa
 OPSTAT fsm_canvela_bfsc_l2frame_new_ws_event(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
 	//int ret = 0;
-	msg_struct_l3bfsc_wmc_ws_event_t rcv;
+	msg_struct_l3bfsc_new_ws_event_t rcv;
+	IHU_HUITP_L2FRAME_STD_frame_header_t *pFrameHeader = NULL;
 	
 	//收到消息并做参数检查
-	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_wmc_ws_event_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_wmc_ws_event_t)))
+	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_new_ws_event_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_new_ws_event_t)))
 			IHU_ERROR_PRINT_CANVELA("CANVELA: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);
 	
+	//准备组装发送消息
+	StrMsg_HUITP_MSGID_sui_bfsc_new_ws_event_t pMsgProc;
+	UINT16 msgProcLen = sizeof(StrMsg_HUITP_MSGID_sui_bfsc_new_ws_event_t);
+	memset(&pMsgProc, 0, msgProcLen);
+	pMsgProc.msgid = HUITP_ENDIAN_EXG16(HUITP_MSGID_sui_bfsc_new_ws_event);
+	pMsgProc.length = HUITP_ENDIAN_EXG16(msgProcLen - 4);
 	
+	pMsgProc.wmc_id.wmc_id = rcv.wmc_id.wmc_id;
+	pMsgProc.weight_ind.weight_event = HUITP_ENDIAN_EXG32(rcv.weight_ind.weight_event);
+	pMsgProc.weight_ind.average_weight = HUITP_ENDIAN_EXG32(rcv.weight_ind.average_weight);
+	pMsgProc.weight_ind.repeat_times = HUITP_ENDIAN_EXG32(rcv.weight_ind.repeat_times);
+	pMsgProc.weight_combin_type.WeightCombineType = HUITP_ENDIAN_EXG32(rcv.weight_combin_type.WeightCombineType);
+	pMsgProc.weight_combin_type.ActionDelayMs = HUITP_ENDIAN_EXG32(rcv.weight_combin_type.ActionDelayMs);
+
+	//发送出去
+	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
+	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
+	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
+	pFrameHeader->len = param_len + MAX_WMC_CONTROL_MSG_HEADER_LEN;
+	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
+	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], param_ptr, param_len);
+	func_canvela_frame_send(pFrameHeader);	
 	
 	return IHU_SUCCESS;
 }
@@ -804,6 +881,7 @@ OPSTAT fsm_canvela_bfsc_l2frame_repeat_ws_event(UINT8 dest_id, UINT8 src_id, voi
 {
 	//int ret = 0;
 	msg_struct_l3bfsc_repeat_ws_event_t rcv;
+	IHU_HUITP_L2FRAME_STD_frame_header_t *pFrameHeader = NULL;
 	
 	//收到消息并做参数检查
 	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_repeat_ws_event_t));
@@ -811,6 +889,28 @@ OPSTAT fsm_canvela_bfsc_l2frame_repeat_ws_event(UINT8 dest_id, UINT8 src_id, voi
 			IHU_ERROR_PRINT_CANVELA("CANVELA: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);
 
+	//准备组装发送消息
+	StrMsg_HUITP_MSGID_sui_bfsc_repeat_ws_event_t pMsgProc;
+	UINT16 msgProcLen = sizeof(StrMsg_HUITP_MSGID_sui_bfsc_repeat_ws_event_t);
+	memset(&pMsgProc, 0, msgProcLen);
+	pMsgProc.msgid = HUITP_ENDIAN_EXG16(HUITP_MSGID_sui_bfsc_repeat_ws_event);
+	pMsgProc.length = HUITP_ENDIAN_EXG16(msgProcLen - 4);
+	
+	pMsgProc.wmc_id.wmc_id = rcv.wmc_id.wmc_id;
+	pMsgProc.weight_ind.weight_event = HUITP_ENDIAN_EXG32(rcv.weight_ind.weight_event);
+	pMsgProc.weight_ind.average_weight = HUITP_ENDIAN_EXG32(rcv.weight_ind.average_weight);
+	pMsgProc.weight_ind.repeat_times = HUITP_ENDIAN_EXG32(rcv.weight_ind.repeat_times);
+	pMsgProc.weight_combin_type.WeightCombineType = HUITP_ENDIAN_EXG32(rcv.weight_combin_type.WeightCombineType);
+	pMsgProc.weight_combin_type.ActionDelayMs = HUITP_ENDIAN_EXG32(rcv.weight_combin_type.ActionDelayMs);
+
+	//发送出去
+	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
+	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
+	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
+	pFrameHeader->len = param_len + MAX_WMC_CONTROL_MSG_HEADER_LEN;
+	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
+	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], param_ptr, param_len);
+	func_canvela_frame_send(pFrameHeader);
 	
 	return IHU_SUCCESS;
 }
@@ -819,6 +919,7 @@ OPSTAT fsm_canvela_bfsc_l2frame_combin_resp(UINT8 dest_id, UINT8 src_id, void * 
 {
 	//int ret = 0;
 	msg_struct_l3bfsc_wmc_combin_out_resp_t rcv;
+	IHU_HUITP_L2FRAME_STD_frame_header_t *pFrameHeader = NULL;
 	
 	//收到消息并做参数检查
 	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_wmc_combin_out_resp_t));
@@ -826,6 +927,24 @@ OPSTAT fsm_canvela_bfsc_l2frame_combin_resp(UINT8 dest_id, UINT8 src_id, void * 
 			IHU_ERROR_PRINT_CANVELA("CANVELA: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);
 
+	//准备组装发送消息
+	StrMsg_HUITP_MSGID_sui_bfsc_ws_comb_out_resp_t pMsgProc;
+	UINT16 msgProcLen = sizeof(StrMsg_HUITP_MSGID_sui_bfsc_ws_comb_out_resp_t);
+	memset(&pMsgProc, 0, msgProcLen);
+	pMsgProc.msgid = HUITP_ENDIAN_EXG16(HUITP_MSGID_sui_bfsc_ws_comb_out_resp);
+	pMsgProc.length = HUITP_ENDIAN_EXG16(msgProcLen - 4);
+	
+	pMsgProc.weight_combin_type.WeightCombineType = HUITP_ENDIAN_EXG32(rcv.weight_combin_type.WeightCombineType);
+	pMsgProc.weight_combin_type.ActionDelayMs = HUITP_ENDIAN_EXG32(rcv.weight_combin_type.ActionDelayMs);
+
+	//发送出去
+	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
+	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
+	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
+	pFrameHeader->len = param_len + MAX_WMC_CONTROL_MSG_HEADER_LEN;
+	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
+	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], param_ptr, param_len);
+	func_canvela_frame_send(pFrameHeader);
 	
 	return IHU_SUCCESS;
 }
@@ -834,6 +953,7 @@ OPSTAT fsm_canvela_bfsc_l2frame_fault_ind(UINT8 dest_id, UINT8 src_id, void * pa
 {
 	//int ret = 0;
 	msg_struct_l3bfsc_wmc_fault_ind_t rcv;
+	IHU_HUITP_L2FRAME_STD_frame_header_t *pFrameHeader = NULL;
 	
 	//收到消息并做参数检查
 	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_wmc_fault_ind_t));
@@ -841,6 +961,24 @@ OPSTAT fsm_canvela_bfsc_l2frame_fault_ind(UINT8 dest_id, UINT8 src_id, void * pa
 			IHU_ERROR_PRINT_CANVELA("CANVELA: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);
 
+	//准备组装发送消息
+	StrMsg_HUITP_MSGID_sui_bfsc_fault_ind_t pMsgProc;
+	UINT16 msgProcLen = sizeof(StrMsg_HUITP_MSGID_sui_bfsc_fault_ind_t);
+	memset(&pMsgProc, 0, msgProcLen);
+	pMsgProc.msgid = HUITP_ENDIAN_EXG16(HUITP_MSGID_sui_bfsc_fault_ind);
+	pMsgProc.length = HUITP_ENDIAN_EXG16(msgProcLen - 4);
+	
+	pMsgProc.wmc_id.wmc_id = rcv.wmc_id.wmc_id;
+	pMsgProc.error_code = HUITP_ENDIAN_EXG16(rcv.error_code);
+
+	//发送出去
+	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
+	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
+	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
+	pFrameHeader->len = param_len + MAX_WMC_CONTROL_MSG_HEADER_LEN;
+	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
+	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], param_ptr, param_len);
+	func_canvela_frame_send(pFrameHeader);
 	
 	return IHU_SUCCESS;
 }
@@ -849,6 +987,7 @@ OPSTAT fsm_canvela_bfsc_l2frame_command_resp(UINT8 dest_id, UINT8 src_id, void *
 {
 	//int ret = 0;
 	msg_struct_l3bfsc_wmc_command_resp_t rcv;
+	IHU_HUITP_L2FRAME_STD_frame_header_t *pFrameHeader = NULL;
 	
 	//收到消息并做参数检查
 	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_wmc_command_resp_t));
@@ -856,6 +995,27 @@ OPSTAT fsm_canvela_bfsc_l2frame_command_resp(UINT8 dest_id, UINT8 src_id, void *
 			IHU_ERROR_PRINT_CANVELA("CANVELA: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);
 
+	//准备组装发送消息
+	StrMsg_HUITP_MSGID_sui_bfsc_command_resp_t pMsgProc;
+	UINT16 msgProcLen = sizeof(StrMsg_HUITP_MSGID_sui_bfsc_command_resp_t);
+	memset(&pMsgProc, 0, msgProcLen);
+	pMsgProc.msgid = HUITP_ENDIAN_EXG16(HUITP_MSGID_sui_bfsc_command_resp);
+	pMsgProc.length = HUITP_ENDIAN_EXG16(msgProcLen - 4);
+	
+	pMsgProc.wmc_id.wmc_id = rcv.wmc_id.wmc_id;
+	pMsgProc.result.error_code = HUITP_ENDIAN_EXG16(rcv.result.error_code);
+	pMsgProc.motor_speed = HUITP_ENDIAN_EXG32(rcv.motor_speed);
+	pMsgProc.sensor_weight = HUITP_ENDIAN_EXG32(rcv.sensor_weight);
+	pMsgProc.validFlag = rcv.validFlag;
+
+	//发送出去
+	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
+	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
+	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
+	pFrameHeader->len = param_len + MAX_WMC_CONTROL_MSG_HEADER_LEN;
+	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
+	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], param_ptr, param_len);
+	func_canvela_frame_send(pFrameHeader);
 	
 	return IHU_SUCCESS;
 }
@@ -864,6 +1024,7 @@ OPSTAT fsm_canvela_bfsc_l2frame_heart_beat_report(UINT8 dest_id, UINT8 src_id, v
 {
 	//int ret = 0;
 	msg_struct_l3bfsc_wmc_heart_beat_confirm_t rcv;
+	IHU_HUITP_L2FRAME_STD_frame_header_t *pFrameHeader = NULL;
 	
 	//收到消息并做参数检查
 	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_wmc_heart_beat_confirm_t));
@@ -871,14 +1032,27 @@ OPSTAT fsm_canvela_bfsc_l2frame_heart_beat_report(UINT8 dest_id, UINT8 src_id, v
 			IHU_ERROR_PRINT_CANVELA("CANVELA: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);
 	
+	//准备组装发送消息
+	StrMsg_HUITP_MSGID_sui_bfsc_heart_beat_confirm_t pMsgProc;
+	UINT16 msgProcLen = sizeof(StrMsg_HUITP_MSGID_sui_bfsc_heart_beat_confirm_t);
+	memset(&pMsgProc, 0, msgProcLen);
+	pMsgProc.msgid = HUITP_ENDIAN_EXG16(HUITP_MSGID_sui_bfsc_heart_beat_confirm);
+	pMsgProc.length = HUITP_ENDIAN_EXG16(msgProcLen - 4);
 	
+	pMsgProc.wmc_id.wmc_id = rcv.wmc_id.wmc_id;
+	pMsgProc.wmcState = rcv.wmcState;
+
+	//发送出去
+	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
+	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
+	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
+	pFrameHeader->len = param_len + MAX_WMC_CONTROL_MSG_HEADER_LEN;
+	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
+	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], param_ptr, param_len);
+	func_canvela_frame_send(pFrameHeader);
 	
 	return IHU_SUCCESS;
 }
-
-
-
-
 
 //将L2FRAME发送出去
 void func_canvela_frame_send(IHU_HUITP_L2FRAME_STD_frame_header_t *pframe)
@@ -902,8 +1076,21 @@ OPSTAT fsm_canvela_l3iap_inventory_report(UINT8 dest_id, UINT8 src_id, void * pa
 			IHU_ERROR_PRINT_CANVELA("CANVELA: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);	
 
-	//然后执行L2FRAME发送原语命令，通过中断函数将L2FRAME发送出去
-	//func_canvela_frame_send(pFrameHeader);
+	//准备组装发送消息
+	StrMsg_HUITP_MSGID_sui_inventory_report_t pMsgProc;
+	UINT16 msgProcLen = sizeof(StrMsg_HUITP_MSGID_sui_inventory_report_t);
+	memset(&pMsgProc, 0, msgProcLen);
+	pMsgProc.msgid = HUITP_ENDIAN_EXG16(HUITP_MSGID_sui_inventory_report);
+	pMsgProc.length = HUITP_ENDIAN_EXG16(msgProcLen - 4);
+
+	//发送出去
+	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
+	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
+	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
+	pFrameHeader->len = param_len + MAX_WMC_CONTROL_MSG_HEADER_LEN;
+	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
+	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], param_ptr, param_len);
+	func_canvela_frame_send(pFrameHeader);
 	
 	//返回
 	return IHU_SUCCESS;
@@ -920,8 +1107,21 @@ OPSTAT fsm_canvela_l3iap_sw_package_report(UINT8 dest_id, UINT8 src_id, void * p
 			IHU_ERROR_PRINT_CANVELA("CANVELA: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);	
 
-	//然后执行L2FRAME发送原语命令，通过中断函数将L2FRAME发送出去
-	//func_canvela_frame_send(pFrameHeader);
+	//准备组装发送消息
+	StrMsg_HUITP_MSGID_uni_sw_package_report_t pMsgProc;
+	UINT16 msgProcLen = sizeof(StrMsg_HUITP_MSGID_uni_sw_package_report_t);
+	memset(&pMsgProc, 0, msgProcLen);
+	pMsgProc.msgid = HUITP_ENDIAN_EXG16(HUITP_MSGID_uni_sw_package_report);
+	pMsgProc.length = HUITP_ENDIAN_EXG16(msgProcLen - 4);
+
+	//发送出去
+	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
+	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
+	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
+	pFrameHeader->len = param_len + MAX_WMC_CONTROL_MSG_HEADER_LEN;
+	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
+	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], param_ptr, param_len);
+	func_canvela_frame_send(pFrameHeader);
 	
 	//返回
 	return IHU_SUCCESS;

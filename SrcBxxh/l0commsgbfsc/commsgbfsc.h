@@ -508,6 +508,15 @@ typedef struct msg_struct_l3bfsc_wmc_ws_event
   CombineType_t weight_combin_type;
 }msg_struct_l3bfsc_wmc_ws_event_t;
 
+typedef struct msg_struct_l3bfsc_new_ws_event
+{
+	UINT16 msgid;
+	UINT16 length;
+	WmcId_t wmc_id;               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */
+	WeightIndication_t weight_ind;
+  CombineType_t weight_combin_type;
+}msg_struct_l3bfsc_new_ws_event_t;
+
 typedef struct msg_struct_l3bfsc_repeat_ws_event
 {
 	UINT16 msgid;
