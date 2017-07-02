@@ -74,6 +74,7 @@
 "prjbfscfo@207vg\l2canvela.o"
 "prjbfscfo@207vg\l2packet.o"
 "prjbfscfo@207vg\l2adc_cs5532.o"
+"prjbfscfo@207vg\huixmlcodec.o"
 "prjbfscfo@207vg\l3bfsc.o"
 "prjbfscfo@207vg\l3bfsc_msg.o"
 --library_type=microlib --strict --scatter "PrjBfscFo@207VG\PrjBfscFo@207VG.sct"

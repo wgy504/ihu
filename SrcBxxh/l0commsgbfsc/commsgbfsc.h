@@ -414,45 +414,6 @@ typedef struct msg_struct_l3bfsc_canvela_cmd_resp
 ** ====================================================================
 */
 
-//	//HCU-IHU SUI新增内容
-//	//上电过程
-//	HUITP_MSGID_sui_bfsc_startup_ind                 = 0x3B90,
-//	//配置过程
-//	HUITP_MSGID_sui_bfsc_set_config_req              = 0x3B11,
-//	HUITP_MSGID_sui_bfsc_set_config_resp             = 0x3B91,
-//	//启动过程
-//	HUITP_MSGID_sui_bfsc_start_req                   = 0x3B12,
-//	HUITP_MSGID_sui_bfsc_start_resp                  = 0x3B92,
-//	HUITP_MSGID_sui_bfsc_stop_req                    = 0x3B13,
-//	HUITP_MSGID_sui_bfsc_stop_resp                   = 0x3B93,
-//	//重量汇报过程
-//	HUITP_MSGID_sui_bfsc_new_ws_event                = 0x3B94,
-//	HUITP_MSGID_sui_bfsc_repeat_ws_event             = 0x3B94,
-//	//组合出料过程
-//	HUITP_MSGID_sui_bfsc_ws_comb_out_req             = 0x3B15,
-//	HUITP_MSGID_sui_bfsc_ws_comb_out_resp            = 0x3B95,
-/*
-**	Command Response Structure
-*/
-
-
-///*
-//**	HUITP_MSGID_sui_bfsc_startup_ind
-//*/
-//typedef struct WmcErrorCode
-//{
-//	UINT16 error_code;           
-//	UINT16 spare1;               
-//}WmcErrorCode_t;
-
-//typedef struct WmcId
-//{
-//	UINT8 wmc_id;               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */
-//	UINT8 spare1;               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */
-//	UINT8 spare2;               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */
-//	UINT8 spare3;               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */	
-//}WmcId_t;
-
 typedef struct msg_struct_l3bfsc_wmc_resp
 {
 	UINT16	msgid;
@@ -465,20 +426,6 @@ typedef struct msg_struct_l3bfsc_wmc_resp
 }msg_struct_l3bfsc_wmc_resp_t;
 
 
-
-//typedef struct WmcInventory
-//{
-//	UINT32 hw_inventory_id;
-//	UINT32 sw_inventory_id;
-//	UINT32 stm32_cpu_id;
-//	UINT32 weight_sensor_type;
-//	UINT32 motor_type;
-//	WmcId_t wmc_id;               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */
-//	UINT32 spare1;
-//	UINT32 spare2;
-//}WmcInventory_t;
-
-
 typedef struct msg_struct_l3bfsc_wmc_startup_ind
 {
 	UINT16 msgid;
@@ -486,72 +433,6 @@ typedef struct msg_struct_l3bfsc_wmc_startup_ind
 	WmcInventory_t wmc_inventory;
 }msg_struct_l3bfsc_wmc_startup_ind_t;
 
-/*
-**	MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ
-*/
-//typedef struct CombinationAlgorithmParamaters
-//{
-//	UINT32	MinScaleNumberCombination;				//组合搜索的最小Scale的个数
-//	UINT32	MaxScaleNumberCombination;				//组合搜索的最大Scale的个数
-//	UINT32	MinScaleNumberStartCombination;		//开始查找的最小个数，就是说大于这个个数就开始搜索
-//	UINT32	TargetCombinationWeight;				  //组合目标重量
-//	UINT32	TargetCombinationUpperWeight;			//组合目标重量上限
-//	UINT32	IsPriorityScaleEnabled;					  // 1: Enable, 0: Disable
-//	UINT32	IsProximitCombinationMode;				// 1: AboveUpperLimit, 2: BelowLowerLimit, 0: Disable
-//	UINT32	CombinationBias;						      //每个Scale要求放几个物品
-//	UINT32	IsRemainDetectionEnable;				  //Scale处于LAOD状态超过remainDetectionTimeS, 被认为是Remain状态，提示要将物品拿走: 1:Enable， 0：Disble
-//	UINT32	RemainDetectionTimeSec;					  // RemainDetionTime in Seconds
-//	UINT32	RemainScaleTreatment;					    // 1: Discharge (提示用户移走），0：Enforce（强制进行组合）
-//	UINT32	CombinationSpeedMode;					    // 0：SpeedPriority，1: PrecisePriority
-//	UINT32	CombinationAutoMode;					    // 0: Auto, 1: Manual
-//	UINT32	MovingAvrageSpeedCount;					  //计算平均速度的时候使用最近多少个组合做统计
-//	UINT32	spare1;
-//	UINT32	spare2;
-//	UINT32	spare3;
-//	UINT32	spare4;
-//}CombinationAlgorithmParamaters_t;
-
-//typedef struct WeightSensorParamaters
-//{
-//	UINT32	WeightSensorLoadDetectionTimeMs;		//称台稳定的判断时间
-//	UINT32	WeightSensorLoadThread;							//称台稳定门限，如果在WeightSensorLoadDetectionTime内，重量变化都小于WeightSensorLoadThread
-//	UINT32	WeightSensorEmptyThread;
-//	UINT32	WeightSensorEmptyDetectionTimeMs;
-//	UINT32	WeightSensorPickupThread;						// NOT for GUI
-//	UINT32	WeightSensorPickupDetectionTimeMs;	// NOT for GUI
-//	UINT32	StardardReadyTimeMs;								//???
-//	UINT32	MaxAllowedWeight;										//如果发现超过这个最大值，说明Sensor出错
-//	
-//	UINT32	WeightSensorInitOrNot;							// NOT for GUI
-//	UINT32	WeightSensorAdcSampleFreq;					
-//	UINT32	WeightSensorAdcGain;
-//	UINT32	WeightSensorAdcBitwidth;						// NOT for GUI
-//	UINT32  WeightSensorAdcValue;								// NOT for GUI
-//	UINT32	WeightSensorCalibrationZeroAdcValue;// NOT for GUI
-//	UINT32	WeightSensorCalibrationFullAdcValue;// NOT for GUI
-//	UINT32	WeightSensorCalibrationFullWeight;	
-//	UINT32	WeightSensorStaticZeroValue;				
-//	UINT32	WeightSensorTailorValue;						
-//	UINT32	WeightSensorDynamicZeroThreadValue;	
-//	UINT32	WeightSensorDynamicZeroHysteresisMs;
-//	//UINT32  WeightSensorFilterCoeff[32];				// NOT for GUI
-//	//UINT32  WeightSensorOutputValue[32];				// NOT for GUI
-//}WeightSensorParamaters_t;
-
-//typedef struct MotorControlParamaters
-//{
-//	UINT32	MotorSpeed;
-//	UINT32	MotorDirection;									//0: Clockwise; 1: Counter-Clockwise
-//	UINT32	MotorRollingStartMs;						//how long do the motor rolling for start action
-//	UINT32	MotorRollingStopMs;							//how long do the motor rolling for stop action
-//	UINT32	MotorRollingInveralMs;					//If the motor is rolling, how long the motor will stay in still before roll back (stop action).
-//	UINT32	MotorFailureDetectionVaration;	// % of the MotorSpeed
-//	UINT32	MotorFailureDetectionTimeMs;		// within TimeMs, 如果速度都在外面，认为故障
-//	UINT32	spare1;
-//	UINT32	spare2;
-//	UINT32	spare3;
-//	UINT32	spare4;
-//}MotorControlParamaters_t;
 
 typedef struct msg_struct_l3bfsc_wmc_set_config_req
 {
@@ -560,6 +441,16 @@ typedef struct msg_struct_l3bfsc_wmc_set_config_req
 	WeightSensorParamaters_t weight_sensor_param;
 	MotorControlParamaters_t motor_control_param;
 }msg_struct_l3bfsc_wmc_set_config_req_t;
+
+
+typedef struct msg_struct_l3bfsc_set_config_resp
+{
+	UINT16	msgid;
+	UINT16  length;
+  UINT8  validFlag;  //是否执行成功
+	UINT8  spare1;
+	UINT16  errCode;
+}msg_struct_l3bfsc_set_config_resp_t;
 
 /*
 **	MSG_ID_L3BFSC_WMC_START_REQ
@@ -570,6 +461,16 @@ typedef struct msg_struct_l3bfsc_wmc_start_req
 	UINT16 length;
 }msg_struct_l3bfsc_wmc_start_req_t;
 
+
+typedef struct msg_struct_l3bfsc_start_resp
+{
+	UINT16	msgid;
+	UINT16  length;
+  UINT8  validFlag;  //是否执行成功
+	UINT8  spare1;
+	UINT16  errCode;
+}msg_struct_l3bfsc_start_resp_t;
+
 /*
 **	MSG_ID_L3BFSC_WMC_STOP_REQ
 */
@@ -579,18 +480,15 @@ typedef struct msg_struct_l3bfsc_wmc_stop_req
 	UINT16 length;
 }msg_struct_l3bfsc_wmc_stop_req_t;
 
-/*
-**	MSG_ID_L3BFSC_WMC_WEIGHT_IND
-*/
-//#define 	WEIGHT_EVENT_ID_LOAD						(0)
-//#define 	WEIGHT_EVENT_ID_EMPTY						(1)
-//#define 	WEIGHT_EVENT_ID_PICKUP					(2)
 
-//typedef struct WeightIndication
-//{
-//	UINT32 weight_event;		//LOAD, EMPTY, PICKUP(FFS)
-//	UINT32 average_weight;	//average value in the detect window  // <--- MUST
-//}WeightIndication_t;
+typedef struct msg_struct_l3bfsc_stop_resp
+{
+	UINT16	msgid;
+	UINT16  length;
+  UINT8  validFlag;  //是否执行成功
+	UINT8  spare1;
+	UINT16  errCode;
+}msg_struct_l3bfsc_stop_resp_t;
 
 // MSG_ID_L3BFSC_WMC_WEIGHT_IND -> This is pure for internal message between Weight Thread and L3BFSC thread
 typedef struct msg_struct_l3bfsc_weight_ind
@@ -601,7 +499,6 @@ typedef struct msg_struct_l3bfsc_weight_ind
   UINT32 repeat_times;
 }msg_struct_l3bfsc_weight_ind_t;
 
-
 typedef struct msg_struct_l3bfsc_wmc_ws_event
 {
 	UINT16 msgid;
@@ -611,30 +508,14 @@ typedef struct msg_struct_l3bfsc_wmc_ws_event
   CombineType_t weight_combin_type;
 }msg_struct_l3bfsc_wmc_ws_event_t;
 
-/*
-**	MSG_ID_L3BFSC_WMC_COMBIN_OUT_REQ    //bfsc_ws_comb_out_req
-*/
-//#define 	LED_COMMNAD_ID_IGNORE								(0)//MUSR BE 0
-//#define 	LED_COMMNAD_ID_ON										(1)
-//#define 	LED_COMMNAD_ID_OFF									(2)
-//#define 	LED_COMMNAD_ID_BINKING_HIGHSPEED		(3)
-//#define 	LED_COMMNAD_ID_BINKING_LOWSPEED			(4)
-
-// CombineType Defination
-// COMNINETPYE_ROOLOUT_START
-// COMNINETPYE_ROOLOUT_COMPLETE
-// COMNINETPYE_DROP_START
-// COMNINETPYE_DROP_COMPLETE
-// COMNINETPYE_WARNING_START
-// COMNINETPYE_WARNING_COMPLETE
-// COMNINETPYE_ERROR_START
-// COMNINETPYE_ERROR_COMPLETE
-
-//typedef struct CombineType
-//{
-//	UINT32	WeightCombineType;
-//	UINT32	ActionDelayMs;
-//}CombineType_t;
+typedef struct msg_struct_l3bfsc_repeat_ws_event
+{
+	UINT16 msgid;
+	UINT16 length;
+	WmcId_t wmc_id;               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */
+	WeightIndication_t weight_ind;
+  CombineType_t weight_combin_type;
+}msg_struct_l3bfsc_repeat_ws_event_t;
 
 typedef struct msg_struct_l3bfsc_wmc_combin_out_req
 {

@@ -948,6 +948,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\SrcBxxh\l2frame\l2adc_cs5532.h</FilePath>
             </File>
+            <File>
+              <FileName>huixmlcodec.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SrcBxxh\l2framefreeos\huixmlcodec.c</FilePath>
+            </File>
+            <File>
+              <FileName>huixmlcodec.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\SrcBxxh\l2framefreeos\huixmlcodec.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

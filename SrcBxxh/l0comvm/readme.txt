@@ -8,8 +8,9 @@
 
 
 
-//= ZJL, 2017 July.1, CURRENT_SW_DELIVERY R03.144 =>IAP项目
+//= ZJL, 2017 July.1, CURRENT_SW_DELIVERY R03.144 =>IAP/BFSC项目
 = 挂载MAIN函数
+= 修改完善CANVELA的字序问题：接口全部归到网络字序，调整IHU本身的大小端设置
 
 
 //= MYC, 2017 June.29, CURRENT_SW_DELIVERY R03.143 =>BFSC项目
