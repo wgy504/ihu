@@ -1062,24 +1062,23 @@ OPSTAT fsm_canvela_bfsc_l2frame_err_inq_cmd_resp(UINT8 dest_id, UINT8 src_id, vo
 OPSTAT fsm_canvela_bfsc_l2frame_heart_beat_report(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
 	//int ret = 0;
-	msg_struct_l3bfsc_wmc_heart_beat_confirm_t rcv;
+	msg_struct_l3bfsc_wmc_heart_beat_report_t rcv;
 	IHU_HUITP_L2FRAME_STD_frame_header_t *pFrameHeader = NULL;
 	
 	//收到消息并做参数检查
-	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_wmc_heart_beat_confirm_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_wmc_heart_beat_confirm_t)))
+	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_wmc_heart_beat_report_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_wmc_heart_beat_report_t)))
 			IHU_ERROR_PRINT_CANVELA("CANVELA: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);
 	
 	//准备组装发送消息
-	StrMsg_HUITP_MSGID_sui_bfsc_heart_beat_confirm_t pMsgProc;
-	UINT16 msgProcLen = sizeof(StrMsg_HUITP_MSGID_sui_bfsc_heart_beat_confirm_t);
+	StrMsg_HUITP_MSGID_sui_bfsc_heart_beat_report_t pMsgProc;
+	UINT16 msgProcLen = sizeof(StrMsg_HUITP_MSGID_sui_bfsc_heart_beat_report_t);
 	memset(&pMsgProc, 0, msgProcLen);
-	pMsgProc.msgid = HUITP_ENDIAN_EXG16(HUITP_MSGID_sui_bfsc_heart_beat_confirm);
+	pMsgProc.msgid = HUITP_ENDIAN_EXG16(HUITP_MSGID_sui_bfsc_heart_beat_report);
 	pMsgProc.length = HUITP_ENDIAN_EXG16(msgProcLen - 4);
 	
 	pMsgProc.wmc_id.wmc_id = rcv.wmc_id.wmc_id;
-	pMsgProc.wmcState = rcv.wmcState;
 
 	//发送出去
 	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);

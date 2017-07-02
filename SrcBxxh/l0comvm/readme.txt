@@ -11,6 +11,7 @@
 = 再调整到大端:改好了，而且测试通过
 = 遗留接收的CHECKSUM检查以及CHECKSUM本身大小端的潜在风险
 = 增加ERR_INQ_CMD过程
+= 修正HEART_BEAT_REPORT编码的错误
 
 //= ZJL, 2017 July.1, CURRENT_SW_DELIVERY R03.144 =>IAP/BFSC项目
 = 挂载MAIN函数
