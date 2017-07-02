@@ -10,6 +10,7 @@
 //= ZJL, 2017 July.2, CURRENT_SW_DELIVERY R03.145 =>IAP/BFSC项目
 = 再调整到大端:改好了，而且测试通过
 = 遗留接收的CHECKSUM检查以及CHECKSUM本身大小端的潜在风险
+= 增加ERR_INQ_CMD过程
 
 //= ZJL, 2017 July.1, CURRENT_SW_DELIVERY R03.144 =>IAP/BFSC项目
 = 挂载MAIN函数

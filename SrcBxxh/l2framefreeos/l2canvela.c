@@ -77,6 +77,7 @@ IhuFsmStateItem_t IhuFsmCanvela[] =
 	{MSG_ID_L3BFSC_WMC_COMBIN_RESP,					FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_combin_resp},
 	{MSG_ID_L3BFSC_WMC_FAULT_IND,						FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_fault_ind},
 	{MSG_ID_L3BFSC_WMC_COMMAND_RESP,				FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_command_resp},
+	{MSG_ID_L3BFSC_WMC_ERR_INQ_CMD_RESP,		FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_err_inq_cmd_resp},
 	{MSG_ID_L3BFSC_WMC_HEART_BEAT_REPORT,		FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_bfsc_l2frame_heart_beat_report},	
 #endif
 	
@@ -1008,6 +1009,42 @@ OPSTAT fsm_canvela_bfsc_l2frame_command_resp(UINT8 dest_id, UINT8 src_id, void *
 	pMsgProc.result.error_code = HUITP_ENDIAN_EXG16(rcv.result.error_code);
 	pMsgProc.motor_speed = HUITP_ENDIAN_EXG32(rcv.motor_speed);
 	pMsgProc.sensor_weight = HUITP_ENDIAN_EXG32(rcv.sensor_weight);
+	pMsgProc.validFlag = rcv.validFlag;
+
+	//发送出去
+	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
+	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
+	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
+	pFrameHeader->len = msgProcLen + MAX_WMC_CONTROL_MSG_HEADER_LEN;
+	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
+	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], &pMsgProc, msgProcLen);
+	func_canvela_frame_send(pFrameHeader);
+	
+	return IHU_SUCCESS;
+}
+
+OPSTAT fsm_canvela_bfsc_l2frame_err_inq_cmd_resp(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
+{
+	//int ret = 0;
+	msg_struct_l3bfsc_wmc_err_inq_resp_t rcv;
+	IHU_HUITP_L2FRAME_STD_frame_header_t *pFrameHeader = NULL;
+	
+	//收到消息并做参数检查
+	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_wmc_err_inq_resp_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_wmc_err_inq_resp_t)))
+			IHU_ERROR_PRINT_CANVELA("CANVELA: Receive message error!\n");
+	memcpy(&rcv, param_ptr, param_len);
+
+	//准备组装发送消息
+	StrMsg_HUITP_MSGID_sui_bfsc_err_inq_cmd_resp_t pMsgProc;
+	UINT16 msgProcLen = sizeof(StrMsg_HUITP_MSGID_sui_bfsc_err_inq_cmd_resp_t);
+	memset(&pMsgProc, 0, msgProcLen);
+	pMsgProc.msgid = HUITP_ENDIAN_EXG16(HUITP_MSGID_sui_bfsc_err_inq_cmd_resp);
+	pMsgProc.length = HUITP_ENDIAN_EXG16(msgProcLen - 4);
+	
+	pMsgProc.wmc_id.wmc_id = rcv.wmc_id.wmc_id;
+	pMsgProc.error_code = HUITP_ENDIAN_EXG16(rcv.error_code);
+	pMsgProc.average_weight = HUITP_ENDIAN_EXG32(rcv.average_weight);
 	pMsgProc.validFlag = rcv.validFlag;
 
 	//发送出去
