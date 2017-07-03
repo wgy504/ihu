@@ -312,7 +312,7 @@
 	#define IHU_SYSDIM_FSM_ENTRY_NBR_MAX 50   //一个任务之中，STATE-MSGID成对处理函数最多数量
 	//消息参数
 	#define IHU_SYSDIM_MSGID_NAME_LEN_MAX 70
-	#define IHU_SYSDIM_MSG_BODY_LEN_MAX 560  //消息最长长度，这里比较短节省内存，按道理，没有图像和视频的情况下，是足够的 //MYC from 205 to 252
+	#define IHU_SYSDIM_MSG_BODY_LEN_MAX 252  //消息最长长度，这里比较短节省内存，按道理，没有图像和视频的情况下，是足够的 //MYC from 205 to 252
 	#define IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX IHU_SYSDIM_MSG_BODY_LEN_MAX - 3
 	#define IHU_SYSDIM_FILE_NAME_LEN_MAX 100
 	#define IHU_SYSDIM_MSG_QUEUE_NBR_MAX 2
