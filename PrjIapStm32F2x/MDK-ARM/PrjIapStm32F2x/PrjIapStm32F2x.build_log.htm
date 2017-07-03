@@ -28,9 +28,16 @@ Project File Date:  06/22/2017
 *** Using Compiler 'V5.06 update 1 (build 61)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build Project 'PrjIapStm32F2x' - Target 'PrjIapStm32F2x'
 compiling l2canvela.c...
+D:\IHUSRC\ihu\SrcBxxh\l2framefreeos\l2canvela.c(1110): warning:  #177-D: variable "pFrameHeader" was declared but never referenced
+  	IHU_HUITP_L2FRAME_STD_frame_header_t *pFrameHeader = NULL;
+D:\IHUSRC\ihu\SrcBxxh\l2framefreeos\l2canvela.c(1142): warning:  #177-D: variable "pFrameHeader" was declared but never referenced
+  	IHU_HUITP_L2FRAME_STD_frame_header_t *pFrameHeader = NULL;
+D:\IHUSRC\ihu\SrcBxxh\l2framefreeos\l2canvela.c(1308): warning:  #111-D: statement is unreachable
+  	return ret;
+..\..\SrcBxxh\l2framefreeos\l2canvela.c: 3 warnings, 0 errors
 linking...
-Program Size: Code=43352 RO-data=2816 RW-data=3848 ZI-data=96056  
-"PrjIapStm32F2x\PrjIapStm32F2x.axf" - 0 Error(s), 0 Warning(s).
+Program Size: Code=43664 RO-data=2816 RW-data=3856 ZI-data=96048  
+"PrjIapStm32F2x\PrjIapStm32F2x.axf" - 0 Error(s), 3 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -48,7 +55,7 @@ Package Vendor: ARM
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.0.0
-Build Time Elapsed:  00:00:03
+Build Time Elapsed:  00:00:11
 </pre>
 </body>
 </html>

@@ -7,6 +7,12 @@
 **************************************************************************
 
 
+
+//= ZJL, 2017 July.3, CURRENT_SW_DELIVERY R03.146 =>IAP/BFSC项目
+= Upgrade HUITP.H to V2.8
+
+
+
 //= ZJL, 2017 July.2, CURRENT_SW_DELIVERY R03.145 =>IAP/BFSC项目
 = 再调整到大端:改好了，而且测试通过
 = 遗留接收的CHECKSUM检查以及CHECKSUM本身大小端的潜在风险

@@ -1123,13 +1123,13 @@ OPSTAT fsm_canvela_l3iap_inventory_report(UINT8 dest_id, UINT8 src_id, void * pa
 	pMsgProc.length = HUITP_ENDIAN_EXG16(msgProcLen - 4);
 
 	//发送出去
-	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
-	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
-	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
-	pFrameHeader->len = msgProcLen + MAX_WMC_CONTROL_MSG_HEADER_LEN;
-	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
-	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], &pMsgProc, msgProcLen);
-	func_canvela_frame_send(pFrameHeader);
+//	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
+//	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
+//	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
+//	pFrameHeader->len = msgProcLen + MAX_WMC_CONTROL_MSG_HEADER_LEN;
+//	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
+//	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], &pMsgProc, msgProcLen);
+//	func_canvela_frame_send(pFrameHeader);
 	
 	//返回
 	return IHU_SUCCESS;
@@ -1148,20 +1148,20 @@ OPSTAT fsm_canvela_l3iap_sw_package_report(UINT8 dest_id, UINT8 src_id, void * p
 	memcpy(&rcv, param_ptr, param_len);	
 
 	//准备组装发送消息
-	StrMsg_HUITP_MSGID_uni_sw_package_report_t pMsgProc;
-	UINT16 msgProcLen = sizeof(StrMsg_HUITP_MSGID_uni_sw_package_report_t);
+	StrMsg_HUITP_MSGID_sui_sw_package_report_t pMsgProc;
+	UINT16 msgProcLen = sizeof(StrMsg_HUITP_MSGID_sui_sw_package_report_t);
 	memset(&pMsgProc, 0, msgProcLen);
-	pMsgProc.msgid = HUITP_ENDIAN_EXG16(HUITP_MSGID_uni_sw_package_report);
+	pMsgProc.msgid = HUITP_ENDIAN_EXG16(HUITP_MSGID_sui_sw_package_report);
 	pMsgProc.length = HUITP_ENDIAN_EXG16(msgProcLen - 4);
 
 	//发送出去
-	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
-	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
-	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
-	pFrameHeader->len = msgProcLen + MAX_WMC_CONTROL_MSG_HEADER_LEN;
-	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
-	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], &pMsgProc, msgProcLen);
-	func_canvela_frame_send(pFrameHeader);
+//	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
+//	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
+//	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
+//	pFrameHeader->len = msgProcLen + MAX_WMC_CONTROL_MSG_HEADER_LEN;
+//	pFrameHeader->chksum = l2packet_gen_chksum(pFrameHeader);
+//	memcpy(&ctrlMsgBuf[MAX_WMC_CONTROL_MSG_HEADER_LEN], &pMsgProc, msgProcLen);
+//	func_canvela_frame_send(pFrameHeader);
 	
 	//返回
 	return IHU_SUCCESS;
@@ -1176,12 +1176,8 @@ OPSTAT fsm_canvela_l3iap_sw_package_report(UINT8 dest_id, UINT8 src_id, void * p
 OPSTAT fsm_canvela_l2frame_rcv_handler(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)
 {
 	int ret = 0;
-	//UINT32 msg_id = 0;
-	//msg_struct_l3bfsc_wmc_msg_header_t *pMsgInnerHeader;
-	//UINT16 msg_len = 0;
 	UINT16 msgId = 0, msgLen = 0;
 	msg_struct_canvela_l2frame_rcv_t rcv;
-	//IHU_HUITP_L2FRAME_STD_frame_header_t *pFrameHeader = NULL;
 	
 	//Receive message and copy to local variable
 	memset(&rcv, 0, sizeof(msg_struct_canvela_l2frame_rcv_t));
@@ -1202,6 +1198,7 @@ OPSTAT fsm_canvela_l2frame_rcv_handler(UINT8 dest_id, UINT8 src_id, void *param_
 	//按照消息类型进行分类处理
 	switch(msgId){
 
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)		
 	case HUITP_MSGID_sui_bfsc_set_config_req:
 	{
 		IHU_DEBUG_PRINT_INF("CANVELA: Receive L3 MSG = HUITP_MSGID_sui_bfsc_set_config_req \n");
@@ -1279,7 +1276,7 @@ OPSTAT fsm_canvela_l2frame_rcv_handler(UINT8 dest_id, UINT8 src_id, void *param_
 	}
 	break;
 
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_IAP_ID)
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_IAP_ID)
 	case HUITP_MSGID_sui_inventory_confirm:
 	{
 		IHU_DEBUG_PRINT_INF("CANVELA: Receive L3 MSG = HUITP_MSGID_sui_inventory_confirm \n");
@@ -1307,55 +1304,11 @@ OPSTAT fsm_canvela_l2frame_rcv_handler(UINT8 dest_id, UINT8 src_id, void *param_
 		IHU_ERROR_PRINT_CANVELA("CANVELA: Receive unsupported message!\n");
 	}
 	
-//	pMsgInnerHeader = (msg_struct_l3bfsc_wmc_msg_header_t *)((UINT8 *)param_ptr + 4);
-//	msg_len = pMsgInnerHeader->length + 4; ////!!!TO Align to HCU HUITP msg lenth
-//  IhuDebugPrint("CANVELA: Header (huitp_msg_id = 0x%08X, msg_len = %d bytes)\r\n", pMsgInnerHeader->msgid, msg_len);
-//	pMsgInnerHeader->msgid = HuitpMsgIdMapToInternalMsgId(pMsgInnerHeader->msgid);
-//	msg_id = pMsgInnerHeader->msgid;
-
-//	IhuDebugPrint("CANVELA: Header (mwc_msg_id = 0x%08X, msg_len = %d bytes)\r\n", msg_id, msg_len);
-//	for(i = 0; i < msg_len; i++)
-//	{
-//			if(0 == (i % 32))  printf("\r\n");
-//			printf("%02X ", *(((UINT8 *)pMsgInnerHeader)+i));
-//			//OSTimeDlyHMSM(0, 0, 0, 1);  //schedule other task, so that not block
-//	}
-//	printf("\r\n");
-//  
-//	/* Check message length */
-//	if( msg_len != (param_len - MAX_WMC_CONTROL_MSG_HEADER_LEN))
-//	{
-//			IhuErrorPrint("CANVELA: fsm_canvela_bfsc_l2frame_rcv: msg_len(%d) != param_len (%d)\n", msg_len, (param_len - MAX_WMC_CONTROL_MSG_HEADER_LEN));
-//			zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
-//			return IHU_FAILURE;
-//	}
-//	
-//	/* Check message ID and message length mapping */
-//	if(IHU_FAILURE == WmcAwsMsgCheck(pMsgInnerHeader, msg_len)) ////!!!TO Align to HCU HUITP msg lenth
-//	{
-//			IhuErrorPrint("CANVELA: fsm_canvela_bfsc_l2frame_rcv, msg check failure, return!\n");
-//			zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
-//			return IHU_FAILURE;
-//	}
-
-//	/* ==================== TODO ==================*/
-//	/* START TO PROCESS THE RECIEVED VALID MESSAGE */
-//	/* STEP 1: Check Parameters, if PARAMETER IS NOK, RETURN HERE OR RETURN IN BFSC TASK */
-//	/* STEP 2: FORWARD TO FBSC TASK */
-//	/* ============================================*/
-//	
-//	/* REMOVE THE CAN HEADER */
-//	ret = ihu_message_send(msg_id, TASK_ID_BFSC, TASK_ID_CANVELA, (void *)pMsgInnerHeader, msg_len);
-//	if (ret == IHU_FAILURE){
-//		zIhuSysStaPm.taskRunErrCnt[TASK_ID_CANVELA]++;
-//		IhuErrorPrint("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName, zIhuVmCtrTab.task[TASK_ID_BFSC].taskName);
-//		return IHU_FAILURE;
-//	}
-	
 	//返回
 	return ret;
 }
 
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)
 OPSTAT func_canitfleo_l2frame_msg_bfsc_set_config_req_received_handle(StrMsg_HUITP_MSGID_sui_bfsc_set_config_req_t *rcv)
 {
 	//准备组装发送消息
@@ -1508,7 +1461,7 @@ OPSTAT func_canitfleo_l2frame_msg_bfsc_heart_beat_confirm_received_handle(StrMsg
 	return IHU_SUCCESS;
 }
 
-#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_IAP_ID)
+#elif (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_IAP_ID)
 OPSTAT func_canitfleo_l2frame_msg_inventory_confirm_received_handle(StrMsg_HUITP_MSGID_sui_inventory_confirm_t *rcv)
 {
 	//准备组装发送消息
