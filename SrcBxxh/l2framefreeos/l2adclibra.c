@@ -202,7 +202,9 @@ OPSTAT fsm_adclibra_time_out(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT
 	int ret;
 	msg_struct_com_restart_t snd0;
 	msg_struct_com_time_out_t rcv;
+#if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_BFSC_ID)	
 	static uint32_t number_of_200ms_ticks = 0;
+#endif
 	
 	//Receive message and copy to local variable
 	memset(&rcv, 0, sizeof(msg_struct_com_time_out_t));
