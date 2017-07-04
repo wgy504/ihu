@@ -1082,10 +1082,10 @@ OPSTAT func_gprsmod_module_info_retrieve()
 	
 	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CSQ", (uint8_t*)"OK", 4) == IHU_SUCCESS)		
 	{ 
-		p1=(uint8_t*)strstr((const char*)(zIhuBspStm32SpsGprsRxBuff),":");
+		p1=(int8_t*)strstr((const char*)(zIhuBspStm32SpsGprsRxBuff), ":");
 		if(p1)
 		{
-			p2=(uint8_t*)strstr((const char*)(p1+1),",");
+			p2=(int8_t*)strstr((const char*)(p1+1), ",");
 			strncpy(temp, (char*)p1+2, (p2-p1-2>=sizeof(temp))?sizeof(temp):(p2-p1-2));
 			if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE){
 				IhuDebugPrint("VMMWGPRS: Singal quality: %s\n", temp);	
@@ -1102,9 +1102,9 @@ OPSTAT func_gprsmod_module_info_retrieve()
 	if(func_gprsmod_send_AT_command((uint8_t*)"AT+CNUM", (uint8_t*)"OK", 4)== IHU_SUCCESS)
 	{ 
 		int8_t *p2;
-		p1=(int8_t*)strstr((const char*)(zIhuBspStm32SpsGprsRxBuff),"\""); 
-		p2=(int8_t*)strstr((const char*)(p1+1),"\"");
-    p1=(int8_t*)strstr((const char*)(p2+1),"\"");
+		p1=(int8_t*)strstr((const char*)(zIhuBspStm32SpsGprsRxBuff), "\""); 
+		p2=(int8_t*)strstr((const char*)(p1+1), "\"");
+    p1=(int8_t*)strstr((const char*)(p2+1), "\"");
 		strncpy(temp, (char*)p1+1, 11);
 		if ((zIhuSysEngPar.debugMode & IHU_SYSCFG_TRACE_DEBUG_INF_ON) != FALSE){
 			IhuDebugPrint("VMMWGPRS: Local Number %s", temp);		
@@ -1519,11 +1519,11 @@ OPSTAT func_gprsmod_send_AT_command(uint8_t *cmd, uint8_t *ack, uint16_t wait_ti
 	func_gprsmod_send_LR();	
 	
 	memset(atCommandPrintBuf, 0, 256);
-	CopyReplaceCrLf(atCommandPrintBuf, cmd);
+	CopyReplaceCrLf(atCommandPrintBuf, (char *)cmd);
 	IhuDebugPrint("AT SEND(%d): [%s]\n", osKernelSysTick(), atCommandPrintBuf);
 	
 	memset(atCommandPrintBuf, 0, 256);
-	CopyReplaceCrLf(atCommandPrintBuf, ack);
+	CopyReplaceCrLf(atCommandPrintBuf, (char *)ack);
 	IhuDebugPrint("AT EXPC(%d): [%s]\n", osKernelSysTick(), atCommandPrintBuf);
 	ret = IHU_FAILURE;
 	while((tickTotal > 0) && (ret == IHU_FAILURE))
@@ -1537,7 +1537,7 @@ OPSTAT func_gprsmod_send_AT_command(uint8_t *cmd, uint8_t *ack, uint16_t wait_ti
 	}
 	
 	memset(atCommandPrintBuf, 0, 256);
-	CopyReplaceCrLf(atCommandPrintBuf, zIhuBspStm32SpsGprsRxBuff);
+	CopyReplaceCrLf(atCommandPrintBuf, (char *)zIhuBspStm32SpsGprsRxBuff);
 	IhuDebugPrint("AT RECV(%d): [%s]\n", osKernelSysTick(), atCommandPrintBuf);
 	return ret;
 }

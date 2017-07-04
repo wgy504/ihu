@@ -3,7 +3,7 @@
 <title>Static Call Graph - [PrjBfscFo@207VG\PrjBfscFo@207VG.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image PrjBfscFo@207VG\PrjBfscFo@207VG.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Wed Jul 05 00:52:05 2017
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Wed Jul 05 01:10:04 2017
 <BR><P>
 <H3>Maximum Stack Usage =       1480 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -683,8 +683,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[193]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WeightSensorReadCurrent
 <LI><a href="#[1eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;weight_sensor_map_adc_to_weight
 <LI><a href="#[18a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WeightCalculateAverage
-<LI><a href="#[18f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WeightSensorCalibrationKB
 <LI><a href="#[19e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_fp_digits
+<LI><a href="#[18f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WeightSensorCalibrationKB
 </UL>
 
 <P><STRONG><a name="[b7]"></a>__aeabi_i2d</STRONG> (Thumb, 34 bytes, Stack size 16 bytes, dflti.o(.text))
@@ -1877,11 +1877,11 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[156]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueTakeMutexRecursive
 <LI><a href="#[158]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGiveMutexRecursive
 <LI><a href="#[157]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_sps_print_send_data
+<LI><a href="#[152]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vsnprintf
+<LI><a href="#[153]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 <LI><a href="#[155]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strncat
 <LI><a href="#[154]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
 <LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr
-<LI><a href="#[152]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vsnprintf
-<LI><a href="#[153]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;blk230_init
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;blk230_task
@@ -1950,10 +1950,10 @@ Global Symbols
 <P><STRONG><a name="[d3]"></a>IhuDebugPrintId</STRONG> (Thumb, 114 bytes, Stack size 32 bytes, vmfreeoslayer.o(i.IhuDebugPrintId))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = IhuDebugPrintId &rArr; __2snprintf
 </UL>
-<BR>[Calls]<UL><LI><a href="#[15a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strcat
-<LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr
-<LI><a href="#[153]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
+<BR>[Calls]<UL><LI><a href="#[153]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 <LI><a href="#[159]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2snprintf
+<LI><a href="#[15a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strcat
+<LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;blk230_init
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;blk230_task
@@ -2094,11 +2094,11 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[156]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueTakeMutexRecursive
 <LI><a href="#[158]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGiveMutexRecursive
 <LI><a href="#[157]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_sps_print_send_data
+<LI><a href="#[152]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vsnprintf
+<LI><a href="#[153]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 <LI><a href="#[155]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strncat
 <LI><a href="#[154]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
 <LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr
-<LI><a href="#[152]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vsnprintf
-<LI><a href="#[153]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[193]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WeightSensorReadCurrent
 <LI><a href="#[190]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WeightSensorCalibrationZero
@@ -3402,9 +3402,9 @@ Global Symbols
 <LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintFo
 <LI><a href="#[183]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_message_send
 <LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
+<LI><a href="#[ec]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 <LI><a href="#[16b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy4
 <LI><a href="#[1b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
-<LI><a href="#[ec]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> l3bfsc.o(.data)
 </UL>
@@ -4231,8 +4231,8 @@ Global Symbols
 <LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
 <LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
 <LI><a href="#[1f4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_bsp_stm32_led_work_state_f2board_toggle
-<LI><a href="#[1b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
 <LI><a href="#[ec]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
+<LI><a href="#[1b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;func_canvela_frame_send
 </UL>
@@ -4345,8 +4345,8 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[1fa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericCreate
 <LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
 <LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
-<LI><a href="#[1fc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strerror
 <LI><a href="#[1fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_errno_addr
+<LI><a href="#[1fc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strerror
 </UL>
 <BR>[Called By]<UL><LI><a href="#[205]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_task_create_and_run
 </UL>
@@ -4358,8 +4358,8 @@ Global Symbols
 <LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
 <LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
 <LI><a href="#[1b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_usleep
-<LI><a href="#[1fc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strerror
 <LI><a href="#[1fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_errno_addr
+<LI><a href="#[1fc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strerror
 </UL>
 <BR>[Called By]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FsmProcessingLaunch
 </UL>
@@ -4374,10 +4374,10 @@ Global Symbols
 <LI><a href="#[200]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_timerid_to_string
 <LI><a href="#[1ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_taskid_to_string
 <LI><a href="#[197]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_msgid_to_string
+<LI><a href="#[1fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_errno_addr
 <LI><a href="#[1fc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strerror
 <LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 <LI><a href="#[1b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
-<LI><a href="#[1fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_errno_addr
 </UL>
 <BR>[Called By]<UL><LI><a href="#[209]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_vm_send_init_msg_to_app_task
 <LI><a href="#[e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fsm_com_heart_beat_rcv
@@ -4427,11 +4427,11 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[201]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xQueueGenericSendFromISR
 <LI><a href="#[1ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_taskid_to_string
 <LI><a href="#[197]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_msgid_to_string
+<LI><a href="#[1fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_errno_addr
+<LI><a href="#[ec]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 <LI><a href="#[1fc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strerror
 <LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 <LI><a href="#[1b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
-<LI><a href="#[1fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_errno_addr
-<LI><a href="#[ec]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_can_loopback_callback
 </UL>
@@ -4477,8 +4477,8 @@ Global Symbols
 <LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintId
 <LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuDebugPrintFo
 <LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IhuErrorPrintFo
-<LI><a href="#[1fc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strerror
 <LI><a href="#[1fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_errno_addr
+<LI><a href="#[1fc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strerror
 </UL>
 <BR>[Called By]<UL><LI><a href="#[205]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ihu_task_create_and_run
 </UL>

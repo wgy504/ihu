@@ -125,7 +125,8 @@ void func_ccl_open_all_sensor_power(void);
 void func_cccl_cpu_power_off(void);
 void func_ccl_stm_main_recovery_from_fault(void);  //提供了一种比RESTART更低层次的状态恢复方式
 
-
+//Externl APIs
+extern uint32_t osKernelSysTick (void);
 
 //高级定义，简化程序的可读性，包括return IHU_FAILURE在内的宏定义，没搞定。。。
 #define IHU_ERROR_PRINT_CCL_WO_RETURN zIhuSysStaPm.taskRunErrCnt[TASK_ID_CCL]++; func_ccl_stm_main_recovery_from_fault(); IhuErrorPrint

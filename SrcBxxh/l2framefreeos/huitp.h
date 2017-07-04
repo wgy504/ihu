@@ -1284,7 +1284,6 @@ typedef enum
   //软件清单
 	HUITP_IEID_uni_inventory_min                    = 0xA000,
 	HUITP_IEID_uni_inventory_element                = 0xA000,
-	HUITP_IEID_sui_inventory_element                = 0xA010,
 	HUITP_IEID_uni_inventory_max,
 
   //软件版本体
@@ -1659,6 +1658,7 @@ typedef struct StrIe_HUITP_IEID_uni_com_segment
 	UINT16 ieLen;
 	UINT16 swRelId;
 	UINT16 swVerId;
+	UINT8  upgradeFlag;
 	UINT16 segIndex;
 	UINT16 segTotal;
 	UINT16 segSplitLen;
@@ -2878,13 +2878,13 @@ typedef struct StrIe_HUITP_IEID_uni_inventory_element
 #define HUITP_IEID_UNI_FW_UPGRADE_NONE 0
 #define HUITP_IEID_UNI_FW_UPGRADE_NO 1
 #define HUITP_IEID_UNI_FW_UPGRADE_YES_STABLE 2
-#define HUITP_IEID_UNI_FW_UPGRADE_YES_TRAIL 3
+#define HUITP_IEID_UNI_FW_UPGRADE_YES_TRIAL 3
 #define HUITP_IEID_UNI_FW_UPGRADE_YES_PATCH 4
 #define HUITP_IEID_UNI_FW_UPGRADE_YES_INVALID 0xFF
 #define HUITP_IEID_SUI_FW_UPGRADE_NONE 0
 #define HUITP_IEID_SUI_FW_UPGRADE_NO 1
 #define HUITP_IEID_SUI_FW_UPGRADE_YES_STABLE 2
-#define HUITP_IEID_SUI_FW_UPGRADE_YES_TRAIL 3
+#define HUITP_IEID_SUI_FW_UPGRADE_YES_TRIAL 3
 #define HUITP_IEID_SUI_FW_UPGRADE_YES_PATCH 4
 #define HUITP_IEID_SUI_FW_UPGRADE_YES_INVALID 0xFF
 //HW_TYPE的高字节将表示HCU、IHU等不同类型
@@ -2942,20 +2942,6 @@ typedef struct StrIe_HUITP_IEID_uni_inventory_element
 #define HUITP_IEID_UNI_INVENT_HWTYPE_PDTYPE_E4_ZNSH_01 0x1401  //智能手环
 //用于指示单个硬件具体的PEM信息，或者小版本的演进修改。
 //如果没有独特信息，可采用0000/FFFF来表示无效不用。
-
-//HUITP_IEID_sui_inventory_element                = 0xA010,
-#define HUITP_IEID_SUI_INVENTORY_ELEMENT_DESC_LEN_MAX 50
-typedef struct StrIe_HUITP_IEID_sui_inventory_element
-{
-	UINT16 ieId;
-	UINT16 ieLen;
-	UINT16 hwType;
-	UINT16 hwId;
-	UINT16 swRel;
-	UINT16 swVer;
-	UINT8  upgradeFlag;
-	char   desc[HUITP_IEID_SUI_INVENTORY_ELEMENT_DESC_LEN_MAX];
-}StrIe_HUITP_IEID_sui_inventory_element_t;
 
 //HUITP_IEID_uni_inventory_max,
 
@@ -6760,6 +6746,7 @@ typedef struct StrMsg_HUITP_MSGID_sui_sw_package_report
 	UINT16 length;
 	UINT16 swRelId;
 	UINT16 swVerId;
+	UINT8  upgradeFlag;
 	UINT16 segIndex;
 	UINT16 segTotal;
 	UINT16 segSplitLen;
@@ -6772,6 +6759,7 @@ typedef struct StrMsg_HUITP_MSGID_sui_sw_package_confirm
 	UINT16 length;
 	UINT16 swRelId;
 	UINT16 swVerId;
+	UINT8  upgradeFlag;
 	UINT16 segIndex;
 	UINT16 segTotal;
 	UINT16 segSplitLen;
