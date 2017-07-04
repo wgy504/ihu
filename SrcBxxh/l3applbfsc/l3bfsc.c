@@ -87,6 +87,7 @@ IhuFsmStateItem_t IhuFsmBfsc[] =
   {MSG_ID_L3BFSC_WMC_COMBIN_REQ,				  FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_combin_req},	//MYC	
 	{MSG_ID_L3BFSC_WMC_ERR_INQ_CMD_REQ,			FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_err_inq_req},	//MYC	
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_heart_beat_timeout},
+	{MSG_ID_L3BFSC_WMC_HEART_BEAT_CONFIRM,	FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_heart_beat_confirm},
 	
   {MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ,			FSM_STATE_BFSC_SCAN,							        fsm_bfsc_wmc_set_config_req},	//MYC
 	{MSG_ID_L3BFSC_WMC_START_REQ,				    FSM_STATE_BFSC_SCAN,							        fsm_bfsc_wmc_start_req},	//MYC

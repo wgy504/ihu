@@ -532,12 +532,12 @@ void msg_wmc_command_req_process(void *param_ptr, error_code_t *ec_ptr)
 		}
 		
 		/* Check If it is the right/valid state to process the message */
-		if( FSM_STATE_BFSC_CONFIGURATION != FsmGetState(TASK_ID_BFSC) )
-		{
-				IhuErrorPrint("L3BFSC: msg_wmc_command_req_process: FSM_STATE_BFSC_CONFIGURATION != FsmGetState(TASK_ID_BFSC), return\r\n");
-				*ec_ptr = ERROR_CODE_WRONG_WMC_STATE;
-				return;
-		}
+//		if( FSM_STATE_BFSC_CONFIGURATION != FsmGetState(TASK_ID_BFSC) )
+//		{
+//				IhuErrorPrint("L3BFSC: msg_wmc_command_req_process: FSM_STATE_BFSC_CONFIGURATION != FsmGetState(TASK_ID_BFSC), return\r\n");
+//				*ec_ptr = ERROR_CODE_WRONG_WMC_STATE;
+//				//return;
+//		}
 		
 		/* Check Parameters */
 		*ec_ptr = msg_wmc_command_req_check(param_ptr);
@@ -617,21 +617,38 @@ void msg_wmc_command_resp(error_code_t ec, msg_struct_l3bfsc_wmc_command_req_t *
 		/* Build Message Content Body */
 		msg_wmc_command_resp.motor_speed = zMotorControlParam.MotorSpeed;
 		
+		/* Stop Reading ADC */
+		if((FSM_STATE_BFSC_COMBINATION == FsmGetState(TASK_ID_BFSC) )||
+			 (FSM_STATE_BFSC_SCAN == FsmGetState(TASK_ID_BFSC)) )
+		{
+				weight_sensor_send_cmd(WIGHT_SENSOR_CMD_TYPE_STOP);
+		}
+		
+		/* Start to run weight sensor report */
 		if( SESOR_COMMAND_ID_WEITGH_READ == p_msg->sensor_command)
 		{
 				msg_wmc_command_resp.sensor_weight = WeightSensorReadCurrent(&zWeightSensorParam);
 		}
 		else if ( SESOR_COMMAND_ID_CALIBRATION_ZERO == p_msg->sensor_command )
 		{
-				zWeightSensorParam.WeightSensorCalibrationZeroAdcValue = WeightSensorReadInstantAdc();
-				msg_wmc_command_resp.sensor_weight = zWeightSensorParam.WeightSensorCalibrationZeroAdcValue;
-				WeightSensorCalibrationZero(&zWeightSensorParam);
+				
+				//zWeightSensorParam.WeightSensorCalibrationZeroAdcValue = WeightSensorReadInstantAdc();
+				msg_wmc_command_resp.sensor_weight = WeightSensorCalibrationZero(&zWeightSensorParam);
+				
+				
 		}
 		else if ( SESOR_COMMAND_ID_CALIBRATION_FULL == p_msg->sensor_command ) 
 		{	
-				zWeightSensorParam.WeightSensorCalibrationFullAdcValue = WeightSensorReadInstantAdc();
-				msg_wmc_command_resp.sensor_weight = zWeightSensorParam.WeightSensorCalibrationFullAdcValue;
-				WeightSensorCalibrationFull(&zWeightSensorParam);
+				//zWeightSensorParam.WeightSensorCalibrationFullAdcValue = WeightSensorReadInstantAdc();
+				msg_wmc_command_resp.sensor_weight = WeightSensorCalibrationFull(&zWeightSensorParam);
+				
+		}
+		
+		/* Restart Reading ADC */
+		if((FSM_STATE_BFSC_COMBINATION == FsmGetState(TASK_ID_BFSC) )||
+			 (FSM_STATE_BFSC_SCAN == FsmGetState(TASK_ID_BFSC)) )
+		{
+				weight_sensor_send_cmd(WIGHT_SENSOR_CMD_TYPE_START);
 		}
 		
 		IhuDebugPrint("L3BFSC: msg_wmc_command_resp: msgid=0x%08X, sensor_weight=%d, sensor_command=%d[0(null),3(read weight),4(cal.zero),5(cal.full)]\r\n", \

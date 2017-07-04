@@ -1111,7 +1111,7 @@ uint32_t WeightSensorCalibrationZero(WeightSensorParamaters_t *pwsp)
 	
 	//printf("l2adc_cs5532: WeightSensorCalibrationZero: pwsp = 0x%08X\r\n", pwsp);
 	
-	for(i = 0; i < 32; i ++)
+	for(i = 0; i < 8; i ++)
 	{
 		taskENTER_CRITICAL();
 		__disable_irq(); /* THIS IS VERY IMPORTANT, OR, THE SPI WILL BE INTERRUPT and THE ADC VALUE WILL BE JUMP UP/DOWN */
@@ -1121,9 +1121,9 @@ uint32_t WeightSensorCalibrationZero(WeightSensorParamaters_t *pwsp)
 		}
 		__enable_irq();
 		taskEXIT_CRITICAL();
-		HAL_Delay(20);
+		HAL_Delay(200);
 	}
-	temp = temp >> 5;
+	temp = temp >> 3;
 	
 	pwsp->WeightSensorCalibrationZeroAdcValue = temp;
 	
@@ -1186,7 +1186,7 @@ uint32_t WeightSensorReadInstantAdc()
 		int i;
 		uint32_t temp = 0;
 		
-		for(i = 0; i < 16; i ++)
+		for(i = 0; i < 8; i ++)
 		{
 				taskENTER_CRITICAL();
 				__disable_irq(); /* THIS IS VERY IMPORTANT, OR, THE SPI WILL BE INTERRUPT and THE ADC VALUE WILL BE JUMP UP/DOWN */
@@ -1199,7 +1199,7 @@ uint32_t WeightSensorReadInstantAdc()
 				HAL_Delay(200);
 		}
 		
-		temp = temp >> 4;
+		temp = temp >> 3;
 		return temp;
 }
 
