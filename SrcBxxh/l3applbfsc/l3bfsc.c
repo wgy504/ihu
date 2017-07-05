@@ -1147,7 +1147,7 @@ OPSTAT fsm_bfsc_wmc_command_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UI
 		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);
 	
-	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_command_req_t: rcv.msgid = 0x%08X, rcv.length = %d cmd_flags=0x%08x\r\n", rcv.msgid, rcv.length, rcv.comand_flags);
+	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_command_req_t: rcv.msgid = 0x%08X, rcv.length = %d cmd_flags=0x%08x\r\n", rcv.msgid, rcv.length, rcv.cmdid);
 
 	/* PROCESS TO BE ADDED */
 	/* !!!!!!!!!!!!!!!!!!!!*/

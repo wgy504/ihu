@@ -556,29 +556,25 @@ typedef struct msg_struct_l3bfsc_fault_ind
 /*
 **	MSG_ID_L3BFSC_WMC_COMMAND_REQ
 */
-//#define SENSOR_COMMAND_ID_WEITGH_READ (0x0001)
-//#define MOTOR_COMMAND_ID (0x0002)
+//#define CMDID_SENSOR_COMMAND_WEITGH_READ (0x0001)
+//#define CMDID_MOTOR_SPEED_READ (0x0002)
 //#define LED1_COMMAND_ID (0x0004)
 //#define LED2_COMMAND_ID (0x0008)
 //#define LED3_COMMAND_ID (0x0010)
 //#define LED4_COMMAND_ID (0x0020)
 
-//#define 	LED_COMMNAD_ON										(1)
-//#define 	LED_COMMNAD_OFF									  (2)
-//#define 	LED_COMMNAD_BINKING_HIGHSPEED		  (3)
-//#define 	LED_COMMNAD_BINKING_LOWSPEED			(4)
-
 typedef struct msg_struct_l3bfsc_wmc_command_req
 {
 	UINT16 msgid;
 	UINT16 length;
-	UINT32 comand_flags;
-	UINT8 led1_command;
-	UINT8 led2_command;
-	UINT8 led3_command;
-	UINT8 led4_command;
-	UINT32 motor_command;
-	UINT32 sensor_command;
+	UINT32 cmdid;
+	UINT32 cmdvalue;
+//	UINT8 led1_command;
+//	UINT8 led2_command;
+//	UINT8 led3_command;
+//	UINT8 led4_command;
+//	UINT32 motor_command;
+//	UINT32 sensor_command;
 }msg_struct_l3bfsc_wmc_command_req_t;
 
 /*
@@ -590,11 +586,12 @@ typedef struct msg_struct_l3bfsc_wmc_command_resp
 	UINT16 length;
 	WmcId_t wmc_id;               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */
   WmcErrorCode_t result;
-	UINT32 	motor_speed;
-	UINT32 	sensor_weight;
 	UINT8  validFlag;  //是否执行成功
 	UINT8  spare1;
 	UINT16 spare2;
+	UINT32 cmdid;
+	UINT32 cmdvalue1;
+	UINT32 cmdvalue2;
 }msg_struct_l3bfsc_wmc_command_resp_t;
 
 

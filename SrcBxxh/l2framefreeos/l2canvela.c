@@ -1007,8 +1007,8 @@ OPSTAT fsm_canvela_bfsc_l2frame_command_resp(UINT8 dest_id, UINT8 src_id, void *
 	
 	pMsgProc.wmc_id.wmc_id = rcv.wmc_id.wmc_id;
 	pMsgProc.result.error_code = HUITP_ENDIAN_EXG16(rcv.result.error_code);
-	pMsgProc.motor_speed = HUITP_ENDIAN_EXG32(rcv.motor_speed);
-	pMsgProc.sensor_weight = HUITP_ENDIAN_EXG32(rcv.sensor_weight);
+	pMsgProc.cmdvalue1 = HUITP_ENDIAN_EXG32(rcv.cmdvalue1);;
+	pMsgProc.cmdvalue1 = HUITP_ENDIAN_EXG32(rcv.cmdvalue1);;
 	pMsgProc.validFlag = rcv.validFlag;
 
 	//发送出去
@@ -1411,13 +1411,9 @@ OPSTAT func_canitfleo_l2frame_msg_bfsc_command_req_received_handle(StrMsg_HUITP_
 	msg_struct_l3bfsc_wmc_command_req_t snd;
 	memset(&snd, 0, sizeof(msg_struct_l3bfsc_wmc_command_req_t));
 	
-	snd.comand_flags = HUITP_ENDIAN_EXG32(rcv->comand_flags);
-	snd.led1_command = rcv->led1_command;
-	snd.led2_command = rcv->led2_command;
-	snd.led3_command = rcv->led3_command;
-	snd.led4_command = rcv->led4_command;
-	snd.motor_command = HUITP_ENDIAN_EXG32(rcv->motor_command);
-	snd.sensor_command = HUITP_ENDIAN_EXG32(rcv->sensor_command);
+	snd.cmdid = HUITP_ENDIAN_EXG32(rcv->cmdid);
+	snd.cmdvalue = HUITP_ENDIAN_EXG32(rcv->cmdvalue);
+	snd.cmdvalue = HUITP_ENDIAN_EXG32(rcv->cmdvalue);
 	
 	snd.length = sizeof(msg_struct_l3bfsc_wmc_command_req_t);
 	if (ihu_message_send(MSG_ID_L3BFSC_WMC_COMMAND_REQ, TASK_ID_BFSC, TASK_ID_CANVELA, &snd, snd.length) == IHU_FAILURE)
