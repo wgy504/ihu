@@ -20,6 +20,11 @@
 #define WMC_LAMP_ON 	 		  				(0x00)
 #define WMC_LAMP_OFF 	    	 				(0x01)
 
+#define LED_COMMNAD_ON										(1)
+#define LED_COMMNAD_OFF									  (2)
+#define LED_COMMNAD_BINKING_HIGHSPEED		  (3)
+#define LED_COMMNAD_BINKING_LOWSPEED			(4)
+
 
 // PID parameters
 #define BLK230_KP (1)

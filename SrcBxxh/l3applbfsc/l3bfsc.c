@@ -87,6 +87,7 @@ IhuFsmStateItem_t IhuFsmBfsc[] =
   {MSG_ID_L3BFSC_WMC_COMBIN_REQ,				  FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_combin_req},	//MYC	
 	{MSG_ID_L3BFSC_WMC_ERR_INQ_CMD_REQ,			FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_err_inq_req},	//MYC	
 	{MSG_ID_COM_TIME_OUT,										FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_heart_beat_timeout},
+	{MSG_ID_L3BFSC_WMC_HEART_BEAT_CONFIRM,	FSM_STATE_BFSC_CONFIGURATION,							fsm_bfsc_wmc_heart_beat_confirm},
 	
   {MSG_ID_L3BFSC_WMC_SET_CONFIG_REQ,			FSM_STATE_BFSC_SCAN,							        fsm_bfsc_wmc_set_config_req},	//MYC
 	{MSG_ID_L3BFSC_WMC_START_REQ,				    FSM_STATE_BFSC_SCAN,							        fsm_bfsc_wmc_start_req},	//MYC
@@ -1146,7 +1147,7 @@ OPSTAT fsm_bfsc_wmc_command_req(UINT8 dest_id, UINT8 src_id, void *param_ptr, UI
 		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);
 	
-	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_command_req_t: rcv.msgid = 0x%08X, rcv.length = %d cmd_flags=0x%08x\r\n", rcv.msgid, rcv.length, rcv.comand_flags);
+	IhuDebugPrint("L3BFSC: msg_struct_l3bfsc_wmc_command_req_t: rcv.msgid = 0x%08X, rcv.length = %d cmd_flags=0x%08x\r\n", rcv.msgid, rcv.length, rcv.cmdid);
 
 	/* PROCESS TO BE ADDED */
 	/* !!!!!!!!!!!!!!!!!!!!*/
