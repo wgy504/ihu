@@ -353,8 +353,8 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	//将组装好的消息发送到GPRSMOD模组中去，送往后台
 	//测试HTTP和TCP_TEXT两种模式，最终经过测试，确定一种稳定可靠的高效模式，待跟后台测试以后完善确定
 	memset(&zIhuSpsvirgoMsgRcvBuf, 0, sizeof(msg_struct_ccl_com_cloud_data_rx_t));
-	//ret = ihu_vmmw_gprsmod_http_data_transmit_with_receive((char *)(pMsgOutput.buf), pMsgOutput.bufferLen, zIhuSpsvirgoMsgRcvBuf.buf, &(zIhuSpsvirgoMsgRcvBuf.length));	
-	ret = ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive((char *)(pMsgOutput.buf), pMsgOutput.bufferLen, zIhuSpsvirgoMsgRcvBuf.buf, &(zIhuSpsvirgoMsgRcvBuf.length));	
+	ret = ihu_vmmw_gprsmod_http_data_transmit_with_receive((char *)(pMsgOutput.buf), pMsgOutput.bufferLen, zIhuSpsvirgoMsgRcvBuf.buf, &(zIhuSpsvirgoMsgRcvBuf.length));	
+  //ret = ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive((char *)(pMsgOutput.buf), pMsgOutput.bufferLen, zIhuSpsvirgoMsgRcvBuf.buf, &(zIhuSpsvirgoMsgRcvBuf.length));	
 	
 	
 	//这里有个挺有意思的现象：这里的命令还未执行完成，实际上后台的数据已经通过UART回来了，并通过ISR服务程序发送到SPSVIRGO的QUEUE中，但只有这里执行结束后，
@@ -372,7 +372,6 @@ OPSTAT fsm_spsvirgo_ccl_open_auth_inq(UINT8 dest_id, UINT8 src_id, void * param_
 	if (ret == IHU_FAILURE){
 		memset(&snd, 0, sizeof(msg_struct_spsvirgo_ccl_cloud_fb_t));
 		//如果采用随机工作方式
-		//snd.authResult = ((rand()%2 == 1)?IHU_CCL_LOCK_AUTH_RESULT_OK:IHU_CCL_LOCK_AUTH_RESULT_NOK); //纯粹是为了测试目的
 		snd.authResult = IHU_CCL_LOCK_AUTH_RESULT_NOK;
 		snd.length = sizeof(msg_struct_spsvirgo_ccl_cloud_fb_t);
 		ret = ihu_message_send(MSG_ID_SPS_CCL_CLOUD_FB, TASK_ID_CCL, TASK_ID_SPSVIRGO, &snd, snd.length);

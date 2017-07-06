@@ -749,6 +749,7 @@ void ihu_vm_system_ctr_table_init(void)
 	strcpy(zIhuSysEngPar.cloud.cloudHttpAddLocal, IHU_SYSCFG_BH_HTTP_LOCAL_ADDR);
 	strcpy(zIhuSysEngPar.cloud.cloudBhServerAddr, IHU_SYSCFG_BH_HTTP_SVR_ENTRY_ADDR);
 	strcpy(zIhuSysEngPar.cloud.cloudBhServerName, IHU_SYSCFG_BH_HTTP_SVR_NAME);
+	strcpy(zIhuSysEngPar.cloud.cloudBhServerPort, IHU_SYSCFG_BH_HTTP_SVR_PORT);
 	strcpy(zIhuSysEngPar.cloud.cloudBhFtpSvrAddr, IHU_SYSCFG_BH_FTP_SVR_ADDR);	
 	//local SW storage address
 	strcpy(zIhuSysEngPar.swDownload.ihuSwDownloadDir, IHU_SYSCFG_SW_DOWNLOAD_DIR_DEFAULT);

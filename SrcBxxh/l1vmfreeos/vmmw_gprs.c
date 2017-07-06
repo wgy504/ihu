@@ -326,7 +326,7 @@ OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input, int16_t inl
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: HTTP setting failure on CID selection!\n");
 		return IHU_FAILURE;
 	}			
-	//HTTP参数配置：设置URL目的地址
+	//HTTP参数配置：设置URL目的地址，端口地址暂时没有？？？
 	memset(temp, 0, sizeof(temp));
 	memcpy((char*)temp, "AT+HTTPPARA=\"URL\",\"", sizeof("AT+HTTPPARA=\"URL\",\""));
 	strcat((char*)temp, zIhuSysEngPar.cloud.cloudBhServerAddr);
@@ -349,31 +349,33 @@ OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input, int16_t inl
 	func_gprsmod_send_LR();
 	ihu_usleep(250);  //稍微暂停一下
 	//POST动作指令, 返回字符串中的"200"表示POST成功，1表示POST
-	if(func_gprsmod_send_AT_command((uint8_t*)"AT+HTTPACTION=1", (uint8_t*)"+HTTPACTION: 1,200", 4) == IHU_FAILURE){
+	//if(func_gprsmod_send_AT_command((uint8_t*)"AT+HTTPACTION=1", (uint8_t*)"+HTTPACTION: 1,200", 4) == IHU_FAILURE){
+	if(func_gprsmod_send_AT_command((uint8_t*)"AT+HTTPACTION=1", (uint8_t*)"+HTTPACTION", 4) == IHU_FAILURE){
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: HTTP POST data failure on action execution feedback!\n");
 		return IHU_FAILURE;
 	}		
 	//读取服务器后台的反馈数据
 	func_gprsmod_send_AT_command((uint8_t*)"AT+HTTPACTION=0", (uint8_t*)"OK", 2);
 	//收到200表示反馈成功，0表示GET
-	if(func_gprsmod_send_AT_command((uint8_t*)"AT+HTTPREAD", (uint8_t*)"+HTTPACTION: 0,200", 4) == IHU_FAILURE){
+	//if(func_gprsmod_send_AT_command((uint8_t*)"AT+HTTPREAD", (uint8_t*)"+HTTPACTION: 0,200", 4) == IHU_FAILURE){
+	if(func_gprsmod_send_AT_command((uint8_t*)"AT+HTTPREAD", (uint8_t*)"+HTTPACTION", 4) == IHU_FAILURE){
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: HTTP GET back data failure from cloud!\n");
 		return IHU_FAILURE;
 	}
 	
 	//准备解码并送往上层
 	//暂时返回的都是垃圾，所以自行生成测试数据
-	i = rand() % 11;
-	if (i ==1) strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_HEAD_VALID);
-	else if(i==2) strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_AUTH_IND);
-	else if(i==3) strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_AUTH_RESP_YES);		
-	else if(i==4) strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_AUTH_RESP_NO);		
-	else if(i==5) strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_STATE_REPORT_PERIOD);
-	else if(i==6) strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_STATE_REPORT_CLOSE);
-	else if(i==7) strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_STATE_REPORT_FAULT);
-	else if(i==8) strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_STATE_CONFIRM_PERIOD);
-	else if(i==9) strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_STATE_CONFIRM_CLOSE);
-	else strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_STATE_CONFIRM_FAULT);
+//	i = rand() % 11;
+//	if (i ==1) strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_HEAD_VALID);
+//	else if(i==2) strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_AUTH_IND);
+//	else if(i==3) strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_AUTH_RESP_YES);		
+//	else if(i==4) strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_AUTH_RESP_NO);		
+//	else if(i==5) strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_STATE_REPORT_PERIOD);
+//	else if(i==6) strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_STATE_REPORT_CLOSE);
+//	else if(i==7) strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_STATE_REPORT_FAULT);
+//	else if(i==8) strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_STATE_CONFIRM_PERIOD);
+//	else if(i==9) strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_STATE_CONFIRM_CLOSE);
+//	else strcpy((char*)zIhuBspStm32SpsGprsRxBuff, HUITP_MSG_HUIXML_TEST_DATA_CCL_STATE_CONFIRM_FAULT);
 	
 	//转化为小写与否。同时，大小写本来就是接收消息的一部分
 	if (IHU_VMWM_GPRSMOD_RECEIVE_DATA_TRANSFER_TO_LOWER_CASE_SET == IHU_VMWM_GPRSMOD_RECEIVE_DATA_TRANSFER_TO_LOWER_CASE_YES){
@@ -383,6 +385,7 @@ OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input, int16_t inl
 	}
 	
 	//接收数据处理
+	IHU_DEBUG_PRINT_FAT("VMMWGPRS: Feedback from BH is [%s]!\n", (const char*)zIhuBspStm32SpsGprsRxBuff);
 	p1 = (uint8_t*)strstr((const char*)zIhuBspStm32SpsGprsRxBuff, "<xml>");
 	p2 = (uint8_t*)strstr((const char*)zIhuBspStm32SpsGprsRxBuff, "</xml>");
 	if((p1 != NULL) && (p2 != NULL) && (p1 < p2)){
