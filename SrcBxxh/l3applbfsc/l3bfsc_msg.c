@@ -90,7 +90,7 @@ void msg_wmc_set_config_req_process(void *param_ptr, error_code_t *ec_ptr)
 		/* Process the message */
     // TODO: check each parameters...
     weightSensorConfig(&config_req->weight_sensor_param);
-    zMotorControlParam = config_req->motor_control_param;
+    //zMotorControlParam = config_req->motor_control_param;
 		
 		/* Force to STOP */
 		weight_sensor_send_cmd(WIGHT_SENSOR_CMD_TYPE_STOP);
@@ -751,6 +751,10 @@ void msg_wmc_combin_req_process(void *param_ptr, error_code_t *ec_ptr)
 		}
 		
 		/* Process the message: start motor */
+		
+		IhuDebugPrint("L3BFSC: msg_wmc_combin_req_process start: MotorDirection=%d, MotorSpeed=%d, MotorRollingStartMs=%d\r\n", \
+										zMotorControlParam.MotorDirection, zMotorControlParam.MotorSpeed, zMotorControlParam.MotorRollingStartMs);
+		
     blk230_send_cmd(1, zMotorControlParam.MotorDirection, zMotorControlParam.MotorSpeed, zMotorControlParam.MotorRollingStartMs);
 		//blk230_set_lamp(WMC_LAMP_OUT2_GREEN, WMC_LAMP_ON);
 		blk230_led_send_cmd(WMC_LAMP_OUT2_GREEN, LED_COMMNAD_ON);

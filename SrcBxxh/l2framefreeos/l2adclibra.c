@@ -662,13 +662,23 @@ void WeightLoadEmptyDetection(strIhuBfscAdcWeightPar_t *pbawp, WeightSensorParam
 
 }
 
-void SendWeightIndicationToBfsc(UINT32 adc_filtered, UINT32 average_weight, UINT32 weight_event, UINT32 repeat_times)
+void SendWeightIndicationToBfsc(UINT32 adc_filtered, INT32 average_weight, UINT32 weight_event, UINT32 repeat_times)
 {
 		msg_struct_l3bfsc_weight_ind_t weight_ind;
 		OPSTAT ret;
 	
 		weight_ind.adc_filtered = adc_filtered;
-		weight_ind.average_weight = average_weight;
+	
+		/* Filter Out - value */
+		if(average_weight < 0)
+		{
+				weight_ind.average_weight = 0;
+		}
+		else
+		{
+				weight_ind.average_weight = average_weight;
+		}
+	
 		weight_ind.weight_event = weight_event;
 		weight_ind.repeat_times = repeat_times;
 	
@@ -734,6 +744,9 @@ void WeightLoadEmptyEventReport(strIhuBfscAdcWeightPar_t *pbawp, WeightSensorPar
 				//blk230_led_send_cmd(WMC_LAMP_OUT2_GREEN, LED_COMMNAD_OFF);
 				//blk230_led_send_cmd(WMC_LAMP_OUT2_GREEN, LED_COMMNAD_ON);
 				//blk230_led_send_cmd(WMC_LAMP_OUT3_YELLOW, LED_COMMNAD_ON);
+				
+				/* STOP MOTOR */
+				blk230_set_stop(1);
 			
 		}
 		/* Case 3: EMPTY -> LOAD */
@@ -770,7 +783,7 @@ void WeightLoadEmptyEventReport(strIhuBfscAdcWeightPar_t *pbawp, WeightSensorPar
 						IhuDebugPrint("S7:%d:%d:%d:%d: Load->Load, WeightCurrValue=%d, ConsecutiveTimes=%d, RepeatTimes=%d\n", pbawp->SysTicksMs, pbawp->WeightCurrentTicks, \
 					                 pbawp->WeightCurrEventTicks, pbawp->WeightLastEventTicks, pbawp->WeightCurrValue, pbawp->ConsecutiveTimes, pbawp->RepeatTimes);
 
-						if(pbawp->RepeatTimes <= 10)  /* Define 10 times of remain time as the largest allowed times */
+						if(pbawp->RepeatTimes <= 50)  /* Define 10 times of remain time as the largest allowed times */
 						{	
 								SendWeightIndicationToBfsc(pwsp->WeightSensorAdcValue, pbawp->WeightCurrValue, \
 					                              WEIGHT_EVENT_ID_LOAD, pbawp->RepeatTimes);
