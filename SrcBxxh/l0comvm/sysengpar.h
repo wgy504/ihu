@@ -60,6 +60,7 @@ typedef struct SysEngParElementCloudXhui
 	char  cloudHttpAddLocal[IHU_SYSENG_PAR_ELEMENT_CLOUDXHUI_LEN];
 	char  cloudBhServerAddr[IHU_SYSENG_PAR_ELEMENT_CLOUDXHUI_LEN];
 	char  cloudBhServerName[IHU_SYSENG_PAR_ELEMENT_CLOUDXHUI_LEN];
+	char  cloudBhServerPort[IHU_SYSENG_PAR_ELEMENT_CLOUDXHUI_LEN];
 	char  cloudBhFtpSvrAddr[IHU_SYSENG_PAR_ELEMENT_CLOUDXHUI_LEN];
 	UINT8 cloudBhItfFrameStd;
 }SysEngParElementCloudXhui_t;

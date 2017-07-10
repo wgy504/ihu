@@ -418,13 +418,17 @@
 	#define IHU_SYSCFG_GPS_SERIES_PORT_DEFAULT  1
 	//定义后台CLOUD连接到服务器
 	#define IHU_SYSCFG_BH_HTTP_LOCAL_ADDR 			"http://127.0.0.1/test.php"
-	#define IHU_SYSCFG_BH_HTTP_SVR_ENTRY_ADDR 	"http://www.hkrob.com/mfunhcu/l1mainentry/cloud_callback_hcu.php"
+	#define IHU_SYSCFG_BH_HTTP_SVR_ENTRY_ADDR 	"http://121.40.118.33:9510"   //"http://www.hkrob.com/mfunhcu/l1mainentry/cloud_callback_hcu.php"
 	#define IHU_SYSCFG_BH_HTTP_SVR_NAME 				"XHZN_HCU"
+	#define IHU_SYSCFG_BH_HTTP_SVR_PORT 				"9510"
 	#define IHU_SYSCFG_BH_HCU_NAME_SELF 				"HCU_G514_FHYS_SH001"
 	#define IHU_SYSCFG_BH_TCP_SVR_HTTP_ADDR 		"http://www.hkrob.com/"
 	#define IHU_SYSCFG_BH_TCP_SVR_IP_ADDR 			"121.40.118.33"
-	#define IHU_SYSCFG_BH_TCP_SVR_PORT 					"9501"
+	#define IHU_SYSCFG_BH_TCP_SVR_PORT 					"9511"
+	#define IHU_SYSCFG_BH_UDP_SVR_IP_ADDR 			"121.40.118.33"
+	#define IHU_SYSCFG_BH_UDP_SVR_PORT 					"9512"
 	#define IHU_SYSCFG_BH_FTP_SVR_ADDR 					"http://www.hkrob.com/mfunhcu/l1mainentry/cloud_callback_hcu.php"
+	#define IHU_SYSCFG_BH_FTP_SVR_PORT 					"9550"
 	#define IHU_SYSCFG_BH_FTP_USR_NAME 					"test1234"
 	#define IHU_SYSCFG_BH_FTP_PSWD 							"123456"
 	#define IHU_SYSCFG_BH_FTP_FILE_NAME 				"ihu_new_pkg.bin"
@@ -554,10 +558,11 @@
 	#define IHU_SYSCFG_GPS_SERIES_PORT_DEFAULT  1
 	//定义后台CLOUD连接到服务器
 	#define IHU_SYSCFG_BH_HTTP_LOCAL_ADDR 						"http://127.0.0.1/test.php"
-	#define IHU_SYSCFG_BH_HTTP_SVR_ENTRY_ADDR 	"http://www.hkrob.com/mfunhcu/l1mainentry/cloud_callback_hcu.php"
-	#define IHU_SYSCFG_BH_HTTP_SVR_NAME 	"XHZN_HCU"
-	#define IHU_SYSCFG_BH_HCU_NAME_SELF 								"HCU_G881_BFSC_SH001"
-	#define IHU_SYSCFG_BH_FTP_SVR_ADDR 						"http://www.hkrob.com/mfunhcu/l1mainentry/cloud_callback_hcu.php"
+	#define IHU_SYSCFG_BH_HTTP_SVR_ENTRY_ADDR 				"http://www.hkrob.com/mfunhcu/l1mainentry/cloud_callback_hcu.php"
+	#define IHU_SYSCFG_BH_HTTP_SVR_NAME 							"XHZN_HCU"
+	#define IHU_SYSCFG_BH_HTTP_SVR_PORT 							"9510"
+	#define IHU_SYSCFG_BH_HCU_NAME_SELF 							"HCU_G881_BFSC_SH001"
+	#define IHU_SYSCFG_BH_FTP_SVR_ADDR 								"http://www.hkrob.com/mfunhcu/l1mainentry/cloud_callback_hcu.php"
 	
 	//local SW storage address
 	#define  IHU_SYSCFG_SW_DOWNLOAD_DIR_DEFAULT "/home/pi/ihu_sw_download/"
@@ -610,6 +615,7 @@
 	#define IHU_SYSCFG_BH_HTTP_LOCAL_ADDR 			"http://127.0.0.1/test.php"
 	#define IHU_SYSCFG_BH_HTTP_SVR_ENTRY_ADDR 	"http://www.hkrob.com/mfunhcu/l1mainentry/cloud_callback_hcu.php"
 	#define IHU_SYSCFG_BH_HTTP_SVR_NAME 				"XHZN_HCU"
+	#define IHU_SYSCFG_BH_HTTP_SVR_PORT 				"9510"
 	#define IHU_SYSCFG_BH_HCU_NAME_SELF 				"HCU_G514_FHYS_SH001"
 	#define IHU_SYSCFG_BH_TCP_SVR_HTTP_ADDR 		"http://www.hkrob.com/"
 	#define IHU_SYSCFG_BH_TCP_SVR_IP_ADDR 			"121.40.118.33"
