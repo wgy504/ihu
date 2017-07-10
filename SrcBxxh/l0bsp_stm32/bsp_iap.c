@@ -122,3 +122,71 @@ void IAP_execute_app_bin_all_in_one(void)
 {
 	IAP_ExecuteApp(APP_START_ADDR);
 }
+
+/*
+** ========================================
+*/
+OPSTAT ihu_bsp_stm32_iap_bootcfg_read_all(SysEngParElementHwBurnPhyIdAddr_t *buf)
+{
+	return SUCCESS;
+}
+
+OPSTAT ihu_bsp_stm32_iap_bootcfg_write_all(SysEngParElementHwBurnPhyIdAddr_t *buf)
+{
+	return SUCCESS;
+}
+
+uint8_t ihu_bsp_stm32_iap_bootcfg_read_boot_flag(void)
+{
+	return 0;
+}
+
+OPSTAT ihu_bsp_stm32_iap_bootcfg_write_boot_flag(uint8_t flag)
+{
+	return SUCCESS;
+}
+
+OPSTAT ihu_bsp_stm32_iap_bootcfg_update_swid (uint16_t relid, uint16_t verid)
+{
+	return SUCCESS;
+}
+
+OPSTAT ihu_bsp_stm32_iap_bootcfg_update_boot_index (uint8_t index)
+{
+	return SUCCESS;
+}
+
+OPSTAT ihu_bsp_stm32_iap_bootcfg_update_boot_load (uint8_t index, uint32_t addr, uint16_t relid, uint16_t verid, uint16_t checksum, uint16_t validflag)
+{
+	return SUCCESS;
+}
+
+bool ihu_bsp_stm32_iap_check_load_max_len(uint32_t len)
+{
+	return SUCCESS;
+}
+
+OPSTAT ihu_bsp_stm32_iap_write_load_segment(uint8_t loadindex, uint16_t segId, uint8_t *buf)
+{
+	return SUCCESS;
+}
+
+OPSTAT ihu_bsp_stm32_iap_switch_to_app(void)
+{
+	return SUCCESS;
+}
+
+OPSTAT ihu_bsp_stm32_iap_switch_to_iap(void)
+{
+	return SUCCESS;
+}
+
+OPSTAT ihu_ihu_bsp_stm32_iap_erase_flash_block(uint32_t start_address, uint32_t length_in_bytes)
+{
+	return SUCCESS;
+}
+
+OPSTAT ihu_ihu_bsp_stm32_iap_write_flash(uint32_t start_address, uint32_t length_in_bytes, uint8_t *data)
+{
+	return SUCCESS;
+}

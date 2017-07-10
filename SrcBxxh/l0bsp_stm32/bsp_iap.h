@@ -60,6 +60,23 @@ void IAP_ExecuteApp( uint32_t appxaddr );			                              //æ‰§è
 void IAP_write_app_bin_all_in_one(void);
 void IAP_execute_app_bin_all_in_one(void);
 
+/* define for iap */
+OPSTAT ihu_bsp_stm32_iap_bootcfg_read_all(SysEngParElementHwBurnPhyIdAddr_t *buf);
+OPSTAT ihu_bsp_stm32_iap_bootcfg_write_all(SysEngParElementHwBurnPhyIdAddr_t *buf);
+uint8_t ihu_bsp_stm32_iap_bootcfg_read_boot_flag(void);
+OPSTAT ihu_bsp_stm32_iap_bootcfg_write_boot_flag(uint8_t flag);
+OPSTAT ihu_bsp_stm32_iap_bootcfg_update_swid (uint16_t relid, uint16_t verid);
+OPSTAT ihu_bsp_stm32_iap_bootcfg_update_boot_index (uint8_t index);
+OPSTAT ihu_bsp_stm32_iap_bootcfg_update_boot_load (uint8_t index, uint32_t addr, uint16_t relid, uint16_t verid, uint16_t checksum, uint16_t validflag);
+bool ihu_bsp_stm32_iap_check_load_max_len(uint32_t len);
+OPSTAT ihu_bsp_stm32_iap_write_load_segment(uint8_t loadindex, uint16_t segId, uint8_t *buf);
+
+OPSTAT ihu_bsp_stm32_iap_switch_to_app(void);
+OPSTAT ihu_bsp_stm32_iap_switch_to_iap(void);
+
+
+OPSTAT ihu_ihu_bsp_stm32_iap_erase_flash_block(uint32_t start_address, uint32_t length_in_bytes);
+OPSTAT ihu_ihu_bsp_stm32_iap_write_flash(uint32_t start_address, uint32_t length_in_bytes, uint8_t *data);
 
 #ifdef __cplusplus
 }
