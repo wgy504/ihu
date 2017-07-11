@@ -353,7 +353,7 @@ OPSTAT ihu_vmmw_gprsmod_http_data_transmit_with_receive(char *input, int16_t inl
 	if(func_gprsmod_send_AT_command((uint8_t*)"AT+HTTPACTION=1", (uint8_t*)"+HTTPACTION", 4) == IHU_FAILURE){
 		IHU_ERROR_PRINT_GPRSMOD("VMMWGPRS: HTTP POST data failure on action execution feedback!\n");
 		return IHU_FAILURE;
-	}		
+	}
 	//读取服务器后台的反馈数据
 	func_gprsmod_send_AT_command((uint8_t*)"AT+HTTPACTION=0", (uint8_t*)"OK", 2);
 	//收到200表示反馈成功，0表示GET
@@ -464,6 +464,7 @@ OPSTAT ihu_vmmw_gprsmod_tcp_text_data_transmit_with_receive(char *input, int16_t
 	}
 	
 	//真正发送数据体: TCP方式！
+	IHU_DEBUG_PRINT_FAT("VMMWGPRS: TCP text send out string = [%s]\n", (char *)input);
 	func_gprsmod_send_string(input);
 	memset(temp, 0, sizeof(temp));
 	//CTRL+Z,结束数据发送,启动一次传输	
