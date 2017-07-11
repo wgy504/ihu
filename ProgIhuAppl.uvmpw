@@ -21,6 +21,8 @@
 
   <project>
     <PathAndName>.\PrjIapStm32F2x\MDK-ARM\PrjIapStm32F2x.uvprojx</PathAndName>
+    <NodeIsActive>1</NodeIsActive>
+    <NodeIsExpanded>1</NodeIsExpanded>
   </project>
 
   <project>

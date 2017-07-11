@@ -85,10 +85,10 @@ enum IHU_INTER_TASK_MSG_ID
 	MSG_ID_CAN_L2FRAME_RCV,
 
 	//L3IAP
-	MSG_ID_L3IAP_CANVELA_INVENTORY_REPORT,
-	MSG_ID_L3IAP_CANVELA_SW_PACKAGE_REPORT,
-	MSG_ID_CANVELA_L3IAP_INVENTORY_CONFIRM,
-	MSG_ID_CANVELA_L3IAP_SW_PACKAGE_CONFIRM,
+	MSG_ID_IAP_SW_INVENTORY_REPORT,   		// IHU -> HCU
+	MSG_ID_IAP_SW_INVENTORY_CONFIRM,  		// HCU -> IHU
+	MSG_ID_IAP_SW_PACKAGE_REPORT,   	    // IHU -> HCU
+	MSG_ID_IAP_SW_PACKAGE_CONFIRM,  	    // HCU -> IHU
 	
 	//END FLAG
 	MSG_ID_COM_MAX, //Ending point
@@ -211,7 +211,184 @@ typedef struct msg_struct_canvela_l3iap_sw_package_confirm
 	UINT16 length;
 }msg_struct_canvela_l3iap_sw_package_confirm_t;
 
+/*
+** IAP System Message inside L2 Frame
+*/
 
+//msgid:
+//	MSG_ID_IAP_SW_INVENTORY_REPORT,   		// IHU -> HCU
+//	MSG_ID_IAP_SW_INVENTORY_CONFIRM,  		// HCU -> IHU
+//	MSG_ID_IAP_SW_PACKAGE_REPORT,   	    // IHU -> HCU
+//	MSG_ID_IAP_SW_PACKAGE_CONFIRM,  	    // HCU -> IHU
+
+/*
+**	MSG_ID_L3IAP_WMC_MSH_HEADER
+*/
+
+/* 
+** THIS IS DEFINED BY LI HAO C, TO BE MERGED
+*/
+//typedef struct SysEngParElementHwBurnPhyIdAddr
+//{
+//	char  	equLable[20];
+//	UINT16 	hwType;
+//	UINT16 	hwPemId;
+//	UINT16 	swRelId;
+//	UINT16 	swVerId;
+//	UINT8  	swUpgradeFlag;
+//  UINT32  spare1;
+//	UINT32  facLoadAddr;
+//  UINT16  facLoadSwRel;
+//  UINT16  facLoadSwVer;
+//  UINT16  facLoadCheckSum;
+//  UINT16  facLoadValid;
+//  UINT32  spare2;
+//	UINT32  bootLoad1Addr;
+//  UINT16  bootLoad1SwRel;
+//  UINT16  bootLoad1SwVer;
+//  UINT16  bootLoad1CheckSum;
+//  UINT16  bootLoad1Valid;
+//  UINT32  spare3;
+//	UINT8 	rsv2;
+//	UINT8 	rsv3;
+//}SysEngParElementHwBurnPhyIdAddr_t;
+
+//typedef struct SysEngParElementHwBurnPhyIdAddr
+//{
+//	char  	equLable[20];
+//	UINT16 	hwType;
+//	UINT16 	hwPemId;
+//	UINT8  	swUpgradeFlag;
+//	UINT8 	swUpgPollId;
+//	UINT8 	bootIndex;
+//	UINT8 	bootAreaMax;  
+//	UINT32  HwNodeIdPart1;    //32
+//	UINT32	HwNodeIdPart2;		 //32
+//	UINT32  facLoadAddr; 
+//	UINT16	facLoadSwRel;
+//	UINT16	facLoadSwVer;	
+//	UINT16 	facLoadCheckSum;
+//	UINT16  facLoadValid;
+//	UINT32  bootLoad1Addr;
+//	UINT16 	bootLoad1RelId;
+//	UINT16 	bootLoad1VerId;
+//	UINT16 	bootLoad1CheckSum;
+//	UINT16  bootLoad1Valid;
+//	UINT32	spare3;   //32
+//	UINT32  bootLoad2Addr;
+//	UINT16 	bootLoad2RelId;
+//	UINT16 	bootLoad2VerId;
+//	UINT16 	bootLoad2CheckSum;
+//	UINT16  bootLoad2Valid;
+//	UINT32	spare4;
+//	UINT32  bootLoad3Addr;
+//	UINT16 	bootLoad3RelId;
+//	UINT16 	bootLoad3VerId;
+//	UINT16 	bootLoad3CheckSum;
+//	UINT16  bootLoad3Valid;
+//	UINT32  spare5;       //32
+//	UINT8   cipherKey[16];
+//	UINT8 	rsv[16];   		//32
+//}SysEngParElementHwBurnPhyIdAddr_t;
+
+typedef struct msg_struct_l3iap_msg_header
+{
+	UINT16 msgid;
+	UINT16 length;
+}msg_struct_l3iap_msg_header_t;
+
+
+//MSG_ID_IAP_SW_INVENTORY_REPORT,
+typedef struct msg_struct_l3iap_sw_inventory_report
+{
+	UINT16  msgid;
+	UINT16  length;
+	UINT16  hwType;
+	UINT16  hwId;
+	UINT16  swRel;
+	UINT16  swVer;
+	UINT16  upgradeFlag;
+	UINT32  timeStamp;
+}msg_struct_l3iap_sw_upgrade_report_t;
+
+//MSG_ID_IAP_SW_INVENTORY_CONFIRM,
+#define IAP_SW_UPGRADE_TYPE_JUMP_TO_APP_LOAD         (1) //NO Upgrade
+#define IAP_SW_UPGRADE_TYPE_JUMP_TO_FACTORY_LOAD     (2) //NO Upgrade
+#define IAP_SW_UPGRADE_TYPE_UPGRADE_APP_LOAD         (3) //Upgrade AppLoad
+#define IAP_SW_UPGRADE_TYPE_UPGRADE_FACTORY_LOAD     (4) //Upgrade FacoryLoad
+
+typedef struct msg_struct_l3iap_sw_inventory_confirm
+{
+	UINT16  msgid;
+	UINT16  length;
+	UINT16 	swUpgradeType;					       //APP or FACTORY, or ... same as msg_struct_l3iap_iap_sw_upgrade_req
+	UINT16 	swRelId;
+	UINT16 	swVerId;
+	UINT16 	swCheckSum;
+	UINT32  swTotalLengthInBytes;
+}msg_struct_l3iap_sw_inventory_confirm_t;
+
+//MSG_ID_IAP_SW_PACKAGE_REPORT,
+
+#define IAP_SW_UPGRADE_PREPARE_STATUS_ABOUT_TO_JUMP_TO_APP              (1) //NO Upgrade
+#define IAP_SW_UPGRADE_PREPARE_STATUS_ABOUT_TO_JUMP_TO_FACTORY_LOAD     (2) //NO Upgrade
+#define IAP_SW_UPGRADE_PREPARE_STATUS_APP_LOAD_FLASH_ERASED_OK          (3) //Upgrade AppLoad
+#define IAP_SW_UPGRADE_PREPARE_STATUS_FACTORY_LOAD_FLASH_ERASED_OK      (4) //Upgrade FacoryLoad
+
+/*
+Frame structure:
+
+1. L2 CAN FRAME Header (4 bytes)
+typedef struct IHU_HUITP_L2FRAME_STD_frame_header
+{
+		uint8_t start;
+		uint8_t chksum;
+		uint16_t len;     // the length including the size of header
+}IHU_HUITP_L2FRAME_STD_frame_header_t;
+
+2. L2 FRAME HEADER (4 bytes)
+typedef struct msg_struct_l3iap_msg_header
+{
+		UINT16 msgid;
+		UINT16 length;
+}msg_struct_l3iap_msg_header_t;
+
+3. Private Header for each message
+	UINT16 	UpgradePrepareStatus;					//APP or FACTORY, or ...
+	UINT16 	swRelId;
+	UINT16 	swVerId;
+	UINT16 	swCheckSum;
+	UINT32  swTotalLengthInBytes;
+	UINT32	swSegmentIndex;        // 0, 1, 2, ... MaxLoadSegmentIndex, start from 0, 
+		
+*/
+typedef struct msg_struct_l3iap_sw_package_report
+{
+	UINT16  msgid;
+	UINT16  length;
+	UINT16 	UpgradePrepareStatus;					//APP or FACTORY, or ...
+	UINT16 	swRelId;
+	UINT16 	swVerId;
+	UINT16 	swCheckSum;
+	UINT32  swTotalLengthInBytes;
+	UINT32	swSegmentIndex;        // 0, 1, 2, ... MaxLoadSegmentIndex, start from 0, 
+}msg_struct_l3iap_sw_package_report_t;
+
+//MSG_ID_IAP_SW_PACKAGE_CONFIRM,
+#define MAX_LEN_PER_LOAD_SEGMENT	(256-4-sizeof(msg_struct_l3iap_sw_package_report_t))      //232
+	
+typedef struct msg_struct_l3iap_sw_package_confirm
+{
+	UINT16  msgid;
+	UINT16  length;
+	UINT16 	UpgradePrepareStatus;					//APP or FACTORY, or ...
+	UINT16 	swRelId;
+	UINT16 	swVerId;
+	UINT16 	swCheckSum;
+	UINT32  swTotalLengthInBytes;
+	UINT32	swSegmentIndex;        // 0, 1, 2, ... MaxLoadSegmentIndex, start from 0, 
+	UINT8		swPackageSegmentContent[MAX_LEN_PER_LOAD_SEGMENT];
+}msg_struct_l3iap_sw_package_confirm_t;
 
 
 

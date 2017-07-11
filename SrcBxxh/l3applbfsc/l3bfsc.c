@@ -180,6 +180,9 @@ OPSTAT fsm_bfsc_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param
 	memset(&zCombAlgoParam, 0, sizeof(CombinationAlgorithmParamaters_t));
 	IhuDebugPrint("L3BFSC: fsm_bfsc_init: zCombAlgoParam set 0, size = %d bytes\n", sizeof(CombinationAlgorithmParamaters_t));	
 	
+	memset(&zMotorControlParam, 0, sizeof(MotorControlParamaters_t));
+	IhuDebugPrint("L3BFSC: fsm_bfsc_init: zMotorControlParam set 0, size = %d bytes\n", sizeof(MotorControlParamaters_t));
+	
 	memset(&zBfscWmcState, 0, sizeof(BfscWmcState_t));
 	IhuDebugPrint("L3BFSC: fsm_bfsc_init: zBfscWmcState set 0, size = %d bytes\n", sizeof(BfscWmcState_t));	
 	
@@ -324,6 +327,16 @@ UINT32 GetWmcId()
 	wmc_id = wmc_id & 0x2F;
 	return wmc_id;
 }
+
+void MotorControlInit(MotorControlParamaters_t *pmcp)
+{
+		pmcp->MotorDirection = 0;
+		pmcp->MotorRollingStartMs = 5000;
+		pmcp->MotorSpeed = 150;
+		//blk230_send_cmd(1, zMotorControlParam.MotorDirection, zMotorControlParam.MotorSpeed, zMotorControlParam.MotorRollingStartMs);
+		//blk230_send_cmd(1, 0, 0, 1000);
+}
+
 //MYC
 OPSTAT func_bfsc_hw_init(WmcInventory_t *pwi)
 {
@@ -352,10 +365,13 @@ OPSTAT func_bfsc_hw_init(WmcInventory_t *pwi)
 	
 	/* Load Default Parameters */
 	WeightSensorInit(&zWeightSensorParam);
-	IhuDebugPrint("L3BFSC: func_bfsc_hw_init: WeightSensorInit()\r\n");
+	IhuDebugPrint("L3BFSC: func_bfsc_hw_init: WeightSensorInit()\n");
 	
 	WeightSensorDefaultCalibrationValue(&zWeightSensorParam);
-	IhuDebugPrint("L3BFSC: func_bfsc_hw_init: WeightSensorDefaultCalibrationValue()\r\n");
+	IhuDebugPrint("L3BFSC: func_bfsc_hw_init: WeightSensorDefaultCalibrationValue()\n");
+	
+	MotorControlInit(&zMotorControlParam);
+	IhuDebugPrint("L3BFSC: func_bfsc_hw_init: MotorControlInit()\n");
 	
 	srand(zWmcInvenory.wmc_id.wmc_id); /* For generating ramdon value for test */
 	
@@ -999,7 +1015,10 @@ OPSTAT fsm_bfsc_wmc_startind_time_out(UINT8 dest_id, UINT8 src_id, void * param_
 		snd.length = sizeof(msg_struct_l3bfsc_wmc_startup_ind_t);
 		snd.msgid = (MSG_ID_L3BFSC_WMC_STARTUP_IND);
 		memcpy(&snd.wmc_inventory, &zWmcInvenory, sizeof(WmcInventory_t));
-
+		
+		//blk230_send_cmd(1, zMotorControlParam.MotorDirection, zMotorControlParam.MotorSpeed, zMotorControlParam.MotorRollingStartMs);
+		//blk230_send_cmd(1, 0, 0, 1000);
+		
 		number_of_wmc_startind++;
     IhuDebugPrint("send WMC_START_IND (%d bytes, %d times): 0x%08x\n", snd.length, number_of_wmc_startind, *(UINT32 *)&snd);
 		ret = ihu_message_send(MSG_ID_L3BFSC_WMC_STARTUP_IND, TASK_ID_CANVELA, TASK_ID_BFSC, &snd, snd.length);
@@ -1420,8 +1439,63 @@ OPSTAT fsm_bfsc_wmc_heart_beat_timeout(UINT8 dest_id, UINT8 src_id, void *param_
 OPSTAT fsm_bfsc_wmc_heart_beat_confirm(UINT8 dest_id, UINT8 src_id, void *param_ptr, UINT16 param_len)
 {
 	
+	OPSTAT ret = IHU_SUCCESS;
+	//error_code_t error_code;
+	msg_struct_l3bfsc_wmc_heart_beat_confirm_t rcv;
+	
+	//收到消息并做参数检查
+	memset(&rcv, 0, sizeof(msg_struct_l3bfsc_wmc_heart_beat_confirm_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3bfsc_wmc_heart_beat_confirm_t)))
+		IHU_ERROR_PRINT_BFSC_RECOVERY("L3BFSC: Receive message error!\n");
+	memcpy(&rcv, param_ptr, param_len);	
+	
 	number_of_heart_beat_confirm++;
-	IhuDebugPrint("Receive MSG_ID_L3BFSC_WMC_HEART_BEAT_CONFIRM, wmc_id=%d, report=%d, confirm=%d, SysTick=%d\n", zWmcInvenory.wmc_id.wmc_id, number_of_heart_beat_report, number_of_heart_beat_confirm, osKernelSysTick());
+
+	if(HUITP_IEID_SUI_BFSC_HEATT_BEAT_WMC_STATE_OFFLINE == rcv.wmcState)
+	{
+			IhuDebugPrint("Receive MSG_ID_L3BFSC_WMC_HEART_BEAT_CONFIRM, wmc_id=%d, report=%d, confirm=%d, SysTick=%d， Restart to send STARTUP_IND\n", zWmcInvenory.wmc_id.wmc_id, number_of_heart_beat_report, number_of_heart_beat_confirm, osKernelSysTick());
+			FsmSetState(TASK_ID_BFSC, FSM_STATE_BFSC_INITED); // BACK TO SCAN STATE
+			
+			/* Process the message */
+			weight_sensor_send_cmd(WIGHT_SENSOR_CMD_TYPE_STOP);
+		
+			/* STOP MOTOR */
+			blk230_set_stop(1);
+		
+			/* TURN OFF LIGHT */
+			blk230_led_send_cmd(WMC_LAMP_OUT2_GREEN, LED_COMMNAD_OFF);
+			blk230_led_send_cmd(WMC_LAMP_OUT3_YELLOW, LED_COMMNAD_OFF);
+		
+			ret = ihu_timer_start(TASK_ID_BFSC, TIMER_ID_10MS_BFSC_STARTUP_IND, \
+			zIhuSysEngPar.timer.array[TIMER_ID_10MS_BFSC_STARTUP_IND].dur, TIMER_TYPE_PERIOD, 
+			zIhuSysEngPar.timer.array[TIMER_ID_10MS_BFSC_STARTUP_IND].gradunarity);
+			if (ret == IHU_FAILURE){
+					zIhuSysStaPm.taskRunErrCnt[TASK_ID_BFSC]++;
+					IhuErrorPrint("L3BFSC: Error start TIMER_ID_1S_BFSC_STARTUP_IND\n");
+					return IHU_FAILURE;
+	}
+	
+	}
+	else
+	{
+			IhuDebugPrint("Receive MSG_ID_L3BFSC_WMC_HEART_BEAT_CONFIRM, wmc_id=%d, report=%d, confirm=%d, SysTick=%d\n", zWmcInvenory.wmc_id.wmc_id, number_of_heart_beat_report, number_of_heart_beat_confirm, osKernelSysTick());
+	}
+	
+//#define HUITP_IEID_SUI_BFSC_HEATT_BEAT_WMC_STATE_NULL 		0
+//#define HUITP_IEID_SUI_BFSC_HEATT_BEAT_WMC_STATE_OFFLINE 	1
+//#define HUITP_IEID_SUI_BFSC_HEATT_BEAT_WMC_STATE_INIT 		2
+//#define HUITP_IEID_SUI_BFSC_HEATT_BEAT_WMC_STATE_WORKING 	3
+//#define HUITP_IEID_SUI_BFSC_HEATT_BEAT_WMC_STATE_INVALID 	0xFF
+//typedef struct msg_struct_l3bfsc_wmc_heart_beat_confirm
+//{
+//	UINT16 	msgid;
+//	UINT16 	length;
+//	WmcId_t wmc_id;               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */
+//	UINT8   wmcState;
+//	UINT8   spare1;
+//	UINT16  spare2;
+//}msg_struct_l3bfsc_wmc_heart_beat_confirm_t;
+
 	return IHU_SUCCESS;
 }
 

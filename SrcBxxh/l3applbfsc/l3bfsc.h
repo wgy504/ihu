@@ -123,6 +123,7 @@ OPSTAT func_bfsc_time_out_give_up_process(void);
 void 	 func_bfsc_stm_main_recovery_from_fault(void);  //提供了一种比RESTART更低层次的状态恢复方式
 
 UINT32 GetWmcId(void);
+void MotorControlInit(MotorControlParamaters_t *pmcp);
 
 //高级定义，简化程序的可读性
 #define IHU_ERROR_PRINT_BFSC_WO_RETURN zIhuSysStaPm.taskRunErrCnt[TASK_ID_BFSC]++; func_bfsc_stm_main_recovery_from_fault(); IhuErrorPrint

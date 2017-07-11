@@ -1019,7 +1019,7 @@ uint32_t weightSensorConfig(WeightSensorParamaters_t *pwsp)
 				zWeightSensorParam.WeightSensorLoadThread = WEIGHT_SENSOR_LOAD_THREDSHOLD;
 				zWeightSensorParam.WeightSensorEmptyDetectionTimeMs = WEIGHT_SENSOR_EMPTY_DETECTION_TIME_MS;		
 				zWeightSensorParam.WeightSensorEmptyThread = WEIGHT_SENSOR_EMPTY_DETECTION_THREDSHOLD;
-				zWeightSensorParam.RemainDetectionTimeSec = 10;
+				zWeightSensorParam.RemainDetectionTimeSec = 2;
 				zWeightSensorParam.MaxAllowedWeight = 1000000;
 
 				zWeightSensorParam.WeightSensorStaticZeroValue = WEIGHT_SENSOR_STATIC_ZERO_VALUE;
@@ -1058,6 +1058,11 @@ uint32_t weightSensorConfig(WeightSensorParamaters_t *pwsp)
 				/* THESE LOAD THE DEFAULT PARAMETERS FOR CALIBRATION */
 				IhuDebugPrint("WeightSensorDefaultCalibrationValue(&zWeightSensorParam);\n", zWeightSensorParam.WeightSensorDynamicZeroHysteresisMs);
 				WeightSensorDefaultCalibrationValue(&zWeightSensorParam);
+				
+				/* Enable */
+				zWeightSensorParam.WeightSensorCalibrationZeroAdcValue = pwsp->WeightSensorCalibrationZeroAdcValue;
+				zWeightSensorParam.WeightSensorCalibrationFullAdcValue = pwsp->WeightSensorCalibrationFullAdcValue;
+				zWeightSensorParam.WeightSensorCalibrationFullWeight = pwsp->WeightSensorCalibrationFullWeight;
 				IhuDebugPrint("======================================================================================\n");
 		}
 		else

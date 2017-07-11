@@ -96,6 +96,8 @@ extern OPSTAT fsm_adclibra_l3bfsc_ws_cmd_ctrl(UINT8 dest_id, UINT8 src_id, void 
 extern OPSTAT fsm_adclibra_canvela_ws_man_set_zero(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len);
 
 extern bool ihu_adclibra_ccl_scan_battery_warning_level(void);	
+
+void SendWeightIndicationToBfsc(UINT32 adc_filtered, INT32 average_weight, UINT32 weight_event, UINT32 repeat_times);
 	
 //Local API
 OPSTAT func_adclibra_hw_init(void);
@@ -157,9 +159,9 @@ void weight_sensor_task(void const *param);
 
 
 #define		WEIGHT_SENSOR_LOAD_DETECTION_TIME_MS							(600)		
-#define		WEIGHT_SENSOR_LOAD_THREDSHOLD											(50)			// for 2g with 0.01 granuality
+#define		WEIGHT_SENSOR_LOAD_THREDSHOLD											(100)			// for 2g with 0.01 granuality
 #define		WEIGHT_SENSOR_EMPTY_DETECTION_TIME_MS							(400)		
-#define		WEIGHT_SENSOR_EMPTY_DETECTION_THREDSHOLD					(5000)			// for 2g with 0.01 granuality
+#define		WEIGHT_SENSOR_EMPTY_DETECTION_THREDSHOLD					(1000)			// for 2g with 0.01 granuality
 #define		WEIGHT_SENSOR_MAX_ALLOWED_WEIGHT									(1000000)	// 10kg
 
 #define		WEIGHT_SENSOR_STATIC_ZERO_VALUE										(0)

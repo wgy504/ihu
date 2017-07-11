@@ -83,8 +83,8 @@ IhuFsmStateItem_t IhuFsmCanvela[] =
 	
 	//Task level actived status	
 #if (IHU_WORKING_PROJECT_NAME_UNIQUE_CURRENT_ID == IHU_WORKING_PROJECT_NAME_UNIQUE_STM32_IAP_ID)
-	{MSG_ID_L3IAP_CANVELA_INVENTORY_REPORT,	FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_l3iap_inventory_report},
-	{MSG_ID_L3IAP_CANVELA_SW_PACKAGE_REPORT,FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_l3iap_sw_package_report},
+	{MSG_ID_IAP_SW_INVENTORY_REPORT,	        FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_l3iap_inventory_report},
+	{MSG_ID_IAP_SW_PACKAGE_REPORT,            FSM_STATE_CANVELA_ACTIVED,									fsm_canvela_l3iap_sw_package_report},
 #endif
 	
   //结束点，固定定义，不要改动
@@ -1465,7 +1465,7 @@ OPSTAT func_canitfleo_l2frame_msg_inventory_confirm_received_handle(StrMsg_HUITP
 	memset(&snd, 0, sizeof(msg_struct_canvela_l3iap_inventory_confirm_t));
 			
 	snd.length = sizeof(msg_struct_canvela_l3iap_inventory_confirm_t);
-	if (ihu_message_send(MSG_ID_CANVELA_L3IAP_INVENTORY_CONFIRM, TASK_ID_L3IAP, TASK_ID_CANVELA, &snd, snd.length) == IHU_FAILURE)
+	if (ihu_message_send(MSG_ID_IAP_SW_INVENTORY_CONFIRM, TASK_ID_L3IAP, TASK_ID_CANVELA, &snd, snd.length) == IHU_FAILURE)
 		IHU_ERROR_PRINT_CANVELA("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName, zIhuVmCtrTab.task[TASK_ID_L3IAP].taskName);
 
 	//返回
@@ -1479,7 +1479,7 @@ OPSTAT func_canitfleo_l2frame_msg_sw_package_confirm_received_handle(StrMsg_HUIT
 	memset(&snd, 0, sizeof(msg_struct_canvela_l3iap_sw_package_confirm_t));
 			
 	snd.length = sizeof(msg_struct_canvela_l3iap_sw_package_confirm_t);
-	if (ihu_message_send(MSG_ID_CANVELA_L3IAP_SW_PACKAGE_CONFIRM, TASK_ID_L3IAP, TASK_ID_CANVELA, &snd, snd.length) == IHU_FAILURE)
+	if (ihu_message_send(MSG_ID_IAP_SW_PACKAGE_CONFIRM, TASK_ID_L3IAP, TASK_ID_CANVELA, &snd, snd.length) == IHU_FAILURE)
 		IHU_ERROR_PRINT_CANVELA("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName, zIhuVmCtrTab.task[TASK_ID_L3IAP].taskName);
 
 	//返回

@@ -208,7 +208,7 @@ void blk230_task(void const *param)
 //	osDelay(1000);
 
 
-	blk230_set_dc_speed(300);
+	blk230_set_dc_speed(150);
 	blk230_set_stop(0);
 	blk230_set_brake(0);
 	blk230_set_ccw(0);

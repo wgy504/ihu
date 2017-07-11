@@ -22,41 +22,32 @@ Dialog DLL:      TCM.DLL V1.14.8.0
  
 <h2>Project:</h2>
 D:\Myc\Project\Baxian\Git\ihu\PrjIapStm32F2x\MDK-ARM\PrjIapStm32F2x.uvprojx
-Project File Date:  06/26/2017
+Project File Date:  07/05/2017
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 1 (build 61)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build Project 'PrjIapStm32F2x' - Target 'PrjIapStm32F2x'
-compiling bsp_can.c...
-compiling bsp_calendar.c...
-compiling main.c...
-compiling bsp_cpuid.c...
-compiling bsp_dido.c...
-compiling bsp_iap.c...
-compiling bsp_rtc.c...
-compiling bsp_led.c...
-compiling bsp_stmflash.c...
-compiling bsp_usart.c...
-compiling l1timer_freeos.c...
-compiling l1vmfo.c...
-compiling huixmlcodec.c...
-compiling vmmw_gprs.c...
-compiling vmfreeoslayer.c...
-compiling l2ledpisces.c...
-compiling l2spsvirgo.c...
-D:\Myc\Project\Baxian\Git\ihu\SrcBxxh\l2framefreeos\l2spsvirgo.c(250): warning:  #177-D: variable "ret" was declared but never referenced
-  	int ret;
-..\..\SrcBxxh\l2framefreeos\l2spsvirgo.c: 1 warning, 0 errors
-compiling l2canvela.c...
-D:\Myc\Project\Baxian\Git\ihu\SrcBxxh\l2framefreeos\l2canvela.c(1110): warning:  #177-D: variable "pFrameHeader" was declared but never referenced
-  	IHU_HUITP_L2FRAME_STD_frame_header_t *pFrameHeader = NULL;
-D:\Myc\Project\Baxian\Git\ihu\SrcBxxh\l2framefreeos\l2canvela.c(1142): warning:  #177-D: variable "pFrameHeader" was declared but never referenced
-  	IHU_HUITP_L2FRAME_STD_frame_header_t *pFrameHeader = NULL;
-..\..\SrcBxxh\l2framefreeos\l2canvela.c: 2 warnings, 0 errors
 compiling l3iap.c...
+D:\Myc\Project\Baxian\Git\ihu\SrcBxxh\l3appliap\l3iap.c(322): warning:  #223-D: function "ihu_ihu_bsp_stm32_iap_erase_flash_block" declared implicitly
+  				ret = ihu_ihu_bsp_stm32_iap_erase_flash_block(FLASH_ADDRESS_APP_LOAD, zIhuL3iapTaskContext.swTotalLengthInBytes);
+D:\Myc\Project\Baxian\Git\ihu\SrcBxxh\l3appliap\l3iap.c(332): warning:  #223-D: function "ihu_ihu_bsp_stm32_iap_erase_flash_block" declared implicitly
+  				ret = ihu_ihu_bsp_stm32_iap_erase_flash_block(FLASH_ADDRESS_FACTORY_LOAD, zIhuL3iapTaskContext.swTotalLengthInBytes);
+D:\Myc\Project\Baxian\Git\ihu\SrcBxxh\l3appliap\l3iap.c(365): warning:  #177-D: variable "ret" was declared but never referenced
+  	  OPSTAT ret;
+D:\Myc\Project\Baxian\Git\ihu\SrcBxxh\l3appliap\l3iap.c(500): warning:  #223-D: function "ihu_ihu_bsp_stm32_iap_write_flash" declared implicitly
+  		ret = ihu_ihu_bsp_stm32_iap_write_flash(zIhuL3iapTaskContext.NextFlashSaveAddress, SegmentLengthInBytes, rcv.swPackageSegmentContent);
+D:\Myc\Project\Baxian\Git\ihu\SrcBxxh\l3appliap\l3iap.c(573): warning:  #177-D: variable "ret" was declared but never referenced
+  	  OPSTAT ret;
+D:\Myc\Project\Baxian\Git\ihu\SrcBxxh\l3appliap\l3iap.c(699): warning:  #223-D: function "ihu_ihu_bsp_stm32_iap_erase_flash_block" declared implicitly
+  		ret = ihu_ihu_bsp_stm32_iap_erase_flash_block(FLASH_ADDRESS_SW_CONTROL_TABLE, sizeof(SysEngParElementHwBurnPhyIdAddr_t));
+D:\Myc\Project\Baxian\Git\ihu\SrcBxxh\l3appliap\l3iap.c(706): warning:  #223-D: function "ihu_ihu_bsp_stm32_iap_write_flash" declared implicitly
+  		ret = ihu_ihu_bsp_stm32_iap_write_flash(FLASH_ADDRESS_SW_CONTROL_TABLE, sizeof(SysEngParElementHwBurnPhyIdAddr_t), (UINT8 *)&zIhuSysEngElementHwBurnContext);
+D:\Myc\Project\Baxian\Git\ihu\SrcBxxh\l3appliap\l3iap.c(727): warning:  #1-D: last line of file ends without a newline
+  }
+..\..\SrcBxxh\l3appliap\l3iap.c: 8 warnings, 0 errors
 linking...
-Program Size: Code=44328 RO-data=2816 RW-data=3856 ZI-data=96048  
-"PrjIapStm32F2x\PrjIapStm32F2x.axf" - 0 Error(s), 3 Warning(s).
+Program Size: Code=48232 RO-data=6532 RW-data=3936 ZI-data=96224  
+"PrjIapStm32F2x\PrjIapStm32F2x.axf" - 0 Error(s), 8 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -74,7 +65,7 @@ Package Vendor: ARM
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.0.0
-Build Time Elapsed:  00:00:39
+Build Time Elapsed:  00:00:06
 </pre>
 </body>
 </html>
