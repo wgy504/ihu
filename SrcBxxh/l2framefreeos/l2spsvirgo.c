@@ -804,8 +804,9 @@ OPSTAT fsm_spsvirgo_ccl_close_door_report_send(UINT8 dest_id, UINT8 src_id, void
 	//先传送图像
 	//再使用TCP_U8，将图像数据发送到后台
 	//数据源是CCL的上下文全局变量=> zIhuCclTaskContext.picBuf
+	//暂时不发送图像到后台，待完善
 	memset(&zIhuSpsvirgoMsgRcvBuf, 0, sizeof(msg_struct_ccl_com_cloud_data_rx_t));
-	ret2 = ihu_vmmw_gprsmod_tcp_u8_data_transmit_with_receive((int8_t *)(zIhuCclTaskContext.picBuf), zIhuCclTaskContext.picActualPkgSize, (int8_t*)zIhuSpsvirgoMsgRcvBuf.buf, &(zIhuSpsvirgoMsgRcvBuf.length));		
+	//ret2 = ihu_vmmw_gprsmod_tcp_u8_data_transmit_with_receive((int8_t *)(zIhuCclTaskContext.picBuf), zIhuCclTaskContext.picActualPkgSize, (int8_t*)zIhuSpsvirgoMsgRcvBuf.buf, &(zIhuSpsvirgoMsgRcvBuf.length));		
 	//不单独处理图像文件回传的消息
 	
 	//干活，成功了，自然通过ISR将返回发送到L3
