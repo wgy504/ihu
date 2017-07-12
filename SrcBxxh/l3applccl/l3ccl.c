@@ -711,6 +711,7 @@ OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 		
 	//如果是得到开门授权指令，则发送命令到DIDO模块
 	else if (rcv.authResult == IHU_CCL_LOCK_AUTH_RESULT_OK){
+		ihu_usleep(100);
 		memset(&snd, 0, sizeof(msg_struct_ccl_dido_door_open_req_t));
 		snd.length = sizeof(msg_struct_ccl_dido_door_open_req_t);
 		snd.doorid = IHU_CCL_SENSOR_LOCK_NUMBER_MAX;

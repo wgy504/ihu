@@ -8,11 +8,17 @@
 
 
 
+//= ZJL, 2017 July.12, CURRENT_SW_DELIVERY R03.148 =>CCL项目
+= 优化内存空间： 
+  去掉USB HOST组件，将堆栈从0xCC00改为0xDC00
+  Message Queue从2改为3
+  
+
+
 //= ZJL, 2017 July.4, CURRENT_SW_DELIVERY R03.147 =>CCL项目
 = Removing warning on CCL project compliling
 = 将HTTP全部改为TCP_TEXT通信方式
 = 发现接收到后台数据后死机的情况发生，应该是堆栈或者缓冲区不够了
-
 
 //= ZJL, 2017 July.3, CURRENT_SW_DELIVERY R03.146 =>IAP/BFSC项目
 = Upgrade HUITP.H to V2.8

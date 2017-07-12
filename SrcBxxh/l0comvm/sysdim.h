@@ -279,7 +279,7 @@
 	#define IHU_SYSDIM_MSG_BODY_LEN_MAX 560  //消息最长长度，这里比较短节省内存，按道理，没有图像和视频的情况下，是足够的。加上6B的头以后最好4字节对其。
 	#define IHU_SYSDIM_L2FRAME_MSG_BODY_LEN_MAX IHU_SYSDIM_MSG_BODY_LEN_MAX - 4
 	#define IHU_SYSDIM_FILE_NAME_LEN_MAX 64
-	#define IHU_SYSDIM_MSG_QUEUE_NBR_MAX 2
+	#define IHU_SYSDIM_MSG_QUEUE_NBR_MAX 3
   #define IHU_SYSDIM_MSG_QUEUE_SIZE_MAX IHU_SYSDIM_MSG_BODY_LEN_MAX + 24 //由于涉及到4B对其，消息长度必须是头部4B对其，消息体4B对其！！！
 	//SLEEP控制表给任务模块可以给出
 	#define IHU_SYSDIM_SLEEP_UP_LIMIT_CNT_MAX 50000

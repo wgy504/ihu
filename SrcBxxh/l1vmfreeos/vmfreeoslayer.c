@@ -1478,7 +1478,8 @@ OPSTAT ihu_message_send(UINT16 msg_id, UINT8 dest_id, UINT8 src_id, void *param_
 	//IhuDebugPrint("VMFO: Calling OS_QUEUE_PUT()\r\n");
   if (OS_QUEUE_PUT(zIhuVmCtrTab.task[dest_id].QueId, &msg, 0) != OS_QUEUE_OK){
     zIhuSysStaPm.taskRunErrCnt[TASK_ID_VMFO]++;
-    IhuErrorPrint("VMFO: msgsnd() write msg failed, errno=%d[%s], dest_id = %d [%s]\n",errno,strerror(errno), dest_id, zIhuVmCtrTab.task[dest_id].taskName);
+    IhuErrorPrint("VMFO: msgsnd() write msg failed, errno=%d[%s], src_id = %d [%s], dest_id = %d [%s], MsgId=0x%x [%s]\n", \
+		  errno,strerror(errno), src_id, zIhuVmCtrTab.task[src_id].taskName, dest_id, zIhuVmCtrTab.task[dest_id].taskName, msg_id, zIhuSysEngPar.traceList.msg[msg_id].msgName);
     //zIhuVmCtrTab.task[dest_id].QueFullFlag = IHU_SYSCFG_TASK_QUEUE_FULL_TRUE;
     return IHU_FAILURE;
   }
