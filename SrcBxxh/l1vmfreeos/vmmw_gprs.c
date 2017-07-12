@@ -1490,7 +1490,7 @@ void CopyReplaceCrLf(char *pOut, char *pIn)
 				return;
 		}
 		
-		for(i = 0; i < 256; i++)
+		for(i = 0; i < 255; i++)   /* !!!!! need tp be 1 byte smaller than 256 */
 		{
 				if(0 == pIn[i])
 				{
