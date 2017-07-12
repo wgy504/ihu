@@ -41,11 +41,11 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
-extern HCD_HandleTypeDef hhcd_USB_OTG_FS;
 extern UART_HandleTypeDef huart4;
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
+extern HCD_HandleTypeDef hhcd_USB_OTG_FS;
 
 extern TIM_HandleTypeDef htim1;
 

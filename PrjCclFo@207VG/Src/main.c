@@ -49,7 +49,7 @@
 #include "rtc.h"
 #include "spi.h"
 #include "usart.h"
-#include "usb_host.h"
+#include "usb_otg.h"
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
@@ -107,6 +107,7 @@ int main(void)
   MX_USART3_UART_Init();
   MX_SPI1_Init();
   MX_UART4_Init();
+  MX_USB_OTG_FS_HCD_Init();
 
   /* Initialize interrupts */
   MX_NVIC_Init();

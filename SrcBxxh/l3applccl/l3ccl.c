@@ -722,7 +722,7 @@ OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 		if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX >= 1){
 			ihu_usleep(200);
 			ihu_l1hd_dido_f2board_lock1_do1_on();
-			ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_LOCK1_TRIGGER, 30);
+			//ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_LOCK1_TRIGGER, 30);
 			ihu_sleep(5);
 			ihu_l1hd_dido_f2board_lock1_do1_off();
 		}
@@ -730,7 +730,7 @@ OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 		if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX >= 2){
 			ihu_usleep(200);
 			ihu_l1hd_dido_f2board_lock2_do1_on();
-			ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_LOCK2_TRIGGER, 30);
+			//ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_LOCK2_TRIGGER, 30);
 			ihu_sleep(5);
 			ihu_l1hd_dido_f2board_lock2_do1_off();
 		}
@@ -738,13 +738,13 @@ OPSTAT fsm_ccl_sps_cloud_fb(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 		if (IHU_CCL_SENSOR_LOCK_NUMBER_MAX >= 4){
 			ihu_usleep(200);
 			ihu_l1hd_dido_f2board_lock3_do1_on();
-			ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_LOCK3_TRIGGER, 30);
+			//ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_LOCK3_TRIGGER, 30);
 			ihu_sleep(5);
 			ihu_l1hd_dido_f2board_lock3_do1_off();
 			
 			ihu_usleep(200);
 			ihu_l1hd_dido_f2board_lock4_do1_on();
-			ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_LOCK4_TRIGGER, 30);
+			//ihu_ledpisces_galowag_start(GALOWAG_CTRL_ID_CCL_BEEP_PATTERN_LOCK4_TRIGGER, 30);
 			ihu_sleep(5);
 			ihu_l1hd_dido_f2board_lock4_do1_off();
 		}

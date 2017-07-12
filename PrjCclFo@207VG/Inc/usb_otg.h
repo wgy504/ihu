@@ -1,8 +1,8 @@
 /**
- ******************************************************************************
-  * @file            : USB_HOST
-  * @version         : v1.0_Cube
-  * @brief           :  This file implements the USB Host 
+  ******************************************************************************
+  * File Name          : USB_OTG.h
+  * Description        : This file provides code for the configuration
+  *                      of the USB_OTG instances.
   ******************************************************************************
   *
   * Copyright (c) 2017 STMicroelectronics International N.V. 
@@ -40,89 +40,40 @@
   * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *
   ******************************************************************************
-*/
+  */
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef __usb_otg_H
+#define __usb_otg_H
+#ifdef __cplusplus
+ extern "C" {
+#endif
 
 /* Includes ------------------------------------------------------------------*/
+#include "stm32f2xx_hal.h"
+#include "main.h"
 
-#include "usb_host.h"
-#include "usbh_core.h"
-#include "usbh_audio.h"
-#include "usbh_cdc.h"
-#include "usbh_msc.h"
-#include "usbh_hid.h"
-#include "usbh_mtp.h"
+/* USER CODE BEGIN Includes */
 
-/* USB Host Core handle declaration */
-USBH_HandleTypeDef hUsbHostFS;
-ApplicationTypeDef Appli_state = APPLICATION_IDLE;
+/* USER CODE END Includes */
 
-/**
-* -- Insert your variables declaration here --
-*/ 
-/* USER CODE BEGIN 0 */
+extern HCD_HandleTypeDef hhcd_USB_OTG_FS;
 
-/* USER CODE END 0 */
+/* USER CODE BEGIN Private defines */
 
-/*
-* user callbak declaration
-*/ 
-static void USBH_UserProcess  (USBH_HandleTypeDef *phost, uint8_t id);
+/* USER CODE END Private defines */
 
-/**
-* -- Insert your external function declaration here --
-*/ 
-/* USER CODE BEGIN 1 */
+extern void Error_Handler(void);
 
-/* USER CODE END 1 */
+void MX_USB_OTG_FS_HCD_Init(void);
 
-/* init function */				        
-void MX_USB_HOST_Init(void)
-{
-  /* Init Host Library,Add Supported Class and Start the library*/
-  USBH_Init(&hUsbHostFS, USBH_UserProcess, HOST_FS);
+/* USER CODE BEGIN Prototypes */
 
-  USBH_RegisterClass(&hUsbHostFS, USBH_AUDIO_CLASS);
+/* USER CODE END Prototypes */
 
-  USBH_RegisterClass(&hUsbHostFS, USBH_CDC_CLASS);
-
-  USBH_RegisterClass(&hUsbHostFS, USBH_MSC_CLASS);
-
-  USBH_RegisterClass(&hUsbHostFS, USBH_HID_CLASS);
-
-  USBH_RegisterClass(&hUsbHostFS, USBH_MTP_CLASS);
-
-  USBH_Start(&hUsbHostFS);
+#ifdef __cplusplus
 }
-
-/*
- * user callbak definition
-*/ 
-static void USBH_UserProcess  (USBH_HandleTypeDef *phost, uint8_t id)
-{
-
-  /* USER CODE BEGIN 2 */
-  switch(id)
-  { 
-  case HOST_USER_SELECT_CONFIGURATION:
-  break;
-    
-  case HOST_USER_DISCONNECTION:
-  Appli_state = APPLICATION_DISCONNECT;
-  break;
-    
-  case HOST_USER_CLASS_ACTIVE:
-  Appli_state = APPLICATION_READY;
-  break;
-
-  case HOST_USER_CONNECTION:
-  Appli_state = APPLICATION_START;
-  break;
-
-  default:
-  break; 
-  }
-  /* USER CODE END 2 */
-}
+#endif
+#endif /*__ usb_otg_H */
 
 /**
   * @}
