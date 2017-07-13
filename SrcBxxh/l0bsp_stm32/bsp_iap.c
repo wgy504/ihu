@@ -113,6 +113,35 @@ void IAP_ExecuteApp ( uint32_t ulAddr_App )
 	}
 }		
 
+/* 
+** ===========================================
+** Merge from LI Hao C after test, 2017/07/21
+** ===========================================
+*/
+uint32_t AppAddress;
+typedef  void (*pFunction)(void);
+
+void IAP_ExecuteApp_fun ( uint32_t ulAddr_App )
+{
+//taskENTER_CRITICAL();
+//taskDISABLE_INTERRUPTS();
+#if 1
+    pFunction App_Run;
+	  AppAddress = *(__IO uint32_t*) (ulAddr_App + 4);
+
+	  App_Run = (pFunction)AppAddress;
+
+	  __set_MSP(*(__IO uint32_t*) ulAddr_App);
+	
+//	  osDelay(1000);
+//	  printf("\n\r Start to Jump to IAP program, IAP addr = %x\n\r", ulAddr_App);
+	  App_Run();
+#endif
+//taskEXIT_CRITICAL();
+//taskENABLE_INTERRUPTS();
+
+}
+
 void IAP_write_app_bin_all_in_one(void)
 {
 	IAP_Write_App_Bin(APP_START_ADDR, strAppBin.ucDataBuf, strAppBin.usLength );
@@ -181,12 +210,3 @@ OPSTAT ihu_bsp_stm32_iap_switch_to_iap(void)
 	return SUCCESS;
 }
 
-OPSTAT ihu_ihu_bsp_stm32_iap_erase_flash_block(uint32_t start_address, uint32_t length_in_bytes)
-{
-	return SUCCESS;
-}
-
-OPSTAT ihu_ihu_bsp_stm32_iap_write_flash(uint32_t start_address, uint32_t length_in_bytes, uint8_t *data)
-{
-	return SUCCESS;
-}

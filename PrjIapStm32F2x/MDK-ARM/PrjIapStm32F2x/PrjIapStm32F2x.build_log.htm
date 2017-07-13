@@ -27,27 +27,11 @@ Project File Date:  07/05/2017
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 1 (build 61)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build Project 'PrjIapStm32F2x' - Target 'PrjIapStm32F2x'
-compiling l3iap.c...
-D:\Myc\Project\Baxian\Git\ihu\SrcBxxh\l3appliap\l3iap.c(322): warning:  #223-D: function "ihu_ihu_bsp_stm32_iap_erase_flash_block" declared implicitly
-  				ret = ihu_ihu_bsp_stm32_iap_erase_flash_block(FLASH_ADDRESS_APP_LOAD, zIhuL3iapTaskContext.swTotalLengthInBytes);
-D:\Myc\Project\Baxian\Git\ihu\SrcBxxh\l3appliap\l3iap.c(332): warning:  #223-D: function "ihu_ihu_bsp_stm32_iap_erase_flash_block" declared implicitly
-  				ret = ihu_ihu_bsp_stm32_iap_erase_flash_block(FLASH_ADDRESS_FACTORY_LOAD, zIhuL3iapTaskContext.swTotalLengthInBytes);
-D:\Myc\Project\Baxian\Git\ihu\SrcBxxh\l3appliap\l3iap.c(365): warning:  #177-D: variable "ret" was declared but never referenced
-  	  OPSTAT ret;
-D:\Myc\Project\Baxian\Git\ihu\SrcBxxh\l3appliap\l3iap.c(500): warning:  #223-D: function "ihu_ihu_bsp_stm32_iap_write_flash" declared implicitly
-  		ret = ihu_ihu_bsp_stm32_iap_write_flash(zIhuL3iapTaskContext.NextFlashSaveAddress, SegmentLengthInBytes, rcv.swPackageSegmentContent);
-D:\Myc\Project\Baxian\Git\ihu\SrcBxxh\l3appliap\l3iap.c(573): warning:  #177-D: variable "ret" was declared but never referenced
-  	  OPSTAT ret;
-D:\Myc\Project\Baxian\Git\ihu\SrcBxxh\l3appliap\l3iap.c(699): warning:  #223-D: function "ihu_ihu_bsp_stm32_iap_erase_flash_block" declared implicitly
-  		ret = ihu_ihu_bsp_stm32_iap_erase_flash_block(FLASH_ADDRESS_SW_CONTROL_TABLE, sizeof(SysEngParElementHwBurnPhyIdAddr_t));
-D:\Myc\Project\Baxian\Git\ihu\SrcBxxh\l3appliap\l3iap.c(706): warning:  #223-D: function "ihu_ihu_bsp_stm32_iap_write_flash" declared implicitly
-  		ret = ihu_ihu_bsp_stm32_iap_write_flash(FLASH_ADDRESS_SW_CONTROL_TABLE, sizeof(SysEngParElementHwBurnPhyIdAddr_t), (UINT8 *)&zIhuSysEngElementHwBurnContext);
-D:\Myc\Project\Baxian\Git\ihu\SrcBxxh\l3appliap\l3iap.c(727): warning:  #1-D: last line of file ends without a newline
-  }
-..\..\SrcBxxh\l3appliap\l3iap.c: 8 warnings, 0 errors
+compiling l2spsvirgo.c...
+compiling l2canvela.c...
 linking...
-Program Size: Code=48232 RO-data=6532 RW-data=3936 ZI-data=96224  
-"PrjIapStm32F2x\PrjIapStm32F2x.axf" - 0 Error(s), 8 Warning(s).
+Program Size: Code=52884 RO-data=7880 RW-data=3716 ZI-data=96060  
+"PrjIapStm32F2x\PrjIapStm32F2x.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -65,7 +49,7 @@ Package Vendor: ARM
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.0.0
-Build Time Elapsed:  00:00:06
+Build Time Elapsed:  00:00:05
 </pre>
 </body>
 </html>

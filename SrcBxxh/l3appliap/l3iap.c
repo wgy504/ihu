@@ -53,6 +53,7 @@ IhuFsmStateItem_t IhuFsmL3iap[] =
 //Global variables defination
 strIhuL3iapTaskContext_t zIhuL3iapTaskContext;
 SysEngParElementHwBurnPhyIdAddr_t zIhuSysEngElementHwBurnContext;
+WmcInventory_t										zWmcInvenory;
 
 //Main Entry
 //Input parameter would be useless, but just for similar structure purpose
@@ -65,6 +66,115 @@ OPSTAT fsm_l3iap_task_entry(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT1
 	}
 	return IHU_SUCCESS;
 }
+
+UINT32 GetWmcId()
+{
+	/* PA5,PA6,PA7,PA8 => SW0,1,2,3 */
+	GPIO_PinState ps;
+	UINT32 wmc_id = 0;
+	
+	/* SW0 <= PE10 */
+	ps = HAL_GPIO_ReadPin(GPIOE, CUBEMX_PIN_ADD_SW0_NODEID_BIT0_Pin);
+	if (GPIO_PIN_RESET == ps)
+	{
+		wmc_id = wmc_id & 0xFFFFFFFE;  //1110
+	}
+	else
+	{
+		wmc_id = wmc_id | 0x00000001;  //0001
+	}
+	
+	/* SW1 <= PE11 */
+	ps = HAL_GPIO_ReadPin(GPIOE, CUBEMX_PIN_ADD_SW1_NODEID_BIT1_Pin);
+	if (GPIO_PIN_RESET == ps)
+	{
+		wmc_id = wmc_id & 0xFFFFFFFD;  //1101
+	}
+	else
+	{
+		wmc_id = wmc_id | 0x00000002;  //0010
+	}
+	
+	/* SW2 <= PE12 */
+	ps = HAL_GPIO_ReadPin(GPIOE, CUBEMX_PIN_ADD_SW2_NODEID_BIT2_Pin);
+	if (GPIO_PIN_RESET == ps)
+	{
+		wmc_id = wmc_id & 0xFFFFFFFB;  //1011
+	}
+	else
+	{
+		wmc_id = wmc_id | 0x00000004;  //0100
+	}
+	
+	/* SW3 <= PE13 */
+	ps = HAL_GPIO_ReadPin(GPIOE, CUBEMX_PIN_ADD_SW3_NODEID_BIT3_Pin);
+	if (GPIO_PIN_RESET == ps)
+	{
+		wmc_id = wmc_id & 0xFFFFFFF7;  //0111
+	}
+	else
+	{
+		wmc_id = wmc_id | 0x00000008;  //1000
+	}
+	
+	/* SW4 <= PE14 */
+	ps = HAL_GPIO_ReadPin(GPIOE, CUBEMX_PIN_ADD_SW4_NODEID_BIT4_Pin);
+	if (GPIO_PIN_RESET == ps)
+	{
+		wmc_id = wmc_id & 0xFFFFFFEF;  //11101111
+	}
+	else
+	{
+		wmc_id = wmc_id | 0x00000010;  //00010000
+	}
+	
+	/* SW5 <= PE15 */
+	ps = HAL_GPIO_ReadPin(GPIOE, CUBEMX_PIN_ADD_SW5_RESERVED_Pin);
+	if (GPIO_PIN_RESET == ps)
+	{
+		wmc_id = wmc_id & 0xFFFFFFDF;  //11011111
+	}
+	else
+	{
+		wmc_id = wmc_id | 0x00000020;  //00100000
+	}
+	
+	/* make sure only the last 6 digit values */
+	wmc_id = wmc_id & 0x2F;
+	return wmc_id;
+}
+
+
+OPSTAT func_bfsc_hw_init(WmcInventory_t *pwi)
+{
+	if(NULL == pwi)
+	{
+		IhuErrorPrint("L3BFSC: func_bfsc_hw_init: input parameter pwi == BULL");
+		return IHU_FAILURE;
+	}
+	
+	//MYC TODO
+	pwi->hw_inventory_id = 0x0;
+	pwi->sw_inventory_id = 0x1;
+	
+	//MYC Get CPU ID for STM32
+	ihu_bsp_stm32_get_cpuid_f2board(&pwi->stm32_cpu_id);
+	IhuDebugPrint("L3BFSC: func_bfsc_hw_init: stm32_cpu_id = [0x%08X]\n", pwi->stm32_cpu_id);
+	
+	//MYC TODO
+	pwi->weight_sensor_type = 0x2;
+	pwi->motor_type = 0x03;
+	pwi->wmc_id.wmc_id = GetWmcId();               /* 0 ~ 15 is the DIP defined, ID 16 is the main rolling */
+	IhuDebugPrint("L3BFSC: func_bfsc_hw_init: wmc_id = [0x%02X]\n", pwi->wmc_id);
+
+	extern CAN_HandleTypeDef hcan1;
+	bsp_can_config_filter(&hcan1, WMC_CAN_ID);
+	
+	srand(zWmcInvenory.wmc_id.wmc_id); /* For generating ramdon value for test */
+	
+	return IHU_SUCCESS;
+}
+
 
 OPSTAT fsm_l3iap_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
@@ -93,6 +203,11 @@ OPSTAT fsm_l3iap_init(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 para
 	//初始化硬件接口
 	if (func_l3iap_hw_init() == IHU_FAILURE){	
 		IhuErrorPrint("L3IAP: Error initialize interface!");
+		return IHU_FAILURE;
+	}
+	
+	if (func_bfsc_hw_init(&zWmcInvenory) == IHU_FAILURE){	
+		IhuErrorPrint("L3BFSC: Error initialize interface!");
 		return IHU_FAILURE;
 	}
 
@@ -287,16 +402,16 @@ OPSTAT fsm_l3iap_sw_inventory_confirm(UINT8 dest_id, UINT8 src_id, void * param_
 			return IHU_FAILURE;
 		}
 		memcpy(&rcv, param_ptr, param_len);
-		
-		IhuDebugPrint("L3IAP: fsm_l3iap_sw_inventory_confirm received: swUpgradeType=%d\n", rcv.swUpgradeType); 
-		IhuDebugPrint("L3IAP: fsm_l3iap_sw_inventory_confirm received: swRelId=%d\n", rcv.swRelId); 
-		IhuDebugPrint("L3IAP: fsm_l3iap_sw_inventory_confirm received: swVerId=%d\n", rcv.swVerId); 
+			
+		IhuDebugPrint("L3IAP: fsm_l3iap_sw_inventory_confirm received: swRel=%d\n", rcv.swRel); 
+		IhuDebugPrint("L3IAP: fsm_l3iap_sw_inventory_confirm received: swVer=%d\n", rcv.swVer); 
+		IhuDebugPrint("L3IAP: fsm_l3iap_sw_inventory_confirm received: upgradeFlag=%d\n", rcv.upgradeFlag);
 		IhuDebugPrint("L3IAP: fsm_l3iap_sw_inventory_confirm received: swCheckSum=%d\n", rcv.swCheckSum);
 		IhuDebugPrint("L3IAP: fsm_l3iap_sw_inventory_confirm received: swTotalLengthInBytes=%d\n", rcv.swTotalLengthInBytes);
 				
-		zIhuL3iapTaskContext.swUpgradeType = rcv.swUpgradeType;					       //APP or FACTORY, or ... same as msg_struct_l3iap_iap_sw_upgrade_req
-	  zIhuL3iapTaskContext.swRelId = rcv.swRelId;
-	  zIhuL3iapTaskContext.swVerId = rcv.swVerId;
+		zIhuL3iapTaskContext.swUpgradeType = rcv.upgradeFlag;					       //APP or FACTORY, or ... same as msg_struct_l3iap_iap_sw_upgrade_req
+	  zIhuL3iapTaskContext.swRelId = rcv.swRel;
+	  zIhuL3iapTaskContext.swVerId = rcv.swVer;
 	  zIhuL3iapTaskContext.swCheckSum = rcv.swCheckSum;
 	  zIhuL3iapTaskContext.swTotalLengthInBytes = rcv.swTotalLengthInBytes;
 		
@@ -319,21 +434,21 @@ OPSTAT fsm_l3iap_sw_inventory_confirm(UINT8 dest_id, UINT8 src_id, void * param_
 		/* !!!! erase the flash block !!!! */
 		if(IAP_SW_UPGRADE_TYPE_UPGRADE_APP_LOAD == zIhuL3iapTaskContext.swUpgradeType)
 		{
-				ret = ihu_ihu_bsp_stm32_iap_erase_flash_block(FLASH_ADDRESS_APP_LOAD, zIhuL3iapTaskContext.swTotalLengthInBytes);
+				ret = ihu_iap_erase_flash_block(FLASH_ADDRESS_APP_LOAD, zIhuL3iapTaskContext.swTotalLengthInBytes);
 				if(IHU_FAILURE == ret)
 				{
 						/* TO BE DISCUSSED */
-						IhuDebugPrint("L3IAP: ihu_ihu_bsp_stm32_iap_erase_flash_block() failure, about to call ihu_iap_sw_jump_to_factory_load(), leaving IAP ...\n");
+						IhuDebugPrint("L3IAP: ihu_iap_erase_flash_block() failure, about to call ihu_iap_sw_jump_to_factory_load(), leaving IAP ...\n");
 						ihu_iap_sw_jump_to_factory_load();
 				}
 		}
 		else if(IAP_SW_UPGRADE_TYPE_UPGRADE_FACTORY_LOAD == zIhuL3iapTaskContext.swUpgradeType)
 		{
-				ret = ihu_ihu_bsp_stm32_iap_erase_flash_block(FLASH_ADDRESS_FACTORY_LOAD, zIhuL3iapTaskContext.swTotalLengthInBytes);
+				ret = ihu_iap_erase_flash_block(FLASH_ADDRESS_FACTORY_LOAD, zIhuL3iapTaskContext.swTotalLengthInBytes);
 				if(IHU_FAILURE == ret)
 				{
 						/* TO BE DISCUSSED */
-						IhuDebugPrint("L3IAP: ihu_ihu_bsp_stm32_iap_erase_flash_block() failure, about to call ihu_iap_sw_jump_to_app_load(), leaving IAP ...\n");
+						IhuDebugPrint("L3IAP: ihu_iap_erase_flash_block() failure, about to call ihu_iap_sw_jump_to_app_load(), leaving IAP ...\n");
 						ihu_iap_sw_jump_to_app_load();
 				}
 		}
@@ -366,6 +481,7 @@ OPSTAT fsm_l3iap_sw_inventory_timeout(UINT8 dest_id, UINT8 src_id, void * param_
 		msg_struct_com_time_out_t rcv;
 	
 	  //Receive message and copy to local variable
+	  ret = ret;
 	  memset(&rcv, 0, sizeof(msg_struct_com_time_out_t));
 	  if ((param_ptr == NULL || param_len > sizeof(msg_struct_com_time_out_t))){
 		    IhuErrorPrint("L3IAP: Receive message error!\n");
@@ -416,20 +532,24 @@ OPSTAT fsm_l3iap_sw_package_confirm(UINT8 dest_id, UINT8 src_id, void * param_pt
 
 		//typedef struct msg_struct_l3iap_sw_package_confirm
 		//{
-		//	UINT16  msgid;
-		//	UINT16  length;
-		//	UINT16 	UpgradePrepareStatus;					//APP or FACTORY, or ...
-		//	UINT16 	swRelId;
-		//	UINT16 	swVerId;
-		//	UINT16 	swCheckSum;
-		//	UINT32  swTotalLengthInBytes;
-		//	UINT32	swSegmentIndex;        // 0, 1, 2, ... MaxLoadSegmentIndex, start from 0, 
-		//	UINT8		swPackageSegmentContent[MAX_LEN_PER_LOAD_SEGMENT];
+		//	UINT16 msgid;
+		//	UINT16 length;
+		//	UINT16 swRelId;
+		//	UINT16 swVerId;
+		//	UINT8  upgradeFlag;
+		//	UINT16 segIndex;
+		//	UINT16 segTotal;
+		//	UINT16 segSplitLen;
+		//	UINT16 segValidLen;
+		//	UINT16 segCheckSum;
+		//	UINT8  swPkgBody[MAX_LEN_PER_LOAD_SEGMENT];
 		//}msg_struct_l3iap_sw_package_confirm_t;
 
   	OPSTAT ret;
 		msg_struct_l3iap_sw_package_confirm_t rcv;
-	  UINT32 SegmentLengthInBytes = rcv.length - sizeof(msg_struct_l3iap_sw_package_report_t);
+	  UINT32 SegmentLengthInBytes = rcv.length - sizeof(msg_struct_l3iap_sw_package_confirm_t);
+	  UINT16 segCheckSumRcv = 0;
+	  UINT16 segCheckSumCalculated = 0;
 		
 		//Receive message and copy to local variable
 		memset(&rcv, 0, sizeof(msg_struct_l3iap_sw_package_confirm_t));
@@ -440,19 +560,34 @@ OPSTAT fsm_l3iap_sw_package_confirm(UINT8 dest_id, UINT8 src_id, void * param_pt
 		}
 		memcpy(&rcv, param_ptr, param_len);
 		
+		//	UINT16 swRelId;
+		//	UINT16 swVerId;
+		//	UINT8  upgradeFlag;
+		//	UINT16 segIndex;
+		//	UINT16 segTotal;
+		//	UINT16 segSplitLen;
+		//	UINT16 segValidLen;
+		//	UINT16 segCheckSum;
+		
 		IhuDebugPrint("L3IAP: fsm_l3iap_sw_package_confirm received: swRelId=%d\n", rcv.swRelId); 
 		IhuDebugPrint("L3IAP: fsm_l3iap_sw_package_confirm received: swVerId=%d\n", rcv.swVerId); 
-		IhuDebugPrint("L3IAP: fsm_l3iap_sw_package_confirm received: swCheckSum=%d\n", rcv.swCheckSum);
-		IhuDebugPrint("L3IAP: fsm_l3iap_sw_package_confirm received: swTotalLengthInBytes=%d\n", rcv.swTotalLengthInBytes);
-		IhuDebugPrint("L3IAP: fsm_l3iap_sw_package_confirm received: swSegmentIndex=%d\n", rcv.swSegmentIndex);
+		IhuDebugPrint("L3IAP: fsm_l3iap_sw_package_confirm received: upgradeFlag=%d\n", rcv.upgradeFlag); 
+		IhuDebugPrint("L3IAP: fsm_l3iap_sw_package_confirm received: segIndex=%d\n", rcv.segIndex); 
+		IhuDebugPrint("L3IAP: fsm_l3iap_sw_package_confirm received: segTotal=%d\n", rcv.segTotal);
+		IhuDebugPrint("L3IAP: fsm_l3iap_sw_package_confirm received: segSplitLen=%d\n", rcv.segSplitLen); 
+		IhuDebugPrint("L3IAP: fsm_l3iap_sw_package_confirm received: segValidLen=%d\n", rcv.segValidLen);
+		IhuDebugPrint("L3IAP: fsm_l3iap_sw_package_confirm received: segCheckSum=%d\n", rcv.segCheckSum);
+		
+		SegmentLengthInBytes = rcv.segValidLen;
+		segCheckSumRcv = rcv.segCheckSum;
 		
 		IhuDebugPrint("L3IAP: fsm_l3iap_sw_package_confirm received: SegmentLength=%d\n", SegmentLengthInBytes);
 
 		/* Step 1: Segment Length Check */
-		if(rcv.swSegmentIndex == zIhuL3iapTaskContext.swTotalSegmentNumber)
+		if(rcv.segIndex == zIhuL3iapTaskContext.swTotalSegmentNumber)
 		{
 				IhuDebugPrint("L3IAP: fsm_l3iap_sw_package_confirm: Segment (%d) is the last Segment (%d)\n", \
-			      rcv.swSegmentIndex, zIhuL3iapTaskContext.swTotalSegmentNumber);
+			      rcv.segIndex, zIhuL3iapTaskContext.swTotalSegmentNumber);
 			  
 			  if(SegmentLengthInBytes != zIhuL3iapTaskContext.swLengthInBytesLastSegment)
 				{
@@ -466,7 +601,7 @@ OPSTAT fsm_l3iap_sw_package_confirm(UINT8 dest_id, UINT8 src_id, void * param_pt
 		{
 			
 			  IhuDebugPrint("L3IAP: fsm_l3iap_sw_package_confirm: Segment (%d) is not the last Segment (%d)\n", \
-			      rcv.swSegmentIndex, zIhuL3iapTaskContext.swTotalSegmentNumber);
+			      rcv.segIndex, zIhuL3iapTaskContext.swTotalSegmentNumber);
 			
 			  if(SegmentLengthInBytes != zIhuL3iapTaskContext.swLengthInBytesPerSegment)
 				{
@@ -476,15 +611,24 @@ OPSTAT fsm_l3iap_sw_package_confirm(UINT8 dest_id, UINT8 src_id, void * param_pt
 				}			  		
 		}
 		
+		/* Step 1.1 Checksum */
+		segCheckSumCalculated == CalculateCheckSum(rcv.swPkgBody, SegmentLengthInBytes);
+		if(segCheckSumCalculated != segCheckSumRcv)
+		{
+				IhuDebugPrint("L3IAP: fsm_l3iap_sw_package_confirm: segCheckSumCalculated(0x%04x)!=segCheckSumRcv(0x%04x), return\n", \
+			          segCheckSumCalculated, segCheckSumRcv);
+				return IHU_FAILURE;
+		}
+		
 		/* Step 2: START TO CHECK RECEIVED INFORMATION */
 		if( (zIhuL3iapTaskContext.swRelId != rcv.swRelId) ||
 		    (zIhuL3iapTaskContext.swVerId != rcv.swVerId) ||
-		    (zIhuL3iapTaskContext.swTotalLengthInBytes != rcv.swTotalLengthInBytes) ||
-		    (zIhuL3iapTaskContext.CurrentSegmentIndex != rcv.swSegmentIndex) )
+		    //(zIhuL3iapTaskContext.swTotalLengthInBytes != rcv.swTotalLengthInBytes) ||
+		    (zIhuL3iapTaskContext.CurrentSegmentIndex != rcv.segIndex) )
 		{
 		    IhuDebugPrint("L3IAP: fsm_l3iap_sw_package_confirm expected: swRelId=%d\n", zIhuL3iapTaskContext.swRelId); 
 		    IhuDebugPrint("L3IAP: fsm_l3iap_sw_package_confirm expected: swVerId=%d\n", zIhuL3iapTaskContext.swVerId); 
-		    IhuDebugPrint("L3IAP: fsm_l3iap_sw_package_confirm expected: swTotalLengthInBytes=%d\n", zIhuL3iapTaskContext.swTotalLengthInBytes);
+		    //IhuDebugPrint("L3IAP: fsm_l3iap_sw_package_confirm expected: swTotalLengthInBytes=%d\n", zIhuL3iapTaskContext.swTotalLengthInBytes);
 		    IhuDebugPrint("L3IAP: fsm_l3iap_sw_package_confirm expected: CurrentSegmentIndex=%d\n", zIhuL3iapTaskContext.CurrentSegmentIndex);
 			
 			  IhuDebugPrint("L3IAP: fsm_l3iap_sw_package_confirm: expected != received, do nothing, wait for retransmission\n");
@@ -497,7 +641,7 @@ OPSTAT fsm_l3iap_sw_package_confirm(UINT8 dest_id, UINT8 src_id, void * param_pt
 		IhuDebugPrint("L3IAP: fsm_l3iap_sw_package_confirm: expected == received, save to FLASH address 0x%08x, length=%d\n", \
 		    zIhuL3iapTaskContext.NextFlashSaveAddress, SegmentLengthInBytes);
 
-		ret = ihu_ihu_bsp_stm32_iap_write_flash(zIhuL3iapTaskContext.NextFlashSaveAddress, SegmentLengthInBytes, rcv.swPackageSegmentContent);
+		ret = ihu_iap_write_flash(zIhuL3iapTaskContext.NextFlashSaveAddress, SegmentLengthInBytes, rcv.swPkgBody);
 		if(IHU_FAILURE == ret)
 		{
 			  /* TO DO */
@@ -509,13 +653,13 @@ OPSTAT fsm_l3iap_sw_package_confirm(UINT8 dest_id, UINT8 src_id, void * param_pt
 		}
 		
 		/* Step 4: CHECK WHETHER IT IS THE LAST SEGMENT */
-    zIhuL3iapTaskContext.swCalculatedCheckSum = zIhuL3iapTaskContext.swCalculatedCheckSum ^ CalculateCheckSum(rcv.swPackageSegmentContent, SegmentLengthInBytes);
+    zIhuL3iapTaskContext.swCalculatedCheckSum = zIhuL3iapTaskContext.swCalculatedCheckSum ^ segCheckSumCalculated;
 			  		
 		/* IF IT IS LAST SEGMENT, JUMP TO IT */
-		if(rcv.swSegmentIndex == zIhuL3iapTaskContext.swTotalSegmentNumber)
+		if(rcv.segIndex == zIhuL3iapTaskContext.swTotalSegmentNumber)
 		{
 				IhuDebugPrint("L3IAP: fsm_l3iap_sw_package_confirm: Segment (%d) is the last Segment (%d), request for Segment(%d)\n", \
-			      rcv.swSegmentIndex, zIhuL3iapTaskContext.swTotalSegmentNumber, zIhuL3iapTaskContext.CurrentSegmentIndex);
+			      rcv.segIndex, zIhuL3iapTaskContext.swTotalSegmentNumber, zIhuL3iapTaskContext.CurrentSegmentIndex);
 			
 				/* Check Checksum */
 			  /* TO DO */
@@ -524,13 +668,14 @@ OPSTAT fsm_l3iap_sw_package_confirm(UINT8 dest_id, UINT8 src_id, void * param_pt
 					  /* TO DO */
 					  IhuDebugPrint("L3IAP: fsm_l3iap_sw_package_confirm() swCalculatedCheckSum(0x%04x)!=swCheckSum(0x%04x), Checksum failure\n", \
 					       zIhuL3iapTaskContext.swCalculatedCheckSum!=zIhuL3iapTaskContext.swCheckSum);
+					  /* TO DO */
 					  
 				}
 			  /* TO DO */
 			
 				if(IAP_SW_UPGRADE_TYPE_UPGRADE_APP_LOAD == zIhuL3iapTaskContext.swUpgradeType)
 				{
-						IhuDebugPrint("L3IAP: fsm_l3iap_sw_package_confirm() last segment (%d), about to call ihu_iap_sw_jump_to_factory_load(), leaving IAP with SUCCESS RESULT...\n", rcv.swSegmentIndex);
+						IhuDebugPrint("L3IAP: fsm_l3iap_sw_package_confirm() last segment (%d), about to call ihu_iap_sw_jump_to_factory_load(), leaving IAP with SUCCESS RESULT...\n", rcv.segIndex);
 					  zIhuSysEngElementHwBurnContext.bootLoad1RelId = zIhuL3iapTaskContext.swRelId;
 					  zIhuSysEngElementHwBurnContext.bootLoad1VerId = zIhuL3iapTaskContext.swVerId;
 					  zIhuSysEngElementHwBurnContext.bootLoad1Valid = TRUE;
@@ -540,7 +685,7 @@ OPSTAT fsm_l3iap_sw_package_confirm(UINT8 dest_id, UINT8 src_id, void * param_pt
 				}
 				else if(IAP_SW_UPGRADE_TYPE_UPGRADE_FACTORY_LOAD == zIhuL3iapTaskContext.swUpgradeType)
 				{
-						IhuDebugPrint("L3IAP: fsm_l3iap_sw_package_confirm() last segment (%d), about to call ihu_iap_sw_jump_to_app_load(), leaving IAP with SUCCESS RESULT...\n", rcv.swSegmentIndex);
+						IhuDebugPrint("L3IAP: fsm_l3iap_sw_package_confirm() last segment (%d), about to call ihu_iap_sw_jump_to_app_load(), leaving IAP with SUCCESS RESULT...\n", rcv.segIndex);
 						zIhuSysEngElementHwBurnContext.facLoadSwRel = zIhuL3iapTaskContext.swRelId;
 					  zIhuSysEngElementHwBurnContext.facLoadSwVer = zIhuL3iapTaskContext.swVerId;
 					  zIhuSysEngElementHwBurnContext.facLoadValid = TRUE;
@@ -559,7 +704,7 @@ OPSTAT fsm_l3iap_sw_package_confirm(UINT8 dest_id, UINT8 src_id, void * param_pt
 			  zIhuL3iapTaskContext.CurrentSegmentTransTimes = 1; /* Reset Retrans to 1 */
 			
 			  IhuDebugPrint("L3IAP: fsm_l3iap_sw_package_confirm: Segment (%d) is not the last Segment (%d), request for Segment(%d)\n", \
-			      rcv.swSegmentIndex, zIhuL3iapTaskContext.swTotalSegmentNumber, zIhuL3iapTaskContext.CurrentSegmentIndex);
+			      rcv.segIndex, zIhuL3iapTaskContext.swTotalSegmentNumber, zIhuL3iapTaskContext.CurrentSegmentIndex);
 			  
 			  /* Request for next segment */ 
 			  ihu_send_iap_sw_package_report();
@@ -574,6 +719,7 @@ OPSTAT fsm_l3iap_sw_package_timeout(UINT8 dest_id, UINT8 src_id, void * param_pt
 		msg_struct_com_time_out_t rcv;
 	
 	  //Receive message and copy to local variable
+	  ret = ret;
 	  memset(&rcv, 0, sizeof(msg_struct_com_time_out_t));
 	  if ((param_ptr == NULL || param_len > sizeof(msg_struct_com_time_out_t))){
 		    IhuErrorPrint("L3IAP: Receive message error!\n");
@@ -632,6 +778,7 @@ void ihu_send_iap_sw_inventory_report(void)
 	
 		snd0.hwId  = zIhuSysEngElementHwBurnContext.hwPemId;
 		snd0.hwType = zIhuSysEngElementHwBurnContext.hwType;
+		snd0.upgradeFlag = 0; //////////!!!!!!/////////???????/////////
 	
 	  if(TRUE == zIhuSysEngElementHwBurnContext.bootLoad1Valid)
 		{
@@ -656,11 +803,30 @@ void ihu_send_iap_sw_inventory_report(void)
 
 extern OPSTAT LoadIhuSysEngElementHwBurnContext(SysEngParElementHwBurnPhyIdAddr_t *psepehb, UINT32 SysEngElementHwBurnContextAddress)
 {
-	  psepehb->hwPemId = 1;
-		psepehb->hwType = 2;
 	
-		psepehb->bootLoad1RelId = 3;
-		psepehb->bootLoad1VerId = 4;
+		SysEngParElementHwBurnPhyIdAddr_t *pFlash;
+		if(NULL == psepehb)
+		{
+			  IhuErrorPrint("L3IAP: LoadIhuSysEngElementHwBurnContext: NULL == psepehb, return failure\n");
+			  return IHU_FAILURE;
+		}
+		
+		if(SysEngElementHwBurnContextAddress != FLASH_ADDRESS_SW_CONTROL_TABLE)
+		{
+				IhuErrorPrint("L3IAP: SysEngElementHwBurnContextAddress != FLASH_ADDRESS_SW_CONTROL_TABLE, return failure\n");
+			  return IHU_FAILURE;
+		}
+	
+		pFlash = (SysEngParElementHwBurnPhyIdAddr_t *)FLASH_ADDRESS_SW_CONTROL_TABLE;
+		if( (0 == pFlash->hwType) &&
+			  (0 == pFlash->hwPemId) &&
+		    (0 == pFlash->swRelId) &&
+		    (0 == pFlash->swVerId) )
+    {
+		    SysEngElementHwBurnFlashContentInit();
+		}
+		
+		memcpy((void *)psepehb, (void *)pFlash, sizeof(SysEngParElementHwBurnPhyIdAddr_t));
 	
 	  return IHU_SUCCESS;
 }
@@ -674,14 +840,13 @@ void ihu_send_iap_sw_package_report(void)
 		snd0.length = sizeof(msg_struct_l3iap_sw_package_report_t);
 	  snd0.msgid = MSG_ID_IAP_SW_PACKAGE_REPORT;
 
-		snd0.UpgradePrepareStatus = IAP_SW_UPGRADE_PREPARE_STATUS_APP_LOAD_FLASH_ERASED_OK;					//APP or FACTORY, or ...
-	  snd0.swRelId = zIhuL3iapTaskContext.swRelId;
-	  snd0.swVerId = zIhuL3iapTaskContext.swVerId;
-	  snd0.swCheckSum = zIhuL3iapTaskContext.swCheckSum;
-	  snd0.swTotalLengthInBytes = zIhuL3iapTaskContext.swTotalLengthInBytes;
-	
-	  snd0.swSegmentIndex = zIhuL3iapTaskContext.CurrentSegmentIndex;        // 0, 1, 2, ... MaxLoadSegmentIndex, start from 0, 
-	
+		snd0.swRelId = zIhuL3iapTaskContext.swRelId;
+		snd0.swVerId = zIhuL3iapTaskContext.swVerId;
+		snd0.upgradeFlag = IAP_SW_UPGRADE_PREPARE_STATUS_APP_LOAD_FLASH_ERASED_OK;
+		snd0.segIndex = zIhuL3iapTaskContext.CurrentSegmentIndex;
+		snd0.segTotal = zIhuL3iapTaskContext.swTotalSegmentNumber;
+		snd0.segSplitLen = zIhuL3iapTaskContext.swLengthInBytesPerSegment;
+
 		IhuDebugPrint("L3IAP: ihu_send_iap_sw_package_report: request segment(%d of %d) for total size of (%d) bytes\n", \
 	      zIhuL3iapTaskContext.CurrentSegmentIndex, zIhuL3iapTaskContext.swTotalSegmentNumber, zIhuL3iapTaskContext.swTotalLengthInBytes);
 		ret = ihu_message_send(MSG_ID_IAP_SW_PACKAGE_REPORT, TASK_ID_CANVELA, TASK_ID_L3IAP, &snd0, snd0.length);
@@ -692,22 +857,66 @@ void ihu_send_iap_sw_package_report(void)
 		}
 }
 
+void SysEngElementHwBurnFlashContentInit(void)
+{
+		IhuDebugPrint("L3IAP: SysEngElementHwBurnFlashContentInit start ...\n");
+		//zIhuSysEngElementHwBurnContext.equLable[20];
+		zIhuSysEngElementHwBurnContext.hwType = 1;
+		zIhuSysEngElementHwBurnContext.hwPemId = 2;
+		zIhuSysEngElementHwBurnContext.swRelId = 3;
+		zIhuSysEngElementHwBurnContext.swVerId = 4;
+		zIhuSysEngElementHwBurnContext.swUpgradeFlag = 0;
+		zIhuSysEngElementHwBurnContext.swUpgPollId = 0;
+		zIhuSysEngElementHwBurnContext.bootIndex = 1;
+		zIhuSysEngElementHwBurnContext.bootAreaMax = 2;   //32
+		zIhuSysEngElementHwBurnContext.facLoadAddr = 0; 
+		zIhuSysEngElementHwBurnContext.facLoadSwRel = 0;
+		zIhuSysEngElementHwBurnContext.facLoadSwVer = 0;	
+		zIhuSysEngElementHwBurnContext.facLoadCheckSum = 0;
+		zIhuSysEngElementHwBurnContext.facLoadValid = 0;
+		zIhuSysEngElementHwBurnContext.spare2 = 0;
+		zIhuSysEngElementHwBurnContext.bootLoad1Addr = FLASH_ADDRESS_APP_LOAD;
+		zIhuSysEngElementHwBurnContext.bootLoad1RelId = 2;
+		zIhuSysEngElementHwBurnContext.bootLoad1VerId = 3;
+		zIhuSysEngElementHwBurnContext.bootLoad1CheckSum = 0;
+		zIhuSysEngElementHwBurnContext.bootLoad1Valid = 1;
+		zIhuSysEngElementHwBurnContext.spare3  = 0;   //32
+		zIhuSysEngElementHwBurnContext.bootLoad2Addr = 0;
+		zIhuSysEngElementHwBurnContext.bootLoad2RelId = 0;
+		zIhuSysEngElementHwBurnContext.bootLoad2VerId = 0;
+		zIhuSysEngElementHwBurnContext.bootLoad2CheckSum = 0;
+		zIhuSysEngElementHwBurnContext.bootLoad2Valid = 0;
+		zIhuSysEngElementHwBurnContext.spare4 = 0;
+		zIhuSysEngElementHwBurnContext.bootLoad3Addr = 0;
+		zIhuSysEngElementHwBurnContext.bootLoad3RelId = 0;
+		zIhuSysEngElementHwBurnContext.bootLoad3VerId = 0;
+		zIhuSysEngElementHwBurnContext.bootLoad3CheckSum = 0;
+		zIhuSysEngElementHwBurnContext.bootLoad3Valid = 0;
+		zIhuSysEngElementHwBurnContext.spare5 = 0;       //32
+		//zIhuSysEngElementHwBurnContext.cipherKey[16];
+		//zIhuSysEngElementHwBurnContext.rsv[16];   //32
+		
+		ihu_iap_sw_save_hw_sw_control_table();
+		IhuDebugPrint("L3IAP: SysEngElementHwBurnFlashContentInit complete\n");
+}
+	
+
 void ihu_iap_sw_save_hw_sw_control_table(void)
 {
 		OPSTAT ret;
 
-		ret = ihu_ihu_bsp_stm32_iap_erase_flash_block(FLASH_ADDRESS_SW_CONTROL_TABLE, sizeof(SysEngParElementHwBurnPhyIdAddr_t));
+		ret = ihu_iap_erase_flash_block(FLASH_ADDRESS_SW_CONTROL_TABLE, sizeof(SysEngParElementHwBurnPhyIdAddr_t));
 		if(IHU_FAILURE == ret)
 		{
 				/* TO BE DISCUSSED */
-				IhuDebugPrint("L3IAP: ihu_iap_sw_save_hw_sw_control_table(), ihu_ihu_bsp_stm32_iap_erase_flash_block() failure\n");
+				IhuDebugPrint("L3IAP: ihu_iap_sw_save_hw_sw_control_table(), ihu_iap_erase_flash_block() failure\n");
 		}
 		
-		ret = ihu_ihu_bsp_stm32_iap_write_flash(FLASH_ADDRESS_SW_CONTROL_TABLE, sizeof(SysEngParElementHwBurnPhyIdAddr_t), (UINT8 *)&zIhuSysEngElementHwBurnContext);
+		ret = ihu_iap_write_flash(FLASH_ADDRESS_SW_CONTROL_TABLE, sizeof(SysEngParElementHwBurnPhyIdAddr_t), (UINT8 *)&zIhuSysEngElementHwBurnContext);
 		if(IHU_FAILURE == ret)
 		{
 			  /* TO BE DISCUSSED */
-			  IhuDebugPrint("L3IAP: ihu_iap_sw_save_hw_sw_control_table(), ihu_ihu_bsp_stm32_iap_write_flash() failure\n");
+			  IhuDebugPrint("L3IAP: ihu_iap_sw_save_hw_sw_control_table(), ihu_iap_write_flash() failure\n");
 		}
 }
 
@@ -718,10 +927,167 @@ UINT16 CalculateCheckSum(UINT8 *pdata, UINT32 length_in_bytes)
 	
 void ihu_iap_sw_jump_to_app_load(void)
 {
-    return;
+	  IhuDebugPrint("L3IAP: disable_irq and about to jump to app(0x%08X)\n", FLASH_ADDRESS_APP_LOAD);
+		__disable_irq();
+    IAP_ExecuteApp_fun(FLASH_ADDRESS_APP_LOAD);
 }
 
 void ihu_iap_sw_jump_to_factory_load(void)
 {
-    return;
+	  IhuDebugPrint("L3IAP: disable_irq and about to jump to factory(0x%08X)\n", FLASH_ADDRESS_FACTORY_LOAD);
+		HAL_FLASH_Lock();
+		__disable_irq();
+    IAP_ExecuteApp_fun(FLASH_ADDRESS_FACTORY_LOAD);
+}
+
+void ihu_iap_sw_jump_to_iap_load(void)
+{
+	  IhuDebugPrint("L3IAP: disable_irq and about to jump to iap(0x%08X)\n", FLASH_ADDRESS_IAP_LOAD);
+	  HAL_FLASH_Lock();
+		__disable_irq();
+    IAP_ExecuteApp_fun(FLASH_ADDRESS_IAP_LOAD);
+}
+
+OPSTAT ihu_iap_erase_flash_block(uint32_t start_address, uint32_t length_in_bytes)
+{
+//#define FLASH_ADDRESS_SW_CONTROL_TABLE             (0x080E0000)  // TO BE UPDATE
+//#define FLASH_ADDRESS_IAP_LOAD                     (0x08000000)
+//#define FLASH_ADDRESS_FACTORY_LOAD                 (0x08020000)  // TO BE UPDATE
+//#define FLASH_ADDRESS_APP_LOAD                     (0x08080000)  // TO BE UPDATE
+
+//#define FLASH_SECTOR_HW_CONTROL_TABLE              FLASH_SECTOR_11
+//#define FLASH_SECTOR_IAP_LOAD                      FLASH_SECTOR_0
+//#define FLASH_SECTOR_FACTORY_LOAD                  FLASH_SECTOR_5
+//#define FLASH_SECTOR_APP_LOAD                      FLASH_SECTOR_8
+    UINT32 sector_start_index = 0;
+	  UINT32 sector_stop_index = 0;
+	  UINT32 index = 0;
+    
+		switch(start_address)
+		{
+				case FLASH_ADDRESS_SW_CONTROL_TABLE:
+					  if(length_in_bytes > FLASH_MAX_SIZE_HW_CONTROL_TABLE)
+						{
+								IhuErrorPrint("L3IAP: ihu_iap_erase_flash_block, length_in_bytes(%d) > FLASH_MAX_SIZE_HW_CONTROL_TABLE*%d), return failure\n", length_in_bytes, FLASH_MAX_SIZE_HW_CONTROL_TABLE);
+								return IHU_FAILURE;
+						}
+						sector_start_index = FLASH_SECTOR_11;
+				    sector_stop_index = FLASH_SECTOR_11;
+						IhuDebugPrint("L3IAP: ihu_iap_erase_flash_block, FLASH_ADDRESS_SW_CONTROL_TABLE(0x%08x), sector_start_index=%d, sector_stop_index=%d\n", start_address, sector_start_index, sector_stop_index);
+				    break;
+						
+				case FLASH_ADDRESS_IAP_LOAD:
+					  if(length_in_bytes > FLASH_MAX_SIZE_IAP_LOAD)
+						{
+								IhuErrorPrint("L3IAP: ihu_iap_erase_flash_block, length_in_bytes(%d) > FLASH_MAX_SIZE_HW_CONTROL_TABLE*%d), return failure\n", length_in_bytes, FLASH_MAX_SIZE_HW_CONTROL_TABLE);
+								return IHU_FAILURE;
+						}
+						
+						sector_start_index = FLASH_SECTOR_0;
+				    if(length_in_bytes > (0x00010000)) // > 64K
+						{
+								sector_stop_index = FLASH_SECTOR_4;
+						}
+						else
+						{
+							  sector_stop_index = length_in_bytes / (0x400);
+						}
+					  IhuDebugPrint("L3IAP: ihu_iap_erase_flash_block, FLASH_ADDRESS_IAP_LOAD(0x%08x), sector_start_index=%d, sector_stop_index=%d\n", start_address, sector_start_index, sector_stop_index);
+						break;
+						
+				case FLASH_ADDRESS_FACTORY_LOAD:
+					 	if(length_in_bytes > FLASH_MAX_SIZE_FACTORY_LOAD)
+						{
+								IhuErrorPrint("L3IAP: ihu_iap_erase_flash_block, length_in_bytes(%d) > FLASH_MAX_SIZE_HW_CONTROL_TABLE*%d), return failure\n", length_in_bytes, FLASH_MAX_SIZE_HW_CONTROL_TABLE);
+								return IHU_FAILURE;
+						}
+						
+						sector_start_index = FLASH_SECTOR_5;
+					  sector_stop_index = sector_start_index + length_in_bytes / (0x2000); /* 128K */
+						IhuDebugPrint("L3IAP: ihu_iap_erase_flash_block, FLASH_ADDRESS_FACTORY_LOAD(0x%08x), sector_start_index=%d, sector_stop_index=%d\n", start_address, sector_start_index, sector_stop_index);
+					  break;
+						
+				case FLASH_ADDRESS_APP_LOAD:
+						if(length_in_bytes > FLASH_MAX_SIZE_APP_LOAD)
+						{
+								IhuErrorPrint("L3IAP: ihu_iap_erase_flash_block, length_in_bytes(%d) > FLASH_MAX_SIZE_HW_CONTROL_TABLE*%d), return failure\n", length_in_bytes, FLASH_MAX_SIZE_HW_CONTROL_TABLE);
+								return IHU_FAILURE;
+						}
+						
+						sector_start_index = FLASH_SECTOR_8;
+					  sector_stop_index = sector_start_index + length_in_bytes / (0x2000); /* 128K */
+						IhuDebugPrint("L3IAP: ihu_iap_erase_flash_block, FLASH_ADDRESS_APP_LOAD(0x%08x), sector_start_index=%d, sector_stop_index=%d\n", start_address, sector_start_index, sector_stop_index);
+					  
+	          break;
+				default:
+						IhuErrorPrint("L3IAP: ihu_iap_erase_flash_block, invalid start_address(0x%08x), return failure\n", start_address);
+						return IHU_FAILURE;	
+				
+					  //break;
+		}
+		
+		IhuDebugPrint("L3IAP: ihu_iap_erase_flash_block, HAL_FLASH_Unlock() start at SysTick(%d)\n", osKernelSysTick());
+		HAL_FLASH_Unlock();
+    IhuDebugPrint("L3IAP: ihu_iap_erase_flash_block, HAL_FLASH_Unlock() complete at SysTick(%d)\n", osKernelSysTick());
+		
+	  for(index = sector_start_index; index <= sector_stop_index; index++)
+		{
+				IhuDebugPrint("L3IAP: ihu_iap_erase_flash_block, FLASH_Erase_Sector(%) start at SysTick(%d)\n", index, osKernelSysTick());
+				FLASH_Erase_Sector(index, (uint8_t) FLASH_VOLTAGE_RANGE_2);
+			  IhuDebugPrint("L3IAP: ihu_iap_erase_flash_block, FLASH_Erase_Sector(%) complete at SysTick(%d)\n", index, osKernelSysTick());
+		}
+	
+		HAL_FLASH_Lock();
+	  return IHU_SUCCESS;
+}
+
+OPSTAT ihu_iap_write_flash(uint32_t start_address, uint32_t length_in_bytes, uint8_t *data)
+{
+    UINT32 i;
+	  UINT16 val;
+	  UINT32 write_len;
+	  UINT32 write_addr;
+	  HAL_StatusTypeDef status;
+	
+	  if(start_address > (1024*1024-2))
+		{
+				IhuErrorPrint("L3IAP: ihu_iap_write_flash, start_address(%d) > (1024*1024-2)(%d), return failure\n", start_address, (1024*1024-2));
+			  return IHU_FAILURE;
+		}
+
+    if(length_in_bytes > (1024*1024))
+		{
+				IhuErrorPrint("L3IAP: ihu_iap_write_flash, length_in_bytes(%d) > (1024*1024)(%d), return failure\n", length_in_bytes, (1024*1024));
+			  return IHU_FAILURE;
+		}
+	
+    if(NULL == data)
+		{
+				IhuErrorPrint("L3IAP: ihu_iap_write_flash, NULL == data, return failure\n");
+			  return IHU_FAILURE;
+		}				
+	
+		write_len = length_in_bytes;
+		write_addr = start_address;
+		IhuDebugPrint("L3IAP: ihu_iap_write_flash: write_addr=0x%08X, write value=0x%04X start at sysTick(%d)\n", write_addr, val, osKernelSysTick());//*(uint16_t *)(iap_pac_conf->payload.swPackageSegmentContent[i]));
+
+		HAL_FLASH_Unlock();
+		for(i = 0; i < write_len; i = i + 2)
+    {
+        val =  ((uint16_t)data[i] + ((uint16_t)data[i+1]<<8));
+			  status = HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD, write_addr, val);
+			  if(HAL_OK != status)
+				{
+						IhuErrorPrint("L3IAP: ihu_iap_write_flash, HAL_FLASH_Program failure with status=%d, return failure\n", status);
+					  HAL_FLASH_Lock();
+					  return IHU_FAILURE;
+				}
+        write_addr = write_addr + 2;
+    }
+		
+		HAL_FLASH_Lock();
+		IhuDebugPrint("L3IAP: ihu_iap_write_flash: write_addr=0x%08X, write value=0x%04X complete at sysTick(%d)\n", write_addr, val, osKernelSysTick());//*(uint16_t *)(iap_pac_conf->payload.swPackageSegmentContent[i]));
+		
+		return IHU_SUCCESS;
+		
 }

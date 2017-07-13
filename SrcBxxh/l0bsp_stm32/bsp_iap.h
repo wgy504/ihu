@@ -60,6 +60,8 @@ void IAP_ExecuteApp( uint32_t appxaddr );			                              //æ‰§è
 void IAP_write_app_bin_all_in_one(void);
 void IAP_execute_app_bin_all_in_one(void);
 
+void IAP_ExecuteApp_fun (uint32_t ulAddr_App);
+
 /* define for iap */
 OPSTAT ihu_bsp_stm32_iap_bootcfg_read_all(SysEngParElementHwBurnPhyIdAddr_t *buf);
 OPSTAT ihu_bsp_stm32_iap_bootcfg_write_all(SysEngParElementHwBurnPhyIdAddr_t *buf);

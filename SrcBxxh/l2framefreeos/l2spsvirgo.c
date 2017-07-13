@@ -251,6 +251,7 @@ OPSTAT fsm_spsvirgo_l2frame_rcv(UINT8 dest_id, UINT8 src_id, void * param_ptr, U
 	msg_struct_spsvirgo_l2frame_rcv_t rcv;
 	
 	//Receive message and copy to local variable
+	ret = ret;
 	memset(&rcv, 0, sizeof(msg_struct_spsvirgo_l2frame_rcv_t));
 	if ((param_ptr == NULL || param_len > sizeof(msg_struct_spsvirgo_l2frame_rcv_t)))
 		IHU_ERROR_PRINT_SPSVIRGO("SPSVIRGO: Receive message error!\n");
