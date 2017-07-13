@@ -1106,23 +1106,52 @@ void func_canvela_frame_send(IHU_HUITP_L2FRAME_STD_frame_header_t *pframe)
 OPSTAT fsm_canvela_l3iap_inventory_report(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
 	//int ret = 0;
-	msg_struct_l3iap_canvela_inventory_report_t rcv;
+	msg_struct_l3iap_sw_upgrade_report_t rcv;
 	IHU_HUITP_L2FRAME_STD_frame_header_t *pFrameHeader = NULL;
+	pFrameHeader = pFrameHeader;
+//	typedef struct msg_struct_l3iap_sw_inventory_report
+//	{
+//		UINT16  msgid;
+//		UINT16  length;
+//		UINT16  hwType;
+//		UINT16  hwId;
+//		UINT16  swRel;
+//		UINT16  swVer;
+//		UINT8   upgradeFlag;
+//		//UINT32  timeStamp;
+//	}msg_struct_l3iap_sw_upgrade_report_t;
 	
 	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_l3iap_canvela_inventory_report_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3iap_canvela_inventory_report_t)))
+	memset(&rcv, 0, sizeof(msg_struct_l3iap_sw_upgrade_report_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3iap_sw_upgrade_report_t)))
 			IHU_ERROR_PRINT_CANVELA("CANVELA: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);	
 
 	//准备组装发送消息
+	//	typedef struct StrMsg_HUITP_MSGID_sui_inventory_report
+	//	{
+	//		UINT16 msgid;
+	//		UINT16 length;
+	//		UINT16 hwType;
+	//		UINT16 hwId;
+	//		UINT16 swRel;
+	//		UINT16 swVer;
+	//		UINT8  upgradeFlag;
+	//	}StrMsg_HUITP_MSGID_sui_inventory_report_t;
+
 	StrMsg_HUITP_MSGID_sui_inventory_report_t pMsgProc;
 	UINT16 msgProcLen = sizeof(StrMsg_HUITP_MSGID_sui_inventory_report_t);
 	memset(&pMsgProc, 0, msgProcLen);
 	pMsgProc.msgid = HUITP_ENDIAN_EXG16(HUITP_MSGID_sui_inventory_report);
 	pMsgProc.length = HUITP_ENDIAN_EXG16(msgProcLen - 4);
 
-	//发送出去
+	pMsgProc.hwType      = HUITP_ENDIAN_EXG16(rcv.hwType);
+	pMsgProc.hwId        = HUITP_ENDIAN_EXG16(rcv.hwType);
+	pMsgProc.swRel       = HUITP_ENDIAN_EXG16(rcv.hwType);
+	pMsgProc.swVer       = HUITP_ENDIAN_EXG16(rcv.hwType);
+	pMsgProc.upgradeFlag = rcv.hwType;
+	
+//发送出去
 //	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
 //	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
 //	pFrameHeader->start = IHU_L2PACKET_START_CHAR;
@@ -1138,22 +1167,54 @@ OPSTAT fsm_canvela_l3iap_inventory_report(UINT8 dest_id, UINT8 src_id, void * pa
 OPSTAT fsm_canvela_l3iap_sw_package_report(UINT8 dest_id, UINT8 src_id, void * param_ptr, UINT16 param_len)
 {
 	//int ret = 0;
-	msg_struct_l3iap_canvela_sw_package_report_t rcv;
+	msg_struct_l3iap_sw_package_report_t rcv;
 	IHU_HUITP_L2FRAME_STD_frame_header_t *pFrameHeader = NULL;
+	pFrameHeader = pFrameHeader;
+	
+	//typedef struct msg_struct_l3iap_sw_package_report
+	//{
+	//	UINT16  msgid;
+	//	UINT16  length;
+	//	UINT16  swRelId;
+	//	UINT16  swVerId;
+	//	UINT8   upgradeFlag;
+	//	UINT16  segIndex;
+	//	UINT16  segTotal;
+	//	UINT16  segSplitLen;
+	//}msg_struct_l3iap_sw_package_report_t;
 	
 	//Receive message and copy to local variable
-	memset(&rcv, 0, sizeof(msg_struct_l3iap_canvela_sw_package_report_t));
-	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3iap_canvela_sw_package_report_t)))
+	memset(&rcv, 0, sizeof(msg_struct_l3iap_sw_package_report_t));
+	if ((param_ptr == NULL || param_len > sizeof(msg_struct_l3iap_sw_package_report_t)))
 			IHU_ERROR_PRINT_CANVELA("CANVELA: Receive message error!\n");
 	memcpy(&rcv, param_ptr, param_len);	
 
 	//准备组装发送消息
+	//typedef struct StrMsg_HUITP_MSGID_sui_sw_package_report
+	//{
+	//	UINT16 msgid;
+	//	UINT16 length;
+	//	UINT16 swRelId;
+	//	UINT16 swVerId;
+	//	UINT8  upgradeFlag;
+	//	UINT16 segIndex;
+	//	UINT16 segTotal;
+	//	UINT16 segSplitLen;
+	//}StrMsg_HUITP_MSGID_sui_sw_package_report_t;
+	
 	StrMsg_HUITP_MSGID_sui_sw_package_report_t pMsgProc;
 	UINT16 msgProcLen = sizeof(StrMsg_HUITP_MSGID_sui_sw_package_report_t);
 	memset(&pMsgProc, 0, msgProcLen);
 	pMsgProc.msgid = HUITP_ENDIAN_EXG16(HUITP_MSGID_sui_sw_package_report);
 	pMsgProc.length = HUITP_ENDIAN_EXG16(msgProcLen - 4);
 
+	pMsgProc.swRelId      = HUITP_ENDIAN_EXG16(rcv.swRelId);
+	pMsgProc.swVerId      = HUITP_ENDIAN_EXG16(rcv.swVerId);
+	pMsgProc.upgradeFlag  = rcv.upgradeFlag;   // 1 byte 
+	pMsgProc.segIndex     = HUITP_ENDIAN_EXG16(rcv.segIndex);
+	pMsgProc.segTotal     = HUITP_ENDIAN_EXG16(rcv.segTotal);
+	pMsgProc.segSplitLen  = HUITP_ENDIAN_EXG16(rcv.segSplitLen);
+	
 	//发送出去
 //	memset(ctrlMsgBuf, 0, MAX_WMC_CONTROL_MSG_LEN);
 //	pFrameHeader = (IHU_HUITP_L2FRAME_STD_frame_header_t *)ctrlMsgBuf;
@@ -1461,10 +1522,40 @@ OPSTAT func_canitfleo_l2frame_msg_bfsc_heart_beat_confirm_received_handle(StrMsg
 OPSTAT func_canitfleo_l2frame_msg_inventory_confirm_received_handle(StrMsg_HUITP_MSGID_sui_inventory_confirm_t *rcv)
 {
 	//准备组装发送消息
-	msg_struct_canvela_l3iap_inventory_confirm_t snd;
-	memset(&snd, 0, sizeof(msg_struct_canvela_l3iap_inventory_confirm_t));
-			
+//	typedef struct StrMsg_HUITP_MSGID_sui_inventory_confirm
+//	{
+//		UINT16 msgid;
+//		UINT16 length;
+//		UINT16 swRel;
+//		UINT16 swVer;
+//		UINT8  upgradeFlag;
+//		UINT16 	swCheckSum;
+//		UINT32  swTotalLengthInBytes;
+//	}StrMsg_HUITP_MSGID_sui_inventory_confirm_t;
+	
+//		typedef struct msg_struct_l3iap_sw_inventory_confirm
+//		{
+//				UINT16  msgid;
+//				UINT16  length;
+//				UINT16  swRel;
+//				UINT16  swVer;
+//				UINT8   upgradeFlag;
+//				UINT16 	swCheckSum;
+//				UINT32  swTotalLengthInBytes;
+//		}msg_struct_l3iap_sw_inventory_confirm_t;
+
+	msg_struct_l3iap_sw_inventory_confirm_t snd;
+	memset(&snd, 0, sizeof(msg_struct_l3iap_sw_inventory_confirm_t));
+	
+	snd.msgid = MSG_ID_IAP_SW_INVENTORY_CONFIRM;
 	snd.length = sizeof(msg_struct_canvela_l3iap_inventory_confirm_t);
+	
+	snd.swRel = rcv->swRel;
+	snd.swRel = rcv->swVer;
+	snd.upgradeFlag = rcv->upgradeFlag;					       //APP or FACTORY, or ... same as msg_struct_l3iap_iap_sw_upgrade_req
+	snd.swCheckSum = rcv->swCheckSum;
+	snd.swTotalLengthInBytes = rcv->swTotalLengthInBytes;
+			
 	if (ihu_message_send(MSG_ID_IAP_SW_INVENTORY_CONFIRM, TASK_ID_L3IAP, TASK_ID_CANVELA, &snd, snd.length) == IHU_FAILURE)
 		IHU_ERROR_PRINT_CANVELA("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName, zIhuVmCtrTab.task[TASK_ID_L3IAP].taskName);
 
@@ -1475,13 +1566,59 @@ OPSTAT func_canitfleo_l2frame_msg_inventory_confirm_received_handle(StrMsg_HUITP
 OPSTAT func_canitfleo_l2frame_msg_sw_package_confirm_received_handle(StrMsg_HUITP_MSGID_sui_sw_package_confirm_t *rcv)
 {
 	//准备组装发送消息
-	msg_struct_canvela_l3iap_sw_package_confirm_t snd;
-	memset(&snd, 0, sizeof(msg_struct_canvela_l3iap_sw_package_confirm_t));
-			
-	snd.length = sizeof(msg_struct_canvela_l3iap_sw_package_confirm_t);
-	if (ihu_message_send(MSG_ID_IAP_SW_PACKAGE_CONFIRM, TASK_ID_L3IAP, TASK_ID_CANVELA, &snd, snd.length) == IHU_FAILURE)
-		IHU_ERROR_PRINT_CANVELA("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName, zIhuVmCtrTab.task[TASK_ID_L3IAP].taskName);
+//	typedef struct StrMsg_HUITP_MSGID_sui_sw_package_confirm
+//	{
+//		UINT16 msgid;
+//		UINT16 length;
+//		UINT16 swRelId;
+//		UINT16 swVerId;
+//		UINT8  upgradeFlag;
+//		UINT16 segIndex;
+//		UINT16 segTotal;
+//		UINT16 segSplitLen;
+//		UINT16 segValidLen;
+//		UINT16 segCheckSum;
+//		UINT8  swPkgBody[HUITP_IEID_SUI_SW_PACKAGE_BODY_MAX_LEN];
+//	}StrMsg_HUITP_MSGID_sui_sw_package_confirm_t;
+	
+//	typedef struct msg_struct_l3iap_sw_package_confirm
+//	{
+//			UINT16 msgid;
+//			UINT16 length;
+//			UINT16 swRelId;
+//			UINT16 swVerId;
+//			UINT8  upgradeFlag;
+//			UINT16 segIndex;
+//			UINT16 segTotal;
+//			UINT16 segSplitLen;
+//			UINT16 segValidLen;
+//			UINT16 segCheckSum;
+//			UINT8  swPkgBody[MAX_LEN_PER_LOAD_SEGMENT];
+//	}msg_struct_l3iap_sw_package_confirm_t;
 
+	msg_struct_l3iap_sw_package_confirm_t snd;
+	memset(&snd, 0, sizeof(msg_struct_l3iap_sw_package_confirm_t));
+	
+	snd.msgid = MSG_ID_IAP_SW_PACKAGE_CONFIRM;
+	snd.length = sizeof(msg_struct_l3iap_sw_package_confirm_t);  //TO CHECK LENTH
+	
+	snd.swRelId       = rcv->swRelId;
+	snd.swVerId       = rcv->swVerId;
+	snd.upgradeFlag   = rcv->upgradeFlag;
+	snd.segIndex      = rcv->segIndex;
+	snd.segTotal      = rcv->segTotal;
+	snd.segSplitLen   = rcv->segSplitLen;
+	snd.segValidLen   = rcv->segValidLen;
+	snd.segCheckSum   = rcv->segCheckSum;
+	
+	if(rcv->segSplitLen <= MAX_LEN_PER_LOAD_SEGMENT)
+	{
+			memcpy(snd.swPkgBody, rcv->swPkgBody, MAX_LEN_PER_LOAD_SEGMENT);  //rcv.segSplitLen ????????
+			snd.length = sizeof(msg_struct_l3iap_sw_package_confirm_t);
+			if (ihu_message_send(MSG_ID_IAP_SW_PACKAGE_CONFIRM, TASK_ID_L3IAP, TASK_ID_CANVELA, &snd, snd.length) == IHU_FAILURE)
+					IHU_ERROR_PRINT_CANVELA("CANVELA: Send message error, TASK [%s] to TASK[%s]!\n", zIhuVmCtrTab.task[TASK_ID_CANVELA].taskName, zIhuVmCtrTab.task[TASK_ID_L3IAP].taskName);
+	}
+	
 	//返回
 	return IHU_SUCCESS;
 }

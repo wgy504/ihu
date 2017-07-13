@@ -29,6 +29,7 @@
 //#include <system.h>
 //#include <sys/ipc.h>
 
+#pragma pack (1) //强制1字节对齐
 
 //遗留特殊的定义
 //typedef UINT8           		bool;
@@ -307,8 +308,8 @@ typedef struct msg_struct_l3iap_sw_inventory_report
 	UINT16  hwId;
 	UINT16  swRel;
 	UINT16  swVer;
-	UINT16  upgradeFlag;
-	UINT32  timeStamp;
+	UINT8   upgradeFlag;
+	//UINT32  timeStamp;
 }msg_struct_l3iap_sw_upgrade_report_t;
 
 //MSG_ID_IAP_SW_INVENTORY_CONFIRM,
@@ -319,13 +320,21 @@ typedef struct msg_struct_l3iap_sw_inventory_report
 
 typedef struct msg_struct_l3iap_sw_inventory_confirm
 {
-	UINT16  msgid;
-	UINT16  length;
-	UINT16 	swUpgradeType;					       //APP or FACTORY, or ... same as msg_struct_l3iap_iap_sw_upgrade_req
-	UINT16 	swRelId;
-	UINT16 	swVerId;
-	UINT16 	swCheckSum;
-	UINT32  swTotalLengthInBytes;
+//	UINT16  msgid;
+//	UINT16  length;
+//	UINT16 	swUpgradeType;					       //APP or FACTORY, or ... same as msg_struct_l3iap_iap_sw_upgrade_req
+//	UINT16 	swRelId;
+//	UINT16 	swVerId;
+//	UINT16 	swCheckSum;
+//	UINT32  swTotalLengthInBytes;
+	
+		UINT16  msgid;
+		UINT16  length;
+		UINT16  swRel;
+		UINT16  swVer;
+		UINT8   upgradeFlag;
+		UINT16 	swCheckSum;
+		UINT32  swTotalLengthInBytes;
 }msg_struct_l3iap_sw_inventory_confirm_t;
 
 //MSG_ID_IAP_SW_PACKAGE_REPORT,
@@ -364,14 +373,22 @@ typedef struct msg_struct_l3iap_msg_header
 */
 typedef struct msg_struct_l3iap_sw_package_report
 {
+//	UINT16  msgid;
+//	UINT16  length;
+//	UINT16 	UpgradePrepareStatus;					//APP or FACTORY, or ...
+//	UINT16 	swRelId;
+//	UINT16 	swVerId;
+//	UINT16 	swCheckSum;
+//	UINT32  swTotalLengthInBytes;
+//	UINT32	swSegmentIndex;        // 0, 1, 2, ... MaxLoadSegmentIndex, start from 0, 
 	UINT16  msgid;
 	UINT16  length;
-	UINT16 	UpgradePrepareStatus;					//APP or FACTORY, or ...
-	UINT16 	swRelId;
-	UINT16 	swVerId;
-	UINT16 	swCheckSum;
-	UINT32  swTotalLengthInBytes;
-	UINT32	swSegmentIndex;        // 0, 1, 2, ... MaxLoadSegmentIndex, start from 0, 
+	UINT16  swRelId;
+	UINT16  swVerId;
+	UINT8   upgradeFlag;
+	UINT16  segIndex;
+	UINT16  segTotal;
+	UINT16  segSplitLen;
 }msg_struct_l3iap_sw_package_report_t;
 
 //MSG_ID_IAP_SW_PACKAGE_CONFIRM,
@@ -379,15 +396,26 @@ typedef struct msg_struct_l3iap_sw_package_report
 	
 typedef struct msg_struct_l3iap_sw_package_confirm
 {
-	UINT16  msgid;
-	UINT16  length;
-	UINT16 	UpgradePrepareStatus;					//APP or FACTORY, or ...
-	UINT16 	swRelId;
-	UINT16 	swVerId;
-	UINT16 	swCheckSum;
-	UINT32  swTotalLengthInBytes;
-	UINT32	swSegmentIndex;        // 0, 1, 2, ... MaxLoadSegmentIndex, start from 0, 
-	UINT8		swPackageSegmentContent[MAX_LEN_PER_LOAD_SEGMENT];
+//	UINT16  msgid;
+//	UINT16  length;
+//	UINT16 	UpgradePrepareStatus;					//APP or FACTORY, or ...
+//	UINT16 	swRelId;
+//	UINT16 	swVerId;
+//	UINT16 	swCheckSum;
+//	UINT32  swTotalLengthInBytes;
+//	UINT32	swSegmentIndex;        // 0, 1, 2, ... MaxLoadSegmentIndex, start from 0, 
+//	UINT8		swPackageSegmentContent[MAX_LEN_PER_LOAD_SEGMENT];
+	UINT16 msgid;
+	UINT16 length;
+	UINT16 swRelId;
+	UINT16 swVerId;
+	UINT8  upgradeFlag;
+	UINT16 segIndex;
+	UINT16 segTotal;
+	UINT16 segSplitLen;
+	UINT16 segValidLen;
+	UINT16 segCheckSum;
+	UINT8  swPkgBody[MAX_LEN_PER_LOAD_SEGMENT];
 }msg_struct_l3iap_sw_package_confirm_t;
 
 

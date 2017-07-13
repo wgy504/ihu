@@ -126,6 +126,16 @@ typedef struct strIhuL3iapCtrlContext
 #define FLASH_ADDRESS_FACTORY_LOAD                 (0x08020000)  // TO BE UPDATE
 #define FLASH_ADDRESS_APP_LOAD                     (0x08080000)  // TO BE UPDATE
 
+#define FLASH_SECTOR_HW_CONTROL_TABLE              FLASH_SECTOR_11
+#define FLASH_SECTOR_IAP_LOAD                      FLASH_SECTOR_0
+#define FLASH_SECTOR_FACTORY_LOAD                  FLASH_SECTOR_5
+#define FLASH_SECTOR_APP_LOAD                      FLASH_SECTOR_8
+
+#define FLASH_MAX_SIZE_HW_CONTROL_TABLE            (0x00020000)   /* 128 * 1024 */
+#define FLASH_MAX_SIZE_IAP_LOAD                    (0x00020000)   /* 128 * 1024 */
+#define FLASH_MAX_SIZE_FACTORY_LOAD                (0x00060000)   /* 384 * 1024 */
+#define FLASH_MAX_SIZE_APP_LOAD                    (0x00060000)   /* 384 * 1024 */
+
 extern strIhuL3iapTaskContext_t zIhuL3iapTaskContext;
 extern SysEngParElementHwBurnPhyIdAddr_t zIhuSysEngElementHwBurnContext;
 
@@ -135,10 +145,23 @@ void ihu_iap_sw_jump_to_factory_load(void);
 void ihu_send_iap_sw_inventory_report(void);
 void ihu_send_iap_sw_package_report(void);
 
+OPSTAT ihu_iap_erase_flash_block(uint32_t start_address, uint32_t length_in_bytes);
+OPSTAT ihu_iap_write_flash(uint32_t start_address, uint32_t length_in_bytes, uint8_t *data);
+
 void ihu_iap_sw_save_hw_sw_control_table(void);
+void SysEngElementHwBurnFlashContentInit(void);
 UINT16 CalculateCheckSum(UINT8 *pdata, UINT32 length_in_bytes);
 
 extern OPSTAT LoadIhuSysEngElementHwBurnContext(SysEngParElementHwBurnPhyIdAddr_t *psepehb, UINT32 SysEngElementHwBurnContextAddress);
+extern void IAP_ExecuteApp_fun (uint32_t ulAddr_App);
+
+UINT32 GetWmcId(void);
+
+/* Can ID for communication between AWS and WMC */
+
+#define		WMC_CAN_ID_SUFFIX												((zWmcInvenory.wmc_id.wmc_id&0x2F))
+#define		AWS_CAN_ID															((WMC_TO_AWS_CAN_ID_PREFIX)|(WMC_CAN_ID_SUFFIX))
+#define		WMC_CAN_ID															((AWS_TO_WMC_CAN_ID_PREFIX)|(1<<WMC_CAN_ID_SUFFIX))
 
 #endif /* L3APPL_L3IAP_H_ */
 
